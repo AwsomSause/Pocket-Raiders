@@ -8,6 +8,10 @@ import type { Rng } from './rng';
 import { chemistryOf } from './story/chemistry';
 import type { PokemonInstance, RunState } from './state';
 import type { Temperament } from './shadowWorld/schema';
+import { noteShadow } from './expansion/fieldNotes';
+import { addScar, hasScar, revealHintAfterBattle, scarName, sootheKeyScale } from './shadow2/keys';
+import { shadow2Data } from './shadow2/data';
+import { shadowTierDamage } from './shadow2/tiers';
 
 export const SHADOW_HEART_START = 100;
 export const SHADOW_DAMAGE_DEALT = 1.2;
@@ -19,9 +23,9 @@ export const SHADOW_FRIENDSHIP_STEP = 25;
 
 export const isShadow = (mon: Pick<PokemonInstance, 'shadow'>): boolean => mon.shadow !== undefined;
 
-/** The damage multiplier for one hit: a shadowed attacker hits harder, a shadowed target takes more. */
-export function shadowDamageMultiplier(user: Pick<PokemonInstance, 'shadow'>, target: Pick<PokemonInstance, 'shadow'>): number {
-  return (isShadow(user) ? SHADOW_DAMAGE_DEALT : 1) * (isShadow(target) ? SHADOW_DAMAGE_TAKEN : 1);
+/** The damage multiplier for one hit: the attacker's Shadow tier bonus, the target's tier drawback (Shadow II), and a Steadfast scar's 3%. */
+export function shadowDamageMultiplier(user: Pick<PokemonInstance, 'shadow'>, target: Pick<PokemonInstance, 'shadow' | 'scars'>): number {
+  return shadowTierDamage(user, target) * (hasScar(target, 'steadfast') ? shadow2Data.steadfastTaken : 1);
 }
 
 /** Heart Gauge points one battle soothes for this Pokémon. */
@@ -67,7 +71,7 @@ function chemistryPartners(content: Content, run: Pick<RunState, 'party' | 'stor
 export function sootheAmount(content: Content, run: Pick<RunState, 'party' | 'story'>, mon: PokemonInstance): number {
   const t = temperamentOf(content, mon);
   const partners = Math.min(content.shadowWorld.chemistryMaxPartners, chemistryPartners(content, run, mon));
-  return Math.max(1, Math.round(battleSoothe(mon) * t.sootheMultiplier) + partners * content.shadowWorld.chemistrySoothe);
+  return Math.max(1, Math.round((Math.round(battleSoothe(mon) * t.sootheMultiplier) + partners * content.shadowWorld.chemistrySoothe) * sootheKeyScale(mon)));
 }
 
 /** Soothes a shadowed Pokémon. Returns true when this purifies it (the Shadow is gone for good). */
@@ -75,7 +79,7 @@ export function soothe(content: Content, mon: PokemonInstance, amount: number): 
   if (!mon.shadow) return false;
   const heart = mon.shadow.heart - Math.max(0, amount);
   if (heart > 0) {
-    mon.shadow = { heart };
+    mon.shadow = { ...mon.shadow, heart };
     return false;
   }
   delete mon.shadow;
@@ -88,12 +92,16 @@ export function soothePartyAfterBattle(content: Content, run: Pick<RunState, 'pa
   const purified: string[] = [];
   for (const mon of run.party) {
     if (mon.hp <= 0 || !mon.shadow || !participants.includes(mon.uid)) continue;
+    revealHintAfterBattle(mon);
+    if (mon.shadow.named) noteShadow(run as Pick<RunState, 'expansion'>, mon.shadow.named, mon.shadow.hints ?? 1);
     const before = heartStage(content, mon.shadow.heart);
     const name = content.species.get(mon.speciesId)?.name ?? mon.speciesId;
     const t = temperamentOf(content, mon);
     if (soothe(content, mon, sootheAmount(content, run as Pick<RunState, 'party' | 'story'>, mon))) {
       purified.push(name);
-      stageLines?.push(`${name}: ${t.lines.purified}`);
+      // Heart Bond leaves a Steadfast scar (a third scar is refused).
+      const scar = addScar(mon, 'steadfast');
+      stageLines?.push(`${name}: ${t.lines.purified}${scar === 'added' ? ` It keeps a heart scar: ${scarName('steadfast')}.` : ''}`);
     } else if (mon.shadow && heartStage(content, mon.shadow.heart) !== before) {
       const line = t.lines[heartStage(content, mon.shadow.heart)];
       if (line) stageLines?.push(`${name}: ${line}`);

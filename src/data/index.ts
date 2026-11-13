@@ -2,6 +2,7 @@
 // cross-references (e.g. every learnset move exists). Throws a readable
 // ContentError listing every problem found.
 
+import { allChoices } from '../core/eventMemory';
 import { z } from 'zod';
 import {
   AbilitySchema,
@@ -67,6 +68,7 @@ import regionsJson from './regions.json';
 import movesJson from './moves.json';
 import megaMovesJson from './megaMoves.json';
 import storySignatureMovesJson from './storySignatureMoves.json';
+import canonMovesJson from './canonMoves.json';
 import rewardsJson from './rewards.json';
 import rulesetJson from './ruleset.json';
 import trainerTiersJson from './trainerTiers.json';
@@ -103,6 +105,10 @@ import { RaidFileSchema } from '../core/raid/schema';
 import { PROMPTS } from '../core/interaction/prompt';
 import eventsJson from './events.json';
 import eventsW5Json from './eventsW5.json';
+import eventsCanonKantoJson from './eventsCanonKanto.json';
+import eventsCanonFuchsiaJson from './eventsCanonFuchsia.json';
+import eventsCanonVermilionJson from './eventsCanonVermilion.json';
+import eventsCanonSaffronJson from './eventsCanonSaffron.json';
 import eventsFacesJson from './eventsFaces.json';
 import eventsStoryJson from './eventsStory.json';
 import eventsGamesJson from './eventsGames.json';
@@ -172,6 +178,14 @@ export interface RawContent {
   npcStory: unknown;
   /** Ideas W5 map events (eventsW5.json), added to `events`. */
   eventsW5: unknown;
+  /** Beta 0.6 Canon Spaces: Kanto events (eventsCanonKanto.json), added to `events`. */
+  eventsCanonKanto?: unknown;
+  /** Beta 0.6 Canon Spaces: Fuchsia City events (eventsCanonFuchsia.json), added to `events`. */
+  eventsCanonFuchsia?: unknown;
+  /** Beta 0.6 Canon Spaces: the Vermilion City events (eventsCanonVermilion.json, built by tools/build-canon-vermilion.ts). */
+  eventsCanonVermilion?: unknown;
+  /** Beta 0.6 Canon Spaces: Saffron City events (eventsCanonSaffron.json), added to `events`. */
+  eventsCanonSaffron?: unknown;
   /** Story and characters ideas (S110-S131): eventsStory.json, added to `events`. Optional so older test fixtures stay valid. */
   eventsStory?: unknown;
   /** Famous faces, rivals and cameos (R436-R470): eventsFaces.json, added to `events`. */
@@ -272,7 +286,7 @@ export const RAW_CONTENT: RawContent = {
   ),
   // Generated: npm run data:mega-moves (Mega signature moves, flagged megasig).
   // Story Run signature moves: npm run data:story-sigs (flagged storysig).
-  moves: [...movesJson, ...megaMovesJson.moves, ...storySignatureMovesJson.moves, ...jetSpeciesJson.moves],
+  moves: [...movesJson, ...megaMovesJson.moves, ...storySignatureMovesJson.moves, ...canonMovesJson.moves, ...jetSpeciesJson.moves],
   abilities: [...abilitiesJson, ...storySpeciesJson.abilities, ...jetSpeciesJson.abilities],
   typeChart: typeChartJson,
   archetypes: archetypesJson,
@@ -312,6 +326,10 @@ export const RAW_CONTENT: RawContent = {
   maxMoves: maxMovesJson,
   npcStory: npcStoryJson,
   eventsW5: eventsW5Json,
+  eventsCanonKanto: eventsCanonKantoJson,
+  eventsCanonFuchsia: eventsCanonFuchsiaJson,
+  eventsCanonVermilion: eventsCanonVermilionJson,
+  eventsCanonSaffron: eventsCanonSaffronJson,
   eventsStory: eventsStoryJson,
   eventsFaces: eventsFacesJson,
   eventsGames: eventsGamesJson,
@@ -386,10 +404,16 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const shadowWorld = parse(ShadowWorldFileSchema, raw.shadowWorld, 'shadowWorld.json', problems);
   const evilTeams = parse(EvilFileSchema, raw.evilTeams, 'evilTeams.json', problems);
   // Evil Team storyline and operation stops are expanded from templates into ordinary events (core/evil/content.ts).
-  const w5Events = [...((raw.eventsW5 as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsHelpers as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsWeather as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsMysteries as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsTraining as { events?: unknown[] } | undefined)?.events ?? [])];
+  const w5Events = [...((raw.eventsW5 as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsHelpers as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsWeather as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsMysteries as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsTraining as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsCanonKanto as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsCanonFuchsia as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsCanonSaffron as { events?: unknown[] } | undefined)?.events ?? []), ...(((raw.itemCatalog as unknown[] | undefined) ?? []).length > 0 ? (raw.eventsCanonVermilion as { events?: unknown[] } | undefined)?.events ?? [] : [])];
   const storyEvents = [...((raw.eventsStory as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsFaces as { events?: unknown[] } | undefined)?.events ?? [])];
   const gamesEvents = [...((raw.eventsGames as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsRK as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsVillain as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsMerchants as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsRB as { events?: unknown[] } | undefined)?.events ?? [])];
-  for (const file of (raw.eventsExtra ?? []) as { events?: unknown[] }[]) gamesEvents.push(...(file.events ?? []));
+  // An event in src/data/events/*.json replaces any older event with the same id (Beta 0.6 revisions of the pack's REVISE/MERGE events).
+  const extraFiles = (raw.eventsExtra ?? []) as { events?: unknown[]; override?: boolean }[];
+  // A file marked `"override": true` (hazards.json) also wins over other auto-loaded files.
+  const winners = new Set(extraFiles.filter((f) => f.override).flatMap((f) => (f.events ?? []).map((e) => (e as { id?: string }).id)));
+  const extraEvents = extraFiles.flatMap((file) => (file.events ?? []).filter((e) => file.override || !winners.has((e as { id?: string }).id)));
+  const extraIds = new Set(extraEvents.map((e) => (e as { id?: string }).id));
+  gamesEvents.push(...extraEvents);
   // Overhaul slice 23: the pack's event chains become map events (core/overhaul/chains.ts).
   // Story Overhaul W6: dungeons become room events (validated: every branch reaches the exit).
   for (const p of validateAllDungeons()) problems.push(`dungeons.json ${p}`);
@@ -401,7 +425,9 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   if (hasCatalog) gamesEvents.push(...pseudoEvents());
   if (balance?.overhaulChains.enabled) gamesEvents.push(...chainEvents(((raw.itemCatalog as { id: string; family: string; rarity: string; status: string }[] | undefined) ?? []), balance.overhaulChains).events);
   if (balance?.mythicalChains.enabled) gamesEvents.push(...mythicalChainEvents(balance.mythicalChains));
-  const eventsFile = parse(EventsFileSchema, evilTeams ? { events: [...(raw.events as { events: unknown[] }).events, ...expandEvilEvents(evilTeams), ...w5Events, ...storyEvents, ...gamesEvents] } : { events: [...(raw.events as { events: unknown[] }).events, ...w5Events, ...storyEvents, ...gamesEvents] }, 'events.json', problems);
+  const extraSet = new Set<unknown>(extraEvents);
+  const replaced = (list: unknown[]): unknown[] => list.filter((e) => extraSet.has(e) || !extraIds.has((e as { id?: string }).id));
+  const eventsFile = parse(EventsFileSchema, evilTeams ? { events: replaced([...(raw.events as { events: unknown[] }).events, ...expandEvilEvents(evilTeams), ...w5Events, ...storyEvents, ...gamesEvents]) } : { events: replaced([...(raw.events as { events: unknown[] }).events, ...w5Events, ...storyEvents, ...gamesEvents]) }, 'events.json', problems);
   const baseExpeditions = parse(ExpeditionFileSchema, raw.expeditions, 'expeditions.json', problems);
   const legend = parse(LegendaryFileSchema, raw.legendaryEvents, 'legendaryEvents.json', problems);
   const raids = baseRaids && legend ? { ...baseRaids, raids: [...baseRaids.raids, ...legend.raids] } : null;
@@ -513,7 +539,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   // Raids: every boss species, reward item and phase must exist (the boss must be able to fight).
   for (const raid of raids.raids) {
     for (const id of raid.species) if (!content.species.has(id)) problems.push(`raids.json "${raid.id}" has unknown species "${id}"`);
-    for (const r of raid.rewards.items) if (!content.items.has(r.item)) problems.push(`raids.json "${raid.id}" gives unknown item "${r.item}"`);
+    for (const r of raid.rewards.items) if (!content.items.has(r.item) && content.catalog.size > 0 && !content.catalog.has(r.item)) problems.push(`raids.json "${raid.id}" gives unknown item "${r.item}"`);
     if (raid.shield && raid.shield.at.length * raid.shield.points >= 0.9) problems.push(`raids.json "${raid.id}" shields are too big`);
     if (raid.phases.some((p, i) => i > 0 && p.atHp >= raid.phases[i - 1]!.atHp)) problems.push(`raids.json "${raid.id}" phases must go down in HP`);
   }
@@ -530,7 +556,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   }
   const blessingIds = new Set(shadowWorld.blessings.map((b) => b.id));
   for (const ev of eventsFile.events) {
-    for (const ch of ev.choices) {
+    for (const ch of allChoices(ev)) {
       if (ch.prompt && !PROMPTS.some((d) => d.id === ch.prompt!.id)) problems.push(`events.json "${ev.id}" uses unknown prompt "${ch.prompt.id}"`);
       for (const o of [ch.success, ch.failure]) {
         for (const e of [...(o?.effects ?? []), ...(o?.battle?.win ?? [])]) if (e.kind === 'blessing' && !blessingIds.has(e.id)) problems.push(`events.json "${ev.id}" gives unknown blessing "${e.id}"`);

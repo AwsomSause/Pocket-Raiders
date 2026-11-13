@@ -3,6 +3,8 @@
 // It remembers its team, comes back stronger, and swaps ONE member for a Pokémon from the
 // planned team that resists the type of attack you use most; the player is told which.
 
+import { counterCap as liveCounterCap } from './live';
+import { pityFor } from './overhaul';
 import { counterCap, rivalRoleOf, SPAR_NOTE } from '../overhaul/rivalRoles';
 import { focusIs, RIVAL_FOCUS_GAP_CUT } from '../campaign/focus';
 import { runPerks } from '../archetypes';
@@ -117,7 +119,7 @@ function baseReturn(content: Content, run: RunState, rival: Rival, plan: Trainer
   };
   const mods = rivalMods(rival);
   // Personality: vindictive rivals return stronger. Style: how sharp its move choice is.
-  const revised = { ...revisedTeam(content, run, profile, plan, { ...effect, levelBonus: effect.levelBonus + mods.levelBonus + bondShift(rival) + rivalDebtLevels(run, rival) + rivalLevelOffset(runPerks(content, run)) }), ai: Math.max(plan.ai, mods.ai) };
+  const revised = { ...revisedTeam(content, run, profile, plan, { ...effect, levelBonus: effect.levelBonus + mods.levelBonus + bondShift(rival) + rivalDebtLevels(run, rival) + rivalLevelOffset(runPerks(content, run)) + pityFor(run, rival.id).levelDelta }), ai: Math.max(plan.ai, mods.ai) };
   const perks = runPerks(content, run);
   const type = mostUsedType(content, run, rival);
   const seen = bondNote(rival);
@@ -129,7 +131,7 @@ function baseReturn(content: Content, run: RunState, rival: Rival, plan: Trainer
   if (!type || !mods.canAdapt || rival.adaptations.length >= counterCap(rolesCfg, role, mods.adaptCap)) return { plan: planned, note: seen };
   const bias = (speciesId: string) => mods.statBias.reduce((sum, stat) => sum + (getSpecies(content, speciesId).baseStats[stat as 'hp'] ?? 0), 0);
   // One counter-pick for the type you use most; a trainer perk adds a counter for the next most used types.
-  const types = usedTypes(content, run, rival).slice(0, 1 + rivalCounterBonus(perks));
+  const types = usedTypes(content, run, rival).slice(0, liveCounterCap(run, rival.id, 'trainer', 1 + rivalCounterBonus(perks)));
   let members = planned.members;
   const notes: string[] = [];
   types.forEach((t, k) => {

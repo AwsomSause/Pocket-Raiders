@@ -6,6 +6,7 @@
 // confetti falls; in defeat they settle in quietly, a little dimmed.
 
 import { endOfRunLetter, rivalNickname } from '../core/rivals/ledger';
+import { witnessCards } from '../core/rivals/witness';
 import { RANK_NAMES } from '../core/mastery';
 import { contractRewardText } from '../core/contracts';
 import { gameRewardText } from '../core/gameEvents';
@@ -217,6 +218,11 @@ export class GameOverScene extends Phaser.Scene {
     const newest = session.profile.legacyRuns[0];
     const letter = newest && run && newest.runId === run.runId ? endOfRunLetter(newest, rivalNickname(session.profile.legacyRuns)) : null;
     if (letter) lines.push('', `Letter from ${letter.from}: "${letter.text}"`);
+    // Beta 0.6 R11: Witness the Rest. Cards from THIS run's rivals only (no archive); needs a registered rival.
+    if (run && (run.expansion?.rival ? Object.keys(run.expansion.rival).length > 0 : false)) {
+      const rivals = Object.entries(run.expansion!.rival!).map(([id, rec]) => ({ id, rec, name: run.story.rivals.find((r) => r.id === id)?.name ?? id }));
+      lines.push('', 'Witness the Rest', ...witnessCards({ playerName: 'You', won, rivals }).map((c) => `${c.title}: ${c.body}`));
+    }
     const reflection = run && !won ? whatIf(session.content, run) : null;
     if (reflection) lines.unshift(reflection, '');
     // Long endings (a what-if, rewards, a letter) step down a size, then cut, so they never spill out of the panel.

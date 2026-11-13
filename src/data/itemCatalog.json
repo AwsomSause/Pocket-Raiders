@@ -982,6 +982,54 @@
   }
  },
  {
+  "id": "tauros-charm",
+  "name": "Tauros Charm",
+  "family": "Battle held items",
+  "description": "Normal moves +15% per copy",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "muscle-band",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "normal"
+     ],
+     "percent": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "silver-powder",
+  "name": "Silver Powder",
+  "family": "Type boosters (held)",
+  "description": "Bug moves +20%",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "silverpowder",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "bug"
+     ],
+     "percent": 20
+    }
+   ]
+  }
+ },
+ {
   "id": "soft-sand",
   "name": "Soft Sand",
   "family": "Type boosters (held)",
@@ -28305,6 +28353,91 @@
     {
      "mod": "exp",
      "percent": 15
+    }
+   ]
+  }
+ },
+ {
+  "id": "cool-shades",
+  "name": "Cool Shades",
+  "family": "Battle held items",
+  "description": "Immune to Intimidate. The first use of each status move has +1 priority",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "blackglasses",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "coolShades"
+    }
+   ]
+  }
+ },
+ {
+  "id": "unofficial-badge",
+  "name": "Unofficial Badge",
+  "family": "Valuables",
+  "description": "Damian's badge. It does not count toward progress. Sell for ₽300",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/surgebadge",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 300,
+   "changes": {}
+  }
+ },
+ {
+  "id": "perfume-vial",
+  "name": "Perfume Vial",
+  "family": "Type boosters (held)",
+  "description": "Grass moves +20%",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "miracle-seed",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "grass"
+     ],
+     "percent": 20
+    }
+   ]
+  }
+ },
+ {
+  "id": "flashlight",
+  "name": "Flashlight",
+  "family": "Map and encounter items",
+  "description": "Lights the way: the map shows the wild Pokémon waiting at the next stops, and Rock Tunnel lets you choose",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/lightkey",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "preview",
+     "what": "wild"
     }
    ]
   }

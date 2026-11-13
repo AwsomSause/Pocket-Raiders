@@ -4,7 +4,9 @@
 
 import type { Content } from './contentSchema';
 import { NATURES, type NatureId } from './natures';
-import { createBattle, exhibitionMove, resolveTurn, type BattleContext, type PlayerAction } from './battle/engine';
+import { createBattle, exhibitionMove, resolveTurn, type BattleContext, type BattleEvent, type PlayerAction } from './battle/engine';
+import { autoCommands, monAt, resolveDoublesTurn, startDoubles, type Spot } from './battle/doubles';
+import { makeTriples } from './battle/triples';
 import { createPokemon, maxHp } from './pokemon';
 import { Rng, hashSeed } from './rng';
 import { pickThemeSpecies } from './themes';
@@ -47,8 +49,11 @@ export function palaceStyle(nature: NatureId | undefined): 'attack' | 'support' 
   return up === 'atk' || up === 'spa' ? 'attack' : up === 'spe' ? 'fickle' : 'support';
 }
 
-/** A real battle on the engine: both teams are played by the AI, three against three, with its own random stream. */
-export function fight(content: Content, seed: string, key: string, a: ExhibitionTeam, b: ExhibitionTeam, opts: { palace?: boolean } = {}): { winner: 0 | 1; lines: string[] } {
+/**
+ * A real battle on the engine: both teams are played by the AI, three against three, with its own random stream.
+ * `triples`: all three on the field at once (a triple battle, Beta 0.6 T3); each Pokémon uses its strongest move on a foe in reach.
+ */
+export function fight(content: Content, seed: string, key: string, a: ExhibitionTeam, b: ExhibitionTeam, opts: { palace?: boolean; triples?: boolean } = {}): { winner: 0 | 1; lines: string[] } {
   const build = (team: ExhibitionTeam, tag: string): PokemonInstance[] =>
     team.fighters.map((f, i) => {
       const mon = createPokemon(content, f.speciesId, f.level, `ex-${tag}${i}`);
@@ -64,11 +69,33 @@ export function fight(content: Content, seed: string, key: string, a: Exhibition
   [...mine.map((m) => [m, a] as const), ...theirs.map((m) => [m, b] as const)].forEach(([m, t]) => owner.set(m.uid, { name: content.species.get(m.speciesId)?.name ?? m.speciesId, trainer: t.trainer }));
   const lines: string[] = [`${a.trainer} versus ${b.trainer}!`];
   let lastMove: { side: string; moveId: string } | null = null;
+  const triples = Boolean(opts.triples) && mine.length >= 3 && theirs.length >= 3;
+  if (triples) {
+    makeTriples(battle, mine);
+    startDoubles(ctx);
+  }
   for (let turn = 0; turn < 300 && !battle.outcome; turn++) {
-    const alive = mine.findIndex((m, i) => m.hp > 0 && i !== battle.activeIndex);
-    const action: PlayerAction = battle.needsSwitch ? { kind: 'switch', partyIndex: alive } : { kind: 'move', index: opts.palace ? palaceMove(ctx, content, turn) : exhibitionMove(ctx) };
-    if (action.kind === 'switch' && alive < 0) break;
-    for (const e of resolveTurn(ctx, action)) {
+    let events: BattleEvent[];
+    if (triples) {
+      // Three a side: no bench, so nobody is ever sent out; each Pokémon picks its strongest move.
+      const commands = autoCommands(ctx).map((c, spot) => {
+        const mon = monAt(ctx, 'player', spot as Spot);
+        if (c?.action.kind !== 'move' || !mon) return c;
+        return { ...c, action: { kind: 'move' as const, index: strongestMove(content, mon, c.action.index) } };
+      });
+      try {
+        events = resolveDoublesTurn(ctx, { kind: 'double', commands });
+      } catch {
+        // A move the engine won't take this turn (Disable, Taunt...): fall back to the first usable ones.
+        events = resolveDoublesTurn(ctx, { kind: 'double', commands: autoCommands(ctx) });
+      }
+    } else {
+      const alive = mine.findIndex((m, i) => m.hp > 0 && i !== battle.activeIndex);
+      const action: PlayerAction = battle.needsSwitch ? { kind: 'switch', partyIndex: alive } : { kind: 'move', index: opts.palace ? palaceMove(ctx, content, turn) : exhibitionMove(ctx) };
+      if (action.kind === 'switch' && alive < 0) break;
+      events = resolveTurn(ctx, action);
+    }
+    for (const e of events) {
       if (e.type === 'move') lastMove = { side: e.side, moveId: e.moveId };
       else if (e.type === 'faint') {
         const who = owner.get(e.uid);
@@ -91,4 +118,15 @@ function palaceMove(ctx: BattleContext, content: Content, turn: number): number 
   const isStatus = (id: string) => content.moves.get(id)?.category === 'status';
   const wantStatus = style === 'support' || (style === 'fickle' && turn % 2 === 1);
   return exhibitionMove(ctx, (id) => (wantStatus ? isStatus(id) : !isStatus(id)));
+}
+
+/** The usable move with the most power (ties: the first), or `fallback` when none deals damage. */
+function strongestMove(content: Content, mon: PokemonInstance, fallback: number): number {
+  let best = fallback;
+  let power = 0;
+  mon.moves.forEach((m, i) => {
+    const p = m.pp > 0 ? (content.moves.get(m.id)?.power ?? 0) : 0;
+    if (p > power) [best, power] = [i, p];
+  });
+  return best;
 }

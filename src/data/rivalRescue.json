@@ -1,0 +1,814 @@
+{
+ "note": "Rival Rescue Plan data (R9). Hand-written from RIVAL_RESCUE_PLAN.md + the expanded edition; edit here.",
+ "stages": [
+  "approach",
+  "offer",
+  "pitch-quiet",
+  "pitch-loud",
+  "pitch-deal",
+  "accept",
+  "decline",
+  "start",
+  "complication",
+  "full",
+  "partial",
+  "fail",
+  "second-offer",
+  "climax-eve",
+  "hint-approach",
+  "hint-door",
+  "hint-cage",
+  "pitch-inside",
+  "pitch-exchange",
+  "reunion",
+  "held-too-long",
+  "the-pound"
+ ],
+ "archetypes": [
+  "hotshot",
+  "prodigy",
+  "friendly",
+  "bitter",
+  "scholar",
+  "heir",
+  "lone-wolf",
+  "mirror"
+ ],
+ "lines": {
+  "hotshot": {
+   "approach": "{player}! Stop right there. I've got news, and it's about to make your day.",
+   "offer": "They took {count} of yours, right? I've been scouting {site}. I've got a plan. A great plan. The best one I've ever had.",
+   "pitch-quiet": "Option one: we sneak in. I know, I know, me, sneaking. I can do it for, like, ten minutes.",
+   "pitch-loud": "Option two: we walk in the front door, I announce us, and everybody in the way regrets it. That's my pick.",
+   "pitch-deal": "Option three: we pay them off. Boring. Fine. But it works.",
+   "accept": "That's the spirit! You and me. They won't know what hit them.",
+   "decline": "Wait, what? You're turning down a Hotshot-certified plan? …Fine. It'll keep. For a bit.",
+   "start": "Right. Stay behind me. No, beside me. Okay, slightly behind.",
+   "complication": "Okay, that guard wasn't on my map. Don't look at me like that. He wasn't!",
+   "full": "Told you! Flawless! Every last one. Okay, mostly flawless.",
+   "partial": "Okay, so we got some. That's a lot, actually! We'll get the rest, I swear.",
+   "fail": "That wasn't supposed to happen. I'll make it right. I will. Give me a day.",
+   "second-offer": "I've been thinking about it. My plan's still good. Want to try again?",
+   "climax-eve": "No more waiting. They've got your Pokémon and a big show planned. We hit {site} now, or never.",
+   "hint-approach": "I'll go first and be loud. That's the plan. That's also just me.",
+   "hint-door": "Hinges! Always go for the hinges. I saw it in a film.",
+   "hint-cage": "Get in front of the cages. If anything hits them I'll never forgive either of us.",
+   "pitch-inside": "We know a guy? We *know a guy*! Why didn't you say! Okay, new plan, the guy.",
+   "pitch-exchange": "We trade them something? Like a hostage swap? That is the coolest thing you've ever suggested.",
+   "reunion": "Look at them! Look at {mon}! Okay, I'm not crying, there's cage dust.",
+   "held-too-long": "…{mon}'s got something on it. Something of theirs. That's on me. I was slow.",
+   "the-pound": "The cells are *on the map*. They put the cells on the map! I'm taking the cells."
+  },
+  "prodigy": {
+   "approach": "I've been looking for you. We should speak, privately and quickly.",
+   "offer": "{count} of your Pokémon are held at {site}. I've mapped the guard rotations and the paperwork. I can get them out. The question is how.",
+   "pitch-quiet": "Plan A, extraction. Minimal contact, highest efficiency, and a roughly seventy per cent success rate if you follow instructions.",
+   "pitch-loud": "Plan B, assault. Higher variance, shorter duration. Not elegant. Effective.",
+   "pitch-deal": "Plan C, a transaction. Zero risk to the Pokémon, moderate cost to you. I'd prefer not to use it.",
+   "accept": "Good. Memorize the route. I'll lead; you improvise only when I say.",
+   "decline": "That is an unusual decision. I'll assume you have a reason. The offer stands.",
+   "start": "Stage one. Three minutes. Count them.",
+   "complication": "An unlisted patrol. Recalculating. Do not move.",
+   "full": "Every variable accounted for. Well, nearly. They're yours again.",
+   "partial": "A partial result. I will adjust the model. The remainder is recoverable.",
+   "fail": "My estimate was wrong. That doesn't happen often. I'm not enjoying it.",
+   "second-offer": "I've revised the plan. The odds are better. Will you hear it?",
+   "climax-eve": "We are out of time. Whatever the plan, it begins now.",
+   "hint-approach": "The shift changes at the quarter hour. We wait. Patience is a tactic.",
+   "hint-door": "The receipt lists a service entrance. They wrote the route down for us. Remarkable.",
+   "hint-cage": "Let it see you before you touch the latch. A frightened Pokémon is a variable.",
+   "pitch-inside": "An informant removes the Door beat entirely. I recommend it. I recommend also that we thank them properly.",
+   "pitch-exchange": "A trade is a negotiation with a fixed outcome, provided nobody talks too much. I shall stand behind you and not talk.",
+   "reunion": "All accounted for. …I had prepared remarks. I find I do not need them.",
+   "held-too-long": "There is a trace of their method on {mon}. Ten points of Corruption, by my estimate. Recoverable. I am sorry it is not zero.",
+   "the-pound": "The holding site is a district. Assign me to it. I have its floor plan memorised, for reasons I regret."
+  },
+  "friendly": {
+   "approach": "{player}! Oh, I'm so glad I found you. I've been worried sick. Are you okay?",
+   "offer": "I know they took {mon} and the others. I couldn't stop thinking about it. Let's get them back. Together. I've got a plan, and snacks.",
+   "pitch-quiet": "We could sneak in, quiet as anything. I'll bring a lantern with a cover on it, and berries in case anyone's scared.",
+   "pitch-loud": "Or we fight our way in. I don't love it, but I'll be right beside you, healing as fast as I can.",
+   "pitch-deal": "Or we could pay. It's not brave, but nobody gets hurt. I'll chip in what I have.",
+   "accept": "Yes! Okay! We'll bring them home. I promise.",
+   "decline": "Oh. Okay. I understand. I'll be around if you change your mind. I'll always be around.",
+   "start": "Deep breath. We've got this. {mon} knows we're coming.",
+   "complication": "Oh no, there's someone there. Okay, okay, stay calm. I'll distract them. Sort of.",
+   "full": "They're safe! They're all safe! Look, {mon}'s so happy! I'm crying, sorry.",
+   "partial": "We got some of them! We'll get the others, don't give up. I won't.",
+   "fail": "I'm so sorry. I really thought it would work. We'll try again. I swear we will.",
+   "second-offer": "I haven't stopped thinking about it. Could we try again? Please?",
+   "climax-eve": "We can't wait any longer. They're going to use them tonight. Let me help. Please.",
+   "hint-approach": "Let's wait till they change over. I don't want anyone to get in trouble. Even them. A bit.",
+   "hint-door": "There's a little side door on the ticket. Side doors are nicer. Nobody slams a side door.",
+   "hint-cage": "Let {mon} smell your hand first. Slowly. There. See? It *knows*.",
+   "pitch-inside": "Someone inside wants to help? Oh, that's so brave of them. We have to bring them something.",
+   "pitch-exchange": "We give them a thing, they give us our friends. Nobody fights. Can it be that one? Please?",
+   "reunion": "They're all here. They're all *here*. Group hug. No, I mean it, everybody in.",
+   "held-too-long": "{mon}'s a bit… far away. That's okay. We'll go slowly. We've got time now.",
+   "the-pound": "Put me on the cells. I'll sit with them till you're done. I'll tell them you're coming."
+  },
+  "bitter": {
+   "approach": "Hey. Got a minute? Don't make it a thing.",
+   "offer": "They took {count} of yours. I know what that's like. I've got a way into {site}. Take it or don't.",
+   "pitch-quiet": "Quiet's the smart way. Slip in, grab them, slip out. If you can keep your mouth shut.",
+   "pitch-loud": "Loud's the satisfying way. We break the door, we break a few faces. They've earned it.",
+   "pitch-deal": "Or pay them. I hate that. But it's the one they can't refuse.",
+   "accept": "Fine. Don't slow me down.",
+   "decline": "Your call. I'll pretend I never asked.",
+   "start": "Stay close. And try not to say anything stupid.",
+   "complication": "Of course. Of course something went wrong. Move!",
+   "full": "…Got them. All of them. Don't thank me. I mean it.",
+   "partial": "Some of them. Not enough. The rest are still in there, and I'm not leaving it like that.",
+   "fail": "It's my fault. Don't say otherwise. I'll fix it.",
+   "second-offer": "I haven't dropped it. Want a second shot?",
+   "climax-eve": "No time left. Tonight they use them, or we do this now. Pick.",
+   "hint-approach": "I'll make the noise. You've got the face people open doors for. Use it.",
+   "hint-door": "Hinge side. Locks are for people who follow rules.",
+   "hint-cage": "Stand in front of them. If one more thing gets taken off somebody today I'm going to break something expensive.",
+   "pitch-inside": "You've got a friend on the inside. Course you do. Fine. Use them. Just… make sure they're all right after.",
+   "pitch-exchange": "Sell them their own junk back. I like it. I like it a lot.",
+   "reunion": "…Yeah. Okay. That's. Yeah.",
+   "held-too-long": "They got to {mon}. A little. I know what a little feels like. It'll want you close. Don't crowd it.",
+   "the-pound": "Cells are mine. Nobody argue."
+  },
+  "scholar": {
+   "approach": "Ah, {player}. Good. I have a proposition, and the data support it.",
+   "offer": "Your {count} impounded Pokémon are at {site}. I've observed the place for nine days. I believe I can retrieve them.",
+   "pitch-quiet": "Method one: stealth. Fewer observed incidents, longer preparation. It's my preferred method.",
+   "pitch-loud": "Method two: direct action. Statistically messier, but faster.",
+   "pitch-deal": "Method three: negotiation. Only workable if you can pay. I can supply the argument.",
+   "accept": "Excellent. I'll brief you on the way. Take notes. I will.",
+   "decline": "Noted. An unexpected decision. I will record it and keep the offer open.",
+   "start": "Beginning observation. Please walk where I walk.",
+   "complication": "An anomaly. Interesting, and terribly inconvenient.",
+   "full": "Success. And a fascinating dataset. They're all yours.",
+   "partial": "A partial retrieval. The results are instructive. I propose a follow-up.",
+   "fail": "Failure. I underestimated a variable: them. Forgive the error.",
+   "second-offer": "I've refined the method. Would you like to review the revision?",
+   "climax-eve": "The window closes tonight. I recommend we act, even imperfectly.",
+   "hint-approach": "Observation: they change shifts at the quarter hour and nobody watches the gap. We shall be the gap.",
+   "hint-door": "The receipt is a primary document. It names a service door. Always read the primary document.",
+   "hint-cage": "Recognition precedes trust. Let it identify you. I shall time it, for interest.",
+   "pitch-inside": "A primary source! We must not waste a primary source. Also we must keep them safe; I have seen what happens to sources.",
+   "pitch-exchange": "An exchange of goods under mutual suspicion. I have read about these. Do not explain the item's value. The books are firm on that.",
+   "reunion": "I note elevated vocalisation, physical contact, and what I can only record as joy. Sample size: all of them.",
+   "held-too-long": "{mon} presents with a mild Shadow tier. I am recording that as *mild* and *temporary*, and I will be checking on it personally.",
+   "the-pound": "The holding site, as a contested district. I should like to hold it. I should like, for once, to be useful rather than informative."
+  },
+  "heir": {
+   "approach": "{player}. A word, if you will permit me.",
+   "offer": "Your Pokémon were taken by {team}. That is a stain upon every trainer in this region. I should like to help remove it.",
+   "pitch-quiet": "I propose discretion. My family has taught me the use of quiet doors.",
+   "pitch-loud": "Or a formal assault. It will be noisy, but honourable.",
+   "pitch-deal": "Or I can see it settled by purse. I would prefer you not owe anyone for it. I will cover the cost.",
+   "accept": "Thank you. I will not forget the trust.",
+   "decline": "I understand. My offer remains; do not hesitate to call upon it.",
+   "start": "We proceed. Remain composed, and I shall do the same.",
+   "complication": "An unforeseen obstacle. I have faced worse at table. Stay close.",
+   "full": "It is done. Your Pokémon are returned. It was an honour.",
+   "partial": "We have recovered some. The rest remain; I will not rest until they are free.",
+   "fail": "I have failed you. That is not a thing I say lightly.",
+   "second-offer": "Once more, if you will permit. I have improved the arrangement.",
+   "climax-eve": "The hour is late. Let us act, or let this stand forever.",
+   "hint-approach": "We wait for the change of the guard. One does not interrupt.",
+   "hint-door": "The tradesman's entrance. I am told it is the honest way into any great house.",
+   "hint-cage": "Allow it to come to you. One does not seize what one has come to restore.",
+   "pitch-inside": "A friend within. Then we are guests, in a manner of speaking. Let us behave as guests and leave nothing broken that need not be.",
+   "pitch-exchange": "A formal exchange. I know the customs. Place the article down first; it shows good faith, and it frees both hands.",
+   "reunion": "They are restored to you. I am… forgive me. I was not taught what to do with my face at such moments.",
+   "held-too-long": "They have left their mark upon {mon}. I consider it an insult to us both. It will be answered.",
+   "the-pound": "Assign me the cells. A promise was made concerning them. I intend that it be kept on the field."
+  },
+  "lone-wolf": {
+   "approach": "…Hey.",
+   "offer": "Your Pokémon. {site}. I can get them.",
+   "pitch-quiet": "Quiet.",
+   "pitch-loud": "Loud.",
+   "pitch-deal": "Pay.",
+   "accept": "…Come.",
+   "decline": "…Fine.",
+   "start": "…Follow.",
+   "complication": "…Trouble.",
+   "full": "…Done. They're yours.",
+   "partial": "…Some. Not all.",
+   "fail": "…Missed.",
+   "second-offer": "…Again?",
+   "climax-eve": "…Now. Or never.",
+   "hint-approach": "…Wait.",
+   "hint-door": "…Side.",
+   "hint-cage": "…Slow.",
+   "pitch-inside": "…You trust them?\" \"…Okay.",
+   "pitch-exchange": "…Don't talk.",
+   "reunion": "…",
+   "held-too-long": "…It'll come back. Give it time.",
+   "the-pound": "…Cells. Mine."
+  },
+  "mirror": {
+   "approach": "I was going to find you. Looks like you were going to find me.",
+   "offer": "They took {count} of yours. I'd have wanted someone to come for mine. So here I am.",
+   "pitch-quiet": "You'd go quiet. You always do. I'd do it your way.",
+   "pitch-loud": "Or loud, which is what I'd do if you hadn't gotten there first.",
+   "pitch-deal": "Or pay. Which is what neither of us wants, so it's probably right.",
+   "accept": "Good. Then we do this the way you'd do it.",
+   "decline": "I get it. I'd have said no too. Still here if you change your mind.",
+   "start": "Right foot first, same as you. Let's go.",
+   "complication": "That's not what you'd have planned for. Me neither.",
+   "full": "They're back. I did what you'd have done. Better, maybe? No. Same.",
+   "partial": "We got some. You'd say it's good enough for now. I'd say the same.",
+   "fail": "That isn't how it was supposed to go. For either of us.",
+   "second-offer": "I keep replaying it. Let's try again.",
+   "climax-eve": "There's no later left. Whatever you'd do, do it now.",
+   "hint-approach": "You'd wait for the shift change. So we wait.",
+   "hint-door": "You'd read the ticket twice. I read it twice. There's a side door.",
+   "hint-cage": "You'd let it come to you. I'd have grabbed. I'm learning.",
+   "pitch-inside": "You've got someone in there who'd open a door for you. I'd like to know what that's like.",
+   "pitch-exchange": "A trade. You give up something to get something back. You're better at that than me.",
+   "reunion": "They went straight to you. Not a look at me. …Good. That's how it should be.",
+   "held-too-long": "{mon} isn't sure which feelings are its own right now. I can sit with it, if you want. I know the way out of that.",
+   "the-pound": "You'd want the cells held by someone who knows what it is to be kept. That's me."
+  }
+ },
+ "beatenToIt": {
+  "hotshot": "A *balloon*? You got rescued by a *balloon*? I had a whole plan! It had a part with a rope!",
+  "prodigy": "An external actor resolved it first. I am told this is good news. I am adjusting to that.",
+  "friendly": "They're back? Oh, thank goodness. I don't mind who. I mind a *bit*. Mostly I don't mind.",
+  "bitter": "Somebody else did it. Faster. …Good. No, I mean it. Good.",
+  "scholar": "I had a nine-day observation log. I shall file it under 'unnecessary' and try to feel pleased.",
+  "heir": "The matter is settled, and not by me. I shall be gracious about it. Starting presently.",
+  "lone-wolf": "…Huh.",
+  "mirror": "Someone got there before me. That's usually your line."
+ },
+ "froze": {
+  "hotshot": "A Pokémon of the same species as their starter, much smaller, in a cage that is too big",
+  "prodigy": "A cage with nothing in it and scratch marks on the inside",
+  "friendly": "All of it. They are fine. They need a second",
+  "bitter": "A cage tag with a sponsor's logo on it. A sponsor that turned them down",
+  "scholar": "A clipboard with someone else's notes. The handwriting is neat. The notes are about pain thresholds",
+  "heir": "Their family's crest, stamped on the lock",
+  "lone-wolf": "Nothing visible. They stand there for five seconds, and then carry on",
+  "mirror": "Their own reflection in the glass, with a Pokémon behind it looking back"
+ },
+ "teams": [
+  "rocket",
+  "rocket-returns",
+  "aqua",
+  "magma",
+  "galactic",
+  "plasma",
+  "flare",
+  "skull",
+  "aether",
+  "macro-cosmos",
+  "yell",
+  "star",
+  "rocket-remnants",
+  "snagem"
+ ],
+ "receipts": {
+  "rocket": "A numbered claim ticket, carbon copy. \"Property held pending assessment. No refunds.",
+  "rocket-returns": "A request slip from a radio station: \"Your dedication has been received and will be played shortly.",
+  "aqua": "A cargo tag, damp. A berth number and a tide table",
+  "magma": "A sample label: specimen, mass, temperature tolerance",
+  "galactic": "A form with every field filled in except *Owner*",
+  "plasma": "A certificate of liberation, gilt-edged, congratulating the Pokémon",
+  "flare": "An invoice. The amount is the Pokémon. It is marked *paid*",
+  "skull": "A tag sprayed on the nearest wall: the Pokémon's name, spelled wrong, and \"BORROWED",
+  "aether": "An intake card with a photograph, a habitat number and visiting hours",
+  "macro-cosmos": "A lanyard pass for the Pokémon: \"Contractor, Energy Division",
+  "yell": "A ticket stub. Standing section. \"See you at the match!",
+  "star": "A sticky note: \"Borrowing this. Sorry. Will give back. Probably.",
+  "rocket-remnants": "An IOU, signed by all three, with a pawprint",
+  "snagem": "Nothing. That is how the player knows who it was"
+ },
+ "effects": {
+  "rocket": {
+   "processed": "A numbered ear tag",
+   "assigned": "*Tagged*: cannot be forced to switch out; the tag can be removed at any rest node",
+   "heldTooLong": "Veiled, Capture Rig"
+  },
+  "rocket-returns": {
+   "processed": "It hums a jingle",
+   "assigned": "Flinches at radio static: −1 Speed on its first turn in the next battle only",
+   "heldTooLong": "Veiled, Radio Wave Lock"
+  },
+  "aqua": {
+   "processed": "Smells of brine",
+   "assigned": "+1 Speed in rain, −1 in harsh sun, for five nodes",
+   "heldTooLong": "Veiled, Orb Resonance"
+  },
+  "magma": {
+   "processed": "Soot on its coat",
+   "assigned": "+1 Defense in harsh sun, −1 in rain, for five nodes",
+   "heldTooLong": "Veiled, Orb Resonance"
+  },
+  "galactic": {
+   "processed": "Sits very still",
+   "assigned": "*Quiet*: bond effects are halved for five nodes. It comes back to itself gradually",
+   "heldTooLong": "Veiled, Red Chain Lock"
+  },
+  "plasma": {
+   "processed": "Looks for the door",
+   "assigned": "Hesitates once (loses one turn in its next battle) the first time it is sent out",
+   "heldTooLong": "Veiled, Liberation Lock"
+  },
+  "flare": {
+   "processed": "Groomed, with a ribbon",
+   "assigned": "Keeps the ribbon: a harmless held item",
+   "heldTooLong": "Veiled, Life-Force Siphon"
+  },
+  "skull": {
+   "processed": "A sprayed tag on one flank",
+   "assigned": "Has picked up a bad habit: uses its weakest move first, once. The Grunts taught it that for a laugh",
+   "heldTooLong": "Veiled, Stolen Bond"
+  },
+  "aether": {
+   "processed": "Very clean; a wristband",
+   "assigned": "Cannot be given a status condition for five nodes; −1 Speed for the same",
+   "heldTooLong": "Veiled, Conservation Hold"
+  },
+  "macro-cosmos": {
+   "processed": "A lanyard",
+   "assigned": "Tired: starts its next battle at 90% HP. It has been working",
+   "heldTooLong": "Veiled, Dynamax Overload"
+  },
+  "yell": {
+   "processed": "Face paint",
+   "assigned": "Louder: its sound-based moves have +10% power for five nodes. It had a lovely time",
+   "heldTooLong": "Never. Yell binds nothing; the Pokémon comes back hoarse"
+  },
+  "star": {
+   "processed": "A star sticker",
+   "assigned": "Nothing. Somebody fed it and taught it a trick",
+   "heldTooLong": "Veiled, Star Barrage Link"
+  },
+  "rocket-remnants": {
+   "processed": "A tiny bow tie",
+   "assigned": "Nothing. Meowth kept it company and it is slightly spoiled",
+   "heldTooLong": "Never: no lasting Shadow"
+  },
+  "snagem": {
+   "processed": "A dark collar",
+   "assigned": "*Snagged*: 20% chance to skip a turn in its next battle, once, looking for its trainer",
+   "heldTooLong": "Veiled, Snag Machine"
+  }
+ },
+ "sites": [
+  {
+   "team": "rocket",
+   "name": "Team Rocket",
+   "site": "The Celadon basement cells",
+   "annexPr": "pr.kanto.celadon-cells",
+   "note": "Numbered cages under the Game Corner",
+   "approach": "Down the Game Corner's back stairs, past a poster that is a switch",
+   "door": "A numbered grille; the number on the claim ticket opens it",
+   "cage": "Rows of cages with claim numbers",
+   "jailer": "Mr. Fitch",
+   "jailerLine": "Ticket? No ticket, no talk. Ticket, we talk."
+  },
+  {
+   "team": "rocket-returns",
+   "name": "Rocket Returns",
+   "site": "The Mahogany back room",
+   "annexPr": "pr.johto.mahogany-cells",
+   "note": "Pokémon kept near the transmitter",
+   "approach": "Through the souvenir shop, under the Ragecandybar display",
+   "door": "A studio door with a red light. It cannot be opened while the light is on",
+   "cage": "Pens beside the transmitter. The hum makes teeth ache",
+   "jailer": "Nan Holloway",
+   "jailerLine": "station manager\". \"We're on air in two minutes. Whatever this is, make it one."
+  },
+  {
+   "team": "aqua",
+   "name": "Team Aqua",
+   "site": "The Slateport sub bay",
+   "annexPr": "pr.hoenn.sub-bay-cells",
+   "note": "Tanks and net cages",
+   "approach": "Along the dry dock at low tide",
+   "door": "A pressure hatch",
+   "cage": "Tanks and net cages, half flooded on a schedule",
+   "jailer": "Bosun Kettle",
+   "jailerLine": "Tide's in at six. You want 'em dry, you want 'em before six."
+  },
+  {
+   "team": "magma",
+   "name": "Team Magma",
+   "site": "The Mt. Chimney tunnels",
+   "annexPr": "pr.hoenn.chimney-cells",
+   "note": "Heat-lamped pens",
+   "approach": "Down a service tunnel that is slightly too warm",
+   "door": "A blast door with a thermal lock: it opens when the room is cool",
+   "cage": "Heat-lamped pens",
+   "jailer": "Technician Ashby",
+   "jailerLine": "Don't touch the lamps. They like the lamps. I'm fairly sure they like the lamps."
+  },
+  {
+   "team": "galactic",
+   "name": "Team Galactic",
+   "site": "The Eterna Building basement",
+   "annexPr": "pr.sinnoh.eterna-cells",
+   "note": "Chain-linked cages",
+   "approach": "The lift does not list this floor",
+   "door": "A door with no handle on the outside",
+   "cage": "Chain-linked cages in a room with no echo",
+   "jailer": "Grunt 87",
+   "jailerLine": "I am required to ask your business. I am not required to care."
+  },
+  {
+   "team": "plasma",
+   "name": "Team Plasma",
+   "site": "The Plasma Frigate hold",
+   "annexPr": "pr.unova.frigate-hold",
+   "note": "\"Freed\" Pokémon bound to the signal",
+   "approach": "Up the Frigate's stern ladder",
+   "door": "A hold hatch with a banner over it: *They Are Free Now*",
+   "cage": "A large, comfortable pen with no exit",
+   "jailer": "Brother Aldous",
+   "jailerLine": "You've come to take them back into bondage. I shall pray for you. The key is on the hook."
+  },
+  {
+   "team": "flare",
+   "name": "Team Flare",
+   "site": "The Lysandre Labs lower levels",
+   "annexPr": "pr.kalos.lab-cells",
+   "note": "Sterile glass cages",
+   "approach": "The café's wine cellar",
+   "door": "A glass door. Fingerprints show",
+   "cage": "Sterile glass cases, each with a price card",
+   "jailer": "Madame Solange",
+   "jailerLine": "They are very well kept. Better than you kept them, I think. Look at the coat."
+  },
+  {
+   "team": "skull",
+   "name": "Team Skull",
+   "site": "The Po Town cellar",
+   "annexPr": "pr.alola.po-cellar",
+   "note": "\"Borrowed\" Pokémon with a whistle tag",
+   "approach": "Over the Po Town wall, in the rain",
+   "door": "A door held shut by a Grunt leaning on it",
+   "cage": "A cellar. Someone has put down blankets",
+   "jailer": "Grunt \"Big Wheels\"",
+   "jailerLine": "Boss said nobody goes in. He didn't say nothin' about *out*. Hm."
+  },
+  {
+   "team": "aether",
+   "name": "Aether Foundation",
+   "site": "The Paradise conservation wing",
+   "annexPr": "pr.alola.paradise-wing",
+   "note": "\"Protected\" Pokémon in glass habitats",
+   "approach": "The visitors' entrance, during visiting hours",
+   "door": "A habitat airlock with a sanitising cycle",
+   "cage": "Glass habitats, each one perfect and sealed",
+   "jailer": "Keeper Lehua",
+   "jailerLine": "Visiting hours end at four. You're welcome to look. Please don't tap the glass."
+  },
+  {
+   "team": "macro-cosmos",
+   "name": "Macro Cosmos",
+   "site": "The Energy Plant holding floor",
+   "annexPr": "pr.galar.plant-holding",
+   "note": "Pokémon kept in Dynamax chambers",
+   "approach": "A staff corridor; the lanyard pass from the receipt works once",
+   "door": "A turnstile",
+   "cage": "Dynamax chambers: red light under the doors",
+   "jailer": "Shift Supervisor Dunn",
+   "jailerLine": "If it's on the rota I can't release it. If you take it off the rota I never saw it on the rota."
+  },
+  {
+   "team": "yell",
+   "name": "Team Yell",
+   "site": "The Spikemuth fan hall back room",
+   "annexPr": "pr.galar.fan-hall-backroom",
+   "note": "Pokémon \"held for the cheer\"",
+   "approach": "The fan hall's side door",
+   "door": "It is open. It is always open",
+   "cage": "A back room with sofas. The Pokémon are watching a match replay",
+   "jailer": "Yell Grunt Tegan",
+   "jailerLine": "Oh! They're yours? We thought they were supporters! They've been *brilliant*."
+  },
+  {
+   "team": "star",
+   "name": "Team Star",
+   "site": "The Segin Base garage",
+   "annexPr": "pr.paldea.segin-garage",
+   "note": "\"Borrowed\" Pokémon in Starmobile crates",
+   "approach": "The Base's garage roller door",
+   "door": "A padlock with the code written on it in marker",
+   "cage": "Starmobile crates with air holes and cushions",
+   "jailer": "Star Grunt Pío",
+   "jailerLine": "We were gonna give them back! We got busy! There was a *thing*!"
+  },
+  {
+   "team": "rocket-remnants",
+   "name": "Rocket Remnants",
+   "site": "Their hideout in the host region (default: Route 9 depot, back lot)",
+   "annexPr": "pr.kanto.route9-depot",
+   "note": "Rust-and-crate cages",
+   "approach": "Their hideout in the host region",
+   "door": "A net, strung across the doorway, that falls on whoever sets it",
+   "cage": "A cage made of other, smaller cages",
+   "jailer": "Meowth",
+   "jailerLine": "Youse can't prove nothin'. …How much ya got?"
+  },
+  {
+   "team": "snagem",
+   "name": "Team Snag'em",
+   "site": "Their hideout in the host region (default: the Unova shipyard)",
+   "annexPr": "pr.unova.shipyard",
+   "note": "Shadow stock in dark cages",
+   "approach": "Their hideout in the host region",
+   "door": "A roller shutter and a dog that is actually a Houndour",
+   "cage": "Dark cages. The Pokémon inside have gone quiet",
+   "jailer": "Wakin",
+   "jailerLine": "…Take them. Quick. I'm going to go and check on something over there for five minutes."
+  }
+ ],
+ "complications": [
+  {
+   "id": 1,
+   "name": "The Extra Guard",
+   "sees": "Someone who was not on the rival's map",
+   "good": "Wait: they are on a break and will leave",
+   "poor": "Rush them"
+  },
+  {
+   "id": 2,
+   "name": "The Wrong Cage",
+   "sees": "The cage number on the receipt holds a different Pokémon",
+   "good": "Open it anyway, then find the right one",
+   "poor": "Leave it"
+  },
+  {
+   "id": 3,
+   "name": "Moved",
+   "sees": "The Pokémon were moved an hour ago",
+   "good": "Follow the drag marks",
+   "poor": "Search room by room"
+  },
+  {
+   "id": 4,
+   "name": "The Alarm Test",
+   "sees": "A scheduled alarm test begins",
+   "good": "Walk, do not run: it is only a test",
+   "poor": "Run"
+  },
+  {
+   "id": 5,
+   "name": "It Won't Come",
+   "sees": "The player's Pokémon is frightened and will not leave the cage",
+   "good": "Sit down. Wait. Say its name",
+   "poor": "Pull"
+  },
+  {
+   "id": 6,
+   "name": "The Friendly Grunt",
+   "sees": "A Grunt who has been feeding them and does not want trouble",
+   "good": "Thank them",
+   "poor": "Battle them"
+  },
+  {
+   "id": 7,
+   "name": "The Second Rescuer",
+   "sees": "Somebody else is already breaking in for their own Pokémon",
+   "good": "Work together",
+   "poor": "Compete for the door"
+  },
+  {
+   "id": 8,
+   "name": "Locked In",
+   "sees": "The door shuts behind the party",
+   "good": "Look up: there is always a hatch",
+   "poor": "Force the door"
+  },
+  {
+   "id": 9,
+   "name": "The Officer",
+   "sees": "A Lieutenant arrives for an inspection",
+   "good": "Hide among the cages. The Pokémon keep quiet for the player",
+   "poor": "Fight"
+  },
+  {
+   "id": 10,
+   "name": "The Paperwork",
+   "sees": "The jailer will not release them without a form",
+   "good": "Fill in the form. It is two lines long",
+   "poor": "Tear up the form"
+  },
+  {
+   "id": 11,
+   "name": "Somebody's Missing",
+   "sees": "One of the impounded Pokémon is not with the others",
+   "good": "Ask the others. One of them points",
+   "poor": "Assume the worst"
+  },
+  {
+   "id": 12,
+   "name": "The Rival Freezes",
+   "sees": "The rival sees something in a cage that stops them",
+   "good": "Give them a moment",
+   "poor": "Hurry them"
+  }
+ ],
+ "gruntPools": {
+  "macro-cosmos": [
+   "magnemite",
+   "koffing",
+   "voltorb"
+  ],
+  "rocket-remnants": [
+   "rattata",
+   "ekans",
+   "koffing"
+  ],
+  "snagem": [
+   "poochyena",
+   "houndour",
+   "zubat"
+  ]
+ },
+ "tuning": {
+  "waitMin": 9,
+  "waitSpan": 3,
+  "secondOfferGap": 5,
+  "pMin": 0.35,
+  "pMax": 0.95,
+  "partialBand": 0.15,
+  "base": {
+   "quiet": 0.7,
+   "loud": 0.8,
+   "inside": 0.85
+  },
+  "preferredBonus": 0.1,
+  "beatStep": 0.05,
+  "raidStep": 0.05,
+  "latePenalty": 0.1,
+  "exchangePenalty": 0.1,
+  "insiderGoodBonus": 0.05,
+  "attitudePerPoint": 0.05,
+  "intelPerTier": 0.03,
+  "osFree": 10,
+  "osPerPoint": 0.02,
+  "dealMoneyPct": 40,
+  "dealMoneyPctRep": 30,
+  "dealIntelCost": 5,
+  "dealIntelOffPct": 10,
+  "heat": {
+   "quietBad": 10,
+   "loudAlways": 15,
+   "fail": 10
+  },
+  "cellmateChance": 0.2,
+  "assignedNodes": 5,
+  "processedAt": 5,
+  "assignedAt": 10,
+  "poundHpShare": 0.5,
+  "warrantNodes": 3,
+  "tooLongCorruption": 10,
+  "labels": {
+   "risky": 0.5,
+   "even": 0.65,
+   "likely": 0.8
+  }
+ },
+ "attitude": {
+  "hotshot": {
+   "full": 1,
+   "partial": 0,
+   "fail": -0.5,
+   "declined": -0.5
+  },
+  "prodigy": {
+   "full": 1,
+   "partial": 0,
+   "fail": -0.5,
+   "declined": 0
+  },
+  "friendly": {
+   "full": 1.5,
+   "partial": 0.5,
+   "fail": 0.5,
+   "declined": 0
+  },
+  "bitter": {
+   "full": 0.5,
+   "partial": 0,
+   "fail": -0.5,
+   "declined": -0.5
+  },
+  "scholar": {
+   "full": 1,
+   "partial": 0.5,
+   "fail": 0,
+   "declined": 0
+  },
+  "heir": {
+   "full": 1,
+   "partial": 0,
+   "fail": -0.5,
+   "declined": 0
+  },
+  "lone-wolf": {
+   "full": 1,
+   "partial": 0,
+   "fail": 0,
+   "declined": 0
+  },
+  "mirror": {
+   "full": 0.5,
+   "partial": 0,
+   "fail": 0,
+   "declined": 0
+  }
+ },
+ "prefers": {
+  "hotshot": "loud",
+  "prodigy": "quiet",
+  "friendly": "quiet",
+  "bitter": "loud",
+  "scholar": "quiet",
+  "heir": "deal",
+  "lone-wolf": "quiet",
+  "mirror": "quiet"
+ },
+ "noBinding": [
+  "yell",
+  "rocket-remnants"
+ ],
+ "summaryLines": {
+  "logged": "It checked that you were all still here.",
+  "processed": "It keeps looking at the mark they left. It doesn't seem to mind when you look too.",
+  "assigned": "It did what they told it. It would rather not talk about it.",
+  "held-too-long": "It knows you came. It took a while to be sure."
+ },
+ "beats": {
+  "quiet": {
+   "approach": {
+    "good": "Wait for the shift change",
+    "neutral": "Go at once",
+    "bad": "Go at once, with a light"
+   },
+   "door": {
+    "good": "Use the service entrance the receipt names",
+    "neutral": "Pick the main lock",
+    "bad": "Try the window. There is always a window. It is always alarmed"
+   },
+   "cage": {
+    "good": "Let the Pokémon recognise the player before opening",
+    "neutral": "Open every cage at once",
+    "bad": "Carry the cage out, closed"
+   }
+  },
+  "loud": {
+   "approach": {
+    "good": "Let the rival go first and be the noise",
+    "neutral": "Go in together",
+    "bad": "Go first and be the noise yourself"
+   },
+   "door": {
+    "good": "Break the hinge side",
+    "neutral": "Break the lock",
+    "bad": "Argue with the guard"
+   },
+   "cage": {
+    "good": "Shield the cages before the last fight",
+    "neutral": "Fight in the open",
+    "bad": "Fight beside the cages"
+   }
+  },
+  "inside": {
+   "approach": {
+    "good": "Arrive exactly when the insider said",
+    "neutral": "Arrive early",
+    "bad": "Arrive late"
+   },
+   "cage": {
+    "good": "Leave the way the insider says, even though it is longer",
+    "neutral": "Leave the way the player came",
+    "bad": "Stop to take something else"
+   }
+  }
+ },
+ "exchange": {
+  "opening": {
+   "good": "Put the item on the table first",
+   "wrong": "Ask to see the Pokémon first"
+  },
+  "middle": {
+   "good": "Say nothing while they inspect it",
+   "wrong": "Explain what it is worth"
+  },
+  "close": {
+   "good": "Take the Pokémon and leave",
+   "wrong": "Ask for something extra"
+  }
+ },
+ "personalityArchetype": {
+  "champion-chaser": "hotshot",
+  "bitter-challenger": "bitter",
+  "enthusiast": "friendly",
+  "idealist": "heir",
+  "strategist": "scholar",
+  "protector": "mirror",
+  "prodigy": "prodigy",
+  "underdog": "lone-wolf"
+ }
+}

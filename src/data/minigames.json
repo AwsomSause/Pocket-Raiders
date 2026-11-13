@@ -8,7 +8,8 @@
     "tierMultipliers": [
       1,
       1.5,
-      2
+      2,
+      3
     ],
     "effectCapPerStage": 2,
     "frontier": {
@@ -114,6 +115,15 @@
             "moves": 18,
             "decoys": 2
           }
+        },
+        {
+          "id": "master",
+          "label": "Master",
+          "params": {
+            "pairs": 12,
+            "moves": 20,
+            "decoys": 3
+          }
         }
       ],
       "durationLimit": 0,
@@ -206,6 +216,16 @@
             "goal": 14,
             "targets": 3
           }
+        },
+        {
+          "id": "master",
+          "label": "Master",
+          "params": {
+            "throws": 8,
+            "ticks": 24,
+            "goal": 15,
+            "targets": 4
+          }
         }
       ],
       "durationLimit": 30,
@@ -288,6 +308,13 @@
           "label": "Hard",
           "params": {
             "notes": 26
+          }
+        },
+        {
+          "id": "master",
+          "label": "Master",
+          "params": {
+            "notes": 34
           }
         }
       ],
@@ -375,6 +402,15 @@
             "capacity": 4,
             "hideRotten": 1
           }
+        },
+        {
+          "id": "master",
+          "label": "Master",
+          "params": {
+            "items": 14,
+            "capacity": 4,
+            "hideRotten": 1
+          }
         }
       ],
       "durationLimit": 0,
@@ -457,6 +493,13 @@
           "label": "Hard",
           "params": {
             "questions": 10
+          }
+        },
+        {
+          "id": "master",
+          "label": "Master",
+          "params": {
+            "questions": 12
           }
         }
       ],
@@ -544,6 +587,14 @@
             "treasures": 6,
             "durability": 14
           }
+        },
+        {
+          "id": "master",
+          "label": "Master",
+          "params": {
+            "treasures": 7,
+            "durability": 13
+          }
         }
       ],
       "durationLimit": 0,
@@ -630,6 +681,14 @@
             "rounds": 5,
             "ticks": 60
           }
+        },
+        {
+          "id": "master",
+          "label": "Master",
+          "params": {
+            "rounds": 6,
+            "ticks": 55
+          }
         }
       ],
       "durationLimit": 0,
@@ -711,6 +770,14 @@
           "label": "Hard",
           "params": {
             "puzzles": 4,
+            "turns": 3
+          }
+        },
+        {
+          "id": "master",
+          "label": "Master",
+          "params": {
+            "puzzles": 5,
             "turns": 3
           }
         }
@@ -802,6 +869,15 @@
             "moves": 10,
             "goal": 14
           }
+        },
+        {
+          "id": "master",
+          "label": "Master",
+          "params": {
+            "tiles": 18,
+            "moves": 10,
+            "goal": 16
+          }
         }
       ],
       "durationLimit": 0,
@@ -884,6 +960,14 @@
           "params": {
             "rounds": 4,
             "probes": 5
+          }
+        },
+        {
+          "id": "master",
+          "label": "Master",
+          "params": {
+            "rounds": 5,
+            "probes": 4
           }
         }
       ],
@@ -971,6 +1055,14 @@
             "plots": 6,
             "units": 12
           }
+        },
+        {
+          "id": "master",
+          "label": "Master",
+          "params": {
+            "plots": 7,
+            "units": 14
+          }
         }
       ],
       "durationLimit": 0,
@@ -1054,6 +1146,13 @@
           "params": {
             "rounds": 10
           }
+        },
+        {
+          "id": "master",
+          "label": "Master",
+          "params": {
+            "rounds": 12
+          }
         }
       ],
       "durationLimit": 0,
@@ -1133,6 +1232,13 @@
           "label": "Hard",
           "params": {
             "forks": 7
+          }
+        },
+        {
+          "id": "master",
+          "label": "Master",
+          "params": {
+            "forks": 8
           }
         }
       ],
@@ -1219,6 +1325,14 @@
           "params": {
             "rounds": 10,
             "window": 2
+          }
+        },
+        {
+          "id": "master",
+          "label": "Master",
+          "params": {
+            "rounds": 12,
+            "window": 1
           }
         }
       ],
@@ -1403,7 +1517,7 @@
       "medals": {
         "bronze": 0.5,
         "silver": 0.75,
-        "gold": 1.0
+        "gold": 1
       },
       "rewardTable": {
         "bronze": {
@@ -1578,7 +1692,7 @@
       "medals": {
         "bronze": 0.5,
         "silver": 0.66,
-        "gold": 1.0
+        "gold": 1
       },
       "rewardTable": {
         "bronze": {
@@ -1853,7 +1967,7 @@
           "effect": {
             "kind": "heal",
             "amount": 25,
-            "chance": 1.0
+            "chance": 1
           }
         },
         "gold": {
@@ -1865,7 +1979,7 @@
           "effect": {
             "kind": "heal",
             "amount": 40,
-            "chance": 1.0
+            "chance": 1
           }
         }
       },
@@ -1914,6 +2028,14 @@
             "level": 30,
             "rounds": 5
           }
+        },
+        {
+          "id": "master",
+          "label": "Master",
+          "params": {
+            "level": 35,
+            "rounds": 6
+          }
         }
       ],
       "durationLimit": 0,
@@ -1922,7 +2044,7 @@
       "medals": {
         "bronze": 0.34,
         "silver": 0.6,
-        "gold": 1.0
+        "gold": 1
       },
       "rewardTable": {
         "bronze": {
@@ -2000,6 +2122,14 @@
             "level": 30,
             "rounds": 5
           }
+        },
+        {
+          "id": "master",
+          "label": "Master",
+          "params": {
+            "level": 35,
+            "rounds": 6
+          }
         }
       ],
       "durationLimit": 0,
@@ -2008,7 +2138,7 @@
       "medals": {
         "bronze": 0.34,
         "silver": 0.6,
-        "gold": 1.0
+        "gold": 1
       },
       "rewardTable": {
         "bronze": {
@@ -2089,6 +2219,15 @@
             "rounds": 5,
             "spins": 1
           }
+        },
+        {
+          "id": "master",
+          "label": "Master",
+          "params": {
+            "level": 35,
+            "rounds": 6,
+            "spins": 1
+          }
         }
       ],
       "durationLimit": 0,
@@ -2097,7 +2236,7 @@
       "medals": {
         "bronze": 0.34,
         "silver": 0.6,
-        "gold": 1.0
+        "gold": 1
       },
       "rewardTable": {
         "bronze": {
@@ -2180,6 +2319,16 @@
             "floors": 3,
             "steps": 12,
             "foes": 2
+          }
+        },
+        {
+          "id": "master",
+          "label": "Master",
+          "params": {
+            "level": 35,
+            "floors": 4,
+            "steps": 12,
+            "foes": 3
           }
         }
       ],
@@ -2441,7 +2590,7 @@
       "medals": {
         "bronze": 0.34,
         "silver": 0.67,
-        "gold": 1.0
+        "gold": 1
       },
       "rewardTable": {
         "bronze": {
@@ -2705,7 +2854,7 @@
       "medals": {
         "bronze": 0.34,
         "silver": 0.67,
-        "gold": 1.0
+        "gold": 1
       },
       "rewardTable": {
         "bronze": {

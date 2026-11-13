@@ -39,6 +39,8 @@ export const StepInConfigSchema = z.object({
   teamSize: z.number().int().min(2).max(6),
   lines: z.object(Object.fromEntries(SCENARIOS.map((s) => [s, ToneLines])) as Record<Scenario, typeof ToneLines>),
 });
+import { overhaulOf } from './overhaul';
+import { catchStepInRoll, markStepIn } from './presence';
 export const STEP_IN = StepInConfigSchema.parse(json);
 
 export type StepInKind = 'assist' | 'duel' | 'catch';
@@ -47,6 +49,15 @@ export interface StepInPlan { kind: StepInKind; rivalId: string; legend?: 'legen
 const stageKey = (run: Pick<RunState, 'regionIndex' | 'stage'>) => `${run.regionIndex}.${run.stage?.index ?? 0}`;
 export const stepInFlag = (run: Pick<RunState, 'regionIndex' | 'stage'>, group: 'ab' | 'c') => `stepin:${group}:${stageKey(run)}`;
 export const STEPIN_FORCE = 'stepin:force';
+/** A Pseudo Stage Team-Up or Ambush (rivals/live.ts): "assist:<rivalId>" or "duel:<rivalId>" for the next eligible battle. */
+export const PSEUDO_FORCE = 'stepin:pseudo';
+const pseudoForced = (run: RunState): { kind: 'assist' | 'duel'; rival: Rival } | null => {
+  const v = run.story.flags[PSEUDO_FORCE];
+  if (typeof v !== 'string') return null;
+  const [kind, id] = v.split(':') as ['assist' | 'duel', string];
+  const rival = run.story.rivals.find((r) => r.id === id);
+  return rival && (kind === 'assist' || kind === 'duel') ? { kind, rival } : null;
+};
 /** The rival a duel must be built for (read by the trainer planner while the duel battle is made). */
 export const forcedStepInRival = (run: RunState): Rival | null => {
   const id = run.story.flags[STEPIN_FORCE];
@@ -85,6 +96,8 @@ export function catchable(content: Content, b: BattleState): boolean {
 export function planStepIn(content: Content, run: RunState): StepInPlan | null {
   const b = run.battle;
   if (!b || run.phase !== 'battle' || !eligibleBattle(run, b)) return null;
+  const forced = pseudoForced(run);
+  if (forced && !(forced.kind === 'assist' && b.doubles)) return { kind: forced.kind, rivalId: forced.rival.id };
   const rng = new Rng(hashSeed(`${run.seed}::stepin::${run.regionIndex}.${run.stage?.index ?? 0}::${run.encountersCompleted}`));
   const pool = run.story.rivals.filter((r) => r.cooldown === 0 && (hostile(r) || friendly(r)));
   if (!pool.length) return null;
@@ -94,7 +107,10 @@ export function planStepIn(content: Content, run: RunState): StepInPlan | null {
   const rollKind = rng.float();
   if (catchable(content, b) && hostile(rival) && Number(run.story.flags[stepInFlag(run, 'c')] ?? 0) < STEP_IN.perStageCatch) {
     const legend = legendKind(content, b.enemyTeam[b.enemyIndex]!.speciesId);
-    if (rollC < (legend ? STEP_IN.legendCatchChance : STEP_IN.catchChance)) return { kind: 'catch', rivalId: rival.id, ...(legend ? { legend } : {}) };
+    // Beta 0.6 R6: a registered rival steps in on a catch 3% of the time, once per region (rivals/presence.ts).
+    const rec = overhaulOf(run, rival.id);
+    const fires = rec ? catchStepInRoll(`${run.seed}:${rival.id}`, rec, run.regionIndex, run.encountersCompleted) : rollC < (legend ? STEP_IN.legendCatchChance : STEP_IN.catchChance);
+    if (fires) return { kind: 'catch', rivalId: rival.id, ...(legend ? { legend } : {}) };
   }
   if (Number(run.story.flags[stepInFlag(run, 'ab')] ?? 0) >= STEP_IN.perStageDuelAssist) return null;
   if (rollAB >= STEP_IN.assistChance + STEP_IN.duelChance) return null;

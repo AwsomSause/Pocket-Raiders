@@ -1,0 +1,292 @@
+{
+ "events": [
+  {
+   "id": "stand-with-recruiter",
+   "name": "A Job Offer",
+   "group": "Evil Team",
+   "rarity": "rare",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 2
+    },
+    {
+     "kind": "standWith",
+     "joined": false
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A recruiter in a plain jacket falls into step beside you. \"We have noticed you. We notice useful people. There is a uniform, a code name and a desk, and nobody will ask you for a reason. Decline, and we will never have met.\"",
+   "choices": [
+    {
+     "label": "Join as an Inside Man",
+     "success": {
+      "text": "A uniform is folded into your arms. You are somebody else now, on the inside.",
+      "effects": [
+       {
+        "kind": "standWith",
+        "action": "join"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "The recruiter nods once and is gone.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "stand-with-team-mission",
+   "name": "A Small Job for the Team",
+   "group": "Evil Team",
+   "rarity": "uncommon",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "standWith"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "An officer hands you a sealed envelope without looking up. \"Errand. Nothing to do with the plan. Do it well and people will notice.\"",
+   "choices": [
+    {
+     "label": "Run the errand (+8 reputation)",
+     "success": {
+      "text": "It is done by evening, and nobody says thank you, which is how you know.",
+      "effects": [
+       {
+        "kind": "standWith",
+        "action": "rep",
+        "change": "team-mission"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse to your officer's face (-4 reputation, never below your band)",
+     "success": {
+      "text": "The officer's pen stops. Then it starts again.",
+      "effects": [
+       {
+        "kind": "standWith",
+        "action": "rep",
+        "change": "refuse-order"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Slip the errand's target a warning (a small mercy)",
+     "success": {
+      "text": "Somebody in the city sleeps better tonight.",
+      "effects": [
+       {
+        "kind": "standWith",
+        "action": "mercy",
+        "noticed": false
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "stand-with-verdict",
+   "name": "The Verdict",
+   "group": "Evil Team",
+   "rarity": "rare",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "forced": true,
+   "priority": 95,
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "standWith",
+     "verdictPending": true
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "The defenders are gone. The team's Leader looks at you for a long time. \"You held the line,\" they say. \"Now tell me what kind of ally you are.\"",
+   "choices": [
+    {
+     "label": "Rise: take the Executive's post, and hand your rival to the team",
+     "requires": [
+      {
+       "kind": "standWith",
+       "verdict": "rise"
+      },
+      {
+       "kind": "standWith",
+       "rival": true
+      }
+     ],
+     "success": {
+      "text": "You are made an Executive. The team takes your rival, and some of your bench with them.",
+      "effects": [
+       {
+        "kind": "standWith",
+        "action": "verdict",
+        "verdict": "rise",
+        "noticed": false,
+        "rival": "handOver"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rise: take the Executive's post (a rival, if you have one, walks free)",
+     "requires": [
+      {
+       "kind": "standWith",
+       "verdict": "rise"
+      }
+     ],
+     "success": {
+      "text": "You are made an Executive.",
+      "effects": [
+       {
+        "kind": "standWith",
+        "action": "verdict",
+        "verdict": "rise",
+        "noticed": false,
+        "rival": "release"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the Throne (needs +70)",
+     "requires": [
+      {
+       "kind": "standWith",
+       "verdict": "throne"
+      }
+     ],
+     "success": {
+      "text": "You take the chair. The officers choose, and they choose you.",
+      "effects": [
+       {
+        "kind": "standWith",
+        "action": "verdict",
+        "verdict": "throne",
+        "noticed": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn: break the plan from the inside",
+     "requires": [
+      {
+       "kind": "standWith",
+       "verdict": "turn"
+      }
+     ],
+     "success": {
+      "text": "You break the plan from the inside. The team will remember it in every region after this one.",
+      "effects": [
+       {
+        "kind": "standWith",
+        "action": "verdict",
+        "verdict": "turn",
+        "noticed": false
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "stand-with-hideout",
+   "name": "Hold the Line",
+   "group": "Evil Team",
+   "rarity": "rare",
+   "tags": [
+    "Evil Team",
+    "Story",
+    "Combat"
+   ],
+   "forced": true,
+   "priority": 90,
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "evil",
+     "beat": 6
+    },
+    {
+     "kind": "standWith",
+     "playable": true
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "shake"
+   },
+   "intro": "The region's defenders are at the gates. Your officer finds you in the corridor. \"This is the day you earn that uniform. Hold the line, and we will talk about what you are afterwards.\"",
+   "choices": [
+    {
+     "label": "[Stand with them] Defend the team",
+     "success": {
+      "text": "You pull on the uniform and take the line. The defenders come in waves.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "classId": "ace-trainer",
+       "name": "The Region's Defenders",
+       "size": 5,
+       "levelBonus": 3,
+       "chain": 2,
+       "pseudo": true,
+       "standWith": true,
+       "win": [
+        {
+         "kind": "standWith",
+         "action": "climaxWon",
+         "noticed": false
+        },
+        {
+         "kind": "evil",
+         "beat": true,
+         "heat": 0
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Not today",
+     "success": {
+      "text": "Your officer's mouth tightens. The offer stands, for now.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

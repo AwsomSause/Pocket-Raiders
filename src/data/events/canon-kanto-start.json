@@ -1,0 +1,2597 @@
+{
+ "events": [
+  {
+   "id": "cs-kanto-viridian-oldman",
+   "name": "The Old Man's Lesson",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a5a2d"
+   },
+   "intro": "Outside the Poké Mart a very old man dozes on a crate, an empty coffee cup in his hand. \"Ah, a new trainer. Let me show you how catching is done.\"",
+   "choices": [
+    {
+     "label": "Take the lesson",
+     "chance": 0.8,
+     "success": {
+      "text": "He tosses a ball at a startled Weedle and it clicks shut. \"Gentle hands, that is the secret.\" He gives you the Weedle, a Catching Charm and a handful of Poké Balls.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "weedle"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 5
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Catching Charm: the first wild Poké Ball is 25% better",
+        "effects": [
+         {
+          "kind": "captureMultiplier",
+          "value": 1.25
+         }
+        ],
+        "battles": 1,
+        "until": "wild"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-weedle-seed",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "He has not had his coffee. \"Catch it yourself!\" he yelps, and the Weedle charges you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "weedle"
+       ],
+       "levelBonus": -3,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "weedle"
+         ],
+         "levelBonus": -2
+        },
+        {
+         "kind": "item",
+         "id": "poke-ball",
+         "count": 5
+        },
+        {
+         "kind": "tempEffect",
+         "label": "Catching Charm: the first wild Poké Ball is 25% better",
+         "effects": [
+          {
+           "kind": "captureMultiplier",
+           "value": 1.25
+          }
+         ],
+         "battles": 1,
+         "until": "wild"
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-weedle-seed",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let him sleep",
+     "success": {
+      "text": "You tiptoe past. He snores on.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.viridian.oldman"
+  },
+  {
+   "id": "cs-kanto-viridian-route22",
+   "name": "Route 22: The Rival",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a5a2d"
+   },
+   "intro": "The road to the League gate. A guard blocks it. \"Come back when the whole region has heard of you.\" Your rival steps out of the tall grass, grinning.",
+   "choices": [
+    {
+     "label": "Face your rival",
+     "success": {
+      "text": "\"Let's see if you're any good!\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route22-fought",
+        "amount": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "rivalry": 1
+        },
+        "lead": 0,
+        "mark": "route22-token"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "size": 2,
+       "levelBonus": 2,
+       "rival": true,
+       "win": []
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.viridian.route22"
+  },
+  {
+   "id": "cs-kanto-viridian-route22-return",
+   "name": "Route 22: The Final Rematch",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a5a2d"
+   },
+   "intro": "Back at the gate where it began. The guard steps aside for you now, but your rival is waiting on the road, stronger than ever. \"One more. For old times.\"",
+   "choices": [
+    {
+     "label": "Take the rematch",
+     "success": {
+      "text": "Nobody speaks. Then the first ball flies.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route22-rematch",
+        "amount": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "size": 4,
+       "levelBonus": 4,
+       "rival": true,
+       "win": []
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.viridian.route22"
+  },
+  {
+   "id": "cs-kanto-viridian-parcel",
+   "name": "Viridian Mart: The Parcel",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a5a2d"
+   },
+   "intro": "The clerk waves you over. \"Oak ordered something. Could you drop this parcel at the next Pokémon Center?\"",
+   "choices": [
+    {
+     "label": "Take Oak's Parcel",
+     "success": {
+      "text": "You tuck it under your arm and head for the Center.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-viridian-parcel-drop"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today",
+     "success": {
+      "text": "\"Suit yourself.\"",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.viridian.parcel"
+  },
+  {
+   "id": "cs-kanto-viridian-parcel-drop",
+   "name": "Viridian Mart: The Delivery",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a5a2d"
+   },
+   "intro": "The Pokémon Center is just ahead. The parcel feels light in your hands.",
+   "choices": [
+    {
+     "label": "Deliver the parcel",
+     "chance": 0.75,
+     "success": {
+      "text": "The nurse beams and gives you the Pokédex Upgrade, a Devon Scope that shows the wild Pokémon waiting at the next stops.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "devon-scope"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-parcel-upgrade",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "A Rattata or Meowth snatches the parcel and bolts!",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "rattata",
+        "meowth"
+       ],
+       "pseudo": true,
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "devon-scope"
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-parcel-upgrade",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-school",
+   "name": "Viridian Trainer School",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a5a2d"
+   },
+   "intro": "A classroom of chalk and diagrams. The teacher taps the blackboard. \"Three questions. Get them right and you will battle better.\"",
+   "choices": [
+    {
+     "label": "Sit the quiz",
+     "success": {
+      "text": "Pencils up!",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-viridian-school-q1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Skip class",
+     "success": {
+      "text": "Detention is for other people.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.viridian.school"
+  },
+  {
+   "id": "cs-kanto-viridian-school-q1",
+   "name": "Trainer School: Question 1",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a5a2d"
+   },
+   "intro": "\"Question one. Which type is super effective against Water?\"",
+   "choices": [
+    {
+     "label": "Fire",
+     "success": {
+      "text": "Not quite. The teacher sighs and moves on.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-viridian-school-q2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Electric",
+     "success": {
+      "text": "Correct! A gold star, and a little something extra for your lead.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "weakestStat"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-viridian-school-q2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Normal",
+     "success": {
+      "text": "Not quite. The teacher sighs and moves on.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-viridian-school-q2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-school-q2",
+   "name": "Trainer School: Question 2",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a5a2d"
+   },
+   "intro": "\"Question two. Which type cannot hurt a Ground-type at all?\"",
+   "choices": [
+    {
+     "label": "Electric",
+     "success": {
+      "text": "Correct! A gold star, and a little something extra for your lead.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "weakestStat"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-viridian-school-q3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fire",
+     "success": {
+      "text": "Not quite. The teacher sighs and moves on.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-viridian-school-q3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Psychic",
+     "success": {
+      "text": "Not quite. The teacher sighs and moves on.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-viridian-school-q3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-school-q3",
+   "name": "Trainer School: Question 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a5a2d"
+   },
+   "intro": "\"Last question. Which type is Grass weak to?\"",
+   "choices": [
+    {
+     "label": "Water",
+     "success": {
+      "text": "Not quite. The teacher sighs and moves on.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Ground",
+     "success": {
+      "text": "Not quite. The teacher sighs and moves on.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Fire",
+     "success": {
+      "text": "Correct! A gold star, and a little something extra for your lead.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "weakestStat"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-diglett",
+   "name": "Diglett's Cave",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a4a2d"
+   },
+   "intro": "A tunnel mouth pocked with fresh holes. Dirt keeps popping up from the ground ahead.",
+   "choices": [
+    {
+     "label": "Enter the tunnel",
+     "success": {
+      "text": "The dirt shakes under your feet.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-viridian-diglett-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You back away from the holes.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.viridian.diglett"
+  },
+  {
+   "id": "cs-kanto-viridian-diglett-n1",
+   "name": "Diglett's Cave: Swarm",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a4a2d"
+   },
+   "intro": "Holes everywhere. Heads pop up from every one.",
+   "choices": [
+    {
+     "label": "Push on",
+     "success": {
+      "text": "A swarm of Diglett pops up!",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "diglett",
+        "diglett-alola",
+        "diglett-delta"
+       ],
+       "pseudo": true,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-viridian-diglett-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-diglett-n2",
+   "name": "Diglett's Cave: Deeper",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a4a2d"
+   },
+   "intro": "The tunnel narrows. The ground ahead is moving.",
+   "choices": [
+    {
+     "label": "Dig on",
+     "chance": 0.8,
+     "success": {
+      "text": "More Diglett burst out of the walls.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "diglett",
+        "diglett-alola",
+        "diglett-delta"
+       ],
+       "pseudo": true,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-viridian-diglett-n3"
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "The tunnel breaks into a warm den. A Sandshrew rolls out to defend it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sandshrew",
+        "sandshrew-alola"
+       ],
+       "pseudo": true,
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "sandshrew",
+          "sandshrew-alola"
+         ],
+         "levelBonus": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-viridian-diglett-n3"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-diglett-n3",
+   "name": "Diglett's Cave: The Dugtrio",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a4a2d"
+   },
+   "intro": "At the far end, a Dugtrio rises from the dirt and stares you down.",
+   "choices": [
+    {
+     "label": "Duel the Dugtrio",
+     "success": {
+      "text": "It does not blink.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "dugtrio",
+        "dugtrio-delta"
+       ],
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "soft-sand"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-viridian-diglett-reward"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-diglett-reward",
+   "name": "Diglett's Cave: The Burrow",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a4a2d"
+   },
+   "intro": "Behind the Dugtrio there is a deep burrow with something shining in it.",
+   "choices": [
+    {
+     "label": "Reach into the burrow",
+     "chance": 0.05,
+     "success": {
+      "text": "A special Dugtrio crawls out, shaking sand off its fur. It wants to come along!",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "dugtrio"
+        ],
+        "ability": "sand-veil",
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "tri-attack",
+        "species": "dugtrio"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Just sand. Still, the Soft Sand was a good find.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-indigo-road",
+   "name": "Victory Road",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a2d"
+   },
+   "intro": "The last road before the Indigo Plateau. Cave mouths, loose boulders and every strong trainer who made it this far.",
+   "choices": [
+    {
+     "label": "Climb Victory Road",
+     "success": {
+      "text": "The wind drops as the cave swallows you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-road-n1"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.indigo.road"
+  },
+  {
+   "id": "cs-kanto-indigo-road-n1",
+   "name": "Victory Road: First Cave",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a2d"
+   },
+   "intro": "A Hiker blocks the tunnel, rubbing his hands. \"Rock-hard, that is me!\"",
+   "choices": [
+    {
+     "label": "Battle",
+     "success": {
+      "text": "\"Let's rumble!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Hiker",
+       "size": 3,
+       "pseudo": true,
+       "classId": "hiker",
+       "types": [
+        "rock",
+        "ground"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-indigo-road-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-indigo-road-n2",
+   "name": "Victory Road: Boulders",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a2d"
+   },
+   "intro": "A boulder sits in the only way forward. There may be a trick to it.",
+   "choices": [
+    {
+     "label": "Push the boulder",
+     "check": "strength",
+     "success": {
+      "text": "You set your shoulder to it and it rolls into the hole. The way is open.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-road-n3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It will not budge. You squeeze through a crack and scrape your team up.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-road-n3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Squeeze around",
+     "success": {
+      "text": "Tight, but you make it.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-road-n3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-indigo-road-n3",
+   "name": "Victory Road: Fighters",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a2d"
+   },
+   "intro": "A Black Belt stands in a pool of light. \"No shortcuts here.\"",
+   "choices": [
+    {
+     "label": "Battle",
+     "success": {
+      "text": "\"Hai!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Black Belt",
+       "size": 3,
+       "pseudo": true,
+       "classId": "black-belt",
+       "types": [
+        "fighting",
+        "rock"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-indigo-road-n4"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-indigo-road-n4",
+   "name": "Victory Road: Boulders",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a2d"
+   },
+   "intro": "A boulder sits in the only way forward. There may be a trick to it.",
+   "choices": [
+    {
+     "label": "Push the boulder",
+     "check": "strength",
+     "success": {
+      "text": "You set your shoulder to it and it rolls into the hole. The way is open.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-road-n5"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It will not budge. You squeeze through a crack and scrape your team up.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-road-n5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Squeeze around",
+     "success": {
+      "text": "Tight, but you make it.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-road-n5"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-indigo-road-n5",
+   "name": "Victory Road: The Last Stand",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a2d"
+   },
+   "intro": "At the top of the road a familiar figure waits on the ledge. \"I was not going to let you pass me. Not now.\"",
+   "choices": [
+    {
+     "label": "Face your rival",
+     "success": {
+      "text": "\"This is everything I have got.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "rivalry": 1
+        },
+        "lead": 0
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "size": 4,
+       "levelBonus": 3,
+       "rival": true,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-indigo-road-n6"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Whistle for the Pidgeot that left",
+     "requires": [
+      {
+       "kind": "eventSeen",
+       "id": "cs-kanto-route-pidgeotto-bye"
+      }
+     ],
+     "success": {
+      "text": "A great shape drops out of the sky and lands beside you. It remembers.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "size": 4,
+       "levelBonus": 3,
+       "rival": true,
+       "format": "doubles",
+       "ally": "pidgeot",
+       "win": [
+        {
+         "kind": "friendship",
+         "amount": 20,
+         "who": "party"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-indigo-road-n6"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-indigo-road-n6",
+   "name": "Victory Road: Boulders",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a2d"
+   },
+   "intro": "A boulder sits in the only way forward. There may be a trick to it.",
+   "choices": [
+    {
+     "label": "Push the boulder",
+     "check": "strength",
+     "success": {
+      "text": "You set your shoulder to it and it rolls into the hole. The way is open.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-road-n7"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It will not budge. You squeeze through a crack and scrape your team up.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-road-n7"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Squeeze around",
+     "success": {
+      "text": "Tight, but you make it.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-road-n7"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-indigo-road-n7",
+   "name": "Victory Road: The Summit",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a2d"
+   },
+   "intro": "A ring of fire on the peak. Something huge is circling above the flames.",
+   "choices": [
+    {
+     "label": "Climb to the summit",
+     "chance": 0.35,
+     "success": {
+      "text": "Moltres, King of the Flames, dives out of the sky!",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "moltres"
+       ],
+       "pseudo": true,
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "item",
+         "id": "hard-stone"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-indigo-cave"
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "A mighty Arcanine guards the peak and snarls at you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "arcanine"
+       ],
+       "pseudo": true,
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "item",
+         "id": "hard-stone"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-indigo-cave"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-indigo-cave",
+   "name": "Cerulean Cave",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2b4a63"
+   },
+   "intro": "Beyond the summit a crack in the mountain leads down to a cave that glows pale blue. A voice with no mouth says: this place is closed.",
+   "choices": [
+    {
+     "label": "Enter Cerulean Cave",
+     "success": {
+      "text": "Cold air rolls up from the dark.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-mewtwo-met",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-cave-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back",
+     "success": {
+      "text": "You decide some secrets are better left alone.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.cave",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-indigo-cave-n1",
+   "name": "Cerulean Cave: Mewtwo",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2b4a63"
+   },
+   "intro": "At the end of the cave something waits that was never meant to be caught. \"You should not be here.\"",
+   "choices": [
+    {
+     "label": "Stand your ground",
+     "success": {
+      "text": "Mewtwo lifts its head. The cave goes silent.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Mewtwo",
+       "size": 1,
+       "pseudo": true,
+       "team": [
+        "mewtwo"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-indigo-cave-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-indigo-cave-n2",
+   "name": "Cerulean Cave: Second Visit",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2b4a63"
+   },
+   "intro": "Mewtwo does not run. It watches you and waits. This time it feels like a question.",
+   "choices": [
+    {
+     "label": "Try to bond with it",
+     "success": {
+      "text": "It meets you with calm eyes. This time it can be caught.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "mewtwo"
+       ],
+       "pseudo": true,
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-secret",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Earned the Kanto Secret title in Cerulean Cave."
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it be",
+     "success": {
+      "text": "Some things are better left unfought.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-secret",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Earned the Kanto Secret title in Cerulean Cave."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-snorlax",
+   "name": "Snorlax Blockade",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a4a3a"
+   },
+   "intro": "A Snorlax sleeps right across the road. The ground shakes every time it snores.",
+   "choices": [
+    {
+     "label": "Play the Poké Flute",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "poke-flute"
+      }
+     ],
+     "success": {
+      "text": "It wakes, yawns, and ambles aside. As it goes, it drops a snack and decides to follow you.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "snorlax"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "item",
+        "id": "leftovers"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight it",
+     "success": {
+      "text": "You poke it. It opens one eye, then both.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "snorlax"
+       ],
+       "pseudo": true,
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "item",
+         "id": "leftovers"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Go around",
+     "success": {
+      "text": "You find another way, a long one.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.snorlax"
+  },
+  {
+   "id": "cs-kanto-route-charizard",
+   "name": "Charizard Valley",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a3a2a"
+   },
+   "intro": "A high plateau where Charizard soar and their trainers train. A banner reads: three wins earns a feather.",
+   "choices": [
+    {
+     "label": "Enter the valley",
+     "success": {
+      "text": "Heat rolls over the rocks.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-charizard-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pass",
+     "success": {
+      "text": "You leave them to their flying.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.charizard"
+  },
+  {
+   "id": "cs-kanto-route-charizard-n1",
+   "name": "Charizard Valley: Fire Spitter",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a3a2a"
+   },
+   "intro": "A trainer on the ledge calls down: \"Feather's yours if you can win it.\"",
+   "choices": [
+    {
+     "label": "Battle",
+     "success": {
+      "text": "Wings snap open overhead.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Fire Spitter",
+       "size": 3,
+       "pseudo": true,
+       "classId": "firebreather",
+       "types": [
+        "fire",
+        "flying"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-charizard-feather",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-charizard-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-charizard-n2",
+   "name": "Charizard Valley: Wing Rider",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a3a2a"
+   },
+   "intro": "A trainer on the ledge calls down: \"Feather's yours if you can win it.\"",
+   "choices": [
+    {
+     "label": "Battle",
+     "success": {
+      "text": "Wings snap open overhead.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Wing Rider",
+       "size": 3,
+       "pseudo": true,
+       "classId": "bird-keeper",
+       "types": [
+        "fire",
+        "flying"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-charizard-feather",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-charizard-n3"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-charizard-n3",
+   "name": "Charizard Valley: Valley Keeper",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a3a2a"
+   },
+   "intro": "A trainer on the ledge calls down: \"Feather's yours if you can win it.\"",
+   "choices": [
+    {
+     "label": "Battle",
+     "success": {
+      "text": "Wings snap open overhead.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Valley Keeper",
+       "size": 3,
+       "pseudo": true,
+       "classId": "firebreather",
+       "types": [
+        "fire",
+        "flying"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-charizard-feather",
+         "amount": 1
+        },
+        {
+         "kind": "item",
+         "id": "charcoal"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-charizard-end"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-charizard-end",
+   "name": "Charizard Valley: The Feathers",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a3a2a"
+   },
+   "intro": "Three feathers in your hand glow orange. A huge Charizard lands and presses its snout to them.",
+   "choices": [
+    {
+     "label": "Hold them up",
+     "chance": 0.5,
+     "success": {
+      "text": "Its eyes soften. It leaves a fire-red stone at your feet.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "charizardite-x",
+         "charizardite-y"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "It snorts, warm and approving, and takes off.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-pidgeotto",
+   "name": "Pidgeotto's Farewell",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [
+    {
+     "kind": "partySpecies",
+     "species": "pidgeotto"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a4a5a"
+   },
+   "intro": "A Pidgeotto circles overhead, gazing at the sky and at you. It is ready to go home.",
+   "choices": [
+    {
+     "label": "Let your Pidgeotto go",
+     "success": {
+      "text": "It nuzzles you, then rises into the sky. \"We will meet again,\" it seems to say.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "Your Pidgeotto",
+         "species": [
+          "pidgeotto"
+         ]
+        }
+       },
+       {
+        "kind": "item",
+        "id": "sharp-beak"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-pidgeotto-ally",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-pidgeotto-bye"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it",
+     "success": {
+      "text": "It settles back on your shoulder.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.pidgeotto"
+  },
+  {
+   "id": "cs-kanto-route-pidgeotto-bye",
+   "name": "Pidgeotto's Farewell: Goodbye",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a4a5a"
+   },
+   "intro": "It is a Pidgeot's cry that you will hear on the road to the Plateau.",
+   "choices": [
+    {
+     "label": "Wave",
+     "success": {
+      "text": "The speck of a bird vanishes into the clouds.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-bulbasaur",
+   "name": "Bulbasaur's Gathering",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#1f3a2a"
+   },
+   "intro": "At night the trees open up and a ring of Bulbasaur dances in the moonlight. One of them beckons you in.",
+   "choices": [
+    {
+     "label": "Join the dance",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Your steps match theirs. They welcome you with a gift.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "bulbasaur",
+         "ivysaur"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You stumble. They scatter, giggling, and leave a berry behind.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch from the trees",
+     "success": {
+      "text": "You leave them to their dance.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.bulbasaur"
+  },
+  {
+   "id": "cs-kanto-route-haunter",
+   "name": "Haunter's Mansion",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a2a4a"
+   },
+   "intro": "A broken-down house glows with party lights. A Haunter floats at the door, giggling. \"Come in!\"",
+   "choices": [
+    {
+     "label": "Play along",
+     "chance": 0.6,
+     "success": {
+      "text": "You laugh at the pranks and clap at the tricks. Haunter hands you a Spell Tag and floats to your side.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "spell-tag"
+       },
+       {
+        "kind": "join",
+        "species": [
+         "haunter"
+        ],
+        "levelBonus": -2
+       }
+      ]
+     },
+     "failure": {
+      "text": "The joke is on you. You are soaked in cold slime and everyone's spirits dip.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight it",
+     "success": {
+      "text": "Haunter's grin widens.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "haunter"
+       ],
+       "pseudo": true,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "spell-tag"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.haunter"
+  },
+  {
+   "id": "cs-kanto-route-thunderstone",
+   "name": "The Pikachu Who Hates Evolving",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a4a2a"
+   },
+   "intro": "A Thunder Stone lies in the grass. It buzzes softly.",
+   "choices": [
+    {
+     "label": "Respect your Pikachu's choice",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "pikachu"
+      }
+     ],
+     "success": {
+      "text": "Pikachu shoves the stone away and beams at you. It will stay as it is, and it hands you a Light Ball.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "light-ball"
+       },
+       {
+        "kind": "friendship",
+        "amount": 20,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Force the evolution",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "pikachu"
+      }
+     ],
+     "success": {
+      "text": "There is a flash. Raichu stares at you and sulks.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "pikachu",
+        "to": "raichu"
+       },
+       {
+        "kind": "friendship",
+        "amount": -30,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the stone",
+     "success": {
+      "text": "It will come in handy.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "thunder-stone"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.thunderstone"
+  },
+  {
+   "id": "cs-kanto-route-lapras",
+   "name": "Lapras's Song",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#1f3a5a"
+   },
+   "intro": "At night, a sad song drifts over the water. A Lapras sings alone on the coast.",
+   "choices": [
+    {
+     "label": "Escort it to its family",
+     "success": {
+      "text": "It follows you along the shore, singing softly. Then the poachers appear.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "tentacool",
+        "tentacruel",
+        "shellder"
+       ],
+       "pseudo": true,
+       "levelBonus": 1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "lapras"
+         ],
+         "ability": "water-absorb",
+         "levelBonus": 0
+        },
+        {
+         "kind": "teachMove",
+         "move": "sing",
+         "species": "lapras"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Try to catch it",
+     "success": {
+      "text": "The song stops.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "lapras"
+       ],
+       "pseudo": true,
+       "levelBonus": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Listen and leave",
+     "success": {
+      "text": "The song fades behind you.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.lapras"
+  },
+  {
+   "id": "cs-kanto-route-poster",
+   "name": "Pokémon Tournament Poster",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a4a4a"
+   },
+   "intro": "A wall poster in bold print: a tournament will be held in a later town. Entrants only.",
+   "choices": [
+    {
+     "label": "Read it carefully",
+     "success": {
+      "text": "You note the date, the rules and the prizes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-tournament-poster",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.poster"
+  },
+  {
+   "id": "cs-kanto-route-pidgey-rush",
+   "name": "Route 1: Pidgey Rush",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a6a2d"
+   },
+   "intro": "The tall grass erupts. A flock of Pidgey and a pack of Rattata come at you at once.",
+   "choices": [
+    {
+     "label": "Wade in",
+     "success": {
+      "text": "Here they come!",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "pidgey",
+        "rattata"
+       ],
+       "pseudo": true,
+       "levelBonus": -1,
+       "chain": 3,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 150
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Go around",
+     "success": {
+      "text": "You skirt the grass.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.pidgey-rush"
+  },
+  {
+   "id": "cs-kanto-route-cut-tree",
+   "name": "Route 2: The Cut Tree",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a5a2d"
+   },
+   "intro": "A small tree blocks a narrow side path. Beyond it, something glints.",
+   "choices": [
+    {
+     "label": "Cut it down",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "cut"
+      }
+     ],
+     "success": {
+      "text": "One clean slice. Behind the tree: potions and a tidy little clearing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 2
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Samurai Slash it",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "samurai-slash"
+      }
+     ],
+     "success": {
+      "text": "A single stroke, and the tree falls in two. Behind it: potions and a tidy clearing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 2
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go around",
+     "success": {
+      "text": "No time to dig around.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.cut-tree"
+  },
+  {
+   "id": "cs-kanto-route-tough-junior",
+   "name": "Route 3: The Tough Junior",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a4a2d"
+   },
+   "intro": "A Junior Trainer crosses his arms. \"I'm tough! Beat me and I will give you a Potion!\"",
+   "choices": [
+    {
+     "label": "Accept",
+     "success": {
+      "text": "\"Here I come!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Junior Trainer",
+       "size": 2,
+       "pseudo": true,
+       "classId": "youngster",
+       "win": [
+        {
+         "kind": "item",
+         "id": "potion"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "\"Chicken!\"",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.tough-junior"
+  },
+  {
+   "id": "cs-kanto-route-fishing",
+   "name": "Route 12: Fishing Contest",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2a4a6a"
+   },
+   "intro": "Rods in the water as far as the eye can see. A judge calls: \"Biggest catch wins a Super Rod!\"",
+   "choices": [
+    {
+     "label": "Enter the contest",
+     "prompt": {
+      "id": "pull-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Your line goes taut. You haul in a monster, and the judge hands over the Super Rod.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "super-rod"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A Magikarp. The judge gives you an honourable mention and a Potion.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "potion"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "Not today.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.fishing"
+  },
+  {
+   "id": "cs-kanto-route-stone-seller",
+   "name": "Route 15: The Stone Seller",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a4a3a"
+   },
+   "intro": "A seller spreads stones on a cloth. \"Evolution stones! Rare! Cheap! Well, not that cheap.\"",
+   "choices": [
+    {
+     "label": "Buy at full price (900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A fair deal.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fire-stone",
+         "water-stone",
+         "thunder-stone",
+         "leaf-stone",
+         "moon-stone"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Haggle",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 450
+      }
+     ],
+     "check": "charisma",
+     "success": {
+      "text": "He laughs and halves the price. \"You drive a hard bargain!\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -450
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fire-stone",
+         "water-stone",
+         "thunder-stone",
+         "leaf-stone",
+         "moon-stone"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "\"Not a coin less.\" He packs up his cloth.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You keep your wallet shut.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.stone-seller"
+  },
+  {
+   "id": "cs-kanto-route-cycling",
+   "name": "Route 16: Cycling Road",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a4a5a"
+   },
+   "intro": "A long downhill road. Bikers whoop past. One of them shouts: \"Race me! Winner takes a prize!\"",
+   "choices": [
+    {
+     "label": "Race the Bikers",
+     "check": "speed",
+     "success": {
+      "text": "You tear down the slope with the wind in your face and beat them all.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "bike-voucher",
+         "quick-claw"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "They leave you in a cloud of dust.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You keep to the shoulder.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.cycling"
+  },
+  {
+   "id": "cs-kanto-route-biker-gang",
+   "name": "Route 18: The Biker Gang",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a2a2a"
+   },
+   "intro": "A gang of bikers blocks the road. The spray-painted badge on their jackets looks familiar.",
+   "choices": [
+    {
+     "label": "Take them on",
+     "success": {
+      "text": "They rev their engines and swarm.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Biker Gang",
+       "size": 3,
+       "pseudo": true,
+       "classId": "biker",
+       "types": [
+        "poison",
+        "dark"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 300
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Slip past",
+     "success": {
+      "text": "You wait until they look away.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.biker-gang"
+  },
+  {
+   "id": "cs-kanto-route-badge-check",
+   "name": "Route 23: The Badge Check",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a4a4a"
+   },
+   "intro": "A guard stands at the gate to Victory Road. \"Badges, please.\"",
+   "choices": [
+    {
+     "label": "Show six or more Badges",
+     "requires": [
+      {
+       "kind": "badges",
+       "atLeast": 6
+      }
+     ],
+     "success": {
+      "text": "The guard whistles. \"Go on through, champ, the short way.\"",
+      "effects": [
+       {
+        "kind": "express"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show your Badges",
+     "success": {
+      "text": "\"Not enough. Come back when the whole region has heard of you.\"",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.badge-check"
+  },
+  {
+   "id": "cs-kanto-cast-balloon",
+   "name": "The Balloon in the Sky",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a6a8a"
+   },
+   "intro": "High above the trees a balloon drifts by. A voice you almost know carries on the wind: \"To protect the world from devastation...\"",
+   "choices": [
+    {
+     "label": "Look up",
+     "success": {
+      "text": "It is gone behind the clouds. You jot down what you heard.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-cast-balloon",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.cast.balloon"
+  },
+  {
+   "id": "cs-kanto-cast-safari-net",
+   "name": "Safari Zone: The Net",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6a2a"
+   },
+   "intro": "In the Safari Zone, three figures try to net a Tauros. The net tangles around them instead.",
+   "choices": [
+    {
+     "label": "Step in",
+     "success": {
+      "text": "\"Not you again!\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-cast-net",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Safari Poachers",
+       "size": 2,
+       "pseudo": true,
+       "levelBonus": -1,
+       "evil": "grunt",
+       "evilTeam": "rocket-remnants",
+       "win": [
+        {
+         "kind": "money",
+         "amount": 300
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch",
+     "success": {
+      "text": "You watch the Tauros trample their net and run off. They glare at you, then at each other.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-cast-net",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.cast.safari-net"
+  }
+ ]
+}

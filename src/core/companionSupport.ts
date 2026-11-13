@@ -5,6 +5,7 @@ import type { Content } from './contentSchema';
 import type { RunState } from './state';
 import { companionLeft } from './wanderer';
 import { maxHp } from './pokemon';
+import { fieldIndexes } from './battle/triples';
 
 const CAST = 'companion-cast';
 export const COMPANION_FLAG = 'ev:companion';
@@ -17,8 +18,8 @@ export function companionSupport(content: Content, run: RunState): { amount: num
   if (!battle || battle.outcome || !hasCompanion(run)) return null;
   const mark = run.encountersCompleted + 1;
   if ((run.itemCounters?.[CAST] ?? 0) === mark) return null;
-  // Double battles: both Pokémon on the field are candidates; the one in the worst shape is helped.
-  const onField = [battle.activeIndex, battle.doubles?.player.index ?? -1].flatMap((i) => (i >= 0 && run.party[i] ? [run.party[i]!] : []));
+  // Double and triple battles: every Pokémon on the field is a candidate; the one in the worst shape is helped.
+  const onField = fieldIndexes(battle, 'player').flatMap((i) => (run.party[i] ? [run.party[i]!] : []));
   const hurt = onField.filter((m) => m.hp > 0 && m.hp * 2 < maxHp(content, m)).sort((a, b) => a.hp / maxHp(content, a) - b.hp / maxHp(content, b))[0];
   if (!hurt) return null;
   const mon = hurt;

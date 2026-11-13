@@ -6,6 +6,7 @@
 // It never changes battle state and never draws random numbers, so the same
 // turn always gets the same cues, and turning effects off can't change results.
 
+import { pokemonMoment } from '../moments/pokemonMoments';
 import { moveFamily, type FamilyId } from './families';
 import type { BattleEvent, Side } from '../battle/engine';
 import type { Content } from '../contentSchema';
@@ -50,7 +51,9 @@ export type Cue =
   /** The badge's animated words (registry id `text.*`); `miss` has no badge text of its own. */
   | { kind: 'textAnim'; side: Side; anim: string; label: string }
   /** A Hyper/Overdrive moment or an interaction flourish (registry ids `overdrive.*`, `interaction.*`). */
-  | { kind: 'storyAnim'; side: Side; anim: string };
+  | { kind: 'storyAnim'; side: Side; anim: string }
+  /** A Pokémon moment's full-screen scene (core/moments `scene`): fade to black, static, then each line. */
+  | { kind: 'momentScene'; id: string; speciesId: string; fadeMs: number; staticMs: number; lines: string[]; clips?: string[] };
 
 const other = (side: Side): Side => (side === 'player' ? 'enemy' : 'player');
 
@@ -160,6 +163,13 @@ export function planCues(
       case 'hyper':
         if (animated) cues.push({ kind: 'storyAnim', side: e.side, anim: hyperAnimId(e.defId) });
         break;
+      case 'pmoment': {
+        const def = pokemonMoment(e.id);
+        if (animated && e.scene && def?.scene) cues.push({ kind: 'momentScene', id: e.id, speciesId: e.speciesId, fadeMs: def.scene.fadeMs, staticMs: def.scene.staticMs, lines: def.scene.lines, clips: def.scene.clips });
+        else if (animated && e.cinematic) cues.push({ kind: 'storyAnim', side: e.side, anim: 'overdrive.rise' });
+        else if (animated && e.trigger === 'lethal') cues.push({ kind: 'storyAnim', side: e.side, anim: 'overdrive.hung' });
+        break;
+      }
       case 'spectacle':
         if (animated && SPECTACLE_ANIM[e.kind]) cues.push({ kind: 'storyAnim', side: e.side, anim: SPECTACLE_ANIM[e.kind]! });
         break;

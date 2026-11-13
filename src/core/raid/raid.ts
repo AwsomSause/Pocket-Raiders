@@ -74,9 +74,9 @@ export function pickRaidFor(content: Content, run: Pick<RunState, 'seed' | 'regi
   const regionOpen = tiersForRegion(content, run.regionIndex).filter((t) => t <= open);
   const region = regionOpen.filter((t) => tierOpenAtBadges(content.raids.badgeScaling, t, badges));
   // A region whose tiers are all still closed gets the highest open tier instead (the badge gate still applies when the region has open tiers).
-  const usable = content.raids.raids.filter((r) => !r.grand && !r.gang && !r.legendary && !r.special && r.tier <= open && (regionOpen.length === 0 || tierOpenAtBadges(content.raids.badgeScaling, r.tier, badges)));
+  const usable = content.raids.raids.filter((r) => !r.grand && !r.gang && !r.legendary && !r.special && !r.canon && r.tier <= open && (regionOpen.length === 0 || tierOpenAtBadges(content.raids.badgeScaling, r.tier, badges)));
   const tiers = region.length > 0 ? region : [Math.max(1, ...usable.map((r) => r.tier))];
-  const tiered = content.raids.raids.filter((r) => tiers.includes(r.tier) && !r.grand && !r.gang && !r.legendary && !r.special);
+  const tiered = content.raids.raids.filter((r) => tiers.includes(r.tier) && !r.grand && !r.gang && !r.legendary && !r.special && !r.canon);
   // Spreadsheet availability: a den's boss must be unlocked at the level it would fight at (else the tier's dens stay as they were).
   const cap = levelCap(content, run.regionIndex);
   const end = Math.max(1, cap - content.balance.difficulty.capMargin);
@@ -86,7 +86,7 @@ export function pickRaidFor(content: Content, run: Pick<RunState, 'seed' | 'regi
   const preferred = prefer ? base.filter((r) => r.kind === prefer) : [];
   const pool = preferred.length > 0 ? preferred : base;
   const rng = new Rng(hashSeed(`${run.seed}::raid-pick::${key}`));
-  return rng.pick(pool.length > 0 ? pool : content.raids.raids.filter((r) => !r.gang && !r.legendary && !r.special));
+  return rng.pick(pool.length > 0 ? pool : content.raids.raids.filter((r) => !r.gang && !r.legendary && !r.special && !r.canon));
 }
 
 /** Which species the boss is, from a seeded generator (so reloading never changes it). */
@@ -720,7 +720,7 @@ export function denWeather(content: Content, run: Pick<RunState, 'regionIndex' |
 
 /** S394 Raid Weekly Rotation: the featured raid of the week (a plain den raid). The week comes from the run's calendar day, else it moves on with each region. */
 export function weeklyRaidId(content: Content, run: Pick<RunState, 'calendar' | 'seed' | 'regionIndex'>): string | null {
-  const pool = content.raids.raids.filter((r) => !r.grand && !r.gang && !r.legendary && !r.special && r.kind === 'wild');
+  const pool = content.raids.raids.filter((r) => !r.grand && !r.gang && !r.legendary && !r.special && !r.canon && r.kind === 'wild');
   if (pool.length === 0) return null;
   const today = run.calendar?.today ? Date.parse(`${run.calendar.today}T12:00:00Z`) : Number.NaN;
   const week = Number.isNaN(today) ? run.regionIndex + new Rng(hashSeed(run.seed)).int(0, 96) : Math.floor(today / 86_400_000 / 7);
@@ -751,7 +751,7 @@ function placeExtraDens(content: Content, run: RunState): void {
     const candidates = free();
     if (candidates.length > 0) rng.pick(candidates).sides.push({ id: `raid-week-${stage.index}`, kind: 'raid', raidId: weekly1.id, used: false, featured: true });
   }
-  const specials = content.raids.raids.filter((r) => r.special && tiers.includes(r.tier));
+  const specials = content.raids.raids.filter((r) => r.special && r.special !== 'canon' && tiers.includes(r.tier));
   if (specials.length > 0 && rng.chance(content.raids.specialDenChance)) {
     const def = rng.pick(specials);
     // A mini-boss waits in the middle of the map; the giants and gauntlets can be anywhere before the gym.

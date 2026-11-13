@@ -148,7 +148,7 @@ function conditionMet(content: Content, c: EvoCondition, mon: PokemonInstance, w
 export function conditionEvolutionTarget(content: Content, mon: PokemonInstance, weather: string | null, info?: EvoRunInfo): string | null {
   if (mon.hp <= 0 || mon.care?.holdEvolve) return null;
   for (const e of CONDITION_EVOLUTIONS) {
-    if (e.from !== mon.speciesId || mon.level < e.minLevel || !content.species.has(e.to) || !e.condition) continue;
+    if (e.from !== mon.speciesId || mon.level < e.minLevel || !content.species.has(e.to) || !e.condition || (mon.evoBlock ?? []).includes(e.to)) continue;
     if (conditionMet(content, e.condition, mon, weather, info)) return e.to;
   }
   return null;

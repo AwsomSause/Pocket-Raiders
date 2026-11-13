@@ -193,7 +193,7 @@ export const EMERGENT_EVENTS: Json[] = [
   ev('plasma-substage-yard', 'The Plasma Yard', G, { rarity: 'rare', minStage: 3, cast: ['boss.ghetsis'], effect: 'none', tint: '#1a2230' },
     'Dozens of crates. The guards have not spotted you yet.', [
       ch('Open the crates', out('Frightened Pokémon, all of them, glad to see you. The nearest guard hears the crate lid.', room('plasma-substage-leader'), flag('plasma-freed'), good(3), rp(40))),
-      ch('Fight the guards', fight('Three grunts and their Pokémon.', trainer('Plasma Guards', { cls: 'worker', size: 3, lv: 2, win: [room('plasma-substage-leader'), rp(40)] }))),
+      ch('Fight the guards', fight('Three grunts send out their Pokémon side by side.', trainer('Plasma Guards', { format: 'triples', cls: 'worker', size: 3, lv: 2, win: [room('plasma-substage-leader'), rp(40)] }))),
     ]),
   ev('plasma-substage-leader', 'The Plasma Handler', G, { rarity: 'rare', minStage: 3, cast: ['boss.ghetsis'], effect: 'fog', tint: '#1a2230' },
     'The handler steps out with a Pokémon that is clearly not theirs. "Those are company property."', [

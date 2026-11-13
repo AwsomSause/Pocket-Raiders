@@ -116,8 +116,14 @@ export function typesPool(content: Content, types: readonly TypeName[], regionId
 export const RIVAL_CLASS = 'rival';
 
 export function pickThemeSpecies(content: Content, theme: Theme, rng: Rng, prefer?: readonly TypeName[], regionId?: string, weightMod?: (speciesId: string) => number, level?: number): string {
-  const pool = themePool(content, theme, regionId, level);
-  return pickFromPool(content, weightMod ? pool.map((p) => ({ ...p, weight: p.weight * weightMod(p.speciesId) })) : pool, rng, prefer);
+  const base = themePool(content, theme, regionId, level);
+  let pool = weightMod ? base.map((p) => ({ ...p, weight: p.weight * weightMod(p.speciesId) })) : base;
+  // Beta 0.6 B3: species a modifier rules out (weight 0) leave the pool, unless that would empty it.
+  if (weightMod && pool.some((p) => p.weight <= 0)) {
+    const live = pool.filter((p) => p.weight > 0);
+    pool = live.length > 0 ? live : base;
+  }
+  return pickFromPool(content, pool, rng, prefer);
 }
 
 export function pickTypeSpecies(content: Content, types: readonly TypeName[], rng: Rng): string {
@@ -126,7 +132,9 @@ export function pickTypeSpecies(content: Content, types: readonly TypeName[], rn
 
 function pickFromPool(content: Content, pool: PoolEntry[], rng: Rng, prefer?: readonly TypeName[]): string {
   const preferred = prefer ? pool.filter((p) => sharesType(content.species.get(p.speciesId)!.types, prefer)) : [];
-  const from = preferred.length > 0 ? preferred : pool;
+  // Beta 0.6 B3: a type slot needs at least `minSlotSpecies` candidates, else the whole pool is used (no thin slots).
+  const { enabled, minSlotSpecies } = content.balance.trainerPools;
+  const from = preferred.length > 0 && (!enabled || preferred.length >= minSlotSpecies || preferred.length === pool.length) ? preferred : pool;
   return rng.weighted(from.map((p) => ({ item: p.speciesId, weight: p.weight })));
 }
 

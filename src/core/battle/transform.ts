@@ -52,6 +52,7 @@ import { zMoveDelayTurns, megaDelayTurns, megaPartyLimit, permanentMegaFriendshi
 import type { BattleState, PokemonInstance } from '../state';
 import { grantMegaMove, endMegaMoves } from './megaMove';
 import { gimmickLevel, stoneKey, type GimmickContext } from '../gimmicks';
+import { variantGimmickDue } from '../expansion/variantLines';
 
 type Side = 'player' | 'enemy';
 export type FormChangeKind = 'mega' | 'primal' | 'gigantamax' | 'tera' | 'ability';
@@ -456,6 +457,20 @@ export function applyTransformations(ctx: TransformContext, request: TransformRe
   // ... or Dynamax (the engine turns its moves into Max Moves; see battleMove).
   if (request?.kind === 'dynamax' && player.hp > 0 && !dynamaxProblem(ctx, player)) dynamax(ctx, 'player', player, events);
 
+  // Beta 0.6 variant lines: Overcharged Dynamaxes and Tuned Terastallizes by themselves, once, with no Band, Spot or Orb.
+  for (const [side, mon, turnsOut] of [['player', player, battle.playerVolatile.turnsOut], ['enemy', enemy, battle.enemyVolatile.turnsOut]] as const) {
+    if (mon.hp <= 0 || battle.transform.forms[mon.uid] || battle.transform.mechanics[mon.uid]) continue;
+    const due = variantGimmickDue(battle.extra.variants, mon.uid, turnsOut);
+    if (due === 'dynamax') {
+      dynamax(ctx, side, mon, events);
+      battle.transform.dynamax[mon.uid] = 1;
+      battle.transform.used[side].pop(); // it did not spend the side's own Dynamax
+    } else if (due === 'tera') {
+      terastallize(ctx, side, mon, teraTypeOf(content, mon), events);
+      battle.transform.used[side].pop();
+    }
+  }
+
   // 3. The opponent's: a boss's ace Mega Evolves if it can, otherwise Terastallizes, as soon as it is out.
   const may = (kind: TransformKind) =>
     !ctx.disabledMechanics?.includes(kind) && battle.transform.enemyMechanics.includes(kind) && !battle.transform.used.enemy.includes(kind);
@@ -625,7 +640,15 @@ export function revertTransformations(content: Content, battle: BattleState, par
   const limit = megaPartyLimit(perks) ?? Infinity;
   let megas = party.filter((p) => getSpecies(content, p.speciesId).form?.kind === 'mega' && !battle.transform.forms[p.uid]).length;
   endMegaMoves([...party, ...battle.enemyTeam]);
-  for (const mon of party) endDynamax(content, battle, 'player', mon);
+  for (const mon of party) {
+    // Overcharged ends with the battle: HP is scaled back to the normal maximum.
+    if (mon.overcharged) {
+      const before = calcStats(content, mon).hp;
+      delete mon.overcharged;
+      if (mon.hp > 0) mon.hp = Math.max(1, Math.min(calcStats(content, mon).hp, Math.round((mon.hp * calcStats(content, mon).hp) / before)));
+    }
+    endDynamax(content, battle, 'player', mon);
+  }
   for (const mon of battle.enemyTeam) endDynamax(content, battle, 'enemy', mon);
   for (const mon of [...party, ...battle.enemyTeam]) {
     const record = battle.transform.forms[mon.uid];

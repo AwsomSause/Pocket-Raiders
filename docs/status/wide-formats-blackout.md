@@ -1,0 +1,7 @@
+# Wide formats: Blackout (E4, 2 of 7)
+
+- `src/core/formats/blackout.ts`: Kanto Phase 1 "The Streets". Three anchors (Mr. Mime, 2 Pokémon each); pick one at a time. While the Seal holds (fewer than 2 anchors beaten) each fight has `eventRule { noSwitchFirstTurn, typeBoost psychic +10% }`, applied to both sides. The Seal breaks at 2 anchors. Triad on (`run.story.flags['rocket.x.triad']`, or `startFormat('blackout', ctx, { triad: true })`): the third anchor is Oracle Sabrina (4 Pokémon, +2 levels), unlocked after the other two, and fought with no Seal. A lost fight heals the party (story loss) and the anchor stays up. Checkpoint and `cut.done` at the end.
+- `src/core/formats/battle.ts` (`launchFormatBattle`): the shared way a format starts an ordinary trainer battle. It is an event battle tagged `format:<id>`, seeded `format-battle` (new stream, old rolls unchanged). `run.ts` tells the format how the fight ended (`battleEnded`) right after the replay is sealed; format fights count as story fights, so a loss never ends the run.
+- Engine/data touches: `EventRule` gains `noSwitchFirstTurn` and `typeBoost`; the trainer `EventBattle` gains optional `species`; `startEventBattle` is exported. Two one-line engine edits (switch check, power multiplier); nothing near the variant-line hooks.
+- Not built: Sabrina's executive ability "Foresight Tax" (needs an AI hook in the battle engine). The North Gate "rival battle added to Phase 1" effect comes with the Siege Map.
+- Tests: `tests/unit/formats.test.ts` (Blackout block), `tests/e2e/wideFormats.spec.ts`.

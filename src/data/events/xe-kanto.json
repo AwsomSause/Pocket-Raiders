@@ -1,0 +1,818 @@
+{
+ "events": [
+  {
+   "id": "xe.kanto.count-room",
+   "name": "The Count Room",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#241a10",
+    "effect": "glint"
+   },
+   "intro": "A basement room under the Game Corner with a brass door and the hum of coin counters. A pit boss in a waistcoat: \"Welcome to the only honest room in the building. Every coin that lies upstairs tells the truth down here.\" On a velvet stand, a Dratini coils on a prize card: JACKPOT, 9,900 coins. \"Nobody has ever won her. The machine isn't built to count that high.\"",
+   "choices": [
+    {
+     "label": "\"Whose is she?\"",
+     "success": {
+      "text": "\"A dealer's. Was. He had a good week once.\" Vesper taps the card, and the address behind it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-jackpot-lead",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll play you for her.\"",
+     "success": {
+      "text": "\"House pays. First time for everything.\" Jackpot uncoils, looks at the empty chips on the felt, and chooses you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "magnemite",
+        "dratini"
+       ],
+       "special": "sv.rocket.jackpot",
+       "name": "Pit Boss Vesper",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "dratini"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rocket-jackpot-won",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "\"Come back when the machine can count that high.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.kanto.small-print",
+   "name": "Small Print",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "priority": 100,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m",
+     "trainer.roughneck"
+    ],
+    "tint": "#2a1414",
+    "effect": "flicker"
+   },
+   "intro": "A bike shop with its shutter half down. The owner: \"We're closed. We're not closed. We're... between payments.\" A Rocket Collector steps out with a receipt book. \"Insurance. Fires, floods, people like me.\"",
+   "choices": [
+    {
+     "label": "\"How much does he owe?\" (₽4,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 4000
+      }
+     ],
+     "success": {
+      "text": "\"Four thousand. For you, four thousand.\" The shop reopens with a permanent 10% discount for you. The Collectors will ask again.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -4000
+       },
+       {
+        "kind": "evil",
+        "heat": -3
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-paid-once",
+        "amount": 1
+       },
+       {
+        "kind": "relic",
+        "id": "xe-kanto-insured",
+        "name": "Insured Shop",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.9
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Show me the policy.\"",
+     "success": {
+      "text": "\"It's a verbal policy!\" The receipt book drops. It lists eleven shops and one Gym.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rocket Collector",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "rocket-receipt-book",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Whose Pokémon is in that crate?\"",
+     "success": {
+      "text": "A Growlithe with a black tag. You win, and it goes home. The receipt book falls too.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rocket Collector",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "rocket-receipt-book",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "\"They'll send someone bigger,\" the owner says. \"They always send someone bigger.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.kanto.appointment",
+   "name": "The Appointment",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "evil",
+     "heat": 35
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#14141c",
+    "effect": "glint"
+   },
+   "intro": "A black car idles at the curb. A woman with a tablet steps out. \"You're difficult to schedule. I have eleven minutes, so I'll be direct. The Boss has noticed you. Being noticed is expensive. He would like to make it cheap.\"",
+   "choices": [
+    {
+     "label": "Take the envelope",
+     "success": {
+      "text": "₽5,000 and a month of quiet. \"I'll put you down as 'bought'.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 5000
+       },
+       {
+        "kind": "evil",
+        "heat": -20
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-bought",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse",
+     "success": {
+      "text": "\"I'll put you down as 'declined'. He keeps that list short.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 5
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-declined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it, and take it to Officer Jenny",
+     "success": {
+      "text": "The police hold the evidence. The envelope stays with them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-wire",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Does he always send you?\"",
+     "success": {
+      "text": "A pause, the first. \"He sends me when he'd rather not send Domino. Take that as a compliment.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-matori-line",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.kanto.roadblock",
+   "name": "The Roadblock",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#241818",
+    "effect": "none"
+   },
+   "intro": "A Snorlax sleeps across the road. A catering truck with a red R is parked beside it, and two grunts are shovelling food. \"Forty kilos a day. Each. Boss says it's cheaper than a wall.\"",
+   "choices": [
+    {
+     "label": "Play the Poké Flute",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "poke-flute"
+      }
+     ],
+     "success": {
+      "text": "The Roadblock wakes hungry and angry.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-roadblock-flute",
+        "amount": 1
+       },
+       {
+        "kind": "fieldNote",
+        "special": "sv.rocket.roadblock"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "special": "sv.rocket.roadblock",
+       "species": [
+        "snorlax"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Stop the food truck",
+     "success": {
+      "text": "Three fights, and the truck never reaches the second Snorlax. Both wander off by morning.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Rocket Driver",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "track",
+         "input": "raidSuccess"
+        },
+        {
+         "kind": "flag",
+         "key": "rocket-roadblock-truck",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Feed it yourself (3 Oran Berries)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry",
+       "count": 3
+      }
+     ],
+     "success": {
+      "text": "It rolls over. The road opens for you.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-roadblock-fed",
+        "amount": 1
+       },
+       {
+        "kind": "fieldNote",
+        "special": "sv.rocket.roadblock"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.kanto.harbor-export",
+   "name": "Harbor Export",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 2
+    },
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck",
+     "trainer.gentleman"
+    ],
+    "tint": "#101820",
+    "effect": "none"
+   },
+   "intro": "A freighter with no name. Cranes moving in the dark. \"Harbor's closed, kid.\" You: \"Those crates are breathing.\" A thin man in a lab coat checks one with a handheld reader: \"Corruption is uneven on this batch, Major. Your technicians are rushing.\"",
+   "choices": [
+    {
+     "label": "Count the crates",
+     "success": {
+      "text": "You count forty-one crates. You write the number down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-manifest-count",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cipher-seen-ein",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Challenge Major Surge",
+     "success": {
+      "text": "\"I don't stay for the practical,\" the man says as he walks away. \"Send me the numbers.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Major Surge",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "rocket-surge-down",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "cipher-seen-ein",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.kanto.blaine-defects",
+   "name": "The Riddle Without a Joke",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2a1810",
+    "effect": "flicker"
+   },
+   "intro": "An old man in sunglasses is burning a notebook in a metal bin. \"Riddle. What wears armor and has never been in danger? A prisoner. I built the first suit. Giovanni asked me to make it obey. I said the armor could do one or the other: protect it or hold it.\"",
+   "choices": [
+    {
+     "label": "Take the page",
+     "success": {
+      "text": "Four seals. Shoulders, chest, crown. They vent in order, like a kettle. \"Don't fight it. Fight the suit.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-seal-diagram",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Come with me.\"",
+     "success": {
+      "text": "He folds the sunglasses into his pocket. \"Lead on.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-blaine-ally",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why didn't you stop him?\"",
+     "success": {
+      "text": "\"No riddle for that one.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.kanto.madame-call",
+   "name": "The Phone in the Basement",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#241420",
+    "effect": "flicker"
+   },
+   "intro": "A desk phone rings as you leave the hideout. \"Don't hang up, dear. I built this from a card table and one stolen Pidgey. He's made it into a company. I'm proud. It's also boring. You're the first interesting thing in his books in years.\"",
+   "choices": [
+    {
+     "label": "\"Who is this?\"",
+     "success": {
+      "text": "\"The founder. Sit up straight. He'll be on the roof. He always saves something for the roof.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-madame",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why help me?\"",
+     "success": {
+      "text": "\"I'm not. I'm watching. But he'll be on the roof.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-madame",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hang up",
+     "success": {
+      "text": "The phone rings again at the next rest stop. She is laughing.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.kanto.trio-conscience",
+   "name": "Growlie",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c2018",
+    "effect": "none"
+   },
+   "intro": "A kennel van, door open. James is kneeling by a cage. \"Shh. I had one just like you.\" Jessie: \"James. We are paid to deliver these.\" Meowth: \"We ain't been paid since Mt. Moon.\" James opens the cage and a tagged Growlithe bolts into the grass. They see you. \"...You saw nothing, twerp.\"",
+   "choices": [
+    {
+     "label": "\"I saw nothing.\"",
+     "success": {
+      "text": "Jessie nods once. They owe you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-trio-debt",
+        "amount": 1
+       },
+       {
+        "kind": "fieldNote",
+        "special": "sv.rocket.meowth"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'm telling Domino.\"",
+     "success": {
+      "text": "They do not let you leave quietly.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Jessie and James",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "evil",
+         "heat": 4
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Need help with the other cages?\"",
+     "success": {
+      "text": "Six more go free. Meowth: \"Don't make it weird.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-trio-debt",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 5
+       },
+       {
+        "kind": "fieldNote",
+        "special": "sv.rocket.meowth"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.kanto.orphan",
+   "name": "Orphan",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#1c1830",
+    "effect": "none"
+   },
+   "intro": "A Cubone sits outside the Tower and will not go in. A volunteer: \"It waits there every evening. Something upstairs cries, and it cries back.\"",
+   "choices": [
+    {
+     "label": "Sit with it",
+     "success": {
+      "text": "Three evenings, and you do not leave. The Cubone follows you now. It does not battle; it walks beside you.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "wandererFriend",
+        "stages": 3
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-orphan-walker",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it be",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

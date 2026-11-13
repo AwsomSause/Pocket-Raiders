@@ -2,6 +2,7 @@
 // and the permanent profile. These schemas double as save-file validators,
 // so the game refuses to load a save that doesn't match.
 
+import { ExpansionRunSchema, ExpansionSettingsSchema, EXPANSION_SETTINGS_DEFAULTS } from './expansion/schema';
 import { ProfileStorySchema, StorySettingsSchema, STORY_SETTINGS_DEFAULTS } from './story2/schema';
 import { TreasureHuntSchema } from './treasureHunt';
 import { EVENT_STYLE_IDS } from './presentation/eventStyles';
@@ -19,6 +20,8 @@ import { ArchivedRivalSchema, MENTOR_TYPES, StoryStateSchema } from './story/sch
 import { PartyLifeStateSchema, createPartyLife } from './partyLife/schema';
 import { freshHyperBattle } from './battle/hyper';
 import { SpectacleBattleSchema } from './battle/spectacle';
+import { TraitsSchema, type Traits } from './expansion/traits';
+import { TimedStageSchema, VariantsSchema, type TimedStage, type Variants } from './expansion/variantLines';
 import { ArenaSchema, SkillInputSchema } from './battle/w1Play';
 
 const RngStateSchema = z.object({ a: z.number(), b: z.number(), c: z.number(), d: z.number() });
@@ -93,6 +96,14 @@ export const PokemonInstanceSchema = z.object({
    * Pokémon from saves made before abilities existed get the first one.
    */
   abilitySlot: z.number().int().min(-1).default(0),
+  /** An ability it was given outright (Squirtle Squad's Contrary); it beats the slot. Optional, so older saves load as they are. */
+  fixedAbility: z.string().optional(),
+  /** New Island clones have no ability at all. Optional, so older saves load as they are. */
+  abilityless: z.boolean().optional(),
+  /** Evolutions it can never take (the Tournament champion Primeape never becomes Annihilape). Optional, so older saves load as they are. */
+  evoBlock: z.array(z.string()).optional(),
+  /** The Fighting Tournament champion belt (a cosmetic form; shown as a tag). Optional. */
+  champion: z.literal(true).optional(),
   /** Its nature (core/natures.ts). Missing in saves from before natures: neutral. */
   nature: z.enum(NATURE_IDS).optional(),
   /** S418 temporary mint: this nature counts instead of `nature` until `battles` more won battles have passed. */
@@ -123,8 +134,20 @@ export const PokemonInstanceSchema = z.object({
   awakened: z.array(z.string()).optional(),
   /** In battle only: Dynamaxed, so its HP is doubled (core/battle/transform.ts). */
   dynamaxed: z.literal(true).optional(),
+  /** In battle only: Overcharged (Failure Will (NOT) Be Tolerated, core/battle/pokemonMoments.ts): all stats doubled, HP x1.5, moves on a one-turn cooldown. */
+  overcharged: z.literal(true).optional(),
   /** Shadow Pokémon (catalog #76-77, core/shadow.ts): the Heart Gauge, 100 (sealed) down to 0 (purified). */
-  shadow: z.object({ heart: z.number().int().min(1).max(100) }).optional(),
+  shadow: z.object({
+    heart: z.number().int().min(1).max(100),
+    /** Shadow II (core/shadow2): the id of the Named Shadow this is (`ss.*`), whose purification key sets it free. */
+    named: z.string().optional(),
+    /** Shadow II: the key became impossible in this run, so it is a Common Shadow from now on. */
+    keyGone: z.boolean().optional(),
+    /** Shadow II: how many of its key's three hints the player has been given (0 to 3). */
+    hints: z.number().int().min(0).max(3).optional(),
+  }).optional(),
+  /** Shadow II heart scars (core/shadow2/scars.ts): small marks a purified Pokémon keeps, at most two. */
+  scars: z.array(z.string()).max(2).optional(),
   /** Blissful Pokémon (core/shadowWorld/blissful.ts): touched by a benevolent force. `aura` picks its look (bloom, glow, chime). */
   blissful: z.object({ aura: z.string().min(1) }).optional(),
   /** Care & party life (core/care): mood, fatigue, journal counters, nickname, talent, training. */
@@ -200,6 +223,8 @@ export const VolatileSchema = z.object({
   abilityOverride: z.string().nullable().default(null),
   /** Focus Energy: critical hits are two stages likelier. */
   focusEnergy: z.boolean().default(false),
+  /** Pokémon moments: extra critical-hit stages (fades or lasts the battle; gone on switch-out). */
+  momentCrit: z.number().int().min(0).max(3).default(0),
   /** S164 charge-up stacks waiting for the next damaging move. */
   bank: z.number().int().min(0).default(0),
   /** Laser Focus: the next attack is a critical hit. */
@@ -263,6 +288,8 @@ export const VolatileSchema = z.object({
   loweredThisTurn: z.boolean().default(false),
   /** Moves used this stay (Last Resort). */
   movesUsed: z.array(z.string()).default([]),
+  /** The move being used now is the first use of it this stay (Samurai Slash). */
+  firstUseNow: z.boolean().default(false),
   /** Rollout / Ice Ball hits in a row. */
   rollout: z.number().int().min(0).default(0),
   /** Fury Cutter hits in a row. */
@@ -276,6 +303,10 @@ export const VolatileSchema = z.object({
   sigilUsed: z.boolean().default(false),
   /** Silent Cloak: the first move since switching in has been used. */
   cloakUsed: z.boolean().default(false),
+  /** Champion's Fury: its first attack since switching in has gone off. */
+  furyUsed: z.boolean().default(false),
+  /** Haunted (the Haunting move): 0 = no, else the number of foe turns it has haunted (odd turns lower a random stat, even turns confuse). */
+  haunted: z.number().int().min(0).default(0),
   /** Gem Orbit: gems shattered so far (4 per battle). */
   gems: z.number().int().min(0).default(0),
   /** Nightmare: loses HP while asleep. */
@@ -359,6 +390,7 @@ export const freshVolatile = (): Volatile => ({
   typeShift: null,
   abilityOverride: null,
   focusEnergy: false,
+  momentCrit: 0,
   bank: 0,
   laserFocus: false,
   sureHit: false,
@@ -391,6 +423,7 @@ export const freshVolatile = (): Volatile => ({
   lastFailed: false,
   loweredThisTurn: false,
   movesUsed: [],
+  firstUseNow: false,
   rollout: 0,
   furyCutter: 0,
   ampMove: null,
@@ -398,6 +431,8 @@ export const freshVolatile = (): Volatile => ({
   dynamoBoost: false,
   sigilUsed: false,
   cloakUsed: false,
+  furyUsed: false,
+  haunted: 0,
   gems: 0,
   nightmare: false,
   cursed: false,
@@ -445,12 +480,25 @@ export const DoublesSchema = z.object({
   enemy: DoublesSlotSchema,
   /** True while the Pokémon in the main fields stands in the right-hand spot (spot 1). */
   swapped: z.object({ player: z.boolean(), enemy: z.boolean() }),
-  /** Spots (0 left, 1 right) waiting for the player to send out a replacement. */
-  refill: z.array(z.number().int().min(0).max(1)).default([]),
+  /** Spots (0 left, 1 right; 2 in a triple battle) waiting for the player to send out a replacement. */
+  refill: z.array(z.number().int().min(0).max(2)).default([]),
   /** Tatsugiri commanding from inside a partner Dondozo (Commander): they skip their turns and can't be hit. */
   commanding: z.array(z.string()).default([]),
   /** Where each Pokémon last aimed its move (the second turn of Solar Beam goes the same way). */
-  aims: z.record(z.string(), z.object({ side: z.enum(['player', 'enemy']), spot: z.union([z.literal(0), z.literal(1)]) })).default({}),
+  aims: z.record(z.string(), z.object({ side: z.enum(['player', 'enemy']), spot: z.union([z.literal(0), z.literal(1), z.literal(2)]) })).default({}),
+  /**
+   * A triple battle (battle/triples.ts): three spots per side (0 left, 1 centre, 2 right as seen on screen, both sides).
+   * `at` is the spot whose Pokémon is in the engine's main fields; the other two wait in `player` / `enemy` by spot
+   * (the entry at `at` is an empty placeholder). In a triple battle the doubles-only `player` / `enemy` / `swapped`
+   * fields above are unused (index -1).
+   */
+  trio: z
+    .object({
+      at: z.object({ player: z.number().int().min(0).max(2), enemy: z.number().int().min(0).max(2) }),
+      player: z.array(DoublesSlotSchema).length(3),
+      enemy: z.array(DoublesSlotSchema).length(3),
+    })
+    .optional(),
 });
 export type DoublesState = z.infer<typeof DoublesSchema>;
 
@@ -502,6 +550,13 @@ export const freshExtra = () => ({
   ionDeluge: false,
   wonderRoom: 0,
   brokenFace: [] as string[],
+  variants: {} as Variants,
+  variantTimed: [] as TimedStage[],
+  traits: {} as Traits,
+  /** Lights Out: turns of darkness left (accuracy -10% for both sides). */
+  darkTurns: 0,
+  /** Payout: its holder knocked out a foe this battle, so the prize money is doubled. */
+  payout: false,
   galar: [] as string[],
   delta: false,
   mimic: {} as Record<string, { kind: 'mimic' | 'transform'; slot: number; moves: { id: string; pp: number }[] }>,
@@ -683,6 +738,10 @@ export const BattleStateSchema = z.object({
   turn: z.number().int().min(1),
   /** Revive items used in this battle (capped by balance.itemCaps.revivesPerBattle). */
   revivesUsed: z.number().int().min(0).default(0),
+  /** Healing items used in this battle (capped by balance.itemCaps.healsPerBattle). */
+  healsUsed: z.number().int().min(0).default(0),
+  /** Revives a boss, rival, Elite Four member or Champion used this battle (same cap as the player's). */
+  enemyRevivesUsed: z.number().int().min(0).default(0),
   /** Encore! Hype (core/battle/engine.ts applyHype): the meter, turns of boost left, and whether the run's Hype was loaded in. */
   hype: z.number().int().min(0).default(0),
   hypeTurns: z.number().int().min(0).default(0),
@@ -697,7 +756,7 @@ export const BattleStateSchema = z.object({
   /** Which member of enemyTeam is out. */
   enemyIndex: z.number().int().min(0),
   /** The opposing trainer. `leaderId` is set for gym leaders (classId is then "gym-leader"). */
-  trainer: z.object({ classId: z.string(), name: z.string(), leaderId: z.string().nullable().default(null) }).nullable(),
+  trainer: z.object({ classId: z.string(), name: z.string(), leaderId: z.string().nullable().default(null), /** Beta 0.6: drawn as this boss character (formats: Sabrina, Giovanni). */ spriteBoss: z.string().optional() }).nullable(),
   playerStages: StagesSchema,
   enemyStages: StagesSchema,
   playerVolatile: VolatileSchema.default(freshVolatile),
@@ -718,6 +777,14 @@ export const BattleStateSchema = z.object({
     wonderRoom: z.number().int().default(0),
     /** Pokémon whose Disguise / Ice Face is already used up. */
     brokenFace: z.array(z.string()).default([]),
+    /** Beta 0.6 variant lines (core/expansion/variantLines.ts): uid -> its line and counters for this battle. */
+    variants: VariantsSchema,
+    /** Patchwork's net and smoke ball: stat changes that wear off after 2 turns. */
+    variantTimed: z.array(TimedStageSchema).default([]),
+    /** Beta 0.6 signature traits (core/expansion/traits.ts): uid -> trait and counters. */
+    traits: TraitsSchema,
+    darkTurns: z.number().int().min(0).default(0),
+    payout: z.boolean().default(false),
     /** Galar big-battle moments already used (evolve-and-survive per Pokémon, the thread, the cheat) and ones pending this hit (galarMoments.ts). */
     galar: z.array(z.string()).default([]),
     delta: z.boolean().default(false),
@@ -784,6 +851,8 @@ export const BattleStateSchema = z.object({
   held: HeldStateSchema.default(freshHeldState),
   /** Map items in this battle: turns the wild Pokémon loses (Poké Doll), and the catch-rate items for ball throws. */
   mapItems: z.object({ freeTurns: z.number().int().min(0), thrown: z.number().int().min(0) }).optional(),
+  /** Beta 0.6 B9: an evolution stone this wild Pokémon stands beside; win or catch the fight to take it. */
+  evoStone: z.string().optional(),
   /** A VS Seeker rematch: double prize money. */
   rematch: z.boolean().optional(),
   /** "This Trainer Will Return": the enemy profile id of a trainer back for its rematch. */
@@ -795,6 +864,8 @@ export const BattleStateSchema = z.object({
   /** A rival back for its rematch (Living Rivalry Engine): its id, and what it changed about its team. */
   rivalId: z.string().optional(),
   rivalNote: z.string().optional(),
+  /** Beta 0.6 R4: the tier-5 rival AI's plan and scouting snapshot for this battle (core/rivals/tier5.ts). */
+  rivalBrain: z.object({ tier: z.union([z.literal(4), z.literal(5)]), winCondition: z.enum(['sweep', 'weather', 'stall']), personality: z.string(), seenMoves: z.array(z.string()), seenSpecies: z.array(z.string()), switchRate: z.number().min(0).max(1), lostLast: z.boolean().optional(), seed: z.string() }).optional(),
   /** Rival step-in (core/rivals/stepIn.ts): 'assist' fights beside you, 'duel' is the warm-up fight with the real battle queued behind it, 'done' is the real battle after the duel. */
   stepIn: z.object({ kind: z.enum(['assist', 'duel', 'done']), rivalId: z.string(), queued: z.unknown().optional() }).optional(),
   /** W0/W2: moves you used this battle, by move id (the rival's adaptations read only what it saw here). */
@@ -822,8 +893,12 @@ export const BattleStateSchema = z.object({
   memory: z.object({ kind: z.enum(['ghost', 'gauntlet', 'echo']), id: z.string(), note: z.string() }).optional(),
   /** A raid boss fight: shield, phases, telegraph and timer (core/raid/raid.ts). */
   raid: RaidBattleSchema.optional(),
+  /** Beta 0.6 Foresight Tax (core/battle/foresight.ts): the move revealed this turn and whether the reveal has ended. */
+  foresight: z.object({ ended: z.boolean(), revealed: z.string().nullable() }).optional(),
   /** Run events B: special rules of this event fight (no switching, no attacks, turn limits...); see EventRuleSchema. */
   eventRule: EventRuleSchema.optional(),
+  /** Every move's accuracy is multiplied by this for both sides (Veridian Forest fog). */
+  accuracyMult: z.number().min(0.1).max(1).optional(),
   /** Overhaul slice 17/18: the boss's named strategy id (balance.bossStrategy); read by the AI and the risk label. */
   strategy: z.string().optional(),
   /** A battle an event started: no reward draft after it, and `win` effects if you win (events.json). */
@@ -958,6 +1033,10 @@ export const MapNodeSchema = z.object({
   name: z.string().max(24).optional(),
   /** Story Overhaul S4: the Story Stops (blueprint stop ids) that play when the player reaches this node. */
   storyStops: z.array(z.string()).optional(),
+  /** Beta 0.6 B6 stage pacing: this trainer is the stage's ace trainer (a stronger team). */
+  ace: z.boolean().optional(),
+  /** Beta 0.6 B6: this trainer always fights two at a time (region 2 and later). */
+  doubles: z.boolean().optional(),
   /** How the generator made this node, for debugging. */
   note: z.string(),
 });
@@ -967,6 +1046,8 @@ export const StageMapSchema = z.object({
   columns: z.number().int().min(1),
   nodes: z.array(MapNodeSchema).min(1),
   trainerColumns: z.array(z.number().int()),
+  /** Beta 0.6 B6: columns where the trainer is optional (the top node is a trainer, the other nodes are wild). */
+  optionalTrainerColumns: z.array(z.number().int()).optional(),
 });
 export type StageMap = z.infer<typeof StageMapSchema>;
 
@@ -1033,6 +1114,8 @@ export const PendingDecisionSchema = z.discriminatedUnion('kind', [
     title: z.string(),
     options: z.array(z.object({ label: z.string(), description: z.string(), action: z.enum(['door0', 'door1', 'pass', 'guest', 'skip']), leaderId: z.string().optional(), /** The Leader's portrait asset id (Fork Gate and Rematch Day menus). */ sprite: z.string().optional() })).min(1),
   }),
+  /** Beta 0.6 B7: the League door. Your party is registered; option 0 keeps it, option N swaps the Pokémon the League answers most for boxed Pokémon `swapIns[N-1]`. */
+  z.object({ kind: z.literal('leagueDoor'), title: z.string(), outUid: z.string(), swapIns: z.array(z.string()), options: z.array(z.object({ label: z.string(), description: z.string() })).min(1) }),
   /** A PP Up or PP Max: pick which move gets the extra PP. */
   z.object({ kind: z.literal('ppUp'), uid: z.string(), itemName: z.string(), ups: z.number().int().min(1).max(3) }),
   /** A trainer's signature mechanic: pick one of the options (core/signature.ts). */
@@ -1436,6 +1519,8 @@ export const RunStateSchema = z.object({
   streaks: z.object({ wins: z.number().int().min(0), best: z.number().int().min(0), faintedSeen: z.number().int().min(0), rareMisses: z.number().int().min(0) }).default(() => ({ wins: 0, best: 0, faintedSeen: 0, rareMisses: 0 })),
   /** A past run's Pokémon waiting to meet you after this many battles (story slice 5); unset when none was chosen. */
   reunion: z.object({ mon: PastPokemonSchema, afterEncounters: z.number().int().min(1), done: z.boolean() }).optional(),
+  /** Beta 0.6 INSTRUMENTALITY run state (run v43). Absent until a slice that uses it writes it; older runs load untouched. */
+  expansion: ExpansionRunSchema.optional(),
 });
 export type RunState = z.infer<typeof RunStateSchema>;
 
@@ -1773,6 +1858,8 @@ export type Profile = z.infer<typeof ProfileSchema>;
 export const SettingsSchema = z.object({
   /** Story Overhaul v2 settings (settings v39). */
   story: StorySettingsSchema.default(STORY_SETTINGS_DEFAULTS),
+  /** Beta 0.6 INSTRUMENTALITY settings (settings v42), all at their safe defaults. */
+  expansion: ExpansionSettingsSchema.default(EXPANSION_SETTINGS_DEFAULTS),
   musicVolume: z.number().min(0).max(1),
   sfxVolume: z.number().min(0).max(1),
   muted: z.boolean(),

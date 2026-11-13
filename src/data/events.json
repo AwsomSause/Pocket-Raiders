@@ -1989,6 +1989,7 @@
       "effects": [],
       "battle": {
        "kind": "trainer",
+       "format": "doubles",
        "name": "Twins",
        "size": 2,
        "types": [],
@@ -4283,10 +4284,11 @@
       }
      ],
      "success": {
-      "text": "They attack together!",
+      "text": "They attack together, all three at once!",
       "effects": [],
       "battle": {
        "kind": "trainer",
+       "format": "triples",
        "name": "Shadow Triad",
        "size": 3,
        "types": [
@@ -11293,10 +11295,11 @@
       }
      ],
      "success": {
-      "text": "Present attack!",
+      "text": "Present attack, times three!",
       "effects": [],
       "battle": {
        "kind": "wild",
+       "format": "triples",
        "species": [
         "delibird"
        ],
@@ -13285,17 +13288,18 @@
     ],
     "effect": "shake"
    },
-   "intro": "Three kids challenge you at once. \"All of us! Right now!\"",
+   "intro": "Three kids line up side by side. \"All three of us! Right now!\"",
    "choices": [
     {
-     "label": "Take them all",
+     "label": "Battle all three",
      "success": {
-      "text": "Three teams, one after another!",
+      "text": "Three Pokémon hit the field at once!",
       "effects": [],
       "battle": {
        "kind": "trainer",
+       "format": "triples",
        "name": "Kid Squad",
-       "size": 4,
+       "size": 3,
        "types": [],
        "levelBonus": 1,
        "win": [
@@ -15402,8 +15406,13 @@
     {
      "label": "Chant along",
      "success": {
-      "text": "They let you pass, laughing.",
+      "text": "They let you pass, laughing, and a fan presses Marnie's League Card into your hand.",
       "effects": [
+       {
+        "kind": "flag",
+        "key": "marnies-league-card",
+        "amount": 1
+       },
        {
         "kind": "attribute",
         "key": "charisma",
@@ -41616,10 +41625,11 @@
     {
      "label": "Fight the guards",
      "success": {
-      "text": "Three grunts and their Pokémon.",
+      "text": "Three grunts send out their Pokémon side by side.",
       "effects": [],
       "battle": {
        "kind": "trainer",
+       "format": "triples",
        "name": "Plasma Guards",
        "classId": "worker",
        "size": 3,
@@ -45984,7 +45994,7 @@
     "tint": "#1a2d1c",
     "effect": "fog"
    },
-   "intro": "A ring of mossy stones. Something is humming a lullaby.",
+   "intro": "A ring of mossy stones. An old Jigglypuff hums a lullaby to nobody, and every wild Pokémon in the ring is fast asleep.",
    "choices": [
     {
      "label": "Push on",
@@ -46001,6 +46011,35 @@
        "species": [],
        "types": [
         "fairy"
+       ],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 30
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Wake them",
+     "success": {
+      "text": "Three grumpy Pokémon open their eyes at once.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "whispering-grove-2"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "format": "triples",
+       "species": [],
+       "types": [
+        "fairy",
+        "grass"
        ],
        "levelBonus": 2,
        "shinyMultiplier": 1,
@@ -46847,6 +46886,7 @@
       "effects": [],
       "battle": {
        "kind": "wild",
+       "format": "triples",
        "species": [],
        "types": [],
        "levelBonus": 2,
@@ -46881,6 +46921,7 @@
       ],
       "battle": {
        "kind": "wild",
+       "format": "triples",
        "species": [],
        "types": [],
        "levelBonus": 3,

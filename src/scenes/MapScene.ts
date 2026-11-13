@@ -7,6 +7,7 @@
 // pillar with a bigger token, and the champion stands in turning gold rays
 // (Visual Bible: "a deliberate escalation from normal stages").
 
+import { climaxTick } from '../core/arc/climaxExtended';
 import { nodeHint } from '../core/worldSim/tick';
 import { mapOmens, type Omen, type OmenTier } from '../core/omens';
 import { wealthTaxNotice } from '../core/priceSwing';
@@ -48,6 +49,9 @@ import { arenaFor, getTheme } from '../core/themes';
 import { stageModifier } from '../core/runModifiers';
 import type { MapNode, SideStop } from '../core/state';
 import { services } from '../game/services';
+import { pendingRescue, runningRescue } from '../core/evil/rescueGlue';
+import { pendingFormat, sceneForFormat } from '../core/formats/glue';
+import { rescueOf } from '../core/evil/rescue';
 import { device } from '../game/deviceTools';
 import { flagOn } from '../core/tools/featureFlags';
 import { commentaryLine } from '../core/tools/commentary';
@@ -94,6 +98,13 @@ import { eggLabel, eggRevealed, eggTier } from '../core/eggs';
 import { protagonistTitle, topHeadline } from '../core/rivals/recognition';
 import { mentorHudLine } from '../core/mentors';
 import { ensureNarration } from '../core/overhaul/partyNarration';
+import { rivalReport } from '../core/rivals/report';
+import { trackPage } from '../core/expansion/trackView';
+import { fieldNotesView } from '../core/expansion/fieldNotes';
+import { drawFieldNotes, type FieldNotesPage } from '../ui/fieldNotesPage';
+import { drawTrackPage } from '../ui/trackPage';
+import { drawDossier } from '../ui/dossier';
+import { dossierFolders } from '../core/expansion/cast/dossier';
 
 const COL_SPACING = 104;
 const ROW_SPACING = 92;
@@ -235,6 +246,35 @@ export class MapScene extends Phaser.Scene {
     if (session.storyScene()) {
       this.scene.start('Story', { next: 'Map' });
       return;
+    }
+    // R9: the rival's Rescue Plan offer, at a quiet moment, shown on top of the map (the screen resumes this scene).
+    const running = runningRescue(session.content, run);
+    const rescue = running ? null : pendingRescue(session.content, run);
+    if (running) {
+      // A plan is already under way (a guard fight just ended, or the run was reloaded at the Door): carry on where it stopped.
+      const hold = rescueOf(run).holds.find((h) => h.id === run.expansion!.rescue!.active!.holdId);
+      const mon = hold ? session.content.species.get(String(hold.pokemon[0]?.speciesId))?.name ?? 'your Pokémon' : 'your Pokémon';
+      this.time.delayedCall(0, () => {
+        this.scene.launch('Rescue', { ...running, resume: true, names: { player: session.content.archetypes.get(run.archetypeId)?.name ?? 'friend', mon }, from: 'Map' });
+        this.scene.pause();
+      });
+    } else if (rescue) {
+      const hold = rescueOf(run).holds.find((h) => h.id === rescue.offer.holdId);
+      const mon = hold ? session.content.species.get(String(hold.pokemon[0]?.speciesId))?.name ?? 'your Pokémon' : 'your Pokémon';
+      this.time.delayedCall(0, () => {
+        this.scene.launch('Rescue', { ...rescue, names: { player: session.content.archetypes.get(run.archetypeId)?.name ?? 'friend', mon }, from: 'Map' });
+        this.scene.pause();
+      });
+    }
+    // Wide formats (Breather and the rest): a running format shows its plain screen on top of the map.
+    if (run.phase === 'map' && climaxTick(session.content, run)) session.saveRunNow();
+    // The director launched a climax battle: the battle screen takes over.
+    if (run.phase === 'battle') { this.time.delayedCall(0, () => this.scene.start('Battle')); return; }
+    if (pendingFormat(run)) {
+      this.time.delayedCall(0, () => {
+        this.scene.launch(sceneForFormat(run), { from: 'Map' });
+        this.scene.pause();
+      });
     }
     // W10 (I496/I507/I497): C hears a cry, H holds the lead's paw, N names the node. Keys and touch buttons share one handler each.
     const stageKey = (nodeId: string): string => {
@@ -779,6 +819,14 @@ export class MapScene extends Phaser.Scene {
         if (action === 'back' || action === 'confirm') this.toggleLegend();
         return;
       }
+      if (this.fieldNotes) {
+        this.fieldNotes.handle(action);
+        return;
+      }
+      if (this.report) {
+        if (action === 'back' || action === 'confirm') this.closeReport();
+        return;
+      }
       if (this.picker) {
         this.picker.handle(action);
         return;
@@ -803,6 +851,26 @@ export class MapScene extends Phaser.Scene {
     this.input.keyboard?.on('keydown-L', () => this.toggleLegend());
     const legendTag = this.add.text(GAME_WIDTH - 24, 402, 'L: map legend', textStyle(12, '#a69cb4')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('legend-tag');
     legendTag.on('pointerdown', () => this.toggleLegend());
+    // Beta 0.6 R7: R opens the Rival Report pop-up (only once a rival has been met).
+    if (session.run && rivalReport(session.run).length > 0) {
+      this.input.keyboard?.on('keydown-R', () => this.toggleRivalReport());
+      this.add.text(GAME_WIDTH - 24, 370, 'R: rival report', textStyle(12, '#a69cb4')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('rival-report-tag').on('pointerdown', () => this.toggleRivalReport());
+    }
+    // Beta 0.6 E2: T opens the Notebook's world-state track page (Kanto's Rocket Ledger), once the track has a step to show.
+    if (session.run && (session.run.expansion?.track?.[region.id]?.peak ?? 0) > 0 && trackPage(content, session.run)) {
+      this.input.keyboard?.on('keydown-T', () => this.toggleTrackPage());
+      this.add.text(GAME_WIDTH - 24, 354, 'T: notebook track', textStyle(12, '#a69cb4')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('track-tag').on('pointerdown', () => this.toggleTrackPage());
+    }
+    // Beta 0.6 E1: D opens the Dossier once the run has met someone from the cast.
+    if (session.run && dossierFolders(session.run).length > 0) {
+      this.input.keyboard?.on('keydown-D', () => this.toggleDossier());
+      this.add.text(GAME_WIDTH - 24, 338, 'D: dossier', textStyle(12, '#a69cb4')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('dossier-tag').on('pointerdown', () => this.toggleDossier());
+    }
+    // Beta 0.6: F opens Field Notes (special Pokémon, Shadows, Data ROMs and keys met this run).
+    if (session.run) {
+      this.input.keyboard?.on('keydown-F', () => this.toggleFieldNotes());
+      this.add.text(GAME_WIDTH - 24, 322, 'F: field notes', textStyle(12, '#a69cb4')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('field-notes-tag').on('pointerdown', () => this.toggleFieldNotes());
+    }
     // Galar's Champion Tournament: B opens the bracket.
     if (league && region.id === 'galar' && stage.map.nodes.some((n) => n.sides.length > 0)) {
       this.input.keyboard?.on('keydown-B', () => this.toggleBracket());
@@ -1307,7 +1375,7 @@ export class MapScene extends Phaser.Scene {
   /** A minigame stop: shows the rules and the attempts left, and the pick of a difficulty starts the game. */
   private openMinigame(sideId: string): void {
     const { session } = services();
-    const pv = minigamePreview(session.content, session.run!, sideId);
+    const pv = minigamePreview(session.content, session.run!, sideId, session.settings.expansion.minigamesDifficulty);
     const picker: Picker = new Picker(this, {
       title: `${pv.name} - ${pv.attemptsLeft} attempt${pv.attemptsLeft === 1 ? '' : 's'} left`,
       columns: 1,
@@ -1316,7 +1384,7 @@ export class MapScene extends Phaser.Scene {
         problem: pv.attemptsLeft > 0 ? null : 'No attempts left',
         hint: `${pv.instructions} ${pv.scoring}`,
         draw: (scene, box, w) => {
-          box.add(scene.add.text(16, 8, `${pv.name}  ·  ${t.label}`, textStyle(22)));
+          box.add(scene.add.text(16, 8, `${pv.name}  ·  ${t.label}${t.index === pv.recommendedTier ? '  (your setting)' : ''}`, textStyle(22)));
           box.add(scene.add.text(16, 40, `${pv.instructions} ${pv.scoring}`, textStyle(15, '#ffd0a0', { wordWrap: { width: w - 32 } })));
           box.add(scene.add.text(16, 92, `${pv.medals}  ·  Best: ${pv.best}`, textStyle(14, '#a0d0ff', { wordWrap: { width: w - 32 } })));
         },
@@ -1706,6 +1774,8 @@ export class MapScene extends Phaser.Scene {
   }
 
   private legend: Phaser.GameObjects.Container | null = null;
+  private report: Phaser.GameObjects.Container | null = null;
+  private fieldNotes: FieldNotesPage | null = null;
   private bracket: Phaser.GameObjects.Container | null = null;
 
   /** Galar's Champion Tournament bracket: the five rounds, who is left, your next opponent. Presentation only (core/galarTournament.ts bracketView). */
@@ -1814,6 +1884,79 @@ export class MapScene extends Phaser.Scene {
     const timer = this.time.addEvent({ delay: 1500, loop: true, callback: step });
     step();
     this.input.keyboard?.once('keydown', close);
+  }
+
+  /** Field Notes (Beta 0.6): the Bestiary Book pop-up. F, Esc, Enter or a click outside closes it. */
+  private toggleFieldNotes(): void {
+    if (this.fieldNotes) {
+      this.fieldNotes.layer.destroy();
+      this.fieldNotes = null;
+      this.busy = false;
+      return;
+    }
+    if (this.report || this.busy || this.picker || this.legend) return;
+    const run = services().session.run;
+    if (!run) return;
+    this.fieldNotes = drawFieldNotes(this, fieldNotesView(services().session.content, run), (id) => services().session.content.species.get(id), () => this.toggleFieldNotes());
+    this.busy = true;
+  }
+
+  private closeReport(): void {
+    this.report?.destroy();
+    this.report = null;
+    this.busy = false;
+  }
+
+  /** The Dossier (Beta 0.6 E1): Case Folders with the Org Pyramid. D, Esc or a click on a tab's folder edge closes it. */
+  private toggleDossier(): void {
+    if (this.report) return this.closeReport();
+    if (this.busy || this.picker || this.legend) return;
+    const run = services().session.run;
+    const folders = run ? dossierFolders(run) : [];
+    if (!folders.length) return;
+    this.report = drawDossier(this, folders, () => this.closeReport());
+    this.busy = true;
+  }
+
+  /** The Notebook's track page (Beta 0.6 E2): a pop-up like the Rival Report. T, Esc or a click closes it. */
+  private toggleTrackPage(): void {
+    if (this.report) return this.closeReport();
+    if (this.busy || this.picker || this.legend) return;
+    const run = services().session.run;
+    const page = run ? trackPage(services().session.content, run) : null;
+    if (!page) return;
+    this.report = drawTrackPage(this, page, () => this.closeReport());
+    this.busy = true;
+  }
+
+  /** The Rival Report (Beta 0.6 R7): a pop-up panel, not a screen. Shows Lead, Marks and feelings for each rival. R, Esc or a click closes it. */
+  private toggleRivalReport(): void {
+    if (this.report) {
+      this.report.destroy();
+      this.report = null;
+      this.busy = false;
+      return;
+    }
+    if (this.busy || this.picker || this.legend) return;
+    const run = services().session.run;
+    if (!run) return;
+    const rows = rivalReport(run);
+    const layer = this.add.container(0, 0).setDepth(85).setName('rival-report');
+    layer.add(this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.6).setOrigin(0).setInteractive().on('pointerdown', () => this.toggleRivalReport()));
+    const w = Math.min(GAME_WIDTH - 120, 560);
+    const x = (GAME_WIDTH - w) / 2;
+    layer.add(drawGlass(this, x, 60, w, GAME_HEIGHT - 120, { tint: AERO.glassLow, rim: AERO.rim, radius: 18, alpha: 0.97 }));
+    layer.add(this.add.text(GAME_WIDTH / 2, 76, 'Rival Report  (R or click to close)', textStyle(20, COLORS.gold)).setOrigin(0.5, 0));
+    let y = 112;
+    for (const r of rows) {
+      layer.add(this.add.text(x + 20, y, `${r.name}  ·  ${r.role === 'friend' ? 'Friend' : 'Rival'}  ·  ${r.personality}`, textStyle(16, COLORS.textLight)));
+      layer.add(fitLine(this.add.text(x + 20, y + 22, `${r.leadText}   Meetings: ${r.meetings}   Seen of yours: ${r.seenMoves} moves, ${r.seenSpecies} Pokémon`, textStyle(12, '#d8d0e0')), w - 40));
+      layer.add(fitLine(this.add.text(x + 20, y + 40, `Feels: ${r.feelings.map((f) => `${f.key[0]!.toUpperCase()}${f.key.slice(1)} ${f.value}`).join(', ')}`, textStyle(12, '#a69cb4')), w - 40));
+      layer.add(fitLine(this.add.text(x + 20, y + 56, r.marks.length ? `Marks: ${r.marks.join(', ')}` : 'Marks: none yet', textStyle(12, '#a69cb4')), w - 40));
+      y += 88;
+    }
+    this.report = layer;
+    this.busy = true;
   }
 
   /** The map legend (ideas W4, key L): what every node, stop, badge and obstacle icon means. Esc or L closes it. */

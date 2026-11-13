@@ -12,6 +12,9 @@
 // (Elite Four, then the champion); beating the champion moves the run to the
 // next region, or wins the run after the last one.
 
+import { noteBattle } from './expansion/fieldNotes';
+import { battleEnded as formatBattleEnded } from './formats/registry';
+import { rescueFightEnded } from './evil/rescueFights';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
 import { recordStoryLoss, storyLossApplies } from './story2/loss';
@@ -25,19 +28,24 @@ import { eliteRematchDue } from './story/eliteRematch';
 import { markAssisted } from './tools/assisted';
 import { crossObstacle, placeDungeon, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
 import { wandererStageStart, wandererStep } from './wanderer';
+import { climaxBattleEnded, setClimaxCut } from './arc/climaxExtended';
+import { freeHandedOverRival, standWithClimaxLost, standWithOf } from './arc/standWithExtended';
 import { makeShadow, rollShadowHeart, soothePartyAfterBattle } from './shadow';
+import { leaveRegion, startGrandArc } from './grandArc';
+import { checkFlagKeys, checkLeadWinKey, SHADOW_SLOT_CAP, heavyShadowCount, shadowTierOf } from './shadow2';
 import { advanceShadowWorld, addFlag, gangNotes, gangRaidWon, liberatedHpDiscount, outbreakShadow, placeGangDen } from './shadowWorld/world';
 import { blissfulAfterBattle, blissfulAtRest } from './shadowWorld/blissful';
 import { wildBehavior, wildCatchMultiplier } from './wildBehavior';
 import { buildPriceFactor, sabotageStep, wildEffect } from './battle/battleFlair';
 import { interruptFlag, interruptingRival } from './rivals/interrupt';
 import { applyInterference } from './rivals/interference';
-import { catchable, forcedStepInRival, legendKind, planStepIn, rivalAce, recordRivalCatch, stepInFlag, stepInLine, STEPIN_FORCE, STEP_IN, withCaughtMembers, type StepInKind } from './rivals/stepIn';
+import { catchable, forcedStepInRival, legendKind, planStepIn, rivalAce, recordRivalCatch, stepInFlag, stepInLine, STEPIN_FORCE, PSEUDO_FORCE, STEP_IN, withCaughtMembers, type StepInKind } from './rivals/stepIn';
 import { captureMultiplier, getArchetype, runArchetype, runPerks, badgeTypesOf, healingMultiplier, moneyMultiplier, priceMultiplier, shopUnlockOffset, trainerPreviews, typeModifiers, xpMultiplier } from './archetypes';
 import { chooseSignatureOption, signatureDecisions } from './signature';
 import { boxCapacity, catchLevelOffset, encounterWeightPerk, partyLimit, postBattleHealShare, hasStarterSignature, releaseLimit, signatureMoveFor, evolutionLevelOffset, isBossClass, regionLevelOffset, startingAttributes, startingLevelOffset, syncHpPerks, xpPerk, bossMoneyPerk, championMoneyPerk, ordinaryMoneyPerk, catchMoneyPerk, doubleBattleRewardPerk, singleBattleXpPerk, shopEarlyStockPerk, shopEarlyRareStockPerk, shopRefreshPerk, thirdBossLevels, isUltraBeast, fishingRareTriesPerk, bonusRewardChancePerk } from './trainerPerks';
-import { createBattle, resolveTurn, startBattle, type BattleContext, type BattleEvent, type PlayerAction } from './battle/engine';
+import { createBattle, itemProblem, resolveTurn, startBattle, type BattleContext, type BattleEvent, type PlayerAction } from './battle/engine';
 import { autoCommands, canBeDoubles, makeDoubles, primarySpot, resolveDoublesTurn, startDoubles } from './battle/doubles';
+import { canBeTriples, makeTriples } from './battle/triples';
 import { endBattle as endHeldBattle, expMultiplier, giveBossItems, growthOnLevelUp } from './battle/held';
 import { gimmickSlots, planBossGimmicks } from './battle/bossGimmicks';
 import { revertTransformations } from './battle/transform';
@@ -67,6 +75,7 @@ import {
 } from './encounters';
 import { evolutionGift, evolve, evolveFully, type EvolutionResult } from './evolution';
 import { changeFriendship } from './friendship';
+import { joinMoments, restMoments } from './moments/runMoments';
 import { followStep } from './followMode';
 import { addItem, applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem, STACK_MAX } from './items';
 import { addLevels, createPokemon, gainXp, getSpecies, MAX_PP_UPS, maxHp, maxPp, xpForDefeat, xpForLevel } from './pokemon';
@@ -77,12 +86,14 @@ import { applyReward, generateDraft, rewardTargetProblem, type RewardResult } fr
 import { pickRunQuest } from './quests';
 import { familyId, runMasteryPerks } from './mastery';
 import { rememberPick, varietyWeight } from './variety';
+import { regionTrainerCap, rememberRegionTrainer } from './trainerPools';
+import { WILD_MET_POOL, isOddOneOutNode, oddOneOutWeight, wildMetWeight } from './wildDampers';
 import { gameEventModifiers } from './gameEvents';
 import { bumpEventCounters } from './eventToolkit';
 import { blackMarketMarkup, fieldResearchMoney, spookyEncounterChance, voiceAsksToJoin } from './trainerEvolution';
 import { growGarden } from './berries';
 import { layEgg, tickEggs } from './eggs';
-import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isPseudoBattle, isStoryEventBattle } from './events';
+import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
@@ -179,6 +190,7 @@ import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
 import { applyTrainerParity, trainerHistoryLine, trainerKey } from './trainerWorld/trainerWorld';
 import { planTrainerGimmicks, returningPlan, trainerKit } from './trainerWorld/behavior';
 import { castGymLeader, castLeague, record } from './rolePool';
+import type { MomentHooks } from './moments/pokemonMoments';
 import { galarScope, lastStandUsed, markLastStand, pickCounterSpecies } from './galarCrowd';
 import { GALAR_SHOP_COLUMNS, ballGuyLimit, ballGuyStock, galarEliteFour, usesGalarTournament } from './galarTournament';
 import { getTheme, pickGymLeader, typesPool, wildEligibleSpecies } from './themes';
@@ -221,7 +233,10 @@ import { applyMutator, mutatorCatch, mutatorDue, mutatorMoney, mutatorOffer, mut
 import { advanceStreak, applyPity } from './streaks';
 import { conditionEvolutionTarget, evoRunInfo } from './conditionEvolution';
 import { roleOrder } from './battle/opponentAi';
-import { winHealFraction, openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
+import { beginRivalBrain } from './rivals/brainSetup';
+import { friendFinaleAssist, friendStageBeat, rivalBattleLines } from './rivals/live';
+import { markStepIn } from './rivals/presence';
+import { winHealFraction, openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, triplesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
 import { shopTierAllowed } from './rarity';
 import { campMoment, campQuirkLine } from './overhaul/quirkTimes';
 import { noteBountyKills } from './bounties';
@@ -230,6 +245,7 @@ import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
 import { recapRegion, tellAct } from './campaign/director';
+import { healStopShut, trackShopFactor, trackWildWeight } from './expansion/trackRun';
 import { freshClock, migrationWildWeight, periodOf, periodWildWeight, shopHoursMultiplier, stepClock, tideShopMultiplier, tideWildWeight } from './clock';
 import { bulkTotal, currentShopType, haggleWins, pokenetDeal, shopTypeAt, typedStock, typePriceFactor } from './shopTypes';
 import { finalRivalLine, tellCampfire } from './story/highHype';
@@ -251,6 +267,7 @@ import { withTeamTypes } from './rivals/adapt';
 import { finaleAssistRival } from './rivals/living';
 import { markTakeover, takeoverNote, takeoverRival } from './rivals/promotion';
 import { frontRunnerIntro, onFrontRunnerBattle } from './timeline/frontRunner';
+import { beatBoss, beatClimax } from './expansion/cast/meet';
 import { beginBossRematch, bossRematchPlan, dueBossRematch, recordBossDefeat, type BossRecord } from './story/bossRematch';
 import { bondScoreOf } from './battle/spectacle';
 import { freshSpectacle } from './battle/spectacle';
@@ -262,6 +279,9 @@ import { isStoryCampaign, leagueAfterRegion } from './campaign/circuit';
 import { StoryV2Schema } from './story2/schema';
 import type { PronounSet } from './story2/identity';
 import { castAuthoredLeague, circuitLeader, guestMatch, noteGymWin } from './campaign/circuitCast';
+import { applyLeagueDoorChoice, leagueDoorDecision } from './campaign/leagueDoor';
+import { wildStoneFor } from './evoEncounter';
+import { counterPickMembers, counterTargets } from './campaign/counterPick';
 import { applyCircuitChoice, forkDecision, isCircuitRun, nextGymIndex, rematchDecision } from './campaign/circuitGate';
 import { ensureStoryRun, placeStoryStops, playFinaleStops, playNodeStops, playStageEndStops } from './campaign/storyDirector';
 import { beginNemesisBattle, counterTypes, dueNemesis, isHunted, markHunted, nemesisMember, nemesisTrainerPlan } from './story/nemesis';
@@ -270,6 +290,10 @@ import { answerMentorship, graduateMentorships, planMentorship } from './story/m
 import { mentorshipsAfterBattle } from './story/mentorBond';
 import { answerReturn, planReturn, recordDefeats, returningPokemon } from './story/returnProtege';
 import { PSEUDO } from './dungeon/pseudo';
+import { addCanonStops, failCanonRaid, finishCanonRaid, restoreStash } from './expansion/canonRun';
+import { expireStageMods } from './expansion/stageMods';
+import { addFinaleCanonStops, addOpeningCanonStops, addRouteCanonStops } from './expansion/canonEnds';
+import { leaveCanonStash, ruleEvolution } from './expansion/canonSaffron';
 import { apprenticeLost, applyLessons, bondOf, mentorBadgeWon, startMentorship } from './mentors';
 import { answerAskLead, planAskLead } from './story/askLead';
 import { planReunion, reunionPokemon } from './story/reunion';
@@ -316,6 +340,8 @@ export interface NewRunOptions {
   treasureHunt?: Profile['treasureHunt'];
   /** Story Run: the player's name, pronouns and Look from the prologue (profile.story.protagonist). */
   protagonist?: { look: string; name: string; pronouns: string | PronounSet; backstory?: string };
+  /** Beta 0.6: which expansion settings were on at run start (settings.expansion). Each flag is stored in `run.expansion` once and never changes. */
+  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean; grandArc?: boolean; worldTracks?: boolean; eventsDensity?: 'low' | 'normal' | 'full'; climaxCut?: 'standard' | 'extended' };
 }
 
 export function createRun(content: Content, opts: NewRunOptions): RunState {
@@ -416,6 +442,13 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     run.story.v2 ??= StoryV2Schema.parse({ mode: 'story_run' });
     run.story.v2.protagonist = { ...run.story.v2.protagonist, look: opts.protagonist.look, name: opts.protagonist.name, pronouns: opts.protagonist.pronouns, ...(opts.protagonist.backstory ? { backstory: opts.protagonist.backstory } : {}) };
   }
+  if (opts.expansion) {
+    const e = opts.expansion;
+    const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.kantoCanon ? { canon: { flags: [], completed: [], menus: {} } } : {}), ...(e.worldTracks ? { tracks: true } : {}), ...(e.eventsDensity ? { density: e.eventsDensity } : {}), ...(e.climaxCut === 'extended' ? { climaxCut: 'extended' as const } : {}) };
+    if (Object.keys(flags).length > 0) run.expansion = { ...run.expansion, ...flags };
+    setClimaxCut(run, e.climaxCut);
+    if (e.grandArc) startGrandArc(run);
+  }
   recordRunStarted(content, run);
   return run;
 }
@@ -464,6 +497,7 @@ export function endRunEarly(current: RunState): RunState {
   assertPhase(current, 'map');
   if (!wipeStatus(current)) throw new Error('Only Adventure runs can be ended from the map');
   const run = structuredClone(current);
+  freeHandedOverRival(run);
   run.phase = 'over';
   run.victory = false;
   return run;
@@ -615,11 +649,26 @@ function forceFirstRivalColumn(content: Content, run: RunState, index: number, m
   const cfg = content.balance.rival;
   if (run.regionIndex !== 0 || index !== cfg.stage || run.story.flags[FIRST_RIVAL_FLAG] !== undefined || cfg.column >= map.columns) return;
   if (map.trainerColumns.includes(cfg.column)) return;
+  // Stage pacing: a skippable trainer column becomes a full trainer column, so every route meets the rival.
+  if (map.optionalTrainerColumns?.includes(cfg.column)) {
+    for (const node of map.nodes) {
+      if (node.column === cfg.column) {
+        node.kind = 'trainer';
+        node.harder = false;
+        node.note = `trainer column ${cfg.column} (the first rival waits here)`;
+      }
+    }
+    map.optionalTrainerColumns = map.optionalTrainerColumns.filter((c) => c !== cfg.column);
+    map.trainerColumns = [...map.trainerColumns, cfg.column].sort((a, b) => a - b);
+    return;
+  }
   // The stage's first trainer level moves to the rival's level (a map keeps exactly two trainer levels).
   const moved = map.trainerColumns[0]!;
   for (const node of map.nodes) {
     if (node.column === moved) {
       node.kind = 'wild';
+      delete node.ace;
+      delete node.doubles;
       node.note = `wild, column ${moved} (its trainers moved to column ${cfg.column} for the first rival)`;
     } else if (node.column === cfg.column) {
       node.kind = 'trainer';
@@ -643,7 +692,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
     // The old region-locked pick is still rolled (and dropped) so every other 'map' roll stays where it was; the cast itself comes from 'roleCast'.
     pickGymLeader(content, theme, run.usedLeaders, r, region.gymLeaders);
     const leader = circuitLeader(content, run, run.regionIndex, index) ?? castGymLeader(content, run, theme, run.regionIndex, index);
-    return { theme, leader, map: generateStageMap(content, campaign, r), themeLine: line };
+    return { theme, leader, map: generateStageMap(content, campaign, r, run.expansion?.pacing ? { regionIndex: run.regionIndex } : undefined), themeLine: line };
   });
   forceFirstRivalColumn(content, run, index, map);
   const problems = validateStageMap(map);
@@ -653,6 +702,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   run.usedThemes.push(theme.id);
   run.usedLeaders.push(leader.id);
   run.stage = { kind: 'stage', index, themeId: theme.id, leaderId: leader.id, eliteFour: [], map, current: null, visited: [], scoutedTo: 0, foresight: 0, extraFronts: [], roamers: [], convoy: null };
+  expireStageMods(run);
   startStageEffects(run);
   clearRecentPurchases(run);
   applyWealthTax(content, run);
@@ -662,6 +712,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   rivalCatchesMonRival(content, run);
   rivalRivalries(content, run);
   rivalSighting(content, run);
+  friendStageBeat(content, run);
   noteProtagonistTitle(content, run);
   tellCampfire(content, run);
   tellAct(content, run);
@@ -675,6 +726,9 @@ function enterStage(content: Content, run: RunState, index: number): void {
   // Rods, and Wave, Tropic and Harbor Mail, add stops to the new map; then the event ("?") stops.
   addItemStops(content, run);
   addEventStops(content, run);
+  addCanonStops(content, run);
+  addOpeningCanonStops(content, run);
+  addRouteCanonStops(content, run);
   spawnRoamers(content, run);
   placeObstacles(content, run);
   placeLandmark(content, run);
@@ -758,6 +812,7 @@ function enterLeague(content: Content, run: RunState): void {
     extraFronts: [],
     roamers: [],
   };
+  addFinaleCanonStops(content, run);
   placeStoryStops(content, run);
   startStageEffects(run);
   syncHpPerks(content, runArchetype(content, run).modifiers, run.party);
@@ -825,6 +880,7 @@ function enterNextRegion(content: Content, run: RunState): void {
   if (run.regionIndex + 1 >= run.regionOrder.length) {
     playFinaleStops(content, run);
     run.victory = true;
+    freeHandedOverRival(run);
     run.phase = 'over';
     return;
   }
@@ -892,6 +948,16 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
       return run;
     }
   }
+  // Beta 0.6 B7: the League door registers your party (the six the Elite Four may answer) and offers one swap.
+  if (stage.kind === 'league' && run.expansion?.counterPick && !run.expansion.league && findNode(stage.map, nodeId).kind === 'elite') {
+    const door = leagueDoorDecision(content, run);
+    if (door) {
+      run.pending.unshift(door);
+      run.afterDecisions = 'map';
+      run.phase = 'decision';
+      return run;
+    }
+  }
   const mode = run.moveMode;
   delete run.moveMode;
   const node = findNode(stage.map, nodeId);
@@ -903,6 +969,8 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   const modeItem = mode ? perkItem(content, run, mode) : null;
   if (mode === 'airship' && modeItem) spendUse(run, modeItem);
   else if (mode && modeItem && (mode !== 'machBike' || node.kind === 'wild')) markUsedThisStage(run, modeItem);
+  // Saffron canon: walking away from a Tournament bout or the Labyrinth brings the whole party back.
+  leaveCanonStash(run);
   stage.current = nodeId;
   stage.visited.push(nodeId);
   tickChainTimers(run.story.flags);
@@ -1711,13 +1779,15 @@ function failRaid(content: Content, run: RunState): void {
   const battle = run.battle!;
   const raidId = battle.raid?.id ?? battle.totem!.id;
   buryFallen(content, run, battleCause(content, battle));
+  const lostCanon = battle.raid ? getRaid(content, battle.raid.id).canon : null;
+  if (lostCanon) failCanonRaid(content, run, lostCanon);
   if (battle.raid && getRaid(content, battle.raid.id).grand) endGrandBattle(content, run, false, run.party[battle.activeIndex]?.uid);
   const frac = battle.totem ? content.totems.failureHealFraction : content.raids.failureHealFraction;
   // The timer ran out: the boss escapes and comes back in a later stage, changed (once).
   const raid = battle.raid;
   const rawRaid = raid ? getRaid(content, raid.id) : null;
   // S408 Boss Revenge Rematch: a boss that beat you (not a practice fight, not a story raid) comes back stronger in a later stage, once.
-  const beaten = Boolean(raid && !raid.practice && !raid.returning && rawRaid && !rawRaid.grand && !rawRaid.gang && !rawRaid.legendary && !rawRaid.special && battle.outcome === 'lose' && !(raid.timerLeft !== null && raid.timerLeft <= 0));
+  const beaten = Boolean(raid && !raid.practice && !raid.returning && rawRaid && !rawRaid.grand && !rawRaid.gang && !rawRaid.legendary && !rawRaid.canon && !rawRaid.special && battle.outcome === 'lose' && !(raid.timerLeft !== null && raid.timerLeft <= 0));
   if (beaten && !run.raids.escaped.includes(raid!.id)) run.raids.escaped.push(raid!.id);
   if (raid && raid.timerLeft !== null && raid.timerLeft <= 0 && !raid.returning) {
     run.raids.escaped.push(raid.id);
@@ -1809,6 +1879,23 @@ function claimRaidRewards(content: Content, run: RunState, battle: BattleState):
   // Kept as a counter so the account remembers it (profile best "raidBestTier") and opens the next tier in later runs.
   run.log.counters.raidBestTier = run.raids.bestTier;
   run.raids.done.push(def.id);
+  // Beta 0.6 Canon Spaces: a canon raid finishes its space and may hand over a gift Pokémon (Kaiju Tentacruel's Tentacool).
+  if (def.canon) finishCanonRaid(run, def.canon);
+  const gift = def.rewards.gift;
+  if (gift) {
+    const level = Math.max(1, boss.level - gift.levelDrop);
+    const given = newMon(content, run, gift.species, level, 'p');
+    if (gift.ability) given.fixedAbility = gift.ability;
+    for (const id of gift.moves) {
+      const mv = content.moves.get(id);
+      if (!mv || given.moves.some((m) => m.id === id)) continue;
+      if (given.moves.length < 4) given.moves.push({ id, pp: mv.pp });
+      else given.moves[3] = { id, pp: mv.pp };
+    }
+    count(run, 'pokemonCaught');
+    discover(run, given.speciesId, true);
+    run.pending.unshift({ kind: 'caught', mon: given, raidTier: def.tier });
+  }
   if (def.grand) endGrandBattle(content, run, true, run.party[battle.activeIndex]?.uid);
   let notes: string[] | undefined = def.gang ? gangRaidWon(content, run, def) : undefined;
   if (battle.raid!.coop) {
@@ -1823,6 +1910,8 @@ function claimRaidRewards(content: Content, run: RunState, battle: BattleState):
  * a generator of its own, so the encounter stream (and every later battle) is unchanged.
  */
 export function startEncounter(content: Content, run: RunState, node: MapNode, rematch?: Rng): void {
+  // Flight North: stepping back onto the ordinary map with only the Bug-type gives the stolen party back first.
+  restoreStash(run);
   startEncounterBase(content, run, node, rematch);
   addPlayFeatures(content, run, node);
 }
@@ -1860,12 +1949,17 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     // Map items (Flutes, Incense, Mail, Poké Radar...) change the wild Pokémon; their own rolls use a generator of their own.
     const mods = activeMods(content, run);
     // Overhaul slice 3: families met in the last few wild battles are less likely (core/variety.ts).
-    const recentWild = varietyWeight(content, run, 'wild');
+    const recentWild0 = varietyWeight(content, run, 'wild');
+    // Beta 0.6 B2: dampeners for species met this run, and one uncommon "odd one out" per early stage.
+    const metWild = wildMetWeight(content, run);
+    const oddWild = isOddOneOutNode(content, run, run.regionIndex * campaign.stagesPerRegion + stage.index, node.id) ? oddOneOutWeight(content) : () => 1;
+    const recentWild = (key: string) => recentWild0(key);
+    const dampen = (id: string) => metWild(id) * oddWild(id) * trackWildWeight(content, run, id);
     const plan = withStream(run.rng, 'encounter', (r) => {
       const [lo, hi] = content.balance.difficulty.harderBonus;
       const bonus = (node.harder ? r.int(lo, hi) : 0) + wildLevelBonus(content, run, mods);
       const shiny = runAttributeEffects(content, run).shinyChance * wildShinyMultiplier(content, run, mods);
-      return planWild(content, archetype, theme, scale, bonus, r, run.regionOrder[run.regionIndex], shiny, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id) * migrationWildWeight(content, run, id) * weatherSpawnWeight(content, frontAt(content, run, node)?.weather, id) * ecosystemWeight(content, run, id) * biomeWildWeight(content, run, id) * modifierWildWeight(content, run, id) * recentWild(familyId(content, id)));
+      return planWild(content, archetype, theme, scale, bonus, r, run.regionOrder[run.regionIndex], shiny, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id) * migrationWildWeight(content, run, id) * weatherSpawnWeight(content, frontAt(content, run, node)?.weather, id) * ecosystemWeight(content, run, id) * biomeWildWeight(content, run, id) * modifierWildWeight(content, run, id) * recentWild(familyId(content, id)) * dampen(id));
     });
     let speciesId = lockSpecies(content, run, wildSpeciesWithItems(content, run, theme, plan.speciesId, mapItemRng(run, node.id), mods), `wild:${node.id}`);
     const legendary = rollLegendaryWild(content, new Rng(hashSeed(`${run.seed}:legendary:${run.encountersCompleted}:${node.id}`)), run.regionIndex, encounterWeightPerk(archetype.modifiers, 'legendary'));
@@ -1908,6 +2002,13 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       run.battle.enemyStages.def = 1;
     }
     run.battle.levelInfo = [plan.levelInfo];
+    if (!legendary && !back && !mrBack) {
+      const stone = wildStoneFor(content, run, enemy.speciesId, `${run.encountersCompleted}:${node.id}`);
+      if (stone) {
+        run.battle.evoStone = stone;
+        run.battle.rivalNote = [`A ${content.items.get(stone)!.name} glints beside it.`, run.battle.rivalNote].filter(Boolean).join(' ');
+      }
+    }
     if (nemesis && back) beginNemesisBattle(content, run, nemesis, back.change, null);
     if (monRival && mrBack) run.battle.rivalNote = beginMonRivalBattle(content, run, monRival, enemy);
     else {
@@ -1920,6 +2021,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     }
     claimArea(run);
     rememberPick(content, run, 'wild', familyId(content, enemy.speciesId));
+    rememberPick(content, run, WILD_MET_POOL, enemy.speciesId);
     const setup = wildBattleSetup(content, run, mods);
     if (setup.weather) run.battle.weather = { id: setup.weather, turns: 999 };
     if (setup.drop) run.itemCounters = { ...run.itemCounters, 'pinap-drop': 1 };
@@ -1930,12 +2032,13 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     const doublesCfg = content.balance.doubles;
     const pairRng = new Rng(hashSeed(`${run.seed}::wild-doubles::${run.regionIndex}::${stage.index}::${node.id}::${run.encountersCompleted}`));
     if (!legendary && !mrBack && !run.battle.mapItems && stageNumber >= doublesCfg.fromStage && run.party.filter((m) => m.hp > 0).length >= 2 && (doublesOnly(run.rules) || pairRng.chance(doublesCfg.wildChance))) {
-      const second = planWild(content, archetype, theme, scale, 0, pairRng, run.regionOrder[run.regionIndex], runAttributeEffects(content, run).shinyChance, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id) * migrationWildWeight(content, run, id) * weatherSpawnWeight(content, frontAt(content, run, node)?.weather, id) * ecosystemWeight(content, run, id) * biomeWildWeight(content, run, id) * recentWild(familyId(content, id)));
+      const second = planWild(content, archetype, theme, scale, 0, pairRng, run.regionOrder[run.regionIndex], runAttributeEffects(content, run).shinyChance, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id) * migrationWildWeight(content, run, id) * weatherSpawnWeight(content, frontAt(content, run, node)?.weather, id) * ecosystemWeight(content, run, id) * biomeWildWeight(content, run, id) * recentWild(familyId(content, id)) * dampen(id));
       const partner = newMon(content, run, lockSpecies(content, run, second.speciesId, `wild2:${node.id}`), Math.min(second.level, enemy.level + 2), 'e');
       partner.shiny = second.shiny;
       if (partner.shiny) countShiny(run, partner.speciesId);
       run.battle.enemyTeam.push(partner);
       rememberPick(content, run, 'wild', familyId(content, partner.speciesId));
+      rememberPick(content, run, WILD_MET_POOL, partner.speciesId);
       run.battle.levelInfo = [...(run.battle.levelInfo ?? []), second.levelInfo];
       makeDoubles(run.battle, run.party);
     }
@@ -1953,7 +2056,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
         case 'champion':
           return planChampion(content, archetype, stage.leaderId, run.regionIndex, scale, r, bossRemix(run.rules) || run.story.flags[FINALE_FLAG] === 'pending', isFinalBoss(content, run));
         default:
-          return planTrainer(content, archetype, theme, stageNumber, scale, r, run.regionOrder[run.regionIndex], `${run.seed}::${run.regionIndex}::${node.id}`, recentTemplates(run), (() => { const w = varietyWeight(content, run, 'trainerSpecies'); return (id: string) => w(familyId(content, id)); })());
+          return planTrainer(content, archetype, theme, stageNumber, scale, r, run.regionOrder[run.regionIndex], `${run.seed}::${run.regionIndex}::${node.id}`, recentTemplates(run), (() => { const w = varietyWeight(content, run, 'trainerSpecies'); const cap = regionTrainerCap(content, run); return (id: string) => w(familyId(content, id)) * cap(familyId(content, id)); })());
       }
     });
     // Trainer tiers: an ordinary trainer's team grows more skilled with progress (its own seed, so no roll changes).
@@ -1967,7 +2070,19 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       const c = run.log.counters;
       if (((c.gymLeadersDefeated ?? 0) + (c.eliteFourDefeated ?? 0) + (c.championsDefeated ?? 0) + 1) % 3 === 0) plan = { ...plan, members: plan.members.map((m) => ({ ...m, level: m.level + bossLevels })) };
     }
-    if (node.kind === 'trainer' && plan.templateId) { rememberTemplate(content, run, plan.templateId); for (const m of plan.members) rememberPick(content, run, 'trainerSpecies', familyId(content, m.speciesId)); }
+    // B7: the Elite Four and Champion answer the Pokémon registered at the League door (never an unseen one).
+    if ((node.kind === 'elite' || node.kind === 'champion') && run.expansion?.counterPick && run.expansion.league && plan.leaderId) {
+      const cp = content.balance.leagueCounterPick;
+      const members = counterPickMembers(content, plan.leaderId, node.kind, plan.members, counterTargets(content, run, node.kind), cp.cap);
+      plan = { ...plan, members };
+    }
+    // Stage pacing (B6): the stage's ace trainer fights a stronger team (no roll; a fixed level bump).
+    if (node.kind === 'trainer' && node.ace && run.expansion?.pacing && !rematch) {
+      const pcfg = content.balance.stage.pacing;
+      const top = plan.members.reduce((best, m, i) => (m.level > (plan.members[best]?.level ?? 0) ? i : best), 0);
+      plan = { ...plan, members: plan.members.map((m, i) => ({ ...m, level: m.level + (i === top ? pcfg.aceTopBonus : pcfg.aceRestBonus) })) };
+    }
+    if (node.kind === 'trainer' && plan.templateId) { rememberTemplate(content, run, plan.templateId); for (const m of plan.members) rememberPick(content, run, 'trainerSpecies', familyId(content, m.speciesId)); rememberRegionTrainer(content, run, plan.members.map((m) => familyId(content, m.speciesId))); }
     // Gym Leader Personalities (S126): the leader's mood of the day shapes the opening (own hash, no roll moves).
     if (node.kind === 'gym' && content.balance.leaderMoods) plan = applyLeaderMood(plan, leaderMood(run.seed, stage.leaderId, `${run.regionIndex}:${stage.index}`));
     // The Rival Who Wins Without You (left-out 5.5): a rival that took over a Gym, reached the finals or became
@@ -2172,7 +2287,8 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     if (memoryHit) run.battle.memory = memoryHit.memory;
     // Living Rival: a friend (or a rescued rival) arrives to help in the final boss (clear rules in rivals/living.ts).
     if (plan.classId === CHAMPION_CLASS && isFinalBoss(content, run)) {
-      const assist = finaleAssistRival(content, run, Math.max(...team.map((m) => m.level)));
+      const topLevel = Math.max(...team.map((m) => m.level));
+      const assist = friendFinaleAssist(content, run, topLevel, finaleAssistRival(content, run, topLevel));
       if (assist) {
         run.battle.finaleAssist = assist;
         run.battle.rivalNote = [run.battle.rivalNote, `${assist.name} burst through the doors: "Not without me!"`].filter(Boolean).join(' ');
@@ -2181,14 +2297,23 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     if (plan.memoryNote && !hunted && !nemesis) run.battle.memoryNote = plan.memoryNote;
     // Some ordinary trainers fight two at a time (their own seed, so no other roll changes).
     const doublesCfg = content.balance.doubles;
+    const triplesCfg = content.balance.triples;
+    const ordinary = node.kind === 'trainer' && !rematch && !back && !rivalBack && !isRival && !nemesis && !memoryHit && !bossBack;
+    // Beta 0.6 T3: triple battles (Triples Only rule, bosses known for them, or some ordinary trainers from a later region; own seed).
+    if (plan.leaderId && triplesCfg.enabled && triplesCfg.bossIds.includes(plan.leaderId) && canBeTriples(run.party, team)) makeTriples(run.battle, run.party);
+    else if (ordinary && canBeTriples(run.party, team) && (triplesOnly(run.rules) || (triplesCfg.enabled && run.regionIndex >= triplesCfg.fromRegion && new Rng(hashSeed(`${run.seed}::triples::${run.regionIndex}::${stage.index}::${node.id}`)).chance(triplesCfg.chance)))) makeTriples(run.battle, run.party);
     // Bosses known for double battles (Tate & Liza) always fight two at a time.
-    if (plan.leaderId && doublesCfg.bossIds.includes(plan.leaderId) && canBeDoubles(run.party, team)) makeDoubles(run.battle, run.party);
+    else if (plan.leaderId && doublesCfg.bossIds.includes(plan.leaderId) && canBeDoubles(run.party, team)) makeDoubles(run.battle, run.party);
+    else if (node.kind === 'trainer' && node.doubles && run.expansion?.pacing && !rematch && !back && !rivalBack && !isRival && !nemesis && !memoryHit && !bossBack && canBeDoubles(run.party, team)) makeDoubles(run.battle, run.party);
     else if (node.kind === 'trainer' && !rematch && !back && !rivalBack && !isRival && !nemesis && !memoryHit && !bossBack && stageNumber >= doublesCfg.fromStage && canBeDoubles(run.party, team)) {
       if (doublesOnly(run.rules) || new Rng(hashSeed(`${run.seed}::doubles::${run.regionIndex}::${stage.index}::${node.id}`)).chance(doublesCfg.chance)) makeDoubles(run.battle, run.party);
     }
     if (trainingIndex >= 0) run.battle.drama.evolvable.push(team[trainingIndex]!.uid);
     if (rivalBack) {
       run.battle.rivalId = rivalBack.id;
+      beginRivalBrain(content, run, rivalBack.id);
+      const bankLines = rivalBattleLines(content, run, rivalBack.id, node.kind, activeIndex);
+      if (bankLines.length > 0) run.battle.rivalNote = [run.battle.rivalNote, ...bankLines.map((l) => `${rivalBack.name}: "${l}"`)].filter(Boolean).join(' ');
       if (rivalNote) run.battle.rivalNote = [rivalNote, run.battle.rivalNote].filter(Boolean).join(' ');
       if (narrativeDef) run.battle.narrative = { id: narrativeDef.id, maxTurns: narrativeDef.maxTurns };
     }
@@ -2278,6 +2403,9 @@ export function rivalStepIn(content: Content, current: RunState): StepInResult |
   if (!plan) return null;
   const run = structuredClone(current);
   const rival = run.story.rivals.find((r) => r.id === plan.rivalId)!;
+  const stepRec = plan.kind === 'catch' ? run.expansion?.rival?.[plan.rivalId] : undefined;
+  if (stepRec) markStepIn(stepRec, run.regionIndex);
+  if (run.story.flags[PSEUDO_FORCE] !== undefined && String(run.story.flags[PSEUDO_FORCE]).endsWith(`:${plan.rivalId}`)) delete run.story.flags[PSEUDO_FORCE];
   const battle = run.battle!;
   const foe = battle.enemyTeam[battle.enemyIndex]!;
   const ace = rivalAce(content, run, rival);
@@ -2384,6 +2512,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
   const run = structuredClone(current);
   const runSide = findNode(run.stage!.map, stage.current).sides.find((s) => s.id === sideId)!;
   if (side.kind === 'heal' && noHealStops(run.rules)) return { run: current, message: 'Your No Rest contract forbids healing stops.' };
+  if (side.kind === 'heal' && healStopShut(content, run, sideId)) return { run: current, message: 'The Pokémon Center is shut for the night: the Ledger says so. Try again in the morning.' };
   if (side.kind === 'heal') {
     healParty(content, run);
     careRest(run, content);
@@ -2404,7 +2533,9 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     const sigPartner = run.party.find((m) => m.uid === run.story.v2?.heartbond.partner);
     const sigLines = sigPartner ? checkSignatures(content, run, 'recovery').map((u) => learnedLine(content, run, displayName(content, sigPartner), u)).join(' ') : '';
     const camp = campQuirkLine(run.party, campMoment(content, run), campKey, nameOf) ?? quirkReaction(run.party, 'rest_node', campKey, nameOf) ?? partyNarration(run.party, 'rest_node', campKey, nameOf, (m) => content.species.get(m.speciesId)?.types ?? []);
-    return { run, message: `Your Pokémon were fully healed!${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}${heartbondScenes ? ` ${heartbondScenes}` : ''}${sigLines ? ` ${sigLines}` : ''}` };
+    // Pokémon moments (Beta 0.6): a party member's rest moment can add a line.
+    const momentLine = restMoments(content, run).join(' ');
+    return { run, message: `Your Pokémon were fully healed!${momentLine ? ` ${momentLine}` : ''}${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}${heartbondScenes ? ` ${heartbondScenes}` : ''}${sigLines ? ` ${sigLines}` : ''}` };
   }
   run.phase = 'shop';
   noteMapGrowth(content, run, run.party[0]?.uid, 'shopVisit');
@@ -2431,6 +2562,12 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     return { run, message: `Welcome to the shop! You already have a ${entry.name}, so the voucher was worth ₽${voucher.refund}.` };
   }
   return { run, message: 'Welcome to the shop!' };
+}
+
+/** The lines Pokémon moments add when a caught Pokémon joins the party (a legendary heals the team, Ditto rolls a talent). */
+function joinLine(content: Content, run: RunState, joined: PokemonInstance): string {
+  const lines = joinMoments(content, run, joined, () => healParty(content, run));
+  return lines.length ? ` ${lines.join(' ')}` : '';
 }
 
 export function healParty(content: Content, run: RunState): void {
@@ -2511,7 +2648,7 @@ export function shopPrice(content: Content, run: RunState, entry: Content['shop'
   // Coupons lower the price; a full Point Card makes it free.
   const markup = isBlackMarket(content, run, entry) ? blackMarketMarkup(runPerks(content, run))! : 1;
   const deal = currentShopType(run) === 'pokenet' ? pokenetDeal(content, run, shopStock(content, run), shopSaleItem(content, run)) : null;
-  return Math.round(entry.price * markup * buildPriceFactor(content, run.party, entry.item) * typePriceFactor(content, run, entry.item, deal) * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * tideShopMultiplier(content, run, content.items.get(entry.item)?.category) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story) * dynamicPriceFactor(content, run, entry.item));
+  return Math.round(entry.price * markup * buildPriceFactor(content, run.party, entry.item) * typePriceFactor(content, run, entry.item, deal) * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * tideShopMultiplier(content, run, content.items.get(entry.item)?.category) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story) * dynamicPriceFactor(content, run, entry.item) * trackShopFactor(content, run));
 }
 
 /** Base price for an item the shop doesn't list (urge items and other finds), by rarity. */
@@ -2681,6 +2818,8 @@ export interface TurnResult {
   stepIn?: StepInEnd;
   /** What the trainer says during the turn (presentation only). */
   drama: DramaLine[];
+  /** A Poké Doll was used: the wild battle is over, with no experience, money or catch. */
+  escaped?: boolean;
 }
 
 /** The battle engine's view of the run's battle (the engine changes `run` in place). */
@@ -2712,6 +2851,26 @@ function galarLastStandMon(content: Content, run: RunState): PokemonInstance | n
   if (!battle.transform.enemyMechanics.includes('mega')) battle.transform.enemyMechanics.push('mega');
   battle.transform.used.enemy = battle.transform.used.enemy.filter((k) => k !== 'mega');
   return mon;
+}
+
+/** Pokémon moments (core/moments): the seed, the run's saved flags and the cinematic budget, all read from the run. */
+function pokemonMomentHooks(content: Content, run: RunState): MomentHooks {
+  return {
+    seed: `${run.seed}:${run.encountersCompleted}`,
+    flags: run.story.flags,
+    cinematic: (tier) => momentAllowed(content, run, tier),
+    noteCinematic: (tier) => noteMoments(run, tier),
+    // Only a wipe with nothing left to catch it ends the run: no checkpoint to return to, no Safety Net, no VS Recorder.
+    runWouldEnd: () => {
+      const battle = run.battle;
+      if (!battle || battle.outcome === 'win' || battle.outcome === 'caught') return false;
+      if (battle.expedition || battle.raid || battle.totem || battle.narrative || battle.event || battle.stepIn || battle.doubles) return false;
+      if (storyLossApplies(run, battle, content)) return false;
+      if (run.recorder && (vsRecorderReady(content, run) || safetyNetReady(content, run))) return false;
+      if (run.checkpoint && (getMode(run.rules.modeId)?.checkpoints === true || (run.rules.deathBlock && !run.rules.deathBlockUsed && run.encountersCompleted < RUN_RULES.deathBlock.battles))) return false;
+      return true;
+    },
+  };
 }
 
 function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rng, hyperRng?: Rng): BattleContext {
@@ -2747,6 +2906,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     disabledMechanics: run.disabledMechanics,
     manualMega: true,
     hyper: hyperRng ? buildHyperContext(content, run, hyperRng) : undefined,
+    moments: content.balance.pokemonMoments === false ? undefined : pokemonMomentHooks(content, run),
     teamItems: run.passives,
     noBattleItems: noBattleItems(run.rules),
     setStyle: isHardcore(run.rules),
@@ -2776,6 +2936,7 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   const ctx = battleContext(content, run, rng, new Rng(run.rng.capture));
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
   run.rng.battle = rng.state;
+  noteBattle(content, run);
   wildBehaviorEffect(content, run, events);
   countAttributeGrowth(content, run, events);
   return { run, events };
@@ -2806,6 +2967,23 @@ function doublesAction(ctx: BattleContext, action: PlayerAction): PlayerAction {
   return { kind: 'double', commands };
 }
 
+/** A Poké Doll: slips out of an ordinary wild battle. The item is used up; nothing is earned and the fight does not count as won or lost. */
+function escapeBattle(content: Content, run: RunState, itemId: string, rng: Rng, captureRng: Rng, hyperRng: Rng): TurnResult {
+  const battle = run.battle!;
+  const problem = itemProblem(battleContext(content, run, rng, captureRng, hyperRng), itemId);
+  if (problem) throw new Error(problem);
+  consumeItem(run.inventory, itemId);
+  revertTransformations(content, battle, run.party, runArchetype(content, run).modifiers);
+  for (const mon of run.party) endHeldBattle(mon);
+  endSignatureMoves(run.party);
+  endLastResort(run);
+  endHyperMoves(run, false);
+  run.battle = null;
+  run.phase = 'map';
+  const events: RunEvent[] = [{ type: 'spectacle', kind: 'arena', side: 'player', text: 'You used a Poké Doll and slipped away!' } as RunEvent];
+  return { run, events, end: null, defeated: false, cues: [], drama: [], escaped: true };
+}
+
 export function takeTurn(content: Content, current: RunState, action: PlayerAction, dialogue: DialogueFrequency = 'normal'): TurnResult {
   assertPhase(current, 'battle');
   const run = structuredClone(current);
@@ -2815,6 +2993,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const hyperRng = new Rng(run.rng.hyper);
   const targetUid = currentEnemy(battle).uid;
   // Bond Engine: a willful Pokémon may refuse a reckless order, a synced one may step in (before the turn).
+  const escapeItem = action.kind === 'item' ? content.items.get(action.itemId) : undefined;
+  if (escapeItem?.effect.kind === 'escape') return escapeBattle(content, run, escapeItem.id, rng, captureRng, hyperRng);
   const shaped = shapeAction(content, run, action);
   const wasForced = battle.needsSwitch;
   const outgoing = run.party[battle.activeIndex]?.uid;
@@ -2865,6 +3045,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     const fainted = e.type === 'faint' && e.side === 'player' ? run.party.find((p) => p.uid === e.uid) : undefined;
     if (fainted) {
       noteKeepsakeFaint(run);
+      run.expansion = { ...run.expansion, lastFaint: { uid: fainted.uid, at: run.encountersCompleted } };
       changeFriendship(content, fainted, content.balance.friendship.perFaint);
       careFaint(fainted);
       if (fainted.care?.ace) careAceFell(run, fainted.uid);
@@ -2879,6 +3060,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // A rival's training Pokémon may evolve now that the turn is over (Battle Drama Engine, Phase 5).
   const evolved = midBattleEvolution(content, run);
   if (evolved) events.push(evolved);
+  // Saffron canon: the `evolveMid` rule evolves the active Pokémon in the heat of the fight.
+  events.push(...ruleEvolution(content, run));
   // A rival's battle style may do something now (berserker rage, revenge, last stand).
   const trick = styleTrick(content, run);
   if (trick) events.push(trick);
@@ -2887,6 +3070,11 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const reveal = [revealMove(content, run, 'player', false), revealMove(content, run, 'enemy', Boolean(rivalHere) && rivalBond(rivalHere, currentEnemy(battle).speciesId).confidence >= 40)];
   for (const r of reveal) if (r) events.push(r);
   events.push(...trackFeelings(content, current, run, events as BattleEvent[]));
+  if ((battle.outcome === 'win' || battle.outcome === 'caught') && battle.evoStone) {
+    addItem(run.inventory, battle.evoStone, 1);
+    events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: `You pick up the ${content.items.get(battle.evoStone)?.name ?? battle.evoStone}.` });
+    delete battle.evoStone;
+  }
   if (battle.outcome === 'win') bondVictory(run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));
   if (battle.outcome === 'win') heartbondVictory(run, `b${run.encountersCompleted}`, isBossFight(battle) || Boolean(battle.rivalId), underdogXpMultiplier(content, run.party, battle.enemyTeam) > 1);
   // S6 Keepsakes: Gym, rival, League and type-disadvantage wins leave marks (Story Runs only).
@@ -2935,6 +3123,12 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // Battle Replay: the big fights keep a short turn-by-turn record, sealed when the fight ends.
   noteReplayTurn(content, run, current.battle!, events as BattleEvent[]);
   if (battle.outcome) sealReplay(content, run);
+  // Wide formats (Beta 0.6 E4): a fight a format launched tells the format how it ended, before any loss tail runs.
+  if (battle.outcome && battle.event?.eventId === 'format:climax') climaxBattleEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
+  if (battle.outcome === 'win' && battle.event?.eventId === 'format:climax') beatClimax(run);
+  if (battle.outcome && battle.event?.eventId.startsWith('format:')) formatBattleEnded({ content, run }, battle.outcome === 'win' || battle.outcome === 'caught');
+  // PS-RESCUE (Beta 0.6 R9): a guard fight tells the running rescue plan how it ended.
+  if (battle.outcome && battle.event?.eventId.startsWith('rescue:')) rescueFightEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
   // Mega Evolution and other transformations end with the battle, and so do "next battle" item effects.
   if (battle.outcome) {
     revertTransformations(content, battle, run.party, runArchetype(content, run).modifiers);
@@ -2979,11 +3173,15 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   }
   if (battle.outcome === 'lose' && (battle.raid || battle.totem)) {
     failRaid(content, run);
+    if (battle.event) eventBattleLost(content, run, battle.event);
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, raidFailed: true };
   }
   if (battle.outcome === 'lose' && battle.event && isPseudoBattle(content, battle.event)) {
+    // Stand With Them: a lost climax battle is Second Shot (core/arc/standWithExtended.ts); the run always goes on.
+    if (isStandWithBattle(content, battle.event) && standWithOf(run)) standWithClimaxLost(run);
     pseudoLost(content, run);
+    eventBattleLost(content, run, battle.event);
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, clubLost: true };
   }
@@ -3031,6 +3229,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
       recordChanges(content, current, back, 'battle');
       return { run: back, events, end: null, defeated: false, cues, drama, wiped: true };
     }
+    freeHandedOverRival(run);
     run.phase = 'over';
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: true, cues, drama };
@@ -3099,7 +3298,7 @@ function awardExperience(content: Content, run: RunState, events: BattleEvent[])
   const archetype = runArchetype(content, run);
   const bossBattle = isBossClass(battle.trainer?.classId);
   // White Flute: more EXP from wild battles.
-  const multiplier = xpMultiplier(runArchetype(content, run)) * content.balance.difficulty.xpScale * (getMode(run.rules.modeId)?.xpScale ?? 1) * (battle.doubles ? 1 : singleBattleXpPerk(runArchetype(content, run).modifiers)) * effects.exp * (battle.autoUsed ? content.balance.difficulty.autoBattleXp : 1) * mutatorXp(run) * (battle.kind === 'wild' ? wildExpMultiplier(content, run) : 1);
+  const multiplier = xpMultiplier(runArchetype(content, run)) * content.balance.difficulty.xpScale * (getMode(run.rules.modeId)?.xpScale ?? 1) * (battle.doubles ? 1 : singleBattleXpPerk(runArchetype(content, run).modifiers)) * effects.exp * (battle.autoUsed ? content.balance.difficulty.autoBattleXp : 1) * mutatorXp(run) * (battle.kind === 'wild' ? wildExpMultiplier(content, run) : 1) * (run.expansion?.pacing ? content.balance.stage.pacing.expMultiplier : 1);
   const underdog = underdogXpMultiplier(content, run.party, battle.enemyTeam);
   const out: RunEvent[] = [];
   for (const e of events) {
@@ -3220,6 +3419,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     const pts = timeAttackPoints(run.rules, battle.turn - 1);
     if (pts > 0) run.timeAttack = { points: (run.timeAttack?.points ?? 0) + pts, fast: (run.timeAttack?.fast ?? 0) + 1 };
   }
+  if (battle.extra?.payout) moneyGained *= 2; // Jackpot's Payout (Kanto): its holder knocked out a foe this battle
   if (battle.alpha) moneyGained = Math.floor(moneyGained * content.balance.w1.luck.alphaMoney);
   if (battle.deal) moneyGained = Math.floor(moneyGained * content.balance.w1.play.deal.money);
   run.money += moneyGained;
@@ -3324,6 +3524,11 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     }
     // Shadow Pokémon that fought are soothed; at 0 the haze lifts.
     shadowPurified = soothePartyAfterBattle(content, run, battle.participants, shadowStages);
+    // Shadow II keys: a Named Shadow that led a won battle outdoors (a wild fight), or whose key flag is set, is freed.
+    for (const line of [...checkLeadWinKey(content, run, battle.participants[0], battle.kind === 'wild'), ...checkFlagKeys(content, run)]) {
+      shadowStages.push(line);
+      shadowPurified.push(line.split(':')[0]!);
+    }
     // Freeing a Pokémon from the haze is a kindness the world remembers.
     if (shadowPurified.length > 0) addFlag(run, 'kindness', shadowPurified.length);
     blissfulHealed = blissfulAfterBattle(content, run);
@@ -3440,6 +3645,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (role) {
       count(run, role);
       recordBossDefeat(content, run, battle);
+      beatBoss(run, battle.trainer?.leaderId);
       onFrontRunnerBattle(content, run, battle, 'win');
       const lead = run.party[battle.activeIndex];
       for (const type of lead ? getSpecies(content, lead.speciesId).types : []) count(run, `bossWinsLead.${type}`);
@@ -3473,6 +3679,9 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     regionCleared = currentRegion(content, run).id;
     run.regionsCleared.push(regionCleared);
     count(run, 'regionsCleared');
+    // Grand Arc: a liaison nobody beat in this region leaves with a sample (Stock step 1).
+    const liaisonNote = leaveRegion(run, regionCleared);
+    if (liaisonNote) shadowStages.push(liaisonNote);
     if (!run.log.charmUsedInRegion) count(run, 'regionsClearedNoCharm');
     if (run.log.starterUid && run.party.some((m) => m.uid === run.log.starterUid)) count(run, 'regionsClearedWithStarter');
     if (run.regionIndex + 1 >= run.regionOrder.length && !extendEndless(run)) run.victory = true;
@@ -3558,6 +3767,7 @@ export function continueAfterDecisions(content: Content, run: RunState): void {
     // The last champion is beaten: the run is won. A Story Run tells its Finale and Epilogue Stops first (S19 found they never played here).
     playFinaleStops(content, run);
     run.draft = null;
+    freeHandedOverRival(run);
     run.phase = 'over';
     return;
   }
@@ -3703,6 +3913,13 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
   let message: string;
   let followUp: PendingDecision | null = null;
 
+  if (decision.kind === 'leagueDoor') {
+    run.pending.shift();
+    const at = choice.kind === 'circuit' ? choice.optionIndex : 0;
+    const message = applyLeagueDoorChoice(content, run, decision, at);
+    continueAfterDecisions(content, run);
+    return { run, message };
+  }
   if (decision.kind === 'circuit') {
     run.pending.shift();
     const out = applyCircuitChoice(content, run, decision, choice.kind === 'circuit' ? choice.optionIndex : decision.step === 'fork' ? 0 : decision.options.length - 1);
@@ -3736,20 +3953,22 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
     const name = speciesName(content, caught.speciesId);
     if (choice.kind === 'addToParty') {
       if (run.party.length >= partyCapacity(content, run)) throw new Error('Your party is full');
+      if (shadowTierOf(caught)?.countsAgainstCap && heavyShadowCount(run.party) >= SHADOW_SLOT_CAP) throw new Error(`A party can hold only ${SHADOW_SLOT_CAP} Gripped or Fallen Shadow Pokémon. Send it to the PC.`);
       const problem = joinProblem(content, run, caught.speciesId);
       if (problem) throw new Error(problem);
       run.party.push(caught);
       count(run, 'caughtKept');
-      message = `${name} joined your party!`;
+      message = `${name} joined your party!${joinLine(content, run, caught)}`;
     } else if (choice.kind === 'replace') {
       const old = run.party[choice.partyIndex];
       if (!old) throw new Error('Choose a party member to replace');
       if (old.care?.favourite) throw new Error('A favourite cannot be swapped out. Unmark it in Care first.');
+      if (shadowTierOf(caught)?.countsAgainstCap && heavyShadowCount(run.party.filter((m) => m.uid !== old.uid)) >= SHADOW_SLOT_CAP) throw new Error(`A party can hold only ${SHADOW_SLOT_CAP} Gripped or Fallen Shadow Pokémon.`);
       const problem = joinProblem(content, run, caught.speciesId, old.uid);
       if (problem) throw new Error(problem);
       run.party[choice.partyIndex] = caught;
       count(run, 'caughtKept');
-      message = `${speciesName(content, old.speciesId)} left the party. ${name} joined!`;
+      message = `${speciesName(content, old.speciesId)} left the party. ${name} joined!${joinLine(content, run, caught)}`;
     } else if (choice.kind === 'sendToBox') {
       if (run.box.length >= boxCapacity(runPerks(content, run))) throw new Error('The PC is full');
       run.box.push(caught);
@@ -3989,6 +4208,7 @@ export function withdrawFromBox(content: Content, current: RunState, boxIndex: n
   assertPhase(current, 'map');
   if (!current.box[boxIndex]) throw new Error('No Pokémon in that PC slot');
   if (current.party.length >= partyCapacity(content, current)) throw new Error('Your party is full');
+  if (shadowTierOf(current.box[boxIndex]!)?.countsAgainstCap && heavyShadowCount(current.party) >= SHADOW_SLOT_CAP) throw new Error(`A party can hold only ${SHADOW_SLOT_CAP} Gripped or Fallen Shadow Pokémon.`);
   const run = structuredClone(current);
   run.party.push(run.box.splice(boxIndex, 1)[0]!);
   return run;
@@ -4081,6 +4301,8 @@ function assignField(content: Content, run: RunState, boss: boolean): void {
 
 /** W7 rule P5: a loss inside a pseudo stage sends the party back to the map, partly healed (fainted Pokémon at the failure share of their HP), and the run goes on. */
 export function pseudoLost(content: Content, run: RunState): void {
+  // Flight North: a loss inside the Bug-type's stage sends you home with your own team back.
+  restoreStash(run);
   for (const m of run.party) {
     const floor = Math.max(1, Math.floor(maxHp(content, m) * PSEUDO.rules.failureHeal));
     if (m.hp < floor) m.hp = floor;

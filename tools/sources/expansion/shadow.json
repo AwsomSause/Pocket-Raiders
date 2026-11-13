@@ -1,0 +1,447 @@
+{
+  "moves": [
+    {
+      "n": 1,
+      "name": "Umbral Rush",
+      "power": "80",
+      "effect": "Priority +1 if user is faster",
+      "cost": "+3 corruption"
+    },
+    {
+      "n": 2,
+      "name": "Hollow Tide",
+      "power": "90",
+      "effect": "Hits all adjacent foes; user loses 10% max HP",
+      "cost": "+4"
+    },
+    {
+      "n": 3,
+      "name": "Dusk Brand",
+      "power": "70",
+      "effect": "Marks the target: next hit on it +30%",
+      "cost": "+2"
+    },
+    {
+      "n": 4,
+      "name": "Siphon Lull",
+      "power": "60",
+      "effect": "Drains 50%; target sleepy (50% to miss next turn)",
+      "cost": "+3"
+    },
+    {
+      "n": 5,
+      "name": "Gloam Crash",
+      "power": "100",
+      "effect": "−1 user Defense",
+      "cost": "+4"
+    },
+    {
+      "n": 6,
+      "name": "Ember of Grief",
+      "power": "75",
+      "effect": "Burns; 30% flinch",
+      "cost": "+3"
+    },
+    {
+      "n": 7,
+      "name": "Chain Hymn",
+      "power": "65",
+      "effect": "Lowers target Speed −2; blocks switching 2 turns",
+      "cost": "+3"
+    },
+    {
+      "n": 8,
+      "name": "Null Pulse",
+      "power": "85",
+      "effect": "Ignores abilities for 2 turns",
+      "cost": "+4"
+    },
+    {
+      "n": 9,
+      "name": "Weeping Maw",
+      "power": "95",
+      "effect": "Hits harder when user is below 50% HP (up to 120)",
+      "cost": "+5"
+    },
+    {
+      "n": 10,
+      "name": "Cinder Ward",
+      "power": "—",
+      "effect": "Shields user for 1 hit; reflects 25%",
+      "cost": "+2"
+    },
+    {
+      "n": 11,
+      "name": "Pale Echo",
+      "power": "70",
+      "effect": "Copies the target's last move at 70% power",
+      "cost": "+3"
+    },
+    {
+      "n": 12,
+      "name": "Rift Step",
+      "power": "—",
+      "effect": "Swap with ally and heal both 12%",
+      "cost": "+2"
+    },
+    {
+      "n": 13,
+      "name": "Last Lamp",
+      "power": "120",
+      "effect": "Only usable at ≤25% HP; user faints if it fails to KO",
+      "cost": "+6"
+    },
+    {
+      "n": 14,
+      "name": "Heart Eclipse",
+      "power": "110",
+      "effect": "Next turn the user can't act",
+      "cost": "+5"
+    }
+  ],
+  "abilities": [
+    {
+      "n": 1,
+      "name": "Grim Resolve",
+      "effect": "Survives one KO hit at 1 HP once per battle"
+    },
+    {
+      "n": 2,
+      "name": "Shroud",
+      "effect": "Evasion +1 when HP > 75%"
+    },
+    {
+      "n": 3,
+      "name": "Overbound",
+      "effect": "Shadow moves cost half the Corruption increase"
+    },
+    {
+      "n": 4,
+      "name": "Lurker",
+      "effect": "First attack each battle +25%"
+    },
+    {
+      "n": 5,
+      "name": "Dread Aura",
+      "effect": "Foes' accuracy −5%"
+    },
+    {
+      "n": 6,
+      "name": "Hollow Hide",
+      "effect": "−10% damage from super-effective hits"
+    },
+    {
+      "n": 7,
+      "name": "Debt Collector",
+      "effect": "Heals 6% max HP when it KOs a foe"
+    },
+    {
+      "n": 8,
+      "name": "Choir Hum",
+      "effect": "Allies' Special Defense +10%"
+    },
+    {
+      "n": 9,
+      "name": "Squall Mantle",
+      "effect": "Water/Flying moves +10%"
+    },
+    {
+      "n": 10,
+      "name": "Frost Oath",
+      "effect": "Ice/Rock moves +10%; weather immune"
+    },
+    {
+      "n": 11,
+      "name": "Contract Clause",
+      "effect": "Cannot be forced out by the opponent; cannot be healed by items"
+    },
+    {
+      "n": 12,
+      "name": "Spotlight Sap",
+      "effect": "When a foe boosts, boost the same stat by +1 once"
+    },
+    {
+      "n": 13,
+      "name": "Tailored Edge",
+      "effect": "Slashing/Dark moves +10%"
+    },
+    {
+      "n": 14,
+      "name": "Salt Chain",
+      "effect": "Foes' Speed −1 on entry"
+    },
+    {
+      "n": 15,
+      "name": "Odds Shaver",
+      "effect": "Moves with secondary effect: effect chance ×1.5"
+    },
+    {
+      "n": 16,
+      "name": "Relic Ward",
+      "effect": "Takes 25% less from moves of types the user is *weak* to the first time per battle"
+    },
+    {
+      "n": 17,
+      "name": "Lantern Heart",
+      "effect": "Cures its own status at end of turn (30%)"
+    },
+    {
+      "n": 18,
+      "name": "Black Ledger",
+      "effect": "Foes' stat boosts reduced by 1 stage on entry"
+    },
+    {
+      "n": 19,
+      "name": "Echo of Another",
+      "effect": "Copies one random ally ability for the battle"
+    },
+    {
+      "n": 20,
+      "name": "Unbound Spark",
+      "effect": "At Tier 4: acts first in priority bracket 25% of turns"
+    }
+  ],
+  "purification": [
+    {
+      "n": 1,
+      "name": "Heart Bond",
+      "how": "Corruption −5 per battle the Pokémon participates in without fainting; −10 if it lands the finishing blow",
+      "limits": "Needs Tier ≤3; the Pokémon must have Bond ≥ Friendly"
+    },
+    {
+      "n": 2,
+      "name": "Calming Rite",
+      "how": "A rest-node ritual: spend 1 Herb/Charm to drop Corruption −20",
+      "limits": "Once per rest node; scales with Chemistry (+5 per chemistry partner on the team)"
+    },
+    {
+      "n": 3,
+      "name": "Rival's Word",
+      "how": "If the Pokémon belongs to a team the rival once opposed, the rival can speak to it (rival memory required)",
+      "limits": "Drops Corruption −25 once; changes rival Attitude +1"
+    },
+    {
+      "n": 4,
+      "name": "Mentor Bind",
+      "how": "Link to a Clear Pokémon (the Mentor); each turn together, Corruption −2 for the Shadow, +1 Fatigue for the Mentor",
+      "limits": "Mentor's Bond ≥ 3; max 1 Mentor per Shadow (see §7)"
+    },
+    {
+      "n": 5,
+      "name": "Site Cleansing",
+      "how": "Visit a hidden Purification Site (one per region, found via Intel or Sightings)",
+      "limits": "Costs a node; drops Corruption by 40–100 depending on the site's condition"
+    },
+    {
+      "n": 6,
+      "name": "Team Reversal",
+      "how": "Defeat the team's lieutenant/commander who bound it; the binding weakens",
+      "limits": "−30 Corruption; not available if the binder is a Leader whose Doctrine is active"
+    },
+    {
+      "n": 7,
+      "name": "Choose to Release",
+      "how": "Release the Pokémon into the wild; it is **not** lost: it returns as a rare wild encounter in the same region with the Shadow cleared and 50% chance to join if the player is kind",
+      "limits": "Costs the Pokémon from the party; may become an ally later"
+    }
+  ],
+  "teamMethods": [
+    {
+      "team": "Team Rocket (Kanto)",
+      "method": "Capture Rig",
+      "abilityPool": [
+        "Grim Resolve",
+        "Dread Aura",
+        "Lurker"
+      ],
+      "bindingScene": "A Rocket-built harness overrides the bond with a radio pulse",
+      "purificationBoost": "Defeat the technician: −30"
+    },
+    {
+      "team": "Team Rocket Return (Johto)",
+      "method": "Radio Wave Lock",
+      "abilityPool": [
+        "Choir Hum",
+        "Overbound",
+        "Lurker"
+      ],
+      "bindingScene": "The Tower's signal pulses a Pokémon into a single instinct",
+      "purificationBoost": "Cut the broadcast: −35"
+    },
+    {
+      "team": "Team Aqua (Hoenn)",
+      "method": "Orb Resonance",
+      "abilityPool": [
+        "Squall Mantle",
+        "Salt Chain",
+        "Dread Aura"
+      ],
+      "bindingScene": "The Blue Orb binds sea Pokémon to the tide",
+      "purificationBoost": "Clear-sky weather = −20 extra"
+    },
+    {
+      "team": "Team Magma (Hoenn)",
+      "method": "Orb Resonance",
+      "abilityPool": [
+        "Frost Oath",
+        "Hollow Hide",
+        "Dread Aura"
+      ],
+      "bindingScene": "The Red Orb binds land Pokémon to the heat",
+      "purificationBoost": "Seal the vent = −25"
+    },
+    {
+      "team": "Team Galactic (Sinnoh)",
+      "method": "Red Chain Lock",
+      "abilityPool": [
+        "Dread Aura",
+        "Echo of Another",
+        "Black Ledger"
+      ],
+      "bindingScene": "A Galactic-engineered chain bends the will to a single hand",
+      "purificationBoost": "Cut the tether: −35"
+    },
+    {
+      "team": "Team Plasma (Unova)",
+      "method": "Liberation Lock",
+      "abilityPool": [
+        "Spotlight Sap",
+        "Overbound",
+        "Contract Clause"
+      ],
+      "bindingScene": "A \"freed\" Pokémon is bound to the Frigate's signal",
+      "purificationBoost": "Break the Relay = −40"
+    },
+    {
+      "team": "Team Flare (Kalos)",
+      "method": "Life-Force Siphon",
+      "abilityPool": [
+        "Tailored Edge",
+        "Hollow Hide",
+        "Lurker"
+      ],
+      "bindingScene": "The weapon's current bleeds a Pokémon's will into the machine",
+      "purificationBoost": "Open the conduits = −35"
+    },
+    {
+      "team": "Team Skull (Alola)",
+      "method": "Stolen Bond",
+      "abilityPool": [
+        "Debt Collector",
+        "Dread Aura",
+        "Odds Shaver"
+      ],
+      "bindingScene": "A \"borrowed\" Pokémon is bound by the taker's whistle",
+      "purificationBoost": "Return it to its owner = −30"
+    },
+    {
+      "team": "Aether Foundation (Alola)",
+      "method": "Conservation Hold",
+      "abilityPool": [
+        "Relic Ward",
+        "Lantern Heart",
+        "Shroud"
+      ],
+      "bindingScene": "The lab seals a Pokémon's will for \"protection\"",
+      "purificationBoost": "Free it from the Paradise = −35"
+    },
+    {
+      "team": "Macro Cosmos (Galar)",
+      "method": "Dynamax Overload",
+      "abilityPool": [
+        "Squall Mantle",
+        "Contract Clause",
+        "Overbound"
+      ],
+      "bindingScene": "The Plant's pulse binds a Pokémon in a permanent Dynamax state",
+      "purificationBoost": "Cut the pulse = −40"
+    },
+    {
+      "team": "Team Yell (Galar)",
+      "method": "Cheer Chant",
+      "abilityPool": [
+        "Choir Hum",
+        "Lantern Heart",
+        "Shroud"
+      ],
+      "bindingScene": "A crowd chant rattles a Pokémon into battle, no binding at all",
+      "purificationBoost": "Calm the crowd = −15"
+    },
+    {
+      "team": "Team Star (Paldea)",
+      "method": "Star Barrage Link",
+      "abilityPool": [
+        "Unbound Spark",
+        "Relic Ward",
+        "Echo of Another"
+      ],
+      "bindingScene": "A Terastal charge forced through the Bases' Starmobiles",
+      "purificationBoost": "Ground the Starmobile = −30"
+    },
+    {
+      "team": "Rocket Remnants (any)",
+      "method": "Gadget Snare",
+      "abilityPool": [
+        "Grim Resolve",
+        "Lurker",
+        "Salt Chain"
+      ],
+      "bindingScene": "Nets, balloons and pit traps; no permanent Shadow",
+      "purificationBoost": "Defeat the technician: −30"
+    },
+    {
+      "team": "Team Snag'em (any)",
+      "method": "Snag Machine",
+      "abilityPool": [
+        "Dread Aura",
+        "Black Ledger",
+        "Overbound"
+      ],
+      "bindingScene": "An arm-mounted Machine takes a Pokémon mid-battle and makes it a Shadow Pokémon",
+      "purificationBoost": "Destroy the Machine: −40"
+    }
+  ],
+  "tiers": [
+    {
+      "tier": 0,
+      "name": "Clear",
+      "corruption": [
+        0,
+        0
+      ]
+    },
+    {
+      "tier": 1,
+      "name": "Veiled",
+      "corruption": [
+        1,
+        25
+      ]
+    },
+    {
+      "tier": 2,
+      "name": "Bound",
+      "corruption": [
+        26,
+        50
+      ]
+    },
+    {
+      "tier": 3,
+      "name": "Gripped",
+      "corruption": [
+        51,
+        75
+      ]
+    },
+    {
+      "tier": 4,
+      "name": "Fallen",
+      "corruption": [
+        76,
+        100
+      ]
+    }
+  ],
+  "source": "authored (parsed from docs/SHADOW_POKEMON_SYSTEM.md)"
+}

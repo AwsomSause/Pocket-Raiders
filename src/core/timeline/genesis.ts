@@ -36,6 +36,7 @@ export function captureGenesis(run: RunState, opts: GenesisOptions, grants: RunG
     licenses: opts.licenses ?? [],
     candyPerks: opts.candyPerks ?? [],
     ownedTrainers: [...(opts.ownedTrainers ?? [])],
+    ...(run.expansion && (run.expansion.pacing || run.expansion.evoEncounters || run.expansion.counterPick || run.expansion.canon || run.expansion.grandArc || run.expansion.tracks || run.expansion.density || run.expansion.climaxCut) ? { expansion: { ...(run.expansion.pacing ? { stagePacing: true } : {}), ...(run.expansion.evoEncounters ? { evolutionEncounters: true } : {}), ...(run.expansion.counterPick ? { leagueCounterPick: true } : {}), ...(run.expansion.canon ? { kantoCanon: true } : {}), ...(run.expansion.grandArc ? { grandArc: true } : {}), ...(run.expansion.tracks ? { worldTracks: true } : {}), ...(run.expansion.density ? { eventsDensity: run.expansion.density } : {}), ...(run.expansion.climaxCut ? { climaxCut: run.expansion.climaxCut } : {}) } } : {}),
     legacyRival: run.legacyRival,
     reunion: run.reunion ?? null,
     storyFlags: run.story.flags,
@@ -67,6 +68,7 @@ export function reconstructRun(content: Content, g: RunGenesis, replayId: string
     licenses: g.licenses,
     candyPerks: g.candyPerks,
     ownedTrainers: g.ownedTrainers,
+    ...(g.expansion ? { expansion: g.expansion } : {}),
   });
   run.legacyRival = structuredClone(g.legacyRival);
   if (g.reunion) run.reunion = structuredClone(g.reunion);

@@ -40,7 +40,8 @@ describe('minigame data', () => {
     for (const id of ['pokemon-memory', 'catching-challenge', 'rhythm-challenge', 'berry-foraging', 'knowledge-quiz', 'fossil-excavation']) expect(ids).toContain(id);
     expect(ids.length).toBeGreaterThanOrEqual(14);
     for (const g of content.minigames.games) {
-      expect(g.difficultyTiers.map((t) => t.id)).toEqual(['easy', 'normal', 'hard']);
+      expect(g.difficultyTiers.map((t) => t.id).slice(0, 3)).toEqual(['easy', 'normal', 'hard']);
+      expect(g.difficultyTiers.length === 3 || g.difficultyTiers[3]!.id === 'master').toBe(true);
       expect(g.medals.bronze).toBeLessThan(g.medals.silver);
       expect(g.medals.silver).toBeLessThan(g.medals.gold);
     }
@@ -49,7 +50,7 @@ describe('minigame data', () => {
 
 describe('every minigame', () => {
   for (const def of content.minigames.games) {
-    for (let tier = 0; tier < 3; tier++) {
+    for (let tier = 0; tier < def.difficultyTiers.length; tier++) {
       it(`${def.id} (${def.difficultyTiers[tier]!.id}) is well formed, finishes, is JSON-safe and replays the same`, () => {
         const run = stopRun(`mg-${def.id}`, def.id);
         const a = play(beginMinigame(content, run, 'mg-test', tier), `bot-${def.id}`);
@@ -234,5 +235,23 @@ describe('minigame saves', () => {
       const again = minigameAct(content, loaded.data, 'anything');
       expect(again.money).toBe(run.money);
     }
+  });
+});
+
+describe('Master tier (Beta 0.6 MG1)', () => {
+  const REMADE = ['pokemon-memory', 'catching-challenge', 'rhythm-challenge', 'berry-foraging', 'knowledge-quiz', 'fossil-excavation', 'fishing-challenge', 'battle-puzzle', 'type-match', 'pokemon-tracking', 'berry-growing', 'trainers-trial', 'treasure-hunt', 'reaction-challenge', 'battle-factory', 'battle-palace', 'battle-arcade', 'battle-pyramid'];
+  it('the 14 games and 4 Frontier games all have a Master tier', () => {
+    for (const id of REMADE) expect(getMinigame(content, id).difficultyTiers[3]?.id, id).toBe('master');
+  });
+  it('Master pays more than Hard and rejects a tier the game lacks', () => {
+    const eco = content.minigames.economy;
+    expect(eco.tierMultipliers[3]).toBeGreaterThan(eco.tierMultipliers[2]!);
+    const run = stopRun('mg-master', 'pokemon-memory');
+    expect(() => beginMinigame(content, run, 'mg-test', 4)).toThrow(/difficulty/);
+  });
+  it('the difficulty setting picks the suggested tier', () => {
+    const run = stopRun('mg-pick', 'pokemon-memory');
+    const t = (d: 'easy' | 'normal' | 'hard') => minigamePreview(content, run, 'mg-test', d).recommendedTier;
+    expect([t('easy'), t('normal'), t('hard')]).toEqual([0, 1, 3]);
   });
 });

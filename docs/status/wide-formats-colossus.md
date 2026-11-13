@@ -1,0 +1,8 @@
+# Wide formats: Colossus (E4, 5 of 7)
+
+- Kice's change (2026-11-13): a Colossus is a normal multi-phase RAID on the game's own raid system, not a custom format. The seal rules (`battle/colossus.ts`, `battle.colossus`, the three engine hooks), the `balance.colossus` numbers and the Blueprint plate screen are gone.
+- `src/data/raids.json` `ss-rocket-m2` (special `canon`, so it is never a random den): M2 (Mewtwo, +4 levels, 300% HP) raises a shield at 75%, 50% and 25% of its HP, starts a phase at each (right shoulder, left shoulder, chest; the later phases boost M2), charges every 3 turns (interrupted by sleep, paralysis or freeze), takes an extra action below 30% HP, and has a 10 turn timer. No catch, no join.
+- `src/core/formats/colossus.ts`: the format starts the raid as an event raid tagged `format:colossus` (via `launchFormatBattle` with `raid`). `rocket.x.madame` adds a turn; `rocket.x.seal-diagram` leaves the first shield already cracked (it never rises). Result once in `run.story.flags['rocket.x.m2']`: `broken` (raid won; plants `legend-cerulean-cave`), `taken` (timer ran out: the helicopter takes it, the climax still counts), `lost` (the party fell: Second Shot). A lost raid is a story loss: party healed, run goes on.
+- Field Notes: a battle whose raid id starts `ss-` notes the Apex Shadow (`ss-rocket-m2` → `ss.rocket.m2`).
+- Not built: the Rig Room shutdown lowering M2 a tier, the trio's debt delaying Giovanni's first order, and M2's signature moves (not real moves yet), so the shield breaks do not remove moves any more.
+- Tests: `tests/unit/colossus.test.ts`, `tests/unit/fieldNotes.test.ts`, `tests/e2e/wideFormats.spec.ts`.

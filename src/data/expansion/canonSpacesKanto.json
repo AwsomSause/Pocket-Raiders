@@ -1,0 +1,1483 @@
+{
+ "region": "kanto",
+ "townRoll": {
+  "early": 2,
+  "late": 3,
+  "maxPseudoStages": 2
+ },
+ "towns": [
+  {
+   "id": "viridian",
+   "name": "Viridian City"
+  },
+  {
+   "id": "pewter",
+   "name": "Pewter City"
+  },
+  {
+   "id": "cerulean",
+   "name": "Cerulean City"
+  },
+  {
+   "id": "vermilion",
+   "name": "Vermilion City"
+  },
+  {
+   "id": "lavender",
+   "name": "Lavender Town"
+  },
+  {
+   "id": "celadon",
+   "name": "Celadon City"
+  },
+  {
+   "id": "fuchsia",
+   "name": "Fuchsia City"
+  },
+  {
+   "id": "saffron",
+   "name": "Saffron City"
+  },
+  {
+   "id": "cinnabar",
+   "name": "Cinnabar Island"
+  },
+  {
+   "id": "indigo",
+   "name": "Indigo Plateau"
+  }
+ ],
+ "slots": [
+  {
+   "slot": "interlude-0",
+   "town": "viridian",
+   "stage": 0,
+   "always": null
+  },
+  {
+   "slot": "stage-1",
+   "town": "pewter",
+   "stage": 1,
+   "always": null
+  },
+  {
+   "slot": "stage-2",
+   "town": "cerulean",
+   "stage": 2,
+   "always": null
+  },
+  {
+   "slot": "stage-3",
+   "town": "vermilion",
+   "stage": 3,
+   "always": null
+  },
+  {
+   "slot": "interlude-3",
+   "town": "lavender",
+   "stage": 3,
+   "always": null
+  },
+  {
+   "slot": "stage-4",
+   "town": "celadon",
+   "stage": 4,
+   "always": null
+  },
+  {
+   "slot": "stage-5",
+   "town": "fuchsia",
+   "stage": 5,
+   "always": null
+  },
+  {
+   "slot": "stage-6",
+   "town": "saffron",
+   "stage": 6,
+   "always": null
+  },
+  {
+   "slot": "stage-7",
+   "town": "cinnabar",
+   "stage": 7,
+   "always": null
+  },
+  {
+   "slot": "stage-8",
+   "town": "viridian",
+   "stage": 8,
+   "always": [
+    "cs.kanto.viridian.route22"
+   ]
+  },
+  {
+   "slot": "finale",
+   "town": "indigo",
+   "stage": 8,
+   "always": null
+  }
+ ],
+ "spaces": [
+  {
+   "id": "cs.kanto.viridian.oldman",
+   "town": "viridian",
+   "parent": null,
+   "name": "The Old Man's Lesson",
+   "kind": "CUT",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.weedle.seed"
+   ],
+   "section": "2.2"
+  },
+  {
+   "id": "cs.kanto.viridian.route22",
+   "town": "viridian",
+   "parent": null,
+   "name": "Route 22 — The Rival",
+   "kind": "MC",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 2
+   },
+   "length": null,
+   "flags": [
+    "kanto.route22.fought",
+    "kanto.route22.rematch"
+   ],
+   "section": "2.3"
+  },
+  {
+   "id": "cs.kanto.viridian.parcel",
+   "town": "viridian",
+   "parent": null,
+   "name": "Viridian Mart — The Parcel",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.parcel.upgrade"
+   ],
+   "section": "2.4"
+  },
+  {
+   "id": "cs.kanto.viridian.school",
+   "town": "viridian",
+   "parent": null,
+   "name": "Viridian Trainer School",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "2.5"
+  },
+  {
+   "id": "cs.kanto.viridian.diglett",
+   "town": "viridian",
+   "parent": null,
+   "name": "Diglett's Cave",
+   "kind": "PS",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": -1
+   },
+   "length": 3,
+   "flags": [],
+   "section": "2.6"
+  },
+  {
+   "id": "cs.kanto.pewter.forest",
+   "town": "pewter",
+   "parent": null,
+   "name": "Veridian Forest",
+   "kind": "PS",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": -1
+   },
+   "length": 6,
+   "flags": [
+    "kanto.forest.bug",
+    "kanto.forest.samurai.won"
+   ],
+   "section": "3.2"
+  },
+  {
+   "id": "cs.kanto.pewter.moon",
+   "town": "pewter",
+   "parent": null,
+   "name": "Mt. Moon",
+   "kind": "PS",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
+   "length": 7,
+   "flags": [],
+   "section": "3.3"
+  },
+  {
+   "id": "cs.kanto.pewter.rest",
+   "town": "pewter",
+   "parent": null,
+   "name": "Brock's Rest Stop",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "3.4"
+  },
+  {
+   "id": "cs.kanto.pewter.museum",
+   "town": "pewter",
+   "parent": null,
+   "name": "Pewter Museum of Science",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "3.5"
+  },
+  {
+   "id": "cs.kanto.pewter.magikarp",
+   "town": "pewter",
+   "parent": null,
+   "name": "Magikarp Salesman",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.magikarp"
+   ],
+   "section": "3.6"
+  },
+  {
+   "id": "cs.kanto.pewter.flock",
+   "town": "pewter",
+   "parent": null,
+   "name": "Pewter Skies: The Flock",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.flock.seen"
+   ],
+   "section": "3.7"
+  },
+  {
+   "id": "cs.kanto.pewter.moon.clefairy",
+   "town": "pewter",
+   "parent": "cs.kanto.pewter.moon",
+   "name": "Clefairy Moon Watching",
+   "kind": "EV",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.moon.clefairy"
+   ],
+   "section": "3.3.1"
+  },
+  {
+   "id": "cs.kanto.pewter.moon.fossil",
+   "town": "pewter",
+   "parent": "cs.kanto.pewter.moon",
+   "name": "Fossil Recovery",
+   "kind": "EV",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
+   "length": null,
+   "flags": [],
+   "section": "3.3.2"
+  },
+  {
+   "id": "cs.kanto.pewter.moon.mine",
+   "town": "pewter",
+   "parent": "cs.kanto.pewter.moon",
+   "name": "Gem-Stone Mine",
+   "kind": "EV",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.moon.mine"
+   ],
+   "section": "3.3.3"
+  },
+  {
+   "id": "cs.kanto.cerulean.damian",
+   "town": "cerulean",
+   "parent": null,
+   "name": "Damian's Unofficial Gym",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
+   "length": null,
+   "flags": [
+    "kanto.cerulean.damian.won"
+   ],
+   "section": "4.1"
+  },
+  {
+   "id": "cs.kanto.cerulean.bridge",
+   "town": "cerulean",
+   "parent": null,
+   "name": "Bridge Crossing",
+   "kind": "MC",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.bridge.fell"
+   ],
+   "section": "4.2"
+  },
+  {
+   "id": "cs.kanto.cerulean.hidden-village",
+   "town": "cerulean",
+   "parent": null,
+   "name": "The Hidden Village",
+   "kind": "PS",
+   "appears": "trigger",
+   "requires": {
+    "flags": [
+     "kanto.bridge.fell"
+    ],
+    "spaces": []
+   },
+   "uniqueRewardFlag": "kanto.hidden.done",
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
+   "length": 4,
+   "flags": [
+    "kanto.hidden.starter",
+    "kanto.hidden.done"
+   ],
+   "section": "4.2.1"
+  },
+  {
+   "id": "cs.kanto.cerulean.rain",
+   "town": "cerulean",
+   "parent": null,
+   "name": "Cold Nights Rain",
+   "kind": "PS",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 1
+   },
+   "length": 5,
+   "flags": [
+    "kanto.rain.fire",
+    "kanto.rain.saved"
+   ],
+   "section": "4.3"
+  },
+  {
+   "id": "cs.kanto.cerulean.squad",
+   "town": "cerulean",
+   "parent": null,
+   "name": "Squirtle Squad",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.squad.joined"
+   ],
+   "section": "4.4"
+  },
+  {
+   "id": "cs.kanto.cerulean.bill",
+   "town": "cerulean",
+   "parent": null,
+   "name": "Bill's Lighthouse",
+   "kind": "PS",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": -1
+   },
+   "length": 5,
+   "flags": [
+    "kanto.bill.pc",
+    "kanto.ssanne.ticket"
+   ],
+   "section": "4.5"
+  },
+  {
+   "id": "cs.kanto.cerulean.burglary",
+   "town": "cerulean",
+   "parent": null,
+   "name": "Cerulean Burglary",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "4.6"
+  },
+  {
+   "id": "cs.kanto.cerulean.daycare",
+   "town": "cerulean",
+   "parent": null,
+   "name": "Route 5 Day-Care",
+   "kind": "SHOP",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "4.7"
+  },
+  {
+   "id": "cs.kanto.cerulean.cave",
+   "town": "indigo",
+   "parent": null,
+   "name": "Cerulean Cave",
+   "kind": "PS",
+   "appears": "locked",
+   "requires": {
+    "flags": [],
+    "spaces": [
+     "cs.kanto.indigo.road"
+    ]
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.mewtwo.met",
+    "kanto.secret"
+   ],
+   "section": "4.8"
+  },
+  {
+   "id": "cs.kanto.vermilion.ssanne",
+   "town": "vermilion",
+   "parent": null,
+   "name": "S.S. Anne",
+   "kind": "PS",
+   "appears": "roll",
+   "requires": {
+    "flags": [
+     "kanto.ssanne.ticket"
+    ],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 1
+   },
+   "length": 12,
+   "flags": [
+    "kanto.ssanne.done",
+    "kanto.ssanne.machine"
+   ],
+   "section": "5.1"
+  },
+  {
+   "id": "cs.kanto.vermilion.kaiju",
+   "town": "vermilion",
+   "parent": null,
+   "name": "Kaiju Tentacruel",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 3
+   },
+   "length": null,
+   "flags": [
+    "kanto.kaiju.won"
+   ],
+   "section": "5.2"
+  },
+  {
+   "id": "cs.kanto.vermilion.maiden",
+   "town": "vermilion",
+   "parent": null,
+   "name": "Maiden's Peak",
+   "kind": "PS",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": "kanto.maiden.zcrystal",
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
+   "length": 6,
+   "flags": [
+    "kanto.maiden.zcrystal",
+    "kanto.maiden.hms",
+    "kanto.maiden.blessing"
+   ],
+   "section": "5.3"
+  },
+  {
+   "id": "cs.kanto.vermilion.flightnorth",
+   "town": "vermilion",
+   "parent": null,
+   "name": "Flight North",
+   "kind": "MC",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "fixed",
+    "min": 5,
+    "max": 20
+   },
+   "length": 7,
+   "flags": [
+    "kanto.flight.stolen",
+    "kanto.flight.bug",
+    "kanto.flight.rescue.used",
+    "kanto.flight.keeps"
+   ],
+   "section": "5.4"
+  },
+  {
+   "id": "cs.kanto.vermilion.fishclub",
+   "town": "vermilion",
+   "parent": null,
+   "name": "Diglett Port: The Fan Club Fish",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "5.6"
+  },
+  {
+   "id": "cs.kanto.vermilion.market",
+   "town": "vermilion",
+   "parent": null,
+   "name": "Vermilion Harbor Market",
+   "kind": "SHOP",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "5.6"
+  },
+  {
+   "id": "cs.kanto.lavender.tower",
+   "town": "lavender",
+   "parent": null,
+   "name": "Pokémon Tower",
+   "kind": "PS",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
+   "length": null,
+   "flags": [
+    "kanto.tower.cleared",
+    "kanto.tower.memorial"
+   ],
+   "section": "6.1"
+  },
+  {
+   "id": "cs.kanto.lavender.fuji",
+   "town": "lavender",
+   "parent": null,
+   "name": "Mr. Fuji's House",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "6.2"
+  },
+  {
+   "id": "cs.kanto.lavender.fanclub",
+   "town": "lavender",
+   "parent": null,
+   "name": "Pokémon Fan Club",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "6.3"
+  },
+  {
+   "id": "cs.kanto.lavender.rocktunnel",
+   "town": "lavender",
+   "parent": null,
+   "name": "Rock Tunnel Blackout",
+   "kind": "PS",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
+   "length": 5,
+   "flags": [],
+   "section": "6.4"
+  },
+  {
+   "id": "cs.kanto.lavender.powerplant",
+   "town": "lavender",
+   "parent": null,
+   "name": "Abandoned Power Plant",
+   "kind": "PS",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 2
+   },
+   "length": 6,
+   "flags": [],
+   "section": "6.5"
+  },
+  {
+   "id": "cs.kanto.lavender.volunteers",
+   "town": "lavender",
+   "parent": null,
+   "name": "Lavender Volunteers",
+   "kind": "SHOP",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "6.6"
+  },
+  {
+   "id": "cs.kanto.celadon.mart",
+   "town": "celadon",
+   "parent": null,
+   "name": "Celadon Department Store",
+   "kind": "HUB",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "7.2"
+  },
+  {
+   "id": "cs.kanto.celadon.gamecorner",
+   "town": "celadon",
+   "parent": null,
+   "name": "Game Corner",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "7.3"
+  },
+  {
+   "id": "cs.kanto.celadon.mansion",
+   "town": "celadon",
+   "parent": null,
+   "name": "Celadon Mansion",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "7.4"
+  },
+  {
+   "id": "cs.kanto.celadon.eevee",
+   "town": "celadon",
+   "parent": null,
+   "name": "Eeveelution Brothers",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.eevee"
+   ],
+   "section": "7.5"
+  },
+  {
+   "id": "cs.kanto.celadon.tea",
+   "town": "celadon",
+   "parent": null,
+   "name": "Tea House & Gardens",
+   "kind": "SHOP",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "7.6"
+  },
+  {
+   "id": "cs.kanto.celadon.perfume",
+   "town": "celadon",
+   "parent": null,
+   "name": "Perfume Heist",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "7.7"
+  },
+  {
+   "id": "cs.kanto.celadon.rooftop",
+   "town": "celadon",
+   "parent": null,
+   "name": "Rooftop Vending",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "7.8"
+  },
+  {
+   "id": "cs.kanto.fuchsia.factory",
+   "town": "fuchsia",
+   "parent": null,
+   "name": "Polluted Factory",
+   "kind": "PS",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 1
+   },
+   "length": 6,
+   "flags": [
+    "kanto.factory.cleared",
+    "kanto.factory.pick"
+   ],
+   "section": "8.2"
+  },
+  {
+   "id": "cs.kanto.fuchsia.safari",
+   "town": "fuchsia",
+   "parent": null,
+   "name": "Safari Land",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.safari.balls",
+    "kanto.safari.steps"
+   ],
+   "section": "8.3"
+  },
+  {
+   "id": "cs.kanto.fuchsia.savanna",
+   "town": "fuchsia",
+   "parent": null,
+   "name": "Deep Savanna",
+   "kind": "PS",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 1
+   },
+   "length": 6,
+   "flags": [],
+   "section": "8.4"
+  },
+  {
+   "id": "cs.kanto.fuchsia.jungle",
+   "town": "fuchsia",
+   "parent": null,
+   "name": "Lush Jungle",
+   "kind": "PS",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 1
+   },
+   "length": 6,
+   "flags": [],
+   "section": "8.5"
+  },
+  {
+   "id": "cs.kanto.fuchsia.warden",
+   "town": "fuchsia",
+   "parent": null,
+   "name": "Warden's Gold Teeth",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": [
+     "cs.kanto.fuchsia.safari"
+    ]
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "8.6"
+  },
+  {
+   "id": "cs.kanto.fuchsia.tauros",
+   "town": "fuchsia",
+   "parent": null,
+   "name": "Tauros Stampede",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": [
+     "cs.kanto.fuchsia.safari"
+    ]
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "8.7"
+  },
+  {
+   "id": "cs.kanto.fuchsia.zoo",
+   "town": "fuchsia",
+   "parent": null,
+   "name": "Fuchsia Zoo",
+   "kind": "SHOP",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "8.8"
+  },
+  {
+   "id": "cs.kanto.fuchsia.snag",
+   "town": "fuchsia",
+   "parent": null,
+   "name": "The Snag Test",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "12.2"
+  },
+  {
+   "id": "cs.kanto.saffron.labyrinth",
+   "town": "saffron",
+   "parent": null,
+   "name": "Sabrina's Labyrinth",
+   "kind": "PS",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": 7,
+   "flags": [
+    "kanto.sabrina.ghost",
+    "kanto.sabrina.labyrinth.done",
+    "kanto.sabrina.haunting.owed"
+   ],
+   "section": "9.2"
+  },
+  {
+   "id": "cs.kanto.saffron.route25",
+   "town": "saffron",
+   "parent": null,
+   "name": "Route 25",
+   "kind": "MC",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 1
+   },
+   "length": null,
+   "flags": [
+    "kanto.mankey"
+   ],
+   "section": "9.3"
+  },
+  {
+   "id": "cs.kanto.saffron.tournament",
+   "town": "saffron",
+   "parent": null,
+   "name": "Fighting Tournament",
+   "kind": "EV",
+   "appears": "trigger",
+   "requires": {
+    "flags": [
+     "kanto.mankey"
+    ],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [
+    "kanto.tournament.won"
+   ],
+   "section": "9.4"
+  },
+  {
+   "id": "cs.kanto.saffron.dojo",
+   "town": "saffron",
+   "parent": null,
+   "name": "Fighting Dojo",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "9.5"
+  },
+  {
+   "id": "cs.kanto.saffron.copycat",
+   "town": "saffron",
+   "parent": null,
+   "name": "Copycat Girl",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "9.6"
+  },
+  {
+   "id": "cs.kanto.saffron.silph",
+   "town": "saffron",
+   "parent": null,
+   "name": "Silph Co. Lobby",
+   "kind": "CUT",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "9.7"
+  },
+  {
+   "id": "cs.kanto.saffron.train",
+   "town": "saffron",
+   "parent": null,
+   "name": "Magnet Train",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "9.8"
+  },
+  {
+   "id": "cs.kanto.cinnabar.lab",
+   "town": "cinnabar",
+   "parent": null,
+   "name": "Cinnabar Lab",
+   "kind": "HUB",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "10.2"
+  },
+  {
+   "id": "cs.kanto.cinnabar.mansion",
+   "town": "cinnabar",
+   "parent": null,
+   "name": "Pokémon Mansion",
+   "kind": "PS",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 1
+   },
+   "length": 6,
+   "flags": [],
+   "section": "10.3"
+  },
+  {
+   "id": "cs.kanto.cinnabar.seafoam",
+   "town": "cinnabar",
+   "parent": null,
+   "name": "Seafoam Islands",
+   "kind": "PS",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 2
+   },
+   "length": 6,
+   "flags": [],
+   "section": "10.4"
+  },
+  {
+   "id": "cs.kanto.cinnabar.newisland",
+   "town": "cinnabar",
+   "parent": null,
+   "name": "New Island",
+   "kind": "PS",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 3
+   },
+   "length": 5,
+   "flags": [],
+   "section": "10.5"
+  },
+  {
+   "id": "cs.kanto.cinnabar.volcano",
+   "town": "cinnabar",
+   "parent": null,
+   "name": "Cinnabar Volcano",
+   "kind": "EV",
+   "appears": "roll",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "10.6"
+  },
+  {
+   "id": "cs.kanto.indigo.road",
+   "town": "indigo",
+   "parent": null,
+   "name": "Victory Road",
+   "kind": "PS",
+   "appears": "always",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": {
+    "mode": "relative",
+    "offset": 2
+   },
+   "length": 7,
+   "flags": [],
+   "section": "11.1"
+  },
+  {
+   "id": "cs.kanto.route.snorlax",
+   "town": "route",
+   "parent": null,
+   "name": "Snorlax Blockade",
+   "kind": "EV",
+   "appears": "route",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "13.1"
+  },
+  {
+   "id": "cs.kanto.route.charizard",
+   "town": "route",
+   "parent": null,
+   "name": "Charizard Valley",
+   "kind": "EV",
+   "appears": "route",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "13.1"
+  },
+  {
+   "id": "cs.kanto.route.pidgeotto",
+   "town": "route",
+   "parent": null,
+   "name": "Pidgeotto's Farewell",
+   "kind": "EV",
+   "appears": "route",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "13.1"
+  },
+  {
+   "id": "cs.kanto.route.bulbasaur",
+   "town": "route",
+   "parent": null,
+   "name": "Bulbasaur's Gathering",
+   "kind": "EV",
+   "appears": "route",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "13.1"
+  },
+  {
+   "id": "cs.kanto.route.haunter",
+   "town": "route",
+   "parent": null,
+   "name": "Haunter's Mansion",
+   "kind": "EV",
+   "appears": "route",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "13.1"
+  },
+  {
+   "id": "cs.kanto.route.thunderstone",
+   "town": "route",
+   "parent": null,
+   "name": "The Pikachu Who Hates Evolving",
+   "kind": "EV",
+   "appears": "route",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "13.1"
+  },
+  {
+   "id": "cs.kanto.route.lapras",
+   "town": "route",
+   "parent": null,
+   "name": "Lapras's Song",
+   "kind": "EV",
+   "appears": "route",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "13.1"
+  },
+  {
+   "id": "cs.kanto.route.poster",
+   "town": "route",
+   "parent": null,
+   "name": "Pokémon Tournament Poster",
+   "kind": "EV",
+   "appears": "route",
+   "requires": {
+    "flags": [],
+    "spaces": []
+   },
+   "uniqueRewardFlag": null,
+   "level": null,
+   "length": null,
+   "flags": [],
+   "section": "13.1"
+  }
+ ]
+}

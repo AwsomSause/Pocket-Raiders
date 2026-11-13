@@ -1,0 +1,3198 @@
+{
+ "events": [
+  {
+   "id": "cs-kanto-fuchsia-factory",
+   "name": "Polluted Factory",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a4a2a"
+   },
+   "intro": "A fenced-off factory leaking green fog into the grass. Everything in there is grimy, and a foreman is waving a clipboard.",
+   "choices": [
+    {
+     "label": "Enter",
+     "success": {
+      "text": "The gate buzzes open. The air tastes of metal.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Sludge: Poison moves +10%",
+        "battles": 5,
+        "until": "battle",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "poison",
+          "value": 1.1
+         }
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You turn back. Nothing here is forced.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.fuchsia.factory"
+  },
+  {
+   "id": "cs-kanto-fuchsia-factory-n1",
+   "name": "Polluted Factory: The Gate",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a4a2a"
+   },
+   "intro": "A foreman asks you to sign a waiver. It is mostly a drawing of a Grimer wearing a hard hat.",
+   "choices": [
+    {
+     "label": "Sign \"Definitely Not Liable\"",
+     "success": {
+      "text": "He nods solemnly and lets you through.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sign \"Ash Ketchum\"",
+     "success": {
+      "text": "He squints at the name, shrugs, and lets you through.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the fine print",
+     "success": {
+      "text": "Clause 9 says the pipes burst. You note the warning.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-factory-n2",
+   "name": "Polluted Factory: The Pipes",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a4a2a"
+   },
+   "intro": "Rusty pipes run overhead. One of them is dripping.",
+   "choices": [
+    {
+     "label": "Cross the catwalk",
+     "success": {
+      "text": "Nothing bursts. A grimy Pokémon drops down in front of you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "grimer",
+        "muk",
+        "koffing",
+        "weezing",
+        "trubbish",
+        "garbodor",
+        "stunky",
+        "skuntank",
+        "grimer-alola",
+        "muk-alola",
+        "grimer-delta",
+        "muk-delta",
+        "weezing-galar",
+        "gulpin",
+        "swalot"
+       ],
+       "chain": 1,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-fuchsia-factory-n3"
+        }
+       ]
+      }
+     },
+     "chance": 0.75,
+     "failure": {
+      "text": "A pipe bursts! Poison gas hits your lead, and a grimy Pokémon drops down.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "poison",
+        "who": "lead",
+        "except": [
+         "poison",
+         "steel"
+        ]
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "grimer",
+        "muk",
+        "koffing",
+        "weezing",
+        "trubbish",
+        "garbodor",
+        "stunky",
+        "skuntank",
+        "grimer-alola",
+        "muk-alola",
+        "grimer-delta",
+        "muk-delta",
+        "weezing-galar",
+        "gulpin",
+        "swalot"
+       ],
+       "chain": 1,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-fuchsia-factory-n3"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-factory-n3",
+   "name": "Polluted Factory: The Vats",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a4a2a"
+   },
+   "intro": "A worker in a stained coat blocks the stairs. \"Unauthorised! Prepare to be decontaminated!\"",
+   "choices": [
+    {
+     "label": "Battle the Scientist",
+     "success": {
+      "text": "He throws a Pokéball with a gloved hand.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "classId": "worker",
+       "name": "Scientist",
+       "size": 2,
+       "types": [
+        "poison"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-fuchsia-factory-n4"
+        }
+       ],
+       "species": [
+        "grimer",
+        "muk",
+        "koffing",
+        "weezing",
+        "trubbish",
+        "garbodor",
+        "stunky",
+        "skuntank",
+        "grimer-alola",
+        "muk-alola",
+        "grimer-delta",
+        "muk-delta",
+        "weezing-galar",
+        "gulpin",
+        "swalot"
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-factory-n4",
+   "name": "Polluted Factory: The Sludge Trench",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a4a2a"
+   },
+   "intro": "A trench of green sludge. Three Grimer rise out of it at once.",
+   "choices": [
+    {
+     "label": "Wade in",
+     "success": {
+      "text": "They surge forward!",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "grimer",
+        "grimer-alola",
+        "grimer-delta"
+       ],
+       "chain": 3,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-fuchsia-factory-n5a"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-factory-n5a",
+   "name": "Polluted Factory: Control Room (1 of 3)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a4a2a"
+   },
+   "intro": "A wall of valves. A note says: \"SAFE valves are the ones with a blue ring.\"",
+   "choices": [
+    {
+     "label": "Close the blue-ringed valve",
+     "success": {
+      "text": "The valve seals with a clunk.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-factory-valves",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n5b"
+       }
+      ]
+     },
+     "chance": 0.9,
+     "failure": {
+      "text": "It sticks. The valve is not fully closed.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n5b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Close the rusty valve",
+     "success": {
+      "text": "It groans shut, mostly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-factory-valves",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n5b"
+       }
+      ]
+     },
+     "chance": 0.4,
+     "failure": {
+      "text": "It will not turn.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n5b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Smash the pressure gauge",
+     "success": {
+      "text": "That was a gamble.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-factory-valves",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n5b"
+       }
+      ]
+     },
+     "chance": 0.15,
+     "failure": {
+      "text": "Nothing happens.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n5b"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-factory-n5b",
+   "name": "Polluted Factory: Control Room (2 of 3)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a4a2a"
+   },
+   "intro": "Another bank. The note says: \"Never the red ones. Red means the boiler.\"",
+   "choices": [
+    {
+     "label": "Close the green valve",
+     "success": {
+      "text": "The valve seals with a clunk.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-factory-valves",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n5c"
+       }
+      ]
+     },
+     "chance": 0.9,
+     "failure": {
+      "text": "It sticks. The valve is not fully closed.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n5c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Close the red valve",
+     "success": {
+      "text": "It groans shut, mostly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-factory-valves",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n5c"
+       }
+      ]
+     },
+     "chance": 0.4,
+     "failure": {
+      "text": "It will not turn.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n5c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the lever and hope",
+     "success": {
+      "text": "That was a gamble.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-factory-valves",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n5c"
+       }
+      ]
+     },
+     "chance": 0.15,
+     "failure": {
+      "text": "Nothing happens.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n5c"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-factory-n5c",
+   "name": "Polluted Factory: Control Room (3 of 3)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a4a2a"
+   },
+   "intro": "The last bank hisses. The note says: \"Turn clockwise. Slowly.\"",
+   "choices": [
+    {
+     "label": "Turn the wheel slowly, clockwise",
+     "success": {
+      "text": "The valve seals with a clunk.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-factory-valves",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n6"
+       }
+      ]
+     },
+     "chance": 0.9,
+     "failure": {
+      "text": "It sticks. The valve is not fully closed.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn the wheel quickly",
+     "success": {
+      "text": "It groans shut, mostly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-factory-valves",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n6"
+       }
+      ]
+     },
+     "chance": 0.4,
+     "failure": {
+      "text": "It will not turn.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Kick the wheel",
+     "success": {
+      "text": "That was a gamble.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-factory-valves",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n6"
+       }
+      ]
+     },
+     "chance": 0.15,
+     "failure": {
+      "text": "Nothing happens.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-factory-n6"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-factory-n6",
+   "name": "Polluted Factory: The Furnace",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6a3a1a"
+   },
+   "intro": "The furnace room glows orange. A huge Muk, glowing like embers, slides out of the molten sludge. It is Magmuk, and it will not be caught.",
+   "choices": [
+    {
+     "label": "Fight Magmuk",
+     "success": {
+      "text": "Molten sludge seeps across the floor!",
+      "effects": [],
+      "battle": {
+       "kind": "raid",
+       "raidId": "magmuk",
+       "name": "Magmuk",
+       "pseudo": true,
+       "spikesUnless": {
+        "flag": "kanto-factory-valves",
+        "atLeast": 3
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "black-sludge"
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-factory-cleared",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-fuchsia-factory-pick"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "kanto-factory-shut",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-factory-pick",
+   "name": "Polluted Factory: Rescued",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a4a2a"
+   },
+   "intro": "With Magmuk gone, three Pokémon come out from behind the machines. One will follow you out.",
+   "choices": [
+    {
+     "label": "Alolan Grimer",
+     "success": {
+      "text": "Alolan Grimer sticks to your boot and will not let go.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "grimer-alola"
+        ],
+        "hiddenAbility": true
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-factory-pick",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Delta Grimer",
+     "success": {
+      "text": "Delta Grimer rolls after you, humming.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "grimer-delta"
+        ],
+        "hiddenAbility": true
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-factory-pick",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trubbish",
+     "success": {
+      "text": "Trubbish waves its little bag.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "trubbish"
+        ],
+        "hiddenAbility": true
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-factory-pick",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-safari",
+   "name": "Safari Land",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f3a"
+   },
+   "intro": "A wide gate and a ticket booth. \"Welcome to Safari Land! ₽500 gets you 30 Safari Balls and 500 steps. No battling inside.\" Beyond the fence the grass moves with a huge crowd of Pokémon.",
+   "choices": [
+    {
+     "label": "Pay ₽500 and go in",
+     "success": {
+      "text": "The warden hands you 30 Safari Balls. Something big stirs in the grass right away.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": 30
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-safari-steps",
+        "amount": 500
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "chansey",
+        "kangaskhan",
+        "tauros",
+        "scyther",
+        "pinsir",
+        "dratini",
+        "dragonair",
+        "heracross",
+        "nidorina",
+        "nidorino",
+        "exeggcute",
+        "rhyhorn",
+        "venonat",
+        "paras",
+        "doduo",
+        "parasect",
+        "tangela",
+        "psyduck",
+        "slowpoke",
+        "rhydon"
+       ],
+       "chain": 1,
+       "levelBonus": 2,
+       "win": []
+      }
+     },
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ]
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You watch the herd for a while, then move along.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.fuchsia.safari"
+  },
+  {
+   "id": "cs-kanto-fuchsia-savanna",
+   "name": "Deep Savanna",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#c9a24a"
+   },
+   "intro": "Flat gold grass under a hard sun, and a wall of sand on the horizon. Ground-types move through it like fish.",
+   "choices": [
+    {
+     "label": "Enter",
+     "success": {
+      "text": "The sand wall closes around you.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Sandstorm on every first turn",
+        "battles": 5,
+        "until": "battle",
+        "effects": [
+         {
+          "kind": "battleStart",
+          "weather": "sand",
+          "turns": 5
+         }
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-savanna-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You turn back. Nothing here is forced.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.fuchsia.savanna"
+  },
+  {
+   "id": "cs-kanto-fuchsia-savanna-n1",
+   "name": "Deep Savanna: The Plain",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#c9a24a"
+   },
+   "intro": "Dry grass rustles. Something fast is running through it.",
+   "choices": [
+    {
+     "label": "Walk into the grass",
+     "success": {
+      "text": "Something bursts out of the dust.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "sandshrew",
+        "sandshrew-alola",
+        "trapinch",
+        "hippopotas",
+        "diglett",
+        "cacnea",
+        "maractus",
+        "sandile",
+        "krokorok",
+        "gible",
+        "larvitar",
+        "rhyhorn",
+        "tauros",
+        "heliolisk",
+        "dunsparce",
+        "stunfisk",
+        "palossand"
+       ],
+       "chain": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-fuchsia-savanna-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-savanna-n2",
+   "name": "Deep Savanna: Watering Hole",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#c9a24a"
+   },
+   "intro": "A small pool, ringed with tracks. The water is clean.",
+   "choices": [
+    {
+     "label": "Drink and rest",
+     "success": {
+      "text": "The party recovers a little.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-savanna-n3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-savanna-n3",
+   "name": "Deep Savanna: Dust Devil",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#c9a24a"
+   },
+   "intro": "A column of sand spins toward you across the plain.",
+   "choices": [
+    {
+     "label": "Brace against it",
+     "success": {
+      "text": "The dust devil tears across you. Your lead is scoured and slowed.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.125,
+        "who": "lead",
+        "except": [
+         "rock",
+         "ground",
+         "steel"
+        ]
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Speed -1 for the next fight",
+        "battles": 1,
+        "until": "battle",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 0.67
+         }
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-savanna-n4"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-savanna-n4",
+   "name": "Deep Savanna: The Oasis",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#c9a24a"
+   },
+   "intro": "Palm trees ahead and a second watering hole. Something is moving at its edge.",
+   "choices": [
+    {
+     "label": "Approach the oasis",
+     "success": {
+      "text": "A Sand Veil Diglett group pops out of the sand, all at once!",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "diglett"
+       ],
+       "chain": 3,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-fuchsia-savanna-n5"
+        }
+       ]
+      }
+     },
+     "chance": 0.1,
+     "failure": {
+      "text": "Just a quiet oasis. You drink and rest.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-savanna-n5"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-savanna-n5",
+   "name": "Deep Savanna: Dune Duel",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#c9a24a"
+   },
+   "intro": "A Ground-type trainer waits on a high dune. \"One duel, then the road is yours.\"",
+   "choices": [
+    {
+     "label": "Accept the duel",
+     "success": {
+      "text": "The wind picks up.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "classId": "hiker",
+       "name": "Dune Duelist",
+       "size": 3,
+       "types": [
+        "ground"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-fuchsia-savanna-n6"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-savanna-n6",
+   "name": "Deep Savanna: Sandstorm Camp",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#c9a24a"
+   },
+   "intro": "A ring of tents in the lee of a rock. The storm howls but the camp is warm.",
+   "choices": [
+    {
+     "label": "Take Soft Sand",
+     "success": {
+      "text": "You strap it onto a Pokémon.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.4
+       },
+       {
+        "kind": "item",
+        "id": "soft-sand"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take Smooth Rock",
+     "success": {
+      "text": "Smooth and heavy.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.4
+       },
+       {
+        "kind": "item",
+        "id": "smooth-rock"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take Gible",
+     "success": {
+      "text": "A little Gible with sandpaper skin follows you.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.4
+       },
+       {
+        "kind": "join",
+        "species": [
+         "gible"
+        ],
+        "ability": "rough-skin"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take Trapinch",
+     "success": {
+      "text": "A patient Trapinch climbs out of its pit.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.4
+       },
+       {
+        "kind": "join",
+        "species": [
+         "trapinch"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-jungle",
+   "name": "Lush Jungle",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d5a2a"
+   },
+   "intro": "Thick green and thicker air. Everything drips, and the vines look like they are watching.",
+   "choices": [
+    {
+     "label": "Enter",
+     "success": {
+      "text": "The canopy closes overhead.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Humid: Grass +10%, Fire -10%",
+        "battles": 5,
+        "until": "battle",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "grass",
+          "value": 1.1
+         },
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "fire",
+          "value": 0.9
+         }
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-jungle-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You turn back. Nothing here is forced.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.fuchsia.jungle"
+  },
+  {
+   "id": "cs-kanto-fuchsia-jungle-n1",
+   "name": "Lush Jungle: Vines",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d5a2a"
+   },
+   "intro": "Vines hang across the trail.",
+   "choices": [
+    {
+     "label": "Push through",
+     "success": {
+      "text": "The vines catch your lead. A wild Pokémon rustles out of the leaves.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Tangled: Speed -15% for the next fight",
+        "battles": 1,
+        "until": "battle",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 0.85
+         }
+        ]
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "oddish",
+        "gloom",
+        "bellsprout",
+        "weepinbell",
+        "paras",
+        "exeggcute",
+        "tangela",
+        "venonat",
+        "ledian",
+        "foongus",
+        "bounsweet",
+        "roselia",
+        "budew",
+        "seedot",
+        "lotad",
+        "petilil",
+        "spinarak",
+        "ariados"
+       ],
+       "chain": 1,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-fuchsia-jungle-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-jungle-n2",
+   "name": "Lush Jungle: More Vines",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d5a2a"
+   },
+   "intro": "The trail narrows. The vines here are thicker.",
+   "choices": [
+    {
+     "label": "Cut through",
+     "success": {
+      "text": "Another tangle, and another wild Pokémon.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Tangled: Speed -15% for the next fight",
+        "battles": 1,
+        "until": "battle",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 0.85
+         }
+        ]
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "oddish",
+        "gloom",
+        "bellsprout",
+        "weepinbell",
+        "paras",
+        "exeggcute",
+        "tangela",
+        "venonat",
+        "ledian",
+        "foongus",
+        "bounsweet",
+        "roselia",
+        "budew",
+        "seedot",
+        "lotad",
+        "petilil",
+        "spinarak",
+        "ariados"
+       ],
+       "chain": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-fuchsia-jungle-n3"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-jungle-n3",
+   "name": "Lush Jungle: Spore Cloud",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d5a2a"
+   },
+   "intro": "A fat mushroom bursts underfoot and the air turns yellow.",
+   "choices": [
+    {
+     "label": "Hold your breath and run",
+     "success": {
+      "text": "You get through clean.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-jungle-n4a"
+       }
+      ]
+     },
+     "chance": 0.7,
+     "failure": {
+      "text": "Poison spores! Your lead is poisoned.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "poison",
+        "who": "lead",
+        "except": [
+         "poison",
+         "steel"
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-jungle-n4a"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-jungle-n4a",
+   "name": "Lush Jungle: Hidden Ruin (1 of 2)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d5a2a"
+   },
+   "intro": "A mossy wall of carved glyphs. A clue is scratched in the stone: \"Not the leaf, not the fang.\"",
+   "choices": [
+    {
+     "label": "Press the sun glyph",
+     "success": {
+      "text": "The stone slides. A clue!",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-jungle-clue",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-jungle-n4b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Press the leaf glyph",
+     "success": {
+      "text": "Nothing. The wall hums angrily.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-jungle-n4b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Press the fang glyph",
+     "success": {
+      "text": "A dart of spores hisses out. Nothing else.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-jungle-n4b"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-jungle-n4b",
+   "name": "Lush Jungle: Hidden Ruin (2 of 2)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d5a2a"
+   },
+   "intro": "A second wall. \"Three then one, and the last is the moon.\"",
+   "choices": [
+    {
+     "label": "Press moon, sun, leaf",
+     "success": {
+      "text": "The wall opens on a hidden alcove.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-jungle-clue",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-jungle-n4c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Press sun, moon, leaf",
+     "success": {
+      "text": "The glyphs go dark.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-jungle-n4c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Press leaf, leaf, moon",
+     "success": {
+      "text": "A dead end.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-jungle-n4c"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-jungle-n4c",
+   "name": "Lush Jungle: The Alcove",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d5a2a"
+   },
+   "intro": "Inside the ruin: a faded mural and a small stone dish.",
+   "choices": [
+    {
+     "label": "Read the mural",
+     "success": {
+      "text": "You work out what the carvers meant. It sharpens your thinking.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-jungle-n5"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-jungle-clue",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Leave the ruin",
+     "success": {
+      "text": "You go back to the trail.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-jungle-n5"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-jungle-n5",
+   "name": "Lush Jungle: The Jungle Chief",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d5a2a"
+   },
+   "intro": "A tall ranger in leaf-green stands on a root. \"This is my jungle. Show me you can keep up.\"",
+   "choices": [
+    {
+     "label": "Battle the Jungle Chief",
+     "success": {
+      "text": "The ranger grins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "classId": "ranger",
+       "name": "Jungle Chief",
+       "size": 3,
+       "types": [
+        "grass",
+        "poison"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-fuchsia-jungle-n6a"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-jungle-n6a",
+   "name": "Lush Jungle: The Heart",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d5a2a"
+   },
+   "intro": "The trail ends at a clearing. In the middle, something very large breathes slowly under a blanket of leaves.",
+   "choices": [
+    {
+     "label": "Look closer",
+     "success": {
+      "text": "A Venusaur, sleeping at the heart of the jungle. It wakes!",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "venusaur"
+       ],
+       "chain": 1,
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-fuchsia-jungle-n6"
+        }
+       ]
+      }
+     },
+     "chance": 0.15,
+     "failure": {
+      "text": "Only a heap of leaves, rising and falling with the wind.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-jungle-n6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back away",
+     "success": {
+      "text": "You tiptoe on.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-jungle-n6"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-jungle-n6",
+   "name": "Lush Jungle: Treehouse",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d5a2a"
+   },
+   "intro": "A rope ladder leads up to a treehouse. There is food, a hammock, and two gifts left out.",
+   "choices": [
+    {
+     "label": "Take the Miracle Seed",
+     "success": {
+      "text": "You rest, then climb down.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.4
+       },
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the Black Sludge",
+     "success": {
+      "text": "You rest, then climb down.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.4
+       },
+       {
+        "kind": "item",
+        "id": "black-sludge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take Tangela",
+     "success": {
+      "text": "A shaggy Tangela follows you down.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.4
+       },
+       {
+        "kind": "join",
+        "species": [
+         "tangela"
+        ],
+        "ability": "chlorophyll"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take Foongus",
+     "success": {
+      "text": "A shy Foongus follows you down.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.4
+       },
+       {
+        "kind": "join",
+        "species": [
+         "foongus"
+        ],
+        "ability": "regenerator"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-warden",
+   "name": "Warden's Gold Teeth",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a6a2a"
+   },
+   "intro": "The Safari Warden is pacing the fence, hand over his mouth. \"I lost my gold teeth somewhere in the Zone. Find them and I will make it worth your while.\"",
+   "choices": [
+    {
+     "label": "Search the Zone",
+     "success": {
+      "text": "You head in to look.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-warden-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now",
+     "success": {
+      "text": "He sighs. \"Fair enough.\"",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.fuchsia.warden"
+  },
+  {
+   "id": "cs-kanto-fuchsia-warden-n1",
+   "name": "Warden's Gold Teeth: The Center",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a6a2a"
+   },
+   "intro": "The Center of the Zone: wide grass, a bench, and hoofprints everywhere.",
+   "choices": [
+    {
+     "label": "Search the Center",
+     "success": {
+      "text": "A glint in the grass: the teeth!",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "strength"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-safari-pass",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-warden-reward"
+       }
+      ]
+     },
+     "chance": 0.4,
+     "failure": {
+      "text": "Nothing here but a chewed bench. On to Area 2.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-warden-n2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-warden-n2",
+   "name": "Warden's Gold Teeth: Area 2",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a6a2a"
+   },
+   "intro": "Area 2: tall reeds and a muddy bank.",
+   "choices": [
+    {
+     "label": "Search Area 2",
+     "success": {
+      "text": "There! Gold, in the mud.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "strength"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-safari-pass",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-warden-reward"
+       }
+      ]
+     },
+     "chance": 0.5833333333333334,
+     "failure": {
+      "text": "Only mud. Area 3 is left.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-warden-n3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-warden-n3",
+   "name": "Warden's Gold Teeth: Area 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a6a2a"
+   },
+   "intro": "Area 3: the far corner of the Zone, dry and rocky.",
+   "choices": [
+    {
+     "label": "Search Area 3",
+     "success": {
+      "text": "Wedged between two stones: the teeth.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "strength"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-safari-pass",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-warden-reward"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-warden-reward",
+   "name": "Warden's Gold Teeth: Thanks",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a6a2a"
+   },
+   "intro": "The Warden grins a gold-less grin, then slides the teeth back in. \"A fine day! Take this.\"",
+   "choices": [
+    {
+     "label": "Accept",
+     "success": {
+      "text": "He teaches you Strength and gives you a Safari Pass. Your next Safari Land visit starts with 10 extra Safari Balls.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Found the Safari Warden's gold teeth."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-tauros",
+   "name": "Tauros Stampede",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a5a2a"
+   },
+   "intro": "A rumble in the ground. A herd of Tauros comes over the ridge, straight at you.",
+   "choices": [
+    {
+     "label": "Dodge",
+     "success": {
+      "text": "You dive aside. The herd thunders past. Nobody is hurt.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Throw bait and hold your ground",
+     "success": {
+      "text": "The herd slows, sniffing the bait.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-bait",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r1"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-safari-balls",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Throw rocks",
+     "success": {
+      "text": "The herd stampedes, furious!",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-rock",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r1"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-safari-balls",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    }
+   ],
+   "canon": "cs.kanto.fuchsia.tauros"
+  },
+  {
+   "id": "cs-kanto-fuchsia-tauros-r1",
+   "name": "Tauros Stampede: Throw (1 of 6)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a5a2a"
+   },
+   "intro": "The herd mills around you.",
+   "choices": [
+    {
+     "label": "Throw a ball (bait: 40%)",
+     "success": {
+      "text": "Caught one!",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-caught",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r2"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-tauros-bait",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-safari-balls",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "chance": 0.4,
+     "failure": {
+      "text": "It slips away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw a ball (rock: 25%, costs 2)",
+     "success": {
+      "text": "Caught one!",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-caught",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r2"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-tauros-rock",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-safari-balls",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "chance": 0.25,
+     "failure": {
+      "text": "It slips away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the herd go",
+     "success": {
+      "text": "The herd thunders off.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-end"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-tauros-r2",
+   "name": "Tauros Stampede: Throw (2 of 6)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a5a2a"
+   },
+   "intro": "The herd mills around you.",
+   "choices": [
+    {
+     "label": "Throw a ball (bait: 40%)",
+     "success": {
+      "text": "Caught one!",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-caught",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r3"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-tauros-bait",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-safari-balls",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "chance": 0.4,
+     "failure": {
+      "text": "It slips away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw a ball (rock: 25%, costs 2)",
+     "success": {
+      "text": "Caught one!",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-caught",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r3"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-tauros-rock",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-safari-balls",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "chance": 0.25,
+     "failure": {
+      "text": "It slips away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the herd go",
+     "success": {
+      "text": "The herd thunders off.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-end"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-tauros-r3",
+   "name": "Tauros Stampede: Throw (3 of 6)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a5a2a"
+   },
+   "intro": "The herd mills around you.",
+   "choices": [
+    {
+     "label": "Throw a ball (bait: 40%)",
+     "success": {
+      "text": "Caught one!",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-caught",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r4"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-tauros-bait",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-safari-balls",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "chance": 0.4,
+     "failure": {
+      "text": "It slips away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw a ball (rock: 25%, costs 2)",
+     "success": {
+      "text": "Caught one!",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-caught",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r4"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-tauros-rock",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-safari-balls",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "chance": 0.25,
+     "failure": {
+      "text": "It slips away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the herd go",
+     "success": {
+      "text": "The herd thunders off.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-end"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-tauros-r4",
+   "name": "Tauros Stampede: Throw (4 of 6)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a5a2a"
+   },
+   "intro": "The herd mills around you.",
+   "choices": [
+    {
+     "label": "Throw a ball (bait: 40%)",
+     "success": {
+      "text": "Caught one!",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-caught",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r5"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-tauros-bait",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-safari-balls",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "chance": 0.4,
+     "failure": {
+      "text": "It slips away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw a ball (rock: 25%, costs 2)",
+     "success": {
+      "text": "Caught one!",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-caught",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r5"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-tauros-rock",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-safari-balls",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "chance": 0.25,
+     "failure": {
+      "text": "It slips away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the herd go",
+     "success": {
+      "text": "The herd thunders off.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-end"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-tauros-r5",
+   "name": "Tauros Stampede: Throw (5 of 6)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a5a2a"
+   },
+   "intro": "The herd mills around you.",
+   "choices": [
+    {
+     "label": "Throw a ball (bait: 40%)",
+     "success": {
+      "text": "Caught one!",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-caught",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r6"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-tauros-bait",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-safari-balls",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "chance": 0.4,
+     "failure": {
+      "text": "It slips away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw a ball (rock: 25%, costs 2)",
+     "success": {
+      "text": "Caught one!",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-caught",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r6"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-tauros-rock",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-safari-balls",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "chance": 0.25,
+     "failure": {
+      "text": "It slips away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-r6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the herd go",
+     "success": {
+      "text": "The herd thunders off.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-end"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-tauros-r6",
+   "name": "Tauros Stampede: Throw (6 of 6)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a5a2a"
+   },
+   "intro": "The herd mills around you.",
+   "choices": [
+    {
+     "label": "Throw a ball (bait: 40%)",
+     "success": {
+      "text": "Caught one!",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-caught",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-end"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-tauros-bait",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-safari-balls",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "chance": 0.4,
+     "failure": {
+      "text": "It slips away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw a ball (rock: 25%, costs 2)",
+     "success": {
+      "text": "Caught one!",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-caught",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-end"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-tauros-rock",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-safari-balls",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "chance": 0.25,
+     "failure": {
+      "text": "It slips away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-safari-balls",
+        "amount": -2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the herd go",
+     "success": {
+      "text": "The herd thunders off.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-end"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-tauros-end",
+   "name": "Tauros Stampede: The Haul",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a5a2a"
+   },
+   "intro": "The dust settles. The Tauros you caught wait in a line.",
+   "choices": [
+    {
+     "label": "Take the Tauros home",
+     "success": {
+      "text": "A big Tauros snorts and falls in beside you.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "tauros"
+        ],
+        "ability": "intimidate"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-joined",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-caught",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-end"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-tauros-caught",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-tauros-joined",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Take a Tauros Charm",
+     "success": {
+      "text": "Each Tauros past the first leaves a charm behind.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "tauros-charm"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-caught",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-end"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-tauros-caught",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-tauros-joined",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Head out",
+     "success": {
+      "text": "You walk on.",
+      "effects": []
+     },
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-tauros-caught",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-zoo",
+   "name": "Fuchsia Zoo",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a7a8a"
+   },
+   "intro": "The Fuchsia Zoo, with pens of rare Pokémon from all over. A keeper is selling a few oddities by the gate.",
+   "choices": [
+    {
+     "label": "Tour the rare Pokémon",
+     "success": {
+      "text": "The keeper tells you what each type is weak to. You learn a lot.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy the Rare Candy (₽10,000)",
+     "success": {
+      "text": "A Rare Candy changes hands. \"Only one a customer,\" the keeper warns.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -10000
+       },
+       {
+        "kind": "item",
+        "id": "rare-candy"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-zoo-candy",
+        "amount": 1
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 10000
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-zoo-candy",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Move on",
+     "success": {
+      "text": "You wave and walk on.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.fuchsia.zoo"
+  },
+  {
+   "id": "cs-kanto-fuchsia-snag",
+   "name": "The Snag Test",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3a5a"
+   },
+   "intro": "Two Team Snag'em operatives are testing a Snag Machine on a Safari trainer's Pokémon. One has already been snagged mid-battle. The trainer looks panicked.",
+   "choices": [
+    {
+     "label": "Step in (2-on-1)",
+     "success": {
+      "text": "The trainer's Rhyhorn charges beside you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-snag-seen",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Snag'em Operative",
+       "classId": "worker",
+       "size": 3,
+       "types": [
+        "poison",
+        "dark"
+       ],
+       "shadow": 1,
+       "levelBonus": 1,
+       "ally": "rhyhorn",
+       "win": [
+        {
+         "kind": "item",
+         "id": "snag-ball"
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-snag-ball",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Took the Snag Ball prototype from Team Snag'em."
+        }
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "kanto-snag-lost",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch from the bushes",
+     "success": {
+      "text": "You see how the machine works, then slip away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-snag-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.fuchsia.snag"
+  }
+ ]
+}

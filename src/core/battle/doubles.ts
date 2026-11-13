@@ -1,4 +1,5 @@
-// Double battles: two Pokémon on each side.
+// Double battles: two Pokémon on each side. Triple battles (three per side) run
+// through the same code; the spots, reach and Shift rules are in triples.ts.
 //
 // The engine (engine.ts) works on one Pokémon per side: battle.activeIndex /
 // enemyIndex with their stages and volatile state. In a double battle the
@@ -26,9 +27,18 @@ import { setAnnounceContent, doublesSteps as S, forcedMoveId, hasUsableMove, typ
 import { comboName } from './battleFlair';
 import * as Held from './held';
 import { applyTransformations, battleMove, endDynamax, tickDynamax, zMoveFor, type TransformStepEvent } from './transform';
+import { alliesAdjacent, canReach, centringMoves, foesAdjacent, lanesOn, shiftProblem } from './triples';
 
-export type Spot = 0 | 1;
-const SPOTS: readonly Spot[] = [0, 1];
+/** 0 left, 1 right in a double battle; 0 left, 1 centre, 2 right in a triple battle. */
+export type Spot = 0 | 1 | 2;
+const DUO: readonly Spot[] = [0, 1];
+const TRIO: readonly Spot[] = [0, 1, 2];
+/** The spots on each side of this battle. */
+export function spotsOf(battle: Pick<BattleState, 'doubles'>): readonly Spot[] {
+  return battle.doubles?.trio ? TRIO : DUO;
+}
+type Slot = DoublesState['player'];
+const emptySlot = (): Slot => ({ index: -1, stages: freshStages(), vol: freshVolatile() });
 const SIDES: readonly Side[] = ['player', 'enemy'];
 const otherSide = (side: Side): Side => (side === 'player' ? 'enemy' : 'player');
 
@@ -58,9 +68,15 @@ const NO_COPY = new Set(['trace', 'receiver', 'power-of-alchemy', 'wonder-guard'
 
 // ---------- spots and focus ----------
 
-/** The spot (0 left, 1 right) of the Pokémon in the engine's main fields. */
+/** The spot of the Pokémon in the engine's main fields. */
 export function primarySpot(d: DoublesState, side: Side): Spot {
+  if (d.trio) return d.trio.at[side] as Spot;
   return d.swapped[side] ? 1 : 0;
+}
+
+/** The waiting slot for a spot that isn't in the main fields. */
+function parked(d: DoublesState, side: Side, spot: Spot): Slot {
+  return d.trio ? d.trio[side][spot]! : d[side];
 }
 
 interface SlotView {
@@ -78,7 +94,7 @@ function slotView(ctx: Pick<BattleContext, 'battle' | 'party'>, side: Side, spot
       ? { mon: ctx.party[battle.activeIndex]!, stages: battle.playerStages, vol: battle.playerVolatile, index: battle.activeIndex }
       : { mon: battle.enemyTeam[battle.enemyIndex]!, stages: battle.enemyStages, vol: battle.enemyVolatile, index: battle.enemyIndex };
   }
-  const o = d[side];
+  const o = parked(d, side, spot);
   if (o.index < 0) return null;
   const mon = (side === 'player' ? ctx.party : battle.enemyTeam)[o.index];
   return mon ? { mon, stages: o.stages, vol: o.vol, index: o.index } : null;
@@ -104,8 +120,29 @@ export function volAt(ctx: Pick<BattleContext, 'battle' | 'party'>, side: Side, 
   return slotView(ctx, side, spot)?.vol ?? null;
 }
 
-function swapFields(battle: BattleState, side: Side): void {
+function swapFields(battle: BattleState, side: Side, to: Spot): void {
   const d = battle.doubles!;
+  if (d.trio) {
+    const t = d.trio;
+    const incoming = t[side][to]!;
+    const outgoing: Slot =
+      side === 'player'
+        ? { index: battle.activeIndex, stages: battle.playerStages, vol: battle.playerVolatile }
+        : { index: battle.enemyIndex, stages: battle.enemyStages, vol: battle.enemyVolatile };
+    if (side === 'player') {
+      battle.activeIndex = incoming.index;
+      battle.playerStages = incoming.stages;
+      battle.playerVolatile = incoming.vol;
+    } else {
+      battle.enemyIndex = incoming.index;
+      battle.enemyStages = incoming.stages;
+      battle.enemyVolatile = incoming.vol;
+    }
+    t[side][t.at[side]] = outgoing;
+    t[side][to] = emptySlot();
+    t.at[side] = to;
+    return;
+  }
   const o = d[side];
   if (side === 'player') {
     [battle.activeIndex, o.index] = [o.index, battle.activeIndex];
@@ -122,19 +159,40 @@ function swapFields(battle: BattleState, side: Side): void {
 /** Makes the Pokémon in `spot` the one the engine works on (emits a `focus` event when that changes). */
 function focus(ctx: BattleContext, side: Side, spot: Spot, events: BattleEvent[]): void {
   const d = ctx.battle.doubles!;
-  if (primarySpot(d, side) === spot || d[side].index < 0) return;
-  swapFields(ctx.battle, side);
+  if (primarySpot(d, side) === spot || parked(d, side, spot).index < 0) return;
+  swapFields(ctx.battle, side, spot);
   events.push({ type: 'focus', side, uid: slotView(ctx, side, spot)!.mon.uid });
 }
 
-/** Between turns the left spot is in the main fields, unless it is empty. */
+/** Between turns the leftmost Pokémon is in the main fields. */
 function rest(ctx: BattleContext, events: BattleEvent[]): void {
-  const d = ctx.battle.doubles!;
   for (const side of SIDES) {
-    const left = slotView(ctx, side, 0);
-    if (left) focus(ctx, side, 0, events);
-    else focus(ctx, side, 1, events);
+    const spot = spotsOf(ctx.battle).find((s) => slotView(ctx, side, s));
+    if (spot !== undefined) focus(ctx, side, spot, events);
   }
+}
+
+/**
+ * Two spots on one side trade places (Ally Switch, Shift, the centring rule). The main fields keep their
+ * Pokémon; only which spot it stands in changes. Either spot may be empty (triple battles).
+ */
+function exchangeSpots(ctx: BattleContext, side: Side, a: Spot, b: Spot): void {
+  const d = ctx.battle.doubles!;
+  if (!d.trio) {
+    d.swapped[side] = !d.swapped[side];
+    return;
+  }
+  const t = d.trio;
+  const row = t[side];
+  if (t.at[side] === a) {
+    row[a] = row[b]!;
+    row[b] = emptySlot();
+    t.at[side] = b;
+  } else if (t.at[side] === b) {
+    row[b] = row[a]!;
+    row[a] = emptySlot();
+    t.at[side] = a;
+  } else [row[a], row[b]] = [row[b]!, row[a]!];
 }
 
 /** The Combatants of one turn, by uid, so Protect and flinching last the whole turn. */
@@ -156,10 +214,14 @@ class Field {
     return c;
   }
 
+  get size(): number {
+    return spotsOf(this.ctx.battle).length;
+  }
+
   /** The Pokémon in battle that haven't fainted. */
   alive(side?: Side): Combatant[] {
     const out: Combatant[] = [];
-    for (const s of side ? [side] : SIDES) for (const spot of SPOTS) {
+    for (const s of side ? [side] : SIDES) for (const spot of spotsOf(this.ctx.battle)) {
       const c = this.at(s, spot);
       if (c && c.mon.hp > 0) out.push(c);
     }
@@ -167,15 +229,42 @@ class Field {
   }
 
   spotOf(c: Combatant): Spot | null {
-    for (const spot of SPOTS) if (slotView(this.ctx, c.side, spot)?.mon.uid === c.mon.uid) return spot;
+    for (const spot of spotsOf(this.ctx.battle)) if (slotView(this.ctx, c.side, spot)?.mon.uid === c.mon.uid) return spot;
     return null;
   }
 
-  ally(c: Combatant): Combatant | null {
+  /** The partners standing next to `c` (one in doubles; up to two for the centre of a triple battle). */
+  allies(c: Combatant): Combatant[] {
     const spot = this.spotOf(c);
-    if (spot === null) return null;
-    const a = this.at(c.side, spot === 0 ? 1 : 0);
-    return a && a.mon.hp > 0 ? a : null;
+    if (spot === null) return [];
+    return this.alive(c.side).filter((a) => a !== c && (this.size < 3 || alliesAdjacent(spot, this.spotOf(a)!)));
+  }
+
+  /** The first partner next to `c` (left first). */
+  ally(c: Combatant): Combatant | null {
+    return this.allies(c)[0] ?? null;
+  }
+
+  /** The Front's lane rule binds `c` only while the foe in its own lane still stands; with that lane empty it may help the others. */
+  private laneHolds(c: Combatant, spot: number): boolean {
+    return lanesOn(this.ctx.battle) && this.alive(otherSide(c.side)).some((f) => this.spotOf(f) === spot);
+  }
+
+  /** The foes `c` stands next to or faces (every foe in doubles). */
+  nearFoes(c: Combatant): Combatant[] {
+    const spot = this.spotOf(c);
+    const foes = this.alive(otherSide(c.side));
+    if (spot !== null && this.laneHolds(c, spot)) return foes.filter((f) => this.spotOf(f) === spot);
+    if (spot === null || this.size < 3) return foes;
+    return foes.filter((f) => foesAdjacent(spot, this.spotOf(f)!));
+  }
+
+  /** Whether a single-target `move` from `user` can be aimed at `target`. */
+  reaches(user: Combatant, target: Combatant, move: Pick<Move, 'id'>): boolean {
+    const a = this.spotOf(user);
+    const b = this.spotOf(target);
+    if (a === null || b === null) return false;
+    return canReach(this.size, { side: user.side, spot: a }, { side: target.side, spot: b }, move, this.laneHolds(user, a));
   }
 
   /** Focuses on `c` (and keeps the other side as it is). Returns false if it is no longer in battle. */
@@ -212,9 +301,10 @@ export function canBeDoubles(party: PokemonInstance[], enemyTeam: PokemonInstanc
 
 /** The uids on the field, left then right, for each side (the screen's layout). */
 export function fieldUids(ctx: Pick<BattleContext, 'battle' | 'party'>): Record<Side, (string | null)[]> {
+  const spots = spotsOf(ctx.battle);
   return {
-    player: SPOTS.map((s) => monAt(ctx, 'player', s)?.uid ?? null),
-    enemy: SPOTS.map((s) => monAt(ctx, 'enemy', s)?.uid ?? null),
+    player: spots.map((s) => monAt(ctx, 'player', s)?.uid ?? null),
+    enemy: spots.map((s) => monAt(ctx, 'enemy', s)?.uid ?? null),
   };
 }
 
@@ -223,7 +313,7 @@ export function doublesSwitchProblem(ctx: Pick<BattleContext, 'battle' | 'party'
   const mon = ctx.party[partyIndex];
   if (!mon) return 'There is no Pokémon there';
   if (mon.hp <= 0) return `${mon.uid} has fainted`;
-  if (SPOTS.some((s) => indexAt(ctx, 'player', s) === partyIndex)) return 'That Pokémon is already in battle';
+  if (spotsOf(ctx.battle).some((s) => indexAt(ctx, 'player', s) === partyIndex)) return 'That Pokémon is already in battle';
   if (taken.includes(partyIndex)) return 'That Pokémon is already being sent out';
   return null;
 }
@@ -329,6 +419,7 @@ export function resolveDoublesTurn(ctx: BattleContext, action: PlayerAction): Ba
   // The player's commands, checked one spot at a time.
   const commands: (SlotCommand | null)[] = [];
   const switching: number[] = [];
+  const SPOTS = spotsOf(battle);
   for (const spot of SPOTS) {
     const c = field.at('player', spot);
     if (!c || c.mon.hp <= 0 || d.refill.includes(spot) || d.commanding.includes(c.mon.uid)) {
@@ -352,7 +443,19 @@ export function resolveDoublesTurn(ctx: BattleContext, action: PlayerAction): Ba
         const problem = S.arenaProblem(ctx);
         if (problem) throw new Error(problem);
         if (commands.some((o) => o?.action.kind === 'arena')) throw new Error('Only one Pokémon can smash the arena');
-      } else S.validateAction(ctx, cmd.action);
+      } else if (cmd.action.kind === 'shift') {
+        const problem = shiftProblem(SPOTS.length, spot);
+        if (problem) throw new Error(problem);
+        if (commands.some((o) => o?.action.kind === 'shift')) throw new Error('Only one Pokémon can shift to the centre');
+      } else {
+        S.validateAction(ctx, cmd.action);
+        // Triple battles: an ordinary single-target move can't be aimed at the far edge.
+        if (cmd.action.kind === 'move' && cmd.target && SPOTS.length === 3) {
+          const target = field.at(cmd.target.side, cmd.target.spot as Spot);
+          const move = S.resolveMove(content, c.mon, cmd.action.index);
+          if (target && target.mon.hp > 0 && targetKind(move) === 'single' && !field.reaches(c, target, move)) throw new Error(`${move.name} can't reach that far`);
+        }
+      }
     }
     commands.push(cmd);
   }
@@ -364,10 +467,13 @@ export function resolveDoublesTurn(ctx: BattleContext, action: PlayerAction): Ba
   // Ideas W1: mind-read, grudges and a spectator's buff, once each.
   S.w1DoublesStart(ctx, field.alive('player'), field.alive('enemy'), events, (c) => field.on(c, events));
 
+  // Who gave each command (a Shift moves Pokémon between spots before the moves).
+  const owners = SPOTS.map((spot) => field.at('player', spot));
+
   // 1. Switches and items go before any move.
   for (const spot of SPOTS) {
     const cmd = commands[spot];
-    const c = field.at('player', spot);
+    const c = owners[spot] ?? null;
     if (!cmd || !c) continue;
     if (cmd.action.kind === 'switch') {
       field.on(c, events);
@@ -391,11 +497,33 @@ export function resolveDoublesTurn(ctx: BattleContext, action: PlayerAction): Ba
       turn.acted.add(c.mon.uid);
     } else if (cmd.action.kind === 'idle') turn.acted.add(c.mon.uid);
   }
+  // Triple battles: Shift (after switches and items, before any move). The edge Pokémon and the centre one trade places.
+  for (const spot of SPOTS) {
+    const c = owners[spot];
+    if (commands[spot]?.action.kind !== 'shift' || !c || c.mon.hp <= 0 || field.spotOf(c) !== spot) continue;
+    field.on(c, events);
+    exchangeSpots(ctx, 'player', spot, 1);
+    events.push({ type: 'shift', side: 'player', uid: c.mon.uid, from: spot, to: 1 });
+    const other = field.at('player', spot);
+    if (other) events.push({ type: 'shift', side: 'player', uid: other.mon.uid, from: 1, to: spot });
+    turn.acted.add(c.mon.uid);
+  }
+  // The foe Shifts too: an edge Pokémon with nobody in reach steps into the centre (one per turn; no random numbers).
+  const foeShift = enemyShiftSpot(ctx, field);
+  if (foeShift !== null) {
+    const c = field.at('enemy', foeShift)!;
+    field.on(c, events);
+    exchangeSpots(ctx, 'enemy', foeShift, 1);
+    events.push({ type: 'shift', side: 'enemy', uid: c.mon.uid, from: foeShift, to: 1 });
+    const other = field.at('enemy', foeShift);
+    if (other) events.push({ type: 'shift', side: 'enemy', uid: other.mon.uid, from: 1, to: foeShift });
+    turn.acted.add(c.mon.uid);
+  }
 
   // 2. Transformations (Mega Evolution, Tera, Dynamax) before any move, so they count for turn order.
   for (const spot of SPOTS) {
     const cmd = commands[spot];
-    const c = field.at('player', spot);
+    const c = owners[spot] ?? null;
     if (!cmd || !c || c.mon.hp <= 0 || cmd.action.kind !== 'move') continue;
     field.on(c, events);
     const foe = field.alive('enemy')[0];
@@ -416,7 +544,7 @@ export function resolveDoublesTurn(ctx: BattleContext, action: PlayerAction): Ba
   };
   for (const spot of SPOTS) {
     const cmd = commands[spot];
-    const c = field.at('player', spot);
+    const c = owners[spot] ?? null;
     if (!cmd || !c || c.mon.hp <= 0 || cmd.action.kind !== 'move') continue;
     field.on(c, events);
     const index = cmd.action.index;
@@ -425,7 +553,7 @@ export function resolveDoublesTurn(ctx: BattleContext, action: PlayerAction): Ba
     turn.queue.push(plan(c, move, index, cmd.target));
   }
   for (const foe of field.alive('enemy')) {
-    if (battle.doubles!.commanding?.includes(foe.mon.uid)) continue;
+    if (battle.doubles!.commanding?.includes(foe.mon.uid) || turn.acted.has(foe.mon.uid)) continue;
     const choice = enemyChoice(ctx, field, foe, events);
     if (!choice) continue;
     turn.queue.push(plan(foe, choice.move, choice.slot, choice.target));
@@ -450,7 +578,7 @@ export function resolveDoublesTurn(ctx: BattleContext, action: PlayerAction): Ba
   // 4. Moves.
   const skills = new Map<string, NonNullable<BattleState['skill']>>();
   commands.forEach((cmd, spot) => {
-    const c = field.at('player', spot as Spot);
+    const c = owners[spot] ?? null;
     if (c && cmd?.action.kind === 'move' && cmd.action.skill) skills.set(c.mon.uid, cmd.action.skill);
   });
   while (turn.queue.length > 0 && !battle.outcome) {
@@ -505,9 +633,10 @@ function sendOut(ctx: BattleContext, field: Field, side: Side, spot: Spot, index
   const view = slotView(ctx, side, spot);
   if (!view) {
     // An empty spot: the engine's main fields need someone, so the new Pokémon goes there first.
-    d[side].index = index;
-    d[side].stages = freshStages();
-    d[side].vol = freshVolatile();
+    const slot = parked(d, side, spot);
+    slot.index = index;
+    slot.stages = freshStages();
+    slot.vol = freshVolatile();
     focus(ctx, side, spot, events);
     if (side === 'player') {
       const mon = ctx.party[index]!;
@@ -544,16 +673,17 @@ function runEntries(ctx: BattleContext, field: Field, entering: Combatant[], eve
   faintCheck(ctx, field, events);
   for (const c of order) {
     if (c.mon.hp <= 0 || !field.on(c, events)) continue;
-    const foes = field.alive(otherSide(c.side));
+    const foes = field.nearFoes(c);
     if (foes.length === 0) continue;
     field.on(foes[0]!, events);
     S.entryAbility(ctx, c, foes[0]!, events);
-    // Intimidate (and the like) reach both foes.
+    // Intimidate (and the like) reach every adjacent foe.
     const ability = S.abilityIn(ctx, c);
-    if (foes[1] && (ability === 'intimidate' || ability === 'supersweet-syrup')) {
-      field.on(foes[1], events);
+    for (const other of foes.slice(1)) {
+      if (ability !== 'intimidate' && ability !== 'supersweet-syrup') break;
+      field.on(other, events);
       const mark = events.length;
-      S.entryAbility(ctx, c, foes[1], events);
+      S.entryAbility(ctx, c, other, events);
       const dup = events.findIndex((e, i) => i >= mark && e.type === 'ability' && e.side === c.side && e.ability === ability);
       if (dup >= 0) events.splice(dup, 1);
     }
@@ -604,17 +734,20 @@ function enemyChoice(ctx: BattleContext, field: Field, foe: Combatant, events: B
   const locked = forced ?? S.choiceLock(battle, foe.mon);
   const lockedIndex = locked ? foe.mon.moves.findIndex((m) => m.id === locked) : -1;
   if (forced && lockedIndex < 0) foe.vol.locked = null;
-  const players = field.alive('player');
-  if (players.length === 0) return null;
+  if (field.alive('player').length === 0) return null;
+  const near = field.nearFoes(foe);
   const ally = field.ally(foe);
   // How much a move is worth against each Pokémon it would hit.
   const worth = (move: Move): { score: number; target?: { side: Side; spot: Spot } } => {
     const kind = targetKind(move);
     const value = (target: Combatant) => S.moveValue({ content, ai: 1, target: target.mon, stages: foe.stages }, foe.mon, move.id);
+    // Triple battles: only the Pokémon this move can reach (every player Pokémon in doubles).
+    const players = kind === 'single' ? field.alive('player').filter((p) => field.reaches(foe, p, move)) : near;
+    if (players.length === 0) return { score: 0 };
     if (kind === 'foes' || kind === 'others') {
       let score = players.reduce((sum, p) => sum + value(p), 0) * (players.length > 1 ? 0.75 : 1);
-      // Spread moves that also hit the partner cost it what they'd do to the partner (unless Telepathy).
-      if (kind === 'others' && ally && S.abilityIn(ctx, ally) !== 'telepathy') score -= value(ally) * 0.75;
+      // Spread moves that also hit the partners cost what they'd do to them (unless Telepathy).
+      if (kind === 'others') for (const a of field.allies(foe)) if (S.abilityIn(ctx, a) !== 'telepathy') score -= value(a) * 0.75;
       return { score };
     }
     if (move.id === 'helping-hand') {
@@ -634,6 +767,11 @@ function enemyChoice(ctx: BattleContext, field: Field, foe: Combatant, events: B
     return { score: value(best), target: { side: 'player', spot: field.spotOf(best)! } };
   };
   const usable = foe.mon.moves.map((m, i) => ({ m, i })).filter((x) => x.m.pp > 0);
+  // Triple battles: a move that can't reach anyone is never picked while another one can (doubles: every move reaches).
+  if (field.size === 3) {
+    const hitting = usable.filter((x) => canHit(field, foe, S.resolveMove(content, foe.mon, x.i)));
+    if (hitting.length > 0 && hitting.length < usable.length) usable.splice(0, usable.length, ...hitting);
+  }
   let slot: number;
   if (lockedIndex >= 0) slot = lockedIndex;
   else if (usable.length === 0) slot = -1;
@@ -643,6 +781,41 @@ function enemyChoice(ctx: BattleContext, field: Field, foe: Combatant, events: B
   } else slot = rng.pick(usable).i;
   const move = battleMove(content, battle, foe.mon, S.resolveMove(content, foe.mon, slot));
   return { move, slot, target: worth(move).target };
+}
+
+/** Whether `move` from `user` would land on somebody: a foe or partner in reach, or the user / its side for self moves. */
+function canHit(field: Field, user: Combatant, move: Move): boolean {
+  const kind = targetKind(move);
+  if (kind === 'self' || kind === 'userAndAllies' || kind === 'userOrAlly') return true;
+  if (kind === 'ally') return field.allies(user).length > 0;
+  if (kind === 'single') {
+    if (move.category === 'status' && !ALLY_AIMED.has(move.id)) return true; // side and field moves (Stealth Rock, Rain Dance) need nobody in reach
+    const pool = ALLY_AIMED.has(move.id) ? field.allies(user) : field.alive(otherSide(user.side));
+    return pool.some((t) => field.reaches(user, t, move));
+  }
+  return field.nearFoes(user).length > 0 || (kind === 'others' && field.allies(user).length > 0);
+}
+
+/**
+ * Triple battles: the edge foe that should Shift this turn, or null. It shifts when no player Pokémon is next to it, none of
+ * its usable attacks can reach one (long-range moves can), it isn't locked into a move, and the centre is free or held by a
+ * partner with no attack (so two foes never swap back and forth).
+ */
+function enemyShiftSpot(ctx: BattleContext, field: Field): Spot | null {
+  if (field.size !== 3 || field.alive('player').length === 0) return null;
+  const commanding = ctx.battle.doubles!.commanding ?? [];
+  const attacksOf = (c: Combatant) => c.mon.moves.filter((m) => m.pp > 0).map((m) => ctx.content.moves.get(m.id)).filter((m): m is Move => Boolean(m) && m!.category !== 'status');
+  const centre = field.at('enemy', 1);
+  if (centre && centre.mon.hp > 0 && (attacksOf(centre).length > 0 || commanding.includes(centre.mon.uid))) return null;
+  for (const spot of [0, 2] as const) {
+    const foe = field.at('enemy', spot);
+    if (!foe || foe.mon.hp <= 0 || commanding.includes(foe.mon.uid) || forcedMoveId(foe.vol) || foe.vol.trapped) continue;
+    if (field.nearFoes(foe).length > 0) continue;
+    const attacks = attacksOf(foe);
+    if (attacks.length === 0 || attacks.some((m) => canHit(field, foe, m))) continue;
+    return spot;
+  }
+  return null;
 }
 
 // ---------- running a move ----------
@@ -675,29 +848,35 @@ function runPlanned(ctx: BattleContext, field: Field, turn: TurnState, p: Planne
 /** The Pokémon a move will hit, in order. */
 function aim(ctx: BattleContext, field: Field, turn: TurnState, user: Combatant, move: Move, chosen?: { side: Side; spot: Spot }): Combatant[] {
   const kind = targetKind(move);
-  const foes = field.alive(otherSide(user.side)).filter((c) => !ctx.battle.doubles!.commanding!.includes(c.mon.uid));
-  const ally = field.ally(user);
+  const commanding = ctx.battle.doubles!.commanding!;
+  // Spread and random moves reach the adjacent foes (all foes in doubles); a single-target move any foe it can reach.
+  const foes = field.nearFoes(user).filter((c) => !commanding.includes(c.mon.uid));
+  const allies = field.allies(user);
+  const chosenAlly = chosen && chosen.side === user.side ? allies.find((a) => field.spotOf(a) === chosen.spot) : undefined;
+  const ally = chosenAlly ?? allies[0] ?? null;
   switch (kind) {
     case 'self':
       return [];
     case 'foes':
       return foes;
     case 'others':
-      return [...foes, ...(ally ? [ally] : [])];
+      return [...foes, ...allies];
     case 'ally':
       return ally ? [ally] : [];
     case 'userAndAllies':
-      return [user, ...(ally ? [ally] : [])];
+      // Every partner, adjacent or not.
+      return [user, ...field.alive(user.side).filter((a) => a !== user)];
     case 'userOrAlly':
-      return chosen && chosen.side === user.side && ally && field.spotOf(ally) === chosen.spot ? [ally] : [user];
+      return chosenAlly ? [chosenAlly] : [user];
     case 'random':
       return foes.length ? [foes.length > 1 ? ctx.rng.pick(foes) : foes[0]!] : [];
     case 'single': {
       let target: Combatant | null = chosen ? field.at(chosen.side, chosen.spot) : null;
-      if (target && (target.mon.hp <= 0 || target === user)) target = null;
+      if (target && (target.mon.hp <= 0 || target === user || !field.reaches(user, target, move))) target = null;
       if (!target) {
         if (chosen?.side === user.side && ALLY_AIMED.has(move.id)) return ally ? [ally] : [];
-        target = foes.find((f) => chosen && f.side === chosen.side && field.spotOf(f) === chosen.spot) ?? foes[0] ?? null;
+        const reachable = field.alive(otherSide(user.side)).filter((c) => !commanding.includes(c.mon.uid) && field.reaches(user, c, move));
+        target = reachable.find((f) => chosen && f.side === chosen.side && field.spotOf(f) === chosen.spot) ?? reachable[0] ?? null;
       }
       if (target && ctx.battle.doubles!.commanding!.includes(target.mon.uid)) target = field.ally(target) ?? null;
       if (!target) return [];
@@ -715,12 +894,12 @@ function redirect(ctx: BattleContext, field: Field, turn: TurnState, user: Comba
   if (center && center.uid !== target.mon.uid) {
     const c = field.alive(target.side).find((x) => x.mon.uid === center.uid);
     const powderProof = getSpecies(ctx.content, user.mon.speciesId).types.includes('grass') || own === 'overcoat';
-    if (c && !(center.powder && powderProof)) return c;
+    if (c && !(center.powder && powderProof) && field.reaches(user, c, move)) return c;
   }
   const rod = move.type === 'electric' ? 'lightning-rod' : move.type === 'water' ? 'storm-drain' : null;
   if (rod && S.targetAbility(ctx, user, target) !== rod) {
-    const other = field.ally(target);
-    if (other && S.targetAbility(ctx, user, other) === rod) return other;
+    const other = field.alive(target.side).find((o) => o !== target && S.targetAbility(ctx, user, o) === rod && field.reaches(user, o, move));
+    if (other) return other;
   }
   return target;
 }
@@ -736,6 +915,12 @@ function hitAll(ctx: BattleContext, field: Field, turn: TurnState, user: Combata
     return;
   }
   const kind = targetKind(move);
+  // Triple battles: an attack with nobody in reach (an edge Pokémon facing only the far edge) fails.
+  if (targets.length === 0 && field.size === 3 && kind !== 'self' && move.category !== 'status') {
+    field.on(user, events);
+    events.push({ type: 'fail', side: user.side });
+    return;
+  }
   // Moves with no target, and moves that only touch the user, run once as usual.
   if (targets.length === 0 || kind === 'self') {
     const foe = field.alive(otherSide(user.side))[0];
@@ -858,11 +1043,12 @@ const DOUBLES_MOVES: Record<string, DoublesMove> = {
   },
   'ally-switch': (ctx, field, _turn, user, _target, events) => {
     const spot = field.spotOf(user);
-    const d = ctx.battle.doubles!;
-    const other = spot === null ? null : slotView(ctx, user.side, spot === 0 ? 1 : 0);
-    if (spot === null || !other || other.mon.hp <= 0) return false;
+    // Doubles: the other spot. Triples: the far edge (it fails in the centre).
+    const to: Spot | null = spot === null ? null : field.size === 3 ? (spot === 1 ? null : ((2 - spot) as Spot)) : spot === 0 ? 1 : 0;
+    const other = spot === null || to === null ? null : slotView(ctx, user.side, to);
+    if (spot === null || to === null || !other || other.mon.hp <= 0) return false;
     // The main fields keep the same Pokémon; it now stands in the other spot.
-    d.swapped[user.side] = !d.swapped[user.side];
+    exchangeSpots(ctx, user.side, spot, to);
     events.push({ type: 'allySwitch', side: user.side });
     return true;
   },
@@ -986,12 +1172,15 @@ function endOfTurn(ctx: BattleContext, field: Field, commands: (SlotCommand | nu
   each((c) => S.statusCureAbility(ctx, c, events));
   // Healer: 30% to cure the partner's status.
   each((c) => {
-    const ally = field.ally(c);
-    if (S.abilityIn(ctx, c) !== 'healer' || !ally?.mon.status || !ctx.rng.chance(0.3)) return;
-    S.announce(c, 'healer', events);
-    ally.mon.status = null;
-    field.on(ally, events);
-    events.push({ type: 'cured', side: ally.side });
+    if (S.abilityIn(ctx, c) !== 'healer') return;
+    for (const ally of field.allies(c)) {
+      if (!ally.mon.status || !ctx.rng.chance(0.3)) continue;
+      field.on(c, events);
+      S.announce(c, 'healer', events);
+      ally.mon.status = null;
+      field.on(ally, events);
+      events.push({ type: 'cured', side: ally.side });
+    }
   });
   each((c) => {
     const foe = field.alive(otherSide(c.side))[0];
@@ -1059,7 +1248,7 @@ function pivots(ctx: BattleContext, field: Field, events: BattleEvent[]): void {
 /** Healthy Pokémon not on the field. */
 function benchOf(ctx: BattleContext, side: Side): number[] {
   const team = side === 'player' ? ctx.party : ctx.battle.enemyTeam;
-  const onField = SPOTS.map((s) => indexAt(ctx, side, s));
+  const onField = spotsOf(ctx.battle).map((s) => indexAt(ctx, side, s));
   return team.map((m, i) => ({ m, i })).filter(({ m, i }) => m.hp > 0 && !onField.includes(i)).map(({ i }) => i);
 }
 
@@ -1070,7 +1259,7 @@ function sideOut(field: Field, side: Side): boolean {
 /** Faint events for Pokémon that just fainted; Receiver / Power of Alchemy take their abilities. */
 function faintCheck(ctx: BattleContext, field: Field, events: BattleEvent[]): void {
   const { battle } = ctx;
-  for (const side of SIDES) for (const spot of SPOTS) {
+  for (const side of SIDES) for (const spot of spotsOf(battle)) {
     const c = field.at(side, spot);
     if (!c || c.mon.hp > 0 || events.some((e) => e.type === 'faint' && e.uid === c.mon.uid)) continue;
     focus(ctx, side, spot, events);
@@ -1118,7 +1307,8 @@ function settle(ctx: BattleContext, field: Field, events: BattleEvent[]): void {
     battle.outcome = 'lose';
     return;
   }
-  // The trainer sends out its next Pokémon into each fainted spot.
+  // The trainer sends out its next Pokémon into each fainted spot, left to right.
+  const SPOTS = spotsOf(battle);
   const entering: Combatant[] = [];
   for (const spot of SPOTS) {
     const c = field.at('enemy', spot);
@@ -1142,25 +1332,50 @@ function settle(ctx: BattleContext, field: Field, events: BattleEvent[]): void {
   battle.participants = [...new Set([...battle.participants, ...field.alive('player').map((c) => c.mon.uid)])];
   if (entering.length > 0) runEntries(ctx, field, entering, events);
   if (entering.some((c) => c.mon.hp <= 0)) settle(ctx, field, events);
+  else if (!battle.needsSwitch) centre(ctx, field, events);
+}
+
+/** Triple battles: one Pokémon left on each side, on opposite edges, so both step into the centre. */
+function centre(ctx: BattleContext, field: Field, events: BattleEvent[]): void {
+  if (field.size !== 3 || ctx.battle.outcome) return;
+  const last = (side: Side) => {
+    const alive = field.alive(side);
+    return alive.length === 1 ? field.spotOf(alive[0]!) : null;
+  };
+  const moves = centringMoves(3, { player: last('player'), enemy: last('enemy') });
+  if (!moves) return;
+  for (const side of SIDES) {
+    const from = moves[side];
+    if (from === undefined) continue;
+    const c = field.alive(side)[0]!;
+    field.on(c, events);
+    exchangeSpots(ctx, side, from as Spot, 1);
+    events.push({ type: 'shift', side, uid: c.mon.uid, from, to: 1 });
+  }
 }
 
 /** A spot whose Pokémon fainted with nobody to replace it: the other one stays in the main fields. */
 function clearSpot(ctx: BattleContext, side: Side, spot: Spot, events: BattleEvent[]): void {
   const d = ctx.battle.doubles!;
   if (!slotView(ctx, side, spot)) return;
-  const otherSpot: Spot = spot === 0 ? 1 : 0;
-  if (!slotView(ctx, side, otherSpot)) return;
+  const otherSpot = spotsOf(ctx.battle).find((s) => s !== spot && slotView(ctx, side, s));
+  if (otherSpot === undefined) return;
   focus(ctx, side, otherSpot, events);
-  d[side].index = -1;
+  if (d.trio) d.trio[side][spot] = emptySlot();
+  else d[side].index = -1;
 }
 
 /** For the battle screen and tests: the commands a simple player would give (first usable move, first foe). */
 export function autoCommands(ctx: Pick<BattleContext, 'battle' | 'party' | 'content'>): (SlotCommand | null)[] {
-  return SPOTS.map((spot) => {
+  const spots = spotsOf(ctx.battle);
+  return spots.map((spot) => {
     const mon = monAt(ctx, 'player', spot);
     if (!mon || mon.hp <= 0) return null;
     const index = hasUsableMove(mon) ? mon.moves.findIndex((m) => m.pp > 0) : -1;
-    const foeSpot = SPOTS.find((s) => (monAt(ctx, 'enemy', s)?.hp ?? 0) > 0) ?? 0;
+    // The first foe it can reach (triple battles: an edge can't reach the far edge).
+    const laneBound = lanesOn(ctx.battle) && (monAt(ctx, 'enemy', spot)?.hp ?? 0) > 0;
+    const near = spots.filter((s) => (laneBound ? s === spot : spots.length < 3 || foesAdjacent(spot, s)));
+    const foeSpot = near.find((s) => (monAt(ctx, 'enemy', s)?.hp ?? 0) > 0) ?? near[0] ?? 0;
     return { action: { kind: 'move', index }, target: { side: 'enemy', spot: foeSpot } };
   });
 }

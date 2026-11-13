@@ -68,6 +68,8 @@ export const RunRulesDataSchema = z.object({
       steady: z.boolean().optional(),
       gauntlet: z.boolean().optional(),
       doublesOnly: z.boolean().optional(),
+      /** Triples Only (Beta 0.6 T3): every trainer fight that can be a triple battle is one. */
+      triplesOnly: z.boolean().optional(),
       /** Pacifist (S300): wild Pokémon can't be knocked out; win by catching or running. */
       pacifist: z.boolean().optional(),
       /** Tag Team (S302): two players share one party at the same screen; the Pokémon in even party slots belong to Player 1, odd slots to Player 2. */
@@ -285,6 +287,8 @@ export function battleContent(content: Content, rules: Pick<RunRules, 'modifierI
 export const gauntlet = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.gauntlet);
 /** Doubles Only (S292): every fight that can be a double battle is one. */
 export const doublesOnly = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.doublesOnly);
+/** Triples Only (Beta 0.6 T3): every trainer fight that can be a triple battle is one. */
+export const triplesOnly = (rules: Pick<RunRules, 'modifierIds'>): boolean => has(rules, (m) => m.triplesOnly);
 /** Pacifist (S300): wild Pokémon are never knocked out by damage. */
 /** Tag Team (S302): who commands the Pokémon in party slot `index` ("Player 1" for slots 1, 3, 5; "Player 2" for 2, 4, 6), or null when the rule is off. */
 export const tagPilot = (rules: Pick<RunRules, 'modifierIds'>, index: number): string | null => (has(rules, (m) => m.tagTeam) ? `Player ${(index % 2) + 1}` : null);

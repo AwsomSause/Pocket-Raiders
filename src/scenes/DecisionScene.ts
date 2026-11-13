@@ -107,6 +107,7 @@ export class DecisionScene extends Phaser.Scene {
     else if (decision.kind === 'signature') this.buildSignature(decision.title, decision.options);
     else if (decision.kind === 'mutator') this.buildMutator(decision.choices);
     else if (decision.kind === 'circuit') this.buildCircuit(decision.title, decision.options);
+    else if (decision.kind === 'leagueDoor') this.buildSignature(decision.title, decision.options, 'circuit');
     else if (decision.kind === 'mentorship') this.buildMentorship(decision.mentorUid, decision.proteUid, decision.path, decision.types);
     else if (decision.kind === 'askLead') this.buildAskLead(decision.uid, decision.reason);
     else if (decision.kind === 'returnProtege') this.buildReturn(decision.mon, decision.mentorUid, decision.reason);

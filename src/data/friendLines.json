@@ -1,0 +1,125 @@
+{
+ "note": "Friend scene lines from the evil pack's second_rival.json (docs/plans/instrumentality/evil-pack/docs/SECOND_RIVAL.md). Tokens: {friend}, {player}, {rival}.",
+ "lines": [
+  {
+   "archetype": "hotshot",
+   "kind": "meet",
+   "line": "You're {player}, right? Everyone's talking. I'm not impressed yet. Don't make me wait."
+  },
+  {
+   "archetype": "hotshot",
+   "kind": "mid",
+   "line": "I heard about the raid. Not bad. If I'd been there it'd have been faster, but not bad."
+  },
+  {
+   "archetype": "hotshot",
+   "kind": "support-1",
+   "line": "Don't look so surprised! You think I'd miss the loudest fight in the region?"
+  },
+  {
+   "archetype": "prodigy",
+   "kind": "meet",
+   "line": "Your team composition is unusual. I'm {friend}. I'd like to see it in action."
+  },
+  {
+   "archetype": "prodigy",
+   "kind": "mid",
+   "line": "I read the raid report. You made two good calls and one lucky one. Let's work on the lucky one."
+  },
+  {
+   "archetype": "prodigy",
+   "kind": "support-1",
+   "line": "I calculated the odds of you needing help. They were high. Here I am."
+  },
+  {
+   "archetype": "friendly",
+   "kind": "meet",
+   "line": "Oh, hi! I'm {friend}. Is your team okay? They look tired. Here, I have berries!"
+  },
+  {
+   "archetype": "friendly",
+   "kind": "mid",
+   "line": "I heard it was scary. Are you alright? Really? You can tell me."
+  },
+  {
+   "archetype": "friendly",
+   "kind": "support-1",
+   "line": "I couldn't just sit at home! Let me help. Please let me help."
+  },
+  {
+   "archetype": "bitter",
+   "kind": "meet",
+   "line": "{friend}. Don't bother introducing yourself; I read the standings. Try not to embarrass us both."
+  },
+  {
+   "archetype": "bitter",
+   "kind": "mid",
+   "line": "A raid. How noble. Next time, bring someone who can keep up."
+  },
+  {
+   "archetype": "bitter",
+   "kind": "support-1",
+   "line": "Don't thank me. I'm here because the team ruined my favourite pier. That's all."
+  },
+  {
+   "archetype": "scholar",
+   "kind": "meet",
+   "line": "Oh! Your Pokémon's stance is unusual. Do you mind if I take notes? I'm {friend}."
+  },
+  {
+   "archetype": "scholar",
+   "kind": "mid",
+   "line": "Fascinating. The raid pattern matches a rural supply chain. Tell me what you saw."
+  },
+  {
+   "archetype": "scholar",
+   "kind": "support-1",
+   "line": "I've reviewed the site plans. There are three exits. I'll hold the north one."
+  },
+  {
+   "archetype": "heir",
+   "kind": "meet",
+   "line": "I'm {friend}. You'll have heard the name. I'd prefer you judged me on today."
+  },
+  {
+   "archetype": "heir",
+   "kind": "mid",
+   "line": "My family would have paid the team off. I'd rather watch you do it properly."
+  },
+  {
+   "archetype": "heir",
+   "kind": "support-1",
+   "line": "I've come to help. No retinue, no name. Just me. Please call me {friend}."
+  },
+  {
+   "archetype": "lone-wolf",
+   "kind": "meet",
+   "line": "...{friend}. I don't talk much. I watch. You're worth watching."
+  },
+  {
+   "archetype": "lone-wolf",
+   "kind": "mid",
+   "line": "Raid. I saw the smoke. Good."
+  },
+  {
+   "archetype": "lone-wolf",
+   "kind": "support-1",
+   "line": "I'm here."
+  },
+  {
+   "archetype": "mirror",
+   "kind": "meet",
+   "line": "You walk like I walk. Funny. I'm {friend}. We should talk about that."
+  },
+  {
+   "archetype": "mirror",
+   "kind": "mid",
+   "line": "You handled the raid the way I would have. Which is either very good or very worrying."
+  },
+  {
+   "archetype": "mirror",
+   "kind": "support-1",
+   "line": "I knew you'd be here. I'd have been here too. So I came."
+  }
+ ]
+}

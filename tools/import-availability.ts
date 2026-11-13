@@ -24,6 +24,17 @@ for (const line of lines) {
   if (!(key in RARITY)) throw new Error(`Unknown rarity "${key}" for #${dex}`);
   out[id] = { rarity: RARITY[key], difficulty: Number(difficulty), minLevel: Number(low), maxLevel: Number(high), captureRate: Number(capture) };
 }
+// Beta 0.6 B1 (type retag): a species the sheet calls Common but whose type is a rarer one moves up a tier.
+// Steel/Ghost/Psychic -> uncommon, Ice/Fairy/Dragon -> rare; a species with both kinds takes the rarest (rare).
+const UNCOMMON_TYPES = ['steel', 'ghost', 'psychic'];
+const RARE_TYPES = ['ice', 'fairy', 'dragon'];
+const typed = JSON.parse(readFileSync(join(root, 'src', 'data', 'species.json'), 'utf8')) as { id: string; types: string[] }[];
+for (const s of typed) {
+  const row = out[s.id] as { rarity: string } | undefined;
+  if (!row || row.rarity !== 'common') continue;
+  if (s.types.some((t) => RARE_TYPES.includes(t))) row.rarity = 'rare';
+  else if (s.types.some((t) => UNCOMMON_TYPES.includes(t))) row.rarity = 'uncommon';
+}
 const file = { status: 'suggested', source: 'Pokemon_Spreadsheet.xlsx (director), Pokedex sheet', species: out };
 writeFileSync(join(root, 'src', 'data', 'availability.json'), JSON.stringify(file, null, 1) + '\n');
 console.log(`Wrote availability for ${Object.keys(out).length} of ${species.length} species`);

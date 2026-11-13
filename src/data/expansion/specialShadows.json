@@ -1,0 +1,1190 @@
+[
+ {
+  "id": "ss.snagem.first-snag",
+  "team": "snagem",
+  "region": "any",
+  "code": null,
+  "apex": false,
+  "name": "First Snag",
+  "species": [
+   "Makuhita",
+   "Hariyama"
+  ],
+  "tier": "1 Veiled",
+  "ability": "Dread Aura",
+  "moves": [
+   "Umbral Rush"
+  ],
+  "purification": "Any method; it is the one Shadow meant to teach purification",
+  "where": "Event First Snag"
+ },
+ {
+  "id": "ss.snagem.the-gift",
+  "team": "snagem",
+  "region": "any",
+  "code": null,
+  "apex": false,
+  "name": "The Gift",
+  "species": [
+   "Togetic",
+   "Togekiss"
+  ],
+  "tier": "2 Bound",
+  "ability": "Black Ledger",
+  "moves": [
+   "Dusk Brand",
+   "Siphon Lull"
+  ],
+  "purification": "Heart Bond only: it has to be walked with",
+  "where": "Offered by a Snag'em contact as a present"
+ },
+ {
+  "id": "ss.cipher.kingmaker",
+  "team": "cipher",
+  "region": "any",
+  "code": null,
+  "apex": false,
+  "name": "Kingmaker",
+  "species": [
+   "Tyranitar",
+   "Mega Tyranitar"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Overbound",
+  "moves": [
+   "Gloam Crash",
+   "Weeping Maw",
+   "Heart Eclipse"
+  ],
+  "purification": "Defeat Evice with the mask off",
+  "where": "Finale, Phase 3"
+ },
+ {
+  "id": "ss.cipher.disco",
+  "team": "cipher",
+  "region": "any",
+  "code": null,
+  "apex": false,
+  "name": "Encore, Please",
+  "species": [
+   "Dragonite",
+   "Z-Mega Dragonite"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Spotlight Sap",
+  "moves": [
+   "Hollow Tide",
+   "Pale Echo",
+   "Rift Step"
+  ],
+  "purification": "Beat it in time with the music (see Finale, Phase 3)",
+  "where": "Finale, Phase 3: Miror B., who finally got one"
+ },
+ {
+  "id": "ss.cipher.whiteout",
+  "team": "cipher",
+  "region": "any",
+  "code": null,
+  "apex": false,
+  "name": "Whiteout",
+  "species": [
+   "Articuno"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Frost Oath",
+  "moves": [
+   "Chain Hymn",
+   "Null Pulse",
+   "Cinder Ward"
+  ],
+  "purification": "Open its tank in the Reservoir",
+  "where": "Greevil"
+ },
+ {
+  "id": "ss.cipher.blackout",
+  "team": "cipher",
+  "region": "any",
+  "code": null,
+  "apex": false,
+  "name": "Blackout Wing",
+  "species": [
+   "Zapdos"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Unbound Spark",
+  "moves": [
+   "Umbral Rush",
+   "Null Pulse",
+   "Dusk Brand"
+  ],
+  "purification": "Open its tank in the Reservoir",
+  "where": "Greevil"
+ },
+ {
+  "id": "ss.cipher.burnout",
+  "team": "cipher",
+  "region": "any",
+  "code": null,
+  "apex": false,
+  "name": "Burnout",
+  "species": [
+   "Moltres"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Lantern Heart",
+  "moves": [
+   "Ember of Grief",
+   "Null Pulse",
+   "Gloam Crash"
+  ],
+  "purification": "Open its tank in the Reservoir",
+  "where": "Greevil"
+ },
+ {
+  "id": "ss.cipher.xd001",
+  "team": "cipher",
+  "region": "any",
+  "code": "XD001",
+  "apex": true,
+  "name": "XD001",
+  "species": [
+   "Lugia"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Contract Clause",
+  "moves": [
+   "Hollow Tide",
+   "Null Pulse",
+   "Heart Eclipse",
+   "Storm Without a Song"
+  ],
+  "purification": "Story only: nine locks, nine ROMs",
+  "where": "Citadark Isle, Phase 6"
+ },
+ {
+  "id": "ss.rocket.amberjack",
+  "team": "rocket",
+  "region": "kanto",
+  "code": null,
+  "apex": false,
+  "name": "Amberjack",
+  "species": [
+   "Aerodactyl",
+   "Mega Aerodactyl"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Lurker",
+  "moves": [
+   "Umbral Rush",
+   "Dusk Brand",
+   "Gloam Crash"
+  ],
+  "purification": "Win one battle outdoors with it leading, after Namba's technician is beaten (\"It sees the sky and remembers it.\")",
+  "where": "Raid 1, the Amber Lab"
+ },
+ {
+  "id": "ss.rocket.shellshock",
+  "team": "rocket",
+  "region": "kanto",
+  "code": null,
+  "apex": false,
+  "name": "Shellshock",
+  "species": [
+   "Kabutops",
+   "Z-Mega Kabutops"
+  ],
+  "tier": "2 Bound",
+  "ability": "Grim Resolve",
+  "moves": [
+   "Umbral Rush",
+   "Chain Hymn"
+  ],
+  "purification": "Register its fossil at the Pewter Museum, or Site Cleansing",
+  "where": "Phase 2, the 10th floor"
+ },
+ {
+  "id": "ss.rocket.marrowmother",
+  "team": "rocket",
+  "region": "kanto",
+  "code": null,
+  "apex": false,
+  "name": "Marrowmother",
+  "species": [
+   "Marowak",
+   "Alolan Marowak"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Grim Resolve",
+  "moves": [
+   "Weeping Maw",
+   "Ember of Grief",
+   "Last Lamp"
+  ],
+  "purification": "Story only: bring the orphan Cubone to the top of the Tower",
+  "where": "Raid 3"
+ },
+ {
+  "id": "ss.rocket.matron",
+  "team": "rocket",
+  "region": "kanto",
+  "code": null,
+  "apex": false,
+  "name": "Matron",
+  "species": [
+   "Kangaskhan",
+   "Mega Kangaskhan"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Dread Aura",
+  "moves": [
+   "Gloam Crash",
+   "Chain Hymn",
+   "Dusk Brand"
+  ],
+  "purification": "Return her child from the poachers' truck",
+  "where": "Raid 5"
+ },
+ {
+  "id": "ss.rocket.black-fog",
+  "team": "rocket",
+  "region": "kanto",
+  "code": null,
+  "apex": false,
+  "name": "The Black Fog",
+  "species": [
+   "Haunter",
+   "Z-Gengar"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Shroud",
+  "moves": [
+   "Siphon Lull",
+   "Pale Echo",
+   "Heart Eclipse"
+  ],
+  "purification": "Site Cleansing at Pokémon Tower only",
+  "where": "Lavender at night, world state 3 or higher"
+ },
+ {
+  "id": "ss.rocket.m2",
+  "team": "rocket",
+  "region": "kanto",
+  "code": "XD002",
+  "apex": true,
+  "name": "M2",
+  "species": [
+   "Mewtwo",
+   "Mega Mewtwo X"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Contract Clause",
+  "moves": [
+   "Null Pulse",
+   "Heart Eclipse",
+   "Mind Vault"
+  ],
+  "purification": "Story only: break the four armor seals (Phase 6)",
+  "where": "The roof of Silph Co."
+ },
+ {
+  "id": "ss.rocket-return.rage-signal",
+  "team": "rocket-return",
+  "region": "johto",
+  "code": null,
+  "apex": false,
+  "name": "Rage Signal",
+  "species": [
+   "Gyarados",
+   "Mega Gyarados"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Overbound",
+  "moves": [
+   "Hollow Tide",
+   "Gloam Crash",
+   "Umbral Rush"
+  ],
+  "purification": "Destroy the Lake transmitter, then stand at the shore with it for one rest node",
+  "where": "Raid 3; the red Gyarados of the Lake"
+ },
+ {
+  "id": "ss.rocket-return.silver",
+  "team": "rocket-return",
+  "region": "johto",
+  "code": null,
+  "apex": false,
+  "name": "Silver",
+  "species": [
+   "Lugia"
+  ],
+  "tier": "2 Bound",
+  "ability": "Choir Hum",
+  "moves": [
+   "Hollow Tide",
+   "Siphon Lull"
+  ],
+  "purification": "Story only: return it to its parent in the storm",
+  "where": "Raid 5"
+ },
+ {
+  "id": "ss.rocket-return.thunder-under-glass",
+  "team": "rocket-return",
+  "region": "johto",
+  "code": null,
+  "apex": false,
+  "name": "Thunder Under Glass",
+  "species": [
+   "Raikou"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Lurker",
+  "moves": [
+   "Umbral Rush",
+   "Dusk Brand",
+   "Null Pulse"
+  ],
+  "purification": "Shatter the Miracle Crystal",
+  "where": "Raid 4"
+ },
+ {
+  "id": "ss.rocket-return.ash-crown",
+  "team": "rocket-return",
+  "region": "johto",
+  "code": null,
+  "apex": false,
+  "name": "Ash Crown",
+  "species": [
+   "Entei"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Dread Aura",
+  "moves": [
+   "Ember of Grief",
+   "Gloam Crash",
+   "Null Pulse"
+  ],
+  "purification": "Shatter the Miracle Crystal",
+  "where": "Raid 4"
+ },
+ {
+  "id": "ss.rocket-return.north-wind",
+  "team": "rocket-return",
+  "region": "johto",
+  "code": null,
+  "apex": false,
+  "name": "North Wind",
+  "species": [
+   "Suicune"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Shroud",
+  "moves": [
+   "Hollow Tide",
+   "Chain Hymn",
+   "Null Pulse"
+  ],
+  "purification": "Shatter the Miracle Crystal",
+  "where": "Raid 4"
+ },
+ {
+  "id": "ss.rocket-return.dark-celebi",
+  "team": "rocket-return",
+  "region": "johto",
+  "code": "XD003",
+  "apex": true,
+  "name": "Dark Celebi",
+  "species": [
+   "Celebi"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Echo of Another",
+  "moves": [
+   "Pale Echo",
+   "Heart Eclipse",
+   "Yesterday's Thorn"
+  ],
+  "purification": "Story only: break the three Thorn Rings and call it by the name Kurt gave you",
+  "where": "The Tower roof, Phase 6"
+ },
+ {
+  "id": "ss.aqua.low-tide",
+  "team": "aqua",
+  "region": "hoenn",
+  "code": null,
+  "apex": false,
+  "name": "Low Tide",
+  "species": [
+   "Wailord"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Salt Chain",
+  "moves": [
+   "Hollow Tide",
+   "Gloam Crash",
+   "Siphon Lull"
+  ],
+  "purification": "Help it off the beach at high tide (a rest node on any coast in clear weather)",
+  "where": "Beached on a random shore, world state 2 or higher"
+ },
+ {
+  "id": "ss.magma.fault-line",
+  "team": "magma",
+  "region": "hoenn",
+  "code": null,
+  "apex": false,
+  "name": "Fault Line",
+  "species": [
+   "Aggron",
+   "Mega Aggron"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Hollow Hide",
+  "moves": [
+   "Gloam Crash",
+   "Dusk Brand",
+   "Cinder Ward"
+  ],
+  "purification": "Seal the vent it guards, then plant a tree on its mountain",
+  "where": "Meteor Falls, Raid 1"
+ },
+ {
+  "id": "ss.aqua.ebb",
+  "team": "aqua",
+  "region": "hoenn",
+  "code": null,
+  "apex": false,
+  "name": "Ebb",
+  "species": [
+   "Latios",
+   "Mega Latios"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Squall Mantle",
+  "moves": [
+   "Umbral Rush",
+   "Null Pulse",
+   "Rift Step"
+  ],
+  "purification": "Reunite it with its twin on Southern Island",
+  "where": "Raid 4"
+ },
+ {
+  "id": "ss.magma.kindle",
+  "team": "magma",
+  "region": "hoenn",
+  "code": null,
+  "apex": false,
+  "name": "Kindle",
+  "species": [
+   "Latias",
+   "Mega Latias"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Dread Aura",
+  "moves": [
+   "Umbral Rush",
+   "Null Pulse",
+   "Rift Step"
+  ],
+  "purification": "Reunite it with its twin on Southern Island",
+  "where": "Raid 4"
+ },
+ {
+  "id": "ss.aqua.abyssal",
+  "team": "aqua",
+  "region": "hoenn",
+  "code": "XD004",
+  "apex": true,
+  "name": "Abyssal",
+  "species": [
+   "Kyogre",
+   "Primal Kyogre"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Squall Mantle",
+  "moves": [
+   "Hollow Tide",
+   "Chain Hymn",
+   "Drowned Sky"
+  ],
+  "purification": "Story only: break the Blue Orb's three links",
+  "where": "The Cave of Origin, Phase 6"
+ },
+ {
+  "id": "ss.magma.cinderheart",
+  "team": "magma",
+  "region": "hoenn",
+  "code": "XD005",
+  "apex": true,
+  "name": "Cinderheart",
+  "species": [
+   "Groudon",
+   "Primal Groudon"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Frost Oath",
+  "moves": [
+   "Ember of Grief",
+   "Gloam Crash",
+   "Scorched Dawn"
+  ],
+  "purification": "Story only: break the Red Orb's three links",
+  "where": "The Cave of Origin, Phase 6"
+ },
+ {
+  "id": "ss.galactic.unknowing",
+  "team": "galactic",
+  "region": "sinnoh",
+  "code": null,
+  "apex": false,
+  "name": "Unknowing",
+  "species": [
+   "Uxie"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Black Ledger",
+  "moves": [
+   "Null Pulse",
+   "Siphon Lull",
+   "Rift Step"
+  ],
+  "purification": "Return it to Lake Acuity",
+  "where": "Raid 5"
+ },
+ {
+  "id": "ss.galactic.unfeeling",
+  "team": "galactic",
+  "region": "sinnoh",
+  "code": null,
+  "apex": false,
+  "name": "Unfeeling",
+  "species": [
+   "Mesprit"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Dread Aura",
+  "moves": [
+   "Null Pulse",
+   "Chain Hymn",
+   "Rift Step"
+  ],
+  "purification": "Return it to Lake Verity",
+  "where": "Raid 5"
+ },
+ {
+  "id": "ss.galactic.unwilling",
+  "team": "galactic",
+  "region": "sinnoh",
+  "code": null,
+  "apex": false,
+  "name": "Unwilling",
+  "species": [
+   "Azelf"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Echo of Another",
+  "moves": [
+   "Null Pulse",
+   "Umbral Rush",
+   "Rift Step"
+  ],
+  "purification": "Return it to Lake Valor",
+  "where": "Raid 3 or Raid 5"
+ },
+ {
+  "id": "ss.galactic.slag-heart",
+  "team": "galactic",
+  "region": "sinnoh",
+  "code": null,
+  "apex": false,
+  "name": "Slag Heart",
+  "species": [
+   "Heatran"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Hollow Hide",
+  "moves": [
+   "Ember of Grief",
+   "Gloam Crash",
+   "Cinder Ward"
+  ],
+  "purification": "Put the Magma Stone back",
+  "where": "Raid 4"
+ },
+ {
+  "id": "ss.galactic.long-night",
+  "team": "galactic",
+  "region": "sinnoh",
+  "code": null,
+  "apex": false,
+  "name": "The Long Night",
+  "species": [
+   "Darkrai",
+   "Z-Mega Darkrai"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Shroud",
+  "moves": [
+   "Siphon Lull",
+   "Heart Eclipse",
+   "Pale Echo"
+  ],
+  "purification": "A Lunar Wing, carried to Canalave",
+  "where": "Event The Town That Slept"
+ },
+ {
+  "id": "ss.galactic.stillhour",
+  "team": "galactic",
+  "region": "sinnoh",
+  "code": "XD006",
+  "apex": true,
+  "name": "Stillhour",
+  "species": [
+   "Dialga",
+   "Origin Dialga"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Contract Clause",
+  "moves": [
+   "Chain Hymn",
+   "Heart Eclipse",
+   "Stopped Clock"
+  ],
+  "purification": "Story only: break its two Red Chains",
+  "where": "The Spear Pillar, Phase 6"
+ },
+ {
+  "id": "ss.galactic.farshore",
+  "team": "galactic",
+  "region": "sinnoh",
+  "code": "XD007",
+  "apex": true,
+  "name": "Farshore",
+  "species": [
+   "Palkia",
+   "Origin Palkia"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Contract Clause",
+  "moves": [
+   "Rift Step",
+   "Gloam Crash",
+   "Folded Distance"
+  ],
+  "purification": "Story only: break its two Red Chains",
+  "where": "The Spear Pillar, Phase 6"
+ },
+ {
+  "id": "ss.plasma.captive-star",
+  "team": "plasma",
+  "region": "unova",
+  "code": null,
+  "apex": false,
+  "name": "The Captive Star",
+  "species": [
+   "Victini"
+  ],
+  "tier": "2 Bound",
+  "ability": "Spotlight Sap",
+  "moves": [
+   "Ember of Grief",
+   "Cinder Ward"
+  ],
+  "purification": "Open the basement door and step out of the way",
+  "where": "Event Liberty Garden"
+ },
+ {
+  "id": "ss.plasma.oathbreaker",
+  "team": "plasma",
+  "region": "unova",
+  "code": null,
+  "apex": false,
+  "name": "Oathbreaker",
+  "species": [
+   "Cobalion"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Contract Clause",
+  "moves": [
+   "Umbral Rush",
+   "Dusk Brand",
+   "Null Pulse"
+  ],
+  "purification": "Beat it without any of your Pokémon fainting",
+  "where": "Mistralton Cave, world state 3 or higher"
+ },
+ {
+  "id": "ss.plasma.second-sun",
+  "team": "plasma",
+  "region": "unova",
+  "code": null,
+  "apex": false,
+  "name": "The Second Sun",
+  "species": [
+   "Volcarona"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Overbound",
+  "moves": [
+   "Ember of Grief",
+   "Hollow Tide",
+   "Gloam Crash"
+  ],
+  "purification": "Carry it out of the Relic Castle into daylight",
+  "where": "Relic Castle, with Sage Ryoku"
+ },
+ {
+  "id": "ss.plasma.old-guard",
+  "team": "plasma",
+  "region": "unova",
+  "code": null,
+  "apex": false,
+  "name": "Old Guard",
+  "species": [
+   "Haxorus"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Spotlight Sap",
+  "moves": [
+   "Gloam Crash",
+   "Dusk Brand",
+   "Weeping Maw"
+  ],
+  "purification": "Thaw Opelucid (Raid 4)",
+  "where": "Raid 4"
+ },
+ {
+  "id": "ss.plasma.absolute",
+  "team": "plasma",
+  "region": "unova",
+  "code": "XD008",
+  "apex": true,
+  "name": "Absolute",
+  "species": [
+   "Kyurem",
+   "Black Kyurem",
+   "White Kyurem"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Contract Clause",
+  "moves": [
+   "Null Pulse",
+   "Heart Eclipse",
+   "Empty Crown"
+  ],
+  "purification": "Story only: pull the three Splicer wedges",
+  "where": "The Giant Chasm, Phase 6"
+ },
+ {
+  "id": "ss.flare.leading-lady",
+  "team": "flare",
+  "region": "kalos",
+  "code": null,
+  "apex": false,
+  "name": "The Leading Lady",
+  "species": [
+   "Gardevoir",
+   "Mega Gardevoir"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Tailored Edge",
+  "moves": [
+   "Dusk Brand",
+   "Siphon Lull",
+   "Pale Echo"
+  ],
+  "purification": "Diantha's voice: she must be present and say the line they rehearsed together",
+  "where": "Raid 4"
+ },
+ {
+  "id": "ss.flare.rose-of-the-mine",
+  "team": "flare",
+  "region": "kalos",
+  "code": null,
+  "apex": false,
+  "name": "The Rose of the Mine",
+  "species": [
+   "Diancie",
+   "Mega Diancie"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Hollow Hide",
+  "moves": [
+   "Cinder Ward",
+   "Dusk Brand",
+   "Null Pulse"
+  ],
+  "purification": "Return its Heart Diamond from the weapon's cooling loop",
+  "where": "Raid 2, the Dig Site"
+ },
+ {
+  "id": "ss.flare.ancien-regime",
+  "team": "flare",
+  "region": "kalos",
+  "code": null,
+  "apex": false,
+  "name": "Ancien Régime",
+  "species": [
+   "Tyrantrum"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Lurker",
+  "moves": [
+   "Gloam Crash",
+   "Weeping Maw",
+   "Umbral Rush"
+  ],
+  "purification": "Open the conduit in Lysandre Labs that feeds on it",
+  "where": "Raid 3"
+ },
+ {
+  "id": "ss.flare.z2",
+  "team": "flare",
+  "region": "kalos",
+  "code": null,
+  "apex": false,
+  "name": "Z-2",
+  "species": [
+   "Zygarde",
+   "10% Zygarde"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Tailored Edge",
+  "moves": [
+   "Chain Hymn",
+   "Gloam Crash",
+   "Heart Eclipse"
+  ],
+  "purification": "Squishy must reach it and touch it",
+  "where": "Raid 5; Phase 7"
+ },
+ {
+  "id": "ss.flare.battery",
+  "team": "flare",
+  "region": "kalos",
+  "code": "XD009",
+  "apex": true,
+  "name": "The Battery",
+  "species": [
+   "Xerneas",
+   "Yveltal"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Contract Clause",
+  "moves": [
+   "Siphon Lull",
+   "Null Pulse",
+   "Borrowed Years"
+  ],
+  "purification": "Story only: close the flower's three petals",
+  "where": "Geosenge, Phase 6"
+ },
+ {
+  "id": "ss.skull.rent-money",
+  "team": "skull",
+  "region": "alola",
+  "code": null,
+  "apex": false,
+  "name": "Rent Money",
+  "species": [
+   "Alolan Raticate"
+  ],
+  "tier": "2 Bound",
+  "ability": "Debt Collector",
+  "moves": [
+   "Umbral Rush",
+   "Dusk Brand"
+  ],
+  "purification": "Walk it back to its trial site",
+  "where": "Raid 1; a Totem Pokémon Skull \"borrowed\" to prove they could"
+ },
+ {
+  "id": "ss.aether.tall-tale",
+  "team": "aether",
+  "region": "alola",
+  "code": null,
+  "apex": false,
+  "name": "Tall Tale",
+  "species": [
+   "Alolan Exeggutor"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Relic Ward",
+  "moves": [
+   "Gloam Crash",
+   "Siphon Lull",
+   "Cinder Ward"
+  ],
+  "purification": "Take it to the Pelago",
+  "where": "Event The Gallery: Exhibit One"
+ },
+ {
+  "id": "ss.aether.null-three",
+  "team": "aether",
+  "region": "alola",
+  "code": null,
+  "apex": false,
+  "name": "Null Three",
+  "species": [
+   "Type: Null",
+   "Silvally"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Lantern Heart",
+  "moves": [
+   "Null Pulse",
+   "Gloam Crash",
+   "Last Lamp"
+  ],
+  "purification": "Break the control helmet, which takes trust, not force",
+  "where": "Raid 3"
+ },
+ {
+  "id": "ss.aether.guardian-in-glass",
+  "team": "aether",
+  "region": "alola",
+  "code": null,
+  "apex": false,
+  "name": "The Guardian in Glass",
+  "species": [
+   "Tapu Lele"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Shroud",
+  "moves": [
+   "Null Pulse",
+   "Chain Hymn",
+   "Rift Step"
+  ],
+  "purification": "The island must call it: the kahuna and three people the player has helped",
+  "where": "Raid 4"
+ },
+ {
+  "id": "ss.aether.mother-beast",
+  "team": "aether",
+  "region": "alola",
+  "code": "XD010",
+  "apex": true,
+  "name": "The Mother Beast",
+  "species": [
+   "Nihilego"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Contract Clause",
+  "moves": [
+   "Siphon Lull",
+   "Chain Hymn",
+   "Keepsake"
+  ],
+  "purification": "Story only: part the three veils and be heard",
+  "where": "Ultra Space, Phase 6"
+ },
+ {
+  "id": "ss.macro-cosmos.lighthouse",
+  "team": "macro-cosmos",
+  "region": "galar",
+  "code": null,
+  "apex": false,
+  "name": "Lighthouse",
+  "species": [
+   "Lapras",
+   "Gigantamax Lapras"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Squall Mantle",
+  "moves": [
+   "Hollow Tide",
+   "Chain Hymn",
+   "Siphon Lull"
+  ],
+  "purification": "Uncap its den, then have a crowd call it by its ferry name",
+  "where": "Raid 4"
+ },
+ {
+  "id": "ss.macro-cosmos.old-shift",
+  "team": "macro-cosmos",
+  "region": "galar",
+  "code": null,
+  "apex": false,
+  "name": "The Old Shift",
+  "species": [
+   "Coalossal",
+   "Gigantamax Coalossal"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Overbound",
+  "moves": [
+   "Ember of Grief",
+   "Gloam Crash",
+   "Cinder Ward"
+  ],
+  "purification": "Peony's voice: it knew him when it was a Rolycoly and he was a lad with a lamp",
+  "where": "Raid 1, the furnace hall"
+ },
+ {
+  "id": "ss.macro-cosmos.rusted-sword",
+  "team": "macro-cosmos",
+  "region": "galar",
+  "code": null,
+  "apex": false,
+  "name": "The Sword That Slept",
+  "species": [
+   "Zacian",
+   "Crowned Zacian"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Contract Clause",
+  "moves": [
+   "Umbral Rush",
+   "Dusk Brand",
+   "Null Pulse"
+  ],
+  "purification": "Return the rusted sword to its hand",
+  "where": "Raid 2, or Phase 7"
+ },
+ {
+  "id": "ss.macro-cosmos.rusted-shield",
+  "team": "macro-cosmos",
+  "region": "galar",
+  "code": null,
+  "apex": false,
+  "name": "The Shield That Slept",
+  "species": [
+   "Zamazenta",
+   "Crowned Zamazenta"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Contract Clause",
+  "moves": [
+   "Cinder Ward",
+   "Gloam Crash",
+   "Null Pulse"
+  ],
+  "purification": "Return the rusted shield to its arm",
+  "where": "Raid 2, or Phase 7"
+ },
+ {
+  "id": "ss.macro-cosmos.darkest-day",
+  "team": "macro-cosmos",
+  "region": "galar",
+  "code": "XD011",
+  "apex": true,
+  "name": "The Darkest Day",
+  "species": [
+   "Eternatus",
+   "Eternamax Eternatus"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Contract Clause",
+  "moves": [
+   "Hollow Tide",
+   "Heart Eclipse",
+   "Red Star"
+  ],
+  "purification": "Story only: cut the three feeds, then outlast it",
+  "where": "Above Hammerlocke, Phase 6"
+ },
+ {
+  "id": "ss.star.first-engine",
+  "team": "star",
+  "region": "paldea",
+  "code": null,
+  "apex": false,
+  "name": "The First Engine",
+  "species": [
+   "Varoom",
+   "Revavroom"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Unbound Spark",
+  "moves": [
+   "Umbral Rush",
+   "Gloam Crash",
+   "Dusk Brand"
+  ],
+  "purification": "Ortega rebuilds it: bring him three parts",
+  "where": "Raid 4"
+ },
+ {
+  "id": "ss.star.overlooked",
+  "team": "star",
+  "region": "paldea",
+  "code": null,
+  "apex": false,
+  "name": "Overlooked",
+  "species": [
+   "Applin",
+   "Dipplin",
+   "Hydrapple"
+  ],
+  "tier": "2 Bound",
+  "ability": "Echo of Another",
+  "moves": [
+   "Siphon Lull",
+   "Dusk Brand"
+  ],
+  "purification": "Its trainer says one honest sentence to it",
+  "where": "Event The Applicant"
+ },
+ {
+  "id": "ss.star.grudge-tablets",
+  "team": "star",
+  "region": "paldea",
+  "code": null,
+  "apex": false,
+  "name": "The Tablets of Grudge",
+  "species": [
+   "Wo-Chien"
+  ],
+  "tier": "3 Gripped",
+  "ability": "Relic Ward",
+  "moves": [
+   "Siphon Lull",
+   "Chain Hymn",
+   "Null Pulse"
+  ],
+  "purification": "Read the deleted reports aloud at its shrine",
+  "where": "Raid 5, or the shrine after it"
+ },
+ {
+  "id": "ss.star.time-capsule",
+  "team": "star",
+  "region": "paldea",
+  "code": null,
+  "apex": false,
+  "name": "The Time Capsule",
+  "species": [
+   "Roaring Moon",
+   "Iron Valiant"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Unbound Spark",
+  "moves": [
+   "Gloam Crash",
+   "Weeping Maw",
+   "Heart Eclipse"
+  ],
+  "purification": "Site Cleansing only; it does not belong to this age",
+  "where": "Phase 1, if world state is 5"
+ },
+ {
+  "id": "ss.star.cassiopeia-engine",
+  "team": "star",
+  "region": "paldea",
+  "code": "XD012",
+  "apex": true,
+  "name": "The Cassiopeia Engine",
+  "species": [
+   "Revavroom"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Unbound Spark",
+  "moves": [
+   "Null Pulse",
+   "Heart Eclipse",
+   "Starfall Barrage"
+  ],
+  "purification": "Story only: five Bosses pull five cores",
+  "where": "Starfall Street, Phase 6"
+ }
+]

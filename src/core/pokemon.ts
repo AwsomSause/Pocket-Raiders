@@ -55,6 +55,10 @@ export function calcStats(content: Content, mon: PokemonInstance): StatBlock {
   }
   // Dynamax doubles HP for its turns (battle/transform.ts).
   if (mon.dynamaxed) stats.hp *= 2;
+  // Overcharged (Beta 0.6 Pokémon moments): HP x1.5, every other stat doubled, until the battle ends.
+  if (mon.overcharged) {
+    for (const stat of STAT_NAMES) stats[stat] = Math.floor(stats[stat] * (stat === 'hp' ? 1.5 : 2));
+  }
   return stats;
 }
 
@@ -191,6 +195,8 @@ export function rollAbilitySlot(content: Content, species: Species, key: string)
 export function abilityOf(content: Content, mon: PokemonInstance): string | null {
   const species = getSpecies(content, mon.speciesId);
   const { normal, hidden } = species.abilities;
+  if (mon.abilityless) return null;
+  if (mon.fixedAbility) return mon.fixedAbility;
   // A Mega or Primal form has one ability, whatever slot the base form used.
   if ((species.form?.kind === 'mega' || species.form?.kind === 'primal') && normal.length > 0) return normal[0]!;
   if (mon.abilitySlot === -1 && hidden) return hidden;

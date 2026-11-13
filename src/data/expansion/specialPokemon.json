@@ -1,0 +1,1410 @@
+[
+ {
+  "id": "sv.rocket-remnants.wobbuffet",
+  "team": "rocket-remnants",
+  "region": "any",
+  "name": "Wobbuffet!",
+  "species": [
+   "Wobbuffet"
+  ],
+  "trait": "Nobody Called You: it may come out of its Ball by itself at the start of any turn, replacing Jessie's active Pokémon, and salute",
+  "where": "Jessie",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.rocket-remnants.growlie",
+  "team": "rocket-remnants",
+  "region": "any",
+  "name": "Growlie",
+  "species": [
+   "Growlithe",
+   "Arcanine"
+  ],
+  "trait": "Waited at the Gate: +1 to all stats in any battle fought at James's side, which is every battle it is in",
+  "where": "James, when things are serious",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.rocket-remnants.bottlecap",
+  "team": "rocket-remnants",
+  "region": "any",
+  "name": "Bottlecap",
+  "species": [
+   "Mime Jr."
+  ],
+  "trait": "Copies the Twerp: its first move each battle is the last move the player's Pokémon used",
+  "where": "James",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.rocket-remnants.top-cat",
+  "team": "rocket-remnants",
+  "region": "any",
+  "name": "Top Cat",
+  "species": [
+   "Meowth"
+  ],
+  "trait": "Translator: reveals the foe's next move once per battle; in this file he also reads crate stencils",
+  "where": "With the trio",
+  "obtainable": "Ally only, and only when he decides"
+ },
+ {
+  "id": "sv.rocket-remnants.express",
+  "team": "rocket-remnants",
+  "region": "any",
+  "name": "Express",
+  "species": [
+   "Delibird"
+  ],
+  "trait": "Special Delivery: it brings the trio one random item at the start of a battle; one time in five it is something that explodes",
+  "where": "The Boss's old messenger, still making the rounds",
+  "obtainable": "Yes: it has had no orders in years and will deliver for anyone who signs"
+ },
+ {
+  "id": "sv.snagem.overhead",
+  "team": "snagem",
+  "region": "any",
+  "name": "Overhead",
+  "species": [
+   "Skarmory"
+  ],
+  "trait": "Eye in the Sky: the player cannot flee, and the foe's switches are announced a turn early",
+  "where": "Gonzap",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.snagem.sol-and-luna",
+  "team": "snagem",
+  "region": "any",
+  "name": "Sol and Luna",
+  "species": [
+   "Espeon",
+   "Umbreon"
+  ],
+  "trait": "Matched Pair: when one is hit, the other's next move has +1 priority",
+  "where": "Wes",
+  "obtainable": "Ally only: they are Wes's"
+ },
+ {
+  "id": "sv.snagem.old-sparky",
+  "team": "snagem",
+  "region": "any",
+  "name": "Old Sparky",
+  "species": [
+   "Pikachu"
+  ],
+  "trait": "Still Got It: its first attack each battle is always a critical hit; after that it needs a sit-down (it skips every third turn)",
+  "where": "Eagun, at the Relic Stone",
+  "obtainable": "Ally only: it is Eagun's, and has been for fifty years"
+ },
+ {
+  "id": "sv.snagem.dukings-plusle",
+  "team": "snagem",
+  "region": "any",
+  "name": "Duking's Plusle",
+  "species": [
+   "Plusle"
+  ],
+  "trait": "Cheerleader: while it is on the field its partner's moves cannot miss",
+  "where": "Snag'em's warehouse",
+  "obtainable": "Returned: it belongs to a very large man who is crying"
+ },
+ {
+  "id": "sv.snagem.pocket-change",
+  "team": "snagem",
+  "region": "any",
+  "name": "Pocket Change",
+  "species": [
+   "Tuftin"
+  ],
+  "trait": "Too Small to Snag: a Snag Machine cannot lock onto it, and it shares that with one ally",
+  "where": "A Snag'em Grunt's own, hidden in his jacket",
+  "obtainable": "Yes: he hands it over to keep it away from the boss"
+ },
+ {
+  "id": "sv.rocket.chairman",
+  "team": "rocket",
+  "region": "kanto",
+  "name": "Chairman",
+  "species": [
+   "Persian"
+  ],
+  "trait": "Seat at the Table: on entry, clears the foe's stat boosts (announced)",
+  "where": "Beside Giovanni in Phase 5",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.rocket.vault-breaker",
+  "team": "rocket",
+  "region": "kanto",
+  "name": "Vault-Breaker",
+  "species": [
+   "Rhydon",
+   "Z-Rhyperior"
+  ],
+  "trait": "Drill Through: its first Ground or Rock move each battle ignores Protect and screens",
+  "where": "Giovanni's ace",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.rocket.house-pair",
+  "team": "rocket",
+  "region": "kanto",
+  "name": "The House Pair",
+  "species": [
+   "Nidoking",
+   "Nidoqueen"
+  ],
+  "trait": "The House Wins: when one faints, the other gains +1 Attack and +1 Special Defense",
+  "where": "Giovanni's team",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.rocket.ledger",
+  "team": "rocket",
+  "region": "kanto",
+  "name": "LEDGER",
+  "species": [
+   "Porygon",
+   "Porygon2",
+   "Porygon-Z"
+  ],
+  "trait": "Double Entry: once per battle, copies the foe's last stat change onto itself",
+  "where": "Raid 4, Phase 7",
+  "obtainable": "Yes: custody after the Convoy, or as a Raid 4 Triumph reward"
+ },
+ {
+  "id": "sv.rocket.big-tab",
+  "team": "rocket",
+  "region": "kanto",
+  "name": "Big Tab",
+  "species": [
+   "Raticate",
+   "Bruticate"
+  ],
+  "trait": "Collections: its biting moves take the target's Berry",
+  "where": "Cassidy's ace from Raid 3 onward",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.rocket.roadblock",
+  "team": "rocket",
+  "region": "kanto",
+  "name": "The Roadblock",
+  "species": [
+   "Snorlax",
+   "Z-Mega Snorlax"
+  ],
+  "trait": "Fed and Paid: heals 1/8 HP each turn until its food is knocked away",
+  "where": "Event The Roadblock",
+  "obtainable": "Yes: wake it and catch it"
+ },
+ {
+  "id": "sv.rocket.jackpot",
+  "team": "rocket",
+  "region": "kanto",
+  "name": "Jackpot",
+  "species": [
+   "Dratini",
+   "Dragonair"
+  ],
+  "trait": "Payout: when it knocks out a foe, the winner's prize money for the battle is doubled",
+  "where": "Raid 2 count room",
+  "obtainable": "Yes: the dealer lets you keep it, or you return it"
+ },
+ {
+  "id": "sv.rocket.blackout",
+  "team": "rocket",
+  "region": "kanto",
+  "name": "Blackout",
+  "species": [
+   "Voltorb",
+   "Electrode",
+   "Z-Electrode"
+  ],
+  "trait": "Lights Out: when it faints the field goes dark for 3 turns (accuracy −10% for both sides)",
+  "where": "Dr. Namba; Phase 4",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.rocket.meowth",
+  "team": "rocket",
+  "region": "kanto",
+  "name": "Meowth, That's Right",
+  "species": [
+   "Meowth"
+  ],
+  "trait": "Translator: once per battle he overhears the foe and reveals its next move",
+  "where": "With Jessie and James",
+  "obtainable": "Ally only, on the Stand-with route"
+ },
+ {
+  "id": "sv.rocket-return.overlord",
+  "team": "rocket-return",
+  "region": "johto",
+  "name": "Overlord",
+  "species": [
+   "Tyranitar",
+   "Mega Tyranitar"
+  ],
+  "trait": "Scorched Ground: while its sandstorm blows, Berries cannot be eaten by either side",
+  "where": "The Marauder's ace",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.rocket-return.sliver",
+  "team": "rocket-return",
+  "region": "johto",
+  "name": "Sliver",
+  "species": [
+   "Sneasel",
+   "Weavile"
+  ],
+  "trait": "Marked Prey: +20% damage against the Pokémon it hit last turn",
+  "where": "The Marauder",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.rocket-return.vigil",
+  "team": "rocket-return",
+  "region": "johto",
+  "name": "Vigil",
+  "species": [
+   "Houndoom",
+   "Mega Houndoom"
+  ],
+  "trait": "Keeps the Fire: burns it inflicts cannot be cured by items for 2 turns",
+  "where": "Archer",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.rocket-return.last-call",
+  "team": "rocket-return",
+  "region": "johto",
+  "name": "Last Call",
+  "species": [
+   "Murkrow",
+   "Honchkrow"
+  ],
+  "trait": "Last Call: when it is Archer's last Pokémon, its first move has +1 priority",
+  "where": "Archer's ace",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.rocket-return.understudy",
+  "team": "rocket-return",
+  "region": "johto",
+  "name": "Understudy",
+  "species": [
+   "Ditto"
+  ],
+  "trait": "Quick Change: on entry it becomes the last Pokémon the player sent out",
+  "where": "Petrel",
+  "obtainable": "Yes: it defects if Petrel is beaten in every disguise"
+ },
+ {
+  "id": "sv.rocket-return.razor",
+  "team": "rocket-return",
+  "region": "johto",
+  "name": "Razor",
+  "species": [
+   "Skarmory",
+   "Z-Skarmory"
+  ],
+  "trait": "Clean Cut: its slicing moves ignore the target's Defense boosts",
+  "where": "Attila",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.rocket-return.girder",
+  "team": "rocket-return",
+  "region": "johto",
+  "name": "Girder",
+  "species": [
+   "Steelix",
+   "Z-Steelix"
+  ],
+  "trait": "Load-Bearing: takes 25% less damage while a partner is on the field",
+  "where": "Hun",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.rocket-return.night-desk",
+  "team": "rocket-return",
+  "region": "johto",
+  "name": "Night Desk",
+  "species": [
+   "Noctowl",
+   "Z-Noctowl"
+  ],
+  "trait": "Night Desk: reveals the player's held items at the start of the battle",
+  "where": "Signal Technicians on the Tower's upper floors",
+  "obtainable": "Yes: a wild one waits on the roof after the climax"
+ },
+ {
+  "id": "sv.rocket-return.old-yawn",
+  "team": "rocket-return",
+  "region": "johto",
+  "name": "Old Yawn",
+  "species": [
+   "Slowpoke",
+   "Slowking"
+  ],
+  "trait": "The Yawn That Ended the Drought: its Yawn also brings rain for 5 turns",
+  "where": "The Slowpoke Well",
+  "obtainable": "Yes: it follows you after a Raid 1 Triumph"
+ },
+ {
+  "id": "sv.aqua.riptide",
+  "team": "aqua",
+  "region": "hoenn",
+  "name": "Riptide",
+  "species": [
+   "Sharpedo",
+   "Mega Sharpedo",
+   "Z-Sharpedo"
+  ],
+  "trait": "Blood in the Water: +1 Attack whenever any Pokémon on the field drops below half HP",
+  "where": "Archie's ace",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.aqua.bosun",
+  "team": "aqua",
+  "region": "hoenn",
+  "name": "Bosun",
+  "species": [
+   "Mightyena",
+   "Alphayena"
+  ],
+  "trait": "All Hands: its first move each battle also raises its partner's Attack by 1",
+  "where": "Matt",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.aqua.siren",
+  "team": "aqua",
+  "region": "hoenn",
+  "name": "Siren",
+  "species": [
+   "Milotic",
+   "Z-Mega Milotic"
+  ],
+  "trait": "Undertow Song: Pokémon that switch in against it lose 1 Speed",
+  "where": "Shelly",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.aqua.flagship",
+  "team": "aqua",
+  "region": "hoenn",
+  "name": "Flagship",
+  "species": [
+   "Wailmer",
+   "Wailord"
+  ],
+  "trait": "Flagship: while it is on the field, its allies take 10% less damage",
+  "where": "Navigator Stern; Raid 2",
+  "obtainable": "Yes: it follows Stern, and Stern follows you if he is turned"
+ },
+ {
+  "id": "sv.aqua.twin-pearls",
+  "team": "aqua",
+  "region": "hoenn",
+  "name": "Twin Pearls",
+  "species": [
+   "Gorebyss",
+   "Huntail"
+  ],
+  "trait": "Matched Set: if both are on the field, each acts again at half power once per battle",
+  "where": "Amber",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.magma.caldera",
+  "team": "magma",
+  "region": "hoenn",
+  "name": "Caldera",
+  "species": [
+   "Camerupt",
+   "Mega Camerupt"
+  ],
+  "trait": "Pressure Vent: each hit it takes adds 10% to its next Fire move (up to 50%)",
+  "where": "Maxie's ace",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.magma.old-faithful",
+  "team": "magma",
+  "region": "hoenn",
+  "name": "Old Faithful",
+  "species": [
+   "Torkoal",
+   "Z-Mega Torkoal"
+  ],
+  "trait": "On Schedule: every third turn it sets harsh sun for free",
+  "where": "Tabitha",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.magma.specimen-nine",
+  "team": "magma",
+  "region": "hoenn",
+  "name": "Specimen Nine",
+  "species": [
+   "Claydol"
+  ],
+  "trait": "Analysis Complete: after seeing a move twice, it takes 30% less from that move",
+  "where": "Courtney",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.magma.borehead",
+  "team": "magma",
+  "region": "hoenn",
+  "name": "Borehead",
+  "species": [
+   "Aggron",
+   "Cataggron"
+  ],
+  "trait": "Tunnel Bore: its Rock and Steel moves break screens before hitting",
+  "where": "Magma tunnel crews; Raid 1",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.magma.mirage",
+  "team": "magma",
+  "region": "hoenn",
+  "name": "Mirage",
+  "species": [
+   "Slugma",
+   "Magcargo"
+  ],
+  "trait": "Heat Haze: in harsh sun the first move aimed at it each turn has a 30% chance to miss",
+  "where": "Blaise",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.magma.thermal",
+  "team": "magma",
+  "region": "hoenn",
+  "name": "Thermal",
+  "species": [
+   "Swellow",
+   "Tempestwing"
+  ],
+  "trait": "Updraft: +1 Speed at the end of each turn of harsh sun",
+  "where": "Blaise",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.aqua.forecast",
+  "team": "aqua",
+  "region": "hoenn",
+  "name": "Forecast",
+  "species": [
+   "Castform",
+   "Rainy Castform",
+   "Sunny Castform"
+  ],
+  "trait": "Tomorrow's Weather: at the start of battle it shows what the weather will be for the next three shifts",
+  "where": "The Weather Institute",
+  "obtainable": "Yes: the Institute gives it to whoever saves it"
+ },
+ {
+  "id": "sv.galactic.absence",
+  "team": "galactic",
+  "region": "sinnoh",
+  "name": "Absence",
+  "species": [
+   "Murkrow",
+   "Honchkrow"
+  ],
+  "trait": "No Witnesses: when it knocks out a foe, the next Pokémon sent against it has its ability suppressed for 1 turn",
+  "where": "Cyrus's ace",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.galactic.zero-kelvin",
+  "team": "galactic",
+  "region": "sinnoh",
+  "name": "Zero Kelvin",
+  "species": [
+   "Sneasel",
+   "Weavile"
+  ],
+  "trait": "Absolute: its Ice moves ignore the target's Defense and Special Defense boosts",
+  "where": "Cyrus",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.galactic.remainder",
+  "team": "galactic",
+  "region": "sinnoh",
+  "name": "Remainder",
+  "species": [
+   "Gyarados"
+  ],
+  "trait": "Subtraction: each attack removes one stat boost from its target",
+  "where": "Cyrus",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.galactic.empress",
+  "team": "galactic",
+  "region": "sinnoh",
+  "name": "Empress",
+  "species": [
+   "Glameow",
+   "Purugly"
+  ],
+  "trait": "First Claw: always moves first on the turn it enters",
+  "where": "Mars",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.galactic.miasma",
+  "team": "galactic",
+  "region": "sinnoh",
+  "name": "Miasma",
+  "species": [
+   "Stunky",
+   "Skuntank"
+  ],
+  "trait": "Lingering: when it faints, the Pokémon that replaces its attacker is badly poisoned",
+  "where": "Jupiter",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.galactic.verdict",
+  "team": "galactic",
+  "region": "sinnoh",
+  "name": "Verdict",
+  "species": [
+   "Croagunk",
+   "Toxicroak"
+  ],
+  "trait": "Considered Strike: +30% damage against a Pokémon that used a status move this turn",
+  "where": "Saturn",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.galactic.bulwark",
+  "team": "galactic",
+  "region": "sinnoh",
+  "name": "Bulwark",
+  "species": [
+   "Bastiodon",
+   "Bastiodoom"
+  ],
+  "trait": "Shut Door: the foe cannot switch out during the first 2 turns it is on the field",
+  "where": "Warden Pell; the Veilstone building",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.galactic.relay",
+  "team": "galactic",
+  "region": "sinnoh",
+  "name": "Relay",
+  "species": [
+   "Electivire",
+   "Z-Electivire"
+  ],
+  "trait": "Grid Tie: Electric moves used by anyone on the field heal it by 10%",
+  "where": "Chief Engineer Volkner",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.galactic.friday",
+  "team": "galactic",
+  "region": "sinnoh",
+  "name": "Friday",
+  "species": [
+   "Drifloon",
+   "Drifblim"
+  ],
+  "trait": "Carry Off: once per battle it lifts its partner out of the way of one attack",
+  "where": "The Windworks roof",
+  "obtainable": "Yes: it comes when the little girl at the Windworks calls it, and she lends it to you"
+ },
+ {
+  "id": "sv.galactic.poltergeist",
+  "team": "galactic",
+  "region": "sinnoh",
+  "name": "The Poltergeist Engine",
+  "species": [
+   "Rotom",
+   "Heat Rotom",
+   "Wash Rotom",
+   "Frost Rotom",
+   "Fan Rotom",
+   "Mow Rotom"
+  ],
+  "trait": "Appliance Shift: changes form at the end of each turn, in a fixed order shown to both sides",
+  "where": "Charon",
+  "obtainable": "Yes: it leaves Charon when shown the page of his boyhood notebook"
+ },
+ {
+  "id": "sv.galactic.warrant",
+  "team": "galactic",
+  "region": "sinnoh",
+  "name": "Warrant",
+  "species": [
+   "Salamence",
+   "Mega Salamence"
+  ],
+  "trait": "Bring It In: its first hit on each new target cannot be survived by Sturdy or a Focus Sash",
+  "where": "Hunter J",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.plasma.regent",
+  "team": "plasma",
+  "region": "unova",
+  "name": "Regent",
+  "species": [
+   "Hydreigon"
+  ],
+  "trait": "Three Mouths: its moves that hit several targets do full damage to each",
+  "where": "Ghetsis's ace",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.plasma.speechwriter",
+  "team": "plasma",
+  "region": "unova",
+  "name": "The Speechwriter",
+  "species": [
+   "Cofagrigus"
+  ],
+  "trait": "Ghostwritten: the first status move used against it each battle is turned back on the user",
+  "where": "Ghetsis",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.plasma.permafrost",
+  "team": "plasma",
+  "region": "unova",
+  "name": "Permafrost",
+  "species": [
+   "Cryogonal"
+  ],
+  "trait": "Never Thaws: it cannot be burned, and Fire moves against it do not thaw frozen allies",
+  "where": "Zinzolin",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.plasma.proof",
+  "team": "plasma",
+  "region": "unova",
+  "name": "Proof",
+  "species": [
+   "Klinklang"
+  ],
+  "trait": "Reproducible: its stat boosts cannot be removed or copied",
+  "where": "Colress",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.plasma.p2",
+  "team": "plasma",
+  "region": "unova",
+  "name": "P2",
+  "species": [
+   "Genesect"
+  ],
+  "trait": "Drive Swap: its signature attack changes type each turn in a fixed cycle (Fire, Water, Electric, Ice), shown to both sides",
+  "where": "Colress's lab; Phase 4",
+  "obtainable": "Yes: if freed in Raid 2 it finds the player after the climax"
+ },
+ {
+  "id": "sv.plasma.likeness",
+  "team": "plasma",
+  "region": "unova",
+  "name": "The King's Likeness",
+  "species": [
+   "Zorua",
+   "Zoroark"
+  ],
+  "trait": "Wearing a Crown: enters looking like its trainer's strongest Pokémon; the first hit against it does nothing and breaks the illusion",
+  "where": "Raid 5; Phase 4",
+  "obtainable": "Yes: it goes home with N, or with the player if N is absent"
+ },
+ {
+  "id": "sv.plasma.sandking",
+  "team": "plasma",
+  "region": "unova",
+  "name": "Sandking",
+  "species": [
+   "Krookodile",
+   "Dreadodile"
+  ],
+  "trait": "Buried Road: in a sandstorm it cannot be hit by moves that missed last turn",
+  "where": "Sage Ryoku",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.plasma.icebreaker",
+  "team": "plasma",
+  "region": "unova",
+  "name": "Icebreaker",
+  "species": [
+   "Excadrill",
+   "Z-Mega Excadrill"
+  ],
+  "trait": "Hull Drill: its Ground and Steel moves ignore hail and ice hazards and break screens",
+  "where": "Sage Bronius",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.plasma.believer",
+  "team": "plasma",
+  "region": "unova",
+  "name": "Believer",
+  "species": [
+   "Conkeldurr",
+   "Z-Mega Conkeldurr"
+  ],
+  "trait": "Unshaken: it cannot be confused or made to flinch while Giallo has more Pokémon left than the player",
+  "where": "Sage Giallo",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.plasma.somebodys-purrloin",
+  "team": "plasma",
+  "region": "unova",
+  "name": "Somebody's Purrloin",
+  "species": [
+   "Purrloin",
+   "Liepard"
+  ],
+  "trait": "Remembers a Name: once per battle, if it would attack a Pokémon at full bond with its trainer, it hesitates and loses the turn",
+  "where": "Aldith",
+  "obtainable": "Returned: it belongs to Hugh's sister"
+ },
+ {
+  "id": "sv.plasma.dreamer",
+  "team": "plasma",
+  "region": "unova",
+  "name": "Dreamer",
+  "species": [
+   "Munna",
+   "Musharna"
+  ],
+  "trait": "Dream Mist: allies that are asleep can still act at half power",
+  "where": "The Dreamyard",
+  "obtainable": "Yes: it follows whoever stops the kicking"
+ },
+ {
+  "id": "sv.plasma.votive",
+  "team": "plasma",
+  "region": "unova",
+  "name": "Votive",
+  "species": [
+   "Chandelure",
+   "Spooky Chandelure"
+  ],
+  "trait": "Candle for the King: while it burns, its trainer's other Pokémon cannot be forced to switch",
+  "where": "The faithful at N's Castle",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.flare.sovereign",
+  "team": "flare",
+  "region": "kalos",
+  "name": "Sovereign",
+  "species": [
+   "Gyarados",
+   "Mega Gyarados"
+  ],
+  "trait": "Without Flaw: the first super-effective hit it takes each battle is treated as neutral",
+  "where": "Lysandre's ace",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.flare.pride",
+  "team": "flare",
+  "region": "kalos",
+  "name": "Pride",
+  "species": [
+   "Pyroar",
+   "Z-Mega Pyroar"
+  ],
+  "trait": "Looks Down: +1 Special Attack on entry if the Pokémon facing it is slower",
+  "where": "Lysandre",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.flare.prime-time",
+  "team": "flare",
+  "region": "kalos",
+  "name": "Prime Time",
+  "species": [
+   "Talonflame"
+  ],
+  "trait": "Live Feed: while Malva's On Air is active, its Fire moves have +1 priority",
+  "where": "Malva",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.flare.contrarian",
+  "team": "flare",
+  "region": "kalos",
+  "name": "Contrarian",
+  "species": [
+   "Malamar"
+  ],
+  "trait": "Inverse Lecture: once per battle it reverses every stat change on the field, both sides",
+  "where": "Xerosic",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.flare.stiletto",
+  "team": "flare",
+  "region": "kalos",
+  "name": "Stiletto",
+  "species": [
+   "Aegislash",
+   "Blade Aegislash"
+  ],
+  "trait": "Dressed to Kill: changing stance does not use its turn",
+  "where": "Celosia",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.flare.gargoyle",
+  "team": "flare",
+  "region": "kalos",
+  "name": "Gargoyle",
+  "species": [
+   "Druddigon"
+  ],
+  "trait": "Rough Cut: contact with it removes the attacker's held item for 2 turns",
+  "where": "Aliana",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.flare.ember-black",
+  "team": "flare",
+  "region": "kalos",
+  "name": "Ember-Black",
+  "species": [
+   "Charizard",
+   "Mega Charizard X"
+  ],
+  "trait": "Chosen Bond: its Mega Evolution needs no turn and no item slot; it fails if Alain doubts (see Raid 5)",
+  "where": "Alain",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.flare.mimi",
+  "team": "flare",
+  "region": "kalos",
+  "name": "Mimi",
+  "species": [
+   "Espurr",
+   "Meowstic"
+  ],
+  "trait": "Knows Her Voice: when it faces Essentia it reveals which of her Pokémon is borrowed",
+  "where": "Emma's Espurr, in the Lumiose alleys",
+  "obtainable": "Ally only: it is Emma's"
+ },
+ {
+  "id": "sv.flare.cavern-elder",
+  "team": "flare",
+  "region": "kalos",
+  "name": "The Elder of the Cavern",
+  "species": [
+   "Abomasnow",
+   "Mega Abomasnow"
+  ],
+  "trait": "Old Snow: hail it brings lasts until it leaves the field",
+  "where": "Frost Cavern, Raid 2",
+  "obtainable": "Yes: it gives an Abomasite and comes along if asked"
+ },
+ {
+  "id": "sv.flare.eternal-flower",
+  "team": "flare",
+  "region": "kalos",
+  "name": "The Eternal Flower",
+  "species": [
+   "Floette",
+   "Eternal Floette"
+  ],
+  "trait": "Three Thousand Years: once per battle it revives a fainted ally to 25% HP",
+  "where": "With AZ, at the very end",
+  "obtainable": "Yes: only if AZ reached Geosenge and the weapon was not sealed with him inside"
+ },
+ {
+  "id": "sv.flare.squishy",
+  "team": "flare",
+  "region": "kalos",
+  "name": "Squishy",
+  "species": [
+   "10% Zygarde",
+   "Zygarde",
+   "Complete Zygarde"
+  ],
+  "trait": "Order: the field cannot hold more than one weather, terrain or room effect while it is out; the oldest ends",
+  "where": "In the player's bag, uninvited",
+  "obtainable": "Ally only: it is not anyone's"
+ },
+ {
+  "id": "sv.skull.ya-boy",
+  "team": "skull",
+  "region": "alola",
+  "name": "Ya Boy",
+  "species": [
+   "Wimpod",
+   "Golisopod"
+  ],
+  "trait": "Back Again: when it retreats at half HP it may return on the next turn with +1 Attack, once per battle",
+  "where": "Guzma's ace",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.skull.big-sis",
+  "team": "skull",
+  "region": "alola",
+  "name": "Big Sis",
+  "species": [
+   "Salandit",
+   "Salazzle"
+  ],
+  "trait": "Looks After Her Own: each time an ally faints she gains +1 Special Attack and +1 Speed",
+  "where": "Plumeria's ace",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.skull.lil-g",
+  "team": "skull",
+  "region": "alola",
+  "name": "Li'l G",
+  "species": [
+   "Wimpod"
+  ],
+  "trait": "Runs, Comes Back: it flees a battle at half HP and returns at the end with an item it found",
+  "where": "Guzma's childhood bedroom",
+  "obtainable": "Yes: if nothing in the room is touched"
+ },
+ {
+  "id": "sv.skull.doorman",
+  "team": "skull",
+  "region": "alola",
+  "name": "The Doorman",
+  "species": [
+   "Mimikyu",
+   "Busted Mimikyu"
+  ],
+  "trait": "Two Coats: its disguise absorbs two hits where others absorb one",
+  "where": "The Shady House, Raid 1",
+  "obtainable": "Yes: it follows whoever knocks first"
+ },
+ {
+  "id": "sv.skull.the-hood",
+  "team": "skull",
+  "region": "alola",
+  "name": "The Hood",
+  "species": [
+   "Dartrix",
+   "Decidueye (Assassian)"
+  ],
+  "trait": "Takes from the Rich: when it knocks out a foe holding an item, the item goes to its trainer",
+  "where": "Po Town's rooftops",
+  "obtainable": "Yes: it joins whoever returns the Yungoos"
+ },
+ {
+  "id": "sv.skull.capn",
+  "team": "skull",
+  "region": "alola",
+  "name": "Cap'n",
+  "species": [
+   "Yungoos",
+   "Gumshoos"
+  ],
+  "trait": "Stakeout: +50% damage against a Pokémon that switched in this turn",
+  "where": "The Aether House",
+  "obtainable": "Returned: it belongs to a boy there"
+ },
+ {
+  "id": "sv.skull.landlord",
+  "team": "skull",
+  "region": "alola",
+  "name": "Landlord",
+  "species": [
+   "Alolan Meowth",
+   "Alolan Persian"
+  ],
+  "trait": "Rent Is Due: after each battle its trainer gains a little money from the loser, whoever wins",
+  "where": "Nanu",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.aether.madame",
+  "team": "aether",
+  "region": "alola",
+  "name": "Madame",
+  "species": [
+   "Clefable"
+  ],
+  "trait": "In Mother's Image: copies the stat boosts of Lusamine's last Pokémon to leave the field",
+  "where": "Lusamine",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.aether.embrace",
+  "team": "aether",
+  "region": "alola",
+  "name": "Embrace",
+  "species": [
+   "Bewear"
+  ],
+  "trait": "Won't Let Go: its contact moves stop the target switching out for 2 turns",
+  "where": "Lusamine",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.aether.null",
+  "team": "aether",
+  "region": "alola",
+  "name": "Null",
+  "species": [
+   "Type: Null",
+   "Silvally"
+  ],
+  "trait": "Memory Drive: changes type once per battle to resist the last move that hit it",
+  "where": "Gladion",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.aether.promotion",
+  "team": "aether",
+  "region": "alola",
+  "name": "Promotion",
+  "species": [
+   "Bruxish"
+  ],
+  "trait": "Senior Staff: its Psychic moves have +1 priority against a Pokémon of lower level",
+  "where": "Faba",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.aether.beans",
+  "team": "aether",
+  "region": "alola",
+  "name": "Beans",
+  "species": [
+   "Poipole",
+   "Naganadel"
+  ],
+  "trait": "From Elsewhere: immune to the Thin Light condition, and shares that with its side",
+  "where": "Zossie",
+  "obtainable": "Yes: she gives it to the player if asked nicely, and it is clear she had been hoping to be asked"
+ },
+ {
+  "id": "sv.aether.nebby",
+  "team": "aether",
+  "region": "alola",
+  "name": "Nebby",
+  "species": [
+   "Cosmog",
+   "Cosmoem",
+   "Solgaleo",
+   "Lunala"
+  ],
+  "trait": "Won't Stay in the Bag: at the start of a battle it may leave the bag and move one of the player's Pokémon out of danger, once",
+  "where": "With Lillie",
+  "obtainable": "Ally only: it is Lillie's, or its own"
+ },
+ {
+  "id": "sv.macro-cosmos.skyline",
+  "team": "macro-cosmos",
+  "region": "galar",
+  "name": "Skyline",
+  "species": [
+   "Duraludon",
+   "Gigantamax Duraludon"
+  ],
+  "trait": "Built to Last: when its Dynamax ends it keeps half of the extra HP",
+  "where": "Rose's ace",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.macro-cosmos.boardroom",
+  "team": "macro-cosmos",
+  "region": "galar",
+  "name": "Boardroom",
+  "species": [
+   "Perrserker"
+  ],
+  "trait": "Company Line: while it is on the field, its allies' Steel moves gain +20%",
+  "where": "Rose",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.macro-cosmos.foundry",
+  "team": "macro-cosmos",
+  "region": "galar",
+  "name": "Foundry",
+  "species": [
+   "Copperajah",
+   "Gigantamax Copperajah"
+  ],
+  "trait": "Heavy Industry: its contact moves lower the target's Speed by 1",
+  "where": "Rose",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.macro-cosmos.first-friend",
+  "team": "macro-cosmos",
+  "region": "galar",
+  "name": "First Friend",
+  "species": [
+   "Garbodor",
+   "Gigantamax Garbodor"
+  ],
+  "trait": "Never Thrown Away: once per battle it survives a knockout at 1 HP and gains +2 Defense",
+  "where": "Oleana's ace",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.macro-cosmos.decorum",
+  "team": "macro-cosmos",
+  "region": "galar",
+  "name": "Decorum",
+  "species": [
+   "Hatterene",
+   "Gigantamax Hatterene"
+  ],
+  "trait": "Silence, Please: it moves first against any Pokémon that used a sound move last turn",
+  "where": "Bede",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.macro-cosmos.sir-counterfeit",
+  "team": "macro-cosmos",
+  "region": "galar",
+  "name": "Sir Counterfeit",
+  "species": [
+   "Sirfetch’d"
+  ],
+  "trait": "By Right of Blood: its first attack each battle is always a critical hit; its second never is",
+  "where": "Sordward",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.macro-cosmos.honor-guard",
+  "team": "macro-cosmos",
+  "region": "galar",
+  "name": "The Honor Guard",
+  "species": [
+   "Falinks"
+  ],
+  "trait": "Close Ranks: takes 20% less damage for each of its trainer's Pokémon that has not yet fainted (up to 60%)",
+  "where": "Shielbert",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.macro-cosmos.cabbie",
+  "team": "macro-cosmos",
+  "region": "galar",
+  "name": "Cabbie",
+  "species": [
+   "Corviknight",
+   "Gigantamax Corviknight"
+  ],
+  "trait": "Fare's Fair: once per battle it carries a fainted ally off the field; that ally returns next battle at 25% HP",
+  "where": "Any Flying Taxi rank",
+  "obtainable": "Yes: it resigns from Macro Cosmos Airlines at world state 4 and will fly for a decent tip"
+ },
+ {
+  "id": "sv.yell.frontman",
+  "team": "yell",
+  "region": "galar",
+  "name": "Frontman",
+  "species": [
+   "Obstagoon"
+  ],
+  "trait": "No Encore: it cannot be made to repeat a move, and its blocking move cannot be broken through",
+  "where": "Piers's ace",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.yell.opening-act",
+  "team": "yell",
+  "region": "galar",
+  "name": "The Opening Act",
+  "species": [
+   "Toxel",
+   "Vine Riff"
+  ],
+  "trait": "Warm Up the Crowd: its first sound move raises the Speed of everything on its side",
+  "where": "Piers's band",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.yell.encore",
+  "team": "yell",
+  "region": "galar",
+  "name": "The Encore",
+  "species": [
+   "Toxel",
+   "Electric Oncore"
+  ],
+  "trait": "One More: once per battle, after it knocks out a foe, it acts again at once",
+  "where": "Piers's band",
+  "obtainable": "Yes: it follows the player out of the gig if they stay to the end"
+ },
+ {
+  "id": "sv.yell.hangry",
+  "team": "yell",
+  "region": "galar",
+  "name": "Hangry",
+  "species": [
+   "Morpeko",
+   "Hangry Morpeko"
+  ],
+  "trait": "Mood Swing: its signature move changes type with its mood each turn, and the mood is shown",
+  "where": "Marnie",
+  "obtainable": "Ally only: it is Marnie's"
+ },
+ {
+  "id": "sv.yell.banner",
+  "team": "yell",
+  "region": "galar",
+  "name": "Banner",
+  "species": [
+   "Galarian Zigzagoon",
+   "Galarian Linoone"
+  ],
+  "trait": "Flag Day: when it enters, its side's next cheer counts double",
+  "where": "Cheer Captain Gaz",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.star.segin-starmobile",
+  "team": "star",
+  "region": "paldea",
+  "name": "Segin Starmobile",
+  "species": [
+   "Revavroom"
+  ],
+  "trait": "Dark Engine: Dark type; lowers the foe's Attack on entry",
+  "where": "Giacomo, Raid 1",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.star.schedar-starmobile",
+  "team": "star",
+  "region": "paldea",
+  "name": "Schedar Starmobile",
+  "species": [
+   "Revavroom"
+  ],
+  "trait": "Fire Engine: Fire type; +1 Speed at the end of each turn",
+  "where": "Mela, Raid 2",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.star.navi-starmobile",
+  "team": "star",
+  "region": "paldea",
+  "name": "Navi Starmobile",
+  "species": [
+   "Revavroom"
+  ],
+  "trait": "Poison Engine: Poison type; scatters toxic spikes when hit by a physical move",
+  "where": "Atticus, Raid 3",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.star.ruchbah-starmobile",
+  "team": "star",
+  "region": "paldea",
+  "name": "Ruchbah Starmobile",
+  "species": [
+   "Revavroom"
+  ],
+  "trait": "Fairy Engine: Fairy type; sets a misty field on entry",
+  "where": "Ortega, Raid 4",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.star.caph-starmobile",
+  "team": "star",
+  "region": "paldea",
+  "name": "Caph Starmobile",
+  "species": [
+   "Revavroom"
+  ],
+  "trait": "Fighting Engine: Fighting type; +1 Defense each time it is hit",
+  "where": "Eri",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.star.neon-moon",
+  "team": "star",
+  "region": "paldea",
+  "name": "Neon Moon",
+  "species": [
+   "Eevee",
+   "Neon Moon"
+  ],
+  "trait": "Backdoor: once per battle it ignores the foe's protective move and screens",
+  "where": "Cassiopeia's hidden ace",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.star.pyro-spirit",
+  "team": "star",
+  "region": "paldea",
+  "name": "Pyro Spirit",
+  "species": [
+   "Eevee",
+   "Pyro Spirit"
+  ],
+  "trait": "Firewall: the first status move aimed at its side each battle fails",
+  "where": "Cassiopeia",
+  "obtainable": "No"
+ },
+ {
+  "id": "sv.star.amp",
+  "team": "star",
+  "region": "paldea",
+  "name": "Amp",
+  "species": [
+   "Wattrel",
+   "Kilowattrel",
+   "Megawattrel"
+  ],
+  "trait": "Bass Drop: every fourth turn its Electric moves hit both foes",
+  "where": "Giacomo's sound rig",
+  "obtainable": "Yes: it follows whoever fixes the speaker in Raid 1"
+ },
+ {
+  "id": "sv.star.old-pal",
+  "team": "star",
+  "region": "paldea",
+  "name": "Old Pal",
+  "species": [
+   "Mabosstiff"
+  ],
+  "trait": "Good Dog: when its trainer's last other Pokémon faints, it enters at once with +1 to all stats",
+  "where": "Arven",
+  "obtainable": "Ally only: it is Arven's"
+ },
+ {
+  "id": "sv.star.detention",
+  "team": "star",
+  "region": "paldea",
+  "name": "Detention",
+  "species": [
+   "Gimmighoul",
+   "Roaming Form Gimmighoul",
+   "Gholdengo"
+  ],
+  "trait": "Lost Property: after a won battle it finds one item the foe was holding",
+  "where": "Under a desk in the Old Wing",
+  "obtainable": "Yes: it climbs into the player's bag in Raid 5"
+ }
+]

@@ -1,0 +1,7 @@
+# Pokémon moments, batch 1
+
+**Player gets:** Pokémon-specific moments tied to a species, evolution line, type or group (catalog of 129: `pokemon-moments-catalog.md`, data in `src/data/pokemonMoments.json`). This batch builds two kinds. (1) "Failure Will (NOT) Be Tolerated": when the run would really end, a construct (Rotom, Magnezone, Golurk and others) has a 50% chance, once per run, to refuse: black screen, static, the voice lines, then its eyes open red with a flash and the theme fades in; it returns with 150% HP and Overcharged (all stats x2, every move on a one-turn cooldown) until the battle ends. (2) 28 last-stand moments: a fatal hit may be survived at 1 HP with a type/line/group bonus (Rock, Dragon, Ghost, Eevee line, babies, legendaries and so on).
+
+**Save:** no version bump. Once-per-run claims are stored in `run.story.flags` (`pm:<id>`), per-battle limits in `battle.storyEffects`. `overcharged` is an optional in-battle flag on a Pokémon (cleared when the battle ends). Rolls are stateless hashes of seed + moment + Pokémon + turn, so they never move any other roll.
+
+**Limits:** singles battles only (double battles do not run moments yet). The run-end revive does not fire while a checkpoint, Safety Net, VS Recorder, story loss, raid or event rule would catch the loss. Eye position in the scene is a fixed guess over the sprite. The other 100 moments are in the catalog as `disabled` until later batches. Audio is the director's own clips (see asset provenance).

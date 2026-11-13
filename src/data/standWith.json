@@ -1,0 +1,39 @@
+{
+  "joinRep": 30,
+  "standWithRep": 45,
+  "throneRep": 70,
+  "officersMajorityRep": 85,
+  "mercyRunnerAt": 3,
+  "shots": 2,
+  "codeNames": [
+    { "team": "rocket", "region": "kanto", "name": "Provisional Agent 000", "alias": "House Card", "givenBy": "Giovanni", "meaning": "A card the house keeps back. Useful, and not yet played." },
+    { "team": "rocket-returns", "region": "johto", "name": "Executive-in-Waiting", "alias": "Standby", "givenBy": "Archer", "meaning": "Archer is waiting for someone. Everyone under him waits too." },
+    { "team": "aqua", "region": "hoenn", "name": "Stowaway", "alias": "Stowaway", "givenBy": "Archie", "meaning": "You came aboard without asking, and he liked that." },
+    { "team": "magma", "region": "hoenn", "name": "Ember", "alias": "Ember", "givenBy": "Maxie", "meaning": "A small, measurable quantity of heat." },
+    { "team": "galactic", "region": "sinnoh", "name": "Probationer Ceres", "alias": "Ceres", "givenBy": "Cyrus", "meaning": "Commanders are planets. Ceres is not quite one." },
+    { "team": "plasma", "region": "unova", "name": "The Seventh Sage", "alias": "Seventh Sage", "givenBy": "Ghetsis", "meaning": "A seat that has stood empty since the Sages broke." },
+    { "team": "flare", "region": "kalos", "name": "The Guest of Honor", "alias": "Guest of Honor", "givenBy": "Lysandre", "meaning": "The one person he wants to save without charging." },
+    { "team": "skull", "region": "alola", "name": "Numbskull Number One", "alias": "Number One", "givenBy": "Guzma", "meaning": "It is the highest compliment he has." },
+    { "team": "aether", "region": "alola", "name": "The Deputy Director", "alias": "Deputy Director", "givenBy": "Lusamine", "meaning": "A white coat, and a door that locks behind you." },
+    { "team": "macro-cosmos", "region": "galar", "name": "Junior Executive, Future Planning", "alias": "Future Planning", "givenBy": "Rose", "meaning": "A department of one, invented for the player." },
+    { "team": "star", "region": "paldea", "name": "Fulu Squad", "alias": "Fulu", "givenBy": "Penny", "meaning": "The faintest star in the constellation. Still in it." }
+  ],
+  "ladder": [
+    { "rep": 30, "band": "Recognized", "rank": "Specialist", "hideout": "People stop talking when you come in.", "gives": ["The uniform", "The team shop", "Grunts stop challenging you"] },
+    { "rep": 45, "band": "Respected", "rank": "Lieutenant", "hideout": "People keep talking.", "gives": ["[Stand with them] unlocks", "A Grunt runner carries one item for you"] },
+    { "rep": 60, "band": "Trusted", "rank": "Commander", "hideout": "People ask you what you think.", "gives": ["You are told the real plan, not the memo", "One officer's signature tool can be borrowed per job"] },
+    { "rep": 70, "band": "Allied", "rank": "Commander, with the Leader's ear", "hideout": "The Leader's door is left open.", "gives": ["Take the Throne becomes possible", "The Leader asks you one honest question"] }
+  ],
+  "repChanges": {
+    "loyalty-triumph": 12, "loyalty-success": 8, "loyalty-partial": 4, "loyalty-failure": -5,
+    "team-mission": 8, "team-dialogue": 3, "sabotage-triumph": -20, "sabotage-success": -12, "sabotage-partial": -5, "sabotage-failure": 0,
+    "clean-job": 2, "cover-runner": 3, "officer-favour": 2, "lose-rival-team-ambush": 1, "win-authority-ambush": 3,
+    "turn-in-defector": 10, "warn-defector-found": -6, "warn-defector": 0, "refuse-order": -4, "free-team-shadow": -8, "keep-team-shadow": 2,
+    "alone-with-liaison": -2, "argue-with-liaison": 3
+  },
+  "verdicts": {
+    "rise": { "name": "Rise", "rank": "Executive", "text": "The team keeps you. You hold the post longer than their Executives did." },
+    "throne": { "name": "Take the Throne", "text": "You take the chair. The officers choose, and the first three orders are yours." },
+    "turn": { "name": "Turn", "text": "You break the plan from the inside. The team will remember it in every region after this one." }
+  }
+}

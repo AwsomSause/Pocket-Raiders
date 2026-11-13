@@ -16,8 +16,10 @@
 // after a hit (Static, Rough Skin), at the end of the turn (Speed Boost) and
 // when switching out (Regenerator).
 
+import { foresightBegin } from './foresight';
 import { CARE } from '../care/mods';
-import { shadowDamageMultiplier, shadowResists } from '../shadow';
+import { shadowDamageMultiplier } from '../shadow';
+import { shadowTurnPlan, shadow2Data } from '../shadow2';
 import { championsAuraStages, firstStrikeBonus } from '../trainerEvolution';
 import { freshDrama } from '../drama/schema';
 import { skillThrowFactor } from '../camp/schema';
@@ -29,6 +31,9 @@ import { catchProbability, resolveCatchRoll } from '../capture';
 import { styleProbability, styleProblem, type StyleInput } from '../captureStyles';
 import { applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem, lastStandItemId } from '../items';
 import { abilityOf, calcStats, createPokemon, getSpecies, maxHp } from '../pokemon';
+import { rallyStages } from './rally';
+import { HOUSE_WINS_STAGES, LIGHTS_OUT_ACCURACY, LIGHTS_OUT_TURNS, housePending, isHousePair, takeHousePending, traitDoubleEntry, traitDrill, traitFeedHeal, traitFoodKnocked, traitLightsOut, traitOverhears, traitPayout, traitSeatMessage, traitTakesBerry } from '../expansion/traits';
+import { ACCESSORY_TORN_MESSAGE, SPIRITLESS_MESSAGE, variantBlocksForcedSwitch, variantBlocksMind, variantBlocksStage, variantBlocksStatus, variantEndTurnLoss, variantAccessory, variantAccessoryTorn, variantCheer, variantEndTurnStages, variantGimmickTick, variantGadget, variantIncoming, variantItemMove, variantLosesTurn, variantNeverMisses, variantOnEntry, variantOutgoing, variantPriorityBonus, variantSnagRefuses, variantTagCall } from '../expansion/variantLines';
 import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
 import type { Rng } from '../rng';
 import { cooldownKey, hasBattleEffect, markBattleEffect } from '../story/ledger';
@@ -60,6 +65,7 @@ import { growthAccuracyMultiplier, growthDamageMultiplier, growthDefenseMultipli
 import { fieldPowerMultiplier, fieldBanners, conditionWeather, tickCondition } from '../overhaul/field';
 import { abilityPair, arenaReaction, crowdSees, flairState, phaseMoveSwap, shockWater } from './battleFlair';
 import { preBattleTrap } from './opponentAi';
+import { tier5Pick, type Tier5Option } from '../rivals/tier5';
 import { breakImmunity, counterBeats, counterClassOf, COUNTER_NAMES, reactionFor, stackableStatus, stackMultiplier, typeRulesOf } from './typeRules';
 import {
   ABSORB,
@@ -107,9 +113,12 @@ import { ARENA_IMMUNE, foeStake, aimAccuracy, arenaText, dealOffer, mindReader, 
 import { benchSupporter, addBleed, bleedDamage, causesBleed, curseMultiplier, resonanceMultiplier } from './w1Rules';
 import { sacrificeFor } from './sacrificeRule';
 import { berserkDue, berserkMove, isBerserk } from './berserk';
+import { momentContactPoison, momentDamageMult, spendMomentBoost, applyPendingMoments, fadeMomentBoosts, tryFaintMoments, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
+import type { MomentHooks } from '../moments/pokemonMoments';
 import { freshHyperBattle, rollHyper, type EnemyRage, type HyperContext, type HyperEligibility } from './hyper';
 import { applyTransformations, battleMove, battleTypes, endDynamax, maxMoveExtras, maxMoveTerrain, maxMoveWeather, stabMultiplier, teraPower, tickDynamax, transformProblem, zMoveFor, type TransformEvent, type TransformRequest, type TransformStepEvent } from './transform';
 import { hiddenPowerType } from '../ivs';
+import { fieldIndexes, trioSpots } from './triples';
 
 export type Side = 'player' | 'enemy';
 
@@ -130,6 +139,8 @@ export type BattleEvent =
   | { type: 'cured'; side: Side }
   /** Became confused; `confusion` is the "is confused!" check at the start of its move; `confusionEnd` snapped out. */
   | { type: 'confused'; side: Side }
+  /** A Pokémon moment (core/moments): `cinematic` false means it is told as a plain line; `scene` is the full-screen run-end revive. */
+  | { type: 'pmoment'; side: Side; uid: string; speciesId: string; id: string; name: string; tier: 'minor' | 'major' | 'landmark'; hpAfter: number; cinematic: boolean; scene: boolean; trigger: 'runEnd' | 'lethal' | 'faint' | 'start' | 'enter' | 'ally' | 'low' | 'ko' | 'super' | 'crit' | 'weather' | 'status' | 'rest' | 'catch' }
   | { type: 'confusion'; side: Side }
   | { type: 'confusionEnd'; side: Side }
   | { type: 'confusionHit'; side: Side; amount: number; hpAfter: number }
@@ -233,6 +244,8 @@ export type BattleEvent =
   | { type: 'focus'; side: Side; uid: string }
   /** Ally Switch: the two Pokémon on `side` traded spots. */
   | { type: 'allySwitch'; side: Side }
+  /** Triple battles: a Pokémon moved from one spot to another (the Shift command, or both sides' last Pokémon moving to the centre). */
+  | { type: 'shift'; side: Side; uid: string; from: number; to: number }
   | { type: 'item'; itemId: string; targetUid: string; message: string; hpAfter: number }
   | { type: 'ball'; itemId: string; shakes: number; caught: boolean }
   | Held.HeldEvent
@@ -257,10 +270,11 @@ export type PlayerAction =
   | { kind: 'double'; commands: (SlotCommand | null)[] };
 
 /** One Pokémon's command in a double battle, and which Pokémon its move is aimed at. */
-export type SlotAction = Exclude<PlayerAction, { kind: 'double' }>;
+export type SlotAction = Exclude<PlayerAction, { kind: 'double' }> | { kind: 'shift' };
 export interface SlotCommand {
   action: SlotAction;
-  target?: { side: Side; spot: 0 | 1 };
+  /** Spot 0 left, 1 right (doubles) or 0 left, 1 centre, 2 right (triples). */
+  target?: { side: Side; spot: 0 | 1 | 2 };
 }
 
 export interface Combatant {
@@ -316,6 +330,10 @@ export interface BattleContext {
   bondPartners?: (uid: string) => string[];
   /** Hyper moments for your Pokémon (none when absent). */
   hyper?: HyperContext;
+  /** Pokémon moments (Beta 0.6, core/moments); none when absent. */
+  moments?: MomentHooks;
+  /** Events queued by moments deep inside damage code; added to the turn's events when it ends. */
+  momentQueue?: BattleEvent[];
   /** Set during a turn once a Hyper moment has changed the battle (one per turn). */
   hyperUsed?: boolean;
   /** The same for the opposing side (its rage). */
@@ -375,6 +393,8 @@ export function createBattle(
     turn: 1,
     hype: 0,
     revivesUsed: 0,
+    healsUsed: 0,
+    enemyRevivesUsed: 0,
     hypeTurns: 0,
     hypeLoaded: false,
     activeIndex,
@@ -429,6 +449,8 @@ export interface EnemyBrain {
   party?: PokemonInstance[];
   /** Only a damage estimate is wanted (no strategic tweaks). */
   raw?: boolean;
+  /** Foresight Tax: the move the foe is about to use, known in advance (the foe's threat is that move alone). */
+  foresight?: string;
 }
 
 /** The Advanced AI view of one matchup (core/battle/aai.ts). */
@@ -463,7 +485,7 @@ function aaiView(brain: EnemyBrain, user: PokemonInstance, best: number): AaiVie
       if (threat === undefined) {
         const foeStages = battle ? (side === 'enemy' ? battle.playerStages : battle.enemyStages) : freshStages();
         const back: EnemyBrain = { content, ai: 1, target: user, stages: foeStages, battle, party: brain.party, side: side === 'enemy' ? 'player' : 'enemy', raw: true };
-        threat = Math.max(0, ...target.moves.filter((m) => m.pp > 0).map((m) => estimateDamage(back, target, m.id)));
+        threat = Math.max(0, ...target.moves.filter((m) => m.pp > 0 && (!brain.foresight || m.id === brain.foresight)).map((m) => estimateDamage(back, target, m.id)));
       }
       return threat;
     },
@@ -485,9 +507,47 @@ export function chooseEnemyMove(enemy: PokemonInstance, rng: Rng, brain?: EnemyB
   if (counter) return counter.i;
   if (brain && brain.ai > 0 && rng.chance(brain.ai)) {
     const scored = usable.map((x) => ({ i: x.i, score: moveValue(brain, enemy, x.m.id) }));
+    if (brain.battle?.rivalBrain?.tier === 5 && (brain.side ?? 'enemy') === 'enemy') return tier5Choose(enemy, scored, brain);
     return scored.reduce((best, x) => (x.score > best.score ? x : best)).i;
   }
   return rng.pick(usable).i;
+}
+
+/** Beta 0.6 R4: the tier-5 rival picks among the engine's own scores (core/rivals/tier5.ts). Draws no random number. */
+function tier5Choose(enemy: PokemonInstance, scored: { i: number; score: number }[], brain: EnemyBrain): number {
+  const battle = brain.battle!;
+  const { content, target } = brain;
+  const rb = battle.rivalBrain!;
+  const ownStats = calcStats(content, enemy);
+  const foeStats = calcStats(content, target);
+  const back: EnemyBrain = { content, ai: 1, target: enemy, stages: battle.playerStages, battle, party: brain.party, side: 'player', raw: true };
+  const foeBest = Math.max(0, ...target.moves.filter((m) => m.pp > 0).map((m) => estimateDamage(back, target, m.id)));
+  const bench = (brain.party ?? []).filter((m) => m.hp > 0 && m.uid !== target.uid);
+  const incoming = bench.length > 0 ? bench.reduce((b, m) => (m.hp / maxHp(content, m) > b.hp / maxHp(content, b) ? m : b)) : null;
+  const options: Tier5Option[] = scored.map((x) => {
+    const mv = content.moves.get(enemy.moves[x.i]!.id);
+    const fx = (mv?.effects ?? {}) as Record<string, unknown>;
+    return {
+      index: x.i,
+      score: x.score,
+      damage: estimateDamage(brain, enemy, enemy.moves[x.i]!.id),
+      priority: (mv?.priority ?? 0) > 0,
+      setup: mv?.category === 'status' && Boolean(fx.statChanges ?? fx.stages ?? fx.boost),
+      heal: Boolean(fx.heal),
+      weather: Boolean(fx.weather),
+      status: mv?.category === 'status' && !fx.heal,
+      sacrifice: Boolean(fx.userFaint),
+      switchDamage: incoming ? estimateDamage({ ...brain, target: incoming }, enemy, enemy.moves[x.i]!.id) : 0,
+    };
+  });
+  const enemyLeft = battle.enemyTeam.filter((m) => m.hp > 0 && m.uid !== enemy.uid).length;
+  const trickRoom = (battle.field.trickRoom ?? 0) > 0;
+  const ownFaster = trickRoom ? ownStats.spe < foeStats.spe : ownStats.spe > foeStats.spe;
+  const playerLeft = bench.length;
+  return tier5Pick({
+    brain: rb, turn: battle.turn, options, ownHp: enemy.hp, ownMaxHp: ownStats.hp, foeHp: target.hp, foeMaxHp: foeStats.hp, ownFaster, foeBestDamage: foeBest,
+    isAce: battle.enemyTeam[battle.enemyTeam.length - 1]?.uid === enemy.uid, ownReserves: enemyLeft, foeReserves: playerLeft, switchLikely: playerLeft > 0 && foeBest > 0 && options.some((o) => o.damage > 0) && rb.switchRate >= 0,
+  });
 }
 
 /** Average damage a move's score stands for (the level-based damage formula on the score, accuracy taken back out). */
@@ -616,6 +676,7 @@ export function switchProblem(ctx: Pick<BattleContext, 'battle' | 'party'> & Par
   if (!mon) return 'There is no Pokémon in that slot.';
   if (partyIndex === ctx.battle.activeIndex && !ctx.battle.needsSwitch) return 'That Pokémon is already in battle.';
   if (ctx.battle.eventRule?.noSwitch && !ctx.battle.needsSwitch) return 'Honor duel: no switching allowed!';
+  if (ctx.battle.eventRule?.noSwitchFirstTurn && ctx.battle.turn <= 1 && !ctx.battle.needsSwitch) return 'The Seal: no switching on the first turn!';
   if (ctx.setStyle && ctx.battle.kind === 'trainer' && !ctx.battle.needsSwitch) return 'Set style: no switching in trainer battles.';
   if (mon.hp <= 0) return 'That Pokémon has fainted.';
   const active = ctx.party[ctx.battle.activeIndex];
@@ -646,6 +707,8 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   if (action.kind === 'double' || battle.doubles) throw new Error('A double battle takes its turn in battle/doubles.ts');
   const events: BattleEvent[] = [];
   announceContent = content;
+  // Shadow II: the battle stream as this turn begins (read only), so the obey check matches what the player was shown.
+  const turnStartState = rng.state;
 
   if (battle.needsSwitch) {
     if (action.kind !== 'switch') throw new Error('Choose a Pokémon to send out');
@@ -673,6 +736,8 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   // X items and Dire Hit take effect when a Pokémon is first in battle.
   enterField(ctx, { side: 'player', mon: ctx.party[battle.activeIndex]!, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false });
   enterField(ctx, { side: 'enemy', mon: currentEnemy(battle), stages: battle.enemyStages, vol: battle.enemyVolatile, flinched: false });
+  // Pokémon moments (Beta 0.6): the lead's "battle start" moments, once per battle.
+  if (ctx.moments) tryStartMoments(ctx, { side: 'player', mon: ctx.party[battle.activeIndex]!, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, events);
   // Bench support (ideas W1): once per battle a well-liked benched Pokémon shouts a buff for the one in front.
   if (!battle.benchShout && !battle.raid && !battle.totem) {
     const support = benchSupporter(content, ctx.party, battle.activeIndex);
@@ -749,10 +814,17 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   const enemyForcedIndex = enemyForced ? enemy.mon.moves.findIndex((m) => m.id === enemyForced) : -1;
   const enemyChoice = choiceLock(battle, enemy.mon);
   const enemyChoiceIndex = enemyChoice ? enemy.mon.moves.findIndex((m) => m.id === enemyChoice) : -1;
+  const foresightMove = foresightBegin(battle, action.kind === 'move' && action.index >= 0 ? ctx.party[battle.activeIndex]?.moves[action.index]?.id ?? null : null, events);
   let enemyMoveIndex =
-    enemyForcedIndex >= 0 ? enemyForcedIndex : enemyChoiceIndex >= 0 ? enemyChoiceIndex : ctx.enemyPick !== undefined && ctx.enemyPick >= 0 && ctx.enemyPick < enemy.mon.moves.length ? ctx.enemyPick : chooseEnemyMove(enemy.mon, rng, { content, ai: battle.ai, target: ctx.party[battle.activeIndex]!, stages: battle.enemyStages, battle, party: ctx.party });
+    enemyForcedIndex >= 0 ? enemyForcedIndex : enemyChoiceIndex >= 0 ? enemyChoiceIndex : ctx.enemyPick !== undefined && ctx.enemyPick >= 0 && ctx.enemyPick < enemy.mon.moves.length ? ctx.enemyPick : chooseEnemyMove(enemy.mon, rng, { content, ai: foresightMove ? 1 : battle.ai, target: ctx.party[battle.activeIndex]!, stages: battle.enemyStages, battle, party: ctx.party, ...(foresightMove ? { foresight: foresightMove } : {}) });
   ctx.enemyPick = undefined;
   let enemyMove = resolveMove(content, enemy.mon, enemyMoveIndex);
+  // Beta 0.6 Translator: once per battle he overhears the foe and reveals its next move.
+  {
+    const heard = enemy.mon.hp > 0 && traitOverhears(battle.extra.traits, enemy.mon.uid) ? 'player' : ctx.party[battle.activeIndex]!.hp > 0 && traitOverhears(battle.extra.traits, ctx.party[battle.activeIndex]!.uid) ? 'enemy' : null;
+    const heardMove = heard === 'enemy' ? enemyMove?.id : action.kind === 'move' && action.index >= 0 ? ctx.party[battle.activeIndex]!.moves[action.index]?.id : undefined;
+    if (heard && heardMove) events.push({ type: 'raid', tone: 'info', text: `Translator: "${content.moves.get(heardMove)?.name ?? heardMove}!" is coming.` });
+  }
 
   // 1. Switching and items go before any move.
   if (action.kind === 'switch') {
@@ -856,13 +928,23 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
       order === 'player'
         ? [{ user: playerC, target: enemy, move: playerMove, slot: action.index }, { user: enemy, target: playerC, move: enemyMove, slot: enemyMoveIndex }]
         : [{ user: enemy, target: playerC, move: enemyMove, slot: enemyMoveIndex }, { user: playerC, target: enemy, move: playerMove, slot: action.index }];
-    actions.forEach((a, index) => {
+    actions.forEach((a0, index) => {
+      let a = a0;
       if (anyFainted(playerC, enemy) || a.user.mon.hp <= 0) return;
       if (a.user.side === 'enemy' && (enemyActed || loseFreeTurn(battle, events) || blissfulCalm(ctx, enemy, events))) return;
-      // A Sealed Shadow Pokémon sometimes ignores its trainer (it trusts no one yet).
-      if (a.user.side === 'player' && a.user.mon.shadow && shadowResists(content, a.user.mon, rng.int(0, 99))) {
-        events.push({ type: 'raid', tone: 'info', text: `${getSpecies(content, a.user.mon.speciesId).name} is lost in the haze and ignores your command!` });
-        return;
+      // Shadow II: a Veiled Pokémon may hesitate; a Gripped or Fallen one may use a move of its own choosing. Decided (and shown) before the turn.
+      if (a.user.side === 'player' && a.user.mon.shadow) {
+        const plan = shadowTurnPlan(a.user.mon, battle.turn, turnStartState);
+        const name = getSpecies(content, a.user.mon.speciesId).name;
+        if (plan.result === 'hesitate') {
+          events.push({ type: 'raid', tone: 'info', text: `${name} hesitates.` });
+          return;
+        }
+        if (plan.result === 'replace') {
+          const own = resolveMove(content, a.user.mon, plan.moveIndex);
+          events.push({ type: 'raid', tone: 'info', text: `The shadow tightens! ${name} acts on its own: ${own.name}.` });
+          a = { ...a, move: battleMove(content, battle, a.user.mon, own), slot: plan.moveIndex };
+        }
       }
       actWithRage(ctx, a.user, enemy, events, () => executeMove(ctx, a.user, a.target, a.move, a.slot, index === 0, events));
     });
@@ -936,6 +1018,10 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
 
   // Dynamax turns run down (and a fainted Dynamax Pokémon shrinks back).
   tickDynamax(content, battle, ctx.party, events as TransformStepEvent[]);
+  if (battle.extra.darkTurns > 0) {
+    battle.extra.darkTurns -= 1;
+    if (battle.extra.darkTurns === 0) events.push({ type: 'raid', tone: 'info', text: 'The lights come back on.' });
+  }
 
   // U-turn, Baton Pass and friends: the user leaves once the turn is over.
   if (!battle.outcome) resolvePivots(ctx, playerC, enemy, events);
@@ -945,12 +1031,18 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   settleFaints(ctx, events);
   // A trainer's next Pokémon saw its ally fall.
   if (!battle.outcome && battle.enemyIndex !== enemyBefore) warnRage(ctx, currentEnemy(battle), events);
+  if (ctx.moments) {
+    tryFaintMoments(ctx, events, events);
+    tryReactiveMoments(ctx, events, events);
+  }
+  fadeMomentBoosts(ctx, events);
   battle.turn += 1;
   eventRuleEnd(battle, events, ctx.party, ctx.content);
   if (raidTimeout && !battle.outcome) battle.outcome = 'lose';
   // A narrative fight that drags on ends as the story loss (the rival cannot be beaten, so it must end).
   if (battle.narrative && !battle.outcome && battle.turn > battle.narrative.maxTurns) battle.outcome = 'lose';
   applyHype(ctx, events);
+  if (ctx.momentQueue?.length) events.push(...ctx.momentQueue.splice(0));
   return events;
 }
 
@@ -1419,6 +1511,7 @@ export function itemProblem(ctx: Pick<BattleContext, 'content' | 'battle' | 'par
   if (itemCount(ctx.inventory, itemId) <= 0) return `You have no ${item.name} left.`;
   if (!item.usableInBattle) return `${item.name} can't be used in battle.`;
   if (item.category === 'revive' && (ctx.battle.revivesUsed ?? 0) >= ctx.content.balance.itemCaps.revivesPerBattle) return `You've already used ${ctx.content.balance.itemCaps.revivesPerBattle} revives this battle.`;
+  if (item.category === 'healing' && (ctx.battle.healsUsed ?? 0) >= ctx.content.balance.itemCaps.healsPerBattle) return `You've already used ${ctx.content.balance.itemCaps.healsPerBattle} healing items this battle.`;
   const noHeal = raidItemProblem(ctx.content, ctx.battle, item.category === 'healing' || item.category === 'revive');
   if (noHeal) return noHeal;
   if (item.effect.kind === 'catch') {
@@ -1443,6 +1536,11 @@ export function itemProblem(ctx: Pick<BattleContext, 'content' | 'battle' | 'par
     // Wild double battle: the ball has no clear target until only one wild Pokémon is left.
     const partner = ctx.battle.doubles ? ctx.battle.enemyTeam[ctx.battle.doubles.enemy.index] : undefined;
     if (partner && partner.hp > 0 && currentEnemy(ctx.battle).hp > 0) return "You can't aim a Poké Ball while two wild Pokémon are out!";
+    return null;
+  }
+  if (item.effect.kind === 'escape') {
+    const b = ctx.battle;
+    if (b.kind !== 'wild' || b.raid || b.totem || b.event || b.expedition || b.monRival) return "You can't slip away from this one!";
     return null;
   }
   if (item.effect.kind === 'itemDrop') {
@@ -1512,6 +1610,7 @@ function useItemInBattle(ctx: BattleContext, itemId: string, targetIndex: number
   const item = getItem(content, itemId);
   consumeItem(ctx.inventory, itemId);
   if (item.category === 'revive') battle.revivesUsed = (battle.revivesUsed ?? 0) + 1;
+  if (item.category === 'healing') battle.healsUsed = (battle.healsUsed ?? 0) + 1;
   if (item.effect.kind === 'catch' && item.effect.rule === 'snag') {
     // Snagging never fails. The Pokémon leaves the trainer's team and joins you when the battle is won.
     const foe = currentEnemy(battle);
@@ -1582,7 +1681,7 @@ function useItemInBattle(ctx: BattleContext, itemId: string, targetIndex: number
     events.push({ type: 'item', itemId, targetUid: target.uid, message, hpAfter: target.hp });
     return;
   }
-  const message = applyItemToPokemon(content, item, target, { healMultiplier: ctx.healMultiplier ?? 1 });
+  const message = applyItemToPokemon(content, item, target, { healMultiplier: (ctx.healMultiplier ?? 1) * (target.scars?.includes('soft-hearted') ? shadow2Data.softHeartedHeal : 1) });
   events.push({ type: 'item', itemId, targetUid: target.uid, message, hpAfter: target.hp });
 }
 
@@ -1640,6 +1739,9 @@ function switchIn(ctx: BattleContext, partyIndex: number, events: BattleEvent[])
   events.push({ type: 'switchIn', side: 'player', uid: mon.uid, speciesId: mon.speciesId, level: mon.level });
   battle.pendingEntry = [...(battle.pendingEntry ?? []).filter((side) => side !== 'player'), 'player'];
   enterField(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false });
+  // Pokémon moments (Beta 0.6): a "switch-in" moment for the Pokémon that just came out.
+  if (ctx.moments) tryEntryMoments(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, 'enter', events);
+  if (ctx.moments) applyPendingMoments(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, events);
 }
 
 /** Poké Doll: the wild Pokémon loses this turn (uses up one free turn). */
@@ -1808,6 +1910,14 @@ function allyCombatant(ctx: BattleContext, c: Combatant): Combatant | null {
   if (!d) return null;
   const { battle } = ctx;
   const team = c.side === 'player' ? ctx.party : battle.enemyTeam;
+  if (d.trio) {
+    // Triple battles: the first partner standing next to `c` (left first).
+    const spots = trioSpots(battle, c.side);
+    const at = spots.findIndex((s) => s.index >= 0 && team[s.index]?.uid === c.mon.uid);
+    if (at < 0) return null;
+    const near = spots.map((s, spot) => ({ s, spot })).find(({ s, spot }) => Math.abs(spot - at) === 1 && s.index >= 0 && (team[s.index]?.hp ?? 0) > 0);
+    return near ? { side: c.side, mon: team[near.s.index]!, stages: near.s.stages, vol: near.s.vol, flinched: false, protected: false } : null;
+  }
   const primary = c.side === 'player' ? { mon: ctx.party[battle.activeIndex], stages: battle.playerStages, vol: battle.playerVolatile } : { mon: battle.enemyTeam[battle.enemyIndex], stages: battle.enemyStages, vol: battle.enemyVolatile };
   const slot = d[c.side];
   const other = slot.index >= 0 ? { mon: team[slot.index], stages: slot.stages, vol: slot.vol } : null;
@@ -1827,6 +1937,16 @@ function benchedActives(ctx: BattleContext): { mon: PokemonInstance; vol: Volati
   const d = ctx.battle.doubles;
   if (!d) return [];
   const out: { mon: PokemonInstance; vol: Volatile }[] = [];
+  if (d.trio) {
+    for (const side of ['player', 'enemy'] as const) {
+      const team = side === 'player' ? ctx.party : ctx.battle.enemyTeam;
+      trioSpots(ctx.battle, side).forEach((s, spot) => {
+        const mon = s.index >= 0 ? team[s.index] : undefined;
+        if (spot !== d.trio!.at[side] && mon && mon.hp > 0) out.push({ mon, vol: s.vol });
+      });
+    }
+    return out;
+  }
   const p = d.player.index >= 0 ? ctx.party[d.player.index] : undefined;
   const e = d.enemy.index >= 0 ? ctx.battle.enemyTeam[d.enemy.index] : undefined;
   if (p && p.hp > 0) out.push({ mon: p, vol: d.player.vol });
@@ -1875,6 +1995,28 @@ function resolveEntries(ctx: BattleContext, events: BattleEvent[]): void {
   if (sides.length === 2 && speedOf(ctx, enemy) > speedOf(ctx, player)) sides.reverse();
   for (const { c } of sides) enterExtras(ctx, c, events);
   for (const { c } of sides) applyHazards(ctx, c, events);
+  for (const { c, other } of sides) {
+    // Beta 0.6 traits: Seat at the Table sweeps away the foe's boosts; a waiting House Wins bonus lands as the partner comes in.
+    const seat = c.mon.hp > 0 && other.mon.hp > 0 ? traitSeatMessage(ctx.battle.extra.traits, c.mon.uid) : null;
+    if (seat) {
+      events.push({ type: 'raid', tone: 'info', text: seat });
+      for (const stat of Object.keys(other.stages) as BoostStat[]) {
+        if (other.stages[stat] <= 0) continue;
+        events.push({ type: 'stat', side: other.side, stat, change: -other.stages[stat] });
+        other.stages[stat] = 0;
+      }
+    }
+    if (c.mon.hp > 0 && takeHousePending(ctx.battle.extra.traits, c.mon.uid)) {
+      events.push({ type: 'raid', tone: 'info', text: 'The House Wins.' });
+      for (const [stat, n] of Object.entries(HOUSE_WINS_STAGES) as [BoostStat, number][]) applyStageChange(ctx, c, stat, n, events);
+    }
+    // Tagged-Up (Alola): a foe coming in while the sprayer is out is called out and loses 1/16 HP, once each.
+    const call = c.mon.hp > 0 && other.mon.hp > 0 ? variantTagCall(ctx.battle.extra.variants, other.mon.uid, c.mon.uid, calcStats(ctx.content, c.mon).hp) : null;
+    if (call && call.loss > 0) {
+      events.push({ type: 'raid', tone: 'info', text: `${nameOf(ctx, c.mon)} is ${call.message}!` });
+      abilityHurt(ctx, c, call.loss, events);
+    }
+  }
   if (sides.some(({ c }) => c.mon.hp <= 0)) {
     // A hazard knocked it out as it came in.
     recordFaints(ctx, player, enemy, events);
@@ -1919,6 +2061,8 @@ function restoreMoves(ctx: BattleContext, mon: PokemonInstance): void {
   if (rec.kind === 'mimic') {
     const orig = rec.moves[rec.slot];
     if (orig && mon.moves[rec.slot]) mon.moves[rec.slot] = { ...orig };
+    // A move a Pokémon moment added to an empty slot goes away again.
+    else if (!orig && mon.moves[rec.slot]) mon.moves.splice(rec.slot, 1);
   } else mon.moves = rec.moves.map((m) => ({ ...m }));
   delete ctx.battle.extra.mimic[mon.uid];
 }
@@ -2108,6 +2252,10 @@ function entryAbility(ctx: BattleContext, c: Combatant, other: Combatant, events
   if (ability === 'intimidate' && other.mon.hp > 0) {
     announce(c, ability, events);
     const guard = abilityIn(ctx, other);
+    if (Held.hasHook(ctx, other.mon, other.side, 'coolShades')) {
+      events.push({ type: 'fail', side: other.side });
+      return;
+    }
     if (guard && INTIMIDATE_GUARD.has(guard)) {
       announce(other, guard, events);
       events.push({ type: 'fail', side: other.side });
@@ -2137,6 +2285,13 @@ function entryAbility(ctx: BattleContext, c: Combatant, other: Combatant, events
       ctx.battle.sideEffects[c.side].tailwind = Math.max(ctx.battle.sideEffects[c.side].tailwind, 2);
       events.push({ type: 'sideEffect', side: c.side, effect: 'tailwind', on: true });
     }
+    return;
+  }
+  if (ability === 'champions-fury') {
+    // Fighting Tournament champion: a random stat rises by two stages each time it is sent out.
+    const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
+    announce(c, ability, events);
+    applyStageChange(ctx, c, stats[ctx.rng.int(0, stats.length - 1)]!, 2, events);
     return;
   }
   if (ability === 'download' && other.mon.hp > 0) {
@@ -2271,13 +2426,15 @@ function speedOf(ctx: BattleContext, c: Combatant): number {
 function priorityOf(ctx: BattleContext, c: Combatant, move: Move): number {
   // §29 enraged after a rival's sacrifice: its next moves go first.
   const rage = ctx.battle.enraged;
-  return basePriority(ctx, c, move) + (rage && rage.left > 0 && c.side === 'player' && rage.uid === c.mon.uid ? rage.priority : 0);
+  return basePriority(ctx, c, move) + variantPriorityBonus(ctx.battle.extra.variants, c.mon.uid) + (rage && rage.left > 0 && c.side === 'player' && rage.uid === c.mon.uid ? rage.priority : 0) + momentPriority(ctx, c);
 }
 
 function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
   const ability = abilityIn(ctx, c);
   if (ability === 'prankster' && move.category === 'status') return move.priority + 1;
+  if (move.category === 'status' && !c.vol.movesUsed.includes(move.id) && Held.hasHook(ctx, c.mon, c.side, 'coolShades')) return move.priority + 1;
   if (ability === 'silent-cloak' && !c.vol.cloakUsed) return move.priority + 1;
+  if (ability === 'champions-fury' && !c.vol.furyUsed && move.category !== 'status') return move.priority + 1;
   if (ability === 'gale-wings' && move.type === 'flying' && c.mon.hp >= calcStats(ctx.content, c.mon).hp) return move.priority + 1;
   if (ability === 'triage' && (move.effects.heal || move.effects.drain)) return move.priority + 3;
   if (ability === 'mycelium-might' && move.category === 'status') return move.priority - 0.5;
@@ -2357,6 +2514,13 @@ function canAct(ctx: BattleContext, user: Combatant, events: BattleEvent[], move
       return false;
     }
   }
+  const lostTurn = variantLosesTurn(ctx.battle.extra.variants, user.mon.uid);
+  if (lostTurn) {
+    events.push({ type: 'raid', tone: 'info', text: lostTurn });
+    return false;
+  }
+  if (user.vol.infatuated && variantBlocksMind(ctx.battle.extra.variants, user.mon.uid)) user.vol.infatuated = false;
+  if (user.flinched && variantBlocksMind(ctx.battle.extra.variants, user.mon.uid)) user.flinched = false;
   if (user.vol.infatuated) {
     events.push({ type: 'selfState', side: user.side, state: 'inLove' });
     if (rng.chance(0.5)) {
@@ -2507,6 +2671,7 @@ function takeHp(
       chargedLanded = raid.charging;
     }
   }
+  amount = guardAmount(ctx, c, amount);
   let lost = Math.min(Math.max(0, amount), c.mon.hp);
   if (c.side === 'enemy' && lost > 0 && ctx.battle.raid && ctx.battle.raid.minionUid !== c.mon.uid) {
     const hero = ctx.party[ctx.battle.activeIndex]?.uid;
@@ -2532,6 +2697,15 @@ function takeHp(
       lost = c.mon.hp - (hyper.hpAfter > 0 && !hyper.revived ? hyper.hpAfter : 0);
       c.mon.hp = hyper.hpAfter;
       return { lost, lastStand: null, hyper: hyper.event, knockedDown: hyper.revived };
+    }
+  }
+  // Beta 0.6 Pokémon moments: a species, line, type or group may hang on (core/moments). A Hyper moment this turn comes first.
+  if (hit !== null && c.side === 'player' && lost > 0 && lost >= c.mon.hp) {
+    const left = tryLethalMoment(ctx, c);
+    if (left !== null) {
+      lost = c.mon.hp - left;
+      c.mon.hp = left;
+      return { lost, lastStand: null, hyper: null, knockedDown: false, stand: false };
     }
   }
   // Last Stand: a deeply bonded Pokémon may hold on at 1 HP (rare, once per battle; battle/spectacle.ts).
@@ -2976,6 +3150,7 @@ function executeMove(
     const stopped =
       (v.disabled && v.disabled.turns > 0 && v.disabled.moveId === move.id) ||
       (v.torment && v.lastMove === move.id) ||
+      (user.mon.overcharged && v.lastMove === move.id && user.mon.moves.filter((m) => m.pp > 0).length > 1) ||
       (v.taunt > 0 && move.category === 'status') ||
       (v.throat > 0 && move.flags.includes('sound')) ||
       (target.vol.imprison && target.mon.moves.some((m) => m.id === move.id));
@@ -3007,6 +3182,7 @@ function executeMove(
   }
   user.vol.destinyBond = false;
   user.vol.exposed = false;
+  user.vol.firstUseNow = !continuing && !user.vol.movesUsed.includes(move.id);
   if (!continuing && !user.vol.movesUsed.includes(move.id)) user.vol.movesUsed.push(move.id);
   if (!continuing && user.side === 'player') countMoveUse(user.mon, move.id);
   if (!continuing && user.side === 'player') {
@@ -3069,6 +3245,7 @@ function executeMove(
   else runMove(ctx, user, target, hitMove, movedFirst, events);
   user.vol.lastFailed = events.slice(mark).some((e) => (e.type === 'fail' || e.type === 'miss' || e.type === 'noEffect' || e.type === 'protected') && (e.type === 'noEffect' ? e.side === target.side : e.type === 'protected' ? e.side === target.side : e.side === user.side));
   if (abilityIn(ctx, user) === 'silent-cloak') user.vol.cloakUsed = true;
+  if (abilityIn(ctx, user) === 'champions-fury') user.vol.furyUsed = true;
   if (abilityIn(ctx, user) === 'encore-amp' && move.flags.includes('sound') && !user.vol.lastFailed) {
     user.vol.ampCount = user.vol.ampMove === move.id ? Math.min(3, user.vol.ampCount + 1) : 1;
     user.vol.ampMove = move.id;
@@ -3515,7 +3692,9 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     }
   }
   // Z-Moves go through Protect for a quarter of their damage (see the damage step).
-  const piercesProtect = move.flags.includes('contact') && (userAbility === 'unseen-fist' || userAbility === 'piercing-drill');
+  const drill = move.category !== 'status' && traitDrill(ctx.battle.extra.traits, user.mon.uid, move.type);
+  if (drill) events.push({ type: 'raid', tone: 'info', text: 'Drill Through: nothing stops it.' });
+  const piercesProtect = drill || (move.flags.includes('contact') && (userAbility === 'unseen-fist' || userAbility === 'piercing-drill'));
   if (targetsEnemy && move.category === 'status' && user !== target && foeAbility === 'magic-bounce' && userAbility !== 'magic-bounce' && !target.protected) {
     announce(target, 'magic-bounce', events);
     applyStatusMove(ctx, target, user, move, events);
@@ -3605,6 +3784,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (foeAbility && weather && WEATHER_EVASION[foeAbility]?.includes(weather)) accuracy *= 0.8;
       if (foeAbility === 'tangled-feet' && target.vol.confusion > 0) accuracy *= 0.5;
       if (ctx.battle.field.gravity > 0) accuracy *= 5 / 3;
+      if (ctx.battle.accuracyMult) accuracy *= ctx.battle.accuracyMult;
       if (target.side === 'player') accuracy /= evasionPerk(ctx.perks, getSpecies(content, target.mon.speciesId).types) * growthEvasionMultiplier(content.balance.overhaulGrowth, target.mon, target.mon.hp / Math.max(1, calcStats(content, target.mon).hp));
       if (foeAbility === 'wonder-skin' && move.category === 'status') accuracy = Math.min(accuracy, 0.5);
       // S157 Focus: a focused Pokémon aims a little better.
@@ -3613,6 +3793,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     accuracy = Math.min(1, accuracy);
   }
   if (noGuard || ((target.vol.exposed || target.vol.telekinesis > 0) && !fx.ohko && targetsEnemy)) accuracy = 1;
+  if (ctx.battle.extra.darkTurns > 0) accuracy *= LIGHTS_OUT_ACCURACY;
+  if (variantNeverMisses(ctx.battle.extra.variants, user.mon.uid, ctx.battle.weather?.id ?? null, move.type)) accuracy = 1;
   if (user.vol.sureHit && targetsEnemy) {
     accuracy = 1;
     user.vol.sureHit = false;
@@ -3669,7 +3851,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     events.push({ type: 'fail', side: user.side });
     return;
   }
-  if (targetsEnemy && move.category === 'status' && target.vol.substitute > 0 && user !== target && !move.effects.sideMove && !move.effects.field) {
+  if (targetsEnemy && move.category === 'status' && target.vol.substitute > 0 && user !== target && !move.effects.sideMove && !move.effects.field && !move.effects.haunting) {
     events.push({ type: 'fail', side: user.side });
     return;
   }
@@ -3763,7 +3945,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       const physical = fx.attackFrom === 'best' || fx.autoCategory || (fx.teraBlast && ctx.battle.transform.teraTypes[user.mon.uid]) ? userStats.atk >= userStats.spa : move.category === 'physical';
       const hitsDefense = (physical || fx.targetsDefense) !== (ctx.battle.extra.wonderRoom > 0);
       const userStatus = user.mon.status?.id;
-      crit = rng.chance(scaleCrit(Math.min(1, critChance(content.ruleset, move.critStage + Held.critStageBonus(ctx, user) + (userAbility === 'super-luck' ? 1 : 0) + (user.vol.focusEnergy ? 2 : 0)) * (user.side === 'player' ? critChancePerk(ctx.perks) : 1) + (user.side === 'player' ? critChanceBonusPerk(ctx.perks) : 0) + (user.side === 'enemy' && ctx.battle.eventRule?.beginnersLuck ? 0.2 : 0) + focusCrit(content, user.mon) + (user.side === 'player' ? growthCritBonus(content.balance.overhaulGrowth, user.mon) : 0) + (user.side === 'enemy' && classPassiveOf(content, ctx.battle)?.kind === 'crit' ? classPassiveOf(content, ctx.battle)!.amount : 0)), content.balance.critScaling.softCap, content.balance.critScaling.excessFactor));
+      crit = rng.chance(scaleCrit(Math.min(1, critChance(content.ruleset, move.critStage + Held.critStageBonus(ctx, user) + (userAbility === 'super-luck' ? 1 : 0) + (user.vol.focusEnergy ? 2 : 0) + (user.vol.momentCrit ?? 0)) * (user.side === 'player' ? critChancePerk(ctx.perks) : 1) + (user.side === 'player' ? critChanceBonusPerk(ctx.perks) : 0) + (user.side === 'enemy' && ctx.battle.eventRule?.beginnersLuck ? 0.2 : 0) + focusCrit(content, user.mon) + (user.side === 'player' ? growthCritBonus(content.balance.overhaulGrowth, user.mon) : 0) + (user.side === 'enemy' && classPassiveOf(content, ctx.battle)?.kind === 'crit' ? classPassiveOf(content, ctx.battle)!.amount : 0)), content.balance.critScaling.softCap, content.balance.critScaling.excessFactor));
       if (fx.alwaysCrit || user.vol.laserFocus) crit = true;
       if (userAbility === 'merciless' && target.mon.status?.id === 'psn') crit = true;
       if (foeAbility === 'battle-armor' || foeAbility === 'shell-armor' || ctx.battle.sideEffects[target.side].luckyChant > 0) crit = false;
@@ -3792,6 +3974,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (userAbility === 'sovereign-plumage' && moveType === 'flying') powerMult *= 1.2;
       if (userAbility === 'dynamo-down' && moveType === 'electric' && user.vol.dynamoBoost) { powerMult *= 1.5; user.vol.dynamoBoost = false; }
       if (userAbility === 'reckless' && fx.recoil) powerMult *= 1.2;
+      if (ctx.battle.eventRule?.typeBoost?.type === moveType) powerMult *= 1 + ctx.battle.eventRule.typeBoost.pct / 100;
       if (ctx.battle.field.waterSport > 0 && moveType === 'fire') powerMult *= 1 / 3;
       if (ctx.battle.field.mudSport > 0 && moveType === 'electric') powerMult *= 1 / 3;
       if (userAbility && TYPE_BOOST[userAbility] === moveType) powerMult *= 1.5;
@@ -3869,7 +4052,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if ((foeAbility === 'multiscale' || foeAbility === 'shadow-shield') && target.mon.hp >= targetStats.hp) final *= 0.5;
       if (!crit) {
         const tfx = ctx.battle.sideEffects[target.side];
-        if (tfx.auroraVeil > 0 || (hitsDefense ? tfx.reflect > 0 : tfx.lightScreen > 0)) final *= 0.5;
+        if (!drill && (tfx.auroraVeil > 0 || (hitsDefense ? tfx.reflect > 0 : tfx.lightScreen > 0))) final *= 0.5;
       }
       if (userAbility === 'tinted-lens' && effectiveness < 1) final *= 2;
       // S7 Old Style Surge (Remains of the Past): at half HP or less the partner's attack hits 1.5 times as hard, once.
@@ -3915,11 +4098,21 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
         final,
       });
       damage = applyTypeModifiers(ctx, user, target, effectiveness, damage, physical, moveType, move);
+      if (ctx.moments) { const boost = momentDamageMult(ctx, user, moveType, move.id); if (boost !== 1) damage = Math.max(1, Math.floor(damage * boost)); }
       const itemMultiplier =
         terrainMultiplier(ctx, user, target, moveType) *
         Held.attackMultiplier(ctx, user, target, move, moveType, effectiveness, events as Held.HeldEvent[]) *
         Held.defenseMultiplier(ctx, target, moveType, effectiveness, ctx.battle.kind === 'wild' && target.side === 'player', events as Held.HeldEvent[]);
       if (itemMultiplier !== 1) damage = Math.max(1, Math.floor(damage * itemMultiplier));
+      const loud = variantOutgoing(ctx.battle.extra.variants, user.mon.uid, move.flags);
+      if (loud !== 1) damage = Math.max(1, Math.floor(damage * loud));
+      const gadget = variantGadget(ctx.battle.extra.variants, target.mon.uid);
+      if (gadget) patchworkGadget(ctx, gadget, user, target, events);
+      const variantHit = variantIncoming(ctx.battle.extra.variants, target.mon.uid);
+      if (variantHit.multiplier !== 1) {
+        damage = Math.max(1, Math.floor(damage * variantHit.multiplier));
+        if (variantHit.message) events.push({ type: 'raid', tone: 'info', text: variantHit.message });
+      }
       if (target.protected && (move.flags.includes('zmove') || move.flags.includes('max') || userAbility === 'piercing-drill')) damage = Math.max(1, Math.floor(damage / 4));
     }
     damage = spectacleDamage(ctx, user, target, move, damage, events);
@@ -4032,9 +4225,43 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     ctx.battle.terrain = null;
   }
   Held.afterHit(ctx, user, target, move, moveType, effectiveness, dealt, movedFirst, events as Held.HeldEvent[]);
+  if (dealt > 0 && target.mon.hp > 0 && traitTakesBerry(ctx.battle.extra.traits, user.mon.uid, move.flags)) {
+    const berry = Object.keys(target.mon.held ?? {}).find((id) => ctx.content.catalog.get(id)?.family.startsWith('Berries'));
+    if (berry) {
+      const held = { ...target.mon.held };
+      if ((held[berry] ?? 0) > 1) held[berry] = held[berry]! - 1;
+      else delete held[berry];
+      target.mon.held = held;
+      user.mon.held = { ...user.mon.held, [berry]: (user.mon.held?.[berry] ?? 0) + 1 };
+      events.push({ type: 'raid', tone: 'info', text: 'Collections: it pockets the Berry.' });
+    }
+  }
+  if (dealt > 0) {
+    const food = traitFoodKnocked(ctx.battle.extra.traits, target.mon.uid, move.id);
+    if (food) events.push({ type: 'raid', tone: 'info', text: food });
+    const torn = variantItemMove(ctx.battle.extra.variants, target.mon.uid, move.id);
+    if (torn) events.push({ type: 'raid', tone: 'info', text: torn });
+    const accessory = variantAccessoryTorn(ctx.battle.extra.variants, target.mon.uid, move.id);
+    if (accessory) {
+      const held = { ...target.mon.held };
+      if ((held[accessory] ?? 0) > 1) held[accessory] = held[accessory]! - 1;
+      else delete held[accessory];
+      target.mon.held = held;
+      events.push({ type: 'raid', tone: 'info', text: ACCESSORY_TORN_MESSAGE });
+    }
+  }
+  const sprung = ctx.battle.extra.variants[target.mon.uid]?.flags;
+  if (sprung?.launch === 1) {
+    sprung.launch = 0;
+    if (target.mon.hp > 0) forceOut(ctx, target, events); // the spring throws it back to its Ball (wild Pokémon stay: no ball to go back to)
+  }
   if (dealt > 0 && target.mon.hp > 0 && user.mon.hp > 0) {
     if (Held.triggerOnce(ctx, target, 'redCard', events as Held.HeldEvent[])) forceOut(ctx, user, events);
     else if (Held.triggerOnce(ctx, target, 'ejectButton', events as Held.HeldEvent[])) target.vol.pivot = { baton: false };
+  }
+  if (target.mon.hp <= 0 && traitPayout(ctx.battle.extra.traits, user.mon.uid) && !ctx.battle.extra.payout) {
+    ctx.battle.extra.payout = true;
+    events.push({ type: 'raid', tone: 'info', text: 'Payout: the prize money doubles.' });
   }
   if (target.mon.hp <= 0) Held.onKnockout(ctx, user, events as Held.HeldEvent[]);
   if (fx.ohko && target.mon.hp <= 0) events.push({ type: 'ohko', side: target.side });
@@ -4123,7 +4350,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       tryInflictStatus(ctx, user, target, id, move, events, false);
     }
     if (fx.status && roll(fx.status.chance, fx.status.id)) tryInflictStatus(ctx, user, target, fx.status.id, move, events, false);
-    if (fx.flinchChance && movedFirst && roll(fx.flinchChance)) flinch(ctx, user, target);
+    if (fx.flinchFirstUse && user.vol.firstUseNow && movedFirst) flinch(ctx, user, target);
+    else if (fx.flinchChance && movedFirst && roll(fx.flinchChance)) flinch(ctx, user, target);
     else if (!fx.flinchChance && userAbility === 'stench' && movedFirst && rng.chance(0.1)) flinch(ctx, user, target);
     if (fx.confuse && roll(fx.confuse.chance, 'confusion')) tryConfuse(ctx, user, target, events, false);
   }
@@ -4178,6 +4406,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     announce(user, 'twin-maw', events);
     abilityHurt(ctx, target, Math.max(1, Math.floor(dealt * 0.25)), events);
   }
+  if (landed > 0 && ctx.moments) {
+    spendMomentBoost(ctx, user, moveType);
+    // Toxic Blood: a contact hit on the Pokémon poisons the attacker.
+    if (contact && user.mon.hp > 0 && momentContactPoison(ctx, target) && !user.mon.status && canGetStatus(ctx, target, user, 'psn')) tryInflictStatus(ctx, target, user, 'psn', undefined, events, false);
+  }
   if (landed > 0) afterHitAbilities(ctx, user, target, move, moveType, contact, anyCrit, events);
 }
 
@@ -4208,7 +4441,7 @@ function elementalReaction(ctx: BattleContext, user: Combatant, target: Combatan
 
 /** Makes the target flinch, unless Inner Focus stops it or it is Dynamaxed. */
 function flinch(ctx: BattleContext, user: Combatant, target: Combatant): void {
-  if (targetAbility(ctx, user, target) !== 'inner-focus' && !target.mon.dynamaxed) target.flinched = true;
+  if (targetAbility(ctx, user, target) !== 'inner-focus' && !target.mon.dynamaxed && !momentNoFlinch(ctx, target)) target.flinched = true;
 }
 
 /**
@@ -4412,17 +4645,34 @@ function afterHitAbilities(ctx: BattleContext, user: Combatant, target: Combatan
 /** Protecting moves that punish contact (King's Shield, Spiky Shield, ...), for the turn they are up. */
 const PROTECT_CONTACT = new WeakMap<Combatant, NonNullable<Move['effects']['protectContact']>>();
 
+/** Patchwork's gadget, once: a net (the attacker's Speed -2 for 2 turns), a smoke ball (both sides' accuracy -1 for 2 turns) or a spring (the holder is launched back to its Ball). */
+function patchworkGadget(ctx: BattleContext, g: { gadget: 'net' | 'smoke' | 'spring'; message: string }, user: Combatant, holder: Combatant, events: BattleEvent[]): void {
+  events.push({ type: 'raid', tone: 'info', text: g.message });
+  const timed = (c: Combatant, stat: BoostStat, amount: number, source?: Combatant): void => {
+    const before = c.stages[stat];
+    applyStageChange(ctx, c, stat, amount, events, source);
+    const moved = c.stages[stat] - before;
+    if (moved !== 0) ctx.battle.extra.variantTimed.push({ uid: c.mon.uid, stat, amount: moved, left: 2 });
+  };
+  if (g.gadget === 'net') timed(user, 'spe', -2, holder);
+  else if (g.gadget === 'smoke') { timed(user, 'acc', -1, holder); timed(holder, 'acc', -1); }
+  else ctx.battle.extra.variants[holder.mon.uid]!.flags.launch = 1; // the holder leaves once the hit is done
+}
+
 /** Roar, Whirlwind, Dragon Tail: a trainer's Pokémon is swapped for another; the player's for a random one. A wild Pokémon is unaffected. */
 function forceOut(ctx: BattleContext, target: Combatant, events: BattleEvent[]): void {
   const { battle, rng } = ctx;
   if (target.mon.hp <= 0 || target.mon.dynamaxed) return;
+  if (variantBlocksForcedSwitch(battle.extra.variants, target.mon.uid)) return;
   if (target.side === 'enemy') {
     if (battle.kind !== 'trainer') return;
-    const others = battle.enemyTeam.map((m, i) => ({ m, i })).filter(({ m, i }) => i !== battle.enemyIndex && i !== battle.doubles?.enemy.index && m.hp > 0);
+    const onField = fieldIndexes(battle, 'enemy');
+    const others = battle.enemyTeam.map((m, i) => ({ m, i })).filter(({ m, i }) => !onField.includes(i) && m.hp > 0);
     if (!others.length) return;
     swapInEnemy(ctx, rng.pick(others).i, events);
   } else {
-    const others = ctx.party.map((m, i) => ({ m, i })).filter(({ m, i }) => i !== battle.activeIndex && i !== battle.doubles?.player.index && m.hp > 0);
+    const onField = fieldIndexes(battle, 'player');
+    const others = ctx.party.map((m, i) => ({ m, i })).filter(({ m, i }) => !onField.includes(i) && m.hp > 0);
     if (!others.length) return;
     const outgoing = ctx.party[battle.activeIndex]!;
     events.push({ type: 'switchOut', side: 'player', uid: outgoing.uid });
@@ -4447,13 +4697,26 @@ function trainerAiTurn(ctx: BattleContext, enemy: Combatant, events: BattleEvent
   if (lent) events.push(...lent);
   const max = calcStats(content, mon).hp;
   const wealth = battle.trainerWealth;
-  const kit = wealth === undefined ? cfg.maxItems : WEALTH_POTIONS[wealth]!;
+  // Beta 0.6 B5: bosses, rivals, the Elite Four and Champions get the player's budget: 10 heals + 6 revives.
+  const bossy = Boolean(battle.trainer?.leaderId || battle.rival);
+  const caps = content.balance.itemCaps;
+  const kit = bossy ? Math.max(wealth === undefined ? cfg.maxItems : WEALTH_POTIONS[wealth]!, caps.healsPerBattle) : wealth === undefined ? cfg.maxItems : WEALTH_POTIONS[wealth]!;
   if (battle.enemyItemsUsed < kit && mon.hp / max < cfg.healBelow) {
     const gain = Math.min(max - mon.hp, Math.floor(max * (wealth === undefined ? cfg.healFraction : WEALTH_HEAL[wealth]!)));
     if (gain > 0) {
       battle.enemyItemsUsed += 1;
       mon.hp += gain;
       events.push({ type: 'item', itemId: 'hyper-potion', targetUid: mon.uid, message: `The trainer used a Hyper Potion on ${getSpecies(content, mon.speciesId).name}!`, hpAfter: mon.hp });
+      return true;
+    }
+  }
+  if (bossy && (battle.enemyRevivesUsed ?? 0) < caps.revivesPerBattle) {
+    // Revive the strongest fallen teammate once the team is down to its last two; never on a full team.
+    const fallen = battle.enemyTeam.filter((m) => m.hp <= 0).sort((a, b) => b.level - a.level)[0];
+    if (fallen && battle.enemyTeam.filter((m) => m.hp > 0).length <= 2) {
+      battle.enemyRevivesUsed = (battle.enemyRevivesUsed ?? 0) + 1;
+      fallen.hp = Math.max(1, Math.floor(calcStats(content, fallen).hp * 0.5));
+      events.push({ type: 'item', itemId: 'revive', targetUid: fallen.uid, message: `The trainer used a Revive on ${getSpecies(content, fallen.speciesId).name}!`, hpAfter: fallen.hp });
       return true;
     }
   }
@@ -4467,7 +4730,10 @@ function trainerAiTurn(ctx: BattleContext, enemy: Combatant, events: BattleEvent
   if (guard.kos > 0 && (battle.trainer?.leaderId || battle.rival) && battle.sweep && battle.sweep.kos >= guard.kos && battle.sweep.braced !== mon.uid && ctx.party.filter((p) => p.hp > 0).length > 1) {
     battle.sweep = { ...battle.sweep, braced: mon.uid, used: battle.sweep.used + 1 };
     events.push(say('enemy', 'rally', `${getSpecies(content, mon.speciesId).name} steels itself to stop the winning streak!`, mon.uid));
-    for (const stat of guard.stats) applyStageChange(ctx, enemy, stat, guard.stages, events);
+    for (const stat of guard.stats) {
+      const gain = rallyStages(guard, battle.sweep.kos, enemy.stages[stat]);
+      if (gain > 0) applyStageChange(ctx, enemy, stat, gain, events);
+    }
   }
   if (battle.enemySwitches >= cfg.maxSwitches || enemy.vol.turnsOut < 1 || enemy.vol.trapped || enemy.vol.bound > 0) return false;
   if ((mon.friendship ?? 0) >= 230 && !(battle.enemyMoments ??= []).includes(`refuse:${mon.uid}`) && mon.hp / max >= 0.2) {
@@ -4617,7 +4883,7 @@ function disrupt(ctx: BattleContext, user: Combatant, target: Combatant, kind: N
       target.vol.torment = true;
       break;
     case 'taunt':
-      if (target.vol.taunt > 0) return fail();
+      if (target.vol.taunt > 0 || variantBlocksMind(ctx.battle.extra.variants, target.mon.uid)) return fail();
       target.vol.taunt = 3;
       if (Held.triggerOnce(ctx, target, 'mentalHerb', events as Held.HeldEvent[])) {
         target.vol.taunt = 0;
@@ -4677,6 +4943,42 @@ function endTurnMon(ctx: BattleContext, c: Combatant, foe: Combatant, events: Ba
     if (c.vol.nightmare && c.mon.status?.id !== 'slp') c.vol.nightmare = false;
     if (c.vol.nightmare) abilityHurt(ctx, c, Math.max(1, Math.floor(max / 4)), events);
     if (c.vol.cursed) abilityHurt(ctx, c, Math.max(1, Math.floor(max / 4)), events);
+    const overclock = variantEndTurnStages(ctx.battle.extra.variants, c.mon.uid);
+    if (overclock.message) {
+      events.push({ type: 'raid', tone: 'info', text: overclock.message });
+      for (const [stat, n] of Object.entries(overclock.stages) as [BoostStat, number][]) c.stages[stat] = Math.max(-6, c.stages[stat] + n);
+    }
+    for (const t of ctx.battle.extra.variantTimed.filter((x) => x.uid === c.mon.uid)) {
+      t.left -= 1;
+      if (t.left <= 0) c.stages[t.stat] = Math.max(-6, Math.min(6, c.stages[t.stat] - t.amount));
+    }
+    ctx.battle.extra.variantTimed = ctx.battle.extra.variantTimed.filter((x) => x.left > 0);
+    const feed = traitFeedHeal(ctx.battle.extra.traits, c.mon.uid, max);
+    if (feed > 0 && c.mon.hp < max) {
+      c.mon.hp = Math.min(max, c.mon.hp + feed);
+      events.push({ type: 'raid', tone: 'info', text: 'Fed and Paid: it eats well.' });
+      events.push({ type: 'heal', side: c.side, amount: feed, hpAfter: c.mon.hp });
+    }
+    const gim = variantGimmickTick(ctx.battle.extra.variants, c.mon.uid);
+    if (gim.endDynamax) endDynamax(ctx.content, ctx.battle, c.side, c.mon, events as TransformStepEvent[]);
+    if (gim.endTera) {
+      delete ctx.battle.transform.mechanics[c.mon.uid];
+      delete ctx.battle.transform.teraTypes[c.mon.uid];
+      if (gim.message) events.push({ type: 'raid', tone: 'info', text: gim.message });
+      applyStageChange(ctx, c, 'spe', -1, events);
+    }
+    const cheer = variantCheer(ctx.battle.extra.variants, c.mon.uid);
+    if (cheer) {
+      events.push({ type: 'raid', tone: 'info', text: 'The stands cheer.' });
+      applyStageChange(ctx, c, 'spe', cheer, events);
+    }
+    const refusal = variantSnagRefuses(ctx.battle.extra.variants, c.mon.uid, `${ctx.battle.turn}:${ctx.rng.state.a}`);
+    if (refusal) events.push({ type: 'raid', tone: 'info', text: refusal });
+    const variantLoss = variantEndTurnLoss(ctx.battle.extra.variants, c.mon.uid, max);
+    if (variantLoss.loss > 0) {
+      if (variantLoss.message) events.push({ type: 'raid', tone: 'info', text: variantLoss.message });
+      abilityHurt(ctx, c, variantLoss.loss, events);
+    }
     if (c.vol.saltCure) {
       const t = battleTypes(ctx.content, ctx.battle, c.mon);
       abilityHurt(ctx, c, Math.max(1, Math.floor(max / (t.includes('water') || t.includes('steel') ? 4 : 8))), events);
@@ -4732,6 +5034,15 @@ function endTurnMon(ctx: BattleContext, c: Combatant, foe: Combatant, events: Ba
     }
     if (c.vol.yawn > 0 && --c.vol.yawn === 0 && !c.mon.status) {
       tryInflictStatus(ctx, foe, c, 'slp', undefined, events, false);
+    }
+    if (c.vol.haunted > 0 && c.mon.hp > 0) {
+      // Haunted: odd turns lower a random stat, even turns roll confusion; the cycle repeats until it switches out.
+      const turn = c.vol.haunted++;
+      if (turn % 2 === 1) {
+        const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
+        const down = stats.filter((st) => c.stages[st] > -6);
+        if (down.length) applyStageChange(ctx, c, down[ctx.rng.int(0, down.length - 1)]!, -1, events);
+      } else tryConfuse(ctx, foe, c, events, false);
     }
     if (c.vol.perish > 0) {
       c.vol.perish -= 1;
@@ -5100,6 +5411,17 @@ function applyStateEffects(ctx: BattleContext, user: Combatant, target: Combatan
 /** Healing Wish / Lunar Dance and a passed Substitute take effect on the Pokémon that comes in. */
 function enterExtras(ctx: BattleContext, c: Combatant, events: BattleEvent[]): void {
   const ex = ctx.battle.extra;
+  if (ex.variants[c.mon.uid] && c.mon.hp > 0) {
+    // Beta 0.6 variant lines: entry stage changes and announcement.
+    const entry = variantOnEntry(ex.variants, c.mon.uid, ctx.battle.weather?.id ?? null);
+    for (const [stat, n] of Object.entries(entry.stages) as [BoostStat, number][]) c.stages[stat] = Math.max(-6, Math.min(6, c.stages[stat] + n));
+    if (entry.message) events.push({ type: 'raid', tone: 'info', text: entry.message });
+    const accessory = variantAccessory(ex.variants, c.mon.uid);
+    if (accessory) {
+      c.mon.held = { ...c.mon.held, [accessory]: (c.mon.held?.[accessory] ?? 0) + 1 };
+      events.push({ type: 'raid', tone: 'info', text: `It wears ${ctx.content.catalog.get(accessory)?.name ?? accessory}.` });
+    }
+  }
   const wish = ex.healingWish[c.side];
   if (wish !== 'none' && c.mon.hp > 0) {
     ex.healingWish[c.side] = 'none';
@@ -5216,7 +5538,7 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
     return;
   }
   if (fx.attract) {
-    if (target.vol.infatuated || !oppositeGender(content, user.mon, target.mon) || abilityIn(ctx, target) === 'oblivious' || Held.statusBlocked(ctx, target, 'infatuation')) {
+    if (target.vol.infatuated || variantBlocksMind(ctx.battle.extra.variants, target.mon.uid) || !oppositeGender(content, user.mon, target.mon) || abilityIn(ctx, target) === 'oblivious' || Held.statusBlocked(ctx, target, 'infatuation')) {
       if (abilityIn(ctx, target) === 'oblivious') announce(target, 'oblivious', events);
       return void events.push({ type: 'fail', side: user.side });
     }
@@ -5463,6 +5785,27 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
       }
     }
     events.push(any ? { type: 'selfState', side: user.side, state: 'perishSong' } : { type: 'fail', side: user.side });
+    return;
+  }
+  if (fx.haunting) {
+    // Haunting: four stage-one Ghost spirits each strike once (power 25, through Substitute), then the foe is Haunted.
+    if (user.vol.prevMove === move.id || target.mon.hp <= 0) {
+      events.push({ type: 'fail', side: user.side });
+      return;
+    }
+    const stats = calcStats(ctx.content, user.mon);
+    const foeStats = calcStats(ctx.content, target.mon);
+    const eff = typeEffectiveness(ctx.content.typeChart, 'ghost', getSpecies(ctx.content, target.mon.speciesId).types);
+    const base = Math.floor(((2 * user.mon.level) / 5 + 2) * 25 * (stats.spa / Math.max(1, foeStats.spd)) / 50) + 2;
+    const one = eff === 0 ? 0 : Math.max(1, Math.floor(base * eff));
+    for (let i = 0; i < 4 && target.mon.hp > 0; i++) {
+      const { lost } = takeHp(ctx, target, one);
+      events.push({ type: 'damage', side: target.side, amount: lost, hpAfter: target.mon.hp, effectiveness: eff, crit: false });
+    }
+    if (target.mon.hp > 0 && target.vol.haunted === 0) {
+      target.vol.haunted = 1;
+      events.push({ type: 'selfState', side: target.side, state: 'haunted' });
+    }
     return;
   }
   if (fx.yawn) {
@@ -5780,6 +6123,7 @@ function tryConfuse(ctx: BattleContext, source: Combatant, target: Combatant, ev
 /** Whether `target` can get this status from `source` (types, abilities such as Limber, Leaf Guard in sun). */
 function canGetStatus(ctx: BattleContext, source: Combatant, target: Combatant, status: StatusId, move?: Move): boolean {
   if (target.mon.status || target.mon.hp <= 0) return false;
+  if (variantBlocksStatus(ctx.battle.extra.variants, target.mon.uid)) return false;
   if (status === 'slp' && (source.vol.uproar > 0 || target.vol.uproar > 0 || (source === target ? false : false))) return false;
   const corrosive = status === 'psn' && abilityIn(ctx, source) === 'corrosion' && source !== target;
   if (!corrosive && isStatusImmune(status, getSpecies(ctx.content, target.mon.speciesId).types, move)) return false;
@@ -5849,6 +6193,10 @@ function tryInflictStatus(
     events.push(say(target.side, 'bleed', `${nameOf(ctx, target.mon)}'s ${status === 'brn' ? 'burn' : 'poison'} got worse! (x${now + 1})`, target.mon.uid));
     return true;
   }
+  if (source !== target && variantBlocksStatus(ctx.battle.extra.variants, target.mon.uid)) {
+    if (announceFailure) events.push({ type: 'fail', side: target.side });
+    return false;
+  }
   const blocker = target.mon.status ? null : statusAbilityBlock(ctx, source, target, status);
   const corrosive = status === 'psn' && abilityIn(ctx, source) === 'corrosion' && source !== target;
   if (target.mon.status || (!corrosive && isStatusImmune(status, types, move)) || blocker || Held.statusBlocked(ctx, target, status) || terrainBlocksStatus(ctx, target, status) || (source.side !== target.side && ctx.battle.sideEffects[target.side].safeguard > 0)) {
@@ -5895,6 +6243,10 @@ function changeStage(ctx: BattleContext, user: Combatant, recipient: Combatant, 
  * change and Contrary reverses it.
  */
 function applyStageChange(ctx: BattleContext, c: Combatant, stat: BoostStat, stages: number, events: BattleEvent[], source?: Combatant): boolean {
+  if (variantBlocksStage(ctx.battle.extra.variants, c.mon.uid, stages, Boolean(source && source.side !== c.side))) {
+    events.push({ type: 'raid', tone: 'info', text: SPIRITLESS_MESSAGE });
+    return false;
+  }
   const ability = source ? targetAbility(ctx, source, c) : abilityIn(ctx, c);
   if (source && stages < 0 && source.side !== c.side && Held.hasHook(ctx, c.mon, c.side, 'clearAmulet')) {
     events.push({ type: 'held', side: c.side, itemId: 'clear-amulet', what: 'guard' });
@@ -5934,6 +6286,16 @@ function applyStageChange(ctx: BattleContext, c: Combatant, stat: BoostStat, sta
   c.stages[stat] = after;
   if (stages < 0) c.vol.loweredThisTurn = true;
   events.push({ type: 'stat', side: c.side, stat, change: after - before });
+  {
+    // Beta 0.6 Double Entry: once per battle the foe copies a stat change it sees.
+    const foe = c.side === 'player' ? activeCombatants(ctx).enemy : activeCombatants(ctx).player;
+    if (foe.mon.hp > 0 && traitDoubleEntry(ctx.battle.extra.traits, foe.mon.uid)) {
+      events.push({ type: 'raid', tone: 'info', text: 'Double Entry: it copies the change.' });
+      const fb = foe.stages[stat];
+      foe.stages[stat] = clampStage(fb + (after - before));
+      if (foe.stages[stat] !== fb) events.push({ type: 'stat', side: foe.side, stat, change: foe.stages[stat] - fb });
+    }
+  }
   if (source && after < before && source.side !== c.side && Held.triggerOnce(ctx, c, 'ejectPack', events as Held.HeldEvent[])) c.vol.pivot = { baton: false };
   if (after > before && abilityIn(ctx, c) === 'adaptive-plating' && c.mon.speciesId.startsWith('cataggron')) {
     // Adaptive Plating: a rise in Attack or Sp. Atk means Attack Forme; Defense or Sp. Def, Defence Forme (the last rise wins).
@@ -6213,6 +6575,22 @@ function recordFaints(ctx: BattleContext, player: Combatant, enemy: Combatant, e
       }
     }
     events.push({ type: 'faint', side: c.side, uid: c.mon.uid, participants });
+    // Beta 0.6 traits: Lights Out darkens the field; the other of the House pair is lifted.
+    if (traitLightsOut(ctx.battle.extra.traits, c.mon.uid)) {
+      ctx.battle.extra.darkTurns = LIGHTS_OUT_TURNS;
+      events.push({ type: 'raid', tone: 'warn', text: 'Lights Out: the field goes dark.' });
+    }
+    if (isHousePair(ctx.battle.extra.traits, c.mon.uid)) {
+      const team = c.side === 'enemy' ? ctx.battle.enemyTeam : ctx.party;
+      for (const mate of team) {
+        if (mate.uid === c.mon.uid || mate.hp <= 0 || !isHousePair(ctx.battle.extra.traits, mate.uid)) continue;
+        const out = c.side === 'enemy' ? currentEnemy(ctx.battle).uid === mate.uid : ctx.party[ctx.battle.activeIndex]?.uid === mate.uid;
+        if (!out) { housePending(ctx.battle.extra.traits, mate.uid); continue; }
+        events.push({ type: 'raid', tone: 'info', text: 'The House Wins.' });
+        const mateC = c.side === 'enemy' ? activeCombatants(ctx).enemy : activeCombatants(ctx).player;
+        for (const [stat, n] of Object.entries(HOUSE_WINS_STAGES) as [BoostStat, number][]) applyStageChange(ctx, mateC, stat, n, events);
+      }
+    }
     spectacleFaint(ctx, c.side, c.mon.uid, events);
     if (c.side === 'enemy' && player.mon.uid === ctx.party[ctx.battle.activeIndex]?.uid) friendlyFinish(ctx, player.mon, events);
     if (c.side === 'enemy' && player.mon.hp > 0) ctx.battle.sweep = { uid: player.mon.uid, kos: (ctx.battle.sweep?.uid === player.mon.uid ? ctx.battle.sweep.kos : 0) + 1, used: ctx.battle.sweep?.used ?? 0, ...(ctx.battle.sweep?.braced ? { braced: ctx.battle.sweep.braced } : {}) };
@@ -6227,6 +6605,15 @@ function recordFaints(ctx: BattleContext, player: Combatant, enemy: Combatant, e
 function settleFaints(ctx: BattleContext, events: BattleEvent[]): void {
   const { battle } = ctx;
   const enemy = currentEnemy(battle);
+  // Flight North (Beta 0.6 Vermilion): when the lone Bug-type drops under a quarter of its HP, a shiny copy of it arrives and knocks the foe out, once. No random numbers.
+  if (battle.eventRule?.shinyRescue && !battle.storyEffects.includes('shiny-rescue') && enemy.hp > 0) {
+    const hero = ctx.party[battle.activeIndex];
+    if (hero && hero.hp > 0 && hero.hp * 4 < calcStats(ctx.content, hero).hp) {
+      battle.storyEffects.push('shiny-rescue');
+      events.push({ type: 'raid', tone: 'phase', text: `A shiny ${nameOf(ctx, hero)} swoops in and knocks out ${getSpecies(ctx.content, enemy.speciesId).name} with one move!` });
+      enemy.hp = 0;
+    }
+  }
   if (enemy.hp <= 0) {
     const next = battle.enemyTeam.findIndex((m, i) => i > battle.enemyIndex && m.hp > 0);
     if (next < 0) {
@@ -6273,9 +6660,18 @@ function settleFaints(ctx: BattleContext, events: BattleEvent[]): void {
     active.status = null;
     events.push({ type: 'raid', tone: 'phase', text: `${nameOf(ctx, active)} gets back up! Pinch hitter!` });
   }
+  if (active.hp <= 0 && battle.eventRule?.ghostRescue && !battle.storyEffects.includes('ghost-rescue')) {
+    // Sabrina's Labyrinth: the ghost calls every other ghost; they strike the foe down and give your body back.
+    battle.storyEffects.push('ghost-rescue');
+    active.hp = 1;
+    active.status = null;
+    for (const foe of battle.enemyTeam) foe.hp = 0;
+    events.push({ type: 'raid', tone: 'phase', text: `${nameOf(ctx, active)} calls out! Every ghost in the Labyrinth answers and swarms the foe!` });
+    battle.outcome = 'win';
+  }
   if (active.hp <= 0) {
     if (ctx.party.some((p) => p.hp > 0)) battle.needsSwitch = true;
-    else battle.outcome = 'lose';
+    else if (!tryRunEndMoment(ctx, events)) battle.outcome = 'lose';
   }
   // The trainer's next Pokémon's entry ability (after the player's replacement, if one is needed).
   resolveEntries(ctx, events);

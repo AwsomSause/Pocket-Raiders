@@ -1,0 +1,6580 @@
+{
+ "events": [
+  {
+   "id": "xr.fe-44",
+   "name": "The Road Is Closed",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A Rocket barricade across the road: \"Closed for inventory.\" The detour is long, and the grunts have not seen you yet.",
+   "choices": [
+    {
+     "label": "Take the long way round",
+     "success": {
+      "text": "It costs you an hour and a bit of nerve, nothing else.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Break the barricade",
+     "success": {
+      "text": "Two grunts come out of the van.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 2,
+       "name": "Rocket Barricade",
+       "classId": "roughneck",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "evil",
+         "heat": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Pay the \"inventory fee\" (₽600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "The barricade lifts. The receipt says INSURANCE.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -600
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-45",
+   "name": "The Shop Is Taken",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "The Poké Mart has a Rocket sign over the door and half its shelves bare. A grunt behind the counter: \"New management.\"",
+   "choices": [
+    {
+     "label": "Buy the leftovers (₽300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "A few Potions at triple the sign price. It is still a shop.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the shop back",
+     "success": {
+      "text": "The grunt calls for a friend.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rocket Clerk",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "super-potion",
+         "count": 2
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You find the owner out back, who points you to the next town's shop.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-46",
+   "name": "Blackout",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#0c0c14",
+    "effect": "none"
+   },
+   "intro": "The lights go out across the block. A voice on a loudspeaker: \"Power is a privilege. Accuracy is, too.\" Your Pokémon will fight at a disadvantage in the dark: moves miss more often tonight.",
+   "choices": [
+    {
+     "label": "Wait for dawn at the Center",
+     "success": {
+      "text": "You sit out the dark. The power is back by morning and your party is rested.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "rest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push on in the dark",
+     "success": {
+      "text": "Accuracy is down 10% in this fight. It is announced, and you can still back out.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rocket Lineman",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "evil",
+         "heat": 1
+        },
+        {
+         "kind": "item",
+         "id": "smoke-ball"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Find the breaker",
+     "success": {
+      "text": "You trace the cable to a grunt's van and pull the plug. The lights come back, and so does their patience.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-47",
+   "name": "Requisition",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A grunt with a clipboard is \"requisitioning\" a Pokémon Center's supplies: bandages, Potions, a cot. The nurse looks at you.",
+   "choices": [
+    {
+     "label": "Stand beside the nurse",
+     "success": {
+      "text": "The Requisition Squad does not take it well.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rocket Requisition",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "full-heal",
+         "count": 2
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Hand over ₽500",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "The clipboard gets its tick. The nurse keeps her cots.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       }
+      ]
+     }
+    },
+    {
+     "label": "Slip away quietly",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-48",
+   "name": "The Leader's Announcement",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#18121c",
+    "effect": "none"
+   },
+   "intro": "Every screen in town shows the same face. \"Citizens, from tonight the Ledger is simply how things are done.\" The crowd goes quiet. Nothing else happens, and there is nothing to fight.",
+   "choices": [
+    {
+     "label": "Listen to the end",
+     "success": {
+      "text": "You learn what the Ledger now covers, and who is nervous about it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ledger-announced",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-49",
+   "name": "Checkpoint",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "Two grunts and a folding table: \"Papers.\" Everyone ahead of you is being let through for a small fee.",
+   "choices": [
+    {
+     "label": "Show the Gym badges instead",
+     "requires": [
+      {
+       "kind": "badges",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "\"Fine. Go.\" They do not look at what they are waving through.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight your way through",
+     "success": {
+      "text": "The table goes over.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 2,
+       "name": "Checkpoint Guard",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "evil",
+         "heat": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Pay the toll (₽400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "The table is moved an inch.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-50",
+   "name": "The Poached Meadow",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "The tall grass is flattened in neat rows. A trapper is loading cages into a truck with a red R on the side.",
+   "choices": [
+    {
+     "label": "Release the cages",
+     "success": {
+      "text": "The trapper does not give up the key.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rocket Trapper",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 3
+        },
+        {
+         "kind": "item",
+         "id": "great-ball",
+         "count": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Follow the truck's tracks",
+     "success": {
+      "text": "You mark where the truck stops. It helps the next person who cares.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "poach-route-marked",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Report it to the Ranger",
+     "success": {
+      "text": "The Ranger takes the note and thanks you.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-51",
+   "name": "Supply Line",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A convoy of three vans, one lead grunt. They are ferrying the supplies that keep the Ledger funded. A win here would make the world a little easier.",
+   "choices": [
+    {
+     "label": "Stop the convoy",
+     "success": {
+      "text": "Three fights in a row, no healing between them. A win turns the Ledger back one step.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Convoy Driver",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "track",
+         "input": "raidSuccess"
+        },
+        {
+         "kind": "evil",
+         "heat": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Slow it down (₽300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "A few well-placed nails in a tire. The convoy is late, not stopped.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it pass",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-60",
+   "name": "What the Baker Heard",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A baker slides you a warm roll. \"Heard the shop on Elm is paying 'insurance' now. For what? Nobody says.\"",
+   "choices": [
+    {
+     "label": "Ask her to say more",
+     "success": {
+      "text": "She tells you which shop, and when the Collector comes by.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "baker-tip",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy another roll (₽80)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 80
+      }
+     ],
+     "success": {
+      "text": "It is a good roll. Your party shares it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -80
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thank her and go",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-61",
+   "name": "The Queue",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A queue around the block for a Center that opens two hours a night. People have brought chairs.",
+   "choices": [
+    {
+     "label": "Give up your place to someone with a sick Pokémon",
+     "success": {
+      "text": "A woman thanks you three times. Your party does not mind the wait.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait your turn",
+     "success": {
+      "text": "Two hours later, a rested party.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk past",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-62",
+   "name": "The Back-Door Shop",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A shopkeeper waves you into a stockroom. \"The front door is watched. Here, it's the old prices. Quick.\"",
+   "choices": [
+    {
+     "label": "Buy a bundle (₽500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "Potions and a ball, at honest prices.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 3
+       },
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell him you will not be a customer",
+     "success": {
+      "text": "He shrugs. \"Then you were never here.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-63",
+   "name": "Black-Label",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "The prize counter at the Game Corner has new labels: BLACK. A boy stares at a plush he can no longer afford.",
+   "choices": [
+    {
+     "label": "Buy it for him (₽400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "He hugs it and will not stop thanking you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the counter who made the new labels",
+     "success": {
+      "text": "The counter goes quiet. You write it down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "black-label-asked",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Move on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-64",
+   "name": "The Street That Left",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 4
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "Half a street of shutters, a notice taped to each: GONE WITH THE EXPORT. A boy sits on a step holding a Poké Ball that nobody will answer.",
+   "choices": [
+    {
+     "label": "Sit with him",
+     "success": {
+      "text": "He tells you what his Pokémon was like. It is a long story, and a good one.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave a few Potions",
+     "success": {
+      "text": "He takes them with both hands.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "potion"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-65",
+   "name": "Under New Management",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A restaurant has a new sign: UNDER NEW MANAGEMENT. The old owner is washing the windows anyway.",
+   "choices": [
+    {
+     "label": "Ask what changed",
+     "success": {
+      "text": "\"The menu. The prices. Who I am allowed to serve.\" He gives you a note for the next town.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "management-note",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Order a meal (₽200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "The food is fine. The silence is not.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-66",
+   "name": "The Rocket Advert",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "Every screen in the plaza runs a jingle: \"Team Rocket: Insuring Your Peace of Mind.\" People hum it without noticing.",
+   "choices": [
+    {
+     "label": "Tear down the poster",
+     "success": {
+      "text": "A grunt notices. You have a head start.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Study the advert",
+     "success": {
+      "text": "You catch the number at the bottom. It is a tip line.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "advert-number",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ignore it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-67",
+   "name": "A Letter Home",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A woman asks if you can carry a letter to her sister in the next town. Post is \"slow\" these days.",
+   "choices": [
+    {
+     "label": "Carry it",
+     "success": {
+      "text": "You will remember the name on the envelope.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "letter-carried",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline politely",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-68",
+   "name": "The Closed Gym Door",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A dojo is shuttered. A black belt sweeps the step anyway. \"My students stopped coming. Somebody is telling them it is not safe.\"",
+   "choices": [
+    {
+     "label": "Spar with him",
+     "success": {
+      "text": "A friendly bout. He teaches you something about breathing.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Promise to tell the town it is safe",
+     "success": {
+      "text": "You do, at the next stop. The town thinks about it.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "town-reassured",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave him to it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-69",
+   "name": "Name It Out Loud",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 5
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#14141c",
+    "effect": "none"
+   },
+   "intro": "Everyone in the square knows what is wrong and nobody says it. A child asks you, loudly, what the Ledger is.",
+   "choices": [
+    {
+     "label": "Tell her the truth, plainly",
+     "success": {
+      "text": "The square goes still, and then a few people nod. It is not much. It is a start.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "track",
+        "input": "raidSuccess"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Change the subject",
+     "success": {
+      "text": "She frowns. You walk on.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-52",
+   "name": "An Officer With a Name",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "extendedCut"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A woman in a pressed uniform stops you. \"I am Officer Hale of the team's planning office. I do not usually leave my desk, and I would like to be done quickly.\"",
+   "choices": [
+    {
+     "label": "Hear her out",
+     "success": {
+      "text": "She offers a trade: leave the next shipment alone and she will leave you alone. You do not answer yet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "officer-hale-met",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle her",
+     "success": {
+      "text": "A Lieutenant's party, no more.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Officer Hale",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "officer-hale-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Excuse yourself",
+     "success": {
+      "text": "\"A pity,\" she says, and means it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-53",
+   "name": "The Familiar Face",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "extendedCut"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A man in a team uniform is not wearing his hat right. You know him from somewhere. He knows you too. \"I took this job after the factory closed.\"",
+   "choices": [
+    {
+     "label": "Tell him he does not have to stay",
+     "success": {
+      "text": "He looks at the ground. \"Where would I go?\" You tell him about the next town, and who is hiring.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "whatif-face-turned",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle him",
+     "success": {
+      "text": "He fights like someone who would rather not.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Familiar Grunt",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "whatif-face-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "evil",
+         "heat": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Pretend you do not know him",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-54",
+   "name": "Handler and Hound",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "extendedCut"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A Handler walks a big, quiet Pokémon on a short lead. It looks at you, once. \"This is a trained line,\" she says. \"Do not make me prove it.\"",
+   "choices": [
+    {
+     "label": "Ask about the Pokémon",
+     "success": {
+      "text": "She tells you more than she meant to: how it is trained and what it will not do. You write it down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "handler-line-learned",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 6
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle the Handler",
+     "success": {
+      "text": "The Handler and her Pokémon, announced before the first move.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Handler",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "handler-line-learned",
+         "amount": 1
+        },
+        {
+         "kind": "evil",
+         "heat": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back away slowly",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-55",
+   "name": "The Inside Man Appears",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "extendedCut"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A grunt keeps falling behind his patrol and looking at you. When the others turn a corner he says it fast: \"I am on your side. I cannot say more.\"",
+   "choices": [
+    {
+     "label": "Trust him",
+     "success": {
+      "text": "He slips you a note and walks off. It is a time and a door.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "insideman-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "insideman-note",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Test him with a battle",
+     "success": {
+      "text": "He loses on purpose. You are not sure whether that is better or worse.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Inside Man",
+       "classId": "roughneck",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "insideman-met",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Do not trust anyone in that uniform",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-56",
+   "name": "The Inside Man Warns",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "extendedCut"
+    },
+    {
+     "kind": "flag",
+     "key": "insideman-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "The Inside Man catches your sleeve. \"Tonight the Collectors are out in force. Do not go by the main road.\"",
+   "choices": [
+    {
+     "label": "Take the back way",
+     "success": {
+      "text": "You avoid a patrol and an awkward conversation.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": -2
+       },
+       {
+        "kind": "flag",
+        "key": "insideman-warned",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go by the main road anyway",
+     "success": {
+      "text": "The patrol is waiting, exactly as he said.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 2,
+       "name": "Night Patrol",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "evil",
+         "heat": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-57",
+   "name": "The Inside Man Is Caught",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "extendedCut"
+    },
+    {
+     "kind": "flag",
+     "key": "insideman-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "Two lieutenants are walking your Inside Man down an alley, hands on his shoulders.",
+   "choices": [
+    {
+     "label": "Step in",
+     "success": {
+      "text": "You get him free, and a promise to keep quiet.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Escort Lieutenant",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "insideman-saved",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Create a distraction (₽400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "A dropped crate of balls. He runs. You pay for the crate.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "flag",
+        "key": "insideman-saved",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look away",
+     "success": {
+      "text": "You hear nothing more from him.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "insideman-lost",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-58",
+   "name": "The Runner",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "extendedCut"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A kid runs past with a satchel and does not stop. He drops one thing as he turns the corner: an envelope with no name. Nothing chases him. Nothing needs to.",
+   "choices": [
+    {
+     "label": "Pick it up",
+     "success": {
+      "text": "A hand-drawn map. One building is circled twice.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "runner-map",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it where it fell",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-59",
+   "name": "The Honor Guard",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "extendedCut"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "Four black-clad guards stand in a square outside a district gate. They salute you, crisply. \"Orders are orders.\"",
+   "choices": [
+    {
+     "label": "Battle them",
+     "success": {
+      "text": "A tough fight; one district is easier to hold if you win.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 2,
+       "name": "Honor Guard",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "district-held",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Talk them down",
+     "requires": [
+      {
+       "kind": "attribute",
+       "key": "charisma",
+       "atLeast": 20
+      }
+     ],
+     "success": {
+      "text": "One of them lowers his hand. The gate stays open for you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "district-held",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go around",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-70",
+   "name": "A Tag Removed",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A Pokémon wears a black tag on its ear, plainly. A volunteer with a pair of snips is working her way along a fence of cages.",
+   "choices": [
+    {
+     "label": "Help her",
+     "success": {
+      "text": "One tag comes off; the Pokémon walks out of the cage and does not look back.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "tag-removed",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the tag instead",
+     "success": {
+      "text": "A line number and a lot code. You write them down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tag-read",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-71",
+   "name": "A Trait Overheard",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "Two grunts argue about whose Pokémon is the better \"line\". One brags about its signature trait and how nothing can stop it.",
+   "choices": [
+    {
+     "label": "Listen carefully",
+     "success": {
+      "text": "You catch the trait and its one weakness.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "trait-overheard",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Interrupt with a challenge",
+     "success": {
+      "text": "They both turn on you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 2,
+       "name": "Bragging Grunt",
+       "classId": "roughneck",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "trait-overheard",
+         "amount": 1
+        },
+        {
+         "kind": "evil",
+         "heat": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-72",
+   "name": "One Left Behind",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A hideout has been cleared in a hurry. One Pokémon is still in the corner, tagged, shivering, unclaimed.",
+   "choices": [
+    {
+     "label": "Take it with you",
+     "success": {
+      "text": "It joins you for the road. It is wary, but it follows.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [],
+        "levelBonus": -2,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for its trainer",
+     "success": {
+      "text": "Nobody comes. You leave water and a note.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-73",
+   "name": "One Returned",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A grunt in civilian clothes stands outside a Center holding a ball in both hands. \"I took this from a trainer. It never worked right for me. Do you know whose it is?\"",
+   "choices": [
+    {
+     "label": "Take it and find the owner",
+     "success": {
+      "text": "You carry it to the next town. A girl is waiting. She cries.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell him to hand it in himself",
+     "success": {
+      "text": "He nods. He goes in.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-74",
+   "name": "A Signature, Seen",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "On a rooftop across the street, a Pokémon you do not know practises one move, over and over. The glow before it hits is unmistakable.",
+   "choices": [
+    {
+     "label": "Watch from cover",
+     "success": {
+      "text": "You learn the glow and the warning that comes before it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "signature-seen",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-75",
+   "name": "The Stolen Egg",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A grunt is carrying a warm egg wrapped in a jacket. He sees you and runs.",
+   "choices": [
+    {
+     "label": "Give chase",
+     "success": {
+      "text": "He trips on a root and the egg rolls free.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Egg Thief",
+       "classId": "roughneck",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "egg",
+         "species": [],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "left": 3,
+         "unit": "battle"
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let him go",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-76",
+   "name": "Training Yard",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A fenced yard where recruits train their Pokémon. A drill sergeant waves you in. \"Free spar, no tricks. Nobody keeps score.\"",
+   "choices": [
+    {
+     "label": "Spar for the fun of it",
+     "success": {
+      "text": "A hard hour. Your lead comes away sharper.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch from the fence",
+     "success": {
+      "text": "You pick up a trick or two.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-77",
+   "name": "A Name on a Crate",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A stack of crates, each stencilled with a name and a number. One of the names is the same as a Pokémon you once lost.",
+   "choices": [
+    {
+     "label": "Look closer",
+     "success": {
+      "text": "The number matches an entry in a ledger you have heard about.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "crate-name-found",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-78",
+   "name": "The Grateful One",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A Pokémon you helped earlier turns up on a ledge, a little thinner and a little braver. It brings you something it found.",
+   "choices": [
+    {
+     "label": "Accept the gift",
+     "success": {
+      "text": "A berry and a long look. It stays near for a while.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "sitrus-berry"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thank it and let it go",
+     "success": {
+      "text": "It trots off, satisfied.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-79",
+   "name": "The Signature Move, Rehearsed",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "extendedCut"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#18121c",
+    "effect": "none"
+   },
+   "intro": "From a roof you watch the finale's own Apex rehearse its signature move, with an engineer calling the warning line. You can read both from here.",
+   "choices": [
+    {
+     "label": "Memorise the warning line",
+     "success": {
+      "text": "You now know what it says, and what it means.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "apex-warning-learned",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 6
+       }
+      ]
+     }
+    },
+    {
+     "label": "Mark one part of the move",
+     "success": {
+      "text": "You note the part that matters most: it is where the engineer's eyes go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "apex-part-marked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-60",
+   "name": "They Have Come for One of Yours",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "hasShadow"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#241028",
+    "effect": "none"
+   },
+   "intro": "A whistle, three times, from the roof. Two grunts step out with a transport case: \"That one belongs to the team. We have come to collect.\" This is the Reclaim attempt, announced before it begins.",
+   "choices": [
+    {
+     "label": "Battle to keep it",
+     "success": {
+      "text": "Announced: a win ends the Reclaim. A loss follows the standard defeat rule.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 2,
+       "name": "Reclaim Squad",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "reclaim-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Pay them off (₽800)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 800
+      }
+     ],
+     "success": {
+      "text": "They take the money and leave. They will be back, quieter.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -800
+       },
+       {
+        "kind": "evil",
+        "heat": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Slip away before they close the street",
+     "success": {
+      "text": "You lose the whistle in a crowd. They lose your trail.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-61",
+   "name": "The Surge",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "hasShadow"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1c1030",
+    "effect": "none"
+   },
+   "intro": "A transmitter on a pole starts to hum, and your Shadow Pokémon looks up. This is the Surge, announced: it will stir your Shadow Pokémon for one fight.",
+   "choices": [
+    {
+     "label": "Cut the power",
+     "success": {
+      "text": "A technician guards the box.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Surge Technician",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "surge-cut",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Lead your party away from it",
+     "success": {
+      "text": "You walk three streets before the hum fades. Your party is unsettled but fine.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait it out in a quiet doorway",
+     "success": {
+      "text": "It passes.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-62",
+   "name": "Snag!",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A grunt with a strange glove squares up to you, and the glove has a ball in it. Announced: this is a Snag attempt on one of your Pokémon. Switching dodges it.",
+   "choices": [
+    {
+     "label": "Dodge by switching in",
+     "success": {
+      "text": "The ball hits the pavement. You keep the Pokémon.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "snag-dodged",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle the grunt",
+     "success": {
+      "text": "He gets one throw; a win ends it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Snag Grunt",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "snag-dodged",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Run",
+     "success": {
+      "text": "You are faster. Mostly.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-63",
+   "name": "A Bound Pokémon",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A wild Pokémon is chained to a stake, ringed by grunts. It looks at you and does not growl.",
+   "choices": [
+    {
+     "label": "Free it",
+     "success": {
+      "text": "The ring breaks when you do.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 2,
+       "name": "Binding Crew",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 3
+        },
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Cut the chain quietly (₽300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "A bolt cutter from a stall. The Pokémon walks off into the grass.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-64",
+   "name": "An Officer Throws Down",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "hasShadow"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#241028",
+    "effect": "none"
+   },
+   "intro": "A lieutenant leans on a lamp post as you pass. \"Your Shadow Pokémon is a team asset. I would like to see how it fights without you telling it what to do.\"",
+   "choices": [
+    {
+     "label": "Accept the challenge",
+     "success": {
+      "text": "A fair fight, announced; your Shadow Pokémon may hesitate, and you will see why.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Challenging Lieutenant",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "officer-challenged",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "\"Afraid to see it?\" You walk on.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-65",
+   "name": "A Key Turns",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "keyHinted"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#101830",
+    "effect": "none"
+   },
+   "intro": "Your Shadow Pokémon stops in the middle of the road and looks at a particular door. It remembers something. This is the moment a key is close. No fight is needed; this is a scene.",
+   "choices": [
+    {
+     "label": "Follow its gaze",
+     "success": {
+      "text": "Behind the door is a small thing that matters. Your Pokémon relaxes for the first time in days.",
+      "effects": [
+       {
+        "kind": "shadowHeart",
+        "amount": -4
+       },
+       {
+        "kind": "flag",
+        "key": "key-hint-followed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-80",
+   "name": "The Long Walk",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "hasShadow"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A road with no towns on it. Your Shadow Pokémon walks easier on this one.",
+   "choices": [
+    {
+     "label": "Walk it with them",
+     "success": {
+      "text": "A day of nothing in particular. Corruption eases by 3.",
+      "effects": [
+       {
+        "kind": "shadowHeart",
+        "amount": -3
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the quick road",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-81",
+   "name": "The Shared Table",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "hasShadow"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A table in a plaza, set for strangers. A woman waves you over: \"Sit. Everyone eats.\"",
+   "choices": [
+    {
+     "label": "Sit with your whole party",
+     "success": {
+      "text": "A long meal, nobody keeping score. Corruption eases by 8.",
+      "effects": [
+       {
+        "kind": "shadowHeart",
+        "amount": -8
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just eat quickly",
+     "success": {
+      "text": "A bite, and a thank-you. Corruption eases by 3.",
+      "effects": [
+       {
+        "kind": "shadowHeart",
+        "amount": -3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-82",
+   "name": "The Crowd Chant",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "hasShadow"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A street fair, a drum, and a chant that everyone knows. The chant is about being let in.",
+   "choices": [
+    {
+     "label": "Join the chant",
+     "success": {
+      "text": "You and your Shadow Pokémon are in the circle for ten minutes. Corruption eases by 12.",
+      "effects": [
+       {
+        "kind": "shadowHeart",
+        "amount": -12
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stand back",
+     "success": {
+      "text": "You watch from a bench. Corruption eases by 2.",
+      "effects": [
+       {
+        "kind": "shadowHeart",
+        "amount": -2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-83",
+   "name": "The Bridge of Lamps",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "hasShadow"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A bridge lit with paper lamps. The whole town walks it once a year, thinking of someone.",
+   "choices": [
+    {
+     "label": "Cross it slowly with your Shadow Pokémon",
+     "success": {
+      "text": "A hush, and the lamps; corruption eases by 15.",
+      "effects": [
+       {
+        "kind": "shadowHeart",
+        "amount": -15
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cross it alone",
+     "success": {
+      "text": "It is pretty. Nothing else happens.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-84",
+   "name": "A Key Hinted",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "keyHinted"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "Your Shadow Pokémon nudges the same object three times: an old jacket in a shop window.",
+   "choices": [
+    {
+     "label": "Buy it (₽250)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 250
+      }
+     ],
+     "success": {
+      "text": "The shopkeeper asks no questions. Your Pokémon rests its head on it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -250
+       },
+       {
+        "kind": "shadowHeart",
+        "amount": -5
+       },
+       {
+        "kind": "flag",
+        "key": "key-hint-object",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Note it for later",
+     "success": {
+      "text": "You write down the shop's name.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "key-hint-noted",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-85",
+   "name": "Stabilize, or Not",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "hasShadow"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#101830",
+    "effect": "none"
+   },
+   "intro": "A quiet doctor offers to Stabilize your Shadow Pokémon: not purify, only steady. It would keep its Shadow traits and stop sliding. He says you can decide later.",
+   "choices": [
+    {
+     "label": "Ask about the cost",
+     "success": {
+      "text": "He is honest: it will not be fully free. It will be safe.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stabilize-asked",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline, gently",
+     "success": {
+      "text": "\"Of course. The offer stays open.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stabilize-declined",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-86",
+   "name": "Purified Water",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A spring with a hand-painted sign: DRINK, IF YOU LIKE. A Pokémon you do not know laps at it.",
+   "choices": [
+    {
+     "label": "Drink",
+     "success": {
+      "text": "Cool and plain. Your party is a little better for it.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fill a bottle (₽0)",
+     "success": {
+      "text": "You take a Full Heal-sized bottle, no charge.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "full-heal"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-87",
+   "name": "A Key Missed",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "keyHinted"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "You pass the place your Shadow Pokémon's key points to, and by the time you notice, the shop has closed and the street is empty. Nothing is lost; the key waits.",
+   "choices": [
+    {
+     "label": "Come back tomorrow",
+     "success": {
+      "text": "You mark the spot. The key will still be there.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "key-fallback-set",
+        "amount": 1
+       },
+       {
+        "kind": "shadowHeart",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Move on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-66",
+   "name": "The Man With the Clipboard",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "grandArc"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#101820",
+    "effect": "none"
+   },
+   "intro": "A thin man with a clipboard writes down every Pokémon that passes the crossroads, yours included. He does not look up. This is a scene, not a fight.",
+   "choices": [
+    {
+     "label": "Ask what he is counting",
+     "success": {
+      "text": "\"Throughput,\" he says. Then he writes down your question.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "liaison-seen",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look over his shoulder",
+     "success": {
+      "text": "Columns of numbers, and a header: CIPHER, ACCOUNT 2.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "liaison-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cipher-account-seen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk past",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-67",
+   "name": "Samples",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "grandArc"
+    },
+    {
+     "kind": "xflag",
+     "flag": "liaisonSeen"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A numbered crate is being loaded into a van, and the liaison is signing for it. The crate is the first shipment of Samples: if it leaves, the Stock grows.",
+   "choices": [
+    {
+     "label": "Stop the loading",
+     "success": {
+      "text": "A loader and a driver, no more. A win stops the crate.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 2,
+       "name": "Crate Loaders",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "samples-stopped",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Delay the van (₽300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "A flat tire, a long argument. The crate does not leave tonight.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "flag",
+        "key": "samples-stopped",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go",
+     "success": {
+      "text": "The van pulls out. The Stock grows by one step.",
+      "effects": [
+       {
+        "kind": "grandArcStock",
+        "step": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-68",
+   "name": "A Demonstration",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "grandArc"
+    },
+    {
+     "kind": "xflag",
+     "flag": "liaisonSeen"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#101820",
+    "effect": "none"
+   },
+   "intro": "The liaison is showing a buyer something in a locked room, and the buyer is impressed. You see a lit window.",
+   "choices": [
+    {
+     "label": "Break up the sale",
+     "success": {
+      "text": "A guard and a demonstrator.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Demonstration Crew",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "demo-stopped",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take notes from the street",
+     "success": {
+      "text": "You are too far to hear. You are close enough to see the buyer's face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "demo-watched",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-69",
+   "name": "The Invoice",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "grandArc"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A courier hands you an envelope by mistake. Inside: an invoice for \"Services, Region (partial)\", with a line item you recognise. No fight, no hurry.",
+   "choices": [
+    {
+     "label": "Read it all the way through",
+     "success": {
+      "text": "Names, amounts, and a signature you will see again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "invoice-read",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 6
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it back to the courier",
+     "success": {
+      "text": "He thanks you, and does not meet your eye.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-70",
+   "name": "Late Fee",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "grandArc"
+    },
+    {
+     "kind": "xflag",
+     "flag": "romHeld"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A collector for the liaison taps his watch. \"Overdue.\" He wants a copy of the Data ROM you hold, and he will take it by force. A lost fight never costs the ROM: a copy is all anyone can take.",
+   "choices": [
+    {
+     "label": "Fight him",
+     "success": {
+      "text": "A win and he leaves you alone.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Collector",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "late-fee-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Pay the late fee (₽500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "He signs off. The ROM stays with you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hand over a copy",
+     "success": {
+      "text": "He copies it on the spot. The original stays in your hand.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-71",
+   "name": "The Postcard From Elsewhere",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "grandArc"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A postcard with no stamp is slipped under your door. It shows the next region on your road. On the back, in a neat hand: SEE YOU THERE.",
+   "choices": [
+    {
+     "label": "Keep it",
+     "success": {
+      "text": "You keep it, face up, in your notebook.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "postcard-kept",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw it away",
+     "success": {
+      "text": "You do not look at it again.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-96",
+   "name": "A Crate Number",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "grandArc"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A stencilled number on an empty crate in an alley: 00-17-A. The same number is on a van parked two blocks away.",
+   "choices": [
+    {
+     "label": "Follow the van",
+     "success": {
+      "text": "It leads to a warehouse you will remember.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "crate-number-followed",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Note the number and go",
+     "success": {
+      "text": "You write it on your hand and wash it off later.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "crate-number-noted",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-97",
+   "name": "A Maker's Plate",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "grandArc"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A discarded machine with a brass plate: BUILT FOR CIPHER, SERIES 2. A tinkerer is trying to buy it for scrap.",
+   "choices": [
+    {
+     "label": "Tell him what it is",
+     "success": {
+      "text": "He puts it down, shaken. He thanks you for the warning.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the plate",
+     "success": {
+      "text": "A cold bit of brass, and a name.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "makers-plate",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-98",
+   "name": "A Waveform on a Napkin",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "grandArc"
+    },
+    {
+     "kind": "xflag",
+     "flag": "liaisonSeen"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A napkin on a café table, a waveform drawn in pen. Someone drew it while thinking about something else.",
+   "choices": [
+    {
+     "label": "Take it",
+     "success": {
+      "text": "You show it to someone who knows. It matches a signal at the Silph tower.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "waveform-taken",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-99",
+   "name": "Meowth Reads a Stencil",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "grandArc"
+    },
+    {
+     "kind": "xflag",
+     "flag": "liaisonSeen"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A talking Meowth is reading a stencil on a van, mouthing it. He sees you. \"Don't say nothing.\"",
+   "choices": [
+    {
+     "label": "Ask what it says",
+     "success": {
+      "text": "He reads it out. It is a delivery window. He asks you not to use it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stencil-read",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer him a snack",
+     "success": {
+      "text": "He eats it. \"I ain't sayin' nothin', but thanks.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-100",
+   "name": "The Clipboard, Unattended",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "grandArc"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A clipboard lies on a bench. Nobody is near it.",
+   "choices": [
+    {
+     "label": "Read it",
+     "success": {
+      "text": "Counts, timings, a map. Everything on it is a request for numbers.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "clipboard-read",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Move it where its owner can find it",
+     "success": {
+      "text": "Better to be decent than clever.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-101",
+   "name": "A Copy",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "grandArc"
+    },
+    {
+     "kind": "xflag",
+     "flag": "romHeld"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A courier is carrying a Data ROM identical to yours. Hers is a copy. Yours is the only original.",
+   "choices": [
+    {
+     "label": "Ask who copied it",
+     "success": {
+      "text": "\"The Boss's supplier,\" she says, then regrets saying it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rom-copy-learned",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let her pass",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-102",
+   "name": "A Debt Repaid",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "grandArc"
+    },
+    {
+     "kind": "xflag",
+     "flag": "trioFriendly"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "Three figures in dark coats and a talking Meowth stand in the shade of a vending machine. \"We owe you,\" says one. \"We never said we would pay.\"",
+   "choices": [
+    {
+     "label": "Accept their help",
+     "success": {
+      "text": "They carry a heavy crate of supplies for you, then vanish before the next street.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 3
+       },
+       {
+        "kind": "item",
+        "id": "super-potion",
+        "count": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell them it is fine",
+     "success": {
+      "text": "\"Then we owe you more.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-103",
+   "name": "The Girl Who Sees Auras",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "grandArc"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#14182c",
+    "effect": "none"
+   },
+   "intro": "A girl sits on a wall and stares just left of you. \"Your Pokémon have colours,\" she says. \"Yours is the only party that is a little bit blue.\" She says it kindly.",
+   "choices": [
+    {
+     "label": "Ask her about the blue",
+     "success": {
+      "text": "\"It is where they are sad, but they like being with you.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the other people",
+     "success": {
+      "text": "She says some of the people in the plaza have one big dark colour. She does not say which.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aura-girl-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-72",
+   "name": "Double Booking",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "Two different teams have scheduled the same road. The grunts argue over a clipboard. A favor is owed by whoever helps them sort it out.",
+   "choices": [
+    {
+     "label": "Settle the dispute",
+     "success": {
+      "text": "One grunt owes you a favor. The other wants it forgotten.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "favor-owed",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take advantage",
+     "success": {
+      "text": "You stir it into a three-way brawl. Both teams turn on you at once.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Booking Grunts",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "evil",
+         "heat": 1
+        }
+       ],
+       "format": "triples"
+      }
+     }
+    },
+    {
+     "label": "Walk around them",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-73",
+   "name": "The Machine of the Week",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A new machine rolls into the square and a grunt reads from its manual: \"It can do something new every week.\" Today, it is aimed at you.",
+   "choices": [
+    {
+     "label": "Disable it",
+     "success": {
+      "text": "A technician and the machine's first demonstration.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Machine Operator",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "machine-disabled",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Study it from a distance",
+     "success": {
+      "text": "You see its one trick and when it uses it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "machine-studied",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back off",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-74",
+   "name": "The Mark",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A grunt chalks a small mark on a wall near you and walks off. You are sure it is for you. No fight, nothing to run from; yet.",
+   "choices": [
+    {
+     "label": "Rub it out",
+     "success": {
+      "text": "A little smeared chalk on your sleeve. Heat eases.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Copy it and find out what it means",
+     "success": {
+      "text": "A scrawl a few streets on: it is a meeting place.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mark-copied",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ignore it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.fe-75",
+   "name": "The Curtain Call",
+   "group": "Forced scenes (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#241428",
+    "effect": "none"
+   },
+   "intro": "A theatre troupe, unexpected and loud, finishes a street show with a bow, then looks straight at you. \"Final act: audience participation.\" This is a scene, not a fight.",
+   "choices": [
+    {
+     "label": "Join the cast",
+     "success": {
+      "text": "A silly bit with a cardboard sword. The crowd cheers and your party is in a fine mood.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take a bow and leave",
+     "success": {
+      "text": "A polite round of applause.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-104",
+   "name": "The Postcard Beat",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A mailman hands you a postcard from someone you met earlier. The picture is of somewhere you have not been yet.",
+   "choices": [
+    {
+     "label": "Read it carefully",
+     "success": {
+      "text": "A line of kindness and a line of warning. You smile at both.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pin it up",
+     "success": {
+      "text": "It will be there when you need it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-105",
+   "name": "Truce by Firelight",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#2a1810",
+    "effect": "none"
+   },
+   "intro": "A campfire, and two grunts of different teams, side by side, not talking. They wave you over. \"Just for tonight.\"",
+   "choices": [
+    {
+     "label": "Sit by the fire",
+     "success": {
+      "text": "Soup, a story, and a promise: one favor, once, any time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "favor-owed",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decline",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-106",
+   "name": "A Favor Called In",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "trioFriendly"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "The trio, in a delivery van, honks twice. \"We said we owed you. We have a thing.\"",
+   "choices": [
+    {
+     "label": "Take their gift",
+     "success": {
+      "text": "A neat box of supplies. Nobody asks where from.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "revive"
+       },
+       {
+        "kind": "item",
+        "id": "full-heal",
+        "count": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for information instead",
+     "success": {
+      "text": "A name and a time. You write it down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "trio-info",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-107",
+   "name": "The Bill",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A grunt hands you a bill for \"damage to team property,\" itemised. He looks as embarrassed as you do.",
+   "choices": [
+    {
+     "label": "Pay it (₽250)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 250
+      }
+     ],
+     "success": {
+      "text": "He thanks you and slinks off.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -250
+       }
+      ]
+     }
+    },
+    {
+     "label": "Frame it and keep it",
+     "success": {
+      "text": "A handsome piece of paperwork.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "framed-bill",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tear it up",
+     "success": {
+      "text": "He sighs.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-108",
+   "name": "Wes at the Wall",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#14182c",
+    "effect": "none"
+   },
+   "intro": "A figure in a long coat sits on a low wall, quietly watching traffic. He nods at you. \"Looks like you are going somewhere. Don't let them stop you.\"",
+   "choices": [
+    {
+     "label": "Nod back",
+     "success": {
+      "text": "He gives you a small, sincere smile and a Potion.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "super-potion"
+       },
+       {
+        "kind": "flag",
+        "key": "wes-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask who he is",
+     "success": {
+      "text": "\"Just someone who got out.\" That is all he says.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wes-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-109",
+   "name": "Chobin's Stall",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A tiny stall run by a very serious boy named Chobin. He is drawing sketches of Pokémon, five of them. All are well drawn.",
+   "choices": [
+    {
+     "label": "Buy one (₽120)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 120
+      }
+     ],
+     "success": {
+      "text": "It is a good sketch. Your party approves.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -120
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell him he is talented",
+     "success": {
+      "text": "He pretends not to care. He cares.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-110",
+   "name": "Evidence for the Detective",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A man in a trench coat flashes a badge: Detective Looker, International Police. \"I need something concrete to make a seizure legal.\"",
+   "choices": [
+    {
+     "label": "Give him what you have",
+     "success": {
+      "text": "You hand over your notes. He reads them slowly. \"That will do.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "looker-evidence",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what he can do for you",
+     "success": {
+      "text": "\"Watch your back. That is all I can say.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-111",
+   "name": "The Wrong Turn",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "You take a wrong turn and end up behind a theatre where an old man is practising his lines to a Pokémon. He pauses. \"Oh. Do you want to hear the whole thing?\"",
+   "choices": [
+    {
+     "label": "Stay for the scene",
+     "success": {
+      "text": "He is very good. A little emotional. Your party is moved.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back out politely",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-88",
+   "name": "The Errand",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "friendPresent"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "Your Friend meets you outside a Center with a list. \"Can you help me with some errands? It is faster with two.\"",
+   "choices": [
+    {
+     "label": "Help with the whole list",
+     "success": {
+      "text": "Three stops, two jokes, one stolen ice cream. Your party likes your Friend.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "friend-errand",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take half the list",
+     "success": {
+      "text": "You are both home before dark. Fair enough.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "friend-errand",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today",
+     "success": {
+      "text": "\"Next time, then.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-89",
+   "name": "The Eve",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "friendPresent"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#14182c",
+    "effect": "none"
+   },
+   "intro": "The night before a big thing, your Friend sits beside you on a step. \"I am a little scared. I do not want to say that to anyone else.\"",
+   "choices": [
+    {
+     "label": "Tell them you are, too",
+     "success": {
+      "text": "You sit together for a long time. It helps.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "friend-eve",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give them a pep talk",
+     "success": {
+      "text": "\"You are better than you think.\" They believe you, a little.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "friend-eve",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing, stay close",
+     "success": {
+      "text": "That works too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "friend-eve",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-90",
+   "name": "Something of Theirs",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "At the entrance to a place you will have to go in alone, someone has left a small thing on the ground: a button, a wristband, a drawing. Yours, or from someone who loves you.",
+   "choices": [
+    {
+     "label": "Take it with you",
+     "success": {
+      "text": "It is a small weight in your pocket, and a lighter heart.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "keepsake-held",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it where it is",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-91",
+   "name": "A Rival Who Stayed",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "friendPresent"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "Your Friend lags behind to help a stranger with a stuck cart, then catches up, wiping their hands. \"What? We had time.\"",
+   "choices": [
+    {
+     "label": "Help push the cart",
+     "success": {
+      "text": "A good deed done quickly, and a little better for it.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait by the road",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-92",
+   "name": "The Receipt",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A grunt slips a receipt into your pocket as he passes: itemised, stamped, dated. It records where your rival's Pokémon was taken.",
+   "choices": [
+    {
+     "label": "Keep it",
+     "success": {
+      "text": "A thin paper, a long list, and a place you will want to look at.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "receipt-held",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw it away",
+     "success": {
+      "text": "You cannot unread it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "receipt-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-93",
+   "name": "A Postcard, Not for You",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A postcard blown against your shoe, addressed to someone else. Even so, you can read: \"Wish you were here.\"",
+   "choices": [
+    {
+     "label": "Mail it for them",
+     "success": {
+      "text": "You find a post box and drop it in.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it",
+     "success": {
+      "text": "It is just a card.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-94",
+   "name": "What the Shadow Remembers",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "hasShadow"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "In a quiet moment your Shadow Pokémon stops and listens to a bell in the distance. It has heard this bell before.",
+   "choices": [
+    {
+     "label": "Walk toward the bell",
+     "success": {
+      "text": "A small church garden. The bell stops. Your Pokémon seems steadier.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "shadow-remembered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-95",
+   "name": "Cellmate",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#14141c",
+    "effect": "none"
+   },
+   "intro": "A holding cell at a hideout you are walking through. Someone is in it, not a grunt: a local kid, caught wandering. He looks at you.",
+   "choices": [
+    {
+     "label": "Let him out",
+     "success": {
+      "text": "He takes the key and runs for the door, then comes back to say thank you.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "cellmate-freed",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave a Potion and a note",
+     "success": {
+      "text": "He will be found by someone kinder.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "potion"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-112",
+   "name": "The Dossier Open",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A quiet night at a rest stop. You open your notebook to the page that lists everyone you have met since you started.",
+   "choices": [
+    {
+     "label": "Read it from the top",
+     "success": {
+      "text": "It is a lot of people. Some you are glad you met.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dossier-read",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Add a note",
+     "success": {
+      "text": "A line about someone you do not want to forget.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dossier-noted",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-113",
+   "name": "A Name Given",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A kid at the rest stop has a Pokémon who has never had a nickname. The kid asks you to name it.",
+   "choices": [
+    {
+     "label": "Give it a name",
+     "success": {
+      "text": "You choose something warm. The kid grins from ear to ear.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the kid pick",
+     "success": {
+      "text": "He names it Bob. Bob it is.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-114",
+   "name": "Two Asleep",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "Two of your Pokémon have fallen asleep against each other. The fire is warm.",
+   "choices": [
+    {
+     "label": "Let them sleep",
+     "success": {
+      "text": "They wake rested and a little closer.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.4
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wake them for the road",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-115",
+   "name": "An Offering",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A memorial wall with shelves of small things: a berry, a feather, a stone. People leave them for Pokémon they miss.",
+   "choices": [
+    {
+     "label": "Leave a berry for one you lost",
+     "success": {
+      "text": "You set it down gently. You feel a bit lighter.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "flag",
+        "key": "offering-left",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the notes",
+     "success": {
+      "text": "Each one is a small story.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-116",
+   "name": "The Breather Before",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "The last warm room before something big. The kettle is on; the chairs are soft; nobody here is in a hurry.",
+   "choices": [
+    {
+     "label": "Save the evening for tomorrow",
+     "success": {
+      "text": "A slow night, a hot drink, and a good sleep. You will remember it tomorrow.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "breather-saved",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Move on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-117",
+   "name": "A Fireside Story",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A traveller by the fire tells the story of the first time he saw a Pokémon he had only read about.",
+   "choices": [
+    {
+     "label": "Listen to the end",
+     "success": {
+      "text": "It is a good story. It is also a little sad.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Add one of your own",
+     "success": {
+      "text": "He nods, pleased.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-118",
+   "name": "Rain on the Roof",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A shelter, a tin roof, a fine steady rain. Nobody wants to move.",
+   "choices": [
+    {
+     "label": "Wait it out",
+     "success": {
+      "text": "You doze off. The rain stops, and you feel rested.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run for it",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-119",
+   "name": "The Flask Before the Climax",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#14141c",
+    "effect": "none"
+   },
+   "intro": "A traveller offers you a flask. \"For the road. For whatever is at the end of it.\" It is just tea.",
+   "choices": [
+    {
+     "label": "Drink it",
+     "success": {
+      "text": "It tastes like a long walk.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.6
+       }
+      ]
+     }
+    },
+    {
+     "label": "Save it",
+     "success": {
+      "text": "You tuck it in your bag.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "super-potion"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-120",
+   "name": "The Quiet Collector",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A man with a receipt book sits on a bench in the market. He is not asking for anything yet. He is writing down the names of the shops.",
+   "choices": [
+    {
+     "label": "Sit beside him and talk",
+     "success": {
+      "text": "He tells you which shops he has been told to \"insure\" and why. You write them down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-shops-noted",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Warn the shops",
+     "success": {
+      "text": "You tell three shopkeepers. They thank you and put up a sign.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-121",
+   "name": "The Hum Under the Tower",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A hum, low and steady, from the radio tower's base. Pokémon in the yard look up all at once.",
+   "choices": [
+    {
+     "label": "Trace the cable",
+     "success": {
+      "text": "It runs under the road to a grey box with a Rocket logo and a lock. You note the lock.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "johto-hum-traced",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cover the Pokémon's ears",
+     "success": {
+      "text": "A bit of cloth and a calm voice. They settle.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-122",
+   "name": "Two Hoods, One Cave",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "Two grunts in different coloured hoods share a cave mouth and a cold lunch. They are not talking about it.",
+   "choices": [
+    {
+     "label": "Ask about the weather",
+     "success": {
+      "text": "They both say it is going to be a strange one. They both say it quietly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-hoods-heard",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer them lunch",
+     "success": {
+      "text": "One of them takes a sandwich. The other pretends not to notice.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-123",
+   "name": "The Quiet Machines",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A row of machines on a hillside, humming in unison. A technician in a hard hat is writing numbers in a notebook.",
+   "choices": [
+    {
+     "label": "Watch the technician",
+     "success": {
+      "text": "He is counting something. You count with him.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sinnoh-machines-counted",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for a tour",
+     "success": {
+      "text": "He gives you a short one. He is proud of the machines.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-124",
+   "name": "The Speaker in the Square",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A man on a crate speaks about freedom to a growing crowd. Everyone is nodding. You are not sure why you are uneasy.",
+   "choices": [
+    {
+     "label": "Listen to the whole thing",
+     "success": {
+      "text": "It is beautiful. It does not once say what the Pokémon want.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "unova-speaker-heard",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask a question",
+     "success": {
+      "text": "The crowd turns. He answers. It is still beautiful.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-125",
+   "name": "The Fashion Show",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A runway in a plaza. A model walks past in a cloak that looks very much like a team uniform.",
+   "choices": [
+    {
+     "label": "Look closer at the cloak",
+     "success": {
+      "text": "The tag reads FLARE COUTURE, SEASON ONE.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kalos-couture-seen",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Applaud",
+     "success": {
+      "text": "Everyone does. It is a lovely show.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-126",
+   "name": "A Slow Afternoon",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A beach, a stall, and two members of rival crews trading stickers. One says: \"I am only here for the free coconut.\"",
+   "choices": [
+    {
+     "label": "Join them",
+     "success": {
+      "text": "A good afternoon. You leave with a sticker.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask them about the boss",
+     "success": {
+      "text": "They both look away and say, very softly, that he is nice.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-boss-asked",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-127",
+   "name": "The Crowd Cheers",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A stadium lot, loud with supporters. A man hands out free flags. The flag has a very small logo in the corner.",
+   "choices": [
+    {
+     "label": "Read the logo",
+     "success": {
+      "text": "It is a sponsor. The sponsor is not who you think.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-flag-read",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave one",
+     "success": {
+      "text": "Why not? It is a good atmosphere.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-128",
+   "name": "The Study Hall",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A class of students argues cheerfully about homework. One of them has a Team Star pin and has never been in a fight.",
+   "choices": [
+    {
+     "label": "Ask about the pin",
+     "success": {
+      "text": "He shrugs: \"It is a club. We have snacks.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "paldea-pin-asked",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Join the homework",
+     "success": {
+      "text": "Three hours later you know more about fractions. Your party is entertained.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-129",
+   "name": "The Second Team's Opinion",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A grunt from the other team in the region, off duty, offers you his view of things. \"The big ones think they are the main show. We are in the second row.\"",
+   "choices": [
+    {
+     "label": "Listen",
+     "success": {
+      "text": "He tells you where he thinks his own team will go wrong.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "second-team-heard",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask whose side he is on",
+     "success": {
+      "text": "\"My own.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-130",
+   "name": "A District Worth Holding",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "extendedCut"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1c1424",
+    "effect": "none"
+   },
+   "intro": "A district council asks whether you will stand with them. They have a plan, and a flag, and a very good map.",
+   "choices": [
+    {
+     "label": "Stand with them",
+     "success": {
+      "text": "They will hold one district for you when the time comes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "district-ally",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what they need first",
+     "success": {
+      "text": "A list of five things. You can do two of them today.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "district-asked",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this time",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xr.en-131",
+   "name": "Standard or Extended",
+   "group": "Encounters (Beta 0.6)",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "xflag",
+     "flag": "extendedCut"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#14182c",
+    "effect": "none"
+   },
+   "intro": "The Last Rest before the end: a room, a lamp, a long table. The keeper of the house asks you, plainly, how you want the last night to go: the short version, or the long one with everything in it. You can say either.",
+   "choices": [
+    {
+     "label": "The short version",
+     "success": {
+      "text": "A single long night, and a clear morning.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cut-standard",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The long version, with everything in it",
+     "success": {
+      "text": "You ask for all of it. The keeper nods.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cut-extended",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

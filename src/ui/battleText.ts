@@ -1,5 +1,6 @@
 // Turns battle events into the sentences shown in the battle message box.
 
+import { pokemonMoment } from '../core/moments/pokemonMoments';
 import type { Side } from '../core/battle/engine';
 import type { Content, Terrain, Weather } from '../core/contentSchema';
 import type { RunEvent } from '../core/run';
@@ -114,6 +115,16 @@ export function eventText(content: Content, names: Names, e: RunEvent, details =
     }
     case 'lastStand':
       return `${who(e.side)} hung on using its ${content.items.get(e.itemId)?.name ?? 'charm'}!`;
+    case 'pmoment': {
+      // A Pokémon moment (core/moments): its name and one line; a refused cinematic is told this same way.
+      const def = pokemonMoment(e.id);
+      // A full-screen scene already told its story; the box only says what happened.
+      if (e.scene) return `${who(e.side)} rises again, Overcharged!`;
+      const line = (def?.presentation.split(' | ').pop() ?? '').replace(/^"|"$/g, '');
+      // Battle-start and switch-in moments: their flavour line, then what it did.
+      if (e.trigger !== 'lethal' && e.trigger !== 'runEnd') return `${e.name}! ${line ? `${line} ` : ''}${def?.effectText ?? ''}`.trim();
+      return `${e.name}! ${who(e.side)} hangs on!${line ? ` ${line}` : ''}`;
+    }
     case 'hyper':
       // The story layer normally shows the moment's own lines instead.
       return e.cured ? `${who(e.side)} shook off its status!` : `${who(e.side)} won't give up!`;
@@ -269,6 +280,8 @@ export function eventText(content: Content, names: Names, e: RunEvent, details =
       return null;
     case 'allySwitch':
       return `${who(e.side)} switched places with its partner!`;
+    case 'shift':
+      return e.to === 1 ? `${who(e.side)} moved to the centre!` : null;
     case 'item':
       return e.message;
     case 'ball':

@@ -83,6 +83,8 @@ export const RaidRewardSchema = z.object({
   megaStones: z.number().int().min(0).max(3).default(0),
   /** Rare-encounter tokens: the next this-many wild encounters are far likelier to be rare or Legendary. */
   rareEncounters: z.number().int().min(0).max(3).default(0),
+  /** Beta 0.6 Vermilion: a Pokémon handed over for the win (the Kaiju Tentacool), joining at the boss's level minus `levelDrop`. */
+  gift: z.object({ species: z.string().min(1), ability: z.string().optional(), moves: z.array(z.string()).max(4).default([]), levelDrop: z.number().int().min(0).default(0) }).optional(),
 });
 
 export const RaidDefSchema = z.object({
@@ -117,6 +119,8 @@ export const RaidDefSchema = z.object({
   /** Moves the boss knows beyond the usual four (up to two more). */
   extraMoves: z.array(z.string()).max(2).default([]),
   rewards: RaidRewardSchema,
+  /** Beta 0.6 Canon Spaces: the space (`cs.kanto.*`) this raid is. It is placed by the Town Roll instead of the random den draw, and winning finishes the space. */
+  canon: z.string().regex(/^cs\.kanto\.[a-z0-9.-]+$/).nullable().default(null),
   /** Boss HP lines at which it calls a minion. Never authored: badge scaling fills it in (core/raid/scaling.ts). */
   summons: z.array(Fraction).max(3).default([]),
   /**
@@ -140,7 +144,7 @@ export const RaidDefSchema = z.object({
   /** S409 Boss Pokémon Capture: a Poké Ball works once the boss is at or below this share of its HP; the catch ends the raid as a win. */
   capture: Fraction.optional(),
   /** Special dens (titan, gauntlet, mini-boss) are never drawn for an ordinary den: the world places them on their own (core/raid/raid.ts placeSpecialDens). */
-  special: z.enum(['titan', 'gauntlet', 'mini']).optional(),
+  special: z.enum(['titan', 'gauntlet', 'mini', 'canon']).optional(),
   /** The Grand-Enemy's own fights (core/story/grandEnemy): placed by the campaign, never in the random den pool. */
   grand: z.enum(['contact', 'reckoning']).optional(),
 });

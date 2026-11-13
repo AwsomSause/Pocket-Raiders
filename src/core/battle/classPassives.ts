@@ -27,7 +27,7 @@ export const CLASS_PASSIVES: Record<string, ClassPassive> = {
   'aroma-lady': { name: 'Soothing Aroma', kind: 'guard', amount: 0.08 },
   'snow-worker': { name: 'Thick Coats', kind: 'guard', amount: 0.1 },
   biker: { name: 'Road Rash', kind: 'crit', amount: 0.05 },
-  psychic: { name: 'Foresight', kind: 'crit', amount: 0.05 },
+  psychic: { name: 'Keen Mind', kind: 'crit', amount: 0.05 },
   'hex-maniac': { name: 'Hex Charm', kind: 'power', amount: 0.1 },
   'dragon-tamer': { name: 'Dragon Pride', kind: 'power', amount: 0.12 },
   roughneck: { name: 'Dirty Tricks', kind: 'crit', amount: 0.06 },
