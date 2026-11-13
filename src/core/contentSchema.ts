@@ -3288,6 +3288,8 @@ export const EventDefSchema = z.object({
   timeoutChoice: z.number().int().min(0).optional(),
   /** A room of a landmark, dungeon or tower: only opens from another event's `addEvent`, never drawn on its own. */
   room: z.boolean().default(false),
+  /** Beta 0.6 Canon Spaces: the space this event plays (`cs.kanto.*`, data/expansion/canonSpacesKanto.json). Never drawn at random; placed by core/expansion/canonRun.ts from the town menu. */
+  canon: z.string().regex(/^cs\.kanto\.[a-z0-9.-]+$/).nullable().default(null),
   /** A follow-up scene: gets a stop on the next stage where it is eligible (its `requires` hold), so a kindness shows up again later. */
   callback: z.boolean().default(false),
   /** A secret path: shows as "?" until one of these holds (a Pokémon with the right ability or type), then the real stop. */

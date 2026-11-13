@@ -1,0 +1,395 @@
+{
+ "events": [
+  {
+   "id": "cs-kanto-pewter-rest",
+   "name": "Brock's Rest Stop",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "A camp by the road. Brock is stirring a big pot and waves you over. \"Stew's almost ready. Hungry?\"",
+   "choices": [
+    {
+     "label": "Share Brock's stew",
+     "chance": 0.9,
+     "success": {
+      "text": "Warm and filling. Everyone feels better, and Brock is reaching for his secret spice...",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.15
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-rest-spice"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Brock gets distracted and burns the whole pot. \"Uh... next time!\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "Move on",
+     "success": {
+      "text": "You thank Brock and keep walking.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.pewter.rest"
+  },
+  {
+   "id": "cs-kanto-pewter-rest-spice",
+   "name": "Brock's Secret Spice",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "Brock holds up a little jar. \"Pick a stat. The spice only works if I get it just right.\"",
+   "choices": [
+    {
+     "label": "Spice for Attack",
+     "chance": 0.5556,
+     "success": {
+      "text": "Perfect! Your team's Attack is boosted for the next boss fight.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Brock's stew: Attack x1.5 in the next boss fight",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "value": 1.5
+         }
+        ],
+        "battles": 1,
+        "until": "boss"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A pinch too much. The spice does nothing special, but the stew was good.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Spice for Defense",
+     "chance": 0.5556,
+     "success": {
+      "text": "Perfect! Your team's Defense is boosted for the next boss fight.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Brock's stew: Defense x1.5 in the next boss fight",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "value": 1.5
+         }
+        ],
+        "battles": 1,
+        "until": "boss"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A pinch too much. The spice does nothing special, but the stew was good.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Spice for Sp. Atk",
+     "chance": 0.5556,
+     "success": {
+      "text": "Perfect! Your team's Sp. Atk is boosted for the next boss fight.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Brock's stew: Sp. Atk x1.5 in the next boss fight",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spa",
+          "value": 1.5
+         }
+        ],
+        "battles": 1,
+        "until": "boss"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A pinch too much. The spice does nothing special, but the stew was good.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Spice for Speed",
+     "chance": 0.5556,
+     "success": {
+      "text": "Perfect! Your team's Speed is boosted for the next boss fight.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Brock's stew: Speed x1.5 in the next boss fight",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 1.5
+         }
+        ],
+        "battles": 1,
+        "until": "boss"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A pinch too much. The spice does nothing special, but the stew was good.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-museum",
+   "name": "Pewter Museum of Science",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "Fossils fill the glass cases. A curator beams at you. \"Old Amber is on display. Answer my fossil quiz and it is yours.\"",
+   "choices": [
+    {
+     "label": "Register your Helix Fossil",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "helix-fossil"
+      }
+     ],
+     "success": {
+      "text": "The curator logs it in the Fossil Registry, pays you 300 coins and pins a Fossil Registry badge on you. The fossil stays yours for revival.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "moment",
+        "text": "Registered a fossil at the Pewter Museum of Science."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Register your Dome Fossil",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "dome-fossil"
+      }
+     ],
+     "success": {
+      "text": "The curator logs it in the Fossil Registry, pays you 300 coins and pins a Fossil Registry badge on you. The fossil stays yours for revival.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "moment",
+        "text": "Registered a fossil at the Pewter Museum of Science."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the fossil quiz",
+     "check": "intelligence",
+     "success": {
+      "text": "Three for three! The curator hands over the Old Amber.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "old-amber"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Two wrong. \"Come back when you have studied!\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "Just look around",
+     "success": {
+      "text": "Fascinating, but you have places to be.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.pewter.museum"
+  },
+  {
+   "id": "cs-kanto-pewter-magikarp",
+   "name": "Magikarp Salesman",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "A man on Route 4 grins. \"Psst! Magikarp for sale, only 500! Best Pokemon in the world!\"",
+   "choices": [
+    {
+     "label": "Buy the Magikarp (500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "chance": 0.35,
+     "success": {
+      "text": "This Magikarp is something special: strong and quick in the water. Even the salesman looks surprised.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "join",
+        "species": [
+         "magikarp"
+        ],
+        "levelBonus": 3
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-magikarp",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "A normal Magikarp. It flops. It uses Splash. The salesman is already gone.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "join",
+        "species": [
+         "magikarp"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-magikarp",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away",
+     "success": {
+      "text": "\"Your loss!\" he calls after you.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.pewter.magikarp"
+  },
+  {
+   "id": "cs-kanto-pewter-flock",
+   "name": "Pewter Skies: The Flock",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "A flock of Spearow dives at a lone Pidgey, and it cannot fight them all.",
+   "choices": [
+    {
+     "label": "Drive the flock off",
+     "success": {
+      "text": "You jump in. The flock turns on you, wave after wave.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-flock-seen",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "spearow"
+       ],
+       "chain": 3,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "pidgey"
+         ],
+         "levelBonus": 0
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look away",
+     "success": {
+      "text": "You keep walking. Behind you, the Pidgey's cries fade.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-flock-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.pewter.flock"
+  }
+ ]
+}
