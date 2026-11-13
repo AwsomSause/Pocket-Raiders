@@ -18,6 +18,8 @@ export const StandWithStateSchema = z.object({
   betrayed: z.boolean().default(false),
   /** Climax losses on this route (Second Shot: the first retries, the second gives the worst ending, never ends the run). */
   lost: z.number().int().min(0).max(2).default(0),
+  /** The Stand-with climax battles were won and the verdict is waiting. */
+  climaxWon: z.boolean().default(false),
   /** The verdict chosen, when there was one. */
   verdict: z.enum(VERDICTS).nullable().default(null),
   /** The Turn ending was used in this run: later regions' teams remember it. */

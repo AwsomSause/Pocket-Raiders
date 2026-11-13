@@ -63,7 +63,7 @@ import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } fro
 import { hashSeed, Rng } from './rng';
 import { continueAfterDecisions, healParty, newMon } from './run';
 import { earnRom, gainStock, grandArcOf, romById, romsHeld } from './grandArc';
-import { addMercy, changeRep, joinInsideMan, joinProblem, standWithOf } from './arc/standWithExtended';
+import { addMercy, changeRep, joinInsideMan, joinProblem, resolveVerdict, standWithClimaxWon, standWithOf, standWithPlayable, verdictsOpen } from './arc/standWithExtended';
 import { checkFlagKeys } from './shadow2/keys';
 import { grantNamedShadow } from './shadow2/grant';
 import type { MapNode, RunState, SideStop } from './state';
@@ -178,7 +178,13 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
     }
     case 'standWith': {
       const sw = standWithOf(run);
-      return c.joined ? !!sw && (c.minRep === undefined || sw.rep >= c.minRep) : !sw && joinProblem(run) === null;
+      if (!c.joined) return !sw && joinProblem(run) === null;
+      if (!sw || (c.minRep !== undefined && sw.rep < c.minRep)) return false;
+      if (c.playable !== undefined && standWithPlayable(run) !== c.playable) return false;
+      if (c.verdictPending !== undefined && (sw.climaxWon && !sw.verdict) !== c.verdictPending) return false;
+      if (c.verdict && !(sw.climaxWon && verdictsOpen(run, 'none').includes(c.verdict))) return false;
+      if (c.rival !== undefined && (featuredRival(run) !== null) !== c.rival) return false;
+      return true;
     }
     case 'storyRun':
       return !!run.story.v2;
@@ -1093,6 +1099,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'standWith':
       if (e.action === 'join') return joinInsideMan(run);
       if (e.action === 'mercy') addMercy(run, e.noticed);
+      else if (e.action === 'climaxWon') standWithClimaxWon(run);
+      else if (e.action === 'verdict' && e.verdict) return resolveVerdict(content, run, e.verdict, { apex: 'none', ...(e.rival && featuredRival(run) ? { rival: e.rival } : {}), ...(e.keepApexBound !== undefined ? { keepApexBound: e.keepApexBound } : {}) }).lines.join(' ');
       else if (e.change) changeRep(run, e.change);
       return '';
     case 'flag':
@@ -1369,6 +1377,13 @@ export function isStoryEventBattle(content: Content, event: EventBattleRef): boo
 }
 
 /** W7 rule P5: a fight inside a pseudo stage. A loss there ejects to the map instead of ending the run. */
+/** A Stand-with climax battle (a loss is Second Shot). */
+export function isStandWithBattle(content: Content, event: EventBattleRef): boolean {
+  const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
+  const battle = (event.success ? choice?.success : choice?.failure)?.battle;
+  return battle?.kind === 'trainer' && battle.standWith === true;
+}
+
 export function isPseudoBattle(content: Content, event: EventBattleRef): boolean {
   const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;

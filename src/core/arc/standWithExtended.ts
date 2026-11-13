@@ -140,6 +140,9 @@ export function resolveVerdict(content: Content, run: RunState, verdict: Verdict
   if (s.verdict) throw new Error('The verdict was already given.');
   if (!verdictsOpen(run, input.apex).includes(verdict)) throw new Error(`${STAND.verdicts[verdict]!.name} is not open.`);
   s.verdict = verdict;
+  s.climaxWon = false;
+  // The storyline's end: Rise and the Throne keep the team going (allied); Turn brings it down.
+  if (run.story.evil) run.story.evil.end = verdict === 'turn' ? 'defeated' : 'allied';
   const lines = [STAND.verdicts[verdict]!.text];
   if (verdict === 'turn') s.turned = true;
   s.apex = input.apex === 'none' ? null : verdict === 'turn' || input.apex === 'broken' ? 'freed' : verdict === 'throne' ? (input.keepApexBound ? 'taken' : 'freed') : 'taken';
@@ -186,4 +189,22 @@ export function officersSide(run: Pick<RunState, 'expansion'>, officers: number)
   // At +85 or more the majority side with the player; below that they are the minority.
   const withPlayer = s.rep >= STAND.officersMajorityRep ? Math.floor(officers / 2) + 1 : Math.ceil(officers / 2) - 1;
   return { withPlayer: Math.max(0, withPlayer), runnerFirst: s.mercies >= STAND.mercyRunnerAt };
+}
+
+/** The Stand-with climax's defender battles were won: the verdict is now due. */
+export function standWithClimaxWon(run: Pick<RunState, 'expansion'>): void {
+  const s = standWithOf(run);
+  if (s && !s.verdict) s.climaxWon = true;
+}
+
+/** A Stand-with climax battle was lost: Second Shot. Returns what happens next (the caller heals the party and returns to the map). */
+export function standWithClimaxLost(run: Pick<RunState, 'expansion'>): { next: 'retry' | 'worst'; line: string } {
+  const next = lostStandWithClimax(run);
+  return { next, line: next === 'retry' ? 'The defenders drive you back. You can try again.' : 'The defenders break the team. The run goes on, and the ledger remembers.' };
+}
+
+/** Whether the Stand-with choice can still be taken at the hideout: open, no verdict, and the second shot is not spent. */
+export function standWithPlayable(run: Pick<RunState, 'expansion'>): boolean {
+  const s = standWithOf(run);
+  return !!s && !s.verdict && s.lost < STAND.shots && standWithStatus(run).open;
 }
