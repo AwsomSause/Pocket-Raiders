@@ -2225,6 +2225,10 @@ function entryAbility(ctx: BattleContext, c: Combatant, other: Combatant, events
   if (ability === 'intimidate' && other.mon.hp > 0) {
     announce(c, ability, events);
     const guard = abilityIn(ctx, other);
+    if (Held.hasHook(ctx, other.mon, other.side, 'coolShades')) {
+      events.push({ type: 'fail', side: other.side });
+      return;
+    }
     if (guard && INTIMIDATE_GUARD.has(guard)) {
       announce(other, guard, events);
       events.push({ type: 'fail', side: other.side });
@@ -2394,6 +2398,7 @@ function priorityOf(ctx: BattleContext, c: Combatant, move: Move): number {
 function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
   const ability = abilityIn(ctx, c);
   if (ability === 'prankster' && move.category === 'status') return move.priority + 1;
+  if (move.category === 'status' && !c.vol.movesUsed.includes(move.id) && Held.hasHook(ctx, c.mon, c.side, 'coolShades')) return move.priority + 1;
   if (ability === 'silent-cloak' && !c.vol.cloakUsed) return move.priority + 1;
   if (ability === 'gale-wings' && move.type === 'flying' && c.mon.hp >= calcStats(ctx.content, c.mon).hp) return move.priority + 1;
   if (ability === 'triage' && (move.effects.heal || move.effects.drain)) return move.priority + 3;

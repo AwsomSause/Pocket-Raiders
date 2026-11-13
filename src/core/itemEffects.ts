@@ -97,6 +97,8 @@ function hookText(hook: HeldHook, copies: number): HookText {
       return { text: 'Copies the stat boosts an opponent just got.', once: true };
     case 'covertCloak':
       return { text: 'Added effects of moves (status, flinch, stat drops) never hit it.' };
+    case 'coolShades':
+      return { text: 'Immune to Intimidate. The first use of each status move has +1 priority.' };
     case 'clearAmulet':
       return { text: "Opponents can't lower its stats." };
     case 'loadedDice':

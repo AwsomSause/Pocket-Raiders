@@ -110,6 +110,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return (run.inventory[c.id] ?? 0) >= (c.count ?? 1) || (run.passives?.[c.id] ?? 0) > 0;
     case 'emotion':
       return run.party.some((m) => emotionOf(content, run, m.uid)?.id === c.id);
+    case 'partyLevelOver':
+      return (!!run.stage && run.party.some((m) => m.level >= curveLevel(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, run.stage!.index, 1)) + c.over)) !== (c.absent === true);
     case 'partyMoveType':
       return run.party.some((m) => m.hp > 0 && m.moves.some((s) => { const mv = content.moves.get(s.id); return mv?.type === c.type && mv.category !== 'status'; }));
     case 'partyType':
@@ -310,6 +312,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs a milestone day';
     case 'partyType':
       return c.absent ? `Only without a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party` : `Needs a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party`;
+    case 'partyLevelOver':
+      return c.over >= 0 ? `Needs a Pokémon ${c.over} levels above this stage` : 'Needs a strong Pokémon';
     case 'partyMoveType':
       return `Needs a Pokémon that knows a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type move`;
     case 'partyMove':
@@ -1144,6 +1148,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       }
       if (e.blissful) makeBlissful(content, mon);
       if (e.hiddenAbility && content.species.get(mon.speciesId)?.abilities.hidden) mon.abilitySlot = -1;
+      if (e.ability) mon.fixedAbility = e.ability;
       discover(run, mon.speciesId, true);
       count(run, 'pokemonCaught');
       run.pending.push({ kind: 'caught', mon });
@@ -1189,7 +1194,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (!move || !learner || learner.moves.some((m) => m.id === e.move)) return '';
       const slot = { id: move.id, pp: move.pp };
       if (learner.moves.length < 4) learner.moves.push(slot);
-      else learner.moves[3] = slot;
+      else learner.moves[e.slot ?? 3] = slot;
       return `${content.species.get(learner.speciesId)?.name ?? learner.speciesId} learned ${move.name}!`;
     }
     case 'evoEncounter':
