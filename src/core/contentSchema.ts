@@ -471,6 +471,8 @@ export const MoveSchema = z.object({
       sureIn: WeatherSchema.optional(),
       /** Only works on the user's first turn in battle (Fake Out). */
       firstTurnOnly: z.literal(true).optional(),
+      /** The target flinches the first time the user uses this move in a stay on the field, whoever moves first (Samurai Slash). */
+      flinchFirstUse: z.literal(true).optional(),
       /** Goes through Protect (Feint, Phantom Force). */
       breaksProtect: z.literal(true).optional(),
       /** Breaks the target's Reflect, Light Screen and Aurora Veil before the hit (Bastion Fist). */
@@ -1191,6 +1193,8 @@ export const HeldHookSchema = z.discriminatedUnion('hook', [
   z.object({ hook: z.literal('covertCloak') }),
   /** Opponents can't lower its stats (Clear Amulet). */
   z.object({ hook: z.literal('clearAmulet') }),
+  /** Immune to Intimidate; the first use of each status move goes first (Cool Shades, Squirtle Squad). */
+  z.object({ hook: z.literal('coolShades') }),
   /** Multi-hit moves hit at least 4 times (Loaded Dice). */
   z.object({ hook: z.literal('loadedDice') }),
   /** Punching moves do more damage and don't make contact (Punching Glove). */
@@ -2768,7 +2772,7 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** A meter leaning one way: Rage (positive ragePeace) / Peace (negative), Good (positive goodEvil) / Evil (negative). */
   z.object({ kind: z.literal('meter'), key: z.enum(['ragePeace', 'goodEvil']), side: z.enum(['positive', 'negative']), atLeast: z.number().int().min(0) }),
   z.object({ kind: z.literal('item'), id: z.string(), /** Copies needed (default 1). */ count: z.number().int().min(1).optional() }),
-  z.object({ kind: z.literal('partyType'), type: TypeNameSchema }),
+  z.object({ kind: z.literal('partyType'), type: TypeNameSchema, /** True: holds only when NO Pokémon of this type is in the party. */ absent: z.boolean().optional() }),
   /** Ideas W4: the run calendar's season (core/clock.ts seasonOf) is one of these. */
   z.object({ kind: z.literal('season'), in: z.array(z.enum(['Spring', 'Summer', 'Autumn', 'Winter'])).min(1) }),
   /** Ideas W4 landmarks: the run is in one of these regions (regions.json ids). */
@@ -2783,6 +2787,10 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('evoEncounters'), /** Also needs a party Pokémon within this many levels of a level evolution. */ nearEvolution: z.number().int().min(0).max(20).optional() }),
   /** Field moves (S416): a party member knows this move (Cut, Surf, Flash ...). */
   z.object({ kind: z.literal('partyMove'), move: z.string() }),
+  /** A conscious party Pokémon knows a damaging move of this type. */
+  z.object({ kind: z.literal('partyMoveType'), type: TypeNameSchema }),
+  /** Your highest-level Pokémon is at least `over` levels above this stage's opening level (Squirtle Squad's Blastoise). */
+  z.object({ kind: z.literal('partyLevelOver'), over: z.number().int(), /** True: your Pokémon are NOT that strong. */ absent: z.boolean().optional() }),
   /** A party member knows a move with this flag (sound, wind, ...). */
   z.object({ kind: z.literal('partyMoveFlag'), flag: z.enum(['sound', 'wind', 'punch', 'bite', 'pulse', 'bullet', 'slicing', 'powder']) }),
   /** A party member whose current emotion is this one (Overdrive emotions: kindness, bravery...). */
@@ -2973,9 +2981,9 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('attribute'), key: AttributeKeySchema, amount: z.number().int() }),
   /** Research Points, paid at the end of the run. */
   z.object({ kind: z.literal('research'), amount: z.number().int().positive() }),
-  z.object({ kind: z.literal('levels'), amount: z.number().int().positive(), who: z.enum(['lead', 'party']).default('lead') }),
+  z.object({ kind: z.literal('levels'), amount: z.number().int().positive(), who: z.enum(['lead', 'party', 'weakest']).default('lead') }),
   /** A Pokémon joins (or goes to storage when the party is full): a listed species, or one of the types, or the stage's theme. */
-  z.object({ kind: z.literal('join'), species: z.array(z.string()).default([]), types: z.array(TypeNameSchema).default([]), levelBonus: z.number().int().default(0), shinyMultiplier: z.number().min(1).default(1), shadow: z.boolean().default(false), blissful: z.boolean().default(false), hiddenAbility: z.boolean().default(false) }),
+  z.object({ kind: z.literal('join'), species: z.array(z.string()).default([]), types: z.array(TypeNameSchema).default([]), levelBonus: z.number().int().default(0), shinyMultiplier: z.number().min(1).default(1), shadow: z.boolean().default(false), blissful: z.boolean().default(false), hiddenAbility: z.boolean().default(false), /** It joins with this ability instead of its own (Squad Squirtle: Contrary). */ ability: z.string().optional() }),
   /** A seedling grows in the Berry Garden (core/berries.ts): a held-berry plot, optionally mutated; the garden must have room. */
   z.object({ kind: z.literal('seedling'), berry: z.string().min(1), mutated: z.boolean().default(false) }),
   /** A sanctuary's blessing (shadowWorld.json): a few battles of a small, narrow boost. */
@@ -2997,6 +3005,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   }),
   /** The lead learns one of its family's egg moves it doesn't know yet. */
   z.object({ kind: z.literal('eggMove') }),
+  /** A party Pokémon learns a move: the first conscious one of `type`, else the lead. A full moveset loses its last move. */
+  z.object({ kind: z.literal('teachMove'), move: z.string().min(1), type: TypeNameSchema.optional(), /** Teach this species instead (the Clefairy you just got). */ species: z.string().optional(), /** A full moveset loses the move in this slot (0-3) instead of the last one. */ slot: z.number().int().min(0).max(3).optional() }),
   /** The next reward draft uses the gym leader's odds and offers `extra` more choices. */
   z.object({ kind: z.literal('betterDraft'), extra: z.number().int().min(0).default(0) }),
   /** The map shows this stage's gym leader's whole team. */
@@ -3113,6 +3123,10 @@ export type EventEffect = z.infer<typeof EventEffectSchema>;
  * `foeAsleep`: the foe's Pokémon start asleep. `reversed`: your last conscious Pokémon leads. `stages`: both sides start with these stat stages.
  */
 export const EventRuleSchema = z.object({
+  /** A duel: your first conscious Pokémon of this type leads (Samurai face-off). */
+  leadType: TypeNameSchema.optional(),
+  /** The foe's level equals your lead's level (Samurai face-off). */
+  matchLead: z.boolean().optional(),
   noSwitch: z.boolean().optional(),
   noAttacks: z.boolean().optional(),
   /** No bag items in this fight (Mentor's Examination). */
@@ -3147,6 +3161,8 @@ export const EventRuleSchema = z.object({
   pinchHitter: z.boolean().optional(),
   /** Blackout's Seal (Beta 0.6 E4): no voluntary switching on the first turn of the fight. */
   noSwitchFirstTurn: z.boolean().optional(),
+  /** Beta 0.6 Foresight Tax: the foe sees your first chosen move each turn until one of its Pokémon faints. */
+  foresight: z.boolean().optional(),
   /** Front (Beta 0.6): each Pokémon fights only the foe in its own lane (spot n faces spot n); no moves reach other lanes or allies. */
   lanes: z.boolean().optional(),
   /** Blackout's Seal: moves of this type hit this many percent harder, for both sides. */
@@ -3191,6 +3207,10 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     kind: z.literal('trainer'),
     /** Fought as a double or triple battle (see EventBattleFormatSchema); `size` should be at least 2 or 3. */
     format: EventBattleFormatSchema.optional(),
+    /** A fixed foe team (species ids) instead of one drawn by `types`. */
+    team: z.array(z.string()).optional(),
+    /** With `team`: this team instead when your lead is weak to `weakTo` (the Samurai counters your Bug-type). */
+    counter: z.object({ weakTo: TypeNameSchema, team: z.array(z.string()).min(1) }).optional(),
     /** A trainer class from trainers.json, or a boss id (its signature team). */
     classId: z.string().optional(),
     bossId: z.string().optional(),
@@ -3237,6 +3257,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     /** Run events B: `win` effects used instead of `win` when the fight took longer than `rule.turnLimit` turns. */
     slowWin: z.array(EventEffectSchema).optional(),
     win: z.array(EventEffectSchema).default([]),
+    /** Effects applied when this fight is lost (a consolation prize). Only fights whose loss does not end the run (pseudo stages) use it. */
+    lose: z.array(EventEffectSchema).optional(),
   }),
 ]);
 export type EventBattle = z.infer<typeof EventBattleSchema>;
@@ -3386,6 +3408,8 @@ export const EventDefSchema = z.object({
   timeoutChoice: z.number().int().min(0).optional(),
   /** A room of a landmark, dungeon or tower: only opens from another event's `addEvent`, never drawn on its own. */
   room: z.boolean().default(false),
+  /** Beta 0.6 Canon Spaces: the space this event plays (`cs.kanto.*`, data/expansion/canonSpacesKanto.json). Never drawn at random; placed by core/expansion/canonRun.ts from the town menu. */
+  canon: z.string().regex(/^cs\.kanto\.[a-z0-9.-]+$/).nullable().default(null),
   /** A follow-up scene: gets a stop on the next stage where it is eligible (its `requires` hold), so a kindness shows up again later. */
   callback: z.boolean().default(false),
   /** A secret path: shows as "?" until one of these holds (a Pokémon with the right ability or type), then the real stop. */

@@ -4328,6 +4328,99 @@
         "slowFactor": 2,
         "noTimerOption": false
       }
+    },
+    {
+      "id": "triage-beds",
+      "name": "The Day the Center Closed: Beds",
+      "category": "resource",
+      "blurb": "Beds, supplies, worst first.",
+      "instructions": "Pick a patient, then a bed (a patient in a bed stops getting worse). Tap the bed to pick the patient, then use the supply that cures them. Supplies run out, so save the worst first.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "beta06": true,
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "patients": 5,
+            "hp": 9,
+            "short": 1,
+            "ticks": 40
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "patients": 6,
+            "hp": 7,
+            "short": 2,
+            "ticks": 40
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "patients": 7,
+            "hp": 6,
+            "short": 2,
+            "ticks": 40
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "1, 2 or 3 points for each patient saved, by risk.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.55,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 70,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 119,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 189,
+          "item": {
+            "item": "ultra-ball",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "heal",
+            "amount": 25,
+            "chance": 0.5
+          }
+        }
+      },
+      "failureOutcome": "The Center closes; you keep the patients you saved.",
+      "replayRules": "Two tries per stop; the best medal counts.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 600
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": false
+      }
     }
   ]
 }

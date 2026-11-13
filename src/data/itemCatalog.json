@@ -982,6 +982,30 @@
   }
  },
  {
+  "id": "silver-powder",
+  "name": "Silver Powder",
+  "family": "Type boosters (held)",
+  "description": "Bug moves +20%",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "silverpowder",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "bug"
+     ],
+     "percent": 20
+    }
+   ]
+  }
+ },
+ {
   "id": "soft-sand",
   "name": "Soft Sand",
   "family": "Type boosters (held)",
@@ -28307,6 +28331,43 @@
      "percent": 15
     }
    ]
+  }
+ },
+ {
+  "id": "cool-shades",
+  "name": "Cool Shades",
+  "family": "Battle held items",
+  "description": "Immune to Intimidate. The first use of each status move has +1 priority",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "blackglasses",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "coolShades"
+    }
+   ]
+  }
+ },
+ {
+  "id": "unofficial-badge",
+  "name": "Unofficial Badge",
+  "family": "Valuables",
+  "description": "Damian's badge. It does not count toward progress. Sell for ₽300",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "library/surgebadge",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 300,
+   "changes": {}
   }
  }
 ]

@@ -4,7 +4,8 @@
 // of the three anchors are beaten; that fight and every one after it have no Seal. If the Triad is active the third anchor
 // is Oracle Sabrina and she must be beaten too (3 battles, else 2). A lost fight heals the party (story loss), the anchor
 // stays up, and the player may try again. No RNG here; the battles use their own seeded stream (`format-battle`).
-// Not built: Sabrina's executive ability "Foresight Tax" (needs an AI hook in the battle engine).
+// Sabrina's executive ability "Foresight Tax" is the battle rule `foresight` (core/battle/foresight.ts): she sees your first chosen
+// move each turn until one of her Pokémon faints.
 
 import { markCheckpoint, markDone } from './store';
 import { launchFormatBattle } from './battle';
@@ -103,7 +104,7 @@ function choose(s: BlackoutState, id: string, ctx: FormatCtx): BlackoutState {
     species: a.species,
     size: a.size,
     levelBonus: a.sabrina ? 2 : 0,
-    ...(sealHolds(s) ? { rule: { ...SEAL } } : {}),
+    ...(sealHolds(s) || a.sabrina ? { rule: { ...(sealHolds(s) ? SEAL : {}), ...(a.sabrina ? { foresight: true } : {}) } } : {}),
   });
   return ok ? { ...s, pending: a.id } : s;
 }

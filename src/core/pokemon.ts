@@ -195,6 +195,7 @@ export function rollAbilitySlot(content: Content, species: Species, key: string)
 export function abilityOf(content: Content, mon: PokemonInstance): string | null {
   const species = getSpecies(content, mon.speciesId);
   const { normal, hidden } = species.abilities;
+  if (mon.fixedAbility) return mon.fixedAbility;
   // A Mega or Primal form has one ability, whatever slot the base form used.
   if ((species.form?.kind === 'mega' || species.form?.kind === 'primal') && normal.length > 0) return normal[0]!;
   if (mon.abilitySlot === -1 && hidden) return hidden;

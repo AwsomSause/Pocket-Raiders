@@ -1,0 +1,4124 @@
+{
+ "events": [
+  {
+   "id": "cs-kanto-pewter-rest",
+   "name": "Brock's Rest Stop",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "A camp by the road. Brock is stirring a big pot and waves you over. \"Stew's almost ready. Hungry?\"",
+   "choices": [
+    {
+     "label": "Share Brock's stew",
+     "chance": 0.9,
+     "success": {
+      "text": "Warm and filling. Everyone feels better, and Brock is reaching for his secret spice...",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.15
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-rest-spice"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Brock gets distracted and burns the whole pot. \"Uh... next time!\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "Move on",
+     "success": {
+      "text": "You thank Brock and keep walking.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.pewter.rest"
+  },
+  {
+   "id": "cs-kanto-pewter-rest-spice",
+   "name": "Brock's Secret Spice",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "Brock holds up a little jar. \"Pick a stat. The spice only works if I get it just right.\"",
+   "choices": [
+    {
+     "label": "Spice for Attack",
+     "chance": 0.5556,
+     "success": {
+      "text": "Perfect! Your team's Attack is boosted for the next boss fight.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Brock's stew: Attack x1.5 in the next boss fight",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "value": 1.5
+         }
+        ],
+        "battles": 1,
+        "until": "boss"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A pinch too much. The spice does nothing special, but the stew was good.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Spice for Defense",
+     "chance": 0.5556,
+     "success": {
+      "text": "Perfect! Your team's Defense is boosted for the next boss fight.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Brock's stew: Defense x1.5 in the next boss fight",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "value": 1.5
+         }
+        ],
+        "battles": 1,
+        "until": "boss"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A pinch too much. The spice does nothing special, but the stew was good.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Spice for Sp. Atk",
+     "chance": 0.5556,
+     "success": {
+      "text": "Perfect! Your team's Sp. Atk is boosted for the next boss fight.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Brock's stew: Sp. Atk x1.5 in the next boss fight",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spa",
+          "value": 1.5
+         }
+        ],
+        "battles": 1,
+        "until": "boss"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A pinch too much. The spice does nothing special, but the stew was good.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Spice for Speed",
+     "chance": 0.5556,
+     "success": {
+      "text": "Perfect! Your team's Speed is boosted for the next boss fight.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Brock's stew: Speed x1.5 in the next boss fight",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 1.5
+         }
+        ],
+        "battles": 1,
+        "until": "boss"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A pinch too much. The spice does nothing special, but the stew was good.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-museum",
+   "name": "Pewter Museum of Science",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "Fossils fill the glass cases. A curator beams at you. \"Old Amber is on display. Answer my fossil quiz and it is yours.\"",
+   "choices": [
+    {
+     "label": "Register your Helix Fossil",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "helix-fossil"
+      }
+     ],
+     "success": {
+      "text": "The curator logs it in the Fossil Registry, pays you 300 coins and pins a Fossil Registry badge on you. The fossil stays yours for revival.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "moment",
+        "text": "Registered a fossil at the Pewter Museum of Science."
+       },
+       {
+        "kind": "flag",
+        "key": "xk-fossil-registered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Register your Dome Fossil",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "dome-fossil"
+      }
+     ],
+     "success": {
+      "text": "The curator logs it in the Fossil Registry, pays you 300 coins and pins a Fossil Registry badge on you. The fossil stays yours for revival.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "moment",
+        "text": "Registered a fossil at the Pewter Museum of Science."
+       },
+       {
+        "kind": "flag",
+        "key": "xk-fossil-registered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the fossil quiz",
+     "check": "intelligence",
+     "success": {
+      "text": "Three for three! The curator hands over the Old Amber.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "old-amber"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Two wrong. \"Come back when you have studied!\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "Just look around",
+     "success": {
+      "text": "Fascinating, but you have places to be.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.pewter.museum"
+  },
+  {
+   "id": "cs-kanto-pewter-magikarp",
+   "name": "Magikarp Salesman",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "A man on Route 4 grins. \"Psst! Magikarp for sale, only 500! Best Pokemon in the world!\"",
+   "choices": [
+    {
+     "label": "Buy the Magikarp (500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "chance": 0.35,
+     "success": {
+      "text": "This Magikarp is something special: strong and quick in the water. Even the salesman looks surprised.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "join",
+        "species": [
+         "magikarp"
+        ],
+        "levelBonus": 3
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-magikarp",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "A normal Magikarp. It flops. It uses Splash. The salesman is already gone.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "join",
+        "species": [
+         "magikarp"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-magikarp",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away",
+     "success": {
+      "text": "\"Your loss!\" he calls after you.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.pewter.magikarp"
+  },
+  {
+   "id": "cs-kanto-pewter-flock",
+   "name": "Pewter Skies: The Flock",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "A flock of Spearow dives at a lone Pidgey, and it cannot fight them all.",
+   "choices": [
+    {
+     "label": "Drive the flock off",
+     "success": {
+      "text": "You jump in. The flock turns on you, wave after wave.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-flock-seen",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "spearow"
+       ],
+       "chain": 3,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "pidgey"
+         ],
+         "levelBonus": 0
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look away",
+     "success": {
+      "text": "You keep walking. Behind you, the Pidgey's cries fade.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-flock-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.pewter.flock"
+  },
+  {
+   "id": "cs-kanto-pewter-forest",
+   "name": "Veridian Forest",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "The trees close in overhead. Somewhere ahead, an old swordsman is said to wait in a clearing. You can turn back before the first fight.",
+   "choices": [
+    {
+     "label": "Enter Veridian Forest",
+     "chance": 0.8,
+     "success": {
+      "text": "You step in.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n1"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You step in. Something feels different today.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-twist"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You turn back. Nothing here is forced.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.pewter.forest"
+  },
+  {
+   "id": "cs-kanto-pewter-forest-twist",
+   "name": "Veridian Forest: A Strange Turn",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "The forest is quiet. Too quiet. Branches creak overhead.",
+   "choices": [
+    {
+     "label": "Press on",
+     "chance": 0.5,
+     "success": {
+      "text": "A thick fog rolls between the trees. Nobody can aim properly in here: accuracy drops for everyone until you leave the forest.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-forest-fog",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n1"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A net drops on the party! Far above, a striped balloon drifts away over the trees.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "moment",
+        "text": "A striped balloon over Veridian Forest, with a net-launcher hanging under it."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n1"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-forest-n1",
+   "name": "Veridian Forest: Bug Catcher",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "A Bug Catcher jumps out of the ferns, net first.",
+   "choices": [
+    {
+     "label": "Push on",
+     "success": {
+      "text": "\"My bugs are the best!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "classId": "bug-catcher",
+       "name": "Bug Catcher",
+       "size": 2,
+       "types": [
+        "bug"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-forest-n2",
+   "name": "Veridian Forest: The Forest Gift",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "Something rustles in the grass: a Caterpie, a Weedle or a Pinsir. The forest is offering you a Bug-type. Catch it if you can.",
+   "choices": [
+    {
+     "label": "Step toward the rustle",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-forest-fog",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You step toward the rustle.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "caterpie",
+        "weedle",
+        "pinsir"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Step toward the rustle (in the fog)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-forest-fog",
+       "atLeast": 1
+      }
+     ],
+     "chance": 0.01,
+     "success": {
+      "text": "The fog parts on something pale and empty-eyed.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "shedinja"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n3"
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "You step toward the rustle.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "caterpie",
+        "weedle",
+        "pinsir"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n3"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-forest-n3",
+   "name": "Veridian Forest: The Thicket",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "A trail runs on, and to one side a thicket buzzes angrily.",
+   "choices": [
+    {
+     "label": "Follow the trail",
+     "success": {
+      "text": "A Bug Catcher blocks the trail.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "classId": "bug-catcher",
+       "name": "Bug Catcher",
+       "size": 2,
+       "types": [
+        "bug"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n4"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Check the buzzing thicket",
+     "chance": 0.4,
+     "success": {
+      "text": "A Beedrill swarm erupts out of the thicket!",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "weedle",
+        "kakuna",
+        "beedrill"
+       ],
+       "chain": 3,
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "poison-barb"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n4"
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "Only an empty nest. You rejoin the trail.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n4"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-forest-n4",
+   "name": "Veridian Forest: The Hollow Tree",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "The trail bends past a huge hollow tree that smells of honey.",
+   "choices": [
+    {
+     "label": "Follow the trail",
+     "success": {
+      "text": "A Bug Catcher is waiting.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "classId": "bug-catcher",
+       "name": "Bug Catcher",
+       "size": 2,
+       "types": [
+        "bug"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n5"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look in the hollow tree",
+     "chance": 0.3,
+     "success": {
+      "text": "A den! Something big is guarding the honey.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "combee",
+        "heracross"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n5"
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "Just honey and bark. You move on.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n5"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-forest-n5",
+   "name": "Veridian Forest: The Clearing",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "A clearing. A figure in old armor sits on a stump, very still. A Bug-type is the only thing that will be welcome here.",
+   "choices": [
+    {
+     "label": "Step into the clearing",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "bug"
+      }
+     ],
+     "success": {
+      "text": "The figure lifts his head and looks at your Bug-type.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-forest-bug",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Step into the clearing (a Weedle was waiting)",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "bug",
+       "absent": true
+      }
+     ],
+     "success": {
+      "text": "A Weedle that was already waiting for you crawls up your leg. The figure on the stump watches it.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "weedle"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-forest-bug",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n6"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-forest-n6",
+   "name": "Veridian Forest: The Samurai",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "\"One Pokemon against one. Same level. No items, no switching. Show me your Bug-type.\"",
+   "choices": [
+    {
+     "label": "Face the Samurai",
+     "success": {
+      "text": "The Samurai draws a blade. The duel begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Samurai",
+       "classId": "veteran",
+       "size": 1,
+       "team": [
+        "pinsir"
+       ],
+       "counter": {
+        "weakTo": "flying",
+        "team": [
+         "scyther"
+        ]
+       },
+       "rule": {
+        "leadType": "bug",
+        "matchLead": true,
+        "suddenDeath": true,
+        "noSwitch": true,
+        "noItems": true
+       },
+       "win": [
+        {
+         "kind": "teachMove",
+         "move": "samurai-slash",
+         "type": "bug"
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-forest-samurai-won",
+         "amount": 1
+        }
+       ],
+       "lose": [
+        {
+         "kind": "item",
+         "id": "silver-powder"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-moon",
+   "name": "Mt. Moon",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "A cave mouth, cool and echoing. Somewhere inside, a skylight lets the moon in. You can turn back before the first fight.",
+   "choices": [
+    {
+     "label": "Enter Mt. Moon",
+     "success": {
+      "text": "You step into the dark.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You turn back. Nothing here is forced.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.pewter.moon"
+  },
+  {
+   "id": "cs-kanto-pewter-moon-n1",
+   "name": "Mt. Moon: The Mouth",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "Zubat flutter overhead as you go in.",
+   "choices": [
+    {
+     "label": "Push on",
+     "success": {
+      "text": "Something stirs in the dark.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "zubat",
+        "geodude",
+        "paras"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-moon-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-moon-n2",
+   "name": "Mt. Moon: The Hiker",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "A Hiker is resting against the wall, boots off.",
+   "choices": [
+    {
+     "label": "Push on",
+     "success": {
+      "text": "\"Mt. Moon is my second home!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "classId": "hiker",
+       "name": "Hiker",
+       "size": 2,
+       "types": [
+        "rock",
+        "ground"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-moon-n3"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-moon-n3",
+   "name": "Mt. Moon: Deeper In",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "The tunnel narrows. Pebbles trickle down from the ceiling.",
+   "choices": [
+    {
+     "label": "Push on",
+     "success": {
+      "text": "A wild shape scrambles out of a crack.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "zubat",
+        "geodude",
+        "paras",
+        "sandshrew"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-moon-n4"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-moon-n4",
+   "name": "Mt. Moon: Moon Watching (1 of 3)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "Midnight. A ring of Clefairy dance under the skylight. What do you do?",
+   "choices": [
+    {
+     "label": "Watch quietly",
+     "success": {
+      "text": "That felt right. The Clefairy relax.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-moon-clefairy-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n4b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Join in",
+     "success": {
+      "text": "The Clefairy scatter, startled.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n4b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Clap along",
+     "success": {
+      "text": "The sudden noise spooks them.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n4b"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-moon-n4b",
+   "name": "Mt. Moon: Moon Watching (2 of 3)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "A Clefairy shyly holds out a shard of Moon Stone.",
+   "choices": [
+    {
+     "label": "Offer a berry in return",
+     "success": {
+      "text": "That felt right. The Clefairy relax.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-moon-clefairy-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n4c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the shard and go",
+     "success": {
+      "text": "It tilts its head, unsure.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n4c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look away",
+     "success": {
+      "text": "It puts the shard back down.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n4c"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-moon-n4c",
+   "name": "Mt. Moon: Moon Watching (3 of 3)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "The smallest Clefairy hides behind your leg.",
+   "choices": [
+    {
+     "label": "Let it stay",
+     "success": {
+      "text": "That felt right. The Clefairy relax.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-moon-clefairy-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n4d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Gently shoo it back",
+     "success": {
+      "text": "It whimpers and runs off.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n4d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick it up",
+     "success": {
+      "text": "It squeaks and wriggles free.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n4d"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-moon-n4d",
+   "name": "Mt. Moon: The Clefairy's Gift",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "The dance winds down. The smallest Clefairy looks up at you.",
+   "choices": [
+    {
+     "label": "Meet its eyes (all three right)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-moon-clefairy-right",
+       "atLeast": 3
+      }
+     ],
+     "success": {
+      "text": "The Clefairy trots to your side, and it knows Moonblast.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "clefairy"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "moonblast",
+        "species": "clefairy"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-moon-clefairy",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Meet its eyes (two right)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-moon-clefairy-right",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "chance": 0.5,
+     "success": {
+      "text": "The Clefairy trots to your side, and it knows Moonblast.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "clefairy"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "moonblast",
+        "species": "clefairy"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-moon-clefairy",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n5"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It waves goodbye and leaves a Moon Stone shard behind.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "moon-stone"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-moon-clefairy",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Meet its eyes (the dance is a blur)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-moon-clefairy-right",
+       "atLeast": 0,
+       "atMost": 1
+      }
+     ],
+     "success": {
+      "text": "It waves goodbye and leaves a Moon Stone shard behind.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "moon-stone"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-moon-clefairy",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n5"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true,
+   "canon": "cs.kanto.pewter.moon.clefairy"
+  },
+  {
+   "id": "cs-kanto-pewter-moon-n5",
+   "name": "Mt. Moon: Fossil Recovery",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "A scientist is cracking something out of the wall with a little hammer. \"Hey! This one is mine!\"",
+   "choices": [
+    {
+     "label": "Fight for the fossil",
+     "success": {
+      "text": "\"Then you will have to beat me for it!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "classId": "worker",
+       "name": "Scientist",
+       "size": 3,
+       "team": [
+        "magnemite",
+        "voltorb",
+        "koffing"
+       ],
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "helix-fossil",
+          "dome-fossil",
+          "old-amber",
+          "helix-fossil",
+          "dome-fossil",
+          "old-amber",
+          "helix-fossil",
+          "dome-fossil",
+          "old-amber",
+          "helix-fossil",
+          "dome-fossil",
+          "old-amber",
+          "helix-fossil",
+          "dome-fossil",
+          "old-amber",
+          "helix-fossil",
+          "dome-fossil",
+          "old-amber",
+          "helix-fossil",
+          "dome-fossil",
+          "old-amber",
+          "root-fossil",
+          "claw-fossil",
+          "skull-fossil",
+          "armor-fossil",
+          "cover-fossil",
+          "plume-fossil",
+          "jaw-fossil",
+          "sail-fossil",
+          "hisui-ember-fossil"
+         ],
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "xk-fossil-registered",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-moon-n6"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true,
+   "canon": "cs.kanto.pewter.moon.fossil"
+  },
+  {
+   "id": "cs-kanto-pewter-moon-n6",
+   "name": "Mt. Moon: Gem-Stone Mine",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "A wall of glittering ore deposits. A Fighting-type move would crack one open.",
+   "choices": [
+    {
+     "label": "Punch a deposit open",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fighting"
+      }
+     ],
+     "chance": 0.1,
+     "success": {
+      "text": "A Gem Vein! Rare Candy and a Metal Coat tumble out.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "rare-candy"
+       },
+       {
+        "kind": "item",
+        "id": "metal-coat"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-moon-mine",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n7"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The deposit cracks and an evolution stone drops out, but something heavy wakes behind it.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-moon-mine",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "geodude",
+        "onix",
+        "rhyhorn",
+        "geodude-alola"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-moon-n7"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Rent a pickaxe (200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "You hire a pickaxe from a man with too many of them and break one deposit open.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "moon-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "fire-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "water-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "thunder-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "leaf-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "sun-stone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone",
+         "everstone"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-moon-mine",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-moon-n7"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true,
+   "canon": "cs.kanto.pewter.moon.mine"
+  },
+  {
+   "id": "cs-kanto-pewter-moon-n7",
+   "name": "Mt. Moon: The Way Out",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3350"
+   },
+   "intro": "Daylight again, far down the other side of the mountain.",
+   "choices": [
+    {
+     "label": "Leave Mt. Moon",
+     "success": {
+      "text": "You leave the mountain behind.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Crossed Mt. Moon."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-bridge",
+   "name": "Cerulean: The Bridge",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2b4a63"
+   },
+   "intro": "A long bridge over the river, the only way on. Planks creak under the wind. You cannot go around.",
+   "choices": [
+    {
+     "label": "Cross the bridge",
+     "chance": 0.5,
+     "success": {
+      "text": "The planks hold. Five trainers wait at the far end.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bridge-n1"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The rope snaps. You fall into the river and the current carries you away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-bridge-fell",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-village"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.bridge"
+  },
+  {
+   "id": "cs-kanto-cerulean-bridge-n1",
+   "name": "Nugget Bridge: First Challengers",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2b4a63"
+   },
+   "intro": "The first three trainers step onto the planks. \"Nobody crosses without a battle!\"",
+   "choices": [
+    {
+     "label": "Take them on",
+     "success": {
+      "text": "Three trainers, one after another.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Nugget Bridge trainer",
+       "size": 2,
+       "types": [],
+       "chain": 3,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-bridge-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-bridge-n2",
+   "name": "Nugget Bridge: The Last Two",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2b4a63"
+   },
+   "intro": "Two more trainers wait at the end of the bridge.",
+   "choices": [
+    {
+     "label": "Take them on",
+     "success": {
+      "text": "Two more fights.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Nugget Bridge trainer",
+       "size": 2,
+       "types": [],
+       "chain": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-bridge-n3"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-bridge-n3",
+   "name": "Nugget Bridge: The Offer",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2b4a63"
+   },
+   "intro": "At the end of the bridge a man in black leans on the rail. \"Nice work. We pay well, you know. There is a spot on our team with your name on it.\"",
+   "choices": [
+    {
+     "label": "Refuse",
+     "success": {
+      "text": "\"Your loss,\" he shrugs, and tosses you a Nugget. He talks too much while he does.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "nugget"
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Accept",
+     "success": {
+      "text": "\"Wise choice,\" he grins. Then he throws a ball. It was a trap, and a free fight.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rocket Grunt",
+       "size": 2,
+       "types": [
+        "poison",
+        "dark"
+       ],
+       "win": [
+        {
+         "kind": "item",
+         "id": "nugget"
+        },
+        {
+         "kind": "flag",
+         "key": "rocket-recruit-offered",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-village",
+   "name": "The Hidden Village",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a5a2d"
+   },
+   "intro": "You wake up in a quiet valley, wet and aching. The river brought you here. There is a village, and a rope hanging from the cliff.",
+   "choices": [
+    {
+     "label": "Look around",
+     "success": {
+      "text": "Smoke rises from a few small houses.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-n1"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.hidden-village",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-hv-n1",
+   "name": "The Hidden Village: Valley Path",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a5a2d"
+   },
+   "intro": "Tall grass fills the valley floor, and something is moving in it.",
+   "choices": [
+    {
+     "label": "Press on",
+     "success": {
+      "text": "A wild Pokémon jumps out.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "oddish",
+        "bellsprout",
+        "caterpie",
+        "weedle",
+        "pidgey"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-hv-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-hv-n2",
+   "name": "The Hidden Village: Valley Path",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a5a2d"
+   },
+   "intro": "Tall grass fills the valley floor, and something is moving in it.",
+   "choices": [
+    {
+     "label": "Press on",
+     "success": {
+      "text": "A wild Pokémon jumps out.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "paras",
+        "venonat",
+        "exeggcute",
+        "rattata",
+        "spearow"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-hv-n3"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-hv-n3",
+   "name": "The Hidden Village: The Square",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a5a2d"
+   },
+   "intro": "A small square with a healing pool, a shrine heaped with berries, and an old Elder on a bench. You have time for one of them.",
+   "choices": [
+    {
+     "label": "Bathe in the Healing Pool",
+     "success": {
+      "text": "The warm water takes every ache away.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-pick"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Visit the Berry Shrine",
+     "success": {
+      "text": "The shrine keeper presses a few berries into your hands.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry"
+        ],
+        "count": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-pick"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Listen to the Elder's legend",
+     "success": {
+      "text": "\"Long ago, grass starters of every land came here to rest.\" You think about that for a while.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-pick"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-hv-pick",
+   "name": "The Hidden Village: A Request",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a5a2d"
+   },
+   "intro": "A villager waves you over. \"There is something we need help with. It will not take long.\"",
+   "choices": [
+    {
+     "label": "Hear them out",
+     "success": {
+      "text": "You follow the villager.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-cerulean-hv-t1",
+         "cs-kanto-cerulean-hv-t2",
+         "cs-kanto-cerulean-hv-t3",
+         "cs-kanto-cerulean-hv-t4",
+         "cs-kanto-cerulean-hv-t5",
+         "cs-kanto-cerulean-hv-t6",
+         "cs-kanto-cerulean-hv-t7",
+         "cs-kanto-cerulean-hv-t8",
+         "cs-kanto-cerulean-hv-t9"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-hv-t1",
+   "name": "Hidden Village: The Venusaur Garden",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a5a2d"
+   },
+   "intro": "A giant Venusaur droops in a wilting garden. Three Poison-type thieves are stripping its flowers.",
+   "choices": [
+    {
+     "label": "Drive off the thieves",
+     "success": {
+      "text": "The garden is saved. A Bulbasaur seedling looks up from beside the Venusaur.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Poison-type thief",
+       "size": 2,
+       "types": [
+        "poison"
+       ],
+       "chain": 3,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "bulbasaur"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "teachMove",
+         "move": "skull-bash",
+         "species": "bulbasaur"
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-hidden-bulbasaur",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-hidden-done",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-hv-exit"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "item",
+         "id": "miracle-seed"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-hv-t2",
+   "name": "Hidden Village: Bayleef's Dew",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a5a2d"
+   },
+   "intro": "The village lost its dew bottle. A sweet scent hangs in the air, and there are three trails to follow.",
+   "choices": [
+    {
+     "label": "Follow the scent of honey",
+     "chance": 0.8,
+     "success": {
+      "text": "The trail ends at a Bayleef who was guarding the bottle all along.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "chikorita"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "ancient-power",
+        "species": "chikorita"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-chikorita",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The trail goes cold in a flower bed.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the scent of smoke",
+     "chance": 0.2,
+     "success": {
+      "text": "It is only a chimney.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "chikorita"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "ancient-power",
+        "species": "chikorita"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-chikorita",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You lose the trail among the houses.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the scent of the river",
+     "chance": 0.55,
+     "success": {
+      "text": "The bottle is stuck in the reeds, with a Chikorita sitting on it.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "chikorita"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "ancient-power",
+        "species": "chikorita"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-chikorita",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You come back wet and empty-handed.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-hv-t3",
+   "name": "Hidden Village: The Rooftop Race",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a5a2d"
+   },
+   "intro": "An old Treecko dares you to cross the rooftops before it does. Three jumps.",
+   "choices": [
+    {
+     "label": "Jump slowly, one roof at a time",
+     "chance": 0.5,
+     "success": {
+      "text": "You make it, a step behind, and the elder is impressed that you finished at all.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "treecko"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "crunch",
+        "species": "treecko"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-treecko",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You slip on a wet tile.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run and leap on the beat",
+     "chance": 0.75,
+     "success": {
+      "text": "You nail every jump. The elder bows and sends a youngster over to join you.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "treecko"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "crunch",
+        "species": "treecko"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-treecko",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You miss the second jump.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the elder exactly",
+     "chance": 0.25,
+     "success": {
+      "text": "The elder cheats. It was a test of whether you would copy.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "treecko"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "crunch",
+        "species": "treecko"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-treecko",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You trip on its tail.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-hv-t4",
+   "name": "Hidden Village: The Slow Planting",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a5a2d"
+   },
+   "intro": "A sapling needs planting. Then you must wait three turns of weather without touching it.",
+   "choices": [
+    {
+     "label": "Wait, and wait, and wait",
+     "chance": 0.85,
+     "success": {
+      "text": "Three turns of rain and sun later, a small Turtwig sits under the leaves.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "turtwig"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "superpower",
+        "species": "turtwig"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-turtwig",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You waited well, but the storm washed it out.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Water it to speed things up",
+     "chance": 0.1,
+     "success": {
+      "text": "The sapling drowns.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "turtwig"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "superpower",
+        "species": "turtwig"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-turtwig",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It rots in the mud.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-hv-t5",
+   "name": "Hidden Village: The Dignity Test",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a5a2d"
+   },
+   "intro": "A proud Snivy stands on a stump, chin high. It will only talk to someone with manners.",
+   "choices": [
+    {
+     "label": "Bow low and wait to be spoken to",
+     "chance": 0.85,
+     "success": {
+      "text": "The Snivy nods. A slight smile.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "snivy"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "dragon-pulse",
+        "species": "snivy"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-snivy",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Snivy turns its back.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer a handshake",
+     "chance": 0.2,
+     "success": {
+      "text": "The Snivy stares at the hand.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "snivy"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "dragon-pulse",
+        "species": "snivy"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-snivy",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It turns away, offended.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say hello loudly",
+     "chance": 0.1,
+     "success": {
+      "text": "It does not dignify that with a look.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "snivy"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "dragon-pulse",
+        "species": "snivy"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-snivy",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It leaves.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-hv-t6",
+   "name": "Hidden Village: The Feast",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a5a2d"
+   },
+   "intro": "A hungry Chespin sits by an empty bowl. A basket holds six ingredients, and it likes only some of them.",
+   "choices": [
+    {
+     "label": "Chestnuts and honey",
+     "chance": 0.85,
+     "success": {
+      "text": "The Chespin devours it and hugs your leg.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "chespin"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "pin-missile",
+        "species": "chespin"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-chespin",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It sniffs and pushes the bowl away.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Spicy peppers",
+     "chance": 0.15,
+     "success": {
+      "text": "Too hot.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "chespin"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "pin-missile",
+        "species": "chespin"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-chespin",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It sneezes the bowl over.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Whatever is on top",
+     "chance": 0.35,
+     "success": {
+      "text": "The Chespin looks at you flatly.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "chespin"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "pin-missile",
+        "species": "chespin"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-chespin",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Not a good pick.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-hv-t7",
+   "name": "Hidden Village: The Night Watch",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a5a2d"
+   },
+   "intro": "The village sleeps. You must walk the night patrol without waking three sleeping Pokémon.",
+   "choices": [
+    {
+     "label": "Walk on tiptoe along the wall",
+     "chance": 0.7,
+     "success": {
+      "text": "Not a sound. A young Rowlet drops from a branch and falls into step.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "rowlet"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "defog",
+        "species": "rowlet"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-rowlet",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A Snorlax rolls over and the whole village hears it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk down the middle of the road",
+     "chance": 0.2,
+     "success": {
+      "text": "Every step echoes.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "rowlet"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "defog",
+        "species": "rowlet"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-rowlet",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You wake everyone.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Whistle to stay calm",
+     "chance": 0.1,
+     "success": {
+      "text": "You wake a sleeping Pokémon at once.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "rowlet"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "defog",
+        "species": "rowlet"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-rowlet",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Bad idea.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-hv-t8",
+   "name": "Hidden Village: The Jam Session",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a5a2d"
+   },
+   "intro": "A drum made of tree stumps. A Grookey beats a four-beat rhythm, and you must match it.",
+   "choices": [
+    {
+     "label": "Listen once, then repeat",
+     "chance": 0.65,
+     "success": {
+      "text": "You match every beat. The Grookey laughs and joins your party.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "grookey"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "power-whip",
+        "species": "grookey"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-grookey",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You lose count on the last beat.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Play faster than it did",
+     "chance": 0.2,
+     "success": {
+      "text": "Not the same rhythm.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "grookey"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "power-whip",
+        "species": "grookey"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-grookey",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Wrong rhythm.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Clap along first, then drum",
+     "chance": 0.45,
+     "success": {
+      "text": "Close enough to try.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "grookey"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "power-whip",
+        "species": "grookey"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-grookey",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The beat falls apart.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-hv-exit"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-hv-t9",
+   "name": "Hidden Village: The Berry Heist",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a5a2d"
+   },
+   "intro": "A Sprigatito snatched your berry and dashed off through the village. Three twists of the chase.",
+   "choices": [
+    {
+     "label": "Give chase",
+     "success": {
+      "text": "You run it down at the end of the lane.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Sprigatito",
+       "size": 1,
+       "team": [
+        "sprigatito"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "sprigatito"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "teachMove",
+         "move": "leech-seed",
+         "species": "sprigatito"
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-hidden-sprigatito",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-hidden-done",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-hv-exit"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "item",
+         "id": "miracle-seed"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-hv-exit",
+   "name": "The Hidden Village: The Rope",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a5a2d"
+   },
+   "intro": "The villagers lower a rope from the cliff. It leads back up to the bridge.",
+   "choices": [
+    {
+     "label": "Climb up",
+     "success": {
+      "text": "You climb back to the road. The village is already hard to see.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Found the Hidden Village."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-squad",
+   "name": "Squirtle Squad",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2b4a63"
+   },
+   "intro": "Sunglasses glint behind a hedge. A water balloon bursts at your feet. \"Hey! You wanna play?\"",
+   "choices": [
+    {
+     "label": "Go after the squad",
+     "chance": 0.65,
+     "success": {
+      "text": "The squad scatters, laughing, and then turns to fight.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-squad-n1"
+       }
+      ]
+     },
+     "failure": {
+      "text": "An Officer already has them in a row. \"They have been causing trouble.\" But their boss is still around the corner.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-squad-n3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away",
+     "success": {
+      "text": "You leave them to their pranks.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.squad"
+  },
+  {
+   "id": "cs-kanto-cerulean-squad-n1",
+   "name": "Squirtle Squad: The Fire Brigade",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2b4a63"
+   },
+   "intro": "Three Squirtle with sunglasses open a hose on you.",
+   "choices": [
+    {
+     "label": "Take them on",
+     "success": {
+      "text": "Three Squirtle in a row.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "squirtle"
+       ],
+       "chain": 3,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-squad-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-squad-n2",
+   "name": "Squirtle Squad: The Wartortle",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2b4a63"
+   },
+   "intro": "A Wartortle steps out of the smoke, arms crossed.",
+   "choices": [
+    {
+     "label": "Face it",
+     "success": {
+      "text": "Wartortle charges in.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "wartortle"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-squad-n3"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-squad-n3",
+   "name": "Squirtle Squad: The Boss",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2b4a63"
+   },
+   "intro": "The squad parts. At the back, a Blastoise in sunglasses grins.",
+   "choices": [
+    {
+     "label": "Face the Blastoise",
+     "requires": [
+      {
+       "kind": "partyLevelOver",
+       "over": 3
+      }
+     ],
+     "success": {
+      "text": "It braces its cannons.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "blastoise"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-squad-reward"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Talk to the squad",
+     "requires": [
+      {
+       "kind": "partyLevelOver",
+       "over": 3,
+       "absent": true
+      }
+     ],
+     "success": {
+      "text": "The Blastoise sees you are no match yet and lets you pass, with a nod.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-squad-reward"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-squad-reward",
+   "name": "Squirtle Squad: The Shades",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2b4a63"
+   },
+   "intro": "The squad lines up. One of the Squirtle steps forward and hands you its sunglasses. It wants to come with you.",
+   "choices": [
+    {
+     "label": "Take the Squirtle",
+     "success": {
+      "text": "It slides on its shades and grins.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "squirtle"
+        ],
+        "levelBonus": 0,
+        "ability": "contrary"
+       },
+       {
+        "kind": "teachMove",
+        "move": "swagger",
+        "species": "squirtle",
+        "slot": 3
+       },
+       {
+        "kind": "teachMove",
+        "move": "hex",
+        "species": "squirtle",
+        "slot": 2
+       },
+       {
+        "kind": "item",
+        "id": "cool-shades"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-squad-joined",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-damian",
+   "name": "Damian's Unofficial Gym",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2b4a63"
+   },
+   "intro": "A hand-painted sign: \"GYM. (Unofficial.)\" A boy in a wet jacket waves you in. \"Two of my friends first, then me. No pressure.\"",
+   "choices": [
+    {
+     "label": "Go in",
+     "success": {
+      "text": "The door is held by a bucket.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-damian-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk past",
+     "success": {
+      "text": "You leave the unofficial gym to the pigeons.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.damian"
+  },
+  {
+   "id": "cs-kanto-cerulean-damian-n1",
+   "name": "Damian's Gym: The Swimmer",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2b4a63"
+   },
+   "intro": "A Swimmer cannonballs out of a paddling pool. \"Round one!\"",
+   "choices": [
+    {
+     "label": "Battle",
+     "success": {
+      "text": "Splash!",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Swimmer",
+       "classId": "swimmer",
+       "size": 2,
+       "types": [
+        "water"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-damian-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-damian-n2",
+   "name": "Damian's Gym: The Fire Spirit",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2b4a63"
+   },
+   "intro": "A Fire Spirit trainer pops up beside a camping stove. \"Round two. Mind the sparks.\"",
+   "choices": [
+    {
+     "label": "Battle",
+     "success": {
+      "text": "Embers fly.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Fire Spirit",
+       "classId": "firebreather",
+       "size": 2,
+       "types": [
+        "fire"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-damian-n3"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-damian-n3",
+   "name": "Damian's Gym: Damian",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2b4a63"
+   },
+   "intro": "Damian pulls a ball from his pocket. \"I am not really a Leader. I just like battling.\"",
+   "choices": [
+    {
+     "label": "Battle Damian",
+     "success": {
+      "text": "Damian grins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Damian",
+       "size": 3,
+       "types": [
+        "water",
+        "fire"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "unofficial-badge"
+        },
+        {
+         "kind": "teachMove",
+         "move": "water-pulse",
+         "type": "water"
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-cerulean-damian-won",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-burglary",
+   "name": "Cerulean: The Burglary",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2b4a63"
+   },
+   "intro": "A wall is smashed in and a Rocket Grunt runs out of the house with the family’s TM under one arm.",
+   "choices": [
+    {
+     "label": "Give chase",
+     "success": {
+      "text": "You catch up in an alley.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rocket Grunt",
+       "size": 2,
+       "types": [
+        "poison",
+        "dark"
+       ],
+       "win": [
+        {
+         "kind": "teachMove",
+         "move": "dig",
+         "type": "ground"
+        },
+        {
+         "kind": "evil",
+         "heat": -1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let them go",
+     "success": {
+      "text": "The family sighs at the hole in their wall.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.burglary"
+  }
+ ]
+}
