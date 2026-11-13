@@ -158,3 +158,18 @@ describe('story raids drive the track', () => {
     expect(trackStep(r, 'kanto')).toBe(1);
   });
 });
+
+describe('the track event effect and condition', () => {
+  it('moves the track once per stop and reads back as a condition', async () => {
+    const { applyEffect, conditionMet } = await import('../../src/core/events');
+    const { Rng, hashSeed } = await import('../../src/core/rng');
+    const r = run('wt-effect');
+    advanceTrack(r, 'kanto', 'raidFailed', 'a');
+    advanceTrack(r, 'kanto', 'raidFailed', 'b');
+    expect(conditionMet(content, r, { kind: 'track', atLeast: 2, atMost: 5 })).toBe(true);
+    applyEffect(content, r, { kind: 'track', input: 'raidSuccess' }, new Rng(hashSeed('x')));
+    applyEffect(content, r, { kind: 'track', input: 'raidSuccess' }, new Rng(hashSeed('x')));
+    expect(trackStep(r, 'kanto')).toBe(1);
+    expect(conditionMet(content, r, { kind: 'track', atLeast: 2, atMost: 5 })).toBe(false);
+  });
+});

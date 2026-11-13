@@ -163,10 +163,10 @@ describe('Battle-start and switch-in moments (batch 2)', () => {
 
   it('every start and enter moment is either supported with an effect or documented as disabled', () => {
     const all = POKEMON_MOMENTS.filter((m) => m.trigger === 'start' || m.trigger === 'enter');
-    expect(all.filter((m) => m.status === 'supported').length).toBeGreaterThanOrEqual(28);
+    expect(all.filter((m) => m.status === 'supported').length).toBeGreaterThanOrEqual(34);
     for (const m of all) if (m.status === 'supported') expect(m.effect, m.id).toBeDefined();
-    // The five that need new mechanics stay off rather than doing something else.
-    expect(all.filter((m) => m.status === 'disabled').map((m) => m.id).sort()).toEqual(['ditto-copy', 'mew-curious', 'darkrai-nightmare', 'smeargle-sketch', 'sneasel-ambush'].sort());
+    // Batch 4 built the five that needed new mechanics.
+    expect(all.filter((m) => m.status === 'disabled').map((m) => m.id)).toEqual([]);
   });
 
   it('Arceus judges at battle start: all stats +1, once per run', () => {
@@ -347,10 +347,13 @@ describe('Reactive moments (batch 3): low HP, a KO, a hit taken', () => {
     expect(rock).toBeGreaterThan(0);
     for (let i = 0; i < 400; i++) {
       const s = fight('umbreon', `desperate-${i}`, [weak('magikarp', 'splash')], { hpPct: 10 });
-      if (!ids(turn(s.ctx), 'low').includes('dark-desperate')) continue;
-      expect(s.battle.playerVolatile.momentCrit).toBe(2);
+      const events = turn(s.ctx);
+      if (!ids(events, 'low').includes('dark-desperate')) continue;
+      // Dark Menace (battle start) adds one lasting crit stage when it plays.
+      const lasting = ids(events, 'start').includes('dark-menace') ? 1 : 0;
+      expect(s.battle.playerVolatile.momentCrit).toBe(2 + lasting);
       turn(s.ctx);
-      expect(s.battle.playerVolatile.momentCrit).toBe(0);
+      expect(s.battle.playerVolatile.momentCrit).toBe(lasting);
       return;
     }
     throw new Error('no seed played Dark Desperate');
@@ -362,5 +365,147 @@ describe('Reactive moments (batch 3): low HP, a KO, a hit taken', () => {
       return JSON.stringify([turn(s.ctx), turn(s.ctx), s.battle.playerStages]);
     };
     expect(run()).toBe(run());
+  });
+});
+
+describe('Batch 4: the mechanics for Ditto, Smeargle, Mew, Darkrai, Sneasel; shared revival use', () => {
+  const duel = (playerSp: string, seed: string, enemy: PokemonInstance, level = 40, flags: MomentHooks['flags'] = {}) => {
+    const player = createPokemon(content, playerSp, level, `${playerSp}-p`);
+    const battle = createBattle('trainer', [enemy], 0, player.uid);
+    const moments: MomentHooks = { seed, flags, cinematic: () => false, noteCinematic: () => undefined, runWouldEnd: () => false };
+    const ctx: BattleContext = { content, battle, party: [player], inventory: {}, rng: new Rng(hashSeed(seed)), captureRng: new Rng(hashSeed(`${seed}c`)), catchMultiplier: 1, moments };
+    return { ctx, battle, player };
+  };
+  const played = (events: BattleEvent[], id: string) => events.some((e) => e.type === 'pmoment' && e.id === id);
+  const find = (sp: string, id: string, make: (seed: string) => ReturnType<typeof duel>) => {
+    for (let i = 0; i < 400; i++) {
+      const s = make(`${id}-${i}`);
+      const events = turn(s.ctx);
+      if (played(events, id)) return { ...s, events };
+    }
+    throw new Error(`no seed played ${id}`);
+  };
+  const foe = (sp: string, level: number, ...moves: string[]) => { const m = strike(sp, ...moves); m.level = level; return m; };
+
+  it('Ditto takes on the foe\'s types for the battle', () => {
+    const s = find('ditto', 'ditto-copy', (seed) => duel('ditto', seed, foe('charizard', 5, 'splash')));
+    expect(s.battle.playerVolatile.typeList).toEqual(content.species.get('charizard')!.types);
+  });
+
+  it('Smeargle sketches a foe move and Mew learns a TM move, each in the last slot, with the old move backed up', () => {
+    const sk = find('smeargle', 'smeargle-sketch', (seed) => { const d = duel('smeargle', seed, foe('charizard', 5, 'ember', 'splash')); d.player.moves = ['tackle', 'growl', 'splash', 'harden'].map((id) => ({ id, pp: 10 })); return d; });
+    expect(['ember', 'splash']).toContain(sk.player.moves[3]!.id);
+    expect(sk.battle.extra.mimic[sk.player.uid]?.moves[3]?.id).toBe('harden');
+    const mew = find('mew', 'mew-curious', (seed) => { const d = duel('mew', seed, foe('magikarp', 5, 'splash')); d.player.moves = ['tackle', 'growl', 'splash', 'harden'].map((id) => ({ id, pp: 10 })); return d; });
+    expect(mew.player.moves[3]!.id).not.toBe('harden');
+    expect(mew.battle.extra.mimic[mew.player.uid]?.moves[3]?.id).toBe('harden');
+  });
+
+  it('Darkrai\'s nightmare drains a sleeping foe each turn but never its last point', () => {
+    const s = find('darkrai', 'darkrai-nightmare', (seed) => { const d = duel('darkrai', seed, foe('snorlax', 40, 'splash')); d.player.moves = [{ id: 'splash', pp: 99 }]; d.battle.enemyTeam[0]!.status = { id: 'slp', turns: 5 }; return d; });
+    const hp1 = s.battle.enemyTeam[0]!.hp;
+    turn(s.ctx);
+    expect(s.battle.enemyTeam[0]!.hp).toBeLessThan(hp1);
+    for (let i = 0; i < 40 && s.battle.enemyTeam[0]!.status?.id === 'slp'; i++) turn(s.ctx);
+    expect(s.battle.enemyTeam[0]!.hp).toBeGreaterThanOrEqual(1);
+  });
+
+  it('Sneasel moves first on turn 1 even against a much faster foe; Mewtwo is not flinched', () => {
+    const s = find('sneasel', 'sneasel-ambush', (seed) => { const d = duel('sneasel', seed, foe('jolteon', 90, 'tackle'), 10); d.player.moves = [{ id: 'quick-attack', pp: 10 }]; return d; });
+    const order = s.events.filter((e) => e.type === 'move').map((e) => e.type === 'move' && e.side);
+    expect(order[0]).toBe('player');
+    const m = find('mewtwo', 'mewtwo-armored', (seed) => duel('mewtwo', seed, foe('magikarp', 5, 'splash')));
+    expect(m.battle.storyEffects.some((t) => t.startsWith('pm-noflinch:'))).toBe(true);
+  });
+
+  it('all run-end revivals share one use per run', () => {
+    const used = setup('rotom', 'shared-1', true, { 'pm:runend-used': 1 });
+    const events = turn(used.ctx);
+    expect(moved(events).some((e) => e.type === 'pmoment' && e.id === 'failure-not-tolerated')).toBe(false);
+    const fresh = setup('rotom', 'shared-2');
+    turn(fresh.ctx);
+    expect(fresh.flags['pm:runend-used']).toBe(1);
+  });
+});
+
+describe('Batch 5: faint, ally, weather and status moments', () => {
+  const build = (seed: string, party: PokemonInstance[], enemy: PokemonInstance) => {
+    const battle = createBattle('trainer', [enemy], 0, party[0]!.uid);
+    const moments: MomentHooks = { seed, flags: {}, cinematic: () => false, noteCinematic: () => undefined, runWouldEnd: () => false };
+    const ctx: BattleContext = { content, battle, party, inventory: {}, rng: new Rng(hashSeed(seed)), captureRng: new Rng(hashSeed(`${seed}c`)), catchMultiplier: 1, moments };
+    return { ctx, battle };
+  };
+  const mon = (sp: string, level: number, hp?: number, uid = `${sp}-b`): PokemonInstance => {
+    const m = createPokemon(content, sp, level, uid);
+    m.moves = [{ id: 'splash', pp: 99 }];
+    if (hp !== undefined) m.hp = hp;
+    return m;
+  };
+  const big = (): PokemonInstance => strike('mewtwo', 'psystrike');
+  const has = (events: BattleEvent[], id: string) => events.some((e) => e.type === 'pmoment' && e.id === id);
+
+  it('the remaining catalog moments are exactly the rest, catch and four hook-blocked ones', () => {
+    const off = POKEMON_MOMENTS.filter((m) => m.status === 'disabled').map((m) => m.id).sort();
+    expect(off).toEqual(['bug-swarm-low', 'gengar-cackle', 'ice-chill-ko', 'poison-toxic-blood', 'snorlax-rest', 'pikachu-spark-night', 'eevee-curl', 'fire-campfire', 'ghost-story', 'water-song', 'grass-sprout', 'psychic-dream', 'ditto-join', 'legend-joined'].sort());
+  });
+
+  it('a weather moment plays only in its weather', () => {
+    let sun = 0;
+    for (let i = 0; i < 300; i++) {
+      const dry = build(`sun-dry-${i}`, [mon('charmander', 40)], mon('magikarp', 5));
+      expect(has(turn(dry.ctx), 'sunny-day-fire')).toBe(false);
+      const wet = build(`sun-${i}`, [mon('charmander', 40)], mon('magikarp', 5));
+      wet.battle.weather = { id: 'sun', turns: 5 };
+      if (has(turn(wet.ctx), 'sunny-day-fire')) { sun++; expect(wet.battle.playerStages.spe).toBeGreaterThanOrEqual(1); }
+    }
+    expect(sun).toBeGreaterThan(0);
+  });
+
+  it('a status moment needs the status; Fire thaws at once', () => {
+    let thawed = 0;
+    for (let i = 0; i < 300; i++) {
+      const healthy = build(`thaw-h-${i}`, [mon('charmander', 40)], mon('magikarp', 5));
+      expect(has(turn(healthy.ctx), 'fire-thaw')).toBe(false);
+      const p = mon('charmander', 40);
+      p.status = { id: 'frz' };
+      const s = build(`thaw-${i}`, [p], mon('magikarp', 5));
+      if (has(turn(s.ctx), 'fire-thaw')) { thawed++; expect(p.status).toBeNull(); }
+    }
+    expect(thawed).toBeGreaterThan(0);
+  });
+
+  it('a fallen Electric type paralyses the foe (faint trigger)', () => {
+    let n = 0;
+    for (let i = 0; i < 400; i++) {
+      const s = build(`faint-${i}`, [mon('pikachu', 5, 1), mon('rattata', 30)], big());
+      const events = turn(s.ctx);
+      if (has(events, 'p2-static-discharge')) { n++; expect(s.battle.enemyTeam[0]!.status?.id).toBe('par'); }
+    }
+    expect(n).toBeGreaterThan(0);
+  });
+
+  it('a fallen legendary bird stirs the next bird: the boost waits for the switch-in', () => {
+    let n = 0;
+    for (let i = 0; i < 400; i++) {
+      const s = build(`ally-${i}`, [mon('articuno', 5, 1), mon('zapdos', 40)], big());
+      const events = turn(s.ctx);
+      expect(has(events, 'legendary-birds')).toBe(false);
+      if (!s.battle.needsSwitch) continue;
+      const pending = s.battle.storyEffects.some((t) => t.startsWith('pm-pending:legendary-birds'));
+      const out = resolveTurn(s.ctx, { kind: 'switch', partyIndex: 1 });
+      expect(has(out, 'legendary-birds')).toBe(pending);
+      if (pending) { n++; expect(s.battle.playerStages.spa).toBeGreaterThanOrEqual(1); expect(s.battle.storyEffects.some((t) => t.startsWith('pm-pending:'))).toBe(false); }
+    }
+    expect(n).toBeGreaterThan(0);
+  });
+
+  it('Arcanine only gets Legendary Pokémon against a legendary foe; Falinks forms up', () => {
+    for (let i = 0; i < 20; i++) expect(has(turn(build(`arc-n-${i}`, [mon('arcanine', 40)], mon('magikarp', 5)).ctx), 'p2-legendary-arcanine')).toBe(false);
+    const legend = build('arc-y', [mon('arcanine', 40)], foeLegend());
+    expect(has(turn(legend.ctx), 'p2-legendary-arcanine')).toBe(true);
+    expect(legend.battle.playerStages.atk).toBeGreaterThanOrEqual(1);
+    const f = build('falinks', [mon('falinks', 40)], mon('magikarp', 5));
+    expect(has(turn(f.ctx), 'p2-formation')).toBe(true);
+    function foeLegend(): PokemonInstance { const m = strike('articuno', 'splash'); m.level = 5; return m; }
   });
 });

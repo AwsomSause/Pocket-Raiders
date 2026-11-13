@@ -21,6 +21,9 @@ export interface Cell {
   detail?: string;
   tone?: 'good' | 'bad' | 'info' | 'dim' | 'hot';
   disabled?: boolean;
+  /** Part of the picture board (drawn as a tile), not a control. Screens may show art for it (asset id) and fall back to the label. */
+  board?: boolean;
+  art?: string;
 }
 
 export interface MinigameView {

@@ -12,24 +12,26 @@
 import { modifierEventWeight } from './runModifiers';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
 import { PSEUDO } from './dungeon/pseudo';
+import { addMark, overhaulOf, type FeelingKey } from './rivals/overhaul';
 import { friendName, friendTeam, pseudoRivalBeat } from './rivals/live';
 import { repAtLeast } from './rivals/reputation';
 import type { ChoiceKind } from './presentation/eventStyles';
 import { befriendWanderer, startWanderer } from './wanderer';
 import { emotionOf } from './story/emotions';
 import { featuredMapEvents, runGameEventIds } from './gameEvents';
-import { eventChanceScale } from './rules';
+import { eventChanceScale, triplesOnly } from './rules';
 import { getArchetype, runPerks } from './archetypes';
 import { ATTRIBUTE_LABELS, addRunAttribute, effectiveAttributes, runAttributeEffects } from './attributes';
 import { createBattle } from './battle/engine';
-import type { Content, EventBattle, EventChoice, EventCondition, EventDef, EventEffect, EventOutcome, TradeWant, TypeName } from './contentSchema';
+import type { Content, EventBattle, EventBattleFormat, EventChoice, EventCondition, EventDef, EventEffect, EventOutcome, TradeWant, TypeName } from './contentSchema';
 import { curveLevel, enemyLevel, evolvedFormAt, levelScale, rollShiny, withPartyStrength } from './encounters';
 import { changeFriendship } from './friendship';
 import { atLeast, promptById, type Grade, type PromptResult } from './interaction/prompt';
 import { applyCatalog, catalogTargetProblem, isFreeReroll } from './catalog';
 import { addItem } from './items';
 import { evolve } from './evolution';
-import { makeDoubles } from './battle/doubles';
+import { canBeDoubles, makeDoubles } from './battle/doubles';
+import { canBeTriples, makeTriples } from './battle/triples';
 import { championTeam, retiredTeam } from './story/championDefense';
 import { oldFoe } from './story/promises';
 import { featuredRival, rivalBeaten, rivalFightTeam, rivalLastResult, rivalPath } from './rivals/living';
@@ -58,6 +60,9 @@ import { addFlag } from './shadowWorld/world';
 import { grantBlessing, makeBlissful } from './shadowWorld/blissful';
 import { eggMoveOptions, familyId, teachEggMove } from './mastery';
 import { applyTrainEffect, trainEffectText } from './trainingEffects';
+import { advanceTrack, trackStep } from './expansion/trackRun';
+import { scheduleStage, spacedColumns } from './expansion/scheduler';
+import { fnv1a } from './expansion/hash';
 import { currentRegion, getCampaign, levelCap, runLevelCap } from './regions';
 import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } from './encounterDirector';
 import { hashSeed, Rng } from './rng';
@@ -137,6 +142,10 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return evilConditionMet(content, run, c);
     case 'choice':
       return choiceMade(run, c.id, c.pick) === c.made;
+    case 'memberFainted': {
+      const f = run.expansion?.lastFaint;
+      return !!f && run.encountersCompleted - f.at <= c.within;
+    }
     case 'friendship':
       return run.party.some((m) => m.friendship >= c.atLeast);
     case 'rivalMet':
@@ -167,6 +176,11 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return crisisAid(run) >= c.atLeast;
     case 'tournament':
       return tournamentRound(run) === c.round;
+    case 'rivalState': {
+      const rec = featuredRival(run) ? overhaulOf(run, featuredRival(run)!.id) : undefined;
+      if (!rec) return false;
+      return (!c.feeling || rec.feelings[c.feeling.key] >= c.feeling.atLeast) && (c.leadAtLeast === undefined || rec.lead >= c.leadAtLeast) && (c.leadAtMost === undefined || rec.lead <= c.leadAtMost) && (!c.mark || rec.marks.includes(c.mark));
+    }
     case 'flag':
       return Number(run.story.flags[`ev:${c.key}`] ?? 0) >= c.atLeast && Number(run.story.flags[`ev:${c.key}`] ?? 0) <= c.atMost;
     case 'partyBlissful':
@@ -177,6 +191,12 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       const g = grandArcOf(run);
       return !!g && (!c.missingRom || !romsHeld(g).includes(c.missingRom));
     }
+    case 'track': {
+      const step = trackStep(run, currentRegion(content, run).id);
+      return step >= c.atLeast && step <= c.atMost;
+    }
+    case 'xevents':
+      return run.expansion?.density !== undefined;
     case 'standWith': {
       const sw = standWithOf(run);
       if (!c.joined) return !sw && joinProblem(run) === null;
@@ -293,6 +313,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return `Needs an earlier delivery`;
     case 'noTrainerTag':
       return `Your trainer won't do this`;
+    case 'memberFainted':
+      return 'Needs a team member who fainted recently';
     case 'friendship':
       return `Needs a Pokémon with friendship ${c.atLeast}`;
     case 'rivalAlly':
@@ -333,6 +355,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs allies gathered in this region';
     case 'tournament':
       return 'Needs the tournament bracket to be at this round';
+    case 'rivalState':
+      return 'Needs a rival who feels a certain way about you';
     case 'flag':
       return 'Needs something you did earlier';
     case 'partyBlissful':
@@ -342,6 +366,10 @@ export function conditionText(content: Content, c: EventCondition): string {
     case 'grandArc':
     case 'standWith':
       return 'Needs something you have not done yet';
+    case 'track':
+      return 'Needs the world to have changed more';
+    case 'xevents':
+      return 'Only with the Kanto story events on';
     case 'storyRun':
       return 'Only in a Story Run';
     case 'oldFoe':
@@ -442,7 +470,8 @@ function pickEvent(content: Content, run: RunState, rng: Rng, taken: Set<string>
   const cfg = content.balance.events;
   const featured = featuredMapEvents(content, run);
   const pool = eligibleEvents(content, run)
-    .filter((e) => !taken.has(e.id) && !e.forced)
+    // Story events (`xe.*`) are placed by the quiet-node scheduler, never drawn at random.
+    .filter((e) => !taken.has(e.id) && !e.forced && !e.id.startsWith('xe.'))
     .map((e) => ({
       item: e,
       weight:
@@ -487,6 +516,13 @@ export function addEventStops(content: Content, run: RunState): void {
     taken.add(id);
     place(id, false);
   }
+  // E3 quiet-node scheduler: the Kanto saga's story events (`xe.*`), by density, anchor first, never on neighbouring columns.
+  scheduleExpansionStops(content, run, open, taken, (id, column) => {
+    const nodes = candidates.filter((n) => n.column === column);
+    const node = nodes[fnv1a(`${run.seed}::xe:node::${stageKey(run)}::${id}`) % Math.max(1, nodes.length)] ?? candidates[0]!;
+    taken.add(id);
+    node.sides.push({ id: `event-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId: id });
+  });
   // W5 Event Priority Manager: Critical (forced) events are never random. They take a stop now, or wait in a queue of 4.
   const wanted = [...content.events.values()].filter((e) => e.forced && open.has(e.id) && !taken.has(e.id)).map((e) => e.id);
   const step = stepQueue({
@@ -528,6 +564,35 @@ export function addEventStops(content: Content, run: RunState): void {
     const hidden = stage.map.nodes.flatMap((n) => n.sides).find((s) => s.kind === 'event' && s.hidden);
     if (hidden) delete hidden.hidden;
   }
+}
+
+/** The columns of this stage that hold a story event (`xe.*`) stop, for the spacing rule. */
+export function xeColumns(run: RunState): number[] {
+  const map = run.stage?.map;
+  return map ? map.nodes.filter((n) => n.sides.some((s) => s.eventId?.startsWith('xe.'))).map((n) => n.column) : [];
+}
+
+/**
+ * Places this stage's share of the region's story events (design X8.2). `open` are the eligible event ids. Returns the ids placed.
+ * Uses no gameplay RNG: ties and columns come from hashes of the seed, so nothing else's rolls change.
+ */
+export function scheduleExpansionStops(content: Content, run: RunState, open: ReadonlySet<string>, taken: Set<string>, put: (id: string, column: number) => void): string[] {
+  const density = run.expansion?.density;
+  const stage = run.stage;
+  if (!density || !stage || stage.kind !== 'stage') return [];
+  const candidates = [...open].filter((id) => id.startsWith('xe.') && !taken.has(id) && !run.expansion?.eventsSeen?.includes(id)).map((id) => content.events.get(id)!).filter((e) => !!e).map((e) => ({ id: e.id, priority: priorityOf(e), anchor: e.priority === 100 }));
+  if (candidates.length === 0) return [];
+  const regionId = currentRegion(content, run).id;
+  const sched = scheduleStage({
+    candidates, quota: content.balance.expansionEvents.density[density], placedInRegion: run.expansion?.xe?.[regionId] ?? 0,
+    stagesLeft: getCampaign(content, run.campaignId).stagesPerRegion - stage.index, seed: run.seed, stageKey: stageKey(run) ?? '',
+  });
+  if (sched.ids.length === 0) return [];
+  const cols = spacedColumns(stage.map.nodes.filter((n) => n.column < stage.map.columns).map((n) => n.column), sched.ids.length, xeColumns(run), `${run.seed}::${stageKey(run)}`);
+  sched.ids.forEach((id, i) => put(id, cols[i] ?? cols[0]!));
+  // `eventsSeen` remembers every story event already given a stop, so none is placed twice in a run.
+  run.expansion = { ...run.expansion, eventsSeen: [...(run.expansion?.eventsSeen ?? []), ...sched.ids], xe: { ...(run.expansion?.xe ?? {}), [regionId]: (run.expansion?.xe?.[regionId] ?? 0) + sched.ids.length } };
+  return sched.ids;
 }
 
 /** Bridge Mail V: an event stop beside the node just reached. */
@@ -841,6 +906,7 @@ export function effectWords(content: Content, e: EventEffect): string {
       return e.amount < 0 ? 'the crisis eases' : 'the crisis grows';
     case 'aid':
       return 'allies gathered';
+    case 'rivalChange':
     case 'flag':
       return '';
     case 'grandArcRom':
@@ -848,6 +914,8 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'grandArcStock':
     case 'standWith':
       return '';
+    case 'track':
+      return e.input === 'raidSuccess' || e.input === 'officerTurned' ? 'the world eases' : 'the world tightens';
     case 'namedShadow':
       return 'a Shadow Pokémon is offered to you';
     case 'mentor':
@@ -1097,6 +1165,12 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'grandArcStock':
       gainStock(run, e.step);
       return '';
+    case 'track': {
+      // The key is this node, so one stop moves the track once however often it is replayed.
+      const before = trackStep(run, currentRegion(content, run).id);
+      const after = advanceTrack(run, currentRegion(content, run).id, e.input, `event:${run.regionIndex}:${run.stage?.index ?? 0}:${run.stage?.current ?? ''}`);
+      return after === before ? '' : after > before ? 'The Ledger fills a little more.' : 'The Ledger loses a line.';
+    }
     case 'namedShadow': {
       const name = grantNamedShadow(content, run, e.id, e.level);
       return name ? `${name} is yours to keep, if you can hold it` : 'there was nobody to hand over';
@@ -1108,6 +1182,15 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       else if (e.action === 'verdict' && e.verdict) return resolveVerdict(content, run, e.verdict, { apex: 'none', ...(e.rival && featuredRival(run) ? { rival: e.rival } : {}), ...(e.keepApexBound !== undefined ? { keepApexBound: e.keepApexBound } : {}) }).lines.join(' ');
       else if (e.change) changeRep(run, e.change);
       return '';
+    case 'rivalChange': {
+      const rival = featuredRival(run);
+      const rec = rival ? overhaulOf(run, rival.id) : undefined;
+      if (!rec) return '';
+      for (const [k, d] of Object.entries(e.feelings)) rec.feelings[k as FeelingKey] = Math.min(10, Math.max(0, rec.feelings[k as FeelingKey] + (d ?? 0)));
+      rec.lead = Math.min(3, Math.max(-3, rec.lead + e.lead));
+      if (e.mark) addMark(rec, e.mark);
+      return '';
+    }
     case 'flag':
       run.story.flags[`ev:${e.key}`] = Math.max(0, Number(run.story.flags[`ev:${e.key}`] ?? 0) + e.amount);
       // Shadow II: a story flag may be exactly the key a Shadow in your party or PC has been waiting for.
@@ -1177,6 +1260,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return effectWords(content, e);
     case 'rest': {
       restUntilMorning(run);
+      if (run.expansion?.lastFaint) delete run.expansion.lastFaint;
       const warmed = warmEggs(run, 1);
       return warmed > 0 ? `${effectWords(content, e)}; your Egg${warmed === 1 ? ' is' : 's are'} snug by the fire` : effectWords(content, e);
     }
@@ -1295,7 +1379,16 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     if (enemy.shiny) countShiny(run, enemy.speciesId);
     if (b.shadow) makeShadow(enemy, rollShadowHeart(content, new Rng(hashSeed(`${run.seed}::shadow-foe::${enemy.uid}`))));
     if (b.blissful) makeBlissful(content, enemy);
-    run.battle = createBattle('wild', [enemy], activeIndex, run.party[activeIndex]!.uid);
+    // T4: a doubles / triples wild fight brings one or two more wild Pokémon, rolled by their own generator (old rolls stay the same).
+    const extra = b.format === 'triples' ? 2 : b.format === 'doubles' ? 1 : 0;
+    const formatRng = new Rng(hashSeed(`${run.seed}::event-format::${event.eventId}::${run.encountersCompleted}`));
+    const others = Array.from({ length: extra }, () => {
+      const mon = newMon(content, run, evolvedFormAt(content, pickSpecies(content, run, b.species, b.types, formatRng), level, formatRng), level, 'e');
+      mon.shiny = rollShiny(content, formatRng, runAttributeEffects(content, run).shinyChance * b.shinyMultiplier);
+      if (mon.shiny) countShiny(run, mon.speciesId);
+      return mon;
+    });
+    run.battle = createBattle('wild', [enemy, ...others], activeIndex, run.party[activeIndex]!.uid);
   } else {
     const boss = b.bossId ? content.bosses.get(b.bossId) : undefined;
     const ghost = b.retired ? retiredTeam(run.story) : b.ghost ? championTeam(run.story) : [];
@@ -1361,10 +1454,29 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       run.battle.loaner = ally.uid;
     }
   }
+  if (b.format && !run.battle.doubles) applyEventFormat(content, run, b.format);
   run.battle.event = event;
   for (const mon of run.battle.enemyTeam) discover(run, mon.speciesId, false);
   run.phase = 'battle';
   recordBattleStarted(content, run);
+}
+
+/**
+ * T4: turns a new event battle into a triple battle (when it is switched on and both sides have three healthy Pokémon) or a double
+ * battle; it stays a single battle when neither can be made. No random numbers.
+ */
+export function applyEventFormat(content: Content, run: RunState, format: EventBattleFormat): 'singles' | 'doubles' | 'triples' {
+  const battle = run.battle!;
+  const triplesOn = content.balance.triples.enabled || triplesOnly(run.rules);
+  if (format === 'triples' && triplesOn && canBeTriples(run.party, battle.enemyTeam)) {
+    makeTriples(battle, run.party);
+    return 'triples';
+  }
+  if (canBeDoubles(run.party, battle.enemyTeam)) {
+    makeDoubles(battle, run.party);
+    return 'doubles';
+  }
+  return 'singles';
 }
 
 /** Whether this event battle is a sparring match with the fellow apprentice: losing it is friendly (nobody is out). */
