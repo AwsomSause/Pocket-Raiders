@@ -3195,6 +3195,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     blissful: z.boolean().default(false),
     /** W7: a fight inside a pseudo stage (a loss ejects, the run goes on). */
     pseudo: z.boolean().optional(),
+    /** The field is forced to this weather for the whole fight (Cold Nights Rain). */
+    weather: WeatherSchema.optional(),
     /** The wild Pokémon is one that beat a party member earlier this run (catalog 28). */
     recall: z.boolean().default(false),
     /** Battles in a row at this stop without healing in between (a detour); `win` pays after the last. */

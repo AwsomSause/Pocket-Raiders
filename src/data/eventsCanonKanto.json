@@ -4119,6 +4119,6355 @@
     }
    ],
    "canon": "cs.kanto.cerulean.burglary"
+  },
+  {
+   "id": "cs-kanto-cerulean-rain",
+   "name": "Cold Nights Rain",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The rain started an hour ago. Somewhere ahead, in the dark, something small is shivering. This road does not let you pass without looking.",
+   "choices": [
+    {
+     "label": "Follow the sound",
+     "success": {
+      "text": "The rain gets heavier.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-charmander-open",
+         "cs-kanto-cerulean-rain-growlithe-open",
+         "cs-kanto-cerulean-rain-growlithe-open",
+         "cs-kanto-cerulean-rain-growlithe-open",
+         "cs-kanto-cerulean-rain-growlithe-open",
+         "cs-kanto-cerulean-rain-growlithe-open",
+         "cs-kanto-cerulean-rain-growlithe-open",
+         "cs-kanto-cerulean-rain-growlithe-open",
+         "cs-kanto-cerulean-rain-growlithe-open",
+         "cs-kanto-cerulean-rain-growlithe-open",
+         "cs-kanto-cerulean-rain-growlithe-open",
+         "cs-kanto-cerulean-rain-growlithe-open",
+         "cs-kanto-cerulean-rain-growlithe-open",
+         "cs-kanto-cerulean-rain-growlithe-open",
+         "cs-kanto-cerulean-rain-growlithe-open",
+         "cs-kanto-cerulean-rain-growlithe-open",
+         "cs-kanto-cerulean-rain-vulpix-open",
+         "cs-kanto-cerulean-rain-vulpix-open",
+         "cs-kanto-cerulean-rain-vulpix-open",
+         "cs-kanto-cerulean-rain-vulpix-open",
+         "cs-kanto-cerulean-rain-vulpix-open",
+         "cs-kanto-cerulean-rain-vulpix-open",
+         "cs-kanto-cerulean-rain-vulpix-open",
+         "cs-kanto-cerulean-rain-vulpix-open",
+         "cs-kanto-cerulean-rain-vulpix-open",
+         "cs-kanto-cerulean-rain-vulpix-open",
+         "cs-kanto-cerulean-rain-vulpix-open",
+         "cs-kanto-cerulean-rain-vulpix-open",
+         "cs-kanto-cerulean-rain-ponyta-open",
+         "cs-kanto-cerulean-rain-ponyta-open",
+         "cs-kanto-cerulean-rain-ponyta-open",
+         "cs-kanto-cerulean-rain-ponyta-open",
+         "cs-kanto-cerulean-rain-ponyta-open",
+         "cs-kanto-cerulean-rain-ponyta-open",
+         "cs-kanto-cerulean-rain-ponyta-open",
+         "cs-kanto-cerulean-rain-ponyta-open",
+         "cs-kanto-cerulean-rain-ponyta-open",
+         "cs-kanto-cerulean-rain-ponyta-open",
+         "cs-kanto-cerulean-rain-cyndaquil-open",
+         "cs-kanto-cerulean-rain-cyndaquil-open",
+         "cs-kanto-cerulean-rain-cyndaquil-open",
+         "cs-kanto-cerulean-rain-cyndaquil-open",
+         "cs-kanto-cerulean-rain-torchic-open",
+         "cs-kanto-cerulean-rain-torchic-open",
+         "cs-kanto-cerulean-rain-torchic-open",
+         "cs-kanto-cerulean-rain-torchic-open",
+         "cs-kanto-cerulean-rain-chimchar-open",
+         "cs-kanto-cerulean-rain-chimchar-open",
+         "cs-kanto-cerulean-rain-chimchar-open",
+         "cs-kanto-cerulean-rain-chimchar-open",
+         "cs-kanto-cerulean-rain-tepig-open",
+         "cs-kanto-cerulean-rain-tepig-open",
+         "cs-kanto-cerulean-rain-tepig-open",
+         "cs-kanto-cerulean-rain-tepig-open",
+         "cs-kanto-cerulean-rain-fennekin-open",
+         "cs-kanto-cerulean-rain-fennekin-open",
+         "cs-kanto-cerulean-rain-fennekin-open",
+         "cs-kanto-cerulean-rain-fennekin-open",
+         "cs-kanto-cerulean-rain-litten-open",
+         "cs-kanto-cerulean-rain-litten-open",
+         "cs-kanto-cerulean-rain-litten-open",
+         "cs-kanto-cerulean-rain-litten-open",
+         "cs-kanto-cerulean-rain-scorbunny-open",
+         "cs-kanto-cerulean-rain-scorbunny-open",
+         "cs-kanto-cerulean-rain-scorbunny-open",
+         "cs-kanto-cerulean-rain-scorbunny-open",
+         "cs-kanto-cerulean-rain-fuecoco-open",
+         "cs-kanto-cerulean-rain-fuecoco-open",
+         "cs-kanto-cerulean-rain-fuecoco-open",
+         "cs-kanto-cerulean-rain-fuecoco-open"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain"
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-charmander-open",
+   "name": "Cold Nights Rain: Charmander",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "charmander",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "A Charmander stands on a rock in the downpour, thin and soaked. It looks at you and does not run.",
+   "choices": [
+    {
+     "label": "Save it",
+     "success": {
+      "text": "You pick it up. It is cold. Its flame is almost out. (Warmth 3 of 5)",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-saved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-fire",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-charmander-r1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on your way",
+     "success": {
+      "text": "You walk on. Nothing is gained, nothing is lost, and the rain keeps falling behind you.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-charmander-r1",
+   "name": "Cold Nights Rain: The First Mile",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "charmander",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The Charmander shakes in your arms. The road ahead is flooded. Something rustles in the dark.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "A wild Pokémon steps out of the rain.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-charmander-r2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look for a campfire",
+     "chance": 0.4,
+     "success": {
+      "text": "You find a tarp with a dying fire under it. It is just enough.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-charmander-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "There is no fire anywhere, only more rain.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-charmander-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share an Oran Berry",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "It eats the berry and stops shaking for a while.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-charmander-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Check the soggy note on the fence post",
+     "chance": 0.25,
+     "success": {
+      "text": "You read it: a trainer is looking for a lost Pokémon, and it names the team they train.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-charmander-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The ink has run. You cannot read a word of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-charmander-r2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-charmander-r2",
+   "name": "Cold Nights Rain: The Long Dark",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "charmander",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "Night. The rain has not eased. The Charmander stops shivering for a moment, and that is worse.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "Another wild Pokémon, drawn by the light.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-charmander-r3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-charmander-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-charmander-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shelter under an overhang and wait",
+     "chance": 0.5,
+     "success": {
+      "text": "You wait out the worst of it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-charmander-r3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The overhang leaks. The cold wins a little.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-charmander-r3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-charmander-r3",
+   "name": "Cold Nights Rain: The Last Stretch",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "charmander",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The lights of a house show through the rain. The Charmander is barely awake.",
+   "choices": [
+    {
+     "label": "Press on",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "You carry it the last stretch, one step at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-charmander-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Press on in the cold",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atMost": 1
+      }
+     ],
+     "success": {
+      "text": "It stops moving in your arms.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-lost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-charmander-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-charmander-owner"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-charmander-owner",
+   "name": "Cold Nights Rain: The Owner",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "charmander",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "Damian, the boy who left it behind, is standing in the rain.",
+   "choices": [
+    {
+     "label": "Face them",
+     "success": {
+      "text": "\"Give it back.\" The Pokémon looks at you, not at them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Damian",
+       "size": 3,
+       "types": [
+        "water"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "charmander"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "charcoal"
+        },
+        {
+         "kind": "moment",
+         "text": "The Charmander chose you."
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-growlithe-open",
+   "name": "Cold Nights Rain: Growlithe",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "growlithe",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "A Growlithe stands on a rock in the downpour, thin and soaked. It looks at you and does not run.",
+   "choices": [
+    {
+     "label": "Save it",
+     "success": {
+      "text": "You pick it up. It is cold. Its flame is almost out. (Warmth 3 of 5)",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-saved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-fire",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-growlithe-r1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on your way",
+     "success": {
+      "text": "You walk on. Nothing is gained, nothing is lost, and the rain keeps falling behind you.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-growlithe-r1",
+   "name": "Cold Nights Rain: The First Mile",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "growlithe",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The Growlithe shakes in your arms. The road ahead is flooded. Something rustles in the dark.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "A wild Pokémon steps out of the rain.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-growlithe-r2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look for a campfire",
+     "chance": 0.4,
+     "success": {
+      "text": "You find a tarp with a dying fire under it. It is just enough.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-growlithe-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "There is no fire anywhere, only more rain.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-growlithe-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share an Oran Berry",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "It eats the berry and stops shaking for a while.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-growlithe-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Check the soggy note on the fence post",
+     "chance": 0.25,
+     "success": {
+      "text": "You read it: a trainer is looking for a lost Pokémon, and it names the team they train.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-growlithe-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The ink has run. You cannot read a word of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-growlithe-r2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-growlithe-r2",
+   "name": "Cold Nights Rain: The Long Dark",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "growlithe",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "Night. The rain has not eased. The Growlithe stops shivering for a moment, and that is worse.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "Another wild Pokémon, drawn by the light.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-growlithe-r3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-growlithe-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-growlithe-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shelter under an overhang and wait",
+     "chance": 0.5,
+     "success": {
+      "text": "You wait out the worst of it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-growlithe-r3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The overhang leaks. The cold wins a little.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-growlithe-r3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-growlithe-r3",
+   "name": "Cold Nights Rain: The Last Stretch",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "growlithe",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The lights of a house show through the rain. The Growlithe is barely awake.",
+   "choices": [
+    {
+     "label": "Press on",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "You carry it the last stretch, one step at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-growlithe-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Press on in the cold",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atMost": 1
+      }
+     ],
+     "success": {
+      "text": "It stops moving in your arms.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-lost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-growlithe-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-growlithe-owner"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-growlithe-owner",
+   "name": "Cold Nights Rain: The Owner",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "growlithe",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The hunter who lost it is out searching, soaked.",
+   "choices": [
+    {
+     "label": "Face them",
+     "success": {
+      "text": "\"Give it back.\" The Pokémon looks at you, not at them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Hunter",
+       "size": 3,
+       "types": [
+        "normal",
+        "ground"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "growlithe"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "charcoal"
+        },
+        {
+         "kind": "moment",
+         "text": "The Growlithe chose you."
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-vulpix-open",
+   "name": "Cold Nights Rain: Vulpix",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "vulpix",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "A Vulpix stands on a rock in the downpour, thin and soaked. It looks at you and does not run.",
+   "choices": [
+    {
+     "label": "Save it",
+     "success": {
+      "text": "You pick it up. It is cold. Its flame is almost out. (Warmth 3 of 5)",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-saved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-fire",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-vulpix-r1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on your way",
+     "success": {
+      "text": "You walk on. Nothing is gained, nothing is lost, and the rain keeps falling behind you.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-vulpix-r1",
+   "name": "Cold Nights Rain: The First Mile",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "vulpix",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The Vulpix shakes in your arms. The road ahead is flooded. Something rustles in the dark.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "A wild Pokémon steps out of the rain.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-vulpix-r2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look for a campfire",
+     "chance": 0.4,
+     "success": {
+      "text": "You find a tarp with a dying fire under it. It is just enough.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-vulpix-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "There is no fire anywhere, only more rain.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-vulpix-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share an Oran Berry",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "It eats the berry and stops shaking for a while.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-vulpix-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Check the soggy note on the fence post",
+     "chance": 0.25,
+     "success": {
+      "text": "You read it: a trainer is looking for a lost Pokémon, and it names the team they train.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-vulpix-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The ink has run. You cannot read a word of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-vulpix-r2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-vulpix-r2",
+   "name": "Cold Nights Rain: The Long Dark",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "vulpix",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "Night. The rain has not eased. The Vulpix stops shivering for a moment, and that is worse.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "Another wild Pokémon, drawn by the light.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-vulpix-r3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-vulpix-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-vulpix-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shelter under an overhang and wait",
+     "chance": 0.5,
+     "success": {
+      "text": "You wait out the worst of it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-vulpix-r3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The overhang leaks. The cold wins a little.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-vulpix-r3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-vulpix-r3",
+   "name": "Cold Nights Rain: The Last Stretch",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "vulpix",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The lights of a house show through the rain. The Vulpix is barely awake.",
+   "choices": [
+    {
+     "label": "Press on",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "You carry it the last stretch, one step at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-vulpix-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Press on in the cold",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atMost": 1
+      }
+     ],
+     "success": {
+      "text": "It stops moving in your arms.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-lost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-vulpix-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-vulpix-owner"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-vulpix-owner",
+   "name": "Cold Nights Rain: The Owner",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "vulpix",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The show trainer who lost it is calling its name into the rain.",
+   "choices": [
+    {
+     "label": "Face them",
+     "success": {
+      "text": "\"Give it back.\" The Pokémon looks at you, not at them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Show Trainer",
+       "size": 3,
+       "types": [
+        "fairy",
+        "ice"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "vulpix"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "charcoal"
+        },
+        {
+         "kind": "moment",
+         "text": "The Vulpix chose you."
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-ponyta-open",
+   "name": "Cold Nights Rain: Ponyta",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "ponyta",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "A Ponyta stands on a rock in the downpour, thin and soaked. It looks at you and does not run.",
+   "choices": [
+    {
+     "label": "Save it",
+     "success": {
+      "text": "You pick it up. It is cold. Its flame is almost out. (Warmth 3 of 5)",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-saved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-fire",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-ponyta-r1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on your way",
+     "success": {
+      "text": "You walk on. Nothing is gained, nothing is lost, and the rain keeps falling behind you.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-ponyta-r1",
+   "name": "Cold Nights Rain: The First Mile",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "ponyta",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The Ponyta shakes in your arms. The road ahead is flooded. Something rustles in the dark.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "A wild Pokémon steps out of the rain.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-ponyta-r2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look for a campfire",
+     "chance": 0.4,
+     "success": {
+      "text": "You find a tarp with a dying fire under it. It is just enough.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-ponyta-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "There is no fire anywhere, only more rain.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-ponyta-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share an Oran Berry",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "It eats the berry and stops shaking for a while.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-ponyta-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Check the soggy note on the fence post",
+     "chance": 0.25,
+     "success": {
+      "text": "You read it: a trainer is looking for a lost Pokémon, and it names the team they train.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-ponyta-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The ink has run. You cannot read a word of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-ponyta-r2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-ponyta-r2",
+   "name": "Cold Nights Rain: The Long Dark",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "ponyta",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "Night. The rain has not eased. The Ponyta stops shivering for a moment, and that is worse.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "Another wild Pokémon, drawn by the light.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-ponyta-r3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-ponyta-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-ponyta-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shelter under an overhang and wait",
+     "chance": 0.5,
+     "success": {
+      "text": "You wait out the worst of it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-ponyta-r3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The overhang leaks. The cold wins a little.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-ponyta-r3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-ponyta-r3",
+   "name": "Cold Nights Rain: The Last Stretch",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "ponyta",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The lights of a house show through the rain. The Ponyta is barely awake.",
+   "choices": [
+    {
+     "label": "Press on",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "You carry it the last stretch, one step at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-ponyta-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Press on in the cold",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atMost": 1
+      }
+     ],
+     "success": {
+      "text": "It stops moving in your arms.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-lost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-ponyta-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-ponyta-owner"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-ponyta-owner",
+   "name": "Cold Nights Rain: The Owner",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "ponyta",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The racer it ran away from stands at the finish of the lane, out of breath.",
+   "choices": [
+    {
+     "label": "Face them",
+     "success": {
+      "text": "\"Give it back.\" The Pokémon looks at you, not at them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Racer",
+       "size": 3,
+       "types": [
+        "normal",
+        "electric"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "ponyta"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "charcoal"
+        },
+        {
+         "kind": "moment",
+         "text": "The Ponyta chose you."
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-cyndaquil-open",
+   "name": "Cold Nights Rain: Cyndaquil",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "cyndaquil",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "A Cyndaquil stands on a rock in the downpour, thin and soaked. It looks at you and does not run.",
+   "choices": [
+    {
+     "label": "Save it",
+     "success": {
+      "text": "You pick it up. It is cold. Its flame is almost out. (Warmth 3 of 5)",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-saved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-fire",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-cyndaquil-r1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on your way",
+     "success": {
+      "text": "You walk on. Nothing is gained, nothing is lost, and the rain keeps falling behind you.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-cyndaquil-r1",
+   "name": "Cold Nights Rain: The First Mile",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "cyndaquil",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The Cyndaquil shakes in your arms. The road ahead is flooded. Something rustles in the dark.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "A wild Pokémon steps out of the rain.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-cyndaquil-r2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look for a campfire",
+     "chance": 0.4,
+     "success": {
+      "text": "You find a tarp with a dying fire under it. It is just enough.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-cyndaquil-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "There is no fire anywhere, only more rain.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-cyndaquil-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share an Oran Berry",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "It eats the berry and stops shaking for a while.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-cyndaquil-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Check the soggy note on the fence post",
+     "chance": 0.25,
+     "success": {
+      "text": "You read it: a trainer is looking for a lost Pokémon, and it names the team they train.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-cyndaquil-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The ink has run. You cannot read a word of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-cyndaquil-r2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-cyndaquil-r2",
+   "name": "Cold Nights Rain: The Long Dark",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "cyndaquil",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "Night. The rain has not eased. The Cyndaquil stops shivering for a moment, and that is worse.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "Another wild Pokémon, drawn by the light.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-cyndaquil-r3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-cyndaquil-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-cyndaquil-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shelter under an overhang and wait",
+     "chance": 0.5,
+     "success": {
+      "text": "You wait out the worst of it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-cyndaquil-r3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The overhang leaks. The cold wins a little.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-cyndaquil-r3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-cyndaquil-r3",
+   "name": "Cold Nights Rain: The Last Stretch",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "cyndaquil",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The lights of a house show through the rain. The Cyndaquil is barely awake.",
+   "choices": [
+    {
+     "label": "Press on",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "You carry it the last stretch, one step at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-cyndaquil-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Press on in the cold",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atMost": 1
+      }
+     ],
+     "success": {
+      "text": "It stops moving in your arms.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-lost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-cyndaquil-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-cyndaquil-owner"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-cyndaquil-owner",
+   "name": "Cold Nights Rain: The Owner",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "cyndaquil",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The trainer who left it stands in the rain, wet and ashamed. They see the Pokémon in your arms and step forward.",
+   "choices": [
+    {
+     "label": "Face them",
+     "success": {
+      "text": "\"Give it back.\" The Pokémon looks at you, not at them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Trainer",
+       "size": 3,
+       "types": [
+        "normal"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "cyndaquil"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "charcoal"
+        },
+        {
+         "kind": "moment",
+         "text": "The Cyndaquil chose you."
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-torchic-open",
+   "name": "Cold Nights Rain: Torchic",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "torchic",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "A Torchic stands on a rock in the downpour, thin and soaked. It looks at you and does not run.",
+   "choices": [
+    {
+     "label": "Save it",
+     "success": {
+      "text": "You pick it up. It is cold. Its flame is almost out. (Warmth 3 of 5)",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-saved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-fire",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-torchic-r1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on your way",
+     "success": {
+      "text": "You walk on. Nothing is gained, nothing is lost, and the rain keeps falling behind you.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-torchic-r1",
+   "name": "Cold Nights Rain: The First Mile",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "torchic",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The Torchic shakes in your arms. The road ahead is flooded. Something rustles in the dark.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "A wild Pokémon steps out of the rain.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-torchic-r2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look for a campfire",
+     "chance": 0.4,
+     "success": {
+      "text": "You find a tarp with a dying fire under it. It is just enough.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-torchic-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "There is no fire anywhere, only more rain.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-torchic-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share an Oran Berry",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "It eats the berry and stops shaking for a while.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-torchic-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Check the soggy note on the fence post",
+     "chance": 0.25,
+     "success": {
+      "text": "You read it: a trainer is looking for a lost Pokémon, and it names the team they train.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-torchic-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The ink has run. You cannot read a word of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-torchic-r2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-torchic-r2",
+   "name": "Cold Nights Rain: The Long Dark",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "torchic",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "Night. The rain has not eased. The Torchic stops shivering for a moment, and that is worse.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "Another wild Pokémon, drawn by the light.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-torchic-r3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-torchic-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-torchic-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shelter under an overhang and wait",
+     "chance": 0.5,
+     "success": {
+      "text": "You wait out the worst of it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-torchic-r3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The overhang leaks. The cold wins a little.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-torchic-r3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-torchic-r3",
+   "name": "Cold Nights Rain: The Last Stretch",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "torchic",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The lights of a house show through the rain. The Torchic is barely awake.",
+   "choices": [
+    {
+     "label": "Press on",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "You carry it the last stretch, one step at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-torchic-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Press on in the cold",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atMost": 1
+      }
+     ],
+     "success": {
+      "text": "It stops moving in your arms.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-lost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-torchic-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-torchic-owner"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-torchic-owner",
+   "name": "Cold Nights Rain: The Owner",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "torchic",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The trainer who left it stands in the rain, wet and ashamed. They see the Pokémon in your arms and step forward.",
+   "choices": [
+    {
+     "label": "Face them",
+     "success": {
+      "text": "\"Give it back.\" The Pokémon looks at you, not at them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Trainer",
+       "size": 3,
+       "types": [
+        "normal"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "torchic"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "charcoal"
+        },
+        {
+         "kind": "moment",
+         "text": "The Torchic chose you."
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-chimchar-open",
+   "name": "Cold Nights Rain: Chimchar",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "chimchar",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "A Chimchar stands on a rock in the downpour, thin and soaked. It looks at you and does not run.",
+   "choices": [
+    {
+     "label": "Save it",
+     "success": {
+      "text": "You pick it up. It is cold. Its flame is almost out. (Warmth 3 of 5)",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-saved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-fire",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-chimchar-r1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on your way",
+     "success": {
+      "text": "You walk on. Nothing is gained, nothing is lost, and the rain keeps falling behind you.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-chimchar-r1",
+   "name": "Cold Nights Rain: The First Mile",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "chimchar",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The Chimchar shakes in your arms. The road ahead is flooded. Something rustles in the dark.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "A wild Pokémon steps out of the rain.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-chimchar-r2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look for a campfire",
+     "chance": 0.4,
+     "success": {
+      "text": "You find a tarp with a dying fire under it. It is just enough.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-chimchar-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "There is no fire anywhere, only more rain.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-chimchar-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share an Oran Berry",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "It eats the berry and stops shaking for a while.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-chimchar-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Check the soggy note on the fence post",
+     "chance": 0.25,
+     "success": {
+      "text": "You read it: a trainer is looking for a lost Pokémon, and it names the team they train.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-chimchar-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The ink has run. You cannot read a word of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-chimchar-r2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-chimchar-r2",
+   "name": "Cold Nights Rain: The Long Dark",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "chimchar",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "Night. The rain has not eased. The Chimchar stops shivering for a moment, and that is worse.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "Another wild Pokémon, drawn by the light.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-chimchar-r3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-chimchar-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-chimchar-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shelter under an overhang and wait",
+     "chance": 0.5,
+     "success": {
+      "text": "You wait out the worst of it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-chimchar-r3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The overhang leaks. The cold wins a little.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-chimchar-r3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-chimchar-r3",
+   "name": "Cold Nights Rain: The Last Stretch",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "chimchar",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The lights of a house show through the rain. The Chimchar is barely awake.",
+   "choices": [
+    {
+     "label": "Press on",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "You carry it the last stretch, one step at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-chimchar-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Press on in the cold",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atMost": 1
+      }
+     ],
+     "success": {
+      "text": "It stops moving in your arms.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-lost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-chimchar-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-chimchar-owner"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-chimchar-owner",
+   "name": "Cold Nights Rain: The Owner",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "chimchar",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The trainer who left it stands in the rain, wet and ashamed. They see the Pokémon in your arms and step forward.",
+   "choices": [
+    {
+     "label": "Face them",
+     "success": {
+      "text": "\"Give it back.\" The Pokémon looks at you, not at them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Trainer",
+       "size": 3,
+       "types": [
+        "normal"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "chimchar"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "charcoal"
+        },
+        {
+         "kind": "moment",
+         "text": "The Chimchar chose you."
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-tepig-open",
+   "name": "Cold Nights Rain: Tepig",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "tepig",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "A Tepig stands on a rock in the downpour, thin and soaked. It looks at you and does not run.",
+   "choices": [
+    {
+     "label": "Save it",
+     "success": {
+      "text": "You pick it up. It is cold. Its flame is almost out. (Warmth 3 of 5)",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-saved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-fire",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-tepig-r1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on your way",
+     "success": {
+      "text": "You walk on. Nothing is gained, nothing is lost, and the rain keeps falling behind you.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-tepig-r1",
+   "name": "Cold Nights Rain: The First Mile",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "tepig",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The Tepig shakes in your arms. The road ahead is flooded. Something rustles in the dark.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "A wild Pokémon steps out of the rain.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-tepig-r2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look for a campfire",
+     "chance": 0.4,
+     "success": {
+      "text": "You find a tarp with a dying fire under it. It is just enough.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-tepig-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "There is no fire anywhere, only more rain.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-tepig-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share an Oran Berry",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "It eats the berry and stops shaking for a while.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-tepig-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Check the soggy note on the fence post",
+     "chance": 0.25,
+     "success": {
+      "text": "You read it: a trainer is looking for a lost Pokémon, and it names the team they train.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-tepig-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The ink has run. You cannot read a word of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-tepig-r2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-tepig-r2",
+   "name": "Cold Nights Rain: The Long Dark",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "tepig",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "Night. The rain has not eased. The Tepig stops shivering for a moment, and that is worse.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "Another wild Pokémon, drawn by the light.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-tepig-r3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-tepig-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-tepig-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shelter under an overhang and wait",
+     "chance": 0.5,
+     "success": {
+      "text": "You wait out the worst of it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-tepig-r3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The overhang leaks. The cold wins a little.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-tepig-r3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-tepig-r3",
+   "name": "Cold Nights Rain: The Last Stretch",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "tepig",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The lights of a house show through the rain. The Tepig is barely awake.",
+   "choices": [
+    {
+     "label": "Press on",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "You carry it the last stretch, one step at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-tepig-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Press on in the cold",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atMost": 1
+      }
+     ],
+     "success": {
+      "text": "It stops moving in your arms.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-lost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-tepig-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-tepig-owner"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-tepig-owner",
+   "name": "Cold Nights Rain: The Owner",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "tepig",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The trainer who left it stands in the rain, wet and ashamed. They see the Pokémon in your arms and step forward.",
+   "choices": [
+    {
+     "label": "Face them",
+     "success": {
+      "text": "\"Give it back.\" The Pokémon looks at you, not at them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Trainer",
+       "size": 3,
+       "types": [
+        "normal"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "tepig"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "charcoal"
+        },
+        {
+         "kind": "moment",
+         "text": "The Tepig chose you."
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-fennekin-open",
+   "name": "Cold Nights Rain: Fennekin",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "fennekin",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "A Fennekin stands on a rock in the downpour, thin and soaked. It looks at you and does not run.",
+   "choices": [
+    {
+     "label": "Save it",
+     "success": {
+      "text": "You pick it up. It is cold. Its flame is almost out. (Warmth 3 of 5)",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-saved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-fire",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fennekin-r1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on your way",
+     "success": {
+      "text": "You walk on. Nothing is gained, nothing is lost, and the rain keeps falling behind you.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-fennekin-r1",
+   "name": "Cold Nights Rain: The First Mile",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "fennekin",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The Fennekin shakes in your arms. The road ahead is flooded. Something rustles in the dark.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "A wild Pokémon steps out of the rain.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-fennekin-r2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look for a campfire",
+     "chance": 0.4,
+     "success": {
+      "text": "You find a tarp with a dying fire under it. It is just enough.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fennekin-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "There is no fire anywhere, only more rain.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fennekin-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share an Oran Berry",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "It eats the berry and stops shaking for a while.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fennekin-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Check the soggy note on the fence post",
+     "chance": 0.25,
+     "success": {
+      "text": "You read it: a trainer is looking for a lost Pokémon, and it names the team they train.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fennekin-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The ink has run. You cannot read a word of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fennekin-r2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-fennekin-r2",
+   "name": "Cold Nights Rain: The Long Dark",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "fennekin",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "Night. The rain has not eased. The Fennekin stops shivering for a moment, and that is worse.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "Another wild Pokémon, drawn by the light.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-fennekin-r3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fennekin-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fennekin-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shelter under an overhang and wait",
+     "chance": 0.5,
+     "success": {
+      "text": "You wait out the worst of it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fennekin-r3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The overhang leaks. The cold wins a little.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fennekin-r3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-fennekin-r3",
+   "name": "Cold Nights Rain: The Last Stretch",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "fennekin",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The lights of a house show through the rain. The Fennekin is barely awake.",
+   "choices": [
+    {
+     "label": "Press on",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "You carry it the last stretch, one step at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fennekin-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Press on in the cold",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atMost": 1
+      }
+     ],
+     "success": {
+      "text": "It stops moving in your arms.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-lost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fennekin-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fennekin-owner"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-fennekin-owner",
+   "name": "Cold Nights Rain: The Owner",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "fennekin",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The trainer who left it stands in the rain, wet and ashamed. They see the Pokémon in your arms and step forward.",
+   "choices": [
+    {
+     "label": "Face them",
+     "success": {
+      "text": "\"Give it back.\" The Pokémon looks at you, not at them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Trainer",
+       "size": 3,
+       "types": [
+        "normal"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "fennekin"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "charcoal"
+        },
+        {
+         "kind": "moment",
+         "text": "The Fennekin chose you."
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-litten-open",
+   "name": "Cold Nights Rain: Litten",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "litten",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "A Litten stands on a rock in the downpour, thin and soaked. It looks at you and does not run.",
+   "choices": [
+    {
+     "label": "Save it",
+     "success": {
+      "text": "You pick it up. It is cold. Its flame is almost out. (Warmth 3 of 5)",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-saved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-fire",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-litten-r1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on your way",
+     "success": {
+      "text": "You walk on. Nothing is gained, nothing is lost, and the rain keeps falling behind you.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-litten-r1",
+   "name": "Cold Nights Rain: The First Mile",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "litten",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The Litten shakes in your arms. The road ahead is flooded. Something rustles in the dark.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "A wild Pokémon steps out of the rain.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-litten-r2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look for a campfire",
+     "chance": 0.4,
+     "success": {
+      "text": "You find a tarp with a dying fire under it. It is just enough.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-litten-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "There is no fire anywhere, only more rain.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-litten-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share an Oran Berry",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "It eats the berry and stops shaking for a while.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-litten-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Check the soggy note on the fence post",
+     "chance": 0.25,
+     "success": {
+      "text": "You read it: a trainer is looking for a lost Pokémon, and it names the team they train.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-litten-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The ink has run. You cannot read a word of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-litten-r2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-litten-r2",
+   "name": "Cold Nights Rain: The Long Dark",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "litten",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "Night. The rain has not eased. The Litten stops shivering for a moment, and that is worse.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "Another wild Pokémon, drawn by the light.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-litten-r3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-litten-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-litten-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shelter under an overhang and wait",
+     "chance": 0.5,
+     "success": {
+      "text": "You wait out the worst of it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-litten-r3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The overhang leaks. The cold wins a little.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-litten-r3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-litten-r3",
+   "name": "Cold Nights Rain: The Last Stretch",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "litten",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The lights of a house show through the rain. The Litten is barely awake.",
+   "choices": [
+    {
+     "label": "Press on",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "You carry it the last stretch, one step at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-litten-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Press on in the cold",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atMost": 1
+      }
+     ],
+     "success": {
+      "text": "It stops moving in your arms.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-lost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-litten-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-litten-owner"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-litten-owner",
+   "name": "Cold Nights Rain: The Owner",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "litten",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The trainer who left it stands in the rain, wet and ashamed. They see the Pokémon in your arms and step forward.",
+   "choices": [
+    {
+     "label": "Face them",
+     "success": {
+      "text": "\"Give it back.\" The Pokémon looks at you, not at them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Trainer",
+       "size": 3,
+       "types": [
+        "normal"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "litten"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "charcoal"
+        },
+        {
+         "kind": "moment",
+         "text": "The Litten chose you."
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-scorbunny-open",
+   "name": "Cold Nights Rain: Scorbunny",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "scorbunny",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "A Scorbunny stands on a rock in the downpour, thin and soaked. It looks at you and does not run.",
+   "choices": [
+    {
+     "label": "Save it",
+     "success": {
+      "text": "You pick it up. It is cold. Its flame is almost out. (Warmth 3 of 5)",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-saved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-fire",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-scorbunny-r1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on your way",
+     "success": {
+      "text": "You walk on. Nothing is gained, nothing is lost, and the rain keeps falling behind you.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-scorbunny-r1",
+   "name": "Cold Nights Rain: The First Mile",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "scorbunny",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The Scorbunny shakes in your arms. The road ahead is flooded. Something rustles in the dark.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "A wild Pokémon steps out of the rain.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-scorbunny-r2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look for a campfire",
+     "chance": 0.4,
+     "success": {
+      "text": "You find a tarp with a dying fire under it. It is just enough.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-scorbunny-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "There is no fire anywhere, only more rain.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-scorbunny-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share an Oran Berry",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "It eats the berry and stops shaking for a while.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-scorbunny-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Check the soggy note on the fence post",
+     "chance": 0.25,
+     "success": {
+      "text": "You read it: a trainer is looking for a lost Pokémon, and it names the team they train.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-scorbunny-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The ink has run. You cannot read a word of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-scorbunny-r2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-scorbunny-r2",
+   "name": "Cold Nights Rain: The Long Dark",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "scorbunny",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "Night. The rain has not eased. The Scorbunny stops shivering for a moment, and that is worse.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "Another wild Pokémon, drawn by the light.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-scorbunny-r3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-scorbunny-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-scorbunny-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shelter under an overhang and wait",
+     "chance": 0.5,
+     "success": {
+      "text": "You wait out the worst of it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-scorbunny-r3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The overhang leaks. The cold wins a little.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-scorbunny-r3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-scorbunny-r3",
+   "name": "Cold Nights Rain: The Last Stretch",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "scorbunny",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The lights of a house show through the rain. The Scorbunny is barely awake.",
+   "choices": [
+    {
+     "label": "Press on",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "You carry it the last stretch, one step at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-scorbunny-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Press on in the cold",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atMost": 1
+      }
+     ],
+     "success": {
+      "text": "It stops moving in your arms.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-lost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-scorbunny-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-scorbunny-owner"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-scorbunny-owner",
+   "name": "Cold Nights Rain: The Owner",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "scorbunny",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The trainer who left it stands in the rain, wet and ashamed. They see the Pokémon in your arms and step forward.",
+   "choices": [
+    {
+     "label": "Face them",
+     "success": {
+      "text": "\"Give it back.\" The Pokémon looks at you, not at them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Trainer",
+       "size": 3,
+       "types": [
+        "normal"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "scorbunny"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "charcoal"
+        },
+        {
+         "kind": "moment",
+         "text": "The Scorbunny chose you."
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-fuecoco-open",
+   "name": "Cold Nights Rain: Fuecoco",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "fuecoco",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "A Fuecoco stands on a rock in the downpour, thin and soaked. It looks at you and does not run.",
+   "choices": [
+    {
+     "label": "Save it",
+     "success": {
+      "text": "You pick it up. It is cold. Its flame is almost out. (Warmth 3 of 5)",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-saved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-fire",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fuecoco-r1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on your way",
+     "success": {
+      "text": "You walk on. Nothing is gained, nothing is lost, and the rain keeps falling behind you.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-fuecoco-r1",
+   "name": "Cold Nights Rain: The First Mile",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "fuecoco",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The Fuecoco shakes in your arms. The road ahead is flooded. Something rustles in the dark.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "A wild Pokémon steps out of the rain.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-fuecoco-r2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look for a campfire",
+     "chance": 0.4,
+     "success": {
+      "text": "You find a tarp with a dying fire under it. It is just enough.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fuecoco-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "There is no fire anywhere, only more rain.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fuecoco-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share an Oran Berry",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "It eats the berry and stops shaking for a while.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fuecoco-r2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Check the soggy note on the fence post",
+     "chance": 0.25,
+     "success": {
+      "text": "You read it: a trainer is looking for a lost Pokémon, and it names the team they train.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fuecoco-r2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The ink has run. You cannot read a word of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fuecoco-r2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-fuecoco-r2",
+   "name": "Cold Nights Rain: The Long Dark",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "fuecoco",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "Night. The rain has not eased. The Fuecoco stops shivering for a moment, and that is worse.",
+   "choices": [
+    {
+     "label": "Press on through the rain",
+     "success": {
+      "text": "Another wild Pokémon, drawn by the light.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-rain-warmth",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-rain-fuecoco-r3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fuecoco-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fuecoco-r3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shelter under an overhang and wait",
+     "chance": 0.5,
+     "success": {
+      "text": "You wait out the worst of it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fuecoco-r3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The overhang leaks. The cold wins a little.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fuecoco-r3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-fuecoco-r3",
+   "name": "Cold Nights Rain: The Last Stretch",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "fuecoco",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The lights of a house show through the rain. The Fuecoco is barely awake.",
+   "choices": [
+    {
+     "label": "Press on",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "You carry it the last stretch, one step at a time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-warmth",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fuecoco-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Press on in the cold",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-rain-warmth",
+       "atMost": 1
+      }
+     ],
+     "success": {
+      "text": "It stops moving in your arms.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-lost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Warm it with a Fire move",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "A small flame from your party keeps the shivering at bay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fuecoco-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it a Charcoal",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "charcoal"
+      }
+     ],
+     "success": {
+      "text": "It curls around the warm lump.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "charcoal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-rain-fuecoco-owner"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-fuecoco-owner",
+   "name": "Cold Nights Rain: The Owner",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "fuecoco",
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "The trainer who left it stands in the rain, wet and ashamed. They see the Pokémon in your arms and step forward.",
+   "choices": [
+    {
+     "label": "Face them",
+     "success": {
+      "text": "\"Give it back.\" The Pokémon looks at you, not at them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Trainer",
+       "size": 3,
+       "types": [
+        "normal"
+       ],
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "fuecoco"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "charcoal"
+        },
+        {
+         "kind": "moment",
+         "text": "The Fuecoco chose you."
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-rain-lost",
+   "name": "Cold Nights Rain: The Cold Wins",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "rain",
+    "tint": "#1f2a3a"
+   },
+   "intro": "You carry it as far as the house. The door opens. The owner takes the Pokémon from your arms, apologizing, and you are left standing in the rain. You go on.",
+   "choices": [
+    {
+     "label": "Walk away",
+     "success": {
+      "text": "The run goes on, and so do you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-rain-lost",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-bill",
+   "name": "Bill's Lighthouse",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#101a33"
+   },
+   "intro": "A man at the dock says there is a lighthouse somewhere along the coast, and its keeper pays well for visitors who can find him. It is night. The beacon only shows in the dark.",
+   "choices": [
+    {
+     "label": "Search the coast",
+     "success": {
+      "text": "You start along the shore.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not tonight",
+     "success": {
+      "text": "You leave the dock behind.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.bill"
+  },
+  {
+   "id": "cs-kanto-cerulean-bill-n1",
+   "name": "Bill's Lighthouse: Clue 1",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#101a33"
+   },
+   "intro": "Night on the coast. A light on the sea. There is a second sign pointing somewhere else.",
+   "choices": [
+    {
+     "label": "Follow: a light on the sea",
+     "chance": 0.65,
+     "success": {
+      "text": "You follow the glow to a buoy.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-bill-clues",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-n2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It is a false trail. You walk back the way you came.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the other sign",
+     "chance": 0.3,
+     "success": {
+      "text": "It happens to be right.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-bill-clues",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-n2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It is a dead end. You walk back.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-n1"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-bill-n2",
+   "name": "Bill's Lighthouse: Clue 2",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#101a33"
+   },
+   "intro": "Night on the coast. A ship horn. There is a second sign pointing somewhere else.",
+   "choices": [
+    {
+     "label": "Follow: a ship horn",
+     "chance": 0.65,
+     "success": {
+      "text": "You turn toward the sound.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-bill-clues",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-n3"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "flying"
+       ],
+       "levelBonus": -1,
+       "win": []
+      }
+     },
+     "failure": {
+      "text": "It is a false trail. You walk back the way you came.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the other sign",
+     "chance": 0.3,
+     "success": {
+      "text": "It happens to be right.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-bill-clues",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-n3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It is a dead end. You walk back.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-n1"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-bill-n3",
+   "name": "Bill's Lighthouse: Clue 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#101a33"
+   },
+   "intro": "Night on the coast. A Wingull path. There is a second sign pointing somewhere else.",
+   "choices": [
+    {
+     "label": "Follow: a wingull path",
+     "chance": 0.65,
+     "success": {
+      "text": "You follow the birds.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-bill-clues",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-n4"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It is a false trail. You walk back the way you came.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-n2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the other sign",
+     "chance": 0.3,
+     "success": {
+      "text": "It happens to be right.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-bill-clues",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-n4"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It is a dead end. You walk back.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-n2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-bill-n4",
+   "name": "Bill's Lighthouse: Clue 4",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#101a33"
+   },
+   "intro": "Night on the coast. A light on the sea. There is a second sign pointing somewhere else.",
+   "choices": [
+    {
+     "label": "Follow: a light on the sea",
+     "chance": 0.65,
+     "success": {
+      "text": "You follow the glow along the cliff.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-bill-clues",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-n5"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "types": [
+        "water",
+        "flying"
+       ],
+       "levelBonus": -1,
+       "win": []
+      }
+     },
+     "failure": {
+      "text": "It is a false trail. You walk back the way you came.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-n3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the other sign",
+     "chance": 0.3,
+     "success": {
+      "text": "It happens to be right.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-bill-clues",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-n5"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It is a dead end. You walk back.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-n3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-bill-n5",
+   "name": "Bill's Lighthouse: Clue 5",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#101a33"
+   },
+   "intro": "Night on the coast. A ship horn. There is a second sign pointing somewhere else.",
+   "choices": [
+    {
+     "label": "Follow: a ship horn",
+     "chance": 0.65,
+     "success": {
+      "text": "You walk toward the sound.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-bill-clues",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-final"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It is a false trail. You walk back the way you came.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-n4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the other sign",
+     "chance": 0.3,
+     "success": {
+      "text": "It happens to be right.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-bill-clues",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-final"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It is a dead end. You walk back.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-n4"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-bill-final",
+   "name": "Bill's Lighthouse: The Beacon",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#101a33"
+   },
+   "intro": "At last, the coast bends. If you read the signs well, a light blinks from the headland.",
+   "choices": [
+    {
+     "label": "Climb to the light",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-bill-clues",
+       "atLeast": 3
+      }
+     ],
+     "success": {
+      "text": "The beacon is right in front of you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-bill-house"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep searching in the dark",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-bill-clues",
+       "atMost": 2
+      }
+     ],
+     "success": {
+      "text": "You cannot find it. The coast goes dark.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-bill-house",
+   "name": "Bill's Lighthouse: The Mishap",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#101a33"
+   },
+   "intro": "A strange noise comes from the lighthouse. Inside, a Clefairy-shaped Pokémon waves its arms at a console and talks in Bill's voice.",
+   "choices": [
+    {
+     "label": "Press the console",
+     "success": {
+      "text": "There is a flash. Bill stands in front of you, himself again, very grateful.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-bill-pc",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-ssanne-ticket",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "remote-pc"
+       },
+       {
+        "kind": "item",
+        "id": "ss-ticket"
+       },
+       {
+        "kind": "eggMove"
+       },
+       {
+        "kind": "moment",
+        "text": "Rescued Bill from the Teleporter Mishap."
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.bill",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-daycare",
+   "name": "Route 5 Day-Care",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a5a2d"
+   },
+   "intro": "An old couple run a day-care on Route 5. \"Leave a Pokémon with us for the day and we will bring out the best in it. A donation is fine.\"",
+   "choices": [
+    {
+     "label": "Leave your weakest for the day (₽150)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "It comes back full of pride, and a little taller.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "levels",
+        "amount": 3,
+        "who": "weakest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about an Egg (₽300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "The old man comes back with an Egg in a blanket. \"Two of yours got along well.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "left": 3,
+        "unit": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say hello and move on",
+     "success": {
+      "text": "The couple wave you off.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.daycare"
   }
  ]
 }

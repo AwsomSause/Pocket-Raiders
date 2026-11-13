@@ -1462,6 +1462,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       return mon;
     });
     run.battle = createBattle('wild', [enemy, ...others], activeIndex, run.party[activeIndex]!.uid);
+    if (b.weather) run.battle.weather = { id: b.weather, turns: 999 };
   } else {
     const boss = b.bossId ? content.bosses.get(b.bossId) : undefined;
     const ghost = b.retired ? retiredTeam(run.story) : b.ghost ? championTeam(run.story) : [];
