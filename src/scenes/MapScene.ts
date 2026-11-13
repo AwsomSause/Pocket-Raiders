@@ -48,7 +48,7 @@ import { arenaFor, getTheme } from '../core/themes';
 import { stageModifier } from '../core/runModifiers';
 import type { MapNode, SideStop } from '../core/state';
 import { services } from '../game/services';
-import { pendingRescue } from '../core/evil/rescueGlue';
+import { pendingRescue, runningRescue } from '../core/evil/rescueGlue';
 import { pendingFormat } from '../core/formats/glue';
 import { rescueOf } from '../core/evil/rescue';
 import { device } from '../game/deviceTools';
@@ -243,8 +243,17 @@ export class MapScene extends Phaser.Scene {
       return;
     }
     // R9: the rival's Rescue Plan offer, at a quiet moment, shown on top of the map (the screen resumes this scene).
-    const rescue = pendingRescue(session.content, run);
-    if (rescue) {
+    const running = runningRescue(session.content, run);
+    const rescue = running ? null : pendingRescue(session.content, run);
+    if (running) {
+      // A plan is already under way (a guard fight just ended, or the run was reloaded at the Door): carry on where it stopped.
+      const hold = rescueOf(run).holds.find((h) => h.id === run.expansion!.rescue!.active!.holdId);
+      const mon = hold ? session.content.species.get(String(hold.pokemon[0]?.speciesId))?.name ?? 'your Pokémon' : 'your Pokémon';
+      this.time.delayedCall(0, () => {
+        this.scene.launch('Rescue', { ...running, resume: true, names: { player: session.content.archetypes.get(run.archetypeId)?.name ?? 'friend', mon }, from: 'Map' });
+        this.scene.pause();
+      });
+    } else if (rescue) {
       const hold = rescueOf(run).holds.find((h) => h.id === rescue.offer.holdId);
       const mon = hold ? session.content.species.get(String(hold.pokemon[0]?.speciesId))?.name ?? 'your Pokémon' : 'your Pokémon';
       this.time.delayedCall(0, () => {

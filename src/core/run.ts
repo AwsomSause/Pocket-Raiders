@@ -13,6 +13,7 @@
 // next region, or wins the run after the last one.
 
 import { battleEnded as formatBattleEnded } from './formats/registry';
+import { rescueFightEnded } from './evil/rescueFights';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
 import { recordStoryLoss, storyLossApplies } from './story2/loss';
@@ -3054,6 +3055,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (battle.outcome) sealReplay(content, run);
   // Wide formats (Beta 0.6 E4): a fight a format launched tells the format how it ended, before any loss tail runs.
   if (battle.outcome && battle.event?.eventId.startsWith('format:')) formatBattleEnded({ content, run }, battle.outcome === 'win' || battle.outcome === 'caught');
+  // PS-RESCUE (Beta 0.6 R9): a guard fight tells the running rescue plan how it ended.
+  if (battle.outcome && battle.event?.eventId.startsWith('rescue:')) rescueFightEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
   // Mega Evolution and other transformations end with the battle, and so do "next battle" item effects.
   if (battle.outcome) {
     revertTransformations(content, battle, run.party, runArchetype(content, run).modifiers);

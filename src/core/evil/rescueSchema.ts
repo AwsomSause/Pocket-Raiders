@@ -98,6 +98,12 @@ export const PlanRunSchema = z.object({
   penalty: z.number().default(0),
   late: z.boolean().default(false),
   heatDone: z.number().int().default(0),
+  /** PS-RESCUE fights so far, in order. */
+  fights: z.array(z.enum(['won', 'lost'])).default([]),
+  /** The beat whose guard fight is waiting or running (set when the beat is answered, cleared when the fight ends). */
+  fightNow: z.enum(['approach', 'door', 'cage']).nullable().default(null),
+  /** A fight was lost: the plan resolves as Fail. */
+  wiped: z.boolean().default(false),
 });
 export type PlanRun = z.infer<typeof PlanRunSchema>;
 
