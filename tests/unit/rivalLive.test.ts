@@ -95,3 +95,58 @@ describe('Friend scenes and Pseudo Stage beats', () => {
     expect(catchStepInRoll('x', rec, 0, n)).toBe(false);
   });
 });
+
+import { friendFinaleAssist } from '../../src/core/rivals/live';
+import { rivalWinsRace } from '../../src/core/rivals/presence';
+import { PSEUDO_FORCE } from '../../src/core/rivals/stepIn';
+
+describe('Race, Team-Up, Ambush and the Friend finale Assist', () => {
+  it('Race: Lead tilts the odds (35% +5% per Lead point), deterministic', () => {
+    const share = (lead: number) => Array.from({ length: 2000 }, (_, i) => rivalWinsRace(`r${i}`, lead, 0, i % 5)).filter(Boolean).length / 2000;
+    expect(share(0)).toBeGreaterThan(0.3);
+    expect(share(0)).toBeLessThan(0.4);
+    expect(share(3)).toBeGreaterThan(share(-3));
+    expect(rivalWinsRace('a', 1, 0, 1)).toBe(rivalWinsRace('a', 1, 0, 1));
+  });
+  it('a Pseudo Stage beat can set a forced Team-Up or Ambush for the main rival only', () => {
+    let seen = new Set<string>();
+    for (let s = 0; s < 400 && seen.size < 2; s++) {
+      const r = chooseStarter(content, createRun(content, { runId: `ps${s}`, seed: `ps${s}`, archetypeId: 'red' }), 0);
+      reg(r);
+      r.story.rivals.push({ id: 'blue', name: 'Blue' } as never);
+      pseudoRivalBeat(content, r, 'x');
+      const f = r.story.flags[PSEUDO_FORCE];
+      if (typeof f === 'string') seen.add(f.split(':')[0]!);
+    }
+    expect(seen.has('assist') || seen.has('duel')).toBe(true);
+  });
+  it('the Friend adds at most 1 strike to a finale Assist, and stands in alone when nobody else can', () => {
+    const r = run();
+    reg(r);
+    expect(friendFinaleAssist(content, r, 50, null)).toBeNull(); // no Friend registered yet
+    registerRival(r, { id: `friend-${r.seed}`, role: 'friend', personality: 'protector', style: 'blitz', arc: 'rivals-become-friends' });
+    const solo = friendFinaleAssist(content, r, 50, null)!;
+    expect(solo.strikesLeft).toBe(1);
+    expect(solo.level).toBe(44);
+    const base = { id: 'x', name: 'X', speciesId: 'pikachu', level: 40, strikesLeft: 3 };
+    expect(friendFinaleAssist(content, r, 50, base)!.strikesLeft).toBe(4);
+    expect(friendFinaleAssist(content, r, 50, { ...base, strikesLeft: 4 })!.strikesLeft).toBe(4); // Standard cap is 4
+  });
+});
+
+import { conditionMet, isPseudoBattle } from '../../src/core/events';
+
+describe('the optional Friend spar', () => {
+  const ev = content.events.get('friend-spar')!;
+  it('exists, needs a Friend, and is a no-stakes pseudo fight (a loss never ends the run, no money)', () => {
+    expect(ev).toBeDefined();
+    const r = run();
+    reg(r);
+    expect(conditionMet(content, r, ev.requires[0]!)).toBe(false);
+    registerRival(r, { id: `friend-${r.seed}`, role: 'friend', personality: 'protector', style: 'blitz', arc: 'rivals-become-friends' });
+    expect(conditionMet(content, r, ev.requires[0]!)).toBe(true);
+    expect(isPseudoBattle(content, { eventId: 'friend-spar', choiceIndex: 0, success: true } as never)).toBe(true);
+    const win = ev.choices[0]!.success.battle!.win ?? [];
+    expect(win.some((e) => e.kind === 'money' || e.kind === 'item')).toBe(false);
+  });
+});

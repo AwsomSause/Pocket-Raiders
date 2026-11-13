@@ -49,6 +49,15 @@ export interface StepInPlan { kind: StepInKind; rivalId: string; legend?: 'legen
 const stageKey = (run: Pick<RunState, 'regionIndex' | 'stage'>) => `${run.regionIndex}.${run.stage?.index ?? 0}`;
 export const stepInFlag = (run: Pick<RunState, 'regionIndex' | 'stage'>, group: 'ab' | 'c') => `stepin:${group}:${stageKey(run)}`;
 export const STEPIN_FORCE = 'stepin:force';
+/** A Pseudo Stage Team-Up or Ambush (rivals/live.ts): "assist:<rivalId>" or "duel:<rivalId>" for the next eligible battle. */
+export const PSEUDO_FORCE = 'stepin:pseudo';
+const pseudoForced = (run: RunState): { kind: 'assist' | 'duel'; rival: Rival } | null => {
+  const v = run.story.flags[PSEUDO_FORCE];
+  if (typeof v !== 'string') return null;
+  const [kind, id] = v.split(':') as ['assist' | 'duel', string];
+  const rival = run.story.rivals.find((r) => r.id === id);
+  return rival && (kind === 'assist' || kind === 'duel') ? { kind, rival } : null;
+};
 /** The rival a duel must be built for (read by the trainer planner while the duel battle is made). */
 export const forcedStepInRival = (run: RunState): Rival | null => {
   const id = run.story.flags[STEPIN_FORCE];
@@ -87,6 +96,8 @@ export function catchable(content: Content, b: BattleState): boolean {
 export function planStepIn(content: Content, run: RunState): StepInPlan | null {
   const b = run.battle;
   if (!b || run.phase !== 'battle' || !eligibleBattle(run, b)) return null;
+  const forced = pseudoForced(run);
+  if (forced && !(forced.kind === 'assist' && b.doubles)) return { kind: forced.kind, rivalId: forced.rival.id };
   const rng = new Rng(hashSeed(`${run.seed}::stepin::${run.regionIndex}.${run.stage?.index ?? 0}::${run.encountersCompleted}`));
   const pool = run.story.rivals.filter((r) => r.cooldown === 0 && (hostile(r) || friendly(r)));
   if (!pool.length) return null;

@@ -5,11 +5,14 @@ import type { Content } from '../contentSchema';
 import type { RunState } from '../state';
 import { pickContextLine, pickSpeciesLine, useNickname, type BankContext } from './bank';
 import { changeFeelings, overhaulOf, pityFor, registerRival } from './overhaul';
-import { noteMeeting, PRESENCE, pseudoPresence } from './presence';
+import { noteMeeting, PRESENCE, pseudoPresence, rivalWinsRace } from './presence';
 import { maxHp } from '../pokemon';
+import { PSEUDO, pseudoGateId } from '../dungeon/pseudo';
+import { addItem } from '../items';
+import { PSEUDO_FORCE } from './stepIn';
 import { emit } from '../story/record';
 import { fnv1a } from '../story/moments';
-import { friendInRegion, friendPersonality, friendScene, postcard, type FriendScene } from './friend';
+import { friendAssist, friendInRegion, friendPersonality, friendScene, postcard, type FriendScene } from './friend';
 import { counterSlots } from './tier5';
 
 export type RivalNodeKind = 'trainer' | 'gym' | 'elite' | 'champion' | string;
@@ -106,7 +109,7 @@ export function friendStageBeat(content: Content, run: RunState): string | null 
 }
 
 /** Entering a Pseudo Stage: the main rival (65%) or the Friend appears in one of four forms. Text and feelings only. */
-export function pseudoRivalBeat(content: Content, run: RunState): string | null {
+export function pseudoRivalBeat(content: Content, run: RunState, eventId?: string): string | null {
   const all = run.expansion?.rival;
   if (!all) return null;
   const main = Object.entries(all).find(([, r]) => r.role === 'main');
@@ -121,7 +124,42 @@ export function pseudoRivalBeat(content: Content, run: RunState): string | null 
   const name = p.who === 'main' ? (run.story.rivals.find((r) => r.id === id)?.name ?? 'Your rival') : friendName(run);
   noteMeeting(rec, run.regionIndex);
   if (p.form === 'alreadyThere') changeFeelings(rec, rec.lead > 0 ? 'rivalWon' : 'rivalLost');
+  let extra = '';
+  const storyRival = run.story.rivals.find((r) => r.id === id);
+  if (p.form === 'race') {
+    // Whoever reaches the end first takes the first pick: if you win, you take one extra of the reward.
+    const rec2 = PSEUDO.records.find((x) => pseudoGateId(x) === eventId);
+    if (rivalWinsRace(run.seed, rec.lead, run.regionIndex, run.stage?.index ?? 0)) {
+      changeFeelings(rec, 'rivalWon');
+      extra = ` ${name} got there first.`;
+    } else {
+      changeFeelings(rec, 'rivalLost');
+      if (rec2 && content.items.has(rec2.reward.item)) {
+        addItem(run.inventory, rec2.reward.item, 1);
+        extra = ` You got there first and took the first pick: one extra ${content.items.get(rec2.reward.item)!.name}.`;
+      }
+    }
+  } else if (p.form === 'teamUp' && storyRival && p.who === 'main') {
+    run.story.flags[PSEUDO_FORCE] = `assist:${id}`;
+    extra = ` ${name} will join your next fight.`;
+  } else if (p.form === 'ambush' && storyRival && p.who === 'main') {
+    run.story.flags[PSEUDO_FORCE] = `duel:${id}`;
+    extra = ` ${name} will challenge you at the next fight.`;
+  }
   const line = `${PRESENCE.pseudo.text[p.form]!.replace('{who}', name)} "${pickContextLine(rec, `${run.seed}:${id}`, 'pseudo', totalMeetings(run, id))}"`;
-  emit(content, run, 'storyMoment', { actors: [], data: { def: 'pseudo-rival', suppressed: false }, importance: 45, text: line });
-  return line;
+  emit(content, run, 'storyMoment', { actors: [], data: { def: 'pseudo-rival', suppressed: false }, importance: 45, text: line + extra });
+  return line + extra;
+}
+
+/** The Friend's one extra finale Assist: joins the strike list (at most +1, total within the Standard cap), or stands in when no rival can assist. */
+export function friendFinaleAssist(content: Content, run: RunState, bossLevel: number, existing: { id: string; name: string; speciesId: string; level: number; strikesLeft: number } | null): { id: string; name: string; speciesId: string; level: number; strikesLeft: number } | null {
+  const id = friendId(run);
+  if (!run.expansion?.rival?.[id]) return existing;
+  const extra = friendAssist(existing?.strikesLeft ?? 0, 'standard');
+  if (extra === 0) return existing;
+  if (existing) return { ...existing, strikesLeft: existing.strikesLeft + extra };
+  const partners = PRESENCE.friend.partners.filter((s) => content.species.has(s));
+  if (partners.length === 0) return null;
+  const speciesId = partners[fnv1a(`${run.seed}:friend-partner`) % partners.length]!;
+  return { id, name: friendName(run), speciesId, level: Math.max(5, bossLevel - PRESENCE.friend.finaleLevelGap), strikesLeft: extra };
 }

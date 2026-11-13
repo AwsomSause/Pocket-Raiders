@@ -11,7 +11,7 @@ export const PresenceDataSchema = z.object({
   note: z.string(),
   guaranteedPerRegion: z.number().int().min(0),
   thirdChance: z.number().min(0).max(1),
-  pseudo: z.object({ mainChance: z.number().min(0).max(1), friendChance: z.number().min(0).max(1), forms: z.record(z.string(), z.number().int().min(0)), ambushMinPartyHp: z.number().min(0).max(1), text: z.record(z.string(), z.string()) }),
+  pseudo: z.object({ mainChance: z.number().min(0).max(1), friendChance: z.number().min(0).max(1), forms: z.record(z.string(), z.number().int().min(0)), ambushMinPartyHp: z.number().min(0).max(1), text: z.record(z.string(), z.string()), raceBase: z.number().min(0).max(1), racePerLead: z.number().min(0).max(1) }),
   stepIn: z.object({ chance: z.number().min(0).max(1), perRegion: z.number().int().min(1) }),
   friend: z.object({
     regionChance: z.number().min(0).max(1),
@@ -20,6 +20,8 @@ export const PresenceDataSchema = z.object({
     assistCap: z.object({ standard: z.number().int(), extended: z.number().int() }),
     attitude: z.object({ start: z.number().int(), min: z.number().int(), max: z.number().int() }),
     names: z.array(z.string()).min(1),
+    partners: z.array(z.string()).min(1),
+    finaleLevelGap: z.number().int().min(0),
     sceneEvery: z.number().int().min(1),
     text: z.record(z.string(), z.string()),
     postcards: z.array(z.string()).min(3),
@@ -93,4 +95,10 @@ export function noteMeeting(rec: RivalOverhaulState, regionIndex: number): numbe
   const r = (p[String(regionIndex)] ??= { meetings: 0, stepIn: false });
   r.meetings += 1;
   return r.meetings;
+}
+
+/** Race: does the rival reach the end first? Base 35%, +5% per point of Lead the rival has (Lead -3..+3). Deterministic. */
+export function rivalWinsRace(seed: string, lead: number, regionIndex: number, stageIndex: number): boolean {
+  const p = Math.max(0.05, Math.min(0.95, PRESENCE.pseudo.raceBase + PRESENCE.pseudo.racePerLead * lead));
+  return roll(seed, `race:${regionIndex}:${stageIndex}`) < p;
 }
