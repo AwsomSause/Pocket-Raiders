@@ -1203,7 +1203,7 @@
    "id": "cs-kanto-indigo-cave",
    "name": "Cerulean Cave",
    "group": "Canon Spaces: Kanto",
-   "stop": "event",
+   "stop": "delve",
    "rarity": "common",
    "minStage": 1,
    "types": [],
@@ -1240,7 +1240,8 @@
      }
     }
    ],
-   "canon": "cs.kanto.cerulean.cave"
+   "canon": "cs.kanto.cerulean.cave",
+   "room": true
   },
   {
    "id": "cs-kanto-indigo-cave-n1",

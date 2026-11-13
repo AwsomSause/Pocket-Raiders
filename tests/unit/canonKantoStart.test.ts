@@ -17,7 +17,7 @@ describe('Viridian, Indigo, road and cast events: data', () => {
   it('has the events, every addEvent target exists, and canon events are never random stops', () => {
     expect(mine.length).toBeGreaterThanOrEqual(45);
     for (const e of mine) for (const t of nexts(e.id)) expect(content.events.has(t), `${e.id} -> ${t}`).toBe(true);
-    for (const e of mine) if (!e.room) expect(e.canon, e.id).not.toBeNull();
+    for (const e of mine) if (!e.room || e.id.endsWith('-cave')) expect(e.canon, e.id).not.toBeNull();
   });
   it('every road entry names a real event with a stage window', () => {
     for (const r of canonRoutesKanto.routes) expect(content.events.has(r.event), r.event).toBe(true);
