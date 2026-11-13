@@ -2391,6 +2391,58 @@
       },
       "capture": 0.2,
       "special": "mini"
+    },
+    {
+      "id": "magmuk",
+      "name": "Magmuk",
+      "tier": 2,
+      "blurb": "A Delta Muk glowing like a furnace, deep inside the Polluted Factory. It cannot be caught.",
+      "species": [
+        "muk-delta-fire"
+      ],
+      "levelBonus": 2,
+      "hpBoostPercent": 200,
+      "entryCost": 0,
+      "shield": {
+        "at": [
+          0.66,
+          0.33
+        ],
+        "points": 0.15
+      },
+      "phases": [
+        {
+          "atHp": 0.5,
+          "text": "Magmuk boils over!",
+          "boost": {
+            "atk": 1
+          }
+        }
+      ],
+      "kind": "wild",
+      "extraMoves": [
+        "gunk-shot",
+        "sludge-wave"
+      ],
+      "modifiers": {
+        "hazard": {
+          "type": "fire",
+          "percent": 0.0625,
+          "text": "Molten sludge scalds your Pokémon!",
+          "immune": [
+            "fire",
+            "poison",
+            "ground"
+          ]
+        }
+      },
+      "rewards": {
+        "moneyPerLevel": 80,
+        "items": [],
+        "draftExtra": 0,
+        "joinChance": 0
+      },
+      "special": "canon"
     }
   ],
   "denTriggers": [

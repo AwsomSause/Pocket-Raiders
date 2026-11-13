@@ -3,6 +3,7 @@
 // defaults the game plays exactly as it did before (see tests/unit/expansionFoundation.test.ts).
 
 import { z } from 'zod';
+import { CastEntrySchema } from './cast/entry';
 import { CanonStateSchema } from './canonSpaces';
 import { TrackStateSchema } from './track';
 import { RescueStateSchema } from '../evil/rescueSchema';
@@ -60,6 +61,8 @@ export const ExpansionRunSchema = z.object({
   track: z.record(z.string(), TrackStateSchema).optional(),
   /** Cast statuses (E1). */
   cast: z.record(z.string(), z.unknown()).optional(),
+  /** Dossier (E1): the cast characters met this run (`sc.*` id -> status and when first met). Raid levers write `cast` above; this is separate. */
+  dossier: z.record(z.string(), CastEntrySchema).optional(),
   /** Raids n1–6 (E5b). */
   raids: z.record(z.string(), z.unknown()).optional(),
   eventsSeen: z.array(z.string()).optional(),

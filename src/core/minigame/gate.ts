@@ -13,13 +13,13 @@ export function placeMinigameStop(content: Content, run: RunState): void {
   if (!stage || stage.kind !== 'stage') return;
   const rng = new Rng(hashSeed(`${run.seed}::minigame-stop::${run.regionIndex}:${stage.index}`));
   if (!rng.chance(content.minigames.economy.stopChance)) return;
-  const pool = content.minigames.games.filter((g) => !g.beta06 && g.unlockRequirements.badges <= run.badges.length && g.unlockRequirements.regionIndex <= run.regionIndex);
+  const pool = content.minigames.games.filter((g) => !g.zone && !g.beta06 && g.unlockRequirements.badges <= run.badges.length && g.unlockRequirements.regionIndex <= run.regionIndex);
   const candidates = stage.map.nodes.filter((n) => n.column < stage.map.columns && n.sides.length === 0);
   if (pool.length === 0 || candidates.length === 0) return;
   const node = rng.pick(candidates);
   let minigameId = rng.pick(pool).id;
   // Beta 0.6 games get their own roll after the old ones, so the old picks never change.
-  const fresh = content.minigames.games.filter((g) => g.beta06 && g.unlockRequirements.badges <= run.badges.length && g.unlockRequirements.regionIndex <= run.regionIndex);
+  const fresh = content.minigames.games.filter((g) => !g.zone && g.beta06 && g.unlockRequirements.badges <= run.badges.length && g.unlockRequirements.regionIndex <= run.regionIndex);
   const extra = new Rng(hashSeed(`${run.seed}::minigame-stop-b06::${run.regionIndex}:${stage.index}`));
   if (fresh.length > 0 && extra.chance(NEW_GAME_SHARE)) minigameId = extra.pick(fresh).id;
   node.sides.push({ id: `minigame-${stage.index}`, kind: 'minigame', minigameId, used: false });

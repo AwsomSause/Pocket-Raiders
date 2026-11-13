@@ -38,6 +38,12 @@ describe('arena style', () => {
     const lake = new Set(Array.from({ length: 1500 }, (_, i) => pickUieArena({ seed: 'lakes', stageIndex: i, type: 'water' })));
     expect(lake).toContain('lake_night');
   });
+  it('grass fights never use the noisy Flower Garden backdrop (the Haunted Forest rainbow-block bug)', () => {
+    for (let i = 0; i < 800; i++) {
+      const n = pickUieArena({ seed: 'forest', stageIndex: i, type: 'grass' });
+      expect(n ?? '').not.toMatch(/^flowergarden/);
+    }
+  });
   it('themed halls cover every themed type, keep time of day, and half the fights keep the plain arena', () => {
     const seen = new Set<string>();
     let plain = 0;

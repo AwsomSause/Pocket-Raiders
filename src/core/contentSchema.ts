@@ -2967,7 +2967,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Beta 0.6 Vermilion Flight North: the stashed party returns. Whoever is in the party now (the Bug-type) leaves. Does nothing when nothing is stashed. */
   z.object({ kind: z.literal('restoreParty') }),
   /** A healing spot, shop or fishing spot opens beside this node. */
-  z.object({ kind: z.literal('addStop'), stop: z.enum(['heal', 'shop', 'fish']) }),
+  z.object({ kind: z.literal('addStop'), stop: z.enum(['heal', 'shop', 'fish', 'minigame']), /** With `minigame`: the game (minigames.json) that waits at the new stop (Safari Land). */ minigameId: z.string().min(1).optional() }),
   /** A ferry: jump to a node next to the gym (SS Ticket). */
   z.object({ kind: z.literal('skipAhead') }),
   /** Ideas W4: a trainer starts tailing you and steps out to challenge you after this many nodes (core/wanderer.ts). */
@@ -3070,8 +3070,10 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   }),
   /** World-state callback (catalog 75): adds to a named story flag that later events can read. */
   z.object({ kind: z.literal('flag'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), amount: z.number().int().default(1) }),
-  /** Clone Core (New Island): your lead's moves are copied onto your lowest-level other Pokémon, once per event. */
+  /** Clone Core (New Island): your lead's moves are copied onto the other party Pokémon you pick (the lowest-level one when none is picked). */
   z.object({ kind: z.literal('copyMoves') }),
+  /** Dossier (E1): meets a cast character (adds them to the Dossier) or changes their status. `id` is an `sc.*` id from the expansion cast. */
+  z.object({ kind: z.literal('cast'), id: z.string().regex(/^sc\.[a-z0-9-]+\.[a-z0-9-]+$/), status: z.enum(['at large', 'beaten', 'turned', 'ally']).optional() }),
   /** Living Rival: writes a line to the run's Chronicle / journal (a photo, a promise, a letter). */
   z.object({ kind: z.literal('moment'), text: z.string().min(1), importance: z.number().int().min(1).max(100).default(60) }),
   /** A run-defining relic: its modifiers (an upside and a downside) join the run for good. Taken once per id. */
@@ -3203,6 +3205,19 @@ export const EventBattleFormatSchema = z.enum(['doubles', 'triples']);
 export type EventBattleFormat = z.infer<typeof EventBattleFormatSchema>;
 
 export const EventBattleSchema = z.discriminatedUnion('kind', [
+  /** Beta 0.6 canon spaces: a raid (raids.json) fought as an event battle. The boss is not catchable unless the raid sets `capture`; `win` and `lose` apply after the raid result. */
+  z.object({
+    kind: z.literal('raid'),
+    raidId: z.string().min(1),
+    name: z.string().default('Raid'),
+    levelBonus: z.number().int().default(0),
+    chain: z.literal(1).default(1),
+    pseudo: z.boolean().optional(),
+    /** Toxic Spikes lie on your side when the fight opens, unless this story flag (`flag` effect key) reached `atLeast` (the Polluted Factory's valves). */
+    spikesUnless: z.object({ flag: z.string().min(1), atLeast: z.number().int().min(1) }).optional(),
+    win: z.array(EventEffectSchema).default([]),
+    lose: z.array(EventEffectSchema).optional(),
+  }),
   z.object({
     kind: z.literal('wild'),
     format: EventBattleFormatSchema.optional(),

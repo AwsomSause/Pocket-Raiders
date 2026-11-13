@@ -49,6 +49,7 @@ import { noteChoice } from './memories/world';
 import { applyEvilEffect, evilBattle, evilBattleWon, evilConditionMet, evilConditionText, evilTeam } from './evil/teams';
 import { shapeInstances, strategyIdForGroup } from './bossStrategy';
 import { choiceMade, recordChoice } from './evil/choices';
+import { recordCast } from './expansion/cast/dossier';
 import { assignEvilVariants, holdsMarnieCard } from './expansion/variantAssign';
 import { changeAid, changeCrisis, crisisAid, crisisEventIds, crisisLevel, setTournament, tournamentEventId, tournamentRound } from './story/crisis';
 import { activePerks, hasPerk, perkItem, perksOf, spendUse, stageKey } from './mapItems';
@@ -70,10 +71,10 @@ import { getSpecies } from './pokemon';
 import { currentRegion, getCampaign, levelCap, runLevelCap } from './regions';
 import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } from './encounterDirector';
 import { hashSeed, Rng } from './rng';
+import { continueAfterDecisions, healParty, newMon, startRaidBattle } from './run';
 import { NATURE_IDS } from './natures';
 
 const bstOf = (sp: { baseStats: Record<string, number> }): number => Object.values(sp.baseStats).reduce((a, b) => a + b, 0);
-import { continueAfterDecisions, healParty, newMon } from './run';
 import { earnRom, gainStock, grandArcOf, romById, romsHeld } from './grandArc';
 import { climaxCutOf } from './arc/climaxExtended';
 import { addMercy, changeRep, joinInsideMan, joinProblem, resolveVerdict, standWithClimaxWon, standWithOf, standWithPlayable, verdictsOpen } from './arc/standWithExtended';
@@ -279,6 +280,8 @@ export function tradeCandidates(content: Content, run: RunState, want: TradeWant
 }
 
 function tradePicksOf(content: Content, run: RunState, choice: EventChoice): { uid: string; label: string }[] | null {
+  // Clone Core: the player picks which other party Pokémon gets the lead's moves.
+  if (choice.success.effects.some((f) => f.kind === 'copyMoves')) return run.party.slice(1).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
   const e = choice.success.effects.find((f) => f.kind === 'tradeAway' || f.kind === 'tradeFor');
   if (!e || (e.kind !== 'tradeAway' && e.kind !== 'tradeFor')) return null;
   return tradeCandidates(content, run, e.want).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
@@ -286,6 +289,7 @@ function tradePicksOf(content: Content, run: RunState, choice: EventChoice): { u
 
 /** Why a choice's trade cannot happen yet, in words (null when it can or the choice has no trade). */
 function tradeMissing(content: Content, run: RunState, choice: EventChoice): string | null {
+  if (choice.success.effects.some((e) => e.kind === 'copyMoves') && run.party.length < 2) return 'Needs 2 Pokémon in your party';
   for (const e of choice.success.effects) {
     if (e.kind !== 'tradeAway' && e.kind !== 'tradeFor') continue;
     if (e.kind === 'tradeAway' && run.party.length < 2) return 'Needs 2 Pokémon in your party';
@@ -939,7 +943,7 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'revealStops':
       return 'reveal every "?" stop';
     case 'addStop':
-      return e.stop === 'heal' ? 'a healing spot opens here' : e.stop === 'shop' ? 'a shop opens here' : 'a fishing spot opens here';
+      return e.stop === 'heal' ? 'a healing spot opens here' : e.stop === 'shop' ? 'a shop opens here' : e.stop === 'minigame' ? 'a game opens here' : 'a fishing spot opens here';
     case 'skipAhead':
       return 'skip ahead to the gym';
     case 'wanderer':
@@ -978,6 +982,8 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'rivalChange':
     case 'flag':
       return '';
+    case 'cast':
+      return 'a new file in your Dossier';
     case 'grandArcRom':
       return `Data ROM ${e.rom}`;
     case 'grandArcStock':
@@ -1246,7 +1252,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     }
     case 'copyMoves': {
       const lead = run.party[0];
-      const target = run.party.slice(1).sort((a, b) => a.level - b.level)[0];
+      const others = run.party.slice(1);
+      const target = others.find((m) => m.uid === tradeUid) ?? [...others].sort((a, b) => a.level - b.level)[0];
       if (!lead || !target) return '';
       target.moves = lead.moves.map((m) => ({ id: m.id, pp: content.moves.get(m.id)?.pp ?? m.pp }));
       return `${content.species.get(target.speciesId)?.name ?? target.speciesId} now knows ${content.species.get(lead.speciesId)?.name ?? lead.speciesId}'s moves!`;
@@ -1330,6 +1337,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       // Shadow II: a story flag may be exactly the key a Shadow in your party or PC has been waiting for.
       for (const line of checkFlagKeys(content, run)) recordChoice(content, run, { id: `shadow-key-${e.key}`, pick: 'yes', text: line, weight: 2 });
       return '';
+    case 'cast':
+      return recordCast(run, e.id, e.status) ? effectWords(content, e) : '';
     case 'mentor':
       return applyMentorEffect(content, run, e);
     case 'moment':
@@ -1380,7 +1389,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return effectWords(content, e);
     case 'addStop': {
       const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
-      here.sides.push({ id: `event-stop-${here.sides.length + 1}-${here.id}`, kind: e.stop, used: false });
+      here.sides.push({ id: `event-stop-${here.sides.length + 1}-${here.id}`, kind: e.stop, used: false, ...(e.stop === 'minigame' && e.minigameId ? { minigameId: e.minigameId } : {}) });
       return effectWords(content, e);
     }
     case 'scout':
@@ -1506,6 +1515,15 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
   const base = b.level ?? (b.kind === 'trainer' && b.rule?.matchLead ? run.party[activeIndex]!.level : eventLevel(content, run, node, rng) + b.levelBonus);
   // Event foes stay under the region's level cap like every ordinary enemy (Balancing Phase 7).
   const cap = levelCap(content, run.regionIndex);
+  if (b.kind === 'raid') {
+    const def = content.raids.raids.find((r) => r.id === b.raidId);
+    if (!def) throw new Error(`Event raid ${b.raidId} does not exist`);
+    const level = Math.min(cap, Math.max(1, base + def.levelBonus));
+    startRaidBattle(content, run, def, rng.pick(def.species), level);
+    if (b.spikesUnless && Number(run.story.flags[`ev:${b.spikesUnless.flag}`] ?? 0) < b.spikesUnless.atLeast) run.battle!.sideEffects.player.toxicSpikes = 1;
+    run.battle!.event = event;
+    return;
+  }
   if (b.kind === 'wild') {
     const speciesId = (b.recall ? oldFoe(run) : null) ?? pickSpecies(content, run, b.species, b.types, rng);
     const level = Math.min(cap, Math.max(1, base));
@@ -1719,7 +1737,7 @@ export function eventBattleWon(content: Content, run: RunState, event: EventBatt
 export function eventBattleLost(content: Content, run: RunState, event: EventBattleRef): string[] {
   const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
-  if (!battle || battle.kind !== "trainer" || !battle.lose?.length) return [];
+  if (!battle || (battle.kind !== 'trainer' && battle.kind !== 'raid') || !battle.lose?.length) return [];
   const rng = new Rng(hashSeed(`${run.seed}::event-lose::${stageKey(run)}::${event.sideId}`));
   return battle.lose.map((e) => applyEffect(content, run, e, rng)).filter(Boolean);
 }

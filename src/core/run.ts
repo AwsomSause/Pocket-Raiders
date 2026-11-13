@@ -3141,6 +3141,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   }
   if (battle.outcome === 'lose' && (battle.raid || battle.totem)) {
     failRaid(content, run);
+    if (battle.event) eventBattleLost(content, run, battle.event);
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, raidFailed: true };
   }

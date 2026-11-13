@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { chooseEvent, conditionMet } from '../../src/core/events';
+import { chooseEvent, conditionMet, eventView } from '../../src/core/events';
 import { abilityOf, calcStats, createPokemon } from '../../src/core/pokemon';
 import { chooseStarter, createRun, debugForceEvent } from '../../src/core/run';
 import { buildTownMenu } from '../../src/core/expansion/canonSpaces';
@@ -145,9 +145,22 @@ describe('New Island', () => {
     }
     expect(room(`${P}newisland-n3`).choices[0]!.success.battle).toMatchObject({ mirror: true, clone: true });
   });
-  it('the Clone Core copies your lead\'s moves onto your lowest-level Pokémon', () => {
-    const out = play('newisland-n4', 0, 'CC', (r) => { r.party.push(createPokemon(content, 'rattata', 3, 'p')); r.party[0]!.moves = [{ id: 'ember', pp: 25 }, { id: 'scratch', pp: 35 }]; });
-    expect(out.party[out.party.length - 1]!.moves.map((m) => m.id)).toEqual(['ember', 'scratch']);
+  it('the Clone Core copies your lead\'s moves onto the Pokémon you pick (the lowest-level one if none is picked)', () => {
+    const setup = (r: ReturnType<typeof begin>) => { r.party.push(createPokemon(content, 'pidgey', 20, 'p'), createPokemon(content, 'rattata', 3, 'p')); r.party[0]!.moves = [{ id: 'ember', pp: 25 }, { id: 'scratch', pp: 35 }]; };
+    const base = begin('CC'); setup(base);
+    const { run, sideId } = debugForceEvent(content, structuredClone(base), `${P}newisland-n4`);
+    const picks = eventView(content, run, sideId).choices[0]!.tradePicks?.map((p) => p.uid);
+    expect(picks).toEqual([run.party[1]!.uid, run.party[2]!.uid]);
+    const picked = chooseEvent(content, structuredClone(run), sideId, 0, run.party[1]!.uid).run;
+    expect(picked.party[1]!.moves.map((m) => m.id)).toEqual(['ember', 'scratch']);
+    expect(picked.party[2]!.moves.map((m) => m.id)).not.toEqual(['ember', 'scratch']);
+    expect(() => chooseEvent(content, structuredClone(run), sideId, 0, run.party[0]!.uid)).toThrow();
+    const auto = play('newisland-n4', 0, 'CC', setup);
+    expect(auto.party[2]!.moves.map((m) => m.id)).toEqual(['ember', 'scratch']);
+  });
+  it('the Clone Core is locked with only one Pokémon', () => {
+    const { run, sideId } = debugForceEvent(content, structuredClone(begin('CC1')), `${P}newisland-n4`);
+    expect(() => chooseEvent(content, run, sideId, 0)).toThrow(/2 Pokémon/);
   });
   it('Mew shows up 10% of the time', () => {
     const c = room(`${P}newisland-n5`).choices[0]!;

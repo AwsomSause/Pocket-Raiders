@@ -144,7 +144,7 @@ export const RaidDefSchema = z.object({
   /** S409 Boss Pokémon Capture: a Poké Ball works once the boss is at or below this share of its HP; the catch ends the raid as a win. */
   capture: Fraction.optional(),
   /** Special dens (titan, gauntlet, mini-boss) are never drawn for an ordinary den: the world places them on their own (core/raid/raid.ts placeSpecialDens). */
-  special: z.enum(['titan', 'gauntlet', 'mini']).optional(),
+  special: z.enum(['titan', 'gauntlet', 'mini', 'canon']).optional(),
   /** The Grand-Enemy's own fights (core/story/grandEnemy): placed by the campaign, never in the random den pool. */
   grand: z.enum(['contact', 'reckoning']).optional(),
 });
