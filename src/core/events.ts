@@ -75,6 +75,7 @@ import { recordBattleStarted } from './story/hooks';
 import { partyLifeBond } from './partyLife';
 import { celebrateToday, milestoneToday, periodOf, PERIOD_LABEL, restUntilMorning, seasonOf } from './clock';
 import { BERRIES } from './berries';
+import { choiceAt, effectiveEvent, visibleChoices } from './eventMemory';
 import { getTheme, typesPool } from './themes';
 import { anyRoaming, endRoamer, healConvoy, startConvoy, partyHasAbility, placeCamp, scoutAhead, CAMP_EVENT_ID } from './world';
 
@@ -638,7 +639,8 @@ export function choiceKind(choice: EventChoice, chance: number | null): ChoiceKi
 
 export function eventView(content: Content, run: RunState, sideId: string): EventView {
   const { side } = findSide(run, sideId);
-  const event = content.events.get(side.eventId!)!;
+  const base = content.events.get(side.eventId!)!;
+  const event = effectiveEvent(content, run, base);
   const insight = hasPerk(content, run, 'eventInsight');
   const choices = event.choices.map((c) => {
     const unmet = c.requires.find((r) => !conditionMet(content, run, r));
@@ -667,8 +669,11 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   const { node, side } = findSide(current, sideId);
   if (side.used) throw new Error('This event is over');
   const event = content.events.get(side.eventId!)!;
-  const choice = event.choices[choiceIndex];
-  if (!choice) throw new Error(`No choice ${choiceIndex}`);
+  // The player picks a position in what the scene shows now; the rest of the engine uses the stable index.
+  const picked = visibleChoices(content, current, event)[choiceIndex];
+  if (!picked) throw new Error(`No choice ${choiceIndex}`);
+  const choice = picked.choice;
+  choiceIndex = picked.index;
   const missing = choice.requires.find((r) => !conditionMet(content, current, r));
   if (missing) throw new Error(conditionText(content, missing));
   const noTrade = tradeMissing(content, current, choice);
@@ -1364,14 +1369,14 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
 
 /** Whether this event battle is a sparring match with the fellow apprentice: losing it is friendly (nobody is out). */
 export function isApprenticeBattle(content: Content, event: EventBattleRef): boolean {
-  const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
+  const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
   return battle?.kind === "trainer" && battle.apprentice === true;
 }
 
 /** A story fight inside an event: against a rival, an evil team member, a ghost or retired champion. Losing it never ends a run. */
 export function isStoryEventBattle(content: Content, event: EventBattleRef): boolean {
-  const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
+  const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
   return event.eventId.startsWith('format:') || (battle?.kind === 'trainer' && Boolean(battle.rival || battle.evil || battle.ghost || battle.retired));
 }
@@ -1385,7 +1390,7 @@ export function isStandWithBattle(content: Content, event: EventBattleRef): bool
 }
 
 export function isPseudoBattle(content: Content, event: EventBattleRef): boolean {
-  const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
+  const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
   return battle?.pseudo === true;
 }
@@ -1406,7 +1411,7 @@ export function continueEventChain(content: Content, run: RunState): void {
   const ref = run.eventChain;
   delete run.eventChain;
   const node = run.stage && run.stage.current !== null ? run.stage.map.nodes.find((n) => n.id === run.stage!.current) : undefined;
-  const battle = ref ? (ref.success ? content.events.get(ref.eventId)?.choices[ref.choiceIndex]?.success : content.events.get(ref.eventId)?.choices[ref.choiceIndex]?.failure)?.battle : undefined;
+  const battle = ref ? (ref.success ? choiceAt(content.events.get(ref.eventId), ref.choiceIndex)?.success : choiceAt(content.events.get(ref.eventId), ref.choiceIndex)?.failure)?.battle : undefined;
   if (!ref || !node || !battle || !run.party.some((p) => p.hp > 0)) {
     run.afterDecisions = 'map';
     return continueAfterDecisions(content, run);
@@ -1421,7 +1426,7 @@ export const BETRAYAL_FLAG = 'evil:betrayal';
 
 /** Whether a won event battle leads into another of its chain (a detour). Sets up `run.eventChain` if so. */
 export function eventChainNext(content: Content, run: RunState, event: EventBattleRef): boolean {
-  const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
+  const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
   const step = event.step ?? 0;
   if (!battle || step + 1 >= battle.chain) return false;
@@ -1437,7 +1442,7 @@ export function startClubBattle(content: Content, run: RunState, b: EventBattle,
 
 /** After an event battle you won: its `win` effects (mutates `run`). Returns the changes in words. */
 export function eventBattleWon(content: Content, run: RunState, event: EventBattleRef, turns = 0): string[] {
-  const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
+  const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
   if (!battle) return [];
   const rng = new Rng(hashSeed(`${run.seed}::event-win::${stageKey(run)}::${event.sideId}`));
