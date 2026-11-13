@@ -2823,7 +2823,7 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** Grand Arc: this run has the arc on, and (when `rom` is set) does not hold that ROM yet. */
   z.object({ kind: z.literal('grandArc'), missingRom: z.string().length(1).optional() }),
   /** Stand With Them: you have joined the run's team (`joined`, the default) or can still join it (`joined: false`); optionally at least this reputation. */
-  z.object({ kind: z.literal('standWith'), joined: z.boolean().default(true), minRep: z.number().int().optional() }),
+  z.object({ kind: z.literal('standWith'), joined: z.boolean().default(true), minRep: z.number().int().optional(), /** The [Stand with them] climax can be played now. */ playable: z.boolean().optional(), /** The climax was won and the verdict is waiting (with `verdict`, that choice is open). */ verdictPending: z.boolean().optional(), verdict: z.enum(['rise', 'throne', 'turn']).optional(), /** A rival is featured in this run (or not). */ rival: z.boolean().optional() }),
   /** Story Overhaul: only in a Story Run (Alphas, story tournaments). Classic never draws these, so its event rolls never move. */
   z.object({ kind: z.literal('storyRun') }),
   /** Event Director: two of your Pokémon share an open bond. */
@@ -3005,7 +3005,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Grand Arc: gains a Stock step (1 to 5). */
   z.object({ kind: z.literal('grandArcStock'), step: z.number().int().min(1).max(5) }),
   /** Stand With Them: join the run's team as an Inside Man, or move your reputation with it (`change` names a row of standWith.json repChanges), or note a small mercy. */
-  z.object({ kind: z.literal('standWith'), action: z.enum(['join', 'rep', 'mercy']), change: z.string().optional(), noticed: z.boolean().default(false) }),
+  z.object({ kind: z.literal('standWith'), action: z.enum(['join', 'rep', 'mercy', 'climaxWon', 'verdict']), change: z.string().optional(), noticed: z.boolean().default(false), verdict: z.enum(['rise', 'throne', 'turn']).optional(), /** With a verdict: what happens to your rival (a featured rival only). */ rival: z.enum(['release', 'handOver']).optional(), keepApexBound: z.boolean().optional() }),
   /** Shadow II: hands over a Named Shadow Pokémon (an `ss.*` id with a key in shadow2.json) at this level, through the usual caught choice. */
   z.object({ kind: z.literal('namedShadow'), id: z.string().regex(/^ss\.[a-z0-9-]+\.[a-z0-9-]+$/), level: z.number().int().min(1).max(500).default(20) }),
   /** World-state callback (catalog 75): adds to a named story flag that later events can read. */
@@ -3153,6 +3153,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     evil: z.enum(['grunt', 'specialist', 'executive', 'leader']).optional(),
     /** Grand Arc: with `evil`, fight this roaming team (cipher, rocket-remnants, snagem) instead of the run's own team. */
     evilTeam: z.string().optional(),
+    /** Stand With Them: this is a Stand-with climax battle. A loss is Second Shot (the party is healed and you go back to the map; the second loss is the worst ending). Needs `pseudo`. */
+    standWith: z.boolean().optional(),
     /** Shadow Boxing: the foe is a copy of your lead (same species, its level plus `levelBonus`); `size` is ignored. */
     mirror: z.boolean().optional(),
     /** Mentors: the team is your fellow apprentice's (their preferred types; they take the name). A loss is friendly: nobody is out and the run goes on. */
