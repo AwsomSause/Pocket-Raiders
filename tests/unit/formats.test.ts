@@ -185,3 +185,67 @@ describe('Blackout', () => {
     expect(loaded.battle!.eventRule!.typeBoost).toEqual({ type: 'psychic', pct: 10 });
   });
 });
+
+describe('Convoy', () => {
+  const next = (run: ReturnType<typeof mk>, id: string, won: boolean) => {
+    chooseOption(ctxOf(run), id);
+    expect(run.phase).toBe('battle');
+    expect(run.battle!.event!.eventId).toBe('format:convoy');
+    battleEnded(ctxOf(run), won);
+    run.battle = null;
+    run.phase = 'map';
+  };
+
+  it('three legs, no healing between; winning the car with "You\'re a list" gives the ledger', () => {
+    const run = mk('cv1');
+    startFormat('convoy', ctxOf(run), { short: false });
+    expect(currentFormat(run)!.state.legs).toHaveLength(3);
+    next(run, 'fight', true);
+    next(run, 'fight', true);
+    expect(cardOf(ctxOf(run))!.options.map((o) => o.id)).toEqual(['list', 'witness']);
+    next(run, 'list', true);
+    expect(formatOver(ctxOf(run))).toBe(true);
+    expect(run.expansion!.cut!.ledger).toBe('won');
+    expect(run.expansion!.cut!.done).toContain('convoy');
+  });
+
+  it('"You\'re a witness" skips the last battle and LEDGER joins', () => {
+    const run = mk('cv2');
+    startFormat('convoy', ctxOf(run), { short: false });
+    next(run, 'fight', true);
+    next(run, 'fight', true);
+    chooseOption(ctxOf(run), 'witness');
+    expect(run.phase).not.toBe('battle');
+    expect(formatOver(ctxOf(run))).toBe(true);
+    expect(run.expansion!.cut!.ledger).toBe('joined');
+  });
+
+  it('a Raid 4 Triumph makes it one leg shorter', () => {
+    const run = mk('cv3');
+    run.expansion = { raids: { '4': { result: 'triumph' } } };
+    startFormat('convoy', ctxOf(run));
+    expect((currentFormat(run)!.state.legs as { id: string }[]).map((l) => l.id)).toEqual(['van', 'car']);
+  });
+
+  it('losing a leg fails the Convoy, loses only the ledger, and applies once', () => {
+    const run = mk('cv4');
+    startFormat('convoy', ctxOf(run), { short: false });
+    next(run, 'fight', false);
+    expect(formatOver(ctxOf(run))).toBe(true);
+    expect(run.expansion!.cut!.ledger).toBe('none');
+    const before = JSON.stringify(run.expansion);
+    chooseOption(ctxOf(run), 'fight');
+    battleEnded(ctxOf(run), true);
+    expect(JSON.stringify(run.expansion)).toBe(before);
+  });
+
+  it('survives save and reload with a leg running', () => {
+    const run = mk('cv5');
+    startFormat('convoy', ctxOf(run), { short: false });
+    chooseOption(ctxOf(run), 'fight');
+    const loaded = RunStateSchema.parse(JSON.parse(JSON.stringify(run)));
+    expect(currentFormat(loaded)!.state.pending).toBe(true);
+    battleEnded(ctxOf(loaded as typeof run), true);
+    expect(currentFormat(loaded)!.state.index).toBe(1);
+  });
+});

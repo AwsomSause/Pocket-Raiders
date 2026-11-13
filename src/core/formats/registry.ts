@@ -3,6 +3,7 @@
 
 import { blackout } from './blackout';
 import { breather } from './breather';
+import { convoy } from './convoy';
 import { clearFormat, currentFormat, doneFormats, storeFormat } from './store';
 import type { FormatCard, FormatCtx, FormatId, WideFormat } from './types';
 
@@ -10,6 +11,7 @@ import type { FormatCard, FormatCtx, FormatId, WideFormat } from './types';
 export const FORMATS: Partial<Record<FormatId, WideFormat<any>>> = {
   breather,
   blackout,
+  convoy,
 };
 
 /** Starts a format, once per run for formats that are one-shot (the Breather). False when one is running or it already ran. */
