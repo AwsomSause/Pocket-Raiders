@@ -11,6 +11,7 @@ import { MINIGAMES_3 } from './games3';
 import { MINIGAMES_4 } from './games4';
 import { MINIGAMES_6 } from './games6';
 import { MINIGAMES_5 } from './games5';
+import { MINIGAMES_8 } from './games8';
 
 export interface Cell {
   id: string;
@@ -855,6 +856,7 @@ export const MINIGAMES: Record<string, MinigameModule<never>> = {
   ...MINIGAMES_4,
   ...MINIGAMES_6,
   ...MINIGAMES_5,
+  ...MINIGAMES_8,
   ...FRONTIER_GAMES,
 };
 

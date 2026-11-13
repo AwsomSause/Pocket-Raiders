@@ -3608,6 +3608,189 @@
         "slowFactor": 2,
         "noTimerOption": false
       }
+    },
+    {
+      "id": "debate-club",
+      "name": "Debate Club",
+      "category": "knowledge",
+      "blurb": "Win the crowd.",
+      "instructions": "Each round pick Facts, Heart or Humor to suit the crowd. Facts win over Skeptics, Heart over the Kind, Humor over the Stern. Each argument can be used only a few times.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "beta06": true,
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "rounds": 6,
+            "mood": 3,
+            "uses": 3
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "rounds": 8,
+            "mood": 3,
+            "uses": 3
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "rounds": 10,
+            "mood": 2,
+            "uses": 4
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "2 for the right argument, 1 for a near one.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.55,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 70,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 119,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 189,
+          "item": {
+            "item": "ultra-ball",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "heal",
+            "amount": 25,
+            "chance": 0.5
+          }
+        }
+      },
+      "failureOutcome": "The crowd walks out; you keep your points.",
+      "replayRules": "Two tries per stop; the best medal counts.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 600
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "safari-trek",
+      "name": "Safari Trek",
+      "category": "skill",
+      "blurb": "Track it, then shoot it.",
+      "instructions": "Follow the tracks along the path the Pokémon took, within a step limit. Then use the film to take photos: the centre frame scores most.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "beta06": true,
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "legs": 4,
+            "steps": 8,
+            "clueChance": 80,
+            "film": 3
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "legs": 5,
+            "steps": 9,
+            "clueChance": 60,
+            "film": 3
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "legs": 6,
+            "steps": 10,
+            "clueChance": 40,
+            "film": 3
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "1 per right path, then 3 per centre photo.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.55,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 70,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 119,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 189,
+          "item": {
+            "item": "ultra-ball",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "heal",
+            "amount": 25,
+            "chance": 0.5
+          }
+        }
+      },
+      "failureOutcome": "You lose the trail; you keep what you found.",
+      "replayRules": "Two tries per stop; the best medal counts.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 600
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": false
+      }
     }
   ]
 }
