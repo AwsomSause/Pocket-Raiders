@@ -4,6 +4,7 @@
 
 import { z } from 'zod';
 import { CanonStateSchema } from './canonSpaces';
+import { TrackStateSchema } from './track';
 import { RescueStateSchema } from '../evil/rescueSchema';
 import { GrandArcStateSchema } from '../grandArc/schema';
 import { RivalOverhaulStateSchema } from '../rivals/overhaulSchema';
@@ -42,6 +43,8 @@ export const ExpansionSettingsSchema = z.object({
   evolutionEncounters: z.boolean().default(true),
   /** B7 E4 counter-pick: register 6 at the League door, swap 1. */
   leagueCounterPick: z.boolean().default(true),
+  /** E2 world-state tracks (the Kanto Rocket Ledger): shops, shut Centers and thinner wild pools follow how the team's operations go. */
+  worldTracks: z.boolean().default(true),
 });
 export type ExpansionSettings = z.infer<typeof ExpansionSettingsSchema>;
 export const EXPANSION_SETTINGS_DEFAULTS: ExpansionSettings = ExpansionSettingsSchema.parse({});
@@ -53,7 +56,7 @@ export const EXPANSION_SETTINGS_DEFAULTS: ExpansionSettings = ExpansionSettingsS
  */
 export const ExpansionRunSchema = z.object({
   /** World-state track step and history (E2). */
-  track: z.record(z.string(), z.unknown()).optional(),
+  track: z.record(z.string(), TrackStateSchema).optional(),
   /** Cast statuses (E1). */
   cast: z.record(z.string(), z.unknown()).optional(),
   /** Raids n1–6 (E5b). */
@@ -77,6 +80,8 @@ export const ExpansionRunSchema = z.object({
   evoEncounters: z.boolean().optional(),
   /** Runs with the E4 counter-pick on (B7). */
   counterPick: z.boolean().optional(),
+  /** Runs with the world-state tracks on (E2). Set once at run start. */
+  tracks: z.boolean().optional(),
   /** B7: the Pokémon (uids) registered at the League door. Only these are ever countered; a swapped-in Pokémon is unseen. `swapped` = the one swap is used. */
   league: z.object({ registered: z.array(z.string()), swapped: z.boolean().default(false) }).optional(),
 });

@@ -98,6 +98,8 @@ import { protagonistTitle, topHeadline } from '../core/rivals/recognition';
 import { mentorHudLine } from '../core/mentors';
 import { ensureNarration } from '../core/overhaul/partyNarration';
 import { rivalReport } from '../core/rivals/report';
+import { trackPage } from '../core/expansion/trackView';
+import { drawTrackPage } from '../ui/trackPage';
 
 const COL_SPACING = 104;
 const ROW_SPACING = 92;
@@ -801,7 +803,7 @@ export class MapScene extends Phaser.Scene {
         return;
       }
       if (this.report) {
-        if (action === 'back' || action === 'confirm') this.toggleRivalReport();
+        if (action === 'back' || action === 'confirm') this.closeReport();
         return;
       }
       if (this.picker) {
@@ -832,6 +834,11 @@ export class MapScene extends Phaser.Scene {
     if (session.run && rivalReport(session.run).length > 0) {
       this.input.keyboard?.on('keydown-R', () => this.toggleRivalReport());
       this.add.text(GAME_WIDTH - 24, 370, 'R: rival report', textStyle(12, '#a69cb4')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('rival-report-tag').on('pointerdown', () => this.toggleRivalReport());
+    }
+    // Beta 0.6 E2: T opens the Notebook's world-state track page (Kanto's Rocket Ledger), once the track has a step to show.
+    if (session.run && (session.run.expansion?.track?.[region.id]?.peak ?? 0) > 0 && trackPage(content, session.run)) {
+      this.input.keyboard?.on('keydown-T', () => this.toggleTrackPage());
+      this.add.text(GAME_WIDTH - 24, 354, 'T: notebook track', textStyle(12, '#a69cb4')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('track-tag').on('pointerdown', () => this.toggleTrackPage());
     }
     // Galar's Champion Tournament: B opens the bracket.
     if (league && region.id === 'galar' && stage.map.nodes.some((n) => n.sides.length > 0)) {
@@ -1845,6 +1852,23 @@ export class MapScene extends Phaser.Scene {
     const timer = this.time.addEvent({ delay: 1500, loop: true, callback: step });
     step();
     this.input.keyboard?.once('keydown', close);
+  }
+
+  private closeReport(): void {
+    this.report?.destroy();
+    this.report = null;
+    this.busy = false;
+  }
+
+  /** The Notebook's track page (Beta 0.6 E2): a pop-up like the Rival Report. T, Esc or a click closes it. */
+  private toggleTrackPage(): void {
+    if (this.report) return this.closeReport();
+    if (this.busy || this.picker || this.legend) return;
+    const run = services().session.run;
+    const page = run ? trackPage(services().session.content, run) : null;
+    if (!page) return;
+    this.report = drawTrackPage(this, page, () => this.closeReport());
+    this.busy = true;
   }
 
   /** The Rival Report (Beta 0.6 R7): a pop-up panel, not a screen. Shows Lead, Marks and feelings for each rival. R, Esc or a click closes it. */

@@ -239,6 +239,7 @@ import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
 import { recapRegion, tellAct } from './campaign/director';
+import { healStopShut, trackShopFactor, trackWildWeight } from './expansion/trackRun';
 import { freshClock, migrationWildWeight, periodOf, periodWildWeight, shopHoursMultiplier, stepClock, tideShopMultiplier, tideWildWeight } from './clock';
 import { bulkTotal, currentShopType, haggleWins, pokenetDeal, shopTypeAt, typedStock, typePriceFactor } from './shopTypes';
 import { finalRivalLine, tellCampfire } from './story/highHype';
@@ -329,7 +330,7 @@ export interface NewRunOptions {
   /** Story Run: the player's name, pronouns and Look from the prologue (profile.story.protagonist). */
   protagonist?: { look: string; name: string; pronouns: string | PronounSet; backstory?: string };
   /** Beta 0.6: which expansion settings were on at run start (settings.expansion). Each flag is stored in `run.expansion` once and never changes. */
-  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; grandArc?: boolean };
+  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; grandArc?: boolean; worldTracks?: boolean };
 }
 
 export function createRun(content: Content, opts: NewRunOptions): RunState {
@@ -432,7 +433,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
   }
   if (opts.expansion) {
     const e = opts.expansion;
-    const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}) };
+    const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.worldTracks ? { tracks: true } : {}) };
     if (Object.keys(flags).length > 0) run.expansion = { ...run.expansion, ...flags };
     if (e.grandArc) startGrandArc(run);
   }
@@ -1911,7 +1912,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     const metWild = wildMetWeight(content, run);
     const oddWild = isOddOneOutNode(content, run, run.regionIndex * campaign.stagesPerRegion + stage.index, node.id) ? oddOneOutWeight(content) : () => 1;
     const recentWild = (key: string) => recentWild0(key);
-    const dampen = (id: string) => metWild(id) * oddWild(id);
+    const dampen = (id: string) => metWild(id) * oddWild(id) * trackWildWeight(content, run, id);
     const plan = withStream(run.rng, 'encounter', (r) => {
       const [lo, hi] = content.balance.difficulty.harderBonus;
       const bonus = (node.harder ? r.int(lo, hi) : 0) + wildLevelBonus(content, run, mods);
@@ -2469,6 +2470,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
   const run = structuredClone(current);
   const runSide = findNode(run.stage!.map, stage.current).sides.find((s) => s.id === sideId)!;
   if (side.kind === 'heal' && noHealStops(run.rules)) return { run: current, message: 'Your No Rest contract forbids healing stops.' };
+  if (side.kind === 'heal' && healStopShut(content, run, sideId)) return { run: current, message: 'The Pokémon Center is shut for the night: the Ledger says so. Try again in the morning.' };
   if (side.kind === 'heal') {
     healParty(content, run);
     careRest(run, content);
@@ -2596,7 +2598,7 @@ export function shopPrice(content: Content, run: RunState, entry: Content['shop'
   // Coupons lower the price; a full Point Card makes it free.
   const markup = isBlackMarket(content, run, entry) ? blackMarketMarkup(runPerks(content, run))! : 1;
   const deal = currentShopType(run) === 'pokenet' ? pokenetDeal(content, run, shopStock(content, run), shopSaleItem(content, run)) : null;
-  return Math.round(entry.price * markup * buildPriceFactor(content, run.party, entry.item) * typePriceFactor(content, run, entry.item, deal) * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * tideShopMultiplier(content, run, content.items.get(entry.item)?.category) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story) * dynamicPriceFactor(content, run, entry.item));
+  return Math.round(entry.price * markup * buildPriceFactor(content, run.party, entry.item) * typePriceFactor(content, run, entry.item, deal) * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * tideShopMultiplier(content, run, content.items.get(entry.item)?.category) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story) * dynamicPriceFactor(content, run, entry.item) * trackShopFactor(content, run));
 }
 
 /** Base price for an item the shop doesn't list (urge items and other finds), by rarity. */
