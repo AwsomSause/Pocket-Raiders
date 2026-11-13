@@ -31,7 +31,7 @@ import { styleProbability, styleProblem, type StyleInput } from '../captureStyle
 import { applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem, lastStandItemId } from '../items';
 import { abilityOf, calcStats, createPokemon, getSpecies, maxHp } from '../pokemon';
 import { rallyStages } from './rally';
-import { variantBlocksForcedSwitch, variantBlocksStatus, variantEndTurnLoss, variantIncoming, variantItemMove, variantNeverMisses, variantOnEntry } from '../expansion/variantLines';
+import { SPIRITLESS_MESSAGE, variantBlocksForcedSwitch, variantBlocksMind, variantBlocksStage, variantBlocksStatus, variantEndTurnLoss, variantEndTurnStages, variantIncoming, variantItemMove, variantNeverMisses, variantOnEntry, variantPriorityBonus, variantTagCall } from '../expansion/variantLines';
 import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
 import type { Rng } from '../rng';
 import { cooldownKey, hasBattleEffect, markBattleEffect } from '../story/ledger';
@@ -1970,6 +1970,14 @@ function resolveEntries(ctx: BattleContext, events: BattleEvent[]): void {
   if (sides.length === 2 && speedOf(ctx, enemy) > speedOf(ctx, player)) sides.reverse();
   for (const { c } of sides) enterExtras(ctx, c, events);
   for (const { c } of sides) applyHazards(ctx, c, events);
+  for (const { c, other } of sides) {
+    // Tagged-Up (Alola): a foe coming in while the sprayer is out is called out and loses 1/16 HP, once each.
+    const call = c.mon.hp > 0 && other.mon.hp > 0 ? variantTagCall(ctx.battle.extra.variants, other.mon.uid, c.mon.uid, calcStats(ctx.content, c.mon).hp) : null;
+    if (call && call.loss > 0) {
+      events.push({ type: 'raid', tone: 'info', text: `${nameOf(ctx, c.mon)} is ${call.message}!` });
+      abilityHurt(ctx, c, call.loss, events);
+    }
+  }
   if (sides.some(({ c }) => c.mon.hp <= 0)) {
     // A hazard knocked it out as it came in.
     recordFaints(ctx, player, enemy, events);
@@ -2366,7 +2374,7 @@ function speedOf(ctx: BattleContext, c: Combatant): number {
 function priorityOf(ctx: BattleContext, c: Combatant, move: Move): number {
   // §29 enraged after a rival's sacrifice: its next moves go first.
   const rage = ctx.battle.enraged;
-  return basePriority(ctx, c, move) + (rage && rage.left > 0 && c.side === 'player' && rage.uid === c.mon.uid ? rage.priority : 0);
+  return basePriority(ctx, c, move) + variantPriorityBonus(ctx.battle.extra.variants, c.mon.uid) + (rage && rage.left > 0 && c.side === 'player' && rage.uid === c.mon.uid ? rage.priority : 0);
 }
 
 function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
@@ -2452,6 +2460,8 @@ function canAct(ctx: BattleContext, user: Combatant, events: BattleEvent[], move
       return false;
     }
   }
+  if (user.vol.infatuated && variantBlocksMind(ctx.battle.extra.variants, user.mon.uid)) user.vol.infatuated = false;
+  if (user.flinched && variantBlocksMind(ctx.battle.extra.variants, user.mon.uid)) user.flinched = false;
   if (user.vol.infatuated) {
     events.push({ type: 'selfState', side: user.side, state: 'inLove' });
     if (rng.chance(0.5)) {
@@ -4753,7 +4763,7 @@ function disrupt(ctx: BattleContext, user: Combatant, target: Combatant, kind: N
       target.vol.torment = true;
       break;
     case 'taunt':
-      if (target.vol.taunt > 0) return fail();
+      if (target.vol.taunt > 0 || variantBlocksMind(ctx.battle.extra.variants, target.mon.uid)) return fail();
       target.vol.taunt = 3;
       if (Held.triggerOnce(ctx, target, 'mentalHerb', events as Held.HeldEvent[])) {
         target.vol.taunt = 0;
@@ -4813,6 +4823,11 @@ function endTurnMon(ctx: BattleContext, c: Combatant, foe: Combatant, events: Ba
     if (c.vol.nightmare && c.mon.status?.id !== 'slp') c.vol.nightmare = false;
     if (c.vol.nightmare) abilityHurt(ctx, c, Math.max(1, Math.floor(max / 4)), events);
     if (c.vol.cursed) abilityHurt(ctx, c, Math.max(1, Math.floor(max / 4)), events);
+    const overclock = variantEndTurnStages(ctx.battle.extra.variants, c.mon.uid);
+    if (overclock.message) {
+      events.push({ type: 'raid', tone: 'info', text: overclock.message });
+      for (const [stat, n] of Object.entries(overclock.stages) as [BoostStat, number][]) c.stages[stat] = Math.max(-6, c.stages[stat] + n);
+    }
     const variantLoss = variantEndTurnLoss(ctx.battle.extra.variants, c.mon.uid, max);
     if (variantLoss.loss > 0) {
       if (variantLoss.message) events.push({ type: 'raid', tone: 'info', text: variantLoss.message });
@@ -5363,7 +5378,7 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
     return;
   }
   if (fx.attract) {
-    if (target.vol.infatuated || !oppositeGender(content, user.mon, target.mon) || abilityIn(ctx, target) === 'oblivious' || Held.statusBlocked(ctx, target, 'infatuation')) {
+    if (target.vol.infatuated || variantBlocksMind(ctx.battle.extra.variants, target.mon.uid) || !oppositeGender(content, user.mon, target.mon) || abilityIn(ctx, target) === 'oblivious' || Held.statusBlocked(ctx, target, 'infatuation')) {
       if (abilityIn(ctx, target) === 'oblivious') announce(target, 'oblivious', events);
       return void events.push({ type: 'fail', side: user.side });
     }
@@ -6047,6 +6062,10 @@ function changeStage(ctx: BattleContext, user: Combatant, recipient: Combatant, 
  * change and Contrary reverses it.
  */
 function applyStageChange(ctx: BattleContext, c: Combatant, stat: BoostStat, stages: number, events: BattleEvent[], source?: Combatant): boolean {
+  if (variantBlocksStage(ctx.battle.extra.variants, c.mon.uid, stages, Boolean(source && source.side !== c.side))) {
+    events.push({ type: 'raid', tone: 'info', text: SPIRITLESS_MESSAGE });
+    return false;
+  }
   const ability = source ? targetAbility(ctx, source, c) : abilityIn(ctx, c);
   if (source && stages < 0 && source.side !== c.side && Held.hasHook(ctx, c.mon, c.side, 'clearAmulet')) {
     events.push({ type: 'held', side: c.side, itemId: 'clear-amulet', what: 'guard' });
