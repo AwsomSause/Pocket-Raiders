@@ -3,7 +3,7 @@
 
 import { expansionData as EXPANSION } from '../../data/expansion';
 import { FORMATS, startFormat } from '../formats/registry';
-import { beginCut, cutOf, markCheckpoint } from '../formats/store';
+import { beginCut, currentFormat, cutOf, markCheckpoint } from '../formats/store';
 import type { FormatId } from '../formats/types';
 import type { Content } from '../contentSchema';
 import type { RunState } from '../state';
@@ -47,10 +47,10 @@ export function climaxPhases(region: string): ClimaxStep[] {
 /** The region of the running climax (Kanto only for now; other regions pass theirs to `beginClimax`). */
 const regionOf = (run: RunState): string => (typeof run.expansion?.cut?.region === 'string' ? run.expansion.cut.region : 'kanto');
 
-interface Dir { idx: number; shots: number; }
+interface Dir { idx: number; shots: number; /** The step whose format was started (so a closed format means the step is done). */ started?: number; }
 const dirOf = (run: RunState): Dir => {
   const d = cutOf(run).director as Partial<Dir> | undefined;
-  return { idx: Math.max(0, Number(d?.idx) || 0), shots: Math.max(0, Number(d?.shots) || 0) };
+  return { idx: Math.max(0, Number(d?.idx) || 0), shots: Math.max(0, Number(d?.shots) || 0), ...(typeof d?.started === 'number' ? { started: d.started } : {}) };
 };
 const save = (run: RunState, d: Dir): void => { cutOf(run).director = d; };
 
@@ -104,4 +104,27 @@ export function climaxLost(run: RunState): 'retry' | 'worst' {
   d.idx = at >= 0 ? at + 1 : 0;
   save(run, d);
   return 'retry';
+}
+
+/**
+ * Called whenever the map opens. Plays the Extended Cut's wide-format phases end to end: starts the next format, and once it has
+ * closed moves on. Battle and story phases are played by the standard climax content, so they pass straight through.
+ * Does nothing for Standard Cut runs or before the climax has begun. Returns true while a format waits for the player.
+ */
+export function climaxTick(content: Content, run: RunState): boolean {
+  if (climaxCutOf(run) !== 'extended' || !cutOf(run).director) return false;
+  for (let guard = 0; guard < 40; guard++) {
+    const step = nextStep(run);
+    if (!step) return false;
+    const d = dirOf(run);
+    if (step.kind.kind === 'format') {
+      if (currentFormat(run)) return true;
+      if (d.started === d.idx) { delete d.started; save(run, d); finishStep(run); continue; }
+      if (!startStep(content, run)) { finishStep(run); continue; }
+      save(run, { ...dirOf(run), started: d.idx });
+      return true;
+    }
+    finishStep(run);
+  }
+  return false;
 }

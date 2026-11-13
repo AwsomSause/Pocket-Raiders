@@ -7,6 +7,7 @@
 // pillar with a bigger token, and the champion stands in turning gold rays
 // (Visual Bible: "a deliberate escalation from normal stages").
 
+import { climaxTick } from '../core/arc/climaxExtended';
 import { nodeHint } from '../core/worldSim/tick';
 import { mapOmens, type Omen, type OmenTier } from '../core/omens';
 import { wealthTaxNotice } from '../core/priceSwing';
@@ -263,6 +264,7 @@ export class MapScene extends Phaser.Scene {
       });
     }
     // Wide formats (Breather and the rest): a running format shows its plain screen on top of the map.
+    if (run.phase === 'map' && climaxTick(session.content, run)) session.saveRunNow();
     if (pendingFormat(run)) {
       this.time.delayedCall(0, () => {
         this.scene.launch(sceneForFormat(run), { from: 'Map' });
