@@ -50,6 +50,7 @@ import { applyEvilEffect, evilBattle, evilBattleWon, evilConditionMet, evilCondi
 import { shapeInstances, strategyIdForGroup } from './bossStrategy';
 import { choiceMade, recordChoice } from './evil/choices';
 import { recordCast } from './expansion/cast/dossier';
+import { meetFromEvent, meetFromJoin } from './expansion/cast/meet';
 import { assignEvilVariants, holdsMarnieCard } from './expansion/variantAssign';
 import { changeAid, changeCrisis, crisisAid, crisisEventIds, crisisLevel, setTournament, tournamentEventId, tournamentRound } from './story/crisis';
 import { activePerks, hasPerk, perkItem, perksOf, spendUse, stageKey } from './mapItems';
@@ -852,6 +853,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
     if (words) changes.push(words);
   }
   noteCanonEvent(run, event);
+  meetFromEvent(run, event);
   // Explorer Kit: every finished event stop turns up one more item.
   if (hasPerk(content, run, 'eventBonus')) {
     const words = giveItem(content, run, rng.pick(content.balance.events.explorerItems), 1, rng);
@@ -1352,7 +1354,11 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return name ? `${name} is yours to keep, if you can hold it` : 'there was nobody to hand over';
     }
     case 'standWith':
-      if (e.action === 'join') return joinInsideMan(run);
+      if (e.action === 'join') {
+        const line = joinInsideMan(run);
+        meetFromJoin(run, run.story.evil!.teamId!);
+        return line;
+      }
       if (e.action === 'mercy') addMercy(run, e.noticed);
       else if (e.action === 'climaxWon') standWithClimaxWon(run);
       else if (e.action === 'verdict' && e.verdict) return resolveVerdict(content, run, e.verdict, { apex: 'none', ...(e.rival && featuredRival(run) ? { rival: e.rival } : {}), ...(e.keepApexBound !== undefined ? { keepApexBound: e.keepApexBound } : {}) }).lines.join(' ');

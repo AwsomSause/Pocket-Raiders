@@ -266,6 +266,7 @@ import { withTeamTypes } from './rivals/adapt';
 import { finaleAssistRival } from './rivals/living';
 import { markTakeover, takeoverNote, takeoverRival } from './rivals/promotion';
 import { frontRunnerIntro, onFrontRunnerBattle } from './timeline/frontRunner';
+import { beatBoss, beatClimax } from './expansion/cast/meet';
 import { beginBossRematch, bossRematchPlan, dueBossRematch, recordBossDefeat, type BossRecord } from './story/bossRematch';
 import { bondScoreOf } from './battle/spectacle';
 import { freshSpectacle } from './battle/spectacle';
@@ -3122,6 +3123,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (battle.outcome) sealReplay(content, run);
   // Wide formats (Beta 0.6 E4): a fight a format launched tells the format how it ended, before any loss tail runs.
   if (battle.outcome && battle.event?.eventId === 'format:climax') climaxBattleEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
+  if (battle.outcome === 'win' && battle.event?.eventId === 'format:climax') beatClimax(run);
   if (battle.outcome && battle.event?.eventId.startsWith('format:')) formatBattleEnded({ content, run }, battle.outcome === 'win' || battle.outcome === 'caught');
   // PS-RESCUE (Beta 0.6 R9): a guard fight tells the running rescue plan how it ended.
   if (battle.outcome && battle.event?.eventId.startsWith('rescue:')) rescueFightEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
@@ -3640,6 +3642,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (role) {
       count(run, role);
       recordBossDefeat(content, run, battle);
+      beatBoss(run, battle.trainer?.leaderId);
       onFrontRunnerBattle(content, run, battle, 'win');
       const lead = run.party[battle.activeIndex];
       for (const type of lead ? getSpecies(content, lead.speciesId).types : []) count(run, `bossWinsLead.${type}`);
