@@ -1534,6 +1534,11 @@ export function itemProblem(ctx: Pick<BattleContext, 'content' | 'battle' | 'par
     if (partner && partner.hp > 0 && currentEnemy(ctx.battle).hp > 0) return "You can't aim a Poké Ball while two wild Pokémon are out!";
     return null;
   }
+  if (item.effect.kind === 'escape') {
+    const b = ctx.battle;
+    if (b.kind !== 'wild' || b.raid || b.totem || b.event || b.expedition || b.monRival) return "You can't slip away from this one!";
+    return null;
+  }
   if (item.effect.kind === 'itemDrop') {
     const foe = currentEnemy(ctx.battle);
     return Object.keys(Held.effectiveHeld(ctx, foe)).length > 0 ? null : `${getSpecies(ctx.content, foe.speciesId).name} isn't holding anything.`;

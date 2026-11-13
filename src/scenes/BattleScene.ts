@@ -3677,6 +3677,11 @@ export class BattleScene extends Phaser.Scene {
       await this.finish(result, trainer, bossWin);
       return;
     }
+    if (result.escaped) {
+      await exitWipe(this, this.motion, this.wipeMask());
+      this.scene.start(sceneForRun(result.run));
+      return;
+    }
     if (result.raidFailed) {
       await this.say('The fight is over... your Pokémon were pulled back to safety.');
       await exitWipe(this, this.motion, this.wipeMask());

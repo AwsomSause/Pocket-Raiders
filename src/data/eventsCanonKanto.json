@@ -11900,7 +11900,7 @@
       }
      ],
      "success": {
-      "text": "A Poké Doll for your bag.",
+      "text": "A Poké Doll goes in your bag. Use it in a wild battle to slip away.",
       "effects": [
        {
         "kind": "money",
@@ -11908,7 +11908,8 @@
        },
        {
         "kind": "item",
-        "id": "poke-doll"
+        "id": "poke-doll-escape",
+        "count": 1
        }
       ]
      }
@@ -11948,20 +11949,16 @@
       }
      ],
      "success": {
-      "text": "Fresh Water: cold and fizzy. The team feels better.",
+      "text": "Fresh Water: cold and fizzy. It goes in your bag.",
       "effects": [
        {
         "kind": "money",
         "amount": -200
        },
        {
-        "kind": "heal",
-        "share": 0.15
-       },
-       {
-        "kind": "attribute",
-        "key": "ragePeace",
-        "amount": -1
+        "kind": "item",
+        "id": "rooftop-fresh-water",
+        "count": 1
        }
       ]
      }
@@ -11975,20 +11972,16 @@
       }
      ],
      "success": {
-      "text": "Soda Pop: cold and fizzy. The team feels better.",
+      "text": "Soda Pop: cold and fizzy. It goes in your bag.",
       "effects": [
        {
         "kind": "money",
         "amount": -275
        },
        {
-        "kind": "heal",
-        "share": 0.25
-       },
-       {
-        "kind": "attribute",
-        "key": "speed",
-        "amount": 1
+        "kind": "item",
+        "id": "rooftop-soda-pop",
+        "count": 1
        }
       ]
      }
@@ -12002,20 +11995,16 @@
       }
      ],
      "success": {
-      "text": "Lemonade: cold and fizzy. The team feels better.",
+      "text": "Lemonade: cold and fizzy. It goes in your bag.",
       "effects": [
        {
         "kind": "money",
         "amount": -350
        },
        {
-        "kind": "heal",
-        "share": 0.35
-       },
-       {
-        "kind": "attribute",
-        "key": "charisma",
-        "amount": 1
+        "kind": "item",
+        "id": "rooftop-lemonade",
+        "count": 1
        }
       ]
      }
@@ -12125,14 +12114,14 @@
       ]
      },
      "failure": {
-      "text": "Cleaned out. The clerk hands you a Bad Luck Charm. Luck −1.",
+      "text": "Cleaned out. The clerk hands you a Bad Luck Charm. Luck −1 until this stage ends.",
       "effects": [
        {
         "kind": "money",
         "amount": -400
        },
        {
-        "kind": "attribute",
+        "kind": "stageAttribute",
         "key": "luck",
         "amount": -1
        }
@@ -12187,34 +12176,28 @@
     },
     {
      "label": "Try the machine in the back",
+     "requires": [
+      {
+       "kind": "evil",
+       "team": "rocket"
+      },
+      {
+       "kind": "storyRaid",
+       "n": 2
+      }
+     ],
      "check": "intelligence",
      "success": {
-      "text": "It never pays out. You pull the lever and a hidden door opens. A Rocket Grunt steps out.",
-      "effects": [],
-      "battle": {
-       "kind": "trainer",
-       "name": "Rocket Grunt",
-       "size": 2,
-       "evil": "grunt",
-       "types": [
-        "poison",
-        "dark"
-       ],
-       "win": [
-        {
-         "kind": "evil",
-         "heat": -1
-        },
-        {
-         "kind": "attribute",
-         "key": "intelligence",
-         "amount": 1
-        }
-       ]
-      }
+      "text": "It never pays out. You pull the lever seven times and a stairway opens behind the machine: the Celadon Hideout.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-hideout-1"
+       }
+      ]
      },
      "failure": {
-      "text": "It just eats your coins. Strange.",
+      "text": "It just eats your coins. The lever feels loose, though.",
       "effects": []
      }
     },
@@ -12686,13 +12669,49 @@
     "effect": "none",
     "tint": "#6b8f4e"
    },
-   "intro": "Developers hunch over glowing monitors. One looks up: \"Think you know your Pokémon?\"",
+   "intro": "Developers hunch over glowing monitors. One looks up: \"Show us your Pokédex. We hand out Diplomas for a good one.\"",
    "choices": [
     {
-     "label": "Take their quiz",
-     "check": "intelligence",
+     "label": "Show your Pokédex (25 seen)",
+     "requires": [
+      {
+       "kind": "dex",
+       "set": "seen",
+       "atLeast": 25
+      }
+     ],
      "success": {
-      "text": "Full marks! They hand you a Diploma.",
+      "text": "A gold-stamped Diploma! \"Outstanding research.\"",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "celadon-diploma-gold",
+        "name": "Gold Diploma",
+        "effects": [
+         {
+          "kind": "researchMultiplier",
+          "value": 1.2
+         }
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mansion-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show your Pokédex (12 seen)",
+     "requires": [
+      {
+       "kind": "dex",
+       "set": "seen",
+       "atLeast": 12
+      }
+     ],
+     "success": {
+      "text": "\"Nice start!\" They hand you a Diploma.",
       "effects": [
        {
         "kind": "relic",
@@ -12710,21 +12729,12 @@
         "eventId": "cs-kanto-celadon-mansion-3"
        }
       ]
-     },
-     "failure": {
-      "text": "Not quite. Better luck upstairs.",
-      "effects": [
-       {
-        "kind": "addEvent",
-        "eventId": "cs-kanto-celadon-mansion-3"
-       }
-      ]
      }
     },
     {
-     "label": "Skip the quiz",
+     "label": "Not yet",
      "success": {
-      "text": "You climb on.",
+      "text": "\"Come back with more entries,\" they say, and wave you upstairs.",
       "effects": [
        {
         "kind": "addEvent",
@@ -13360,20 +13370,16 @@
       }
      ],
      "success": {
-      "text": "Fresh Water: cold and fizzy. The team feels better.",
+      "text": "Fresh Water: cold and fizzy. It goes in your bag.",
       "effects": [
        {
         "kind": "money",
         "amount": -200
        },
        {
-        "kind": "heal",
-        "share": 0.15
-       },
-       {
-        "kind": "attribute",
-        "key": "ragePeace",
-        "amount": -1
+        "kind": "item",
+        "id": "rooftop-fresh-water",
+        "count": 1
        }
       ]
      }
@@ -13387,20 +13393,16 @@
       }
      ],
      "success": {
-      "text": "Soda Pop: cold and fizzy. The team feels better.",
+      "text": "Soda Pop: cold and fizzy. It goes in your bag.",
       "effects": [
        {
         "kind": "money",
         "amount": -275
        },
        {
-        "kind": "heal",
-        "share": 0.25
-       },
-       {
-        "kind": "attribute",
-        "key": "speed",
-        "amount": 1
+        "kind": "item",
+        "id": "rooftop-soda-pop",
+        "count": 1
        }
       ]
      }
@@ -13414,20 +13416,16 @@
       }
      ],
      "success": {
-      "text": "Lemonade: cold and fizzy. The team feels better.",
+      "text": "Lemonade: cold and fizzy. It goes in your bag.",
       "effects": [
        {
         "kind": "money",
         "amount": -350
        },
        {
-        "kind": "heal",
-        "share": 0.35
-       },
-       {
-        "kind": "attribute",
-        "key": "charisma",
-        "amount": 1
+        "kind": "item",
+        "id": "rooftop-lemonade",
+        "count": 1
        }
       ]
      }
@@ -15904,6 +15902,200 @@
         "eventId": "cs-kanto-lavender-volunteers-revive"
        }
       ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-hideout-1",
+   "name": "Celadon Hideout: B1F",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Spinner arrows, warm light and a corridor of Rocket Grunts. Down the stairs is the Lift Key and the way to the boss.",
+   "choices": [
+    {
+     "label": "Fight through the grunts",
+     "success": {
+      "text": "The grunts rush you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rocket Grunts",
+       "size": 2,
+       "evil": "grunt",
+       "chain": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-celadon-hideout-2"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "storyRaid",
+         "n": 2,
+         "result": "failure"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Turn back",
+     "success": {
+      "text": "You climb out. The machine slides shut.",
+      "effects": [
+       {
+        "kind": "storyRaid",
+        "n": 2,
+        "result": "declined"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-hideout-2",
+   "name": "Celadon Hideout: B3F",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "An Executive blocks the maze of spinner tiles. \"Nobody walks into our Hideout.\"",
+   "choices": [
+    {
+     "label": "Take on the Executive",
+     "success": {
+      "text": "The Executive throws a ball.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rocket Executive",
+       "size": 3,
+       "evil": "executive",
+       "win": [
+        {
+         "kind": "item",
+         "id": "lift-key",
+         "count": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-celadon-hideout-3"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "storyRaid",
+         "n": 2,
+         "result": "failure"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Retreat with what you learned",
+     "success": {
+      "text": "You slip out with the layout memorised. The Hideout stays open.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       },
+       {
+        "kind": "storyRaid",
+        "n": 2,
+        "result": "partial"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-hideout-3",
+   "name": "Celadon Hideout: B4F",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "The Lift Key turns. Behind the office door waits the boss.",
+   "choices": [
+    {
+     "label": "Challenge the boss",
+     "success": {
+      "text": "The boss stands up from the desk.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rocket Boss",
+       "size": 4,
+       "evil": "leader",
+       "rule": {
+        "turnLimit": 20
+       },
+       "win": [
+        {
+         "kind": "evil",
+         "heat": -2
+        },
+        {
+         "kind": "storyRaid",
+         "n": 2,
+         "result": "triumph"
+        }
+       ],
+       "slowWin": [
+        {
+         "kind": "evil",
+         "heat": -1
+        },
+        {
+         "kind": "storyRaid",
+         "n": 2,
+         "result": "success"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "storyRaid",
+         "n": 2,
+         "result": "failure"
+        }
+       ]
+      }
      }
     }
    ],
