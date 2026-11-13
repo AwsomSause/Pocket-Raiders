@@ -264,6 +264,8 @@ export const VolatileSchema = z.object({
   loweredThisTurn: z.boolean().default(false),
   /** Moves used this stay (Last Resort). */
   movesUsed: z.array(z.string()).default([]),
+  /** The move being used now is the first use of it this stay (Samurai Slash). */
+  firstUseNow: z.boolean().default(false),
   /** Rollout / Ice Ball hits in a row. */
   rollout: z.number().int().min(0).default(0),
   /** Fury Cutter hits in a row. */
@@ -392,6 +394,7 @@ export const freshVolatile = (): Volatile => ({
   lastFailed: false,
   loweredThisTurn: false,
   movesUsed: [],
+  firstUseNow: false,
   rollout: 0,
   furyCutter: 0,
   ampMove: null,

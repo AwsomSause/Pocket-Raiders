@@ -471,6 +471,8 @@ export const MoveSchema = z.object({
       sureIn: WeatherSchema.optional(),
       /** Only works on the user's first turn in battle (Fake Out). */
       firstTurnOnly: z.literal(true).optional(),
+      /** The target flinches the first time the user uses this move in a stay on the field, whoever moves first (Samurai Slash). */
+      flinchFirstUse: z.literal(true).optional(),
       /** Goes through Protect (Feint, Phantom Force). */
       breaksProtect: z.literal(true).optional(),
       /** Breaks the target's Reflect, Light Screen and Aurora Veil before the hit (Bastion Fist). */
@@ -2758,7 +2760,7 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** A meter leaning one way: Rage (positive ragePeace) / Peace (negative), Good (positive goodEvil) / Evil (negative). */
   z.object({ kind: z.literal('meter'), key: z.enum(['ragePeace', 'goodEvil']), side: z.enum(['positive', 'negative']), atLeast: z.number().int().min(0) }),
   z.object({ kind: z.literal('item'), id: z.string(), /** Copies needed (default 1). */ count: z.number().int().min(1).optional() }),
-  z.object({ kind: z.literal('partyType'), type: TypeNameSchema }),
+  z.object({ kind: z.literal('partyType'), type: TypeNameSchema, /** True: holds only when NO Pokémon of this type is in the party. */ absent: z.boolean().optional() }),
   /** Ideas W4: the run calendar's season (core/clock.ts seasonOf) is one of these. */
   z.object({ kind: z.literal('season'), in: z.array(z.enum(['Spring', 'Summer', 'Autumn', 'Winter'])).min(1) }),
   /** Ideas W4 landmarks: the run is in one of these regions (regions.json ids). */
@@ -2964,6 +2966,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   }),
   /** The lead learns one of its family's egg moves it doesn't know yet. */
   z.object({ kind: z.literal('eggMove') }),
+  /** A party Pokémon learns a move: the first conscious one of `type`, else the lead. A full moveset loses its last move. */
+  z.object({ kind: z.literal('teachMove'), move: z.string().min(1), type: TypeNameSchema.optional() }),
   /** The next reward draft uses the gym leader's odds and offers `extra` more choices. */
   z.object({ kind: z.literal('betterDraft'), extra: z.number().int().min(0).default(0) }),
   /** The map shows this stage's gym leader's whole team. */
@@ -3061,6 +3065,10 @@ export type EventEffect = z.infer<typeof EventEffectSchema>;
  * `foeAsleep`: the foe's Pokémon start asleep. `reversed`: your last conscious Pokémon leads. `stages`: both sides start with these stat stages.
  */
 export const EventRuleSchema = z.object({
+  /** A duel: your first conscious Pokémon of this type leads (Samurai face-off). */
+  leadType: TypeNameSchema.optional(),
+  /** The foe's level equals your lead's level (Samurai face-off). */
+  matchLead: z.boolean().optional(),
   noSwitch: z.boolean().optional(),
   noAttacks: z.boolean().optional(),
   /** No bag items in this fight (Mentor's Examination). */
@@ -3122,6 +3130,10 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
   }),
   z.object({
     kind: z.literal('trainer'),
+    /** A fixed foe team (species ids) instead of one drawn by `types`. */
+    team: z.array(z.string()).optional(),
+    /** With `team`: this team instead when your lead is weak to `weakTo` (the Samurai counters your Bug-type). */
+    counter: z.object({ weakTo: TypeNameSchema, team: z.array(z.string()).min(1) }).optional(),
     /** A trainer class from trainers.json, or a boss id (its signature team). */
     classId: z.string().optional(),
     bossId: z.string().optional(),

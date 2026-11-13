@@ -3073,6 +3073,7 @@ function executeMove(
   }
   user.vol.destinyBond = false;
   user.vol.exposed = false;
+  user.vol.firstUseNow = !continuing && !user.vol.movesUsed.includes(move.id);
   if (!continuing && !user.vol.movesUsed.includes(move.id)) user.vol.movesUsed.push(move.id);
   if (!continuing && user.side === 'player') countMoveUse(user.mon, move.id);
   if (!continuing && user.side === 'player') {
@@ -4189,7 +4190,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       tryInflictStatus(ctx, user, target, id, move, events, false);
     }
     if (fx.status && roll(fx.status.chance, fx.status.id)) tryInflictStatus(ctx, user, target, fx.status.id, move, events, false);
-    if (fx.flinchChance && movedFirst && roll(fx.flinchChance)) flinch(ctx, user, target);
+    if (fx.flinchFirstUse && user.vol.firstUseNow && movedFirst) flinch(ctx, user, target);
+    else if (fx.flinchChance && movedFirst && roll(fx.flinchChance)) flinch(ctx, user, target);
     else if (!fx.flinchChance && userAbility === 'stench' && movedFirst && rng.chance(0.1)) flinch(ctx, user, target);
     if (fx.confuse && roll(fx.confuse.chance, 'confusion')) tryConfuse(ctx, user, target, events, false);
   }
