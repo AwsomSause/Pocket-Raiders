@@ -8,6 +8,7 @@ import { Rng, hashSeed } from '../rng';
 import type { Content } from '../contentSchema';
 import type { RunState } from '../state';
 import { impound, RESCUE, type Hold } from '../evil/rescue';
+import { applyRaidCost, COST_IDS } from './raidCosts';
 import { lastQuietNodeOfRegion, rescueNode } from '../evil/rescueGlue';
 
 export const RAID_RESULTS = ['triumph', 'success', 'partial', 'failure', 'declined'] as const;
@@ -48,6 +49,7 @@ export const RaidRecordSchema = z.object({
   id: z.string(), result: z.enum(RAID_RESULTS), node: z.number().int(), os: z.number().int(),
   phase: z.record(z.string(), z.number().int()).default({}),
   impounded: z.number().int().min(0).default(0),
+  costs: z.array(z.string()).default([]),
 });
 export type RaidRecord = z.infer<typeof RaidRecordSchema>;
 
@@ -93,7 +95,7 @@ export function climaxMods(run: RunState): Record<string, number> {
 const block = (run: RunState) => (run.expansion ??= {});
 const rec = (o: Record<string, unknown> | undefined) => o ?? {};
 
-export interface ResolvedRaid { record: RaidRecord; hold: Hold | null; alreadyResolved: boolean }
+export interface ResolvedRaid { record: RaidRecord; hold: Hold | null; alreadyResolved: boolean; lines: string[] }
 
 /**
  * Records a raid result once and applies it. A result never applies twice (a second call returns the first).
@@ -103,13 +105,23 @@ export function resolveStoryRaid(content: Content, run: RunState, n: number, res
   const def = raidDefByN(n);
   if (!def) throw new Error(`Unknown story raid ${n}`);
   const done = raidRecord(run, n);
-  if (done) return { record: done, hold: null, alreadyResolved: true };
+  if (done) return { record: done, hold: null, alreadyResolved: true, lines: [] };
   const fx = def.results[result];
   const b = block(run);
   const node = rescueNode(content, run);
   let hold: Hold | null = null;
   if (result === 'failure' && def.failure.includes('C1')) hold = impoundFor(content, run, def.team, `raid-${n}`);
-  const record: RaidRecord = { id: def.id, result, node, os: fx.os, phase: { ...(fx.phase ?? {}) }, impounded: hold ? hold.pokemon.length : 0 };
+  // A failure applies its listed costs (C1 above, the rest here), once.
+  const lines: string[] = [];
+  const costs: string[] = [];
+  if (result === 'failure') {
+    for (const c of def.failure) {
+      if (!(COST_IDS as readonly string[]).includes(c)) continue;
+      const line = applyRaidCost(content, run, c, `raid-${n}-${c}`);
+      if (line) { lines.push(line); costs.push(c); }
+    }
+  }
+  const record: RaidRecord = { id: def.id, result, node, os: fx.os, phase: { ...(fx.phase ?? {}) }, impounded: hold ? hold.pokemon.length : 0, costs };
   b.raids = { ...rec(b.raids), [keyOf(n)]: record };
   // Levers write only these four blocks.
   const siege = rec(b.siege);
@@ -117,7 +129,7 @@ export function resolveStoryRaid(content: Content, run: RunState, n: number, res
   if (fx.apex) b.apex = { ...rec(b.apex), ...fx.apex };
   if (fx.cast) b.cast = { ...rec(b.cast), ...fx.cast };
   b.cut = { ...rec(b.cut), mods: climaxMods(run) };
-  return { record, hold, alreadyResolved: false };
+  return { record, hold, alreadyResolved: false, lines };
 }
 
 /** C1 Impound for a team that has a holding site: how many (1–3) is hashed from seed + region + label, so it never moves another roll. */
