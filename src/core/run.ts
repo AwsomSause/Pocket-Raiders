@@ -3360,6 +3360,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     const pts = timeAttackPoints(run.rules, battle.turn - 1);
     if (pts > 0) run.timeAttack = { points: (run.timeAttack?.points ?? 0) + pts, fast: (run.timeAttack?.fast ?? 0) + 1 };
   }
+  if (battle.extra?.payout) moneyGained *= 2; // Jackpot's Payout (Kanto): its holder knocked out a foe this battle
   if (battle.alpha) moneyGained = Math.floor(moneyGained * content.balance.w1.luck.alphaMoney);
   if (battle.deal) moneyGained = Math.floor(moneyGained * content.balance.w1.play.deal.money);
   run.money += moneyGained;

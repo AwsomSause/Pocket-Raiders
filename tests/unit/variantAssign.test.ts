@@ -1,6 +1,7 @@
 // Beta 0.6 E1 part 6: Evil Team Pokémon carry their team's variant line in a run.
 import { describe, expect, it } from 'vitest';
 import { chooseEvent, startEventBattle } from '../../src/core/events';
+import { takeTurn } from '../../src/core/run';
 import { assignEvilVariants, holdsMarnieCard, lineForTeam, VARIANT_SLOTS } from '../../src/core/expansion/variantAssign';
 import { COUTURE_ACCESSORIES } from '../../src/core/expansion/variantLines';
 import { createPokemon } from '../../src/core/pokemon';
@@ -64,9 +65,9 @@ describe('in a run', () => {
     run.regionIndex = regionIndex;
     return run;
   };
-  const b = (evil: 'grunt' | 'specialist' | 'executive') => ({ kind: 'trainer', name: 'x', evil, size: 3, levelBonus: 0, shadow: 0, types: [], chain: 1, win: [], ghost: false, retired: false, rival: false }) as never;
+  const b = (evil: 'grunt' | 'specialist' | 'executive' | 'leader') => ({ kind: 'trainer', name: 'x', evil, size: 3, levelBonus: 0, shadow: 0, types: [], chain: 1, win: [], ghost: false, retired: false, rival: false }) as never;
   const node = (run: ReturnType<typeof evilRun>) => run.stage!.map.nodes[0]!;
-  const fight = (teamId: string, regionIndex: number, rank: 'grunt' | 'specialist' | 'executive') => {
+  const fight = (teamId: string, regionIndex: number, rank: 'grunt' | 'specialist' | 'executive' | 'leader') => {
     const run = evilRun(teamId, regionIndex);
     startEventBattle(content, run, node(run), b(rank), new Rng(hashSeed('va')), { eventId: 'x', choiceIndex: 0, sideId: 's', success: true });
     return run;
@@ -100,5 +101,33 @@ describe('in a run', () => {
     const v: Record<string, { flags: Record<string, number> }> = {};
     assignEvilVariants(v as never, lineup, { teamId: 'yell', regionId: 'galar', rank: 'executive', marnie: holdsMarnieCard(after) });
     expect(v[lineup[0]!.uid]!.flags.shame).toBe(1);
+  });
+  it('a Kanto Rocket leader fights with Persian, Nidoking and Nidoqueen carrying their traits', () => {
+    const run = fight('rocket', 0, 'leader');
+    const traits = Object.values(run.battle!.extra.traits).map((t) => t.trait).sort();
+    expect(traits).toEqual(expect.arrayContaining(['seat-at-the-table']));
+    for (const mon of run.battle!.enemyTeam) {
+      const t = run.battle!.extra.traits[mon.uid]?.trait;
+      if (mon.speciesId === 'persian') expect(t).toBe('seat-at-the-table');
+      if (mon.speciesId === 'nidoking' || mon.speciesId === 'nidoqueen') expect(t).toBe('house-wins');
+    }
+    expect(Object.keys(fight('rocket', 0, 'grunt').battle!.extra.traits)).toEqual([]);
+  });
+  it("Payout doubles the win's prize money", () => {
+    const winMoney = (payout: boolean) => {
+      const run = fight('rocket', 0, 'grunt');
+      run.battle!.enemyTeam.splice(1);
+      run.battle!.enemyTeam[0]!.hp = 1;
+      run.battle!.extra.payout = payout;
+      run.party[0]!.level = 50;
+      run.party[0]!.moves = [{ id: 'tackle', pp: 35 }];
+      const before = run.money;
+      const res = takeTurn(content, run, { kind: 'move', index: 0 });
+      expect(res.run.battle?.outcome ?? 'win').not.toBe('lose');
+      return res.run.money - before;
+    };
+    const plain = winMoney(false), paid = winMoney(true);
+    expect(plain).toBeGreaterThan(0);
+    expect(paid).toBe(plain * 2);
   });
 });
