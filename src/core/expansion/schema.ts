@@ -3,6 +3,7 @@
 // defaults the game plays exactly as it did before (see tests/unit/expansionFoundation.test.ts).
 
 import { z } from 'zod';
+import { RescueStateSchema } from '../evil/rescueSchema';
 import { RivalOverhaulStateSchema } from '../rivals/overhaulSchema';
 
 /** F1: every expansion setting at its default (plan section 10). Lives in `settings.expansion` (settings v42). */
@@ -56,6 +57,7 @@ export const ExpansionRunSchema = z.object({
   friend: z.record(z.string(), z.unknown()).optional(),
   /** Rival overhaul state by rival id (R1-R3, R10; core/rivals/overhaul.ts). */
   rival: z.record(z.string(), RivalOverhaulStateSchema).optional(),
-  rescue: z.record(z.string(), z.unknown()).optional(),
+  /** Rival Rescue Plan (R9; core/evil/rescue.ts): holds, the running plan, returned Pokémon, attitude, memory. */
+  rescue: RescueStateSchema.optional(),
 });
 export type ExpansionRun = z.infer<typeof ExpansionRunSchema>;
