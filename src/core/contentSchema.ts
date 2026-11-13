@@ -2996,6 +2996,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('recoverKeepsake') }),
   /** Legacy Egg (F118): hands over the egg a past Ace left, at a Daycare or Ranch. */
   z.object({ kind: z.literal('legacyEgg') }),
+  /** Shadow II: hands over a Named Shadow Pokémon (an `ss.*` id with a key in shadow2.json) at this level, through the usual caught choice. */
+  z.object({ kind: z.literal('namedShadow'), id: z.string().regex(/^ss\.[a-z0-9-]+\.[a-z0-9-]+$/), level: z.number().int().min(1).max(500).default(20) }),
   /** World-state callback (catalog 75): adds to a named story flag that later events can read. */
   z.object({ kind: z.literal('flag'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), amount: z.number().int().default(1) }),
   /** Living Rival: writes a line to the run's Chronicle / journal (a photo, a promise, a letter). */
