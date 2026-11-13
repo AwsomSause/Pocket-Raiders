@@ -815,6 +815,8 @@ export const BattleStateSchema = z.object({
   /** A rival back for its rematch (Living Rivalry Engine): its id, and what it changed about its team. */
   rivalId: z.string().optional(),
   rivalNote: z.string().optional(),
+  /** Beta 0.6 R4: the tier-5 rival AI's plan and scouting snapshot for this battle (core/rivals/tier5.ts). */
+  rivalBrain: z.object({ tier: z.union([z.literal(4), z.literal(5)]), winCondition: z.enum(['sweep', 'weather', 'stall']), personality: z.string(), seenMoves: z.array(z.string()), seenSpecies: z.array(z.string()), switchRate: z.number().min(0).max(1), lostLast: z.boolean().optional(), seed: z.string() }).optional(),
   /** Rival step-in (core/rivals/stepIn.ts): 'assist' fights beside you, 'duel' is the warm-up fight with the real battle queued behind it, 'done' is the real battle after the duel. */
   stepIn: z.object({ kind: z.enum(['assist', 'duel', 'done']), rivalId: z.string(), queued: z.unknown().optional() }).optional(),
   /** W0/W2: moves you used this battle, by move id (the rival's adaptations read only what it saw here). */

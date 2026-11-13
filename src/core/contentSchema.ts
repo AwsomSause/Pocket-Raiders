@@ -1904,7 +1904,8 @@ export const TrainerAiSchema = z.object({
   /** Danger switch: a smart trainer whose Pokémon would be KO'd by the player's best move swaps to a teammate that would lose at most this share of its HP (0 = off). */
   dangerSwitch: z.number().min(0).max(1).default(0),
   /** Sweep guard: once the player's Pokémon has KO'd this many of a boss's or rival's team in a row (and the player has another Pokémon left), each new Pokémon of that team braces with `stages` stages in `stats` (0 kos = off). */
-  sweepGuard: z.object({ kos: z.number().int().min(0), stages: z.number().int().min(1).max(3), stats: z.array(z.enum(['atk', 'def', 'spa', 'spd', 'spe'])) }).default({ kos: 0, stages: 1, stats: ['def', 'spd', 'spe'] }),
+  sweepGuard: z.object({ kos: z.number().int().min(0), stages: z.number().int().min(1).max(3), stats: z.array(z.enum(['atk', 'def', 'spa', 'spd', 'spe'])), maxStages: z.number().int().min(1).max(3).default(2), ceiling: z.number().int().min(1).max(6).default(4) }).default({ kos: 0, stages: 1, stats: ['def', 'spd'], maxStages: 2, ceiling: 4 }),
+  // Rally (Beta 0.6 B4): the sweep guard above, merged. Each further `kos` KOs in the streak adds another `stages` (up to `maxStages` per stat per Pokémon); a Rally never lifts a stat past `ceiling`.
   /** The rest of the Advanced AI port (core/battle/aai.ts, docs/plans/aai-coverage.md): one switch per behaviour, all off by default. */
   aai: z
     .object({

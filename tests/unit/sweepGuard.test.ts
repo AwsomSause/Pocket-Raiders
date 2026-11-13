@@ -2,10 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { simulateBattleDetail } from '../../src/quality/balanceSim';
 import { createPlannedPokemon } from '../../src/core/encounters';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
+import { rallyStages } from '../../src/core/battle/rally';
 import { content } from './helpers';
 
 function fight(guardKos: number) {
-  const c = { ...content, balance: { ...content.balance, trainerAi: { ...content.balance.trainerAi, sweepGuard: { kos: guardKos, stages: 1, stats: ['def', 'spd', 'spe'] as ('def' | 'spd' | 'spe')[] } } } };
+  const c = { ...content, balance: { ...content.balance, trainerAi: { ...content.balance.trainerAi, sweepGuard: { ...content.balance.trainerAi.sweepGuard, kos: guardKos } } } };
   const strong = createPokemon(c, 'garchomp', 60, 'p0');
   for (const k of ['hp', 'atk', 'spe'] as const) strong.vitamins[k] = 3;
   strong.moves = ['earthquake', 'outrage'].map((id) => ({ id, pp: 10 }));
@@ -26,5 +27,23 @@ describe('sweep guard', () => {
   });
   it('braced foes make a streak last at least as many turns', () => {
     expect(fight(2).turns).toBeGreaterThanOrEqual(fight(0).turns);
+  });
+});
+
+describe('Rally stacking and ceiling', () => {
+  const cfg = content.balance.trainerAi.sweepGuard;
+  it('is +1 at the first streak, +2 when it doubles, and off below the streak', () => {
+    expect(rallyStages(cfg, cfg.kos - 1, 0)).toBe(0);
+    expect(rallyStages(cfg, cfg.kos, 0)).toBe(1);
+    expect(rallyStages(cfg, cfg.kos * 2, 0)).toBe(2);
+    expect(rallyStages(cfg, cfg.kos * 9, 0)).toBe(cfg.maxStages * cfg.stages);
+  });
+  it('never lifts a stat past the ceiling and is off at 0 KOs', () => {
+    expect(rallyStages(cfg, 9, cfg.ceiling - 1)).toBe(1);
+    expect(rallyStages(cfg, 9, cfg.ceiling)).toBe(0);
+    expect(rallyStages({ ...cfg, kos: 0 }, 9, 0)).toBe(0);
+  });
+  it('the shipped numbers are +1/+2 on Defence and Sp. Def with a +4 ceiling', () => {
+    expect([cfg.kos, cfg.stages, cfg.maxStages, cfg.ceiling, [...cfg.stats].sort().join()]).toEqual([2, 1, 2, 4, 'def,spd']);
   });
 });

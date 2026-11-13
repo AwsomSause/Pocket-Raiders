@@ -29,6 +29,7 @@ import { catchProbability, resolveCatchRoll } from '../capture';
 import { styleProbability, styleProblem, type StyleInput } from '../captureStyles';
 import { applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem, lastStandItemId } from '../items';
 import { abilityOf, calcStats, createPokemon, getSpecies, maxHp } from '../pokemon';
+import { rallyStages } from './rally';
 import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
 import type { Rng } from '../rng';
 import { cooldownKey, hasBattleEffect, markBattleEffect } from '../story/ledger';
@@ -60,6 +61,7 @@ import { growthAccuracyMultiplier, growthDamageMultiplier, growthDefenseMultipli
 import { fieldPowerMultiplier, fieldBanners, conditionWeather, tickCondition } from '../overhaul/field';
 import { abilityPair, arenaReaction, crowdSees, flairState, phaseMoveSwap, shockWater } from './battleFlair';
 import { preBattleTrap } from './opponentAi';
+import { tier5Pick, type Tier5Option } from '../rivals/tier5';
 import { breakImmunity, counterBeats, counterClassOf, COUNTER_NAMES, reactionFor, stackableStatus, stackMultiplier, typeRulesOf } from './typeRules';
 import {
   ABSORB,
@@ -498,9 +500,47 @@ export function chooseEnemyMove(enemy: PokemonInstance, rng: Rng, brain?: EnemyB
   if (counter) return counter.i;
   if (brain && brain.ai > 0 && rng.chance(brain.ai)) {
     const scored = usable.map((x) => ({ i: x.i, score: moveValue(brain, enemy, x.m.id) }));
+    if (brain.battle?.rivalBrain?.tier === 5 && (brain.side ?? 'enemy') === 'enemy') return tier5Choose(enemy, scored, brain);
     return scored.reduce((best, x) => (x.score > best.score ? x : best)).i;
   }
   return rng.pick(usable).i;
+}
+
+/** Beta 0.6 R4: the tier-5 rival picks among the engine's own scores (core/rivals/tier5.ts). Draws no random number. */
+function tier5Choose(enemy: PokemonInstance, scored: { i: number; score: number }[], brain: EnemyBrain): number {
+  const battle = brain.battle!;
+  const { content, target } = brain;
+  const rb = battle.rivalBrain!;
+  const ownStats = calcStats(content, enemy);
+  const foeStats = calcStats(content, target);
+  const back: EnemyBrain = { content, ai: 1, target: enemy, stages: battle.playerStages, battle, party: brain.party, side: 'player', raw: true };
+  const foeBest = Math.max(0, ...target.moves.filter((m) => m.pp > 0).map((m) => estimateDamage(back, target, m.id)));
+  const bench = (brain.party ?? []).filter((m) => m.hp > 0 && m.uid !== target.uid);
+  const incoming = bench.length > 0 ? bench.reduce((b, m) => (m.hp / maxHp(content, m) > b.hp / maxHp(content, b) ? m : b)) : null;
+  const options: Tier5Option[] = scored.map((x) => {
+    const mv = content.moves.get(enemy.moves[x.i]!.id);
+    const fx = (mv?.effects ?? {}) as Record<string, unknown>;
+    return {
+      index: x.i,
+      score: x.score,
+      damage: estimateDamage(brain, enemy, enemy.moves[x.i]!.id),
+      priority: (mv?.priority ?? 0) > 0,
+      setup: mv?.category === 'status' && Boolean(fx.statChanges ?? fx.stages ?? fx.boost),
+      heal: Boolean(fx.heal),
+      weather: Boolean(fx.weather),
+      status: mv?.category === 'status' && !fx.heal,
+      sacrifice: Boolean(fx.userFaint),
+      switchDamage: incoming ? estimateDamage({ ...brain, target: incoming }, enemy, enemy.moves[x.i]!.id) : 0,
+    };
+  });
+  const enemyLeft = battle.enemyTeam.filter((m) => m.hp > 0 && m.uid !== enemy.uid).length;
+  const trickRoom = (battle.field.trickRoom ?? 0) > 0;
+  const ownFaster = trickRoom ? ownStats.spe < foeStats.spe : ownStats.spe > foeStats.spe;
+  const playerLeft = bench.length;
+  return tier5Pick({
+    brain: rb, turn: battle.turn, options, ownHp: enemy.hp, ownMaxHp: ownStats.hp, foeHp: target.hp, foeMaxHp: foeStats.hp, ownFaster, foeBestDamage: foeBest,
+    isAce: battle.enemyTeam[battle.enemyTeam.length - 1]?.uid === enemy.uid, ownReserves: enemyLeft, foeReserves: playerLeft, switchLikely: playerLeft > 0 && foeBest > 0 && options.some((o) => o.damage > 0) && rb.switchRate >= 0,
+  });
 }
 
 /** Average damage a move's score stands for (the level-based damage formula on the score, accuracy taken back out). */
@@ -4507,7 +4547,10 @@ function trainerAiTurn(ctx: BattleContext, enemy: Combatant, events: BattleEvent
   if (guard.kos > 0 && (battle.trainer?.leaderId || battle.rival) && battle.sweep && battle.sweep.kos >= guard.kos && battle.sweep.braced !== mon.uid && ctx.party.filter((p) => p.hp > 0).length > 1) {
     battle.sweep = { ...battle.sweep, braced: mon.uid, used: battle.sweep.used + 1 };
     events.push(say('enemy', 'rally', `${getSpecies(content, mon.speciesId).name} steels itself to stop the winning streak!`, mon.uid));
-    for (const stat of guard.stats) applyStageChange(ctx, enemy, stat, guard.stages, events);
+    for (const stat of guard.stats) {
+      const gain = rallyStages(guard, battle.sweep.kos, enemy.stages[stat]);
+      if (gain > 0) applyStageChange(ctx, enemy, stat, gain, events);
+    }
   }
   if (battle.enemySwitches >= cfg.maxSwitches || enemy.vol.turnsOut < 1 || enemy.vol.trapped || enemy.vol.bound > 0) return false;
   if ((mon.friendship ?? 0) >= 230 && !(battle.enemyMoments ??= []).includes(`refuse:${mon.uid}`) && mon.hp / max >= 0.2) {

@@ -753,7 +753,7 @@
   "koBonus": 2,
   "priorityKoBonus": 1.5,
   "dangerSwitch": 0.5,
-  "sweepGuard": { "kos": 2, "stages": 1, "stats": ["def", "spd", "spe"] },
+  "sweepGuard": { "kos": 2, "stages": 1, "stats": ["def", "spd"], "maxStages": 2, "ceiling": 4 },
   "aai": {
    "abilityReads": true,
    "recoil": true,
