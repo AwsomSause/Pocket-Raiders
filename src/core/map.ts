@@ -18,34 +18,63 @@ function crosses(a: [number, number], b: [number, number]): boolean {
   return (a[0] < b[0] && a[1] > b[1]) || (a[0] > b[0] && a[1] < b[1]);
 }
 
-export function generateStageMap(content: Content, campaign: Campaign, rng: Rng): StageMap {
+/** Beta 0.6 B6 options. Absent = the old two-trainer-column stage, with exactly the same rolls as before. */
+export interface PacingOptions {
+  /** 0-based region index: doubles trainers start at `balance.stage.pacing.doublesFromRegion`. */
+  regionIndex: number;
+}
+
+export function generateStageMap(content: Content, campaign: Campaign, rng: Rng, pacing?: PacingOptions): StageMap {
   const cfg = { ...content.balance.stage, columns: campaign.columns, trainerColumns: campaign.trainerColumns };
   const C = cfg.columns;
+  const pc = cfg.pacing;
 
   // 1. Pick the trainer columns, one from each configured range.
   const trainerColumns: number[] = [];
-  for (const [first, last] of cfg.trainerColumns) {
-    let col = rng.int(first, last);
-    while (trainerColumns.includes(col) && col < last) col += 1;
-    if (!trainerColumns.includes(col)) trainerColumns.push(col);
+  let optionalColumns: number[] = [];
+  if (pacing) {
+    // Stage pacing: 4–5 trainer columns, one from each window; 1–2 of them skippable (a wild node beside the trainer).
+    const total = Math.min(rng.int(pc.totalMin, pc.totalMax), pc.windows.length);
+    const picked: number[] = [];
+    for (const [first, last] of pc.windows.slice(0, total)) {
+      const lo = Math.min(first, C - 1);
+      const hi = Math.min(last, C - 1);
+      let col = rng.int(lo, hi);
+      while (picked.includes(col) && col < hi) col += 1;
+      if (!picked.includes(col)) picked.push(col);
+    }
+    const avoidable = Math.min(rng.int(pc.avoidableMin, pc.avoidableMax), Math.max(0, picked.length - 3));
+    const pool = [...picked];
+    while (optionalColumns.length < avoidable) optionalColumns.push(pool.splice(rng.int(0, pool.length - 1), 1)[0]!);
+    optionalColumns.sort((a, b) => a - b);
+    trainerColumns.push(...picked.filter((c) => !optionalColumns.includes(c)));
+  } else {
+    for (const [first, last] of cfg.trainerColumns) {
+      let col = rng.int(first, last);
+      while (trainerColumns.includes(col) && col < last) col += 1;
+      if (!trainerColumns.includes(col)) trainerColumns.push(col);
+    }
   }
 
   // 2. Column widths and nodes.
   const widths: number[] = [];
   const nodes: MapNode[] = [];
   for (let col = 1; col <= C; col++) {
-    const width = col === C ? 1 : rng.int(cfg.minWidth, cfg.maxWidth);
+    const isOptional = optionalColumns.includes(col);
+    const width = col === C ? 1 : isOptional ? Math.max(2, rng.int(cfg.minWidth, cfg.maxWidth)) : rng.int(cfg.minWidth, cfg.maxWidth);
     widths[col] = width;
     const isTrainer = trainerColumns.includes(col);
     const columnNodes: MapNode[] = [];
     for (let row = 0; row < width; row++) {
-      const kind = col === C ? 'gym' : isTrainer ? 'trainer' : 'wild';
+      const kind = col === C ? 'gym' : isTrainer || (isOptional && row === 0) ? 'trainer' : 'wild';
       const harder = kind === 'wild' && width > 1 && rng.chance(cfg.harderChance);
       const note =
         kind === 'gym'
           ? `gym leader (last column)`
           : kind === 'trainer'
-            ? `trainer column ${col} (one of ${trainerColumns.join(', ')})`
+            ? isOptional
+              ? `optional trainer, column ${col} (skip it by taking a wild node)`
+              : `trainer column ${col} (one of ${trainerColumns.join(', ')})`
             : `wild, column ${col} of ${C}, width ${width}${harder ? `, harder (${Math.round(cfg.harderChance * 100)}% roll)` : ''}`;
       columnNodes.push({ id: nodeId(col, row), column: col, row, kind, harder, next: [], sides: [], note });
     }
@@ -100,7 +129,21 @@ export function generateStageMap(content: Content, campaign: Campaign, rng: Rng)
     if (kind) node.sides.push({ id: `s${++sideCount}`, kind, used: false });
   }
 
-  return { columns: C, nodes, trainerColumns: [...trainerColumns].sort((a, b) => a - b) };
+  if (pacing) {
+    // One ace trainer (the last column every route must cross) and, from region 2, one doubles trainer. Their own streams.
+    const forced = [...trainerColumns].sort((a, b) => a - b);
+    const aceCol = forced[forced.length - 1];
+    const acePick = nodes.filter((n) => n.column === aceCol);
+    for (const n of acePick) { n.ace = true; n.note += ' (ace trainer)'; }
+    if (pacing.regionIndex >= pc.doublesFromRegion) {
+      const doublesCols = forced.filter((c) => c !== aceCol);
+      const dCol = doublesCols.length > 0 ? doublesCols[doublesCols.length - 1]! : aceCol;
+      for (const n of nodes.filter((x) => x.column === dCol)) { n.doubles = true; n.note += ' (doubles)'; }
+    }
+  }
+
+  const trainerOut = [...trainerColumns].sort((a, b) => a - b);
+  return { columns: C, nodes, trainerColumns: trainerOut, ...(pacing ? { optionalTrainerColumns: optionalColumns } : {}) };
 }
 
 /**
@@ -151,10 +194,13 @@ export function validateStageMap(map: StageMap): string[] {
     const nodes = map.nodes.filter((n) => n.column === col);
     if (nodes.length === 0) problems.push(`column ${col} is empty`);
     const isTrainerCol = map.trainerColumns.includes(col);
+    const isOptionalCol = (map.optionalTrainerColumns ?? []).includes(col);
     for (const n of nodes) {
       if (col === map.columns && n.kind !== 'gym') problems.push(`last column node ${n.id} is not the gym`);
       if (col !== map.columns && n.kind === 'gym') problems.push(`gym ${n.id} is not in the last column`);
-      if (col !== map.columns && isTrainerCol !== (n.kind === 'trainer')) problems.push(`node ${n.id} kind ${n.kind} doesn't match trainer columns`);
+      if (col !== map.columns && isOptionalCol) {
+        if ((n.row === 0) !== (n.kind === 'trainer')) problems.push(`optional trainer column ${col}: node ${n.id} kind ${n.kind} is wrong`);
+      } else if (col !== map.columns && isTrainerCol !== (n.kind === 'trainer')) problems.push(`node ${n.id} kind ${n.kind} doesn't match trainer columns`);
       if (col < map.columns && n.next.length === 0) problems.push(`node ${n.id} is a dead end`);
       for (const id of n.next) {
         const target = byId.get(id);
@@ -165,7 +211,14 @@ export function validateStageMap(map: StageMap): string[] {
     }
     if (col === map.columns && nodes.length !== 1) problems.push(`last column has ${nodes.length} nodes (needs exactly 1)`);
   }
-  if (map.trainerColumns.length !== 2) problems.push(`expected 2 trainer columns, found ${map.trainerColumns.length}`);
+  if (map.optionalTrainerColumns === undefined) {
+    if (map.trainerColumns.length !== 2) problems.push(`expected 2 trainer columns, found ${map.trainerColumns.length}`);
+  } else {
+    const total = map.trainerColumns.length + map.optionalTrainerColumns.length;
+    if (total < 4 || total > 5) problems.push(`expected 4–5 trainer columns, found ${total}`);
+    if (map.optionalTrainerColumns.length > 2) problems.push(`expected at most 2 skippable trainer columns, found ${map.optionalTrainerColumns.length}`);
+    for (const c of map.optionalTrainerColumns) if (map.nodes.filter((n) => n.column === c).length < 2) problems.push(`skippable trainer column ${c} has no wild node beside the trainer`);
+  }
   // No crossing lines between neighbouring columns (keeps the map readable).
   for (let col = 1; col < map.columns; col++) {
     const from = map.nodes.filter((n) => n.column === col);

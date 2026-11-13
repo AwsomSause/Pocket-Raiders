@@ -36,6 +36,7 @@ export function captureGenesis(run: RunState, opts: GenesisOptions, grants: RunG
     licenses: opts.licenses ?? [],
     candyPerks: opts.candyPerks ?? [],
     ownedTrainers: [...(opts.ownedTrainers ?? [])],
+    ...(run.expansion && (run.expansion.pacing || run.expansion.evoEncounters || run.expansion.counterPick) ? { expansion: { ...(run.expansion.pacing ? { stagePacing: true } : {}), ...(run.expansion.evoEncounters ? { evolutionEncounters: true } : {}), ...(run.expansion.counterPick ? { leagueCounterPick: true } : {}) } } : {}),
     legacyRival: run.legacyRival,
     reunion: run.reunion ?? null,
     storyFlags: run.story.flags,
@@ -67,6 +68,7 @@ export function reconstructRun(content: Content, g: RunGenesis, replayId: string
     licenses: g.licenses,
     candyPerks: g.candyPerks,
     ownedTrainers: g.ownedTrainers,
+    ...(g.expansion ? { expansion: g.expansion } : {}),
   });
   run.legacyRival = structuredClone(g.legacyRival);
   if (g.reunion) run.reunion = structuredClone(g.reunion);
