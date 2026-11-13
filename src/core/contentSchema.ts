@@ -2042,6 +2042,8 @@ export const BalanceSchema = z.object({
   heldEvolution: z.object({ enabled: z.boolean(), level: z.number().int().min(2).max(100) }).default({ enabled: true, level: 28 }),
   /** Rival battle styles (berserker, revenge-striker, last-stand) do something in the fight (Living Rivalry §3). */
   styleTricks: z.boolean().default(true),
+  /** Galar's big-battle moments (crowd favour, evolve-and-survive, the cheat, the Champion's last stand, four boss gimmicks). Off = Galar battles play as before. */
+  galarMoments: z.boolean().default(true),
   /** Beta 0.5: the mentor rework (all ten mentorship types, chemistry, stat drift, events, spar, returning protégés). Off = the old veteran-only Protégé system. */
   mentorRework: z.boolean().default(true),
   /** Gym Leader Personalities (S126): a leader's mood of the day nudges the opening order and lead level. */

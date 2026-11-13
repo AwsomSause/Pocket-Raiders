@@ -13,7 +13,7 @@ export type GalarScope = 'gym' | 'tournament' | 'champion';
 /** Which kind of Galar major battle this is, or null (every other battle: no favour bar, no hype moments, no boosts). */
 export function galarScope(content: Content, run: RunState): GalarScope | null {
   const trainer = run.battle?.trainer;
-  if (run.regionOrder.length === 0 || !trainer) return null;
+  if (!content.balance.galarMoments || run.regionOrder.length === 0 || !trainer) return null;
   if (currentRegion(content, run).id !== 'galar') return null;
   // The boss classes (core/encounters.ts bossRoleForClass), spelled here so this file stays free of engine imports.
   const role = trainer.classId === 'gym-leader' ? 'gym' : trainer.classId === 'elite-four' ? 'elite' : trainer.classId === 'champion' ? 'champion' : null;
