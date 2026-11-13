@@ -31,6 +31,7 @@ import { styleProbability, styleProblem, type StyleInput } from '../captureStyle
 import { applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem, lastStandItemId } from '../items';
 import { abilityOf, calcStats, createPokemon, getSpecies, maxHp } from '../pokemon';
 import { rallyStages } from './rally';
+import { variantBlocksForcedSwitch, variantBlocksStatus, variantEndTurnLoss, variantIncoming, variantItemMove, variantNeverMisses, variantOnEntry } from '../expansion/variantLines';
 import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
 import type { Rng } from '../rng';
 import { cooldownKey, hasBattleEffect, markBattleEffect } from '../story/ledger';
@@ -3718,6 +3719,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     accuracy = Math.min(1, accuracy);
   }
   if (noGuard || ((target.vol.exposed || target.vol.telekinesis > 0) && !fx.ohko && targetsEnemy)) accuracy = 1;
+  if (variantNeverMisses(ctx.battle.extra.variants, user.mon.uid, ctx.battle.weather?.id ?? null, move.type)) accuracy = 1;
   if (user.vol.sureHit && targetsEnemy) {
     accuracy = 1;
     user.vol.sureHit = false;
@@ -4026,6 +4028,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
         Held.attackMultiplier(ctx, user, target, move, moveType, effectiveness, events as Held.HeldEvent[]) *
         Held.defenseMultiplier(ctx, target, moveType, effectiveness, ctx.battle.kind === 'wild' && target.side === 'player', events as Held.HeldEvent[]);
       if (itemMultiplier !== 1) damage = Math.max(1, Math.floor(damage * itemMultiplier));
+      const variantHit = variantIncoming(ctx.battle.extra.variants, target.mon.uid);
+      if (variantHit.multiplier !== 1) {
+        damage = Math.max(1, Math.floor(damage * variantHit.multiplier));
+        if (variantHit.message) events.push({ type: 'raid', tone: 'info', text: variantHit.message });
+      }
       if (target.protected && (move.flags.includes('zmove') || move.flags.includes('max') || userAbility === 'piercing-drill')) damage = Math.max(1, Math.floor(damage / 4));
     }
     damage = spectacleDamage(ctx, user, target, move, damage, events);
@@ -4138,6 +4145,10 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     ctx.battle.terrain = null;
   }
   Held.afterHit(ctx, user, target, move, moveType, effectiveness, dealt, movedFirst, events as Held.HeldEvent[]);
+  if (dealt > 0) {
+    const torn = variantItemMove(ctx.battle.extra.variants, target.mon.uid, move.id);
+    if (torn) events.push({ type: 'raid', tone: 'info', text: torn });
+  }
   if (dealt > 0 && target.mon.hp > 0 && user.mon.hp > 0) {
     if (Held.triggerOnce(ctx, target, 'redCard', events as Held.HeldEvent[])) forceOut(ctx, user, events);
     else if (Held.triggerOnce(ctx, target, 'ejectButton', events as Held.HeldEvent[])) target.vol.pivot = { baton: false };
@@ -4522,6 +4533,7 @@ const PROTECT_CONTACT = new WeakMap<Combatant, NonNullable<Move['effects']['prot
 function forceOut(ctx: BattleContext, target: Combatant, events: BattleEvent[]): void {
   const { battle, rng } = ctx;
   if (target.mon.hp <= 0 || target.mon.dynamaxed) return;
+  if (variantBlocksForcedSwitch(battle.extra.variants, target.mon.uid)) return;
   if (target.side === 'enemy') {
     if (battle.kind !== 'trainer') return;
     const onField = fieldIndexes(battle, 'enemy');
@@ -4801,6 +4813,11 @@ function endTurnMon(ctx: BattleContext, c: Combatant, foe: Combatant, events: Ba
     if (c.vol.nightmare && c.mon.status?.id !== 'slp') c.vol.nightmare = false;
     if (c.vol.nightmare) abilityHurt(ctx, c, Math.max(1, Math.floor(max / 4)), events);
     if (c.vol.cursed) abilityHurt(ctx, c, Math.max(1, Math.floor(max / 4)), events);
+    const variantLoss = variantEndTurnLoss(ctx.battle.extra.variants, c.mon.uid, max);
+    if (variantLoss.loss > 0) {
+      if (variantLoss.message) events.push({ type: 'raid', tone: 'info', text: variantLoss.message });
+      abilityHurt(ctx, c, variantLoss.loss, events);
+    }
     if (c.vol.saltCure) {
       const t = battleTypes(ctx.content, ctx.battle, c.mon);
       abilityHurt(ctx, c, Math.max(1, Math.floor(max / (t.includes('water') || t.includes('steel') ? 4 : 8))), events);
@@ -5224,6 +5241,12 @@ function applyStateEffects(ctx: BattleContext, user: Combatant, target: Combatan
 /** Healing Wish / Lunar Dance and a passed Substitute take effect on the Pokémon that comes in. */
 function enterExtras(ctx: BattleContext, c: Combatant, events: BattleEvent[]): void {
   const ex = ctx.battle.extra;
+  if (ex.variants[c.mon.uid] && c.mon.hp > 0) {
+    // Beta 0.6 variant lines: entry stage changes and announcement.
+    const entry = variantOnEntry(ex.variants, c.mon.uid, ctx.battle.weather?.id ?? null);
+    for (const [stat, n] of Object.entries(entry.stages) as [BoostStat, number][]) c.stages[stat] = Math.max(-6, Math.min(6, c.stages[stat] + n));
+    if (entry.message) events.push({ type: 'raid', tone: 'info', text: entry.message });
+  }
   const wish = ex.healingWish[c.side];
   if (wish !== 'none' && c.mon.hp > 0) {
     ex.healingWish[c.side] = 'none';
@@ -5904,6 +5927,7 @@ function tryConfuse(ctx: BattleContext, source: Combatant, target: Combatant, ev
 /** Whether `target` can get this status from `source` (types, abilities such as Limber, Leaf Guard in sun). */
 function canGetStatus(ctx: BattleContext, source: Combatant, target: Combatant, status: StatusId, move?: Move): boolean {
   if (target.mon.status || target.mon.hp <= 0) return false;
+  if (variantBlocksStatus(ctx.battle.extra.variants, target.mon.uid)) return false;
   if (status === 'slp' && (source.vol.uproar > 0 || target.vol.uproar > 0 || (source === target ? false : false))) return false;
   const corrosive = status === 'psn' && abilityIn(ctx, source) === 'corrosion' && source !== target;
   if (!corrosive && isStatusImmune(status, getSpecies(ctx.content, target.mon.speciesId).types, move)) return false;
@@ -5972,6 +5996,10 @@ function tryInflictStatus(
     target.mon.status!.stacks = now + 1;
     events.push(say(target.side, 'bleed', `${nameOf(ctx, target.mon)}'s ${status === 'brn' ? 'burn' : 'poison'} got worse! (x${now + 1})`, target.mon.uid));
     return true;
+  }
+  if (source !== target && variantBlocksStatus(ctx.battle.extra.variants, target.mon.uid)) {
+    if (announceFailure) events.push({ type: 'fail', side: target.side });
+    return false;
   }
   const blocker = target.mon.status ? null : statusAbilityBlock(ctx, source, target, status);
   const corrosive = status === 'psn' && abilityIn(ctx, source) === 'corrosion' && source !== target;
