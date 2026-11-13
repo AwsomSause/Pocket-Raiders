@@ -264,6 +264,8 @@ import { isStoryCampaign, leagueAfterRegion } from './campaign/circuit';
 import { StoryV2Schema } from './story2/schema';
 import type { PronounSet } from './story2/identity';
 import { castAuthoredLeague, circuitLeader, guestMatch, noteGymWin } from './campaign/circuitCast';
+import { applyLeagueDoorChoice, leagueDoorDecision } from './campaign/leagueDoor';
+import { counterPickMembers, counterTargets } from './campaign/counterPick';
 import { applyCircuitChoice, forkDecision, isCircuitRun, nextGymIndex, rematchDecision } from './campaign/circuitGate';
 import { ensureStoryRun, placeStoryStops, playFinaleStops, playNodeStops, playStageEndStops } from './campaign/storyDirector';
 import { beginNemesisBattle, counterTypes, dueNemesis, isHunted, markHunted, nemesisMember, nemesisTrainerPlan } from './story/nemesis';
@@ -318,6 +320,8 @@ export interface NewRunOptions {
   treasureHunt?: Profile['treasureHunt'];
   /** Story Run: the player's name, pronouns and Look from the prologue (profile.story.protagonist). */
   protagonist?: { look: string; name: string; pronouns: string | PronounSet; backstory?: string };
+  /** Beta 0.6: which expansion settings were on at run start (settings.expansion). Each flag is stored in `run.expansion` once and never changes. */
+  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean };
 }
 
 export function createRun(content: Content, opts: NewRunOptions): RunState {
@@ -417,6 +421,11 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
   if (opts.protagonist && isStoryCampaign(content, run.campaignId)) {
     run.story.v2 ??= StoryV2Schema.parse({ mode: 'story_run' });
     run.story.v2.protagonist = { ...run.story.v2.protagonist, look: opts.protagonist.look, name: opts.protagonist.name, pronouns: opts.protagonist.pronouns, ...(opts.protagonist.backstory ? { backstory: opts.protagonist.backstory } : {}) };
+  }
+  if (opts.expansion) {
+    const e = opts.expansion;
+    const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}) };
+    if (Object.keys(flags).length > 0) run.expansion = { ...run.expansion, ...flags };
   }
   recordRunStarted(content, run);
   return run;
@@ -617,11 +626,26 @@ function forceFirstRivalColumn(content: Content, run: RunState, index: number, m
   const cfg = content.balance.rival;
   if (run.regionIndex !== 0 || index !== cfg.stage || run.story.flags[FIRST_RIVAL_FLAG] !== undefined || cfg.column >= map.columns) return;
   if (map.trainerColumns.includes(cfg.column)) return;
+  // Stage pacing: a skippable trainer column becomes a full trainer column, so every route meets the rival.
+  if (map.optionalTrainerColumns?.includes(cfg.column)) {
+    for (const node of map.nodes) {
+      if (node.column === cfg.column) {
+        node.kind = 'trainer';
+        node.harder = false;
+        node.note = `trainer column ${cfg.column} (the first rival waits here)`;
+      }
+    }
+    map.optionalTrainerColumns = map.optionalTrainerColumns.filter((c) => c !== cfg.column);
+    map.trainerColumns = [...map.trainerColumns, cfg.column].sort((a, b) => a - b);
+    return;
+  }
   // The stage's first trainer level moves to the rival's level (a map keeps exactly two trainer levels).
   const moved = map.trainerColumns[0]!;
   for (const node of map.nodes) {
     if (node.column === moved) {
       node.kind = 'wild';
+      delete node.ace;
+      delete node.doubles;
       node.note = `wild, column ${moved} (its trainers moved to column ${cfg.column} for the first rival)`;
     } else if (node.column === cfg.column) {
       node.kind = 'trainer';
@@ -645,7 +669,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
     // The old region-locked pick is still rolled (and dropped) so every other 'map' roll stays where it was; the cast itself comes from 'roleCast'.
     pickGymLeader(content, theme, run.usedLeaders, r, region.gymLeaders);
     const leader = circuitLeader(content, run, run.regionIndex, index) ?? castGymLeader(content, run, theme, run.regionIndex, index);
-    return { theme, leader, map: generateStageMap(content, campaign, r), themeLine: line };
+    return { theme, leader, map: generateStageMap(content, campaign, r, run.expansion?.pacing ? { regionIndex: run.regionIndex } : undefined), themeLine: line };
   });
   forceFirstRivalColumn(content, run, index, map);
   const problems = validateStageMap(map);
@@ -889,6 +913,16 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
     const fork = forkDecision(content, run, run.regionIndex, stage.index);
     if (fork) {
       run.pending.unshift(fork);
+      run.afterDecisions = 'map';
+      run.phase = 'decision';
+      return run;
+    }
+  }
+  // Beta 0.6 B7: the League door registers your party (the six the Elite Four may answer) and offers one swap.
+  if (stage.kind === 'league' && run.expansion?.counterPick && !run.expansion.league && findNode(stage.map, nodeId).kind === 'elite') {
+    const door = leagueDoorDecision(content, run);
+    if (door) {
+      run.pending.unshift(door);
       run.afterDecisions = 'map';
       run.phase = 'decision';
       return run;
@@ -1976,6 +2010,18 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       const c = run.log.counters;
       if (((c.gymLeadersDefeated ?? 0) + (c.eliteFourDefeated ?? 0) + (c.championsDefeated ?? 0) + 1) % 3 === 0) plan = { ...plan, members: plan.members.map((m) => ({ ...m, level: m.level + bossLevels })) };
     }
+    // B7: the Elite Four and Champion answer the Pokémon registered at the League door (never an unseen one).
+    if ((node.kind === 'elite' || node.kind === 'champion') && run.expansion?.counterPick && run.expansion.league && plan.leaderId) {
+      const cp = content.balance.leagueCounterPick;
+      const members = counterPickMembers(content, plan.leaderId, node.kind, plan.members, counterTargets(content, run, node.kind), cp.cap);
+      plan = { ...plan, members };
+    }
+    // Stage pacing (B6): the stage's ace trainer fights a stronger team (no roll; a fixed level bump).
+    if (node.kind === 'trainer' && node.ace && run.expansion?.pacing && !rematch) {
+      const pcfg = content.balance.stage.pacing;
+      const top = plan.members.reduce((best, m, i) => (m.level > (plan.members[best]?.level ?? 0) ? i : best), 0);
+      plan = { ...plan, members: plan.members.map((m, i) => ({ ...m, level: m.level + (i === top ? pcfg.aceTopBonus : pcfg.aceRestBonus) })) };
+    }
     if (node.kind === 'trainer' && plan.templateId) { rememberTemplate(content, run, plan.templateId); for (const m of plan.members) rememberPick(content, run, 'trainerSpecies', familyId(content, m.speciesId)); rememberRegionTrainer(content, run, plan.members.map((m) => familyId(content, m.speciesId))); }
     // Gym Leader Personalities (S126): the leader's mood of the day shapes the opening (own hash, no roll moves).
     if (node.kind === 'gym' && content.balance.leaderMoods) plan = applyLeaderMood(plan, leaderMood(run.seed, stage.leaderId, `${run.regionIndex}:${stage.index}`));
@@ -2192,6 +2238,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     const doublesCfg = content.balance.doubles;
     // Bosses known for double battles (Tate & Liza) always fight two at a time.
     if (plan.leaderId && doublesCfg.bossIds.includes(plan.leaderId) && canBeDoubles(run.party, team)) makeDoubles(run.battle, run.party);
+    else if (node.kind === 'trainer' && node.doubles && run.expansion?.pacing && !rematch && !back && !rivalBack && !isRival && !nemesis && !memoryHit && !bossBack && canBeDoubles(run.party, team)) makeDoubles(run.battle, run.party);
     else if (node.kind === 'trainer' && !rematch && !back && !rivalBack && !isRival && !nemesis && !memoryHit && !bossBack && stageNumber >= doublesCfg.fromStage && canBeDoubles(run.party, team)) {
       if (doublesOnly(run.rules) || new Rng(hashSeed(`${run.seed}::doubles::${run.regionIndex}::${stage.index}::${node.id}`)).chance(doublesCfg.chance)) makeDoubles(run.battle, run.party);
     }
@@ -3108,7 +3155,7 @@ function awardExperience(content: Content, run: RunState, events: BattleEvent[])
   const archetype = runArchetype(content, run);
   const bossBattle = isBossClass(battle.trainer?.classId);
   // White Flute: more EXP from wild battles.
-  const multiplier = xpMultiplier(runArchetype(content, run)) * content.balance.difficulty.xpScale * (getMode(run.rules.modeId)?.xpScale ?? 1) * (battle.doubles ? 1 : singleBattleXpPerk(runArchetype(content, run).modifiers)) * effects.exp * (battle.autoUsed ? content.balance.difficulty.autoBattleXp : 1) * mutatorXp(run) * (battle.kind === 'wild' ? wildExpMultiplier(content, run) : 1);
+  const multiplier = xpMultiplier(runArchetype(content, run)) * content.balance.difficulty.xpScale * (getMode(run.rules.modeId)?.xpScale ?? 1) * (battle.doubles ? 1 : singleBattleXpPerk(runArchetype(content, run).modifiers)) * effects.exp * (battle.autoUsed ? content.balance.difficulty.autoBattleXp : 1) * mutatorXp(run) * (battle.kind === 'wild' ? wildExpMultiplier(content, run) : 1) * (run.expansion?.pacing ? content.balance.stage.pacing.expMultiplier : 1);
   const underdog = underdogXpMultiplier(content, run.party, battle.enemyTeam);
   const out: RunEvent[] = [];
   for (const e of events) {
@@ -3712,6 +3759,13 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
   let message: string;
   let followUp: PendingDecision | null = null;
 
+  if (decision.kind === 'leagueDoor') {
+    run.pending.shift();
+    const at = choice.kind === 'circuit' ? choice.optionIndex : 0;
+    const message = applyLeagueDoorChoice(content, run, decision, at);
+    continueAfterDecisions(content, run);
+    return { run, message };
+  }
   if (decision.kind === 'circuit') {
     run.pending.shift();
     const out = applyCircuitChoice(content, run, decision, choice.kind === 'circuit' ? choice.optionIndex : decision.step === 'fork' ? 0 : decision.options.length - 1);
