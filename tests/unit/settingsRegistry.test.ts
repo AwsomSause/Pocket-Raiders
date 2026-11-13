@@ -7,8 +7,8 @@ import { DEFAULT_SETTINGS } from '../../src/save/saveManager';
 describe('settings registry', () => {
   it('every setting id is a real settings key, and ids are unique', () => {
     const keys = Object.keys(SettingsSchema.shape);
-    // `pad_<action>` rows edit one entry of the `gamepadMap` setting; `screenStyle.<screen>` rows one entry of `screenStyles`; `autoRule-<rule>` rows one rule of `autoRules` (S43); `story*` rows edit the `story` object.
-    for (const d of SETTINGS) expect(keys, d.id).toContain(d.id.startsWith('pad_') ? 'gamepadMap' : d.id.startsWith('screenStyle.') ? 'screenStyles' : d.id.startsWith('autoRule-') ? 'autoRules' : d.id === 'storyReduceMotion' ? 'animationIntensity' : d.id.startsWith('story') ? 'story' : d.id);
+    // `pad_<action>` rows edit one entry of the `gamepadMap` setting; `screenStyle.<screen>` rows one entry of `screenStyles`; `autoRule-<rule>` rows one rule of `autoRules` (S43); `story*` rows edit the `story` object; `micInput` edits `expansion.micInput`.
+    for (const d of SETTINGS) expect(keys, d.id).toContain(d.id.startsWith('pad_') ? 'gamepadMap' : d.id.startsWith('screenStyle.') ? 'screenStyles' : d.id.startsWith('autoRule-') ? 'autoRules' : d.id === 'micInput' ? 'expansion' : d.id === 'storyReduceMotion' ? 'animationIntensity' : d.id.startsWith('story') ? 'story' : d.id);
     expect(new Set(SETTINGS.map((d) => d.id)).size).toBe(SETTINGS.length);
   });
 
