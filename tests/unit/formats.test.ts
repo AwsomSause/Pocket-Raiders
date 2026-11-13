@@ -425,3 +425,65 @@ describe('Front', () => {
     }
   });
 });
+
+describe('Debate', () => {
+  const start = (seed: string, flags: Record<string, string | boolean> = {}) => {
+    const run = mk(seed);
+    Object.assign(run.story.flags, flags);
+    expect(startFormat('debate', ctxOf(run))).toBe(true);
+    return run;
+  };
+  const argue = (run: ReturnType<typeof mk>, picks: string[]) => picks.forEach((p) => chooseOption(ctxOf(run), p));
+
+  it('three wins: no battle, flag clean, evidence still there', () => {
+    const run = start('db1', { 'star.x.deletion-log': true, 'star.x.wrong-boots': true, 'star.x.first-engine': true });
+    expect(currentFormat(run)!.state.held).toHaveLength(3);
+    argue(run, ['use:deletion-log', 'use:boots', 'use:engine']);
+    expect(run.phase).not.toBe('battle');
+    expect(run.story.flags['star.x.debate']).toBe('clean');
+    expect(run.story.flags['star.x.deletion-log']).toBe(true);
+    expect(cardOf(ctxOf(run))!.over).toBe(true);
+  });
+
+  it('two wins: the opponent objects, no battle', () => {
+    const run = start('db2', { 'star.x.tully-stood': true, 'star.x.navi-drum': true, 'star.x.first-engine': true });
+    argue(run, ['use:tully', 'use:drum', 'plain']);
+    expect(run.story.flags['star.x.debate']).toBe('objection');
+    expect(run.phase).not.toBe('battle');
+  });
+
+  it('wrong evidence and plain answers never win; fewer than two wins is one battle', () => {
+    const run = start('db3', { 'star.x.deletion-log': true });
+    argue(run, ['use:deletion-log', 'use:deletion-log', 'plain']);
+    expect(currentFormat(run)!.state.won).toBe(1);
+    const card = cardOf(ctxOf(run))!;
+    expect(card.options.map((o) => o.id)).toEqual(['battle']);
+    chooseOption(ctxOf(run), 'battle');
+    expect(run.phase).toBe('battle');
+    expect(run.battle!.event!.eventId).toBe('format:debate');
+    battleEnded(ctxOf(run), true);
+    expect(run.story.flags['star.x.debate']).toBe('settled');
+    expect(formatOver(ctxOf(run))).toBe(true);
+  });
+
+  it('losing the battle is recorded and does not end the run', () => {
+    const run = start('db4');
+    argue(run, ['plain', 'plain', 'plain']);
+    chooseOption(ctxOf(run), 'battle');
+    battleEnded(ctxOf(run), false);
+    expect(run.story.flags['star.x.debate']).toBe('lost');
+  });
+
+  it('cannot use evidence you do not hold, a Key Item counts, and it runs once', () => {
+    const run = start('db5');
+    chooseOption(ctxOf(run), 'use:engine');
+    expect(currentFormat(run)!.state.index).toBe(0);
+    const run2 = mk('db6');
+    run2.inventory['nascour-brochure'] = 1;
+    startFormat('debate', ctxOf(run2));
+    expect(currentFormat(run2)!.state.held).toEqual(['brochure']);
+    argue(run2, ['plain', 'plain', 'use:brochure']);
+    expect(currentFormat(run2)!.state.won).toBe(1);
+    expect(startFormat('debate', ctxOf(run), { region: 'kanto' })).toBe(false);
+  });
+});

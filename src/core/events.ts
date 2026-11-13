@@ -71,6 +71,7 @@ import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } fro
 import { hashSeed, Rng } from './rng';
 import { continueAfterDecisions, healParty, newMon } from './run';
 import { earnRom, gainStock, grandArcOf, romById, romsHeld } from './grandArc';
+import { climaxCutOf } from './arc/climaxExtended';
 import { addMercy, changeRep, joinInsideMan, joinProblem, resolveVerdict, standWithClimaxWon, standWithOf, standWithPlayable, verdictsOpen } from './arc/standWithExtended';
 import { checkFlagKeys } from './shadow2/keys';
 import { grantNamedShadow } from './shadow2/grant';
@@ -594,7 +595,7 @@ export function xflagHolds(run: RunState, flag: string): boolean {
   const flags = run.story.flags;
   const seen = (k: string) => Number(flags[`ev:${k}`] ?? 0) >= 1;
   switch (flag) {
-    case 'extendedCut': return run.expansion?.climaxCut === 'extended';
+    case 'extendedCut': return climaxCutOf(run) === 'extended';
     case 'hasShadow': return run.party.some((m) => !!m.shadow);
     case 'keyHinted': return run.party.some((m) => !!m.shadow?.named && (m.shadow.hints ?? 1) >= 1);
     case 'grandArc': return grandArcOf(run) !== null;
@@ -896,7 +897,7 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'research':
       return `+${e.amount} Research Points`;
     case 'levels':
-      return `${e.who === 'lead' ? 'lead' : 'party'} +${e.amount} level${e.amount === 1 ? '' : 's'}`;
+      return `${e.who === 'party' ? 'party' : e.who === 'weakest' ? 'lowest-level Pokémon' : 'lead'} +${e.amount} level${e.amount === 1 ? '' : 's'}`;
     case 'join':
       return e.shadow ? 'a Shadow Pokémon is rescued' : e.blissful ? 'a Blissful Pokémon joins' : 'a Pokémon joins';
     case 'seedling':
@@ -1128,7 +1129,9 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return effectWords(content, e);
     case 'levels': {
       const cap = runLevelCap(content, run);
-      const who = e.who === 'lead' ? run.party.filter((m) => m.hp > 0).slice(0, 1) : run.party;
+      const able = run.party.filter((m) => m.hp > 0);
+      // The weakest is the lowest level (the first one on a tie): catch-up for a Pokémon that fell behind.
+      const who = e.who === 'lead' ? able.slice(0, 1) : e.who === 'weakest' ? [...able].sort((a, b) => a.level - b.level).slice(0, 1) : run.party;
       let gained = 0;
       for (const m of who) gained += addLevels(content, m, e.amount, cap).levelsGained;
       return gained > 0 ? effectWords(content, e) : '';
