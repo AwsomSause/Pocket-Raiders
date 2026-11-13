@@ -2079,6 +2079,8 @@ export const BalanceSchema = z.object({
   omen: z.object({ partySample: z.number().int().min(1).max(6), perExtraFoe: z.number().min(0), calmAtMost: z.number(), direAtLeast: z.number() }).default({ partySample: 3, perExtraFoe: 2, calmAtMost: -2, direAtLeast: 4 }),
   /** Last Chance Revives (S389): the share of max HP the revived Pokémon gets back. */
   lastChance: z.object({ share: z.number().positive().max(1) }).default({ share: 0.25 }),
+  /** Beta 0.6 Colossus fights (core/formats/colossus.ts): each armor seal's shield bar as a percent of the Apex's max HP, and the Kanto M2 timer in turns. Final numbers come with balance X1. */
+  colossus: z.object({ shieldPct: z.number().int().min(1).max(100), timerM2: z.number().int().min(3).max(30) }).default({ shieldPct: 15, timerM2: 10 }),
   /** Wealth Tax Rival (S88): at each stage start a rival takes `rate` of the money above base + perRegion × region. */
   wealthTax: z.object({ base: z.number().int().min(0), perRegion: z.number().int().min(0), rate: z.number().min(0).max(1) }).default({ base: 4000, perRegion: 2500, rate: 0.15 }),
   /** Shop kinds (shops redesign, core/shopTypes.ts): what each sells and its perk. */

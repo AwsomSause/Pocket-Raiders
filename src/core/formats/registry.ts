@@ -3,6 +3,7 @@
 
 import { blackout } from './blackout';
 import { breather } from './breather';
+import { colossus } from './colossus';
 import { convoy } from './convoy';
 import { siege } from './siege';
 import { clearFormat, currentFormat, doneFormats, storeFormat } from './store';
@@ -14,9 +15,10 @@ export const FORMATS: Partial<Record<FormatId, WideFormat<any>>> = {
   blackout,
   convoy,
   siege,
+  colossus,
 };
 
-const ONE_SHOT: readonly FormatId[] = ['breather', 'blackout', 'convoy', 'siege'];
+const ONE_SHOT: readonly FormatId[] = ['breather', 'blackout', 'convoy', 'siege', 'colossus'];
 
 /** Starts a format, once per climax for one-shot formats (the director calls `beginCut` at the start of each climax). False when one is running or it already ran. */
 export function startFormat(id: FormatId, ctx: FormatCtx, input?: unknown): boolean {

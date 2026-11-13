@@ -98,7 +98,7 @@ function choose(s: BlackoutState, id: string, ctx: FormatCtx): BlackoutState {
   const ok = launchFormatBattle(ctx.content, ctx.run, 'blackout', {
     key: a.id,
     name: a.name,
-    classId: 'psychic',
+    classId: a.sabrina ? 'psychic' : 'worker',
     types: ['psychic'],
     species: a.species,
     size: a.size,

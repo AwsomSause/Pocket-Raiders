@@ -630,6 +630,24 @@ export const RaidBattleSchema = z.object({
 });
 export type RaidBattle = z.infer<typeof RaidBattleSchema>;
 
+/** Beta 0.6 Colossus (core/battle/colossus.ts): armor seals with their own shield bars, and the timer. Absent in every other fight. */
+export const ColossusBattleSchema = z.object({
+  id: z.string(),
+  seals: z.array(z.object({
+    name: z.string(), removes: z.string(), removesLabel: z.string(),
+    shield: z.number().int().min(0), max: z.number().int().min(1), broken: z.boolean(),
+  })),
+  timerLeft: z.number().int().min(0),
+  timerMax: z.number().int().min(1),
+  /** The timer ran out: the Apex escapes. */
+  escaped: z.boolean(),
+  /** Messages for the player; the engine turns them into events at the end of the turn. */
+  notes: z.array(z.string()),
+  /** Seals that broke this turn; their moves go at the end of it. */
+  pendingBreaks: z.array(z.number().int().min(0)),
+});
+export type ColossusBattle = z.infer<typeof ColossusBattleSchema>;
+
 /** The changing state of a Totem fight (rules in core/totem/totem.ts). */
 export const TotemBattleSchema = z.object({
   id: z.string(),
@@ -860,6 +878,8 @@ export const BattleStateSchema = z.object({
   memory: z.object({ kind: z.enum(['ghost', 'gauntlet', 'echo']), id: z.string(), note: z.string() }).optional(),
   /** A raid boss fight: shield, phases, telegraph and timer (core/raid/raid.ts). */
   raid: RaidBattleSchema.optional(),
+  /** Beta 0.6 Colossus fight: armor seals, shield bars and the timer (core/battle/colossus.ts). */
+  colossus: ColossusBattleSchema.optional(),
   /** Run events B: special rules of this event fight (no switching, no attacks, turn limits...); see EventRuleSchema. */
   eventRule: EventRuleSchema.optional(),
   /** Overhaul slice 17/18: the boss's named strategy id (balance.bossStrategy); read by the AI and the risk label. */
