@@ -15,6 +15,8 @@ const RewardSchema = z.object({
 
 export const MinigameDefSchema = z.object({
   id: z.string().regex(/^[a-z0-9-]+$/),
+  /** Beta 0.6 games: kept out of the old stop pick so existing seeds roll the same stops (see gate.ts). */
+  beta06: z.boolean().default(false),
   name: z.string().min(1),
   category: z.enum(['memory', 'timing', 'knowledge', 'resource', 'puzzle', 'skill']),
   blurb: z.string().min(1),

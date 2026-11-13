@@ -3158,6 +3158,273 @@
         "slowFactor": 1,
         "noTimerOption": false
       }
+    },
+    {
+      "id": "psyduck-migration",
+      "name": "Psyduck Migration",
+      "category": "skill",
+      "blurb": "Lead the ducklings home.",
+      "instructions": "Steer Psyduck to each duckling. Your line grows; do not hit the edge or the line.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "beta06": true,
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "size": 6,
+            "goal": 4,
+            "ticks": 40
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "size": 6,
+            "goal": 6,
+            "ticks": 45
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "size": 7,
+            "goal": 8,
+            "ticks": 55
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "1 per duckling led home.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.55,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 70,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 119,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 189,
+          "item": {
+            "item": "ultra-ball",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "heal",
+            "amount": 25,
+            "chance": 0.5
+          }
+        }
+      },
+      "failureOutcome": "The line scatters; you keep what you caught.",
+      "replayRules": "Two tries per stop; the best medal counts.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 600
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "center-triage",
+      "name": "The Day the Center Closed",
+      "category": "resource",
+      "blurb": "Decide who gets care first.",
+      "instructions": "Pick who to treat. Critical patients are worth most but need longest. Waiting patients run out of time.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "beta06": true,
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "patients": 5,
+            "waitMin": 8
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "patients": 6,
+            "waitMin": 6
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "patients": 7,
+            "waitMin": 4
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "1, 2 or 3 points per patient saved by how serious.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.55,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 80,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 136,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 216,
+          "item": {
+            "item": "ultra-ball",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "heal",
+            "amount": 25,
+            "chance": 0.5
+          }
+        }
+      },
+      "failureOutcome": "Those not reached go home with a note.",
+      "replayRules": "Two tries per stop; the best medal counts.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 600
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "sled-run",
+      "name": "Sled Run",
+      "category": "timing",
+      "blurb": "Dodge rocks, grab berries.",
+      "instructions": "Steer between three lanes. Rocks cost a life, berries score.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "beta06": true,
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "length": 22,
+            "rockChance": 35,
+            "lives": 4
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "length": 28,
+            "rockChance": 45,
+            "lives": 3
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "length": 34,
+            "rockChance": 55,
+            "lives": 3
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "1 per berry grabbed.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.55,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 70,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 119,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 189,
+          "item": {
+            "item": "ultra-ball",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "heal",
+            "amount": 25,
+            "chance": 0.5
+          }
+        }
+      },
+      "failureOutcome": "The sled stops; you keep the berries so far.",
+      "replayRules": "Two tries per stop; the best medal counts.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 600
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": false
+      }
     }
   ]
 }
