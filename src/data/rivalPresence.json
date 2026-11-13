@@ -1,0 +1,28 @@
+{
+  "note": "Beta 0.6 R6/R8/R11 numbers: rival presence, Pseudo Stage forms, catch step-in, the Friend and Witness the Rest. Pack rules: RIVAL_SYSTEM_OVERHAUL.md section 7 and SECOND_RIVAL.md.",
+  "guaranteedPerRegion": 2,
+  "thirdChance": 0.5,
+  "pseudo": { "mainChance": 0.65, "friendChance": 0.3, "forms": { "race": 3, "teamUp": 3, "alreadyThere": 3, "ambush": 1 }, "ambushMinPartyHp": 0.5 },
+  "stepIn": { "chance": 0.03, "perRegion": 1 },
+  "friend": {
+    "regionChance": 0.5,
+    "scenes": ["meet", "mid", "errand", "eve"],
+    "maxExtraAssist": 1,
+    "assistCap": { "standard": 4, "extended": 6 },
+    "attitude": { "start": 1, "min": -5, "max": 5 },
+    "text": {
+      "meet": "{friend} waves you over. \"Hey! I was hoping we'd cross paths.\"",
+      "mid": "{friend} catches up with you on the road and asks how the trip is going.",
+      "errand": "{friend} has an errand and could use a hand. It is small and kind, and nobody is watching.",
+      "eve": "{friend} finds you the night before the big fight. \"Whatever happens tomorrow, I'm glad it was you.\""
+    },
+    "postcards": [
+      "A postcard from {friend}: \"Still going. Hope you are too.\"",
+      "A postcard from {friend}: \"Saw a Pokémon today that reminded me of yours.\"",
+      "A postcard from {friend}: \"No news. That is the good kind.\"",
+      "A postcard from {friend}: \"Training hard. Do not get too far ahead.\"",
+      "A postcard from {friend}: \"Thinking of you before the next gym.\""
+    ]
+  },
+  "witness": { "maxCards": 6 }
+}
