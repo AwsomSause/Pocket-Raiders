@@ -43,7 +43,7 @@ import { catchable, forcedStepInRival, legendKind, planStepIn, rivalAce, recordR
 import { captureMultiplier, getArchetype, runArchetype, runPerks, badgeTypesOf, healingMultiplier, moneyMultiplier, priceMultiplier, shopUnlockOffset, trainerPreviews, typeModifiers, xpMultiplier } from './archetypes';
 import { chooseSignatureOption, signatureDecisions } from './signature';
 import { boxCapacity, catchLevelOffset, encounterWeightPerk, partyLimit, postBattleHealShare, hasStarterSignature, releaseLimit, signatureMoveFor, evolutionLevelOffset, isBossClass, regionLevelOffset, startingAttributes, startingLevelOffset, syncHpPerks, xpPerk, bossMoneyPerk, championMoneyPerk, ordinaryMoneyPerk, catchMoneyPerk, doubleBattleRewardPerk, singleBattleXpPerk, shopEarlyStockPerk, shopEarlyRareStockPerk, shopRefreshPerk, thirdBossLevels, isUltraBeast, fishingRareTriesPerk, bonusRewardChancePerk } from './trainerPerks';
-import { createBattle, resolveTurn, startBattle, type BattleContext, type BattleEvent, type PlayerAction } from './battle/engine';
+import { createBattle, itemProblem, resolveTurn, startBattle, type BattleContext, type BattleEvent, type PlayerAction } from './battle/engine';
 import { autoCommands, canBeDoubles, makeDoubles, primarySpot, resolveDoublesTurn, startDoubles } from './battle/doubles';
 import { canBeTriples, makeTriples } from './battle/triples';
 import { endBattle as endHeldBattle, expMultiplier, giveBossItems, growthOnLevelUp } from './battle/held';
@@ -290,6 +290,7 @@ import { mentorshipsAfterBattle } from './story/mentorBond';
 import { answerReturn, planReturn, recordDefeats, returningPokemon } from './story/returnProtege';
 import { PSEUDO } from './dungeon/pseudo';
 import { addCanonStops, failCanonRaid, finishCanonRaid, restoreStash } from './expansion/canonRun';
+import { expireStageMods } from './expansion/stageMods';
 import { addFinaleCanonStops, addOpeningCanonStops, addRouteCanonStops } from './expansion/canonEnds';
 import { leaveCanonStash, ruleEvolution } from './expansion/canonSaffron';
 import { apprenticeLost, applyLessons, bondOf, mentorBadgeWon, startMentorship } from './mentors';
@@ -700,6 +701,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   run.usedThemes.push(theme.id);
   run.usedLeaders.push(leader.id);
   run.stage = { kind: 'stage', index, themeId: theme.id, leaderId: leader.id, eliteFour: [], map, current: null, visited: [], scoutedTo: 0, foresight: 0, extraFronts: [], roamers: [], convoy: null };
+  expireStageMods(run);
   startStageEffects(run);
   clearRecentPurchases(run);
   applyWealthTax(content, run);
@@ -2815,6 +2817,8 @@ export interface TurnResult {
   stepIn?: StepInEnd;
   /** What the trainer says during the turn (presentation only). */
   drama: DramaLine[];
+  /** A Poké Doll was used: the wild battle is over, with no experience, money or catch. */
+  escaped?: boolean;
 }
 
 /** The battle engine's view of the run's battle (the engine changes `run` in place). */
@@ -2962,6 +2966,23 @@ function doublesAction(ctx: BattleContext, action: PlayerAction): PlayerAction {
   return { kind: 'double', commands };
 }
 
+/** A Poké Doll: slips out of an ordinary wild battle. The item is used up; nothing is earned and the fight does not count as won or lost. */
+function escapeBattle(content: Content, run: RunState, itemId: string, rng: Rng, captureRng: Rng, hyperRng: Rng): TurnResult {
+  const battle = run.battle!;
+  const problem = itemProblem(battleContext(content, run, rng, captureRng, hyperRng), itemId);
+  if (problem) throw new Error(problem);
+  consumeItem(run.inventory, itemId);
+  revertTransformations(content, battle, run.party, runArchetype(content, run).modifiers);
+  for (const mon of run.party) endHeldBattle(mon);
+  endSignatureMoves(run.party);
+  endLastResort(run);
+  endHyperMoves(run, false);
+  run.battle = null;
+  run.phase = 'map';
+  const events: RunEvent[] = [{ type: 'spectacle', kind: 'arena', side: 'player', text: 'You used a Poké Doll and slipped away!' } as RunEvent];
+  return { run, events, end: null, defeated: false, cues: [], drama: [], escaped: true };
+}
+
 export function takeTurn(content: Content, current: RunState, action: PlayerAction, dialogue: DialogueFrequency = 'normal'): TurnResult {
   assertPhase(current, 'battle');
   const run = structuredClone(current);
@@ -2971,6 +2992,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const hyperRng = new Rng(run.rng.hyper);
   const targetUid = currentEnemy(battle).uid;
   // Bond Engine: a willful Pokémon may refuse a reckless order, a synced one may step in (before the turn).
+  const escapeItem = action.kind === 'item' ? content.items.get(action.itemId) : undefined;
+  if (escapeItem?.effect.kind === 'escape') return escapeBattle(content, run, escapeItem.id, rng, captureRng, hyperRng);
   const shaped = shapeAction(content, run, action);
   const wasForced = battle.needsSwitch;
   const outgoing = run.party[battle.activeIndex]?.uid;

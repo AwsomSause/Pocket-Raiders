@@ -100,6 +100,7 @@ function choose(s: BlackoutState, id: string, ctx: FormatCtx): BlackoutState {
     key: a.id,
     name: a.name,
     classId: a.sabrina ? 'psychic' : 'worker',
+    ...(a.sabrina ? { sprite: 'sabrina' } : {}),
     types: ['psychic'],
     species: a.species,
     size: a.size,

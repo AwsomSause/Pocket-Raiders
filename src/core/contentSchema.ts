@@ -1075,6 +1075,8 @@ export const ItemEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('urge'), what: z.enum(['ability', 'item', 'reset']) }),
   /** Makes the opposing Pokémon drop its held item for the rest of the battle (Item Drop). */
   z.object({ kind: z.literal('itemDrop') }),
+  /** Leaves an ordinary wild battle at once: no experience, money or catch, and the item is used up (Poké Doll). */
+  z.object({ kind: z.literal('escape') }),
 ]);
 export type ItemEffect = z.infer<typeof ItemEffectSchema>;
 
@@ -2799,6 +2801,10 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('partyMoveFlag'), flag: z.enum(['sound', 'wind', 'punch', 'bite', 'pulse', 'bullet', 'slicing', 'powder']) }),
   /** A party member whose current emotion is this one (Overdrive emotions: kindness, bravery...). */
   z.object({ kind: z.literal('emotion'), id: z.enum(['determination', 'bravery', 'justice', 'kindness', 'patience', 'integrity', 'perseverance']) }),
+  /** Pokédex progress this run: species seen / caught so far (the Game Freak room's Diploma). */
+  z.object({ kind: z.literal('dex'), set: z.enum(['seen', 'caught']), atLeast: z.number().int().positive() }),
+  /** A Story Raid (core/raid/storyRaids.ts) is still open to play: not yet resolved, and its gate is met. */
+  z.object({ kind: z.literal('storyRaid'), n: z.number().int().min(1).max(6) }),
   /** An event that has already been played this run. */
   z.object({ kind: z.literal('eventSeen'), id: z.string() }),
   /** The trainer must not carry this tag (N is "pacifist": no aggressive choices). */
@@ -2992,6 +2998,10 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** `who` lead hits only the first Pokémon able to fight; `except` spares Pokémon of these types (Beta 0.6 biome hazards). */
   z.object({ kind: z.literal('damage'), share: z.number().min(0).max(1), who: z.enum(['party', 'lead']).default('party'), except: z.array(TypeNameSchema).max(4).default([]) }),
   z.object({ kind: z.literal('cure') }),
+  /** Records a Story Raid's result once (core/raid/storyRaids.ts): its levers, Operational Strength, track step and a lost raid's costs. */
+  z.object({ kind: z.literal('storyRaid'), n: z.number().int().min(1).max(6), result: z.enum(['triumph', 'success', 'partial', 'failure', 'declined']) }),
+  /** An attribute change that lasts until this stage ends (a Bad Luck Charm); it is undone when the next stage starts. */
+  z.object({ kind: z.literal('stageAttribute'), key: AttributeKeySchema, amount: z.number().int() }),
   /** Restores every move's PP for the whole party (Erika's tea). */
   z.object({ kind: z.literal('restorePp') }),
   z.object({ kind: z.literal('status'), status: z.enum(['poison', 'burn', 'paralysis', 'sleep']), who: z.enum(['party', 'lead']).default('party'), except: z.array(TypeNameSchema).max(4).default([]) }),
@@ -3303,6 +3313,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     species: z.array(z.string()).optional(),
     /** Beta 0.6 Front: the exact species of the foe's team, slot by slot (a lane each); beats `species` and `types`. */
     lineup: z.array(z.string()).optional(),
+    /** Beta 0.6: draw this foe with a named character's own sprite (a boss id, e.g. "sabrina"). */
+    sprite: z.string().optional(),
     levelBonus: z.number().int().default(0),
     chain: z.number().int().min(1).max(3).default(1),
     /** Run events B: the field is forced to this weather / terrain for the whole fight (Umbrella Squad). */

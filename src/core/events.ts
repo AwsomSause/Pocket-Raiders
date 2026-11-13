@@ -64,6 +64,8 @@ import { eggMoveOptions, familyId, teachEggMove } from './mastery';
 import { applyTrainEffect, trainEffectText } from './trainingEffects';
 import { noteCanonEvent, restoreStash, stashParty } from './expansion/canonRun';
 import { applyCanonEffect, ghostReturns, nearestBst } from './expansion/canonSaffron';
+import { addStageAttribute } from './expansion/stageMods';
+import { raidOffered, resolveStoryRaid } from './raid/storyRaids';
 import { advanceTrack, trackStep } from './expansion/trackRun';
 import { scheduleStage, spacedColumns } from './expansion/scheduler';
 import { fnv1a } from './expansion/hash';
@@ -120,6 +122,10 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return run.party.some((m) => emotionOf(content, run, m.uid)?.id === c.id);
     case 'memorial':
       return (run.nuzlocke?.memorial.length ?? 0) >= c.atLeast;
+    case 'dex':
+      return (c.set === 'seen' ? run.log.speciesSeen : run.log.speciesCaught).length >= c.atLeast;
+    case 'storyRaid':
+      return raidOffered(run, c.n);
     case 'partyLevelOver':
       return (!!run.stage && run.party.some((m) => m.level >= curveLevel(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, run.stage!.index, 1)) + c.over)) !== (c.absent === true);
     case 'partyMoveType':
@@ -315,6 +321,10 @@ export function conditionText(content: Content, c: EventCondition): string {
     }
     case 'item':
       return `Needs ${c.count && c.count > 1 ? `${c.count} × ` : 'a '}${content.catalog.get(c.id)?.name ?? content.items.get(c.id)?.name ?? c.id}`;
+    case 'dex':
+      return `Needs ${c.atLeast} species ${c.set} this run`;
+    case 'storyRaid':
+      return 'The raid is not open';
     case 'period':
       return `Only in the ${c.in.map((x) => PERIOD_LABEL[x].toLowerCase()).join(' or ')}`;
     case 'season':
@@ -906,6 +916,10 @@ export function effectWords(content: Content, e: EventEffect): string {
       return `${e.who === 'lead' ? 'lead' : 'party'} loses ${Math.round(e.share * 100)}% HP${e.except.length ? ` (not ${e.except.join('/')} types)` : ''}`;
     case 'restorePp':
       return 'restore PP';
+    case 'storyRaid':
+      return `raid ${e.n}: ${e.result}`;
+    case 'stageAttribute':
+      return `${e.amount > 0 ? '+' : ''}${e.amount} ${e.key} for this stage`;
     case 'cure':
       return 'cure status';
     case 'status':
@@ -1160,6 +1174,13 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       for (const m of hazardTargets(content, run, e)) m.hp = Math.max(1, m.hp - Math.floor(maxHp(content, m) * e.share));
       return effectWords(content, e);
     }
+    case 'storyRaid': {
+      const r = resolveStoryRaid(content, run, e.n, e.result);
+      return r.alreadyResolved ? '' : r.lines.join(' ');
+    }
+    case 'stageAttribute':
+      addStageAttribute(run, e.key, e.amount);
+      return effectWords(content, e);
     case 'restorePp':
       for (const m of run.party) for (const slot of m.moves) slot.pp = maxPp(content, slot);
       return effectWords(content, e);
@@ -1605,6 +1626,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     const shaped = strategyKey && team.length > 0 ? shapeInstances(content, strategyIdForGroup(content, strategyKey.kind, strategyKey.key), strategyKey.kind, team, 0) : null;
     if (shaped) team.splice(0, team.length, ...shaped.team);
     run.battle = createBattle('trainer', team, activeIndex, run.party[activeIndex]!.uid, { classId: b.classId ?? 'event', name: evil ? evil.name : rival ? rival.name : fellow ? fellow.name : b.kind === 'trainer' && b.friend ? friendName(run) : b.name, leaderId: null });
+    if (b.kind === 'trainer' && b.sprite && run.battle.trainer) run.battle.trainer.spriteBoss = b.sprite;
     // Beta 0.6: the team's special Pokémon carry its variant line (Specialists one, Executives and Leaders two).
     const variantTeam = b.evil ? (b.evilTeam ?? evilTeam(content, run)?.id) : undefined;
     if (b.evil && variantTeam) assignEvilVariants(run.battle.extra.variants, team, { teamId: variantTeam, regionId: currentRegion(content, run).id, rank: b.evil, marnie: holdsMarnieCard(run) });

@@ -90,6 +90,7 @@ function choose(s: FrontState, id: string, ctx: FormatCtx): FrontState {
     key: 'lanes',
     name: 'Giovanni of Rainbow Rocket',
     classId: 'veteran',
+    sprite: 'giovanni',
     lineup: s.lanes.map((l) => l.species),
     size: s.lanes.length,
     levelBonus: 3,
