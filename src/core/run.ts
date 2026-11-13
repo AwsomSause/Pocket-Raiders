@@ -12,6 +12,7 @@
 // (Elite Four, then the champion); beating the champion moves the run to the
 // next region, or wins the run after the last one.
 
+import { battleEnded as formatBattleEnded } from './formats/registry';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
 import { recordStoryLoss, storyLossApplies } from './story2/loss';
@@ -3049,6 +3050,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // Battle Replay: the big fights keep a short turn-by-turn record, sealed when the fight ends.
   noteReplayTurn(content, run, current.battle!, events as BattleEvent[]);
   if (battle.outcome) sealReplay(content, run);
+  // Wide formats (Beta 0.6 E4): a fight a format launched tells the format how it ended, before any loss tail runs.
+  if (battle.outcome && battle.event?.eventId.startsWith('format:')) formatBattleEnded({ content, run }, battle.outcome === 'win' || battle.outcome === 'caught');
   // Mega Evolution and other transformations end with the battle, and so do "next battle" item effects.
   if (battle.outcome) {
     revertTransformations(content, battle, run.party, runArchetype(content, run).modifiers);
