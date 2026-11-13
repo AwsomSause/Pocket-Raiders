@@ -201,5 +201,5 @@ Columns: **id** · name · applies to · chance · limit · effect · tier · pr
 
 ## Open questions (recommendation in bold)
 1. Is "constructs" the right group for Failure Will? **Yes; it is data, Kice can add or remove species.**
-2. Real Metal Sonic audio: **ship the original stand-ins; swap files if Kice supplies licensed ones.**
+2. Metal Sonic audio: **Kice's own files are used (confirmed by Kice, 2026-11-13).** No stand-ins.
 3. Should enemy Pokémon get moments? **No in batch 1 to 3 (player side only); enemy bosses already have Hyper rage.**
