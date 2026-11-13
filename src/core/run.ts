@@ -2986,6 +2986,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     const fainted = e.type === 'faint' && e.side === 'player' ? run.party.find((p) => p.uid === e.uid) : undefined;
     if (fainted) {
       noteKeepsakeFaint(run);
+      run.expansion = { ...run.expansion, lastFaint: { uid: fainted.uid, at: run.encountersCompleted } };
       changeFriendship(content, fainted, content.balance.friendship.perFaint);
       careFaint(fainted);
       if (fainted.care?.ace) careAceFell(run, fainted.uid);

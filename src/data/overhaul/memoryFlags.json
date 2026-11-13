@@ -186,6 +186,18 @@
    "meaning": "Honest answers given to Mewtwo (count)",
    "setBy": "The Lab at the End of the Cave",
    "readBy": "Mewtwo's response, The Made One"
+  },
+  {
+   "id": "camp.pair",
+   "meaning": "Two Pokémon at camp became a pair",
+   "setBy": "The One Who Won’t Eat (let another go)",
+   "readBy": "The Argument"
+  },
+  {
+   "id": "camp.argument",
+   "meaning": "Two Pokémon argued over the fire",
+   "setBy": "The Argument",
+   "readBy": "The Photograph Nobody Posed For"
   }
  ]
 }
