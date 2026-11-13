@@ -114,9 +114,12 @@ export async function playMomentScene(scene: Phaser.Scene, opts: MomentSceneOpti
     // Static and electrical crackle (the director's clip) over flickering noise lines.
     void playClip('failure-static', sfx, 4600);
     const frames = fast ? 0 : Math.floor(opts.staticMs / 60);
+    // Flicker from a tiny fixed-seed generator: presentation code never uses a random number source.
+    let seed = 12345;
+    const next = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
     for (let i = 0; i < frames; i++) {
       noise.clear();
-      for (let n = 0; n < 60; n++) noise.fillStyle(0xffffff, Math.random() * 0.5).fillRect(Math.random() * w, Math.random() * h, 20 + Math.random() * 80, 2);
+      for (let n = 0; n < 60; n++) noise.fillStyle(0xffffff, next() * 0.5).fillRect(next() * w, next() * h, 20 + next() * 80, 2);
       await wait(60);
     }
     noise.clear();
