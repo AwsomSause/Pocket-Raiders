@@ -2783,6 +2783,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('evoEncounters'), /** Also needs a party Pokémon within this many levels of a level evolution. */ nearEvolution: z.number().int().min(0).max(20).optional() }),
   /** Field moves (S416): a party member knows this move (Cut, Surf, Flash ...). */
   z.object({ kind: z.literal('partyMove'), move: z.string() }),
+  /** A party member knows a move with this flag (sound, wind, ...). */
+  z.object({ kind: z.literal('partyMoveFlag'), flag: z.enum(['sound', 'wind', 'punch', 'bite', 'pulse', 'bullet', 'slicing', 'powder']) }),
   /** A party member whose current emotion is this one (Overdrive emotions: kindness, bravery...). */
   z.object({ kind: z.literal('emotion'), id: z.enum(['determination', 'bravery', 'justice', 'kindness', 'patience', 'integrity', 'perseverance']) }),
   /** An event that has already been played this run. */
@@ -2963,9 +2965,10 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('rest') }),
   /** The run clock: today's milestone celebration is held (so it pays once). */
   z.object({ kind: z.literal('celebrate') }),
-  z.object({ kind: z.literal('damage'), share: z.number().min(0).max(1) }),
+  /** `who` lead hits only the first Pokémon able to fight; `except` spares Pokémon of these types (Beta 0.6 biome hazards). */
+  z.object({ kind: z.literal('damage'), share: z.number().min(0).max(1), who: z.enum(['party', 'lead']).default('party'), except: z.array(TypeNameSchema).max(4).default([]) }),
   z.object({ kind: z.literal('cure') }),
-  z.object({ kind: z.literal('status'), status: z.enum(['poison', 'burn', 'paralysis', 'sleep']) }),
+  z.object({ kind: z.literal('status'), status: z.enum(['poison', 'burn', 'paralysis', 'sleep']), who: z.enum(['party', 'lead']).default('party'), except: z.array(TypeNameSchema).max(4).default([]) }),
   z.object({ kind: z.literal('friendship'), amount: z.number().int(), who: z.enum(['lead', 'party']).default('party') }),
   z.object({ kind: z.literal('attribute'), key: AttributeKeySchema, amount: z.number().int() }),
   /** Research Points, paid at the end of the run. */
@@ -3144,6 +3147,8 @@ export const EventRuleSchema = z.object({
   pinchHitter: z.boolean().optional(),
   /** Blackout's Seal (Beta 0.6 E4): no voluntary switching on the first turn of the fight. */
   noSwitchFirstTurn: z.boolean().optional(),
+  /** Front (Beta 0.6): each Pokémon fights only the foe in its own lane (spot n faces spot n); no moves reach other lanes or allies. */
+  lanes: z.boolean().optional(),
   /** Blackout's Seal: moves of this type hit this many percent harder, for both sides. */
   typeBoost: z.object({ type: TypeNameSchema, pct: z.number().int().min(1).max(100) }).optional(),
   surviveTurns: z.number().int().min(1).max(30).optional(),
@@ -3216,6 +3221,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     types: z.array(TypeNameSchema).default([]),
     /** Beta 0.6 wide formats: the foe's Pokémon come from this species list (a pick per slot); empty = from `types`. */
     species: z.array(z.string()).optional(),
+    /** Beta 0.6 Front: the exact species of the foe's team, slot by slot (a lane each); beats `species` and `types`. */
+    lineup: z.array(z.string()).optional(),
     levelBonus: z.number().int().default(0),
     chain: z.number().int().min(1).max(3).default(1),
     /** Run events B: the field is forced to this weather / terrain for the whole fight (Umbrella Squad). */

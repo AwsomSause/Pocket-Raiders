@@ -22,6 +22,8 @@ export interface EventOpts {
   secret?: Json[];
   /** Never drawn on its own: code or another event places it (a room, a landmark, a wanderer's stop). */
   room?: boolean;
+  /** Choice memory (Beta 0.6): up to 3 variants, see core/eventMemory.ts. */
+  remembers?: Json[];
 }
 
 export function ev(id: string, name: string, group: string, o: EventOpts, intro: string, choices: Json[]): Json {
@@ -47,6 +49,11 @@ export const lose = (id?: string): Json => ({ kind: 'loseItem', ...(id ? { id } 
 export const trade = (label: string, want: { species?: string[]; type?: string; tag?: string; stage?: number; minWeight?: number; maxWeight?: number; generation?: number; minLevel?: number; eggGroup?: string; color?: string } = {}): Json => ({ kind: 'tradeAway', want: { label, ...want } });
 export const heal = (share = 1): Json => ({ kind: 'heal', share });
 export const hurt = (share: number): Json => ({ kind: 'damage', share });
+/** Hits only the lead (the first Pokémon able to fight), sparing Pokémon of the `except` types. */
+export const hurtLead = (share: number, except: string[] = []): Json => ({ kind: 'damage', share, who: 'lead', except });
+/** Damage to every Pokémon except those of the given types. */
+export const hurtExcept = (share: number, ...except: string[]): Json => ({ kind: 'damage', share, who: 'party', except });
+export const statusLead = (s: 'poison' | 'burn' | 'paralysis' | 'sleep'): Json => ({ kind: 'status', status: s, who: 'lead' });
 export const cure = (): Json => ({ kind: 'cure' });
 export const status = (s: 'poison' | 'burn' | 'paralysis' | 'sleep'): Json => ({ kind: 'status', status: s });
 export const fr = (amount: number, who: 'lead' | 'party' = 'party'): Json => ({ kind: 'friendship', amount, who });
@@ -113,8 +120,9 @@ export const flagIs = (key: string, atLeast = 1, atMost = 99): Json => ({ kind: 
 export const ability = (label: string, ...abilities: string[]): Json => ({ kind: 'partyAbility', abilities, label });
 
 // ---------- battles ----------
-export const wild = (o: { species?: string[]; types?: string[]; lv?: number; shiny?: number; win?: Json[]; recall?: boolean; chain?: number; shadow?: boolean; blissful?: boolean } = {}): Json => ({
+export const wild = (o: { format?: 'doubles' | 'triples'; species?: string[]; types?: string[]; lv?: number; shiny?: number; win?: Json[]; recall?: boolean; chain?: number; shadow?: boolean; blissful?: boolean } = {}): Json => ({
   kind: 'wild',
+  ...(o.format ? { format: o.format } : {}),
   ...(o.shadow ? { shadow: true } : {}),
   ...(o.blissful ? { blissful: true } : {}),
   ...(o.chain ? { chain: o.chain } : {}),
@@ -125,8 +133,9 @@ export const wild = (o: { species?: string[]; types?: string[]; lv?: number; shi
   shinyMultiplier: o.shiny ?? 1,
   win: o.win ?? [],
 });
-export const trainer = (name: string, o: { cls?: string; boss?: string; size?: number; types?: string[]; lv?: number; win?: Json[]; ghost?: boolean; retired?: boolean; rival?: boolean; ally?: string; chain?: number; mirror?: boolean } = {}): Json => ({
+export const trainer = (name: string, o: { format?: 'doubles' | 'triples'; cls?: string; boss?: string; size?: number; types?: string[]; lv?: number; win?: Json[]; ghost?: boolean; retired?: boolean; rival?: boolean; ally?: string; chain?: number; mirror?: boolean } = {}): Json => ({
   kind: 'trainer',
+  ...(o.format ? { format: o.format } : {}),
   ...(o.chain ? { chain: o.chain } : {}),
   name,
   ...(o.cls ? { classId: o.cls } : {}),
@@ -164,6 +173,7 @@ export const bond = (chemistry: number, calm = 3, settle = false): Json => ({ ki
 export const rest = (): Json => ({ kind: 'rest' });
 /** Today's milestone celebration is held (pays once per milestone). */
 export const celebrate = (): Json => ({ kind: 'celebrate' });
+export const moveFlag = (flag: string): Json => ({ kind: 'partyMoveFlag', flag });
 export const ptype = (type: string): Json => ({ kind: 'partyType', type });
 /** Aggressive choices N (tag "pacifist") won't make. */
 export const fierce: Json = { kind: 'noTrainerTag', tag: 'pacifist' };
