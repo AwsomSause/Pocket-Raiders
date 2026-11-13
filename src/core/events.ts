@@ -60,13 +60,10 @@ import { addFlag } from './shadowWorld/world';
 import { grantBlessing, makeBlissful } from './shadowWorld/blissful';
 import { eggMoveOptions, familyId, teachEggMove } from './mastery';
 import { applyTrainEffect, trainEffectText } from './trainingEffects';
-<<<<<<< HEAD
 import { noteCanonEvent } from './expansion/canonRun';
-=======
 import { advanceTrack, trackStep } from './expansion/trackRun';
 import { scheduleStage, spacedColumns } from './expansion/scheduler';
 import { fnv1a } from './expansion/hash';
->>>>>>> origin/beta-0.6
 import { currentRegion, getCampaign, levelCap, runLevelCap } from './regions';
 import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } from './encounterDirector';
 import { hashSeed, Rng } from './rng';
