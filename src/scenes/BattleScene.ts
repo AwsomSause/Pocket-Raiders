@@ -3562,6 +3562,12 @@ export class BattleScene extends Phaser.Scene {
       return;
     }
     if (this.role === 'rival' && (result.narrativeDefeat || result.wiped || result.defeated)) await this.fx.flourish('enemy', 'rival.win', ENEMY_POS);
+    if (result.storyLoss) {
+      await this.say('You lost this one, but the story goes on. Your team is patched up.');
+      await exitWipe(this, this.motion, this.wipeMask());
+      this.scene.start(sceneForRun(result.run));
+      return;
+    }
     if (result.narrativeDefeat) {
       // The story loss: a heavy shake (skipped when battle animations are off), then the rival's words.
       if (this.motion !== 'off') {
@@ -3585,6 +3591,12 @@ export class BattleScene extends Phaser.Scene {
       await this.say('You have no Pokémon that can fight!');
       await exitWipe(this, this.motion, this.wipeMask());
       this.scene.start('GameOver');
+      return;
+    }
+    // Safety net: a turn that cleared the battle without an end must never leave the screen waiting for a command (the post-battle freeze).
+    if (!result.run.battle) {
+      await exitWipe(this, this.motion, this.wipeMask());
+      this.scene.start(sceneForRun(result.run));
       return;
     }
     this.busy = false;
