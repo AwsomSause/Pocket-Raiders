@@ -65,6 +65,8 @@ export const EvilTeamSchema = z.object({
   ops: z.array(z.object({ id: z.string().regex(/^[a-z][a-z0-9-]*$/), kind: EvilOpKindSchema, name: z.string().min(1), text: z.string().min(1) })).min(3),
   /** Story Overhaul Part IV: one of the six original teams. Only Story Runs draw it, and Story Runs draw only these (Classic rolls never move). */
   storyOnly: z.boolean().default(false),
+  /** Beta 0.6 Grand Arc: a roaming team (Cipher, Rocket Remnants, Team Snag'em). It is never drawn as a run's team; events field it with `evilTeam` on a trainer battle. */
+  roaming: z.boolean().default(false),
 });
 export type EvilTeam = z.infer<typeof EvilTeamSchema>;
 
