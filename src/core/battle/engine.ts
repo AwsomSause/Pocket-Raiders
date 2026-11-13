@@ -670,6 +670,7 @@ export function switchProblem(ctx: Pick<BattleContext, 'battle' | 'party'> & Par
   if (!mon) return 'There is no Pokémon in that slot.';
   if (partyIndex === ctx.battle.activeIndex && !ctx.battle.needsSwitch) return 'That Pokémon is already in battle.';
   if (ctx.battle.eventRule?.noSwitch && !ctx.battle.needsSwitch) return 'Honor duel: no switching allowed!';
+  if (ctx.battle.eventRule?.noSwitchFirstTurn && ctx.battle.turn <= 1 && !ctx.battle.needsSwitch) return 'The Seal: no switching on the first turn!';
   if (ctx.setStyle && ctx.battle.kind === 'trainer' && !ctx.battle.needsSwitch) return 'Set style: no switching in trainer battles.';
   if (mon.hp <= 0) return 'That Pokémon has fainted.';
   const active = ctx.party[ctx.battle.activeIndex];
@@ -3878,6 +3879,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (userAbility === 'sovereign-plumage' && moveType === 'flying') powerMult *= 1.2;
       if (userAbility === 'dynamo-down' && moveType === 'electric' && user.vol.dynamoBoost) { powerMult *= 1.5; user.vol.dynamoBoost = false; }
       if (userAbility === 'reckless' && fx.recoil) powerMult *= 1.2;
+      if (ctx.battle.eventRule?.typeBoost?.type === moveType) powerMult *= 1 + ctx.battle.eventRule.typeBoost.pct / 100;
       if (ctx.battle.field.waterSport > 0 && moveType === 'fire') powerMult *= 1 / 3;
       if (ctx.battle.field.mudSport > 0 && moveType === 'electric') powerMult *= 1 / 3;
       if (userAbility && TYPE_BOOST[userAbility] === moveType) powerMult *= 1.5;
