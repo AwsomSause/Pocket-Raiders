@@ -3147,9 +3147,18 @@ export const EventRuleSchema = z.object({
 });
 export type EventRule = z.infer<typeof EventRuleSchema>;
 
+/**
+ * Beta 0.6 T4: an event fight fought two or three a side. Wild: that many wild Pokémon appear. Triples need three healthy
+ * Pokémon on each side and only run while the triple battle is switched on (balance.triples.enabled or the Triples Only rule);
+ * otherwise the fight drops to doubles, and to a single battle when doubles can't be made either.
+ */
+export const EventBattleFormatSchema = z.enum(['doubles', 'triples']);
+export type EventBattleFormat = z.infer<typeof EventBattleFormatSchema>;
+
 export const EventBattleSchema = z.discriminatedUnion('kind', [
   z.object({
     kind: z.literal('wild'),
+    format: EventBattleFormatSchema.optional(),
     species: z.array(z.string()).default([]),
     types: z.array(TypeNameSchema).default([]),
     levelBonus: z.number().int().default(0),
@@ -3167,6 +3176,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
   }),
   z.object({
     kind: z.literal('trainer'),
+    /** Fought as a double or triple battle (see EventBattleFormatSchema); `size` should be at least 2 or 3. */
+    format: EventBattleFormatSchema.optional(),
     /** A trainer class from trainers.json, or a boss id (its signature team). */
     classId: z.string().optional(),
     bossId: z.string().optional(),

@@ -19,18 +19,19 @@ import type { ChoiceKind } from './presentation/eventStyles';
 import { befriendWanderer, startWanderer } from './wanderer';
 import { emotionOf } from './story/emotions';
 import { featuredMapEvents, runGameEventIds } from './gameEvents';
-import { eventChanceScale } from './rules';
+import { eventChanceScale, triplesOnly } from './rules';
 import { getArchetype, runPerks } from './archetypes';
 import { ATTRIBUTE_LABELS, addRunAttribute, effectiveAttributes, runAttributeEffects } from './attributes';
 import { createBattle } from './battle/engine';
-import type { Content, EventBattle, EventChoice, EventCondition, EventDef, EventEffect, EventOutcome, TradeWant, TypeName } from './contentSchema';
+import type { Content, EventBattle, EventBattleFormat, EventChoice, EventCondition, EventDef, EventEffect, EventOutcome, TradeWant, TypeName } from './contentSchema';
 import { curveLevel, enemyLevel, evolvedFormAt, levelScale, rollShiny, withPartyStrength } from './encounters';
 import { changeFriendship } from './friendship';
 import { atLeast, promptById, type Grade, type PromptResult } from './interaction/prompt';
 import { applyCatalog, catalogTargetProblem, isFreeReroll } from './catalog';
 import { addItem } from './items';
 import { evolve } from './evolution';
-import { makeDoubles } from './battle/doubles';
+import { canBeDoubles, makeDoubles } from './battle/doubles';
+import { canBeTriples, makeTriples } from './battle/triples';
 import { championTeam, retiredTeam } from './story/championDefense';
 import { oldFoe } from './story/promises';
 import { featuredRival, rivalBeaten, rivalFightTeam, rivalLastResult, rivalPath } from './rivals/living';
@@ -1371,7 +1372,16 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     if (enemy.shiny) countShiny(run, enemy.speciesId);
     if (b.shadow) makeShadow(enemy, rollShadowHeart(content, new Rng(hashSeed(`${run.seed}::shadow-foe::${enemy.uid}`))));
     if (b.blissful) makeBlissful(content, enemy);
-    run.battle = createBattle('wild', [enemy], activeIndex, run.party[activeIndex]!.uid);
+    // T4: a doubles / triples wild fight brings one or two more wild Pokémon, rolled by their own generator (old rolls stay the same).
+    const extra = b.format === 'triples' ? 2 : b.format === 'doubles' ? 1 : 0;
+    const formatRng = new Rng(hashSeed(`${run.seed}::event-format::${event.eventId}::${run.encountersCompleted}`));
+    const others = Array.from({ length: extra }, () => {
+      const mon = newMon(content, run, evolvedFormAt(content, pickSpecies(content, run, b.species, b.types, formatRng), level, formatRng), level, 'e');
+      mon.shiny = rollShiny(content, formatRng, runAttributeEffects(content, run).shinyChance * b.shinyMultiplier);
+      if (mon.shiny) countShiny(run, mon.speciesId);
+      return mon;
+    });
+    run.battle = createBattle('wild', [enemy, ...others], activeIndex, run.party[activeIndex]!.uid);
   } else {
     const boss = b.bossId ? content.bosses.get(b.bossId) : undefined;
     const ghost = b.retired ? retiredTeam(run.story) : b.ghost ? championTeam(run.story) : [];
@@ -1437,10 +1447,29 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       run.battle.loaner = ally.uid;
     }
   }
+  if (b.format && !run.battle.doubles) applyEventFormat(content, run, b.format);
   run.battle.event = event;
   for (const mon of run.battle.enemyTeam) discover(run, mon.speciesId, false);
   run.phase = 'battle';
   recordBattleStarted(content, run);
+}
+
+/**
+ * T4: turns a new event battle into a triple battle (when it is switched on and both sides have three healthy Pokémon) or a double
+ * battle; it stays a single battle when neither can be made. No random numbers.
+ */
+export function applyEventFormat(content: Content, run: RunState, format: EventBattleFormat): 'singles' | 'doubles' | 'triples' {
+  const battle = run.battle!;
+  const triplesOn = content.balance.triples.enabled || triplesOnly(run.rules);
+  if (format === 'triples' && triplesOn && canBeTriples(run.party, battle.enemyTeam)) {
+    makeTriples(battle, run.party);
+    return 'triples';
+  }
+  if (canBeDoubles(run.party, battle.enemyTeam)) {
+    makeDoubles(battle, run.party);
+    return 'doubles';
+  }
+  return 'singles';
 }
 
 /** Whether this event battle is a sparring match with the fellow apprentice: losing it is friendly (nobody is out). */
