@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { createBattle, resolveTurn, type BattleContext, type BattleEvent } from '../../src/core/battle/engine';
 import { revertTransformations } from '../../src/core/battle/transform';
 import { MOMENT_GROUPS, POKEMON_MOMENTS, momentRoll, momentsFor, pokemonMoment, type MomentHooks } from '../../src/core/moments/pokemonMoments';
+import { joinMoments, restMoments } from '../../src/core/moments/runMoments';
 import { calcStats, createPokemon } from '../../src/core/pokemon';
+import { chooseStarter, createRun } from '../../src/core/run';
 import { hashSeed, Rng } from '../../src/core/rng';
 import type { PokemonInstance } from '../../src/core/state';
 import { content } from './helpers';
@@ -444,9 +446,9 @@ describe('Batch 5: faint, ally, weather and status moments', () => {
   const big = (): PokemonInstance => strike('mewtwo', 'psystrike');
   const has = (events: BattleEvent[], id: string) => events.some((e) => e.type === 'pmoment' && e.id === id);
 
-  it('the remaining catalog moments are exactly the rest, catch and four hook-blocked ones', () => {
+  it('the moments still off are the four hook-blocked battle ones and three rest ones that need new systems', () => {
     const off = POKEMON_MOMENTS.filter((m) => m.status === 'disabled').map((m) => m.id).sort();
-    expect(off).toEqual(['bug-swarm-low', 'gengar-cackle', 'ice-chill-ko', 'poison-toxic-blood', 'snorlax-rest', 'pikachu-spark-night', 'eevee-curl', 'fire-campfire', 'ghost-story', 'water-song', 'grass-sprout', 'psychic-dream', 'ditto-join', 'legend-joined'].sort());
+    expect(off).toEqual(['bug-swarm-low', 'gengar-cackle', 'ghost-story', 'ice-chill-ko', 'poison-toxic-blood', 'psychic-dream', 'water-song']);
   });
 
   it('a weather moment plays only in its weather', () => {
@@ -507,5 +509,78 @@ describe('Batch 5: faint, ally, weather and status moments', () => {
     const f = build('falinks', [mon('falinks', 40)], mon('magikarp', 5));
     expect(has(turn(f.ctx), 'p2-formation')).toBe(true);
     function foeLegend(): PokemonInstance { const m = strike('articuno', 'splash'); m.level = 5; return m; }
+  });
+});
+
+describe('Batch 6: rest and catch moments (run layer)', () => {
+  const freshRun = (seed: string) => chooseStarter(content, createRun(content, { runId: `rest-${seed}`, seed, archetypeId: 'red' }), 0);
+  const withParty = (seed: string, ...species: string[]) => {
+    const run = freshRun(seed);
+    run.party = species.map((s, i) => createPokemon(content, s, 20, `${s}-r${i}`));
+    run.party.forEach((p) => (p.friendship = 50));
+    return run;
+  };
+
+  it('data: the rest and catch moments that have an effect are supported; four stay off with reasons', () => {
+    const off = POKEMON_MOMENTS.filter((m) => (m.trigger === 'rest' || m.trigger === 'catch') && m.status === 'disabled').map((m) => m.id).sort();
+    expect(off).toEqual(['ghost-story', 'psychic-dream', 'water-song']);
+  });
+
+  it('Snorlax at a rest: +8 friendship and a berry, claimed once per run', () => {
+    const run = withParty('rest-snorlax', 'snorlax');
+    const before = run.party[0]!.friendship;
+    const lines = restMoments(content, run);
+    expect(lines.length).toBe(1);
+    expect(run.party[0]!.friendship).toBe(before + 8);
+    expect((run.inventory['oran-berry'] ?? 0) + (run.inventory['sitrus-berry'] ?? 0)).toBe(1);
+    expect(run.story.flags['pm:snorlax-rest']).toBe(1);
+    expect(restMoments(content, run)).toEqual([]);
+  });
+
+  it('a chance-based rest moment can fail without being claimed, and plays at some later rest', () => {
+    let played = 0;
+    let missedFirst = 0;
+    for (let i = 0; i < 80; i++) {
+      const run = withParty(`rest-eevee-${i}`, 'eevee');
+      const first = restMoments(content, run).length;
+      if (!first) { missedFirst++; expect(run.story.flags['pm:eevee-curl']).toBeUndefined(); }
+      for (let r = 1; r < 12 && !restMoments(content, run).length && !first; r++) run.encountersCompleted += 1;
+      if (run.story.flags['pm:eevee-curl'] !== undefined) played++;
+    }
+    expect(missedFirst).toBeGreaterThan(0);
+    expect(played).toBeGreaterThan(40);
+  });
+
+  it('is repeatable: the same run and rest give the same lines', () => {
+    const a = restMoments(content, withParty('rest-same', 'eevee', 'charmander', 'bulbasaur'));
+    const b = restMoments(content, withParty('rest-same', 'eevee', 'charmander', 'bulbasaur'));
+    expect(a).toEqual(b);
+  });
+
+  it('a legendary joining heals the team and gains 10 friendship (once per run)', () => {
+    const run = withParty('join-legend', 'rattata', 'pidgey');
+    run.party.forEach((p) => (p.hp = 1));
+    const legend = createPokemon(content, 'articuno', 30, 'articuno-j');
+    legend.friendship = 70;
+    let healed = 0;
+    const lines = joinMoments(content, run, legend, () => { healed++; });
+    expect(lines.length).toBe(1);
+    expect(healed).toBe(1);
+    expect(legend.friendship).toBe(80);
+    expect(joinMoments(content, run, createPokemon(content, 'zapdos', 30, 'zapdos-j'), () => { healed++; })).toEqual([]);
+    expect(healed).toBe(1);
+  });
+
+  it('Ditto joins with a talent; one that already has one keeps it and the moment is not claimed', () => {
+    const run = withParty('join-ditto', 'rattata');
+    const ditto = createPokemon(content, 'ditto', 20, 'ditto-j');
+    expect(joinMoments(content, run, ditto, () => undefined).length).toBe(1);
+    expect(['atk', 'def', 'spa', 'spd', 'spe']).toContain(ditto.care?.talent);
+    const run2 = withParty('join-ditto-2', 'rattata');
+    const d2 = createPokemon(content, 'ditto', 20, 'ditto-k');
+    d2.care = { ...(d2.care ?? {}), talent: 'atk' } as NonNullable<PokemonInstance['care']>;
+    expect(joinMoments(content, run2, d2, () => undefined)).toEqual([]);
+    expect(run2.story.flags['pm:ditto-join']).toBeUndefined();
+    expect(d2.care?.talent).toBe('atk');
   });
 });

@@ -2776,9 +2776,13 @@
    "chance": 1,
    "limit": "run",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At the next rest node: +8 friendship and a free berry.",
-   "presentation": "Snore | \"Snuggle.\""
+   "presentation": "Snore | \"Snuggle.\"",
+   "effect": {
+    "friendship": 8,
+    "freeBerry": true
+   }
   },
   {
    "id": "pikachu-spark-night",
@@ -2792,9 +2796,12 @@
    "chance": 0.4,
    "limit": "run",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "At rest: +5 friendship, charges item.",
-   "presentation": "Soft spark | \"Pika-pika.\""
+   "status": "supported",
+   "effectText": "At rest: +5 friendship.",
+   "presentation": "Soft spark | \"Pika-pika.\"",
+   "effect": {
+    "friendship": 5
+   }
   },
   {
    "id": "eevee-curl",
@@ -2808,9 +2815,12 @@
    "chance": 0.4,
    "limit": "run",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At rest: +5 friendship.",
-   "presentation": "Purr | \"Cuddle.\""
+   "presentation": "Purr | \"Cuddle.\"",
+   "effect": {
+    "friendship": 5
+   }
   },
   {
    "id": "fire-campfire",
@@ -2824,9 +2834,12 @@
    "chance": 0.25,
    "limit": "run",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At rest: whole team +2 friendship.",
-   "presentation": "Crackle | \"Warm.\""
+   "presentation": "Crackle | \"Warm.\"",
+   "effect": {
+    "teamFriendship": 2
+   }
   },
   {
    "id": "ghost-story",
@@ -2872,9 +2885,12 @@
    "chance": 0.25,
    "limit": "run",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "At rest: free berry.",
-   "presentation": "Rustle | \"A sprout.\""
+   "presentation": "Rustle | \"A sprout.\"",
+   "effect": {
+    "freeBerry": true
+   }
   },
   {
    "id": "psychic-dream",
@@ -2904,9 +2920,12 @@
    "chance": 1,
    "limit": "run",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "On joining: gets a one-time trait roll.",
-   "presentation": "Squelch | \"It's... you?\""
+   "status": "supported",
+   "effectText": "On joining: rolls a talent (if it has none).",
+   "presentation": "Squelch | \"It's... you?\"",
+   "effect": {
+    "talentRoll": true
+   }
   },
   {
    "id": "legend-joined",
@@ -2920,9 +2939,13 @@
    "chance": 1,
    "limit": "run",
    "tier": "landmark",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "On joining: team heals fully, +10 friendship.",
-   "presentation": "Cry first, gold | \"A legend joins your side.\""
+   "presentation": "Cry first, gold | \"A legend joins your side.\"",
+   "effect": {
+    "healTeam": true,
+    "friendship": 10
+   }
   },
   {
    "status": "supported",
