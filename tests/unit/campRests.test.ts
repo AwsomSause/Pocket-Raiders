@@ -2,9 +2,9 @@
 
 import { describe, expect, it } from 'vitest';
 import { conditionMet, eventView, chooseEvent } from '../../src/core/events';
-import { chooseStarter, createRun } from '../../src/core/run';
+import { chooseStarter, createRun, debugReplaceEnemy, takeTurn } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
-import { content } from './helpers';
+import { content, toBattle } from './helpers';
 
 const IDS = ['camp-one-who-wont-eat', 'camp-the-argument', 'camp-the-bath', 'camp-nightmare-watch', 'camp-photograph-nobody-posed'];
 
@@ -73,5 +73,18 @@ describe('camp and rest scenes', () => {
     camp.expansion = { lastFaint: { uid: 'x', at: camp.encountersCompleted } };
     const rested = chooseEvent(content, camp, 'c', 0).run;
     expect(rested.expansion?.lastFaint).toBeUndefined();
+  });
+
+  it('a real battle faint is recorded in run.expansion.lastFaint', () => {
+    let run = toBattle(chooseStarter(content, createRun(content, { runId: 'f', seed: 'faint', archetypeId: 'red' }), 0));
+    run = debugReplaceEnemy(content, run, 'mewtwo', 100);
+    const uid = run.party[0]!.uid;
+    for (let guard = 0; run.phase === 'battle' && guard < 300; guard++) {
+      const mon = run.party[run.battle!.activeIndex]!;
+      const idx = mon.moves.findIndex((m) => m.pp > 0 && (content.moves.get(m.id)!.power ?? 0) > 0);
+      run = takeTurn(content, run, { kind: 'move', index: idx >= 0 ? idx : 0 }).run;
+    }
+    expect(run.expansion?.lastFaint?.uid).toBe(uid);
+    expect(conditionMet(content, run, { kind: 'memberFainted', within: 6 })).toBe(true);
   });
 });
