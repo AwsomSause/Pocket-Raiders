@@ -19,6 +19,13 @@ export function canonSlotOf(content: Content, run: RunState): string | null {
   return canonKanto.slots.some((s) => s.slot === slot) ? slot : null;
 }
 
+/** The event that plays a canon space in a slot: the Stage 8 visit uses the `-return` variant, every other slot the plain one. */
+export function canonEventFor(content: Content, spaceId: string, slot: string) {
+  const all = [...content.events.values()].filter((e) => e.canon === spaceId && !e.disabled);
+  const ret = all.find((e) => e.id.endsWith('-return'));
+  return slot === 'stage-8' ? ret ?? all[0] : all.find((e) => e !== ret);
+}
+
 /** On a new stage: rolls the town menu once and gives each menu space that has an event a stop beside a map node. */
 export function addCanonStops(content: Content, run: RunState): void {
   const slot = canonSlotOf(content, run);
@@ -29,7 +36,7 @@ export function addCanonStops(content: Content, run: RunState): void {
   if (candidates.length === 0) return;
   const rng = new Rng(hashSeed(`${run.seed}::canon-stops::${slot}`));
   for (const id of menu) {
-    const event = [...content.events.values()].find((e) => e.canon === id && !e.disabled);
+    const event = canonEventFor(content, id, slot);
     if (!event) continue; // a space whose play-through is not built yet is simply not offered
     if (stage.map.nodes.some((n) => n.sides.some((s) => s.eventId === event.id))) continue;
     const node = rng.pick(candidates);
