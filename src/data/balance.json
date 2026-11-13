@@ -695,7 +695,7 @@
   ]
  },
  "triples": {
-  "enabled": false,
+  "enabled": true,
   "chance": 0.15,
   "fromRegion": 2,
   "bossIds": []
