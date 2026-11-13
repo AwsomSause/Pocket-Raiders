@@ -1930,7 +1930,7 @@ export class MapScene extends Phaser.Scene {
     if (this.report || this.busy || this.picker || this.legend) return;
     const run = services().session.run;
     if (!run) return;
-    this.fieldNotes = drawFieldNotes(this, fieldNotesView(services().session.content, run), () => this.toggleFieldNotes());
+    this.fieldNotes = drawFieldNotes(this, fieldNotesView(services().session.content, run), (id) => services().session.content.species.get(id), () => this.toggleFieldNotes());
     this.busy = true;
   }
 

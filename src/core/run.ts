@@ -12,6 +12,7 @@
 // (Elite Four, then the champion); beating the champion moves the run to the
 // next region, or wins the run after the last one.
 
+import { noteBattle } from './expansion/fieldNotes';
 import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
@@ -2935,6 +2936,7 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   const ctx = battleContext(content, run, rng, new Rng(run.rng.capture));
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
   run.rng.battle = rng.state;
+  noteBattle(content, run);
   wildBehaviorEffect(content, run, events);
   countAttributeGrowth(content, run, events);
   return { run, events };

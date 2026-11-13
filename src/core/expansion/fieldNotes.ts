@@ -7,6 +7,7 @@ import { grandArcData, grandArcOf, romsHeld, stockLevel } from '../grandArc';
 import type { Content } from '../contentSchema';
 import { keyOf } from '../shadow2/data';
 import { currentRegion } from '../regions';
+import { lineForTeam } from './variantAssign';
 import type { RunState } from '../state';
 
 export const FIELD_TABS = ['special', 'shadow', 'rom', 'key'] as const;
@@ -41,6 +42,9 @@ export function noteShadow(run: NotesRun, id: string, hints: number): boolean {
 
 /** Notes every Named Shadow currently in the party or the box, at the hints it has earned. */
 export function syncFieldNotes(run: NotesPartyRun): void {
+  // The Convoy's last leg (LEDGER) was met when its result is written: won or joined.
+  const ledger = (run.expansion?.cut as { ledger?: string } | undefined)?.ledger;
+  if (ledger === 'won' || ledger === 'joined') noteSpecial(run, 'sv.rocket.ledger');
   for (const m of [...run.party, ...run.box]) if (m.shadow?.named) noteShadow(run, m.shadow.named, m.shadow.hints ?? 1);
 }
 
@@ -51,6 +55,8 @@ export interface FieldEntry {
   name: string;
   /** Species name for the sprite and the sub-title (null until met). */
   species: string | null;
+  /** The game's species id to draw (the first of its species the game has), or null until met. */
+  speciesId: string | null;
   /** The one-word line in the list ("Black-Label", "Tier 3 Gripped", "Held"). */
   badge: string;
   known: boolean;
@@ -75,14 +81,16 @@ export function fieldNotesView(content: Content, run: Pick<RunState, 'expansion'
   syncFieldNotes(run);
   const here = currentRegion(content, run as RunState).id;
   const notes = run.expansion?.fieldNotes ?? { special: [], shadow: {} };
-  const speciesName = (s: string): string => content.species.get(s.toLowerCase().replace(/[^a-z0-9]+/g, '-'))?.name ?? s;
+  const find = (s: string) => content.species.get(s.toLowerCase().replace(/[^a-z0-9]+/g, '-'));
+  const speciesName = (s: string): string => find(s)?.name ?? s;
+  const drawable = (list: readonly string[]): string | null => list.map(find).find((x) => x)?.id ?? null;
 
   const special: FieldEntry[] = expansionData.specialPokemon
     .filter((s) => notes.special.includes(s.id) || s.region === here)
     .map((s) => {
       const known = notes.special.includes(s.id);
       return {
-        id: s.id, tab: 'special' as const, name: known ? s.name : '???', species: known ? speciesName(s.species[0]!) : null,
+        id: s.id, tab: 'special' as const, name: known ? s.name : '???', species: known ? speciesName(s.species[0]!) : null, speciesId: known ? drawable(s.species) : null,
         badge: known ? (s.team === 'rocket' ? 'Black-Label' : cap(s.team.replace(/-/g, ' '))) : 'Special',
         known,
         lines: known ? [`Trait: ${s.trait}`, `Seen with: ${s.where}`] : ['Not met yet. Its trait shows once you have met it.'],
@@ -103,7 +111,7 @@ export function fieldNotesView(content: Content, run: Pick<RunState, 'expansion'
       for (const h of key.hints.slice(0, stage)) lines.push(h);
     }
     return {
-      id: s.id, tab: 'shadow' as const, name: stage ? s.name : '???', species: stage ? speciesName(s.species[0]!) : null,
+      id: s.id, tab: 'shadow' as const, name: stage ? s.name : '???', species: stage ? speciesName(s.species[0]!) : null, speciesId: stage ? drawable(s.species) : null,
       badge: stage ? (s.apex ? `Apex · Tier ${s.tier}` : `Tier ${s.tier}`) : 'Shadow', known: stage > 0, lines,
       pips: key ? stage : null,
       obtain: stage ? (s.apex ? 'Story only' : key ? 'Yes, with the key' : `Purification: ${s.purification}`) : '',
@@ -116,7 +124,7 @@ export function fieldNotesView(content: Content, run: Pick<RunState, 'expansion'
     ? grandArcData.roms.map((r) => {
         const have = held.includes(r.id);
         return {
-          id: `rom.${r.id}`, tab: 'rom' as const, name: have ? `ROM ${r.id} · ${r.name}` : `ROM ${r.id} · ???`, species: null, badge: have ? (arc.late.includes(r.id) ? 'Taken late' : 'Held') : 'Missing', known: have,
+          id: `rom.${r.id}`, tab: 'rom' as const, name: have ? `ROM ${r.id} · ${r.name}` : `ROM ${r.id} · ???`, species: null, speciesId: null, badge: have ? (arc.late.includes(r.id) ? 'Taken late' : 'Held') : 'Missing', known: have,
           lines: have ? [`${cap(r.region)} · ${r.liaison}`, `Method: ${r.method}`, `Proves: ${r.proves}`] : [`${cap(r.region)}. Beat or read the liaison there to earn it.`],
           pips: null, obtain: have ? 'In your Notebook' : 'Not held',
         };
@@ -128,10 +136,15 @@ export function fieldNotesView(content: Content, run: Pick<RunState, 'expansion'
     const key = keyOf(s.id);
     if (!key || stage === 0) return [];
     return [{
-      id: `key.${s.id}`, tab: 'key' as const, name: `${keySymbol(key.type)} ${cap(key.type)} key`, species: s.name, badge: stage >= 3 ? 'Known' : stage === 2 ? 'Clue' : 'Type only',
+      id: `key.${s.id}`, tab: 'key' as const, name: `${keySymbol(key.type)} ${cap(key.type)} key`, species: s.name, speciesId: null, badge: stage >= 3 ? 'Known' : stage === 2 ? 'Clue' : 'Type only',
       known: true, lines: [`For: ${s.name}`, stage >= 2 ? key.hints[stage - 1]! : 'Fight beside it for the next clue.', `Reward: the ${key.scar.replace(/-/g, ' ')} scar`], pips: stage, obtain: stage >= 3 ? 'Key is known' : 'Hints still to come',
     }];
   });
+
+  // Entries you have met come first, so the book opens on something to read.
+  const metFirst = (list: FieldEntry[]): FieldEntry[] => list.sort((a, b) => Number(b.known) - Number(a.known));
+  metFirst(special);
+  metFirst(shadow);
 
   const counts = {
     special: { have: special.filter((e) => e.known).length, total: special.length },
@@ -149,4 +162,30 @@ export function fieldNotesView(content: Content, run: Pick<RunState, 'expansion'
     },
     grandArcOn: Boolean(arc),
   };
+}
+
+const speciesKey = (name: string): string => name.toLowerCase().replace(/^(z-|mega |m-)/, '').replace(/[^a-z0-9]+/g, '');
+
+/**
+ * Called when a battle begins: notes what the player is now facing. Three things count, all from the battle itself:
+ * a Pokémon carrying its Evil Team's variant line (the team's special Pokémon) whose species is on the region's list,
+ * a Named Shadow on the foe's side, and a Colossus Apex. Reads the state only: no RNG, nothing in the fight changes.
+ */
+export function noteBattle(content: Content, run: Pick<RunState, 'expansion' | 'battle' | 'regionIndex' | 'regionOrder'>): void {
+  const b = run.battle;
+  if (!b) return;
+  const region = currentRegion(content, run as RunState).id;
+  const variants = (b.extra?.variants ?? {}) as Record<string, { line: string }>;
+  for (const mon of b.enemyTeam) {
+    const line = variants[mon.uid]?.line;
+    if (line) {
+      const species = content.species.get(mon.speciesId);
+      const key = speciesKey(species?.name ?? mon.speciesId);
+      for (const s of expansionData.specialPokemon) {
+        if (s.region === region && lineForTeam(s.team, s.region) === line && s.species.some((n) => speciesKey(n) === key)) noteSpecial(run, s.id);
+      }
+    }
+    if (mon.shadow?.named) noteShadow(run, mon.shadow.named, mon.shadow.hints ?? 1);
+  }
+  if (b.colossus?.id.startsWith('ss.')) noteShadow(run, b.colossus.id, 1);
 }
