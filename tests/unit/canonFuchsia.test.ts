@@ -2,9 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { canonKanto } from '../../src/data/expansion';
 import { chooseEvent, conditionMet } from '../../src/core/events';
 import { buildTownMenu } from '../../src/core/expansion/canonSpaces';
-import { beginMinigame, leaveMinigame, minigameAct, minigameView } from '../../src/core/minigame/flow';
-import { safariForms, safariPool, SAFARI_STARS } from '../../src/core/minigame/safariLand';
-import { Rng } from '../../src/core/rng';
 import { chooseStarter, createRun, debugForceEvent, takeTurn } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
@@ -110,70 +107,23 @@ describe('Polluted Factory', () => {
   });
 });
 
-describe('Safari Land', () => {
-  it('the entry costs ₽500, needs the money, and opens a Safari stop on the map', () => {
+describe('Safari Land (a plain event)', () => {
+  it('the entry costs ₽500, needs the money and starts a wild fight in the Safari pool', () => {
     const rich = begin('SAF1');
     rich.money = 1000;
-    const { run, sideId } = (() => { const f = debugForceEvent(content, structuredClone(rich), `${P}safari`); const r = chooseEvent(content, f.run, f.sideId, 0).run; return { run: r, sideId: r.stage!.map.nodes.flatMap((n) => n.sides).find((s) => s.kind === 'minigame')!.id }; })();
-    expect(run.money).toBe(500);
-    expect(flag(run, 'kanto-safari-balls')).toBe(30);
-    expect(run.stage!.map.nodes.flatMap((n) => n.sides).find((s) => s.id === sideId)!.minigameId).toBe('safari-land');
+    const f = debugForceEvent(content, structuredClone(rich), `${P}safari`);
+    const r = chooseEvent(content, f.run, f.sideId, 0).run;
+    expect(r.money).toBe(500);
+    expect(flag(r, 'kanto-safari-balls')).toBe(30);
+    expect(flag(r, 'kanto-safari-steps')).toBe(500);
+    const battle = room('safari').choices[0]!.success.battle as { kind: string; species: string[] };
+    expect(battle.kind).toBe('wild');
+    expect(battle.species).toContain('chansey');
+    for (const id of battle.species) expect(content.species.has(id)).toBe(true);
     const poor = begin('SAF2');
     poor.money = 100;
-    const f = debugForceEvent(content, structuredClone(poor), `${P}safari`);
-    expect(conditionMet(content, f.run, room('safari').choices[0]!.requires[0]!)).toBe(false);
-  });
-  it('30 Safari Balls and 500 steps; a full visit catches Pokémon that come home through the usual catch decision', () => {
-    const rich = begin('SAF3');
-    rich.money = 1000;
-    const f = debugForceEvent(content, structuredClone(rich), `${P}safari`);
-    const entered = chooseEvent(content, f.run, f.sideId, 0).run;
-    const sideId = entered.stage!.map.nodes.flatMap((n) => n.sides).find((s) => s.kind === 'minigame')!.id;
-    let run = beginMinigame(content, entered, sideId, 0);
-    const start = run.minigame!.state as { steps: number; balls: number };
-    expect(start.steps).toBe(500);
-    expect(start.balls).toBe(30);
-    for (let i = 0; i < 400 && !(run.minigame!.state as { done: boolean }).done; i++) run = minigameAct(content, run, i % 5 === 0 ? 'bait' : 'ball');
-    const st = run.minigame!.state as { done: boolean; caught: { id: string }[]; balls: number };
-    expect(st.done).toBe(true);
-    expect(st.caught.length).toBeGreaterThan(0);
-    expect(run.minigame!.outcome!.money).toBe(0);
-    expect(flag(run, 'kanto-safari-balls')).toBe(st.balls);
-    const home = leaveMinigame(run, content);
-    expect(home.phase).toBe('decision');
-    expect(home.pending.filter((p) => p.kind === 'caught').length).toBe(st.caught.length);
-  });
-  it('a Safari Pass adds 10 balls; bait and rock move the odds the way the spec says', () => {
-    const rich = begin('SAF4');
-    rich.money = 1000;
-    rich.story.flags['ev:kanto-safari-pass'] = 1;
-    const f = debugForceEvent(content, structuredClone(rich), `${P}safari`);
-    const entered = chooseEvent(content, f.run, f.sideId, 0).run;
-    const sideId = entered.stage!.map.nodes.flatMap((n) => n.sides).find((s) => s.kind === 'minigame')!.id;
-    let run = beginMinigame(content, entered, sideId, 0);
-    const s0 = run.minigame!.state as { balls: number; catchP: number; fleeP: number };
-    expect(s0.balls).toBe(40);
-    const catch0 = s0.catchP, flee0 = s0.fleeP;
-    run = minigameAct(content, run, 'bait');
-    let s1 = run.minigame!.state as { catchP: number; fleeP: number; mon: { id: string } };
-    if (s1.mon.id === (s0 as unknown as { mon: { id: string } }).mon.id) {
-      expect(s1.catchP).toBeGreaterThan(catch0);
-      expect(s1.fleeP).toBeGreaterThan(flee0);
-    }
-    expect(minigameView(content, run).cells.map((c) => c.id)).toEqual(['ball', 'bait', 'rock', 'run']);
-  });
-  it('the population is the whole Kanto pool plus about 40% of other regions, with stars and forms kept apart', () => {
-    const pool = safariPool(content, 123, 0);
-    const kanto = pool.filter((p) => content.species.get(p.id)!.generation === 1);
-    const other = pool.filter((p) => content.species.get(p.id)!.generation !== 1);
-    expect(kanto.length).toBeGreaterThan(60);
-    const everyOther = [...content.species.values()].filter((s) => s.generation !== 1 && !s.tags.length && !s.form).length;
-    expect(other.length).toBeGreaterThan(everyOther * 0.2);
-    expect(other.length).toBeLessThan(everyOther * 0.6);
-    expect(pool.some((p) => (SAFARI_STARS as readonly string[]).includes(p.id))).toBe(false);
-    expect(safariPool(content, 123, 1).map((p) => p.id)).not.toEqual(pool.map((p) => p.id));
-    expect(safariForms(content).length).toBeGreaterThan(10);
-    void Rng;
+    const g = debugForceEvent(content, structuredClone(poor), `${P}safari`);
+    expect(conditionMet(content, g.run, room('safari').choices[0]!.requires[0]!)).toBe(false);
   });
 });
 

@@ -1430,7 +1430,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return effectWords(content, e);
     case 'addStop': {
       const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
-      here.sides.push({ id: `event-stop-${here.sides.length + 1}-${here.id}`, kind: e.stop, used: false, ...(e.stop === 'minigame' && e.minigameId ? { minigameId: e.minigameId } : {}) });
+      here.sides.push({ id: `event-stop-${here.sides.length + 1}-${here.id}`, kind: e.stop, used: false });
       return effectWords(content, e);
     }
     case 'scout':

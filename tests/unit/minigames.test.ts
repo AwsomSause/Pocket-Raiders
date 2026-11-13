@@ -39,7 +39,7 @@ describe('minigame data', () => {
     const ids = content.minigames.games.map((g) => g.id);
     for (const id of ['pokemon-memory', 'catching-challenge', 'rhythm-challenge', 'berry-foraging', 'knowledge-quiz', 'fossil-excavation']) expect(ids).toContain(id);
     expect(ids.length).toBeGreaterThanOrEqual(14);
-    for (const g of content.minigames.games.filter((x) => !x.zone)) {
+    for (const g of content.minigames.games) {
       expect(g.difficultyTiers.map((t) => t.id).slice(0, 3)).toEqual(['easy', 'normal', 'hard']);
       expect(g.difficultyTiers.length === 3 || g.difficultyTiers[3]!.id === 'master').toBe(true);
       expect(g.medals.bronze).toBeLessThan(g.medals.silver);
