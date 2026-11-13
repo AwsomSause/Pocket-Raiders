@@ -60,11 +60,11 @@ export class RescueScene extends Phaser.Scene {
     this.layer = [];
   }
 
-  private panel(title: string, body: string, side?: string): void {
-    this.layer.push(drawGlass(this, 24, 20, GAME_WIDTH - 48, 250));
+  private panel(title: string, body: string, side?: string, h = 250): void {
+    this.layer.push(drawGlass(this, 24, 20, GAME_WIDTH - 48, h));
     this.layer.push(this.add.text(44, 30, title, textStyle(22, GOLD)));
-    const t = this.add.text(44, 66, body, textStyle(15, SKY, { wordWrap: { width: GAME_WIDTH - 100 } }));
-    fitBlock(t, GAME_WIDTH - 100, 190);
+    const t = this.add.text(44, 66, body, textStyle(17, SKY, { wordWrap: { width: GAME_WIDTH - 100 } }));
+    fitBlock(t, GAME_WIDTH - 100, h - 60);
     this.layer.push(t);
     if (side) this.layer.push(this.add.text(GAME_WIDTH - 44, 30, side, textStyle(14, GOLD)).setOrigin(1, 0));
   }
@@ -86,13 +86,13 @@ export class RescueScene extends Phaser.Scene {
     const v: OfferView = offerView(this.run, offer, ctx, node, names);
     this.site = v.site;
     const body = `${v.lines.join('\n\n')}\n\n${v.receipt ? `Receipt: ${v.receipt}\n` : ''}Held at ${v.site}. ${v.count} Pokémon. Jailer: ${v.jailer}.`;
-    this.panel('The rival has a plan', body, `Clock: ${v.clock.label} (${v.clock.nodesHeld} nodes)`);
+    this.panel('The rival has a plan', body, `Clock: ${v.clock.label} (${v.clock.nodesHeld} nodes)`, 190);
     const options = [
       ...v.plans.map((p) => ({ label: `${p.label}${p.preferred ? ' *' : ''}${p.readiness ? `  [${p.readiness}]` : ''}`, detail: p.available ? p.pitch : (p.reason ?? ''), disabled: !p.available })),
       { label: 'Not now', detail: 'The offer will come back.' },
     ];
     this.menu = new Menu(this, {
-      x: 44, y: 285, options, itemWidth: GAME_WIDTH - 100, itemHeight: 38, fontSize: 18,
+      x: 44, y: 220, options, itemWidth: GAME_WIDTH - 100, itemHeight: 50, fontSize: 16,
       onSelect: (i) => {
         if (i === v.plans.length) { declineOffer(this.run, v.holdId, node, ctx.archetype); this.finish(null); return; }
         this.startPlan(v.plans[i]!.plan, v.holdId);
