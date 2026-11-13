@@ -77,7 +77,7 @@ describe('story foundation: random streams', () => {
     'STORY2/0': 'b24a1a0604f703b8', // STORY2, 5, 6 re-pinned after #1098 (Starter Sets removal); cause not isolated, see PR
     'STORY4/0': '927fbd65e715ebbc',
     'STORY5/0': '93fa407c6ffa3882',
-    'STORY6/0': '4a35f9c7e5c84a54',
+    'STORY6/0': 'bae9e780fa62aea9', // re-pinned in the Kanto canon PR: new Silver Powder (Bug type booster) joins trainer held-item draws; proven by removing it (pin returns)
     'STORY7/0': '2db6e08d823e4f4c',
     'STORY8/0': '2fa3b04267e0313a',
   };
@@ -115,6 +115,7 @@ describe('story foundation: random streams', () => {
     eventsExtra: (RAW_CONTENT.eventsExtra as { events?: { group?: string }[] }[]).map((f) => ({ ...f, events: (f.events ?? []).filter((e) => !String(e.group ?? '').startsWith('Story:') && e.group !== 'Plush Workshop') })),
     // Run events B (trainer battles) came later too.
     eventsRB: { events: [] },
+    eventsCanonKanto: { events: [] }, // Kanto canon spaces came later too
     eventsHelpers: { events: [] },
     eventsMerchants: { events: [] }, // run events A came later too
     // The stage-1 level fix (W13: opening fights at Lv4-6 instead of Lv2-4) came later too; Guard and Brace were removed.

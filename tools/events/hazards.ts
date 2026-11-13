@@ -4,7 +4,7 @@
 // Every hazard has the same three buttons: Push on. / Wait. / Use a [type]-type. "A node lost" has no engine effect, so a risky push
 // costs a little HP instead; "+1 Bond" is +5 friendship (+3 for the whole party). No cross-run memory: flags last one run.
 
-import { $, any, ch, cure, flag, flagIs, fr, good, heal, hurtExcept, hurtLead, item, leave, money, out, ptype, moveFlag, rest, rp, scout, statusLead, stopHere, ev, type Json } from './dsl.ts';
+import { $, any, attr, ch, cure, express, flag, lv, flagIs, fr, good, heal, hurtExcept, hurtLead, item, leave, money, out, ptype, moveFlag, rest, rp, scout, statusLead, stopHere, ev, type Json } from './dsl.ts';
 
 const HZ = 'Biome Hazards';
 const SPEED = (value: number): Json => ({ kind: 'statMultiplier', stat: 'spe', value });
@@ -86,7 +86,7 @@ export const HAZARDS: Hazard[] = [
     use('fire', 'Your Fire-type walks the rim as if it were home.'),
     use('rock', 'Your Rock-type finds the cool ledges.'),
   ]),
-  H(['cave-in'], 'Rubble seals a chamber. Something metallic glints between the stones.', [
+  H(['cave-in', 'world-cave-in'], 'Rubble seals a chamber. Something metallic glints between the stones.', [
     ch('Dig by hand.', out('You dig it free, scraped and sore. A Metal Coat.', hurtLead(0.1), item('metal-coat'))),
     wait('You go round and leave the glint behind.'),
     use('fighting', 'Your Fighting-type clears the rubble. The glint is a Metal Coat.', item('metal-coat')),
@@ -218,6 +218,65 @@ export const NEW_EVENTS: Json[] = [
       ch('Wait for it to tire.', out('Three long hours. The snow stops. The Vanilluxe is alone on the summit, and you are not sure you did right by it.')),
     ]),
 ];
+
+/**
+ * Pack SF135 stops that keep their old mechanics and change only what the pack changes (follow-up PR).
+ * Each patch takes the old event JSON and returns the new one. Choices keep their effects unless stated.
+ */
+type Raw = Json & { intro: string; choices: Json[] };
+const relabel = (e: Raw, from: string, to: string, text?: string): void => {
+  const c = e.choices.find((x) => x.label === from);
+  if (!c) throw new Error(`${e.id}: no choice "${from}"`);
+  c.label = to;
+  if (text) (c.success as Json).text = text;
+};
+export const PATCHES: Record<string, (e: Raw) => Raw> = {
+  'villain-hideout': (e) => {
+    e.intro = 'A poster on the wall hums. Behind it, a base. Voices, boots, a door that is not quite shut.';
+    relabel(e, 'Storm it', 'Go in and fight.');
+    relabel(e, 'Sneak in for loot', 'Sneak in for loot.');
+    const leave = e.choices.find((c) => c.label === 'Leave')!;
+    leave.label = 'Note it and leave.';
+    leave.success = out('You mark the hideout on your map and slip away. Someone will want to know where it is.', flag('hideout-noted'), rp(10));
+    return e;
+  },
+  'ev-hidden-dungeon': (e) => {
+    e.intro = 'Behind a curtain of vines, a stone door hangs ajar. Your Key Charm hums against it.';
+    relabel(e, 'Step through', 'Use the Key Charm.', 'The charm fits the lock. The door opens onto a place no map shows.');
+    relabel(e, 'Leave it', 'Leave it.');
+    return e;
+  },
+  'ev-regional-festival': (e) => {
+    e.intro = 'Lanterns, stalls, games, and a gift swap by the fountain. Everybody is smiling.';
+    relabel(e, 'Join the gift swap', 'Join the swap.', 'You show your gift, and so does the stranger. You both look at each other\'s, and swap. Theirs is better.');
+    relabel(e, 'Play the games', 'Play the games.');
+    relabel(e, 'Rest on a bench', 'Watch.');
+    return e;
+  },
+  'galar-gigantamax-sighting': (e) => {
+    e.intro = 'The ground shakes. Over the ridge, a Pokémon towers into the clouds, swirling red: a Gigantamax form. Copperajah, Centiskorch, Rillaboom, Corviknight or Drednaw; you cannot tell which from here.';
+    relabel(e, 'Face the giant', 'Follow it.');
+    relabel(e, 'Observe from a safe distance', 'Observe from a distance.');
+    relabel(e, 'Run!', 'Let it go.');
+    return e;
+  },
+  'galar-runaway-wooloo': () => ev('galar-runaway-wooloo', 'Runaway Wooloo', 'Galar', { stop: 'event', rarity: 'common', requires: [{ kind: 'region', ids: ['galar'] }], effect: 'float', tint: '#d8d0c0', pokemon: 'wooloo' },
+    'A Wooloo rolls down the route, scattering a fence. The shepherd chases it, out of breath: "Please! It does this every Tuesday!"', [
+      ch('Stop it (a Rock-type).', out('Your Rock-type plants itself and the Wooloo bounces off. The shepherd gives you Wooloo Wool to sell.', $(200), flag('galar-wooloo-saved')), { requires: [ptype('rock')] }),
+      ch('Stop it (a Steel-type).', out('Your Steel-type plants itself and the Wooloo bounces off. The shepherd gives you Wooloo Wool to sell.', $(200), flag('galar-wooloo-saved')), { requires: [ptype('steel')] }),
+      ch('Roll with it.', out('You hop on and roll along with the Wooloo. It carries you a long way, and sets you down laughing.', express())),
+      ch('Let it go.', leave('The Wooloo rolls over the horizon. The shepherd sighs.')),
+    ]) as Raw,
+  'training-ground': (e) => {
+    e.intro = 'Tracks, weights and targets. A coach waves you over.';
+    e.choices = [
+      ch('Train the lead.', out('One session, all on your lead. It gains a level.', lv(1, 'lead'))),
+      ch('Train the weakest.', out('The coach takes your lowest-level Pokémon aside and works it hard. It gains two levels to catch up.', lv(2, 'weakest' as 'lead'))),
+      ch('Run laps.', out('You and the team run until dusk. Faster, and tired.', attr('speed', 3), hurtLead(0.1))),
+    ];
+    return e;
+  },
+};
 
 export type { Hazard, Stop };
 export { HZ };

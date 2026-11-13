@@ -242,8 +242,8 @@ export const MYSTERY_DUNGEON_EVENTS: Json[] = [
       ch('Not today', leave()),
     ]),
   mdRoom('md-1-monster-house', 'Monster House', 'A room full of sleeping Pokémon. A stair on the far side. Every step is a gamble.', [
-    ch('Tiptoe across', out('Not a single eye opens. You find the stair.', roomFrom(...DEPTH2), clue()), { check: 'speed', fail: fight('They wake up all at once.', wild({ lv: 2, win: [roomFrom(...DEPTH2), rp(30)] })) }),
-    ch('Wake them on purpose', fight('A very bad idea.', wild({ lv: 3, win: [roomFrom(...DEPTH2), rp(70), any(...VITAMINS)] }), clue())),
+    ch('Tiptoe across', out('Not a single eye opens. You find the stair.', roomFrom(...DEPTH2), clue()), { check: 'speed', fail: fight('They wake up all at once.', wild({ format: 'triples', lv: 2, win: [roomFrom(...DEPTH2), rp(30)] })) }),
+    ch('Wake them on purpose', fight('A very bad idea.', wild({ format: 'triples', lv: 3, win: [roomFrom(...DEPTH2), rp(70), any(...VITAMINS)] }), clue())),
   ]),
   mdRoom('md-1-trap-corridor', 'Trap Corridor', 'A corridor with a floor that clicks. Some of the tiles are clearly safe. Some of them are not.', [
     ch('Step only on the quiet tiles', out('You cross with your fingers crossed.', roomFrom(...DEPTH2), clue()), { check: 'intelligence', fail: out('A wire trips. Darts fly. Everyone is scratched but you make it to the other side.', roomFrom(...DEPTH2), hurt(0.12)) }),

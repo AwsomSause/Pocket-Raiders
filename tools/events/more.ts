@@ -48,7 +48,7 @@ export const MORE_EVENTS: Json[] = [
   ev('delibird-y', 'Delibird-y', PR, { rarity: 'uncommon', pokemon: 'delibird', effect: 'snow', tint: '#203040' }, 'Three Delibird waddle up with sacks. They want a present first.', [
     ch('Give money (₽600)', out('They hand you a treat.', $(-600), any(...RARE_HELD)), { requires: [money(600)] }),
     ch('Give a healing item', out('They chirp happily and give you a berry bundle.', lose(), any(...BERRIES), any(...BERRIES))),
-    ch('Battle them', fight('Present attack!', wild({ species: ['delibird'], lv: 1, win: [any(...TREASURE)] })), { requires: [fierce] }),
+    ch('Battle them', fight('Present attack, times three!', wild({ format: 'triples', species: ['delibird'], lv: 1, win: [any(...TREASURE)] })), { requires: [fierce] }),
   ]),
   ev('absolute-avarice', 'Absolute Avarice', PR, { rarity: 'rare', minStage: 3, pokemon: 'greedent', effect: 'shake' }, 'A huge Greedent sits on a hoard of berries. It glares at you.', [
     ch('Battle for the hoard', fight('Greedent charges!', wild({ species: ['greedent'], lv: 4, win: [any(...BERRIES), any(...BERRIES), any(...BERRIES)] }))),
@@ -175,8 +175,8 @@ export const MORE_EVENTS: Json[] = [
   ]),
 
   // ---------- more trainers and challenges ----------
-  ev('triple-battle', 'Triple Trouble', T, { rarity: 'uncommon', minStage: 2, cast: ['trainer.youngster_m'], effect: 'shake' }, 'Three kids challenge you at once. "All of us! Right now!"', [
-    ch('Take them all', fight('Three teams, one after another!', trainer('Kid Squad', { size: 4, lv: 1, win: [$(1500), any(...HEALING)] }))),
+  ev('triple-battle', 'Triple Trouble', T, { rarity: 'uncommon', minStage: 2, cast: ['trainer.youngster_m'], effect: 'shake' }, 'Three kids line up side by side. "All three of us! Right now!"', [
+    ch('Battle all three', fight('Three Pokémon hit the field at once!', trainer('Kid Squad', { format: 'triples', size: 3, lv: 1, win: [$(1500), any(...HEALING)] }))),
     ch('Just one of them', fight('The bravest steps up.', trainer('Youngster', { size: 1, win: [$(400)] }))),
   ]),
   ev('veteran-challenge', 'Veteran\'s Challenge', T, { rarity: 'rare', minStage: 4, cast: ['trainer.marshal'], effect: 'shake' }, 'An old Veteran nods. "Show me what you\'ve learned."', [

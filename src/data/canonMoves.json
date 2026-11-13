@@ -1,0 +1,23 @@
+{
+ "moves": [
+  {
+   "id": "samurai-slash",
+   "name": "Samurai Slash",
+   "type": "bug",
+   "category": "physical",
+   "power": 70,
+   "accuracy": 100,
+   "pp": 10,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "contact",
+    "slicing"
+   ],
+   "effects": {
+    "flinchFirstUse": true
+   }
+  }
+ ]
+}
