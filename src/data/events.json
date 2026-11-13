@@ -15406,8 +15406,13 @@
     {
      "label": "Chant along",
      "success": {
-      "text": "They let you pass, laughing.",
+      "text": "They let you pass, laughing, and a fan presses Marnie's League Card into your hand.",
       "effects": [
+       {
+        "kind": "flag",
+        "key": "marnies-league-card",
+        "amount": 1
+       },
        {
         "kind": "attribute",
         "key": "charisma",

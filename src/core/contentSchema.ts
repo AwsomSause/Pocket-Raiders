@@ -2790,6 +2790,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** A conscious party Pokémon knows a damaging move of this type. */
   z.object({ kind: z.literal('partyMoveType'), type: TypeNameSchema }),
   /** Your highest-level Pokémon is at least `over` levels above this stage's opening level (Squirtle Squad's Blastoise). */
+  /** Nuzlocke memorial (Pokémon Tower's Memorial Wall): at least this many Pokémon have fallen for good this run. */
+  z.object({ kind: z.literal('memorial'), atLeast: z.number().int().min(1).max(99) }),
   z.object({ kind: z.literal('partyLevelOver'), over: z.number().int(), /** True: your Pokémon are NOT that strong. */ absent: z.boolean().optional() }),
   /** A party member knows a move with this flag (sound, wind, ...). */
   z.object({ kind: z.literal('partyMoveFlag'), flag: z.enum(['sound', 'wind', 'punch', 'bite', 'pulse', 'bullet', 'slicing', 'powder']) }),
@@ -2976,6 +2978,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** `who` lead hits only the first Pokémon able to fight; `except` spares Pokémon of these types (Beta 0.6 biome hazards). */
   z.object({ kind: z.literal('damage'), share: z.number().min(0).max(1), who: z.enum(['party', 'lead']).default('party'), except: z.array(TypeNameSchema).max(4).default([]) }),
   z.object({ kind: z.literal('cure') }),
+  /** Restores every move's PP for the whole party (Erika's tea). */
+  z.object({ kind: z.literal('restorePp') }),
   z.object({ kind: z.literal('status'), status: z.enum(['poison', 'burn', 'paralysis', 'sleep']), who: z.enum(['party', 'lead']).default('party'), except: z.array(TypeNameSchema).max(4).default([]) }),
   z.object({ kind: z.literal('friendship'), amount: z.number().int(), who: z.enum(['lead', 'party']).default('party') }),
   z.object({ kind: z.literal('attribute'), key: AttributeKeySchema, amount: z.number().int() }),
@@ -3161,6 +3165,8 @@ export const EventRuleSchema = z.object({
   pinchHitter: z.boolean().optional(),
   /** Blackout's Seal (Beta 0.6 E4): no voluntary switching on the first turn of the fight. */
   noSwitchFirstTurn: z.boolean().optional(),
+  /** Beta 0.6 Foresight Tax: the foe sees your first chosen move each turn until one of its Pokémon faints. */
+  foresight: z.boolean().optional(),
   /** Front (Beta 0.6): each Pokémon fights only the foe in its own lane (spot n faces spot n); no moves reach other lanes or allies. */
   lanes: z.boolean().optional(),
   /** Blackout's Seal: moves of this type hit this many percent harder, for both sides. */

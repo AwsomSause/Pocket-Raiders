@@ -34,6 +34,8 @@ export interface MinigameView {
   cols: number;
   cells: Cell[];
   done: boolean;
+  /** Species ids drawn as a row of small icons above the game (performers, patients). Screens skip ones they cannot find. */
+  portraits?: string[];
 }
 
 export interface BaseState {

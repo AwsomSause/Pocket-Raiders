@@ -101,16 +101,19 @@ Pallet Town and all of its spaces were removed at your request. The number is ke
 - **Beats:** the Old Man, half-asleep outside the Poké Mart, demonstrates catching. He catches a Weedle for you (a guaranteed catch tutorial).
 - **Reward:** *Catching Charm* (first Poké Ball thrown this run has a **+25%** catch bonus), plus **5** Poké Balls.
 - **Added:** *The Coffee Joke.* **20%** he has not had his coffee and the lesson becomes a comic fight against his Weedle at level 3. Win and you keep the Weedle (which becomes the seed for §5.4 if you choose to carry it, flag `kanto.weedle.seed`).
+- **Flags:** `kanto.weedle.seed`
 
 ### 2.3 Route 22 — The Rival (`cs.kanto.viridian.route22`)
 - **Beats:** the rival blocks the road to the League gate. The first rival fight of the run. **Added:** a guard at the League gate turns you back and says you need the Badges ("Come back when the whole region has heard of you").
 - **Level:** previous stage +2.
 - **Reward:** the first Rival Rescue Plan entry is created here (the rival flag is written even if you lose); *Rival Token* (1).
 - **At Stage 8:** the rival returns here for a **final rematch** (level previous stage +4), and the Roll spaces already completed are skipped.
+- **Flags:** `kanto.route22.fought`, `kanto.route22.rematch`
 
 ### 2.4 Viridian Mart — The Parcel (`cs.kanto.viridian.parcel`) — *Added*
 - **Beats:** the clerk gives you **Oak's Parcel** to drop off at the next Pokémon Center. Carrying it adds a free detour node; delivering earns the **Pokédex Upgrade** (a one-time scouting bonus: the next five wild encounters show their Ability).
 - **Odds:** the parcel is stolen by a Rattata or Meowth **25%** on the way (a Heat-neutral minor fight).
+- **Flags:** `kanto.parcel.upgrade`
 
 ### 2.5 Viridian Trainer School (`cs.kanto.viridian.school`) — *Added*
 - **Beats:** a classroom quiz: three questions about type matchups. Each right answer gives **+1** to a random stat on one Pokémon of your choice (max +3 total).
@@ -306,6 +309,7 @@ Pallet Town and all of its spaces were removed at your request. The number is ke
 
 ### 4.8 Cerulean Cave (`cs.kanto.cerulean.cave`) — *Added, locked*
 - **Appears:** only **after Indigo Plateau**. See §11.3 (Mewtwo).
+- **Flags:** `kanto.mewtwo.met`, `kanto.secret`
 
 ---
 

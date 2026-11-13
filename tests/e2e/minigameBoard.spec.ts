@@ -34,7 +34,7 @@ async function toMap(page: Page) {
     .toBe(false);
 }
 
-for (const id of ["sled-run", "psyduck-migration", "stealth-escape"]) {
+for (const id of ["sled-run", "psyduck-migration", "stealth-escape", "orchestra-pit", "triage-beds"]) {
   test(`${id} draws its picture board and still plays with the controls`, async ({
     page,
   }) => {

@@ -12,6 +12,7 @@
 //  - Recurring villains: the executive and leader remember every meeting. Their teams grow and their lines change
 //    (first meeting, after you beat them, after they beat you, grudging respect).
 
+import { beginClimax } from '../arc/climaxExtended';
 import { standingLine } from '../arc/standWithExtended';
 import { impoundFor } from '../raid/storyRaids';
 import type { Content, EventBattle, EventCondition, EventEffect } from '../contentSchema';
@@ -125,7 +126,7 @@ export function applyEvilEffect(content: Content, run: RunState, e: EvilEffect):
   if (e.beat && s.beat < 7) {
     s.beat += 1;
     // E2: the real plan comes out (beat 6): the climax is now scheduled, so the region's track rises once.
-    if (s.beat === 6) trackOnClimax(run, run.regionIndex);
+    if (s.beat === 6) { trackOnClimax(run, run.regionIndex); beginClimax(run); }
     const cfg = evilConfig(content, run);
     // Story Run (Appendix S.7): after beat 6 the hideout waits for League entry (core/campaign/storyDirector.ts places it).
     s.nextAt = s.beat === 6 && cfg.hideoutAtLeague ? HIDEOUT_AT_LEAGUE : s.stages + cfg.beatEvery;

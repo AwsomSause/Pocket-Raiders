@@ -49,7 +49,7 @@ const pit: MinigameModule<PitState> = {
         cells.push({ id: 'x', label: n ? (n.len > 1 ? '║' : '●') : row === LINE ? '▬' : ' ', tone: held ? 'good' : n ? 'info' : row === LINE ? 'hot' : 'dim', disabled: true, board: true, ...(n && n.len === 1 ? { art: 'ball.pb' } : {}) });
       }
     for (const [i, k] of KEYS.entries()) cells.push({ id: String(i), label: k, tone: 'hot', disabled: s.done });
-    return { hud: [`Score: ${s.score}`, `Combo: ${s.combo}`, `Applause: ${s.applause}/${s.maxApplause}`, s.msg], prompt: 'Tap D F J K as each note crosses the line. Tap again to let go of a long note. Misses quiet the crowd.', cols: 4, cells, done: s.done };
+    return { hud: [`Score: ${s.score}`, `Combo: ${s.combo}`, `Applause: ${s.applause}/${s.maxApplause}`, s.msg], prompt: 'Tap D F J K as each note crosses the line. Tap again to let go of a long note. Misses quiet the crowd.', cols: 4, cells, done: s.done, portraits: ['loudred', 'jigglypuff', 'smoochum', 'chatot'] };
   },
   act(_c, s, id) {
     const lane = Number(id);

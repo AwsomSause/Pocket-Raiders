@@ -7,6 +7,7 @@
 // pillar with a bigger token, and the champion stands in turning gold rays
 // (Visual Bible: "a deliberate escalation from normal stages").
 
+import { climaxTick } from '../core/arc/climaxExtended';
 import { nodeHint } from '../core/worldSim/tick';
 import { mapOmens, type Omen, type OmenTier } from '../core/omens';
 import { wealthTaxNotice } from '../core/priceSwing';
@@ -37,6 +38,7 @@ import { boxCapacity } from '../core/trainerPerks';
 import { hiddenItemNode, mapItemSummary, repelActive } from '../core/mapItems';
 import { expeditionPreview } from '../core/expedition/flow';
 import { minigamePreview } from '../core/minigame/flow';
+import { arcadeCabinets, canChooseCabinet } from '../core/minigame/arcade';
 import { ROUTE_LABELS, routeKind } from '../core/campaign/director';
 import { anomalyLine, stageAnomaly } from '../core/story/anomaly';
 import { StopCard, type StopLook } from '../ui/stopLooks';
@@ -262,6 +264,9 @@ export class MapScene extends Phaser.Scene {
       });
     }
     // Wide formats (Breather and the rest): a running format shows its plain screen on top of the map.
+    if (run.phase === 'map' && climaxTick(session.content, run)) session.saveRunNow();
+    // The director launched a climax battle: the battle screen takes over.
+    if (run.phase === 'battle') { this.time.delayedCall(0, () => this.scene.start('Battle')); return; }
     if (pendingFormat(run)) {
       this.time.delayedCall(0, () => {
         this.scene.launch(sceneForFormat(run), { from: 'Map' });
@@ -1351,8 +1356,40 @@ export class MapScene extends Phaser.Scene {
   }
 
   /** A minigame stop: shows the rules and the attempts left, and the pick of a difficulty starts the game. */
-  private openMinigame(sideId: string): void {
+  /** Rocket Row Arcade: pick a cabinet (Pinball, Whack-a-Diglett, Claw Machine), then the usual difficulty picker. */
+  private openArcade(sideId: string): void {
     const { session } = services();
+    const cabinets = arcadeCabinets(session.content, session.run!);
+    const picker: Picker = new Picker(this, {
+      title: 'Rocket Row Arcade - pick a cabinet',
+      columns: 1,
+      rowHeight: 90,
+      rows: cabinets.map((c) => ({
+        problem: null,
+        hint: c.blurb,
+        draw: (scene, box, w) => {
+          box.add(scene.add.text(16, 8, c.name.replace(/^Arcade: /, ''), textStyle(24)));
+          box.add(scene.add.text(16, 44, `${c.blurb}  ·  Best: ${c.best}`, textStyle(15, '#ffd0a0', { wordWrap: { width: w - 32 } })));
+        },
+      })),
+      onSelect: (i) => {
+        picker.close();
+        this.picker = null;
+        playSfx(this, 'ui.select');
+        session.chooseArcadeCabinet(sideId, cabinets[i]!.id);
+        this.openMinigame(sideId, true);
+      },
+      onBack: () => {
+        picker.close();
+        this.picker = null;
+      },
+    });
+    this.picker = picker;
+  }
+
+  private openMinigame(sideId: string, cabinetChosen = false): void {
+    const { session } = services();
+    if (!cabinetChosen && canChooseCabinet(session.run!, sideId)) return this.openArcade(sideId);
     const pv = minigamePreview(session.content, session.run!, sideId, session.settings.expansion.minigamesDifficulty);
     const picker: Picker = new Picker(this, {
       title: `${pv.name} - ${pv.attemptsLeft} attempt${pv.attemptsLeft === 1 ? '' : 's'} left`,

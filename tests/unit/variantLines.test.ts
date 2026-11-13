@@ -5,11 +5,11 @@ import { createBattle, resolveTurn, type BattleContext } from '../../src/core/ba
 import { calcStats, createPokemon } from '../../src/core/pokemon';
 import { hashSeed, Rng } from '../../src/core/rng';
 import { BattleStateSchema } from '../../src/core/state';
-import { assignVariant, UNWIRED_LINES, variantLosesTurn, variantNeverMisses, variantOnEntry, variantSnagRefuses, WIRED_LINES, type Variants } from '../../src/core/expansion/variantLines';
+import { assignVariant, type AssignOptions, UNWIRED_LINES, variantLosesTurn, variantNeverMisses, variantOnEntry, variantSnagRefuses, WIRED_LINES, type Variants } from '../../src/core/expansion/variantLines';
 import { plainLimit, simLimit, simulateVariantLine } from '../../src/quality/variantSim';
 import { content } from './helpers';
 
-function duel(opts: { line?: string; kind?: 'wild' | 'trainer'; pMove?: string; weather?: 'rain' | 'sun'; second?: boolean; uid?: string; eMove?: string; opts?: { crowd?: boolean; marnie?: boolean } } = {}) {
+function duel(opts: { line?: string; kind?: 'wild' | 'trainer'; pMove?: string; weather?: 'rain' | 'sun'; second?: boolean; uid?: string; eMove?: string; opts?: AssignOptions } = {}) {
   const player = createPokemon(content, 'machop', 50, 'p');
   const enemy = createPokemon(content, 'snorlax', 50, opts.uid ?? 'e');
   const enemies = [enemy, ...(opts.second ? [createPokemon(content, 'rattata', 10, 'e2')] : [])];
@@ -27,10 +27,12 @@ const lost = (es: Events, side: 'player' | 'enemy') => es.reduce((n, e) => (e.ty
 const texts = (es: Events) => es.filter((e) => e.type === 'raid').map((e) => (e as { text: string }).text);
 
 describe('variant line registry', () => {
-  it('wires eleven lines, lists the other three, and refuses to assign an unwired one', () => {
-    expect(WIRED_LINES).toHaveLength(11);
+  it('wires all fourteen lines and refuses to assign a line that does not exist', () => {
+    expect(WIRED_LINES).toHaveLength(14);
     expect(WIRED_LINES.length + UNWIRED_LINES.length).toBe(14);
-    expect(() => assignVariant({}, 'x', 'couture')).toThrow('not wired');
+    expect(() => assignVariant({}, 'x', 'nope')).toThrow('not wired');
+    expect(() => assignVariant({}, 'x', 'couture')).toThrow('accessory');
+    expect(() => assignVariant({}, 'x', 'couture', { accessory: 'rocky-helmet' })).toThrow('accessory');
   });
   it('with no variants the battle is unchanged and the saved battle has an empty map', () => {
     const a = duel(), b = duel();
@@ -306,6 +308,59 @@ describe('Team Yell: Loud', () => {
     expect(texts(first)).toContain('It has remembered who it is cheering for.');
     expect(lost(first, 'player')).toBe(0);
     expect(lost(d.go(), 'player')).toBeGreaterThan(0);
+  });
+});
+
+describe('Couture, Overcharged, Tuned', () => {
+  it('Couture puts its accessory on at the start, and Knock Off takes it first, once', () => {
+    const d = duel({ line: 'couture', opts: { accessory: 'focus-sash' }, pMove: 'knock-off' });
+    const first = d.go();
+    expect(texts(first).some((t) => t.startsWith('It wears'))).toBe(true);
+    expect(texts(first)).toContain('Its accessory is knocked askew.');
+    expect(d.enemy.held?.['focus-sash'] ?? 0).toBe(0);
+    expect(texts(d.go())).not.toContain('Its accessory is knocked askew.');
+  });
+  it('Couture keeps the accessory as an ordinary item if nothing takes it', () => {
+    const d = duel({ line: 'couture', opts: { accessory: 'focus-sash' } });
+    d.go();
+    expect(d.enemy.held?.['focus-sash']).toBe(1);
+    d.go();
+    expect(d.enemy.held?.['focus-sash']).toBe(1);
+  });
+  it('Overcharged Dynamaxes by itself on its second turn out, for one turn, then cannot act', () => {
+    const d = duel({ line: 'overcharged', eMove: 'tackle', pMove: 'splash' });
+    d.player.hp = 9999;
+    const t1 = d.go();
+    expect(d.enemy.dynamaxed).toBeUndefined();
+    expect(lost(t1, 'player')).toBeGreaterThan(0);
+    const t2 = d.go();
+    expect(t2.some((e) => e.type === 'transform' && e.kind === 'dynamax')).toBe(true);
+    expect(d.enemy.dynamaxed).toBeUndefined(); // it ends with that turn
+    const t3 = d.go();
+    expect(texts(t3)).toContain('It is paying for that.');
+    expect(lost(t3, 'player')).toBe(0);
+    expect(lost(d.go(), 'player')).toBeGreaterThan(0);
+    expect(d.battle.transform.used.enemy).not.toContain('dynamax');
+  });
+  it('Tuned Terastallizes by itself for 2 turns, then stalls at -1 Speed', () => {
+    const d = duel({ line: 'tuned', eMove: 'tackle', pMove: 'splash' });
+    d.player.hp = 9999;
+    d.go();
+    const t2 = d.go();
+    expect(t2.some((e) => e.type === 'transform' && e.kind === 'tera')).toBe(true);
+    expect(d.battle.transform.mechanics[d.enemy.uid]).toBe('tera');
+    const t3 = d.go();
+    expect(d.battle.transform.mechanics[d.enemy.uid]).toBeUndefined();
+    expect(texts(t3)).toContain("It's borrowed. It has to give it back.");
+    expect(d.battle.enemyStages.spe).toBe(-1);
+    const t4 = d.go();
+    expect(t4.some((e) => e.type === 'transform')).toBe(false); // once per battle
+  });
+  it('the accessory and counters survive a save', () => {
+    const d = duel({ line: 'couture', opts: { accessory: 'focus-sash' } });
+    d.go();
+    const back = BattleStateSchema.parse(JSON.parse(JSON.stringify(d.battle)));
+    expect(back.extra.variants[d.enemy.uid]?.accessory).toBe('focus-sash');
   });
 });
 
