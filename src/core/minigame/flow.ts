@@ -18,17 +18,17 @@ export function getMinigame(content: Content, id: string): MinigameDef {
 
 export interface MinigamePreview {
   id: string; name: string; blurb: string; instructions: string; scoring: string; failure: string; replay: string;
-  attemptsLeft: number; tiers: { label: string; index: number }[]; best: Medal; medals: string;
+  attemptsLeft: number; recommendedTier: number; tiers: { label: string; index: number }[]; best: Medal; medals: string;
 }
 
-export function minigamePreview(content: Content, run: RunState, sideId: string): MinigamePreview {
+export function minigamePreview(content: Content, run: RunState, sideId: string, difficulty: 'easy' | 'normal' | 'hard' = 'normal'): MinigamePreview {
   const side = findStop(run, sideId);
   const def = getMinigame(content, side.minigameId!);
   const used = run.minigames.attempts[sideId] ?? 0;
   const m = def.medals;
   return {
     id: def.id, name: def.name, blurb: def.blurb, instructions: def.instructions, scoring: def.scoringRules, failure: def.failureOutcome, replay: def.replayRules,
-    attemptsLeft: Math.max(0, def.attemptLimit - used), tiers: def.difficultyTiers.map((t, index) => ({ label: t.label, index })), best: run.minigames.best[def.id] ?? 'none',
+    attemptsLeft: Math.max(0, def.attemptLimit - used), recommendedTier: Math.min(def.difficultyTiers.length - 1, { easy: 0, normal: 1, hard: 3 }[difficulty]), tiers: def.difficultyTiers.map((t, index) => ({ label: t.label, index })), best: run.minigames.best[def.id] ?? 'none',
     medals: `Bronze ${Math.round(m.bronze * 100)}% · Silver ${Math.round(m.silver * 100)}% · Gold ${Math.round(m.gold * 100)}%`,
   };
 }
@@ -42,12 +42,12 @@ function findStop(run: RunState, sideId: string) {
   return side;
 }
 
-/** Starts an attempt at difficulty tier 0–2. Walking away mid-game counts as an attempt and pays nothing. */
+/** Starts an attempt at difficulty tier (0 Easy to 2 Hard; 3 Master where the game has it). Walking away mid-game counts as an attempt and pays nothing. */
 export function beginMinigame(content: Content, current: RunState, sideId: string, tier: number): RunState {
   if (current.phase !== 'map') throw new Error('Minigames start from the map');
   const side = findStop(current, sideId);
   const def = getMinigame(content, side.minigameId!);
-  if (tier < 0 || tier > 2) throw new Error('Unknown difficulty');
+  if (!Number.isInteger(tier) || tier < 0 || tier >= def.difficultyTiers.length) throw new Error('Unknown difficulty');
   const used = current.minigames.attempts[sideId] ?? 0;
   if (side.used || used >= def.attemptLimit) throw new Error('No attempts left at this stop');
   const run = structuredClone(current);

@@ -92,7 +92,7 @@ describe('minigame payouts', () => {
     it('a random player earns little and is not handed gold on most runs', () => {
       const eco = content.minigames.economy;
       const def = content.minigames.games.find((g) => g.id === id)!;
-      for (let tier = 0; tier < 3; tier++) {
+      for (let tier = 0; tier < def.difficultyTiers.length; tier++) {
         const medals = { gold: 0, silver: 0, bronze: 0, none: 0 };
         let money = 0;
         for (let i = 0; i < 30; i++) {
