@@ -127,7 +127,17 @@ export const PokemonInstanceSchema = z.object({
   /** In battle only: Overcharged (Failure Will (NOT) Be Tolerated, core/battle/pokemonMoments.ts): all stats doubled, HP x1.5, moves on a one-turn cooldown. */
   overcharged: z.literal(true).optional(),
   /** Shadow Pokémon (catalog #76-77, core/shadow.ts): the Heart Gauge, 100 (sealed) down to 0 (purified). */
-  shadow: z.object({ heart: z.number().int().min(1).max(100) }).optional(),
+  shadow: z.object({
+    heart: z.number().int().min(1).max(100),
+    /** Shadow II (core/shadow2): the id of the Named Shadow this is (`ss.*`), whose purification key sets it free. */
+    named: z.string().optional(),
+    /** Shadow II: the key became impossible in this run, so it is a Common Shadow from now on. */
+    keyGone: z.boolean().optional(),
+    /** Shadow II: how many of its key's three hints the player has been given (0 to 3). */
+    hints: z.number().int().min(0).max(3).optional(),
+  }).optional(),
+  /** Shadow II heart scars (core/shadow2/scars.ts): small marks a purified Pokémon keeps, at most two. */
+  scars: z.array(z.string()).max(2).optional(),
   /** Blissful Pokémon (core/shadowWorld/blissful.ts): touched by a benevolent force. `aura` picks its look (bloom, glow, chime). */
   blissful: z.object({ aura: z.string().min(1) }).optional(),
   /** Care & party life (core/care): mood, fatigue, journal counters, nickname, talent, training. */

@@ -1,6 +1,9 @@
 // The "Pokémon Acquired" panel text (Untitled document Phase B). Pure: no UI, no RNG.
 
 import { heartStage, temperamentOf } from './shadow';
+import { activeKey, scarName, summaryHints } from './shadow2/keys';
+import { shadowTierOf } from './shadow2/tiers';
+import { keyOf } from './shadow2/data';
 import { typeEffectiveness } from './battle/damage';
 import { TYPE_NAMES, type Content } from './contentSchema';
 import { abilityOf, calcStats, getSpecies, isUsableMove } from './pokemon';
@@ -87,8 +90,14 @@ export function catchSummary(content: Content, mon: PokemonInstance, compareTo?:
       ];
   if (mon.shadow) {
     const t = temperamentOf(content, mon);
-    lines.splice(1, 0, `SHADOW · ${heartStage(content, mon.shadow.heart)} · Heart Gauge ${mon.shadow.heart}/100 · ${t.label}: ${t.story}`);
+    const tier = shadowTierOf(mon);
+    const extra: string[] = [];
+    const key = activeKey(mon);
+    if (key) extra.push(`Key (${key.type}): ${summaryHints(mon).join(' / ')}`);
+    else if (mon.shadow.named && keyOf(mon.shadow.named) && mon.shadow.keyGone) extra.push('What it was waiting for is gone. It will need a longer road.');
+    lines.splice(1, 0, `SHADOW · ${tier?.name ?? ''} (tier ${tier?.tier ?? 0}) · ${heartStage(content, mon.shadow.heart)} · Corruption ${mon.shadow.heart}/100 · ${t.label}: ${t.story}`, ...extra);
   }
+  if (mon.scars?.length) lines.splice(1, 0, `HEART SCARS · ${mon.scars.map(scarName).join(', ')}`);
   if (mon.blissful) lines.splice(1, 0, `BLISSFUL · ${content.shadowWorld.auras.find((a) => a.id === mon.blissful!.aura)?.label ?? 'Aura'} aura: mends the party a little after battle and calms Shadow Pokémon at rest`);
   if (compareTo) {
     const other = calcStats(content, compareTo);
