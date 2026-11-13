@@ -1,0 +1,72 @@
+[
+ {
+  "rule": "Patchwork",
+  "text": "(Rocket Remnants) a Patchwork Pokémon carries one gadget, chosen at random from three when it enters and shown to the player: a net (the target's Speed −2 for 2 turns), a smoke ball (both sides' accuracy −1 for 2 turns), or a spring (it is launched back to its Ball and the next Pokémon comes in). The gadget goes off once, on the turn the Pokémon would first be hit (announced: \"Something goes sproing.\").",
+  "region": "any"
+ },
+ {
+  "rule": "Snagged",
+  "text": "(Team Snag'em) a Snagged Pokémon was taken from its trainer and remembers. At the end of each turn there is a chance it refuses its snagger and skips its next turn: 20% on the first turn, +10% each turn after (announced: \"It is looking for someone who isn't here.\"). Returned to its real trainer, it loses the rule.",
+  "region": "any"
+ },
+ {
+  "rule": "Tagged",
+  "text": "a Black-Label Pokémon cannot be forced to switch out, and the first hit it takes in each battle does 20% less damage (announced: \"The tag holds it in place.\"). Knock Off, Thief or winning the battle removes the tag; a caught or freed Black-Label Pokémon loses the rule and keeps its signature trait.",
+  "region": "kanto"
+ },
+ {
+  "rule": "Dark Ball",
+  "text": "a Dark Ball Pokémon enters every battle with +1 Attack and +1 Special Attack, and loses 1/16 of its HP at the end of each turn (announced: \"The Ball burns.\"). The rule ends when its trainer is beaten. A Dark Ball Pokémon taken into custody cracks its Ball and keeps only its signature trait.",
+  "region": "johto"
+ },
+ {
+  "rule": "Tidebound",
+  "text": "(Team Aqua) in rain, a Tidebound Pokémon enters with +1 Speed and its Water moves cannot miss; in harsh sun it has neither (announced: \"The tide is with it.\" / \"The tide is out.\").",
+  "region": "hoenn"
+ },
+ {
+  "rule": "Cinderborn",
+  "text": "(Team Magma) in harsh sun, a Cinderborn Pokémon enters with +1 Defense and its Fire and Ground moves cannot miss; in rain it has neither (announced: \"The ground is warm.\" / \"The ground is cold.\").",
+  "region": "hoenn"
+ },
+ {
+  "rule": "Spiritless",
+  "text": "a Spiritless Pokémon's stats cannot be lowered by the foe, cannot be raised by anyone, and it cannot flinch, be taunted or be infatuated (announced: \"It feels nothing about that.\"). The rule is removed by purifying it like a Tier 1 Shadow, or by returning Mesprit to Lake Verity, which restores every Spiritless Pokémon in the region at once.",
+  "region": "sinnoh"
+ },
+ {
+  "rule": "Overclocked",
+  "text": "an Overclocked Pokémon's first move each time it enters has +1 priority. At the end of its third consecutive turn on the field it overheats: −1 to every stat until it switches out (announced: \"The machine has asked too much.\").",
+  "region": "unova"
+ },
+ {
+  "rule": "Couture",
+  "text": "a Couture Pokémon carries a second held item, its accessory, shown to the player at the start of battle. Knock Off, Thief and similar moves remove the accessory first (announced: \"Its accessory is knocked askew.\"). A Couture Pokémon that is caught or freed keeps the accessory as an ordinary item.",
+  "region": "kalos"
+ },
+ {
+  "rule": "Tagged-Up",
+  "text": "(Team Skull) when a Tagged-Up Pokémon enters it sprays a tag on the field. Until it faints, the first time each foe switches in it loses 1/16 HP and is \"called out\" (its name appears in the tag; purely for show, and the Grunts love it).",
+  "region": "alola"
+ },
+ {
+  "rule": "Preserved",
+  "text": "(Aether Foundation) a Preserved Pokémon has been kept cold. It enters with −1 Speed, cannot be given a status condition, and takes 25% less damage from the first hit after it enters (announced: \"It was kept very carefully.\").",
+  "region": "alola"
+ },
+ {
+  "rule": "Overcharged",
+  "text": "(Macro Cosmos) once per battle an Overcharged Pokémon may Dynamax for one turn with no Power Spot. On the turn after, it cannot act (announced: \"It is paying for that.\").",
+  "region": "galar"
+ },
+ {
+  "rule": "Loud",
+  "text": "(Team Yell) a Loud Pokémon's sound-based moves have +20% power, and it gains +1 Speed each time a Yell Grunt in the stands cheers (once per turn, if any are watching). If the player holds Marnie's League Card, every Loud Pokémon loses its first turn to embarrassment (announced: \"It has remembered who it is cheering for.\").",
+  "region": "galar"
+ },
+ {
+  "rule": "Tuned",
+  "text": "once per battle a Tuned Pokémon may Terastallize into its squad's type for 2 turns without a charged Tera Orb. When it ends, the Pokémon stalls: −1 Speed for the rest of the battle (announced: \"It's borrowed. It has to give it back.\").",
+  "region": "paldea"
+ }
+]

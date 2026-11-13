@@ -1,0 +1,962 @@
+[
+ {
+  "id": "climax.any",
+  "region": "any",
+  "title": "Citadark",
+  "intro": "This is the climax of the cross-region arc (docs/GRAND_ARC.md). It is optional, it is offered after the run's last regional climax, and it needs three or more Data ROMs. Decision D1 is adjusted for it, in the player's favor: losing here does not undo a won run. The run is recorded as won, finale lost, and XD001 enters the Region of Doom.",
+  "phases": [
+   {
+    "phase": "0",
+    "name": "The Nine Locks",
+    "format": "—",
+    "source": "new",
+    "battles": "0",
+    "heading": "Phase 0 — The Nine Locks"
+   },
+   {
+    "phase": "0b",
+    "name": "The Alliance",
+    "format": "Siege Map",
+    "source": "new",
+    "battles": "0",
+    "heading": "Phase 0b — The Alliance (Siege Map)"
+   },
+   {
+    "phase": "1",
+    "name": "The Crossing",
+    "format": "Convoy",
+    "source": "new",
+    "battles": "2–3",
+    "heading": "Phase 1 — The Crossing (Convoy)"
+   },
+   {
+    "phase": "2",
+    "name": "The Climb",
+    "format": "Gauntlet",
+    "source": "new",
+    "battles": "4–6",
+    "heading": "Phase 2 — The Climb"
+   },
+   {
+    "phase": "3",
+    "name": "The Admins",
+    "format": "Duels",
+    "source": "new",
+    "battles": "2–5",
+    "heading": "Phase 3 — The Admins"
+   },
+   {
+    "phase": "—",
+    "name": "Breather",
+    "format": "Rest",
+    "source": "new",
+    "battles": "0",
+    "heading": "Breather"
+   },
+   {
+    "phase": "4",
+    "name": "The Reservoir",
+    "format": "Set piece",
+    "source": "new",
+    "battles": "2–4",
+    "heading": "Phase 4 — The Reservoir"
+   },
+   {
+    "phase": "5",
+    "name": "Grand Master Greevil",
+    "format": "Boss",
+    "source": "new",
+    "battles": "1",
+    "heading": "Phase 5 — Grand Master Greevil"
+   },
+   {
+    "phase": "6",
+    "name": "XD001",
+    "format": "Colossus",
+    "source": "new",
+    "battles": "0–1",
+    "heading": "Phase 6 — XD001"
+   },
+   {
+    "phase": "7",
+    "name": "The Rainbow Door",
+    "format": "Front",
+    "source": "new, conditional",
+    "battles": "0–4",
+    "heading": "Phase 7 — The Rainbow Door (Front, conditional)"
+   },
+   {
+    "phase": "8",
+    "name": "Resolution",
+    "format": "—",
+    "source": "new",
+    "battles": "0",
+    "heading": "Phase 8 — Resolution"
+   }
+  ]
+ },
+ {
+  "id": "climax.kanto",
+  "region": "kanto",
+  "title": "The Night of the Long Ledger",
+  "intro": "climax.cut = \"extended\". The base phases keep their rules; the table shows where the new ones sit. Checkpoints are after Phase 2 and at the Breather.",
+  "phases": [
+   {
+    "phase": "0",
+    "name": "Broadcast and Choice",
+    "format": "—",
+    "source": "base §10.1–10.3",
+    "battles": "0",
+    "heading": null
+   },
+   {
+    "phase": "0b",
+    "name": "The Sealed City",
+    "format": "Siege Map",
+    "source": "new",
+    "battles": "0",
+    "heading": "Phase 0b — The Sealed City (Siege Map)"
+   },
+   {
+    "phase": "1",
+    "name": "The Streets",
+    "format": "Blackout",
+    "source": "new",
+    "battles": "2–3",
+    "heading": "Phase 1 — The Streets (Blackout)"
+   },
+   {
+    "phase": "2",
+    "name": "The Climb",
+    "format": "Gauntlet",
+    "source": "base Phase 1, extended",
+    "battles": "4–6",
+    "heading": "Phase 2 — The Climb (extended)"
+   },
+   {
+    "phase": "3",
+    "name": "The Officers",
+    "format": "Duels",
+    "source": "base Phase 2, extended",
+    "battles": "2–3",
+    "heading": "Phase 3 — The Officers (extended)"
+   },
+   {
+    "phase": "—",
+    "name": "Breather",
+    "format": "Rest",
+    "source": "new",
+    "battles": "0",
+    "heading": "Breather"
+   },
+   {
+    "phase": "4",
+    "name": "Saffron Sealed",
+    "format": "Set piece",
+    "source": "base Phase 3, extended",
+    "battles": "2–4",
+    "heading": "Phase 4 — Saffron Sealed (extended)"
+   },
+   {
+    "phase": "5",
+    "name": "Giovanni",
+    "format": "Boss",
+    "source": "base Phase 4, extended",
+    "battles": "1",
+    "heading": "Phase 5 — Giovanni (extended)"
+   },
+   {
+    "phase": "6",
+    "name": "The Roof: Project M2",
+    "format": "Colossus",
+    "source": "new",
+    "battles": "1",
+    "heading": "Phase 6 — The Roof: Project M2 (Colossus)"
+   },
+   {
+    "phase": "7",
+    "name": "The Long Drive",
+    "format": "Convoy",
+    "source": "new, optional",
+    "battles": "2–3",
+    "heading": "Phase 7 — The Long Drive (Convoy, optional)"
+   },
+   {
+    "phase": "8",
+    "name": "Resolution",
+    "format": "—",
+    "source": "base §10.9, extended",
+    "battles": "0",
+    "heading": "Phase 8 — Resolution (extended)"
+   }
+  ]
+ },
+ {
+  "id": "climax.johto",
+  "region": "johto",
+  "title": "Dead Air",
+  "intro": "Checkpoints are after Phase 2 and at the Breather.",
+  "phases": [
+   {
+    "phase": "0",
+    "name": "Broadcast and Choice",
+    "format": "—",
+    "source": "base §10.1–10.3",
+    "battles": "0",
+    "heading": null
+   },
+   {
+    "phase": "0b",
+    "name": "Goldenrod Under Static",
+    "format": "Siege Map",
+    "source": "new",
+    "battles": "0",
+    "heading": "Phase 0b — Goldenrod Under Static (Siege Map)"
+   },
+   {
+    "phase": "1",
+    "name": "The Underground",
+    "format": "Blackout",
+    "source": "new",
+    "battles": "2–3",
+    "heading": "Phase 1 — The Underground (Blackout)"
+   },
+   {
+    "phase": "2",
+    "name": "The Tower Climb",
+    "format": "Gauntlet",
+    "source": "base Phase 1, extended",
+    "battles": "4–6",
+    "heading": "Phase 2 — The Tower Climb (extended)"
+   },
+   {
+    "phase": "3",
+    "name": "The Executives",
+    "format": "Duels",
+    "source": "base Phase 2, extended",
+    "battles": "2–4",
+    "heading": "Phase 3 — The Executives (extended)"
+   },
+   {
+    "phase": "—",
+    "name": "Breather",
+    "format": "Rest",
+    "source": "new",
+    "battles": "0",
+    "heading": "Breather"
+   },
+   {
+    "phase": "4",
+    "name": "The Broadcast",
+    "format": "Set piece",
+    "source": "base Phase 3, extended",
+    "battles": "3–5",
+    "heading": "Phase 4 — The Broadcast (extended)"
+   },
+   {
+    "phase": "5",
+    "name": "Archer",
+    "format": "Boss",
+    "source": "base Phase 4, extended",
+    "battles": "1",
+    "heading": "Phase 5 — Archer (extended)"
+   },
+   {
+    "phase": "6",
+    "name": "The Welcome: Dark Celebi",
+    "format": "Colossus",
+    "source": "new",
+    "battles": "1",
+    "heading": "Phase 6 — The Welcome: Dark Celebi (Colossus)"
+   },
+   {
+    "phase": "7",
+    "name": "Tohjo Falls, Three Years Ago",
+    "format": "Duel",
+    "source": "new, optional",
+    "battles": "1",
+    "heading": "Phase 7 — Tohjo Falls, Three Years Ago (optional)"
+   },
+   {
+    "phase": "8",
+    "name": "Resolution",
+    "format": "—",
+    "source": "base §10.9, extended",
+    "battles": "0",
+    "heading": "Phase 8 — Resolution (extended)"
+   }
+  ]
+ },
+ {
+  "id": "climax.hoenn",
+  "region": "hoenn",
+  "title": "The Long Weather",
+  "intro": "Checkpoints are after Phase 2 and at the Breather.",
+  "phases": [
+   {
+    "phase": "0",
+    "name": "Broadcast and Choice",
+    "format": "—",
+    "source": "base §10.1–10.3",
+    "battles": "0",
+    "heading": null
+   },
+   {
+    "phase": "0b",
+    "name": "Sootopolis Divided",
+    "format": "Siege Map",
+    "source": "new",
+    "battles": "0",
+    "heading": "Phase 0b — Sootopolis Divided (Siege Map)"
+   },
+   {
+    "phase": "1",
+    "name": "The Crater Lake",
+    "format": "Blackout",
+    "source": "new",
+    "battles": "2–3",
+    "heading": "Phase 1 — The Crater Lake (Blackout)"
+   },
+   {
+    "phase": "2",
+    "name": "The Descent",
+    "format": "Gauntlet",
+    "source": "base Phase 1, extended",
+    "battles": "4–6",
+    "heading": "Phase 2 — The Descent (extended)"
+   },
+   {
+    "phase": "3",
+    "name": "The Admins",
+    "format": "Duels and Front",
+    "source": "base Phase 2, extended",
+    "battles": "2–4",
+    "heading": "Phase 3 — The Admins (extended)"
+   },
+   {
+    "phase": "—",
+    "name": "Breather",
+    "format": "Rest",
+    "source": "new",
+    "battles": "0",
+    "heading": "Breather"
+   },
+   {
+    "phase": "4",
+    "name": "The Orbs Resonate",
+    "format": "Set piece",
+    "source": "base Phase 3, extended",
+    "battles": "2–4",
+    "heading": "Phase 4 — The Orbs Resonate (extended)"
+   },
+   {
+    "phase": "5",
+    "name": "Archie and Maxie",
+    "format": "Boss",
+    "source": "base Phase 4, extended",
+    "battles": "1–2",
+    "heading": "Phase 5 — Archie and Maxie (extended)"
+   },
+   {
+    "phase": "6",
+    "name": "The Awakening: Abyssal and Cinderheart",
+    "format": "Colossus",
+    "source": "new",
+    "battles": "1",
+    "heading": "Phase 6 — The Awakening: Abyssal and Cinderheart (Colossus)"
+   },
+   {
+    "phase": "7",
+    "name": "The Sky Pillar",
+    "format": "Duel",
+    "source": "new, optional",
+    "battles": "1",
+    "heading": "Phase 7 — The Sky Pillar (optional)"
+   },
+   {
+    "phase": "8",
+    "name": "Resolution",
+    "format": "—",
+    "source": "base §10.9, extended",
+    "battles": "0",
+    "heading": "Phase 8 — Resolution (extended)"
+   }
+  ]
+ },
+ {
+  "id": "climax.sinnoh",
+  "region": "sinnoh",
+  "title": "Zero Hour",
+  "intro": "Checkpoints are after Phase 2 and at the Breather.",
+  "phases": [
+   {
+    "phase": "0",
+    "name": "Broadcast and Choice",
+    "format": "—",
+    "source": "base §10.1–10.3",
+    "battles": "0",
+    "heading": null
+   },
+   {
+    "phase": "0b",
+    "name": "The Mountain Under Siege",
+    "format": "Siege Map",
+    "source": "new",
+    "battles": "0",
+    "heading": "Phase 0b — The Mountain Under Siege (Siege Map)"
+   },
+   {
+    "phase": "1",
+    "name": "The White Tunnel",
+    "format": "Blackout",
+    "source": "new",
+    "battles": "2–3",
+    "heading": "Phase 1 — The White Tunnel (Blackout)"
+   },
+   {
+    "phase": "2",
+    "name": "The Ascent",
+    "format": "Gauntlet",
+    "source": "base Phase 1, extended",
+    "battles": "4–6",
+    "heading": "Phase 2 — The Ascent (extended)"
+   },
+   {
+    "phase": "3",
+    "name": "The Scientist and the Commanders",
+    "format": "Duels",
+    "source": "base Phase 2, extended",
+    "battles": "2–4",
+    "heading": "Phase 3 — The Scientist and the Commanders (extended)"
+   },
+   {
+    "phase": "—",
+    "name": "Breather",
+    "format": "Rest",
+    "source": "new",
+    "battles": "0",
+    "heading": "Breather"
+   },
+   {
+    "phase": "4",
+    "name": "The Red Chain",
+    "format": "Set piece",
+    "source": "base Phase 3, extended",
+    "battles": "2–4",
+    "heading": "Phase 4 — The Red Chain (extended)"
+   },
+   {
+    "phase": "5",
+    "name": "Cyrus",
+    "format": "Boss",
+    "source": "base Phase 4, extended",
+    "battles": "1",
+    "heading": "Phase 5 — Cyrus (extended)"
+   },
+   {
+    "phase": "6",
+    "name": "Zero Hour: Stillhour and Farshore",
+    "format": "Colossus",
+    "source": "new",
+    "battles": "1",
+    "heading": "Phase 6 — Zero Hour: Stillhour and Farshore (Colossus)"
+   },
+   {
+    "phase": "7",
+    "name": "The Distortion World",
+    "format": "Duel",
+    "source": "new, optional",
+    "battles": "1–2",
+    "heading": "Phase 7 — The Distortion World (optional)"
+   },
+   {
+    "phase": "8",
+    "name": "Resolution",
+    "format": "—",
+    "source": "base §10.9, extended",
+    "battles": "0",
+    "heading": "Phase 8 — Resolution (extended)"
+   }
+  ]
+ },
+ {
+  "id": "climax.unova",
+  "region": "unova",
+  "title": "The Long Winter",
+  "intro": "Checkpoints are after Phase 2 and at the Breather.",
+  "phases": [
+   {
+    "phase": "0",
+    "name": "Broadcast and Choice",
+    "format": "—",
+    "source": "base §10.1–10.3",
+    "battles": "0",
+    "heading": null
+   },
+   {
+    "phase": "0b",
+    "name": "The Five Bridges",
+    "format": "Siege Map",
+    "source": "new",
+    "battles": "0",
+    "heading": "Phase 0b — The Five Bridges (Siege Map)"
+   },
+   {
+    "phase": "1",
+    "name": "The Frost Line",
+    "format": "Blackout",
+    "source": "new",
+    "battles": "2–3",
+    "heading": "Phase 1 — The Frost Line (Blackout)"
+   },
+   {
+    "phase": "2",
+    "name": "The Approach",
+    "format": "Gauntlet",
+    "source": "base Phase 1, extended",
+    "battles": "4–6",
+    "heading": "Phase 2 — The Approach (extended)"
+   },
+   {
+    "phase": "3",
+    "name": "The Sage and the Scientist",
+    "format": "Duels",
+    "source": "base Phase 2, extended",
+    "battles": "2–4",
+    "heading": "Phase 3 — The Sage and the Scientist (extended)"
+   },
+   {
+    "phase": "—",
+    "name": "Breather",
+    "format": "Rest",
+    "source": "new",
+    "battles": "0",
+    "heading": "Breather"
+   },
+   {
+    "phase": "4",
+    "name": "The Frost Relays",
+    "format": "Set piece",
+    "source": "base Phase 3, extended",
+    "battles": "2–4",
+    "heading": "Phase 4 — The Frost Relays (extended)"
+   },
+   {
+    "phase": "5",
+    "name": "Ghetsis",
+    "format": "Boss",
+    "source": "base Phase 4, extended",
+    "battles": "1",
+    "heading": "Phase 5 — Ghetsis (extended)"
+   },
+   {
+    "phase": "6",
+    "name": "The Crown: Absolute",
+    "format": "Colossus",
+    "source": "new",
+    "battles": "1",
+    "heading": "Phase 6 — The Crown: Absolute (Colossus)"
+   },
+   {
+    "phase": "7",
+    "name": "The Thaw",
+    "format": "Convoy",
+    "source": "new, optional",
+    "battles": "2–3",
+    "heading": "Phase 7 — The Thaw (Convoy, optional)"
+   },
+   {
+    "phase": "8",
+    "name": "Resolution",
+    "format": "—",
+    "source": "base §10.9, extended",
+    "battles": "0",
+    "heading": "Phase 8 — Resolution (extended)"
+   }
+  ]
+ },
+ {
+  "id": "climax.kalos",
+  "region": "kalos",
+  "title": "The Last Beautiful Day",
+  "intro": "Checkpoints are after Phase 2 and at the Breather.",
+  "phases": [
+   {
+    "phase": "0",
+    "name": "Broadcast and Choice",
+    "format": "—",
+    "source": "base §10.1–10.3",
+    "battles": "0",
+    "heading": null
+   },
+   {
+    "phase": "0b",
+    "name": "Kalos on Every Screen",
+    "format": "Siege Map",
+    "source": "new",
+    "battles": "0",
+    "heading": "Phase 0b — Kalos on Every Screen (Siege Map)"
+   },
+   {
+    "phase": "1",
+    "name": "The Stones of Route 10",
+    "format": "Blackout",
+    "source": "new",
+    "battles": "2–3",
+    "heading": "Phase 1 — The Stones of Route 10 (Blackout)"
+   },
+   {
+    "phase": "2",
+    "name": "The Descent",
+    "format": "Gauntlet",
+    "source": "base Phase 1, extended",
+    "battles": "4–6",
+    "heading": "Phase 2 — The Descent (extended)"
+   },
+   {
+    "phase": "3",
+    "name": "The Scientist and the Broadcaster",
+    "format": "Duels and Front",
+    "source": "base Phase 2, extended",
+    "battles": "2–4",
+    "heading": "Phase 3 — The Scientist and the Broadcaster (extended)"
+   },
+   {
+    "phase": "—",
+    "name": "Breather",
+    "format": "Rest",
+    "source": "new",
+    "battles": "0",
+    "heading": "Breather"
+   },
+   {
+    "phase": "4",
+    "name": "The Conduits",
+    "format": "Set piece",
+    "source": "base Phase 3, extended",
+    "battles": "2–4",
+    "heading": "Phase 4 — The Conduits (extended)"
+   },
+   {
+    "phase": "5",
+    "name": "Lysandre",
+    "format": "Boss",
+    "source": "base Phase 4, extended",
+    "battles": "1",
+    "heading": "Phase 5 — Lysandre (extended)"
+   },
+   {
+    "phase": "6",
+    "name": "The Flower Opens: The Battery",
+    "format": "Colossus",
+    "source": "new",
+    "battles": "1",
+    "heading": "Phase 6 — The Flower Opens: The Battery (Colossus)"
+   },
+   {
+    "phase": "7",
+    "name": "The Rock Over Anistar",
+    "format": "Convoy",
+    "source": "new, conditional",
+    "battles": "2–3",
+    "heading": "Phase 7 — The Rock Over Anistar (Convoy, conditional)"
+   },
+   {
+    "phase": "8",
+    "name": "Resolution",
+    "format": "—",
+    "source": "base §10.9, extended",
+    "battles": "0",
+    "heading": "Phase 8 — Resolution (extended)"
+   }
+  ]
+ },
+ {
+  "id": "climax.alola",
+  "region": "alola",
+  "title": "What We Keep",
+  "intro": "Checkpoints are after Phase 2 and at the Breather.",
+  "phases": [
+   {
+    "phase": "0",
+    "name": "Broadcast and Choice",
+    "format": "—",
+    "source": "base §10.1–10.3",
+    "battles": "0",
+    "heading": null
+   },
+   {
+    "phase": "0b",
+    "name": "Four Islands",
+    "format": "Siege Map",
+    "source": "new",
+    "battles": "0",
+    "heading": "Phase 0b — Four Islands (Siege Map)"
+   },
+   {
+    "phase": "1",
+    "name": "The Crossing",
+    "format": "Blackout",
+    "source": "new",
+    "battles": "2–3",
+    "heading": "Phase 1 — The Crossing (Blackout)"
+   },
+   {
+    "phase": "2",
+    "name": "The Approach",
+    "format": "Gauntlet",
+    "source": "base Phase 1, extended",
+    "battles": "4–6",
+    "heading": "Phase 2 — The Approach (extended)"
+   },
+   {
+    "phase": "3",
+    "name": "The Boss and the Chief",
+    "format": "Duels",
+    "source": "base Phase 2, extended",
+    "battles": "1–3",
+    "heading": "Phase 3 — The Boss and the Chief (extended)"
+   },
+   {
+    "phase": "—",
+    "name": "Breather",
+    "format": "Rest",
+    "source": "new",
+    "battles": "0",
+    "heading": "Breather"
+   },
+   {
+    "phase": "4",
+    "name": "The Gate",
+    "format": "Set piece",
+    "source": "base Phase 3, extended",
+    "battles": "2–4",
+    "heading": "Phase 4 — The Gate (extended)"
+   },
+   {
+    "phase": "5",
+    "name": "Lusamine",
+    "format": "Boss",
+    "source": "base Phase 4, extended",
+    "battles": "1",
+    "heading": "Phase 5 — Lusamine (extended)"
+   },
+   {
+    "phase": "6",
+    "name": "The Deep: The Mother Beast",
+    "format": "Colossus",
+    "source": "new",
+    "battles": "1",
+    "heading": "Phase 6 — The Deep: The Mother Beast (Colossus)"
+   },
+   {
+    "phase": "7",
+    "name": "The Beasts Come Through",
+    "format": "Front",
+    "source": "new, conditional",
+    "battles": "2–4",
+    "heading": "Phase 7 — The Beasts Come Through (Front, conditional)"
+   },
+   {
+    "phase": "8",
+    "name": "Resolution",
+    "format": "—",
+    "source": "base §10.9, extended",
+    "battles": "0",
+    "heading": "Phase 8 — Resolution (extended)"
+   }
+  ]
+ },
+ {
+  "id": "climax.galar",
+  "region": "galar",
+  "title": "Launch Day",
+  "intro": "Checkpoints are after Phase 2 and at the Breather.",
+  "phases": [
+   {
+    "phase": "0",
+    "name": "Broadcast and Choice",
+    "format": "—",
+    "source": "base §10.1–10.3",
+    "battles": "0",
+    "heading": null
+   },
+   {
+    "phase": "0b",
+    "name": "Five Stadiums",
+    "format": "Siege Map",
+    "source": "new",
+    "battles": "0",
+    "heading": "Phase 0b — Five Stadiums (Siege Map)"
+   },
+   {
+    "phase": "1",
+    "name": "The Last Train to Wyndon",
+    "format": "Convoy",
+    "source": "new",
+    "battles": "2–3",
+    "heading": "Phase 1 — The Last Train to Wyndon (Convoy)"
+   },
+   {
+    "phase": "2",
+    "name": "The Tower Climb",
+    "format": "Gauntlet",
+    "source": "base Phase 1, extended",
+    "battles": "4–6",
+    "heading": "Phase 2 — The Tower Climb (extended)"
+   },
+   {
+    "phase": "3",
+    "name": "The Secretary",
+    "format": "Duels",
+    "source": "base Phase 2, extended",
+    "battles": "2–4",
+    "heading": "Phase 3 — The Secretary (extended)"
+   },
+   {
+    "phase": "—",
+    "name": "Breather",
+    "format": "Rest",
+    "source": "new",
+    "battles": "0",
+    "heading": "Breather"
+   },
+   {
+    "phase": "4",
+    "name": "The Pulses",
+    "format": "Set piece",
+    "source": "base Phase 3, extended",
+    "battles": "2–4",
+    "heading": "Phase 4 — The Pulses (extended)"
+   },
+   {
+    "phase": "5",
+    "name": "Chairman Rose",
+    "format": "Boss",
+    "source": "base Phase 4, extended",
+    "battles": "1",
+    "heading": "Phase 5 — Chairman Rose (extended)"
+   },
+   {
+    "phase": "6",
+    "name": "The Darkest Day",
+    "format": "Colossus",
+    "source": "new",
+    "battles": "1–2",
+    "heading": "Phase 6 — The Darkest Day (Colossus)"
+   },
+   {
+    "phase": "7",
+    "name": "Their Majesties' Encore",
+    "format": "Front",
+    "source": "new, conditional",
+    "battles": "2–3",
+    "heading": "Phase 7 — Their Majesties' Encore (Front, conditional)"
+   },
+   {
+    "phase": "8",
+    "name": "Resolution",
+    "format": "—",
+    "source": "base §10.9, extended",
+    "battles": "0",
+    "heading": "Phase 8 — Resolution (extended)"
+   }
+  ]
+ },
+ {
+  "id": "climax.paldea",
+  "region": "paldea",
+  "title": "Roll Call",
+  "intro": "Checkpoints are after Phase 2 and at the Breather.",
+  "phases": [
+   {
+    "phase": "0",
+    "name": "Broadcast and Choice",
+    "format": "—",
+    "source": "base §10.1–10.3",
+    "battles": "0",
+    "heading": null
+   },
+   {
+    "phase": "0b",
+    "name": "The Five Bases",
+    "format": "Siege Map",
+    "source": "new",
+    "battles": "0",
+    "heading": "Phase 0b — The Five Bases (Siege Map)"
+   },
+   {
+    "phase": "1",
+    "name": "The Long Walk to School",
+    "format": "Blackout",
+    "source": "new",
+    "battles": "2–3",
+    "heading": "Phase 1 — The Long Walk to School (Blackout)"
+   },
+   {
+    "phase": "2",
+    "name": "The Squad Line",
+    "format": "Gauntlet",
+    "source": "base Phase 1, extended",
+    "battles": "4–6",
+    "heading": "Phase 2 — The Squad Line (extended)"
+   },
+   {
+    "phase": "3",
+    "name": "The Bosses",
+    "format": "Duels",
+    "source": "base Phase 2, extended",
+    "battles": "2–4",
+    "heading": "Phase 3 — The Bosses (extended)"
+   },
+   {
+    "phase": "—",
+    "name": "Breather",
+    "format": "Rest",
+    "source": "new",
+    "battles": "0",
+    "heading": "Breather"
+   },
+   {
+    "phase": "4",
+    "name": "The Star Barrage",
+    "format": "Set piece",
+    "source": "base Phase 3, extended",
+    "battles": "3–5",
+    "heading": "Phase 4 — The Star Barrage (extended)"
+   },
+   {
+    "phase": "5",
+    "name": "Cassiopeia",
+    "format": "Boss",
+    "source": "base Phase 4, extended",
+    "battles": "1",
+    "heading": "Phase 5 — Cassiopeia (extended)"
+   },
+   {
+    "phase": "6",
+    "name": "The Cassiopeia Engine",
+    "format": "Colossus",
+    "source": "new",
+    "battles": "1",
+    "heading": "Phase 6 — The Cassiopeia Engine (Colossus)"
+   },
+   {
+    "phase": "7",
+    "name": "The Assembly",
+    "format": "Debate",
+    "source": "new",
+    "battles": "0–1",
+    "heading": "Phase 7 — The Assembly (Debate)"
+   },
+   {
+    "phase": "8",
+    "name": "Resolution",
+    "format": "—",
+    "source": "base §10.9, extended",
+    "battles": "0",
+    "heading": "Phase 8 — Resolution (extended)"
+   }
+  ]
+ }
+]

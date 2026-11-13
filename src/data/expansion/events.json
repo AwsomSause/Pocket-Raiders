@@ -1,0 +1,322 @@
+[
+ {
+  "id": "xe.any.disguise",
+  "region": "any"
+ },
+ {
+  "id": "xe.any.landing-zone",
+  "region": "any"
+ },
+ {
+  "id": "xe.any.prize-machine",
+  "region": "any"
+ },
+ {
+  "id": "xe.any.first-snag",
+  "region": "any"
+ },
+ {
+  "id": "xe.any.old-jacket",
+  "region": "any"
+ },
+ {
+  "id": "xe.any.relic-stone",
+  "region": "any"
+ },
+ {
+  "id": "xe.any.verich",
+  "region": "any"
+ },
+ {
+  "id": "xe.any.es-cade",
+  "region": "any"
+ },
+ {
+  "id": "xe.kanto.small-print",
+  "region": "kanto"
+ },
+ {
+  "id": "xe.kanto.appointment",
+  "region": "kanto"
+ },
+ {
+  "id": "xe.kanto.roadblock",
+  "region": "kanto"
+ },
+ {
+  "id": "xe.kanto.harbor-export",
+  "region": "kanto"
+ },
+ {
+  "id": "xe.kanto.blaine-defects",
+  "region": "kanto"
+ },
+ {
+  "id": "xe.kanto.madame-call",
+  "region": "kanto"
+ },
+ {
+  "id": "xe.kanto.trio-conscience",
+  "region": "kanto"
+ },
+ {
+  "id": "xe.kanto.orphan",
+  "region": "kanto"
+ },
+ {
+  "id": "xe.johto.tail-market",
+  "region": "johto"
+ },
+ {
+  "id": "xe.johto.false-director",
+  "region": "johto"
+ },
+ {
+  "id": "xe.johto.black-hour",
+  "region": "johto"
+ },
+ {
+  "id": "xe.johto.dragon-tamer",
+  "region": "johto"
+ },
+ {
+  "id": "xe.johto.olivine-arrival",
+  "region": "johto"
+ },
+ {
+  "id": "xe.johto.heir",
+  "region": "johto"
+ },
+ {
+  "id": "xe.johto.shrine-keeper",
+  "region": "johto"
+ },
+ {
+  "id": "xe.johto.counterfeit-boss",
+  "region": "johto"
+ },
+ {
+  "id": "xe.hoenn.wet-cellar",
+  "region": "hoenn"
+ },
+ {
+  "id": "xe.hoenn.weather-institute",
+  "region": "hoenn"
+ },
+ {
+  "id": "xe.hoenn.stern-and-cozmo",
+  "region": "hoenn"
+ },
+ {
+  "id": "xe.hoenn.two-hoods",
+  "region": "hoenn"
+ },
+ {
+  "id": "xe.hoenn.arms-dealer",
+  "region": "hoenn"
+ },
+ {
+  "id": "xe.hoenn.truce-lunch",
+  "region": "hoenn"
+ },
+ {
+  "id": "xe.hoenn.steven-letter",
+  "region": "hoenn"
+ },
+ {
+  "id": "xe.hoenn.keepers",
+  "region": "hoenn"
+ },
+ {
+  "id": "xe.sinnoh.clinic",
+  "region": "sinnoh"
+ },
+ {
+  "id": "xe.sinnoh.fridays",
+  "region": "sinnoh"
+ },
+ {
+  "id": "xe.sinnoh.grunt-836",
+  "region": "sinnoh"
+ },
+ {
+  "id": "xe.sinnoh.grandfather",
+  "region": "sinnoh"
+ },
+ {
+  "id": "xe.sinnoh.marsh-test",
+  "region": "sinnoh"
+ },
+ {
+  "id": "xe.sinnoh.celestic-wall",
+  "region": "sinnoh"
+ },
+ {
+  "id": "xe.sinnoh.town-slept",
+  "region": "sinnoh"
+ },
+ {
+  "id": "xe.sinnoh.ribbon",
+  "region": "sinnoh"
+ },
+ {
+  "id": "xe.unova.speech",
+  "region": "unova"
+ },
+ {
+  "id": "xe.unova.dreamyard",
+  "region": "unova"
+ },
+ {
+  "id": "xe.unova.truth-seeker",
+  "region": "unova"
+ },
+ {
+  "id": "xe.unova.cold-storage",
+  "region": "unova"
+ },
+ {
+  "id": "xe.unova.candidate",
+  "region": "unova"
+ },
+ {
+  "id": "xe.unova.stolen-one",
+  "region": "unova"
+ },
+ {
+  "id": "xe.unova.kings-room",
+  "region": "unova"
+ },
+ {
+  "id": "xe.unova.liberty-garden",
+  "region": "unova"
+ },
+ {
+  "id": "xe.kalos.boutique",
+  "region": "kalos"
+ },
+ {
+  "id": "xe.kalos.cafe",
+  "region": "kalos"
+ },
+ {
+  "id": "xe.kalos.tall-man",
+  "region": "kalos"
+ },
+ {
+  "id": "xe.kalos.courier",
+  "region": "kalos"
+ },
+ {
+  "id": "xe.kalos.under-time",
+  "region": "kalos"
+ },
+ {
+  "id": "xe.kalos.factory",
+  "region": "kalos"
+ },
+ {
+  "id": "xe.kalos.essentia",
+  "region": "kalos"
+ },
+ {
+  "id": "xe.kalos.squishy",
+  "region": "kalos"
+ },
+ {
+  "id": "xe.alola.yo",
+  "region": "alola"
+ },
+ {
+  "id": "xe.alola.aether-house",
+  "region": "alola"
+ },
+ {
+  "id": "xe.alola.rent",
+  "region": "alola"
+ },
+ {
+  "id": "xe.alola.guzmas-room",
+  "region": "alola"
+ },
+ {
+  "id": "xe.alola.gallery",
+  "region": "alola"
+ },
+ {
+  "id": "xe.alola.consultant",
+  "region": "alola"
+ },
+ {
+  "id": "xe.alola.recon",
+  "region": "alola"
+ },
+ {
+  "id": "xe.alola.pelago",
+  "region": "alola"
+ },
+ {
+  "id": "xe.galar.ball-guy",
+  "region": "galar"
+ },
+ {
+  "id": "xe.galar.road-closed",
+  "region": "galar"
+ },
+ {
+  "id": "xe.galar.insurance",
+  "region": "galar"
+ },
+ {
+  "id": "xe.galar.press-release",
+  "region": "galar"
+ },
+ {
+  "id": "xe.galar.mine",
+  "region": "galar"
+ },
+ {
+  "id": "xe.galar.their-majesties",
+  "region": "galar"
+ },
+ {
+  "id": "xe.galar.partner-firm",
+  "region": "galar"
+ },
+ {
+  "id": "xe.galar.gig",
+  "region": "galar"
+ },
+ {
+  "id": "xe.paldea.flyer",
+  "region": "paldea"
+ },
+ {
+  "id": "xe.paldea.clive",
+  "region": "paldea"
+ },
+ {
+  "id": "xe.paldea.sandwich",
+  "region": "paldea"
+ },
+ {
+  "id": "xe.paldea.read-receipts",
+  "region": "paldea"
+ },
+ {
+  "id": "xe.paldea.admissions",
+  "region": "paldea"
+ },
+ {
+  "id": "xe.paldea.old-hallway",
+  "region": "paldea"
+ },
+ {
+  "id": "xe.paldea.applicant",
+  "region": "paldea"
+ },
+ {
+  "id": "xe.paldea.shop-class",
+  "region": "paldea"
+ }
+]

@@ -1,0 +1,82 @@
+[
+ {
+  "id": "pr.any.the-under",
+  "region": "any"
+ },
+ {
+  "id": "pr.any.cipher-key-lair",
+  "region": "any"
+ },
+ {
+  "id": "pr.kanto.vermilion-docks",
+  "region": "kanto"
+ },
+ {
+  "id": "pr.kanto.safari-night",
+  "region": "kanto"
+ },
+ {
+  "id": "pr.johto.burned-tower",
+  "region": "johto"
+ },
+ {
+  "id": "pr.johto.whirl-islands",
+  "region": "johto"
+ },
+ {
+  "id": "pr.hoenn.southern-island",
+  "region": "hoenn"
+ },
+ {
+  "id": "pr.hoenn.space-center",
+  "region": "hoenn"
+ },
+ {
+  "id": "pr.sinnoh.stark-mountain",
+  "region": "sinnoh"
+ },
+ {
+  "id": "pr.sinnoh.veilstone-hq",
+  "region": "sinnoh"
+ },
+ {
+  "id": "pr.unova.opelucid-ice",
+  "region": "unova"
+ },
+ {
+  "id": "pr.unova.plasma-castle",
+  "region": "unova"
+ },
+ {
+  "id": "pr.kalos.parfum-palace",
+  "region": "kalos"
+ },
+ {
+  "id": "pr.kalos.megalith",
+  "region": "kalos"
+ },
+ {
+  "id": "pr.alola.ruins-of-life",
+  "region": "alola"
+ },
+ {
+  "id": "pr.alola.aether-gala",
+  "region": "alola"
+ },
+ {
+  "id": "pr.galar.wild-area-dens",
+  "region": "galar"
+ },
+ {
+  "id": "pr.galar.wyndon-stadium",
+  "region": "galar"
+ },
+ {
+  "id": "pr.paldea.ruchbah-base",
+  "region": "paldea"
+ },
+ {
+  "id": "pr.paldea.academy-old-wing",
+  "region": "paldea"
+ }
+]
