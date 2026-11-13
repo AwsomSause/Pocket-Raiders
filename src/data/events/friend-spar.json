@@ -1,0 +1,40 @@
+{
+ "events": [
+  {
+   "id": "friend-spar",
+   "name": "A Friendly Spar",
+   "group": "The Friend",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [],
+   "requires": [{ "kind": "friendHere" }],
+   "scene": { "cast": [], "tint": "#3a2f4a", "effect": "glint" },
+   "intro": "Your Friend is warming up in a clearing. \"One match, nothing riding on it. Just for fun. Want to?\"",
+   "choices": [
+    {
+     "label": "Spar",
+     "success": {
+      "text": "You shake hands first. \"Ready?\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "classId": "ace-trainer",
+       "name": "Your Friend",
+       "size": 2,
+       "levelBonus": -2,
+       "win": [
+        { "kind": "moment", "text": "You won the friendly spar. Nothing was riding on it, and you both laughed.", "importance": 40 }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Not today",
+     "success": { "text": "\"Another time, then!\" Your Friend waves you off.", "effects": [] }
+    }
+   ]
+  }
+ ]
+}

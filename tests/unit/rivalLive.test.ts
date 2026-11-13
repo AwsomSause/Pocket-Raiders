@@ -133,3 +133,20 @@ describe('Race, Team-Up, Ambush and the Friend finale Assist', () => {
     expect(friendFinaleAssist(content, r, 50, { ...base, strikesLeft: 4 })!.strikesLeft).toBe(4); // Standard cap is 4
   });
 });
+
+import { conditionMet, isPseudoBattle } from '../../src/core/events';
+
+describe('the optional Friend spar', () => {
+  const ev = content.events.get('friend-spar')!;
+  it('exists, needs a Friend, and is a no-stakes pseudo fight (a loss never ends the run, no money)', () => {
+    expect(ev).toBeDefined();
+    const r = run();
+    reg(r);
+    expect(conditionMet(content, r, ev.requires[0]!)).toBe(false);
+    registerRival(r, { id: `friend-${r.seed}`, role: 'friend', personality: 'protector', style: 'blitz', arc: 'rivals-become-friends' });
+    expect(conditionMet(content, r, ev.requires[0]!)).toBe(true);
+    expect(isPseudoBattle(content, { eventId: 'friend-spar', choiceIndex: 0, success: true } as never)).toBe(true);
+    const win = ev.choices[0]!.success.battle!.win ?? [];
+    expect(win.some((e) => e.kind === 'money' || e.kind === 'item')).toBe(false);
+  });
+});

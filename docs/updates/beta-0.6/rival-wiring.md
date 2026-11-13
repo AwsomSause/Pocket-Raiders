@@ -24,4 +24,6 @@ Limits: Race, Team-Up and Ambush are text only (no first-pick reward, partner or
 - **Team-Up** (main rival): it joins your next eligible fight as a step-in Assist (not in doubles). **Ambush** (main rival): it challenges you at the next fight (the existing duel step-in). Both clear after one use. Neither happens at under 50% party HP (Ambush) and neither applies to the Friend.
 - **Friend finale Assist**: in the final-boss fight the Friend adds at most 1 strike to the rival Assist (total capped at 4 Standard), or stands in alone with 1 strike and a partner (Eevee, Pikachu...) when no other rival can assist. Level is 6 under the boss.
 
-Limits: no optional Friend spar yet (it needs a no-stakes battle flow with a non-rival trainer; the Friend is not a story rival). Extended-mode cap (6) is not read here; Standard is used.
+- **Friend spar** ("A Friendly Spar", event `friend-spar`): once your Friend exists, an optional event offers a 2-Pokémon match at 2 levels under you. It uses the Pseudo Stage fight rules: a loss heals you partway and the run goes on, there is no money or item prize, and nothing changes Lead or pity. New event condition `friendHere`.
+
+Limits: the Friend's spar team is a generic Ace Trainer team (the Friend has no fixed team yet) and is named "Your Friend". Extended-mode cap (6) is not read here; Standard is used.

@@ -138,6 +138,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return run.story.rivals.some((r) => r.encounters >= c.atLeast);
     case 'rivalAlly':
       return run.story.rivals.some((r) => r.state === 'ally');
+    case 'friendHere':
+      return Object.values(run.expansion?.rival ?? {}).some((r) => r.role === 'friend');
     case 'rivalPath':
       return rivalPath(run) === c.path;
     case 'rivalBeaten':
@@ -276,6 +278,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return `Needs a Pokémon with friendship ${c.atLeast}`;
     case 'rivalAlly':
       return 'Needs a rival who has become a friend';
+    case 'friendHere':
+      return 'Needs your Friend nearby';
     case 'rivalPath':
       return c.path === 'friend' ? 'Needs a rival who is becoming a friend' : c.path === 'rival' ? 'Needs a rival who sees you as an adversary' : 'Needs a rival who has not decided about you';
     case 'rivalBeaten':

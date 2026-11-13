@@ -2785,6 +2785,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('rivalMet'), atLeast: z.number().int().min(1) }),
   /** A rival whose rivalry with you ended as friends (state ally). */
   z.object({ kind: z.literal('rivalAlly') }),
+  /** Beta 0.6 R8: this run has a Friend (the supporting rival, core/rivals/friend.ts). */
+  z.object({ kind: z.literal('friendHere') }),
   /** Living Rival: which way the relationship leans (friend / rival / between; core/rivals/living.ts). */
   z.object({ kind: z.literal('rivalPath'), path: z.enum(['friend', 'rival', 'between']) }),
   /** Living Rival: a rival you beat in your last meeting (it has something to prove). */
