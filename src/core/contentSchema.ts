@@ -3303,6 +3303,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     species: z.array(z.string()).optional(),
     /** Beta 0.6 Front: the exact species of the foe's team, slot by slot (a lane each); beats `species` and `types`. */
     lineup: z.array(z.string()).optional(),
+    /** Beta 0.6: draw this foe with a named character's own sprite (a boss id, e.g. "sabrina"). */
+    sprite: z.string().optional(),
     levelBonus: z.number().int().default(0),
     chain: z.number().int().min(1).max(3).default(1),
     /** Run events B: the field is forced to this weather / terrain for the whole fight (Umbrella Squad). */

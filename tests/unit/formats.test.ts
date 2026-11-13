@@ -433,31 +433,49 @@ describe('Debate', () => {
     expect(startFormat('debate', ctxOf(run))).toBe(true);
     return run;
   };
-  const argue = (run: ReturnType<typeof mk>, picks: string[]) => picks.forEach((p) => chooseOption(ctxOf(run), p));
+  const say = (run: ReturnType<typeof mk>, picks: string[]) => picks.forEach((p) => chooseOption(ctxOf(run), p));
+  // The right rebuttal for each argument, from the script: evidence in exchange 1 meets denial, 2 smear, 3 authority;
+  // the apt arguments meet denial, authority, denial.
+  const FULL = { 'star.x.deletion-log': true, 'star.x.wrong-boots': true, 'star.x.first-engine': true };
 
-  it('three wins: no battle, flag clean, evidence still there', () => {
-    const run = start('db1', { 'star.x.deletion-log': true, 'star.x.wrong-boots': true, 'star.x.first-engine': true });
+  it('evidence carries an exchange even when the rebuttal is answered wrongly; three wins: no battle, evidence kept', () => {
+    const run = start('db1', FULL);
     expect(currentFormat(run)!.state.held).toHaveLength(3);
-    argue(run, ['use:deletion-log', 'use:boots', 'use:engine']);
+    say(run, ['arg:deletion-log', 'reb:authority', 'arg:boots', 'reb:authority', 'arg:engine', 'reb:authority']);
     expect(run.phase).not.toBe('battle');
     expect(run.story.flags['star.x.debate']).toBe('clean');
     expect(run.story.flags['star.x.deletion-log']).toBe(true);
     expect(cardOf(ctxOf(run))!.over).toBe(true);
   });
 
-  it('two wins: the opponent objects, no battle', () => {
-    const run = start('db2', { 'star.x.tully-stood': true, 'star.x.navi-drum': true, 'star.x.first-engine': true });
-    argue(run, ['use:tully', 'use:drum', 'plain']);
-    expect(run.story.flags['star.x.debate']).toBe('objection');
-    expect(run.phase).not.toBe('battle');
+  it('each exchange is an argument, then a rebuttal to answer, then the next exchange', () => {
+    const run = start('db1b');
+    let card = cardOf(ctxOf(run))!;
+    expect(card.options.map((o) => o.id)).toEqual(['arg:apt', 'arg:weak', 'arg:bluster']);
+    say(run, ['arg:apt']);
+    card = cardOf(ctxOf(run))!;
+    expect(card.options.map((o) => o.id)).toEqual(['reb:denial', 'reb:smear', 'reb:authority']);
+    expect(card.lines.join(' ')).toMatch(/Harrow:/);
+    say(run, ['reb:denial']);
+    expect(currentFormat(run)!.state.index).toBe(1);
+    expect(currentFormat(run)!.state.won).toBe(1);
   });
 
-  it('wrong evidence and plain answers never win; fewer than two wins is one battle', () => {
-    const run = start('db3', { 'star.x.deletion-log': true });
-    argue(run, ['use:deletion-log', 'use:deletion-log', 'plain']);
-    expect(currentFormat(run)!.state.won).toBe(1);
-    const card = cardOf(ctxOf(run))!;
-    expect(card.options.map((o) => o.id)).toEqual(['battle']);
+  it('ordinary play wins: the apt argument plus the right rebuttal; a wrong answer or a weak argument loses it', () => {
+    const run = start('db2');
+    say(run, ['arg:apt', 'reb:denial', 'arg:apt', 'reb:authority', 'arg:apt', 'reb:smear']);
+    expect(currentFormat(run)!.state.won).toBe(2);
+    expect(run.story.flags['star.x.debate']).toBe('objection');
+    expect(run.phase).not.toBe('battle');
+    const run2 = start('db2b');
+    say(run2, ['arg:weak', 'reb:smear', 'arg:bluster', 'reb:smear', 'arg:apt', 'reb:denial']);
+    expect(currentFormat(run2)!.state.won).toBe(1);
+  });
+
+  it('fewer than two wins is one battle against the opponent; winning it settles the matter', () => {
+    const run = start('db3');
+    say(run, ['arg:weak', 'reb:smear', 'arg:weak', 'reb:smear', 'arg:weak', 'reb:smear']);
+    expect(cardOf(ctxOf(run))!.options.map((o) => o.id)).toEqual(['battle']);
     chooseOption(ctxOf(run), 'battle');
     expect(run.phase).toBe('battle');
     expect(run.battle!.event!.eventId).toBe('format:debate');
@@ -468,22 +486,46 @@ describe('Debate', () => {
 
   it('losing the battle is recorded and does not end the run', () => {
     const run = start('db4');
-    argue(run, ['plain', 'plain', 'plain']);
+    say(run, ['arg:bluster', 'reb:smear', 'arg:bluster', 'reb:smear', 'arg:bluster', 'reb:smear']);
     chooseOption(ctxOf(run), 'battle');
     battleEnded(ctxOf(run), false);
     expect(run.story.flags['star.x.debate']).toBe('lost');
   });
 
-  it('cannot use evidence you do not hold, a Key Item counts, and it runs once', () => {
+  it('cannot use evidence you do not hold; wrong evidence wins nothing; a Key Item counts; runs once, Paldea only', () => {
     const run = start('db5');
-    chooseOption(ctxOf(run), 'use:engine');
-    expect(currentFormat(run)!.state.index).toBe(0);
+    chooseOption(ctxOf(run), 'arg:engine');
+    expect(currentFormat(run)!.state.stage).toBe('argue');
     const run2 = mk('db6');
     run2.inventory['nascour-brochure'] = 1;
+    run2.story.flags['star.x.deletion-log'] = true;
     startFormat('debate', ctxOf(run2));
-    expect(currentFormat(run2)!.state.held).toEqual(['brochure']);
-    argue(run2, ['plain', 'plain', 'use:brochure']);
-    expect(currentFormat(run2)!.state.won).toBe(1);
-    expect(startFormat('debate', ctxOf(run), { region: 'kanto' })).toBe(false);
+    expect(currentFormat(run2)!.state.held).toEqual(['deletion-log', 'brochure']);
+    say(run2, ['arg:brochure', 'reb:denial']); // the brochure does not answer exchange 1
+    expect(currentFormat(run2)!.state.won).toBe(0);
+    expect(startFormat('debate', ctxOf(mk('db7')), { region: 'kanto' })).toBe(false);
+  });
+
+  it('is deterministic and survives save and reload mid-debate', () => {
+    const a = start('db8', FULL);
+    say(a, ['arg:deletion-log']);
+    const loaded = RunStateSchema.parse(JSON.parse(JSON.stringify(a)));
+    say(a, ['reb:denial']);
+    say(loaded, ['reb:denial']);
+    expect(currentFormat(loaded)!.state).toEqual(currentFormat(a)!.state);
+  });
+
+  it('a format battle can name the character it is drawn as (Sabrina, Giovanni)', () => {
+    const run = mk('db9');
+    startFormat('blackout', ctxOf(run), { triad: true });
+    for (const id of ['a1', 'a2']) {
+      chooseOption(ctxOf(run), id);
+      battleEnded(ctxOf(run), true);
+      run.battle = null;
+      run.phase = 'map';
+    }
+    chooseOption(ctxOf(run), 'a3');
+    expect(run.battle!.trainer!.spriteBoss).toBe('sabrina');
+    expect(content.bosses.get('sabrina')!.sprites.default).toBe('boss.sabrina-lgpe');
   });
 });
