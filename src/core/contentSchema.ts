@@ -2790,6 +2790,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** A conscious party Pokémon knows a damaging move of this type. */
   z.object({ kind: z.literal('partyMoveType'), type: TypeNameSchema }),
   /** Your highest-level Pokémon is at least `over` levels above this stage's opening level (Squirtle Squad's Blastoise). */
+  /** Nuzlocke memorial (Pokémon Tower's Memorial Wall): at least this many Pokémon have fallen for good this run. */
+  z.object({ kind: z.literal('memorial'), atLeast: z.number().int().min(1).max(99) }),
   z.object({ kind: z.literal('partyLevelOver'), over: z.number().int(), /** True: your Pokémon are NOT that strong. */ absent: z.boolean().optional() }),
   /** A party member knows a move with this flag (sound, wind, ...). */
   z.object({ kind: z.literal('partyMoveFlag'), flag: z.enum(['sound', 'wind', 'punch', 'bite', 'pulse', 'bullet', 'slicing', 'powder']) }),
