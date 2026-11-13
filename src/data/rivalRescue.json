@@ -800,5 +800,15 @@
    "good": "Take the Pokémon and leave",
    "wrong": "Ask for something extra"
   }
+ },
+ "personalityArchetype": {
+  "champion-chaser": "hotshot",
+  "bitter-challenger": "bitter",
+  "enthusiast": "friendly",
+  "idealist": "heir",
+  "strategist": "scholar",
+  "protector": "mirror",
+  "prodigy": "prodigy",
+  "underdog": "lone-wolf"
  }
 }

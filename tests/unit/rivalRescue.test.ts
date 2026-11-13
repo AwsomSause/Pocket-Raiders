@@ -416,3 +416,25 @@ describe('screen view-models', () => {
     expect(exchangeView(r, 0).choices.map((c) => c.wrong).sort()).toEqual([false, true]);
   });
 });
+
+describe('map glue', () => {
+  it('offers appear only with a rival, on a map phase, at the due node; none without holds', async () => {
+    const { pendingRescue, rescueNode, rescueArchetype } = await import('../../src/core/evil/rescueGlue');
+    const { registerRival } = await import('../../src/core/rivals/overhaul');
+    const r = mk('glue');
+    expect(pendingRescue(content, r)).toBeNull();
+    const node = rescueNode(content, r);
+    const h = impound(r, { teamId: 'rocket', regionId: 'kanto', node, lastQuietNode: node + 40, count: 1 })!;
+    expect(pendingRescue(content, r)).toBeNull(); // no registered rival yet
+    registerRival(r, { id: 'blue', role: 'main', personality: 'prodigy', style: 'blitz', arc: 'prodigy-learns-humility' });
+    expect(rescueArchetype(r)).toBe('prodigy');
+    expect(pendingRescue(content, r)).toBeNull(); // not due yet
+    h.dueAt = node;
+    r.phase = 'map';
+    const p = pendingRescue(content, r)!;
+    expect(p.offer).toEqual({ holdId: h.id, kind: 'first' });
+    expect(p.ctx.archetype).toBe('prodigy');
+    r.phase = 'battle';
+    expect(pendingRescue(content, r)).toBeNull();
+  });
+});
