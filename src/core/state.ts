@@ -20,7 +20,7 @@ import { ArchivedRivalSchema, MENTOR_TYPES, StoryStateSchema } from './story/sch
 import { PartyLifeStateSchema, createPartyLife } from './partyLife/schema';
 import { freshHyperBattle } from './battle/hyper';
 import { SpectacleBattleSchema } from './battle/spectacle';
-import { VariantsSchema, type Variants } from './expansion/variantLines';
+import { TimedStageSchema, VariantsSchema, type TimedStage, type Variants } from './expansion/variantLines';
 import { ArenaSchema, SkillInputSchema } from './battle/w1Play';
 
 const RngStateSchema = z.object({ a: z.number(), b: z.number(), c: z.number(), d: z.number() });
@@ -536,6 +536,7 @@ export const freshExtra = () => ({
   wonderRoom: 0,
   brokenFace: [] as string[],
   variants: {} as Variants,
+  variantTimed: [] as TimedStage[],
   galar: [] as string[],
   delta: false,
   mimic: {} as Record<string, { kind: 'mimic' | 'transform'; slot: number; moves: { id: string; pp: number }[] }>,
@@ -776,6 +777,8 @@ export const BattleStateSchema = z.object({
     brokenFace: z.array(z.string()).default([]),
     /** Beta 0.6 variant lines (core/expansion/variantLines.ts): uid -> its line and counters for this battle. */
     variants: VariantsSchema,
+    /** Patchwork's net and smoke ball: stat changes that wear off after 2 turns. */
+    variantTimed: z.array(TimedStageSchema).default([]),
     /** Galar big-battle moments already used (evolve-and-survive per Pokémon, the thread, the cheat) and ones pending this hit (galarMoments.ts). */
     galar: z.array(z.string()).default([]),
     delta: z.boolean().default(false),

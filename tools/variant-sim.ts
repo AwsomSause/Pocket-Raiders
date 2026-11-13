@@ -6,14 +6,14 @@ import type * as Lines from '../src/core/expansion/variantLines.ts';
 import { closeModules, loadModule } from './lib/gameModules.ts';
 
 const { buildContent } = await loadModule<typeof Data>('/src/data/index.ts');
-const { simulateVariantLine, simLimit: limit } = await loadModule<typeof Sim>('/src/quality/variantSim.ts');
+const { simulateVariantLine, simLimit: limit, plainLimit } = await loadModule<typeof Sim>('/src/quality/variantSim.ts');
 const { WIRED_LINES } = await loadModule<typeof Lines>('/src/core/expansion/variantLines.ts');
 const battles = Number(process.argv[2] ?? 5000);
 const content = buildContent();
 let bad = 0;
 for (const line of [null, ...WIRED_LINES]) {
   const r = simulateVariantLine(content, line, battles);
-  const ok = r.variantRate <= limit(line) && r.plainRate <= limit(line);
+  const ok = r.variantRate <= limit(line) && r.plainRate <= plainLimit(line);
   if (!ok && line) bad++;
   console.log(`${(line ?? 'baseline').padEnd(11)} ${battles} battles: line ${(r.variantRate * 100).toFixed(1)}%  plain ${(r.plainRate * 100).toFixed(1)}%  ${line ? (ok ? 'ok' : `OVER ${(limit(line) * 100).toFixed(0)}%`) : ''}`);
 }

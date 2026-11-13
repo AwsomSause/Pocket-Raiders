@@ -32,7 +32,7 @@ import { styleProbability, styleProblem, type StyleInput } from '../captureStyle
 import { applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem, lastStandItemId } from '../items';
 import { abilityOf, calcStats, createPokemon, getSpecies, maxHp } from '../pokemon';
 import { rallyStages } from './rally';
-import { SPIRITLESS_MESSAGE, variantBlocksForcedSwitch, variantBlocksMind, variantBlocksStage, variantBlocksStatus, variantEndTurnLoss, variantEndTurnStages, variantIncoming, variantItemMove, variantNeverMisses, variantOnEntry, variantPriorityBonus, variantTagCall } from '../expansion/variantLines';
+import { SPIRITLESS_MESSAGE, variantBlocksForcedSwitch, variantBlocksMind, variantBlocksStage, variantBlocksStatus, variantEndTurnLoss, variantCheer, variantEndTurnStages, variantGadget, variantIncoming, variantItemMove, variantLosesTurn, variantNeverMisses, variantOnEntry, variantOutgoing, variantPriorityBonus, variantSnagRefuses, variantTagCall } from '../expansion/variantLines';
 import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
 import type { Rng } from '../rng';
 import { cooldownKey, hasBattleEffect, markBattleEffect } from '../story/ledger';
@@ -2474,6 +2474,11 @@ function canAct(ctx: BattleContext, user: Combatant, events: BattleEvent[], move
       return false;
     }
   }
+  const lostTurn = variantLosesTurn(ctx.battle.extra.variants, user.mon.uid);
+  if (lostTurn) {
+    events.push({ type: 'raid', tone: 'info', text: lostTurn });
+    return false;
+  }
   if (user.vol.infatuated && variantBlocksMind(ctx.battle.extra.variants, user.mon.uid)) user.vol.infatuated = false;
   if (user.flinched && variantBlocksMind(ctx.battle.extra.variants, user.mon.uid)) user.flinched = false;
   if (user.vol.infatuated) {
@@ -4057,6 +4062,10 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
         Held.attackMultiplier(ctx, user, target, move, moveType, effectiveness, events as Held.HeldEvent[]) *
         Held.defenseMultiplier(ctx, target, moveType, effectiveness, ctx.battle.kind === 'wild' && target.side === 'player', events as Held.HeldEvent[]);
       if (itemMultiplier !== 1) damage = Math.max(1, Math.floor(damage * itemMultiplier));
+      const loud = variantOutgoing(ctx.battle.extra.variants, user.mon.uid, move.flags);
+      if (loud !== 1) damage = Math.max(1, Math.floor(damage * loud));
+      const gadget = variantGadget(ctx.battle.extra.variants, target.mon.uid);
+      if (gadget) patchworkGadget(ctx, gadget, user, target, events);
       const variantHit = variantIncoming(ctx.battle.extra.variants, target.mon.uid);
       if (variantHit.multiplier !== 1) {
         damage = Math.max(1, Math.floor(damage * variantHit.multiplier));
@@ -4177,6 +4186,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   if (dealt > 0) {
     const torn = variantItemMove(ctx.battle.extra.variants, target.mon.uid, move.id);
     if (torn) events.push({ type: 'raid', tone: 'info', text: torn });
+  }
+  const sprung = ctx.battle.extra.variants[target.mon.uid]?.flags;
+  if (sprung?.launch === 1) {
+    sprung.launch = 0;
+    if (target.mon.hp > 0) forceOut(ctx, target, events); // the spring throws it back to its Ball (wild Pokémon stay: no ball to go back to)
   }
   if (dealt > 0 && target.mon.hp > 0 && user.mon.hp > 0) {
     if (Held.triggerOnce(ctx, target, 'redCard', events as Held.HeldEvent[])) forceOut(ctx, user, events);
@@ -4564,6 +4578,20 @@ function afterHitAbilities(ctx: BattleContext, user: Combatant, target: Combatan
 /** Protecting moves that punish contact (King's Shield, Spiky Shield, ...), for the turn they are up. */
 const PROTECT_CONTACT = new WeakMap<Combatant, NonNullable<Move['effects']['protectContact']>>();
 
+/** Patchwork's gadget, once: a net (the attacker's Speed -2 for 2 turns), a smoke ball (both sides' accuracy -1 for 2 turns) or a spring (the holder is launched back to its Ball). */
+function patchworkGadget(ctx: BattleContext, g: { gadget: 'net' | 'smoke' | 'spring'; message: string }, user: Combatant, holder: Combatant, events: BattleEvent[]): void {
+  events.push({ type: 'raid', tone: 'info', text: g.message });
+  const timed = (c: Combatant, stat: BoostStat, amount: number, source?: Combatant): void => {
+    const before = c.stages[stat];
+    applyStageChange(ctx, c, stat, amount, events, source);
+    const moved = c.stages[stat] - before;
+    if (moved !== 0) ctx.battle.extra.variantTimed.push({ uid: c.mon.uid, stat, amount: moved, left: 2 });
+  };
+  if (g.gadget === 'net') timed(user, 'spe', -2, holder);
+  else if (g.gadget === 'smoke') { timed(user, 'acc', -1, holder); timed(holder, 'acc', -1); }
+  else ctx.battle.extra.variants[holder.mon.uid]!.flags.launch = 1; // the holder leaves once the hit is done
+}
+
 /** Roar, Whirlwind, Dragon Tail: a trainer's Pokémon is swapped for another; the player's for a random one. A wild Pokémon is unaffected. */
 function forceOut(ctx: BattleContext, target: Combatant, events: BattleEvent[]): void {
   const { battle, rng } = ctx;
@@ -4853,6 +4881,18 @@ function endTurnMon(ctx: BattleContext, c: Combatant, foe: Combatant, events: Ba
       events.push({ type: 'raid', tone: 'info', text: overclock.message });
       for (const [stat, n] of Object.entries(overclock.stages) as [BoostStat, number][]) c.stages[stat] = Math.max(-6, c.stages[stat] + n);
     }
+    for (const t of ctx.battle.extra.variantTimed.filter((x) => x.uid === c.mon.uid)) {
+      t.left -= 1;
+      if (t.left <= 0) c.stages[t.stat] = Math.max(-6, Math.min(6, c.stages[t.stat] - t.amount));
+    }
+    ctx.battle.extra.variantTimed = ctx.battle.extra.variantTimed.filter((x) => x.left > 0);
+    const cheer = variantCheer(ctx.battle.extra.variants, c.mon.uid);
+    if (cheer) {
+      events.push({ type: 'raid', tone: 'info', text: 'The stands cheer.' });
+      applyStageChange(ctx, c, 'spe', cheer, events);
+    }
+    const refusal = variantSnagRefuses(ctx.battle.extra.variants, c.mon.uid, `${ctx.battle.turn}:${ctx.rng.state.a}`);
+    if (refusal) events.push({ type: 'raid', tone: 'info', text: refusal });
     const variantLoss = variantEndTurnLoss(ctx.battle.extra.variants, c.mon.uid, max);
     if (variantLoss.loss > 0) {
       if (variantLoss.message) events.push({ type: 'raid', tone: 'info', text: variantLoss.message });

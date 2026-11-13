@@ -5,20 +5,20 @@ import { createBattle, resolveTurn, type BattleContext } from '../../src/core/ba
 import { calcStats, createPokemon } from '../../src/core/pokemon';
 import { hashSeed, Rng } from '../../src/core/rng';
 import { BattleStateSchema } from '../../src/core/state';
-import { assignVariant, UNWIRED_LINES, variantNeverMisses, variantOnEntry, WIRED_LINES, type Variants } from '../../src/core/expansion/variantLines';
-import { simLimit, simulateVariantLine } from '../../src/quality/variantSim';
+import { assignVariant, UNWIRED_LINES, variantLosesTurn, variantNeverMisses, variantOnEntry, variantSnagRefuses, WIRED_LINES, type Variants } from '../../src/core/expansion/variantLines';
+import { plainLimit, simLimit, simulateVariantLine } from '../../src/quality/variantSim';
 import { content } from './helpers';
 
-function duel(opts: { line?: string; kind?: 'wild' | 'trainer'; pMove?: string; weather?: 'rain' | 'sun'; second?: boolean } = {}) {
+function duel(opts: { line?: string; kind?: 'wild' | 'trainer'; pMove?: string; weather?: 'rain' | 'sun'; second?: boolean; uid?: string; eMove?: string; opts?: { crowd?: boolean; marnie?: boolean } } = {}) {
   const player = createPokemon(content, 'machop', 50, 'p');
-  const enemy = createPokemon(content, 'snorlax', 50, 'e');
+  const enemy = createPokemon(content, 'snorlax', 50, opts.uid ?? 'e');
   const enemies = [enemy, ...(opts.second ? [createPokemon(content, 'rattata', 10, 'e2')] : [])];
   const move = (m: string) => ({ id: m, pp: content.moves.get(m)!.pp });
   player.moves = [move(opts.pMove ?? 'tackle')];
-  for (const e of enemies) e.moves = [move('splash')];
+  for (const e of enemies) e.moves = [move(opts.eMove ?? 'splash')];
   const battle = createBattle(opts.kind ?? 'wild', enemies, 0, player.uid);
   if (opts.weather) battle.weather = { id: opts.weather, turns: 5 };
-  if (opts.line) assignVariant(battle.extra.variants, enemy.uid, opts.line);
+  if (opts.line) assignVariant(battle.extra.variants, enemy.uid, opts.line, opts.opts);
   const ctx: BattleContext = { content, battle, party: [player], inventory: {}, rng: new Rng(hashSeed('variant')), captureRng: new Rng(hashSeed('variantc')), catchMultiplier: 1 };
   return { ctx, battle, player, enemy, go: () => resolveTurn(ctx, { kind: 'move', index: 0 }) };
 }
@@ -27,10 +27,10 @@ const lost = (es: Events, side: 'player' | 'enemy') => es.reduce((n, e) => (e.ty
 const texts = (es: Events) => es.filter((e) => e.type === 'raid').map((e) => (e as { text: string }).text);
 
 describe('variant line registry', () => {
-  it('wires eight lines, lists the other six, and refuses to assign an unwired one', () => {
-    expect(WIRED_LINES).toHaveLength(8);
+  it('wires eleven lines, lists the other three, and refuses to assign an unwired one', () => {
+    expect(WIRED_LINES).toHaveLength(11);
     expect(WIRED_LINES.length + UNWIRED_LINES.length).toBe(14);
-    expect(() => assignVariant({}, 'x', 'loud')).toThrow('not wired');
+    expect(() => assignVariant({}, 'x', 'couture')).toThrow('not wired');
   });
   it('with no variants the battle is unchanged and the saved battle has an empty map', () => {
     const a = duel(), b = duel();
@@ -193,6 +193,122 @@ describe('Tagged-Up in battle', () => {
   });
 });
 
+const gadgetOf = (uid: string): number => {
+  const v: Variants = {};
+  assignVariant(v, uid, 'patchwork');
+  variantOnEntry(v, uid, null);
+  return v[uid]!.flags.gadget!;
+};
+const uidFor = (g: number): string => {
+  for (let i = 0; i < 200; i++) if (gadgetOf(`pw${i}`) === g) return `pw${i}`;
+  throw new Error('no uid');
+};
+
+describe('Rocket Remnants: Patchwork', () => {
+  it('the gadget is fixed by the Pokémon, shown on entry, and all three exist', () => {
+    expect(gadgetOf('pw1')).toBe(gadgetOf('pw1'));
+    expect(new Set(Array.from({ length: 60 }, (_, i) => gadgetOf(`pw${i}`)))).toEqual(new Set([1, 2, 3]));
+    const d = duel({ line: 'patchwork', uid: uidFor(2) });
+    expect(texts(d.go())).toContain('It carries a smoke ball.');
+  });
+  it('the net drops the attacker by 2 Speed for 2 turns, once', () => {
+    const d = duel({ line: 'patchwork', uid: uidFor(1) });
+    const first = d.go();
+    expect(texts(first)).toContain('Something goes sproing.');
+    expect(d.battle.playerStages.spe).toBe(-2);
+    const second = d.go();
+    expect(texts(second)).not.toContain('Something goes sproing.');
+    expect(d.battle.playerStages.spe).toBe(0);
+    expect(d.battle.extra.variantTimed).toEqual([]);
+  });
+  it('the smoke ball lowers both sides accuracy for 2 turns', () => {
+    const d = duel({ line: 'patchwork', uid: uidFor(2) });
+    d.go();
+    expect(d.battle.playerStages.acc).toBe(-1);
+    expect(d.battle.enemyStages.acc).toBe(-1);
+    d.go();
+    expect(d.battle.playerStages.acc).toBe(0);
+    expect(d.battle.enemyStages.acc).toBe(0);
+  });
+  it('the spring sends a trainer Pokémon back to its Ball', () => {
+    const d = duel({ line: 'patchwork', uid: uidFor(3), kind: 'trainer', second: true });
+    d.go();
+    expect(d.battle.enemyTeam[d.battle.enemyIndex]!.uid).not.toBe(d.enemy.uid);
+  });
+  it('pending gadget effects are saved and old battles load without them', () => {
+    const d = duel({ line: 'patchwork', uid: uidFor(1) });
+    d.go();
+    const back = BattleStateSchema.parse(JSON.parse(JSON.stringify(d.battle)));
+    expect(back.extra.variantTimed).toHaveLength(1);
+    const old = JSON.parse(JSON.stringify(duel().battle));
+    delete old.extra.variantTimed;
+    expect(BattleStateSchema.parse(old).extra.variantTimed).toEqual([]);
+  });
+});
+
+describe("Team Snag'em: Snagged", () => {
+  it('refuses at 20% on the first turn, climbing 10% a turn, and replays the same', () => {
+    const run = (): number => {
+      const v: Variants = {};
+      assignVariant(v, 'sn', 'snagged');
+      let hits = 0;
+      for (let i = 0; i < 400; i++) { const r = variantSnagRefuses(v, 'sn', `s${i}`); if (r) { hits++; variantLosesTurn(v, 'sn'); } }
+      return hits;
+    };
+    expect(run()).toBe(run());
+    expect(run()).toBeGreaterThan(40);
+    expect(run()).toBeLessThan(200);
+  });
+  it('the refused turn is lost and announced, and the line ends when freed', () => {
+    const v: Variants = {};
+    assignVariant(v, 'sn', 'snagged');
+    let said: string | null = null;
+    for (let i = 0; i < 40 && !said; i++) said = variantSnagRefuses(v, 'sn', `t${i}`);
+    expect(said).toBe("It is looking for someone who isn't here.");
+    expect(variantLosesTurn(v, 'sn')).toBe('It refuses to move.');
+    expect(variantLosesTurn(v, 'sn')).toBeNull();
+  });
+  it('in a battle it refuses within a few turns and the turn after deals no damage', () => {
+    const d = duel({ line: 'snagged', eMove: 'tackle', pMove: 'splash' });
+    d.player.hp = 9999;
+    let refusedAt = -1;
+    const dmg: number[] = [];
+    for (let i = 0; i < 12; i++) {
+      const es = d.go();
+      dmg.push(lost(es, 'player'));
+      if (refusedAt < 0 && texts(es).includes("It is looking for someone who isn't here.")) refusedAt = i;
+    }
+    expect(refusedAt).toBeGreaterThanOrEqual(0);
+    expect(dmg[refusedAt + 1]).toBe(0);
+    expect(dmg[0]).toBeGreaterThan(0);
+  });
+});
+
+describe('Team Yell: Loud', () => {
+  it('sound moves hit 20% harder than the same Pokémon without the line', () => {
+    const base = duel({ eMove: 'hyper-voice', pMove: 'splash' }), loud = duel({ line: 'loud', eMove: 'hyper-voice', pMove: 'splash' });
+    const b = lost(base.go(), 'player'), l = lost(loud.go(), 'player');
+    expect(l / b).toBeGreaterThan(1.1);
+    expect(l / b).toBeLessThan(1.3);
+    const plain = duel({ line: 'loud', eMove: 'tackle', pMove: 'splash' }), plainBase = duel({ eMove: 'tackle', pMove: 'splash' });
+    expect(lost(plain.go(), 'player')).toBe(lost(plainBase.go(), 'player'));
+  });
+  it('gains Speed (once, capped) only while the stands cheer', () => {
+    const crowd = duel({ line: 'loud', opts: { crowd: true } }), quiet = duel({ line: 'loud' });
+    crowd.go(); crowd.go();
+    quiet.go(); quiet.go();
+    expect(crowd.battle.enemyStages.spe).toBe(1); // capped at +1
+    expect(quiet.battle.enemyStages.spe).toBe(0);
+  });
+  it("with Marnie's League Card it loses its first turn only", () => {
+    const d = duel({ line: 'loud', eMove: 'tackle', pMove: 'splash', opts: { marnie: true } });
+    const first = d.go();
+    expect(texts(first)).toContain('It has remembered who it is cheering for.');
+    expect(lost(first, 'player')).toBe(0);
+    expect(lost(d.go(), 'player')).toBeGreaterThan(0);
+  });
+});
+
 describe('balance sim: neither side above 60%', () => {
   it('baseline with no line is balanced', () => {
     const r = simulateVariantLine(content, null, 600);
@@ -203,7 +319,7 @@ describe('balance sim: neither side above 60%', () => {
     it(`${line}: 600 mirror battles`, () => {
       const r = simulateVariantLine(content, line, 600);
       expect(r.variantRate, JSON.stringify(r)).toBeLessThanOrEqual(simLimit(line));
-      expect(r.plainRate, JSON.stringify(r)).toBeLessThanOrEqual(simLimit(line));
+      expect(r.plainRate, JSON.stringify(r)).toBeLessThanOrEqual(plainLimit(line));
     }, 60000);
   }
 });
