@@ -1160,6 +1160,9 @@ export class BattleScene extends Phaser.Scene {
     const standInClass = standIn ? content.trainers.get(standIn.classId) : undefined;
     if (standInClass) return { assetId: standInClass.spriteAssetId, label: trainer.name };
     if (boss) return { assetId: boss.spriteAssetId, label: boss.name };
+    // Beta 0.6: a format's named foe (Oracle Sabrina, Giovanni) is drawn as that character, not as the class stand-in.
+    const named = trainer.spriteBoss ? content.bosses.get(trainer.spriteBoss) : undefined;
+    if (named) return { assetId: named.sprites.default, label: trainer.name };
     const cls = content.trainers.get(trainer.classId);
     // Beta 4.4: a rival is drawn as its own character (Silver, Hop, Nemona...), not always as Blue.
     const character = trainer.classId === 'rival' ? content.bosses.get(trainer.name.toLowerCase()) : undefined;

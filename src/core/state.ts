@@ -756,7 +756,7 @@ export const BattleStateSchema = z.object({
   /** Which member of enemyTeam is out. */
   enemyIndex: z.number().int().min(0),
   /** The opposing trainer. `leaderId` is set for gym leaders (classId is then "gym-leader"). */
-  trainer: z.object({ classId: z.string(), name: z.string(), leaderId: z.string().nullable().default(null) }).nullable(),
+  trainer: z.object({ classId: z.string(), name: z.string(), leaderId: z.string().nullable().default(null), /** Beta 0.6: drawn as this boss character (formats: Sabrina, Giovanni). */ spriteBoss: z.string().optional() }).nullable(),
   playerStages: StagesSchema,
   enemyStages: StagesSchema,
   playerVolatile: VolatileSchema.default(freshVolatile),
