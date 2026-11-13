@@ -207,6 +207,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       if (c.rival !== undefined && (featuredRival(run) !== null) !== c.rival) return false;
       return true;
     }
+    case 'xflag':
+      return xflagHolds(run, c.flag);
     case 'storyRun':
       return !!run.story.v2;
     case 'oldFoe':
@@ -370,6 +372,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs the world to have changed more';
     case 'xevents':
       return 'Only with the Kanto story events on';
+    case 'xflag':
+      return 'Needs something from the Beta 0.6 story in play';
     case 'storyRun':
       return 'Only in a Story Run';
     case 'oldFoe':
@@ -501,7 +505,10 @@ export function addEventStops(content: Content, run: RunState): void {
   const candidates = stage.map.nodes.filter((n) => n.column < stage.map.columns);
   const taken = new Set<string>();
   const place = (eventId: string, hidden: boolean) => {
-    const node = rng.pick(candidates);
+    // E3b: a run event (`xr.*`) keeps one column away from every story event (`xe.*`) on the stage, when the map allows it.
+    const xe = eventId.startsWith('xr.') ? xeColumns(run) : [];
+    const apart = xe.length > 0 ? candidates.filter((n) => xe.every((c) => Math.abs(c - n.column) > 1)) : candidates;
+    const node = rng.pick(apart.length > 0 ? apart : candidates);
     node.sides.push({ id: `event-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId, ...(hidden ? { hidden: true } : {}) });
   };
   // A running tournament round and a serious crisis always get their stop (until played), so neither can be missed by luck.
@@ -563,6 +570,24 @@ export function addEventStops(content: Content, run: RunState): void {
   if (effectiveAttributes(content, run).intelligence >= cfg.revealIntelligence) {
     const hidden = stage.map.nodes.flatMap((n) => n.sides).find((s) => s.kind === 'event' && s.hidden);
     if (hidden) delete hidden.hidden;
+  }
+}
+
+/** The ten Expanded flags of RUN_EVENTS_EXPANDED X2, read from the run. */
+export function xflagHolds(run: RunState, flag: string): boolean {
+  const flags = run.story.flags;
+  const seen = (k: string) => Number(flags[`ev:${k}`] ?? 0) >= 1;
+  switch (flag) {
+    case 'extendedCut': return run.expansion?.climaxCut === 'extended';
+    case 'hasShadow': return run.party.some((m) => !!m.shadow);
+    case 'keyHinted': return run.party.some((m) => !!m.shadow?.named && (m.shadow.hints ?? 1) >= 1);
+    case 'grandArc': return grandArcOf(run) !== null;
+    case 'liaisonSeen': return seen('liaison-seen');
+    case 'romHeld': { const g = grandArcOf(run); return !!g && romsHeld(g).length > 0; }
+    case 'friendPresent': return Object.values(run.expansion?.rival ?? {}).some((r) => r.role === 'friend');
+    case 'trioFriendly': return seen('rocket-trio-debt');
+    case 'wesMet': return seen('wes-met');
+    default: return false;
   }
 }
 
@@ -914,6 +939,8 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'grandArcStock':
     case 'standWith':
       return '';
+    case 'shadowHeart':
+      return 'a Shadow Pokémon eases';
     case 'track':
       return e.input === 'raidSuccess' || e.input === 'officerTurned' ? 'the world eases' : 'the world tightens';
     case 'namedShadow':
@@ -1165,6 +1192,11 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'grandArcStock':
       gainStock(run, e.step);
       return '';
+    case 'shadowHeart': {
+      let eased = 0;
+      for (const m of run.party) if (m.shadow && m.shadow.heart > 1) { m.shadow.heart = Math.max(1, m.shadow.heart + e.amount); eased += 1; }
+      return eased > 0 ? 'Their Shadow loosens its hold a little.' : '';
+    }
     case 'track': {
       // The key is this node, so one stop moves the track once however often it is replayed.
       const before = trackStep(run, currentRegion(content, run).id);

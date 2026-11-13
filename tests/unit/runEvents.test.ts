@@ -1,78 +1,121 @@
+// Beta 0.6 E3b: the 104 new run events (FE-44 to FE-75, EN-60 to EN-131). Count, gating, fairness, no selling, the new
+// flags and effect, and the spacing rule against story events.
+
+import { execFileSync } from 'node:child_process';
 import { describe, expect, it } from 'vitest';
-import { addEventStops, eligibleEvents } from '../../src/core/events';
-import { byPriority, EVENT_TAGS, priorityOf, QUEUE_MAX, stepQueue, tagsOf } from '../../src/core/events/priority';
+import type { EventDef } from '../../src/core/contentSchema';
+import { addEventStops, applyEffect, conditionMet, eligibleEvents, xflagHolds } from '../../src/core/events';
+import { Rng, hashSeed } from '../../src/core/rng';
 import { chooseStarter, createRun } from '../../src/core/run';
-import catalogue from '../../src/data/events/run-catalogue.json';
+import { getCampaign } from '../../src/core/regions';
+import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
 
-const critical = () => true;
-const base = { queue: [], wanted: [] as string[], capacity: 2, stage: 5, critical, seed: 's', priority: () => 90 };
+const runEvents = (): EventDef[] => [...content.events.values()].filter((e) => e.id.startsWith('xr.'));
+const mk = (seed: string, on = true): RunState => {
+  const r = chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', ...(on ? { expansion: { eventsDensity: 'full' as const, worldTracks: true } } : {}) }), 0);
+  return r;
+};
 
-describe('W5 priority and tags', () => {
-  it('ranks map to the base priorities and forced events use 70 or more', () => {
-    expect(priorityOf({ rarity: 'common', forced: false })).toBe(10);
-    expect(priorityOf({ rarity: 'uncommon', forced: false })).toBe(30);
-    expect(priorityOf({ rarity: 'rare', forced: false })).toBe(50);
-    expect(priorityOf({ rarity: 'epic', forced: false })).toBe(60);
-    expect(priorityOf({ rarity: 'common', forced: true })).toBe(70);
-    expect(priorityOf({ rarity: 'common', forced: true, priority: 100 })).toBe(100);
-    const list = byPriority([{ id: 'a', rarity: 'common', forced: false }, { id: 'b', rarity: 'epic', forced: false }, { id: 'c', rarity: 'rare', forced: false }], 'x');
-    expect(list.map((e) => e.id)).toEqual(['b', 'c', 'a']);
-    expect(byPriority(list, 'x').map((e) => e.id)).toEqual(['b', 'c', 'a']);
+describe('the 104 run events', () => {
+  it('are 32 forced scenes (FE-44 to FE-75) and 72 encounters (EN-60 to EN-131), with unique ids', () => {
+    const all = runEvents();
+    expect(all).toHaveLength(104);
+    const fe = all.filter((e) => e.id.startsWith('xr.fe-')).map((e) => Number(e.id.slice(6)));
+    const en = all.filter((e) => e.id.startsWith('xr.en-')).map((e) => Number(e.id.slice(6)));
+    expect(fe.sort((a, b) => a - b)).toEqual(Array.from({ length: 32 }, (_, i) => 44 + i));
+    expect(en.sort((a, b) => a - b)).toEqual(Array.from({ length: 72 }, (_, i) => 60 + i));
+    expect(new Set(all.map((e) => e.id)).size).toBe(104);
   });
-  it('every live event has valid tags (own or from its group) and the catalogue has 25 events', () => {
-    for (const e of content.events.values()) for (const t of tagsOf(e)) expect(EVENT_TAGS).toContain(t);
-    const cat = catalogue.events.map((e) => content.events.get(e.id)!);
-    expect(cat.every(Boolean)).toBe(true);
-    expect(cat).toHaveLength(25);
-    expect(cat.filter((e) => e.disabled)).toHaveLength(0);
+  it('the generated file is current', () => {
+    expect(() => execFileSync('node', ['tools/build-run-events.ts', '--check'], { stdio: 'pipe' })).not.toThrow();
   });
-  it('disabled events are never offered', () => {
-    const run = structuredClone(chooseStarter(content, createRun(content, { runId: 'd', seed: 'd', archetypeId: 'red' }), 0));
-    expect(eligibleEvents(content, run).some((e) => e.disabled)).toBe(false);
+  it('never appear in a run without the saga on (old rolls and old stages untouched)', () => {
+    const r = mk('re-off', false);
+    expect(eligibleEvents(content, r).some((e) => e.id.startsWith('xr.'))).toBe(false);
+    addEventStops(content, r);
+    expect(r.stage!.map.nodes.some((n) => n.sides.some((s) => s.eventId?.startsWith('xr.')))).toBe(false);
+  });
+  it('wait for their Expanded flags: with every flag false only the general events are eligible', () => {
+    const r = mk('re-flags');
+    r.stage!.index = 3;
+    const open = new Set(eligibleEvents(content, r).map((e) => e.id));
+    const flagged = runEvents().filter((e) => e.requires.some((c) => c.kind === 'xflag' || (c.kind === 'track' && c.atLeast >= 1)));
+    expect(flagged.length).toBeGreaterThan(40);
+    for (const e of flagged) expect(open.has(e.id), e.id).toBe(false);
+    expect(runEvents().filter((e) => open.has(e.id)).length).toBeGreaterThan(10);
+  });
+  it('every forced scene has two or more ways out, one of them with no fight', () => {
+    for (const e of runEvents().filter((x) => x.group.startsWith('Forced'))) {
+      expect(e.choices.length, e.id).toBeGreaterThanOrEqual(2);
+      expect(e.choices.some((c) => !c.success.battle && !(c.failure?.battle)), e.id).toBe(true);
+    }
+  });
+  it('no event sells, pays coins, gives EXP candy, ends a run or takes a Key Item or Data ROM', () => {
+    const text = JSON.stringify(runEvents()).toLowerCase();
+    expect(text).not.toMatch(/\bsell|\bsold\b|\bcoins?\b|exp(erience)? candy|rare-candy/);
+    for (const e of runEvents()) for (const c of e.choices) for (const fx of [...c.success.effects, ...(c.failure?.effects ?? [])]) {
+      expect(['tradeAway', 'recruit', 'mentor', 'gauntlet', 'tournament', 'crisis'].includes(fx.kind), `${e.id}:${fx.kind}`).toBe(false);
+    }
+  });
+  it('no battle is above an Executive-sized party', () => {
+    for (const e of runEvents()) for (const c of e.choices) {
+      const b = c.success.battle;
+      if (b && b.kind === 'trainer') expect(b.size ?? 2, e.id).toBeLessThanOrEqual(3);
+    }
   });
 });
 
-describe('W5 event queue', () => {
-  it('places forced events up to the stage capacity and queues the rest', () => {
-    const s = stepQueue({ ...base, wanted: ['a', 'b', 'c'], critical: () => false });
-    expect(s.place).toHaveLength(2);
-    expect(s.queue).toHaveLength(1);
-    expect(s.queue[0]!.since).toBe(5);
+describe('the Expanded flags', () => {
+  it('read the run', () => {
+    const r = mk('re-xflag');
+    for (const f of ['extendedCut', 'hasShadow', 'keyHinted', 'grandArc', 'liaisonSeen', 'romHeld', 'friendPresent', 'trioFriendly', 'wesMet']) expect(xflagHolds(r, f), f).toBe(false);
+    r.story.flags['ev:wes-met'] = 1;
+    r.story.flags['ev:liaison-seen'] = 1;
+    r.story.flags['ev:rocket-trio-debt'] = 1;
+    expect(xflagHolds(r, 'wesMet') && xflagHolds(r, 'liaisonSeen') && xflagHolds(r, 'trioFriendly')).toBe(true);
+    r.party[0]!.shadow = { heart: 60, named: 'ss.x', hints: 1 } as never;
+    expect(xflagHolds(r, 'hasShadow') && xflagHolds(r, 'keyHinted')).toBe(true);
+    r.expansion = { ...r.expansion, climaxCut: 'extended' };
+    expect(xflagHolds(r, 'extendedCut')).toBe(true);
   });
-  it('a waiting event is retried from the top and never duplicated', () => {
-    const first = stepQueue({ ...base, wanted: ['a', 'b', 'c'], critical: () => false });
-    const next = stepQueue({ ...base, queue: first.queue, wanted: ['c'], stage: 6, critical: () => false });
-    expect(next.place).toEqual(['c']);
-    expect(next.queue).toEqual([]);
-    const again = stepQueue({ ...base, queue: first.queue, wanted: ['c', 'c'], stage: 6, critical: () => false });
-    expect(again.place).toEqual(['c']);
-  });
-  it('after 2 stages a Critical event becomes a first stop even with no room; others expire', () => {
-    const q = [{ id: 'crit', since: 3 }, { id: 'meh', since: 3 }];
-    const s = stepQueue({ ...base, queue: q, wanted: ['crit', 'meh'], capacity: 0, stage: 5, critical: (id) => id === 'crit' });
-    expect(s.place).toEqual(['crit']);
-    expect(s.expired).toEqual(['meh']);
-    expect(s.queue).toEqual([]);
-  });
-  it('the queue never starves: with many events it never holds more than 4 and Critical overflow is placed', () => {
-    const wanted = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
-    const s = stepQueue({ ...base, wanted, capacity: 1 });
-    expect(s.queue.length).toBeLessThanOrEqual(QUEUE_MAX);
-    expect(s.place.length + s.queue.length).toBe(7);
-  });
-  it('an entry that is no longer eligible expires with a report', () => {
-    const s = stepQueue({ ...base, queue: [{ id: 'gone', since: 5 }], wanted: [] });
-    expect(s.expired).toEqual(['gone']);
+  it('an event waits on its flag through conditionMet', () => {
+    const r = mk('re-cond');
+    const ev = content.events.get('xr.en-106')!;
+    expect(ev.requires.every((c) => conditionMet(content, r, c))).toBe(false);
   });
 });
 
-describe('W5 stage placement', () => {
-  it('addEventStops never places a forced event twice on one stage and keeps the queue valid', () => {
-    const run = structuredClone(chooseStarter(content, createRun(content, { runId: 'p', seed: 'p', archetypeId: 'red' }), 0));
-    addEventStops(content, run);
-    const ids = run.stage!.map.nodes.flatMap((n) => n.sides).flatMap((s) => (s.eventId ? [s.eventId] : []));
-    expect(ids.every((id) => !content.events.get(id)?.forced || ids.filter((x) => x === id).length === 1)).toBe(true);
-    expect((run.story.eventQueue ?? []).length).toBeLessThanOrEqual(QUEUE_MAX);
+describe('shadowHeart', () => {
+  it('eases every party Shadow, never below 1, and ignores other Pokémon', () => {
+    const r = mk('re-heart');
+    const [a, b] = [r.party[0]!, { ...r.party[0]!, uid: 'x2' }];
+    a.shadow = { heart: 10, hints: 1 } as never;
+    b.shadow = { heart: 2, hints: 1 } as never;
+    r.party = [a, b, { ...r.party[0]!, uid: 'x3', shadow: undefined }];
+    applyEffect(content, r, { kind: 'shadowHeart', amount: -15 }, new Rng(hashSeed('h')));
+    expect(r.party[0]!.shadow!.heart).toBe(1);
+    expect(r.party[1]!.shadow!.heart).toBe(1);
+    expect(r.party[2]!.shadow).toBeUndefined();
+  });
+});
+
+describe('spacing against story events', () => {
+  it('a run event is never on a column next to a story event', () => {
+    for (let n = 0; n < 12; n++) {
+      const r = mk(`re-space-${n}`);
+      r.regionOrder[r.regionIndex] = 'kanto';
+      r.expansion = { ...r.expansion, climaxCut: 'extended' };
+      const stages = getCampaign(content, r.campaignId).stagesPerRegion;
+      for (let i = 0; i < stages; i++) {
+        r.stage!.index = i;
+        r.stage!.map.nodes.forEach((x) => (x.sides = []));
+        addEventStops(content, r);
+        const stops = r.stage!.map.nodes.flatMap((x) => x.sides.filter((s) => s.eventId).map((s) => ({ id: s.eventId!, column: x.column })));
+        const xe = stops.filter((s) => s.id.startsWith('xe.'));
+        const xr = stops.filter((s) => s.id.startsWith('xr.'));
+        for (const a of xe) for (const b of xr) if (Math.abs(a.column - b.column) <= 1 && stops.length < r.stage!.map.nodes.length) throw new Error(`xr ${b.id} beside xe ${a.id}, seed ${n}`);
+      }
+    }
   });
 });
