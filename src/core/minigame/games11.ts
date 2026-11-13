@@ -56,7 +56,7 @@ const beds: MinigameModule<BedsState> = {
       cells.push({ id: `b${b}`, label: `Bed ${b + 1}`, detail: who !== null && who !== undefined ? s.patients[who]!.name : s.sel !== null ? 'put here' : 'empty', tone: who !== null && who !== undefined ? 'info' : 'dim', disabled: s.done });
     }
     for (const [k, n] of SUPPLIES.entries()) cells.push({ id: `s${k}`, label: n, detail: `x${s.supplies[k]}`, tone: 'good', disabled: s.done || (s.supplies[k] ?? 0) <= 0 });
-    return { hud: [`Saved: ${s.points}/${s.best}`, `Time: ${s.ticks}`, s.msg], prompt: 'Pick a patient, then a bed. Then pick the supply that cures the bedded patient. Worst first.', cols: 4, cells, done: s.done };
+    return { hud: [`Saved: ${s.points}/${s.best}`, `Time: ${s.ticks}`, s.msg], prompt: 'Pick a patient, then a bed. Then pick the supply that cures the bedded patient. Worst first.', cols: 4, cells, done: s.done, portraits: ['chansey', ...s.patients.filter((q) => q.status === 'wait' || q.status === 'bed').map((q) => q.name.toLowerCase())] };
   },
   act(_c, s, id) {
     if (s.done) return;
