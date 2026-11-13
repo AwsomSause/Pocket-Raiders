@@ -92,12 +92,14 @@ interface ShootState extends BaseState {
   lives: number;
   total: number;
   ticks: number;
+  /** One throw per beat: extra taps in the same beat only move the shooter. */
+  cool: boolean;
 }
 const shooter: MinigameModule<ShootState> = {
   start(_c, p, rs) {
     const r = new Rng(rs);
     const queue = Array.from({ length: p.targets! }, () => r.int(0, SW - 1));
-    return { ...base(r.state), targets: [], queue, col: 2, hit: 0, lives: p.lives!, total: p.targets!, ticks: p.ticks! };
+    return { ...base(r.state), targets: [], queue, col: 2, hit: 0, lives: p.lives!, total: p.targets!, ticks: p.ticks!, cool: false };
   },
   view(_c, s) {
     const cells: Cell[] = [];
@@ -112,6 +114,8 @@ const shooter: MinigameModule<ShootState> = {
   act(_c, s, id) {
     if (s.done || id === 'x') return;
     s.col = Number(id);
+    if (s.cool) return;
+    s.cool = true;
     // The snowball hits the lowest target in the column.
     const col = s.targets.filter((q) => q.col === s.col).sort((a, b) => b.row - a.row)[0];
     if (col) {
@@ -123,6 +127,7 @@ const shooter: MinigameModule<ShootState> = {
   tick(_c, s) {
     if (s.done) return;
     s.ticks -= 1;
+    s.cool = false;
     for (const q of s.targets) q.row += 1;
     const reached = s.targets.filter((q) => q.row >= SH - 1);
     if (reached.length) {
@@ -176,7 +181,9 @@ const stacker: MinigameModule<StackState> = {
     s.width = right - left;
     s.stack.push({ left, width: s.width });
     s.msg = right - left === top.width ? 'Perfect!' : 'Trimmed.';
-    s.pos = left;
+    // The next crate starts sliding in from the edge again.
+    s.pos = 0;
+    s.dir = 1;
     if (s.stack.length - 1 >= s.goal) s.done = true;
   },
   tick(_c, s) {
