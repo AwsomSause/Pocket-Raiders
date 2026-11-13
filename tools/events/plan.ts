@@ -142,7 +142,7 @@ export const PLAN_EVENTS: Json[] = [
     ch('Decline', leave()),
   ]),
   ev('double-trouble', 'Double Trouble', T, { cast: ['trainer.youngster_m', 'trainer.fairy_tale_girl'], effect: 'hearts' }, 'Twins hold hands. "We battle together!"', [
-    ch('Battle them both', fight('Two at once!', trainer('Twins', { size: 2, lv: 1, win: [$(1000), better()] }))),
+    ch('Battle them both', fight('Two at once!', trainer('Twins', { format: 'doubles', size: 2, lv: 1, win: [$(1000), better()] }))),
     ch('Decline', leave()),
   ]),
   ev('dojo-challenge', 'Dojo Challenge', T, { stop: 'dojo', cast: ['trainer.black_belt_m'], types: ['fighting'], effect: 'shake' }, 'A Black Belt bows. "Spar, or meditate?"', [
@@ -285,7 +285,7 @@ export const PLAN_EVENTS: Json[] = [
     ch('Run', out('You escape!'), { check: 'speed', fail: out('The portal sucks something from your Bag.', lose()) }),
   ]),
   ev('shadow-triad', 'Shadow Triad', V, { rarity: 'uncommon', effect: 'fog', tint: '#101010' }, 'Three figures appear in a puff of smoke.', [
-    ch('Battle all three', fight('They attack together!', trainer('Shadow Triad', { size: 3, types: ['dark'], lv: 2, win: [any(...HELD), $(1500)] })), { requires: [fierce] }),
+    ch('Battle all three', fight('They attack together, all three at once!', trainer('Shadow Triad', { format: 'triples', size: 3, types: ['dark'], lv: 2, win: [any(...HELD), $(1500)] })), { requires: [fierce] }),
     ch('Hand over an item', out('They vanish with it.', lose())),
   ]),
   ev('ghetsis-offer', "Ghetsis's Offer", V, { rarity: 'rare', cast: ['boss.ghetsis'], effect: 'fog', tint: '#281038' }, '"Power, child. Take it."', [
