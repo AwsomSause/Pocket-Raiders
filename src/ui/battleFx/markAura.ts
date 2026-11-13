@@ -1,14 +1,10 @@
 // Beta 0.6: battle marks on a Pokémon's sprite. A Shadow Pokémon sits in a dark, pulsing violet aura; a variant-tagged Pokémon
-// (Tagged, Dark Ball, Tidebound ...) gets a coloured ring at its feet and a small label. Presentation only: it reads the
+// (Tagged, Dark Ball, Tidebound ...) gets a coloured ring at its feet (no text label). Presentation only: it reads the
 // sprite's bounds, never uses gameplay RNG, and with motion 'off' the marks are still drawn, just not animated.
 
 import Phaser from 'phaser';
 import type { MotionLevel } from '../aero';
-import { loadAssets } from '../lazyAssets';
-import { itemVisual, type Visual } from '../sprites';
-
-/** The label shown over a variant-tagged Pokémon ("dark-ball" → "DARK BALL"). */
-export const variantLabel = (line: string): string => line.replace(/-/g, ' ').toUpperCase();
+import type { Visual } from '../sprites';
 
 /** A stable colour per variant line (hash of its id, so a new line needs no table entry). */
 export function variantColor(line: string): number {
@@ -20,8 +16,6 @@ export function variantColor(line: string): number {
 export interface MarkOptions {
   shadow: boolean;
   variant: string | null;
-  /** Couture: the item asset id of its accessory, drawn on the sprite. */
-  accessoryIcon?: string | null;
   motion: MotionLevel;
 }
 
@@ -70,15 +64,6 @@ export function addMarks(scene: Phaser.Scene, field: Phaser.GameObjects.Containe
       back.strokeEllipse(cx, b.bottom - 4, w * 0.95, 22);
       back.lineStyle(1, 0xffffff, 0.5);
       back.strokeEllipse(cx, b.bottom - 4, w * 0.95 + 8, 28);
-      const label = scene.add.text(cx, b.top - 4, variantLabel(o.variant), { fontFamily: 'sans-serif', fontSize: '14px', fontStyle: 'bold', color: '#101010', backgroundColor: `#${col.toString(16).padStart(6, '0')}`, padding: { x: 6, y: 2 } }).setOrigin(0.5, 1);
-      front.add(label);
-      if (o.accessoryIcon && !scene.textures.exists(o.accessoryIcon)) void loadAssets(scene, [o.accessoryIcon]).then(() => scene.textures.exists(o.accessoryIcon!) && draw());
-      if (o.accessoryIcon) {
-        // The worn accessory: its item art on a coloured disc at the Pokémon's neck.
-        const y = b.top + b.height * 0.38;
-        front.add(scene.add.circle(cx, y, 17, col, 0.9).setStrokeStyle(2, 0xffffff, 0.9));
-        front.add(itemVisual(scene, o.accessoryIcon, cx, y, 1.6));
-      }
     }
   };
   draw();

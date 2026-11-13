@@ -1206,7 +1206,7 @@ export class BattleScene extends Phaser.Scene {
     const visual = this.showSpriteBody(side, mon, species, cry, grow);
     try {
       const vs = this.run.battle?.extra?.variants?.[mon.uid];
-      this.markObjs[side] = addMarks(this, this.field, visual, { shadow: Boolean(mon.shadow), variant: vs?.line ?? null, accessoryIcon: vs?.accessory ? services().session.content.items.get(vs.accessory)?.iconAssetId ?? `item.${vs.accessory}` : null, motion: this.motion });
+      this.markObjs[side] = addMarks(this, this.field, visual, { shadow: Boolean(mon.shadow), variant: vs?.line ?? null, motion: this.motion });
     } catch {
       /* presentation only */
     }

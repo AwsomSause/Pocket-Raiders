@@ -6,7 +6,7 @@ import type { PokemonInstance } from '../state';
 import type { Variants, VariantLineId } from './variantLines';
 import { assignVariant, COUTURE_ACCESSORIES } from './variantLines';
 import { hashSeed, Rng } from '../rng';
-import { assignTrait, traitForSpecies, type Traits } from './traits';
+import { assignTrait, traitForSpecies, traitHolds, traitOfDossier, type Traits } from './traits';
 
 export type EvilRank = 'grunt' | 'specialist' | 'executive' | 'leader';
 
@@ -66,6 +66,15 @@ export function assignEvilTraits(traits: Traits, team: readonly PokemonInstance[
     given.push(mon.uid);
   }
   return given;
+}
+
+/** An event battle names its special Pokémon (`special`: a dossier id such as sv.rocket.roadblock): the first foe of a matching species carries its trait. Returns that foe's uid, or null. */
+export function assignSpecialTrait(traits: Traits, team: readonly PokemonInstance[], dossierId: string): string | null {
+  const trait = traitOfDossier(dossierId);
+  const holder = trait ? team.find((m) => traitHolds(trait, m.speciesId)) : undefined;
+  if (!trait || !holder) return null;
+  assignTrait(traits, holder.uid, trait);
+  return holder.uid;
 }
 
 /** Marnie's League Card: the Team Yell Blockade event's "Chant along" branch adds the event flag `marnies-league-card` (event flags live in `run.story.flags` as `ev:<key>`). Once held it stays for the run. */

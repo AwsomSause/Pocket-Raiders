@@ -130,4 +130,20 @@ describe('in a run', () => {
     expect(plain).toBeGreaterThan(0);
     expect(paid).toBe(plain * 2);
   });
+  it('The Roadblock\'s Snorlax fights with Fed and Paid, and Jackpot\'s Dratini with Payout', () => {
+    const run = evilRun('rocket', 0);
+    const node = run.stage!.map.nodes[0]!;
+    run.stage!.current = node.id;
+    run.stage!.visited = [node.id];
+    const roadblock = content.events.get('xe.kanto.roadblock')!.choices.find((c) => c.label === 'Play the Poké Flute')!.success.battle!;
+    expect(roadblock.kind === 'wild' && roadblock.special).toBe('sv.rocket.roadblock');
+    startEventBattle(content, run, node, roadblock as never, new Rng(hashSeed('rb')), { eventId: 'xe.kanto.roadblock', choiceIndex: 0, sideId: 's', success: true });
+    const snorlax = run.battle!.enemyTeam.find((m) => m.speciesId === 'snorlax')!;
+    expect(run.battle!.extra.traits[snorlax.uid]?.trait).toBe('fed-and-paid');
+    const count = content.events.get('xe.kanto.count-room')!.choices.find((c) => c.label.includes('play you'))!.success.battle!;
+    startEventBattle(content, run, node, count as never, new Rng(hashSeed('cr')), { eventId: 'xe.kanto.count-room', choiceIndex: 1, sideId: 's', success: true });
+    const dratini = run.battle!.enemyTeam.find((m) => m.speciesId === 'dratini')!;
+    expect(run.battle!.extra.traits[dratini.uid]?.trait).toBe('payout');
+    expect(run.battle!.enemyTeam.map((m) => m.speciesId)).toEqual(['magnemite', 'dratini']);
+  });
 });

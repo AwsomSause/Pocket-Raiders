@@ -56,11 +56,11 @@ const kantoRun = (seed: string, density: 'low' | 'normal' | 'full' | null = 'nor
 const placed = (r: RunState) => r.stage!.map.nodes.flatMap((n) => n.sides.filter((s) => s.eventId?.startsWith('xe.')).map((s) => ({ id: s.eventId!, column: n.column })));
 
 describe('the Kanto story events', () => {
-  it('are eight, all in Kanto, built from the script (file is current)', () => {
+  it('are nine, all in Kanto, built from the script (file is current)', () => {
     const ids = [...content.events.keys()].filter((id) => id.startsWith('xe.kanto.'));
-    expect(ids.sort()).toEqual(['xe.kanto.appointment', 'xe.kanto.blaine-defects', 'xe.kanto.harbor-export', 'xe.kanto.madame-call', 'xe.kanto.orphan', 'xe.kanto.roadblock', 'xe.kanto.small-print', 'xe.kanto.trio-conscience']);
+    expect(ids.sort()).toEqual(['xe.kanto.appointment', 'xe.kanto.blaine-defects', 'xe.kanto.count-room', 'xe.kanto.harbor-export', 'xe.kanto.madame-call', 'xe.kanto.orphan', 'xe.kanto.roadblock', 'xe.kanto.small-print', 'xe.kanto.trio-conscience']);
     const file = JSON.parse(readFileSync('src/data/events/xe-kanto.json', 'utf8')).events as { id: string }[];
-    expect(file).toHaveLength(8);
+    expect(file).toHaveLength(9);
   });
   it('are never eligible without the saga on, or outside Kanto', () => {
     const off = kantoRun('xe-off', null);

@@ -3265,12 +3265,16 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     chain: z.number().int().min(1).max(3).default(1),
     /** The wild Pokémon knows these moves (replacing its last ones): Route 25's Primeape uses Rage. */
     foeMoves: z.array(z.string()).max(2).optional(),
+    /** Beta 0.6: a named special Pokémon (dossier id, e.g. sv.rocket.roadblock) is the foe, so it fights with its signature trait. */
+    special: z.string().optional(),
     win: z.array(EventEffectSchema).default([]),
   }),
   z.object({
     kind: z.literal('trainer'),
     /** Beta 0.6 Vermilion: the exact level of the foe's team (the last Pokémon is one higher) instead of the stage's event level plus `levelBonus`. */
     level: z.number().int().min(1).max(100).optional(),
+    /** Beta 0.6: the foe team's named special Pokémon (dossier id): its first matching species carries the signature trait. */
+    special: z.string().optional(),
     /** Fought as a double or triple battle (see EventBattleFormatSchema); `size` should be at least 2 or 3. */
     format: EventBattleFormatSchema.optional(),
     /** A fixed foe team (species ids) instead of one drawn by `types`. */

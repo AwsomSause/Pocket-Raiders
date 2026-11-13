@@ -106,3 +106,8 @@ export function traitOverhears(traits: Traits, uid: string): boolean {
   f.used = 1;
   return true;
 }
+
+/** The trait of a named special Pokémon (its dossier id), or null. */
+export const traitOfDossier = (dossierId: string): TraitId | null => TRAIT_IDS.find((t) => TRAIT_CAST[t].dossier === dossierId) ?? null;
+/** Whether a species can be this trait's holder (a Dratini stands in for Jackpot, a Dragonair too). */
+export const traitHolds = (trait: TraitId, speciesId: string): boolean => TRAIT_CAST[trait].species.includes(speciesId);
