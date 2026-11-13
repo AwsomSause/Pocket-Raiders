@@ -552,6 +552,35 @@ describe('Batch 5: faint, ally, weather and status moments', () => {
     expect(has(turn(f.ctx), 'p2-formation')).toBe(true);
     function foeLegend(): PokemonInstance { const m = strike('articuno', 'splash'); m.level = 5; return m; }
   });
+
+  it('Houndoom howls only at night; Tinkaton only boosts its hammer against a Steel/Flying foe', () => {
+    const day = build('howl-day', [mon('houndoom', 40)], mon('magikarp', 5));
+    day.ctx.period = 'afternoon';
+    expect(has(turn(day.ctx), 'p2-houndoom-howl')).toBe(false);
+    const night = build('howl-night', [mon('houndoom', 40)], mon('magikarp', 5));
+    night.ctx.period = 'night';
+    expect(has(turn(night.ctx), 'p2-houndoom-howl')).toBe(true);
+    expect(night.battle.enemyStages.spe).toBe(-1);
+    const plain = build('hammer-n', [mon('tinkaton', 40)], mon('magikarp', 5));
+    expect(has(turn(plain.ctx), 'p2-tinkaton-hammer')).toBe(false);
+    const bird = strike('skarmory', 'splash'); bird.level = 5;
+    const hit = build('hammer-y', [mon('tinkaton', 40)], bird);
+    expect(has(turn(hit.ctx), 'p2-tinkaton-hammer')).toBe(true);
+    expect(hit.battle.storyEffects.some((t) => t.startsWith('pm-moveboost:'))).toBe(true);
+  });
+
+  it('Psyduck headache: below half HP the next Psychic move is doubled, then spent', () => {
+    let played = 0;
+    for (let i = 0; i < 300 && played < 2; i++) {
+      const p = mon('psyduck', 40);
+      p.hp = Math.floor(calcStats(content, p).hp * 0.3);
+      const s = build(`duck-${i}`, [p], mon('magikarp', 5));
+      if (!turn(s.ctx).some((e) => e.type === 'pmoment' && e.id === 'p2-psyduck-headache')) continue;
+      played++;
+      expect(s.battle.storyEffects.some((t) => t.startsWith('pm-nextboost:'))).toBe(true);
+    }
+    expect(played).toBeGreaterThan(0);
+  });
 });
 
 describe('Batch 6: rest and catch moments (run layer)', () => {
