@@ -65,6 +65,8 @@ export const CanonStateSchema = z.object({
   flags: z.array(flag).default([]),
   completed: z.array(spaceId).default([]),
   menus: z.record(z.string(), z.array(spaceId)).default({}),
+  /** Flight North: the party that was taken away (PokemonInstance records) while the Bug-type fights alone. Missing = nothing stashed. */
+  stash: z.array(z.any()).optional(),
 });
 export type CanonState = z.infer<typeof CanonStateSchema>;
 

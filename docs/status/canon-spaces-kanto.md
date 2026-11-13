@@ -9,3 +9,5 @@ Celadon City (Department Store, Game Corner, Mansion, Eeveelution Brothers, Tea,
 
 
 Lavender Town built (interlude-3, shown on the Stage 4 map): Pokémon Tower, Fuji's House, Fan Club, Rock Tunnel, Power Plant, Volunteers. See docs/updates/beta-0.6/lavender-canon.md.
+
+Vermilion City is built too (tools/build-canon-vermilion.ts -> src/data/eventsCanonVermilion.json; the Kaiju raid is in raids.json). See docs/updates/beta-0.6/vermilion-canon.md for what is and is not in.

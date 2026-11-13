@@ -98,6 +98,93 @@
   "failureHealFraction": 0.5,
   "raids": [
     {
+      "id": "kaiju-tentacruel",
+      "name": "Kaiju Tentacruel",
+      "tier": 2,
+      "blurb": "The harbor pollution has made this Tentacruel huge. Break its three shields; it calls Tentacool at each.",
+      "species": [
+        "tentacruel"
+      ],
+      "levelBonus": 3,
+      "hpBoostPercent": 260,
+      "entryCost": 0,
+      "shield": {
+        "at": [
+          0.75,
+          0.5,
+          0.25
+        ],
+        "points": 0.12
+      },
+      "phases": [
+        {
+          "atHp": 0.5,
+          "text": "The harbor boils. The Tentacruel rears up out of the water!",
+          "boost": {
+            "atk": 1,
+            "spa": 1
+          }
+        }
+      ],
+      "kind": "regional",
+      "approaches": [
+        {
+          "id": "direct",
+          "label": "Face it alone",
+          "text": "Take it on with your own team.",
+          "cost": 0
+        },
+        {
+          "id": "boats",
+          "label": "Call the harbor boats",
+          "text": "The fishing boats harry it from the water first (the boss starts 25% weaker).",
+          "cost": 600,
+          "hpDeltaPercent": -25
+        }
+      ],
+      "modifiers": {
+        "hazard": {
+          "type": "poison",
+          "percent": 0.05,
+          "text": "The polluted harbor water burns your Pokémon!",
+          "immune": [
+            "poison",
+            "steel",
+            "water"
+          ]
+        }
+      },
+      "extraMoves": [
+        "wrap",
+        "acid-armor"
+      ],
+      "rewards": {
+        "moneyPerLevel": 90,
+        "items": [
+          {
+            "item": "poison-barb",
+            "chance": 1
+          },
+          {
+            "item": "mystic-water",
+            "chance": 1
+          }
+        ],
+        "draftExtra": 1,
+        "joinChance": 0,
+        "gift": {
+          "species": "tentacool",
+          "ability": "huge-power",
+          "moves": [
+            "liquidation"
+          ],
+          "levelDrop": 6
+        }
+      },
+      "canon": "cs.kanto.vermilion.kaiju",
+      "capture": 0.2
+    },
+    {
       "id": "sleeping-snorlax",
       "name": "Sleeping Giant",
       "tier": 1,

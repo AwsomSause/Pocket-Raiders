@@ -106,6 +106,7 @@ import { PROMPTS } from '../core/interaction/prompt';
 import eventsJson from './events.json';
 import eventsW5Json from './eventsW5.json';
 import eventsCanonKantoJson from './eventsCanonKanto.json';
+import eventsCanonVermilionJson from './eventsCanonVermilion.json';
 import eventsFacesJson from './eventsFaces.json';
 import eventsStoryJson from './eventsStory.json';
 import eventsGamesJson from './eventsGames.json';
@@ -177,6 +178,8 @@ export interface RawContent {
   eventsW5: unknown;
   /** Beta 0.6 Canon Spaces: Kanto events (eventsCanonKanto.json), added to `events`. */
   eventsCanonKanto?: unknown;
+  /** Beta 0.6 Canon Spaces: the Vermilion City events (eventsCanonVermilion.json, built by tools/build-canon-vermilion.ts). */
+  eventsCanonVermilion?: unknown;
   /** Story and characters ideas (S110-S131): eventsStory.json, added to `events`. Optional so older test fixtures stay valid. */
   eventsStory?: unknown;
   /** Famous faces, rivals and cameos (R436-R470): eventsFaces.json, added to `events`. */
@@ -318,6 +321,7 @@ export const RAW_CONTENT: RawContent = {
   npcStory: npcStoryJson,
   eventsW5: eventsW5Json,
   eventsCanonKanto: eventsCanonKantoJson,
+  eventsCanonVermilion: eventsCanonVermilionJson,
   eventsStory: eventsStoryJson,
   eventsFaces: eventsFacesJson,
   eventsGames: eventsGamesJson,
@@ -392,7 +396,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const shadowWorld = parse(ShadowWorldFileSchema, raw.shadowWorld, 'shadowWorld.json', problems);
   const evilTeams = parse(EvilFileSchema, raw.evilTeams, 'evilTeams.json', problems);
   // Evil Team storyline and operation stops are expanded from templates into ordinary events (core/evil/content.ts).
-  const w5Events = [...((raw.eventsW5 as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsHelpers as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsWeather as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsMysteries as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsTraining as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsCanonKanto as { events?: unknown[] } | undefined)?.events ?? [])];
+  const w5Events = [...((raw.eventsW5 as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsHelpers as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsWeather as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsMysteries as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsTraining as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsCanonKanto as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsCanonVermilion as { events?: unknown[] } | undefined)?.events ?? [])];
   const storyEvents = [...((raw.eventsStory as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsFaces as { events?: unknown[] } | undefined)?.events ?? [])];
   const gamesEvents = [...((raw.eventsGames as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsRK as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsVillain as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsMerchants as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsRB as { events?: unknown[] } | undefined)?.events ?? [])];
   // An event in src/data/events/*.json replaces any older event with the same id (Beta 0.6 revisions of the pack's REVISE/MERGE events).
@@ -527,7 +531,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   // Raids: every boss species, reward item and phase must exist (the boss must be able to fight).
   for (const raid of raids.raids) {
     for (const id of raid.species) if (!content.species.has(id)) problems.push(`raids.json "${raid.id}" has unknown species "${id}"`);
-    for (const r of raid.rewards.items) if (!content.items.has(r.item)) problems.push(`raids.json "${raid.id}" gives unknown item "${r.item}"`);
+    for (const r of raid.rewards.items) if (!content.items.has(r.item) && !content.catalog.has(r.item)) problems.push(`raids.json "${raid.id}" gives unknown item "${r.item}"`);
     if (raid.shield && raid.shield.at.length * raid.shield.points >= 0.9) problems.push(`raids.json "${raid.id}" shields are too big`);
     if (raid.phases.some((p, i) => i > 0 && p.atHp >= raid.phases[i - 1]!.atHp)) problems.push(`raids.json "${raid.id}" phases must go down in HP`);
   }
