@@ -1,5 +1,7 @@
 // Entry point: validates game data, opens the save system and starts Phaser.
 
+import { beginClimax, setClimaxCut } from './core/arc/climaxExtended';
+import { freshEvil } from './core/evil/schema';
 import { hasSkinBackdrop } from './ui/screenSkins';
 import { ruleWipe, wipeAssetId, type WipeMask } from './ui/battleFx/ruleWipe';
 import { loadAssets } from './ui/lazyAssets';
@@ -183,6 +185,23 @@ function start(): void {
     session,
     game,
     activeScene: () => game.scene.getScenes(true).map((s) => s.scene.key)[0] ?? null,
+    /**
+     * Dev hook: jump the current run into the Extended Cut climax (Kanto phases), then open the map so the director plays them.
+     * From the console or a test: `await __pkr.extendedCut()`. Returns false when there is no run on the map.
+     */
+    extendedCut: () => {
+      const run = session.run;
+      if (!run || run.phase !== 'map') return false;
+      setClimaxCut(run, 'extended');
+      if (!run.story.evil?.teamId) {
+        const team = session.content.evilTeams.teams[0];
+        if (team) run.story.evil = { ...(run.story.evil ?? freshEvil()), teamId: team.id };
+      }
+      beginClimax(run, 'kanto');
+      session.saveRunNow();
+      game.scene.getScenes(true)[0]?.scene.start('Map');
+      return true;
+    },
     /** A microphone loudness meter (MIC1). Browser tests use it with a fake media stream; screens create their own. */
     micMeter: () => new MicMeter(),
     /** Runs a shared interaction prompt over the active scene and resolves with its result (browser tests, debug panel). */

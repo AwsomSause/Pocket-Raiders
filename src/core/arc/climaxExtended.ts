@@ -6,6 +6,7 @@ import { FORMATS, startFormat } from '../formats/registry';
 import { beginCut, currentFormat, cutOf, markCheckpoint } from '../formats/store';
 import type { FormatId } from '../formats/types';
 import { launchFormatBattle } from '../formats/battle';
+import { trackOnClimaxLost } from '../expansion/trackRun';
 import { hashSeed, Rng } from '../rng';
 import type { Content } from '../contentSchema';
 import type { RunState } from '../state';
@@ -58,7 +59,7 @@ const save = (run: RunState, d: Dir): void => { cutOf(run).director = d; };
 
 /** The climax begins: forgets the last climax's formats and starts at phase 0. Standard-cut runs do nothing. */
 export function beginClimax(run: RunState, region = 'kanto'): boolean {
-  if (climaxCutOf(run) !== 'extended') return false;
+  if (climaxCutOf(run) !== 'extended' || region !== 'kanto') return false; // Kanto only until the other regions' formats exist
   beginCut(run);
   cutOf(run).region = region;
   save(run, { idx: 0, shots: dirOf(run).shots });
@@ -100,7 +101,11 @@ export function climaxLost(run: RunState): 'retry' | 'worst' {
   const d = dirOf(run);
   d.shots += 1;
   delete d.fought; delete d.need; delete d.started;
-  if (d.shots >= SECOND_SHOT_TRIES) { d.idx = climaxPhases(regionOf(run)).length; save(run, d); return 'worst'; }
+  if (d.shots >= SECOND_SHOT_TRIES) { d.idx = climaxPhases(regionOf(run)).length; save(run, d);
+    cutOf(run).result = 'worst'; // (cut.ledger belongs to the Convoy)
+    trackOnClimaxLost(run);
+    return 'worst';
+  }
   const steps = climaxPhases(regionOf(run));
   const cp = cutOf(run).checkpoint;
   const at = typeof cp === 'string' ? steps.findIndex((s) => s.phase === cp) : -1;
