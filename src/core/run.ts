@@ -26,7 +26,7 @@ import { eliteRematchDue } from './story/eliteRematch';
 import { markAssisted } from './tools/assisted';
 import { crossObstacle, placeDungeon, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
 import { wandererStageStart, wandererStep } from './wanderer';
-import { freeHandedOverRival } from './arc/standWithExtended';
+import { freeHandedOverRival, standWithClimaxLost, standWithOf } from './arc/standWithExtended';
 import { makeShadow, rollShadowHeart, soothePartyAfterBattle } from './shadow';
 import { leaveRegion, startGrandArc } from './grandArc';
 import { checkFlagKeys, checkLeadWinKey, SHADOW_SLOT_CAP, heavyShadowCount, shadowTierOf } from './shadow2';
@@ -89,7 +89,7 @@ import { bumpEventCounters } from './eventToolkit';
 import { blackMarketMarkup, fieldResearchMoney, spookyEncounterChance, voiceAsksToJoin } from './trainerEvolution';
 import { growGarden } from './berries';
 import { layEgg, tickEggs } from './eggs';
-import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isPseudoBattle, isStoryEventBattle } from './events';
+import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
@@ -332,7 +332,7 @@ export interface NewRunOptions {
   /** Story Run: the player's name, pronouns and Look from the prologue (profile.story.protagonist). */
   protagonist?: { look: string; name: string; pronouns: string | PronounSet; backstory?: string };
   /** Beta 0.6: which expansion settings were on at run start (settings.expansion). Each flag is stored in `run.expansion` once and never changes. */
-  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; grandArc?: boolean; worldTracks?: boolean };
+  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; grandArc?: boolean; worldTracks?: boolean; eventsDensity?: 'low' | 'normal' | 'full' };
 }
 
 export function createRun(content: Content, opts: NewRunOptions): RunState {
@@ -435,7 +435,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
   }
   if (opts.expansion) {
     const e = opts.expansion;
-    const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.worldTracks ? { tracks: true } : {}) };
+    const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.worldTracks ? { tracks: true } : {}), ...(e.eventsDensity ? { density: e.eventsDensity } : {}) };
     if (Object.keys(flags).length > 0) run.expansion = { ...run.expansion, ...flags };
     if (e.grandArc) startGrandArc(run);
   }
@@ -3102,6 +3102,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     return { run, events, end: null, defeated: false, cues, drama, raidFailed: true };
   }
   if (battle.outcome === 'lose' && battle.event && isPseudoBattle(content, battle.event)) {
+    // Stand With Them: a lost climax battle is Second Shot (core/arc/standWithExtended.ts); the run always goes on.
+    if (isStandWithBattle(content, battle.event) && standWithOf(run)) standWithClimaxLost(run);
     pseudoLost(content, run);
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, clubLost: true };

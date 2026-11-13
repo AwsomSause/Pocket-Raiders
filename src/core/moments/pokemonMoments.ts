@@ -44,6 +44,12 @@ export const MomentEffectSchema = z.object({
   ppRestore: z.number().int().min(1).max(30).optional(),
   /** Chance (percent) the foe is confused by `foeConfuse`. */
   foeConfuseChance: z.number().int().min(1).max(100).default(100),
+  /** The Pokémon falls asleep for this many turns (Snorlax's nap). */
+  sleepSelf: z.number().int().min(1).max(3).optional(),
+  /** Critical-hit stages added for the battle (or for `boostTurns` turns). */
+  critStage: z.number().int().min(1).max(3).optional(),
+  /** Starts this weather for this many turns (never over a primal weather). */
+  weather: z.object({ id: z.enum(['rain', 'sun', 'sand', 'snow', 'hail']), turns: z.number().int().min(1).max(8) }).optional(),
   /** Entry moments: HP restored now, as a percent of max HP. */
   healNowPct: z.number().int().min(1).max(100).optional(),
   /** Own stat boosts from `boost` / `boostBest` fade after this many turns (absent = last the battle). */
@@ -73,7 +79,9 @@ export const PokemonMomentSchema = z.object({
   scope: ScopeSchema,
   trigger: z.enum(MOMENT_TRIGGERS),
   /** Extra condition: at least this many living party members must match the moment's own scope (Eevee's Bond). */
-  requires: z.object({ partyMatching: z.number().int().min(2).max(6) }).optional(),
+  requires: z.object({ partyMatching: z.number().int().min(2).max(6).optional(), weather: z.enum(['rain', 'sun', 'sand', 'snow', 'hail']).optional() }).optional(),
+  /** Low-HP moments: it can play once the Pokémon is below this percent of its max HP (checked at the end of each turn). */
+  hpBelow: z.number().int().min(1).max(99).optional(),
   /** 0–1. */
   chance: z.number().min(0).max(1),
   limit: z.enum(['battle', 'run']),

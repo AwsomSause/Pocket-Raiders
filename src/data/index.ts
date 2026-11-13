@@ -2,6 +2,7 @@
 // cross-references (e.g. every learnset move exists). Throws a readable
 // ContentError listing every problem found.
 
+import { allChoices } from '../core/eventMemory';
 import { z } from 'zod';
 import {
   AbilitySchema,
@@ -530,7 +531,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   }
   const blessingIds = new Set(shadowWorld.blessings.map((b) => b.id));
   for (const ev of eventsFile.events) {
-    for (const ch of ev.choices) {
+    for (const ch of allChoices(ev)) {
       if (ch.prompt && !PROMPTS.some((d) => d.id === ch.prompt!.id)) problems.push(`events.json "${ev.id}" uses unknown prompt "${ch.prompt.id}"`);
       for (const o of [ch.success, ch.failure]) {
         for (const e of [...(o?.effects ?? []), ...(o?.battle?.win ?? [])]) if (e.kind === 'blessing' && !blessingIds.has(e.id)) problems.push(`events.json "${ev.id}" gives unknown blessing "${e.id}"`);

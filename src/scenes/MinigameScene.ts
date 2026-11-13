@@ -13,6 +13,9 @@ import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { Menu } from '../ui/widgets';
 import { glassPanel as drawPanel } from '../ui/aero';
 import { sceneForRun } from './routing';
+import { loadAssets } from '../ui/lazyAssets';
+
+const TONE_FILL: Record<string, number> = { good: 0x2f7a4a, bad: 0x8a3a3a, info: 0x3a5f8a, hot: 0xc9962a, dim: 0x22303a };
 
 const MEDAL_SFX: Record<string, string> = { gold: 'se.shiny', silver: 'se.level_up', bronze: 'se.level_up', none: 'ui.error' };
 const MEDAL_COLOR: Record<string, number> = { gold: 0xf5c842, silver: 0xd0d8e0, bronze: 0xd08848, none: 0x707080 };
@@ -50,17 +53,20 @@ export class MinigameScene extends Phaser.Scene {
     if (outcome) this.showMedal(outcome.medal, motion);
     const fr = session.content.minigames.economy.frontier;
     const prizes = outcome && fr.games.includes(run.minigame.id) ? fr.prizes : [];
+    const controls = view.cells.filter((c) => !c.board);
     const options = outcome
       ? [
           { label: 'Done', detail: prizes.length ? `${run.minigames.frontierPoints} Frontier Points` : 'back to the map', disabled: false },
           ...prizes.map((p) => ({ label: p.name, detail: `${p.cost} FP`, disabled: run.minigames.frontierPoints < p.cost })),
         ]
-      : view.cells.map((c) => ({ label: c.label, detail: c.detail, disabled: c.disabled }));
-    const cols = outcome ? (prizes.length ? 2 : 1) : Math.max(1, view.cols);
+      : controls.map((c) => ({ label: c.label, detail: c.detail, disabled: c.disabled }));
+    const board = outcome ? [] : view.cells.filter((c) => c.board);
+    const cols = outcome ? (prizes.length ? 2 : 1) : board.length ? Math.min(4, Math.max(1, controls.length)) : Math.max(1, view.cols);
     const rows = Math.ceil(options.length / cols);
-    const itemH = Math.min(52, Math.floor((GAME_HEIGHT - 190 - 30) / rows));
+    const boardH = board.length ? this.drawBoard(board, view.cols) : 0;
+    const itemH = Math.min(52, Math.floor((GAME_HEIGHT - 190 - 30 - boardH) / rows));
     this.menu = new Menu(this, {
-      x: 24, y: 156, columns: cols, itemWidth: Math.floor((GAME_WIDTH - 48) / cols), itemHeight: itemH, fontSize: itemH < 40 ? 16 : 19, color: COLORS.textLight,
+      x: 24, y: 156 + boardH, columns: cols, itemWidth: Math.floor((GAME_WIDTH - 48) / cols), itemHeight: itemH, fontSize: itemH < 40 ? 16 : 19, color: COLORS.textLight,
       options,
       onSelect: (i) => {
         if (outcome) {
@@ -72,7 +78,7 @@ export class MinigameScene extends Phaser.Scene {
           this.scene.restart({ focus: i, slow: this.slow, paused: this.paused });
           return;
         }
-        const cell = view.cells[i]!;
+        const cell = controls[i]!;
         if (cell.disabled) return;
         playSfx(this, 'ui.select');
         const after = session.minigameAct(cell.id);
@@ -102,6 +108,27 @@ export class MinigameScene extends Phaser.Scene {
       if (def.accessibilityOptions.noTimerOption) this.scene.restart({ focus: this.menu.index, slow: this.slow, paused: !this.paused });
     });
     onInputAction(this, (a) => this.menu.handle(a));
+  }
+
+  /** Draws the picture board (tiles, with game art where it exists) and returns the height it used. */
+  private drawBoard(cells: { label: string; tone?: string; art?: string }[], cols: number): number {
+    const rows = Math.ceil(cells.length / cols);
+    const size = Math.max(20, Math.min(64, Math.floor(250 / rows), Math.floor((GAME_WIDTH - 48) / cols)));
+    const x0 = Math.floor((GAME_WIDTH - size * cols) / 2);
+    const art = [...new Set(cells.map((c) => c.art).filter((a): a is string => !!a))];
+    cells.forEach((c, i) => {
+      const x = x0 + (i % cols) * size;
+      const y = 156 + Math.floor(i / cols) * size;
+      this.add.rectangle(x + size / 2, y + size / 2, size - 2, size - 2, TONE_FILL[c.tone ?? 'dim'] ?? TONE_FILL.dim!, 1).setStrokeStyle(1, 0x000000, 0.35);
+      const label = this.add.text(x + size / 2, y + size / 2, c.label.trim(), textStyle(Math.max(10, Math.floor(size / 3)), '#ffffff')).setOrigin(0.5);
+      if (c.art && this.textures.exists(c.art)) {
+        label.setVisible(false);
+        this.add.image(x + size / 2, y + size / 2, c.art).setDisplaySize(size - 8, size - 8);
+      }
+    });
+    // Load the art in the background; the next redraw (every tick) uses it. Missing art keeps the text label.
+    if (art.length) void loadAssets(this, art);
+    return rows * size + 8;
   }
 
   /** A glossy medal that bounces in when the game ends (still when motion is off). */
