@@ -44,3 +44,36 @@ test('Breather opens over the map, heals once and closes', async ({ page }) => {
   expect(out.cp).toBe('breather');
   expect(errors).toEqual([]);
 });
+
+test('Blackout: picking an anchor starts a sealed battle', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  await page.goto('/');
+  await page.evaluate(() => localStorage.clear());
+  await page.goto('/?seed=e4-blackout');
+  await waitForScene(page, 'MainMenu');
+  for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
+    await page.keyboard.press('Enter');
+    await waitForScene(page, next);
+  }
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    const run = pkr.session.run;
+    const anchors = [
+      { id: 'a1', place: 'the Nugget Bridge crossing', name: 'Rocket Scientist (anchor)', species: ['mr-mime'], size: 2, beaten: false },
+      { id: 'a2', place: 'the Celadon Lane cordon', name: 'Rocket Scientist (anchor)', species: ['mr-mime'], size: 2, beaten: false },
+      { id: 'a3', place: 'the crossroads below Silph', name: 'Rocket Scientist (anchor)', species: ['mr-mime'], size: 2, beaten: false },
+    ];
+    run.expansion = { ...(run.expansion ?? {}), cut: { format: { id: 'blackout', state: { anchors, triad: false, pending: null, losses: 0 } } } };
+    pkr.game.scene.getScene('Map').scene.restart({ focus: 0 });
+  });
+  await waitForScene(page, 'Format');
+  await page.screenshot({ path: 'test-results/e4-blackout.png' });
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Battle');
+  const rule = await page.evaluate(() => (window as any).__pkr.session.run.battle.eventRule);
+  expect(rule).toEqual({ noSwitchFirstTurn: true, typeBoost: { type: 'psychic', pct: 10 } });
+  expect(errors).toEqual([]);
+});

@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { breatherShare } from '../../src/core/formats/breather';
 import { battleEnded, cardOf, chooseOption, closeFormat, formatOver, startFormat } from '../../src/core/formats/registry';
 import { currentFormat } from '../../src/core/formats/store';
+import { switchProblem } from '../../src/core/battle/engine';
 import { maxHp } from '../../src/core/pokemon';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { RunStateSchema } from '../../src/core/state';
@@ -103,5 +104,84 @@ describe('Breather', () => {
     startFormat('breather', ctxOf(run));
     expect(battleEnded(ctxOf(run), true)).toBe(true);
     expect(startFormat('convoy', ctxOf(run))).toBe(false);
+  });
+});
+
+describe('Blackout', () => {
+  const sealed = (run: ReturnType<typeof mk>) => run.battle!.eventRule;
+
+  it('launches an anchor fight under the Seal and breaks it after two anchors', () => {
+    const run = mk('bo1');
+    expect(startFormat('blackout', ctxOf(run), { triad: false })).toBe(true);
+    const card = cardOf(ctxOf(run))!;
+    expect(card.options.map((o) => o.id)).toEqual(['a1', 'a2', 'a3']);
+    chooseOption(ctxOf(run), 'a1');
+    expect(run.phase).toBe('battle');
+    expect(run.battle!.event!.eventId).toBe('format:blackout');
+    expect(sealed(run)).toEqual({ noSwitchFirstTurn: true, typeBoost: { type: 'psychic', pct: 10 } });
+    expect(run.battle!.enemyTeam.every((m) => m.speciesId === 'mr-mime')).toBe(true);
+    expect(switchProblem({ battle: run.battle!, party: run.party }, 1)).toMatch(/Seal/);
+    run.battle!.turn = 2;
+    expect(switchProblem({ battle: run.battle!, party: run.party }, 1)).toBeNull();
+    // won: first anchor beaten
+    battleEnded(ctxOf(run), true);
+    run.battle = null;
+    run.phase = 'map';
+    chooseOption(ctxOf(run), 'a2');
+    expect(sealed(run)).toBeDefined(); // one beaten: Seal still holds
+    battleEnded(ctxOf(run), true);
+    run.battle = null;
+    run.phase = 'map';
+    // two beaten and no Triad: over, Seal gone
+    expect(formatOver(ctxOf(run))).toBe(true);
+    expect(run.expansion!.cut!.done).toContain('blackout');
+    expect(run.expansion!.cut!.checkpoint).toBe('blackout');
+  });
+
+  it('a lost fight records the loss and leaves the anchor up (no double count)', () => {
+    const run = mk('bo2');
+    startFormat('blackout', ctxOf(run), { triad: false });
+    chooseOption(ctxOf(run), 'a1');
+    battleEnded(ctxOf(run), false);
+    battleEnded(ctxOf(run), true); // no fight pending: ignored
+    run.battle = null;
+    run.phase = 'map';
+    const card = cardOf(ctxOf(run))!;
+    expect(card.options.map((o) => o.id)).toEqual(['a1', 'a2', 'a3']);
+    expect(card.lines.join(' ')).toMatch(/lost: 1/);
+  });
+
+  it('with the Triad, Sabrina is the third anchor, waits for the others, and the third fight has no Seal', () => {
+    const run = mk('bo3');
+    startFormat('blackout', ctxOf(run), { triad: true });
+    const opts = cardOf(ctxOf(run))!.options;
+    expect(opts.find((o) => o.id === 'a3')!.enabled).toBe(false);
+    chooseOption(ctxOf(run), 'a3'); // not allowed yet
+    expect(run.phase).not.toBe('battle');
+    for (const id of ['a1', 'a2']) {
+      chooseOption(ctxOf(run), id);
+      battleEnded(ctxOf(run), true);
+      run.battle = null;
+      run.phase = 'map';
+    }
+    expect(formatOver(ctxOf(run))).toBe(false);
+    chooseOption(ctxOf(run), 'a3');
+    expect(run.battle!.trainer!.name).toBe('Oracle Sabrina');
+    expect(run.battle!.eventRule).toBeUndefined();
+    battleEnded(ctxOf(run), true);
+    expect(formatOver(ctxOf(run))).toBe(true);
+  });
+
+  it('is deterministic and survives save and reload mid-format', () => {
+    const a = mk('bo4');
+    const b = mk('bo4');
+    for (const r of [a, b]) {
+      startFormat('blackout', ctxOf(r), { triad: false });
+      chooseOption(ctxOf(r), 'a2');
+    }
+    expect(a.battle!.enemyTeam.map((m) => [m.speciesId, m.level])).toEqual(b.battle!.enemyTeam.map((m) => [m.speciesId, m.level]));
+    const loaded = RunStateSchema.parse(JSON.parse(JSON.stringify(a)));
+    expect(currentFormat(loaded)!.state.pending).toBe('a2');
+    expect(loaded.battle!.eventRule!.typeBoost).toEqual({ type: 'psychic', pct: 10 });
   });
 });

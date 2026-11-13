@@ -1,0 +1,47 @@
+{
+ "events": [
+  {
+   "id": "stand-with-recruiter",
+   "name": "A Job Offer",
+   "group": "Evil Team",
+   "rarity": "rare",
+   "tags": ["Evil Team", "Story"],
+   "minStage": 2,
+   "requires": [{ "kind": "evil", "after": 2 }, { "kind": "standWith", "joined": false }],
+   "scene": { "cast": [], "effect": "glint" },
+   "intro": "A recruiter in a plain jacket falls into step beside you. \"We have noticed you. We notice useful people. There is a uniform, a code name and a desk, and nobody will ask you for a reason. Decline, and we will never have met.\"",
+   "choices": [
+    {
+     "label": "Join as an Inside Man",
+     "success": { "text": "A uniform is folded into your arms. You are somebody else now, on the inside.", "effects": [{ "kind": "standWith", "action": "join" }] }
+    },
+    { "label": "Decline", "success": { "text": "The recruiter nods once and is gone.", "effects": [] } }
+   ]
+  },
+  {
+   "id": "stand-with-team-mission",
+   "name": "A Small Job for the Team",
+   "group": "Evil Team",
+   "rarity": "uncommon",
+   "tags": ["Evil Team", "Story"],
+   "minStage": 3,
+   "requires": [{ "kind": "standWith" }],
+   "scene": { "cast": [], "effect": "glint" },
+   "intro": "An officer hands you a sealed envelope without looking up. \"Errand. Nothing to do with the plan. Do it well and people will notice.\"",
+   "choices": [
+    {
+     "label": "Run the errand (+8 reputation)",
+     "success": { "text": "It is done by evening, and nobody says thank you, which is how you know.", "effects": [{ "kind": "standWith", "action": "rep", "change": "team-mission" }] }
+    },
+    {
+     "label": "Refuse to your officer's face (-4 reputation, never below your band)",
+     "success": { "text": "The officer's pen stops. Then it starts again.", "effects": [{ "kind": "standWith", "action": "rep", "change": "refuse-order" }] }
+    },
+    {
+     "label": "Slip the errand's target a warning (a small mercy)",
+     "success": { "text": "Somebody in the city sleeps better tonight.", "effects": [{ "kind": "standWith", "action": "mercy", "noticed": false }] }
+    }
+   ]
+  }
+ ]
+}

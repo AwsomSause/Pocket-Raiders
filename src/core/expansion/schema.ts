@@ -7,6 +7,7 @@ import { CanonStateSchema } from './canonSpaces';
 import { TrackStateSchema } from './track';
 import { RescueStateSchema } from '../evil/rescueSchema';
 import { GrandArcStateSchema } from '../grandArc/schema';
+import { StandWithStateSchema } from '../arc/standWithSchema';
 import { RivalOverhaulStateSchema } from '../rivals/overhaulSchema';
 
 /** F1: every expansion setting at its default (plan section 10). Lives in `settings.expansion` (settings v42). */
@@ -74,6 +75,8 @@ export const ExpansionRunSchema = z.object({
   canon: CanonStateSchema.optional(),
   /** Grand Arc (E7): Data ROMs and the Stock track. Present only when the setting was on at run start. */
   grandArc: GrandArcStateSchema.optional(),
+  /** Stand With Them (E8): the Inside Man route, once you have joined a team at Ignition. */
+  standWith: StandWithStateSchema.optional(),
   /** Runs that started with the stage-pacing setting on (B6). Set once at run start, never changed. */
   pacing: z.boolean().optional(),
   /** Runs with Evolution Encounters on (B9). */

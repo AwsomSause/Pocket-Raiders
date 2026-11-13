@@ -12,6 +12,7 @@
 // (Elite Four, then the champion); beating the champion moves the run to the
 // next region, or wins the run after the last one.
 
+import { battleEnded as formatBattleEnded } from './formats/registry';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
 import { recordStoryLoss, storyLossApplies } from './story2/loss';
@@ -25,6 +26,7 @@ import { eliteRematchDue } from './story/eliteRematch';
 import { markAssisted } from './tools/assisted';
 import { crossObstacle, placeDungeon, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
 import { wandererStageStart, wandererStep } from './wanderer';
+import { freeHandedOverRival } from './arc/standWithExtended';
 import { makeShadow, rollShadowHeart, soothePartyAfterBattle } from './shadow';
 import { leaveRegion, startGrandArc } from './grandArc';
 import { checkFlagKeys, checkLeadWinKey, SHADOW_SLOT_CAP, heavyShadowCount, shadowTierOf } from './shadow2';
@@ -485,6 +487,7 @@ export function endRunEarly(current: RunState): RunState {
   assertPhase(current, 'map');
   if (!wipeStatus(current)) throw new Error('Only Adventure runs can be ended from the map');
   const run = structuredClone(current);
+  freeHandedOverRival(run);
   run.phase = 'over';
   run.victory = false;
   return run;
@@ -862,6 +865,7 @@ function enterNextRegion(content: Content, run: RunState): void {
   if (run.regionIndex + 1 >= run.regionOrder.length) {
     playFinaleStops(content, run);
     run.victory = true;
+    freeHandedOverRival(run);
     run.phase = 'over';
     return;
   }
@@ -3048,6 +3052,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // Battle Replay: the big fights keep a short turn-by-turn record, sealed when the fight ends.
   noteReplayTurn(content, run, current.battle!, events as BattleEvent[]);
   if (battle.outcome) sealReplay(content, run);
+  // Wide formats (Beta 0.6 E4): a fight a format launched tells the format how it ended, before any loss tail runs.
+  if (battle.outcome && battle.event?.eventId.startsWith('format:')) formatBattleEnded({ content, run }, battle.outcome === 'win' || battle.outcome === 'caught');
   // Mega Evolution and other transformations end with the battle, and so do "next battle" item effects.
   if (battle.outcome) {
     revertTransformations(content, battle, run.party, runArchetype(content, run).modifiers);
@@ -3144,6 +3150,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
       recordChanges(content, current, back, 'battle');
       return { run: back, events, end: null, defeated: false, cues, drama, wiped: true };
     }
+    freeHandedOverRival(run);
     run.phase = 'over';
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: true, cues, drama };
@@ -3679,6 +3686,7 @@ export function continueAfterDecisions(content: Content, run: RunState): void {
     // The last champion is beaten: the run is won. A Story Run tells its Finale and Epilogue Stops first (S19 found they never played here).
     playFinaleStops(content, run);
     run.draft = null;
+    freeHandedOverRival(run);
     run.phase = 'over';
     return;
   }

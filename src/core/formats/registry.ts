@@ -1,6 +1,7 @@
 // The one entry point for wide formats: start one, show its card, take a choice, report a finished battle or turn.
 // The screen and the Extended Cut director call only these; each format lives in its own file.
 
+import { blackout } from './blackout';
 import { breather } from './breather';
 import { clearFormat, currentFormat, doneFormats, storeFormat } from './store';
 import type { FormatCard, FormatCtx, FormatId, WideFormat } from './types';
@@ -8,6 +9,7 @@ import type { FormatCard, FormatCtx, FormatId, WideFormat } from './types';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const FORMATS: Partial<Record<FormatId, WideFormat<any>>> = {
   breather,
+  blackout,
 };
 
 /** Starts a format, once per run for formats that are one-shot (the Breather). False when one is running or it already ran. */
