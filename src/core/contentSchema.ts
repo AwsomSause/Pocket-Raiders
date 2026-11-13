@@ -3147,6 +3147,8 @@ export const EventRuleSchema = z.object({
   pinchHitter: z.boolean().optional(),
   /** Blackout's Seal (Beta 0.6 E4): no voluntary switching on the first turn of the fight. */
   noSwitchFirstTurn: z.boolean().optional(),
+  /** Front (Beta 0.6): each Pokémon fights only the foe in its own lane (spot n faces spot n); no moves reach other lanes or allies. */
+  lanes: z.boolean().optional(),
   /** Blackout's Seal: moves of this type hit this many percent harder, for both sides. */
   typeBoost: z.object({ type: TypeNameSchema, pct: z.number().int().min(1).max(100) }).optional(),
   surviveTurns: z.number().int().min(1).max(30).optional(),
@@ -3219,6 +3221,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     types: z.array(TypeNameSchema).default([]),
     /** Beta 0.6 wide formats: the foe's Pokémon come from this species list (a pick per slot); empty = from `types`. */
     species: z.array(z.string()).optional(),
+    /** Beta 0.6 Front: the exact species of the foe's team, slot by slot (a lane each); beats `species` and `types`. */
+    lineup: z.array(z.string()).optional(),
     levelBonus: z.number().int().default(0),
     chain: z.number().int().min(1).max(3).default(1),
     /** Run events B: the field is forced to this weather / terrain for the whole fight (Umbrella Squad). */

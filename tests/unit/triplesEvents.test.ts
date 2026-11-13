@@ -109,3 +109,22 @@ describe('doubles scenes from the pack', () => {
     });
   }
 });
+
+describe('more triple scenes from the packs', () => {
+  // [event, choice, foes]: the Shadow Triad, the Plasma Yard guards, three Delibird, the Monster House, the Double Booking brawl.
+  const scenes = [['shadow-triad', 0, 3], ['plasma-substage-yard', 1, 3], ['delibird-y', 2, 3], ['md-1-monster-house', 1, 3], ['xr.fe-72', 1, 3]] as const;
+  for (const [id, choice, foes] of scenes) {
+    it(`${id} is a triple battle when they are on, and doubles while they are off`, () => {
+      const tri = battleOf(on, atEvent(`s-${id}`, id), choice);
+      expect(tri.phase).toBe('battle');
+      expect(tri.battle!.enemyTeam).toHaveLength(foes);
+      expect(isTriples(tri.battle!)).toBe(true);
+      expect(spotCount(battleOf(content, atEvent(`s-${id}`, id), choice).battle!)).toBe(2);
+    });
+  }
+  it('the Monster House wakes three wild Pokémon when tiptoeing fails too', () => {
+    const fail = content.events.get('md-1-monster-house')!.choices[0]!.failure!.battle!;
+    expect(fail.kind).toBe('wild');
+    expect(fail.format).toBe('triples');
+  });
+});

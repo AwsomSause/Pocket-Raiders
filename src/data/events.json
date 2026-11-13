@@ -4284,10 +4284,11 @@
       }
      ],
      "success": {
-      "text": "They attack together!",
+      "text": "They attack together, all three at once!",
       "effects": [],
       "battle": {
        "kind": "trainer",
+       "format": "triples",
        "name": "Shadow Triad",
        "size": 3,
        "types": [
@@ -11294,10 +11295,11 @@
       }
      ],
      "success": {
-      "text": "Present attack!",
+      "text": "Present attack, times three!",
       "effects": [],
       "battle": {
        "kind": "wild",
+       "format": "triples",
        "species": [
         "delibird"
        ],
@@ -41618,10 +41620,11 @@
     {
      "label": "Fight the guards",
      "success": {
-      "text": "Three grunts and their Pokémon.",
+      "text": "Three grunts send out their Pokémon side by side.",
       "effects": [],
       "battle": {
        "kind": "trainer",
+       "format": "triples",
        "name": "Plasma Guards",
        "classId": "worker",
        "size": 3,
@@ -46878,6 +46881,7 @@
       "effects": [],
       "battle": {
        "kind": "wild",
+       "format": "triples",
        "species": [],
        "types": [],
        "levelBonus": 2,
@@ -46912,6 +46916,7 @@
       ],
       "battle": {
        "kind": "wild",
+       "format": "triples",
        "species": [],
        "types": [],
        "levelBonus": 3,
