@@ -253,6 +253,19 @@ describe('fainting and replacements', () => {
   });
 });
 
+describe('forced switches', () => {
+  it('Roar never drags in a Pokémon that is already on the field', () => {
+    for (const seed of ['r1', 'r2', 'r3', 'r4']) {
+      const t = triples([{}, {}, {}, {}], [{ moves: ['roar'], level: 100 }, {}, {}], seed);
+      t.battle.ai = 1;
+      t.turn([t.cmd(0), t.cmd(0), t.cmd(0)]);
+      const onField = t.uids('player');
+      expect(new Set(onField).size, seed).toBe(3);
+      expect(onField, seed).toContain('p3');
+    }
+  });
+});
+
 describe('determinism and saves', () => {
   const play = () => {
     const t = triples([{ moves: ['hyper-voice', 'tackle'] }, { moves: ['earthquake'] }, { moves: ['aerial-ace'] }, {}], [{ moves: ['tackle'] }, { moves: ['rock-slide'] }, { moves: ['hyper-voice'] }, {}], 'same');

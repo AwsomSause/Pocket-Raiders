@@ -14,6 +14,6 @@
 
 **Tests:** `tests/unit/triples.test.ts` (26: targeting table for every position, spread, Shift, Ally Switch, refill order, centring, determinism, save round trip). All doubles tests and `story.test.ts` fingerprints unchanged.
 
-**Limits:** not reachable in a run yet (T3 adds the `triplesOnly` rule and trainers); the battle screen still draws doubles only (T2). The foe AI never Shifts. A status move with nobody in reach still runs (only attacks fail). The W1 combo attack still needs exactly two attackers. Run-level helpers that read `doubles.player.index` (companion support, story hooks) see only the main-field Pokémon in triples; T3 should switch them to `fieldUids`.
+**Limits:** in runs only behind `balance.triples` and the Triples Only rule, both off until the screen exists (T3, `beta06-t3-triples-in-runs.md`); the battle screen still draws doubles only (T2). The foe AI never Shifts. A status move with nobody in reach still runs (only attacks fail). The W1 combo attack still needs exactly two attackers.
 
 **Save:** no version bump. `doubles.trio` is optional and `refill` / `aims` widen to spot 2, so every old save loads (tested).
