@@ -4293,7 +4293,7 @@
        "kind": "trainer",
        "name": "Booking Grunts",
        "classId": "roughneck",
-       "size": 4,
+       "size": 3,
        "types": [],
        "levelBonus": 1,
        "win": [

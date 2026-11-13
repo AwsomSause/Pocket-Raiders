@@ -6,7 +6,7 @@ export const ROAMING_EVENTS: Json[] = [
   xr('fe-72', 'Double Booking', true, { rarity: 'rare', cast: ['trainer.roughneck'] }, 'Two different teams have scheduled the same road. The grunts argue over a clipboard. A favor is owed by whoever helps them sort it out.', [
     ch('Settle the dispute', out('One grunt owes you a favor. The other wants it forgotten.', flag('favor-owed'), good(1))),
     // T4: the pack's "triple booking": both teams' grunts at once, as a triple battle (doubles until the triple screen is on).
-    ch('Take advantage', fight('You stir it into a three-way brawl. Both teams turn on you at once.', { ...(foe('Booking Grunts', 'specialist', [heat(1)]) as Record<string, unknown>), size: 4, format: 'triples' } as Json)),
+    ch('Take advantage', fight('You stir it into a three-way brawl. Both teams turn on you at once.', { ...(foe('Booking Grunts', 'specialist', [heat(1)]) as Record<string, unknown>), size: 3, format: 'triples' } as Json)),
     ch('Walk around them', leave()),
   ]),
   xr('fe-73', 'The Machine of the Week', true, { rarity: 'rare', cast: ['trainer.worker_m'] }, 'A new machine rolls into the square and a grunt reads from its manual: "It can do something new every week." Today, it is aimed at you.', [
