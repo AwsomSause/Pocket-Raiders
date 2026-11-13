@@ -1,0 +1,558 @@
+{
+ "events": [
+  {
+   "group": "Rests, camp and bond",
+   "stop": "rest",
+   "tags": [
+    "Relationship",
+    "Recovery"
+   ],
+   "types": [],
+   "requires": [
+    {
+     "kind": "partySize",
+     "atLeast": 2
+    }
+   ],
+   "remembers": [],
+   "id": "camp-one-who-wont-eat",
+   "name": "The One Who Won’t Eat",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c1c",
+    "effect": "fire"
+   },
+   "intro": "One bowl is still full. Its owner is sitting with its back to the fire, looking at the empty spot where its friend used to lie.",
+   "choices": [
+    {
+     "label": "Sit by it.",
+     "requires": [],
+     "success": {
+      "text": "A long while. It leans against you, eventually. It will be steadier next fight.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 6,
+        "who": "party"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Resolute: may hang on at 1 HP once",
+        "effects": [
+         {
+          "kind": "survivalChance",
+          "chance": 0.5
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bring it the bowl.",
+     "requires": [],
+     "success": {
+      "text": "It eats two bites, to be polite. Then it eats two more.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Resolute: may hang on at 1 HP once",
+        "effects": [
+         {
+          "kind": "survivalChance",
+          "chance": 0.5
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let another Pokémon go to it.",
+     "requires": [],
+     "success": {
+      "text": "The one who knows it best goes and sits. The two form a pair.",
+      "effects": [
+       {
+        "kind": "campBond",
+        "chemistry": 12,
+        "calm": 6,
+        "settle": false
+       },
+       {
+        "kind": "flag",
+        "key": "camp-pair"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Resolute: may hang on at 1 HP once",
+        "effects": [
+         {
+          "kind": "survivalChance",
+          "chance": 0.5
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "group": "Rests, camp and bond",
+   "stop": "rest",
+   "tags": [
+    "Relationship",
+    "Recovery"
+   ],
+   "types": [],
+   "requires": [
+    {
+     "kind": "partySize",
+     "atLeast": 2
+    }
+   ],
+   "remembers": [
+    {
+     "id": "the-pair-is-here",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "camp-pair",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The pair from the fire watches from the side, ears up. They have opinions.",
+     "hide": [],
+     "addChoices": [
+      {
+       "label": "Ask the pair to sort it out.",
+       "requires": [],
+       "success": {
+        "text": "The pair trot over and sit between them. The argument loses its air.",
+        "effects": [
+         {
+          "kind": "campBond",
+          "chemistry": 12,
+          "calm": 12,
+          "settle": true
+         },
+         {
+          "kind": "friendship",
+          "amount": 3,
+          "who": "party"
+         },
+         {
+          "kind": "flag",
+          "key": "camp-argument"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "id": "camp-the-argument",
+   "name": "The Argument",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2218",
+    "effect": "rattle"
+   },
+   "intro": "Two of the team are nose to nose over the best spot by the fire. One stamps. One hisses. The rest of the team looks at you.",
+   "choices": [
+    {
+     "label": "Give the spot to the one who battled today.",
+     "requires": [],
+     "success": {
+      "text": "Fair. The other sulks for a while, then comes round.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "camp-argument"
+       },
+       {
+        "kind": "moment",
+        "text": "They are still not speaking. They fight well anyway.",
+        "importance": 50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Make them share.",
+     "requires": [],
+     "success": {
+      "text": "They refuse, for an hour. Then they are asleep in a heap.",
+      "effects": [
+       {
+        "kind": "campBond",
+        "chemistry": 8,
+        "calm": 8,
+        "settle": true
+       },
+       {
+        "kind": "flag",
+        "key": "camp-argument"
+       },
+       {
+        "kind": "moment",
+        "text": "They are still not speaking. They fight well anyway.",
+        "importance": 50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the spot yourself.",
+     "requires": [],
+     "success": {
+      "text": "Both are so offended they forget each other, and sit on you.",
+      "effects": [
+       {
+        "kind": "campBond",
+        "chemistry": 6,
+        "calm": 10,
+        "settle": false
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "camp-argument"
+       },
+       {
+        "kind": "moment",
+        "text": "They are still not speaking. They fight well anyway.",
+        "importance": 50
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "group": "Rests, camp and bond",
+   "stop": "rest",
+   "tags": [
+    "Relationship",
+    "Recovery"
+   ],
+   "types": [
+    "water"
+   ],
+   "requires": [],
+   "remembers": [],
+   "id": "camp-the-bath",
+   "name": "The Bath",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a30",
+    "effect": "rain"
+   },
+   "intro": "The whole team smells. A river is right there. Nobody volunteers. The Fire-type has climbed a tree. The Ground-type is pretending to be a rock.",
+   "choices": [
+    {
+     "label": "Everyone in.",
+     "requires": [],
+     "success": {
+      "text": "A chase, a lot of splashing, and a great deal of shaking dry. Everyone is clean.",
+      "effects": [
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Shopkeepers like a clean party: 5% off for a while",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.95
+         }
+        ],
+        "battles": 5,
+        "until": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Only the ones who want to.",
+     "requires": [],
+     "success": {
+      "text": "Half the team is clean and smug. The other half is not speaking to you.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Shopkeepers like a clean party: 5% off for a while",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.95
+         }
+        ],
+        "battles": 5,
+        "until": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go in first.",
+     "requires": [],
+     "success": {
+      "text": "They all follow, even the Fire-type, to its toes.",
+      "effects": [
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "friendship",
+        "amount": 4,
+        "who": "party"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Shopkeepers like a clean party: 5% off for a while",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.95
+         }
+        ],
+        "battles": 5,
+        "until": "battle"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "group": "Rests, camp and bond",
+   "stop": "rest",
+   "tags": [
+    "Relationship",
+    "Recovery"
+   ],
+   "types": [],
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "partySize",
+     "atLeast": 2
+    }
+   ],
+   "remembers": [],
+   "id": "camp-nightmare-watch",
+   "name": "The Nightmare Watch",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#161a2e",
+    "effect": "float"
+   },
+   "intro": "In the middle of the night, one of the team is whimpering in its sleep. It is the one that took the worst of the last battle. Its feet are running.",
+   "choices": [
+    {
+     "label": "Wake it gently.",
+     "requires": [],
+     "success": {
+      "text": "It is embarrassed, and stays close for the rest of the night.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the lead curl round it.",
+     "requires": [],
+     "success": {
+      "text": "Your lead moves over without being asked twice.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "campBond",
+        "chemistry": 8,
+        "calm": 8,
+        "settle": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay up beside it.",
+     "requires": [],
+     "success": {
+      "text": "You do not sleep, and the party gets no extra rest from you. It sleeps soundly.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 9,
+        "who": "party"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Slept soundly: takes 10% less damage next battle",
+        "effects": [
+         {
+          "kind": "damageTakenMultiplier",
+          "value": 0.9
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "group": "Rests, camp and bond",
+   "stop": "rest",
+   "tags": [
+    "Relationship",
+    "Recovery"
+   ],
+   "types": [],
+   "requires": [],
+   "remembers": [
+    {
+     "id": "the-two-in-the-photo",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "camp-argument",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The two who argued over the fire are in it, nose to nose, asleep.",
+     "hide": [],
+     "addChoices": []
+    }
+   ],
+   "id": "camp-photograph-nobody-posed",
+   "name": "The Photograph Nobody Posed For",
+   "rarity": "uncommon",
+   "minStage": 6,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "glint"
+   },
+   "intro": "A travelling photographer, Philomena, has been watching the camp from the road and took a picture without asking. \"Sorry. I couldn’t not. Look.\" It is the whole team asleep in a pile, with you in the middle of it, mouth open.",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "requires": [],
+     "success": {
+      "text": "It goes in the album, first page.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "camp-photo"
+       },
+       {
+        "kind": "moment",
+        "text": "The photo of the whole team asleep in a pile goes first in the album.",
+        "importance": 50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send it home.",
+     "requires": [],
+     "success": {
+      "text": "It goes up on the wall at home. You will see it when you get back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "camp-photo-home"
+       },
+       {
+        "kind": "moment",
+        "text": "A photo of the team asleep in a pile is on the wall at home.",
+        "importance": 50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take another, awake.",
+     "requires": [],
+     "success": {
+      "text": "Everyone poses. It is worse.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "camp-photo"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
