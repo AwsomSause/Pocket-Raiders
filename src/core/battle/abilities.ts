@@ -190,7 +190,7 @@ export const ABILITY_FORMS = new Set<string>([
 /** Abilities the battle engine runs. */
 const SUPPORTED = new Set<string>([
   'cute-charm', 'rivalry', 'wise-eye', 'eye-of-the-gale', 'grid-surfer',
-  'dread-jaws', 'storm-talons', 'clinging-dust', 'sovereign-plumage', 'coral-veil', 'eyespot-glare', 'dynamo-down', 'gem-orbit', 'tailwind-rider', 'rune-sigil', 'twin-maw', 'silent-cloak',
+  'dread-jaws', 'storm-talons', 'clinging-dust', 'sovereign-plumage', 'coral-veil', 'eyespot-glare', 'dynamo-down', 'gem-orbit', 'tailwind-rider', 'rune-sigil', 'twin-maw', 'silent-cloak', 'champions-fury',
   'thorn-ballad', 'encore-amp', 'adaptive-plating', 'plague-bulwark', 'soul-kindling', 'neon-circuit',
   ...Object.keys(PINCH),
   ...Object.keys(WEATHER_SETTERS),
