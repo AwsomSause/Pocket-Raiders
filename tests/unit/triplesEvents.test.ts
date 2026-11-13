@@ -31,8 +31,8 @@ const battleOf = (c: typeof content, run: RunState, choice: number) => chooseEve
 
 describe('event battle format field', () => {
   it('is optional and only takes doubles or triples', () => {
-    expect(EventBattleSchema.parse({ kind: 'wild' }).format).toBeUndefined();
-    expect(EventBattleSchema.parse({ kind: 'trainer', name: 'A', format: 'triples' }).format).toBe('triples');
+    expect((EventBattleSchema.parse({ kind: 'wild' }) as { format?: string }).format).toBeUndefined();
+    expect((EventBattleSchema.parse({ kind: 'trainer', name: 'A', format: 'triples' }) as { format?: string }).format).toBe('triples');
     expect(() => EventBattleSchema.parse({ kind: 'trainer', name: 'A', format: 'quads' })).toThrow();
   });
 });
@@ -93,7 +93,7 @@ describe('The Whispering Grove: Wake them', () => {
   it('the extra wild Pokémon come from their own generator: the first foe is the one the fight would have without a format', () => {
     const def = structuredClone(on.events.get('whispering-grove-1')!);
     const battle = def.choices[1]!.success.battle!;
-    delete battle.format;
+    delete (battle as { format?: string }).format;
     const plain = { ...on, events: new Map(on.events).set(def.id, def) };
     const tri = battleOf(on, atEvent('grove-same', 'whispering-grove-1'), 1);
     const single = battleOf(plain, atEvent('grove-same', 'whispering-grove-1'), 1);
@@ -128,6 +128,6 @@ describe('more triple scenes from the packs', () => {
   it('the Monster House wakes three wild Pokémon when tiptoeing fails too', () => {
     const fail = content.events.get('md-1-monster-house')!.choices[0]!.failure!.battle!;
     expect(fail.kind).toBe('wild');
-    expect(fail.format).toBe('triples');
+    expect((fail as { format?: string }).format).toBe('triples');
   });
 });
