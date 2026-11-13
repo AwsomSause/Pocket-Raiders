@@ -1,6 +1,7 @@
 // Live wiring for the rival presentation (Beta 0.6 R5/R6/R4 caps): the lines a registered rival says when a battle starts,
 // meeting counts, and how many counter-picks it may make. Deterministic (hashes only); touches only the rival's own record.
 
+import { climaxCutOf } from '../arc/climaxExtended';
 import type { Content } from '../contentSchema';
 import type { RunState } from '../state';
 import { pickContextLine, pickSpeciesLine, useNickname, type BankContext } from './bank';
@@ -185,7 +186,7 @@ export function friendTeam(content: Content, run: RunState, size: number): strin
 
 /** Standard or Extended Assist cap. The Extended Cut workstream sets run.expansion.cut.climaxCut = 'extended' at run start. */
 export function assistModeOf(run: RunState): 'standard' | 'extended' {
-  return run.expansion?.cut?.climaxCut === 'extended' ? 'extended' : 'standard';
+  return climaxCutOf(run);
 }
 
 /** A Friend scene line from the pack's bank for this Friend's archetype and kind ('meet', 'mid', 'support-1'), tokens filled; null if none. */

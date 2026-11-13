@@ -71,6 +71,7 @@ import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } fro
 import { hashSeed, Rng } from './rng';
 import { continueAfterDecisions, healParty, newMon } from './run';
 import { earnRom, gainStock, grandArcOf, romById, romsHeld } from './grandArc';
+import { climaxCutOf } from './arc/climaxExtended';
 import { addMercy, changeRep, joinInsideMan, joinProblem, resolveVerdict, standWithClimaxWon, standWithOf, standWithPlayable, verdictsOpen } from './arc/standWithExtended';
 import { checkFlagKeys } from './shadow2/keys';
 import { grantNamedShadow } from './shadow2/grant';
@@ -110,6 +111,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return (run.inventory[c.id] ?? 0) >= (c.count ?? 1) || (run.passives?.[c.id] ?? 0) > 0;
     case 'emotion':
       return run.party.some((m) => emotionOf(content, run, m.uid)?.id === c.id);
+    case 'partyLevelOver':
+      return (!!run.stage && run.party.some((m) => m.level >= curveLevel(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, run.stage!.index, 1)) + c.over)) !== (c.absent === true);
     case 'partyMoveType':
       return run.party.some((m) => m.hp > 0 && m.moves.some((s) => { const mv = content.moves.get(s.id); return mv?.type === c.type && mv.category !== 'status'; }));
     case 'partyType':
@@ -310,6 +313,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs a milestone day';
     case 'partyType':
       return c.absent ? `Only without a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party` : `Needs a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party`;
+    case 'partyLevelOver':
+      return c.over >= 0 ? `Needs a Pokémon ${c.over} levels above this stage` : 'Needs a strong Pokémon';
     case 'partyMoveType':
       return `Needs a Pokémon that knows a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type move`;
     case 'partyMove':
@@ -590,7 +595,7 @@ export function xflagHolds(run: RunState, flag: string): boolean {
   const flags = run.story.flags;
   const seen = (k: string) => Number(flags[`ev:${k}`] ?? 0) >= 1;
   switch (flag) {
-    case 'extendedCut': return run.expansion?.climaxCut === 'extended';
+    case 'extendedCut': return climaxCutOf(run) === 'extended';
     case 'hasShadow': return run.party.some((m) => !!m.shadow);
     case 'keyHinted': return run.party.some((m) => !!m.shadow?.named && (m.shadow.hints ?? 1) >= 1);
     case 'grandArc': return grandArcOf(run) !== null;
@@ -892,7 +897,7 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'research':
       return `+${e.amount} Research Points`;
     case 'levels':
-      return `${e.who === 'lead' ? 'lead' : 'party'} +${e.amount} level${e.amount === 1 ? '' : 's'}`;
+      return `${e.who === 'party' ? 'party' : e.who === 'weakest' ? 'lowest-level Pokémon' : 'lead'} +${e.amount} level${e.amount === 1 ? '' : 's'}`;
     case 'join':
       return e.shadow ? 'a Shadow Pokémon is rescued' : e.blissful ? 'a Blissful Pokémon joins' : 'a Pokémon joins';
     case 'seedling':
@@ -1124,7 +1129,9 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return effectWords(content, e);
     case 'levels': {
       const cap = runLevelCap(content, run);
-      const who = e.who === 'lead' ? run.party.filter((m) => m.hp > 0).slice(0, 1) : run.party;
+      const able = run.party.filter((m) => m.hp > 0);
+      // The weakest is the lowest level (the first one on a tie): catch-up for a Pokémon that fell behind.
+      const who = e.who === 'lead' ? able.slice(0, 1) : e.who === 'weakest' ? [...able].sort((a, b) => a.level - b.level).slice(0, 1) : run.party;
       let gained = 0;
       for (const m of who) gained += addLevels(content, m, e.amount, cap).levelsGained;
       return gained > 0 ? effectWords(content, e) : '';
@@ -1144,6 +1151,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       }
       if (e.blissful) makeBlissful(content, mon);
       if (e.hiddenAbility && content.species.get(mon.speciesId)?.abilities.hidden) mon.abilitySlot = -1;
+      if (e.ability) mon.fixedAbility = e.ability;
       discover(run, mon.speciesId, true);
       count(run, 'pokemonCaught');
       run.pending.push({ kind: 'caught', mon });
@@ -1189,7 +1197,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (!move || !learner || learner.moves.some((m) => m.id === e.move)) return '';
       const slot = { id: move.id, pp: move.pp };
       if (learner.moves.length < 4) learner.moves.push(slot);
-      else learner.moves[3] = slot;
+      else learner.moves[e.slot ?? 3] = slot;
       return `${content.species.get(learner.speciesId)?.name ?? learner.speciesId} learned ${move.name}!`;
     }
     case 'evoEncounter':

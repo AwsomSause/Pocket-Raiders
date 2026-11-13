@@ -1,4 +1,5 @@
 {
+ "override": true,
  "events": [
   {
    "id": "abandoned-power-plant",
@@ -1037,6 +1038,89 @@
     "cast": [
      "trainer.worker_m"
     ],
+    "effect": "shake"
+   },
+   "intro": "Rubble seals a chamber. Something metallic glints between the stones.",
+   "choices": [
+    {
+     "label": "Dig by hand.",
+     "success": {
+      "text": "You dig it free, scraped and sore. A Metal Coat.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "item",
+        "id": "metal-coat",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You go round and leave the glint behind.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Use a Fighting-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fighting"
+      }
+     ],
+     "success": {
+      "text": "Your Fighting-type clears the rubble. The glint is a Metal Coat.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "metal-coat",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Ground-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ground"
+      }
+     ],
+     "success": {
+      "text": "Your Ground-type clears the rubble. The glint is a Metal Coat.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "metal-coat",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "world-cave-in",
+   "name": "Cave-In",
+   "group": "Biome Hazards",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "rock",
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
     "effect": "shake"
    },
    "intro": "Rubble seals a chamber. Something metallic glints between the stones.",
@@ -2255,6 +2339,464 @@
        {
         "kind": "damage",
         "share": 0.05,
+        "who": "lead",
+        "except": []
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "villain-hideout",
+   "name": "Villain Hideout",
+   "group": "Map stops",
+   "stop": "hideout",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#200810",
+    "effect": "flicker"
+   },
+   "intro": "A poster on the wall hums. Behind it, a base. Voices, boots, a door that is not quite shut.",
+   "choices": [
+    {
+     "label": "Go in and fight.",
+     "requires": [
+      {
+       "kind": "noTrainerTag",
+       "tag": "pacifist"
+      }
+     ],
+     "success": {
+      "text": "Grunts, then their boss!",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Hideout Boss",
+       "bossId": "giovanni",
+       "size": 4,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "life-orb",
+          "choice-band",
+          "focus-sash"
+         ]
+        },
+        {
+         "kind": "money",
+         "amount": 4000
+        },
+        {
+         "kind": "betterDraft",
+         "extra": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Sneak in for loot.",
+     "check": "speed",
+     "success": {
+      "text": "You grab a crate and run.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "life-orb",
+         "choice-band",
+         "lucky-punch",
+         "macho-brace",
+         "smoke-ball"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Caught!",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Grunt",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Note it and leave.",
+     "success": {
+      "text": "You mark the hideout on your map and slip away. Someone will want to know where it is.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-noted",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-hidden-dungeon",
+   "name": "Hidden Dungeon",
+   "group": "Landmarks",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Mystery"
+   ],
+   "minStage": 3,
+   "requires": [],
+   "intro": "Behind a curtain of vines, a stone door hangs ajar. Your Key Charm hums against it.",
+   "choices": [
+    {
+     "label": "Use the Key Charm.",
+     "success": {
+      "text": "The charm fits the lock. The door opens onto a place no map shows.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "dg-ancient-ruins-a",
+         "dg-deep-mine-a",
+         "dg-haunted-mansion-a",
+         "dg-frozen-cavern-a",
+         "dg-volcanic-core-a",
+         "dg-deep-ocean-a",
+         "dg-overgrown-forest-a",
+         "dg-celestial-observatory-a"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You close the door gently.",
+      "effects": []
+     }
+    }
+   ],
+   "secret": [
+    {
+     "kind": "item",
+     "id": "key-charm"
+    }
+   ]
+  },
+  {
+   "id": "ev-regional-festival",
+   "name": "Regional Festival",
+   "group": "Places and weather",
+   "stop": "event",
+   "rarity": "uncommon",
+   "tags": [
+    "Region",
+    "Shop",
+    "Relationship"
+   ],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "milestone"
+    }
+   ],
+   "intro": "Lanterns, stalls, games, and a gift swap by the fountain. Everybody is smiling.",
+   "choices": [
+    {
+     "label": "Play the games.",
+     "success": {
+      "text": "A ring toss, a lucky win, and a prize for your team.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Join the swap.",
+     "success": {
+      "text": "You show your gift, and so does the stranger. You both look at each other's, and swap. Theirs is better.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "super-potion",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "The music is nice. Your team dozes in the sun.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "stop": "event",
+   "rarity": "rare",
+   "group": "Galar",
+   "tags": [
+    "Region",
+    "Combat",
+    "Pokémon"
+   ],
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "id": "galar-gigantamax-sighting",
+   "name": "Gigantamax Sighting",
+   "minStage": 4,
+   "scene": {
+    "cast": [],
+    "pokemon": "copperajah",
+    "tint": "#b87333",
+    "effect": "shake"
+   },
+   "intro": "The ground shakes. Over the ridge, a Pokémon towers into the clouds, swirling red: a Gigantamax form. Copperajah, Centiskorch, Rillaboom, Corviknight or Drednaw; you cannot tell which from here.",
+   "choices": [
+    {
+     "label": "Follow it.",
+     "success": {
+      "text": "It crashes down at last. You will tell this story for years.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "copperajah-gmax",
+        "centiskorch-gmax",
+        "rillaboom-gmax",
+        "corviknight-gmax",
+        "drednaw-gmax"
+       ],
+       "levelBonus": 4,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 6
+        },
+        {
+         "kind": "moment",
+         "text": "Faced a Gigantamax Pokémon in the wild",
+         "importance": 70
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Observe from a distance.",
+     "success": {
+      "text": "You sketch the creature. The sketch is surprisingly good.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "You run until your legs ache. Nothing follows.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "galar-runaway-wooloo",
+   "name": "Runaway Wooloo",
+   "group": "Galar",
+   "stop": "event",
+   "rarity": "common",
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "wooloo",
+    "tint": "#d8d0c0",
+    "effect": "float"
+   },
+   "intro": "A Wooloo rolls down the route, scattering a fence. The shepherd chases it, out of breath: \"Please! It does this every Tuesday!\"",
+   "choices": [
+    {
+     "label": "Stop it (a Rock-type).",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "rock"
+      }
+     ],
+     "success": {
+      "text": "Your Rock-type plants itself and the Wooloo bounces off. The shepherd gives you Wooloo Wool to sell.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 200
+       },
+       {
+        "kind": "flag",
+        "key": "galar-wooloo-saved",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stop it (a Steel-type).",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "steel"
+      }
+     ],
+     "success": {
+      "text": "Your Steel-type plants itself and the Wooloo bounces off. The shepherd gives you Wooloo Wool to sell.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 200
+       },
+       {
+        "kind": "flag",
+        "key": "galar-wooloo-saved",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Roll with it.",
+     "success": {
+      "text": "You hop on and roll along with the Wooloo. It carries you a long way, and sets you down laughing.",
+      "effects": [
+       {
+        "kind": "express"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "The Wooloo rolls over the horizon. The shepherd sighs.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "training-ground",
+   "name": "Training Ground",
+   "group": "Map stops",
+   "stop": "dojo",
+   "scene": {
+    "cast": [],
+    "effect": "shake"
+   },
+   "intro": "Tracks, weights and targets. A coach waves you over.",
+   "choices": [
+    {
+     "label": "Train the lead.",
+     "success": {
+      "text": "One session, all on your lead. It gains a level.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Train the weakest.",
+     "success": {
+      "text": "The coach takes your lowest-level Pokémon aside and works it hard. It gains two levels to catch up.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 2,
+        "who": "weakest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run laps.",
+     "success": {
+      "text": "You and the team run until dusk. Faster, and tired.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "speed",
+        "amount": 3
+       },
+       {
+        "kind": "damage",
+        "share": 0.1,
         "who": "lead",
         "except": []
        }

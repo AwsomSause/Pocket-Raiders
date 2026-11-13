@@ -6,3 +6,4 @@ Source: pack SF127, SF135, NE76-80 (`/mnt/project-files/catalog_overhaul_pack*`)
 - Flags (run-only): bridge-tuned, fog-named, honest-lied, orchard-planted, lighthouse-marked, snow-stopped, snow-trainer-climbed, quicksand-dale, berrytree-left, center-nurse-kept.
 - Limits: see `docs/updates/beta-0.6/biome-hazards.md`. Heal and revive budgets untouched (events give items out of battle only).
 Tests: `tests/unit/biomeHazards.test.ts`.
+- Follow-up: seven more stops patched from their old versions (`PATCHES` in `tools/events/hazards.ts`). `hazards.json` carries `"override": true`, so it also replaces same-id events from other `src/data/events/*.json` files. New `levels` target `weakest`.
