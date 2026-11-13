@@ -143,6 +143,7 @@ function choose(s: SiegeState, id: string, ctx: FormatCtx): SiegeState {
   const ok = launchFormatBattle(ctx.content, ctx.run, 'siege', {
     key: d.id,
     name: `Rocket Cordon (${d.name})`,
+    classId: 'roughneck',
     types: ['poison', 'normal'],
     size: 3,
     levelBonus: d.status === 'lost' ? 1 : 0,

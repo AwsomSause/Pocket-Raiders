@@ -21,6 +21,8 @@ export interface ConvoyLeg {
   types: string[];
   size: number;
   levelBonus: number;
+  /** The trainer class the battle screen draws. */
+  classId: string;
   /** The last leg asks a question first (the LEDGER choice). */
   ledger?: boolean;
 }
@@ -44,9 +46,9 @@ function setup({ content, run }: FormatCtx, input?: unknown): ConvoyState {
   const short = typeof input === 'object' && input && 'short' in input ? Boolean((input as { short: unknown }).short) : raid4Triumph(run);
   const has = (ids: string[]): string[] => ids.filter((id) => content.species.has(id));
   const legs: ConvoyLeg[] = [
-    { id: 'van', name: 'Rocket Escort', scene: 'An escort van, roof lights off, pulls out ahead of the car.', species: has(['arbok', 'weezing', 'muk']), types: ['poison'], size: 3, levelBonus: 0 },
-    { id: 'rudd', name: 'Poacher-Captain Rudd', scene: 'Rudd leans out of a second truck. "Nothing personal. Everything is on an invoice."', species: has(['rhyhorn', 'arbok', 'muk']), types: ['poison', 'ground'], size: 4, levelBonus: 1 },
-    { id: 'car', name: 'LEDGER', scene: 'The car does not stop. On the bonnet sits LEDGER, a Porygon-Z. ENTRY 9,999. OWNER: NONE. STATUS: UNSOLD. QUERY: WHAT AM I?', species: has(['porygon-z']), types: ['normal'], size: 1, levelBonus: 3, ledger: true },
+    { id: 'van', name: 'Rocket Escort', scene: 'An escort van, roof lights off, pulls out ahead of the car.', species: has(['arbok', 'weezing', 'muk']), types: ['poison'], size: 3, levelBonus: 0, classId: 'biker' },
+    { id: 'rudd', name: 'Poacher-Captain Rudd', scene: 'Rudd leans out of a second truck. "Nothing personal. Everything is on an invoice."', species: has(['rhyhorn', 'arbok', 'muk']), types: ['poison', 'ground'], size: 4, levelBonus: 1, classId: 'roughneck' },
+    { id: 'car', name: 'LEDGER', scene: 'The car does not stop. On the bonnet sits LEDGER, a Porygon-Z. ENTRY 9,999. OWNER: NONE. STATUS: UNSOLD. QUERY: WHAT AM I?', species: has(['porygon-z']), types: ['normal'], size: 1, levelBonus: 3, classId: 'worker', ledger: true },
   ];
   return { legs: short ? legs.filter((l) => l.id !== 'rudd') : legs, index: 0, pending: false, outcome: 'running', ledger: 'none' };
 }
@@ -80,7 +82,7 @@ function choose(s: ConvoyState, id: string, ctx: FormatCtx): ConvoyState {
   if (over(s) || s.pending || !leg) return s;
   if (leg.ledger && id === 'witness') return finish({ ...s, index: s.index + 1, outcome: 'won', ledger: 'joined' }, ctx.run);
   if (id !== (leg.ledger ? 'list' : 'fight')) return s;
-  const ok = launchFormatBattle(ctx.content, ctx.run, 'convoy', { key: leg.id, name: leg.name, types: leg.types as never, species: leg.species, size: leg.size, levelBonus: leg.levelBonus });
+  const ok = launchFormatBattle(ctx.content, ctx.run, 'convoy', { key: leg.id, name: leg.name, classId: leg.classId, types: leg.types as never, species: leg.species, size: leg.size, levelBonus: leg.levelBonus });
   return ok ? { ...s, pending: true } : s;
 }
 

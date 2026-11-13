@@ -117,3 +117,33 @@ test('Siege Map: the Rocket Ledger shows over the map and a Held gate is a free 
   expect(out.cut.format).toBeUndefined();
   expect(errors).toEqual([]);
 });
+
+test('Colossus: the fight opens with the Blueprint plate beside it', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  await page.goto('/');
+  await page.evaluate(() => localStorage.clear());
+  await page.goto('/?seed=e4-colossus');
+  await waitForScene(page, 'MainMenu');
+  for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
+    await page.keyboard.press('Enter');
+    await waitForScene(page, next);
+  }
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    const run = pkr.session.run;
+    run.expansion = { ...(run.expansion ?? {}), cut: { format: { id: 'colossus', state: { apex: { id: 'ss.rocket.m2', name: 'M2', code: 'XD002' }, pending: false, result: null } } } };
+    pkr.game.scene.getScene('Map').scene.restart({ focus: 0 });
+  });
+  await waitForScene(page, 'Format');
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Battle');
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.isActive('ColossusPlate')), { timeout: 10_000 }).toBe(true); // the plate runs above the battle
+  await page.waitForTimeout(6000);
+  await page.screenshot({ path: 'test-results/e4-colossus.png' });
+  const c = await page.evaluate(() => (window as any).__pkr.session.run.battle.colossus);
+  expect(c.seals.map((s: { name: string }) => s.name)).toEqual(['Right Shoulder', 'Left Shoulder', 'Chest', 'Crown']);
+  expect(errors).toEqual([]);
+});
