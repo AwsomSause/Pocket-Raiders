@@ -2802,5 +2802,49 @@
    "move": "photon-geyser",
    "zMove": "light-that-burns-the-sky"
   }
- }
+ },
+  {
+    "id": "rooftop-fresh-water",
+    "name": "Fresh Water",
+    "description": "Restores 30 HP. Cold from the Celadon rooftop machine.",
+    "category": "healing",
+    "iconAssetId": "item.gen5/fresh-water",
+    "usableInBattle": true,
+    "usableOutside": true,
+    "target": "party",
+    "effect": { "kind": "healHp", "amount": 30 }
+  },
+  {
+    "id": "rooftop-soda-pop",
+    "name": "Soda Pop",
+    "description": "Restores 50 HP. Fizzy, from the Celadon rooftop machine.",
+    "category": "healing",
+    "iconAssetId": "item.gen5/soda-pop",
+    "usableInBattle": true,
+    "usableOutside": true,
+    "target": "party",
+    "effect": { "kind": "healHp", "amount": 50 }
+  },
+  {
+    "id": "rooftop-lemonade",
+    "name": "Lemonade",
+    "description": "Restores 70 HP. Sweet, from the Celadon rooftop machine.",
+    "category": "healing",
+    "iconAssetId": "item.gen5/lemonade",
+    "usableInBattle": true,
+    "usableOutside": true,
+    "target": "party",
+    "effect": { "kind": "healHp", "amount": 70 }
+  },
+  {
+    "id": "poke-doll-escape",
+    "name": "Poké Doll",
+    "description": "Slip away from an ordinary wild battle. No experience, money or catch. Used up.",
+    "category": "charm",
+    "iconAssetId": "item.gen5/poke-doll",
+    "usableInBattle": true,
+    "usableOutside": false,
+    "target": "enemy",
+    "effect": { "kind": "escape" }
+  }
 ]
