@@ -39,6 +39,7 @@
     "data:expansion": "node tools/build-expansion.ts",
     "data:canon-spaces": "node tools/build-canon-spaces.ts",
     "data:canon-vermilion": "node tools/build-canon-vermilion.ts",
+    "data:canon-saffron": "node tools/build-canon-saffron.ts",
     "data:abilities": "node tools/import-abilities.ts",
     "data:availability": "node tools/import-availability.ts",
     "data:rival-catalog": "node tools/import-rival-catalog.ts",

@@ -63,6 +63,7 @@ import { grantBlessing, makeBlissful } from './shadowWorld/blissful';
 import { eggMoveOptions, familyId, teachEggMove } from './mastery';
 import { applyTrainEffect, trainEffectText } from './trainingEffects';
 import { noteCanonEvent, restoreStash, stashParty } from './expansion/canonRun';
+import { applyCanonEffect, ghostReturns, nearestBst } from './expansion/canonSaffron';
 import { advanceTrack, trackStep } from './expansion/trackRun';
 import { scheduleStage, spacedColumns } from './expansion/scheduler';
 import { fnv1a } from './expansion/hash';
@@ -79,6 +80,7 @@ import { earnRom, gainStock, grandArcOf, romById, romsHeld } from './grandArc';
 import { climaxCutOf } from './arc/climaxExtended';
 import { addMercy, changeRep, joinInsideMan, joinProblem, resolveVerdict, standWithClimaxWon, standWithOf, standWithPlayable, verdictsOpen } from './arc/standWithExtended';
 import { checkFlagKeys } from './shadow2/keys';
+import { noteSpecial } from './expansion/fieldNotes';
 import { grantNamedShadow } from './shadow2/grant';
 import type { MapNode, RunState, SideStop } from './state';
 import { applyReward, rewardTargetProblem } from './rewards';
@@ -920,6 +922,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return `${e.who === 'party' ? 'party' : e.who === 'weakest' ? 'lowest-level Pokémon' : 'lead'} +${e.amount} level${e.amount === 1 ? '' : 's'}`;
     case 'join':
       return e.shadow ? 'a Shadow Pokémon is rescued' : e.blissful ? 'a Blissful Pokémon joins' : 'a Pokémon joins';
+    case 'canon':
+      return e.action === 'champion' ? 'a champion belt' : e.action === 'ghostReturn' ? 'a ghost asks to join' : e.action === 'ghostFree' ? 'a trapped Pokémon is freed' : '';
     case 'seedling':
       return 'a seedling grows in the Berry Garden';
     case 'blessing':
@@ -987,6 +991,7 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'grandArcRom':
       return `Data ROM ${e.rom}`;
     case 'grandArcStock':
+    case 'fieldNote':
     case 'standWith':
       return '';
     case 'shadowHeart':
@@ -1218,6 +1223,13 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       run.pending.push({ kind: 'caught', mon });
       return `${content.species.get(mon.speciesId)?.name ?? mon.speciesId} ${e.shadow ? 'was rescued from the haze and' : ''} wants to join you!`.replace('  ', ' ');
     }
+    case 'canon': {
+      if (e.action === 'ghostReturn') {
+        const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+        return ghostReturns(content, run, eventLevel(content, run, node, rng));
+      }
+      return applyCanonEffect(content, run, e, rng);
+    }
     case 'seedling': {
       if (run.garden.length >= BERRIES.maxPlots || !content.catalog.has(e.berry)) return '';
       const n = (run.itemCounters?.['plots-planted'] ?? 0) + 1;
@@ -1301,6 +1313,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'grandArcStock':
       gainStock(run, e.step);
       return '';
+    case 'fieldNote':
+      return noteSpecial(run, e.special) ? 'A new entry in your Field Notes' : '';
     case 'shadowHeart': {
       let eased = 0;
       for (const m of run.party) if (m.shadow && m.shadow.heart > 1) { m.shadow.heart = Math.max(1, m.shadow.heart + e.amount); eased += 1; }
@@ -1512,7 +1526,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
   const lastAlive = b.kind === 'trainer' && b.rule?.reversed ? run.party.map((p) => p.hp > 0).lastIndexOf(true) : -1;
   const dueler = b.kind === 'trainer' && b.rule?.leadType ? run.party.findIndex((p) => p.hp > 0 && getSpecies(content, p.speciesId).types.includes(b.rule!.leadType!)) : -1;
   const activeIndex = dueler >= 0 ? dueler : lastAlive >= 0 ? lastAlive : run.party.findIndex((p) => p.hp > 0);
-  const base = b.level ?? (b.kind === 'trainer' && b.rule?.matchLead ? run.party[activeIndex]!.level : eventLevel(content, run, node, rng) + b.levelBonus);
+  const base = (b.kind !== 'raid' ? b.level : undefined) ?? (b.kind === 'trainer' && b.rule?.matchLead ? run.party[activeIndex]!.level + b.levelBonus : eventLevel(content, run, node, rng) + b.levelBonus);
   // Event foes stay under the region's level cap like every ordinary enemy (Balancing Phase 7).
   const cap = levelCap(content, run.regionIndex);
   if (b.kind === 'raid') {
@@ -1530,6 +1544,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     const enemy = newMon(content, run, evolvedFormAt(content, speciesId, level, rng), level, 'e');
     enemy.shiny = rollShiny(content, rng, runAttributeEffects(content, run).shinyChance * b.shinyMultiplier);
     if (enemy.shiny) countShiny(run, enemy.speciesId);
+    for (const [i, id] of (b.foeMoves ?? []).entries()) if (content.moves.has(id) && !enemy.moves.some((m) => m.id === id)) enemy.moves[Math.max(0, enemy.moves.length - 1 - i)] = { id, pp: content.moves.get(id)!.pp };
     if (b.shadow) makeShadow(enemy, rollShadowHeart(content, new Rng(hashSeed(`${run.seed}::shadow-foe::${enemy.uid}`))));
     if (b.blissful) makeBlissful(content, enemy);
     // T4: a doubles / triples wild fight brings one or two more wild Pokémon, rolled by their own generator (old rolls stay the same).
@@ -1580,7 +1595,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     }) : ghost.length > 0 ? ghost.map((m) => newMon(content, run, m.speciesId, Math.min(cap, Math.max(1, Math.min(m.level, base + 6))), 'e')) : Array.from({ length: b.size }, (_, i) => {
       const level = Math.min(cap, Math.max(1, base + (i === b.size - 1 ? 1 : 0)));
       const lane = b.lineup?.[i];
-      const speciesId = boss ? boss.signature[i % boss.signature.length]! : lane && content.species.has(lane) ? lane : pickSpecies(content, run, b.species ?? [], b.types, rng);
+      const speciesId = boss ? boss.signature[i % boss.signature.length]! : lane && content.species.has(lane) ? lane : b.rule?.bstMatch && b.species?.length ? nearestBst(content, b.species, run.party[activeIndex]!) : pickSpecies(content, run, b.species ?? [], b.types, rng);
       return newMon(content, run, evolvedFormAt(content, speciesId, level, rng), level, 'e');
     });
     if (authored) for (const mon of team) auditEncounter(content, 'event', mon, authored);

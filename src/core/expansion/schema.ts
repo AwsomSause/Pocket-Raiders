@@ -76,6 +76,8 @@ export const ExpansionRunSchema = z.object({
   rescue: RescueStateSchema.optional(),
   /** Canon Spaces (workstream 18): `kanto.*` flags, finished spaces and the town menus already rolled. No save-version bump: old runs have none. */
   canon: CanonStateSchema.optional(),
+  /** Field Notes: special Pokémon met (`sv.*`) and, per special Shadow (`ss.*`), how many of its key hints were given (1-3). Observation only; no cross-run memory. */
+  fieldNotes: z.object({ special: z.array(z.string()).default([]), shadow: z.record(z.string(), z.number().int().min(1).max(3)).default({}) }).optional(),
   /** Grand Arc (E7): Data ROMs and the Stock track. Present only when the setting was on at run start. */
   grandArc: GrandArcStateSchema.optional(),
   /** Stand With Them (E8): the Inside Man route, once you have joined a team at Ignition. */

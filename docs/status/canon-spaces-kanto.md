@@ -12,3 +12,6 @@ Lavender Town built (interlude-3, shown on the Stage 4 map): Pokémon Tower, Fuj
 
 Vermilion City is built too (tools/build-canon-vermilion.ts -> src/data/eventsCanonVermilion.json; the Kaiju raid is in raids.json). See docs/updates/beta-0.6/vermilion-canon.md for what is and is not in.
 Cinnabar Island built (Lab, Mansion, Seafoam, New Island, Volcano); see docs/updates/beta-0.6/cinnabar-canon.md.
+Built so far (state at `run.expansion.canon`, no save bump): Pewter events, Veridian Forest, Mt. Moon, and Cerulean slice 1 (Bridge Crossing, Nugget Bridge, Hidden Village, Squirtle Squad, Damian's Gym, Burglary). Cerulean still to build: Cold Nights Rain, Bill's Lighthouse, Route 5 Day-Care, Cerulean Cave (after Indigo).
+
+Saffron (this slice): `tools/build-canon-saffron.ts` -> `src/data/eventsCanonSaffron.json` (29 rooms), rules in `src/core/expansion/canonSaffron.ts` (party stash, ghost, return, mid-fight evolution), tests `tests/unit/canonSaffron.test.ts`. Event rules `evolveMid`, `bstMatch`, `ghostRescue`; effect `canon`; move Haunting; ability Champion's Fury.

@@ -18,6 +18,22 @@
    "effects": {
     "flinchFirstUse": true
    }
+  },
+  {
+   "id": "haunting",
+   "name": "Haunting",
+   "type": "ghost",
+   "category": "status",
+   "power": null,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [],
+   "effects": {
+    "haunting": true
+   }
   }
  ]
 }

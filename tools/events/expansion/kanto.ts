@@ -7,6 +7,7 @@ import { ch, ev, fight, flag, good, has, inRegion, leave, lose, money, out, rest
 const G = 'Tricksters, villains and teams';
 const heat = (n: number): Json => ({ kind: 'evil', heat: n });
 const track = (input: string): Json => ({ kind: 'track', input });
+const note = (special: string): Json => ({ kind: 'fieldNote', special });
 const base: Json[] = [inRegion('kanto'), { kind: 'xevents' }];
 const grunt = (name: string, size = 2, lv = 0, win: Json[] = []) => trainer(name, { cls: 'roughneck', size, lv, win });
 
@@ -27,9 +28,9 @@ export const XE_KANTO_EVENTS: Json[] = [
     ]),
   ev('xe.kanto.roadblock', 'The Roadblock', G, { stop: 'event', rarity: 'uncommon', minStage: 2, requires: [...base, { kind: 'track', atLeast: 3 }], cast: ['trainer.roughneck'], tint: '#241818', effect: 'none' } as never,
     'A Snorlax sleeps across the road. A catering truck with a red R is parked beside it, and two grunts are shovelling food. "Forty kilos a day. Each. Boss says it\'s cheaper than a wall."', [
-      ch('Play the Poké Flute', fight('The Roadblock wakes hungry and angry.', wild({ species: ['snorlax'], lv: 3 }), flag('rocket-roadblock-flute')), { requires: [has('poke-flute')] }),
-      ch('Stop the food truck', fight('Three fights, and the truck never reaches the second Snorlax. Both wander off by morning.', trainer('Rocket Driver', { cls: 'roughneck', size: 2, chain: 3, win: [track('raidSuccess'), flag('rocket-roadblock-truck')] }))),
-      ch('Feed it yourself (3 Oran Berries)', out('It rolls over. The road opens for you.', lose('oran-berry'), lose('oran-berry'), lose('oran-berry'), flag('rocket-roadblock-fed')), { requires: [{ kind: 'item', id: 'oran-berry', count: 3 }] }),
+      ch('Play the Poké Flute', fight('The Roadblock wakes hungry and angry.', wild({ species: ['snorlax'], lv: 3 }), flag('rocket-roadblock-flute'), note('sv.rocket.roadblock')), { requires: [has('poke-flute')] }),
+      ch('Stop the food truck', fight('Three fights, and the truck never reaches the second Snorlax. Both wander off by morning.', trainer('Rocket Driver', { cls: 'roughneck', size: 2, chain: 3, win: [track('raidSuccess'), flag('rocket-roadblock-truck')] })), note('sv.rocket.roadblock')),
+      ch('Feed it yourself (3 Oran Berries)', out('It rolls over. The road opens for you.', lose('oran-berry'), lose('oran-berry'), lose('oran-berry'), flag('rocket-roadblock-fed'), note('sv.rocket.roadblock')), { requires: [{ kind: 'item', id: 'oran-berry', count: 3 }] }),
     ]),
   ev('xe.kanto.harbor-export', 'Harbor Export', G, { stop: 'event', rarity: 'rare', minStage: 3, requires: [...base, { kind: 'track', atLeast: 2 }, { kind: 'period', in: ['evening', 'night'] }], cast: ['trainer.roughneck', 'trainer.gentleman'], tint: '#101820', effect: 'none' } as never,
     'A freighter with no name. Cranes moving in the dark. "Harbor\'s closed, kid." You: "Those crates are breathing." A thin man in a lab coat checks one with a handheld reader: "Corruption is uneven on this batch, Major. Your technicians are rushing."', [

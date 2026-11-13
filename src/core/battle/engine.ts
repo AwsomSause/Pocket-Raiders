@@ -2264,6 +2264,13 @@ function entryAbility(ctx: BattleContext, c: Combatant, other: Combatant, events
     }
     return;
   }
+  if (ability === 'champions-fury') {
+    // Fighting Tournament champion: a random stat rises by two stages each time it is sent out.
+    const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
+    announce(c, ability, events);
+    applyStageChange(ctx, c, stats[ctx.rng.int(0, stats.length - 1)]!, 2, events);
+    return;
+  }
   if (ability === 'download' && other.mon.hp > 0) {
     // Raises Attack if the foe's Defense is lower than its Sp. Def, otherwise Sp. Atk.
     const stats = calcStats(ctx.content, other.mon);
@@ -2404,6 +2411,7 @@ function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
   if (ability === 'prankster' && move.category === 'status') return move.priority + 1;
   if (move.category === 'status' && !c.vol.movesUsed.includes(move.id) && Held.hasHook(ctx, c.mon, c.side, 'coolShades')) return move.priority + 1;
   if (ability === 'silent-cloak' && !c.vol.cloakUsed) return move.priority + 1;
+  if (ability === 'champions-fury' && !c.vol.furyUsed && move.category !== 'status') return move.priority + 1;
   if (ability === 'gale-wings' && move.type === 'flying' && c.mon.hp >= calcStats(ctx.content, c.mon).hp) return move.priority + 1;
   if (ability === 'triage' && (move.effects.heal || move.effects.drain)) return move.priority + 3;
   if (ability === 'mycelium-might' && move.category === 'status') return move.priority - 0.5;
@@ -3216,6 +3224,7 @@ function executeMove(
   else runMove(ctx, user, target, hitMove, movedFirst, events);
   user.vol.lastFailed = events.slice(mark).some((e) => (e.type === 'fail' || e.type === 'miss' || e.type === 'noEffect' || e.type === 'protected') && (e.type === 'noEffect' ? e.side === target.side : e.type === 'protected' ? e.side === target.side : e.side === user.side));
   if (abilityIn(ctx, user) === 'silent-cloak') user.vol.cloakUsed = true;
+  if (abilityIn(ctx, user) === 'champions-fury') user.vol.furyUsed = true;
   if (abilityIn(ctx, user) === 'encore-amp' && move.flags.includes('sound') && !user.vol.lastFailed) {
     user.vol.ampCount = user.vol.ampMove === move.id ? Math.min(3, user.vol.ampCount + 1) : 1;
     user.vol.ampMove = move.id;
@@ -3818,7 +3827,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     events.push({ type: 'fail', side: user.side });
     return;
   }
-  if (targetsEnemy && move.category === 'status' && target.vol.substitute > 0 && user !== target && !move.effects.sideMove && !move.effects.field) {
+  if (targetsEnemy && move.category === 'status' && target.vol.substitute > 0 && user !== target && !move.effects.sideMove && !move.effects.field && !move.effects.haunting) {
     events.push({ type: 'fail', side: user.side });
     return;
   }
@@ -4979,6 +4988,15 @@ function endTurnMon(ctx: BattleContext, c: Combatant, foe: Combatant, events: Ba
     if (c.vol.yawn > 0 && --c.vol.yawn === 0 && !c.mon.status) {
       tryInflictStatus(ctx, foe, c, 'slp', undefined, events, false);
     }
+    if (c.vol.haunted > 0 && c.mon.hp > 0) {
+      // Haunted: odd turns lower a random stat, even turns roll confusion; the cycle repeats until it switches out.
+      const turn = c.vol.haunted++;
+      if (turn % 2 === 1) {
+        const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
+        const down = stats.filter((st) => c.stages[st] > -6);
+        if (down.length) applyStageChange(ctx, c, down[ctx.rng.int(0, down.length - 1)]!, -1, events);
+      } else tryConfuse(ctx, foe, c, events, false);
+    }
     if (c.vol.perish > 0) {
       c.vol.perish -= 1;
       events.push({ type: 'perish', side: c.side, count: c.vol.perish });
@@ -5720,6 +5738,27 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
       }
     }
     events.push(any ? { type: 'selfState', side: user.side, state: 'perishSong' } : { type: 'fail', side: user.side });
+    return;
+  }
+  if (fx.haunting) {
+    // Haunting: four stage-one Ghost spirits each strike once (power 25, through Substitute), then the foe is Haunted.
+    if (user.vol.prevMove === move.id || target.mon.hp <= 0) {
+      events.push({ type: 'fail', side: user.side });
+      return;
+    }
+    const stats = calcStats(ctx.content, user.mon);
+    const foeStats = calcStats(ctx.content, target.mon);
+    const eff = typeEffectiveness(ctx.content.typeChart, 'ghost', getSpecies(ctx.content, target.mon.speciesId).types);
+    const base = Math.floor(((2 * user.mon.level) / 5 + 2) * 25 * (stats.spa / Math.max(1, foeStats.spd)) / 50) + 2;
+    const one = eff === 0 ? 0 : Math.max(1, Math.floor(base * eff));
+    for (let i = 0; i < 4 && target.mon.hp > 0; i++) {
+      const { lost } = takeHp(ctx, target, one);
+      events.push({ type: 'damage', side: target.side, amount: lost, hpAfter: target.mon.hp, effectiveness: eff, crit: false });
+    }
+    if (target.mon.hp > 0 && target.vol.haunted === 0) {
+      target.vol.haunted = 1;
+      events.push({ type: 'selfState', side: target.side, state: 'haunted' });
+    }
     return;
   }
   if (fx.yawn) {
@@ -6549,6 +6588,15 @@ function settleFaints(ctx: BattleContext, events: BattleEvent[]): void {
     active.hp = Math.max(1, Math.ceil(calcStats(ctx.content, active).hp / 4));
     active.status = null;
     events.push({ type: 'raid', tone: 'phase', text: `${nameOf(ctx, active)} gets back up! Pinch hitter!` });
+  }
+  if (active.hp <= 0 && battle.eventRule?.ghostRescue && !battle.storyEffects.includes('ghost-rescue')) {
+    // Sabrina's Labyrinth: the ghost calls every other ghost; they strike the foe down and give your body back.
+    battle.storyEffects.push('ghost-rescue');
+    active.hp = 1;
+    active.status = null;
+    for (const foe of battle.enemyTeam) foe.hp = 0;
+    events.push({ type: 'raid', tone: 'phase', text: `${nameOf(ctx, active)} calls out! Every ghost in the Labyrinth answers and swarms the foe!` });
+    battle.outcome = 'win';
   }
   if (active.hp <= 0) {
     if (ctx.party.some((p) => p.hp > 0)) battle.needsSwitch = true;
