@@ -2321,6 +2321,8 @@ export const BalanceSchema = z.object({
       expMultiplier: z.number().min(0.1).max(1),
     }),
   }),
+  /** Beta 0.6 E2: the Kanto world-state track's numbers (core/expansion/track.ts). */
+  expansionTrack: z.object({ shopMarkup: z.number().min(0).max(0.15), wildShrink: z.number().min(0).max(0.5) }),
   /** A theme's wild pool is topped up from wildPool when it has fewer species than this. */
   minThemePool: z.number().int().min(1),
   /** Weight multiplier for species that have both of the theme's types. */
@@ -3109,6 +3111,10 @@ export const EventRuleSchema = z.object({
   cursedHat: z.boolean().optional(),
   /** Each of your Pokémon that faints comes back once with a quarter of its HP (Pinch Hitter). */
   pinchHitter: z.boolean().optional(),
+  /** Blackout's Seal (Beta 0.6 E4): no voluntary switching on the first turn of the fight. */
+  noSwitchFirstTurn: z.boolean().optional(),
+  /** Blackout's Seal: moves of this type hit this many percent harder, for both sides. */
+  typeBoost: z.object({ type: TypeNameSchema, pct: z.number().int().min(1).max(100) }).optional(),
   surviveTurns: z.number().int().min(1).max(30).optional(),
   suddenDeath: z.boolean().optional(),
   turnLimit: z.number().int().min(1).max(30).optional(),
@@ -3166,6 +3172,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     /** How many of the trainer's Pokémon (the first ones) are Shadow Pokémon a Snag Ball can take. */
     shadow: z.number().int().min(0).max(6).default(0),
     types: z.array(TypeNameSchema).default([]),
+    /** Beta 0.6 wide formats: the foe's Pokémon come from this species list (a pick per slot); empty = from `types`. */
+    species: z.array(z.string()).optional(),
     levelBonus: z.number().int().default(0),
     chain: z.number().int().min(1).max(3).default(1),
     /** Run events B: the field is forced to this weather / terrain for the whole fight (Umbrella Squad). */

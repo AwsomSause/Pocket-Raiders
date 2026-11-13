@@ -61,7 +61,7 @@ describe('expansion run block (run v43)', () => {
     expect(ExpansionRunSchema.safeParse({}).success).toBe(true);
     const storage = new MemoryStorageProvider();
     const sm = new SaveManager(storage, content);
-    const r = { ...freshRun(), expansion: { eventsSeen: ['xe.kanto.a'], track: { step: 2 } } };
+    const r = { ...freshRun(), expansion: { eventsSeen: ['xe.kanto.a'], track: { kanto: { step: 2, peak: 2, applied: [], log: [] } } } };
     sm.saveRun(r);
     const loaded = new SaveManager(storage, content).loadRun();
     expect(loaded.status === 'ok' && loaded.data.expansion).toEqual(r.expansion);

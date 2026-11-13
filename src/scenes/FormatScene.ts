@@ -67,6 +67,13 @@ export class FormatScene extends Phaser.Scene {
         if (over) return this.finish();
         chooseOption(ctx, card.options[i]!.id);
         services().session.saveRunNow();
+        // A format fight was launched: the battle screen takes over, and the map shows this screen again afterwards.
+        if (ctx.run.phase === 'battle') {
+          this.clear();
+          this.scene.stop(this.data0.from);
+          this.scene.start('Battle');
+          return;
+        }
         this.render();
       },
     });

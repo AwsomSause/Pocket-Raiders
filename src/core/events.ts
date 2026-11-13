@@ -1276,7 +1276,7 @@ function eventLevel(content: Content, run: RunState, node: MapNode, rng: Rng): n
   return enemyLevel(content, getArchetype(content, run.archetypeId), scale, 0, rng).level;
 }
 
-function startEventBattle(content: Content, run: RunState, node: MapNode, b: EventBattle, rng: Rng, event: EventBattleRef): void {
+export function startEventBattle(content: Content, run: RunState, node: MapNode, b: EventBattle, rng: Rng, event: EventBattleRef): void {
   const lastAlive = b.kind === 'trainer' && b.rule?.reversed ? run.party.map((p) => p.hp > 0).lastIndexOf(true) : -1;
   const activeIndex = lastAlive >= 0 ? lastAlive : run.party.findIndex((p) => p.hp > 0);
   const base = eventLevel(content, run, node, rng) + b.levelBonus;
@@ -1321,7 +1321,7 @@ function startEventBattle(content: Content, run: RunState, node: MapNode, b: Eve
       return newMon(content, run, id, level, 'e');
     }) : ghost.length > 0 ? ghost.map((m) => newMon(content, run, m.speciesId, Math.min(cap, Math.max(1, Math.min(m.level, base + 6))), 'e')) : Array.from({ length: b.size }, (_, i) => {
       const level = Math.min(cap, Math.max(1, base + (i === b.size - 1 ? 1 : 0)));
-      const speciesId = boss ? boss.signature[i % boss.signature.length]! : pickSpecies(content, run, [], b.types, rng);
+      const speciesId = boss ? boss.signature[i % boss.signature.length]! : pickSpecies(content, run, b.species ?? [], b.types, rng);
       return newMon(content, run, evolvedFormAt(content, speciesId, level, rng), level, 'e');
     });
     if (authored) for (const mon of team) auditEncounter(content, 'event', mon, authored);
@@ -1373,7 +1373,7 @@ export function isApprenticeBattle(content: Content, event: EventBattleRef): boo
 export function isStoryEventBattle(content: Content, event: EventBattleRef): boolean {
   const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
-  return battle?.kind === 'trainer' && Boolean(battle.rival || battle.evil || battle.ghost || battle.retired);
+  return event.eventId.startsWith('format:') || (battle?.kind === 'trainer' && Boolean(battle.rival || battle.evil || battle.ghost || battle.retired));
 }
 
 /** W7 rule P5: a fight inside a pseudo stage. A loss there ejects to the map instead of ending the run. */
