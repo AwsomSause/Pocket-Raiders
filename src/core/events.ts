@@ -51,7 +51,7 @@ import { shapeInstances, strategyIdForGroup } from './bossStrategy';
 import { choiceMade, recordChoice } from './evil/choices';
 import { recordCast } from './expansion/cast/dossier';
 import { meetFromEvent, meetFromJoin } from './expansion/cast/meet';
-import { assignEvilTraits, assignEvilVariants, holdsMarnieCard } from './expansion/variantAssign';
+import { assignEvilTraits, assignEvilVariants, assignSpecialTrait, holdsMarnieCard } from './expansion/variantAssign';
 import { changeAid, changeCrisis, crisisAid, crisisEventIds, crisisLevel, setTournament, tournamentEventId, tournamentRound } from './story/crisis';
 import { activePerks, hasPerk, perkItem, perksOf, spendUse, stageKey } from './mapItems';
 import { scavengerBonus } from './bank';
@@ -1584,6 +1584,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       return mon;
     });
     run.battle = createBattle('wild', [enemy, ...others], activeIndex, run.party[activeIndex]!.uid);
+    if (b.special) assignSpecialTrait(run.battle.extra.traits, [enemy, ...others], b.special);
     if (b.weather) run.battle.weather = { id: b.weather, turns: 999 };
   } else {
     const boss = b.bossId ? content.bosses.get(b.bossId) : undefined;
@@ -1633,6 +1634,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     if (shaped) team.splice(0, team.length, ...shaped.team);
     run.battle = createBattle('trainer', team, activeIndex, run.party[activeIndex]!.uid, { classId: b.classId ?? 'event', name: evil ? evil.name : rival ? rival.name : fellow ? fellow.name : b.kind === 'trainer' && b.friend ? friendName(run) : b.name, leaderId: null });
     if (b.kind === 'trainer' && b.sprite && run.battle.trainer) run.battle.trainer.spriteBoss = b.sprite;
+    if (b.special) assignSpecialTrait(run.battle.extra.traits, team, b.special);
     // Beta 0.6: the team's special Pokémon carry its variant line (Specialists one, Executives and Leaders two).
     const variantTeam = b.evil ? (b.evilTeam ?? evilTeam(content, run)?.id) : undefined;
     if (b.evil && variantTeam) {
