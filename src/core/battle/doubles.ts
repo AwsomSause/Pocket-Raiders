@@ -27,7 +27,7 @@ import { setAnnounceContent, doublesSteps as S, forcedMoveId, hasUsableMove, typ
 import { comboName } from './battleFlair';
 import * as Held from './held';
 import { applyTransformations, battleMove, endDynamax, tickDynamax, zMoveFor, type TransformStepEvent } from './transform';
-import { alliesAdjacent, canReach, centringMoves, foesAdjacent, shiftProblem } from './triples';
+import { alliesAdjacent, canReach, centringMoves, foesAdjacent, lanesOn, shiftProblem } from './triples';
 
 /** 0 left, 1 right in a double battle; 0 left, 1 centre, 2 right in a triple battle. */
 export type Spot = 0 | 1 | 2;
@@ -245,10 +245,16 @@ class Field {
     return this.allies(c)[0] ?? null;
   }
 
+  /** The Front's lane rule binds `c` only while the foe in its own lane still stands; with that lane empty it may help the others. */
+  private laneHolds(c: Combatant, spot: number): boolean {
+    return lanesOn(this.ctx.battle) && this.alive(otherSide(c.side)).some((f) => this.spotOf(f) === spot);
+  }
+
   /** The foes `c` stands next to or faces (every foe in doubles). */
   nearFoes(c: Combatant): Combatant[] {
     const spot = this.spotOf(c);
     const foes = this.alive(otherSide(c.side));
+    if (spot !== null && this.laneHolds(c, spot)) return foes.filter((f) => this.spotOf(f) === spot);
     if (spot === null || this.size < 3) return foes;
     return foes.filter((f) => foesAdjacent(spot, this.spotOf(f)!));
   }
@@ -258,7 +264,7 @@ class Field {
     const a = this.spotOf(user);
     const b = this.spotOf(target);
     if (a === null || b === null) return false;
-    return canReach(this.size, { side: user.side, spot: a }, { side: target.side, spot: b }, move);
+    return canReach(this.size, { side: user.side, spot: a }, { side: target.side, spot: b }, move, this.laneHolds(user, a));
   }
 
   /** Focuses on `c` (and keeps the other side as it is). Returns false if it is no longer in battle. */
@@ -1367,7 +1373,8 @@ export function autoCommands(ctx: Pick<BattleContext, 'battle' | 'party' | 'cont
     if (!mon || mon.hp <= 0) return null;
     const index = hasUsableMove(mon) ? mon.moves.findIndex((m) => m.pp > 0) : -1;
     // The first foe it can reach (triple battles: an edge can't reach the far edge).
-    const near = spots.filter((s) => spots.length < 3 || foesAdjacent(spot, s));
+    const laneBound = lanesOn(ctx.battle) && (monAt(ctx, 'enemy', spot)?.hp ?? 0) > 0;
+    const near = spots.filter((s) => (laneBound ? s === spot : spots.length < 3 || foesAdjacent(spot, s)));
     const foeSpot = near.find((s) => (monAt(ctx, 'enemy', s)?.hp ?? 0) > 0) ?? near[0] ?? 0;
     return { action: { kind: 'move', index }, target: { side: 'enemy', spot: foeSpot } };
   });

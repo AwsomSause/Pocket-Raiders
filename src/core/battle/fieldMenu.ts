@@ -13,7 +13,7 @@ import { getSpecies } from '../pokemon';
 import { typeEffectiveness } from './damage';
 import { ALLY_AIMED, monAt, spotsOf, volAt, type Spot } from './doubles';
 import { forcedMoveId, type SlotCommand } from './engine';
-import { canReach, shiftProblem } from './triples';
+import { canReach, lanesOn, shiftProblem } from './triples';
 
 type View = { battle: BattleState; party: PokemonInstance[] };
 
@@ -54,11 +54,13 @@ export function targetChoices(view: View, content: Content | null, spot: Spot, m
   const spots = spotsOf(battle);
   const size = spots.length;
   const user = { side: 'player' as const, spot };
+  // The lane rule (Front) binds only while the foe in your own lane still stands.
+  const laneBound = lanesOn(battle) && (monAt(view, 'enemy', spot)?.hp ?? 0) > 0;
   const foes: TargetChoice[] = [];
   for (const s of spots) {
     const mon = monAt(view, 'enemy', s);
     if (!mon || mon.hp <= 0 || d.commanding.includes(mon.uid)) continue;
-    if (!canReach(size, user, { side: 'enemy', spot: s }, move)) continue;
+    if (!canReach(size, user, { side: 'enemy', spot: s }, move, laneBound)) continue;
     foes.push({ target: { side: 'enemy', spot: s }, mon, ally: false, best: false });
   }
   // Smart-target arrow (ideas W1): the foe this move hits hardest by type, if that beats the others.
@@ -73,7 +75,7 @@ export function targetChoices(view: View, content: Content | null, spot: Spot, m
     for (const s of spots) {
       const mon = monAt(view, 'player', s);
       if (!mon || mon.hp <= 0 || s === spot) continue;
-      if (!canReach(size, user, { side: 'player', spot: s }, move)) continue;
+      if (!canReach(size, user, { side: 'player', spot: s }, move, laneBound)) continue;
       allies.push({ target: { side: 'player', spot: s }, mon, ally: true, best: false });
     }
   }
