@@ -27,7 +27,7 @@ import { eliteRematchDue } from './story/eliteRematch';
 import { markAssisted } from './tools/assisted';
 import { crossObstacle, placeDungeon, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
 import { wandererStageStart, wandererStep } from './wanderer';
-import { setClimaxCut } from './arc/climaxExtended';
+import { climaxBattleEnded, setClimaxCut } from './arc/climaxExtended';
 import { freeHandedOverRival, standWithClimaxLost, standWithOf } from './arc/standWithExtended';
 import { makeShadow, rollShadowHeart, soothePartyAfterBattle } from './shadow';
 import { leaveRegion, startGrandArc } from './grandArc';
@@ -3068,6 +3068,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   noteReplayTurn(content, run, current.battle!, events as BattleEvent[]);
   if (battle.outcome) sealReplay(content, run);
   // Wide formats (Beta 0.6 E4): a fight a format launched tells the format how it ended, before any loss tail runs.
+  if (battle.outcome && battle.event?.eventId === 'format:climax') climaxBattleEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
   if (battle.outcome && battle.event?.eventId.startsWith('format:')) formatBattleEnded({ content, run }, battle.outcome === 'win' || battle.outcome === 'caught');
   // PS-RESCUE (Beta 0.6 R9): a guard fight tells the running rescue plan how it ended.
   if (battle.outcome && battle.event?.eventId.startsWith('rescue:')) rescueFightEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
