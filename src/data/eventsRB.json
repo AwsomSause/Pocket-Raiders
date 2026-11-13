@@ -18,14 +18,14 @@
     {
      "label": "Take on both vendors",
      "success": {
-      "text": "\"Order up!\" The first vendor sends out their team.",
+      "text": "\"Order up!\" Both vendors send out their Pokémon at once.",
       "effects": [],
       "battle": {
        "kind": "trainer",
-       "chain": 2,
+       "format": "doubles",
        "name": "Hot Dog Duelists",
        "classId": "worker",
-       "size": 2,
+       "size": 4,
        "types": [],
        "levelBonus": 0,
        "win": [
