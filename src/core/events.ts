@@ -71,7 +71,7 @@ import { getSpecies } from './pokemon';
 import { currentRegion, getCampaign, levelCap, runLevelCap } from './regions';
 import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } from './encounterDirector';
 import { hashSeed, Rng } from './rng';
-import { continueAfterDecisions, healParty, newMon } from './run';
+import { continueAfterDecisions, healParty, newMon, startRaidBattle } from './run';
 import { earnRom, gainStock, grandArcOf, romById, romsHeld } from './grandArc';
 import { climaxCutOf } from './arc/climaxExtended';
 import { addMercy, changeRep, joinInsideMan, joinProblem, resolveVerdict, standWithClimaxWon, standWithOf, standWithPlayable, verdictsOpen } from './arc/standWithExtended';
@@ -935,7 +935,7 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'revealStops':
       return 'reveal every "?" stop';
     case 'addStop':
-      return e.stop === 'heal' ? 'a healing spot opens here' : e.stop === 'shop' ? 'a shop opens here' : 'a fishing spot opens here';
+      return e.stop === 'heal' ? 'a healing spot opens here' : e.stop === 'shop' ? 'a shop opens here' : e.stop === 'minigame' ? 'a game opens here' : 'a fishing spot opens here';
     case 'skipAhead':
       return 'skip ahead to the gym';
     case 'wanderer':
@@ -1350,7 +1350,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return effectWords(content, e);
     case 'addStop': {
       const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
-      here.sides.push({ id: `event-stop-${here.sides.length + 1}-${here.id}`, kind: e.stop, used: false });
+      here.sides.push({ id: `event-stop-${here.sides.length + 1}-${here.id}`, kind: e.stop, used: false, ...(e.stop === 'minigame' && e.minigameId ? { minigameId: e.minigameId } : {}) });
       return effectWords(content, e);
     }
     case 'scout':
@@ -1476,6 +1476,15 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
   const base = b.kind === 'trainer' && b.rule?.matchLead ? run.party[activeIndex]!.level : eventLevel(content, run, node, rng) + b.levelBonus;
   // Event foes stay under the region's level cap like every ordinary enemy (Balancing Phase 7).
   const cap = levelCap(content, run.regionIndex);
+  if (b.kind === 'raid') {
+    const def = content.raids.raids.find((r) => r.id === b.raidId);
+    if (!def) throw new Error(`Event raid ${b.raidId} does not exist`);
+    const level = Math.min(cap, Math.max(1, base + def.levelBonus));
+    startRaidBattle(content, run, def, rng.pick(def.species), level);
+    if (b.spikesUnless && Number(run.story.flags[`ev:${b.spikesUnless.flag}`] ?? 0) < b.spikesUnless.atLeast) run.battle!.sideEffects.player.toxicSpikes = 1;
+    run.battle!.event = event;
+    return;
+  }
   if (b.kind === 'wild') {
     const speciesId = (b.recall ? oldFoe(run) : null) ?? pickSpecies(content, run, b.species, b.types, rng);
     const level = Math.min(cap, Math.max(1, base));
@@ -1689,7 +1698,7 @@ export function eventBattleWon(content: Content, run: RunState, event: EventBatt
 export function eventBattleLost(content: Content, run: RunState, event: EventBattleRef): string[] {
   const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
-  if (!battle || battle.kind !== "trainer" || !battle.lose?.length) return [];
+  if (!battle || (battle.kind !== 'trainer' && battle.kind !== 'raid') || !battle.lose?.length) return [];
   const rng = new Rng(hashSeed(`${run.seed}::event-lose::${stageKey(run)}::${event.sideId}`));
   return battle.lose.map((e) => applyEffect(content, run, e, rng)).filter(Boolean);
 }

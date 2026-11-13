@@ -51,7 +51,7 @@ export class MinigameScene extends Phaser.Scene {
     this.add.text(28, 54, view.hud.filter((h) => h.length > 0).join('   ·   '), textStyle(18, '#f0e0a0', { wordWrap: { width: GAME_WIDTH - 56 } }));
     this.add.text(28, 98, outcome ? outcome.lines.join(' ') : view.prompt, textStyle(20, outcome ? '#a0f0a0' : COLORS.textLight, { wordWrap: { width: GAME_WIDTH - 56 } }));
 
-    if (outcome) this.showMedal(outcome.medal, motion);
+    if (outcome && !def.zone) this.showMedal(outcome.medal, motion);
     const fr = session.content.minigames.economy.frontier;
     const prizes = outcome && fr.games.includes(run.minigame.id) ? fr.prizes : [];
     const controls = view.cells.filter((c) => !c.board);
