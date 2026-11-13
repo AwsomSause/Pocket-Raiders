@@ -61,3 +61,29 @@ describe('rival questlines', () => {
     }
   });
 });
+
+describe('rival questlines batch 2', () => {
+  it('loads every rq event, valid, with unique ids', () => {
+    const rq = [...content.events.values()].filter((e) => e.id.startsWith('rq-'));
+    expect(rq.length).toBeGreaterThanOrEqual(40);
+    for (const e of rq) {
+      expect(e.group, e.id).toBe('Rival questline');
+      expect(e.choices.length, e.id).toBeGreaterThanOrEqual(1);
+    }
+  });
+  it('every flag a callback needs is set by some rq event', () => {
+    const rq = [...content.events.values()].filter((e) => e.id.startsWith('rq-'));
+    const setters = new Set<string>();
+    const walk = (o: unknown): void => {
+      if (Array.isArray(o)) o.forEach(walk);
+      else if (o && typeof o === 'object') {
+        const r = o as Record<string, unknown>;
+        if (r.kind === 'flag' && typeof r.key === 'string' && r.amount !== undefined) setters.add(r.key);
+        Object.values(r).forEach(walk);
+      }
+    };
+    rq.forEach((e) => e.choices.forEach(walk));
+    for (const e of rq.filter((x) => x.callback))
+      for (const c of e.requires) if (c.kind === 'flag' && c.atLeast >= 1) expect(setters.has(c.key), `${e.id} needs ${c.key}`).toBe(true);
+  });
+});
