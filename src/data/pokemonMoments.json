@@ -952,9 +952,13 @@
    "chance": 0.12,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "First foe is paralyzed at battle start.",
-   "presentation": "Spark sfx | \"The air crackles.\""
+   "presentation": "Spark sfx | \"The air crackles.\"",
+   "effect": {
+    "foeStatus": "par",
+    "foeStatusChance": 100
+   }
   },
   {
    "id": "gastly-grin",
@@ -970,9 +974,14 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "First foe Accuracy -1.",
-   "presentation": "Laugh sfx | \"It's grinning.\""
+   "presentation": "Laugh sfx | \"It's grinning.\"",
+   "effect": {
+    "foeStage": {
+     "acc": -1
+    }
+   }
   },
   {
    "id": "lucario-aura",
@@ -987,9 +996,14 @@
    "chance": 0.3,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "Accuracy +1 and see the foe's moves for the battle.",
-   "presentation": "Aura ping | \"It senses you.\""
+   "status": "supported",
+   "effectText": "Accuracy +1 for the battle.",
+   "presentation": "Aura ping | \"It senses you.\"",
+   "effect": {
+    "boost": {
+     "acc": 1
+    }
+   }
   },
   {
    "id": "sneasel-ambush",
@@ -1025,9 +1039,15 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "Whole team: Atk +1 for 1 turn.",
-   "presentation": "Bark | \"Fight together.\""
+   "status": "supported",
+   "effectText": "Atk +1 for 1 turn.",
+   "presentation": "Bark | \"Fight together.\"",
+   "effect": {
+    "boost": {
+     "atk": 1
+    },
+    "boostTurns": 1
+   }
   },
   {
    "id": "ditto-copy",
@@ -1074,9 +1094,15 @@
    "chance": 0.2,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "Def +1, SpD +1.",
-   "presentation": "Hollow tone | \"Its skull glints.\""
+   "presentation": "Hollow tone | \"Its skull glints.\"",
+   "effect": {
+    "boost": {
+     "def": 1,
+     "spd": 1
+    }
+   }
   },
   {
    "id": "magikarp-splash",
@@ -1090,9 +1116,12 @@
    "chance": 0.05,
    "limit": "run",
    "tier": "major",
-   "status": "disabled",
-   "effectText": "A huge splash: every foe loses 10% max HP and gains nothing. Once per run.",
-   "presentation": "Giant splash | \"It just splashed. Strangely.\""
+   "status": "supported",
+   "effectText": "A huge splash: the first foe loses 10% max HP. Once per run.",
+   "presentation": "Giant splash | \"It just splashed. Strangely.\"",
+   "effect": {
+    "foeHpPct": 10
+   }
   },
   {
    "id": "gyarados-rage",
@@ -1140,9 +1169,17 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "Foe Spe -1, own SpA +1.",
-   "presentation": "Delayed splash | \"Hm. Right.\""
+   "presentation": "Delayed splash | \"Hm. Right.\"",
+   "effect": {
+    "foeStage": {
+     "spe": -1
+    },
+    "boost": {
+     "spa": 1
+    }
+   }
   },
   {
    "id": "mew-curious",
@@ -1172,9 +1209,15 @@
    "chance": 0.5,
    "limit": "battle",
    "tier": "major",
-   "status": "disabled",
-   "effectText": "SpA +1, SpD +1, immune to flinch.",
-   "presentation": "Dark pulse ring | \"Its mind is armor.\""
+   "status": "supported",
+   "effectText": "SpA +1, SpD +1.",
+   "presentation": "Dark pulse ring | \"Its mind is armor.\"",
+   "effect": {
+    "boost": {
+     "spa": 1,
+     "spd": 1
+    }
+   }
   },
   {
    "id": "darkrai-nightmare",
@@ -1204,9 +1247,18 @@
    "chance": 1,
    "limit": "run",
    "tier": "landmark",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "All stats +1 for the battle. Once per run.",
-   "presentation": "Slow cry, light pillar | \"The god arrives.\""
+   "presentation": "Slow cry, light pillar | \"The god arrives.\"",
+   "effect": {
+    "boost": {
+     "atk": 1,
+     "def": 1,
+     "spa": 1,
+     "spd": 1,
+     "spe": 1
+    }
+   }
   },
   {
    "id": "legendary-entrance",
@@ -1220,9 +1272,16 @@
    "chance": 0.2,
    "limit": "battle",
    "tier": "major",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "Atk +1, SpA +1 for 3 turns.",
-   "presentation": "Cry first, gold flash | \"Its presence is felt.\""
+   "presentation": "Cry first, gold flash | \"Its presence is felt.\"",
+   "effect": {
+    "boost": {
+     "atk": 1,
+     "spa": 1
+    },
+    "boostTurns": 3
+   }
   },
   {
    "id": "mythical-grace",
@@ -1236,9 +1295,15 @@
    "chance": 0.2,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "Evasion +1 for 3 turns.",
-   "presentation": "Sparkle | \"Hard to touch.\""
+   "presentation": "Sparkle | \"Hard to touch.\"",
+   "effect": {
+    "boost": {
+     "eva": 1
+    },
+    "boostTurns": 3
+   }
   },
   {
    "id": "ultra-rift",
@@ -1252,9 +1317,16 @@
    "chance": 0.25,
    "limit": "battle",
    "tier": "major",
-   "status": "disabled",
-   "effectText": "Foes' Accuracy -1 and they are flustered (confused 25%).",
-   "presentation": "Rift hum | \"Reality bends.\""
+   "status": "supported",
+   "effectText": "Foe's Accuracy -1, and 25% to confuse it.",
+   "presentation": "Rift hum | \"Reality bends.\"",
+   "effect": {
+    "foeStage": {
+     "acc": -1
+    },
+    "foeConfuse": true,
+    "foeConfuseChance": 25
+   }
   },
   {
    "id": "paradox-resonance",
@@ -1268,9 +1340,12 @@
    "chance": 0.25,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "Highest stat +1.",
-   "presentation": "Glitch ripple | \"Time is wrong.\""
+   "status": "supported",
+   "effectText": "Atk or Sp. Atk +1, whichever is higher.",
+   "presentation": "Glitch ripple | \"Time is wrong.\"",
+   "effect": {
+    "boostBest": 1
+   }
   },
   {
    "id": "pseudo-presence",
@@ -1284,9 +1359,14 @@
    "chance": 0.12,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "Foe Atk -1.",
-   "presentation": "Cry | \"They feel small.\""
+   "presentation": "Cry | \"They feel small.\"",
+   "effect": {
+    "foeStage": {
+     "atk": -1
+    }
+   }
   },
   {
    "id": "fossil-awaken",
@@ -1300,9 +1380,15 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "Atk +1, Spe +1.",
-   "presentation": "Dust | \"It remembers the age.\""
+   "presentation": "Dust | \"It remembers the age.\"",
+   "effect": {
+    "boost": {
+     "atk": 1,
+     "spe": 1
+    }
+   }
   },
   {
    "id": "eevee-bond",
@@ -1324,9 +1410,21 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "major",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "All stats +1 if the player's party has 2+ Eeveelutions.",
-   "presentation": "Chorus | \"Siblings.\""
+   "presentation": "Chorus | \"Siblings.\"",
+   "effect": {
+    "boost": {
+     "atk": 1,
+     "def": 1,
+     "spa": 1,
+     "spd": 1,
+     "spe": 1
+    }
+   },
+   "requires": {
+    "partyMatching": 2
+   }
   },
   {
    "id": "starter-trainers",
@@ -1340,9 +1438,14 @@
    "chance": 0.18,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "Atk +1 and +1 friendship at battle start.",
-   "presentation": "Trainer shout | \"You and me.\""
+   "status": "supported",
+   "effectText": "Atk +1 at battle start.",
+   "presentation": "Trainer shout | \"You and me.\"",
+   "effect": {
+    "boost": {
+     "atk": 1
+    }
+   }
   },
   {
    "id": "baby-bravery",
@@ -1356,9 +1459,18 @@
    "chance": 0.2,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "Def +1, SpD +1; foe underestimates it (-1 Acc).",
-   "presentation": "Giggle | \"Too small to hit.\""
+   "presentation": "Giggle | \"Too small to hit.\"",
+   "effect": {
+    "boost": {
+     "def": 1,
+     "spd": 1
+    },
+    "foeStage": {
+     "acc": -1
+    }
+   }
   },
   {
    "id": "dragon-aura",
@@ -1372,9 +1484,15 @@
    "chance": 0.08,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "Atk +1 for 3 turns.",
-   "presentation": "Low roar | \"Dragon's aura.\""
+   "presentation": "Low roar | \"Dragon's aura.\"",
+   "effect": {
+    "boost": {
+     "atk": 1
+    },
+    "boostTurns": 3
+   }
   },
   {
    "id": "ghost-chill",
@@ -1388,9 +1506,14 @@
    "chance": 0.08,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "Foe Atk -1 on first turn.",
-   "presentation": "Cold whisper | \"A chill runs down.\""
+   "status": "supported",
+   "effectText": "Foe Atk -1 at battle start.",
+   "presentation": "Cold whisper | \"A chill runs down.\"",
+   "effect": {
+    "foeStage": {
+     "atk": -1
+    }
+   }
   },
   {
    "id": "dark-menace",
@@ -1404,9 +1527,14 @@
    "chance": 0.08,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "Foe loses 1 stage of Evasion; own crit stage +1.",
-   "presentation": "Low drone | \"Menacing.\""
+   "status": "supported",
+   "effectText": "Foe Evasion -1.",
+   "presentation": "Low drone | \"Menacing.\"",
+   "effect": {
+    "foeStage": {
+     "eva": -1
+    }
+   }
   },
   {
    "id": "psychic-focus",
@@ -1420,9 +1548,15 @@
    "chance": 0.08,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "SpA +1 for 3 turns.",
-   "presentation": "Focus ring | \"Calm mind.\""
+   "presentation": "Focus ring | \"Calm mind.\"",
+   "effect": {
+    "boost": {
+     "spa": 1
+    },
+    "boostTurns": 3
+   }
   },
   {
    "id": "fighting-spirit",
@@ -1436,9 +1570,15 @@
    "chance": 0.08,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "Atk +1 for 3 turns.",
-   "presentation": "Kiai | \"Fired up.\""
+   "presentation": "Kiai | \"Fired up.\"",
+   "effect": {
+    "boost": {
+     "atk": 1
+    },
+    "boostTurns": 3
+   }
   },
   {
    "id": "fairy-charm",
@@ -1452,9 +1592,14 @@
    "chance": 0.08,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "Foe Atk -1.",
-   "presentation": "Chime | \"Charmed.\""
+   "presentation": "Chime | \"Charmed.\"",
+   "effect": {
+    "foeStage": {
+     "atk": -1
+    }
+   }
   },
   {
    "id": "fire-last-stand",
@@ -1929,9 +2074,14 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "On switch-in: Atk +1.",
-   "presentation": "Cry | \"Back in the ring.\""
+   "presentation": "Cry | \"Back in the ring.\"",
+   "effect": {
+    "boost": {
+     "atk": 1
+    }
+   }
   },
   {
    "id": "legend-entrance",
@@ -1945,9 +2095,15 @@
    "chance": 0.25,
    "limit": "battle",
    "tier": "major",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "On switch-in: heal 10% and +1 SpA.",
-   "presentation": "Cry first | \"Present again.\""
+   "presentation": "Cry first | \"Present again.\"",
+   "effect": {
+    "healNowPct": 10,
+    "boost": {
+     "spa": 1
+    }
+   }
   },
   {
    "id": "wall-entrance",
@@ -1959,9 +2115,15 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "On switch-in: Def +1, SpD +1.",
-   "presentation": "Clang | \"A wall rises.\""
+   "presentation": "Clang | \"A wall rises.\"",
+   "effect": {
+    "boost": {
+     "def": 1,
+     "spd": 1
+    }
+   }
   },
   {
    "id": "glass-cannon-entrance",
@@ -1973,9 +2135,15 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "On switch-in: Atk +1 or SpA +1 (higher stat) but Def -1.",
-   "presentation": "Spark | \"Dangerous.\""
+   "presentation": "Spark | \"Dangerous.\"",
+   "effect": {
+    "boostBest": 1,
+    "boost": {
+     "def": -1
+    }
+   }
   },
   {
    "id": "support-entrance",
@@ -1987,9 +2155,12 @@
    "chance": 0.15,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "On switch-in: whole team heals 5% max HP.",
-   "presentation": "Chime | \"Here to help.\""
+   "presentation": "Chime | \"Here to help.\"",
+   "effect": {
+    "partyHealPct": 5
+   }
   },
   {
    "id": "steel-no-effect",

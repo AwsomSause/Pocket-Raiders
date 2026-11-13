@@ -62,6 +62,9 @@ import { currentRegion, getCampaign, levelCap, runLevelCap } from './regions';
 import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } from './encounterDirector';
 import { hashSeed, Rng } from './rng';
 import { continueAfterDecisions, healParty, newMon } from './run';
+import { earnRom, gainStock, grandArcOf, romById, romsHeld } from './grandArc';
+import { checkFlagKeys } from './shadow2/keys';
+import { grantNamedShadow } from './shadow2/grant';
 import type { MapNode, RunState, SideStop } from './state';
 import { applyReward, rewardTargetProblem } from './rewards';
 import { focusIs, MYSTERY_EXTRA_STOPS, regionFocus } from './campaign/focus';
@@ -168,6 +171,10 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return run.party.some((m) => m.blissful);
     case 'partyShadow':
       return run.party.some((m) => m.shadow);
+    case 'grandArc': {
+      const g = grandArcOf(run);
+      return !!g && (!c.missingRom || !romsHeld(g).includes(c.missingRom));
+    }
     case 'storyRun':
       return !!run.story.v2;
     case 'oldFoe':
@@ -320,6 +327,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs a Blissful Pokémon in your party';
     case 'partyShadow':
       return 'Needs a Shadow Pokémon in your party';
+    case 'grandArc':
+      return 'Needs something you have not done yet';
     case 'storyRun':
       return 'Only in a Story Run';
     case 'oldFoe':
@@ -817,6 +826,12 @@ export function effectWords(content: Content, e: EventEffect): string {
       return 'allies gathered';
     case 'flag':
       return '';
+    case 'grandArcRom':
+      return `Data ROM ${e.rom}`;
+    case 'grandArcStock':
+      return '';
+    case 'namedShadow':
+      return 'a Shadow Pokémon is offered to you';
     case 'mentor':
       return 'your mentor';
     case 'moment':
@@ -1057,8 +1072,21 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return effectWords(content, e);
     case 'tournament':
       return setTournament(content, run, e.round);
+    case 'grandArcRom': {
+      const rom = romById(e.rom);
+      return rom && earnRom(run, e.rom) ? `You hold Data ROM ${rom.id}, "${rom.name}"` : '';
+    }
+    case 'grandArcStock':
+      gainStock(run, e.step);
+      return '';
+    case 'namedShadow': {
+      const name = grantNamedShadow(content, run, e.id, e.level);
+      return name ? `${name} is yours to keep, if you can hold it` : 'there was nobody to hand over';
+    }
     case 'flag':
       run.story.flags[`ev:${e.key}`] = Math.max(0, Number(run.story.flags[`ev:${e.key}`] ?? 0) + e.amount);
+      // Shadow II: a story flag may be exactly the key a Shadow in your party or PC has been waiting for.
+      for (const line of checkFlagKeys(content, run)) recordChoice(content, run, { id: `shadow-key-${e.key}`, pick: 'yes', text: line, weight: 2 });
       return '';
     case 'mentor':
       return applyMentorEffect(content, run, e);

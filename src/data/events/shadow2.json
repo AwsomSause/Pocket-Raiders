@@ -1,0 +1,40 @@
+{
+ "events": [
+  {
+   "id": "shadow2-first-snag",
+   "name": "First Snag",
+   "group": "Shadow Pokémon",
+   "rarity": "uncommon",
+   "tags": ["Evil Team", "Pokémon"],
+   "minStage": 2,
+   "requires": [{ "kind": "storyRun" }],
+   "scene": { "cast": [], "effect": "glint" },
+   "intro": "A Snag'em recruit is shaking a Makuhita out of a harness. \"Not my kind of job,\" they mutter. \"It still has a Shadow in it. Anything works on this one. Take it, it exists to teach you how to purify.\"",
+   "choices": [
+    {
+     "label": "Take the Makuhita",
+     "success": { "text": "The recruit hands it over and walks away without looking back.", "effects": [{ "kind": "namedShadow", "id": "ss.snagem.first-snag", "level": 12 }] }
+    },
+    { "label": "Walk on", "success": { "text": "You leave it be.", "effects": [] } }
+   ]
+  },
+  {
+   "id": "shadow2-the-gift",
+   "name": "A Present With Strings",
+   "group": "Shadow Pokémon",
+   "rarity": "rare",
+   "tags": ["Evil Team", "Pokémon"],
+   "minStage": 4,
+   "requires": [{ "kind": "storyRun" }],
+   "scene": { "cast": [], "effect": "glint" },
+   "intro": "A Snag'em contact holds out a Poké Ball. \"A present. It has strings. Good luck with the strings.\" A passer-by whispers that it only ever softened for someone who stayed.",
+   "choices": [
+    {
+     "label": "Accept the gift",
+     "success": { "text": "The ball is warm and heavy. Something inside is listening.", "effects": [{ "kind": "namedShadow", "id": "ss.snagem.the-gift", "level": 22 }] }
+    },
+    { "label": "Refuse", "success": { "text": "The contact shrugs and pockets the ball.", "effects": [] } }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,181 @@
+{
+ "slotCap": 2,
+ "tiers": [
+  {
+   "tier": 1,
+   "name": "Veiled",
+   "upTo": 25,
+   "damageBonus": 0.05,
+   "damageTaken": 1,
+   "disobeyChance": 0,
+   "hesitateChance": 0.05,
+   "countsAgainstCap": false
+  },
+  {
+   "tier": 2,
+   "name": "Bound",
+   "upTo": 50,
+   "damageBonus": 0.1,
+   "damageTaken": 1,
+   "disobeyChance": 0,
+   "hesitateChance": 0,
+   "countsAgainstCap": false
+  },
+  {
+   "tier": 3,
+   "name": "Gripped",
+   "upTo": 75,
+   "damageBonus": 0.15,
+   "damageTaken": 1,
+   "disobeyChance": 0.15,
+   "hesitateChance": 0,
+   "countsAgainstCap": true
+  },
+  {
+   "tier": 4,
+   "name": "Fallen",
+   "upTo": 100,
+   "damageBonus": 0.2,
+   "damageTaken": 1.1765,
+   "disobeyChance": 0.25,
+   "hesitateChance": 0,
+   "countsAgainstCap": true
+  }
+ ],
+ "keyHalfStrength": 0.5,
+ "keptPromiseFriendship": 1.1,
+ "softHeartedHeal": 1.1,
+ "steadfastTaken": 0.97,
+ "scars": [
+  {
+   "id": "steadfast",
+   "name": "Steadfast",
+   "effect": "Takes 3% less damage from every hit (a small Defense gain).",
+   "earnedBy": "Heart Bond, or a place or act key"
+  },
+  {
+   "id": "kept-promise",
+   "name": "Kept Promise",
+   "effect": "Its friendship with you grows 10% faster.",
+   "earnedBy": "A person key"
+  },
+  {
+   "id": "soft-hearted",
+   "name": "Soft-hearted",
+   "effect": "Healing items work 10% better on it.",
+   "earnedBy": "An object key"
+  }
+ ],
+ "keys": [
+  {
+   "shadow": "ss.snagem.first-snag",
+   "type": "act",
+   "scar": "steadfast",
+   "when": {
+    "kind": "any"
+   },
+   "hints": [
+    "The Snag'em contact grins: \"Anything works on this one. It is here to teach you.\"",
+    "A bystander says: \"Fight beside it. That is all it wants.\"",
+    "Its purification ring shows a plain circle: any method will do."
+   ],
+   "speciesId": "makuhita",
+   "corruption": 20
+  },
+  {
+   "shadow": "ss.snagem.the-gift",
+   "type": "act",
+   "scar": "steadfast",
+   "when": {
+    "kind": "heartBond"
+   },
+   "hints": [
+    "The Snag'em contact sneers: \"A present with strings. Good luck with the strings.\"",
+    "A passer-by says: \"It only ever softened for someone who stayed.\"",
+    "Its purification ring shows a footprint: it has to be walked with, battle after battle."
+   ],
+   "speciesId": "togetic",
+   "corruption": 40
+  },
+  {
+   "shadow": "ss.rocket.amberjack",
+   "type": "place",
+   "scar": "steadfast",
+   "when": {
+    "kind": "leadWinOutdoors",
+    "needs": "xk-amber-technician-beaten"
+   },
+   "hints": [
+    "Namba's technician boasts: \"Locked it up in a lab. It has not seen the sky in years.\"",
+    "A researcher says: \"Once the technician is out of the way, take it outside and let it lead.\"",
+    "Its purification ring shows a small horizon: win one battle outdoors with it leading."
+   ],
+   "speciesId": "aerodactyl",
+   "corruption": 65
+  },
+  {
+   "shadow": "ss.rocket.shellshock",
+   "type": "object",
+   "scar": "soft-hearted",
+   "when": {
+    "kind": "flag",
+    "flag": "xk-fossil-registered"
+   },
+   "hints": [
+    "A Rocket grunt laughs: \"That fossil? It belongs to us now. Nobody will ever stamp it.\"",
+    "A museum guide says: \"If only that fossil were officially registered.\"",
+    "Its purification ring shows a small stamp: the Pewter Museum has to register its fossil."
+   ],
+   "speciesId": "kabutops",
+   "corruption": 40
+  },
+  {
+   "shadow": "ss.rocket.matron",
+   "type": "person",
+   "scar": "kept-promise",
+   "when": {
+    "kind": "flag",
+    "flag": "xk-matron-child-returned"
+   },
+   "hints": [
+    "A poacher brags: \"Her little one is in the truck. She will do anything we say.\"",
+    "A ranger says: \"She is not angry at you. She wants her child.\"",
+    "Its purification ring shows a small shape beside a large one: return her child."
+   ],
+   "speciesId": "kangaskhan",
+   "corruption": 65
+  },
+  {
+   "shadow": "ss.rocket.black-fog",
+   "type": "place",
+   "scar": "steadfast",
+   "when": {
+    "kind": "flag",
+    "flag": "xk-tower-cleansed"
+   },
+   "hints": [
+    "A Rocket scientist mutters: \"Nothing but the Tower itself will ever clear that fog.\"",
+    "A mourner in Lavender says: \"The old rites at the Tower, that is the only thing that works.\"",
+    "Its purification ring shows a tower: only a Site Cleansing at Pokémon Tower sets it free."
+   ],
+   "speciesId": "haunter",
+   "corruption": 90
+  },
+  {
+   "shadow": "ss.rocket.marrowmother",
+   "type": "person",
+   "scar": "kept-promise",
+   "when": {
+    "kind": "flag",
+    "flag": "xk-cubone-at-tower-top"
+   },
+   "hints": [
+    "A Rocket grunt shivers: \"It keeps looking for something. Something small.\"",
+    "An old woman says: \"She lost her child at the Tower. Take it a little Cubone, if you can.\"",
+    "Its purification ring shows a skull and a small one beside it: the orphan Cubone, at the top of the Tower."
+   ],
+   "speciesId": "marowak",
+   "corruption": 90
+  }
+ ]
+}

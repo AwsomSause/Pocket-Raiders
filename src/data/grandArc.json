@@ -1,0 +1,22 @@
+{
+  "romsPerStep": 3,
+  "maxStock": 5,
+  "roms": [
+    { "id": "K", "region": "kanto", "name": "Rig Pulse", "liaison": "Ein", "method": "Capture Rig", "proves": "The pulse is not Rocket's design." },
+    { "id": "J", "region": "johto", "name": "Carrier Beat", "liaison": "Miror B.", "method": "Radio Wave Lock", "proves": "The same waveform, carried by sound." },
+    { "id": "H", "region": "hoenn", "name": "Resonator Mark II", "liaison": "Dakim", "method": "Orb Resonance", "proves": "One waveform at three sizes." },
+    { "id": "S", "region": "sinnoh", "name": "Chain Lock", "liaison": "Lovrina", "method": "Red Chain Lock", "proves": "A lock strong enough to hold a legend." },
+    { "id": "U", "region": "unova", "name": "Open Hand", "liaison": "Snattle", "method": "Liberation Lock", "proves": "A lock that waits to be let in." },
+    { "id": "X", "region": "kalos", "name": "Siphon", "liaison": "Venus", "method": "Life-Force Siphon", "proves": "A will that is taken is stored, not destroyed." },
+    { "id": "A", "region": "alola", "name": "Kindness", "liaison": "Eldes", "method": "Conservation Hold", "proves": "A lock that calls itself protection." },
+    { "id": "G", "region": "galar", "name": "Overload", "liaison": "Ardos", "method": "Dynamax Overload", "proves": "How to hold a Shadow state over a whole region." },
+    { "id": "P", "region": "paldea", "name": "Borrowed", "liaison": "Nascour", "method": "Star Barrage Link", "proves": "A heart can be asked to lend itself." }
+  ],
+  "stockSteps": [
+    { "step": 1, "id": "samples", "name": "Samples", "gainedWhen": "Any liaison leaves a region unbeaten", "atFinale": "+1 Admin duel in Phase 3" },
+    { "step": 2, "id": "shipments", "name": "Shipments", "gainedWhen": "Any region's Apex Shadow enters the Region of Doom", "atFinale": "That Apex stands guard in Phase 4" },
+    { "step": 3, "id": "three-beasts", "name": "Three Beasts", "gainedWhen": "Raikou, Entei and Suicune were all shipped from Johto", "atFinale": "The three liaisons who hold them return together" },
+    { "step": 4, "id": "the-reading", "name": "The Reading", "gainedWhen": "cipher.lugia-reading is set (Johto Raid 5 failed or declined)", "atFinale": "XD001 has one extra lock" },
+    { "step": 5, "id": "complete", "name": "Complete", "gainedWhen": "Five or more regions were lost or stayed out of", "atFinale": "The Finale's timer is 2 turns shorter" }
+  ]
+}

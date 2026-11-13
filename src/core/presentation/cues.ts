@@ -167,7 +167,7 @@ export function planCues(
         const def = pokemonMoment(e.id);
         if (animated && e.scene && def?.scene) cues.push({ kind: 'momentScene', id: e.id, speciesId: e.speciesId, fadeMs: def.scene.fadeMs, staticMs: def.scene.staticMs, lines: def.scene.lines, clips: def.scene.clips });
         else if (animated && e.cinematic) cues.push({ kind: 'storyAnim', side: e.side, anim: 'overdrive.rise' });
-        else if (animated) cues.push({ kind: 'storyAnim', side: e.side, anim: 'overdrive.hung' });
+        else if (animated && e.trigger === 'lethal') cues.push({ kind: 'storyAnim', side: e.side, anim: 'overdrive.hung' });
         break;
       }
       case 'spectacle':

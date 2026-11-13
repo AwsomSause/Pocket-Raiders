@@ -51,8 +51,10 @@ export function plannedEvilTeamId(content: Content, run: Pick<RunState, 'seed' |
   if (run.story.evil?.teamId) return run.story.evil.teamId;
   // Story Runs draw from the six original teams (Design v2 Part IV); Classic never sees them, so its draw is unchanged.
   const story = !!run.story.v2;
-  const own = content.evilTeams.teams.filter((t) => t.storyOnly === story);
-  const pool = own.length > 0 ? own : content.evilTeams.teams;
+  // Roaming teams (Cipher, Rocket Remnants, Snag'em) are never a run's team.
+  const drawable = content.evilTeams.teams.filter((t) => !t.roaming);
+  const own = drawable.filter((t) => t.storyOnly === story);
+  const pool = own.length > 0 ? own : drawable;
   if (pool.length === 0) return null;
   const focus = (run.perkEffects ?? []).flatMap((m) => (m.kind === 'evilTeamFocus' ? m.teams : []));
   const focused = pool.filter((t) => focus.includes(t.id));
@@ -182,17 +184,24 @@ export interface EvilBattlePlan {
   shadow: number;
 }
 
+/** The record key of a villain: the rank, or `team:rank` for a roaming team. */
+const villainKey = (b: TrainerBattle): string => (b.evilTeam ? `${b.evilTeam}:${b.evil}` : b.evil!);
+
 /** The team, levels and rule for an Evil Team battle at this rank; counts the meeting for a recurring villain. */
 export function evilBattle(content: Content, run: RunState, b: TrainerBattle): EvilBattlePlan | null {
-  const team = evilTeam(content, run);
+  // A roaming team (`evilTeam` on the battle) fights by its own rules: no heat, no operations, and its own villain records.
+  const roaming = b.evilTeam ? content.evilTeams.teams.find((t) => t.id === b.evilTeam && t.roaming) : undefined;
+  const team = roaming ?? evilTeam(content, run);
   if (!team || !b.evil) return null;
   const s = evilOf(run);
   const cfg = content.evilTeams.config;
   const rank = team.ranks[b.evil];
-  const rec = s.villains[b.evil] ?? { met: 0, won: 0, lost: 0, last: 'none' };
+  const key = villainKey(b);
+  const rec = s.villains[key] ?? { met: 0, won: 0, lost: 0, last: 'none' };
+  const heat = roaming ? 0 : s.heat;
   const recurring = b.evil === 'executive' || b.evil === 'leader';
-  let size = b.size + (s.heat >= cfg.reinforceAt ? 1 : 0) + (recurring ? Math.min(2, rec.met) : 0);
-  let levelBonus = Math.floor(s.heat / cfg.heatPerLevel) + successCount(s) * cfg.levelsPerSuccess + (recurring ? rec.met * cfg.levelsPerMeeting : 0);
+  let size = b.size + (heat >= cfg.reinforceAt ? 1 : 0) + (recurring ? Math.min(2, rec.met) : 0);
+  let levelBonus = Math.floor(heat / cfg.heatPerLevel) + (roaming ? 0 : successCount(s)) * cfg.levelsPerSuccess + (recurring ? rec.met * cfg.levelsPerMeeting : 0);
   let shadow = b.shadow;
   if (team.rule.kind === 'swarm') size += 1;
   if (team.rule.kind === 'elite') {
@@ -202,16 +211,17 @@ export function evilBattle(content: Content, run: RunState, b: TrainerBattle): E
   if (team.rule.kind === 'shadow') shadow = Math.max(shadow, 1);
   size = Math.max(1, Math.min(6, size));
   // The meeting counts as theirs until you win it (evilBattleWon).
-  s.villains[b.evil] = { met: rec.met + 1, won: rec.won, lost: rec.lost + 1, last: 'lost' };
+  s.villains[key] = { met: rec.met + 1, won: rec.won, lost: rec.lost + 1, last: 'lost' };
   return { name: rank.name, species: rank.species.slice(0, size), size, levelBonus, shadow: Math.min(shadow, size) };
 }
 
 /** You won an Evil Team battle: the villain remembers it. */
 export function evilBattleWon(run: RunState, b: TrainerBattle): void {
   if (!b.evil) return;
-  const rec = evilOf(run).villains[b.evil];
+  const key = villainKey(b);
+  const rec = evilOf(run).villains[key];
   if (!rec) return;
-  evilOf(run).villains[b.evil] = { met: rec.met, won: rec.won + 1, lost: Math.max(0, rec.lost - 1), last: 'won' };
+  evilOf(run).villains[key] = { met: rec.met, won: rec.won + 1, lost: Math.max(0, rec.lost - 1), last: 'won' };
 }
 
 /** The Story screen's summary of the run's Evil Team. */
