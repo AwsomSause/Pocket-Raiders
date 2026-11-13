@@ -11,6 +11,8 @@ import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
 
 const on = { ...content, balance: { ...content.balance, triples: { ...content.balance.triples, enabled: true } } };
+/** Triple battles switched off (the fallback a scene uses while the screen can't draw them). */
+const off = { ...content, balance: { ...content.balance, triples: { ...content.balance.triples, enabled: false } } };
 
 /** A run with `size` healthy Pokémon, standing on a node with this event beside it. */
 function atEvent(seed: string, eventId: string, size = 3): RunState {
@@ -44,9 +46,10 @@ describe('Triple Trouble', () => {
     const ctx = { battle: run.battle!, party: run.party, content: on };
     for (const s of [0, 1, 2] as const) expect(monAt(ctx, 'enemy', s)).toBeTruthy();
   });
-  it('drops to a double battle while triple battles are off (the default)', () => {
-    expect(content.balance.triples.enabled).toBe(false);
-    const run = battleOf(content, atEvent('tt-off', 'triple-battle'), 0);
+  it('is on in the shipped balance, and drops to a double battle when triple battles are off', () => {
+    expect(content.balance.triples.enabled).toBe(true);
+    expect(isTriples(battleOf(content, atEvent('tt-def', 'triple-battle'), 0).battle!)).toBe(true);
+    const run = battleOf(off, atEvent('tt-off', 'triple-battle'), 0);
     expect(spotCount(run.battle!)).toBe(2);
   });
   it('drops to doubles with two healthy Pokémon, and to a single battle with one (boundary)', () => {
@@ -119,7 +122,7 @@ describe('more triple scenes from the packs', () => {
       expect(tri.phase).toBe('battle');
       expect(tri.battle!.enemyTeam).toHaveLength(foes);
       expect(isTriples(tri.battle!)).toBe(true);
-      expect(spotCount(battleOf(content, atEvent(`s-${id}`, id), choice).battle!)).toBe(2);
+      expect(spotCount(battleOf(off, atEvent(`s-${id}`, id), choice).battle!)).toBe(2);
     });
   }
   it('the Monster House wakes three wild Pokémon when tiptoeing fails too', () => {

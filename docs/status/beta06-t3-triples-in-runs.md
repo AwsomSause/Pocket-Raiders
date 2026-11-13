@@ -26,3 +26,10 @@
 - Tests: `tests/unit/fieldMenu.test.ts`; `doubles.spec.ts` and `raidDoubles.spec.ts` pass.
 - More triple scenes: `shadow-triad`, `plasma-substage-yard` (Fight the guards), `delibird-y` (Battle them, wild), `md-1-monster-house` (both fights, wild), `xr.fe-72` Double Booking (one fight of 3, the Executive-sized limit for run events, instead of a chain of two). Their sources in `tools/events/*.ts` carry the same `format` (the DSL's `wild`/`trainer` take `format`), and so do `triple-battle` and `double-trouble`.
 - Left for later: the rival questline's "three-on-three" spar (`rq-swap-day`, owned by the rival work) stays a single battle. `whispering-grove-1`, `twin-trainers` and `hot-dog-duelists` were edited in their JSON files only; no generator source for them was found.
+
+## T2: the triple battle screen (Kice's pick: Triple 2)
+- `BattleScene`: `duo` now holds `size` (2 or 3) and one slot per unfocused spot (`slots[side][spot]`); `TRIO_POS` / `TRIO_SCALE` / `TRIO_BOX` place three a side. Triple battles always use the Essentials Kit boxes with the long foe box (`makeInfoBox(..., 'kitLong')`).
+- Commands come from `commandPlan`; Back goes to the last spot you commanded (`backSpot`). Edges get a Shift option (`shiftOptionProblem`). The target picker names spots and tags foes out of reach.
+- `shift` events and Ally Switch in triples move the sprites and boxes (`exchangeSpots`).
+- Switched on: `balance.triples.enabled` true; the `triples-only` rule is `supported`.
+- Tests: `tests/e2e/triples.spec.ts` (three sizes, the target picker, Shift, turns, reload); `doubles.spec.ts` and `raidDoubles.spec.ts` still pass.
