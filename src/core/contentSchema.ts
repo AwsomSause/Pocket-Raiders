@@ -3060,7 +3060,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   }),
   /** World-state callback (catalog 75): adds to a named story flag that later events can read. */
   z.object({ kind: z.literal('flag'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), amount: z.number().int().default(1) }),
-  /** Clone Core (New Island): your lead's moves are copied onto your lowest-level other Pokémon, once per event. */
+  /** Clone Core (New Island): your lead's moves are copied onto the other party Pokémon you pick (the lowest-level one when none is picked). */
   z.object({ kind: z.literal('copyMoves') }),
   /** Living Rival: writes a line to the run's Chronicle / journal (a photo, a promise, a letter). */
   z.object({ kind: z.literal('moment'), text: z.string().min(1), importance: z.number().int().min(1).max(100).default(60) }),

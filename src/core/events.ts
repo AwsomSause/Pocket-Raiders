@@ -276,6 +276,8 @@ export function tradeCandidates(content: Content, run: RunState, want: TradeWant
 }
 
 function tradePicksOf(content: Content, run: RunState, choice: EventChoice): { uid: string; label: string }[] | null {
+  // Clone Core: the player picks which other party Pokémon gets the lead's moves.
+  if (choice.success.effects.some((f) => f.kind === 'copyMoves')) return run.party.slice(1).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
   const e = choice.success.effects.find((f) => f.kind === 'tradeAway');
   if (!e || e.kind !== 'tradeAway') return null;
   return tradeCandidates(content, run, e.want).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
@@ -283,6 +285,7 @@ function tradePicksOf(content: Content, run: RunState, choice: EventChoice): { u
 
 /** Why a choice's trade cannot happen yet, in words (null when it can or the choice has no trade). */
 function tradeMissing(content: Content, run: RunState, choice: EventChoice): string | null {
+  if (choice.success.effects.some((e) => e.kind === 'copyMoves') && run.party.length < 2) return 'Needs 2 Pokémon in your party';
   for (const e of choice.success.effects) {
     if (e.kind !== 'tradeAway') continue;
     if (run.party.length < 2) return 'Needs 2 Pokémon in your party';
@@ -1203,7 +1206,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     }
     case 'copyMoves': {
       const lead = run.party[0];
-      const target = run.party.slice(1).sort((a, b) => a.level - b.level)[0];
+      const others = run.party.slice(1);
+      const target = others.find((m) => m.uid === tradeUid) ?? [...others].sort((a, b) => a.level - b.level)[0];
       if (!lead || !target) return '';
       target.moves = lead.moves.map((m) => ({ id: m.id, pp: content.moves.get(m.id)?.pp ?? m.pp }));
       return `${content.species.get(target.speciesId)?.name ?? target.speciesId} now knows ${content.species.get(lead.speciesId)?.name ?? lead.speciesId}'s moves!`;
