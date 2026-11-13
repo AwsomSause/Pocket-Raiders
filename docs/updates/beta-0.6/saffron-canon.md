@@ -1,0 +1,15 @@
+# Kanto Canon Spaces: Saffron City (workstream 18)
+
+**Player gets:** In a Kanto run (Kanto setting on), the Saffron stage always has **Route 25** (five Mankey in a row, a heal prompt after the third, the fifth is a raging Primeape that uses Rage). Win and a **Mankey with Swords Dance and Mach Punch** joins (a **Black Belt** too if nobody fainted), and the **Fighting Tournament** opens. The **Silph Co. Lobby** is always there (the president gives a **Lapras** while Rocket heat is under 40; above that the guards turn you away).
+Rolled for the stage: **Sabrina's Labyrinth**, **Fighting Dojo** (beat the master's Machamp, pick Hitmonlee or Hitmonchan; 15% a Hitmontop too), **Copycat Girl** (four-clap game, pays **Mimic**), **Magnet Train** (jumps you next to the Gym).
+**Tournament:** only your Mankey/Primeape fights, 1-on-1, five rounds (prizes Muscle Band, Protein, Focus Sash, Black Belt). Foes match your level and nearest stat total. The final is a rival copy of yours; either Mankey that has not evolved evolves mid-fight. Win for the title: ability **Champion's Fury** (a random stat +2 on every send-out, first attack goes first), **Dynamic Punch**, a champion belt tag, and it can never become Annihilape. Losing a round returns your team.
+**Labyrinth:** accept the aura reading or the guide's entrance and your Pokémon are locked in six lanterns; a Shuppet, Duskull, Drifloon or Gastly (25% each) is your only Pokémon (L10 to L40, evolves on schedule, Dusclops/Haunter finish in the final fight). Each lantern has a trial (fight, mirror path, memory pattern, two doors, balance, riddle) and frees one Pokémon. Losing sends you back to lantern 1 (freed stay freed; two campfires heal). At the end you face Sabrina's Alakazam; if you would lose, the ghosts swarm her and you win. Your body returns and the ghost leaves. In the next region, at the same stage number, the ghost jump-scares onto a black screen and asks to join, holding its Mega Stone (Banettite or Gengarite) and knowing **Haunting** (four spirit strikes, then *Haunted*: stat drop, confusion, repeat).
+
+**Save:** no version bump. New optional data: `run.expansion.canon.stash / solo / lab`, Pokémon `evoBlock` and `champion`, volatile `furyUsed` and `haunted` (all default).
+
+**Limits:**
+- The champion belt is a "Champion" tag, not new art. The Haunting spirits have no unique animation.
+- The Tournament foe is the entry of the round's list nearest your stat total, not a strict +-10% band.
+- Silph Lobby only gives the Lapras and a flag; it does not schedule the Silph Takeover (that stays with the climax system). Magnet Train jumps next to the Gym; there are no Interlude stages to skip yet.
+- In the Labyrinth, bag items are blocked inside its fights, but potions can still be used on the map; healing is meant to come from the two campfires. If you walk away from the Labyrinth or a Tournament bout, your team comes back and the ghost is gone with no reward.
+- If the next region has no matching stage the ghost comes at the closest one; with no next region it comes at the League.

@@ -6,6 +6,7 @@ import type { Content } from '../contentSchema';
 import { Rng, hashSeed } from '../rng';
 import { currentRegion } from '../regions';
 import type { RunState } from '../state';
+import { ghostReturnEvent } from './canonSaffron';
 import { enterCanonSlot, finishCanonSpace } from './canonSpaces';
 
 /** The story-flag key an event writes for a canon flag: `kanto.flock.seen` -> `ev:kanto-flock-seen`. */
@@ -26,10 +27,24 @@ export function canonEventFor(content: Content, spaceId: string, slot: string) {
   return slot === 'stage-8' ? ret ?? all[0] : all.find((e) => e !== ret);
 }
 
+/** The interlude slot that sits before a stage (interlude-3 = Lavender, between Stage 3 and Stage 4), or null when this stage has none. */
+export function canonInterludeOf(run: RunState): string | null {
+  if (!run.stage || run.stage.kind !== 'stage') return null;
+  if (run.stage.index === 0) return null; // interlude-0 (Viridian) is placed with Stage 1 by canonSlotOf
+  const slot = `interlude-${run.stage.index}`;
+  return canonKanto.slots.some((s) => s.slot === slot) ? slot : null;
+}
+
 /** On a new stage: rolls the town menu once and gives each menu space that has an event a stop beside a map node. */
 export function addCanonStops(content: Content, run: RunState): void {
+  addGhostReturnStop(content, run);
   const slot = canonSlotOf(content, run);
-  if (!slot) return;
+  if (slot) placeCanonSlot(content, run, slot);
+  const interlude = run.expansion?.canon && currentRegion(content, run).id === 'kanto' ? canonInterludeOf(run) : null;
+  if (interlude) placeCanonSlot(content, run, interlude);
+}
+
+function placeCanonSlot(content: Content, run: RunState, slot: string): void {
   const menu = enterCanonSlot(canonKanto, run, slot);
   const stage = run.stage!;
   const candidates = stage.map.nodes.filter((n) => n.column < stage.map.columns);
@@ -51,4 +66,23 @@ export function noteCanonEvent(run: RunState, event: { canon: string | null }): 
   if (!space) return;
   const set = space.flags.filter((f) => Number(run.story.flags[evKey(f)] ?? 0) > 0);
   finishCanonSpace(canonKanto, run, space.id, set);
+  syncCanonFlags(run);
+}
+
+/** A room played after its gate (Route 25's last fight, the Labyrinth's end) sets flags of an already finished space: copy them over too. */
+function syncCanonFlags(run: RunState): void {
+  const canon = run.expansion?.canon;
+  if (!canon) return;
+  const add = canonKanto.spaces.filter((s) => canon.completed.includes(s.id)).flatMap((s) => s.flags).filter((f) => !canon.flags.includes(f) && Number(run.story.flags[evKey(f)] ?? 0) > 0);
+  if (add.length > 0) run.expansion = { ...run.expansion, canon: { ...canon, flags: [...canon.flags, ...add] } };
+}
+
+/** Saffron: the Labyrinth ghost asks to join at the parallel stage of the next region (any region: the setting only decides whether Kanto has the Labyrinth). */
+function addGhostReturnStop(content: Content, run: RunState): void {
+  const id = ghostReturnEvent(content, run);
+  const stage = run.stage;
+  if (!id || !stage) return;
+  const first = stage.map.nodes.filter((n) => n.column < stage.map.columns)[0];
+  if (!first || stage.map.nodes.some((n) => n.sides.some((s) => s.eventId === id))) return;
+  first.sides.push({ id: `canon-ghost-${first.id}`, kind: 'event', used: false, eventId: id });
 }

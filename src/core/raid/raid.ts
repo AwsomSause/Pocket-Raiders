@@ -751,7 +751,7 @@ function placeExtraDens(content: Content, run: RunState): void {
     const candidates = free();
     if (candidates.length > 0) rng.pick(candidates).sides.push({ id: `raid-week-${stage.index}`, kind: 'raid', raidId: weekly1.id, used: false, featured: true });
   }
-  const specials = content.raids.raids.filter((r) => r.special && tiers.includes(r.tier));
+  const specials = content.raids.raids.filter((r) => r.special && r.special !== 'canon' && tiers.includes(r.tier));
   if (specials.length > 0 && rng.chance(content.raids.specialDenChance)) {
     const def = rng.pick(specials);
     // A mini-boss waits in the middle of the map; the giants and gauntlets can be anywhere before the gym.

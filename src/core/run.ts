@@ -27,7 +27,7 @@ import { eliteRematchDue } from './story/eliteRematch';
 import { markAssisted } from './tools/assisted';
 import { crossObstacle, placeDungeon, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
 import { wandererStageStart, wandererStep } from './wanderer';
-import { setClimaxCut } from './arc/climaxExtended';
+import { climaxBattleEnded, setClimaxCut } from './arc/climaxExtended';
 import { freeHandedOverRival, standWithClimaxLost, standWithOf } from './arc/standWithExtended';
 import { makeShadow, rollShadowHeart, soothePartyAfterBattle } from './shadow';
 import { leaveRegion, startGrandArc } from './grandArc';
@@ -290,6 +290,7 @@ import { answerReturn, planReturn, recordDefeats, returningPokemon } from './sto
 import { PSEUDO } from './dungeon/pseudo';
 import { addCanonStops } from './expansion/canonRun';
 import { addFinaleCanonStops, addOpeningCanonStops, addRouteCanonStops } from './expansion/canonEnds';
+import { leaveCanonStash, ruleEvolution } from './expansion/canonSaffron';
 import { apprenticeLost, applyLessons, bondOf, mentorBadgeWon, startMentorship } from './mentors';
 import { answerAskLead, planAskLead } from './story/askLead';
 import { planReunion, reunionPokemon } from './story/reunion';
@@ -964,6 +965,8 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   const modeItem = mode ? perkItem(content, run, mode) : null;
   if (mode === 'airship' && modeItem) spendUse(run, modeItem);
   else if (mode && modeItem && (mode !== 'machBike' || node.kind === 'wild')) markUsedThisStage(run, modeItem);
+  // Saffron canon: walking away from a Tournament bout or the Labyrinth brings the whole party back.
+  leaveCanonStash(run);
   stage.current = nodeId;
   stage.visited.push(nodeId);
   tickChainTimers(run.story.flags);
@@ -3010,6 +3013,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // A rival's training Pokémon may evolve now that the turn is over (Battle Drama Engine, Phase 5).
   const evolved = midBattleEvolution(content, run);
   if (evolved) events.push(evolved);
+  // Saffron canon: the `evolveMid` rule evolves the active Pokémon in the heat of the fight.
+  events.push(...ruleEvolution(content, run));
   // A rival's battle style may do something now (berserker rage, revenge, last stand).
   const trick = styleTrick(content, run);
   if (trick) events.push(trick);
@@ -3072,6 +3077,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   noteReplayTurn(content, run, current.battle!, events as BattleEvent[]);
   if (battle.outcome) sealReplay(content, run);
   // Wide formats (Beta 0.6 E4): a fight a format launched tells the format how it ended, before any loss tail runs.
+  if (battle.outcome && battle.event?.eventId === 'format:climax') climaxBattleEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
   if (battle.outcome && battle.event?.eventId.startsWith('format:')) formatBattleEnded({ content, run }, battle.outcome === 'win' || battle.outcome === 'caught');
   // PS-RESCUE (Beta 0.6 R9): a guard fight tells the running rescue plan how it ended.
   if (battle.outcome && battle.event?.eventId.startsWith('rescue:')) rescueFightEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
@@ -3119,6 +3125,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   }
   if (battle.outcome === 'lose' && (battle.raid || battle.totem)) {
     failRaid(content, run);
+    if (battle.event) eventBattleLost(content, run, battle.event);
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, raidFailed: true };
   }

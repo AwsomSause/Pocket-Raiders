@@ -58,7 +58,7 @@ export function evolutionTarget(content: Content, mon: PokemonInstance, regionId
   const byFriendship = friendshipReady(content, mon) || bondReady;
   const friendshipItem = content.balance.friendship.evolutionItem;
   const ready = species.evolutions.filter((e) => (e.level !== undefined && mon.level >= e.level + levelOffset) || (byFriendship && e.item === friendshipItem) || heldReady(content, mon, e));
-  const branches = applicableBranches(content, mon, ready, regionId);
+  const branches = applicableBranches(content, mon, ready, regionId).filter((b) => !(mon.evoBlock ?? []).includes(b.to));
   if (branches.length === 0) return null;
   return branches[uidHash(mon.uid) % branches.length]!.to;
 }

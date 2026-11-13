@@ -65,6 +65,11 @@ export const CanonStateSchema = z.object({
   flags: z.array(flag).default([]),
   completed: z.array(spaceId).default([]),
   menus: z.record(z.string(), z.array(spaceId)).default({}),
+  /** Saffron: party members waiting while one Pokémon fights alone (PokemonInstance rows; checked where they are used). */
+  stash: z.array(z.unknown()).optional(),
+  solo: z.object({ keep: z.string(), order: z.array(z.string()), mode: z.enum(['tournament', 'labyrinth']) }).optional(),
+  /** Saffron: Sabrina's Labyrinth. `owed`: the ghost returns in the next region; `returned`: it already did. */
+  lab: z.object({ ghost: z.string(), ghostUid: z.string(), regionIndex: z.number().int(), stageIndex: z.number().int(), freed: z.array(z.string()), active: z.boolean(), done: z.boolean(), owed: z.boolean(), returned: z.boolean() }).optional(),
 });
 export type CanonState = z.infer<typeof CanonStateSchema>;
 
@@ -148,6 +153,8 @@ export function finishCanonSpace(file: CanonSpacesFile, run: { expansion?: { can
   if (!space) throw new Error(`unknown canon space ${id}`);
   for (const f of setFlags) if (!space.flags.includes(f)) throw new Error(`${id} does not write flag ${f}`);
   const st = stateOf(run);
-  if (st.completed.includes(id)) return;
-  (run as { expansion?: object }).expansion = { ...run.expansion, canon: { ...st, completed: [...st.completed, id], flags: [...new Set([...st.flags, ...setFlags])] } };
+  // A space made of several events calls this again from its later ones: it counts as finished once, but late flags still get copied.
+  const flags = [...new Set([...st.flags, ...setFlags])];
+  if (st.completed.includes(id) && flags.length === st.flags.length) return;
+  (run as { expansion?: object }).expansion = { ...run.expansion, canon: { ...st, completed: st.completed.includes(id) ? st.completed : [...st.completed, id], flags } };
 }

@@ -89,6 +89,8 @@ export function evilStageStart(content: Content, run: RunState): void {
 
 export function evilConditionMet(content: Content, run: RunState, c: EvilCondition): boolean {
   const s = run.story.evil;
+  if (c.heatBelow !== undefined && (s?.heat ?? 0) >= c.heatBelow) return false;
+  if (c.heatBelow !== undefined && Object.keys(c).length === 2) return true; // {kind, heatBelow} alone
   if (!s?.teamId) return false;
   if (c.team !== undefined && s.teamId !== c.team) return false;
   if (c.beat !== undefined && (s.beat !== c.beat || s.stages < s.nextAt || s.end !== 'none')) return false;
@@ -104,6 +106,7 @@ export function evilConditionMet(content: Content, run: RunState, c: EvilConditi
 export function evilConditionText(c: EvilCondition): string {
   if (c.defector) return 'Needs someone on the inside';
   if (c.stopped) return `Needs ${c.stopped} of their operation${c.stopped === 1 ? '' : 's'} stopped`;
+  if (c.heatBelow) return 'Only while the team is not hunting you';
   if (c.heat) return 'Only when the team is hunting you';
   return 'Needs the right moment in the Evil Team story';
 }
@@ -126,7 +129,7 @@ export function applyEvilEffect(content: Content, run: RunState, e: EvilEffect):
   if (e.beat && s.beat < 7) {
     s.beat += 1;
     // E2: the real plan comes out (beat 6): the climax is now scheduled, so the region's track rises once.
-    if (s.beat === 6) { trackOnClimax(run, run.regionIndex); beginClimax(run); }
+    if (s.beat === 6) { trackOnClimax(run, run.regionIndex); beginClimax(run, run.regionOrder[run.regionIndex]); }
     const cfg = evilConfig(content, run);
     // Story Run (Appendix S.7): after beat 6 the hideout waits for League entry (core/campaign/storyDirector.ts places it).
     s.nextAt = s.beat === 6 && cfg.hideoutAtLeague ? HIDEOUT_AT_LEAGUE : s.stages + cfg.beatEvery;

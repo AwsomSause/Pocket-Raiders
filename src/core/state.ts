@@ -98,6 +98,12 @@ export const PokemonInstanceSchema = z.object({
   abilitySlot: z.number().int().min(-1).default(0),
   /** An ability it was given outright (Squirtle Squad's Contrary); it beats the slot. Optional, so older saves load as they are. */
   fixedAbility: z.string().optional(),
+  /** New Island clones have no ability at all. Optional, so older saves load as they are. */
+  abilityless: z.boolean().optional(),
+  /** Evolutions it can never take (the Tournament champion Primeape never becomes Annihilape). Optional, so older saves load as they are. */
+  evoBlock: z.array(z.string()).optional(),
+  /** The Fighting Tournament champion belt (a cosmetic form; shown as a tag). Optional. */
+  champion: z.literal(true).optional(),
   /** Its nature (core/natures.ts). Missing in saves from before natures: neutral. */
   nature: z.enum(NATURE_IDS).optional(),
   /** S418 temporary mint: this nature counts instead of `nature` until `battles` more won battles have passed. */
@@ -297,6 +303,10 @@ export const VolatileSchema = z.object({
   sigilUsed: z.boolean().default(false),
   /** Silent Cloak: the first move since switching in has been used. */
   cloakUsed: z.boolean().default(false),
+  /** Champion's Fury: its first attack since switching in has gone off. */
+  furyUsed: z.boolean().default(false),
+  /** Haunted (the Haunting move): 0 = no, else the number of foe turns it has haunted (odd turns lower a random stat, even turns confuse). */
+  haunted: z.number().int().min(0).default(0),
   /** Gem Orbit: gems shattered so far (4 per battle). */
   gems: z.number().int().min(0).default(0),
   /** Nightmare: loses HP while asleep. */
@@ -421,6 +431,8 @@ export const freshVolatile = (): Volatile => ({
   dynamoBoost: false,
   sigilUsed: false,
   cloakUsed: false,
+  furyUsed: false,
+  haunted: 0,
   gems: 0,
   nightmare: false,
   cursed: false,

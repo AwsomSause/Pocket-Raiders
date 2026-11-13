@@ -42,7 +42,7 @@ function mapRun(seed: string, raidId = 'sleeping-snorlax'): RunState {
 describe('raid data (slice 6)', () => {
   it('validates with the new fields and the special raids are tiered, special-tagged and never in the ordinary pool', () => {
     expect(() => RaidFileSchema.parse(raidsJson)).not.toThrow();
-    const specials = content.raids.raids.filter((r) => r.special);
+    const specials = content.raids.raids.filter((r) => r.special && r.special !== 'canon');
     expect(new Set(specials.map((r) => r.special))).toEqual(new Set(['titan', 'gauntlet', 'mini']));
     for (let i = 0; i < 60; i++) {
       const run = { seed: `pool-${i}`, regionIndex: i % 4, raids: { unlockedTier: 6 } } as never;

@@ -1,0 +1,3412 @@
+{
+ "events": [
+  {
+   "id": "cs-kanto-cinnabar-lab-fossil-1",
+   "name": "Cinnabar Lab: Fossil Revival",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6a6a78"
+   },
+   "intro": "\"A whole fossil! Pick which one to bring back. One revival per visit.\"",
+   "choices": [
+    {
+     "label": "Revive the Helix Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "omanyte"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Revive the Dome Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "kabuto"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Revive the Old Amber",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "aerodactyl"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Other fossils",
+     "success": {
+      "text": "The scientist flips to the next page of the fossil list.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-fossil-2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-fossil-2",
+   "name": "Cinnabar Lab: Fossil Revival",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6a6a78"
+   },
+   "intro": "\"Rarer fossils are on this page.\"",
+   "choices": [
+    {
+     "label": "Revive the Root Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "lileep"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Revive the Claw Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "anorith"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Revive the Skull Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "cranidos"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Other fossils",
+     "success": {
+      "text": "The scientist flips to the next page of the fossil list.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-fossil-3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-fossil-3",
+   "name": "Cinnabar Lab: Fossil Revival",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6a6a78"
+   },
+   "intro": "\"Rarer fossils are on this page.\"",
+   "choices": [
+    {
+     "label": "Revive the Armor Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "shieldon"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Revive the Cover Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "tirtouga"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Revive the Plume Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "archen"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Other fossils",
+     "success": {
+      "text": "The scientist flips to the next page of the fossil list.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-fossil-4"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-fossil-4",
+   "name": "Cinnabar Lab: Fossil Revival",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6a6a78"
+   },
+   "intro": "\"Rarer fossils are on this page.\"",
+   "choices": [
+    {
+     "label": "Revive the Hisuian Ember Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "growlithe-hisui"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Revive the Hisuian Spark Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "voltorb-hisui"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Revive the Hisuian Tide Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "qwilfish-hisui"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Other fossils",
+     "success": {
+      "text": "The scientist flips to the next page of the fossil list.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-fossil-5"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-fossil-5",
+   "name": "Cinnabar Lab: Fossil Revival",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6a6a78"
+   },
+   "intro": "\"Rarer fossils are on this page.\"",
+   "choices": [
+    {
+     "label": "Revive the Hisuian Talon Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "sneasel-hisui"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Revive the Hisuian Veil Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "zorua-hisui"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Revive the Hisuian Inferno Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "arcanine-hisui"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Other fossils",
+     "success": {
+      "text": "The scientist flips to the next page of the fossil list.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-fossil-6"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-fossil-6",
+   "name": "Cinnabar Lab: Fossil Revival",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6a6a78"
+   },
+   "intro": "\"Rarer fossils are on this page.\"",
+   "choices": [
+    {
+     "label": "Revive the Hisuian Thunder Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "electrode-hisui"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Revive the Hisuian Ghostfire Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "typhlosion-hisui"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Revive the Hisuian Blade Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "samurott-hisui"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Other fossils",
+     "success": {
+      "text": "The scientist flips to the next page of the fossil list.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-fossil-7"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-fossil-7",
+   "name": "Cinnabar Lab: Fossil Revival",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6a6a78"
+   },
+   "intro": "\"Rarer fossils are on this page.\"",
+   "choices": [
+    {
+     "label": "Revive the Hisuian Quill Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "decidueye-hisui"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Revive the Hisuian Phantom Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "zoroark-hisui"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Revive the Hisuian Slime Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "goodra-hisui"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Other fossils",
+     "success": {
+      "text": "The scientist flips to the next page of the fossil list.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-fossil-8"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-fossil-8",
+   "name": "Cinnabar Lab: Fossil Revival",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6a6a78"
+   },
+   "intro": "\"Rarer fossils are on this page.\"",
+   "choices": [
+    {
+     "label": "Revive the Hisuian Bloom Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "lilligant-hisui"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Revive the Hisuian Crest Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "braviary-hisui"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Revive the Hisuian Glacier Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "avalugg-hisui"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Other fossils",
+     "success": {
+      "text": "The scientist flips to the next page of the fossil list.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-fossil-9"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-fossil-9",
+   "name": "Cinnabar Lab: Fossil Revival",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6a6a78"
+   },
+   "intro": "\"Rarer fossils are on this page.\"",
+   "choices": [
+    {
+     "label": "Revive the Jaw Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "tyrunt"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Revive the Sail Fossil",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "amaura"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Revive the Fossilized Bird",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "dracozolt"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Other fossils",
+     "success": {
+      "text": "The scientist flips to the next page of the fossil list.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-fossil-10"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-fossil-10",
+   "name": "Cinnabar Lab: Fossil Revival",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6a6a78"
+   },
+   "intro": "\"Rarer fossils are on this page.\"",
+   "choices": [
+    {
+     "label": "Revive the Fossilized Dino",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "arctozolt"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Revive the Fossilized Drake",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "dracovish"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Revive the Fossilized Fish",
+     "success": {
+      "text": "The machine hums. A living Pokémon steps out of the stone.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "arctovish"
+        ],
+        "levelBonus": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Never mind",
+     "success": {
+      "text": "You put the fossils away.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-fossil",
+   "name": "Cinnabar Lab: The Fossil Machine",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6a6a78"
+   },
+   "intro": "A big glass machine fills the back of the lab. A scientist waves you over. \"Two fossil halves make a whole. I can revive any whole fossil.\"",
+   "choices": [
+    {
+     "label": "Show the Mt. Moon fossil log",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "xk-fossil-registered",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-lab-fragment",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "\"A registered find from Mt. Moon! Take this: half of a fossil.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-fragment",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-lab-fragment",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy the matching half (₽400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-fossil-fragment",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "success": {
+      "text": "\"I have a piece that fits yours.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-fragment",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Complete a fossil (2 Fossil Fragments)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-fossil-fragment",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The scientist fits the two halves together. A whole fossil, and the machine is already humming.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-fragment",
+        "amount": -2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-fossil-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You step back from the machine.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-trade",
+   "name": "Cinnabar Lab: Lab Trades",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6a6a78"
+   },
+   "intro": "A scientist tinkers with a trading cable. \"A fair swap, my friend. A Pokémon for a Pokémon.\"",
+   "choices": [
+    {
+     "label": "Trade an unevolved Pokémon for a Voltorb",
+     "success": {
+      "text": "The cable sparks. A Voltorb rolls into your arms.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "an unevolved Pokémon",
+         "species": [],
+         "stage": 1
+        }
+       },
+       {
+        "kind": "join",
+        "species": [
+         "voltorb"
+        ],
+        "levelBonus": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade a middle-stage Pokémon for an Electrode",
+     "success": {
+      "text": "The cable sparks. An Electrode hums in your hands.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "a middle-stage Pokémon",
+         "species": [],
+         "stage": 2
+        }
+       },
+       {
+        "kind": "join",
+        "species": [
+         "electrode"
+        ],
+        "levelBonus": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade a fully evolved Pokémon for a Porygon",
+     "success": {
+      "text": "The cable sparks. A Porygon blinks into existence.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "a fully evolved three-stage Pokémon",
+         "species": [],
+         "stage": 3
+        }
+       },
+       {
+        "kind": "join",
+        "species": [
+         "porygon"
+        ],
+        "levelBonus": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "No trade",
+     "success": {
+      "text": "You pocket your Pokémon.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-fusion",
+   "name": "Cinnabar Lab: Pokémon Fusion Display",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6a6a78"
+   },
+   "intro": "Glass tubes line a wall, each showing two Pokémon blurred into one. A plaque reads: \"Do not touch.\"",
+   "choices": [
+    {
+     "label": "Study the display",
+     "success": {
+      "text": "Fusions of every kind drift past. None of them look happy, and none of them are real. You file that away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-lab-fusion",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Saw the Pokémon Fusion Display at the Cinnabar Lab.",
+        "importance": 30
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You leave the tubes alone.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab",
+   "name": "Cinnabar Lab",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6a6a78"
+   },
+   "intro": "A white building on a volcanic island, humming with machines. Scientists in coats hurry past with clipboards.",
+   "choices": [
+    {
+     "label": "Fossil machine",
+     "success": {
+      "text": "A scientist leads you to the back of the lab.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-fossil"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lab trades",
+     "success": {
+      "text": "A scientist waves you over to a trading cable.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-trade"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fusion display",
+     "success": {
+      "text": "You wander over to the glass tubes.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-fusion"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You head back out to the shore.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cinnabar.lab"
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion",
+   "name": "Pokémon Mansion",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a2a20"
+   },
+   "intro": "A burned-out mansion on the hill. Charred beams, cracked statues, a smell of old smoke. You can turn back before the first fight.",
+   "choices": [
+    {
+     "label": "Enter the Mansion",
+     "success": {
+      "text": "The door gives way with a groan.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You turn back. Nothing here is forced.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cinnabar.mansion"
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-n1",
+   "name": "Pokémon Mansion: The Burned Hall",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a2a20"
+   },
+   "intro": "Soot covers the floor. Something moves under a fallen chandelier.",
+   "choices": [
+    {
+     "label": "Push on",
+     "success": {
+      "text": "A wild shape slinks out of the ash.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "growlithe",
+        "vulpix",
+        "ponyta",
+        "grimer",
+        "koffing",
+        "magnemite",
+        "voltorb"
+       ],
+       "levelBonus": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-mansion-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-n2",
+   "name": "Pokémon Mansion: The Library",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a2a20"
+   },
+   "intro": "Burnt shelves and a scorched desk. A diary page lies under a paperweight.",
+   "choices": [
+    {
+     "label": "Read the diary page",
+     "success": {
+      "text": "Page 1: \"Our team has found a rare Pokémon in the jungle. The Boss wants it studied at once.\" You learn something.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-mansion-diary-1",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Skip it",
+     "success": {
+      "text": "You leave the page where it lies.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-n3",
+   "name": "Pokémon Mansion: The Statue Room",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a2a20"
+   },
+   "intro": "Cracked stone statues of Pokémon line the walls. One of them is looking at you.",
+   "choices": [
+    {
+     "label": "Push on",
+     "success": {
+      "text": "The \"statue\" was a Pokémon after all.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "growlithe",
+        "vulpix",
+        "ponyta",
+        "grimer",
+        "koffing",
+        "magnemite",
+        "voltorb"
+       ],
+       "levelBonus": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-mansion-n4"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-n4",
+   "name": "Pokémon Mansion: The Study",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a2a20"
+   },
+   "intro": "A locked study, its desk drawer open. Another diary page, folded small.",
+   "choices": [
+    {
+     "label": "Read the diary page",
+     "success": {
+      "text": "Page 2: \"We have bred it from the fossil of a Pokémon we call Mew. The new one is stronger. We named it Mewtwo.\" You learn something.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-mansion-diary-2",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Skip it",
+     "success": {
+      "text": "You leave the page where it lies.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n5"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-sw-s1-v1",
+   "name": "Pokémon Mansion: The Switches: step 1 of 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a2a20"
+   },
+   "intro": "Three switches in the wall. One of them opens the secret door. The others spit sparks.",
+   "choices": [
+    {
+     "label": "Pull the left switch",
+     "success": {
+      "text": "Click. A hidden door slides open.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-cinnabar-mansion-sw-s2-v1",
+         "cs-kanto-cinnabar-mansion-sw-s2-v2",
+         "cs-kanto-cinnabar-mansion-sw-s2-v3"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the middle switch",
+     "success": {
+      "text": "Sparks! The wrong switch shocks you and resets the wall.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-sw-s1-v1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the right switch",
+     "success": {
+      "text": "Sparks! The wrong switch shocks you and resets the wall.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-sw-s1-v1"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-sw-s1-v2",
+   "name": "Pokémon Mansion: The Switches: step 1 of 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a2a20"
+   },
+   "intro": "Three switches in the wall. One of them opens the secret door. The others spit sparks.",
+   "choices": [
+    {
+     "label": "Pull the left switch",
+     "success": {
+      "text": "Sparks! The wrong switch shocks you and resets the wall.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-sw-s1-v2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the middle switch",
+     "success": {
+      "text": "Click. A hidden door slides open.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-cinnabar-mansion-sw-s2-v1",
+         "cs-kanto-cinnabar-mansion-sw-s2-v2",
+         "cs-kanto-cinnabar-mansion-sw-s2-v3"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the right switch",
+     "success": {
+      "text": "Sparks! The wrong switch shocks you and resets the wall.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-sw-s1-v2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-sw-s1-v3",
+   "name": "Pokémon Mansion: The Switches: step 1 of 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a2a20"
+   },
+   "intro": "Three switches in the wall. One of them opens the secret door. The others spit sparks.",
+   "choices": [
+    {
+     "label": "Pull the left switch",
+     "success": {
+      "text": "Sparks! The wrong switch shocks you and resets the wall.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-sw-s1-v3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the middle switch",
+     "success": {
+      "text": "Sparks! The wrong switch shocks you and resets the wall.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-sw-s1-v3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the right switch",
+     "success": {
+      "text": "Click. A hidden door slides open.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-cinnabar-mansion-sw-s2-v1",
+         "cs-kanto-cinnabar-mansion-sw-s2-v2",
+         "cs-kanto-cinnabar-mansion-sw-s2-v3"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-sw-s2-v1",
+   "name": "Pokémon Mansion: The Switches: step 2 of 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a2a20"
+   },
+   "intro": "The first door slides open, but there is a second wall of switches behind it.",
+   "choices": [
+    {
+     "label": "Pull the left switch",
+     "success": {
+      "text": "Click. The second door grinds aside.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-cinnabar-mansion-sw-s3-v1",
+         "cs-kanto-cinnabar-mansion-sw-s3-v2",
+         "cs-kanto-cinnabar-mansion-sw-s3-v3"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the middle switch",
+     "success": {
+      "text": "Sparks! The wrong switch shocks you and resets the wall.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-sw-s2-v1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the right switch",
+     "success": {
+      "text": "Sparks! The wrong switch shocks you and resets the wall.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-sw-s2-v1"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-sw-s2-v2",
+   "name": "Pokémon Mansion: The Switches: step 2 of 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a2a20"
+   },
+   "intro": "The first door slides open, but there is a second wall of switches behind it.",
+   "choices": [
+    {
+     "label": "Pull the left switch",
+     "success": {
+      "text": "Sparks! The wrong switch shocks you and resets the wall.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-sw-s2-v2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the middle switch",
+     "success": {
+      "text": "Click. The second door grinds aside.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-cinnabar-mansion-sw-s3-v1",
+         "cs-kanto-cinnabar-mansion-sw-s3-v2",
+         "cs-kanto-cinnabar-mansion-sw-s3-v3"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the right switch",
+     "success": {
+      "text": "Sparks! The wrong switch shocks you and resets the wall.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-sw-s2-v2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-sw-s2-v3",
+   "name": "Pokémon Mansion: The Switches: step 2 of 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a2a20"
+   },
+   "intro": "The first door slides open, but there is a second wall of switches behind it.",
+   "choices": [
+    {
+     "label": "Pull the left switch",
+     "success": {
+      "text": "Sparks! The wrong switch shocks you and resets the wall.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-sw-s2-v3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the middle switch",
+     "success": {
+      "text": "Sparks! The wrong switch shocks you and resets the wall.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-sw-s2-v3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the right switch",
+     "success": {
+      "text": "Click. The second door grinds aside.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-cinnabar-mansion-sw-s3-v1",
+         "cs-kanto-cinnabar-mansion-sw-s3-v2",
+         "cs-kanto-cinnabar-mansion-sw-s3-v3"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-sw-s3-v1",
+   "name": "Pokémon Mansion: The Switches: step 3 of 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a2a20"
+   },
+   "intro": "The last wall. Three more switches, and a rusted keyhole above them.",
+   "choices": [
+    {
+     "label": "Pull the left switch",
+     "success": {
+      "text": "Click. A hidden compartment pops open with a small iron key inside.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the middle switch",
+     "success": {
+      "text": "Sparks! The wrong switch shocks you and resets the wall.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-sw-s3-v1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the right switch",
+     "success": {
+      "text": "Sparks! The wrong switch shocks you and resets the wall.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-sw-s3-v1"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-sw-s3-v2",
+   "name": "Pokémon Mansion: The Switches: step 3 of 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a2a20"
+   },
+   "intro": "The last wall. Three more switches, and a rusted keyhole above them.",
+   "choices": [
+    {
+     "label": "Pull the left switch",
+     "success": {
+      "text": "Sparks! The wrong switch shocks you and resets the wall.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-sw-s3-v2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the middle switch",
+     "success": {
+      "text": "Click. A hidden compartment pops open with a small iron key inside.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the right switch",
+     "success": {
+      "text": "Sparks! The wrong switch shocks you and resets the wall.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-sw-s3-v2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-sw-s3-v3",
+   "name": "Pokémon Mansion: The Switches: step 3 of 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a2a20"
+   },
+   "intro": "The last wall. Three more switches, and a rusted keyhole above them.",
+   "choices": [
+    {
+     "label": "Pull the left switch",
+     "success": {
+      "text": "Sparks! The wrong switch shocks you and resets the wall.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-sw-s3-v3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the middle switch",
+     "success": {
+      "text": "Sparks! The wrong switch shocks you and resets the wall.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-sw-s3-v3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the right switch",
+     "success": {
+      "text": "Click. A hidden compartment pops open with a small iron key inside.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n6"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-n5",
+   "name": "Pokémon Mansion: The Secret Door",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a2a20"
+   },
+   "intro": "A bare wall in the back of the mansion. A page of the diary is stuck to a switch panel.",
+   "choices": [
+    {
+     "label": "Read the page and try the switches",
+     "success": {
+      "text": "Page 3: \"It is growing too fast. It does not like us. It does not like anything.\" You learn something, then reach for the switches.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-mansion-diary-3",
+        "amount": 1
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-cinnabar-mansion-sw-s1-v1",
+         "cs-kanto-cinnabar-mansion-sw-s1-v2",
+         "cs-kanto-cinnabar-mansion-sw-s1-v3"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Try the switches",
+     "success": {
+      "text": "You ignore the page and reach for the switches.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-cinnabar-mansion-sw-s1-v1",
+         "cs-kanto-cinnabar-mansion-sw-s1-v2",
+         "cs-kanto-cinnabar-mansion-sw-s1-v3"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-n6",
+   "name": "Pokémon Mansion: The Last Scientist",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a2a20"
+   },
+   "intro": "Behind the secret door, a Rocket scientist is burning papers. \"You were not supposed to find this place!\"",
+   "choices": [
+    {
+     "label": "Stop him",
+     "success": {
+      "text": "He throws a Poké Ball.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rocket Scientist",
+       "size": 2,
+       "species": [
+        "muk",
+        "weezing"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "secret-key"
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-mansion-key",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-mansion-n7"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-n7",
+   "name": "Pokémon Mansion: The Last Page",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a2a20"
+   },
+   "intro": "The scientist dropped one more diary page as he ran.",
+   "choices": [
+    {
+     "label": "Read the diary page",
+     "success": {
+      "text": "Page 4: \"Mewtwo has escaped and the lab is lost. The Boss says this never happened. He will hide behind his gym, and no one will ask.\" You learn something.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-mansion-diary-4",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-mansion-giovanni",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Found the last Mansion diary page: the Boss's gym is a cover.",
+        "importance": 60
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n8"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Skip it",
+     "success": {
+      "text": "You leave the page where it lies.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n8"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-n8",
+   "name": "Pokémon Mansion: The Locker",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a2a20"
+   },
+   "intro": "A locker in the burned wall holds two prizes. You can take only one.",
+   "choices": [
+    {
+     "label": "Take the TM Fire Spin",
+     "success": {
+      "text": "The TM is warm in your hand.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "fire-spin",
+        "type": "fire"
+       },
+       {
+        "kind": "moment",
+        "text": "Searched the Pokémon Mansion.",
+        "importance": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take a Fire-type fossil",
+     "success": {
+      "text": "A fossil, still warm from the fire.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "hisui-ember-fossil",
+         "hisui-inferno-fossil",
+         "hisui-ghostfire-fossil"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Searched the Pokémon Mansion.",
+        "importance": 40
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam",
+   "name": "Seafoam Islands",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#28506a"
+   },
+   "intro": "An icy cave under the sea cliffs, with strong currents tugging at the rocks. You can turn back before the first fight.",
+   "choices": [
+    {
+     "label": "Enter the cave",
+     "success": {
+      "text": "Cold air and rushing water.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You turn back. Nothing here is forced.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cinnabar.seafoam"
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam-n1",
+   "name": "Seafoam Islands: The Cave Mouth",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#28506a"
+   },
+   "intro": "Ice glitters on the walls. Something splashes in the dark.",
+   "choices": [
+    {
+     "label": "Push on",
+     "success": {
+      "text": "A wild shape surges out of the water.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "seel",
+        "dewgong",
+        "shellder",
+        "slowpoke",
+        "jynx",
+        "golbat",
+        "zubat",
+        "psyduck"
+       ],
+       "levelBonus": 2,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-seafoam-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam-n2",
+   "name": "Seafoam Islands: The Frozen Shore",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#28506a"
+   },
+   "intro": "Cold wind and a fast current. A boulder sits in front of a hole in the floor.",
+   "choices": [
+    {
+     "label": "Study the boulders",
+     "success": {
+      "text": "Three boulders, three holes. If you plug them right, the current stops.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-cinnabar-seafoam-bd-s1-v1",
+         "cs-kanto-cinnabar-seafoam-bd-s1-v2"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam-bd-s1-v1",
+   "name": "Seafoam Islands: The Boulders: step 1 of 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#28506a"
+   },
+   "intro": "Two boulders block the way, and only one of them fits the first hole.",
+   "choices": [
+    {
+     "label": "Push the left boulder",
+     "success": {
+      "text": "The boulder drops into the hole. The current weakens.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-cinnabar-seafoam-bd-s2-v1",
+         "cs-kanto-cinnabar-seafoam-bd-s2-v2"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push the right boulder",
+     "success": {
+      "text": "The boulder rolls the wrong way and the current drags you back, bruised.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-bd-s1-v1"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam-bd-s1-v2",
+   "name": "Seafoam Islands: The Boulders: step 1 of 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#28506a"
+   },
+   "intro": "Two boulders block the way, and only one of them fits the first hole.",
+   "choices": [
+    {
+     "label": "Push the left boulder",
+     "success": {
+      "text": "The boulder rolls the wrong way and the current drags you back, bruised.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-bd-s1-v2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push the right boulder",
+     "success": {
+      "text": "The boulder drops into the hole. The current weakens.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-cinnabar-seafoam-bd-s2-v1",
+         "cs-kanto-cinnabar-seafoam-bd-s2-v2"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam-bd-s2-v1",
+   "name": "Seafoam Islands: The Boulders: step 2 of 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#28506a"
+   },
+   "intro": "The second hole. The current is stronger here.",
+   "choices": [
+    {
+     "label": "Push the left boulder",
+     "success": {
+      "text": "Another hole plugged. The water slows to a trickle.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-cinnabar-seafoam-bd-s3-v1",
+         "cs-kanto-cinnabar-seafoam-bd-s3-v2"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push the right boulder",
+     "success": {
+      "text": "The boulder rolls the wrong way and the current drags you back, bruised.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-bd-s2-v1"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam-bd-s2-v2",
+   "name": "Seafoam Islands: The Boulders: step 2 of 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#28506a"
+   },
+   "intro": "The second hole. The current is stronger here.",
+   "choices": [
+    {
+     "label": "Push the left boulder",
+     "success": {
+      "text": "The boulder rolls the wrong way and the current drags you back, bruised.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-bd-s2-v2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push the right boulder",
+     "success": {
+      "text": "Another hole plugged. The water slows to a trickle.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-cinnabar-seafoam-bd-s3-v1",
+         "cs-kanto-cinnabar-seafoam-bd-s3-v2"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam-bd-s3-v1",
+   "name": "Seafoam Islands: The Boulders: step 3 of 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#28506a"
+   },
+   "intro": "The third hole. One last push.",
+   "choices": [
+    {
+     "label": "Push the left boulder",
+     "success": {
+      "text": "The last hole plugs. The current stops, and the way down is clear.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-n3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push the right boulder",
+     "success": {
+      "text": "The boulder rolls the wrong way and the current drags you back, bruised.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-bd-s3-v1"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam-bd-s3-v2",
+   "name": "Seafoam Islands: The Boulders: step 3 of 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#28506a"
+   },
+   "intro": "The third hole. One last push.",
+   "choices": [
+    {
+     "label": "Push the left boulder",
+     "success": {
+      "text": "The boulder rolls the wrong way and the current drags you back, bruised.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-bd-s3-v2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push the right boulder",
+     "success": {
+      "text": "The last hole plugs. The current stops, and the way down is clear.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-n3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam-n3",
+   "name": "Seafoam Islands: The Still Water",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#28506a"
+   },
+   "intro": "The current is gone. Ice bridges and a frozen pool. Something big watches from the water.",
+   "choices": [
+    {
+     "label": "Push on",
+     "success": {
+      "text": "A wild shape comes up for air.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "seel",
+        "dewgong",
+        "shellder",
+        "slowpoke",
+        "jynx",
+        "golbat",
+        "zubat",
+        "psyduck"
+       ],
+       "levelBonus": 2,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-seafoam-n4"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam-n4",
+   "name": "Seafoam Islands: The Ice Slope",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#28506a"
+   },
+   "intro": "A long slope of ice leads down. Your footsteps ring in the cold.",
+   "choices": [
+    {
+     "label": "Slide down",
+     "success": {
+      "text": "A wild shape slides up to meet you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "seel",
+        "dewgong",
+        "shellder",
+        "slowpoke",
+        "jynx",
+        "golbat",
+        "zubat",
+        "psyduck"
+       ],
+       "levelBonus": 2,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-seafoam-n5"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam-n5",
+   "name": "Seafoam Islands: The Bottom",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#28506a"
+   },
+   "intro": "The deepest chamber. The air hums with cold, and a big shape coils in the mist.",
+   "choices": [
+    {
+     "label": "Approach the shape",
+     "chance": 0.35,
+     "success": {
+      "text": "It is a legendary bird of ice.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-seafoam-articuno",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-n6a"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It is only a herd of Dewgong, and they do not like visitors.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-n6b"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam-n6a",
+   "name": "Seafoam Islands: Articuno",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#28506a"
+   },
+   "intro": "Articuno spreads its blue wings. The cave glitters like a thousand mirrors.",
+   "choices": [
+    {
+     "label": "Face the bird",
+     "chance": 0.1,
+     "success": {
+      "text": "Its feathers are dark and sharp: a Galarian Articuno.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "articuno-galar"
+       ],
+       "levelBonus": 4,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-seafoam-n7"
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "The legendary bird of ice lowers its head to fight.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "articuno"
+       ],
+       "levelBonus": 4,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-seafoam-n7"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam-n6b",
+   "name": "Seafoam Islands: The Dewgong Herd",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#28506a"
+   },
+   "intro": "A wall of white fur. The Dewgong block the way down.",
+   "choices": [
+    {
+     "label": "Fight through",
+     "success": {
+      "text": "The herd charges, one after another.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "dewgong"
+       ],
+       "levelBonus": 2,
+       "chain": 3,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-seafoam-n7"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam-n7",
+   "name": "Seafoam Islands: The Way Out",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#28506a"
+   },
+   "intro": "A narrow tunnel leads up to the sunlight. Something glitters in the ice by the exit.",
+   "choices": [
+    {
+     "label": "Take the Never-Melt Ice and Icy Rock",
+     "success": {
+      "text": "Two pieces of ice that never melt, even in your hand.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "nevermeltice"
+       },
+       {
+        "kind": "item",
+        "id": "icy-rock"
+       },
+       {
+        "kind": "moment",
+        "text": "Crossed the Seafoam Islands.",
+        "importance": 40
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-newisland",
+   "name": "New Island",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2a2848"
+   },
+   "intro": "A mysterious invitation arrives: a boat, an island castle, a host who will not give a name. A storm is rolling in. You can still say no.",
+   "choices": [
+    {
+     "label": "Accept the invitation",
+     "success": {
+      "text": "The boat leaves the shore in the rain.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-newisland-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You turn back. Nothing here is forced.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cinnabar.newisland"
+  },
+  {
+   "id": "cs-kanto-cinnabar-newisland-n1",
+   "name": "New Island: The Storm",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "rain",
+    "tint": "#2a2848"
+   },
+   "intro": "Thunder cracks over the water. The boat tosses, and something rides the wind beside it.",
+   "choices": [
+    {
+     "label": "Hold on",
+     "success": {
+      "text": "A wild shape swoops out of the storm.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "pidgey",
+        "spearow",
+        "magnemite",
+        "voltorb",
+        "tentacool"
+       ],
+       "levelBonus": 3,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-newisland-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-newisland-n2",
+   "name": "New Island: The Castle",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "rain",
+    "tint": "#2a2848"
+   },
+   "intro": "A grand castle sits on the rock. A voice from a hidden speaker: \"Welcome. Tonight, the strongest become the first of a new kind.\"",
+   "choices": [
+    {
+     "label": "Go inside",
+     "success": {
+      "text": "The doors close behind you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-newisland-n3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-newisland-n3",
+   "name": "New Island: The Clone Laboratory",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "rain",
+    "tint": "#2a2848"
+   },
+   "intro": "Rows of glowing tanks. In each, a Pokémon that looks just like one of yours. The host says: \"These are your copies, and they are better.\"",
+   "choices": [
+    {
+     "label": "Fight your clones",
+     "success": {
+      "text": "The tanks open. Your own Pokémon step out, with no abilities and no heart.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Clones",
+       "size": 6,
+       "mirror": true,
+       "clone": true,
+       "levelBonus": 0,
+       "weather": "rain",
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-newisland-n4"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Was scanned by the clones of New Island.",
+         "importance": 40
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-newisland-n4",
+   "name": "New Island: The Clone Core",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2a2848"
+   },
+   "intro": "The tanks go dark. In the wreckage, a small glowing core that still hums.",
+   "choices": [
+    {
+     "label": "Use the Clone Core",
+     "success": {
+      "text": "The core copies your lead's moves onto your lowest-level Pokémon. Then it burns out.",
+      "effects": [
+       {
+        "kind": "copyMoves"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-newisland-n5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the core",
+     "success": {
+      "text": "You leave it humming in the dark.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-newisland-n5"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-newisland-n5",
+   "name": "New Island: The Mew Sighting",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2a2848"
+   },
+   "intro": "On the roof, rain slackening. A small pink shape floats at the edge of the light.",
+   "choices": [
+    {
+     "label": "Reach for it",
+     "chance": 0.1,
+     "success": {
+      "text": "It turns around and meets your eyes.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "mew"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Met Mew on New Island.",
+         "importance": 80
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "Gone. It was only a trick of the storm. Or was it?",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Saw a pink shape on New Island.",
+        "importance": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go",
+     "success": {
+      "text": "The boat takes you home. Some secrets are not for you.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-volcano",
+   "name": "Cinnabar Volcano",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a2a10"
+   },
+   "intro": "A trail climbs the smoking volcano. Burn Heal herbs grow near the top, and so do their keepers.",
+   "choices": [
+    {
+     "label": "Climb the volcano",
+     "success": {
+      "text": "The ground is warm under your feet.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-volcano-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "Not today.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cinnabar.volcano"
+  },
+  {
+   "id": "cs-kanto-cinnabar-volcano-n1",
+   "name": "Cinnabar Volcano: The Lower Slope",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fire",
+    "tint": "#7a2a10"
+   },
+   "intro": "Heat shimmers over cracked black rock.",
+   "choices": [
+    {
+     "label": "Keep climbing",
+     "chance": 0.9375,
+     "success": {
+      "text": "You pick your way over the hot rock.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-volcano-n2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A gout of fire catches your lead.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "burn",
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-volcano-n2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-volcano-n2",
+   "name": "Cinnabar Volcano: The Ash Field",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fire",
+    "tint": "#7a2a10"
+   },
+   "intro": "Ash drifts down like grey snow. Steam hisses from vents.",
+   "choices": [
+    {
+     "label": "Keep climbing",
+     "chance": 0.9375,
+     "success": {
+      "text": "You pick your way over the hot rock.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-volcano-n3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A gout of fire catches your lead.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "burn",
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-volcano-n3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-volcano-n3",
+   "name": "Cinnabar Volcano: The Herb Ledge",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fire",
+    "tint": "#7a2a10"
+   },
+   "intro": "On a ledge above the lava, a patch of red herbs grows in the heat.",
+   "choices": [
+    {
+     "label": "Gather the herbs",
+     "success": {
+      "text": "You pick a handful of Burn Heal herbs.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "burn-heal",
+        "count": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-volcano-n4"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-volcano-n4",
+   "name": "Cinnabar Volcano: The Last Climb",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fire",
+    "tint": "#7a2a10"
+   },
+   "intro": "The summit is close. The air glows.",
+   "choices": [
+    {
+     "label": "Keep climbing",
+     "chance": 0.9375,
+     "success": {
+      "text": "You pick your way over the hot rock.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-volcano-n5"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A gout of fire catches your lead.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "burn",
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-volcano-n5"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-volcano-n5",
+   "name": "Cinnabar Volcano: The Summit",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fire",
+    "tint": "#7a2a10"
+   },
+   "intro": "At the crater's rim, a fiery shape guards the last of the herbs.",
+   "choices": [
+    {
+     "label": "Face it",
+     "success": {
+      "text": "It lunges out of the smoke.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "magmar",
+        "charmeleon",
+        "ponyta"
+       ],
+       "levelBonus": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-volcano-n6"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-volcano-n6",
+   "name": "Cinnabar Volcano: The Crater Rim",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fire",
+    "tint": "#7a2a10"
+   },
+   "intro": "Fire Stone glints in the rock, and a Heat Rock lies warm beside it.",
+   "choices": [
+    {
+     "label": "Take the stones",
+     "success": {
+      "text": "The stones are hot, but they will keep.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "fire-stone"
+       },
+       {
+        "kind": "item",
+        "id": "heat-rock"
+       },
+       {
+        "kind": "moment",
+        "text": "Climbed the Cinnabar Volcano.",
+        "importance": 40
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  }
+ ]
+}

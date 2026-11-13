@@ -164,6 +164,8 @@ export const PROMPTS: readonly PromptDef[] = [
   { id: 'gauge-hold', kind: 'hold', label: 'Set the level', hint: 'Hold, and let go when the ring is full to set the level.', targetMs: 1300, windowsMs: W(90, 170, 300) },
   { id: 'pitch-hold', kind: 'hold', label: 'Find the pitch', hint: 'Hold, and let go when the ring is full to hit the note.', targetMs: 900, windowsMs: W(80, 160, 280) },
   { id: 'tilt-drag', kind: 'drag', label: 'Tilt!', hint: 'Drag along the path to the goal.', from: [15, 75], to: [80, 30], windowsPx: W(7, 14, 24), maxMs: 4500 },
+  // Beta 0.6 Saffron: the Copycat Girl's game (four claps to copy).
+  { id: 'copycat-claps', kind: 'rhythm', label: 'Copy her claps', hint: 'She claps four times. Press on each beat to copy her.', beatsMs: [500, 950, 1500, 1950], windowsMs: W(100, 180, 320) },
   { id: 'pull-hold', kind: 'hold', label: 'Pull together', hint: 'Hold, and let go as the ring fills to pull them free.', targetMs: 1100, windowsMs: W(90, 180, 320) },
 ];
 

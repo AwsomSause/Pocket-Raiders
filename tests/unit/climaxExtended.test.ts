@@ -79,14 +79,16 @@ describe('climaxTick (screens)', () => {
     expect(JSON.stringify(a.expansion ?? {})).toBe(before);
   });
   it('plays the wide formats in order, one at a time, and finishes', async () => {
-    const { climaxTick } = await import('../../src/core/arc/climaxExtended');
+    const { climaxTick, climaxBattleEnded } = await import('../../src/core/arc/climaxExtended');
     const { currentFormat, clearFormat } = await import('../../src/core/formats/store');
     const r = mk('extended');
+    r.story.evil = { ...(r.story.evil as object), teamId: content.evilTeams.teams[0]!.id } as typeof r.story.evil;
     beginClimax(r);
     const ids: string[] = [];
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 80; i++) {
       if (!climaxTick(content, r)) break;
       const f = currentFormat(r);
+      if (!f) { r.battle = null; r.phase = 'map'; climaxBattleEnded(r, true); continue; } // a battle phase launched: count it as won
       expect(f).not.toBeNull();
       ids.push(f!.id);
       expect(climaxTick(content, r)).toBe(true); // asking again while it runs changes nothing
@@ -97,5 +99,57 @@ describe('climaxTick (screens)', () => {
     expect(ids.indexOf('blackout')).toBeGreaterThan(0);
     expect(ids).toContain('breather');
     expect(nextStep(r)).toBeNull();
+  });
+});
+
+describe('climax battles and Second Shot', () => {
+  it('launches the battle phases, counts wins, and a loss is Second Shot (two tries, run goes on)', async () => {
+    const { climaxTick, climaxBattleEnded } = await import('../../src/core/arc/climaxExtended');
+    const { clearFormat, currentFormat } = await import('../../src/core/formats/store');
+    const r = mk('extended');
+    r.story.evil = { ...(r.story.evil as object), teamId: content.evilTeams.teams[0]!.id } as typeof r.story.evil;
+    beginClimax(r);
+    const climbTo = (): void => { for (let i = 0; i < 20 && r.phase !== 'battle'; i++) { if (!climaxTick(content, r)) break; if (currentFormat(r)) clearFormat(r); } };
+    climbTo();
+    expect(r.phase).toBe('battle');
+    expect(r.battle?.event?.eventId).toBe('format:climax');
+    const need = (r.expansion!.cut!.director as { need: number }).need;
+    expect(need).toBeGreaterThanOrEqual(1);
+    // a win counts; the next tick launches the next one (or moves on)
+    r.battle = null; r.phase = 'map';
+    climaxBattleEnded(r, true);
+    expect((r.expansion!.cut!.director as { fought: number }).fought).toBe(1);
+    // first loss retries, second ends the climax and never ends the run
+    expect(climaxLost(r)).toBe('retry');
+    expect(climaxLost(r)).toBe('worst');
+    expect(nextStep(r)).toBeNull();
+    expect(r.phase).not.toBe('over');
+  });
+});
+
+describe('real run flow', () => {
+  it('an Extended Cut run reaches the climax at story beat 6; classic runs do not', async () => {
+    const { applyEvilEffect } = await import('../../src/core/evil/teams');
+    const { climaxTick } = await import('../../src/core/arc/climaxExtended');
+    for (const cut of ['extended', 'standard'] as const) {
+      const r = mk(cut);
+      r.regionOrder = ['kanto', ...r.regionOrder.slice(1)]; r.regionIndex = 0;
+      r.story.evil = { ...(r.story.evil as object), teamId: content.evilTeams.teams[0]!.id, beat: 5 } as typeof r.story.evil;
+      applyEvilEffect(content, r, { beat: true, heat: 0 } as never);
+      expect(r.story.evil!.beat).toBe(6);
+      expect(!!r.expansion?.cut?.director).toBe(cut === 'extended');
+      if (cut === 'extended') expect(climaxTick(content, r)).toBe(true);
+    }
+  });
+  it('the worst result raises the region world-state track once and the run continues', () => {
+    const r = mk('extended');
+    r.regionOrder = ['kanto', ...r.regionOrder.slice(1)]; r.regionIndex = 0;
+    r.expansion = { ...r.expansion, tracks: true };
+    beginClimax(r);
+    climaxLost(r);
+    expect(climaxLost(r)).toBe('worst');
+    expect(r.expansion!.track!.kanto!.step).toBe(1);
+    expect(r.expansion!.cut!.result).toBe('worst');
+    expect(r.phase).not.toBe('over');
   });
 });

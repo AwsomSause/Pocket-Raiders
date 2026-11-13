@@ -29,12 +29,13 @@ export function shadowTurnPlan(mon: Pick<PokemonInstance, 'uid' | 'shadow' | 'mo
 }
 
 /** The line the player reads BEFORE choosing: the tier, and (never silently) what the shadow will do this turn. Null for a Clear Pokémon. */
-export function shadowPreviewLine(moveName: (id: string) => string, mon: Pick<PokemonInstance, 'uid' | 'shadow' | 'moves'>, turn: number, battleState: RngState): string | null {
+export function shadowPreviewLine(moveName: (id: string) => string, mon: Pick<PokemonInstance, 'uid' | 'shadow' | 'moves'>, turn: number, battleState: RngState, heartStageName?: string): string | null {
   const tier = shadowTierOf(mon);
   if (!tier) return null;
   const plan = shadowTurnPlan(mon, turn, battleState);
-  const head = `Shadow · ${tier.name} (tier ${tier.tier}) · Corruption ${mon.shadow!.heart}/100`;
+  // One short line (tier + Heart Gauge): the command box fits only three lines at this size.
+  const head = heartStageName ? `Shadow · ${tier.name} (tier ${tier.tier}) · ${heartStageName} ${mon.shadow!.heart}/100` : `Shadow · ${tier.name} (tier ${tier.tier}) · Corruption ${mon.shadow!.heart}/100`;
   if (plan.result === 'hesitate') return `${head}\nIt may hesitate this turn.`;
-  if (plan.result === 'replace') return `${head}\nThe shadow tightens. Whatever you order, it will use ${moveName(mon.moves[plan.moveIndex]!.id)}.`;
+  if (plan.result === 'replace') return `${head}\nThe shadow tightens: it will use ${moveName(mon.moves[plan.moveIndex]!.id)}.`;
   return head;
 }

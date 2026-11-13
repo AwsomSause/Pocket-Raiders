@@ -70,6 +70,10 @@ describe('obey check', () => {
     const plan = shadowTurnPlan(m, turn, state);
     expect(shadowPreviewLine((id) => id, m, turn, state)).toContain(`use ${m.moves[plan.moveIndex]!.id}`);
     expect(shadowPreviewLine((id) => id, createPokemon(content, 'rattata', 5, 'c'), 1, state)).toBeNull();
+    // The Heart stage rides on the first line, so the box never needs a fourth line.
+    const line = shadowPreviewLine((id) => id, m, turn, state, 'Wary')!;
+    expect(line.split('\n')).toHaveLength(2);
+    expect(line.split('\n')[0]).toContain('Wary');
   });
   it('in a real battle a replaced command is announced and matches the preview', () => {
     const player = shadowAt(100, 'p1');
