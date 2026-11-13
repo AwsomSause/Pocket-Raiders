@@ -70,6 +70,10 @@ export const MomentEffectSchema = z.object({
   teamFriendship: z.number().int().min(1).max(10).optional(),
   /** Rest moments: a free berry in the bag. */
   freeBerry: z.boolean().optional(),
+  /** Rest moments: the Pokémon gains this percent of the experience between its level and the next. */
+  xpPct: z.number().int().min(1).max(100).optional(),
+  /** Rest moments: names the types that hit this stage's leader hardest. */
+  weaknessHint: z.boolean().optional(),
   /** Catch moments: the whole party is healed fully. */
   healTeam: z.boolean().optional(),
   /** Catch moments: the Pokémon rolls a talent (once) if it has none. */
@@ -78,6 +82,10 @@ export const MomentEffectSchema = z.object({
   healNowPct: z.number().int().min(1).max(100).optional(),
   /** Own stat boosts from `boost` / `boostBest` fade after this many turns (absent = last the battle). */
   boostTurns: z.number().int().min(1).max(5).optional(),
+  /** The next move of this type does this much more damage (percent); spent when it lands. */
+  nextBoost: z.object({ type: z.string(), pct: z.number().int().min(1).max(100) }).optional(),
+  /** For the rest of the battle, a foe that hits it with a contact move is poisoned. */
+  contactPoison: z.boolean().optional(),
   /** Damage is halved for this many turns. */
   guard: z.number().int().min(1).max(5).optional(),
   /** Run-end revive: HP multiplier on max HP, and the Overcharged state. */

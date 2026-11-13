@@ -111,7 +111,7 @@ import { ARENA_IMMUNE, foeStake, aimAccuracy, arenaText, dealOffer, mindReader, 
 import { benchSupporter, addBleed, bleedDamage, causesBleed, curseMultiplier, resonanceMultiplier } from './w1Rules';
 import { sacrificeFor } from './sacrificeRule';
 import { berserkDue, berserkMove, isBerserk } from './berserk';
-import { applyPendingMoments, fadeMomentBoosts, tryFaintMoments, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
+import { momentContactPoison, momentDamageMult, spendMomentBoost, applyPendingMoments, fadeMomentBoosts, tryFaintMoments, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
 import type { MomentHooks } from '../moments/pokemonMoments';
 import { freshHyperBattle, rollHyper, type EnemyRage, type HyperContext, type HyperEligibility } from './hyper';
 import { applyTransformations, battleMove, battleTypes, endDynamax, maxMoveExtras, maxMoveTerrain, maxMoveWeather, stabMultiplier, teraPower, tickDynamax, transformProblem, zMoveFor, type TransformEvent, type TransformRequest, type TransformStepEvent } from './transform';
@@ -4040,6 +4040,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
         final,
       });
       damage = applyTypeModifiers(ctx, user, target, effectiveness, damage, physical, moveType, move);
+      if (ctx.moments) { const boost = momentDamageMult(ctx, user, moveType); if (boost !== 1) damage = Math.max(1, Math.floor(damage * boost)); }
       const itemMultiplier =
         terrainMultiplier(ctx, user, target, moveType) *
         Held.attackMultiplier(ctx, user, target, move, moveType, effectiveness, events as Held.HeldEvent[]) *
@@ -4311,6 +4312,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   if (landed > 0 && dealt > 0 && target.mon.hp > 0 && move.flags.includes('bite') && abilityIn(ctx, user) === 'twin-maw') {
     announce(user, 'twin-maw', events);
     abilityHurt(ctx, target, Math.max(1, Math.floor(dealt * 0.25)), events);
+  }
+  if (landed > 0 && ctx.moments) {
+    spendMomentBoost(ctx, user, moveType);
+    // Toxic Blood: a contact hit on the Pokémon poisons the attacker.
+    if (contact && user.mon.hp > 0 && momentContactPoison(ctx, target) && !user.mon.status && canGetStatus(ctx, target, user, 'psn')) tryInflictStatus(ctx, target, user, 'psn', undefined, events, false);
   }
   if (landed > 0) afterHitAbilities(ctx, user, target, move, moveType, contact, anyCrit, events);
 }

@@ -3,9 +3,12 @@
 // at one rest does not use up the chance at the next. No new RNG stream: nothing else's rolls move.
 
 import { displayName } from '../care';
-import type { Content } from '../contentSchema';
+import { TYPE_NAMES, type Content } from '../contentSchema';
 import { changeFriendship } from '../friendship';
 import { addItem } from '../items';
+import { typeEffectiveness } from '../battle/damage';
+import { gainXp, getSpecies, xpForLevel } from '../pokemon';
+import { bossInfo, runLevelCap } from '../regions';
 import { hashSeed, Rng } from '../rng';
 import type { PokemonInstance, RunState } from '../state';
 import { momentRoll, momentsFor, runClaimKey, type PokemonMoment } from './pokemonMoments';
@@ -23,18 +26,37 @@ function plays(run: RunState, m: PokemonMoment, mon: PokemonInstance): boolean {
   return true;
 }
 
+/** Ghost Story: the types that hit this stage's leader hardest, told as a tale. */
+function weaknessLine(content: Content, run: RunState): string {
+  const stage = run.stage!;
+  const leader = bossInfo(content, stage.kind === 'league' ? 'champion' : 'gym', stage.leaderId);
+  const hits = TYPE_NAMES.map((t) => ({ t, x: typeEffectiveness(content.typeChart, t, leader.types) })).filter((e) => e.x > 1).sort((a, b) => b.x - a.x || a.t.localeCompare(b.t)).slice(0, 3);
+  return hits.length === 0 ? `${leader.title} has no common weakness.` : `${leader.title} is weak to ${hits.map((e) => e.t.toUpperCase()).join(', ')}.`;
+}
+
 /** A healing stop: each party member's rest moments get one roll. Returns the lines to show. */
 export function restMoments(content: Content, run: RunState): string[] {
   if (content.balance.pokemonMoments === false) return [];
   const lines: string[] = [];
   for (const mon of [...run.party]) {
     for (const m of momentsFor(content, mon, 'rest')) {
-      if (!m.effect || !plays(run, m, mon)) continue;
+      if (!m.effect) continue;
+      // Dream Walk does nothing for a Pokémon already at the level cap, so it is neither played nor claimed.
+      if (m.effect.xpPct && mon.xp >= xpForLevel(getSpecies(content, mon.speciesId).growthRate, Math.min(content.balance.difficulty.maxLevel, runLevelCap(content, run)), content.balance.difficulty.highLevelXp)) continue;
+      if (!plays(run, m, mon)) continue;
       const fx = m.effect;
       if (fx.friendship) changeFriendship(content, mon, fx.friendship);
       if (fx.teamFriendship) for (const p of run.party) changeFriendship(content, p, fx.teamFriendship);
       if (fx.freeBerry) addItem(run.inventory, BERRIES[Math.floor(new Rng(hashSeed(`${run.seed}:pmoment:${m.id}:${mon.uid}:berry`)).float() * BERRIES.length)]!, 1);
-      lines.push(`${nameOf(content, mon)}: ${m.name}. ${m.effectText}`);
+      let extra = '';
+      if (fx.xpPct) {
+        const rate = getSpecies(content, mon.speciesId).growthRate;
+        const hl = content.balance.difficulty.highLevelXp;
+        const gap = xpForLevel(rate, mon.level + 1, hl) - xpForLevel(rate, mon.level, hl);
+        gainXp(content, mon, Math.max(1, Math.floor((gap * fx.xpPct) / 100)), runLevelCap(content, run));
+      }
+      if (fx.weaknessHint && run.stage) extra = ` ${weaknessLine(content, run)}`;
+      lines.push(`${nameOf(content, mon)}: ${m.name}. ${m.effectText}${extra}`);
       break;
     }
   }
