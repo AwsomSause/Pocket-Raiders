@@ -39,6 +39,7 @@ import { canDynamax, maxMoveOptions, megaOption, ownedZCrystal, permanentForm, s
 import { runPerks } from '../core/archetypes';
 import { abilityOf, calcStats, maxHp, getSpecies, maxPp, xpForLevel } from '../core/pokemon';
 import { heartStage } from '../core/shadow';
+import { shadowPreviewLine } from '../core/shadow2';
 import { formIntro } from '../core/presentation/sceneEffects';
 import { finalRivalArenaTheme } from '../core/story/highHype';
 import { ultimateRival } from '../core/rivals/ultimate';
@@ -3017,7 +3018,7 @@ export class BattleScene extends Phaser.Scene {
     const featReady = !this.duo && featCharged(this.run) && featV2?.heartbond.partner === this.activeMon().uid;
     const featLine = featReady ? (featV2!.feats.armed ? 'Memory stirs: the Feat is armed.\n' : 'Memory stirs: a Feat is charged.\n') : '';
     const coopRaid = this.run.battle?.raid?.coop ? coopOwner(this.run.battle.raid, this.activeMon().uid) + 1 : 0;
-    this.message.setText(`${coopRaid ? `PLAYER ${coopRaid}: you're up! Pass the controller.\n` : ''}${intent ? `${intent.text}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${featLine}${shadow ? `Shadow haze · ${heartStage(content, shadow.heart)} · Heart Gauge ${shadow.heart}/100 (hits harder, takes more)\n` : ''}${this.pilotTag(this.activeMon())}What will ${this.speciesName(this.activeMon())} do?${ready}`);
+    this.message.setText(`${coopRaid ? `PLAYER ${coopRaid}: you're up! Pass the controller.\n` : ''}${intent ? `${intent.text}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${featLine}${shadow ? `${shadowPreviewLine((id) => content.moves.get(id)?.name ?? id, this.activeMon(), battleNow.turn, this.run.rng.battle)}\nHeart Gauge: ${heartStage(content, shadow.heart)}\n` : ''}${this.pilotTag(this.activeMon())}What will ${this.speciesName(this.activeMon())} do?${ready}`);
     const options = [{ label: 'Fight' }, { label: 'Bag' }, { label: 'Pokémon' }];
     const label = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z', dynamax: 'Max', mega: 'Mega' })[c.kind];
     const onLabel = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z-Move', dynamax: 'Dynamax', mega: 'Mega Evolution' })[c.kind];
