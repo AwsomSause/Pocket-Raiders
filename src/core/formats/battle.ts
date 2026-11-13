@@ -11,7 +11,7 @@ import type { RunState } from '../state';
 import type { FormatId } from './types';
 
 export type FormatBattleSpec = Pick<Extract<EventBattle, { kind: 'trainer' }>, 'name' | 'size' | 'rule'> &
-  Partial<Pick<Extract<EventBattle, { kind: 'trainer' }>, 'classId' | 'types' | 'species' | 'lineup' | 'format' | 'levelBonus' | 'weather' | 'terrain'>> & {
+  Partial<Pick<Extract<EventBattle, { kind: 'trainer' }>, 'evil' | 'classId' | 'types' | 'species' | 'lineup' | 'format' | 'levelBonus' | 'weather' | 'terrain'>> & {
     /** Which part of the format this fight is (an anchor id, a lane...). Part of the battle's seed. */
     key: string;
     /** Colossus fight (Beta 0.6): armor seals and a timer on the foe. */
@@ -19,7 +19,7 @@ export type FormatBattleSpec = Pick<Extract<EventBattle, { kind: 'trainer' }>, '
   };
 
 /** Starts the battle. False when the run has no stage, is already in a battle, or has nobody standing (nothing is changed then). */
-export function launchFormatBattle(content: Content, run: RunState, id: FormatId, spec: FormatBattleSpec): boolean {
+export function launchFormatBattle(content: Content, run: RunState, id: FormatId | 'climax', spec: FormatBattleSpec): boolean {
   const stage = run.stage;
   // The node only sets the foe's level: the current stop, or (before the first stop) the first node.
   const node = stage?.map.nodes.find((n) => n.id === stage.current) ?? stage?.map.nodes[0];

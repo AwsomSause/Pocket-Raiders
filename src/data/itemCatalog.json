@@ -28369,5 +28369,53 @@
    "amount": 300,
    "changes": {}
   }
+ },
+ {
+  "id": "perfume-vial",
+  "name": "Perfume Vial",
+  "family": "Type boosters (held)",
+  "description": "Grass moves +20%",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "miracle-seed",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "grass"
+     ],
+     "percent": 20
+    }
+   ]
+  }
+ },
+ {
+  "id": "flashlight",
+  "name": "Flashlight",
+  "family": "Map and encounter items",
+  "description": "Lights the way: the map shows the wild Pokémon waiting at the next stops, and Rock Tunnel lets you choose",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "passive",
+  "icon": "library/lightkey",
+  "status": "supported",
+  "effect": {
+   "kind": "perk",
+   "lasts": {
+    "for": "run"
+   },
+   "perks": [
+    {
+     "perk": "preview",
+     "what": "wild"
+    }
+   ]
+  }
  }
 ]

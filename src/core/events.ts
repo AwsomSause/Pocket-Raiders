@@ -53,7 +53,7 @@ import { assignEvilVariants, holdsMarnieCard } from './expansion/variantAssign';
 import { changeAid, changeCrisis, crisisAid, crisisEventIds, crisisLevel, setTournament, tournamentEventId, tournamentRound } from './story/crisis';
 import { activePerks, hasPerk, perkItem, perksOf, spendUse, stageKey } from './mapItems';
 import { scavengerBonus } from './bank';
-import { addLevels, calcStats, maxHp } from './pokemon';
+import { addLevels, calcStats, maxHp, maxPp } from './pokemon';
 import { count, countShiny, discover } from './progress';
 import { eggStatus, eggTier, layEgg, warmEggs } from './eggs';
 import { makeShadow, rollShadowHeart } from './shadow';
@@ -112,6 +112,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return (run.inventory[c.id] ?? 0) >= (c.count ?? 1) || (run.passives?.[c.id] ?? 0) > 0;
     case 'emotion':
       return run.party.some((m) => emotionOf(content, run, m.uid)?.id === c.id);
+    case 'memorial':
+      return (run.nuzlocke?.memorial.length ?? 0) >= c.atLeast;
     case 'partyLevelOver':
       return (!!run.stage && run.party.some((m) => m.level >= curveLevel(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, run.stage!.index, 1)) + c.over)) !== (c.absent === true);
     case 'partyMoveType':
@@ -314,6 +316,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs a milestone day';
     case 'partyType':
       return c.absent ? `Only without a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party` : `Needs a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party`;
+    case 'memorial':
+      return c.atLeast <= 1 ? 'Needs a Pokémon lost for good' : `Needs ${c.atLeast} Pokémon lost for good`;
     case 'partyLevelOver':
       return c.over >= 0 ? `Needs a Pokémon ${c.over} levels above this stage` : 'Needs a strong Pokémon';
     case 'partyMoveType':
@@ -885,6 +889,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return 'the day is celebrated';
     case 'damage':
       return `${e.who === 'lead' ? 'lead' : 'party'} loses ${Math.round(e.share * 100)}% HP${e.except.length ? ` (not ${e.except.join('/')} types)` : ''}`;
+    case 'restorePp':
+      return 'restore PP';
     case 'cure':
       return 'cure status';
     case 'status':
@@ -1110,6 +1116,9 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       for (const m of hazardTargets(content, run, e)) m.hp = Math.max(1, m.hp - Math.floor(maxHp(content, m) * e.share));
       return effectWords(content, e);
     }
+    case 'restorePp':
+      for (const m of run.party) for (const slot of m.moves) slot.pp = maxPp(content, slot);
+      return effectWords(content, e);
     case 'cure':
       for (const m of run.party) m.status = null;
       return effectWords(content, e);
@@ -1472,6 +1481,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       return mon;
     });
     run.battle = createBattle('wild', [enemy, ...others], activeIndex, run.party[activeIndex]!.uid);
+    if (b.weather) run.battle.weather = { id: b.weather, turns: 999 };
   } else {
     const boss = b.bossId ? content.bosses.get(b.bossId) : undefined;
     const ghost = b.retired ? retiredTeam(run.story) : b.ghost ? championTeam(run.story) : [];
@@ -1549,6 +1559,8 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
   }
   if (b.format && !run.battle.doubles) applyEventFormat(content, run, b.format);
   run.battle.event = event;
+  // Rock Tunnel is a dark cave: every fight inside it has its accuracy cut by a tenth.
+  if (event.eventId.startsWith('cs-kanto-lavender-rock')) run.battle.accuracyMult = 0.9;
   // Veridian Forest fog: every fight inside the forest has its accuracy cut by a tenth.
   if (event.eventId.startsWith('cs-kanto-pewter-forest') && Number(run.story.flags['ev:kanto-forest-fog'] ?? 0) > 0) run.battle.accuracyMult = 0.9;
   for (const mon of run.battle.enemyTeam) discover(run, mon.speciesId, false);
