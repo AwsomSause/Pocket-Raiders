@@ -427,3 +427,85 @@ describe('Batch 4: the mechanics for Ditto, Smeargle, Mew, Darkrai, Sneasel; sha
     expect(fresh.flags['pm:runend-used']).toBe(1);
   });
 });
+
+describe('Batch 5: faint, ally, weather and status moments', () => {
+  const build = (seed: string, party: PokemonInstance[], enemy: PokemonInstance) => {
+    const battle = createBattle('trainer', [enemy], 0, party[0]!.uid);
+    const moments: MomentHooks = { seed, flags: {}, cinematic: () => false, noteCinematic: () => undefined, runWouldEnd: () => false };
+    const ctx: BattleContext = { content, battle, party, inventory: {}, rng: new Rng(hashSeed(seed)), captureRng: new Rng(hashSeed(`${seed}c`)), catchMultiplier: 1, moments };
+    return { ctx, battle };
+  };
+  const mon = (sp: string, level: number, hp?: number, uid = `${sp}-b`): PokemonInstance => {
+    const m = createPokemon(content, sp, level, uid);
+    m.moves = [{ id: 'splash', pp: 99 }];
+    if (hp !== undefined) m.hp = hp;
+    return m;
+  };
+  const big = (): PokemonInstance => strike('mewtwo', 'psystrike');
+  const has = (events: BattleEvent[], id: string) => events.some((e) => e.type === 'pmoment' && e.id === id);
+
+  it('the remaining catalog moments are exactly the rest, catch and four hook-blocked ones', () => {
+    const off = POKEMON_MOMENTS.filter((m) => m.status === 'disabled').map((m) => m.id).sort();
+    expect(off).toEqual(['bug-swarm-low', 'gengar-cackle', 'ice-chill-ko', 'poison-toxic-blood', 'snorlax-rest', 'pikachu-spark-night', 'eevee-curl', 'fire-campfire', 'ghost-story', 'water-song', 'grass-sprout', 'psychic-dream', 'ditto-join', 'legend-joined'].sort());
+  });
+
+  it('a weather moment plays only in its weather', () => {
+    let sun = 0;
+    for (let i = 0; i < 300; i++) {
+      const dry = build(`sun-dry-${i}`, [mon('charmander', 40)], mon('magikarp', 5));
+      expect(has(turn(dry.ctx), 'sunny-day-fire')).toBe(false);
+      const wet = build(`sun-${i}`, [mon('charmander', 40)], mon('magikarp', 5));
+      wet.battle.weather = { id: 'sun', turns: 5 };
+      if (has(turn(wet.ctx), 'sunny-day-fire')) { sun++; expect(wet.battle.playerStages.spe).toBeGreaterThanOrEqual(1); }
+    }
+    expect(sun).toBeGreaterThan(0);
+  });
+
+  it('a status moment needs the status; Fire thaws at once', () => {
+    let thawed = 0;
+    for (let i = 0; i < 300; i++) {
+      const healthy = build(`thaw-h-${i}`, [mon('charmander', 40)], mon('magikarp', 5));
+      expect(has(turn(healthy.ctx), 'fire-thaw')).toBe(false);
+      const p = mon('charmander', 40);
+      p.status = { id: 'frz' };
+      const s = build(`thaw-${i}`, [p], mon('magikarp', 5));
+      if (has(turn(s.ctx), 'fire-thaw')) { thawed++; expect(p.status).toBeNull(); }
+    }
+    expect(thawed).toBeGreaterThan(0);
+  });
+
+  it('a fallen Electric type paralyses the foe (faint trigger)', () => {
+    let n = 0;
+    for (let i = 0; i < 400; i++) {
+      const s = build(`faint-${i}`, [mon('pikachu', 5, 1), mon('rattata', 30)], big());
+      const events = turn(s.ctx);
+      if (has(events, 'p2-static-discharge')) { n++; expect(s.battle.enemyTeam[0]!.status?.id).toBe('par'); }
+    }
+    expect(n).toBeGreaterThan(0);
+  });
+
+  it('a fallen legendary bird stirs the next bird: the boost waits for the switch-in', () => {
+    let n = 0;
+    for (let i = 0; i < 400; i++) {
+      const s = build(`ally-${i}`, [mon('articuno', 5, 1), mon('zapdos', 40)], big());
+      const events = turn(s.ctx);
+      expect(has(events, 'legendary-birds')).toBe(false);
+      if (!s.battle.needsSwitch) continue;
+      const pending = s.battle.storyEffects.some((t) => t.startsWith('pm-pending:legendary-birds'));
+      const out = resolveTurn(s.ctx, { kind: 'switch', partyIndex: 1 });
+      expect(has(out, 'legendary-birds')).toBe(pending);
+      if (pending) { n++; expect(s.battle.playerStages.spa).toBeGreaterThanOrEqual(1); expect(s.battle.storyEffects.some((t) => t.startsWith('pm-pending:'))).toBe(false); }
+    }
+    expect(n).toBeGreaterThan(0);
+  });
+
+  it('Arcanine only gets Legendary Pokémon against a legendary foe; Falinks forms up', () => {
+    for (let i = 0; i < 20; i++) expect(has(turn(build(`arc-n-${i}`, [mon('arcanine', 40)], mon('magikarp', 5)).ctx), 'p2-legendary-arcanine')).toBe(false);
+    const legend = build('arc-y', [mon('arcanine', 40)], foeLegend());
+    expect(has(turn(legend.ctx), 'p2-legendary-arcanine')).toBe(true);
+    expect(legend.battle.playerStages.atk).toBeGreaterThanOrEqual(1);
+    const f = build('falinks', [mon('falinks', 40)], mon('magikarp', 5));
+    expect(has(turn(f.ctx), 'p2-formation')).toBe(true);
+    function foeLegend(): PokemonInstance { const m = strike('articuno', 'splash'); m.level = 5; return m; }
+  });
+});

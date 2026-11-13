@@ -770,9 +770,16 @@
    "chance": 0.4,
    "limit": "battle",
    "tier": "major",
-   "status": "disabled",
-   "effectText": "When its partner faints: Atk +1, SpA +1, Spe +1.",
-   "presentation": "Cry together | \"Its partner's cry fades.\""
+   "status": "supported",
+   "effectText": "When its partner faints: Atk +1, SpA +1, Spe +1 once it is sent out.",
+   "presentation": "Cry together | \"Its partner's cry fades.\"",
+   "effect": {
+    "boost": {
+     "atk": 1,
+     "spa": 1,
+     "spe": 1
+    }
+   }
   },
   {
    "id": "latios-latias",
@@ -787,9 +794,19 @@
    "chance": 0.6,
    "limit": "battle",
    "tier": "major",
-   "status": "disabled",
-   "effectText": "When the other Eon faints: heal 30% max HP and +1 to all stats.",
-   "presentation": "Twin cry echo | \"They shared one heart.\""
+   "status": "supported",
+   "effectText": "When the other Eon faints: heals 30% max HP and +1 to all stats once it is sent out.",
+   "presentation": "Twin cry echo | \"They shared one heart.\"",
+   "effect": {
+    "healNowPct": 30,
+    "boost": {
+     "atk": 1,
+     "def": 1,
+     "spa": 1,
+     "spd": 1,
+     "spe": 1
+    }
+   }
   },
   {
    "id": "pikachu-ash",
@@ -804,9 +821,16 @@
    "chance": 0.25,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "When an ally faints: ally-friendship +3, Spe +1.",
-   "presentation": "Pika cry | \"Pika-pi!\""
+   "status": "supported",
+   "effectText": "When an ally faints: Spe +1 and +3 friendship once it is sent out.",
+   "presentation": "Pika cry | \"Pika-pi!\"",
+   "effect": {
+    "boost": {
+     "spe": 1
+    },
+    "friendship": 3
+   },
+   "allyScope": "any"
   },
   {
    "id": "nidoking-queen",
@@ -821,9 +845,19 @@
    "chance": 0.7,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "If the other royal is on your team and a teammate faints: Atk +1 / SpA +1.",
-   "presentation": "Crown ping | \"For the pair.\""
+   "status": "supported",
+   "effectText": "If the other royal is still standing and a teammate faints: Atk +1, SpA +1 once it is sent out.",
+   "presentation": "Crown ping | \"For the pair.\"",
+   "effect": {
+    "boost": {
+     "atk": 1,
+     "spa": 1
+    }
+   },
+   "allyScope": "any",
+   "requires": {
+    "partyMatching": 2
+   }
   },
   {
    "id": "legendary-birds",
@@ -839,9 +873,15 @@
    "chance": 0.5,
    "limit": "battle",
    "tier": "major",
-   "status": "disabled",
-   "effectText": "A fallen legendary bird of the trio: survivors +1 SpA, +1 Spe.",
-   "presentation": "Triple screech | \"Three become two, two become one.\""
+   "status": "supported",
+   "effectText": "A fallen legendary bird: the next bird sent out gets SpA +1, Spe +1.",
+   "presentation": "Triple screech | \"Three become two, two become one.\"",
+   "effect": {
+    "boost": {
+     "spa": 1,
+     "spe": 1
+    }
+   }
   },
   {
    "id": "lake-guardians",
@@ -857,9 +897,12 @@
    "chance": 0.5,
    "limit": "battle",
    "tier": "major",
-   "status": "disabled",
-   "effectText": "A fallen guardian: survivors heal 25% max HP.",
-   "presentation": "Chime | \"Will, Emotion, Knowledge.\""
+   "status": "supported",
+   "effectText": "A fallen guardian: the next guardian sent out heals 25% max HP.",
+   "presentation": "Chime | \"Will, Emotion, Knowledge.\"",
+   "effect": {
+    "healNowPct": 25
+   }
   },
   {
    "id": "legendary-beasts",
@@ -875,9 +918,15 @@
    "chance": 0.5,
    "limit": "battle",
    "tier": "major",
-   "status": "disabled",
-   "effectText": "A fallen beast: survivors Atk +1, Spe +1.",
-   "presentation": "Thunder, flame and water crash | \"The pack runs on.\""
+   "status": "supported",
+   "effectText": "A fallen beast: the next beast sent out gets Atk +1, Spe +1.",
+   "presentation": "Thunder, flame and water crash | \"The pack runs on.\"",
+   "effect": {
+    "boost": {
+     "atk": 1,
+     "spe": 1
+    }
+   }
   },
   {
    "id": "swords-justice",
@@ -894,9 +943,15 @@
    "chance": 0.5,
    "limit": "battle",
    "tier": "major",
-   "status": "disabled",
-   "effectText": "A fallen sword: survivors Def +1, Atk +1.",
-   "presentation": "Blade ring | \"Justice stands.\""
+   "status": "supported",
+   "effectText": "A fallen sword: the next sword sent out gets Def +1, Atk +1.",
+   "presentation": "Blade ring | \"Justice stands.\"",
+   "effect": {
+    "boost": {
+     "def": 1,
+     "atk": 1
+    }
+   }
   },
   {
    "id": "regis",
@@ -915,9 +970,15 @@
    "chance": 0.5,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "A fallen Regi: survivors Def +1, SpD +1.",
-   "presentation": "Dot tones | \"...\""
+   "status": "supported",
+   "effectText": "A fallen Regi: the next Regi sent out gets Def +1, SpD +1.",
+   "presentation": "Dot tones | \"...\"",
+   "effect": {
+    "boost": {
+     "def": 1,
+     "spd": 1
+    }
+   }
   },
   {
    "id": "tapu-guardians",
@@ -934,9 +995,12 @@
    "chance": 0.5,
    "limit": "battle",
    "tier": "major",
-   "status": "disabled",
-   "effectText": "A fallen Tapu: survivors heal 20% max HP, terrain sets (matching).",
-   "presentation": "Terrain shimmer | \"The island answers.\""
+   "status": "supported",
+   "effectText": "A fallen Tapu: the next Tapu sent out heals 20% max HP (no terrain yet).",
+   "presentation": "Terrain shimmer | \"The island answers.\"",
+   "effect": {
+    "healNowPct": 20
+   }
   },
   {
    "id": "pikachu-static",
@@ -2512,9 +2576,17 @@
    "chance": 0.2,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "When sun starts: Spe +1.",
-   "presentation": "Fanfare | \"Burning bright.\""
+   "presentation": "Fanfare | \"Burning bright.\"",
+   "effect": {
+    "boost": {
+     "spe": 1
+    }
+   },
+   "requires": {
+    "weather": "sun"
+   }
   },
   {
    "id": "rain-dance-water",
@@ -2528,9 +2600,17 @@
    "chance": 0.2,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "When rain starts: SpA +1.",
-   "presentation": "Drum | \"Rain dance.\""
+   "presentation": "Drum | \"Rain dance.\"",
+   "effect": {
+    "boost": {
+     "spa": 1
+    }
+   },
+   "requires": {
+    "weather": "rain"
+   }
   },
   {
    "id": "sand-rock",
@@ -2544,9 +2624,17 @@
    "chance": 0.2,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "When sand starts: SpD +1.",
-   "presentation": "Gust | \"Wind-hardened.\""
+   "presentation": "Gust | \"Wind-hardened.\"",
+   "effect": {
+    "boost": {
+     "spd": 1
+    }
+   },
+   "requires": {
+    "weather": "sand"
+   }
   },
   {
    "id": "hail-ice",
@@ -2560,9 +2648,17 @@
    "chance": 0.2,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "When hail starts: Atk +1.",
-   "presentation": "Frost | \"Home turf.\""
+   "presentation": "Frost | \"Home turf.\"",
+   "effect": {
+    "boost": {
+     "atk": 1
+    }
+   },
+   "requires": {
+    "weather": "hail"
+   }
   },
   {
    "id": "poison-tolerance",
@@ -2576,9 +2672,17 @@
    "chance": 0.3,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "When poisoned: cures after 1 turn instead.",
-   "presentation": "Hiss | \"Immune system.\""
+   "status": "supported",
+   "effectText": "When poisoned: it wears off after 1 turn.",
+   "presentation": "Hiss | \"Immune system.\"",
+   "effect": {
+    "statusLeft": 1
+   },
+   "requires": {
+    "status": [
+     "psn"
+    ]
+   }
   },
   {
    "id": "fire-thaw",
@@ -2592,9 +2696,17 @@
    "chance": 0.3,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "When frozen: instantly thaws.",
-   "presentation": "Hiss | \"Melted.\""
+   "presentation": "Hiss | \"Melted.\"",
+   "effect": {
+    "cure": true
+   },
+   "requires": {
+    "status": [
+     "frz"
+    ]
+   }
   },
   {
    "id": "psychic-clear",
@@ -2608,9 +2720,18 @@
    "chance": 0.2,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "When confused/asleep: cures.",
-   "presentation": "Ring | \"Clear.\""
+   "status": "supported",
+   "effectText": "When confused or asleep: cured.",
+   "presentation": "Ring | \"Clear.\"",
+   "effect": {
+    "cure": true
+   },
+   "requires": {
+    "status": [
+     "slp",
+     "confusion"
+    ]
+   }
   },
   {
    "id": "normal-hold",
@@ -2624,9 +2745,24 @@
    "chance": 0.2,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
+   "status": "supported",
    "effectText": "When statused: Def +1.",
-   "presentation": "Pat | \"Hold on.\""
+   "presentation": "Pat | \"Hold on.\"",
+   "effect": {
+    "boost": {
+     "def": 1
+    }
+   },
+   "requires": {
+    "status": [
+     "brn",
+     "psn",
+     "par",
+     "slp",
+     "frz",
+     "confusion"
+    ]
+   }
   },
   {
    "id": "snorlax-rest",
@@ -2787,6 +2923,89 @@
    "status": "disabled",
    "effectText": "On joining: team heals fully, +10 friendship.",
    "presentation": "Cry first, gold | \"A legend joins your side.\""
+  },
+  {
+   "status": "supported",
+   "limit": "battle",
+   "tier": "minor",
+   "id": "p2-static-discharge",
+   "name": "Static Discharge",
+   "scope": {
+    "types": [
+     "electric"
+    ]
+   },
+   "trigger": "faint",
+   "chance": 0.35,
+   "effectText": "When it faints: the foe is paralysed.",
+   "presentation": "Spark sfx | \"A last discharge.\"",
+   "effect": {
+    "foeStatus": "par",
+    "foeStatusChance": 100
+   }
+  },
+  {
+   "status": "supported",
+   "limit": "battle",
+   "tier": "minor",
+   "id": "p2-spite-blood",
+   "name": "Spite in the Blood",
+   "scope": {
+    "types": [
+     "poison"
+    ]
+   },
+   "trigger": "faint",
+   "chance": 0.4,
+   "effectText": "When it faints: the foe is poisoned (any hit, not only contact).",
+   "presentation": "Bubble | \"Poison in the blood.\"",
+   "effect": {
+    "foeStatus": "psn",
+    "foeStatusChance": 100
+   }
+  },
+  {
+   "status": "supported",
+   "limit": "battle",
+   "tier": "minor",
+   "id": "p2-formation",
+   "name": "Formation!",
+   "scope": {
+    "species": [
+     "falinks"
+    ]
+   },
+   "trigger": "start",
+   "chance": 1,
+   "effectText": "Its first move goes first (+1 priority).",
+   "presentation": "Shout | \"Formation!\"",
+   "effect": {
+    "firstPriority": 1
+   }
+  },
+  {
+   "status": "supported",
+   "limit": "battle",
+   "tier": "minor",
+   "id": "p2-legendary-arcanine",
+   "name": "Legendary Pokémon",
+   "scope": {
+    "species": [
+     "arcanine"
+    ]
+   },
+   "trigger": "start",
+   "chance": 1,
+   "effectText": "Against a legendary foe: Atk +1.",
+   "presentation": "Roar | \"The legend stands tall.\"",
+   "requires": {
+    "foeTag": "legendary"
+   },
+   "effect": {
+    "boost": {
+     "atk": 1
+    }
+   }
   }
  ]
 }

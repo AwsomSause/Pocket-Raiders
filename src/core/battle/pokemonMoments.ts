@@ -17,6 +17,7 @@ const FADE = 'pm-fade:';
 /** The one run-end revival a run gets, whichever moment uses it. */
 export const RUN_END_CLAIM = 'pm:runend-used';
 const NOFLINCH = 'pm-noflinch:';
+const PENDING = 'pm-pending:';
 const PRIO = 'pm-prio:';
 const NIGHTMARE = 'pm-nightmare:';
 
@@ -101,6 +102,7 @@ function applyEffect(ctx: BattleContext, c: Combatant, fx: MomentEffect, m: Poke
   if (fx.firstPriority) ctx.battle.storyEffects.push(`${PRIO}${c.mon.uid}:${ctx.battle.turn}:${fx.firstPriority}`);
   if (fx.foeNightmarePct && foe.hp > 0) ctx.battle.storyEffects.push(`${NIGHTMARE}${fx.foeNightmarePct}`);
   if (fx.friendship) c.mon.friendship = Math.min(255, c.mon.friendship + fx.friendship);
+  if (fx.statusLeft && c.mon.status) c.mon.status = { ...c.mon.status, left: fx.statusLeft };
   if (fx.sleepSelf && c.mon.hp > 0 && !c.mon.status) c.mon.status = { id: 'slp', turns: fx.sleepSelf };
   if (fx.ppRestore) for (const slot of c.mon.moves) slot.pp = Math.min(maxPp(content, slot), slot.pp + fx.ppRestore);
   for (const [stat, n] of Object.entries(fx.foeStage ?? {}) as [keyof typeof ctx.battle.enemyStages, number][]) ctx.battle.enemyStages[stat] = clampStage((ctx.battle.enemyStages[stat] ?? 0) + n);
@@ -186,9 +188,11 @@ export function tryRunEndMoment(ctx: BattleContext, events: BattleEvent[]): bool
 }
 
 /** A moment's extra conditions: enough matching party members, or a weather on the field. */
-function requirementsMet(ctx: BattleContext, m: PokemonMoment): boolean {
+function requirementsMet(ctx: BattleContext, m: PokemonMoment, c?: Combatant): boolean {
   const r = m.requires;
   if (!r) return true;
+  if (r.status && !(c && (r.status.includes('confusion') && c.vol.confusion > 0 || (c.mon.status && (r.status as string[]).includes(c.mon.status.id))))) return false;
+  if (r.foeTag && !(ctx.content.species.get(currentEnemy(ctx.battle).speciesId)?.tags as string[] | undefined)?.includes(r.foeTag)) return false;
   if (r.partyMatching && ctx.party.filter((p) => p.hp > 0 && momentMatches(ctx.content, m, p.speciesId)).length < r.partyMatching) return false;
   if (r.weather && ctx.battle.weather?.id !== r.weather) return false;
   return true;
@@ -209,7 +213,7 @@ export function tryEntryMoments(ctx: BattleContext, c: Combatant, trigger: Extra
   for (const m of momentsFor(ctx.content, c.mon, trigger)) {
     if (played >= MAX_ENTRY_MOMENTS) break;
     if (!m.effect) continue;
-    if (!requirementsMet(ctx, m)) continue;
+    if (!requirementsMet(ctx, m, c)) continue;
     const key = momentKey(m, c.mon.uid);
     if (m.limit === 'battle' ? ctx.battle.storyEffects.includes(key) : hooks.flags[m.limit === 'run' ? runClaimKey(m) : key] !== undefined) continue;
     if (m.limit === 'battle') ctx.battle.storyEffects.push(key);
@@ -267,17 +271,19 @@ export function tryReactiveMoments(ctx: BattleContext, turnEvents: BattleEvent[]
     ko: turnEvents.some((e) => e.type === 'faint' && e.side === 'enemy'),
     super: hit.some((e) => e.effectiveness > 1),
     crit: hit.some((e) => e.crit),
+    weather: Boolean(battle.weather),
+    status: Boolean(mon.status) || battle.playerVolatile.confusion > 0,
   };
   const max = calcStats(ctx.content, mon).hp;
   const c: Combatant = { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false };
   let played = 0;
-  for (const trigger of ['low', 'ko', 'super', 'crit'] as const) {
+  for (const trigger of ['low', 'ko', 'super', 'crit', 'weather', 'status'] as const) {
     if (!fired[trigger]) continue;
     for (const m of momentsFor(ctx.content, mon, trigger)) {
       if (played >= MAX_ENTRY_MOMENTS) return;
       if (!m.effect) continue;
       if (trigger === 'low' && !(m.hpBelow && mon.hp * 100 < max * m.hpBelow)) continue;
-      if (!requirementsMet(ctx, m)) continue;
+      if (!requirementsMet(ctx, m, c)) continue;
       const key = momentKey(m, mon.uid);
       if (m.limit === 'battle' ? battle.storyEffects.includes(key) : hooks.flags[runClaimKey(m)] !== undefined) continue;
       if (m.limit === 'battle') battle.storyEffects.push(key);
@@ -287,5 +293,61 @@ export function tryReactiveMoments(ctx: BattleContext, turnEvents: BattleEvent[]
       events.push(eventFor(ctx, c, m, mon.hp, cinematicNow(ctx, m.tier)));
       played++;
     }
+  }
+}
+
+/**
+ * The player's Pokémon in front fell this turn. Two kinds of moment: its own "faint" moments (a parting shot at the foe), and
+ * its party-mates' "ally" moments (a fallen friend stirs the survivors). An ally moment cannot buff a Pokémon on the bench, so it
+ * waits as a pending tag and plays when that survivor is next sent out. Rolls and limits are spent at the fall.
+ */
+export function tryFaintMoments(ctx: BattleContext, turnEvents: BattleEvent[], events: BattleEvent[]): void {
+  const hooks = ctx.moments;
+  const { battle } = ctx;
+  if (!hooks || battle.outcome) return;
+  for (const f of turnEvents) {
+    if (f.type !== 'faint' || f.side !== 'player') continue;
+    const fallen = ctx.party.find((p) => p.uid === f.uid);
+    if (!fallen) continue;
+    const spend = (m: PokemonMoment, uid: string): boolean => {
+      const key = momentKey(m, uid);
+      if (m.limit === 'battle' ? battle.storyEffects.includes(key) : hooks.flags[runClaimKey(m)] !== undefined) return false;
+      if (m.limit === 'battle') battle.storyEffects.push(key);
+      else hooks.flags[runClaimKey(m)] = 1;
+      return true;
+    };
+    // Its own parting shot.
+    const c: Combatant = { side: 'player', mon: fallen, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false };
+    for (const m of momentsFor(ctx.content, fallen, 'faint')) {
+      if (!m.effect || !requirementsMet(ctx, m, c) || !spend(m, fallen.uid)) continue;
+      if (!momentRoll(hooks.seed, m.id, fallen.uid, battle.turn, m.chance)) continue;
+      applyEffect(ctx, c, m.effect, m, battle.turn);
+      events.push(eventFor(ctx, c, m, fallen.hp, false));
+      break;
+    }
+    // Survivors' ally moments wait for the next switch-in.
+    for (const owner of ctx.party) {
+      if (owner.uid === fallen.uid || owner.hp <= 0) continue;
+      for (const m of momentsFor(ctx.content, owner, 'ally')) {
+        if (!m.effect || (m.allyScope === 'same' && !momentMatches(ctx.content, m, fallen.speciesId))) continue;
+        if (!requirementsMet(ctx, m)) continue;
+        if (!spend(m, owner.uid)) continue;
+        if (momentRoll(hooks.seed, m.id, owner.uid, battle.turn, m.chance)) battle.storyEffects.push(`${PENDING}${m.id}:${owner.uid}`);
+      }
+    }
+  }
+}
+
+/** A survivor whose ally moment was waiting has just been sent out: it plays now. */
+export function applyPendingMoments(ctx: BattleContext, c: Combatant, events: BattleEvent[]): void {
+  const suffix = `:${c.mon.uid}`;
+  const tags = ctx.battle.storyEffects.filter((t) => t.startsWith(PENDING) && t.endsWith(suffix));
+  if (!tags.length) return;
+  ctx.battle.storyEffects = ctx.battle.storyEffects.filter((t) => !tags.includes(t));
+  for (const tag of tags) {
+    const m = pokemonMoment(tag.slice(PENDING.length, tag.length - suffix.length));
+    if (!m?.effect) continue;
+    applyEffect(ctx, c, m.effect, m, ctx.battle.turn);
+    events.push(eventFor(ctx, c, m, c.mon.hp, cinematicNow(ctx, m.tier)));
   }
 }
