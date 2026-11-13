@@ -13,6 +13,7 @@ import { MINIGAMES_7 } from './games7';
 import { MINIGAMES_6 } from './games6';
 import { MINIGAMES_5 } from './games5';
 import { MINIGAMES_8 } from './games8';
+import { MINIGAMES_9 } from './games9';
 
 export interface Cell {
   id: string;
@@ -20,6 +21,9 @@ export interface Cell {
   detail?: string;
   tone?: 'good' | 'bad' | 'info' | 'dim' | 'hot';
   disabled?: boolean;
+  /** Part of the picture board (drawn as a tile), not a control. Screens may show art for it (asset id) and fall back to the label. */
+  board?: boolean;
+  art?: string;
 }
 
 export interface MinigameView {
@@ -859,6 +863,7 @@ export const MINIGAMES: Record<string, MinigameModule<never>> = {
   ...MINIGAMES_6,
   ...MINIGAMES_5,
   ...MINIGAMES_8,
+  ...MINIGAMES_9,
   ...FRONTIER_GAMES,
 };
 

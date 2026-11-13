@@ -20,7 +20,7 @@ import { ArchivedRivalSchema, MENTOR_TYPES, StoryStateSchema } from './story/sch
 import { PartyLifeStateSchema, createPartyLife } from './partyLife/schema';
 import { freshHyperBattle } from './battle/hyper';
 import { SpectacleBattleSchema } from './battle/spectacle';
-import { VariantsSchema } from './expansion/variantLines';
+import { VariantsSchema, type Variants } from './expansion/variantLines';
 import { ArenaSchema, SkillInputSchema } from './battle/w1Play';
 
 const RngStateSchema = z.object({ a: z.number(), b: z.number(), c: z.number(), d: z.number() });
@@ -214,6 +214,8 @@ export const VolatileSchema = z.object({
   abilityOverride: z.string().nullable().default(null),
   /** Focus Energy: critical hits are two stages likelier. */
   focusEnergy: z.boolean().default(false),
+  /** Pokémon moments: extra critical-hit stages (fades or lasts the battle; gone on switch-out). */
+  momentCrit: z.number().int().min(0).max(3).default(0),
   /** S164 charge-up stacks waiting for the next damaging move. */
   bank: z.number().int().min(0).default(0),
   /** Laser Focus: the next attack is a critical hit. */
@@ -373,6 +375,7 @@ export const freshVolatile = (): Volatile => ({
   typeShift: null,
   abilityOverride: null,
   focusEnergy: false,
+  momentCrit: 0,
   bank: 0,
   laserFocus: false,
   sureHit: false,
@@ -529,7 +532,7 @@ export const freshExtra = () => ({
   ionDeluge: false,
   wonderRoom: 0,
   brokenFace: [] as string[],
-  variants: {} as Record<string, { line: 'tagged' | 'dark-ball' | 'tidebound' | 'cinderborn' | 'preserved'; flags: Record<string, number> }>,
+  variants: {} as Variants,
   galar: [] as string[],
   delta: false,
   mimic: {} as Record<string, { kind: 'mimic' | 'transform'; slot: number; moves: { id: string; pp: number }[] }>,
@@ -629,6 +632,24 @@ export const RaidBattleSchema = z.object({
   formNote: z.object({ from: z.string(), to: z.string(), text: z.string() }).nullable().default(null),
 });
 export type RaidBattle = z.infer<typeof RaidBattleSchema>;
+
+/** Beta 0.6 Colossus (core/battle/colossus.ts): armor seals with their own shield bars, and the timer. Absent in every other fight. */
+export const ColossusBattleSchema = z.object({
+  id: z.string(),
+  seals: z.array(z.object({
+    name: z.string(), removes: z.string(), removesLabel: z.string(),
+    shield: z.number().int().min(0), max: z.number().int().min(1), broken: z.boolean(),
+  })),
+  timerLeft: z.number().int().min(0),
+  timerMax: z.number().int().min(1),
+  /** The timer ran out: the Apex escapes. */
+  escaped: z.boolean(),
+  /** Messages for the player; the engine turns them into events at the end of the turn. */
+  notes: z.array(z.string()),
+  /** Seals that broke this turn; their moves go at the end of it. */
+  pendingBreaks: z.array(z.number().int().min(0)),
+});
+export type ColossusBattle = z.infer<typeof ColossusBattleSchema>;
 
 /** The changing state of a Totem fight (rules in core/totem/totem.ts). */
 export const TotemBattleSchema = z.object({
@@ -860,6 +881,8 @@ export const BattleStateSchema = z.object({
   memory: z.object({ kind: z.enum(['ghost', 'gauntlet', 'echo']), id: z.string(), note: z.string() }).optional(),
   /** A raid boss fight: shield, phases, telegraph and timer (core/raid/raid.ts). */
   raid: RaidBattleSchema.optional(),
+  /** Beta 0.6 Colossus fight: armor seals, shield bars and the timer (core/battle/colossus.ts). */
+  colossus: ColossusBattleSchema.optional(),
   /** Run events B: special rules of this event fight (no switching, no attacks, turn limits...); see EventRuleSchema. */
   eventRule: EventRuleSchema.optional(),
   /** Overhaul slice 17/18: the boss's named strategy id (balance.bossStrategy); read by the AI and the risk label. */

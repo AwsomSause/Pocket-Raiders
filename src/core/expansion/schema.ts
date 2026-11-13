@@ -83,8 +83,16 @@ export const ExpansionRunSchema = z.object({
   evoEncounters: z.boolean().optional(),
   /** Runs with the E4 counter-pick on (B7). */
   counterPick: z.boolean().optional(),
+  /** The story-event density this run started with (E3): how many quiet-node story events a region gets. Set once at run start. */
+  density: z.enum(['low', 'normal', 'full']).optional(),
+  /** The climax length the run started with (the `climaxCut` setting); run events that need the Extended Cut read it. */
+  climaxCut: z.enum(['standard', 'extended']).optional(),
+  /** Story events placed per region so far (E3 scheduler), by region id. */
+  xe: z.record(z.string(), z.number().int().min(0)).optional(),
   /** Runs with the world-state tracks on (E2). Set once at run start. */
   tracks: z.boolean().optional(),
+  /** Camp scenes: the last player Pokémon to faint and the encounter count then (cleared by a night's rest). */
+  lastFaint: z.object({ uid: z.string(), at: z.number().int().min(0) }).optional(),
   /** B7: the Pokémon (uids) registered at the League door. Only these are ever countered; a swapped-in Pokémon is unseen. `swapped` = the one swap is used. */
   league: z.object({ registered: z.array(z.string()), swapped: z.boolean().default(false) }).optional(),
 });

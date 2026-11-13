@@ -16,6 +16,7 @@
 // after a hit (Static, Rough Skin), at the end of the turn (Speed Boost) and
 // when switching out (Regenerator).
 
+import { colossusAbsorb, colossusEndOfTurn } from './colossus';
 import { CARE } from '../care/mods';
 import { shadowDamageMultiplier } from '../shadow';
 import { shadowTurnPlan, shadow2Data } from '../shadow2';
@@ -31,7 +32,7 @@ import { styleProbability, styleProblem, type StyleInput } from '../captureStyle
 import { applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem, lastStandItemId } from '../items';
 import { abilityOf, calcStats, createPokemon, getSpecies, maxHp } from '../pokemon';
 import { rallyStages } from './rally';
-import { variantBlocksForcedSwitch, variantBlocksStatus, variantEndTurnLoss, variantIncoming, variantItemMove, variantNeverMisses, variantOnEntry } from '../expansion/variantLines';
+import { SPIRITLESS_MESSAGE, variantBlocksForcedSwitch, variantBlocksMind, variantBlocksStage, variantBlocksStatus, variantEndTurnLoss, variantEndTurnStages, variantIncoming, variantItemMove, variantNeverMisses, variantOnEntry, variantPriorityBonus, variantTagCall } from '../expansion/variantLines';
 import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
 import type { Rng } from '../rng';
 import { cooldownKey, hasBattleEffect, markBattleEffect } from '../story/ledger';
@@ -111,7 +112,7 @@ import { ARENA_IMMUNE, foeStake, aimAccuracy, arenaText, dealOffer, mindReader, 
 import { benchSupporter, addBleed, bleedDamage, causesBleed, curseMultiplier, resonanceMultiplier } from './w1Rules';
 import { sacrificeFor } from './sacrificeRule';
 import { berserkDue, berserkMove, isBerserk } from './berserk';
-import { fadeMomentBoosts, guardAmount, tryEntryMoments, tryLethalMoment, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
+import { momentContactPoison, momentDamageMult, spendMomentBoost, applyPendingMoments, fadeMomentBoosts, tryFaintMoments, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
 import type { MomentHooks } from '../moments/pokemonMoments';
 import { freshHyperBattle, rollHyper, type EnemyRage, type HyperContext, type HyperEligibility } from './hyper';
 import { applyTransformations, battleMove, battleTypes, endDynamax, maxMoveExtras, maxMoveTerrain, maxMoveWeather, stabMultiplier, teraPower, tickDynamax, transformProblem, zMoveFor, type TransformEvent, type TransformRequest, type TransformStepEvent } from './transform';
@@ -138,7 +139,7 @@ export type BattleEvent =
   /** Became confused; `confusion` is the "is confused!" check at the start of its move; `confusionEnd` snapped out. */
   | { type: 'confused'; side: Side }
   /** A Pokémon moment (core/moments): `cinematic` false means it is told as a plain line; `scene` is the full-screen run-end revive. */
-  | { type: 'pmoment'; side: Side; uid: string; speciesId: string; id: string; name: string; tier: 'minor' | 'major' | 'landmark'; hpAfter: number; cinematic: boolean; scene: boolean; trigger: 'runEnd' | 'lethal' | 'start' | 'enter' | 'ally' | 'low' | 'ko' | 'super' | 'crit' | 'weather' | 'status' | 'rest' | 'catch' }
+  | { type: 'pmoment'; side: Side; uid: string; speciesId: string; id: string; name: string; tier: 'minor' | 'major' | 'landmark'; hpAfter: number; cinematic: boolean; scene: boolean; trigger: 'runEnd' | 'lethal' | 'faint' | 'start' | 'enter' | 'ally' | 'low' | 'ko' | 'super' | 'crit' | 'weather' | 'status' | 'rest' | 'catch' }
   | { type: 'confusion'; side: Side }
   | { type: 'confusionEnd'; side: Side }
   | { type: 'confusionHit'; side: Side; amount: number; hpAfter: number }
@@ -1016,10 +1017,20 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   settleFaints(ctx, events);
   // A trainer's next Pokémon saw its ally fall.
   if (!battle.outcome && battle.enemyIndex !== enemyBefore) warnRage(ctx, currentEnemy(battle), events);
-  fadeMomentBoosts(ctx);
+  if (ctx.moments) {
+    tryFaintMoments(ctx, events, events);
+    tryReactiveMoments(ctx, events, events);
+  }
+  fadeMomentBoosts(ctx, events);
   battle.turn += 1;
   eventRuleEnd(battle, events, ctx.party, ctx.content);
   if (raidTimeout && !battle.outcome) battle.outcome = 'lose';
+  // Colossus (Beta 0.6): broken seals take their moves, the timer ticks, and at zero the Apex escapes.
+  if (battle.colossus && !battle.outcome) {
+    const co = colossusEndOfTurn(ctx.content, battle);
+    for (const text of co.notes) events.push({ type: 'raid', tone: 'warn', text });
+    if (co.timeout) battle.outcome = 'lose';
+  }
   // A narrative fight that drags on ends as the story loss (the rival cannot be beaten, so it must end).
   if (battle.narrative && !battle.outcome && battle.turn > battle.narrative.maxTurns) battle.outcome = 'lose';
   applyHype(ctx, events);
@@ -1717,6 +1728,7 @@ function switchIn(ctx: BattleContext, partyIndex: number, events: BattleEvent[])
   enterField(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false });
   // Pokémon moments (Beta 0.6): a "switch-in" moment for the Pokémon that just came out.
   if (ctx.moments) tryEntryMoments(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, 'enter', events);
+  if (ctx.moments) applyPendingMoments(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, events);
 }
 
 /** Poké Doll: the wild Pokémon loses this turn (uses up one free turn). */
@@ -1970,6 +1982,14 @@ function resolveEntries(ctx: BattleContext, events: BattleEvent[]): void {
   if (sides.length === 2 && speedOf(ctx, enemy) > speedOf(ctx, player)) sides.reverse();
   for (const { c } of sides) enterExtras(ctx, c, events);
   for (const { c } of sides) applyHazards(ctx, c, events);
+  for (const { c, other } of sides) {
+    // Tagged-Up (Alola): a foe coming in while the sprayer is out is called out and loses 1/16 HP, once each.
+    const call = c.mon.hp > 0 && other.mon.hp > 0 ? variantTagCall(ctx.battle.extra.variants, other.mon.uid, c.mon.uid, calcStats(ctx.content, c.mon).hp) : null;
+    if (call && call.loss > 0) {
+      events.push({ type: 'raid', tone: 'info', text: `${nameOf(ctx, c.mon)} is ${call.message}!` });
+      abilityHurt(ctx, c, call.loss, events);
+    }
+  }
   if (sides.some(({ c }) => c.mon.hp <= 0)) {
     // A hazard knocked it out as it came in.
     recordFaints(ctx, player, enemy, events);
@@ -2014,6 +2034,8 @@ function restoreMoves(ctx: BattleContext, mon: PokemonInstance): void {
   if (rec.kind === 'mimic') {
     const orig = rec.moves[rec.slot];
     if (orig && mon.moves[rec.slot]) mon.moves[rec.slot] = { ...orig };
+    // A move a Pokémon moment added to an empty slot goes away again.
+    else if (!orig && mon.moves[rec.slot]) mon.moves.splice(rec.slot, 1);
   } else mon.moves = rec.moves.map((m) => ({ ...m }));
   delete ctx.battle.extra.mimic[mon.uid];
 }
@@ -2366,7 +2388,7 @@ function speedOf(ctx: BattleContext, c: Combatant): number {
 function priorityOf(ctx: BattleContext, c: Combatant, move: Move): number {
   // §29 enraged after a rival's sacrifice: its next moves go first.
   const rage = ctx.battle.enraged;
-  return basePriority(ctx, c, move) + (rage && rage.left > 0 && c.side === 'player' && rage.uid === c.mon.uid ? rage.priority : 0);
+  return basePriority(ctx, c, move) + variantPriorityBonus(ctx.battle.extra.variants, c.mon.uid) + (rage && rage.left > 0 && c.side === 'player' && rage.uid === c.mon.uid ? rage.priority : 0) + momentPriority(ctx, c);
 }
 
 function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
@@ -2452,6 +2474,8 @@ function canAct(ctx: BattleContext, user: Combatant, events: BattleEvent[], move
       return false;
     }
   }
+  if (user.vol.infatuated && variantBlocksMind(ctx.battle.extra.variants, user.mon.uid)) user.vol.infatuated = false;
+  if (user.flinched && variantBlocksMind(ctx.battle.extra.variants, user.mon.uid)) user.flinched = false;
   if (user.vol.infatuated) {
     events.push({ type: 'selfState', side: user.side, state: 'inLove' });
     if (rng.chance(0.5)) {
@@ -2602,6 +2626,8 @@ function takeHp(
       chargedLanded = raid.charging;
     }
   }
+  // Colossus (Beta 0.6): the armor seals' shield bars soak every hit; nothing reaches its HP while a seal remains.
+  if (ctx.battle.colossus && c.side === 'enemy') amount = colossusAbsorb(ctx.battle, amount);
   amount = guardAmount(ctx, c, amount);
   let lost = Math.min(Math.max(0, amount), c.mon.hp);
   if (c.side === 'enemy' && lost > 0 && ctx.battle.raid && ctx.battle.raid.minionUid !== c.mon.uid) {
@@ -3870,7 +3896,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       const physical = fx.attackFrom === 'best' || fx.autoCategory || (fx.teraBlast && ctx.battle.transform.teraTypes[user.mon.uid]) ? userStats.atk >= userStats.spa : move.category === 'physical';
       const hitsDefense = (physical || fx.targetsDefense) !== (ctx.battle.extra.wonderRoom > 0);
       const userStatus = user.mon.status?.id;
-      crit = rng.chance(scaleCrit(Math.min(1, critChance(content.ruleset, move.critStage + Held.critStageBonus(ctx, user) + (userAbility === 'super-luck' ? 1 : 0) + (user.vol.focusEnergy ? 2 : 0)) * (user.side === 'player' ? critChancePerk(ctx.perks) : 1) + (user.side === 'player' ? critChanceBonusPerk(ctx.perks) : 0) + (user.side === 'enemy' && ctx.battle.eventRule?.beginnersLuck ? 0.2 : 0) + focusCrit(content, user.mon) + (user.side === 'player' ? growthCritBonus(content.balance.overhaulGrowth, user.mon) : 0) + (user.side === 'enemy' && classPassiveOf(content, ctx.battle)?.kind === 'crit' ? classPassiveOf(content, ctx.battle)!.amount : 0)), content.balance.critScaling.softCap, content.balance.critScaling.excessFactor));
+      crit = rng.chance(scaleCrit(Math.min(1, critChance(content.ruleset, move.critStage + Held.critStageBonus(ctx, user) + (userAbility === 'super-luck' ? 1 : 0) + (user.vol.focusEnergy ? 2 : 0) + (user.vol.momentCrit ?? 0)) * (user.side === 'player' ? critChancePerk(ctx.perks) : 1) + (user.side === 'player' ? critChanceBonusPerk(ctx.perks) : 0) + (user.side === 'enemy' && ctx.battle.eventRule?.beginnersLuck ? 0.2 : 0) + focusCrit(content, user.mon) + (user.side === 'player' ? growthCritBonus(content.balance.overhaulGrowth, user.mon) : 0) + (user.side === 'enemy' && classPassiveOf(content, ctx.battle)?.kind === 'crit' ? classPassiveOf(content, ctx.battle)!.amount : 0)), content.balance.critScaling.softCap, content.balance.critScaling.excessFactor));
       if (fx.alwaysCrit || user.vol.laserFocus) crit = true;
       if (userAbility === 'merciless' && target.mon.status?.id === 'psn') crit = true;
       if (foeAbility === 'battle-armor' || foeAbility === 'shell-armor' || ctx.battle.sideEffects[target.side].luckyChant > 0) crit = false;
@@ -4023,6 +4049,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
         final,
       });
       damage = applyTypeModifiers(ctx, user, target, effectiveness, damage, physical, moveType, move);
+      if (ctx.moments) { const boost = momentDamageMult(ctx, user, moveType, move.id); if (boost !== 1) damage = Math.max(1, Math.floor(damage * boost)); }
       const itemMultiplier =
         terrainMultiplier(ctx, user, target, moveType) *
         Held.attackMultiplier(ctx, user, target, move, moveType, effectiveness, events as Held.HeldEvent[]) *
@@ -4295,6 +4322,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     announce(user, 'twin-maw', events);
     abilityHurt(ctx, target, Math.max(1, Math.floor(dealt * 0.25)), events);
   }
+  if (landed > 0 && ctx.moments) {
+    spendMomentBoost(ctx, user, moveType);
+    // Toxic Blood: a contact hit on the Pokémon poisons the attacker.
+    if (contact && user.mon.hp > 0 && momentContactPoison(ctx, target) && !user.mon.status && canGetStatus(ctx, target, user, 'psn')) tryInflictStatus(ctx, target, user, 'psn', undefined, events, false);
+  }
   if (landed > 0) afterHitAbilities(ctx, user, target, move, moveType, contact, anyCrit, events);
 }
 
@@ -4325,7 +4357,7 @@ function elementalReaction(ctx: BattleContext, user: Combatant, target: Combatan
 
 /** Makes the target flinch, unless Inner Focus stops it or it is Dynamaxed. */
 function flinch(ctx: BattleContext, user: Combatant, target: Combatant): void {
-  if (targetAbility(ctx, user, target) !== 'inner-focus' && !target.mon.dynamaxed) target.flinched = true;
+  if (targetAbility(ctx, user, target) !== 'inner-focus' && !target.mon.dynamaxed && !momentNoFlinch(ctx, target)) target.flinched = true;
 }
 
 /**
@@ -4753,7 +4785,7 @@ function disrupt(ctx: BattleContext, user: Combatant, target: Combatant, kind: N
       target.vol.torment = true;
       break;
     case 'taunt':
-      if (target.vol.taunt > 0) return fail();
+      if (target.vol.taunt > 0 || variantBlocksMind(ctx.battle.extra.variants, target.mon.uid)) return fail();
       target.vol.taunt = 3;
       if (Held.triggerOnce(ctx, target, 'mentalHerb', events as Held.HeldEvent[])) {
         target.vol.taunt = 0;
@@ -4813,6 +4845,11 @@ function endTurnMon(ctx: BattleContext, c: Combatant, foe: Combatant, events: Ba
     if (c.vol.nightmare && c.mon.status?.id !== 'slp') c.vol.nightmare = false;
     if (c.vol.nightmare) abilityHurt(ctx, c, Math.max(1, Math.floor(max / 4)), events);
     if (c.vol.cursed) abilityHurt(ctx, c, Math.max(1, Math.floor(max / 4)), events);
+    const overclock = variantEndTurnStages(ctx.battle.extra.variants, c.mon.uid);
+    if (overclock.message) {
+      events.push({ type: 'raid', tone: 'info', text: overclock.message });
+      for (const [stat, n] of Object.entries(overclock.stages) as [BoostStat, number][]) c.stages[stat] = Math.max(-6, c.stages[stat] + n);
+    }
     const variantLoss = variantEndTurnLoss(ctx.battle.extra.variants, c.mon.uid, max);
     if (variantLoss.loss > 0) {
       if (variantLoss.message) events.push({ type: 'raid', tone: 'info', text: variantLoss.message });
@@ -5363,7 +5400,7 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
     return;
   }
   if (fx.attract) {
-    if (target.vol.infatuated || !oppositeGender(content, user.mon, target.mon) || abilityIn(ctx, target) === 'oblivious' || Held.statusBlocked(ctx, target, 'infatuation')) {
+    if (target.vol.infatuated || variantBlocksMind(ctx.battle.extra.variants, target.mon.uid) || !oppositeGender(content, user.mon, target.mon) || abilityIn(ctx, target) === 'oblivious' || Held.statusBlocked(ctx, target, 'infatuation')) {
       if (abilityIn(ctx, target) === 'oblivious') announce(target, 'oblivious', events);
       return void events.push({ type: 'fail', side: user.side });
     }
@@ -6047,6 +6084,10 @@ function changeStage(ctx: BattleContext, user: Combatant, recipient: Combatant, 
  * change and Contrary reverses it.
  */
 function applyStageChange(ctx: BattleContext, c: Combatant, stat: BoostStat, stages: number, events: BattleEvent[], source?: Combatant): boolean {
+  if (variantBlocksStage(ctx.battle.extra.variants, c.mon.uid, stages, Boolean(source && source.side !== c.side))) {
+    events.push({ type: 'raid', tone: 'info', text: SPIRITLESS_MESSAGE });
+    return false;
+  }
   const ability = source ? targetAbility(ctx, source, c) : abilityIn(ctx, c);
   if (source && stages < 0 && source.side !== c.side && Held.hasHook(ctx, c.mon, c.side, 'clearAmulet')) {
     events.push({ type: 'held', side: c.side, itemId: 'clear-amulet', what: 'guard' });
@@ -6379,6 +6420,8 @@ function recordFaints(ctx: BattleContext, player: Combatant, enemy: Combatant, e
 function settleFaints(ctx: BattleContext, events: BattleEvent[]): void {
   const { battle } = ctx;
   const enemy = currentEnemy(battle);
+  // Colossus: whatever hurt it (recoil, poison...), it cannot fall while a seal remains.
+  if (battle.colossus && enemy.hp <= 0 && battle.colossus.seals.some((s) => !s.broken)) enemy.hp = 1;
   if (enemy.hp <= 0) {
     const next = battle.enemyTeam.findIndex((m, i) => i > battle.enemyIndex && m.hp > 0);
     if (next < 0) {

@@ -5,12 +5,7 @@
 
 import { z } from 'zod';
 
-// Local copy of the FNV-1a string hash (core/story/moments.ts): importing that file here would loop through state.ts.
-function fnv1a(text: string): number {
-  let h = 0x811c9dc5;
-  for (let i = 0; i < text.length; i++) h = Math.imul(h ^ text.charCodeAt(i), 0x01000193);
-  return h >>> 0;
-}
+import { fnv1a } from './hash';
 
 export const TRACK_MAX = 5;
 

@@ -32,7 +32,8 @@ import { armFeat, featCharged } from '../core/story2/feats';
 import { signatureDisplay } from '../core/story2/signature';
 import { introForBattle, introText, trainerIntro } from '../core/story2/cutscene';
 import { forcedMoveId, forcedMoveIndex, itemProblem, switchProblem, telegraphedAttack, type PlayerAction, type Side, type SlotCommand } from '../core/battle/engine';
-import { ALLY_AIMED, doublesSwitchProblem, indexAt, monAt, needsTarget, primarySpot, volAt } from '../core/battle/doubles';
+import { doublesSwitchProblem, indexAt, monAt, needsTarget, primarySpot } from '../core/battle/doubles';
+import { commandPlan, targetChoices } from '../core/battle/fieldMenu';
 /** This screen draws double battles: spot 0 left, 1 right (triple battles get their own layout in Beta 0.6 T2). */
 type Spot = 0 | 1;
 import { canDynamax, maxMoveOptions, megaOption, ownedZCrystal, permanentForm, stoneForms, teraOption, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
@@ -374,6 +375,12 @@ export class BattleScene extends Phaser.Scene {
     const battle = run.battle!;
     this.history = [];
     this.historyView = null;
+    // Colossus (Beta 0.6): the Blueprint plate sits beside the fight and reads the seals from the battle state.
+    if (battle.colossus) {
+      this.scene.launch('ColossusPlate');
+      this.scene.bringToTop('ColossusPlate');
+      this.events.once('shutdown', () => this.scene.stop('ColossusPlate'));
+    }
     this.startCameraWatchdog();
     this.input.keyboard?.on('keydown-H', () => this.toggleHistory());
     this.input.keyboard?.on('keydown-P', () => {
@@ -2592,26 +2599,22 @@ export class BattleScene extends Phaser.Scene {
     else this.showRootMenu();
   }
 
-  /** Double battles: asks for the command of the Pokémon in `spot` (or fills it in), then the next. */
+  /** Double battles: asks for the command of the Pokémon in `spot` (or fills it in), then the next (core/battle/fieldMenu.ts: commandPlan). */
   private promptSpot(spot: number): void {
     const battle = this.run.battle!;
-    if (spot > 1) {
+    const step = commandPlan({ battle, party: this.run.party })[spot];
+    if (!step) {
       void this.act({ kind: 'double', commands: this.commands });
       return;
     }
-    const at = spot as Spot;
-    const view = { battle, party: this.run.party };
-    const mon = monAt(view, 'player', at);
-    const forced = forcedMoveId(volAt(view, 'player', at) ?? undefined);
-    const forcedIndex = forced && mon ? mon.moves.findIndex((m) => m.id === forced) : -1;
-    if (!mon || mon.hp <= 0 || battle.doubles?.commanding.includes(mon.uid)) {
-      this.commands[at] = null;
+    if (step.kind === 'skip') {
+      this.commands[spot] = null;
       this.promptSpot(spot + 1);
-    } else if (forcedIndex >= 0) {
-      this.commands[at] = { action: { kind: 'move', index: forcedIndex } };
+    } else if (step.kind === 'forced') {
+      this.commands[spot] = { action: { kind: 'move', index: step.index } };
       this.promptSpot(spot + 1);
     } else {
-      this.cmdSpot = at;
+      this.cmdSpot = spot as Spot;
       this.showRootMenu();
     }
   }
@@ -2630,17 +2633,12 @@ export class BattleScene extends Phaser.Scene {
   private openTargetPicker(action: Exclude<PlayerAction, { kind: 'double' }>, move: Move): void {
     const battle = this.run.battle!;
     const view = { battle, party: this.run.party };
-    const choices: { label: string; target: NonNullable<SlotCommand['target']>; tint: number }[] = [];
-    // Smart-target arrow (ideas W1): the foe this move hits hardest by type is marked.
-    const content0 = services().session.content;
-    const eff = (foe: PokemonInstance): number => (move.power ? typeEffectiveness(content0.typeChart, move.type, getSpecies(content0, foe.speciesId).types) : 0);
-    const foes = ([0, 1] as const).map((spot) => ({ spot, foe: monAt(view, 'enemy', spot) })).filter((f): f is { spot: 0 | 1; foe: PokemonInstance } => !!f.foe && f.foe.hp > 0 && !battle.doubles!.commanding.includes(f.foe.uid));
-    const best = foes.length > 1 && move.power ? foes.reduce((a, b) => (eff(b.foe) > eff(a.foe) ? b : a)) : null;
-    const worth = best && eff(best.foe) > Math.min(...foes.map((f) => eff(f.foe)));
-    for (const { spot, foe } of foes) choices.push({ label: `${worth && best.spot === spot ? '▶ ' : ''}${this.speciesName(foe)}${worth && best.spot === spot ? ' (best)' : ''}`, target: { side: 'enemy', spot }, tint: ROLE_RIMS.trainer });
-    const partnerSpot: Spot = this.cmdSpot === 0 ? 1 : 0;
-    const partner = monAt(view, 'player', partnerSpot);
-    if (partner && partner.hp > 0 && ALLY_AIMED.has(move.id)) choices.push({ label: `${this.speciesName(partner)} (ally)`, target: { side: 'player', spot: partnerSpot }, tint: AERO.sky });
+    // Foes in reach and partners for ally moves, with the smart-target arrow (ideas W1) on the foe this move hits hardest by type.
+    const choices = targetChoices(view, services().session.content, this.cmdSpot, move).map((c) => ({
+      label: c.ally ? `${this.speciesName(c.mon)} (ally)` : `${c.best ? '▶ ' : ''}${this.speciesName(c.mon)}${c.best ? ' (best)' : ''}`,
+      target: c.target,
+      tint: c.ally ? AERO.sky : ROLE_RIMS.trainer,
+    }));
     if (choices.length <= 1) {
       this.submit(action, choices[0]?.target);
       return;
@@ -4086,8 +4084,8 @@ export class BattleScene extends Phaser.Scene {
         case 'pmoment': {
           // A revived Pokémon stands back up on the field (the full-screen scene, if any, has already played).
           const live = this.findLive(e.side, e.uid) ?? mon;
-          if (e.trigger === 'start' || e.trigger === 'enter') {
-            // A small edge at battle start or switch-in: only the bars need refreshing (HP, status).
+          if (e.trigger !== 'lethal' && e.trigger !== 'runEnd') {
+            // A small edge (battle start, switch-in, low HP, a KO or a hit taken): only the bars need refreshing (HP, status).
             const fresh = this.findLive('player', e.uid);
             if (fresh && this.shown.player.uid === fresh.uid) {
               this.shown.player.hp = fresh.hp;
