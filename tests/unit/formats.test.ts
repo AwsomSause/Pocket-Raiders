@@ -271,6 +271,12 @@ describe('Siege Map', () => {
     startFormat('siege', ctxOf(run2));
     expect(st(run2)).toMatchObject({ 'north-gate': 'held', 'east-gate': 'held', 'south-gate': 'held', 'west-gate': 'held' });
   });
+  it('reads the flags that Kanto run events write (ev:rocket-wire, ev:rocket-surge-down)', () => {
+    const run = mk('sg-ev');
+    withRaids(run, {}, { 'ev:rocket-wire': 1, 'ev:rocket-surge-down': 1 });
+    startFormat('siege', ctxOf(run));
+    expect(st(run)).toMatchObject({ 'east-gate': 'held', 'south-gate': 'held', 'west-gate': 'contested' });
+  });
 
   it('a Held gate is a free entry and writes the lost list; a lost West Gate makes the Breather heal 35%', () => {
     const run = mk('sg3');

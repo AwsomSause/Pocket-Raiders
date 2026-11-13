@@ -45,7 +45,7 @@ describe('Galar events spawn on the map', () => {
   };
   it('turn up in Galar and never elsewhere', () => {
     let inGalar = 0;
-    for (let i = 0; i < 80; i++) {
+    for (let i = 0; i < 240; i++) {
       inGalar += seen('galar', `G${i}`).filter((id) => galarIds.has(id)).length;
       expect(seen('kanto', `G${i}`).filter((id) => id.startsWith('galar-'))).toEqual([]);
     }

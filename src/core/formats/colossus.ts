@@ -23,7 +23,8 @@ export interface ColossusState {
   result: ColossusResult | null;
 }
 
-const flag = (run: FormatCtx['run'], key: string): boolean => Boolean(run.story.flags[key]);
+/** A Rocket flag counts when a format wrote it (`rocket.x.wire`) or a Kanto run event did (`ev:rocket-wire`). */
+const flag = (run: FormatCtx['run'], key: string): boolean => Boolean(run.story.flags[key] ?? run.story.flags[`ev:${key.replace('rocket.x.', 'rocket-')}`]);
 
 /** The M2 fight's seals, timer and bar size, from the balance numbers and what the run has earned. */
 export function m2Config({ content, run }: FormatCtx): ColossusConfig {
