@@ -29,6 +29,7 @@ export function canonEventFor(content: Content, spaceId: string, slot: string) {
 /** The interlude slot that sits before a stage (interlude-3 = Lavender, between Stage 3 and Stage 4), or null when this stage has none. */
 export function canonInterludeOf(run: RunState): string | null {
   if (!run.stage || run.stage.kind !== 'stage') return null;
+  if (run.stage.index === 0) return null; // interlude-0 (Viridian) is placed with Stage 1 by canonSlotOf
   const slot = `interlude-${run.stage.index}`;
   return canonKanto.slots.some((s) => s.slot === slot) ? slot : null;
 }

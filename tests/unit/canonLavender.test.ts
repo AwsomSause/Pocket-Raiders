@@ -40,9 +40,9 @@ describe('Lavender canon: the event graph', () => {
 });
 
 describe('Lavender in a run (the interlude between Stage 3 and Stage 4)', () => {
-  it('Stage 4 is the stage that opens interlude-3; no other early stage does', () => {
+  it('Stage 4 is the stage that opens interlude-3; Stage 1 leaves interlude-0 to the Viridian code', () => {
     const run = begin('LV1');
-    expect(canonInterludeOf(run)).toBe('interlude-0');
+    expect(canonInterludeOf(run)).toBeNull();
     run.stage!.index = 3;
     expect(canonInterludeOf(run)).toBe('interlude-3');
     run.stage!.index = 4;
