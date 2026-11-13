@@ -26,7 +26,7 @@ Limits: Race, Team-Up and Ambush are text only (no first-pick reward, partner or
 
 - **Friend spar** ("A Friendly Spar", event `friend-spar`): once your Friend exists, an optional event offers a 3-Pokémon match using the Friend's own team (by personality), at 2 levels under you. It uses the Pseudo Stage fight rules: a loss heals you partway and the run goes on, there is no money or item prize, and nothing changes Lead or pity. New event condition `friendHere`.
 
-Limits: the Friend's spar team is a generic Ace Trainer team (the Friend has no fixed team yet) and is named "Your Friend". Extended-mode cap (6) is not read here; Standard is used.
+Limits: see the next section for the Friend's team and the Extended cap.
 
 ## Added: the Friend's real team and Extended cap
 - The Friend's team follows their personality (pack archetypes hotshot, prodigy, friendly, bitter, scholar, heir, lone wolf, mirror; three base Pokémon each, `src/data/friendTeams.json`). The spar fights with it, and the finale partner is its first Pokémon.
