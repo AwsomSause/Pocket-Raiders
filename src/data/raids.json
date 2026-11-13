@@ -2443,6 +2443,72 @@
         "joinChance": 0
       },
       "special": "canon"
+    },
+    {
+      "id": "ss-rocket-m2",
+      "name": "M2 · The Roof",
+      "tier": 6,
+      "blurb": "Project M2 (XD002), kneeling on the Silph helipad in grey armor cabled to a generator. The helicopter lifts it away when the timer runs out. It cannot be caught.",
+      "species": [
+        "mewtwo"
+      ],
+      "levelBonus": 4,
+      "hpBoostPercent": 300,
+      "entryCost": 0,
+      "shield": {
+        "at": [
+          0.75,
+          0.5,
+          0.25
+        ],
+        "points": 0.15
+      },
+      "phases": [
+        {
+          "atHp": 0.75,
+          "text": "The right shoulder armor falls away. Mind Vault is gone from the cage."
+        },
+        {
+          "atHp": 0.5,
+          "text": "The left shoulder armor splits. Null Pulse leaks out of the seam.",
+          "boost": {
+            "spa": 1
+          }
+        },
+        {
+          "atHp": 0.25,
+          "text": "The chest plate drops. Only the crown still holds M2 to the order.",
+          "boost": {
+            "spe": 1
+          },
+          "clearPlayerStages": true
+        }
+      ],
+      "telegraph": {
+        "everyTurns": 3,
+        "boost": 1.5,
+        "text": "M2 draws power from the generator!",
+        "interruptedBy": [
+          "slp",
+          "par",
+          "frz"
+        ]
+      },
+      "extraActions": {
+        "belowHp": 0.3,
+        "max": 2
+      },
+      "timerTurns": 10,
+      "kind": "wild",
+      "extraMoves": [],
+      "modifiers": {},
+      "rewards": {
+        "moneyPerLevel": 120,
+        "items": [],
+        "draftExtra": 0,
+        "joinChance": 0
+      },
+      "special": "canon"
     }
   ],
   "denTriggers": [

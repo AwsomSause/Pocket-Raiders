@@ -110,7 +110,7 @@ describe('noteBattle (a normal Kanto run fills the tabs)', () => {
   });
 
   it('notes a Named Shadow on the foe side at its hints, and a Colossus Apex', () => {
-    const r = withBattle('fn-b2', { enemyTeam: [{ ...foe('aerodactyl'), shadow: { heart: 60, named: 'ss.rocket.amberjack', hints: 2 } }], extra: { variants: {} }, colossus: { id: 'ss.rocket.m2' } });
+    const r = withBattle('fn-b2', { enemyTeam: [{ ...foe('aerodactyl'), shadow: { heart: 60, named: 'ss.rocket.amberjack', hints: 2 } }], extra: { variants: {} }, raid: { id: 'ss-rocket-m2' } });
     noteBattle(content, r);
     expect(r.expansion?.fieldNotes?.shadow).toEqual({ 'ss.rocket.amberjack': 2, 'ss.rocket.m2': 1 });
   });

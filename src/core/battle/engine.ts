@@ -16,7 +16,6 @@
 // after a hit (Static, Rough Skin), at the end of the turn (Speed Boost) and
 // when switching out (Regenerator).
 
-import { colossusAbsorb, colossusEndOfTurn } from './colossus';
 import { foresightBegin } from './foresight';
 import { CARE } from '../care/mods';
 import { shadowDamageMultiplier } from '../shadow';
@@ -1040,12 +1039,6 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   battle.turn += 1;
   eventRuleEnd(battle, events, ctx.party, ctx.content);
   if (raidTimeout && !battle.outcome) battle.outcome = 'lose';
-  // Colossus (Beta 0.6): broken seals take their moves, the timer ticks, and at zero the Apex escapes.
-  if (battle.colossus && !battle.outcome) {
-    const co = colossusEndOfTurn(ctx.content, battle);
-    for (const text of co.notes) events.push({ type: 'raid', tone: 'warn', text });
-    if (co.timeout) battle.outcome = 'lose';
-  }
   // A narrative fight that drags on ends as the story loss (the rival cannot be beaten, so it must end).
   if (battle.narrative && !battle.outcome && battle.turn > battle.narrative.maxTurns) battle.outcome = 'lose';
   applyHype(ctx, events);
@@ -2678,8 +2671,6 @@ function takeHp(
       chargedLanded = raid.charging;
     }
   }
-  // Colossus (Beta 0.6): the armor seals' shield bars soak every hit; nothing reaches its HP while a seal remains.
-  if (ctx.battle.colossus && c.side === 'enemy') amount = colossusAbsorb(ctx.battle, amount);
   amount = guardAmount(ctx, c, amount);
   let lost = Math.min(Math.max(0, amount), c.mon.hp);
   if (c.side === 'enemy' && lost > 0 && ctx.battle.raid && ctx.battle.raid.minionUid !== c.mon.uid) {
@@ -6623,8 +6614,6 @@ function settleFaints(ctx: BattleContext, events: BattleEvent[]): void {
       enemy.hp = 0;
     }
   }
-  // Colossus: whatever hurt it (recoil, poison...), it cannot fall while a seal remains.
-  if (battle.colossus && enemy.hp <= 0 && battle.colossus.seals.some((s) => !s.broken)) enemy.hp = 1;
   if (enemy.hp <= 0) {
     const next = battle.enemyTeam.findIndex((m, i) => i > battle.enemyIndex && m.hp > 0);
     if (next < 0) {
