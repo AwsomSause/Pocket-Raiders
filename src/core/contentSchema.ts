@@ -2976,6 +2976,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** `who` lead hits only the first Pokémon able to fight; `except` spares Pokémon of these types (Beta 0.6 biome hazards). */
   z.object({ kind: z.literal('damage'), share: z.number().min(0).max(1), who: z.enum(['party', 'lead']).default('party'), except: z.array(TypeNameSchema).max(4).default([]) }),
   z.object({ kind: z.literal('cure') }),
+  /** Restores every move's PP for the whole party (Erika's tea). */
+  z.object({ kind: z.literal('restorePp') }),
   z.object({ kind: z.literal('status'), status: z.enum(['poison', 'burn', 'paralysis', 'sleep']), who: z.enum(['party', 'lead']).default('party'), except: z.array(TypeNameSchema).max(4).default([]) }),
   z.object({ kind: z.literal('friendship'), amount: z.number().int(), who: z.enum(['lead', 'party']).default('party') }),
   z.object({ kind: z.literal('attribute'), key: AttributeKeySchema, amount: z.number().int() }),

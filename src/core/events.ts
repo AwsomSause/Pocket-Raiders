@@ -53,7 +53,7 @@ import { assignEvilVariants, holdsMarnieCard } from './expansion/variantAssign';
 import { changeAid, changeCrisis, crisisAid, crisisEventIds, crisisLevel, setTournament, tournamentEventId, tournamentRound } from './story/crisis';
 import { activePerks, hasPerk, perkItem, perksOf, spendUse, stageKey } from './mapItems';
 import { scavengerBonus } from './bank';
-import { addLevels, calcStats, maxHp } from './pokemon';
+import { addLevels, calcStats, maxHp, maxPp } from './pokemon';
 import { count, countShiny, discover } from './progress';
 import { eggStatus, eggTier, layEgg, warmEggs } from './eggs';
 import { makeShadow, rollShadowHeart } from './shadow';
@@ -885,6 +885,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return 'the day is celebrated';
     case 'damage':
       return `${e.who === 'lead' ? 'lead' : 'party'} loses ${Math.round(e.share * 100)}% HP${e.except.length ? ` (not ${e.except.join('/')} types)` : ''}`;
+    case 'restorePp':
+      return 'restore PP';
     case 'cure':
       return 'cure status';
     case 'status':
@@ -1108,6 +1110,9 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       for (const m of hazardTargets(content, run, e)) m.hp = Math.max(1, m.hp - Math.floor(maxHp(content, m) * e.share));
       return effectWords(content, e);
     }
+    case 'restorePp':
+      for (const m of run.party) for (const slot of m.moves) slot.pp = maxPp(content, slot);
+      return effectWords(content, e);
     case 'cure':
       for (const m of run.party) m.status = null;
       return effectWords(content, e);

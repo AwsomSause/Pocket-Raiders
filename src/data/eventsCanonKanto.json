@@ -4119,6 +4119,2979 @@
     }
    ],
    "canon": "cs.kanto.cerulean.burglary"
+  },
+  {
+   "id": "cs-kanto-celadon-mart",
+   "name": "Celadon Department Store",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Six floors of glass and escalators. A directory by the door lists what each one sells.",
+   "choices": [
+    {
+     "label": "Service counter",
+     "success": {
+      "text": "You take the escalator to the service counter.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-f1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trainer's Market",
+     "success": {
+      "text": "Shelves of potions and Poké Balls.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-f2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Counter",
+     "success": {
+      "text": "A clerk is restocking the TM case.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-f3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "More",
+     "success": {
+      "text": "You look further along.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-p2"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.celadon.mart"
+  },
+  {
+   "id": "cs-kanto-celadon-mart-p2",
+   "name": "Celadon Department Store",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Six floors of glass and escalators. A directory by the door lists what each one sells.",
+   "choices": [
+    {
+     "label": "Wise Man",
+     "success": {
+      "text": "An old man sits among boxes of held items.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-f4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Evolution Stones",
+     "success": {
+      "text": "Stones glitter under lamps.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-f5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Doll Floor",
+     "success": {
+      "text": "A whole floor of Poké Dolls.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-f6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "More",
+     "success": {
+      "text": "You look further along.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-p3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-p3",
+   "name": "Celadon Department Store",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Six floors of glass and escalators. A directory by the door lists what each one sells.",
+   "choices": [
+    {
+     "label": "Rooftop",
+     "success": {
+      "text": "Vending machines hum on the roof.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-f7"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You pass on the shopping.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-f1",
+   "name": "Service Counter",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "A nurse smiles from behind the counter.",
+   "choices": [
+    {
+     "label": "Full rest for the team (₽150)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "Everyone is healed, cured and topped up.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Antidotes and PP tonic (₽100)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "Status cleared and PP restored.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "restorePp"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You head back out.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-f2",
+   "name": "Trainer's Market",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Potions and Poké Balls, sold by the handful.",
+   "choices": [
+    {
+     "label": "3 Potions (₽540)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 540
+      }
+     ],
+     "success": {
+      "text": "Three Potions go in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -540
+       },
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "2 Super Potions (₽1300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1300
+      }
+     ],
+     "success": {
+      "text": "Two Super Potions.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1300
+       },
+       {
+        "kind": "item",
+        "id": "super-potion",
+        "count": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "5 Poké Balls (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "Five Poké Balls.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You head back out.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-f3",
+   "name": "TM Counter",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Which shelf is stocked today depends on the delivery.",
+   "choices": [
+    {
+     "label": "Browse the case",
+     "success": {
+      "text": "The clerk pulls out today's shelf.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-celadon-mart-tm-a",
+         "cs-kanto-celadon-mart-tm-b",
+         "cs-kanto-celadon-mart-tm-c",
+         "cs-kanto-celadon-mart-tm-d"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You head back out.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-tm-a",
+   "name": "TM Counter: Today's Shelf",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Five TMs, ₽900 each. Take one.",
+   "choices": [
+    {
+     "label": "TM (Fire) (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A Fire TM goes in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "tm-fire"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM (Water) (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A Water TM goes in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "tm-water"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM (Grass) (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A Grass TM goes in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "tm-grass"
+       }
+      ]
+     }
+    },
+    {
+     "label": "More",
+     "success": {
+      "text": "You look further along.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-tm-a-p2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-tm-a-p2",
+   "name": "TM Counter: Today's Shelf",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Five TMs, ₽900 each. Take one.",
+   "choices": [
+    {
+     "label": "TM (Electric) (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A Electric TM goes in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "tm-electric"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM (Psychic) (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A Psychic TM goes in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "tm-psychic"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You head back out.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-tm-b",
+   "name": "TM Counter: Today's Shelf",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Five TMs, ₽900 each. Take one.",
+   "choices": [
+    {
+     "label": "TM (Normal) (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A Normal TM goes in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "tm-normal"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM (Fighting) (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A Fighting TM goes in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "tm-fighting"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM (Flying) (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A Flying TM goes in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "tm-flying"
+       }
+      ]
+     }
+    },
+    {
+     "label": "More",
+     "success": {
+      "text": "You look further along.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-tm-b-p2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-tm-b-p2",
+   "name": "TM Counter: Today's Shelf",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Five TMs, ₽900 each. Take one.",
+   "choices": [
+    {
+     "label": "TM (Poison) (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A Poison TM goes in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "tm-poison"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM (Ground) (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A Ground TM goes in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "tm-ground"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You head back out.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-tm-c",
+   "name": "TM Counter: Today's Shelf",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Five TMs, ₽900 each. Take one.",
+   "choices": [
+    {
+     "label": "TM (Rock) (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A Rock TM goes in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "tm-rock"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM (Bug) (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A Bug TM goes in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "tm-bug"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM (Ghost) (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A Ghost TM goes in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "tm-ghost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "More",
+     "success": {
+      "text": "You look further along.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-tm-c-p2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-tm-c-p2",
+   "name": "TM Counter: Today's Shelf",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Five TMs, ₽900 each. Take one.",
+   "choices": [
+    {
+     "label": "TM (Steel) (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A Steel TM goes in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "tm-steel"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM (Ice) (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A Ice TM goes in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "tm-ice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You head back out.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-tm-d",
+   "name": "TM Counter: Today's Shelf",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Five TMs, ₽900 each. Take one.",
+   "choices": [
+    {
+     "label": "TM (Dragon) (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A Dragon TM goes in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "tm-dragon"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM (Dark) (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A Dark TM goes in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "tm-dark"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM (Fairy) (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A Fairy TM goes in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "tm-fairy"
+       }
+      ]
+     }
+    },
+    {
+     "label": "More",
+     "success": {
+      "text": "You look further along.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-tm-d-p2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-tm-d-p2",
+   "name": "TM Counter: Today's Shelf",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Five TMs, ₽900 each. Take one.",
+   "choices": [
+    {
+     "label": "TM (Fire) (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A Fire TM goes in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "tm-fire"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM (Water) (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A Water TM goes in your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "tm-water"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You head back out.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-f4",
+   "name": "Wise Man",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "\"A move hits harder with the right trinket,\" he says.",
+   "choices": [
+    {
+     "label": "Charcoal (₽1200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "Charcoal is yours.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "item",
+        "id": "charcoal"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Mystic Water (₽1200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "Mystic Water is yours.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "item",
+        "id": "mystic-water"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Magnet (₽1200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "Magnet is yours.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "item",
+        "id": "magnet"
+       }
+      ]
+     }
+    },
+    {
+     "label": "More",
+     "success": {
+      "text": "You look further along.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-f4-p2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-f4-p2",
+   "name": "Wise Man",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "\"A move hits harder with the right trinket,\" he says.",
+   "choices": [
+    {
+     "label": "Miracle Seed (₽1200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "Miracle Seed is yours.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "item",
+        "id": "miracle-seed"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Spell Tag (₽1200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "Spell Tag is yours.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "item",
+        "id": "spell-tag"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Black Belt (₽1200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "Black Belt is yours.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "item",
+        "id": "black-belt"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You head back out.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-f5",
+   "name": "Evolution Stones",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "One of each Kanto stone. Prices are steep.",
+   "choices": [
+    {
+     "label": "Fire Stone (₽4500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 4500
+      }
+     ],
+     "success": {
+      "text": "You pocket the Fire Stone.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -4500
+       },
+       {
+        "kind": "item",
+        "id": "fire-stone"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Water Stone (₽4500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 4500
+      }
+     ],
+     "success": {
+      "text": "You pocket the Water Stone.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -4500
+       },
+       {
+        "kind": "item",
+        "id": "water-stone"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thunder Stone (₽4500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 4500
+      }
+     ],
+     "success": {
+      "text": "You pocket the Thunder Stone.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -4500
+       },
+       {
+        "kind": "item",
+        "id": "thunder-stone"
+       }
+      ]
+     }
+    },
+    {
+     "label": "More",
+     "success": {
+      "text": "You look further along.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-f5-p2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-f5-p2",
+   "name": "Evolution Stones",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "One of each Kanto stone. Prices are steep.",
+   "choices": [
+    {
+     "label": "Leaf Stone (₽4500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 4500
+      }
+     ],
+     "success": {
+      "text": "You pocket the Leaf Stone.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -4500
+       },
+       {
+        "kind": "item",
+        "id": "leaf-stone"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Moon Stone (₽4500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 4500
+      }
+     ],
+     "success": {
+      "text": "You pocket the Moon Stone.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -4500
+       },
+       {
+        "kind": "item",
+        "id": "moon-stone"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You head back out.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-f6",
+   "name": "Doll Floor",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Poké Dolls in every size.",
+   "choices": [
+    {
+     "label": "Poké Doll (₽300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "A Poké Doll for your bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "item",
+        "id": "poke-doll"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You head back out.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-f7",
+   "name": "Rooftop Machines",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Three vending machines.",
+   "choices": [
+    {
+     "label": "Fresh Water (₽200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "Fresh Water: cold and fizzy. The team feels better.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "heal",
+        "share": 0.15
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Soda Pop (₽275)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 275
+      }
+     ],
+     "success": {
+      "text": "Soda Pop: cold and fizzy. The team feels better.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -275
+       },
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "attribute",
+        "key": "speed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lemonade (₽350)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 350
+      }
+     ],
+     "success": {
+      "text": "Lemonade: cold and fizzy. The team feels better.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -350
+       },
+       {
+        "kind": "heal",
+        "share": 0.35
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You head back out.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-gamecorner",
+   "name": "Game Corner",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Bells, lights and a wall of slot machines. A clerk points at the prize counter.",
+   "choices": [
+    {
+     "label": "Play the slots (₽100)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "check": "luck",
+     "success": {
+      "text": "Three sevens! The machine pays out.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 200
+       }
+      ]
+     },
+     "failure": {
+      "text": "Nothing. The coins are gone.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Play with your Amulet Coin (₽100)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      },
+      {
+       "kind": "item",
+       "id": "amulet-coin"
+      }
+     ],
+     "check": "luck",
+     "success": {
+      "text": "The Amulet Coin hums. Jackpot!",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     },
+     "failure": {
+      "text": "Even luck takes a night off.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Play the high-stakes machine (₽400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "check": "luck",
+     "success": {
+      "text": "The reels line up. A big payout!",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 800
+       }
+      ]
+     },
+     "failure": {
+      "text": "Cleaned out. The clerk hands you a Bad Luck Charm. Luck −1.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "attribute",
+        "key": "luck",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "More",
+     "success": {
+      "text": "You look further along.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-gamecorner-p2"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.celadon.gamecorner"
+  },
+  {
+   "id": "cs-kanto-celadon-gamecorner-p2",
+   "name": "Game Corner",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Bells, lights and a wall of slot machines. A clerk points at the prize counter.",
+   "choices": [
+    {
+     "label": "Prize counter",
+     "success": {
+      "text": "The clerk unlocks the case.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-celadon-prizes-a",
+         "cs-kanto-celadon-prizes-b"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Try the machine in the back",
+     "check": "intelligence",
+     "success": {
+      "text": "It never pays out. You pull the lever and a hidden door opens. A Rocket Grunt steps out.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rocket Grunt",
+       "size": 2,
+       "evil": "grunt",
+       "types": [
+        "poison",
+        "dark"
+       ],
+       "win": [
+        {
+         "kind": "evil",
+         "heat": -1
+        },
+        {
+         "kind": "attribute",
+         "key": "intelligence",
+         "amount": 1
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "It just eats your coins. Strange.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You walk away from the bells.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-prizes-a",
+   "name": "Prize Counter",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Five prizes, five tiers.",
+   "choices": [
+    {
+     "label": "Abra (₽500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "The clerk hands over a Abra.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "join",
+        "species": [
+         "abra"
+        ],
+        "levelBonus": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Clefairy (₽1000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "success": {
+      "text": "The clerk hands over a Clefairy.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1000
+       },
+       {
+        "kind": "join",
+        "species": [
+         "clefairy"
+        ],
+        "levelBonus": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Scyther (₽2000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2000
+      }
+     ],
+     "success": {
+      "text": "The clerk hands over a Scyther.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2000
+       },
+       {
+        "kind": "join",
+        "species": [
+         "scyther"
+        ],
+        "levelBonus": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "More",
+     "success": {
+      "text": "You look further along.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-prizes-a-p2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-prizes-a-p2",
+   "name": "Prize Counter",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Five prizes, five tiers.",
+   "choices": [
+    {
+     "label": "Porygon (₽3500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 3500
+      }
+     ],
+     "success": {
+      "text": "The clerk hands over a Porygon.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -3500
+       },
+       {
+        "kind": "join",
+        "species": [
+         "porygon"
+        ],
+        "levelBonus": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dratini (₽6000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 6000
+      }
+     ],
+     "success": {
+      "text": "The clerk hands over a Dratini.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -6000
+       },
+       {
+        "kind": "join",
+        "species": [
+         "dratini"
+        ],
+        "levelBonus": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You head back out.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-prizes-b",
+   "name": "Prize Counter",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Five prizes, five tiers.",
+   "choices": [
+    {
+     "label": "Abra (₽500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "The clerk hands over a Abra.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "join",
+        "species": [
+         "abra"
+        ],
+        "levelBonus": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Clefairy (₽1000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "success": {
+      "text": "The clerk hands over a Clefairy.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1000
+       },
+       {
+        "kind": "join",
+        "species": [
+         "clefairy"
+        ],
+        "levelBonus": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pinsir (₽2000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2000
+      }
+     ],
+     "success": {
+      "text": "The clerk hands over a Pinsir.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2000
+       },
+       {
+        "kind": "join",
+        "species": [
+         "pinsir"
+        ],
+        "levelBonus": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "More",
+     "success": {
+      "text": "You look further along.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-prizes-b-p2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-prizes-b-p2",
+   "name": "Prize Counter",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Five prizes, five tiers.",
+   "choices": [
+    {
+     "label": "Porygon (₽3500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 3500
+      }
+     ],
+     "success": {
+      "text": "The clerk hands over a Porygon.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -3500
+       },
+       {
+        "kind": "join",
+        "species": [
+         "porygon"
+        ],
+        "levelBonus": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dratini (₽6000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 6000
+      }
+     ],
+     "success": {
+      "text": "The clerk hands over a Dratini.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -6000
+       },
+       {
+        "kind": "join",
+        "species": [
+         "dratini"
+        ],
+        "levelBonus": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You head back out.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mansion",
+   "name": "Celadon Mansion",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "A tall house that turns out to be an office block. Four floors.",
+   "choices": [
+    {
+     "label": "Go in",
+     "success": {
+      "text": "The lobby is quiet. A woman holds a basket.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "xk-mansion-seen"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mansion-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You skip the mansion.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.celadon.mansion"
+  },
+  {
+   "id": "cs-kanto-celadon-mansion-1",
+   "name": "Mansion: Lobby",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "\"Someone left an Eevee in my care. Please take it.\"",
+   "choices": [
+    {
+     "label": "Take the Eevee",
+     "success": {
+      "text": "A tiny Eevee climbs into your arms.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "eevee"
+        ],
+        "levelBonus": -10
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mansion-2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mansion-2",
+   "name": "Mansion: Game Freak Room",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Developers hunch over glowing monitors. One looks up: \"Think you know your Pokémon?\"",
+   "choices": [
+    {
+     "label": "Take their quiz",
+     "check": "intelligence",
+     "success": {
+      "text": "Full marks! They hand you a Diploma.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "celadon-diploma",
+        "name": "Diploma",
+        "effects": [
+         {
+          "kind": "researchMultiplier",
+          "value": 1.1
+         }
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mansion-3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Not quite. Better luck upstairs.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mansion-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Skip the quiz",
+     "success": {
+      "text": "You climb on.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mansion-3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mansion-3",
+   "name": "Mansion: Rooftop",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "A quiet garden with a view over the city.",
+   "choices": [
+    {
+     "label": "Sit and watch the clouds",
+     "success": {
+      "text": "Your team relaxes together. Friendship grows.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 6,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mansion-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Head down the back stairs",
+     "success": {
+      "text": "A door marked staff only is ajar.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mansion-4"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mansion-4",
+   "name": "Mansion: The Secret",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "A map covered in red pins hangs on the wall: Team Rocket plans.",
+   "choices": [
+    {
+     "label": "Copy the plans and take the key",
+     "success": {
+      "text": "You memorise the plans and pocket a Mansion Key. Intelligence +2.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "xk-mansion-key"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You leave it alone.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-eevee",
+   "name": "Eeveelution Brothers",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Rainer, Sparky and Pyro argue in the park, each holding a stone.",
+   "choices": [
+    {
+     "label": "Step in",
+     "chance": 0.75,
+     "success": {
+      "text": "The three brothers turn to you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-eevee"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-eevee-3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A fourth brother jogs up with a Leaf Stone and an Ice Stone. Four stones now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-eevee"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-eevee-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You leave the park.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.celadon.eevee"
+  },
+  {
+   "id": "cs-kanto-celadon-eevee-3",
+   "name": "Three Stones",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Pick one. Only one.",
+   "choices": [
+    {
+     "label": "Take the Water Stone",
+     "success": {
+      "text": "You take it. Pyro is furious and wants a fight!",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Pyro",
+       "size": 1,
+       "team": [
+        "flareon"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "vaporeon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "water-stone"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take the Thunder Stone",
+     "success": {
+      "text": "You take it. Rainer is furious and wants a fight!",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rainer",
+       "size": 1,
+       "team": [
+        "vaporeon"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "jolteon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "thunder-stone"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take the Fire Stone",
+     "success": {
+      "text": "You take it. Sparky is furious and wants a fight!",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Sparky",
+       "size": 1,
+       "team": [
+        "jolteon"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "flareon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "fire-stone"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You back away from the argument.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-eevee-4",
+   "name": "Four Stones",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "The fourth brother adds two more stones. Still just one pick.",
+   "choices": [
+    {
+     "label": "Take the Water Stone",
+     "success": {
+      "text": "You take it. Pyro is furious and wants a fight!",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Pyro",
+       "size": 1,
+       "team": [
+        "flareon"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "vaporeon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "water-stone"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take the Thunder Stone",
+     "success": {
+      "text": "You take it. Rainer is furious and wants a fight!",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rainer",
+       "size": 1,
+       "team": [
+        "vaporeon"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "jolteon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "thunder-stone"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take the Fire Stone",
+     "success": {
+      "text": "You take it. Sparky is furious and wants a fight!",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Sparky",
+       "size": 1,
+       "team": [
+        "jolteon"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "flareon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "fire-stone"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "More",
+     "success": {
+      "text": "You look further along.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-eevee-4-p2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-eevee-4-p2",
+   "name": "Four Stones",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "The fourth brother adds two more stones. Still just one pick.",
+   "choices": [
+    {
+     "label": "Take the Leaf Stone",
+     "success": {
+      "text": "You take it. Sparky is furious and wants a fight!",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Sparky",
+       "size": 1,
+       "team": [
+        "jolteon"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "leafeon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "leaf-stone"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take the Ice Stone",
+     "success": {
+      "text": "You take it. Pyro is furious and wants a fight!",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Pyro",
+       "size": 1,
+       "team": [
+        "flareon"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "glaceon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "ice-stone"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You back away from the argument.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-tea",
+   "name": "Tea House & Gardens",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Erika pours tea in a garden of flowers. \"Sit. Rest.\"",
+   "choices": [
+    {
+     "label": "Erika's tea (₽150)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "Warm and sweet. Status cured and PP restored for the whole team.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "restorePp"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rest in the garden (₽300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "You nap among the flowers. Everyone is fully healed.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You thank Erika and go.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.celadon.tea"
+  },
+  {
+   "id": "cs-kanto-celadon-perfume",
+   "name": "Perfume Heist",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Gardener girls are carting off vats of Erika's perfume. Their boots look wrong for gardening.",
+   "choices": [
+    {
+     "label": "Unmask them",
+     "check": "intelligence",
+     "success": {
+      "text": "The clues add up: Rocket in disguise! They drop the act and attack.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Gardener Girls",
+       "size": 2,
+       "evil": "grunt",
+       "evilTeam": "rocket-remnants",
+       "win": [
+        {
+         "kind": "item",
+         "id": "perfume-vial"
+        },
+        {
+         "kind": "attribute",
+         "key": "charisma",
+         "amount": 2
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "You cannot prove anything. The girls vanish with their cart.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You look away. Not your business.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.celadon.perfume"
+  },
+  {
+   "id": "cs-kanto-celadon-rooftop",
+   "name": "Rooftop Vending",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b8f4e"
+   },
+   "intro": "Three drink machines on the roof, humming in the sun.",
+   "choices": [
+    {
+     "label": "Fresh Water (₽200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "Fresh Water: cold and fizzy. The team feels better.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "heal",
+        "share": 0.15
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Soda Pop (₽275)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 275
+      }
+     ],
+     "success": {
+      "text": "Soda Pop: cold and fizzy. The team feels better.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -275
+       },
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "attribute",
+        "key": "speed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lemonade (₽350)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 350
+      }
+     ],
+     "success": {
+      "text": "Lemonade: cold and fizzy. The team feels better.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -350
+       },
+       {
+        "kind": "heal",
+        "share": 0.35
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You head back out.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.celadon.rooftop"
   }
  ]
 }
