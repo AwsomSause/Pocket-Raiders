@@ -2277,7 +2277,7 @@ export const BalanceSchema = z.object({
     /** The highest level in the game (D14; at most 1000). */
     maxLevel: z.number().int().max(1000),
     /** Party-strength correction (encounters.ts withPartyStrength). */
-    partyStrength: z.object({ enabled: z.boolean(), grace: z.number().min(0), factor: z.number().min(0), maxBonus: z.number().int().min(0) }).default({ enabled: true, grace: 3, factor: 0.5, maxBonus: 4 }),
+    partyStrength: z.object({ enabled: z.boolean(), grace: z.number().min(0), factor: z.number().min(0), maxBonus: z.number().int().min(0), levelCeiling: z.number().int().min(0).default(2) }).default({ enabled: true, grace: 3, factor: 0.5, maxBonus: 4, levelCeiling: 2 }),
     /** Above level 100 each level costs this × (the cost of level 100) × level / 100 EXP (pokemon.ts xpForLevel). */
     highLevelXp: z.number().positive().default(0.4),
     trainerBonus: z.number().int().min(0),
