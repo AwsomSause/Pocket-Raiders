@@ -153,7 +153,7 @@ describe('Blackout', () => {
     expect(card.lines.join(' ')).toMatch(/lost: 1/);
   });
 
-  it('with the Triad, Sabrina is the third anchor, waits for the others, and the third fight has no Seal', () => {
+  it('with the Triad, Sabrina is the third anchor, waits for the others, and the third fight has no Seal but has her Foresight Tax', () => {
     const run = mk('bo3');
     startFormat('blackout', ctxOf(run), { triad: true });
     const opts = cardOf(ctxOf(run))!.options;
@@ -169,7 +169,7 @@ describe('Blackout', () => {
     expect(formatOver(ctxOf(run))).toBe(false);
     chooseOption(ctxOf(run), 'a3');
     expect(run.battle!.trainer!.name).toBe('Oracle Sabrina');
-    expect(run.battle!.eventRule).toBeUndefined();
+    expect(run.battle!.eventRule).toEqual({ foresight: true }); // no Seal, but her Foresight Tax
     battleEnded(ctxOf(run), true);
     expect(formatOver(ctxOf(run))).toBe(true);
   });
