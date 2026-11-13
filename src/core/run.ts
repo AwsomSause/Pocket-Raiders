@@ -26,6 +26,7 @@ import { markAssisted } from './tools/assisted';
 import { crossObstacle, placeDungeon, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
 import { wandererStageStart, wandererStep } from './wanderer';
 import { makeShadow, rollShadowHeart, soothePartyAfterBattle } from './shadow';
+import { leaveRegion, startGrandArc } from './grandArc';
 import { checkFlagKeys, checkLeadWinKey, SHADOW_SLOT_CAP, heavyShadowCount, shadowTierOf } from './shadow2';
 import { advanceShadowWorld, addFlag, gangNotes, gangRaidWon, liberatedHpDiscount, outbreakShadow, placeGangDen } from './shadowWorld/world';
 import { blissfulAfterBattle, blissfulAtRest } from './shadowWorld/blissful';
@@ -328,7 +329,7 @@ export interface NewRunOptions {
   /** Story Run: the player's name, pronouns and Look from the prologue (profile.story.protagonist). */
   protagonist?: { look: string; name: string; pronouns: string | PronounSet; backstory?: string };
   /** Beta 0.6: which expansion settings were on at run start (settings.expansion). Each flag is stored in `run.expansion` once and never changes. */
-  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean };
+  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; grandArc?: boolean };
 }
 
 export function createRun(content: Content, opts: NewRunOptions): RunState {
@@ -433,6 +434,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     const e = opts.expansion;
     const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}) };
     if (Object.keys(flags).length > 0) run.expansion = { ...run.expansion, ...flags };
+    if (e.grandArc) startGrandArc(run);
   }
   recordRunStarted(content, run);
   return run;
@@ -3587,6 +3589,9 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     regionCleared = currentRegion(content, run).id;
     run.regionsCleared.push(regionCleared);
     count(run, 'regionsCleared');
+    // Grand Arc: a liaison nobody beat in this region leaves with a sample (Stock step 1).
+    const liaisonNote = leaveRegion(run, regionCleared);
+    if (liaisonNote) shadowStages.push(liaisonNote);
     if (!run.log.charmUsedInRegion) count(run, 'regionsClearedNoCharm');
     if (run.log.starterUid && run.party.some((m) => m.uid === run.log.starterUid)) count(run, 'regionsClearedWithStarter');
     if (run.regionIndex + 1 >= run.regionOrder.length && !extendEndless(run)) run.victory = true;

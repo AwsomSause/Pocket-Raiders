@@ -5,6 +5,7 @@
 import { z } from 'zod';
 import { CanonStateSchema } from './canonSpaces';
 import { RescueStateSchema } from '../evil/rescueSchema';
+import { GrandArcStateSchema } from '../grandArc/schema';
 import { RivalOverhaulStateSchema } from '../rivals/overhaulSchema';
 
 /** F1: every expansion setting at its default (plan section 10). Lives in `settings.expansion` (settings v42). */
@@ -68,6 +69,8 @@ export const ExpansionRunSchema = z.object({
   rescue: RescueStateSchema.optional(),
   /** Canon Spaces (workstream 18): `kanto.*` flags, finished spaces and the town menus already rolled. No save-version bump: old runs have none. */
   canon: CanonStateSchema.optional(),
+  /** Grand Arc (E7): Data ROMs and the Stock track. Present only when the setting was on at run start. */
+  grandArc: GrandArcStateSchema.optional(),
   /** Runs that started with the stage-pacing setting on (B6). Set once at run start, never changed. */
   pacing: z.boolean().optional(),
   /** Runs with Evolution Encounters on (B9). */
