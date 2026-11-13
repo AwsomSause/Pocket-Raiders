@@ -5,12 +5,14 @@
 import { calcStats, maxPp } from '../pokemon';
 import { currentEnemy, freshStages, freshVolatile, type PokemonInstance } from '../state';
 import { clampStage } from './damage';
-import { momentKey, momentRoll, momentsFor, pokemonMoment, runClaimKey, type MomentEffect, type PokemonMoment } from '../moments/pokemonMoments';
+import { isStatusImmune } from './damage';
+import { momentKey, momentMatches, momentRoll, momentsFor, pokemonMoment, runClaimKey, type MomentEffect, type MomentTrigger, type PokemonMoment } from '../moments/pokemonMoments';
 import type { BattleContext, BattleEvent, Combatant } from './engine';
 
 export type PMomentEvent = Extract<BattleEvent, { type: 'pmoment' }>;
 
-const Claim = { cinematic: 'pm-cine' } as const;
+const Claim = { cinematic: 'pm-cine', start: 'pm-start' } as const;
+const FADE = 'pm-fade:';
 
 /** Applies a moment's effect numbers. Returns the HP the Pokémon is left with (it was already going to be at least 1). */
 function applyEffect(ctx: BattleContext, c: Combatant, fx: MomentEffect, m: PokemonMoment, turnKey: number): number {
@@ -22,12 +24,19 @@ function applyEffect(ctx: BattleContext, c: Combatant, fx: MomentEffect, m: Poke
     c.mon.status = null;
     c.vol.confusion = 0;
   }
-  for (const [stat, n] of Object.entries(fx.boost ?? {}) as [keyof typeof c.stages, number][]) c.stages[stat] = clampStage((c.stages[stat] ?? 0) + n);
+  // Own boosts; with `boostTurns` they are taken back after that many turns (a fade tag the end of turn reads).
+  const raise = (stat: keyof typeof c.stages, n: number): void => {
+    const before = c.stages[stat] ?? 0;
+    c.stages[stat] = clampStage(before + n);
+    const gained = c.stages[stat] - before;
+    if (fx.boostTurns && gained !== 0) ctx.battle.storyEffects.push(`${FADE}${c.mon.uid}:${ctx.battle.turn + fx.boostTurns - 1}:${stat}:${gained}`);
+  };
+  for (const [stat, n] of Object.entries(fx.boost ?? {}) as [keyof typeof c.stages, number][]) raise(stat, n);
   if (fx.boostBest) {
     const s = calcStats(content, c.mon);
-    const stat = s.spa > s.atk ? 'spa' : 'atk';
-    c.stages[stat] = clampStage((c.stages[stat] ?? 0) + fx.boostBest);
+    raise(s.spa > s.atk ? 'spa' : 'atk', fx.boostBest);
   }
+  if (fx.healNowPct && c.mon.hp > 0) c.mon.hp = Math.min(max, c.mon.hp + Math.floor((max * fx.healNowPct) / 100));
   if (fx.partyHealPct) {
     for (const p of ctx.party) {
       if (p.uid === c.mon.uid || p.hp <= 0) continue;
@@ -38,9 +47,9 @@ function applyEffect(ctx: BattleContext, c: Combatant, fx: MomentEffect, m: Poke
   if (fx.ppRestore) for (const slot of c.mon.moves) slot.pp = Math.min(maxPp(content, slot), slot.pp + fx.ppRestore);
   const foe = currentEnemy(ctx.battle);
   for (const [stat, n] of Object.entries(fx.foeStage ?? {}) as [keyof typeof ctx.battle.enemyStages, number][]) ctx.battle.enemyStages[stat] = clampStage((ctx.battle.enemyStages[stat] ?? 0) + n);
-  if (fx.foeConfuse && foe.hp > 0) ctx.battle.enemyVolatile.confusion = Math.max(ctx.battle.enemyVolatile.confusion, 3);
+  if (fx.foeConfuse && foe.hp > 0 && (!ctx.moments || momentRoll(ctx.moments.seed, `${m.id}:confuse`, c.mon.uid, turnKey, fx.foeConfuseChance / 100))) ctx.battle.enemyVolatile.confusion = Math.max(ctx.battle.enemyVolatile.confusion, 3);
   if (fx.foeHpPct && foe.hp > 0) foe.hp = Math.max(1, foe.hp - Math.floor((calcStats(content, foe).hp * fx.foeHpPct) / 100));
-  if (fx.foeStatus && foe.hp > 0 && !foe.status && ctx.moments && momentRoll(ctx.moments.seed, `${m.id}:status`, c.mon.uid, turnKey, fx.foeStatusChance / 100)) foe.status = { id: fx.foeStatus } as PokemonInstance['status'];
+  if (fx.foeStatus && foe.hp > 0 && !foe.status && !isStatusImmune(fx.foeStatus, content.species.get(foe.speciesId)?.types ?? []) && ctx.moments && momentRoll(ctx.moments.seed, `${m.id}:status`, c.mon.uid, turnKey, fx.foeStatusChance / 100)) foe.status = { id: fx.foeStatus } as PokemonInstance['status'];
   if (fx.guard) ctx.battle.storyEffects.push(`pm-guard:${c.mon.uid}:${ctx.battle.turn + fx.guard}`);
   return hp;
 }
@@ -56,7 +65,7 @@ function cinematicNow(ctx: BattleContext, tier: PokemonMoment['tier'], force = f
 }
 
 function eventFor(ctx: BattleContext, c: Combatant, m: PokemonMoment, hpAfter: number, cinematic: boolean): PMomentEvent {
-  return { type: 'pmoment', side: c.side, uid: c.mon.uid, speciesId: c.mon.speciesId, id: m.id, name: m.name, tier: m.tier, hpAfter, cinematic, scene: Boolean(m.scene) && cinematic };
+  return { type: 'pmoment', side: c.side, uid: c.mon.uid, speciesId: c.mon.speciesId, id: m.id, name: m.name, tier: m.tier, hpAfter, cinematic, scene: Boolean(m.scene) && cinematic, trigger: m.trigger };
 }
 
 /** Halves damage while a Dig-In style guard is up. */
@@ -113,6 +122,54 @@ export function tryRunEndMoment(ctx: BattleContext, events: BattleEvent[]): bool
   ctx.battle.playerVolatile = freshVolatile();
   ctx.battle.needsSwitch = false;
   ctx.battle.outcome = null;
-  events.push({ type: 'pmoment', side: 'player', uid: mon.uid, speciesId: mon.speciesId, id: m.id, name: m.name, tier: m.tier, hpAfter: mon.hp, cinematic: cinematicNow(ctx, 'landmark', true), scene: true });
+  events.push({ type: 'pmoment', side: 'player', uid: mon.uid, speciesId: mon.speciesId, id: m.id, name: m.name, tier: m.tier, hpAfter: mon.hp, cinematic: cinematicNow(ctx, 'landmark', true), scene: true, trigger: 'runEnd' });
   return true;
+}
+
+/** At most this many entry moments (battle start or switch-in) play for one Pokémon at once, most specific first. */
+const MAX_ENTRY_MOMENTS = 2;
+
+/**
+ * "Battle start" and "switch-in" moments: the Pokémon in front gets a small edge (or the foe a small setback). Each moment has
+ * its own limit and roll, spent before rolling so a reload cannot try again. Events are added to `events` in order.
+ */
+export function tryEntryMoments(ctx: BattleContext, c: Combatant, trigger: Extract<MomentTrigger, 'start' | 'enter'>, events: BattleEvent[]): void {
+  const hooks = ctx.moments;
+  if (!hooks || c.side !== 'player' || c.mon.hp <= 0) return;
+  const turnKey = ctx.battle.turn;
+  let played = 0;
+  for (const m of momentsFor(ctx.content, c.mon, trigger)) {
+    if (played >= MAX_ENTRY_MOMENTS) break;
+    if (!m.effect) continue;
+    if (m.requires && ctx.party.filter((p) => p.hp > 0 && momentMatches(ctx.content, m, p.speciesId)).length < m.requires.partyMatching) continue;
+    const key = momentKey(m, c.mon.uid);
+    if (m.limit === 'battle' ? ctx.battle.storyEffects.includes(key) : hooks.flags[m.limit === 'run' ? runClaimKey(m) : key] !== undefined) continue;
+    if (m.limit === 'battle') ctx.battle.storyEffects.push(key);
+    else hooks.flags[m.limit === 'run' ? runClaimKey(m) : key] = 1;
+    if (!momentRoll(hooks.seed, m.id, c.mon.uid, turnKey, m.chance)) continue;
+    applyEffect(ctx, c, m.effect, m, turnKey);
+    events.push(eventFor(ctx, c, m, c.mon.hp, cinematicNow(ctx, m.tier)));
+    played++;
+  }
+}
+
+/** Battle start: runs once per battle, before the first turn's moves. */
+export function tryStartMoments(ctx: BattleContext, c: Combatant, events: BattleEvent[]): void {
+  if (ctx.battle.storyEffects.includes(Claim.start)) return;
+  ctx.battle.storyEffects.push(Claim.start);
+  tryEntryMoments(ctx, c, 'start', events);
+}
+
+/** End of a turn: timed moment boosts that have run their turns are taken back. */
+export function fadeMomentBoosts(ctx: BattleContext): void {
+  const { battle } = ctx;
+  if (!battle.storyEffects.some((s) => s.startsWith(FADE))) return;
+  const active = ctx.party[battle.activeIndex];
+  battle.storyEffects = battle.storyEffects.filter((tag) => {
+    if (!tag.startsWith(FADE)) return true;
+    const [uid, until, stat, gained] = tag.slice(FADE.length).split(':') as [string, string, keyof typeof battle.playerStages, string];
+    if (battle.turn < Number(until)) return true;
+    if (active?.uid === uid) battle.playerStages[stat] = clampStage((battle.playerStages[stat] ?? 0) - Number(gained));
+    return false;
+  });
 }
