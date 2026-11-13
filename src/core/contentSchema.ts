@@ -2893,6 +2893,14 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
     ends: z.array(z.enum(['none', 'defeated', 'exposed', 'allied'])).optional(),
     stopped: z.number().int().min(0).optional(),
   }),
+  /** Beta 0.6 rival questlines: the featured rival's overhaul state (core/rivals/overhaul.ts): a feeling at least this (0 to 10), their Lead in a range (-3 to +3, rival ahead is positive), or a mark they hold. Never true without a rival. */
+  z.object({
+    kind: z.literal('rivalState'),
+    feeling: z.object({ key: z.enum(['friendship', 'respect', 'trust', 'rivalry', 'resentment', 'admiration']), atLeast: z.number().int().min(0).max(10) }).optional(),
+    leadAtLeast: z.number().int().min(-3).max(3).optional(),
+    leadAtMost: z.number().int().min(-3).max(3).optional(),
+    mark: z.string().optional(),
+  }),
   /** Permanent choices (spec §17): a choice made earlier this run (`pick`: that answer; `made: false`: not made yet). */
   z.object({ kind: z.literal('choice'), id: z.string().min(1), pick: z.string().optional(), made: z.boolean().default(true) }),
 ]);
@@ -3018,6 +3026,13 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('standWith'), action: z.enum(['join', 'rep', 'mercy', 'climaxWon', 'verdict']), change: z.string().optional(), noticed: z.boolean().default(false), verdict: z.enum(['rise', 'throne', 'turn']).optional(), /** With a verdict: what happens to your rival (a featured rival only). */ rival: z.enum(['release', 'handOver']).optional(), keepApexBound: z.boolean().optional() }),
   /** Shadow II: hands over a Named Shadow Pokémon (an `ss.*` id with a key in shadow2.json) at this level, through the usual caught choice. */
   z.object({ kind: z.literal('namedShadow'), id: z.string().regex(/^ss\.[a-z0-9-]+\.[a-z0-9-]+$/), level: z.number().int().min(1).max(500).default(20) }),
+  /** Beta 0.6 rival questlines: moves the featured rival's feelings (each kept in 0..10), their Lead (kept in -3..+3) and adds a mark they hold. Does nothing without a rival. */
+  z.object({
+    kind: z.literal('rivalChange'),
+    feelings: z.partialRecord(z.enum(['friendship', 'respect', 'trust', 'rivalry', 'resentment', 'admiration']), z.number().int().min(-10).max(10)).default({}),
+    lead: z.number().int().min(-3).max(3).default(0),
+    mark: z.string().optional(),
+  }),
   /** World-state callback (catalog 75): adds to a named story flag that later events can read. */
   z.object({ kind: z.literal('flag'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), amount: z.number().int().default(1) }),
   /** Living Rival: writes a line to the run's Chronicle / journal (a photo, a promise, a letter). */
