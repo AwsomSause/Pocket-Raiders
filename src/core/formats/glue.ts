@@ -7,3 +7,8 @@ import { currentFormat } from './store';
 export function pendingFormat(run: RunState): boolean {
   return run.phase === 'map' && currentFormat(run) !== null;
 }
+
+/** Which screen shows the running format: the Siege Map has its own picked screen, the rest use the plain one. */
+export function sceneForFormat(run: RunState): 'Siege' | 'Format' {
+  return currentFormat(run)?.id === 'siege' ? 'Siege' : 'Format';
+}

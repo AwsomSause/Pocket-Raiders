@@ -33,6 +33,8 @@ export interface FormatCard {
 
 export interface WideFormat<S> {
   id: FormatId;
+  /** False when the format cannot run for this input (a region it has no content for). Checked before `setup`. */
+  canStart?(ctx: FormatCtx, input?: unknown): boolean;
   /** Builds the starting state from the run. Never mutates the run. */
   setup(ctx: FormatCtx, input?: unknown): S;
   describe(state: S, ctx: FormatCtx): FormatCard;
