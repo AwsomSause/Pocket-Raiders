@@ -1317,7 +1317,7 @@ export function autoCommands(ctx: Pick<BattleContext, 'battle' | 'party' | 'cont
     const index = hasUsableMove(mon) ? mon.moves.findIndex((m) => m.pp > 0) : -1;
     // The first foe it can reach (triple battles: an edge can't reach the far edge).
     const near = spots.filter((s) => spots.length < 3 || foesAdjacent(spot, s));
-    const foeSpot = near.find((s) => (monAt(ctx, 'enemy', s)?.hp ?? 0) > 0) ?? spots.find((s) => (monAt(ctx, 'enemy', s)?.hp ?? 0) > 0) ?? 0;
+    const foeSpot = near.find((s) => (monAt(ctx, 'enemy', s)?.hp ?? 0) > 0) ?? near[0] ?? 0;
     return { action: { kind: 'move', index }, target: { side: 'enemy', spot: foeSpot } };
   });
 }
