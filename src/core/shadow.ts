@@ -8,6 +8,7 @@ import type { Rng } from './rng';
 import { chemistryOf } from './story/chemistry';
 import type { PokemonInstance, RunState } from './state';
 import type { Temperament } from './shadowWorld/schema';
+import { noteShadow } from './expansion/fieldNotes';
 import { addScar, hasScar, revealHintAfterBattle, scarName, sootheKeyScale } from './shadow2/keys';
 import { shadow2Data } from './shadow2/data';
 import { shadowTierDamage } from './shadow2/tiers';
@@ -92,6 +93,7 @@ export function soothePartyAfterBattle(content: Content, run: Pick<RunState, 'pa
   for (const mon of run.party) {
     if (mon.hp <= 0 || !mon.shadow || !participants.includes(mon.uid)) continue;
     revealHintAfterBattle(mon);
+    if (mon.shadow.named) noteShadow(run as Pick<RunState, 'expansion'>, mon.shadow.named, mon.shadow.hints ?? 1);
     const before = heartStage(content, mon.shadow.heart);
     const name = content.species.get(mon.speciesId)?.name ?? mon.speciesId;
     const t = temperamentOf(content, mon);

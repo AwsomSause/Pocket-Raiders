@@ -100,6 +100,8 @@ import { mentorHudLine } from '../core/mentors';
 import { ensureNarration } from '../core/overhaul/partyNarration';
 import { rivalReport } from '../core/rivals/report';
 import { trackPage } from '../core/expansion/trackView';
+import { fieldNotesView } from '../core/expansion/fieldNotes';
+import { drawFieldNotes, type FieldNotesPage } from '../ui/fieldNotesPage';
 import { drawTrackPage } from '../ui/trackPage';
 import { drawDossier } from '../ui/dossier';
 import { dossierFolders } from '../core/expansion/cast/dossier';
@@ -817,6 +819,10 @@ export class MapScene extends Phaser.Scene {
         if (action === 'back' || action === 'confirm') this.toggleLegend();
         return;
       }
+      if (this.fieldNotes) {
+        this.fieldNotes.handle(action);
+        return;
+      }
       if (this.report) {
         if (action === 'back' || action === 'confirm') this.closeReport();
         return;
@@ -859,6 +865,11 @@ export class MapScene extends Phaser.Scene {
     if (session.run && dossierFolders(session.run).length > 0) {
       this.input.keyboard?.on('keydown-D', () => this.toggleDossier());
       this.add.text(GAME_WIDTH - 24, 338, 'D: dossier', textStyle(12, '#a69cb4')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('dossier-tag').on('pointerdown', () => this.toggleDossier());
+    }
+    // Beta 0.6: F opens Field Notes (special Pokémon, Shadows, Data ROMs and keys met this run).
+    if (session.run) {
+      this.input.keyboard?.on('keydown-F', () => this.toggleFieldNotes());
+      this.add.text(GAME_WIDTH - 24, 322, 'F: field notes', textStyle(12, '#a69cb4')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('field-notes-tag').on('pointerdown', () => this.toggleFieldNotes());
     }
     // Galar's Champion Tournament: B opens the bracket.
     if (league && region.id === 'galar' && stage.map.nodes.some((n) => n.sides.length > 0)) {
@@ -1764,6 +1775,7 @@ export class MapScene extends Phaser.Scene {
 
   private legend: Phaser.GameObjects.Container | null = null;
   private report: Phaser.GameObjects.Container | null = null;
+  private fieldNotes: FieldNotesPage | null = null;
   private bracket: Phaser.GameObjects.Container | null = null;
 
   /** Galar's Champion Tournament bracket: the five rounds, who is left, your next opponent. Presentation only (core/galarTournament.ts bracketView). */
@@ -1872,6 +1884,21 @@ export class MapScene extends Phaser.Scene {
     const timer = this.time.addEvent({ delay: 1500, loop: true, callback: step });
     step();
     this.input.keyboard?.once('keydown', close);
+  }
+
+  /** Field Notes (Beta 0.6): the Bestiary Book pop-up. F, Esc, Enter or a click outside closes it. */
+  private toggleFieldNotes(): void {
+    if (this.fieldNotes) {
+      this.fieldNotes.layer.destroy();
+      this.fieldNotes = null;
+      this.busy = false;
+      return;
+    }
+    if (this.report || this.busy || this.picker || this.legend) return;
+    const run = services().session.run;
+    if (!run) return;
+    this.fieldNotes = drawFieldNotes(this, fieldNotesView(services().session.content, run), () => this.toggleFieldNotes());
+    this.busy = true;
   }
 
   private closeReport(): void {

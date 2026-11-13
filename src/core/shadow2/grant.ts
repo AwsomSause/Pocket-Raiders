@@ -3,6 +3,7 @@
 import type { Content } from '../contentSchema';
 import { newMon } from '../run';
 import type { PokemonInstance, RunState } from '../state';
+import { noteShadow } from '../expansion/fieldNotes';
 import { keyOf } from './data';
 
 /** Builds a Named Shadow Pokémon: its Shadow II fields set and hint one given. Null for an unknown id or species. */
@@ -18,6 +19,7 @@ export function makeNamedShadow(content: Content, run: RunState, ssId: string, l
 export function grantNamedShadow(content: Content, run: RunState, ssId: string, level: number): string | null {
   const mon = makeNamedShadow(content, run, ssId, level);
   if (!mon) return null;
+  noteShadow(run, ssId, 1);
   run.pending.unshift({ kind: 'caught', mon });
   return content.species.get(mon.speciesId)?.name ?? mon.speciesId;
 }

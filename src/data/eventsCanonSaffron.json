@@ -1,0 +1,1691 @@
+{
+ "events": [
+  {
+   "id": "cs-kanto-saffron-r25",
+   "name": "Route 25: The Horde",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b4a3a"
+   },
+   "intro": "A horde of Angry Mankey spills onto the road and will not let you pass. Five of them, one after another.",
+   "choices": [
+    {
+     "label": "Stand your ground",
+     "success": {
+      "text": "The first three rush you together.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "mankey"
+       ],
+       "chain": 3,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-r25-breath"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.saffron.route25"
+  },
+  {
+   "id": "cs-kanto-saffron-r25-breath",
+   "name": "Route 25: A Breather",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b4a3a"
+   },
+   "intro": "Three down. The last two Mankey are working themselves into a rage behind the rocks.",
+   "choices": [
+    {
+     "label": "Tend your team first",
+     "success": {
+      "text": "You get a minute to patch everyone up.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.35
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-r25-fourth"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Press on",
+     "success": {
+      "text": "No time to lose.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-r25-fourth"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-r25-fourth",
+   "name": "Route 25: The Fourth",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b4a3a"
+   },
+   "intro": "The fourth Mankey screams and charges.",
+   "choices": [
+    {
+     "label": "Meet it",
+     "success": {
+      "text": "It goes down, and the last one steps out.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "mankey"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-r25-wrath"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-r25-wrath",
+   "name": "Route 25: Mankey's Wrath",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b4a3a"
+   },
+   "intro": "The fifth is no Mankey. A Primeape, wild with rage, uses Rage again and again.",
+   "choices": [
+    {
+     "label": "Calm the Primeape down the hard way",
+     "success": {
+      "text": "The horde falls quiet. One Mankey steps out of the grass and sets its jaw: it wants to come with you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "primeape"
+       ],
+       "levelBonus": 2,
+       "foeMoves": [
+        "rage"
+       ],
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "mankey"
+         ],
+         "types": [],
+         "levelBonus": 0
+        },
+        {
+         "kind": "teachMove",
+         "move": "swords-dance",
+         "species": "mankey",
+         "slot": 2
+        },
+        {
+         "kind": "teachMove",
+         "move": "mach-punch",
+         "species": "mankey",
+         "slot": 3
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-mankey",
+         "amount": 1
+        },
+        {
+         "kind": "canon",
+         "action": "flawless",
+         "species": []
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-tournament"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-tournament",
+   "name": "Saffron Fighting Tournament",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3b2e"
+   },
+   "intro": "A banner over the dojo yard: THE SAFFRON FIGHTING TOURNAMENT. Thirty-two fighters, Fighting types only, one Pokémon each. The organizer eyes your Mankey.",
+   "choices": [
+    {
+     "label": "Enter with Mankey",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "mankey"
+      }
+     ],
+     "success": {
+      "text": "The sign-up sheet has thirty-two names. Yours goes at the bottom. Only your fighter steps onto the mat.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "solo",
+        "species": [
+         "mankey",
+         "primeape"
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-t1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Enter with Primeape",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "primeape"
+      }
+     ],
+     "success": {
+      "text": "The sign-up sheet has thirty-two names. Yours goes at the bottom. Only your fighter steps onto the mat.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "solo",
+        "species": [
+         "mankey",
+         "primeape"
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-t1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it for the next trainer.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.saffron.tournament",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-t1",
+   "name": "Tournament: Round of 32",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3b2e"
+   },
+   "intro": "Round of 32. One Pokémon each, matched to yours. If yours faints, you are out.",
+   "choices": [
+    {
+     "label": "Step into the ring",
+     "success": {
+      "text": "Round of 32: a fighter your size.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Brawler",
+       "size": 1,
+       "species": [
+        "machop",
+        "mankey"
+       ],
+       "types": [
+        "fighting"
+       ],
+       "pseudo": true,
+       "rule": {
+        "matchLead": true,
+        "bstMatch": true
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "muscle-band",
+         "count": 1
+        },
+        {
+         "kind": "heal",
+         "share": 0.4
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-t2"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-t2",
+   "name": "Tournament: Round of 16",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3b2e"
+   },
+   "intro": "Round of 16. One Pokémon each, matched to yours. If yours faints, you are out.",
+   "choices": [
+    {
+     "label": "Step into the ring",
+     "success": {
+      "text": "Round of 16: a fighter your size.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Black Belt",
+       "size": 1,
+       "species": [
+        "meditite",
+        "timburr"
+       ],
+       "types": [
+        "fighting"
+       ],
+       "pseudo": true,
+       "rule": {
+        "matchLead": true,
+        "bstMatch": true
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "protein",
+         "count": 1
+        },
+        {
+         "kind": "heal",
+         "share": 0.4
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-t3"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-t3",
+   "name": "Tournament: Quarterfinal",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3b2e"
+   },
+   "intro": "Quarterfinal. One Pokémon each, matched to yours. If yours faints, you are out.",
+   "choices": [
+    {
+     "label": "Step into the ring",
+     "success": {
+      "text": "Quarterfinal: a fighter your size.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Kickboxer",
+       "size": 1,
+       "species": [
+        "hitmonlee",
+        "hitmonchan"
+       ],
+       "types": [
+        "fighting"
+       ],
+       "pseudo": true,
+       "rule": {
+        "matchLead": true,
+        "bstMatch": true
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "focus-sash",
+         "count": 1
+        },
+        {
+         "kind": "heal",
+         "share": 0.4
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-t4"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-t4",
+   "name": "Tournament: Semifinal",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3b2e"
+   },
+   "intro": "Semifinal. One Pokémon each, matched to yours. If yours faints, you are out.",
+   "choices": [
+    {
+     "label": "Step into the ring",
+     "success": {
+      "text": "Semifinal: a fighter your size.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Semifinalist",
+       "size": 1,
+       "species": [
+        "machoke",
+        "poliwrath"
+       ],
+       "types": [
+        "fighting"
+       ],
+       "pseudo": true,
+       "rule": {
+        "matchLead": true,
+        "bstMatch": true
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "black-belt",
+         "count": 1
+        },
+        {
+         "kind": "heal",
+         "share": 0.4
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-t5"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-t5",
+   "name": "Tournament: The Final",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3b2e"
+   },
+   "intro": "The final. Across the mat stands the rival Mankey: the same kind as yours, the same level, and it wants the belt as much as you do.",
+   "choices": [
+    {
+     "label": "Step into the ring",
+     "success": {
+      "text": "The crowd chants for both of you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival Fighter",
+       "size": 1,
+       "mirror": true,
+       "types": [
+        "fighting"
+       ],
+       "pseudo": true,
+       "rule": {
+        "evolveMid": true
+       },
+       "win": [
+        {
+         "kind": "canon",
+         "action": "champion",
+         "species": [
+          "mankey",
+          "primeape"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-tournament-won",
+         "amount": 1
+        },
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        }
+       ],
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-dojo",
+   "name": "Saffron Fighting Dojo",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a4a2a"
+   },
+   "intro": "The Fighting Dojo next door is open. Its master, arms folded, offers a one-on-one: his Machamp against your whole team.",
+   "choices": [
+    {
+     "label": "Take the challenge",
+     "success": {
+      "text": "The master bows. Machamp cracks its knuckles.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Dojo Master",
+       "size": 1,
+       "team": [
+        "machamp"
+       ],
+       "types": [
+        "fighting"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEventFrom",
+         "ids": [
+          "cs-kanto-saffron-dojo-three",
+          "cs-kanto-saffron-dojo-three",
+          "cs-kanto-saffron-dojo-three",
+          "cs-kanto-saffron-dojo-two",
+          "cs-kanto-saffron-dojo-two",
+          "cs-kanto-saffron-dojo-two",
+          "cs-kanto-saffron-dojo-two",
+          "cs-kanto-saffron-dojo-two",
+          "cs-kanto-saffron-dojo-two",
+          "cs-kanto-saffron-dojo-two",
+          "cs-kanto-saffron-dojo-two",
+          "cs-kanto-saffron-dojo-two",
+          "cs-kanto-saffron-dojo-two",
+          "cs-kanto-saffron-dojo-two",
+          "cs-kanto-saffron-dojo-two",
+          "cs-kanto-saffron-dojo-two",
+          "cs-kanto-saffron-dojo-two",
+          "cs-kanto-saffron-dojo-two",
+          "cs-kanto-saffron-dojo-two",
+          "cs-kanto-saffron-dojo-two"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You bow and leave the dojo.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.saffron.dojo"
+  },
+  {
+   "id": "cs-kanto-saffron-dojo-two",
+   "name": "Dojo: The Master’s Gift",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a4a2a"
+   },
+   "intro": "The master nods. \"You earned a student. Choose.\"",
+   "choices": [
+    {
+     "label": "Take Hitmonlee",
+     "success": {
+      "text": "Hitmonlee bows and falls in step beside you.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "hitmonlee"
+        ],
+        "types": [],
+        "levelBonus": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take Hitmonchan",
+     "success": {
+      "text": "Hitmonchan bows and falls in step beside you.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "hitmonchan"
+        ],
+        "types": [],
+        "levelBonus": 0
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-dojo-three",
+   "name": "Dojo: The Master’s Gift",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a4a2a"
+   },
+   "intro": "The master nods, then calls a third student out of the back. \"Today I can offer three. Choose.\"",
+   "choices": [
+    {
+     "label": "Take Hitmonlee",
+     "success": {
+      "text": "Hitmonlee bows and falls in step beside you.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "hitmonlee"
+        ],
+        "types": [],
+        "levelBonus": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take Hitmonchan",
+     "success": {
+      "text": "Hitmonchan bows and falls in step beside you.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "hitmonchan"
+        ],
+        "types": [],
+        "levelBonus": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take Hitmontop",
+     "success": {
+      "text": "Hitmontop bows and falls in step beside you.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "hitmontop"
+        ],
+        "types": [],
+        "levelBonus": 0
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-copycat",
+   "name": "The Copycat Girl",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "sparkle",
+    "tint": "#c25a8a"
+   },
+   "intro": "A girl in a bow follows you down the street, repeating every word you say and every step you take. She holds out a hand: \"Copy me! Four claps!\"",
+   "choices": [
+    {
+     "label": "Play her game",
+     "prompt": {
+      "id": "copycat-claps",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You match all four. She squeals, copies your Pokémon’s cry note for note, and hands you a TM: Mimic.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "mimic"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You miss a clap. She copies your embarrassed face, giggles, and skips away.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "She copies your wave and your walk, all the way out of town.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.saffron.copycat"
+  },
+  {
+   "id": "cs-kanto-saffron-silph",
+   "name": "Silph Co.: The Lobby",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6f8aa8"
+   },
+   "intro": "The lobby of the Silph Co. tower: marble floors, a hushed receptionist, a single elevator. The president himself comes down to meet visitors.",
+   "choices": [
+    {
+     "label": "Meet the president",
+     "requires": [
+      {
+       "kind": "evil",
+       "heatBelow": 40
+      }
+     ],
+     "success": {
+      "text": "He thanks you for keeping the city safe and hands you a Poké Ball: a Lapras, bred for ferrying people across the water. \"Something is wrong upstairs,\" he adds quietly. The building stays open to you.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "lapras"
+        ],
+        "types": [],
+        "levelBonus": 0
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-silph-lobby",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The guards turn you away",
+     "requires": [
+      {
+       "kind": "evil",
+       "heat": 40
+      }
+     ],
+     "success": {
+      "text": "Word has gone round that you are being hunted. The guards cross their arms. The lobby is as far as you get.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-silph-lobby",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.saffron.silph"
+  },
+  {
+   "id": "cs-kanto-saffron-train",
+   "name": "Saffron Magnet Train",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a6a8a"
+   },
+   "intro": "The Magnet Train hums in its station, bound for the coast. A ride would carry you most of the way across, but you would see nothing of the road.",
+   "choices": [
+    {
+     "label": "Ride the train",
+     "success": {
+      "text": "The city blurs. You step off right beside the Gym, with nothing found along the way.",
+      "effects": [
+       {
+        "kind": "skipAhead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You watch it glide away without you.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.saffron.train"
+  },
+  {
+   "id": "cs-kanto-saffron-labyrinth",
+   "name": "Sabrina's Labyrinth",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fog",
+    "tint": "#2a1b3d"
+   },
+   "intro": "A fortune-teller in a violet shawl stops you outside the Gym: \"Let me read your aura.\" A town guide hurries over, whispering about a special entrance that few ever see.",
+   "choices": [
+    {
+     "label": "Let her read your aura",
+     "success": {
+      "text": "Your Poké Balls rattle, then go quiet. The world tilts.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostStart",
+        "species": []
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-lost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the guide’s special entrance",
+     "success": {
+      "text": "Your Poké Balls rattle, then go quiet. The world tilts.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostStart",
+        "species": []
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-lost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You decline. Nothing changes.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.saffron.labyrinth"
+  },
+  {
+   "id": "cs-kanto-saffron-lab-lost",
+   "name": "Labyrinth: The First Fight",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fog",
+    "tint": "#1b1030"
+   },
+   "intro": "Your Pokémon are scattered across the Labyrinth, locked in shadow lanterns. A hooded shape blocks the corridor. You reach for a Poké Ball and find nothing. The first fight is lost before it begins. A tombstone rises on the dark, a swarm of ghosts flies behind it, and the dark folds into a new scene. A small ghost floats up to you: \"I can help you get your body and your Pokémon back.\"",
+   "choices": [
+    {
+     "label": "Follow the ghost",
+     "success": {
+      "text": "Free every lantern, reach Sabrina, and your body comes home.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n1"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-lab-n1",
+   "name": "Labyrinth: The Possessed Trainer",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fog",
+    "tint": "#1b1030"
+   },
+   "intro": "Lantern 1 of 6: one of your Pokémon is trapped inside. A trainer with empty eyes guards it.",
+   "choices": [
+    {
+     "label": "Challenge the trainer",
+     "success": {
+      "text": "The ghost fights alone.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Possessed Trainer",
+       "size": 2,
+       "types": [
+        "ghost",
+        "psychic"
+       ],
+       "pseudo": true,
+       "rule": {
+        "matchLead": true,
+        "noItems": true
+       },
+       "win": [
+        {
+         "kind": "canon",
+         "action": "ghostFree",
+         "species": []
+        },
+        {
+         "kind": "canon",
+         "action": "ghostLevel",
+         "species": [],
+         "level": 15
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-lab-n2"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-lab-n1"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-lab-n2",
+   "name": "Labyrinth: The Mirror Puzzle",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fog",
+    "tint": "#1b1030"
+   },
+   "intro": "Lantern 2 of 6: one of your Pokémon is trapped inside. Mirrors line the walls; the real path is the one that reflects true.",
+   "choices": [
+    {
+     "label": "Trace the true path",
+     "prompt": {
+      "id": "tilt-drag",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "The mirrors part. The lantern opens. A campfire burns warm in the next chamber.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 20
+       },
+       {
+        "kind": "addStop",
+        "stop": "heal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The glass shows you a false road and bites back.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-lab-n3",
+   "name": "Labyrinth: The Memory Game",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fog",
+    "tint": "#1b1030"
+   },
+   "intro": "Lantern 3 of 6: one of your Pokémon is trapped inside. Lights flash in a pattern. Echo it back.",
+   "choices": [
+    {
+     "label": "Echo the pattern",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "The lights fall in line. The lantern opens.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 25
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n4"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You lose the thread and the dark pushes back.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-lab-n4",
+   "name": "Labyrinth: Two Doors",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fog",
+    "tint": "#1b1030"
+   },
+   "intro": "Lantern 4 of 6: one of your Pokémon is trapped inside. Two doors, one lantern. One door is true.",
+   "choices": [
+    {
+     "label": "The left door",
+     "chance": 0.5,
+     "success": {
+      "text": "The true door. The lantern opens, and a campfire waits beyond.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 30
+       },
+       {
+        "kind": "addStop",
+        "stop": "heal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n5"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A false door. You stumble back out.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The right door",
+     "chance": 0.5,
+     "success": {
+      "text": "The true door. The lantern opens, and a campfire waits beyond.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 30
+       },
+       {
+        "kind": "addStop",
+        "stop": "heal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n5"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A false door. You stumble back out.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n4"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-lab-n5",
+   "name": "Labyrinth: The Balance",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fog",
+    "tint": "#1b1030"
+   },
+   "intro": "Lantern 5 of 6: one of your Pokémon is trapped inside. A scale hangs over the lantern. Hold steady until it levels.",
+   "choices": [
+    {
+     "label": "Hold the scale",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "The scale settles. The lantern opens.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 37
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n6"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The scale tips and the weights fall.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n5"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-lab-n6",
+   "name": "Labyrinth: The Riddle",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fog",
+    "tint": "#1b1030"
+   },
+   "intro": "Lantern 6 of 6: one of your Pokémon is trapped inside. A voice from the lantern: \"I walk beside you but leave no steps. Cut me down and I still follow. What am I?\"",
+   "choices": [
+    {
+     "label": "A memory",
+     "success": {
+      "text": "Wrong. The voice sighs.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A shadow",
+     "success": {
+      "text": "The lantern flares open. Only Sabrina remains.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 40
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-final"
+       }
+      ]
+     }
+    },
+    {
+     "label": "An echo",
+     "success": {
+      "text": "Wrong. The voice sighs.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n6"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-lab-final",
+   "name": "Labyrinth: Sabrina's Alakazam",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fog",
+    "tint": "#1b1030"
+   },
+   "intro": "Sabrina waits at the heart of the Labyrinth with her Alakazam. \"You are only a ghost,\" she says. \"Go back to sleep.\"",
+   "choices": [
+    {
+     "label": "Face Sabrina",
+     "success": {
+      "text": "The ghost faces her alone.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Sabrina",
+       "size": 1,
+       "team": [
+        "alakazam"
+       ],
+       "types": [
+        "psychic"
+       ],
+       "levelBonus": 1,
+       "pseudo": true,
+       "rule": {
+        "matchLead": true,
+        "noItems": true,
+        "evolveMid": true,
+        "ghostRescue": true
+       },
+       "win": [
+        {
+         "kind": "canon",
+         "action": "ghostEnd",
+         "species": []
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-sabrina-ghost",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-sabrina-labyrinth-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-sabrina-haunting-owed",
+         "amount": 1
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-lab-n1"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-return-shuppet",
+   "name": "The Ghost Returns",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "banette",
+    "effect": "flicker",
+    "tint": "#000000"
+   },
+   "intro": "The screen goes black. Silence. Then a face lunges out of the dark, all teeth and eyes, and holds there. It wavers, and the fright melts into something shy. It asks, very quietly, to join your team.",
+   "choices": [
+    {
+     "label": "Welcome it",
+     "success": {
+      "text": "It has not forgotten the Labyrinth, or you.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostReturn",
+        "species": []
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "It fades, and the dark lets go of the screen.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-saffron-return-duskull",
+   "name": "The Ghost Returns",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "dusknoir",
+    "effect": "flicker",
+    "tint": "#000000"
+   },
+   "intro": "The screen goes black. Silence. Then a face lunges out of the dark, all teeth and eyes, and holds there. It wavers, and the fright melts into something shy. It asks, very quietly, to join your team.",
+   "choices": [
+    {
+     "label": "Welcome it",
+     "success": {
+      "text": "It has not forgotten the Labyrinth, or you.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostReturn",
+        "species": []
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "It fades, and the dark lets go of the screen.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-saffron-return-drifloon",
+   "name": "The Ghost Returns",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "drifblim",
+    "effect": "flicker",
+    "tint": "#000000"
+   },
+   "intro": "The screen goes black. Silence. Then a face lunges out of the dark, all teeth and eyes, and holds there. It wavers, and the fright melts into something shy. It asks, very quietly, to join your team.",
+   "choices": [
+    {
+     "label": "Welcome it",
+     "success": {
+      "text": "It has not forgotten the Labyrinth, or you.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostReturn",
+        "species": []
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "It fades, and the dark lets go of the screen.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-saffron-return-gastly",
+   "name": "The Ghost Returns",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "gengar",
+    "effect": "flicker",
+    "tint": "#000000"
+   },
+   "intro": "The screen goes black. Silence. Then a face lunges out of the dark, all teeth and eyes, and holds there. It wavers, and the fright melts into something shy. It asks, very quietly, to join your team.",
+   "choices": [
+    {
+     "label": "Welcome it",
+     "success": {
+      "text": "It has not forgotten the Labyrinth, or you.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostReturn",
+        "species": []
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "It fades, and the dark lets go of the screen.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

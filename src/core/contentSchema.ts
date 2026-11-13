@@ -274,6 +274,8 @@ export const MoveSchema = z.object({
       perishSong: z.literal(true).optional(),
       /** Yawn: the target falls asleep at the end of the next turn. */
       yawn: z.literal(true).optional(),
+      /** Haunting (Sabrina's Labyrinth ghost): four spirits strike once each, then the foe is Haunted (a stat drop and confusion in turn). */
+      haunting: z.literal(true).optional(),
       /** Magnet Rise: the user floats for five turns. */
       magnetRise: z.literal(true).optional(),
       /** Smack Down / Thousand Arrows: the target is brought to the ground. */
@@ -2907,6 +2909,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
     after: z.number().int().min(0).max(7).optional(),
     op: z.string().optional(),
     heat: z.number().int().min(0).optional(),
+    /** Heat is below this (also true when no team hunts you: heat 0). */
+    heatBelow: z.number().int().min(1).optional(),
     defector: z.boolean().optional(),
     ends: z.array(z.enum(['none', 'defeated', 'exposed', 'allied'])).optional(),
     stopped: z.number().int().min(0).optional(),
@@ -3046,6 +3050,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('shadowHeart'), amount: z.number().int().min(-20).max(0) }),
   z.object({ kind: z.literal('track'), input: z.enum(['raidFailed', 'raidDeclined', 'climaxScheduled', 'raidSuccess', 'officerTurned']) }),
   /** Grand Arc: gains a Stock step (1 to 5). */
+  /** Field Notes: the player has now met this special Pokémon (`sv.*`). */
+  z.object({ kind: z.literal('fieldNote'), special: z.string().regex(/^sv\.[a-z0-9-]+\.[a-z0-9-]+$/) }),
   z.object({ kind: z.literal('grandArcStock'), step: z.number().int().min(1).max(5) }),
   /** Stand With Them: join the run's team as an Inside Man, or move your reputation with it (`change` names a row of standWith.json repChanges), or note a small mercy. */
   z.object({ kind: z.literal('standWith'), action: z.enum(['join', 'rep', 'mercy', 'climaxWon', 'verdict']), change: z.string().optional(), noticed: z.boolean().default(false), verdict: z.enum(['rise', 'throne', 'turn']).optional(), /** With a verdict: what happens to your rival (a featured rival only). */ rival: z.enum(['release', 'handOver']).optional(), keepApexBound: z.boolean().optional() }),
@@ -3058,6 +3064,11 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
     lead: z.number().int().min(-3).max(3).default(0),
     mark: z.string().optional(),
   }),
+  /**
+   * Saffron canon spaces (core/expansion/canonSaffron.ts). `solo` / `unsolo`: the party waits in a stash while one Pokémon of `species` fights alone (Fighting Tournament).
+   * `ghostStart` / `ghostLevel` / `ghostFree` / `ghostEnd` / `ghostReturn`: Sabrina's Labyrinth and the ghost that joins in the next region. `champion`: the Tournament title.
+   */
+  z.object({ kind: z.literal('canon'), action: z.enum(['solo', 'unsolo', 'ghostStart', 'ghostLevel', 'ghostFree', 'ghostEnd', 'ghostReturn', 'champion', 'flawless']), species: z.array(z.string()).default([]), level: z.number().int().min(1).max(500).optional() }),
   /** World-state callback (catalog 75): adds to a named story flag that later events can read. */
   z.object({ kind: z.literal('flag'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), amount: z.number().int().default(1) }),
   /** Clone Core (New Island): your lead's moves are copied onto the other party Pokémon you pick (the lowest-level one when none is picked). */
@@ -3175,6 +3186,12 @@ export const EventRuleSchema = z.object({
   lanes: z.boolean().optional(),
   /** Blackout's Seal: moves of this type hit this many percent harder, for both sides. */
   typeBoost: z.object({ type: TypeNameSchema, pct: z.number().int().min(1).max(100) }).optional(),
+  /** Saffron canon: at a turn boundary (turn 3, or at half HP) each active Pokémon that has a next evolution evolves in the heat of the fight (Tournament final, Labyrinth finale). */
+  evolveMid: z.boolean().optional(),
+  /** Saffron canon: the foe is the entry of the fight's `species` list whose base stat total is nearest your lead's (Fighting Tournament). */
+  bstMatch: z.boolean().optional(),
+  /** Saffron canon: when your only Pokémon would faint, the ghost calls the other spirits, the foe goes down instead and you win (Sabrina's Labyrinth). */
+  ghostRescue: z.boolean().optional(),
   surviveTurns: z.number().int().min(1).max(30).optional(),
   suddenDeath: z.boolean().optional(),
   turnLimit: z.number().int().min(1).max(30).optional(),
@@ -3224,6 +3241,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     recall: z.boolean().default(false),
     /** Battles in a row at this stop without healing in between (a detour); `win` pays after the last. */
     chain: z.number().int().min(1).max(3).default(1),
+    /** The wild Pokémon knows these moves (replacing its last ones): Route 25's Primeape uses Rage. */
+    foeMoves: z.array(z.string()).max(2).optional(),
     win: z.array(EventEffectSchema).default([]),
   }),
   z.object({
