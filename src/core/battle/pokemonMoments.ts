@@ -3,6 +3,7 @@
 // Outcomes never depend on animation: the events below only describe what already happened.
 
 import { calcStats, maxPp } from '../pokemon';
+import { Rng, hashSeed } from '../rng';
 import { currentEnemy, freshStages, freshVolatile, type PokemonInstance } from '../state';
 import { clampStage } from './damage';
 import { isStatusImmune } from './damage';
@@ -13,10 +14,49 @@ export type PMomentEvent = Extract<BattleEvent, { type: 'pmoment' }>;
 
 const Claim = { cinematic: 'pm-cine', start: 'pm-start' } as const;
 const FADE = 'pm-fade:';
+/** The one run-end revival a run gets, whichever moment uses it. */
+export const RUN_END_CLAIM = 'pm:runend-used';
+const NOFLINCH = 'pm-noflinch:';
+const PENDING = 'pm-pending:';
+const PRIO = 'pm-prio:';
+const NIGHTMARE = 'pm-nightmare:';
+
+/** One seeded number in [0, 1) for a moment's own pick (a move to learn). Stateless: same inputs, same answer. */
+function momentUnit(ctx: BattleContext, id: string, uid: string, turn: number): number {
+  return new Rng(hashSeed(`${ctx.moments?.seed ?? ''}:pmoment:${id}:${uid}:${turn}`)).float();
+}
+
+/** Puts a move in the Pokémon's last slot for this battle (Mimic's backup puts the old move back at the end of the fight). */
+function learnForBattle(ctx: BattleContext, c: Combatant, moveId: string): void {
+  const mimic = ctx.battle.extra.mimic;
+  const move = ctx.content.moves.get(moveId);
+  if (!move || mimic[c.mon.uid] || c.mon.moves.some((m) => m.id === moveId)) return;
+  const slot = Math.min(c.mon.moves.length, 3);
+  mimic[c.mon.uid] = { kind: 'mimic', slot, moves: c.mon.moves.map((m) => ({ ...m })) };
+  c.mon.moves[slot] = { id: moveId, pp: move.pp };
+}
+
+/** Flinch can't stop a Pokémon whose moment says so (Mewtwo Armored). */
+export function momentNoFlinch(ctx: BattleContext, c: Combatant): boolean {
+  return c.side === 'player' && ctx.battle.storyEffects.includes(`${NOFLINCH}${c.mon.uid}`);
+}
+
+/** Extra priority on a Pokémon's first turn (Sneasel's ambush). */
+export function momentPriority(ctx: BattleContext, c: Combatant): number {
+  if (c.side !== 'player') return 0;
+  const prefix = `${PRIO}${c.mon.uid}:`;
+  for (const tag of ctx.battle.storyEffects) {
+    if (!tag.startsWith(prefix)) continue;
+    const [turn, bonus] = tag.slice(prefix.length).split(':').map(Number) as [number, number];
+    if (ctx.battle.turn === turn) return bonus;
+  }
+  return 0;
+}
 
 /** Applies a moment's effect numbers. Returns the HP the Pokémon is left with (it was already going to be at least 1). */
 function applyEffect(ctx: BattleContext, c: Combatant, fx: MomentEffect, m: PokemonMoment, turnKey: number): number {
   const content = ctx.content;
+  const foe = currentEnemy(ctx.battle);
   const max = calcStats(content, c.mon).hp;
   let hp = 1;
   if (fx.healPct) hp = Math.min(max, 1 + Math.floor((max * fx.healPct) / 100));
@@ -49,9 +89,22 @@ function applyEffect(ctx: BattleContext, c: Combatant, fx: MomentEffect, m: Poke
       p.hp = Math.min(pmax, p.hp + Math.floor((pmax * fx.partyHealPct) / 100));
     }
   }
+  if (fx.typeCopy && foe.hp > 0) c.vol.typeList = [...(content.species.get(foe.speciesId)?.types ?? [])];
+  if (fx.learnFoeMove && foe.hp > 0) {
+    const options = foe.moves.map((mv) => mv.id).filter((id) => !c.mon.moves.some((mv) => mv.id === id));
+    if (options.length) learnForBattle(ctx, c, options[Math.floor(momentUnit(ctx, `${m.id}:sketch`, c.mon.uid, turnKey) * options.length)]!);
+  }
+  if (fx.learnTmMove) {
+    const pool = [...(content.learnables.get(c.mon.speciesId) ?? [])].filter((id) => content.moves.has(id) && content.moves.get(id)!.power !== null && !c.mon.moves.some((mv) => mv.id === id)).sort();
+    if (pool.length) learnForBattle(ctx, c, pool[Math.floor(momentUnit(ctx, `${m.id}:tm`, c.mon.uid, turnKey) * pool.length)]!);
+  }
+  if (fx.noFlinch) ctx.battle.storyEffects.push(`${NOFLINCH}${c.mon.uid}`);
+  if (fx.firstPriority) ctx.battle.storyEffects.push(`${PRIO}${c.mon.uid}:${ctx.battle.turn}:${fx.firstPriority}`);
+  if (fx.foeNightmarePct && foe.hp > 0) ctx.battle.storyEffects.push(`${NIGHTMARE}${fx.foeNightmarePct}`);
+  if (fx.friendship) c.mon.friendship = Math.min(255, c.mon.friendship + fx.friendship);
+  if (fx.statusLeft && c.mon.status) c.mon.status = { ...c.mon.status, left: fx.statusLeft };
   if (fx.sleepSelf && c.mon.hp > 0 && !c.mon.status) c.mon.status = { id: 'slp', turns: fx.sleepSelf };
   if (fx.ppRestore) for (const slot of c.mon.moves) slot.pp = Math.min(maxPp(content, slot), slot.pp + fx.ppRestore);
-  const foe = currentEnemy(ctx.battle);
   for (const [stat, n] of Object.entries(fx.foeStage ?? {}) as [keyof typeof ctx.battle.enemyStages, number][]) ctx.battle.enemyStages[stat] = clampStage((ctx.battle.enemyStages[stat] ?? 0) + n);
   if (fx.foeConfuse && foe.hp > 0 && (!ctx.moments || momentRoll(ctx.moments.seed, `${m.id}:confuse`, c.mon.uid, turnKey, fx.foeConfuseChance / 100))) ctx.battle.enemyVolatile.confusion = Math.max(ctx.battle.enemyVolatile.confusion, 3);
   if (fx.foeHpPct && foe.hp > 0) foe.hp = Math.max(1, foe.hp - Math.floor((calcStats(content, foe).hp * fx.foeHpPct) / 100));
@@ -113,11 +166,13 @@ export function tryRunEndMoment(ctx: BattleContext, events: BattleEvent[]): bool
   const hooks = ctx.moments;
   if (!hooks || !hooks.runWouldEnd()) return false;
   const m = pokemonMoment('failure-not-tolerated');
-  if (!m?.effect || m.status === 'disabled' || hooks.flags[runClaimKey(m)] !== undefined) return false;
+  // Every run-end revival shares one use per run.
+  if (!m?.effect || m.status === 'disabled' || hooks.flags[runClaimKey(m)] !== undefined || hooks.flags[RUN_END_CLAIM] !== undefined) return false;
   const mon = ctx.party.find((p) => momentsFor(ctx.content, p, 'runEnd').includes(m));
   if (!mon) return false;
   // One claim per run, spent whether or not the roll succeeds, so a reload or replay cannot roll again.
   hooks.flags[runClaimKey(m)] = 1;
+  hooks.flags[RUN_END_CLAIM] = 1;
   if (!momentRoll(hooks.seed, m.id, mon.uid, ctx.battle.turn, m.chance)) return false;
   mon.overcharged = true;
   mon.hp = Math.max(1, Math.floor(calcStats(ctx.content, mon).hp));
@@ -133,9 +188,11 @@ export function tryRunEndMoment(ctx: BattleContext, events: BattleEvent[]): bool
 }
 
 /** A moment's extra conditions: enough matching party members, or a weather on the field. */
-function requirementsMet(ctx: BattleContext, m: PokemonMoment): boolean {
+function requirementsMet(ctx: BattleContext, m: PokemonMoment, c?: Combatant): boolean {
   const r = m.requires;
   if (!r) return true;
+  if (r.status && !(c && (r.status.includes('confusion') && c.vol.confusion > 0 || (c.mon.status && (r.status as string[]).includes(c.mon.status.id))))) return false;
+  if (r.foeTag && !(ctx.content.species.get(currentEnemy(ctx.battle).speciesId)?.tags as string[] | undefined)?.includes(r.foeTag)) return false;
   if (r.partyMatching && ctx.party.filter((p) => p.hp > 0 && momentMatches(ctx.content, m, p.speciesId)).length < r.partyMatching) return false;
   if (r.weather && ctx.battle.weather?.id !== r.weather) return false;
   return true;
@@ -156,7 +213,7 @@ export function tryEntryMoments(ctx: BattleContext, c: Combatant, trigger: Extra
   for (const m of momentsFor(ctx.content, c.mon, trigger)) {
     if (played >= MAX_ENTRY_MOMENTS) break;
     if (!m.effect) continue;
-    if (!requirementsMet(ctx, m)) continue;
+    if (!requirementsMet(ctx, m, c)) continue;
     const key = momentKey(m, c.mon.uid);
     if (m.limit === 'battle' ? ctx.battle.storyEffects.includes(key) : hooks.flags[m.limit === 'run' ? runClaimKey(m) : key] !== undefined) continue;
     if (m.limit === 'battle') ctx.battle.storyEffects.push(key);
@@ -176,8 +233,16 @@ export function tryStartMoments(ctx: BattleContext, c: Combatant, events: Battle
 }
 
 /** End of a turn: timed moment boosts that have run their turns are taken back. */
-export function fadeMomentBoosts(ctx: BattleContext): void {
+export function fadeMomentBoosts(ctx: BattleContext, events: BattleEvent[]): void {
   const { battle } = ctx;
+  // Darkrai's nightmare: a sleeping foe loses a slice of its HP each turn (never the last point).
+  const nightmare = battle.storyEffects.find((s) => s.startsWith(NIGHTMARE));
+  const foe = currentEnemy(battle);
+  if (nightmare && foe.hp > 1 && foe.status?.id === 'slp') {
+    const loss = Math.min(foe.hp - 1, Math.max(1, Math.floor((calcStats(ctx.content, foe).hp * Number(nightmare.slice(NIGHTMARE.length))) / 100)));
+    foe.hp -= loss;
+    events.push({ type: 'damage', side: 'enemy', amount: loss, hpAfter: foe.hp, effectiveness: 1, crit: false });
+  }
   if (!battle.storyEffects.some((s) => s.startsWith(FADE))) return;
   const active = ctx.party[battle.activeIndex];
   battle.storyEffects = battle.storyEffects.filter((tag) => {
@@ -206,17 +271,19 @@ export function tryReactiveMoments(ctx: BattleContext, turnEvents: BattleEvent[]
     ko: turnEvents.some((e) => e.type === 'faint' && e.side === 'enemy'),
     super: hit.some((e) => e.effectiveness > 1),
     crit: hit.some((e) => e.crit),
+    weather: Boolean(battle.weather),
+    status: Boolean(mon.status) || battle.playerVolatile.confusion > 0,
   };
   const max = calcStats(ctx.content, mon).hp;
   const c: Combatant = { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false };
   let played = 0;
-  for (const trigger of ['low', 'ko', 'super', 'crit'] as const) {
+  for (const trigger of ['low', 'ko', 'super', 'crit', 'weather', 'status'] as const) {
     if (!fired[trigger]) continue;
     for (const m of momentsFor(ctx.content, mon, trigger)) {
       if (played >= MAX_ENTRY_MOMENTS) return;
       if (!m.effect) continue;
       if (trigger === 'low' && !(m.hpBelow && mon.hp * 100 < max * m.hpBelow)) continue;
-      if (!requirementsMet(ctx, m)) continue;
+      if (!requirementsMet(ctx, m, c)) continue;
       const key = momentKey(m, mon.uid);
       if (m.limit === 'battle' ? battle.storyEffects.includes(key) : hooks.flags[runClaimKey(m)] !== undefined) continue;
       if (m.limit === 'battle') battle.storyEffects.push(key);
@@ -226,5 +293,61 @@ export function tryReactiveMoments(ctx: BattleContext, turnEvents: BattleEvent[]
       events.push(eventFor(ctx, c, m, mon.hp, cinematicNow(ctx, m.tier)));
       played++;
     }
+  }
+}
+
+/**
+ * The player's Pokémon in front fell this turn. Two kinds of moment: its own "faint" moments (a parting shot at the foe), and
+ * its party-mates' "ally" moments (a fallen friend stirs the survivors). An ally moment cannot buff a Pokémon on the bench, so it
+ * waits as a pending tag and plays when that survivor is next sent out. Rolls and limits are spent at the fall.
+ */
+export function tryFaintMoments(ctx: BattleContext, turnEvents: BattleEvent[], events: BattleEvent[]): void {
+  const hooks = ctx.moments;
+  const { battle } = ctx;
+  if (!hooks || battle.outcome) return;
+  for (const f of turnEvents) {
+    if (f.type !== 'faint' || f.side !== 'player') continue;
+    const fallen = ctx.party.find((p) => p.uid === f.uid);
+    if (!fallen) continue;
+    const spend = (m: PokemonMoment, uid: string): boolean => {
+      const key = momentKey(m, uid);
+      if (m.limit === 'battle' ? battle.storyEffects.includes(key) : hooks.flags[runClaimKey(m)] !== undefined) return false;
+      if (m.limit === 'battle') battle.storyEffects.push(key);
+      else hooks.flags[runClaimKey(m)] = 1;
+      return true;
+    };
+    // Its own parting shot.
+    const c: Combatant = { side: 'player', mon: fallen, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false };
+    for (const m of momentsFor(ctx.content, fallen, 'faint')) {
+      if (!m.effect || !requirementsMet(ctx, m, c) || !spend(m, fallen.uid)) continue;
+      if (!momentRoll(hooks.seed, m.id, fallen.uid, battle.turn, m.chance)) continue;
+      applyEffect(ctx, c, m.effect, m, battle.turn);
+      events.push(eventFor(ctx, c, m, fallen.hp, false));
+      break;
+    }
+    // Survivors' ally moments wait for the next switch-in.
+    for (const owner of ctx.party) {
+      if (owner.uid === fallen.uid || owner.hp <= 0) continue;
+      for (const m of momentsFor(ctx.content, owner, 'ally')) {
+        if (!m.effect || (m.allyScope === 'same' && !momentMatches(ctx.content, m, fallen.speciesId))) continue;
+        if (!requirementsMet(ctx, m)) continue;
+        if (!spend(m, owner.uid)) continue;
+        if (momentRoll(hooks.seed, m.id, owner.uid, battle.turn, m.chance)) battle.storyEffects.push(`${PENDING}${m.id}:${owner.uid}`);
+      }
+    }
+  }
+}
+
+/** A survivor whose ally moment was waiting has just been sent out: it plays now. */
+export function applyPendingMoments(ctx: BattleContext, c: Combatant, events: BattleEvent[]): void {
+  const suffix = `:${c.mon.uid}`;
+  const tags = ctx.battle.storyEffects.filter((t) => t.startsWith(PENDING) && t.endsWith(suffix));
+  if (!tags.length) return;
+  ctx.battle.storyEffects = ctx.battle.storyEffects.filter((t) => !tags.includes(t));
+  for (const tag of tags) {
+    const m = pokemonMoment(tag.slice(PENDING.length, tag.length - suffix.length));
+    if (!m?.effect) continue;
+    applyEffect(ctx, c, m.effect, m, ctx.battle.turn);
+    events.push(eventFor(ctx, c, m, c.mon.hp, cinematicNow(ctx, m.tier)));
   }
 }
