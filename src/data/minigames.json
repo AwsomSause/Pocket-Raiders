@@ -4058,6 +4058,186 @@
         "slowFactor": 2,
         "noTimerOption": false
       }
+    },
+    {
+      "id": "arcade-whack-a-diglett",
+      "name": "Arcade: Whack-a-Diglett",
+      "category": "timing",
+      "blurb": "Whack the Diglett.",
+      "instructions": "Tap a hole while a Diglett is up. Do not hit the Meowth decoys; too many strikes end the game.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "beta06": true,
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "pops": 12,
+            "decoyChance": 10,
+            "strikes": 4,
+            "stay": 3
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "pops": 16,
+            "decoyChance": 20,
+            "strikes": 3,
+            "stay": 2
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "pops": 20,
+            "decoyChance": 25,
+            "strikes": 3,
+            "stay": 2
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "1 per Diglett hit.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.55,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 70,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 119,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 189,
+          "item": {
+            "item": "ultra-ball",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "heal",
+            "amount": 25,
+            "chance": 0.5
+          }
+        }
+      },
+      "failureOutcome": "The cabinet jams; you keep your hits.",
+      "replayRules": "Two tries per stop; the best medal counts.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 600
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "arcade-claw-machine",
+      "name": "Arcade: Claw Machine",
+      "category": "skill",
+      "blurb": "Grab the prizes.",
+      "instructions": "Move the claw over a prize and drop it. Numbers show each prize's value. Limited drops.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "beta06": true,
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "fill": 80,
+            "drops": 5
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "fill": 70,
+            "drops": 5
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "fill": 60,
+            "drops": 4
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "Total value grabbed.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.55,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 70,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 119,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 189,
+          "item": {
+            "item": "ultra-ball",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "heal",
+            "amount": 25,
+            "chance": 0.5
+          }
+        }
+      },
+      "failureOutcome": "The claw runs out of drops; you keep what you grabbed.",
+      "replayRules": "Two tries per stop; the best medal counts.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 600
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": false
+      }
     }
   ]
 }
