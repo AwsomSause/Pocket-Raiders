@@ -33,6 +33,7 @@ import { styleProbability, styleProblem, type StyleInput } from '../captureStyle
 import { applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem, lastStandItemId } from '../items';
 import { abilityOf, calcStats, createPokemon, getSpecies, maxHp } from '../pokemon';
 import { rallyStages } from './rally';
+import { HOUSE_WINS_STAGES, LIGHTS_OUT_ACCURACY, LIGHTS_OUT_TURNS, housePending, isHousePair, takeHousePending, traitDoubleEntry, traitDrill, traitFeedHeal, traitFoodKnocked, traitLightsOut, traitOverhears, traitPayout, traitSeatMessage, traitTakesBerry } from '../expansion/traits';
 import { ACCESSORY_TORN_MESSAGE, SPIRITLESS_MESSAGE, variantBlocksForcedSwitch, variantBlocksMind, variantBlocksStage, variantBlocksStatus, variantEndTurnLoss, variantAccessory, variantAccessoryTorn, variantCheer, variantEndTurnStages, variantGimmickTick, variantGadget, variantIncoming, variantItemMove, variantLosesTurn, variantNeverMisses, variantOnEntry, variantOutgoing, variantPriorityBonus, variantSnagRefuses, variantTagCall } from '../expansion/variantLines';
 import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
 import type { Rng } from '../rng';
@@ -819,6 +820,12 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
     enemyForcedIndex >= 0 ? enemyForcedIndex : enemyChoiceIndex >= 0 ? enemyChoiceIndex : ctx.enemyPick !== undefined && ctx.enemyPick >= 0 && ctx.enemyPick < enemy.mon.moves.length ? ctx.enemyPick : chooseEnemyMove(enemy.mon, rng, { content, ai: foresightMove ? 1 : battle.ai, target: ctx.party[battle.activeIndex]!, stages: battle.enemyStages, battle, party: ctx.party, ...(foresightMove ? { foresight: foresightMove } : {}) });
   ctx.enemyPick = undefined;
   let enemyMove = resolveMove(content, enemy.mon, enemyMoveIndex);
+  // Beta 0.6 Translator: once per battle he overhears the foe and reveals its next move.
+  {
+    const heard = enemy.mon.hp > 0 && traitOverhears(battle.extra.traits, enemy.mon.uid) ? 'player' : ctx.party[battle.activeIndex]!.hp > 0 && traitOverhears(battle.extra.traits, ctx.party[battle.activeIndex]!.uid) ? 'enemy' : null;
+    const heardMove = heard === 'enemy' ? enemyMove?.id : action.kind === 'move' && action.index >= 0 ? ctx.party[battle.activeIndex]!.moves[action.index]?.id : undefined;
+    if (heard && heardMove) events.push({ type: 'raid', tone: 'info', text: `Translator: "${content.moves.get(heardMove)?.name ?? heardMove}!" is coming.` });
+  }
 
   // 1. Switching and items go before any move.
   if (action.kind === 'switch') {
@@ -1012,6 +1019,10 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
 
   // Dynamax turns run down (and a fainted Dynamax Pokémon shrinks back).
   tickDynamax(content, battle, ctx.party, events as TransformStepEvent[]);
+  if (battle.extra.darkTurns > 0) {
+    battle.extra.darkTurns -= 1;
+    if (battle.extra.darkTurns === 0) events.push({ type: 'raid', tone: 'info', text: 'The lights come back on.' });
+  }
 
   // U-turn, Baton Pass and friends: the user leaves once the turn is over.
   if (!battle.outcome) resolvePivots(ctx, playerC, enemy, events);
@@ -1992,6 +2003,20 @@ function resolveEntries(ctx: BattleContext, events: BattleEvent[]): void {
   for (const { c } of sides) enterExtras(ctx, c, events);
   for (const { c } of sides) applyHazards(ctx, c, events);
   for (const { c, other } of sides) {
+    // Beta 0.6 traits: Seat at the Table sweeps away the foe's boosts; a waiting House Wins bonus lands as the partner comes in.
+    const seat = c.mon.hp > 0 && other.mon.hp > 0 ? traitSeatMessage(ctx.battle.extra.traits, c.mon.uid) : null;
+    if (seat) {
+      events.push({ type: 'raid', tone: 'info', text: seat });
+      for (const stat of Object.keys(other.stages) as BoostStat[]) {
+        if (other.stages[stat] <= 0) continue;
+        events.push({ type: 'stat', side: other.side, stat, change: -other.stages[stat] });
+        other.stages[stat] = 0;
+      }
+    }
+    if (c.mon.hp > 0 && takeHousePending(ctx.battle.extra.traits, c.mon.uid)) {
+      events.push({ type: 'raid', tone: 'info', text: 'The House Wins.' });
+      for (const [stat, n] of Object.entries(HOUSE_WINS_STAGES) as [BoostStat, number][]) applyStageChange(ctx, c, stat, n, events);
+    }
     // Tagged-Up (Alola): a foe coming in while the sprayer is out is called out and loses 1/16 HP, once each.
     const call = c.mon.hp > 0 && other.mon.hp > 0 ? variantTagCall(ctx.battle.extra.variants, other.mon.uid, c.mon.uid, calcStats(ctx.content, c.mon).hp) : null;
     if (call && call.loss > 0) {
@@ -3676,7 +3701,9 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     }
   }
   // Z-Moves go through Protect for a quarter of their damage (see the damage step).
-  const piercesProtect = move.flags.includes('contact') && (userAbility === 'unseen-fist' || userAbility === 'piercing-drill');
+  const drill = move.category !== 'status' && traitDrill(ctx.battle.extra.traits, user.mon.uid, move.type);
+  if (drill) events.push({ type: 'raid', tone: 'info', text: 'Drill Through: nothing stops it.' });
+  const piercesProtect = drill || (move.flags.includes('contact') && (userAbility === 'unseen-fist' || userAbility === 'piercing-drill'));
   if (targetsEnemy && move.category === 'status' && user !== target && foeAbility === 'magic-bounce' && userAbility !== 'magic-bounce' && !target.protected) {
     announce(target, 'magic-bounce', events);
     applyStatusMove(ctx, target, user, move, events);
@@ -3775,6 +3802,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     accuracy = Math.min(1, accuracy);
   }
   if (noGuard || ((target.vol.exposed || target.vol.telekinesis > 0) && !fx.ohko && targetsEnemy)) accuracy = 1;
+  if (ctx.battle.extra.darkTurns > 0) accuracy *= LIGHTS_OUT_ACCURACY;
   if (variantNeverMisses(ctx.battle.extra.variants, user.mon.uid, ctx.battle.weather?.id ?? null, move.type)) accuracy = 1;
   if (user.vol.sureHit && targetsEnemy) {
     accuracy = 1;
@@ -4033,7 +4061,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if ((foeAbility === 'multiscale' || foeAbility === 'shadow-shield') && target.mon.hp >= targetStats.hp) final *= 0.5;
       if (!crit) {
         const tfx = ctx.battle.sideEffects[target.side];
-        if (tfx.auroraVeil > 0 || (hitsDefense ? tfx.reflect > 0 : tfx.lightScreen > 0)) final *= 0.5;
+        if (!drill && (tfx.auroraVeil > 0 || (hitsDefense ? tfx.reflect > 0 : tfx.lightScreen > 0))) final *= 0.5;
       }
       if (userAbility === 'tinted-lens' && effectiveness < 1) final *= 2;
       // S7 Old Style Surge (Remains of the Past): at half HP or less the partner's attack hits 1.5 times as hard, once.
@@ -4206,7 +4234,20 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     ctx.battle.terrain = null;
   }
   Held.afterHit(ctx, user, target, move, moveType, effectiveness, dealt, movedFirst, events as Held.HeldEvent[]);
+  if (dealt > 0 && target.mon.hp > 0 && traitTakesBerry(ctx.battle.extra.traits, user.mon.uid, move.flags)) {
+    const berry = Object.keys(target.mon.held ?? {}).find((id) => ctx.content.catalog.get(id)?.family.startsWith('Berries'));
+    if (berry) {
+      const held = { ...target.mon.held };
+      if ((held[berry] ?? 0) > 1) held[berry] = held[berry]! - 1;
+      else delete held[berry];
+      target.mon.held = held;
+      user.mon.held = { ...user.mon.held, [berry]: (user.mon.held?.[berry] ?? 0) + 1 };
+      events.push({ type: 'raid', tone: 'info', text: 'Collections: it pockets the Berry.' });
+    }
+  }
   if (dealt > 0) {
+    const food = traitFoodKnocked(ctx.battle.extra.traits, target.mon.uid, move.id);
+    if (food) events.push({ type: 'raid', tone: 'info', text: food });
     const torn = variantItemMove(ctx.battle.extra.variants, target.mon.uid, move.id);
     if (torn) events.push({ type: 'raid', tone: 'info', text: torn });
     const accessory = variantAccessoryTorn(ctx.battle.extra.variants, target.mon.uid, move.id);
@@ -4226,6 +4267,10 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   if (dealt > 0 && target.mon.hp > 0 && user.mon.hp > 0) {
     if (Held.triggerOnce(ctx, target, 'redCard', events as Held.HeldEvent[])) forceOut(ctx, user, events);
     else if (Held.triggerOnce(ctx, target, 'ejectButton', events as Held.HeldEvent[])) target.vol.pivot = { baton: false };
+  }
+  if (target.mon.hp <= 0 && traitPayout(ctx.battle.extra.traits, user.mon.uid) && !ctx.battle.extra.payout) {
+    ctx.battle.extra.payout = true;
+    events.push({ type: 'raid', tone: 'info', text: 'Payout: the prize money doubles.' });
   }
   if (target.mon.hp <= 0) Held.onKnockout(ctx, user, events as Held.HeldEvent[]);
   if (fx.ohko && target.mon.hp <= 0) events.push({ type: 'ohko', side: target.side });
@@ -4917,6 +4962,12 @@ function endTurnMon(ctx: BattleContext, c: Combatant, foe: Combatant, events: Ba
       if (t.left <= 0) c.stages[t.stat] = Math.max(-6, Math.min(6, c.stages[t.stat] - t.amount));
     }
     ctx.battle.extra.variantTimed = ctx.battle.extra.variantTimed.filter((x) => x.left > 0);
+    const feed = traitFeedHeal(ctx.battle.extra.traits, c.mon.uid, max);
+    if (feed > 0 && c.mon.hp < max) {
+      c.mon.hp = Math.min(max, c.mon.hp + feed);
+      events.push({ type: 'raid', tone: 'info', text: 'Fed and Paid: it eats well.' });
+      events.push({ type: 'heal', side: c.side, amount: feed, hpAfter: c.mon.hp });
+    }
     const gim = variantGimmickTick(ctx.battle.extra.variants, c.mon.uid);
     if (gim.endDynamax) endDynamax(ctx.content, ctx.battle, c.side, c.mon, events as TransformStepEvent[]);
     if (gim.endTera) {
@@ -6244,6 +6295,16 @@ function applyStageChange(ctx: BattleContext, c: Combatant, stat: BoostStat, sta
   c.stages[stat] = after;
   if (stages < 0) c.vol.loweredThisTurn = true;
   events.push({ type: 'stat', side: c.side, stat, change: after - before });
+  {
+    // Beta 0.6 Double Entry: once per battle the foe copies a stat change it sees.
+    const foe = c.side === 'player' ? activeCombatants(ctx).enemy : activeCombatants(ctx).player;
+    if (foe.mon.hp > 0 && traitDoubleEntry(ctx.battle.extra.traits, foe.mon.uid)) {
+      events.push({ type: 'raid', tone: 'info', text: 'Double Entry: it copies the change.' });
+      const fb = foe.stages[stat];
+      foe.stages[stat] = clampStage(fb + (after - before));
+      if (foe.stages[stat] !== fb) events.push({ type: 'stat', side: foe.side, stat, change: foe.stages[stat] - fb });
+    }
+  }
   if (source && after < before && source.side !== c.side && Held.triggerOnce(ctx, c, 'ejectPack', events as Held.HeldEvent[])) c.vol.pivot = { baton: false };
   if (after > before && abilityIn(ctx, c) === 'adaptive-plating' && c.mon.speciesId.startsWith('cataggron')) {
     // Adaptive Plating: a rise in Attack or Sp. Atk means Attack Forme; Defense or Sp. Def, Defence Forme (the last rise wins).
@@ -6523,6 +6584,22 @@ function recordFaints(ctx: BattleContext, player: Combatant, enemy: Combatant, e
       }
     }
     events.push({ type: 'faint', side: c.side, uid: c.mon.uid, participants });
+    // Beta 0.6 traits: Lights Out darkens the field; the other of the House pair is lifted.
+    if (traitLightsOut(ctx.battle.extra.traits, c.mon.uid)) {
+      ctx.battle.extra.darkTurns = LIGHTS_OUT_TURNS;
+      events.push({ type: 'raid', tone: 'warn', text: 'Lights Out: the field goes dark.' });
+    }
+    if (isHousePair(ctx.battle.extra.traits, c.mon.uid)) {
+      const team = c.side === 'enemy' ? ctx.battle.enemyTeam : ctx.party;
+      for (const mate of team) {
+        if (mate.uid === c.mon.uid || mate.hp <= 0 || !isHousePair(ctx.battle.extra.traits, mate.uid)) continue;
+        const out = c.side === 'enemy' ? currentEnemy(ctx.battle).uid === mate.uid : ctx.party[ctx.battle.activeIndex]?.uid === mate.uid;
+        if (!out) { housePending(ctx.battle.extra.traits, mate.uid); continue; }
+        events.push({ type: 'raid', tone: 'info', text: 'The House Wins.' });
+        const mateC = c.side === 'enemy' ? activeCombatants(ctx).enemy : activeCombatants(ctx).player;
+        for (const [stat, n] of Object.entries(HOUSE_WINS_STAGES) as [BoostStat, number][]) applyStageChange(ctx, mateC, stat, n, events);
+      }
+    }
     spectacleFaint(ctx, c.side, c.mon.uid, events);
     if (c.side === 'enemy' && player.mon.uid === ctx.party[ctx.battle.activeIndex]?.uid) friendlyFinish(ctx, player.mon, events);
     if (c.side === 'enemy' && player.mon.hp > 0) ctx.battle.sweep = { uid: player.mon.uid, kos: (ctx.battle.sweep?.uid === player.mon.uid ? ctx.battle.sweep.kos : 0) + 1, used: ctx.battle.sweep?.used ?? 0, ...(ctx.battle.sweep?.braced ? { braced: ctx.battle.sweep.braced } : {}) };

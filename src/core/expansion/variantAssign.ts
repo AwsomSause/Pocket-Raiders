@@ -6,6 +6,7 @@ import type { PokemonInstance } from '../state';
 import type { Variants, VariantLineId } from './variantLines';
 import { assignVariant, COUTURE_ACCESSORIES } from './variantLines';
 import { hashSeed, Rng } from '../rng';
+import { assignTrait, traitForSpecies, type Traits } from './traits';
 
 export type EvilRank = 'grunt' | 'specialist' | 'executive' | 'leader';
 
@@ -52,6 +53,19 @@ export function assignEvilVariants(variants: Variants, team: readonly PokemonIns
     assignVariant(variants, mon.uid, line, { crowd: ctx.teamId === 'yell', marnie: ctx.marnie, accessory });
   }
   return chosen.map((m) => m.uid);
+}
+
+/** Gives a lineup's named special Pokémon their signature trait (Specialists and above; Grunts never carry one). Returns the uids that got one. */
+export function assignEvilTraits(traits: Traits, team: readonly PokemonInstance[], ctx: Pick<EvilVariantContext, 'teamId' | 'regionId' | 'rank'>): string[] {
+  if (ctx.rank === 'grunt') return [];
+  const given: string[] = [];
+  for (const mon of team) {
+    const trait = traitForSpecies(ctx.teamId, ctx.regionId, mon.speciesId);
+    if (!trait) continue;
+    assignTrait(traits, mon.uid, trait);
+    given.push(mon.uid);
+  }
+  return given;
 }
 
 /** Marnie's League Card: the Team Yell Blockade event's "Chant along" branch adds the event flag `marnies-league-card` (event flags live in `run.story.flags` as `ev:<key>`). Once held it stays for the run. */

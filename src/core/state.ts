@@ -20,6 +20,7 @@ import { ArchivedRivalSchema, MENTOR_TYPES, StoryStateSchema } from './story/sch
 import { PartyLifeStateSchema, createPartyLife } from './partyLife/schema';
 import { freshHyperBattle } from './battle/hyper';
 import { SpectacleBattleSchema } from './battle/spectacle';
+import { TraitsSchema, type Traits } from './expansion/traits';
 import { TimedStageSchema, VariantsSchema, type TimedStage, type Variants } from './expansion/variantLines';
 import { ArenaSchema, SkillInputSchema } from './battle/w1Play';
 
@@ -551,6 +552,11 @@ export const freshExtra = () => ({
   brokenFace: [] as string[],
   variants: {} as Variants,
   variantTimed: [] as TimedStage[],
+  traits: {} as Traits,
+  /** Lights Out: turns of darkness left (accuracy -10% for both sides). */
+  darkTurns: 0,
+  /** Payout: its holder knocked out a foe this battle, so the prize money is doubled. */
+  payout: false,
   galar: [] as string[],
   delta: false,
   mimic: {} as Record<string, { kind: 'mimic' | 'transform'; slot: number; moves: { id: string; pp: number }[] }>,
@@ -793,6 +799,10 @@ export const BattleStateSchema = z.object({
     variants: VariantsSchema,
     /** Patchwork's net and smoke ball: stat changes that wear off after 2 turns. */
     variantTimed: z.array(TimedStageSchema).default([]),
+    /** Beta 0.6 signature traits (core/expansion/traits.ts): uid -> trait and counters. */
+    traits: TraitsSchema,
+    darkTurns: z.number().int().min(0).default(0),
+    payout: z.boolean().default(false),
     /** Galar big-battle moments already used (evolve-and-survive per Pokémon, the thread, the cheat) and ones pending this hit (galarMoments.ts). */
     galar: z.array(z.string()).default([]),
     delta: z.boolean().default(false),
