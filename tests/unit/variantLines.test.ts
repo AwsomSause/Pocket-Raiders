@@ -94,13 +94,13 @@ describe('Dark Ball in battle', () => {
 });
 
 describe('Preserved in battle', () => {
-  it('enters with -1 Speed, takes 25% less on the first hit, and cannot be given a status', () => {
+  it('enters with -1 Speed, takes 20% less on the first hit, and cannot be given a status', () => {
     const base = duel(), pre = duel({ line: 'preserved' });
     const b1 = lost(base.go(), 'enemy');
     const p1Events = pre.go();
     expect(pre.battle.enemyStages.spe).toBe(-1);
-    expect(lost(p1Events, 'enemy') / b1).toBeGreaterThan(0.65);
-    expect(lost(p1Events, 'enemy') / b1).toBeLessThan(0.85);
+    expect(lost(p1Events, 'enemy') / b1).toBeGreaterThan(0.7);
+    expect(lost(p1Events, 'enemy') / b1).toBeLessThan(0.9);
     const thunder = duel({ line: 'preserved', pMove: 'thunder-wave' });
     thunder.go();
     expect(thunder.enemy.status).toBeNull();
@@ -111,7 +111,7 @@ describe('Preserved in battle', () => {
 });
 
 describe('Tidebound and Cinderborn', () => {
-  it('Tidebound: +1 Speed in rain, nothing in sun; Cinderborn: +1 Defense in sun', () => {
+  it('Tidebound: +1 Speed in rain, nothing in sun; Cinderborn: +1 Special Defense in sun', () => {
     const rain = duel({ line: 'tidebound', weather: 'rain' });
     rain.go();
     expect(rain.battle.enemyStages.spe).toBe(1);
@@ -120,7 +120,7 @@ describe('Tidebound and Cinderborn', () => {
     expect(sun.battle.enemyStages.spe).toBe(0);
     const warm = duel({ line: 'cinderborn', weather: 'sun' });
     warm.go();
-    expect(warm.battle.enemyStages.def).toBe(1);
+    expect(warm.battle.enemyStages.spd).toBe(1);
   });
   it('their moves cannot miss under their own weather only', () => {
     const v: Variants = {};

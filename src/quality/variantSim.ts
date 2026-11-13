@@ -41,6 +41,5 @@ export function simulateVariantLine(content: Content, line: string | null, battl
   return { line, battles, variantWins, plainWins, draws, variantRate: variantWins / decided, plainRate: plainWins / decided };
 }
 
-/** The most any side may win. The plan says 60%. Cinderborn's measured 61.3% (5,000 battles, a third of them in sun) is a documented limit, so it is held to 65% until the director picks a fix (docs/status/variant-lines.md). */
-export const SIM_LIMIT: Record<string, number> = { cinderborn: 0.65 };
-export const simLimit = (line: string | null): number => (line ? SIM_LIMIT[line] ?? 0.6 : 0.6);
+/** The most any side may win (plan E1). */
+export const simLimit = (_line: string | null): number => 0.6;

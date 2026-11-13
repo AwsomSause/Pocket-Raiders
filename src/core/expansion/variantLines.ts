@@ -33,7 +33,7 @@ const flags = (variants: Variants, uid: string): Record<string, number> => varia
 
 export interface EntryEffect { stages: Partial<Record<StageKey, number>>; message: string | null }
 
-/** When it comes in. Dark Ball +1 Attack and Special Attack; Preserved -1 Speed; Tidebound/Cinderborn read the weather. */
+/** When it comes in. Dark Ball +1 Attack and Special Attack; Preserved -1 Speed; Tidebound/Cinderborn (+1 Special Defense in sun, director decision) read the weather. */
 export function variantOnEntry(variants: Variants, uid: string, weather: Weather): EntryEffect {
   const line = lineOf(variants, uid);
   const f = flags(variants, uid);
@@ -47,13 +47,13 @@ export function variantOnEntry(variants: Variants, uid: string, weather: Weather
   }
   if (line === 'cinderborn') {
     f.warm = weather === 'sun' ? 1 : 0;
-    if (weather === 'sun') return { stages: { def: 1 }, message: 'The ground is warm.' };
+    if (weather === 'sun') return { stages: { spd: 1 }, message: 'The ground is warm.' };
     if (weather === 'rain') return { stages: {}, message: 'The ground is cold.' };
   }
   return { stages: {}, message: null };
 }
 
-/** The hit it takes: a damage multiplier (and an announcement once). Tagged: first hit of the battle -20%. Preserved: first hit after entering -25% (the cap is 20% for lines, so Preserved's 25% is the one documented exception, capped at 25%). */
+/** The hit it takes: a damage multiplier (and an announcement once). Tagged: first hit of the battle -20%. Preserved: first hit after entering -20% (the script says 25%; the plan's 20% cap wins). */
 export function variantIncoming(variants: Variants, uid: string): { multiplier: number; message: string | null } {
   const line = lineOf(variants, uid);
   const f = flags(variants, uid);
@@ -63,7 +63,7 @@ export function variantIncoming(variants: Variants, uid: string): { multiplier: 
   }
   if (line === 'preserved' && f.guard === 1) {
     f.guard = 0;
-    return { multiplier: 0.75, message: 'It was kept very carefully.' };
+    return { multiplier: 1 - VARIANT_DAMAGE_CAP, message: 'It was kept very carefully.' };
   }
   return { multiplier: 1, message: null };
 }

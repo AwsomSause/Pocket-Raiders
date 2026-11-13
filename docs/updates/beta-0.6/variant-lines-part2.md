@@ -4,4 +4,4 @@
 
 **Save:** none bumped. `battle.extra.variants` is a new defaulted field; old battles load with an empty map (tested).
 
-**Limits:** nine lines not wired yet (assigning one throws). Kanto signature traits not built. Cinderborn measures 61.3% in the 5,000-battle sim (target 60%), Preserved's 25% cut is above the 20% line cap: both flagged in `docs/status/variant-lines.md` for a director call. No special Pokémon spawn in runs yet.
+**Limits:** nine lines not wired yet (assigning one throws). Kanto signature traits not built. Two script rules changed by decision: Cinderborn gives +1 Special Defense in sun (not +1 Defense; sim 51.2%), and Preserved's first-hit cut is 20% (not 25%; plan's cap wins). All wired lines are under 60% in the 5,000-battle sim. No special Pokémon spawn in runs yet. Details: `docs/status/variant-lines.md`.

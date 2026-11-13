@@ -10,8 +10,8 @@ State: `battle.extra.variants` (uid -> line + counters, saved with the battle; o
 | Preserved | Alola | wired, tested |
 | Patchwork, Snagged, Spiritless, Overclocked, Couture, Tagged-Up, Overcharged, Loud, Tuned | various | NOT wired: `assignVariant` throws for them, so none can silently do nothing |
 
-**Balance sim** (`node tools/variant-sim.ts`, 5,000 mirror battles each, identical Blastoise, the line on either side, weather a third rain / a third sun / a third none): baseline 50.0%; Tagged 53.3%; Dark Ball 45.4%; Tidebound 51.4%; **Cinderborn 61.3% (over the 60% target)**; Preserved 58.2%. Cinderborn is held to 65% in the gate as a documented limit; the fix is a director call (e.g. +1 Special Defense instead of +1 Defense, or +1 only after the first sun turn).
+**Balance sim** (`node tools/variant-sim.ts`, 5,000 mirror battles each, identical Blastoise, the line on either side, weather a third rain / a third sun / a third none; gate 60%): baseline 50.0%; Tagged 53.3%; Dark Ball 45.4%; Tidebound 51.4%; Cinderborn 51.2%; Preserved 57.1%.
 
-**Open point:** the script gives Preserved a 25% first-hit cut, above the plan's 20% cap for line damage effects. Kept as written; flagged.
+**Director decisions (via coordinator, 2026-11-13):** Cinderborn gives +1 Special Defense in sun (the script says +1 Defense; that measured 61.3%). Preserved's first-hit cut is 20% (the script says 25%; the plan's 20% cap wins).
 
 Kanto's nine signature traits (Seat at the Table, Drill Through, ...) are not built yet.
