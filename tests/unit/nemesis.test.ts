@@ -260,6 +260,8 @@ describe('The other Overdrive moments', () => {
     b.hp = 0;
     const run = battleRun('trainer', [a, b, createPokemon(content, 'snorlax', 60, 'b3')], { leaderId: 'brock', classId: 'gym-leader' });
     run.battle!.enemyIndex = 2;
+    // Bosses now revive fallen teammates (Beta 0.6 item budget); this boss's revives are spent so it really fights on alone.
+    run.battle!.enemyRevivesUsed = content.balance.itemCaps.revivesPerBattle;
     expect(takeTurn(always, run, { kind: 'move', index: 0 }).cues.map((c) => c.title)).toContain('The Enemy Is Fighting for Its Pride!');
   });
 
