@@ -5,3 +5,5 @@
 **Save:** none. The new `format` field is optional in the event data.
 
 **Limits:** triple battles stay off until the triple battle screen (T2) is in, so for now both triple scenes are fought as double battles. A scene drops to doubles if you have only two healthy Pokémon, and to a single battle if you have one.
+
+**More scenes (second PR):** the **Shadow Triad**, the **Plasma Yard** guards, three **Delibird**, the Mystery Dungeon **Monster House**, and the **Double Booking** brawl (both teams' grunts at once) are now triple battles too. Like the others, they're played as doubles until the triple battle screen is in.

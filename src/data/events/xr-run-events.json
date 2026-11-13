@@ -4287,14 +4287,13 @@
     {
      "label": "Take advantage",
      "success": {
-      "text": "You stir it into a three-way fight.",
+      "text": "You stir it into a three-way brawl. Both teams turn on you at once.",
       "effects": [],
       "battle": {
        "kind": "trainer",
-       "chain": 2,
        "name": "Booking Grunts",
        "classId": "roughneck",
-       "size": 2,
+       "size": 4,
        "types": [],
        "levelBonus": 1,
        "win": [
@@ -4302,7 +4301,8 @@
          "kind": "evil",
          "heat": 1
         }
-       ]
+       ],
+       "format": "triples"
       }
      }
     },
