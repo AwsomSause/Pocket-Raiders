@@ -11,7 +11,7 @@ export const PresenceDataSchema = z.object({
   note: z.string(),
   guaranteedPerRegion: z.number().int().min(0),
   thirdChance: z.number().min(0).max(1),
-  pseudo: z.object({ mainChance: z.number().min(0).max(1), friendChance: z.number().min(0).max(1), forms: z.record(z.string(), z.number().int().min(0)), ambushMinPartyHp: z.number().min(0).max(1) }),
+  pseudo: z.object({ mainChance: z.number().min(0).max(1), friendChance: z.number().min(0).max(1), forms: z.record(z.string(), z.number().int().min(0)), ambushMinPartyHp: z.number().min(0).max(1), text: z.record(z.string(), z.string()) }),
   stepIn: z.object({ chance: z.number().min(0).max(1), perRegion: z.number().int().min(1) }),
   friend: z.object({
     regionChance: z.number().min(0).max(1),
@@ -19,6 +19,8 @@ export const PresenceDataSchema = z.object({
     maxExtraAssist: z.number().int().min(0),
     assistCap: z.object({ standard: z.number().int(), extended: z.number().int() }),
     attitude: z.object({ start: z.number().int(), min: z.number().int(), max: z.number().int() }),
+    names: z.array(z.string()).min(1),
+    sceneEvery: z.number().int().min(1),
     text: z.record(z.string(), z.string()),
     postcards: z.array(z.string()).min(3),
   }),
@@ -65,13 +67,23 @@ export function pseudoPresence(seed: string, regionIndex: number, stageIndex: nu
   return { who, form: forms[0]![0] };
 }
 
-/** Catch step-in: 3% per catch, once per region. Marks the region as used when it fires. */
-export function catchStepIn(seed: string, rec: RivalOverhaulState, regionIndex: number, catchNumber: number): boolean {
+/** True when a catch step-in would fire now: 3% per catch, and not if one already happened this region. Pure: it changes nothing. */
+export function catchStepInRoll(seed: string, rec: Pick<RivalOverhaulState, 'presence'>, regionIndex: number, catchNumber: number): boolean {
+  if (rec.presence?.[String(regionIndex)]?.stepIn) return false;
+  return roll(seed, `step-in:${regionIndex}:${catchNumber}`) < PRESENCE.stepIn.chance;
+}
+
+/** Records that the region's one step-in happened. */
+export function markStepIn(rec: RivalOverhaulState, regionIndex: number): void {
   const p = (rec.presence ??= {});
   const r = (p[String(regionIndex)] ??= { meetings: 0, stepIn: false });
-  if (r.stepIn) return false;
-  if (roll(seed, `step-in:${regionIndex}:${catchNumber}`) >= PRESENCE.stepIn.chance) return false;
   r.stepIn = true;
+}
+
+/** Roll and record in one go (kept for tests and simple callers). */
+export function catchStepIn(seed: string, rec: RivalOverhaulState, regionIndex: number, catchNumber: number): boolean {
+  if (!catchStepInRoll(seed, rec, regionIndex, catchNumber)) return false;
+  markStepIn(rec, regionIndex);
   return true;
 }
 

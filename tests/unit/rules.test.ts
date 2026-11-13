@@ -134,9 +134,10 @@ describe('Death-Block and Adventure', () => {
 
 describe('the 10 other modifiers', () => {
   it('every modifier is supported and the unsupported list is empty', () => {
-    expect(RUN_RULES.modifiers.filter((m) => m.status !== 'supported').map((m) => m.id)).toEqual(['quick-route']); // retired: Quick Route is a mode now
-    // 10 challenge modifiers, 3 Challenge Contracts (Empty Bag, No Rest, No Evolution), Solo Run and the retired Quick Route, Pacifist, Time Attack, the randomizers, and Elite Duelist (S275).
-    expect(RUN_RULES.modifiers).toHaveLength(34);
+    // Retired: Quick Route is a mode now. Triples Only (Beta 0.6 T3) opens when the battle screen draws three a side (T2).
+    expect(RUN_RULES.modifiers.filter((m) => m.status !== 'supported').map((m) => m.id)).toEqual(['triples-only', 'quick-route']);
+    // 10 challenge modifiers, 3 Challenge Contracts (Empty Bag, No Rest, No Evolution), Solo Run and the retired Quick Route, Pacifist, Time Attack, the randomizers, Elite Duelist (S275) and Triples Only.
+    expect(RUN_RULES.modifiers).toHaveLength(35);
   });
 
   it('Limited Party caps the party at 4', () => {

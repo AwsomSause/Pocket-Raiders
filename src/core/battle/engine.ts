@@ -114,6 +114,7 @@ import type { MomentHooks } from '../moments/pokemonMoments';
 import { freshHyperBattle, rollHyper, type EnemyRage, type HyperContext, type HyperEligibility } from './hyper';
 import { applyTransformations, battleMove, battleTypes, endDynamax, maxMoveExtras, maxMoveTerrain, maxMoveWeather, stabMultiplier, teraPower, tickDynamax, transformProblem, zMoveFor, type TransformEvent, type TransformRequest, type TransformStepEvent } from './transform';
 import { hiddenPowerType } from '../ivs';
+import { fieldIndexes, trioSpots } from './triples';
 
 export type Side = 'player' | 'enemy';
 
@@ -1864,6 +1865,14 @@ function allyCombatant(ctx: BattleContext, c: Combatant): Combatant | null {
   if (!d) return null;
   const { battle } = ctx;
   const team = c.side === 'player' ? ctx.party : battle.enemyTeam;
+  if (d.trio) {
+    // Triple battles: the first partner standing next to `c` (left first).
+    const spots = trioSpots(battle, c.side);
+    const at = spots.findIndex((s) => s.index >= 0 && team[s.index]?.uid === c.mon.uid);
+    if (at < 0) return null;
+    const near = spots.map((s, spot) => ({ s, spot })).find(({ s, spot }) => Math.abs(spot - at) === 1 && s.index >= 0 && (team[s.index]?.hp ?? 0) > 0);
+    return near ? { side: c.side, mon: team[near.s.index]!, stages: near.s.stages, vol: near.s.vol, flinched: false, protected: false } : null;
+  }
   const primary = c.side === 'player' ? { mon: ctx.party[battle.activeIndex], stages: battle.playerStages, vol: battle.playerVolatile } : { mon: battle.enemyTeam[battle.enemyIndex], stages: battle.enemyStages, vol: battle.enemyVolatile };
   const slot = d[c.side];
   const other = slot.index >= 0 ? { mon: team[slot.index], stages: slot.stages, vol: slot.vol } : null;
@@ -1883,6 +1892,16 @@ function benchedActives(ctx: BattleContext): { mon: PokemonInstance; vol: Volati
   const d = ctx.battle.doubles;
   if (!d) return [];
   const out: { mon: PokemonInstance; vol: Volatile }[] = [];
+  if (d.trio) {
+    for (const side of ['player', 'enemy'] as const) {
+      const team = side === 'player' ? ctx.party : ctx.battle.enemyTeam;
+      trioSpots(ctx.battle, side).forEach((s, spot) => {
+        const mon = s.index >= 0 ? team[s.index] : undefined;
+        if (spot !== d.trio!.at[side] && mon && mon.hp > 0) out.push({ mon, vol: s.vol });
+      });
+    }
+    return out;
+  }
   const p = d.player.index >= 0 ? ctx.party[d.player.index] : undefined;
   const e = d.enemy.index >= 0 ? ctx.battle.enemyTeam[d.enemy.index] : undefined;
   if (p && p.hp > 0) out.push({ mon: p, vol: d.player.vol });
@@ -4485,11 +4504,13 @@ function forceOut(ctx: BattleContext, target: Combatant, events: BattleEvent[]):
   if (target.mon.hp <= 0 || target.mon.dynamaxed) return;
   if (target.side === 'enemy') {
     if (battle.kind !== 'trainer') return;
-    const others = battle.enemyTeam.map((m, i) => ({ m, i })).filter(({ m, i }) => i !== battle.enemyIndex && i !== battle.doubles?.enemy.index && m.hp > 0);
+    const onField = fieldIndexes(battle, 'enemy');
+    const others = battle.enemyTeam.map((m, i) => ({ m, i })).filter(({ m, i }) => !onField.includes(i) && m.hp > 0);
     if (!others.length) return;
     swapInEnemy(ctx, rng.pick(others).i, events);
   } else {
-    const others = ctx.party.map((m, i) => ({ m, i })).filter(({ m, i }) => i !== battle.activeIndex && i !== battle.doubles?.player.index && m.hp > 0);
+    const onField = fieldIndexes(battle, 'player');
+    const others = ctx.party.map((m, i) => ({ m, i })).filter(({ m, i }) => !onField.includes(i) && m.hp > 0);
     if (!others.length) return;
     const outgoing = ctx.party[battle.activeIndex]!;
     events.push({ type: 'switchOut', side: 'player', uid: outgoing.uid });

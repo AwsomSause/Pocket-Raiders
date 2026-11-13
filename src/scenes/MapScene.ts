@@ -48,6 +48,8 @@ import { arenaFor, getTheme } from '../core/themes';
 import { stageModifier } from '../core/runModifiers';
 import type { MapNode, SideStop } from '../core/state';
 import { services } from '../game/services';
+import { pendingRescue } from '../core/evil/rescueGlue';
+import { rescueOf } from '../core/evil/rescue';
 import { device } from '../game/deviceTools';
 import { flagOn } from '../core/tools/featureFlags';
 import { commentaryLine } from '../core/tools/commentary';
@@ -236,6 +238,16 @@ export class MapScene extends Phaser.Scene {
     if (session.storyScene()) {
       this.scene.start('Story', { next: 'Map' });
       return;
+    }
+    // R9: the rival's Rescue Plan offer, at a quiet moment, shown on top of the map (the screen resumes this scene).
+    const rescue = pendingRescue(session.content, run);
+    if (rescue) {
+      const hold = rescueOf(run).holds.find((h) => h.id === rescue.offer.holdId);
+      const mon = hold ? session.content.species.get(String(hold.pokemon[0]?.speciesId))?.name ?? 'your Pokémon' : 'your Pokémon';
+      this.time.delayedCall(0, () => {
+        this.scene.launch('Rescue', { ...rescue, names: { player: session.content.archetypes.get(run.archetypeId)?.name ?? 'friend', mon }, from: 'Map' });
+        this.scene.pause();
+      });
     }
     // W10 (I496/I507/I497): C hears a cry, H holds the lead's paw, N names the node. Keys and touch buttons share one handler each.
     const stageKey = (nodeId: string): string => {

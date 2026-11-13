@@ -38,6 +38,7 @@ import { chooseSignatureOption, signatureDecisions } from './signature';
 import { boxCapacity, catchLevelOffset, encounterWeightPerk, partyLimit, postBattleHealShare, hasStarterSignature, releaseLimit, signatureMoveFor, evolutionLevelOffset, isBossClass, regionLevelOffset, startingAttributes, startingLevelOffset, syncHpPerks, xpPerk, bossMoneyPerk, championMoneyPerk, ordinaryMoneyPerk, catchMoneyPerk, doubleBattleRewardPerk, singleBattleXpPerk, shopEarlyStockPerk, shopEarlyRareStockPerk, shopRefreshPerk, thirdBossLevels, isUltraBeast, fishingRareTriesPerk, bonusRewardChancePerk } from './trainerPerks';
 import { createBattle, resolveTurn, startBattle, type BattleContext, type BattleEvent, type PlayerAction } from './battle/engine';
 import { autoCommands, canBeDoubles, makeDoubles, primarySpot, resolveDoublesTurn, startDoubles } from './battle/doubles';
+import { canBeTriples, makeTriples } from './battle/triples';
 import { endBattle as endHeldBattle, expMultiplier, giveBossItems, growthOnLevelUp } from './battle/held';
 import { gimmickSlots, planBossGimmicks } from './battle/bossGimmicks';
 import { revertTransformations } from './battle/transform';
@@ -225,7 +226,9 @@ import { advanceStreak, applyPity } from './streaks';
 import { conditionEvolutionTarget, evoRunInfo } from './conditionEvolution';
 import { roleOrder } from './battle/opponentAi';
 import { beginRivalBrain } from './rivals/brainSetup';
-import { winHealFraction, openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
+import { friendStageBeat, rivalBattleLines } from './rivals/live';
+import { markStepIn } from './rivals/presence';
+import { winHealFraction, openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, triplesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
 import { shopTierAllowed } from './rarity';
 import { campMoment, campQuirkLine } from './overhaul/quirkTimes';
 import { noteBountyKills } from './bounties';
@@ -690,6 +693,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   rivalCatchesMonRival(content, run);
   rivalRivalries(content, run);
   rivalSighting(content, run);
+  friendStageBeat(content, run);
   noteProtagonistTitle(content, run);
   tellCampfire(content, run);
   tellAct(content, run);
@@ -2238,8 +2242,13 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     if (plan.memoryNote && !hunted && !nemesis) run.battle.memoryNote = plan.memoryNote;
     // Some ordinary trainers fight two at a time (their own seed, so no other roll changes).
     const doublesCfg = content.balance.doubles;
+    const triplesCfg = content.balance.triples;
+    const ordinary = node.kind === 'trainer' && !rematch && !back && !rivalBack && !isRival && !nemesis && !memoryHit && !bossBack;
+    // Beta 0.6 T3: triple battles (Triples Only rule, bosses known for them, or some ordinary trainers from a later region; own seed).
+    if (plan.leaderId && triplesCfg.enabled && triplesCfg.bossIds.includes(plan.leaderId) && canBeTriples(run.party, team)) makeTriples(run.battle, run.party);
+    else if (ordinary && canBeTriples(run.party, team) && (triplesOnly(run.rules) || (triplesCfg.enabled && run.regionIndex >= triplesCfg.fromRegion && new Rng(hashSeed(`${run.seed}::triples::${run.regionIndex}::${stage.index}::${node.id}`)).chance(triplesCfg.chance)))) makeTriples(run.battle, run.party);
     // Bosses known for double battles (Tate & Liza) always fight two at a time.
-    if (plan.leaderId && doublesCfg.bossIds.includes(plan.leaderId) && canBeDoubles(run.party, team)) makeDoubles(run.battle, run.party);
+    else if (plan.leaderId && doublesCfg.bossIds.includes(plan.leaderId) && canBeDoubles(run.party, team)) makeDoubles(run.battle, run.party);
     else if (node.kind === 'trainer' && node.doubles && run.expansion?.pacing && !rematch && !back && !rivalBack && !isRival && !nemesis && !memoryHit && !bossBack && canBeDoubles(run.party, team)) makeDoubles(run.battle, run.party);
     else if (node.kind === 'trainer' && !rematch && !back && !rivalBack && !isRival && !nemesis && !memoryHit && !bossBack && stageNumber >= doublesCfg.fromStage && canBeDoubles(run.party, team)) {
       if (doublesOnly(run.rules) || new Rng(hashSeed(`${run.seed}::doubles::${run.regionIndex}::${stage.index}::${node.id}`)).chance(doublesCfg.chance)) makeDoubles(run.battle, run.party);
@@ -2248,6 +2257,8 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     if (rivalBack) {
       run.battle.rivalId = rivalBack.id;
       beginRivalBrain(content, run, rivalBack.id);
+      const bankLines = rivalBattleLines(content, run, rivalBack.id, node.kind, activeIndex);
+      if (bankLines.length > 0) run.battle.rivalNote = [run.battle.rivalNote, ...bankLines.map((l) => `${rivalBack.name}: "${l}"`)].filter(Boolean).join(' ');
       if (rivalNote) run.battle.rivalNote = [rivalNote, run.battle.rivalNote].filter(Boolean).join(' ');
       if (narrativeDef) run.battle.narrative = { id: narrativeDef.id, maxTurns: narrativeDef.maxTurns };
     }
@@ -2337,6 +2348,8 @@ export function rivalStepIn(content: Content, current: RunState): StepInResult |
   if (!plan) return null;
   const run = structuredClone(current);
   const rival = run.story.rivals.find((r) => r.id === plan.rivalId)!;
+  const stepRec = plan.kind === 'catch' ? run.expansion?.rival?.[plan.rivalId] : undefined;
+  if (stepRec) markStepIn(stepRec, run.regionIndex);
   const battle = run.battle!;
   const foe = battle.enemyTeam[battle.enemyIndex]!;
   const ace = rivalAce(content, run, rival);

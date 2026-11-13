@@ -39,6 +39,8 @@ export const StepInConfigSchema = z.object({
   teamSize: z.number().int().min(2).max(6),
   lines: z.object(Object.fromEntries(SCENARIOS.map((s) => [s, ToneLines])) as Record<Scenario, typeof ToneLines>),
 });
+import { overhaulOf } from './overhaul';
+import { catchStepInRoll, markStepIn } from './presence';
 export const STEP_IN = StepInConfigSchema.parse(json);
 
 export type StepInKind = 'assist' | 'duel' | 'catch';
@@ -94,7 +96,10 @@ export function planStepIn(content: Content, run: RunState): StepInPlan | null {
   const rollKind = rng.float();
   if (catchable(content, b) && hostile(rival) && Number(run.story.flags[stepInFlag(run, 'c')] ?? 0) < STEP_IN.perStageCatch) {
     const legend = legendKind(content, b.enemyTeam[b.enemyIndex]!.speciesId);
-    if (rollC < (legend ? STEP_IN.legendCatchChance : STEP_IN.catchChance)) return { kind: 'catch', rivalId: rival.id, ...(legend ? { legend } : {}) };
+    // Beta 0.6 R6: a registered rival steps in on a catch 3% of the time, once per region (rivals/presence.ts).
+    const rec = overhaulOf(run, rival.id);
+    const fires = rec ? catchStepInRoll(`${run.seed}:${rival.id}`, rec, run.regionIndex, run.encountersCompleted) : rollC < (legend ? STEP_IN.legendCatchChance : STEP_IN.catchChance);
+    if (fires) return { kind: 'catch', rivalId: rival.id, ...(legend ? { legend } : {}) };
   }
   if (Number(run.story.flags[stepInFlag(run, 'ab')] ?? 0) >= STEP_IN.perStageDuelAssist) return null;
   if (rollAB >= STEP_IN.assistChance + STEP_IN.duelChance) return null;

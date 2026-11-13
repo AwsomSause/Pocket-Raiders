@@ -34,6 +34,8 @@ export const RescueDataSchema = z.object({
   /** The choice text of each beat (PS-RESCUE), by plan and beat; the Exchange has right and wrong lines. */
   beats: z.record(z.enum(['quiet', 'loud', 'inside']), z.record(z.string(), z.object({ good: text, neutral: text, bad: text }))),
   exchange: z.record(z.string(), z.object({ good: text, wrong: text })),
+  /** The rival's pack personality (rivalOverhaul.json) to the rescue archetype whose voice the lines use. */
+  personalityArchetype: z.record(z.string(), z.enum(ARCHETYPES)),
   /** Cellmate species (weakest first) for teams that have no entry in evilTeams.json. */
   gruntPools: z.record(z.string(), z.array(z.string()).min(2)),
   tuning: z.object({

@@ -72,8 +72,9 @@ export class RescueScene extends Phaser.Scene {
   private finish(out: RescueOutcome | null): void {
     services().session.saveRunNow();
     this.clear();
-    this.scene.stop();
-    this.scene.resume(this.data0.from);
+    // Start the map again so the party and bench show what came back.
+    this.scene.stop(this.data0.from);
+    this.scene.start(this.data0.from);
     this.data0.onDone?.(out);
   }
 
