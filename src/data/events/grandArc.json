@@ -1,0 +1,136 @@
+{
+ "events": [
+  {
+   "id": "grand-arc-ein",
+   "name": "The Quiet Figure",
+   "group": "Shadow Pokémon",
+   "rarity": "uncommon",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "grandArc",
+     "missingRom": "K"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_m"
+    ],
+    "effect": "glint"
+   },
+   "intro": "At the edge of a Rocket scene stands a quiet figure with a notebook. Ein. He is not wearing a Rocket uniform, and he is not writing down what Rocket says. He is writing down what the Capture Rig hums. \"The pulse is not theirs,\" he murmurs. \"I would like to show you the reading.\"",
+   "choices": [
+    {
+     "label": "Challenge Ein (a Cipher battle)",
+     "success": {
+      "text": "Ein sets down the notebook. \"Then let us settle it the old way.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "classId": "psychic",
+       "name": "Ein",
+       "size": 3,
+       "levelBonus": 2,
+       "shadow": 1,
+       "win": [
+        {
+         "kind": "grandArcRom",
+         "rom": "K"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let him read your Shadow Pokémon",
+     "requires": [
+      {
+       "kind": "partyShadow"
+      }
+     ],
+     "success": {
+      "text": "Ein listens to the haze for a long moment and nods. He tears out a page and hands you a Data ROM.",
+      "effects": [
+       {
+        "kind": "grandArcRom",
+        "rom": "K"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "Ein closes the notebook and fades into the crowd.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "grand-arc-stencil",
+   "name": "Crates With the Same Stencil",
+   "group": "Shadow Pokémon",
+   "rarity": "common",
+   "tags": [
+    "Evil Team",
+    "Combat"
+   ],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "grandArc"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "effect": "glint"
+   },
+   "intro": "Crates on the dock all carry the same stencil: a small violet mark that is not Rocket's, not Aqua's, not anyone's you know. A Cipher Peon is guarding them and trying very hard to look like a dockworker.",
+   "choices": [
+    {
+     "label": "Open a crate (a Cipher battle)",
+     "success": {
+      "text": "\"Nothing to see here. The fountain is just very clean.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "classId": "worker",
+       "name": "Cipher Peon",
+       "evil": "grunt",
+       "evilTeam": "cipher",
+       "size": 2,
+       "levelBonus": 1,
+       "shadow": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 250
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave them be",
+     "success": {
+      "text": "You note the stencil and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

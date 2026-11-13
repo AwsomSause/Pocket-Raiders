@@ -11,7 +11,7 @@
 import { z } from 'zod';
 import raw from '../../data/pokemonMoments.json';
 import { Rng, hashSeed } from '../rng';
-import type { Content } from '../contentSchema';
+import type { Content, Species } from '../contentSchema';
 import type { PokemonInstance } from '../state';
 
 export const MOMENT_TRIGGERS = ['runEnd', 'lethal', 'ally', 'start', 'low', 'ko', 'enter', 'super', 'crit', 'weather', 'status', 'rest', 'catch'] as const;
@@ -42,6 +42,12 @@ export const MomentEffectSchema = z.object({
   foeStatusChance: z.number().int().min(1).max(100).default(100),
   /** Every move gets this many PP back. */
   ppRestore: z.number().int().min(1).max(30).optional(),
+  /** Chance (percent) the foe is confused by `foeConfuse`. */
+  foeConfuseChance: z.number().int().min(1).max(100).default(100),
+  /** Entry moments: HP restored now, as a percent of max HP. */
+  healNowPct: z.number().int().min(1).max(100).optional(),
+  /** Own stat boosts from `boost` / `boostBest` fade after this many turns (absent = last the battle). */
+  boostTurns: z.number().int().min(1).max(5).optional(),
   /** Damage is halved for this many turns. */
   guard: z.number().int().min(1).max(5).optional(),
   /** Run-end revive: HP multiplier on max HP, and the Overcharged state. */
@@ -57,7 +63,7 @@ const ScopeSchema = z.object({
   types: z.array(z.string()).optional(),
   groups: z.array(z.string()).optional(),
   tags: z.array(z.string()).optional(),
-  /** A stat-shape role (wall, glass-cannon, support); used by later batches. */
+  /** A stat-shape role (wall, glass-cannon, support), worked out from base stats (see `roleOf`). */
   role: z.string().optional(),
 });
 
@@ -66,6 +72,8 @@ export const PokemonMomentSchema = z.object({
   name: z.string().min(1),
   scope: ScopeSchema,
   trigger: z.enum(MOMENT_TRIGGERS),
+  /** Extra condition: at least this many living party members must match the moment's own scope (Eevee's Bond). */
+  requires: z.object({ partyMatching: z.number().int().min(2).max(6) }).optional(),
   /** 0–1. */
   chance: z.number().min(0).max(1),
   limit: z.enum(['battle', 'run']),
@@ -88,14 +96,17 @@ const BY_ID = new Map(POKEMON_MOMENTS.map((m) => [m.id, m]));
 export const pokemonMoment = (id: string): PokemonMoment | undefined => BY_ID.get(id);
 
 /** Every species in the evolution line of `speciesId`, from its root up. */
-function lineRoot(content: Content, speciesId: string): string {
+/** The Pokémon and everything it evolves from, so a line listed by its classic root still matches when a custom baby was added before it. */
+function lineIds(content: Content, speciesId: string): string[] {
+  const ids = [speciesId];
   let id = speciesId;
   for (let i = 0; i < 8; i++) {
     const from = content.species.get(id)?.evolvesFrom;
-    if (!from) return id;
+    if (!from) break;
+    ids.push(from);
     id = from;
   }
-  return id;
+  return ids;
 }
 
 export function momentMatches(content: Content, m: PokemonMoment, speciesId: string): boolean {
@@ -103,11 +114,23 @@ export function momentMatches(content: Content, m: PokemonMoment, speciesId: str
   if (!sp) return false;
   const s = m.scope;
   if (s.species?.includes(speciesId)) return true;
-  if (s.lines?.includes(lineRoot(content, speciesId))) return true;
+  if (s.lines && lineIds(content, speciesId).some((id) => s.lines!.includes(id))) return true;
   if (s.types?.some((t) => sp.types.includes(t as never))) return true;
   if (s.groups?.some((g) => MOMENT_GROUPS[g]?.includes(speciesId))) return true;
   if (s.tags?.some((t) => sp.tags.includes(t as never))) return true;
+  if (s.role && roleOf(sp) === s.role) return true;
   return false;
+}
+
+/** A rough stat-shape role from base stats: wall (bulk well over offence), glass-cannon (offence well over bulk), support (bulky HP, modest attacks). */
+export function roleOf(sp: Pick<Species, 'baseStats'>): 'wall' | 'glass-cannon' | 'support' | null {
+  const b = sp.baseStats;
+  const bulk = b.def + b.spd;
+  const off = b.atk + b.spa;
+  if (bulk >= off * 1.25 && bulk >= 150) return 'wall';
+  if (off >= bulk * 1.25 && off >= 170) return 'glass-cannon';
+  if (b.hp >= 75 && Math.max(b.atk, b.spa) <= 90) return 'support';
+  return null;
 }
 
 /** The supported moments for a trigger that apply to this Pokémon, most specific first (species, line, group, tag, type). */

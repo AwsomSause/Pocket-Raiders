@@ -2219,6 +2219,381 @@
     }
    ],
    "storyOnly": true
+  },
+  {
+   "id": "cipher",
+   "name": "Cipher",
+   "color": "#5b3a8c",
+   "style": "secret",
+   "roaming": true,
+   "front": "Es Cade Municipal Works",
+   "philosophy": "A heart can be closed, and the method can be sold.",
+   "motivation": "Grand Master Greevil wants a Pokémon that can never be purified.",
+   "goal": "learn nine ways of closing a heart, and have other people pay for the lessons",
+   "ranks": {
+    "grunt": {
+     "name": "Cipher Peon",
+     "sprite": "trainer.roughneck",
+     "species": [
+      "makuhita",
+      "zangoose",
+      "primeape",
+      "ursaring",
+      "hariyama",
+      "slaking"
+     ],
+     "lines": {
+      "first": "\"Nothing to see here. The fountain is just very clean.\"",
+      "beaten": "\"I only carry the crates.\"",
+      "winning": "\"Walk away. The mayor does not like a mess.\"",
+      "respect": "\"Fine. Keep your Pokémon. I did not see a thing.\""
+     }
+    },
+    "specialist": {
+     "name": "Trudly and Folly",
+     "sprite": "trainer.pr/scientist_m",
+     "species": [
+      "makuhita",
+      "zangoose",
+      "hariyama",
+      "electrode",
+      "porygon2",
+      "absol"
+     ],
+     "lines": {
+      "first": "\"We are the specialists.\" \"I am the specialist. You are the assistant.\"",
+      "beaten": "\"Told you that would happen.\" \"You told me nothing.\"",
+      "winning": "\"Another satisfied customer.\" \"Nobody is satisfied.\"",
+      "respect": "\"You fight better than the file said.\""
+     }
+    },
+    "executive": {
+     "name": "Evice",
+     "sprite": "trainer.pr/rich_m",
+     "species": [
+      "slaking",
+      "salamence",
+      "scizor",
+      "tyranitar",
+      "dragonite",
+      "houndoom"
+     ],
+     "lines": {
+      "first": "\"Oh, my! A visitor! Mind the carpet. Mind the Pokémon.\"",
+      "beaten": "\"The laugh stops a beat before the smile. Do not tell anyone.\"",
+      "winning": "\"Jolly good. Jolly, jolly good.\"",
+      "respect": "\"You would have made a fine employee. A pity.\""
+     }
+    },
+    "leader": {
+     "name": "Grand Master Greevil",
+     "sprite": "trainer.pr/rich_m",
+     "species": [
+      "rhydon",
+      "exeggutor",
+      "tauros",
+      "articuno",
+      "zapdos",
+      "moltres"
+     ],
+     "lines": {
+      "first": "\"Welcome aboard, my young friend. Have you eaten?\"",
+      "beaten": "\"You have cost me a great deal, my young friend.\"",
+      "winning": "\"A kindly old man, you thought. How very useful.\"",
+      "respect": "\"You listen. Almost nobody listens.\""
+     }
+    }
+   },
+   "rule": {
+    "kind": "shadow",
+    "text": "Cipher locks a heart behind one command: its first Pokémon is a Shadow Pokémon you can snag."
+   },
+   "spoils": [
+    "leftovers",
+    "focus-sash",
+    "life-orb",
+    "choice-band",
+    "smoke-ball"
+   ],
+   "legendary": [
+    "lugia"
+   ],
+   "ops": [
+    {
+     "id": "clean-fountain",
+     "kind": "experiment",
+     "name": "The Clean Fountain",
+     "text": "A town fountain is slightly too clean, and the mayor is slightly too kind."
+    },
+    {
+     "id": "nine-crates",
+     "kind": "steal",
+     "name": "Nine Crates",
+     "text": "Crates with the same stencil are being loaded onto a cruise liner."
+    },
+    {
+     "id": "quiet-liaison",
+     "kind": "research",
+     "name": "The Quiet Liaison",
+     "text": "A figure at the edge of someone else's scene is writing everything down."
+    },
+    {
+     "id": "the-mayor",
+     "kind": "control",
+     "name": "The Mayor",
+     "text": "A kindly mayor is offering every visitor a very generous welcome."
+    }
+   ]
+  },
+  {
+   "id": "rocket-remnants",
+   "name": "Rocket Remnants",
+   "color": "#c04050",
+   "style": "open",
+   "roaming": true,
+   "front": "A different disguise every region",
+   "philosophy": "The boss is gone. The rules are not.",
+   "motivation": "Jessie, James and Meowth want to be noticed by someone who still counts.",
+   "goal": "catch one great Pokémon and be forgiven for the rest",
+   "ranks": {
+    "grunt": {
+     "name": "Rocket Straggler",
+     "sprite": "trainer.pr/rocket_grunt_m",
+     "species": [
+      "rattata",
+      "zubat",
+      "ekans",
+      "koffing",
+      "grimer",
+      "raticate"
+     ],
+     "lines": {
+      "first": "\"Prepare for trouble! Er, I am only the intern.\"",
+      "beaten": "\"This is why nobody gives us the good gadgets.\"",
+      "winning": "\"Make it double! Or at least a little bit more.\"",
+      "respect": "\"Okay. I was never really into this.\""
+     }
+    },
+    "specialist": {
+     "name": "The Trio, Disguised",
+     "sprite": "trainer.pr/rocket_grunt_m",
+     "species": [
+      "arbok",
+      "weezing",
+      "persian",
+      "wobbuffet",
+      "meowth",
+      "koffing"
+     ],
+     "lines": {
+      "first": "\"We are three perfectly ordinary strangers. Strangers, I say!\"",
+      "beaten": "\"The costume was working until the hat fell off.\"",
+      "winning": "\"To protect the world from devastation... and also from you.\"",
+      "respect": "\"Fine. Fine! You win. Nobody tell Giovanni.\""
+     }
+    },
+    "executive": {
+     "name": "Butch and Cassidy",
+     "sprite": "trainer.pr/rocket_grunt_m",
+     "species": [
+      "raticate",
+      "golbat",
+      "weezing",
+      "arbok",
+      "persian",
+      "houndoom"
+     ],
+     "lines": {
+      "first": "\"Don't wait up. Ever.\"",
+      "beaten": "\"Twerps. The usual.\"",
+      "winning": "\"Whatever happens next is your fault.\"",
+      "respect": "\"We will remember you. Unfortunately.\""
+     }
+    },
+    "leader": {
+     "name": "Giovanni of Rainbow Rocket",
+     "sprite": "boss.giovanni-rocketboss",
+     "species": [
+      "mewtwo",
+      "honchkrow",
+      "dugtrio",
+      "nidoking",
+      "rhyperior",
+      "persian"
+     ],
+     "lines": {
+      "first": "\"Somewhere, a world fell. I am what was left.\"",
+      "beaten": "\"Courtesy costs nothing. Losing costs more.\"",
+      "winning": "\"Nothing stopped me there. Nothing will stop me here.\"",
+      "respect": "\"You would have been an asset.\""
+     }
+    }
+   },
+   "rule": {
+    "kind": "swarm",
+    "text": "Patchwork gadgets: one more Pokémon in every battle, and a spring that goes sproing."
+   },
+   "spoils": [
+    "leftovers",
+    "focus-sash",
+    "life-orb",
+    "choice-band",
+    "smoke-ball"
+   ],
+   "legendary": [
+    "mewtwo"
+   ],
+   "ops": [
+    {
+     "id": "a-clever-disguise",
+     "kind": "interfere",
+     "name": "A Clever Disguise",
+     "text": "Three perfectly ordinary strangers in very large hats are hanging around the dock."
+    },
+    {
+     "id": "dock-heist",
+     "kind": "steal",
+     "name": "Dock Heist",
+     "text": "Someone is trying to carry a crate that is clearly too heavy for the costume."
+    },
+    {
+     "id": "rainbow-door",
+     "kind": "recruit",
+     "name": "The Far Side of the Door",
+     "text": "Someone is watching Cipher from behind a door, and taking notes."
+    },
+    {
+     "id": "nobody-called-you",
+     "kind": "habitat",
+     "name": "Nobody Called You",
+     "text": "A Wobbuffet keeps stepping out of its Ball to salute, uninvited."
+    }
+   ]
+  },
+  {
+   "id": "snagem",
+   "name": "Team Snag'em",
+   "color": "#2a2a3a",
+   "style": "open",
+   "roaming": true,
+   "front": "Port Warehouse",
+   "philosophy": "A Pokémon is a prize, and a trainer is just who had it last.",
+   "motivation": "Gonzap owes a debt to Cipher, and the interest is paid in Pokémon.",
+   "goal": "take one Pokémon at a time, in broad daylight, for one very large client",
+   "ranks": {
+    "grunt": {
+     "name": "Snag'em Hand",
+     "sprite": "trainer.roughneck",
+     "species": [
+      "makuhita",
+      "hariyama",
+      "poochyena",
+      "mightyena",
+      "sneasel",
+      "houndoom"
+     ],
+     "lines": {
+      "first": "\"Nice Pokémon. It is a shame it is not yours anymore.\"",
+      "beaten": "\"That one was not even mine to lose.\"",
+      "winning": "\"Hands up. Hands off. Hand it over.\"",
+      "respect": "\"Look, it is just a job.\""
+     }
+    },
+    "specialist": {
+     "name": "Snag'em Technician",
+     "sprite": "trainer.pr/scientist_m",
+     "species": [
+      "magnemite",
+      "magneton",
+      "electrode",
+      "porygon2",
+      "houndour",
+      "koffing"
+     ],
+     "lines": {
+      "first": "\"The Machine locks on at a glance. Hold still.\"",
+      "beaten": "\"The Machine was working fine until you looked at it.\"",
+      "winning": "\"Locked. Logged. Gone.\"",
+      "respect": "\"It was never about the Pokémon. Well, it was.\""
+     }
+    },
+    "executive": {
+     "name": "Wes in the Old Jacket",
+     "sprite": "trainer.fisherman",
+     "species": [
+      "espeon",
+      "umbreon",
+      "houndoom",
+      "tyranitar",
+      "absol",
+      "sneasel"
+     ],
+     "lines": {
+      "first": "\"...\"",
+      "beaten": "\"...\"",
+      "winning": "\"...\"",
+      "respect": "\"...Thanks.\""
+     }
+    },
+    "leader": {
+     "name": "Gonzap",
+     "sprite": "trainer.roughneck",
+     "species": [
+      "hariyama",
+      "slaking",
+      "tyranitar",
+      "houndoom",
+      "mightyena",
+      "salamence"
+     ],
+     "lines": {
+      "first": "\"You owe the port a toll. Pay it in Pokémon.\"",
+      "beaten": "\"The client will not like this. I do not like this.\"",
+      "winning": "\"Debt is debt, kid.\"",
+      "respect": "\"Maybe the debt was not mine to collect.\""
+     }
+    }
+   },
+   "rule": {
+    "kind": "shadow",
+    "text": "The Snag Machine: the first Pokémon is a Shadow Pokémon a Snag Ball can take."
+   },
+   "spoils": [
+    "leftovers",
+    "focus-sash",
+    "life-orb",
+    "choice-band",
+    "smoke-ball"
+   ],
+   "legendary": [
+    "entei"
+   ],
+   "ops": [
+    {
+     "id": "first-snag",
+     "kind": "steal",
+     "name": "First Snag",
+     "text": "A hand with a Machine is snagging one Pokémon in the middle of a battle."
+    },
+    {
+     "id": "warehouse-in-every-port",
+     "kind": "facility",
+     "name": "A Warehouse in Every Port",
+     "text": "Crates are stacked three high behind a fence with no sign."
+    },
+    {
+     "id": "you-owe-me-a-building",
+     "kind": "control",
+     "name": "You Owe Me a Building",
+     "text": "Gonzap is asking everyone to pay a debt nobody remembers."
+    },
+    {
+     "id": "the-prize-machine",
+     "kind": "artificial",
+     "name": "The Prize Machine",
+     "text": "A Snag Machine on a handcart hums at every Pokémon that walks by."
+    }
+   ]
   }
  ],
  "templates": [
