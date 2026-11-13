@@ -122,7 +122,7 @@ export function eventText(content: Content, names: Names, e: RunEvent, details =
       if (e.scene) return `${who(e.side)} rises again, Overcharged!`;
       const line = (def?.presentation.split(' | ').pop() ?? '').replace(/^"|"$/g, '');
       // Battle-start and switch-in moments: their flavour line, then what it did.
-      if (e.trigger === 'start' || e.trigger === 'enter') return `${e.name}! ${line ? `${line} ` : ''}${def?.effectText ?? ''}`.trim();
+      if (e.trigger !== 'lethal' && e.trigger !== 'runEnd') return `${e.name}! ${line ? `${line} ` : ''}${def?.effectText ?? ''}`.trim();
       return `${e.name}! ${who(e.side)} hangs on!${line ? ` ${line}` : ''}`;
     }
     case 'hyper':

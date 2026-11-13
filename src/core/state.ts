@@ -214,6 +214,8 @@ export const VolatileSchema = z.object({
   abilityOverride: z.string().nullable().default(null),
   /** Focus Energy: critical hits are two stages likelier. */
   focusEnergy: z.boolean().default(false),
+  /** Pokémon moments: extra critical-hit stages (fades or lasts the battle; gone on switch-out). */
+  momentCrit: z.number().int().min(0).max(3).default(0),
   /** S164 charge-up stacks waiting for the next damaging move. */
   bank: z.number().int().min(0).default(0),
   /** Laser Focus: the next attack is a critical hit. */
@@ -373,6 +375,7 @@ export const freshVolatile = (): Volatile => ({
   typeShift: null,
   abilityOverride: null,
   focusEnergy: false,
+  momentCrit: 0,
   bank: 0,
   laserFocus: false,
   sureHit: false,
