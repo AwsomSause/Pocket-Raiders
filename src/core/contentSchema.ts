@@ -2830,6 +2830,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('storyRun') }),
   /** Event Director: two of your Pokémon share an open bond. */
   z.object({ kind: z.literal('bond') }),
+  /** A party Pokémon fainted in the last few battles and nobody has slept since (camp scenes). */
+  z.object({ kind: z.literal('memberFainted'), within: z.number().int().min(1).max(30).default(6) }),
   /** W10: Pokémon photographed at camp this run. */
   z.object({ kind: z.literal('photos'), atLeast: z.number().int().min(1) }),
   /** Event Director: the region's focus (mystery, rivals, raids, exploration). */

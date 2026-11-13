@@ -137,6 +137,10 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return evilConditionMet(content, run, c);
     case 'choice':
       return choiceMade(run, c.id, c.pick) === c.made;
+    case 'memberFainted': {
+      const f = run.expansion?.lastFaint;
+      return !!f && run.encountersCompleted - f.at <= c.within;
+    }
     case 'friendship':
       return run.party.some((m) => m.friendship >= c.atLeast);
     case 'rivalMet':
@@ -287,6 +291,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return `Needs an earlier delivery`;
     case 'noTrainerTag':
       return `Your trainer won't do this`;
+    case 'memberFainted':
+      return 'Needs a team member who fainted recently';
     case 'friendship':
       return `Needs a Pokémon with friendship ${c.atLeast}`;
     case 'rivalAlly':
@@ -1169,6 +1175,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return effectWords(content, e);
     case 'rest': {
       restUntilMorning(run);
+      if (run.expansion?.lastFaint) delete run.expansion.lastFaint;
       const warmed = warmEggs(run, 1);
       return warmed > 0 ? `${effectWords(content, e)}; your Egg${warmed === 1 ? ' is' : 's are'} snug by the fire` : effectWords(content, e);
     }

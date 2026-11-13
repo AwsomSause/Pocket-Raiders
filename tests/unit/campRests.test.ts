@@ -1,7 +1,7 @@
 // Camp and rest scenes NE81-85 (Beta 0.6): load, are once-per-run, change the party, and remember each other.
 
 import { describe, expect, it } from 'vitest';
-import { eventView, chooseEvent } from '../../src/core/events';
+import { conditionMet, eventView, chooseEvent } from '../../src/core/events';
 import { chooseStarter, createRun } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
@@ -59,5 +59,19 @@ describe('camp and rest scenes', () => {
     const b = chooseEvent(content, setup('camp-nightmare-watch'), 'c', 2).run;
     expect(JSON.stringify(a.party.map((m) => m.friendship))).toBe(JSON.stringify(b.party.map((m) => m.friendship)));
     expect(a.itemCounters?.['event-seen:camp-nightmare-watch']).toBe(1);
+  });
+
+  it('The One Who Won\'t Eat needs a recent faint, and a night\'s rest clears it', () => {
+    const run = setup('camp-one-who-wont-eat');
+    expect(conditionMet(content, run, { kind: 'memberFainted', within: 6 })).toBe(false);
+    run.expansion = { ...run.expansion, lastFaint: { uid: run.party[0]!.uid, at: run.encountersCompleted } };
+    expect(conditionMet(content, run, { kind: 'memberFainted', within: 6 })).toBe(true);
+    run.encountersCompleted += 7;
+    expect(conditionMet(content, run, { kind: 'memberFainted', within: 6 })).toBe(false);
+    run.encountersCompleted -= 7;
+    const camp = setup('camp-checkpoint');
+    camp.expansion = { lastFaint: { uid: 'x', at: camp.encountersCompleted } };
+    const rested = chooseEvent(content, camp, 'c', 0).run;
+    expect(rested.expansion?.lastFaint).toBeUndefined();
   });
 });

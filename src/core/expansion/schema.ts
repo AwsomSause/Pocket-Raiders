@@ -85,6 +85,8 @@ export const ExpansionRunSchema = z.object({
   counterPick: z.boolean().optional(),
   /** Runs with the world-state tracks on (E2). Set once at run start. */
   tracks: z.boolean().optional(),
+  /** Camp scenes: the last player Pokémon to faint and the encounter count then (cleared by a night's rest). */
+  lastFaint: z.object({ uid: z.string(), at: z.number().int().min(0) }).optional(),
   /** B7: the Pokémon (uids) registered at the League door. Only these are ever countered; a swapped-in Pokémon is unseen. `swapped` = the one swap is used. */
   league: z.object({ registered: z.array(z.string()), swapped: z.boolean().default(false) }).optional(),
 });

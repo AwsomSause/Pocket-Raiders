@@ -12,6 +12,10 @@
     {
      "kind": "partySize",
      "atLeast": 2
+    },
+    {
+     "kind": "memberFainted",
+     "within": 6
     }
    ],
    "remembers": [],
