@@ -390,6 +390,419 @@
     }
    ],
    "canon": "cs.kanto.pewter.flock"
+  },
+  {
+   "id": "cs-kanto-pewter-forest",
+   "name": "Veridian Forest",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "The trees close in overhead. Somewhere ahead, an old swordsman is said to wait in a clearing. You can turn back before the first fight.",
+   "choices": [
+    {
+     "label": "Enter Veridian Forest",
+     "success": {
+      "text": "You step in.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You turn back. Nothing here is forced.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.pewter.forest"
+  },
+  {
+   "id": "cs-kanto-pewter-forest-n1",
+   "name": "Veridian Forest: Bug Catcher",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "A Bug Catcher jumps out of the ferns, net first.",
+   "choices": [
+    {
+     "label": "Push on",
+     "success": {
+      "text": "\"My bugs are the best!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "classId": "bug-catcher",
+       "name": "Bug Catcher",
+       "size": 2,
+       "types": [
+        "bug"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-forest-n2",
+   "name": "Veridian Forest: The Forest Gift",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "Something rustles in the grass: a Caterpie, a Weedle or a Pinsir. The forest is offering you a Bug-type. Catch it if you can.",
+   "choices": [
+    {
+     "label": "Push on",
+     "success": {
+      "text": "You step toward the rustle.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "caterpie",
+        "weedle",
+        "pinsir"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n3"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-forest-n3",
+   "name": "Veridian Forest: The Thicket",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "A trail runs on, and to one side a thicket buzzes angrily.",
+   "choices": [
+    {
+     "label": "Follow the trail",
+     "success": {
+      "text": "A Bug Catcher blocks the trail.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "classId": "bug-catcher",
+       "name": "Bug Catcher",
+       "size": 2,
+       "types": [
+        "bug"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n4"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Check the buzzing thicket",
+     "chance": 0.4,
+     "success": {
+      "text": "A Beedrill swarm erupts out of the thicket!",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "weedle",
+        "kakuna",
+        "beedrill"
+       ],
+       "chain": 3,
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "poison-barb"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n4"
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "Only an empty nest. You rejoin the trail.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n4"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-forest-n4",
+   "name": "Veridian Forest: The Hollow Tree",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "The trail bends past a huge hollow tree that smells of honey.",
+   "choices": [
+    {
+     "label": "Follow the trail",
+     "success": {
+      "text": "A Bug Catcher is waiting.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "classId": "bug-catcher",
+       "name": "Bug Catcher",
+       "size": 2,
+       "types": [
+        "bug"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n5"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look in the hollow tree",
+     "chance": 0.3,
+     "success": {
+      "text": "A den! Something big is guarding the honey.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "combee",
+        "heracross"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-pewter-forest-n5"
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "Just honey and bark. You move on.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n5"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-forest-n5",
+   "name": "Veridian Forest: The Clearing",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "A clearing. A figure in old armor sits on a stump, very still. A Bug-type is the only thing that will be welcome here.",
+   "choices": [
+    {
+     "label": "Step into the clearing",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "bug"
+      }
+     ],
+     "success": {
+      "text": "The figure lifts his head and looks at your Bug-type.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-forest-bug",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Step into the clearing (a Weedle was waiting)",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "bug",
+       "absent": true
+      }
+     ],
+     "success": {
+      "text": "A Weedle that was already waiting for you crawls up your leg. The figure on the stump watches it.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "weedle"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-forest-bug",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-forest-n6"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-forest-n6",
+   "name": "Veridian Forest: The Samurai",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2d4a1f"
+   },
+   "intro": "\"One Pokemon against one. Same level. No items, no switching. Show me your Bug-type.\"",
+   "choices": [
+    {
+     "label": "Face the Samurai",
+     "success": {
+      "text": "The Samurai draws a blade. The duel begins.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Samurai",
+       "classId": "veteran",
+       "size": 1,
+       "team": [
+        "pinsir"
+       ],
+       "counter": {
+        "weakTo": "flying",
+        "team": [
+         "scyther"
+        ]
+       },
+       "rule": {
+        "leadType": "bug",
+        "matchLead": true,
+        "suddenDeath": true,
+        "noSwitch": true,
+        "noItems": true
+       },
+       "win": [
+        {
+         "kind": "teachMove",
+         "move": "samurai-slash",
+         "type": "bug"
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-forest-samurai-won",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
   }
  ]
 }

@@ -19,10 +19,11 @@ describe('Kanto canon stops in a run', () => {
       expect(canonSlotOf(content, run)).toBe('stage-1');
       const stops = canonStops(run);
       expect(stops.length).toBeGreaterThan(0);
-      expect(stops.length).toBeLessThanOrEqual(2);
+      expect(stops.length).toBeLessThanOrEqual(3); // Veridian Forest plus up to two rolled events
       expect(run.expansion!.canon!.menus['stage-1']!.slice(0, 2)).toEqual(['cs.kanto.pewter.forest', 'cs.kanto.pewter.moon']);
       for (const s of stops) expect(content.events.get(s.eventId!)!.canon).not.toBeNull();
       seen += stops.length;
+      expect(stops.some((s) => s.eventId === 'cs-kanto-pewter-forest')).toBe(true);
     }
     expect(seen).toBeGreaterThan(10);
   });
@@ -48,5 +49,36 @@ describe('Kanto canon stops in a run', () => {
       return;
     }
     throw new Error('no Kanto-first run rolled the Flock');
+  });
+});
+
+import { debugForceEvent } from '../../src/core/run';
+
+describe('Veridian Forest (Samurai duel)', () => {
+  const duel = (species: string) => {
+    const base = begin('SAMURAI', true);
+    const run = structuredClone(base);
+    run.party[0]!.speciesId = species;
+    const { run: forced, sideId } = debugForceEvent(content, run, 'cs-kanto-pewter-forest-n6');
+    return chooseEvent(content, forced, sideId, 0).run;
+  };
+  it('is a 1-on-1 at the lead\'s level with no items or switching, and counters a Flying-weak Bug-type with Scyther', () => {
+    const run = duel('caterpie');
+    expect(run.battle!.enemyTeam.map((m) => m.speciesId)).toEqual(['scyther']);
+    expect(run.battle!.enemyTeam[0]!.level).toBe(run.party[0]!.level);
+    expect(run.battle!.eventRule).toMatchObject({ suddenDeath: true, noSwitch: true, noItems: true });
+  });
+  it('uses Pinsir against a Bug-type that is not weak to Flying', () => {
+    expect(duel('scizor').battle!.enemyTeam.map((m) => m.speciesId)).toEqual(['pinsir']);
+  });
+  it('Samurai Slash exists as a Bug move with the first-use flinch', () => {
+    const m = content.moves.get('samurai-slash')!;
+    expect(m).toMatchObject({ type: 'bug', category: 'physical', power: 70, accuracy: 100, pp: 10 });
+    expect(m.effects.flinchFirstUse).toBe(true);
+  });
+  it('the whole chain of rooms opens from the gate (every addEvent target exists)', () => {
+    const ids = [...content.events.keys()].filter((id) => id.startsWith('cs-kanto-pewter-forest'));
+    expect(ids.length).toBe(7);
+    for (const id of ids) for (const c of content.events.get(id)!.choices) for (const o of [c.success, c.failure]) for (const eff of [...(o?.effects ?? []), ...(o?.battle?.win ?? [])]) if (eff.kind === 'addEvent') expect(content.events.has(eff.eventId)).toBe(true);
   });
 });

@@ -59,6 +59,8 @@ import { grantBlessing, makeBlissful } from './shadowWorld/blissful';
 import { eggMoveOptions, familyId, teachEggMove } from './mastery';
 import { applyTrainEffect, trainEffectText } from './trainingEffects';
 import { noteCanonEvent } from './expansion/canonRun';
+import { typeEffectiveness } from './battle/damage';
+import { getSpecies } from './pokemon';
 import { currentRegion, getCampaign, levelCap, runLevelCap } from './regions';
 import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } from './encounterDirector';
 import { hashSeed, Rng } from './rng';
@@ -99,7 +101,7 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
     case 'emotion':
       return run.party.some((m) => emotionOf(content, run, m.uid)?.id === c.id);
     case 'partyType':
-      return run.party.some((m) => content.species.get(m.speciesId)?.types.includes(c.type));
+      return run.party.some((m) => content.species.get(m.speciesId)?.types.includes(c.type)) !== (c.absent === true);
     case 'period':
       return c.in.includes(periodOf(run));
     case 'season':
@@ -262,7 +264,7 @@ export function conditionText(content: Content, c: EventCondition): string {
     case 'milestone':
       return 'Needs a milestone day';
     case 'partyType':
-      return `Needs a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party`;
+      return c.absent ? `Only without a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party` : `Needs a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party`;
     case 'partyMove':
       return `Needs a Pokémon that knows ${content.moves.get(c.move)?.name ?? c.move}`;
     case 'evoEncounters':
@@ -773,6 +775,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return 'you get an Egg';
     case 'eggMove':
       return 'your lead learns an egg move';
+    case 'teachMove':
+      return 'a Pokémon learns a new move';
     case 'train':
       return trainEffectText(e);
     case 'betterDraft':
@@ -1035,6 +1039,15 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (!id || !teachEggMove(content, lead, id, [])) return '';
       return `${content.species.get(lead.speciesId)?.name ?? lead.speciesId} learned the egg move ${content.moves.get(id)!.name}!`;
     }
+    case 'teachMove': {
+      const move = content.moves.get(e.move);
+      const learner = (e.type ? run.party.find((m) => m.hp > 0 && getSpecies(content, m.speciesId).types.includes(e.type!)) : undefined) ?? run.party.find((m) => m.hp > 0);
+      if (!move || !learner || learner.moves.some((m) => m.id === e.move)) return '';
+      const slot = { id: move.id, pp: move.pp };
+      if (learner.moves.length < 4) learner.moves.push(slot);
+      else learner.moves[3] = slot;
+      return `${content.species.get(learner.speciesId)?.name ?? learner.speciesId} learned ${move.name}!`;
+    }
     case 'evoEncounter':
       return applyEvoEncounter(content, run, e);
     case 'formChange': {
@@ -1233,8 +1246,9 @@ function eventLevel(content: Content, run: RunState, node: MapNode, rng: Rng): n
 
 function startEventBattle(content: Content, run: RunState, node: MapNode, b: EventBattle, rng: Rng, event: EventBattleRef): void {
   const lastAlive = b.kind === 'trainer' && b.rule?.reversed ? run.party.map((p) => p.hp > 0).lastIndexOf(true) : -1;
-  const activeIndex = lastAlive >= 0 ? lastAlive : run.party.findIndex((p) => p.hp > 0);
-  const base = eventLevel(content, run, node, rng) + b.levelBonus;
+  const dueler = b.kind === 'trainer' && b.rule?.leadType ? run.party.findIndex((p) => p.hp > 0 && getSpecies(content, p.speciesId).types.includes(b.rule!.leadType!)) : -1;
+  const activeIndex = dueler >= 0 ? dueler : lastAlive >= 0 ? lastAlive : run.party.findIndex((p) => p.hp > 0);
+  const base = b.kind === 'trainer' && b.rule?.matchLead ? run.party[activeIndex]!.level : eventLevel(content, run, node, rng) + b.levelBonus;
   // Event foes stay under the region's level cap like every ordinary enemy (Balancing Phase 7).
   const cap = levelCap(content, run.regionIndex);
   if (b.kind === 'wild') {
@@ -1256,7 +1270,9 @@ function startEventBattle(content: Content, run: RunState, node: MapNode, b: Eve
     const fellow = b.apprentice ? run.mentor?.fellow ?? null : null;
     // S274 Mirror Match: a copy of your team (your lead first, then the others still standing, up to the fight's size), with your moves.
     const mirrored = b.mirror ? [run.party[activeIndex]!, ...run.party.filter((p, i) => i !== activeIndex && p.hp > 0)].slice(0, Math.max(1, b.kind === 'trainer' ? b.size : 1)) : [];
-    const team = mirrored.length > 0 ? mirrored.map((src) => {
+    const leadTypes = getSpecies(content, run.party[activeIndex]!.speciesId).types as TypeName[];
+    const fixedIds = b.counter && typeEffectiveness(content.typeChart, b.counter.weakTo, leadTypes) > 1 ? b.counter.team : b.team ?? [];
+    const team = fixedIds.length > 0 ? fixedIds.map((id) => newMon(content, run, id, Math.min(cap, Math.max(1, base)), 'e')) : mirrored.length > 0 ? mirrored.map((src) => {
       const copy = newMon(content, run, src.speciesId, Math.min(cap, Math.max(1, src.level + b.levelBonus)), 'e');
       copy.moves = src.moves.map((s) => ({ id: s.id, pp: content.moves.get(s.id)?.pp ?? s.pp }));
       return copy;

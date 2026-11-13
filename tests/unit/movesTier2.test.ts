@@ -208,3 +208,13 @@ describe('first-turn moves', () => {
     expect(types(second)).toContain('fail');
   });
 });
+
+describe('Samurai Slash (Kanto canon move)', () => {
+  it('flinches the target the first time it is used, then behaves as a plain Bug move', () => {
+    const { ctx, player, enemy } = setup('scyther', 50, 'snorlax', 30);
+    setMoves(player, 'samurai-slash');
+    setMoves(enemy, 'tackle');
+    expect(turn(ctx)).toContainEqual({ type: 'cant', side: 'enemy', reason: 'flinch' });
+    expect(turn(ctx)).not.toContainEqual({ type: 'cant', side: 'enemy', reason: 'flinch' });
+  });
+});
