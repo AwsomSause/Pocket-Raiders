@@ -110,7 +110,7 @@ export function stashParty(run: RunState): boolean {
 /** Flight North: the stashed party comes back and whoever is in the party now (the Bug-type) leaves. Returns false when nothing is stashed. */
 export function restoreStash(run: RunState): boolean {
   const st = run.expansion?.canon;
-  if (!st?.stash) return false;
+  if (!st?.stash || st.solo) return false; // `solo` means Saffron's own stash (Tournament, Labyrinth): its restore owns it
   run.party = st.stash as RunState['party'];
   run.pending = run.pending.filter((p) => p.kind !== 'caught');
   const { stash: _gone, ...rest } = st;
