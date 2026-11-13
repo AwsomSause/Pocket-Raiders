@@ -8,6 +8,10 @@ import { changeFeelings, overhaulOf, pityFor, registerRival } from './overhaul';
 import { noteMeeting, PRESENCE, pseudoPresence, rivalWinsRace } from './presence';
 import { maxHp } from '../pokemon';
 import { PSEUDO, pseudoGateId } from '../dungeon/pseudo';
+import { z } from 'zod';
+import teamsJson from '../../data/friendTeams.json';
+import linesJson from '../../data/friendLines.json';
+import { getArchetype } from '../archetypes';
 import { addItem } from '../items';
 import { PSEUDO_FORCE } from './stepIn';
 import { emit } from '../story/record';
@@ -99,7 +103,8 @@ export function friendStageBeat(content: Content, run: RunState): string | null 
       run.story.flags[`friend:scenes:${run.regionIndex}`] = shown + 1;
       const s = friendScene(rec, run.seed, scene, name, shown + 1);
       changeFeelings(rec, 'assisted');
-      lines.push(`${s.text} "${s.voice}"`);
+      const pack = scene === 'meet' || scene === 'mid' ? friendPackLine(content, run, scene) : null;
+      lines.push(`${s.text} "${pack ?? s.voice}"`);
     }
   }
   if (lines.length === 0) return null;
@@ -155,11 +160,41 @@ export function pseudoRivalBeat(content: Content, run: RunState, eventId?: strin
 export function friendFinaleAssist(content: Content, run: RunState, bossLevel: number, existing: { id: string; name: string; speciesId: string; level: number; strikesLeft: number } | null): { id: string; name: string; speciesId: string; level: number; strikesLeft: number } | null {
   const id = friendId(run);
   if (!run.expansion?.rival?.[id]) return existing;
-  const extra = friendAssist(existing?.strikesLeft ?? 0, 'standard');
+  const extra = friendAssist(existing?.strikesLeft ?? 0, assistModeOf(run));
   if (extra === 0) return existing;
   if (existing) return { ...existing, strikesLeft: existing.strikesLeft + extra };
-  const partners = PRESENCE.friend.partners.filter((s) => content.species.has(s));
-  if (partners.length === 0) return null;
-  const speciesId = partners[fnv1a(`${run.seed}:friend-partner`) % partners.length]!;
+  const speciesId = friendTeam(content, run, 1)[0];
+  if (!speciesId) return null;
   return { id, name: friendName(run), speciesId, level: Math.max(5, bossLevel - PRESENCE.friend.finaleLevelGap), strikesLeft: extra };
+}
+
+// ---------- The Friend's team, scene lines and Assist mode (R8) ----------
+
+export const FriendTeamsSchema = z.object({ note: z.string(), teams: z.record(z.string(), z.object({ archetype: z.string(), team: z.array(z.string()).length(3) })) });
+export const FRIEND_TEAMS = FriendTeamsSchema.parse(teamsJson);
+export const FriendLinesSchema = z.object({ note: z.string(), lines: z.array(z.object({ archetype: z.string(), kind: z.string(), line: z.string() })).min(1) });
+export const FRIEND_LINES = FriendLinesSchema.parse(linesJson);
+
+/** The Friend's species for this run, by personality (up to `size`, the first is their partner). Falls back to the partner list. */
+export function friendTeam(content: Content, run: RunState, size: number): string[] {
+  const rec = run.expansion?.rival?.[friendId(run)];
+  const own = (rec ? FRIEND_TEAMS.teams[rec.personality]?.team : undefined) ?? PRESENCE.friend.partners.slice(0, 3);
+  const have = own.filter((id) => content.species.has(id));
+  return (have.length > 0 ? have : PRESENCE.friend.partners.filter((id) => content.species.has(id))).slice(0, Math.max(1, size));
+}
+
+/** Standard or Extended Assist cap. The Extended Cut workstream sets run.expansion.cut.climaxCut = 'extended' at run start. */
+export function assistModeOf(run: RunState): 'standard' | 'extended' {
+  return run.expansion?.cut?.climaxCut === 'extended' ? 'extended' : 'standard';
+}
+
+/** A Friend scene line from the pack's bank for this Friend's archetype and kind ('meet', 'mid', 'support-1'), tokens filled; null if none. */
+export function friendPackLine(content: Content, run: RunState, kind: string): string | null {
+  const rec = run.expansion?.rival?.[friendId(run)];
+  const archetype = rec ? FRIEND_TEAMS.teams[rec.personality]?.archetype : undefined;
+  const pool = FRIEND_LINES.lines.filter((l) => l.archetype === archetype && l.kind === kind);
+  if (pool.length === 0) return null;
+  const main = run.story.rivals.find((r) => r.id === Object.entries(run.expansion?.rival ?? {}).find(([, r2]) => r2.role === 'main')?.[0]);
+  const line = pool[fnv1a(`${run.seed}:friend-line:${kind}`) % pool.length]!.line;
+  return line.replaceAll('{friend}', friendName(run)).replaceAll('{player}', getArchetype(content, run.archetypeId).name).replaceAll('{rival}', main?.name ?? 'your rival');
 }

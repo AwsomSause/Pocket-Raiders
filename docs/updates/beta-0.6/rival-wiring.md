@@ -24,6 +24,12 @@ Limits: Race, Team-Up and Ambush are text only (no first-pick reward, partner or
 - **Team-Up** (main rival): it joins your next eligible fight as a step-in Assist (not in doubles). **Ambush** (main rival): it challenges you at the next fight (the existing duel step-in). Both clear after one use. Neither happens at under 50% party HP (Ambush) and neither applies to the Friend.
 - **Friend finale Assist**: in the final-boss fight the Friend adds at most 1 strike to the rival Assist (total capped at 4 Standard), or stands in alone with 1 strike and a partner (Eevee, Pikachu...) when no other rival can assist. Level is 6 under the boss.
 
-- **Friend spar** ("A Friendly Spar", event `friend-spar`): once your Friend exists, an optional event offers a 2-Pokémon match at 2 levels under you. It uses the Pseudo Stage fight rules: a loss heals you partway and the run goes on, there is no money or item prize, and nothing changes Lead or pity. New event condition `friendHere`.
+- **Friend spar** ("A Friendly Spar", event `friend-spar`): once your Friend exists, an optional event offers a 3-Pokémon match using the Friend's own team (by personality), at 2 levels under you. It uses the Pseudo Stage fight rules: a loss heals you partway and the run goes on, there is no money or item prize, and nothing changes Lead or pity. New event condition `friendHere`.
 
 Limits: the Friend's spar team is a generic Ace Trainer team (the Friend has no fixed team yet) and is named "Your Friend". Extended-mode cap (6) is not read here; Standard is used.
+
+## Added: the Friend's real team and Extended cap
+- The Friend's team follows their personality (pack archetypes hotshot, prodigy, friendly, bitter, scholar, heir, lone wolf, mirror; three base Pokémon each, `src/data/friendTeams.json`). The spar fights with it, and the finale partner is its first Pokémon.
+- Meet and Mid scenes use the pack's own lines (`src/data/friendLines.json`, from second_rival.json).
+- The Assist cap is 4 Standard, 6 Extended. The run reads `run.expansion.cut.climaxCut === 'extended'`; the Extended Cut workstream must set that at run start (nothing sets it yet, so runs are Standard today).
+- New fight field `friend: true` for event trainer fights.
