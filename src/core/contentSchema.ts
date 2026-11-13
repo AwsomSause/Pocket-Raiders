@@ -2832,6 +2832,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('xevents') }),
   /** Stand With Them: you have joined the run's team (`joined`, the default) or can still join it (`joined: false`); optionally at least this reputation. */
   z.object({ kind: z.literal('standWith'), joined: z.boolean().default(true), minRep: z.number().int().optional() }),
+  /** Beta 0.6 E3b: one of the ten Expanded flags (RUN_EVENTS_EXPANDED X2) that run events wait on. */
+  z.object({ kind: z.literal('xflag'), flag: z.enum(['extendedCut', 'hasShadow', 'keyHinted', 'grandArc', 'liaisonSeen', 'romHeld', 'friendPresent', 'trioFriendly', 'wesMet']) }),
   /** Story Overhaul: only in a Story Run (Alphas, story tournaments). Classic never draws these, so its event rolls never move. */
   z.object({ kind: z.literal('storyRun') }),
   /** Event Director: two of your Pokémon share an open bond. */
@@ -3011,6 +3013,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Grand Arc: earns a Data ROM (a liaison's proof of one Shadow method). Does nothing when the arc is off for this run. */
   z.object({ kind: z.literal('grandArcRom'), rom: z.string().length(1) }),
   /** Beta 0.6 E2: move the current region's world-state track (once per event id). */
+  /** Beta 0.6 E3b: lowers every party Shadow Pokémon's corruption by `amount` (never below 1: the last step stays with its own key). */
+  z.object({ kind: z.literal('shadowHeart'), amount: z.number().int().min(-20).max(0) }),
   z.object({ kind: z.literal('track'), input: z.enum(['raidFailed', 'raidDeclined', 'climaxScheduled', 'raidSuccess', 'officerTurned']) }),
   /** Grand Arc: gains a Stock step (1 to 5). */
   z.object({ kind: z.literal('grandArcStock'), step: z.number().int().min(1).max(5) }),

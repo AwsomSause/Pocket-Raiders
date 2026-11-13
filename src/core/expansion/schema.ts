@@ -85,6 +85,8 @@ export const ExpansionRunSchema = z.object({
   counterPick: z.boolean().optional(),
   /** The story-event density this run started with (E3): how many quiet-node story events a region gets. Set once at run start. */
   density: z.enum(['low', 'normal', 'full']).optional(),
+  /** The climax length the run started with (the `climaxCut` setting); run events that need the Extended Cut read it. */
+  climaxCut: z.enum(['standard', 'extended']).optional(),
   /** Story events placed per region so far (E3 scheduler), by region id. */
   xe: z.record(z.string(), z.number().int().min(0)).optional(),
   /** Runs with the world-state tracks on (E2). Set once at run start. */
