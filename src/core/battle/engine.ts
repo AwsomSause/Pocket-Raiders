@@ -110,7 +110,7 @@ import { ARENA_IMMUNE, foeStake, aimAccuracy, arenaText, dealOffer, mindReader, 
 import { benchSupporter, addBleed, bleedDamage, causesBleed, curseMultiplier, resonanceMultiplier } from './w1Rules';
 import { sacrificeFor } from './sacrificeRule';
 import { berserkDue, berserkMove, isBerserk } from './berserk';
-import { guardAmount, tryLethalMoment, tryRunEndMoment } from './pokemonMoments';
+import { fadeMomentBoosts, guardAmount, tryEntryMoments, tryLethalMoment, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
 import type { MomentHooks } from '../moments/pokemonMoments';
 import { freshHyperBattle, rollHyper, type EnemyRage, type HyperContext, type HyperEligibility } from './hyper';
 import { applyTransformations, battleMove, battleTypes, endDynamax, maxMoveExtras, maxMoveTerrain, maxMoveWeather, stabMultiplier, teraPower, tickDynamax, transformProblem, zMoveFor, type TransformEvent, type TransformRequest, type TransformStepEvent } from './transform';
@@ -137,7 +137,7 @@ export type BattleEvent =
   /** Became confused; `confusion` is the "is confused!" check at the start of its move; `confusionEnd` snapped out. */
   | { type: 'confused'; side: Side }
   /** A Pokémon moment (core/moments): `cinematic` false means it is told as a plain line; `scene` is the full-screen run-end revive. */
-  | { type: 'pmoment'; side: Side; uid: string; speciesId: string; id: string; name: string; tier: 'minor' | 'major' | 'landmark'; hpAfter: number; cinematic: boolean; scene: boolean }
+  | { type: 'pmoment'; side: Side; uid: string; speciesId: string; id: string; name: string; tier: 'minor' | 'major' | 'landmark'; hpAfter: number; cinematic: boolean; scene: boolean; trigger: 'runEnd' | 'lethal' | 'start' | 'enter' | 'ally' | 'low' | 'ko' | 'super' | 'crit' | 'weather' | 'status' | 'rest' | 'catch' }
   | { type: 'confusion'; side: Side }
   | { type: 'confusionEnd'; side: Side }
   | { type: 'confusionHit'; side: Side; amount: number; hpAfter: number }
@@ -730,6 +730,8 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   // X items and Dire Hit take effect when a Pokémon is first in battle.
   enterField(ctx, { side: 'player', mon: ctx.party[battle.activeIndex]!, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false });
   enterField(ctx, { side: 'enemy', mon: currentEnemy(battle), stages: battle.enemyStages, vol: battle.enemyVolatile, flinched: false });
+  // Pokémon moments (Beta 0.6): the lead's "battle start" moments, once per battle.
+  if (ctx.moments) tryStartMoments(ctx, { side: 'player', mon: ctx.party[battle.activeIndex]!, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, events);
   // Bench support (ideas W1): once per battle a well-liked benched Pokémon shouts a buff for the one in front.
   if (!battle.benchShout && !battle.raid && !battle.totem) {
     const support = benchSupporter(content, ctx.party, battle.activeIndex);
@@ -1012,6 +1014,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   settleFaints(ctx, events);
   // A trainer's next Pokémon saw its ally fall.
   if (!battle.outcome && battle.enemyIndex !== enemyBefore) warnRage(ctx, currentEnemy(battle), events);
+  fadeMomentBoosts(ctx);
   battle.turn += 1;
   eventRuleEnd(battle, events, ctx.party, ctx.content);
   if (raidTimeout && !battle.outcome) battle.outcome = 'lose';
@@ -1710,6 +1713,8 @@ function switchIn(ctx: BattleContext, partyIndex: number, events: BattleEvent[])
   events.push({ type: 'switchIn', side: 'player', uid: mon.uid, speciesId: mon.speciesId, level: mon.level });
   battle.pendingEntry = [...(battle.pendingEntry ?? []).filter((side) => side !== 'player'), 'player'];
   enterField(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false });
+  // Pokémon moments (Beta 0.6): a "switch-in" moment for the Pokémon that just came out.
+  if (ctx.moments) tryEntryMoments(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, 'enter', events);
 }
 
 /** Poké Doll: the wild Pokémon loses this turn (uses up one free turn). */
