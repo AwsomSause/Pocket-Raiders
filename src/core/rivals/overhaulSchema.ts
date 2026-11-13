@@ -26,5 +26,21 @@ export const RivalOverhaulStateSchema = z.object({
   }),
   /** Straight losses by this rival in first-stage fights; any rival win resets it (R10). */
   pityLosses: z.number().int().min(0).default(0),
+  /** R4 scouting ledger: what this rival has seen of you, this run only. Optional, so older runs load unchanged. */
+  ledger: z
+    .object({
+      moves: z.array(z.string()).max(60).default([]),
+      items: z.array(z.string()).max(30).default([]),
+      abilities: z.array(z.string()).max(30).default([]),
+      species: z.array(z.string()).max(60).default([]),
+      /** Battles scouted, turns watched and the turns you switched (for switch prediction). */
+      turns: z.number().int().min(0).default(0),
+      switches: z.number().int().min(0).default(0),
+    })
+    .optional(),
+  /** R5: dialogue lines already said this run (stable keys), so none repeats until all are used. */
+  bankUsed: z.array(z.string()).max(400).optional(),
+  /** R6: meetings so far by region index, and whether the catch step-in happened there. */
+  presence: z.record(z.string(), z.object({ meetings: z.number().int().min(0), stepIn: z.boolean().default(false) })).optional(),
 });
 export type RivalOverhaulState = z.infer<typeof RivalOverhaulStateSchema>;

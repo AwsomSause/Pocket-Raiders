@@ -94,6 +94,7 @@ import { eggLabel, eggRevealed, eggTier } from '../core/eggs';
 import { protagonistTitle, topHeadline } from '../core/rivals/recognition';
 import { mentorHudLine } from '../core/mentors';
 import { ensureNarration } from '../core/overhaul/partyNarration';
+import { rivalReport } from '../core/rivals/report';
 
 const COL_SPACING = 104;
 const ROW_SPACING = 92;
@@ -779,6 +780,10 @@ export class MapScene extends Phaser.Scene {
         if (action === 'back' || action === 'confirm') this.toggleLegend();
         return;
       }
+      if (this.report) {
+        if (action === 'back' || action === 'confirm') this.toggleRivalReport();
+        return;
+      }
       if (this.picker) {
         this.picker.handle(action);
         return;
@@ -803,6 +808,11 @@ export class MapScene extends Phaser.Scene {
     this.input.keyboard?.on('keydown-L', () => this.toggleLegend());
     const legendTag = this.add.text(GAME_WIDTH - 24, 402, 'L: map legend', textStyle(12, '#a69cb4')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('legend-tag');
     legendTag.on('pointerdown', () => this.toggleLegend());
+    // Beta 0.6 R7: R opens the Rival Report pop-up (only once a rival has been met).
+    if (session.run && rivalReport(session.run).length > 0) {
+      this.input.keyboard?.on('keydown-R', () => this.toggleRivalReport());
+      this.add.text(GAME_WIDTH - 24, 370, 'R: rival report', textStyle(12, '#a69cb4')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('rival-report-tag').on('pointerdown', () => this.toggleRivalReport());
+    }
     // Galar's Champion Tournament: B opens the bracket.
     if (league && region.id === 'galar' && stage.map.nodes.some((n) => n.sides.length > 0)) {
       this.input.keyboard?.on('keydown-B', () => this.toggleBracket());
@@ -1706,6 +1716,7 @@ export class MapScene extends Phaser.Scene {
   }
 
   private legend: Phaser.GameObjects.Container | null = null;
+  private report: Phaser.GameObjects.Container | null = null;
   private bracket: Phaser.GameObjects.Container | null = null;
 
   /** Galar's Champion Tournament bracket: the five rounds, who is left, your next opponent. Presentation only (core/galarTournament.ts bracketView). */
@@ -1814,6 +1825,36 @@ export class MapScene extends Phaser.Scene {
     const timer = this.time.addEvent({ delay: 1500, loop: true, callback: step });
     step();
     this.input.keyboard?.once('keydown', close);
+  }
+
+  /** The Rival Report (Beta 0.6 R7): a pop-up panel, not a screen. Shows Lead, Marks and feelings for each rival. R, Esc or a click closes it. */
+  private toggleRivalReport(): void {
+    if (this.report) {
+      this.report.destroy();
+      this.report = null;
+      this.busy = false;
+      return;
+    }
+    if (this.busy || this.picker || this.legend) return;
+    const run = services().session.run;
+    if (!run) return;
+    const rows = rivalReport(run);
+    const layer = this.add.container(0, 0).setDepth(85).setName('rival-report');
+    layer.add(this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.6).setOrigin(0).setInteractive().on('pointerdown', () => this.toggleRivalReport()));
+    const w = Math.min(GAME_WIDTH - 120, 560);
+    const x = (GAME_WIDTH - w) / 2;
+    layer.add(drawGlass(this, x, 60, w, GAME_HEIGHT - 120, { tint: AERO.glassLow, rim: AERO.rim, radius: 18, alpha: 0.97 }));
+    layer.add(this.add.text(GAME_WIDTH / 2, 76, 'Rival Report  (R or click to close)', textStyle(20, COLORS.gold)).setOrigin(0.5, 0));
+    let y = 112;
+    for (const r of rows) {
+      layer.add(this.add.text(x + 20, y, `${r.name}  ·  ${r.role === 'friend' ? 'Friend' : 'Rival'}  ·  ${r.personality}`, textStyle(16, COLORS.textLight)));
+      layer.add(fitLine(this.add.text(x + 20, y + 22, `${r.leadText}   Meetings: ${r.meetings}   Seen of yours: ${r.seenMoves} moves, ${r.seenSpecies} Pokémon`, textStyle(12, '#d8d0e0')), w - 40));
+      layer.add(fitLine(this.add.text(x + 20, y + 40, `Feels: ${r.feelings.map((f) => `${f.key[0]!.toUpperCase()}${f.key.slice(1)} ${f.value}`).join(', ')}`, textStyle(12, '#a69cb4')), w - 40));
+      layer.add(fitLine(this.add.text(x + 20, y + 56, r.marks.length ? `Marks: ${r.marks.join(', ')}` : 'Marks: none yet', textStyle(12, '#a69cb4')), w - 40));
+      y += 88;
+    }
+    this.report = layer;
+    this.busy = true;
   }
 
   /** The map legend (ideas W4, key L): what every node, stop, badge and obstacle icon means. Esc or L closes it. */

@@ -1,0 +1,829 @@
+{
+ "note": "Rival dialogue bank (Beta 0.6 R5): 528 authored lines for 8 personalities, from the notes pack RIVAL_DIALOGUE_BANK.md. Species lines are built at runtime (src/core/rivals/bank.ts): an opener plus a type line, plus a category line. {mon} is the species name.",
+ "personalities": {
+  "champion-chaser": {
+   "voice": "Cocky, quick, always measuring. Compliments come out as insults.",
+   "open": [
+    "So that's your {mon}.",
+    "A {mon}, huh? Cute. I'll remember it when I'm Champion.",
+    "Your {mon} keeps looking at me. It knows who's winning."
+   ],
+   "type": {
+    "normal": "Normal-types. Nothing special, which is about what I expected from you.",
+    "fire": "Fire burns bright and burns out. I don't.",
+    "water": "Water goes wherever the ground lets it. I pick my own road.",
+    "electric": "Fast. Not faster than me, but fast.",
+    "grass": "Grass grows slowly. I don't have that kind of time.",
+    "ice": "Ice breaks if you hit it right. I always hit it right.",
+    "fighting": "Good. Something that can actually throw a punch.",
+    "poison": "Poison's for people who can't win in one hit.",
+    "ground": "Solid. Boring, but solid.",
+    "flying": "It flies. So it'll have a good view of me pulling ahead.",
+    "psychic": "If it reads minds, it already knows how this ends.",
+    "bug": "A Bug-type. You're really making this easy.",
+    "rock": "Hard-headed. We'd get along, if it were on the right team.",
+    "ghost": "Spooky. I don't scare.",
+    "dragon": "A Dragon? Fine. Now it's a real race.",
+    "dark": "Fights dirty. I respect that more than I should.",
+    "steel": "Tough to dent. I like a challenge.",
+    "fairy": "Pretty, and nastier than it looks. Like my win record."
+   },
+   "cat": {
+    "first": "{mon} hasn't even evolved. Call me when it does.",
+    "middle": "{mon}'s halfway there. So are you. I'm not.",
+    "final": "A fully evolved {mon}. Finally, something worth beating.",
+    "single": "{mon} is what it is. No surprises. I like knowing what I'm beating.",
+    "form": "A special form? Showing off already. That's my job.",
+    "titan": "That's a serious Pokémon. Don't waste it."
+   },
+   "catch": [
+    "You caught it? I was going to. I let you have it.",
+    "Nice throw. Mine's better, but nice.",
+    "One more for your team. You'll need all six against me."
+   ],
+   "event": [
+    "You stopped for this? I'd have been at the next Gym by now.",
+    "Fine, I'll help. Faster we finish, faster I beat you.",
+    "Don't tell anyone I stayed for this."
+   ],
+   "interrupt": [
+    "Hold it. Whatever you're doing can wait. I can't.",
+    "Bad time? Good. Let's battle.",
+    "I've been looking for you, and I don't look for people."
+   ],
+   "pseudo": [
+    "First one out picks the prize. Try to keep up.",
+    "You're in here too? Then it's a race.",
+    "I've already been through half of this. Want directions? No? Good."
+   ],
+   "gym": [
+    "This Leader's mine first. You can have what's left.",
+    "I already have this badge. Took me one try.",
+    "Don't lose in there. I want you in decent shape when I beat you."
+   ],
+   "elite": [
+    "Four of them, then the title. I've been counting since the first route.",
+    "If you fall here, I'm not waiting.",
+    "The Elite Four are a formality. You're the one I think about."
+   ],
+   "champion": [
+    "That chair's mine. Try not to scuff it.",
+    "Whoever wins in there, I'm next. Make it worth my time.",
+    "I wanted it to be you and me at the end. Don't tell me I said that."
+   ],
+   "blessing": [
+    "A Legendary picked you? It hasn't met me yet.",
+    "Nice trinket. Does it win battles for you, or do you still have to do that part?",
+    "Whatever's watching over you, tell it to watch closely. I'm about to be worth seeing."
+   ],
+   "mythical": [
+    "What is that following you? No. Don't tell me. I'll find my own.",
+    "It won't even look at me. Fine. I'm not looking at it either.",
+    "You promised it something, didn't you. You'd better keep it. I hate people who don't finish things."
+   ],
+   "static": [
+    "The sky's cracked and you're staring at it. I'm going in. Try to keep up.",
+    "Whatever comes out of that, I'm beating it before you do.",
+    "That thing isn't from here. Good. I was running out of things to beat."
+   ],
+   "second": [
+    "Get up. You don't get to lose to anyone but me."
+   ],
+   "pity": [
+    "I wasn't trying. Obviously. Take this and stop looking at me like that.",
+    "You've had a rough start. That's all I'm saying. Here."
+   ],
+   "won": [
+    "See you at the League. I'll be the one on the plaque.",
+    "That's one. I'm keeping count.",
+    "You were closer than I'll ever admit."
+   ],
+   "lost": [
+    "Fluke. Next time I'm not holding anything back.",
+    "...Fine. You're better today. Today.",
+    "Good. I need somebody worth chasing."
+   ]
+  },
+  "bitter-challenger": {
+   "voice": "Clipped and sore. Says the hard thing first. Cares more than the words admit.",
+   "open": [
+    "{mon}. Of course.",
+    "I've seen what your {mon} does. I haven't forgotten.",
+    "You and that {mon}. Always in my way."
+   ],
+   "type": {
+    "normal": "Ordinary. And it still gets the wins. Typical.",
+    "fire": "Everyone loves a Fire-type. Nobody asks what it burns.",
+    "water": "It just flows around every problem. Must be nice.",
+    "electric": "Quick. Everything comes quick to you.",
+    "grass": "It sits in the sun and gets stronger. I had to work.",
+    "ice": "Cold. Good. At least it's honest.",
+    "fighting": "It hits hard. So do I, now.",
+    "poison": "Poison is patient. So am I.",
+    "ground": "It'll take a lot to move it. I've got a lot.",
+    "flying": "It gets to look down on everyone. Like you.",
+    "psychic": "If it's reading me, I hope it hurts.",
+    "bug": "People step on Bug-types. Then one day they can't.",
+    "rock": "Stubborn. That I understand.",
+    "ghost": "It should be gone and it isn't. I know the feeling.",
+    "dragon": "A Dragon. Somebody handed you that, didn't they.",
+    "dark": "It fights the way the world actually works.",
+    "steel": "Nothing gets through to it. Lucky.",
+    "fairy": "Sweet-looking. I've stopped trusting sweet."
+   },
+   "cat": {
+    "first": "{mon} is small and you still beat people with it. I hate that.",
+    "middle": "{mon} isn't finished. Neither am I.",
+    "final": "{mon} got to become everything it could be. Not everyone does.",
+    "single": "{mon} never changes. It doesn't have to. Must be nice.",
+    "form": "A rare form. Naturally. You'd have one.",
+    "titan": "With a Pokémon like that, anyone could win. Remember that."
+   },
+   "catch": [
+    "It chose your Ball. They always do.",
+    "Take it. I'll catch something that has to earn its place.",
+    "Another one who likes you. Count them while you can."
+   ],
+   "event": [
+    "You're helping. Of course you are. Somebody's watching, I suppose.",
+    "I'll do my part. Don't thank me.",
+    "Nobody stopped for me. I'm stopping anyway. Don't make it strange."
+   ],
+   "interrupt": [
+    "Stop. I've waited long enough.",
+    "You don't get to be busy. Not with me standing here.",
+    "I trained through the night for this. You can spare ten minutes."
+   ],
+   "pseudo": [
+    "I got here on my own. You?",
+    "Stay out of my way in here and I'll stay out of yours.",
+    "If something goes wrong in this place, I'm not carrying you. ...Probably."
+   ],
+   "gym": [
+    "They gave you that badge. I'm going to take mine.",
+    "The Leader said you were 'promising'. Didn't say anything about me.",
+    "Win in there. I don't want to hear you lost to someone else."
+   ],
+   "elite": [
+    "Four people who've never heard my name. That changes today.",
+    "I didn't come this far to watch you from the door.",
+    "If you go through them, I'm right behind you. I always was."
+   ],
+   "champion": [
+    "Everyone thinks it'll be you. Go and prove them right, so I can prove them wrong.",
+    "I wanted this more than you did. Remember that when you're in there.",
+    "...Don't lose. Not to them."
+   ],
+   "blessing": [
+    "Of course something chose you. Something always does.",
+    "A blessing. I got here with nothing watching over me. Remember that.",
+    "Keep your god. I'll keep my own two hands."
+   ],
+   "mythical": [
+    "It trusts you. They always do. Don't waste it.",
+    "I heard that story as a kid. I stopped believing it. Guess that was my mistake.",
+    "If you break whatever you promised it, I'll know. It'll be gone."
+   ],
+   "static": [
+    "Something's wrong with the sky, and somehow I bet it's about you.",
+    "It came because of how you fight. Think about that.",
+    "I'm not afraid of it. I've been somewhere nobody wanted me before."
+   ],
+   "second": [
+    "No. You don't get to go down here. Not before I've beaten you. Get up."
+   ],
+   "pity": [
+    "Don't read anything into it. You're no use to me if you can't get past the first town.",
+    "Take it. I know what it's like to keep losing at the start. That's all you're getting."
+   ],
+   "won": [
+    "That's how it feels. Remember it.",
+    "I've imagined this. It was louder in my head.",
+    "Now you chase me."
+   ],
+   "lost": [
+    "Again. Always again.",
+    "Say something kind and I'm leaving.",
+    "I'll be back. I'm always back."
+   ]
+  },
+  "enthusiast": {
+   "voice": "Loud, warm, breathless. Loses and wins with the same grin.",
+   "open": [
+    "Is that your {mon}? It's great!",
+    "Oh, {mon}! Can I say hi? I'm saying hi.",
+    "Your {mon} looks so ready to go. I love that!"
+   ],
+   "type": {
+    "normal": "Normal-types can do a bit of everything. Best kind of friend.",
+    "fire": "It's so warm! Careful, I get carried away around Fire-types.",
+    "water": "Water-types always look like they're having a good day.",
+    "electric": "My hair's standing up. Worth it!",
+    "grass": "It smells like outside. That's a compliment!",
+    "ice": "So pretty. So cold. I touched it. I regret nothing.",
+    "fighting": "Look at that stance! We have to battle. We have to.",
+    "poison": "A little dangerous. I'm into it. From over here.",
+    "ground": "It looks like it could carry all of us.",
+    "flying": "Does it give rides? I'm asking seriously.",
+    "psychic": "Think of a number! No, wait, it's thinking of mine.",
+    "bug": "Bug-types grow up so fast. I'm proud of it already.",
+    "rock": "Solid! I knocked on it. It didn't mind. I think.",
+    "ghost": "It went through me! That was amazing! Do it again!",
+    "dragon": "A DRAGON. Sorry. A dragon. I'm calm.",
+    "dark": "It's got an attitude. I respect that completely.",
+    "steel": "So shiny! I can see my face. I look thrilled.",
+    "fairy": "It's adorable and it could flatten me. Perfect."
+   },
+   "cat": {
+    "first": "{mon}'s still little! It's going to be incredible. I can tell.",
+    "middle": "{mon}'s right in the middle of growing up. Best part!",
+    "final": "{mon}'s all grown up! You must be so proud.",
+    "single": "{mon}'s one of a kind. No stages, no fuss. I like it.",
+    "form": "I've never seen one like that up close! Can I look? I'm looking.",
+    "titan": "That is a LOT of Pokémon. Battle me. Please."
+   },
+   "catch": [
+    "You got it! Did you see that shake? I held my breath!",
+    "New friend! What are you calling it?",
+    "Great catch! I'd have missed. I usually miss the first one."
+   ],
+   "event": [
+    "What's going on here? Can I help? I'm helping.",
+    "This is the best part of travelling. Stuff just happens!",
+    "Okay, you take that side, I'll take this one. Go!"
+   ],
+   "interrupt": [
+    "Wait, wait, wait! Battle first! I've got a new idea!",
+    "Sorry! Bad timing? I couldn't wait any longer.",
+    "I ran the whole way here. Give me a second. Okay. Battle?"
+   ],
+   "pseudo": [
+    "This place is huge! Want to go through it together?",
+    "Race you to the end! Loser buys lunch!",
+    "I got lost twice already. It's been great."
+   ],
+   "gym": [
+    "You're taking the Gym today? I'm cheering. Loudly.",
+    "I lost to this Leader yesterday! It was so fun. Going again tomorrow.",
+    "Tell me everything after. Every turn."
+   ],
+   "elite": [
+    "The Elite Four! I can't feel my hands!",
+    "Whatever happens in there, this was the best trip of my life.",
+    "Go, go, go! I'll be right behind you!"
+   ],
+   "champion": [
+    "You're really doing it. I'm so happy I could shout. I'm going to shout.",
+    "Win or lose, battle me after. Promise!",
+    "Go show them what we learned out there."
+   ],
+   "blessing": [
+    "Is that glowing? It's glowing! Can I hold it? Is that allowed?",
+    "A Legendary's looking out for you? That's the coolest thing I've ever heard!",
+    "Do you think it'd bless me too if I asked nicely? I'm going to ask nicely."
+   ],
+   "mythical": [
+    "IT'S REAL? It's real! Hi! Hello! Oh, it's shy. I'll be quiet. I can't be quiet.",
+    "My grandma told me about that one! She said it only comes if you believe in it. I always did!",
+    "What did you promise it? Can I help you keep it? I'm helping."
+   ],
+   "static": [
+    "There's a HOLE in the SKY! Do we go in? We go in, right?",
+    "That is the weirdest Pokémon I've ever seen and I love it.",
+    "It looks scared. Do you think it's lost? I think it's lost."
+   ],
+   "second": [
+    "Hey! Hey, I've got you. Up we get. We're not done having fun yet!"
+   ],
+   "pity": [
+    "You've had rotten luck lately, huh? Here, take this. No, really. I want you out there with me.",
+    "I went easy. Don't be mad! I want a rematch later, and you have to get there first."
+   ],
+   "won": [
+    "That was so good! Again soon?",
+    "I won! I can't believe it! Are you okay? Was it fun?",
+    "You nearly had me three times. I counted!"
+   ],
+   "lost": [
+    "I lost and I'm smiling. What's wrong with me?",
+    "Teach me that. That thing you did. Please.",
+    "Best battle yet. Rematch at the next town!"
+   ]
+  },
+  "idealist": {
+   "voice": "Asks questions. Talks about the Pokémon before the battle.",
+   "open": [
+    "Your {mon} trusts you. I can see it.",
+    "May I ask what {mon} wants out of all this?",
+    "{mon} is watching how you treat the others. They always do."
+   ],
+   "type": {
+    "normal": "Normal-types ask for very little. That deserves more, not less.",
+    "fire": "Fire warms or destroys. The difference is always the trainer.",
+    "water": "Water finds the gentlest way through. There's a lesson in it.",
+    "electric": "So much energy. I hope it gets to rest.",
+    "grass": "It lives on light. Imagine needing so little.",
+    "ice": "People call Ice-types cold. They only keep their distance.",
+    "fighting": "It trains because it loves to. Don't let that become something else.",
+    "poison": "Poison is a defence before it is a weapon. Remember that.",
+    "ground": "It holds everything else up and nobody thanks it.",
+    "flying": "It could leave any time. It stays. That means something.",
+    "psychic": "It knows what you're feeling. Be honest with it.",
+    "bug": "Short lives, lived completely. We could learn from them.",
+    "rock": "It has outlasted things we can't imagine.",
+    "ghost": "Whoever it was before, be kind to who it is now.",
+    "dragon": "Power like that is a responsibility. I think you know.",
+    "dark": "It's called a Dark-type. That's our word, not its nature.",
+    "steel": "Even armour was made to protect something soft.",
+    "fairy": "Old stories say they choose who to trust. It chose you."
+   },
+   "cat": {
+    "first": "{mon} is young. What it becomes will depend on what you show it.",
+    "middle": "{mon} is changing. Let it change at its own pace.",
+    "final": "{mon} has grown into itself. Did it choose that, or did you?",
+    "single": "{mon} was never asked to become anything else. I envy that.",
+    "form": "A form like that draws attention. Protect it from the wrong kind.",
+    "titan": "Something that strong follows you by choice. Deserve it."
+   },
+   "catch": [
+    "It let itself be caught. Don't forget it had a choice.",
+    "A new partner. What will you promise it?",
+    "You were gentle with it. I noticed."
+   ],
+   "event": [
+    "This matters more than a badge. I'm glad you stopped.",
+    "Let's do this properly. Somebody is counting on it.",
+    "Whatever we decide here, the Pokémon live with it. Let's be careful."
+   ],
+   "interrupt": [
+    "Forgive the timing. I need to know something, and a battle is how I ask.",
+    "Before you go further: are you sure about the road you're on?",
+    "I've been thinking about what you said. Battle me. I'll explain after."
+   ],
+   "pseudo": [
+    "Places like this weren't made for us. Walk lightly.",
+    "I'd rather go through together. Fewer things get hurt.",
+    "Something living here doesn't want to fight. Let's not make it."
+   ],
+   "gym": [
+    "A Gym tests strength. I hope it tests more than that today.",
+    "The Leader asked me why I battle. I'm still answering.",
+    "Win kindly. It's harder."
+   ],
+   "elite": [
+    "Four of the strongest trainers alive. Ask yourself what they protect.",
+    "Whatever you prove in there, prove it for your Pokémon.",
+    "I'll follow you in. I have questions for them too."
+   ],
+   "champion": [
+    "A Champion sets the example. Think about what yours will be.",
+    "If you win, the region listens to you. Say something worth hearing.",
+    "I believe in what you're doing. I didn't, at the start."
+   ],
+   "blessing": [
+    "Something old has taken an interest in you. Ask yourself what it wants.",
+    "A blessing is a responsibility with a prettier name.",
+    "It chose you. That doesn't mean it agrees with you."
+   ],
+   "mythical": [
+    "So the old stories are true. What did it ask of you?",
+    "A promise to something like that should be kept even when it costs. Especially then.",
+    "It isn't yours. It's travelling with you. Don't confuse the two."
+   ],
+   "static": [
+    "It doesn't belong here, and it didn't ask to come. Remember that when you raise a Ball.",
+    "Our rules don't hold near that thing. Be gentle. It can't know them.",
+    "Send it home if you can. Everything deserves a home."
+   ],
+   "second": [
+    "Not like this. You still have something to show the world. Stand up. I'm with you."
+   ],
+   "pity": [
+    "I asked my team to hold back. They agreed. Nobody should be shut out at the first gate.",
+    "Take this. A journey ought to be allowed to begin."
+   ],
+   "won": [
+    "I won, and I'm not sure it proves what I hoped.",
+    "Thank you. Your Pokémon fought honestly.",
+    "Rest them well. They gave everything."
+   ],
+   "lost": [
+    "Then perhaps you're right, and I have thinking to do.",
+    "Your team fought for you. Mine fought for an idea. I see the difference.",
+    "I'm not finished asking. Not yet."
+   ]
+  },
+  "strategist": {
+   "voice": "Dry and exact. Treats every meeting as data.",
+   "open": [
+    "{mon}. Noted.",
+    "Interesting choice, {mon}. I've already run the numbers.",
+    "I watched your {mon} for three battles. I have questions, and answers."
+   ],
+   "type": {
+    "normal": "One weakness. Efficient. Predictable.",
+    "fire": "Weak to three common types. I carry all three.",
+    "water": "Two weaknesses, broad coverage. The safe pick. You like safe.",
+    "electric": "One weakness. I'd lead with Ground, so I assume you've planned for that.",
+    "grass": "Five weaknesses. Bold. Or you haven't counted.",
+    "ice": "Hits what matters, resists almost nothing. A glass knife.",
+    "fighting": "Breaks walls. I'll simply not bring any.",
+    "poison": "A long game, then. I like long games.",
+    "ground": "Immune to Electric. That removes one of my lines. Only one.",
+    "flying": "Immune to Ground, weak to rocks on the field. Watch your entry.",
+    "psychic": "Strong until something Dark arrives. Something Dark will arrive.",
+    "bug": "Early power, late fall-off. So you plan to win quickly.",
+    "rock": "Hard to break and slow. I only need the second part.",
+    "ghost": "Two immunities. Annoying. I've adjusted.",
+    "dragon": "Resists the basics. Costs you nothing until Ice or Fairy shows up.",
+    "dark": "You brought that for my Psychic-type. I don't have one today.",
+    "steel": "Ten resistances. I'll have to be patient. I am.",
+    "fairy": "The answer to Dragons. Did you bring it for mine?"
+   },
+   "cat": {
+    "first": "{mon}, unevolved. Either you're behind schedule or it's holding something clever.",
+    "middle": "{mon} is one evolution short. I know the level. I'll be past it.",
+    "final": "{mon}, fully evolved. Now its numbers are fixed, and I know them.",
+    "single": "{mon} has no evolution. Nothing to wait for. I can plan around it today.",
+    "form": "An unusual form. Fewer records. You've made me do actual research.",
+    "titan": "High totals across the board. So I won't fight it. I'll fight what stands next to it."
+   },
+   "catch": [
+    "A catch at that health, with that Ball? Roughly one in three. Well done.",
+    "That fills the gap in your team. I'll update my notes.",
+    "You wanted that one badly. That tells me something too."
+   ],
+   "event": [
+    "This isn't efficient. I'm staying anyway. Call it data.",
+    "Three ways this goes. Two are bad. Do what I say and we get the third.",
+    "You handle the talking. I'll handle whatever goes wrong."
+   ],
+   "interrupt": [
+    "Now. While your team is exactly as I planned for.",
+    "I timed this. You've used your best moves twice today already.",
+    "Apologies for the ambush. It was the optimal moment."
+   ],
+   "pseudo": [
+    "I mapped the first half. You may have a copy if you share the second.",
+    "Split up. We cover it twice as fast and compare.",
+    "Something in here doesn't follow the usual rules. I'd like to know why."
+   ],
+   "gym": [
+    "This Leader switches on the third turn. Every time. You're welcome.",
+    "I beat the Gym with one Pokémon to spare. I'd planned for two.",
+    "Watch the Leader's left hand. It gives the switch away."
+   ],
+   "elite": [
+    "Four specialists. Four plans. I've written all of them down.",
+    "They adjust to the challenger's team. Bring something they can't read.",
+    "I expected to be first here. I've corrected for that."
+   ],
+   "champion": [
+    "The Champion builds against your two strongest. Plan from the third.",
+    "I've studied every recorded title match. Nobody has done what you're about to try.",
+    "I'd wish you luck, but you don't need luck. You need turn four to go right."
+   ],
+   "blessing": [
+    "That object wasn't in your bag last time. I've noted what changed in your battles since.",
+    "A blessing. So that's the variable I couldn't account for.",
+    "Once per stage, I think. I've been counting when you use it."
+   ],
+   "mythical": [
+    "That species isn't in any record I trust. I'm revising several assumptions.",
+    "It follows but doesn't battle. So the benefit is elsewhere. Interesting.",
+    "You're avoiding something on purpose lately. A condition, then. I'll work out which."
+   ],
+   "static": [
+    "The usual numbers stop working near that crack. I've had to start a new notebook.",
+    "Both sides are affected equally. Then it's a question of who adapts first. Me.",
+    "It appeared after you'd repeated one habit for six stages. That's a cause, not a coincidence."
+   ],
+   "second": [
+    "I ran this one too. It only works with both of us. On your feet."
+   ],
+   "pity": [
+    "I adjusted my team downward. Don't take it personally. A rival who never leaves the first stage is no use to my plans.",
+    "Five early losses is a pattern, and patterns can be fixed. Here. Start with this."
+   ],
+   "won": [
+    "As planned. Mostly. Turn six surprised me.",
+    "You lost on the switch. Think about it.",
+    "I'll need a new plan next time. You'll have learned."
+   ],
+   "lost": [
+    "Unexpected. Good. I learn nothing from winning.",
+    "Where did I go wrong? No, don't tell me. I'll find it.",
+    "I'll have an answer for that by the next town."
+   ]
+  },
+  "protector": {
+   "voice": "Very few words. Watches the smallest one in the room.",
+   "open": [
+    "{mon}. ...Good.",
+    "Your {mon} is well cared for.",
+    "Keep {mon} close out here."
+   ],
+   "type": {
+    "normal": "Steady. You can rely on steady.",
+    "fire": "Keep it dry.",
+    "water": "Calm. Like deep water.",
+    "electric": "Loud. It means well.",
+    "grass": "Give it sun. It'll do the rest.",
+    "ice": "It doesn't like crowds. Neither do I.",
+    "fighting": "It stands in front. I know the type.",
+    "poison": "Careful hands. It's only protecting itself.",
+    "ground": "Hard to move. Good.",
+    "flying": "Let it scout. It sees trouble first.",
+    "psychic": "It knows more than it says.",
+    "bug": "Small. Watch over it.",
+    "rock": "It won't break. Don't test that.",
+    "ghost": "It's lonely. Stay near it.",
+    "dragon": "Strong. Make sure it's gentle too.",
+    "dark": "It's been in bad places. It's with you now.",
+    "steel": "A shield. Don't make it carry everything.",
+    "fairy": "It guards you. You know that?"
+   },
+   "cat": {
+    "first": "{mon} is young. Don't rush it.",
+    "middle": "{mon} is growing. It still needs you.",
+    "final": "{mon} is grown. It still needs you.",
+    "single": "{mon}. All it'll ever be. That's enough.",
+    "form": "People will want that one. Watch your back.",
+    "titan": "That much strength needs a calm trainer."
+   },
+   "catch": [
+    "It's safe now.",
+    "Good. Something was hunting it.",
+    "Look after it."
+   ],
+   "event": [
+    "I'll stay.",
+    "Get the small ones out first.",
+    "Behind me."
+   ],
+   "interrupt": [
+    "Stop. ...I need to know you can handle what's ahead.",
+    "Battle me. Then I'll let you pass.",
+    "It isn't safe further on. Show me you're ready."
+   ],
+   "pseudo": [
+    "I'll take the front.",
+    "Something's wrong with this place. Stay together.",
+    "I cleared the first rooms. Go carefully past them."
+   ],
+   "gym": [
+    "You're ready.",
+    "The Leader's tough. Fair, though.",
+    "I'll wait outside."
+   ],
+   "elite": [
+    "This is as far as I can walk with you.",
+    "Your team's tired. Rest first. Then go.",
+    "Come back out."
+   ],
+   "champion": [
+    "You don't need me in there.",
+    "...I'm proud of you. That's all.",
+    "Whatever happens. I'll be here."
+   ],
+   "blessing": [
+    "Something walks with you. ...Good.",
+    "Keep that safe. People will want it.",
+    "It watches you. So do I."
+   ],
+   "mythical": [
+    "...I see it too. I won't tell anyone.",
+    "It's small. Keep it out of the rain.",
+    "You gave your word. Keep it."
+   ],
+   "static": [
+    "Stay back from it.",
+    "It's frightened. Frightened things hurt people.",
+    "If it comes out, get behind me."
+   ],
+   "second": [
+    "I'm here. Stand up. I'll hold them."
+   ],
+   "pity": [
+    "I held back. You'd do the same for me.",
+    "Here. Take it. ...Get through the first stretch."
+   ],
+   "won": [
+    "You're hurt. Let me see your team.",
+    "...You'll get there.",
+    "Not yet. Soon."
+   ],
+   "lost": [
+    "Good.",
+    "You're stronger than I thought. I'm glad.",
+    "Then I don't need to worry about you."
+   ]
+  },
+  "prodigy": {
+   "voice": "Precise and condescending. Terrified of being ordinary.",
+   "open": [
+    "A {mon}. I see.",
+    "Your {mon}'s form is off. Slightly. I'd fix that.",
+    "I raised a {mon} once. Correctly."
+   ],
+   "type": {
+    "normal": "A Normal-type. Unremarkable, though I suppose that suits your style.",
+    "fire": "Fire-types reward precision. Most people only bring enthusiasm.",
+    "water": "Reliable. Everyone's first idea.",
+    "electric": "Speed is nothing without accuracy. I assume you've trained both?",
+    "grass": "Grass-types need careful handling. I can already see where you skimped.",
+    "ice": "Elegant. Fragile. It takes real skill to use well.",
+    "fighting": "Brute force. It works until it meets technique.",
+    "poison": "A slow method for people who can't finish cleanly.",
+    "ground": "Dependable. Not what I'd call refined.",
+    "flying": "Its wing position is lazy. You've let it get away with that.",
+    "psychic": "At last, a type that thinks. Shame about the trainer.",
+    "bug": "I had one of those when I was five.",
+    "rock": "Sturdy and crude. A beginner's idea of defence.",
+    "ghost": "Tricky. Tricks are for those who can't win outright.",
+    "dragon": "A Dragon in untrained hands. What a waste.",
+    "dark": "Underhanded. I don't need to be.",
+    "steel": "Acceptable. Properly raised, it would be excellent.",
+    "fairy": "People underrate them. I never have. I underrate nothing."
+   },
+   "cat": {
+    "first": "{mon} is still unevolved? Mine evolved weeks ago.",
+    "middle": "{mon} is at the awkward stage. Most trainers ruin them here.",
+    "final": "A final-stage {mon}. Adequate. The moveset is where you'll have gone wrong.",
+    "single": "{mon} doesn't evolve, so there's no excuse for it being under-trained.",
+    "form": "A rare form. In the right hands it would be a masterpiece.",
+    "titan": "That Pokémon is better than you are. I say it as a fact, not an insult."
+   },
+   "catch": [
+    "You used two Balls more than necessary.",
+    "A passable catch. Its nature's wrong for your team, but passable.",
+    "I'd have weakened it properly first. Still. It's yours."
+   ],
+   "event": [
+    "This is beneath me. ...Move over, you're doing it wrong.",
+    "I'll handle it. Watch, and try to learn something.",
+    "People are looking. Fine. Let's do it perfectly."
+   ],
+   "interrupt": [
+    "You. I've been made to wait. I don't wait.",
+    "A battle. Now. I need to correct something from last time.",
+    "I had a flawless record before I met you. We're fixing that."
+   ],
+   "pseudo": [
+    "I solved this place in half the expected time. Naturally.",
+    "Try not to touch anything. I've set it up exactly right.",
+    "You may follow me. Quietly."
+   ],
+   "gym": [
+    "The Leader called my battle 'textbook'. They meant it as praise.",
+    "I didn't lose a single Pokémon in there. Did you?",
+    "Do try to win properly. Sloppy badges embarrass everyone."
+   ],
+   "elite": [
+    "The Elite Four expected me sooner. I'll apologise by winning.",
+    "My family has had someone in that Hall for three generations. No pressure, they said.",
+    "If you get through first, I'll never hear the end of it. So don't."
+   ],
+   "champion": [
+    "That title was supposed to be mine by now. Everyone says so. Everyone.",
+    "If it has to be someone else, I suppose... no. Go. Before I change my mind.",
+    "Don't make a single mistake in there. I'd notice."
+   ],
+   "blessing": [
+    "A Legendary's favour. My family has had three. None of them needed it.",
+    "It gave you that? Standards are slipping.",
+    "Don't lean on it. Borrowed strength shows."
+   ],
+   "mythical": [
+    "A Mythical. Travelling with you. I've read every book there is, and it chose... I see.",
+    "I assume there are terms. There are always terms. Do try to read them.",
+    "It's looking at me as if I'm the strange one."
+   ],
+   "static": [
+    "That creature breaks four rules I was taught were absolute. I find that personally offensive.",
+    "A Beast Ball. Crude. I suppose it's all they had time to design.",
+    "If anyone is going to be first through that Tear, it's going to be someone qualified."
+   ],
+   "second": [
+    "Unacceptable. You lose when I say you lose. Get up, and do it properly this time."
+   ],
+   "pity": [
+    "Your lead is wrong, your coverage is wrong, and you've been over-levelling one Pokémon. I held back so you'd last long enough to fix it.",
+    "Take this. It's the correct item for your team. You'd have found it eventually. Probably."
+   ],
+   "won": [
+    "As expected.",
+    "You made four errors. I'll write them down for you.",
+    "Better than last time. Still not good."
+   ],
+   "lost": [
+    "That... wasn't in the plan.",
+    "Don't tell anyone. No. Tell them. I'll win it back in front of everybody.",
+    "I made one mistake. One. It won't happen twice."
+   ]
+  },
+  "underdog": {
+   "voice": "Nervous, earnest, stubborn. Counts every small win.",
+   "open": [
+    "Wow. Is that your {mon}?",
+    "Your {mon} looks so strong. Mine are getting there.",
+    "I've been reading about {mon}. Yours is nothing like the pictures. It's better."
+   ],
+   "type": {
+    "normal": "Normal-types don't get much credit. I know how that goes.",
+    "fire": "I wanted a Fire-type so badly when I started.",
+    "water": "Mine's scared of deep water. We're working on it.",
+    "electric": "It's so fast. I can barely follow it.",
+    "grass": "It grew a lot, didn't it? You can tell somebody cared.",
+    "ice": "I'd be nervous to train one. They seem so particular.",
+    "fighting": "It never gives up, does it? I like that. I'm trying to be like that.",
+    "poison": "Everyone avoids them. I bet it's glad it found you.",
+    "ground": "Slow and steady. That's sort of my whole plan.",
+    "flying": "I always watch them and think, imagine just going.",
+    "psychic": "Does it know I'm nervous? It knows. Hi.",
+    "bug": "Bug-types start small and surprise everyone. That's the dream, right?",
+    "rock": "It took a lot of hits to get that tough. I get it.",
+    "ghost": "It's a bit scary. I'm not going to say that to its face.",
+    "dragon": "A Dragon... I'm years away from one of those.",
+    "dark": "People judge them too fast. People do that.",
+    "steel": "I wish I had armour like that some days.",
+    "fairy": "Tiny and tougher than everybody thinks. My favourite kind."
+   },
+   "cat": {
+    "first": "{mon} hasn't evolved yet? Mine neither! We're on the same page, sort of.",
+    "middle": "{mon} already evolved once. I cried when mine did. Don't tell anyone.",
+    "final": "A fully evolved {mon}. I'm not there yet. I will be.",
+    "single": "{mon} is just itself, start to finish. I like that.",
+    "form": "I've only seen that form in books. Can I look? I won't touch.",
+    "titan": "I'm not ready to fight that. Give me a month. Okay, two."
+   },
+   "catch": [
+    "First throw? It takes me about nine.",
+    "It likes you already. How do you do that?",
+    "I was too scared to try for that one. Good for you. Really."
+   ],
+   "event": [
+    "I'm not sure I'll be much help. I'm staying, though.",
+    "Tell me what to do. I can do it. I think I can do it.",
+    "I messed this up last time. Not today."
+   ],
+   "interrupt": [
+    "S-sorry! I know it's a bad time. I have to try now or I'll lose my nerve.",
+    "Please battle me. I've been practising one thing for a week.",
+    "I followed you for two routes working up to this. That sounds bad. Battle?"
+   ],
+   "pseudo": [
+    "I only got this far because I refused to turn back. Is that a strategy?",
+    "Can we go together? Not because I'm scared. A little because I'm scared.",
+    "I found a shortcut by falling down it. It still counts."
+   ],
+   "gym": [
+    "I lost here twice. Third time's tomorrow.",
+    "You'll win first try. You always do. I'll get there.",
+    "The Leader remembered my name! It's because I keep coming back."
+   ],
+   "elite": [
+    "I can't believe I'm standing at this door.",
+    "Whatever happens to me in there, I got here. Nobody thought I would.",
+    "You go first. I want to watch how it's done. Then I'm going to do it."
+   ],
+   "champion": [
+    "When we started I couldn't beat a single route trainer. Look where we are.",
+    "Win it. Then wait there. I'm coming for you, however long it takes.",
+    "I used to want to be you. Now I just want to beat you. That's better, right?"
+   ],
+   "blessing": [
+    "A Legendary noticed you? Nothing's ever noticed me. That's okay. It's okay.",
+    "Can I see it? ...It's warm. Wow.",
+    "If something like that believed in me, I think I'd cry. I'd definitely cry."
+   ],
+   "mythical": [
+    "Is that... no. No way. Those are just stories. Hi. Oh my gosh. Hi.",
+    "It let me stand this close. That's the best thing that's happened to me all year.",
+    "Whatever you promised, keep it, okay? For those of us who'll never get asked."
+   ],
+   "static": [
+    "I don't know what that is and my legs have stopped working.",
+    "It's not from here either, huh. I sort of know how that feels.",
+    "If you're going in, I'm going in. Somebody has to carry the bags."
+   ],
+   "second": [
+    "You never once let me quit. So you don't get to either. Come on. Together."
+   ],
+   "pity": [
+    "I know what losing at the start feels like. Five times? I did eleven. Here. This helped me.",
+    "I didn't go all out. Please don't be upset. Somebody did the same for me once."
+   ],
+   "won": [
+    "I won? I won. I won!",
+    "I want you to know I worked so hard for that.",
+    "Don't go easy next time. Promise me."
+   ],
+   "lost": [
+    "Okay. Okay. I know what to fix.",
+    "Closer than last time. It was, wasn't it?",
+    "One day. I mean it."
+   ]
+  }
+ }
+}
