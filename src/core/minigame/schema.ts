@@ -21,8 +21,8 @@ export const MinigameDefSchema = z.object({
   /** Shown before the game starts. */
   instructions: z.string().min(1),
   unlockRequirements: z.object({ badges: z.number().int().min(0), regionIndex: z.number().int().min(0) }),
-  /** Easy, Normal, Hard: the numbers each game reads (see games.ts). */
-  difficultyTiers: z.array(z.object({ id: z.string(), label: z.string(), params: z.record(z.string(), z.number()) })).length(3),
+  /** Easy, Normal, Hard, and for the 18 remade games a fourth Master tier: the numbers each game reads (see games.ts). */
+  difficultyTiers: z.array(z.object({ id: z.string(), label: z.string(), params: z.record(z.string(), z.number()) })).min(3).max(4),
   /** Per attempt, in game ticks (0 = no time limit). */
   durationLimit: z.number().int().min(0),
   /** Tries at one stop. */
@@ -47,7 +47,7 @@ export const MinigameFileSchema = z.object({
     /** Each repeat of the same game in a stage pays this share of the last payout. */
     diminishing: z.number().min(0).max(1),
     /** Items are only paid from this difficulty tier on (1 easy, 2 normal, 3 hard). */
-    itemMinTier: z.number().int().min(1).max(3),
+    itemMinTier: z.number().int().min(1).max(4),
     itemCapPerStage: z.number().int().min(0),
     /** Most heals, research gains and discounts that minigames can give per stage. */
     effectCapPerStage: z.number().int().min(0).default(2),
@@ -59,7 +59,7 @@ export const MinigameFileSchema = z.object({
         prizes: z.array(z.object({ id: z.string().regex(/^[a-z0-9-]+$/), name: z.string(), item: z.string(), count: z.number().int().min(1), cost: z.number().int().min(1) })),
       })
       .default({ games: [], points: { bronze: 0, silver: 0, gold: 0 }, prizes: [] }),
-    tierMultipliers: z.array(z.number().min(0)).length(3),
+    tierMultipliers: z.array(z.number().min(0)).length(4),
   }),
   games: z.array(MinigameDefSchema).min(1),
 });
