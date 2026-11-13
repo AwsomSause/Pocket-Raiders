@@ -49,6 +49,7 @@ import { noteChoice } from './memories/world';
 import { applyEvilEffect, evilBattle, evilBattleWon, evilConditionMet, evilConditionText, evilTeam } from './evil/teams';
 import { shapeInstances, strategyIdForGroup } from './bossStrategy';
 import { choiceMade, recordChoice } from './evil/choices';
+import { recordCast } from './expansion/cast/dossier';
 import { assignEvilVariants, holdsMarnieCard } from './expansion/variantAssign';
 import { changeAid, changeCrisis, crisisAid, crisisEventIds, crisisLevel, setTournament, tournamentEventId, tournamentRound } from './story/crisis';
 import { activePerks, hasPerk, perkItem, perksOf, spendUse, stageKey } from './mapItems';
@@ -969,6 +970,8 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'rivalChange':
     case 'flag':
       return '';
+    case 'cast':
+      return 'a new file in your Dossier';
     case 'grandArcRom':
       return `Data ROM ${e.rom}`;
     case 'grandArcStock':
@@ -1287,6 +1290,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       // Shadow II: a story flag may be exactly the key a Shadow in your party or PC has been waiting for.
       for (const line of checkFlagKeys(content, run)) recordChoice(content, run, { id: `shadow-key-${e.key}`, pick: 'yes', text: line, weight: 2 });
       return '';
+    case 'cast':
+      return recordCast(run, e.id, e.status) ? effectWords(content, e) : '';
     case 'mentor':
       return applyMentorEffect(content, run, e);
     case 'moment':

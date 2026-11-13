@@ -3062,6 +3062,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('flag'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), amount: z.number().int().default(1) }),
   /** Clone Core (New Island): your lead's moves are copied onto your lowest-level other Pokémon, once per event. */
   z.object({ kind: z.literal('copyMoves') }),
+  /** Dossier (E1): meets a cast character (adds them to the Dossier) or changes their status. `id` is an `sc.*` id from the expansion cast. */
+  z.object({ kind: z.literal('cast'), id: z.string().regex(/^sc\.[a-z0-9-]+\.[a-z0-9-]+$/), status: z.enum(['at large', 'beaten', 'turned', 'ally']).optional() }),
   /** Living Rival: writes a line to the run's Chronicle / journal (a photo, a promise, a letter). */
   z.object({ kind: z.literal('moment'), text: z.string().min(1), importance: z.number().int().min(1).max(100).default(60) }),
   /** A run-defining relic: its modifiers (an upside and a downside) join the run for good. Taken once per id. */

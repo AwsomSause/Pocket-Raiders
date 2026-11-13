@@ -102,6 +102,8 @@ import { ensureNarration } from '../core/overhaul/partyNarration';
 import { rivalReport } from '../core/rivals/report';
 import { trackPage } from '../core/expansion/trackView';
 import { drawTrackPage } from '../ui/trackPage';
+import { drawDossier } from '../ui/dossier';
+import { dossierFolders } from '../core/expansion/cast/dossier';
 
 const COL_SPACING = 104;
 const ROW_SPACING = 92;
@@ -853,6 +855,11 @@ export class MapScene extends Phaser.Scene {
     if (session.run && (session.run.expansion?.track?.[region.id]?.peak ?? 0) > 0 && trackPage(content, session.run)) {
       this.input.keyboard?.on('keydown-T', () => this.toggleTrackPage());
       this.add.text(GAME_WIDTH - 24, 354, 'T: notebook track', textStyle(12, '#a69cb4')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('track-tag').on('pointerdown', () => this.toggleTrackPage());
+    }
+    // Beta 0.6 E1: D opens the Dossier once the run has met someone from the cast.
+    if (session.run && dossierFolders(session.run).length > 0) {
+      this.input.keyboard?.on('keydown-D', () => this.toggleDossier());
+      this.add.text(GAME_WIDTH - 24, 338, 'D: dossier', textStyle(12, '#a69cb4')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('dossier-tag').on('pointerdown', () => this.toggleDossier());
     }
     // Galar's Champion Tournament: B opens the bracket.
     if (league && region.id === 'galar' && stage.map.nodes.some((n) => n.sides.length > 0)) {
@@ -1904,6 +1911,17 @@ export class MapScene extends Phaser.Scene {
     this.report?.destroy();
     this.report = null;
     this.busy = false;
+  }
+
+  /** The Dossier (Beta 0.6 E1): Case Folders with the Org Pyramid. D, Esc or a click on a tab's folder edge closes it. */
+  private toggleDossier(): void {
+    if (this.report) return this.closeReport();
+    if (this.busy || this.picker || this.legend) return;
+    const run = services().session.run;
+    const folders = run ? dossierFolders(run) : [];
+    if (!folders.length) return;
+    this.report = drawDossier(this, folders, () => this.closeReport());
+    this.busy = true;
   }
 
   /** The Notebook's track page (Beta 0.6 E2): a pop-up like the Rival Report. T, Esc or a click closes it. */
