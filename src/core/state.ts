@@ -802,6 +802,8 @@ export const BattleStateSchema = z.object({
   held: HeldStateSchema.default(freshHeldState),
   /** Map items in this battle: turns the wild Pokémon loses (Poké Doll), and the catch-rate items for ball throws. */
   mapItems: z.object({ freeTurns: z.number().int().min(0), thrown: z.number().int().min(0) }).optional(),
+  /** Beta 0.6 B9: an evolution stone this wild Pokémon stands beside; win or catch the fight to take it. */
+  evoStone: z.string().optional(),
   /** A VS Seeker rematch: double prize money. */
   rematch: z.boolean().optional(),
   /** "This Trainer Will Return": the enemy profile id of a trainer back for its rematch. */
