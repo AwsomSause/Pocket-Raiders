@@ -27,7 +27,7 @@ const log = (s: RescueState, e: string) => {
   if (s.log.length > 60) s.log.splice(0, s.log.length - 60);
 };
 const roll = (run: RunState, regionId: string, label: string): number => new Rng(hashSeed(`${run.seed}::${regionId}::${label}`)).float();
-const holdOf = (s: RescueState, id: string): Hold => {
+export const holdOf = (s: RescueState, id: string): Hold => {
   const h = s.holds.find((x) => x.id === id);
   if (!h) throw new Error(`No such hold ${id}`);
   return h;
@@ -285,7 +285,7 @@ export function acceptOffer(run: RunState, holdId: string, plan: PlanId, ctx: Re
   h.accepted = plan;
   h.frozenAt = node;
   h.lateDue = false;
-  const pr: PlanRun = { holdId, plan, complication: drawComplication(run, h.regionId), beats: [], complicationAnswer: null, exchangeWrong: 0, penalty: 0, late: h.late, heatDone: 0 };
+  const pr: PlanRun = { holdId, plan, complication: drawComplication(run, h.regionId), beats: [], complicationAnswer: null, exchangeWrong: 0, penalty: 0, late: h.late, heatDone: 0, fights: [], fightNow: null, wiped: false };
   s.active = pr;
   log(s, `rescue.accepted:${h.id}:${plan}`);
   return pr;
@@ -479,9 +479,13 @@ export function finishPlan(run: RunState, ctx: RescueCtx, node: number, opts: { 
 const avgLevel = (run: RunState): number => Math.max(1, Math.round(run.party.reduce((n, p) => n + p.level, 0) / Math.max(1, run.party.length)));
 
 /** A cellmate drawn from the holding team's Grunt pool (weakest first; never stronger than the current fights). Shadow only for Snag'em. */
+/** The holding team's grunt species (the cellmate and the PS-RESCUE guards come from it). */
+export function gruntSpecies(teamId: string): string[] {
+  const team = (evilJson.teams as { id: string; ranks: { grunt: { species: string[] } } }[]).find((t) => t.id === teamId);
+  return team?.ranks.grunt.species ?? RESCUE.gruntPools[teamId] ?? RESCUE.gruntPools['rocket-remnants']!;
+}
 export function cellmateFor(run: RunState, h: Hold, level: number): { speciesId: string; level: number; shadow: boolean } {
-  const team = (evilJson.teams as { id: string; ranks: { grunt: { species: string[] } } }[]).find((t) => t.id === h.teamId);
-  const pool = team?.ranks.grunt.species ?? RESCUE.gruntPools[h.teamId] ?? RESCUE.gruntPools['rocket-remnants']!;
+  const pool = gruntSpecies(h.teamId);
   const i = Math.floor(roll(run, h.regionId, 'rescue-cellmate-species') * Math.min(2, pool.length));
   return { speciesId: pool[i]!, level, shadow: h.teamId === 'snagem' };
 }

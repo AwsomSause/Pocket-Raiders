@@ -14,7 +14,7 @@ import { Rng, hashSeed } from '../rng';
 import type { Content, Species } from '../contentSchema';
 import type { PokemonInstance } from '../state';
 
-export const MOMENT_TRIGGERS = ['runEnd', 'lethal', 'ally', 'start', 'low', 'ko', 'enter', 'super', 'crit', 'weather', 'status', 'rest', 'catch'] as const;
+export const MOMENT_TRIGGERS = ['runEnd', 'lethal', 'faint', 'ally', 'start', 'low', 'ko', 'enter', 'super', 'crit', 'weather', 'status', 'rest', 'catch'] as const;
 export type MomentTrigger = (typeof MOMENT_TRIGGERS)[number];
 
 /** Triggers in priority order: when several moments could be the cinematic of one battle, the earlier one wins. */
@@ -50,10 +50,42 @@ export const MomentEffectSchema = z.object({
   critStage: z.number().int().min(1).max(3).optional(),
   /** Starts this weather for this many turns (never over a primal weather). */
   weather: z.object({ id: z.enum(['rain', 'sun', 'sand', 'snow', 'hail']), turns: z.number().int().min(1).max(8) }).optional(),
+  /** Ditto's copy: it takes on the foe's types for the battle. */
+  typeCopy: z.boolean().optional(),
+  /** Smeargle's sketch: replaces its last move with one the foe knows, for the battle. */
+  learnFoeMove: z.boolean().optional(),
+  /** Mew's curiosity: replaces its last move with a random move it could learn by TM, for the battle (seeded). */
+  learnTmMove: z.boolean().optional(),
+  /** Flinch can't stop it for the battle. */
+  noFlinch: z.boolean().optional(),
+  /** Its first move goes with this much extra priority (turn 1 only). */
+  firstPriority: z.number().int().min(1).max(2).optional(),
+  /** While the foe is asleep it loses this percent of its max HP each turn. */
+  foeNightmarePct: z.number().int().min(1).max(25).optional(),
+  /** Friendship gained at once (0-255 scale). */
+  friendship: z.number().int().min(1).max(10).optional(),
+  /** A status with this many turns left (Poison Tolerance: it wears off after 1). */
+  statusLeft: z.number().int().min(1).max(3).optional(),
+  /** Rest and catch moments: every party member gains this much friendship. */
+  teamFriendship: z.number().int().min(1).max(10).optional(),
+  /** Rest moments: a free berry in the bag. */
+  freeBerry: z.boolean().optional(),
+  /** Rest moments: the Pokémon gains this percent of the experience between its level and the next. */
+  xpPct: z.number().int().min(1).max(100).optional(),
+  /** Rest moments: names the types that hit this stage's leader hardest. */
+  weaknessHint: z.boolean().optional(),
+  /** Catch moments: the whole party is healed fully. */
+  healTeam: z.boolean().optional(),
+  /** Catch moments: the Pokémon rolls a talent (once) if it has none. */
+  talentRoll: z.boolean().optional(),
   /** Entry moments: HP restored now, as a percent of max HP. */
   healNowPct: z.number().int().min(1).max(100).optional(),
   /** Own stat boosts from `boost` / `boostBest` fade after this many turns (absent = last the battle). */
   boostTurns: z.number().int().min(1).max(5).optional(),
+  /** The next move of this type does this much more damage (percent); spent when it lands. */
+  nextBoost: z.object({ type: z.string(), pct: z.number().int().min(1).max(100) }).optional(),
+  /** For the rest of the battle, a foe that hits it with a contact move is poisoned. */
+  contactPoison: z.boolean().optional(),
   /** Damage is halved for this many turns. */
   guard: z.number().int().min(1).max(5).optional(),
   /** Run-end revive: HP multiplier on max HP, and the Overcharged state. */
@@ -79,7 +111,18 @@ export const PokemonMomentSchema = z.object({
   scope: ScopeSchema,
   trigger: z.enum(MOMENT_TRIGGERS),
   /** Extra condition: at least this many living party members must match the moment's own scope (Eevee's Bond). */
-  requires: z.object({ partyMatching: z.number().int().min(2).max(6).optional(), weather: z.enum(['rain', 'sun', 'sand', 'snow', 'hail']).optional() }).optional(),
+  requires: z
+    .object({
+      partyMatching: z.number().int().min(2).max(6).optional(),
+      weather: z.enum(['rain', 'sun', 'sand', 'snow', 'hail']).optional(),
+      /** The Pokémon has one of these statuses (or `confusion`). */
+      status: z.array(z.enum(['brn', 'psn', 'par', 'slp', 'frz', 'confusion'])).optional(),
+      /** The foe has this species tag (legendary, mythical, baby...). */
+      foeTag: z.string().optional(),
+    })
+    .optional(),
+  /** Ally moments: `same` = the fallen Pokémon must match this moment's scope too; `any` = any ally falling counts. */
+  allyScope: z.enum(['same', 'any']).default('same'),
   /** Low-HP moments: it can play once the Pokémon is below this percent of its max HP (checked at the end of each turn). */
   hpBelow: z.number().int().min(1).max(99).optional(),
   /** 0–1. */

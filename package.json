@@ -68,6 +68,7 @@
     "report:perf": "node tools/report-perf.ts",
     "data:events": "node tools/build-events.ts",
     "data:xe-events": "node tools/build-expansion-events.ts",
+    "data:run-events": "node tools/build-run-events.ts",
     "data:quests": "node tools/build-quests.ts",
     "data:story": "node tools/build-story.ts",
     "data:npc-trainers": "node tools/build-npc-trainers.ts",

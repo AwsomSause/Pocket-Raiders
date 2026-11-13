@@ -2833,11 +2833,15 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** Beta 0.6 E3: the run has the Kanto saga's story events turned on (run.expansion.density). */
   z.object({ kind: z.literal('xevents') }),
   /** Stand With Them: you have joined the run's team (`joined`, the default) or can still join it (`joined: false`); optionally at least this reputation. */
+  /** Beta 0.6 E3b: one of the Expanded flags that run events wait on. */
+  z.object({ kind: z.literal('xflag'), flag: z.enum(['extendedCut', 'hasShadow', 'keyHinted', 'grandArc', 'liaisonSeen', 'romHeld', 'friendPresent', 'trioFriendly', 'wesMet']) }),
   z.object({ kind: z.literal('standWith'), joined: z.boolean().default(true), minRep: z.number().int().optional(), /** The [Stand with them] climax can be played now. */ playable: z.boolean().optional(), /** The climax was won and the verdict is waiting (with `verdict`, that choice is open). */ verdictPending: z.boolean().optional(), verdict: z.enum(['rise', 'throne', 'turn']).optional(), /** A rival is featured in this run (or not). */ rival: z.boolean().optional() }),
   /** Story Overhaul: only in a Story Run (Alphas, story tournaments). Classic never draws these, so its event rolls never move. */
   z.object({ kind: z.literal('storyRun') }),
   /** Event Director: two of your Pokémon share an open bond. */
   z.object({ kind: z.literal('bond') }),
+  /** A party Pokémon fainted in the last few battles and nobody has slept since (camp scenes). */
+  z.object({ kind: z.literal('memberFainted'), within: z.number().int().min(1).max(30).default(6) }),
   /** W10: Pokémon photographed at camp this run. */
   z.object({ kind: z.literal('photos'), atLeast: z.number().int().min(1) }),
   /** Event Director: the region's focus (mystery, rivals, raids, exploration). */
@@ -3021,6 +3025,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Grand Arc: earns a Data ROM (a liaison's proof of one Shadow method). Does nothing when the arc is off for this run. */
   z.object({ kind: z.literal('grandArcRom'), rom: z.string().length(1) }),
   /** Beta 0.6 E2: move the current region's world-state track (once per event id). */
+  /** Beta 0.6 E3b: lowers every party Shadow Pokémon's corruption by `amount` (never below 1: the last step stays with its own key). */
+  z.object({ kind: z.literal('shadowHeart'), amount: z.number().int().min(-20).max(0) }),
   z.object({ kind: z.literal('track'), input: z.enum(['raidFailed', 'raidDeclined', 'climaxScheduled', 'raidSuccess', 'officerTurned']) }),
   /** Grand Arc: gains a Stock step (1 to 5). */
   z.object({ kind: z.literal('grandArcStock'), step: z.number().int().min(1).max(5) }),
