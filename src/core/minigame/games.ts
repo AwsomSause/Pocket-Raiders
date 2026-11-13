@@ -8,14 +8,6 @@ import { Rng, type RngState } from '../rng';
 import { FRONTIER_GAMES } from './frontier';
 import { MINIGAMES_2 } from './games2';
 import { MINIGAMES_3 } from './games3';
-import { MINIGAMES_4 } from './games4';
-import { MINIGAMES_7 } from './games7';
-import { MINIGAMES_6 } from './games6';
-import { MINIGAMES_5 } from './games5';
-import { MINIGAMES_8 } from './games8';
-import { MINIGAMES_9 } from './games9';
-import { MINIGAMES_10 } from './games10';
-import { MINIGAMES_11 } from './games11';
 
 export interface Cell {
   id: string;
@@ -23,9 +15,6 @@ export interface Cell {
   detail?: string;
   tone?: 'good' | 'bad' | 'info' | 'dim' | 'hot';
   disabled?: boolean;
-  /** Part of the picture board (drawn as a tile), not a control. Screens may show art for it (asset id) and fall back to the label. */
-  board?: boolean;
-  art?: string;
 }
 
 export interface MinigameView {
@@ -34,8 +23,6 @@ export interface MinigameView {
   cols: number;
   cells: Cell[];
   done: boolean;
-  /** Species ids drawn as a row of small icons above the game (performers, patients). Screens skip ones they cannot find. */
-  portraits?: string[];
 }
 
 export interface BaseState {
@@ -862,14 +849,6 @@ export const MINIGAMES: Record<string, MinigameModule<never>> = {
   'reaction-challenge': reaction as never,
   ...MINIGAMES_2,
   ...MINIGAMES_3,
-  ...MINIGAMES_4,
-  ...MINIGAMES_7,
-  ...MINIGAMES_6,
-  ...MINIGAMES_5,
-  ...MINIGAMES_8,
-  ...MINIGAMES_9,
-  ...MINIGAMES_10,
-  ...MINIGAMES_11,
   ...FRONTIER_GAMES,
 };
 
