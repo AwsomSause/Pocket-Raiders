@@ -63,11 +63,11 @@ describe('results and levers', () => {
     expect(b.record).toEqual(a.record);
     expect(JSON.stringify(r.expansion)).toBe(before);
   });
-  it('levers write only siege, apex, cast, cut and the raid record', () => {
+  it('levers write only siege, apex, cast, cut and the raid record (plus the Dossier, a block of its own)', () => {
     const r = mk();
     resolveStoryRaid(content, r, 4, 'triumph');
     resolveStoryRaid(content, r, 5, 'failure');
-    expect(Object.keys(r.expansion!).sort()).toEqual(['apex', 'cast', 'cut', 'raids', 'siege']);
+    expect(Object.keys(r.expansion!).sort()).toEqual(['apex', 'cast', 'cut', 'dossier', 'raids', 'siege']);
     expect((r.expansion!.siege as { levers: Record<string, string> }).levers).toEqual({ manifest: 'broken', herd: 'strengthened' });
     expect(r.expansion!.cast).toEqual({ ledger: 'joinable' });
     expect(r.expansion!.apex).toEqual({ 'black-label-gauntlet': true });

@@ -5,6 +5,7 @@ import type { Content } from '../contentSchema';
 import { currentRegion } from '../regions';
 import type { RunState } from '../state';
 import { periodOf } from '../clock';
+import { meetFromTrack } from './cast/meet';
 import { freshTrack, insuredIndex, NO_EFFECTS, reduceTrack, trackEffectsFor, wildTaken, type TrackEffects, type TrackInput, type TrackState } from './track';
 
 export const trackOf = (run: Pick<RunState, 'expansion'>, regionId: string): TrackState | undefined => run.expansion?.track?.[regionId];
@@ -16,6 +17,7 @@ export function advanceTrack(run: RunState, regionId: string, input: TrackInput,
   const after = reduceTrack(before, input, `${input}:${key}`);
   if (after === before && !trackOf(run, regionId)) return 0;
   run.expansion = { ...(run.expansion ?? {}), track: { ...(run.expansion?.track ?? {}), [regionId]: after } };
+  meetFromTrack(run, regionId, after.peak);
   return after.step;
 }
 
