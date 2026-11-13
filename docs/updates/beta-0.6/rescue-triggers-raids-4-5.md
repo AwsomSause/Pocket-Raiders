@@ -1,8 +1,6 @@
 # Rescue triggers and Raids 4/5 (E5b + R9 wiring)
 
-**Player gets:** (Raids 1, 4 and 5 lost also apply the fine, confiscation, reputation, Shadow and setback costs their scripts list.)
-
-**Player gets:** letting a Team Rocket (or any team with a holding site) operation through, by choosing "Leave it alone" or by leaving the region with it still running, now costs you 1 to 3 bench Pokémon (never the last two). The team leaves its receipt, the holding clock starts, and about ten stages later your rival's Rescue offer opens on the map. Shutting an operation down impounds nothing.
+**Player gets:** letting a Team Rocket (or any team with a holding site) operation through, by choosing "Leave it alone" or by leaving the region with it still running, now costs you 1 to 3 bench Pokémon (never the last two). The team leaves its receipt, the holding clock starts, and about ten stages later your rival's Rescue offer opens on the map. Shutting an operation down impounds nothing. Losing Raids 1, 4 or 5 also applies the fine, confiscation, reputation, Shadow and setback costs their scripts list.
 Raid results for Kanto Raids 1 to 5 are recorded with their lever (broken / weakened / dented / strengthened / unchanged). Raid 4 (Vermilion Docks) opens after Raid 2; Raid 5 (Safari Night) opens after Raid 3 or at world-track step 4. A Raid 2 loss impounds Pokémon the same way.
 
 **Save:** no version bump. Results live in `run.expansion.raids` (`n1`..`n6`); levers write only `siege`, `apex`, `cast` and `cut` (phase mods). Old saves have none of it and load unchanged. Round trip is tested.
