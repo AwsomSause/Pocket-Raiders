@@ -10,7 +10,7 @@ export function placeMinigameStop(content: Content, run: RunState): void {
   if (!stage || stage.kind !== 'stage') return;
   const rng = new Rng(hashSeed(`${run.seed}::minigame-stop::${run.regionIndex}:${stage.index}`));
   if (!rng.chance(content.minigames.economy.stopChance)) return;
-  const pool = content.minigames.games.filter((g) => g.unlockRequirements.badges <= run.badges.length && g.unlockRequirements.regionIndex <= run.regionIndex);
+  const pool = content.minigames.games.filter((g) => !g.zone && g.unlockRequirements.badges <= run.badges.length && g.unlockRequirements.regionIndex <= run.regionIndex);
   const candidates = stage.map.nodes.filter((n) => n.column < stage.map.columns && n.sides.length === 0);
   if (pool.length === 0 || candidates.length === 0) return;
   const node = rng.pick(candidates);

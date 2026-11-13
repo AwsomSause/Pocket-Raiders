@@ -16,7 +16,7 @@ const THEMED: Partial<Record<TypeName, readonly string[]>> = {
   ghost: ['haunted', 'dimensional', 'graveyard', 'cityruins'], dragon: ['dragonsden', 'dragonden'], poison: ['corrosivemist', 'sewer', 'swamp', 'marsh'],
   fairy: ['fairytale', 'starlight', 'gemstone', 'meadow'], steel: ['factory', 'industrial', 'mine2'], dark: ['darkcrystalcavern', 'dimensional', 'indoordark', 'grotto'],
   fighting: ['bigtop', 'arena', 'battleparadise'], flying: ['clouds', 'clouds2', 'mountain2'], ground: ['desert', 'sand', 'mine1', 'cave'],
-  grass: ['flowergarden', 'deepforest', 'meadow', 'autumn', 'woodland'], bug: ['forest2', 'deepforest', 'forest3', 'forest4', 'woodland'],
+  grass: ['deepforest', 'meadow', 'autumn', 'woodland'], bug: ['forest2', 'deepforest', 'forest3', 'forest4', 'woodland'],
   water: ['beach', 'lake', 'waterfall', 'waterfall2', 'dive'], rock: ['cave4', 'mountain', 'mountain2', 'mine1', 'mine2'],
   normal: ['newworld', 'route', 'courtyard', 'safari', 'woodland'], ice: ['whitecrystalcavern', 'beachice'],
 };

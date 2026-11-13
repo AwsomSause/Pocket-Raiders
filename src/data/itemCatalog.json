@@ -982,6 +982,30 @@
   }
  },
  {
+  "id": "tauros-charm",
+  "name": "Tauros Charm",
+  "family": "Battle held items",
+  "description": "Normal moves +15% per copy",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "muscle-band",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "normal"
+     ],
+     "percent": 15
+    }
+   ]
+  }
+ },
+ {
   "id": "silver-powder",
   "name": "Silver Powder",
   "family": "Type boosters (held)",

@@ -15,6 +15,8 @@ const RewardSchema = z.object({
 
 export const MinigameDefSchema = z.object({
   id: z.string().regex(/^[a-z0-9-]+$/),
+  /** Canon-space zone games (Safari Land): only an event opens one; never a random stop, and it pays no medal reward. */
+  zone: z.boolean().default(false),
   name: z.string().min(1),
   category: z.enum(['memory', 'timing', 'knowledge', 'resource', 'puzzle', 'skill']),
   blurb: z.string().min(1),
@@ -22,7 +24,7 @@ export const MinigameDefSchema = z.object({
   instructions: z.string().min(1),
   unlockRequirements: z.object({ badges: z.number().int().min(0), regionIndex: z.number().int().min(0) }),
   /** Easy, Normal, Hard, and for the 18 remade games a fourth Master tier: the numbers each game reads (see games.ts). */
-  difficultyTiers: z.array(z.object({ id: z.string(), label: z.string(), params: z.record(z.string(), z.number()) })).min(3).max(4),
+  difficultyTiers: z.array(z.object({ id: z.string(), label: z.string(), params: z.record(z.string(), z.number()) })).min(1).max(4),
   /** Per attempt, in game ticks (0 = no time limit). */
   durationLimit: z.number().int().min(0),
   /** Tries at one stop. */

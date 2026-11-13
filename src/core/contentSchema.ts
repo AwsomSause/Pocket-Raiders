@@ -2957,7 +2957,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** A trade: the lowest-level party Pokémon that fits `want` leaves with the partner. The choice stays locked without one (and while only one Pokémon is left). */
   z.object({ kind: z.literal('tradeAway'), want: TradeWantSchema }),
   /** A healing spot, shop or fishing spot opens beside this node. */
-  z.object({ kind: z.literal('addStop'), stop: z.enum(['heal', 'shop', 'fish']) }),
+  z.object({ kind: z.literal('addStop'), stop: z.enum(['heal', 'shop', 'fish', 'minigame']), /** With `minigame`: the game (minigames.json) that waits at the new stop (Safari Land). */ minigameId: z.string().min(1).optional() }),
   /** A ferry: jump to a node next to the gym (SS Ticket). */
   z.object({ kind: z.literal('skipAhead') }),
   /** Ideas W4: a trainer starts tailing you and steps out to challenge you after this many nodes (core/wanderer.ts). */
@@ -3060,6 +3060,10 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   }),
   /** World-state callback (catalog 75): adds to a named story flag that later events can read. */
   z.object({ kind: z.literal('flag'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), amount: z.number().int().default(1) }),
+  /** Clone Core (New Island): your lead's moves are copied onto the other party Pokémon you pick (the lowest-level one when none is picked). */
+  z.object({ kind: z.literal('copyMoves') }),
+  /** Dossier (E1): meets a cast character (adds them to the Dossier) or changes their status. `id` is an `sc.*` id from the expansion cast. */
+  z.object({ kind: z.literal('cast'), id: z.string().regex(/^sc\.[a-z0-9-]+\.[a-z0-9-]+$/), status: z.enum(['at large', 'beaten', 'turned', 'ally']).optional() }),
   /** Living Rival: writes a line to the run's Chronicle / journal (a photo, a promise, a letter). */
   z.object({ kind: z.literal('moment'), text: z.string().min(1), importance: z.number().int().min(1).max(100).default(60) }),
   /** A run-defining relic: its modifiers (an upside and a downside) join the run for good. Taken once per id. */
@@ -3189,6 +3193,19 @@ export const EventBattleFormatSchema = z.enum(['doubles', 'triples']);
 export type EventBattleFormat = z.infer<typeof EventBattleFormatSchema>;
 
 export const EventBattleSchema = z.discriminatedUnion('kind', [
+  /** Beta 0.6 canon spaces: a raid (raids.json) fought as an event battle. The boss is not catchable unless the raid sets `capture`; `win` and `lose` apply after the raid result. */
+  z.object({
+    kind: z.literal('raid'),
+    raidId: z.string().min(1),
+    name: z.string().default('Raid'),
+    levelBonus: z.number().int().default(0),
+    chain: z.literal(1).default(1),
+    pseudo: z.boolean().optional(),
+    /** Toxic Spikes lie on your side when the fight opens, unless this story flag (`flag` effect key) reached `atLeast` (the Polluted Factory's valves). */
+    spikesUnless: z.object({ flag: z.string().min(1), atLeast: z.number().int().min(1) }).optional(),
+    win: z.array(EventEffectSchema).default([]),
+    lose: z.array(EventEffectSchema).optional(),
+  }),
   z.object({
     kind: z.literal('wild'),
     format: EventBattleFormatSchema.optional(),
@@ -3201,6 +3218,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     blissful: z.boolean().default(false),
     /** W7: a fight inside a pseudo stage (a loss ejects, the run goes on). */
     pseudo: z.boolean().optional(),
+    /** The field is forced to this weather for the whole fight (Cold Nights Rain). */
+    weather: WeatherSchema.optional(),
     /** The wild Pokémon is one that beat a party member earlier this run (catalog 28). */
     recall: z.boolean().default(false),
     /** Battles in a row at this stop without healing in between (a detour); `win` pays after the last. */
@@ -3234,6 +3253,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     standWith: z.boolean().optional(),
     /** Shadow Boxing: the foe is a copy of your lead (same species, its level plus `levelBonus`); `size` is ignored. */
     mirror: z.boolean().optional(),
+    /** With `mirror`: the copies are clones (New Island): no ability, no items, every stat +10%. */
+    clone: z.boolean().optional(),
     /** Mentors: the team is your fellow apprentice's (their preferred types; they take the name). A loss is friendly: nobody is out and the run goes on. */
     apprentice: z.boolean().optional(),
     /** Beta 0.6 R8: the foe is your Friend (their team by personality, their name; core/rivals/live.ts). */

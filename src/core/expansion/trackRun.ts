@@ -76,3 +76,10 @@ export function trackOnRaid(run: RunState, region: string | undefined, n: number
   const input = result === 'triumph' || result === 'success' ? 'raidSuccess' : result === 'failure' ? 'raidFailed' : result === 'declined' ? 'raidDeclined' : null;
   if (input) advanceTrack(run, region, input, `raid:${n}`);
 }
+
+/** The worst climax result (Second Shot spent): the region's world-state track rises once. The run goes on. */
+export function trackOnClimaxLost(run: RunState): void {
+  const region = run.regionOrder[run.regionIndex];
+  if (!run.expansion?.tracks || !region) return;
+  advanceTrack(run, region, 'raidFailed', `climax-lost:${run.regionIndex}`);
+}
