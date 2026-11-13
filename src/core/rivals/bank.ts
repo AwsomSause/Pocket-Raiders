@@ -1,9 +1,9 @@
-// Rival dialogue bank (Beta 0.6 R5): 528 authored lines in src/data/story/text/rivalBank.json; the Pokémon lines are
+// Rival dialogue bank (Beta 0.6 R5): 528 authored lines in src/data/rivalBank.json; the Pokémon lines are
 // BUILT HERE at runtime (opener + type line, plus a category line), so no 70,000-line file ships. Pure: no random draw.
 // At most one Pokémon line per meeting; none repeats in a run until all of that species' lines were used.
 
 import { z } from 'zod';
-import json from '../../data/story/text/rivalBank.json';
+import json from '../../data/rivalBank.json';
 import type { Species } from '../contentSchema';
 import { fnv1a } from '../story/moments';
 import type { RivalOverhaulState } from './overhaulSchema';
