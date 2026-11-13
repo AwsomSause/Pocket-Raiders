@@ -3056,6 +3056,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   }),
   /** World-state callback (catalog 75): adds to a named story flag that later events can read. */
   z.object({ kind: z.literal('flag'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), amount: z.number().int().default(1) }),
+  /** Clone Core (New Island): your lead's moves are copied onto your lowest-level other Pokémon, once per event. */
+  z.object({ kind: z.literal('copyMoves') }),
   /** Living Rival: writes a line to the run's Chronicle / journal (a photo, a promise, a letter). */
   z.object({ kind: z.literal('moment'), text: z.string().min(1), importance: z.number().int().min(1).max(100).default(60) }),
   /** A run-defining relic: its modifiers (an upside and a downside) join the run for good. Taken once per id. */
@@ -3230,6 +3232,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     standWith: z.boolean().optional(),
     /** Shadow Boxing: the foe is a copy of your lead (same species, its level plus `levelBonus`); `size` is ignored. */
     mirror: z.boolean().optional(),
+    /** With `mirror`: the copies are clones (New Island): no ability, no items, every stat +10%. */
+    clone: z.boolean().optional(),
     /** Mentors: the team is your fellow apprentice's (their preferred types; they take the name). A loss is friendly: nobody is out and the run goes on. */
     apprentice: z.boolean().optional(),
     /** Beta 0.6 R8: the foe is your Friend (their team by personality, their name; core/rivals/live.ts). */
