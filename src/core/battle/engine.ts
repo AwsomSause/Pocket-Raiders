@@ -17,6 +17,7 @@
 // when switching out (Regenerator).
 
 import { colossusAbsorb, colossusEndOfTurn } from './colossus';
+import { foresightBegin } from './foresight';
 import { CARE } from '../care/mods';
 import { shadowDamageMultiplier } from '../shadow';
 import { shadowTurnPlan, shadow2Data } from '../shadow2';
@@ -448,6 +449,8 @@ export interface EnemyBrain {
   party?: PokemonInstance[];
   /** Only a damage estimate is wanted (no strategic tweaks). */
   raw?: boolean;
+  /** Foresight Tax: the move the foe is about to use, known in advance (the foe's threat is that move alone). */
+  foresight?: string;
 }
 
 /** The Advanced AI view of one matchup (core/battle/aai.ts). */
@@ -482,7 +485,7 @@ function aaiView(brain: EnemyBrain, user: PokemonInstance, best: number): AaiVie
       if (threat === undefined) {
         const foeStages = battle ? (side === 'enemy' ? battle.playerStages : battle.enemyStages) : freshStages();
         const back: EnemyBrain = { content, ai: 1, target: user, stages: foeStages, battle, party: brain.party, side: side === 'enemy' ? 'player' : 'enemy', raw: true };
-        threat = Math.max(0, ...target.moves.filter((m) => m.pp > 0).map((m) => estimateDamage(back, target, m.id)));
+        threat = Math.max(0, ...target.moves.filter((m) => m.pp > 0 && (!brain.foresight || m.id === brain.foresight)).map((m) => estimateDamage(back, target, m.id)));
       }
       return threat;
     },
@@ -811,8 +814,9 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   const enemyForcedIndex = enemyForced ? enemy.mon.moves.findIndex((m) => m.id === enemyForced) : -1;
   const enemyChoice = choiceLock(battle, enemy.mon);
   const enemyChoiceIndex = enemyChoice ? enemy.mon.moves.findIndex((m) => m.id === enemyChoice) : -1;
+  const foresightMove = foresightBegin(battle, action.kind === 'move' && action.index >= 0 ? ctx.party[battle.activeIndex]?.moves[action.index]?.id ?? null : null, events);
   let enemyMoveIndex =
-    enemyForcedIndex >= 0 ? enemyForcedIndex : enemyChoiceIndex >= 0 ? enemyChoiceIndex : ctx.enemyPick !== undefined && ctx.enemyPick >= 0 && ctx.enemyPick < enemy.mon.moves.length ? ctx.enemyPick : chooseEnemyMove(enemy.mon, rng, { content, ai: battle.ai, target: ctx.party[battle.activeIndex]!, stages: battle.enemyStages, battle, party: ctx.party });
+    enemyForcedIndex >= 0 ? enemyForcedIndex : enemyChoiceIndex >= 0 ? enemyChoiceIndex : ctx.enemyPick !== undefined && ctx.enemyPick >= 0 && ctx.enemyPick < enemy.mon.moves.length ? ctx.enemyPick : chooseEnemyMove(enemy.mon, rng, { content, ai: foresightMove ? 1 : battle.ai, target: ctx.party[battle.activeIndex]!, stages: battle.enemyStages, battle, party: ctx.party, ...(foresightMove ? { foresight: foresightMove } : {}) });
   ctx.enemyPick = undefined;
   let enemyMove = resolveMove(content, enemy.mon, enemyMoveIndex);
 

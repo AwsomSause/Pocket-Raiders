@@ -886,6 +886,8 @@ export const BattleStateSchema = z.object({
   raid: RaidBattleSchema.optional(),
   /** Beta 0.6 Colossus fight: armor seals, shield bars and the timer (core/battle/colossus.ts). */
   colossus: ColossusBattleSchema.optional(),
+  /** Beta 0.6 Foresight Tax (core/battle/foresight.ts): the move revealed this turn and whether the reveal has ended. */
+  foresight: z.object({ ended: z.boolean(), revealed: z.string().nullable() }).optional(),
   /** Run events B: special rules of this event fight (no switching, no attacks, turn limits...); see EventRuleSchema. */
   eventRule: EventRuleSchema.optional(),
   /** Every move's accuracy is multiplied by this for both sides (Veridian Forest fog). */

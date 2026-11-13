@@ -3157,6 +3157,8 @@ export const EventRuleSchema = z.object({
   pinchHitter: z.boolean().optional(),
   /** Blackout's Seal (Beta 0.6 E4): no voluntary switching on the first turn of the fight. */
   noSwitchFirstTurn: z.boolean().optional(),
+  /** Beta 0.6 Foresight Tax: the foe sees your first chosen move each turn until one of its Pokémon faints. */
+  foresight: z.boolean().optional(),
   /** Front (Beta 0.6): each Pokémon fights only the foe in its own lane (spot n faces spot n); no moves reach other lanes or allies. */
   lanes: z.boolean().optional(),
   /** Blackout's Seal: moves of this type hit this many percent harder, for both sides. */
