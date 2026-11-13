@@ -990,7 +990,7 @@
   "stacksOn": "pokemon",
   "max": 3,
   "how": "held",
-  "icon": "silver-powder",
+  "icon": "silverpowder",
   "status": "supported",
   "effect": {
    "kind": "held",
