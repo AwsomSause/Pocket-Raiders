@@ -63,6 +63,7 @@ import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } fro
 import { hashSeed, Rng } from './rng';
 import { continueAfterDecisions, healParty, newMon } from './run';
 import { earnRom, gainStock, grandArcOf, romById, romsHeld } from './grandArc';
+import { addMercy, changeRep, joinInsideMan, joinProblem, standWithOf } from './arc/standWithExtended';
 import { checkFlagKeys } from './shadow2/keys';
 import { grantNamedShadow } from './shadow2/grant';
 import type { MapNode, RunState, SideStop } from './state';
@@ -174,6 +175,9 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
     case 'grandArc': {
       const g = grandArcOf(run);
       return !!g && (!c.missingRom || !romsHeld(g).includes(c.missingRom));
+    case 'standWith': {
+      const sw = standWithOf(run);
+      return c.joined ? !!sw && (c.minRep === undefined || sw.rep >= c.minRep) : !sw && joinProblem(run) === null;
     }
     case 'storyRun':
       return !!run.story.v2;
@@ -328,6 +332,7 @@ export function conditionText(content: Content, c: EventCondition): string {
     case 'partyShadow':
       return 'Needs a Shadow Pokémon in your party';
     case 'grandArc':
+    case 'standWith':
       return 'Needs something you have not done yet';
     case 'storyRun':
       return 'Only in a Story Run';
@@ -829,6 +834,7 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'grandArcRom':
       return `Data ROM ${e.rom}`;
     case 'grandArcStock':
+    case 'standWith':
       return '';
     case 'namedShadow':
       return 'a Shadow Pokémon is offered to you';
@@ -1083,6 +1089,11 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const name = grantNamedShadow(content, run, e.id, e.level);
       return name ? `${name} is yours to keep, if you can hold it` : 'there was nobody to hand over';
     }
+    case 'standWith':
+      if (e.action === 'join') return joinInsideMan(run);
+      if (e.action === 'mercy') addMercy(run, e.noticed);
+      else if (e.change) changeRep(run, e.change);
+      return '';
     case 'flag':
       run.story.flags[`ev:${e.key}`] = Math.max(0, Number(run.story.flags[`ev:${e.key}`] ?? 0) + e.amount);
       // Shadow II: a story flag may be exactly the key a Shadow in your party or PC has been waiting for.

@@ -12,6 +12,7 @@
 //  - Recurring villains: the executive and leader remember every meeting. Their teams grow and their lines change
 //    (first meeting, after you beat them, after they beat you, grudging respect).
 
+import { standingLine } from '../arc/standWithExtended';
 import { impoundFor } from '../raid/storyRaids';
 import type { Content, EventBattle, EventCondition, EventEffect } from '../contentSchema';
 import { hashSeed, Rng } from '../rng';
@@ -236,6 +237,8 @@ export function evilSummary(content: Content, run: RunState): { title: string; l
     const def = team.ops.find((o) => o.id === op.id);
     lines.push(`Region ${op.region + 1}: ${def?.name ?? op.id} (${op.outcome === 'running' ? 'still running' : op.outcome})`);
   }
+  const standing = standingLine(run);
+  if (standing) lines.push(standing);
   for (const rank of ['executive', 'leader'] as const) {
     const rec = s.villains[rank];
     if (rec && rec.met > 0) lines.push(`${team.ranks[rank].name}: met ${rec.met}, you won ${rec.won}.`);
