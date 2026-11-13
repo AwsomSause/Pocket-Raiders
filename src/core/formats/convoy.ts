@@ -7,6 +7,7 @@
 // ('won' | 'joined' | 'none') for the Resolution to read. No RNG here; the battles use the `format-battle` stream.
 // Not built: LEDGER itself joining the party as a Pokémon (the special-Pokémon plumbing belongs to the Kanto saga slices).
 
+import { raidRecord } from '../raid/storyRaids';
 import { launchFormatBattle } from './battle';
 import { cutOf, markDone } from './store';
 import type { FormatCard, FormatCtx, WideFormat } from './types';
@@ -34,10 +35,9 @@ export interface ConvoyState {
   ledger: 'none' | 'won' | 'joined';
 }
 
-/** Raid 4's result is written by the raid slice into `run.expansion.raids`; a Triumph shortens the Convoy. */
+/** Raid 4's result is written by the raid slice (`raidRecord`); a Triumph shortens the Convoy. */
 export function raid4Triumph(run: FormatCtx['run']): boolean {
-  const r = run.expansion?.raids?.['4'] ?? run.expansion?.raids?.n4;
-  return typeof r === 'object' && r !== null && (r as { result?: unknown }).result === 'triumph';
+  return raidRecord(run, 4)?.result === 'triumph';
 }
 
 function setup({ content, run }: FormatCtx, input?: unknown): ConvoyState {
