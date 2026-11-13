@@ -1525,7 +1525,6 @@ export function isStoryEventBattle(content: Content, event: EventBattleRef): boo
   return event.eventId.startsWith('format:') || (battle?.kind === 'trainer' && Boolean(battle.rival || battle.evil || battle.ghost || battle.retired));
 }
 
-/** W7 rule P5: a fight inside a pseudo stage. A loss there ejects to the map instead of ending the run. */
 /** A Stand-with climax battle (a loss is Second Shot). */
 export function isStandWithBattle(content: Content, event: EventBattleRef): boolean {
   const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
@@ -1533,7 +1532,10 @@ export function isStandWithBattle(content: Content, event: EventBattleRef): bool
   return battle?.kind === 'trainer' && battle.standWith === true;
 }
 
+/** W7 rule P5: a fight inside a pseudo stage. A loss there ejects to the map instead of ending the run. */
 export function isPseudoBattle(content: Content, event: EventBattleRef): boolean {
+  // Beta 0.6 R9: the guard fights of PS-RESCUE (core/evil/rescueFights.ts) are pseudo fights.
+  if (event.eventId.startsWith('rescue:')) return true;
   const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
   return battle?.pseudo === true;
