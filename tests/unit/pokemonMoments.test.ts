@@ -276,13 +276,13 @@ describe('Reactive moments (batch 3): low HP, a KO, a hit taken', () => {
   const weak = (sp: string, ...moves: string[]) => { const m = strike(sp, ...moves); m.level = 5; return m; };
   const ids = (events: BattleEvent[], trigger: string) => events.filter((e) => e.type === 'pmoment' && e.trigger === trigger).map((e) => e.type === 'pmoment' && e.id);
 
-  it('data: every low-HP moment has a threshold; supported ones have effects; four stay off', () => {
+  it('data: every low-HP moment has a threshold; supported ones have effects; none stay off', () => {
     const reactive = POKEMON_MOMENTS.filter((m) => ['low', 'ko', 'super', 'crit'].includes(m.trigger));
     for (const m of reactive) {
       if (m.trigger === 'low' && m.status === 'supported') expect(m.hpBelow, m.id).toBeGreaterThan(0);
       if (m.status === 'supported') expect(m.effect, m.id).toBeDefined();
     }
-    expect(reactive.filter((m) => m.status === 'disabled').map((m) => m.id).sort()).toEqual(['bug-swarm-low', 'gengar-cackle', 'ice-chill-ko', 'poison-toxic-blood']);
+    expect(reactive.filter((m) => m.status === 'disabled').map((m) => m.id).sort()).toEqual([]);
   });
 
   it('Gyarados rages below half HP: Atk +2, once per battle, only when low', () => {
@@ -335,6 +335,48 @@ describe('Reactive moments (batch 3): low HP, a KO, a hit taken', () => {
       }
     }
     expect(played).toBeGreaterThan(0);
+  });
+
+  it('Bug swarm: the next Bug move is boosted once, then the boost is spent', () => {
+    let played = 0;
+    for (let i = 0; i < 400 && played < 3; i++) {
+      const s = fight('scyther', `swarm-${i}`, [weak('magikarp', 'splash')], { hpPct: 15 });
+      if (!ids(turn(s.ctx), 'low').includes('bug-swarm-low')) continue;
+      played++;
+      expect(s.battle.storyEffects.some((t) => t.startsWith('pm-nextboost:'))).toBe(true);
+      s.player.moves = [{ id: 'bug-bite', pp: 20 }];
+      turn(s.ctx);
+      expect(s.battle.storyEffects.some((t) => t.startsWith('pm-nextboost:'))).toBe(false);
+    }
+    expect(played).toBeGreaterThan(0);
+  });
+
+  it('Toxic Blood: after it plays, a foe that makes contact is poisoned', () => {
+    let poisoned = 0;
+    for (let i = 0; i < 400 && poisoned < 2; i++) {
+      const s = fight('grimer', `blood-${i}`, [weak('rattata', 'tackle')], { hpPct: 15, level: 60 });
+      if (!ids(turn(s.ctx), 'low').includes('poison-toxic-blood')) continue;
+      expect(s.battle.storyEffects.some((t) => t.startsWith('pm-contactpsn:'))).toBe(true);
+      turn(s.ctx);
+      if (s.battle.enemyTeam[0]!.status?.id === 'psn') poisoned++;
+    }
+    expect(poisoned).toBeGreaterThan(0);
+  });
+
+  it('Cackle and Cold Triumph weaken the next foe after a KO', () => {
+    const check = (species: string, move: string, id: string, expectStages: Record<string, number>) => {
+      let played = 0;
+      for (let i = 0; i < 400 && played < 2; i++) {
+        const s = fight(species, `${id}-${i}`, [weak('caterpie', 'tackle'), weak('weedle', 'tackle')], { level: 70, move });
+        const events = turn(s.ctx);
+        if (!events.some((e) => e.type === 'faint' && e.side === 'enemy') || !ids(events, 'ko').includes(id)) continue;
+        played++;
+        for (const [stat, n] of Object.entries(expectStages)) expect(s.battle.enemyStages[stat as 'atk'], `${id} ${stat}`).toBe(n);
+      }
+      expect(played, id).toBeGreaterThan(0);
+    };
+    check('gengar', 'shadow-ball', 'gengar-cackle', { atk: -1, spa: -1 });
+    check('articuno', 'ice-beam', 'ice-chill-ko', { spe: -1 });
   });
 
   it('a hit taken: super-effective and critical moments, and timed crit stages fade', () => {
@@ -448,7 +490,7 @@ describe('Batch 5: faint, ally, weather and status moments', () => {
 
   it('the moments still off are the four hook-blocked battle ones and three rest ones that need new systems', () => {
     const off = POKEMON_MOMENTS.filter((m) => m.status === 'disabled').map((m) => m.id).sort();
-    expect(off).toEqual(['bug-swarm-low', 'gengar-cackle', 'ghost-story', 'ice-chill-ko', 'poison-toxic-blood', 'psychic-dream', 'water-song']);
+    expect(off).toEqual([]);
   });
 
   it('a weather moment plays only in its weather', () => {
@@ -521,9 +563,9 @@ describe('Batch 6: rest and catch moments (run layer)', () => {
     return run;
   };
 
-  it('data: the rest and catch moments that have an effect are supported; four stay off with reasons', () => {
+  it('data: the rest and catch moments that have an effect are supported; none stay off with reasons', () => {
     const off = POKEMON_MOMENTS.filter((m) => (m.trigger === 'rest' || m.trigger === 'catch') && m.status === 'disabled').map((m) => m.id).sort();
-    expect(off).toEqual(['ghost-story', 'psychic-dream', 'water-song']);
+    expect(off).toEqual([]);
   });
 
   it('Snorlax at a rest: +8 friendship and a berry, claimed once per run', () => {
@@ -535,6 +577,22 @@ describe('Batch 6: rest and catch moments (run layer)', () => {
     expect((run.inventory['oran-berry'] ?? 0) + (run.inventory['sitrus-berry'] ?? 0)).toBe(1);
     expect(run.story.flags['pm:snorlax-rest']).toBe(1);
     expect(restMoments(content, run)).toEqual([]);
+  });
+
+  it('Ghost Story names the leader\'s weak types; Dream Walk gives experience; Water Song warms the team', () => {
+    const seen = { ghost: false, dream: false, water: false };
+    for (let i = 0; i < 200 && !(seen.ghost && seen.dream && seen.water); i++) {
+      const g = withParty(`rest-ghost-${i}`, 'gastly');
+      if (restMoments(content, g).join(' ').includes('weak to')) seen.ghost = true;
+      const d = withParty(`rest-dream-${i}`, 'abra');
+      d.party[0] = createPokemon(content, 'abra', 5, 'abra-r0');
+      d.party[0]!.friendship = 50;
+      const xp = d.party[0]!.xp;
+      if (restMoments(content, d).length) { expect(d.party[0]!.xp).toBeGreaterThan(xp); seen.dream = true; }
+      const w = withParty(`rest-water-${i}`, 'squirtle');
+      if (restMoments(content, w).length) { expect(w.party[0]!.friendship).toBe(53); seen.water = true; }
+    }
+    expect(seen).toEqual({ ghost: true, dream: true, water: true });
   });
 
   it('a chance-based rest moment can fail without being claimed, and plays at some later rest', () => {

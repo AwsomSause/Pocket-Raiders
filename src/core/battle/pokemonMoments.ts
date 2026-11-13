@@ -20,6 +20,8 @@ const NOFLINCH = 'pm-noflinch:';
 const PENDING = 'pm-pending:';
 const PRIO = 'pm-prio:';
 const NIGHTMARE = 'pm-nightmare:';
+const NEXTBOOST = 'pm-nextboost:';
+const CONTACTPSN = 'pm-contactpsn:';
 
 /** One seeded number in [0, 1) for a moment's own pick (a move to learn). Stateless: same inputs, same answer. */
 function momentUnit(ctx: BattleContext, id: string, uid: string, turn: number): number {
@@ -39,6 +41,27 @@ function learnForBattle(ctx: BattleContext, c: Combatant, moveId: string): void 
 /** Flinch can't stop a Pokémon whose moment says so (Mewtwo Armored). */
 export function momentNoFlinch(ctx: BattleContext, c: Combatant): boolean {
   return c.side === 'player' && ctx.battle.storyEffects.includes(`${NOFLINCH}${c.mon.uid}`);
+}
+
+/** Damage multiplier from a waiting "next move of this type" moment (Bug swarm). 1 when none. */
+export function momentDamageMult(ctx: BattleContext, c: Combatant, moveType: string): number {
+  if (c.side !== 'player') return 1;
+  const prefix = `${NEXTBOOST}${c.mon.uid}:${moveType}:`;
+  const tag = ctx.battle.storyEffects.find((t) => t.startsWith(prefix));
+  return tag ? 1 + Number(tag.slice(prefix.length)) / 100 : 1;
+}
+
+/** The boosted hit landed: the waiting boost is spent. */
+export function spendMomentBoost(ctx: BattleContext, c: Combatant, moveType: string): void {
+  if (c.side !== 'player') return;
+  const prefix = `${NEXTBOOST}${c.mon.uid}:${moveType}:`;
+  const at = ctx.battle.storyEffects.findIndex((t) => t.startsWith(prefix));
+  if (at >= 0) ctx.battle.storyEffects.splice(at, 1);
+}
+
+/** Toxic Blood is active on this Pokémon (contact attackers get poisoned). */
+export function momentContactPoison(ctx: BattleContext, c: Combatant): boolean {
+  return c.side === 'player' && ctx.battle.storyEffects.includes(`${CONTACTPSN}${c.mon.uid}`);
 }
 
 /** Extra priority on a Pokémon's first turn (Sneasel's ambush). */
@@ -98,6 +121,8 @@ function applyEffect(ctx: BattleContext, c: Combatant, fx: MomentEffect, m: Poke
     const pool = [...(content.learnables.get(c.mon.speciesId) ?? [])].filter((id) => content.moves.has(id) && content.moves.get(id)!.power !== null && !c.mon.moves.some((mv) => mv.id === id)).sort();
     if (pool.length) learnForBattle(ctx, c, pool[Math.floor(momentUnit(ctx, `${m.id}:tm`, c.mon.uid, turnKey) * pool.length)]!);
   }
+  if (fx.nextBoost) ctx.battle.storyEffects.push(`${NEXTBOOST}${c.mon.uid}:${fx.nextBoost.type}:${fx.nextBoost.pct}`);
+  if (fx.contactPoison) ctx.battle.storyEffects.push(`${CONTACTPSN}${c.mon.uid}`);
   if (fx.noFlinch) ctx.battle.storyEffects.push(`${NOFLINCH}${c.mon.uid}`);
   if (fx.firstPriority) ctx.battle.storyEffects.push(`${PRIO}${c.mon.uid}:${ctx.battle.turn}:${fx.firstPriority}`);
   if (fx.foeNightmarePct && foe.hp > 0) ctx.battle.storyEffects.push(`${NIGHTMARE}${fx.foeNightmarePct}`);
