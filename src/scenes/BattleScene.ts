@@ -375,6 +375,12 @@ export class BattleScene extends Phaser.Scene {
     const battle = run.battle!;
     this.history = [];
     this.historyView = null;
+    // Colossus (Beta 0.6): the Blueprint plate sits beside the fight and reads the seals from the battle state.
+    if (battle.colossus) {
+      this.scene.launch('ColossusPlate');
+      this.scene.bringToTop('ColossusPlate');
+      this.events.once('shutdown', () => this.scene.stop('ColossusPlate'));
+    }
     this.startCameraWatchdog();
     this.input.keyboard?.on('keydown-H', () => this.toggleHistory());
     this.input.keyboard?.on('keydown-P', () => {
