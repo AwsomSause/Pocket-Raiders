@@ -117,3 +117,19 @@ export function meetTeamHeads(run: RunState, team: string): string[] {
   }
   return met;
 }
+
+/** The player beat this character: "beaten", unless they are already an ally or turned (a win never undoes that). Meets them if new. */
+export function markBeaten(run: RunState, id: string): boolean {
+  const have = run.expansion?.dossier?.[id];
+  if (have && (have.status === 'ally' || have.status === 'turned')) return true;
+  return recordCast(run, id, 'beaten');
+}
+
+/** A team's Executives and Seconds (tier 5 to 6) are beaten: a won raid, or the team's climax. Leaders stay at large. */
+export function beatTeamHeads(run: RunState, team: string): string[] {
+  const done: string[] = [];
+  for (const c of expansionData.characters) {
+    if (c.team === team && castTier(c.rank) >= 5 && castTier(c.rank) <= 6 && markBeaten(run, c.id)) done.push(c.id);
+  }
+  return done;
+}

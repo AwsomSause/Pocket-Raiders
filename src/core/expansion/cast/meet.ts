@@ -3,7 +3,7 @@
 // against the cast data by tests/unit/dossier.test.ts.
 
 import type { RunState } from '../../state';
-import { recordCast, type CastStatus } from './dossier';
+import { beatTeamHeads, markBeaten, recordCast, type CastStatus } from './dossier';
 
 type Meeting = string | [id: string, status: CastStatus];
 const meet = (run: RunState, list: readonly Meeting[]): void => {
@@ -66,4 +66,31 @@ export function meetFromJoin(run: RunState, team: string): void {
 /** The Side-with rival is the insider on an Inside Job against Rocket. */
 export function meetFromInsideJob(run: RunState): void {
   if (run.story.evil?.teamId === 'rocket') meet(run, ['sc.rocket.rival-ace']);
+}
+
+/** Boss and leader battles (game ids) that are also cast characters. A win marks them beaten. */
+export const BOSS_CAST: Record<string, string> = {
+  sabrina: 'sc.rocket.triad-sabrina',
+  koga: 'sc.rocket.triad-koga',
+  'lt-surge': 'sc.rocket.triad-surge',
+  blaine: 'sc.rocket.blaine',
+};
+
+/** A gym leader, Elite Four or Champion fight was won. */
+export function beatBoss(run: RunState, leaderId: string | null | undefined): void {
+  const id = leaderId && BOSS_CAST[leaderId];
+  if (id) markBeaten(run, id);
+}
+
+/** A story raid result: a win (triumph or success) beats the team's Executives and Seconds; any other result except declined only meets them. */
+export function fromRaidResult(run: RunState, team: string, result: string, meetHeads: (run: RunState, team: string) => unknown): void {
+  if (result === 'declined') return;
+  meetHeads(run, team);
+  if (result === 'triumph' || result === 'success') beatTeamHeads(run, team);
+}
+
+/** The run's team climax was won. */
+export function beatClimax(run: RunState): void {
+  const team = run.story.evil?.teamId;
+  if (team) beatTeamHeads(run, team);
 }

@@ -14,11 +14,12 @@
 - Kanto canon spaces: Mt. Moon (Griggs), S.S. Anne (Surge), Game Corner (Vesper), Celadon Mansion (Matori), Safari (Rudd, Koga), Silph and the Labyrinth (Sabrina), Cinnabar Lab (Namba, Blaine).
 - Kanto's Rocket Ledger: step 1 Matori, 2 Vesper, 3 Surge, 4 Rudd, 5 Madame Boss.
 - A story raid (any result but declined) meets the team's Executives and above. Joining Rocket as the Inside Man adds your own file; an Inside Job with a Side-with rival adds the rival's.
+- Beaten: winning a gym, Elite Four or Champion fight against Sabrina, Koga, Lt. Surge or Blaine; a won story raid (triumph or success) beats the team's Executives and Seconds; winning a climax fight beats the run's team's Executives and Seconds. An ally or a turned character is never changed by a win. Leaders stay at large.
 - Tables live in `src/core/expansion/cast/meet.ts`; a test checks every id is a real character.
 
 ## Limits
 - Only Rocket's Kanto cast is wired; other regions' characters are added as their slices land (use the `cast` event effect or the tables above).
-- Statuses beaten / turned are set only by the `cast` effect so far; everyone starts at large (Blaine starts as an ally).
+- "Turned" is set only by the `cast` effect so far; everyone starts at large (Blaine starts as an ally). A climax win marks the heads beaten on the first won climax fight, not only the last.
 - A story raid now also writes `run.expansion.dossier` (its own block, not one of the lever blocks); the raid test was updated to say so. Raids are still not offered on the live map.
 - Sprites exist for only a few characters; the rest show a dark shape.
 - Checked by unit tests (`tests/unit/dossier.test.ts`, raids, rescue, canon, track, content) and the browser test `tests/e2e/dossier.spec.ts` with a screenshot.
