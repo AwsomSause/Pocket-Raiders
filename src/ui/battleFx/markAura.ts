@@ -4,8 +4,7 @@
 
 import Phaser from 'phaser';
 import type { MotionLevel } from '../aero';
-import { loadAssets } from '../lazyAssets';
-import { itemVisual, type Visual } from '../sprites';
+import type { Visual } from '../sprites';
 
 /** A stable colour per variant line (hash of its id, so a new line needs no table entry). */
 export function variantColor(line: string): number {
@@ -17,8 +16,6 @@ export function variantColor(line: string): number {
 export interface MarkOptions {
   shadow: boolean;
   variant: string | null;
-  /** Couture: the item asset id of its accessory, drawn on the sprite. */
-  accessoryIcon?: string | null;
   motion: MotionLevel;
 }
 
@@ -67,13 +64,6 @@ export function addMarks(scene: Phaser.Scene, field: Phaser.GameObjects.Containe
       back.strokeEllipse(cx, b.bottom - 4, w * 0.95, 22);
       back.lineStyle(1, 0xffffff, 0.5);
       back.strokeEllipse(cx, b.bottom - 4, w * 0.95 + 8, 28);
-      if (o.accessoryIcon && !scene.textures.exists(o.accessoryIcon)) void loadAssets(scene, [o.accessoryIcon]).then(() => scene.textures.exists(o.accessoryIcon!) && draw());
-      if (o.accessoryIcon) {
-        // The worn accessory: its item art on a coloured disc at the Pokémon's neck.
-        const y = b.top + b.height * 0.38;
-        front.add(scene.add.circle(cx, y, 17, col, 0.9).setStrokeStyle(2, 0xffffff, 0.9));
-        front.add(itemVisual(scene, o.accessoryIcon, cx, y, 1.6));
-      }
     }
   };
   draw();

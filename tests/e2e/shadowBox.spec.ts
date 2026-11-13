@@ -51,14 +51,14 @@ test('the Shadow command box fits its worst case (tier, Heart stage, "tightens",
   expect(errors).toEqual([]);
 });
 
-test('Shadow Pokémon get an aura and variant-tagged Pokémon get a mark, a label and (Couture) an accessory', async ({ page }) => {
+test('Shadow Pokémon get an aura and a purple hue, and variant-tagged Pokémon get a ring', async ({ page }) => {
   const errors: string[] = [];
   await toBattle(page, errors);
   const n = await page.evaluate(() => {
     const b = (window as any).__pkr.game.scene.getScene('Battle');
     const foe = b.shown.enemy;
     foe.shadow = { heart: 60 };
-    b.run.battle.extra.variants[foe.uid] = { line: 'couture', flags: {}, accessory: 'silk-scarf' };
+    b.run.battle.extra.variants[foe.uid] = { line: 'tagged', flags: {} };
     b.showSprite('enemy', foe, false);
     const mine = b.activeMon();
     mine.shadow = { heart: 80 };
