@@ -126,3 +126,30 @@ describe('climax battles and Second Shot', () => {
     expect(r.phase).not.toBe('over');
   });
 });
+
+describe('real run flow', () => {
+  it('an Extended Cut run reaches the climax at story beat 6; classic runs do not', async () => {
+    const { applyEvilEffect } = await import('../../src/core/evil/teams');
+    const { climaxTick } = await import('../../src/core/arc/climaxExtended');
+    for (const cut of ['extended', 'standard'] as const) {
+      const r = mk(cut);
+      r.regionOrder = ['kanto', ...r.regionOrder.slice(1)]; r.regionIndex = 0;
+      r.story.evil = { ...(r.story.evil as object), teamId: content.evilTeams.teams[0]!.id, beat: 5 } as typeof r.story.evil;
+      applyEvilEffect(content, r, { beat: true, heat: 0 } as never);
+      expect(r.story.evil!.beat).toBe(6);
+      expect(!!r.expansion?.cut?.director).toBe(cut === 'extended');
+      if (cut === 'extended') expect(climaxTick(content, r)).toBe(true);
+    }
+  });
+  it('the worst result raises the region world-state track once and the run continues', () => {
+    const r = mk('extended');
+    r.regionOrder = ['kanto', ...r.regionOrder.slice(1)]; r.regionIndex = 0;
+    r.expansion = { ...r.expansion, tracks: true };
+    beginClimax(r);
+    climaxLost(r);
+    expect(climaxLost(r)).toBe('worst');
+    expect(r.expansion!.track!.kanto!.step).toBe(1);
+    expect(r.expansion!.cut!.result).toBe('worst');
+    expect(r.phase).not.toBe('over');
+  });
+});

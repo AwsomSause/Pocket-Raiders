@@ -150,6 +150,8 @@ export function finishCanonSpace(file: CanonSpacesFile, run: { expansion?: { can
   if (!space) throw new Error(`unknown canon space ${id}`);
   for (const f of setFlags) if (!space.flags.includes(f)) throw new Error(`${id} does not write flag ${f}`);
   const st = stateOf(run);
-  if (st.completed.includes(id)) return;
-  (run as { expansion?: object }).expansion = { ...run.expansion, canon: { ...st, completed: [...st.completed, id], flags: [...new Set([...st.flags, ...setFlags])] } };
+  // A space made of several events calls this again from its later ones: it counts as finished once, but late flags still get copied.
+  const flags = [...new Set([...st.flags, ...setFlags])];
+  if (st.completed.includes(id) && flags.length === st.flags.length) return;
+  (run as { expansion?: object }).expansion = { ...run.expansion, canon: { ...st, completed: st.completed.includes(id) ? st.completed : [...st.completed, id], flags } };
 }

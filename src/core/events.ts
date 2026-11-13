@@ -928,6 +928,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return 'your lead learns an egg move';
     case 'teachMove':
       return 'a Pokémon learns a new move';
+    case 'copyMoves':
+      return "your lead's moves are copied onto another Pokémon";
     case 'train':
       return trainEffectText(e);
     case 'betterDraft':
@@ -1242,6 +1244,13 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (!id || !teachEggMove(content, lead, id, [])) return '';
       return `${content.species.get(lead.speciesId)?.name ?? lead.speciesId} learned the egg move ${content.moves.get(id)!.name}!`;
     }
+    case 'copyMoves': {
+      const lead = run.party[0];
+      const target = run.party.slice(1).sort((a, b) => a.level - b.level)[0];
+      if (!lead || !target) return '';
+      target.moves = lead.moves.map((m) => ({ id: m.id, pp: content.moves.get(m.id)?.pp ?? m.pp }));
+      return `${content.species.get(target.speciesId)?.name ?? target.speciesId} now knows ${content.species.get(lead.speciesId)?.name ?? lead.speciesId}'s moves!`;
+    }
     case 'teachMove': {
       const move = content.moves.get(e.move);
       // A Pokémon that has just joined waits in `pending` until the player confirms it, so look there first for a species.
@@ -1515,6 +1524,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       return mon;
     });
     run.battle = createBattle('wild', [enemy, ...others], activeIndex, run.party[activeIndex]!.uid);
+    if (b.weather) run.battle.weather = { id: b.weather, turns: 999 };
   } else {
     const boss = b.bossId ? content.bosses.get(b.bossId) : undefined;
     const ghost = b.retired ? retiredTeam(run.story) : b.ghost ? championTeam(run.story) : [];
@@ -1531,6 +1541,10 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     const team = fixedIds.length > 0 ? fixedIds.map((id) => newMon(content, run, id, Math.min(cap, Math.max(1, base)), 'e')) : mirrored.length > 0 ? mirrored.map((src) => {
       const copy = newMon(content, run, src.speciesId, Math.min(cap, Math.max(1, src.level + b.levelBonus)), 'e');
       copy.moves = src.moves.map((s) => ({ id: s.id, pp: content.moves.get(s.id)?.pp ?? s.pp }));
+      if (b.kind === 'trainer' && b.clone) {
+        copy.abilityless = true;
+        copy.statBoosts = { hp: 10, atk: 10, def: 10, spa: 10, spd: 10, spe: 10 };
+      }
       return copy;
     }) : fellow ? Array.from({ length: b.size }, (_, i) => {
       const level = Math.min(cap, Math.max(1, base + apprenticeLevelBonus(fellow) + (i === b.size - 1 ? 1 : 0)));
