@@ -3,6 +3,8 @@ import { describe, expect, it } from 'vitest';
 import { breatherShare } from '../../src/core/formats/breather';
 import { battleEnded, cardOf, chooseOption, closeFormat, formatOver, startFormat } from '../../src/core/formats/registry';
 import { currentFormat } from '../../src/core/formats/store';
+import { canReach } from '../../src/core/battle/triples';
+import { targetChoices } from '../../src/core/battle/fieldMenu';
 import { switchProblem } from '../../src/core/battle/engine';
 import { maxHp } from '../../src/core/pokemon';
 import { chooseStarter, createRun } from '../../src/core/run';
@@ -320,5 +322,168 @@ describe('Siege Map', () => {
     expect(cardOf(ctxOf(run))!.options.map((o) => o.id)).toEqual(['north-gate', 'east-gate', 'south-gate', 'west-gate']);
     const loaded = RunStateSchema.parse(JSON.parse(JSON.stringify(run)));
     expect(currentFormat(loaded)!.state.districts).toEqual(currentFormat(run)!.state.districts);
+  });
+});
+
+describe('Front', () => {
+  const lane = (id: string, species: string) => ({ id, region: id, leader: `Leader ${id}`, species, apex: species });
+  const trio = [lane('a', 'mewtwo'), lane('b', 'lugia'), lane('c', 'groudon')];
+  const withTriples = (on: boolean, f: () => void) => {
+    const was = content.balance.triples.enabled;
+    content.balance.triples.enabled = on;
+    try { f(); } finally { content.balance.triples.enabled = was; }
+  };
+  const three = (seed: string) => {
+    const run = mk(seed);
+    run.party = Array.from({ length: 3 }, (_, i) => ({ ...structuredClone(run.party[0]!), uid: `t${i}` }));
+    return run;
+  };
+
+  it('with no lost Apex, Giovanni steps through alone: no battle; with Kanto M2 taken there is one lane', () => {
+    const run = mk('fr1');
+    startFormat('front', ctxOf(run));
+    expect(currentFormat(run)!.state.result).toBe('none');
+    expect(cardOf(ctxOf(run))!.over).toBe(true);
+    const run2 = mk('fr2');
+    run2.story.flags['rocket.x.m2'] = 'taken';
+    startFormat('front', ctxOf(run2));
+    expect(currentFormat(run2)!.state.lanes).toHaveLength(1);
+    chooseOption(ctxOf(run2), 'begin');
+    expect(run2.phase).toBe('battle');
+    expect(run2.battle!.doubles).toBeUndefined(); // one lane = a plain fight
+    expect(run2.battle!.enemyTeam.map((m) => m.speciesId)).toEqual(['mewtwo']);
+  });
+
+  it('three lanes are one triple battle with the lane rule; the lineup is exact', () => {
+    withTriples(true, () => {
+      const run = three('fr3');
+      startFormat('front', ctxOf(run), { lanes: trio });
+      chooseOption(ctxOf(run), 'begin');
+      expect(run.battle!.doubles!.trio).toBeDefined();
+      expect(run.battle!.enemyTeam.map((m) => m.speciesId)).toEqual(['mewtwo', 'lugia', 'groudon']);
+      expect(run.battle!.eventRule!.lanes).toBe(true);
+    });
+  });
+
+  it('a fourth lane waits off the field and steps in when a lane falls', () => {
+    withTriples(true, () => {
+      const run = three('fr4');
+      startFormat('front', ctxOf(run), { lanes: [...trio, lane('d', 'rayquaza')] });
+      chooseOption(ctxOf(run), 'begin');
+      const b = run.battle!;
+      expect(b.enemyTeam).toHaveLength(4);
+      const onField = new Set([b.enemyIndex, ...b.doubles!.trio!.enemy.map((s) => s.index)].filter((i) => i >= 0));
+      expect(onField.size).toBe(3);
+      expect(onField.has(3)).toBe(false);
+    });
+  });
+
+  it('while the triple battle is switched off it falls back to a double battle (the rest wait)', () => {
+    withTriples(false, () => {
+      const run = three('fr5');
+      startFormat('front', ctxOf(run), { lanes: trio });
+      chooseOption(ctxOf(run), 'begin');
+      expect(run.battle!.doubles).toBeDefined();
+      expect(run.battle!.doubles!.trio).toBeUndefined();
+      expect(run.battle!.eventRule!.lanes).toBe(true);
+    });
+  });
+
+  it('the lane rule: only the foe in your own lane while it stands; free again once that lane is empty', () => {
+    expect(canReach(3, { side: 'player', spot: 0 }, { side: 'enemy', spot: 0 }, { id: 'tackle' }, true)).toBe(true);
+    expect(canReach(3, { side: 'player', spot: 0 }, { side: 'enemy', spot: 1 }, { id: 'tackle' }, true)).toBe(false);
+    expect(canReach(3, { side: 'player', spot: 0 }, { side: 'enemy', spot: 2 }, { id: 'aerial-ace' }, true)).toBe(false);
+    expect(canReach(3, { side: 'player', spot: 0 }, { side: 'player', spot: 1 }, { id: 'heal-pulse' }, true)).toBe(false);
+    withTriples(true, () => {
+      const run = three('fr6');
+      startFormat('front', ctxOf(run), { lanes: trio });
+      chooseOption(ctxOf(run), 'begin');
+      const b = run.battle!;
+      const view = { battle: b, party: run.party } as never;
+      const move = { id: 'tackle', type: 'normal', power: 40 } as never;
+      const tgt = (spot: 0 | 1 | 2) => targetChoices(view, null, spot, move).filter((t) => !t.ally).map((t) => t.target.spot);
+      expect(tgt(0)).toEqual([0]);
+      expect(tgt(1)).toEqual([1]);
+      expect(tgt(2)).toEqual([2]);
+      // lane 1's foe is down: spot 1 may now aim at its neighbours (ordinary triple reach)
+      const slot = b.doubles!.trio!.enemy[1]!;
+      b.enemyTeam[slot.index]!.hp = 0;
+      expect(tgt(1)).toEqual([0, 2]);
+      expect(tgt(0)).toEqual([0]);
+    });
+  });
+
+  it('results are written once: held on a win, lost on a loss', () => {
+    for (const [won, want] of [[true, 'held'], [false, 'lost']] as const) {
+      const run = mk(`fr7${want}`);
+      startFormat('front', ctxOf(run), { lanes: [lane('a', 'mewtwo')] });
+      chooseOption(ctxOf(run), 'begin');
+      battleEnded(ctxOf(run), won);
+      expect(run.story.flags['finale.x.front']).toBe(want);
+      battleEnded(ctxOf(run), !won);
+      expect(run.story.flags['finale.x.front']).toBe(want);
+    }
+  });
+});
+
+describe('Debate', () => {
+  const start = (seed: string, flags: Record<string, string | boolean> = {}) => {
+    const run = mk(seed);
+    Object.assign(run.story.flags, flags);
+    expect(startFormat('debate', ctxOf(run))).toBe(true);
+    return run;
+  };
+  const argue = (run: ReturnType<typeof mk>, picks: string[]) => picks.forEach((p) => chooseOption(ctxOf(run), p));
+
+  it('three wins: no battle, flag clean, evidence still there', () => {
+    const run = start('db1', { 'star.x.deletion-log': true, 'star.x.wrong-boots': true, 'star.x.first-engine': true });
+    expect(currentFormat(run)!.state.held).toHaveLength(3);
+    argue(run, ['use:deletion-log', 'use:boots', 'use:engine']);
+    expect(run.phase).not.toBe('battle');
+    expect(run.story.flags['star.x.debate']).toBe('clean');
+    expect(run.story.flags['star.x.deletion-log']).toBe(true);
+    expect(cardOf(ctxOf(run))!.over).toBe(true);
+  });
+
+  it('two wins: the opponent objects, no battle', () => {
+    const run = start('db2', { 'star.x.tully-stood': true, 'star.x.navi-drum': true, 'star.x.first-engine': true });
+    argue(run, ['use:tully', 'use:drum', 'plain']);
+    expect(run.story.flags['star.x.debate']).toBe('objection');
+    expect(run.phase).not.toBe('battle');
+  });
+
+  it('wrong evidence and plain answers never win; fewer than two wins is one battle', () => {
+    const run = start('db3', { 'star.x.deletion-log': true });
+    argue(run, ['use:deletion-log', 'use:deletion-log', 'plain']);
+    expect(currentFormat(run)!.state.won).toBe(1);
+    const card = cardOf(ctxOf(run))!;
+    expect(card.options.map((o) => o.id)).toEqual(['battle']);
+    chooseOption(ctxOf(run), 'battle');
+    expect(run.phase).toBe('battle');
+    expect(run.battle!.event!.eventId).toBe('format:debate');
+    battleEnded(ctxOf(run), true);
+    expect(run.story.flags['star.x.debate']).toBe('settled');
+    expect(formatOver(ctxOf(run))).toBe(true);
+  });
+
+  it('losing the battle is recorded and does not end the run', () => {
+    const run = start('db4');
+    argue(run, ['plain', 'plain', 'plain']);
+    chooseOption(ctxOf(run), 'battle');
+    battleEnded(ctxOf(run), false);
+    expect(run.story.flags['star.x.debate']).toBe('lost');
+  });
+
+  it('cannot use evidence you do not hold, a Key Item counts, and it runs once', () => {
+    const run = start('db5');
+    chooseOption(ctxOf(run), 'use:engine');
+    expect(currentFormat(run)!.state.index).toBe(0);
+    const run2 = mk('db6');
+    run2.inventory['nascour-brochure'] = 1;
+    startFormat('debate', ctxOf(run2));
+    expect(currentFormat(run2)!.state.held).toEqual(['brochure']);
+    argue(run2, ['plain', 'plain', 'use:brochure']);
+    expect(currentFormat(run2)!.state.won).toBe(1);
+    expect(startFormat('debate', ctxOf(run), { region: 'kanto' })).toBe(false);
   });
 });
