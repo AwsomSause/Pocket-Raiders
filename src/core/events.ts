@@ -68,6 +68,7 @@ import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } fro
 import { hashSeed, Rng } from './rng';
 import { continueAfterDecisions, healParty, newMon } from './run';
 import { earnRom, gainStock, grandArcOf, romById, romsHeld } from './grandArc';
+import { climaxCutOf } from './arc/climaxExtended';
 import { addMercy, changeRep, joinInsideMan, joinProblem, resolveVerdict, standWithClimaxWon, standWithOf, standWithPlayable, verdictsOpen } from './arc/standWithExtended';
 import { checkFlagKeys } from './shadow2/keys';
 import { grantNamedShadow } from './shadow2/grant';
@@ -582,7 +583,7 @@ export function xflagHolds(run: RunState, flag: string): boolean {
   const flags = run.story.flags;
   const seen = (k: string) => Number(flags[`ev:${k}`] ?? 0) >= 1;
   switch (flag) {
-    case 'extendedCut': return run.expansion?.climaxCut === 'extended';
+    case 'extendedCut': return climaxCutOf(run) === 'extended';
     case 'hasShadow': return run.party.some((m) => !!m.shadow);
     case 'keyHinted': return run.party.some((m) => !!m.shadow?.named && (m.shadow.hints ?? 1) >= 1);
     case 'grandArc': return grandArcOf(run) !== null;
