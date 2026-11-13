@@ -12,6 +12,7 @@
 //  - Recurring villains: the executive and leader remember every meeting. Their teams grow and their lines change
 //    (first meeting, after you beat them, after they beat you, grudging respect).
 
+import { standingLine } from '../arc/standWithExtended';
 import { impoundFor } from '../raid/storyRaids';
 import type { Content, EventBattle, EventCondition, EventEffect } from '../contentSchema';
 import { hashSeed, Rng } from '../rng';
@@ -19,6 +20,7 @@ import type { RunState } from '../state';
 import { emit } from '../story/record';
 import { evilConfig, HIDEOUT_AT_LEAGUE } from '../campaign/circuit';
 import { recordChoice } from './choices';
+import { trackOnClimax, trackOnOperation } from '../expansion/trackRun';
 import { freshEvil, type EvilRank, type EvilState, type EvilTeam, type VillainRecord } from './schema';
 
 type EvilCondition = Extract<EventCondition, { kind: 'evil' }>;
@@ -122,6 +124,8 @@ export function applyEvilEffect(content: Content, run: RunState, e: EvilEffect):
   if (e.talk) words.push(`${team.ranks[e.talk].name}: ${villainLine(team, e.talk, s.villains[e.talk])}`);
   if (e.beat && s.beat < 7) {
     s.beat += 1;
+    // E2: the real plan comes out (beat 6): the climax is now scheduled, so the region's track rises once.
+    if (s.beat === 6) trackOnClimax(run, run.regionIndex);
     const cfg = evilConfig(content, run);
     // Story Run (Appendix S.7): after beat 6 the hideout waits for League entry (core/campaign/storyDirector.ts places it).
     s.nextAt = s.beat === 6 && cfg.hideoutAtLeague ? HIDEOUT_AT_LEAGUE : s.stages + cfg.beatEvery;
@@ -153,6 +157,8 @@ export function applyEvilEffect(content: Content, run: RunState, e: EvilEffect):
 /** Ends an operation and adds its lasting consequence to the run (once per operation). */
 function resolveOp(content: Content, run: RunState, team: EvilTeam, op: EvilState['ops'][number], outcome: Exclude<EvilState['ops'][number]['outcome'], 'running'>): string {
   op.outcome = outcome;
+  // E2: a stopped operation counts as a raid won (the world-state track falls), one let through as a raid lost (it rises).
+  trackOnOperation(run, op.region, op.id, outcome);
   const def = team.ops.find((o) => o.id === op.id);
   const cons = def ? content.evilTeams.consequences[def.kind] : undefined;
   const stopped = outcome === 'foiled' || outcome === 'infiltrated';
@@ -236,6 +242,8 @@ export function evilSummary(content: Content, run: RunState): { title: string; l
     const def = team.ops.find((o) => o.id === op.id);
     lines.push(`Region ${op.region + 1}: ${def?.name ?? op.id} (${op.outcome === 'running' ? 'still running' : op.outcome})`);
   }
+  const standing = standingLine(run);
+  if (standing) lines.push(standing);
   for (const rank of ['executive', 'leader'] as const) {
     const rec = s.villains[rank];
     if (rec && rec.met > 0) lines.push(`${team.ranks[rank].name}: met ${rec.met}, you won ${rec.won}.`);

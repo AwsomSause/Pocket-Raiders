@@ -2321,6 +2321,8 @@ export const BalanceSchema = z.object({
       expMultiplier: z.number().min(0.1).max(1),
     }),
   }),
+  /** Beta 0.6 E2: the Kanto world-state track's numbers (core/expansion/track.ts). */
+  expansionTrack: z.object({ shopMarkup: z.number().min(0).max(0.15), wildShrink: z.number().min(0).max(0.5) }),
   /** A theme's wild pool is topped up from wildPool when it has fewer species than this. */
   minThemePool: z.number().int().min(1),
   /** Weight multiplier for species that have both of the theme's types. */
@@ -2822,6 +2824,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('partyShadow') }),
   /** Grand Arc: this run has the arc on, and (when `rom` is set) does not hold that ROM yet. */
   z.object({ kind: z.literal('grandArc'), missingRom: z.string().length(1).optional() }),
+  /** Stand With Them: you have joined the run's team (`joined`, the default) or can still join it (`joined: false`); optionally at least this reputation. */
+  z.object({ kind: z.literal('standWith'), joined: z.boolean().default(true), minRep: z.number().int().optional() }),
   /** Story Overhaul: only in a Story Run (Alphas, story tournaments). Classic never draws these, so its event rolls never move. */
   z.object({ kind: z.literal('storyRun') }),
   /** Event Director: two of your Pokémon share an open bond. */
@@ -3002,6 +3006,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('grandArcRom'), rom: z.string().length(1) }),
   /** Grand Arc: gains a Stock step (1 to 5). */
   z.object({ kind: z.literal('grandArcStock'), step: z.number().int().min(1).max(5) }),
+  /** Stand With Them: join the run's team as an Inside Man, or move your reputation with it (`change` names a row of standWith.json repChanges), or note a small mercy. */
+  z.object({ kind: z.literal('standWith'), action: z.enum(['join', 'rep', 'mercy']), change: z.string().optional(), noticed: z.boolean().default(false) }),
   /** Shadow II: hands over a Named Shadow Pokémon (an `ss.*` id with a key in shadow2.json) at this level, through the usual caught choice. */
   z.object({ kind: z.literal('namedShadow'), id: z.string().regex(/^ss\.[a-z0-9-]+\.[a-z0-9-]+$/), level: z.number().int().min(1).max(500).default(20) }),
   /** World-state callback (catalog 75): adds to a named story flag that later events can read. */
