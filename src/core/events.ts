@@ -1451,7 +1451,8 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       return newMon(content, run, id, level, 'e');
     }) : ghost.length > 0 ? ghost.map((m) => newMon(content, run, m.speciesId, Math.min(cap, Math.max(1, Math.min(m.level, base + 6))), 'e')) : Array.from({ length: b.size }, (_, i) => {
       const level = Math.min(cap, Math.max(1, base + (i === b.size - 1 ? 1 : 0)));
-      const speciesId = boss ? boss.signature[i % boss.signature.length]! : pickSpecies(content, run, b.species ?? [], b.types, rng);
+      const lane = b.lineup?.[i];
+      const speciesId = boss ? boss.signature[i % boss.signature.length]! : lane && content.species.has(lane) ? lane : pickSpecies(content, run, b.species ?? [], b.types, rng);
       return newMon(content, run, evolvedFormAt(content, speciesId, level, rng), level, 'e');
     });
     if (authored) for (const mon of team) auditEncounter(content, 'event', mon, authored);
