@@ -68,3 +68,34 @@ describe('Extended Cut phases and Second Shot', () => {
     expect(climaxCutOf(back)).toBe('extended');
   });
 });
+
+describe('climaxTick (screens)', () => {
+  it('standard runs and runs before the climax are untouched', async () => {
+    const { climaxTick } = await import('../../src/core/arc/climaxExtended');
+    const a = mk(), b = mk('extended');
+    const before = JSON.stringify(a.expansion ?? {});
+    expect(climaxTick(content, a)).toBe(false);
+    expect(climaxTick(content, b)).toBe(false);
+    expect(JSON.stringify(a.expansion ?? {})).toBe(before);
+  });
+  it('plays the wide formats in order, one at a time, and finishes', async () => {
+    const { climaxTick } = await import('../../src/core/arc/climaxExtended');
+    const { currentFormat, clearFormat } = await import('../../src/core/formats/store');
+    const r = mk('extended');
+    beginClimax(r);
+    const ids: string[] = [];
+    for (let i = 0; i < 12; i++) {
+      if (!climaxTick(content, r)) break;
+      const f = currentFormat(r);
+      expect(f).not.toBeNull();
+      ids.push(f!.id);
+      expect(climaxTick(content, r)).toBe(true); // asking again while it runs changes nothing
+      expect(currentFormat(r)!.id).toBe(f!.id);
+      clearFormat(r);
+    }
+    expect(ids[0]).toBe('siege');
+    expect(ids.indexOf('blackout')).toBeGreaterThan(0);
+    expect(ids).toContain('breather');
+    expect(nextStep(r)).toBeNull();
+  });
+});
