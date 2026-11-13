@@ -190,7 +190,7 @@ describe('failure costs (C2, C3, C8, C10, C11)', () => {
     expect(r.money).toBeGreaterThanOrEqual(400);
     expect(r.money).toBeLessThanOrEqual(600);
     expect(r.plaza.rep).toBe(5);
-    expect(r.tempEffects.at(-1)).toMatchObject({ battles: 3, effects: [{ kind: 'moneyMultiplier', value: 0.75 }] });
+    expect(r.tempEffects.at(-1)).toMatchObject({ battles: 3, effects: [{ kind: 'moneyMultiplier', value: 0.75 }, { kind: 'xpMultiplier', value: 0.75 }, { kind: 'researchMultiplier', value: 0.75 }] });
     expect(out.record.costs).toEqual(['C2', 'C8', 'C11']);
     expect(Object.values(r.inventory).reduce((a, b) => a + b, 0)).toBe(11);
     expect(r.party.some((p) => p.shadow)).toBe(false);
@@ -207,6 +207,16 @@ describe('failure costs (C2, C3, C8, C10, C11)', () => {
     expect(sh[0]!.shadow!.heart).toBeGreaterThanOrEqual(80);
     expect(out.record.costs).toEqual(['C3', 'C10', 'C11']);
     expect(r.tempEffects.length).toBe(1);
+  });
+  it('Raid 5 failure can take Pokémon-held items too, and never leaves a zero count behind', () => {
+    let tookHeld = false;
+    for (let i = 0; i < 20 && !tookHeld; i++) {
+      const { r } = failed(5, (x) => { x.inventory = {}; x.party[0]!.held = { 'oran-berry': 1 }; x.party[1]!.held = { leftovers: 2 }; }, `held${i}`);
+      const left = r.party.flatMap((p) => Object.entries(p.held ?? {}));
+      expect(left.every(([, c]) => c >= 1)).toBe(true);
+      tookHeld = left.reduce((a, [, c]) => a + c, 0) < 3;
+    }
+    expect(tookHeld).toBe(true);
   });
   it('boundary: no money, no bag, no rep means nothing to take and nothing breaks', () => {
     const { r, out } = failed(4, (x) => { x.money = 0; x.plaza.rep = 0; }, 'poor');

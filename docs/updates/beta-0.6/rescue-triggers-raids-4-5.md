@@ -8,7 +8,7 @@ Raid results for Kanto Raids 1 to 5 are recorded with their lever (broken / weak
 **Limits:**
 - The playable Raid formats (PS-RAID: floors, objectives, the fights) are not built (Kanto saga slices 14 to 16). Raids 1 to 5 have the rules, gates, results and levers, but nothing in a run offers them yet, so no run can reach Raid 4 or 5 today. The live source of lost raids is the existing evil-team operation.
 - Raid 3 has no failure list in the script. C6 Hostage (Raid 2) needs the climax Rescue objective, which is not built, so it is not applied.
-- Costs, as built: C2 loses 40-60% of money; C3 takes 2-4 bag items (never Key Items; Pokémon-held items are not touched); C8 is plaza reputation -15 (the only reputation the run has; the team's own regard is not built); C10 gives one random party Pokémon Shadow taint at Heart Gauge 80-95; C11 makes the next 3 battles pay 25% less money (other rewards are not cut).
+- Costs, as built: C2 loses 40-60% of money; C3 takes 2-4 items from the bag and from what the party holds (never Key Items); C8 is plaza reputation -15 (the only reputation the run has; the team's own regard is not built); C10 gives one random party Pokémon Shadow taint at Heart Gauge 80-95; C11 makes the next 3 battles pay 25% less money, experience and research (the item draft is not cut).
 - The track (E2) is not built: Raid 5's "step 4" gate reads `run.expansion.track.step` if it exists, else 0. Raids do not write the track; the track reducer will read the raid records.
 - "Rival handed over" (Stand With Them, E8) is not built, so nothing impounds on it.
 - Bounds are enforced when read: total OS change within +/-2, gauntlet and each phase mod within +/-1.

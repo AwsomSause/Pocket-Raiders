@@ -14,7 +14,7 @@ export const RAID_COSTS = {
   confiscate: { min: 2, max: 4 },
   repFall: 15,
   shadowHeart: { min: 80, max: 95 },
-  setback: { battles: 3, moneyMultiplier: 0.75 },
+  setback: { battles: 3, multiplier: 0.75 },
 } as const;
 
 const roll = (run: RunState, label: string): number => new Rng(hashSeed(`${run.seed}::${run.regionOrder[run.regionIndex] ?? 'region'}::${label}`)).float();
@@ -30,15 +30,23 @@ export function applyRaidCost(content: Content, run: RunState, cost: string, lab
       return lost > 0 ? `A fine of ${lost} (${pct}% of your money).` : null;
     }
     case 'C3': {
-      // 2-4 items from the bag, one at a time from a list sorted by id (stable), never Key Items.
+      // 2-4 items, one at a time, from the bag and from what the party holds (a sorted list, so the draw is stable), never Key Items.
       let n = between(RAID_COSTS.confiscate.min, RAID_COSTS.confiscate.max, roll(run, `${label}-items`));
       const taken: string[] = [];
       for (let i = 0; n > 0; i++) {
-        const ids = Object.keys(run.inventory).filter((id) => (run.inventory[id] ?? 0) > 0 && content.items.get(id)?.category !== 'key').sort();
-        if (ids.length === 0) break;
-        const id = ids[Math.floor(roll(run, `${label}-item-${i}`) * ids.length)]!;
-        run.inventory[id]! -= 1;
-        taken.push(content.items.get(id)?.name ?? id);
+        const sources: { id: string; uid: string | null }[] = [];
+        for (const id of Object.keys(run.inventory).sort()) if ((run.inventory[id] ?? 0) > 0) sources.push({ id, uid: null });
+        for (const mon of run.party) for (const id of Object.keys(mon.held ?? {}).sort()) if ((mon.held?.[id] ?? 0) > 0) sources.push({ id, uid: mon.uid });
+        const open = sources.filter((x) => content.items.get(x.id)?.category !== 'key');
+        if (open.length === 0) break;
+        const pick = open[Math.floor(roll(run, `${label}-item-${i}`) * open.length)]!;
+        if (pick.uid === null) run.inventory[pick.id]! -= 1;
+        else {
+          const mon = run.party.find((p) => p.uid === pick.uid)!;
+          mon.held![pick.id]! -= 1;
+          if (mon.held![pick.id]! <= 0) delete mon.held![pick.id];
+        }
+        taken.push(content.items.get(pick.id)?.name ?? pick.id);
         n -= 1;
       }
       return taken.length > 0 ? `Confiscated: ${taken.join(', ')}.` : null;
@@ -56,8 +64,8 @@ export function applyRaidCost(content: Content, run: RunState, cost: string, lab
       return `${content.species.get(mon.speciesId)?.name ?? 'A Pokémon'} comes back with Shadow taint.`;
     }
     case 'C11': {
-      run.tempEffects.push({ effects: [{ kind: 'moneyMultiplier', value: RAID_COSTS.setback.moneyMultiplier }], battles: RAID_COSTS.setback.battles, until: 'battle' });
-      return `Setback: ${RAID_COSTS.setback.battles} battles pay 25% less.`;
+      run.tempEffects.push({ effects: (['moneyMultiplier', 'xpMultiplier', 'researchMultiplier'] as const).map((kind) => ({ kind, value: RAID_COSTS.setback.multiplier })), battles: RAID_COSTS.setback.battles, until: 'battle' });
+      return `Setback: ${RAID_COSTS.setback.battles} battles pay 25% less money, experience and research.`;
     }
     default:
       return null;
