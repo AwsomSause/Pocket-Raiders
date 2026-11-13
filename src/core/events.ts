@@ -12,6 +12,7 @@
 import { modifierEventWeight } from './runModifiers';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
 import { PSEUDO } from './dungeon/pseudo';
+import { pseudoRivalBeat } from './rivals/live';
 import { repAtLeast } from './rivals/reputation';
 import type { ChoiceKind } from './presentation/eventStyles';
 import { befriendWanderer, startWanderer } from './wanderer';
@@ -659,6 +660,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   keepsakeEvent(run, event);
   const found = noteDungeonEntered(run, event.id);
   if (found) emit(content, run, 'storyMoment', { actors: [], data: { def: 'rival-living', suppressed: false }, importance: 40, text: found });
+  if (event.pseudo) pseudoRivalBeat(content, run);
   const insight = perkItem(content, run, 'eventInsight');
   if (insight) spendUse(run, insight);
   count(run, 'eventsCompleted');

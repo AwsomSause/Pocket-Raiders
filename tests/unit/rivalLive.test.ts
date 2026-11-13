@@ -48,3 +48,50 @@ describe('rival live wiring', () => {
     expect(rivalResultLine(r, 'blue', false)).toBeTruthy();
   });
 });
+
+import { friendInRegion } from '../../src/core/rivals/friend';
+import { friendName, friendStageBeat, pseudoRivalBeat } from '../../src/core/rivals/live';
+import { catchStepInRoll, markStepIn, PRESENCE } from '../../src/core/rivals/presence';
+
+describe('Friend scenes and Pseudo Stage beats', () => {
+  const withMain = () => {
+    const r = run();
+    reg(r);
+    return r;
+  };
+  it('does nothing without a registered main rival', () => {
+    const r = run();
+    expect(friendStageBeat(content, r)).toBeNull();
+    expect(pseudoRivalBeat(content, r)).toBeNull();
+  });
+  it('plays at most the four scenes in a Friend region, one per second stage, once per stage', () => {
+    // find a seed whose region 0 has the Friend
+    let r = withMain();
+    for (let s = 0; s < 50 && !friendInRegion(r.seed, 0); s++) {
+      r = chooseStarter(content, createRun(content, { runId: `fr${s}`, seed: `fr${s}`, archetypeId: 'red' }), 0);
+      reg(r);
+    }
+    expect(friendInRegion(r.seed, 0)).toBe(true);
+    const texts: string[] = [];
+    for (let stage = 1; stage <= 10; stage++) {
+      r.stage = { ...r.stage!, index: stage } as typeof r.stage;
+      const t = friendStageBeat(content, r);
+      if (t) texts.push(t);
+      expect(friendStageBeat(content, r)).toBeNull(); // same stage twice: nothing
+    }
+    expect(texts).toHaveLength(PRESENCE.friend.scenes.length);
+    for (const t of texts) expect(t).toContain(friendName(r));
+    expect(r.expansion!.rival![`friend-${r.seed}`]!.role).toBe('friend');
+  });
+  it('catch step-in is pure to plan and fires once per region once marked', () => {
+    const r = withMain();
+    const rec = r.expansion!.rival!.blue!;
+    let n = -1;
+    for (let c = 0; c < 5000 && n < 0; c++) if (catchStepInRoll('x', rec, 0, c)) n = c;
+    expect(n).toBeGreaterThanOrEqual(0);
+    expect(catchStepInRoll('x', rec, 0, n)).toBe(true);
+    expect(catchStepInRoll('x', rec, 0, n)).toBe(true); // planning twice gives the same answer
+    markStepIn(rec, 0);
+    expect(catchStepInRoll('x', rec, 0, n)).toBe(false);
+  });
+});

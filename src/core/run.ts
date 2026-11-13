@@ -224,7 +224,8 @@ import { advanceStreak, applyPity } from './streaks';
 import { conditionEvolutionTarget, evoRunInfo } from './conditionEvolution';
 import { roleOrder } from './battle/opponentAi';
 import { beginRivalBrain } from './rivals/brainSetup';
-import { rivalBattleLines } from './rivals/live';
+import { friendStageBeat, rivalBattleLines } from './rivals/live';
+import { markStepIn } from './rivals/presence';
 import { winHealFraction, openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
 import { shopTierAllowed } from './rarity';
 import { campMoment, campQuirkLine } from './overhaul/quirkTimes';
@@ -690,6 +691,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   rivalCatchesMonRival(content, run);
   rivalRivalries(content, run);
   rivalSighting(content, run);
+  friendStageBeat(content, run);
   noteProtagonistTitle(content, run);
   tellCampfire(content, run);
   tellAct(content, run);
@@ -2339,6 +2341,8 @@ export function rivalStepIn(content: Content, current: RunState): StepInResult |
   if (!plan) return null;
   const run = structuredClone(current);
   const rival = run.story.rivals.find((r) => r.id === plan.rivalId)!;
+  const stepRec = plan.kind === 'catch' ? run.expansion?.rival?.[plan.rivalId] : undefined;
+  if (stepRec) markStepIn(stepRec, run.regionIndex);
   const battle = run.battle!;
   const foe = battle.enemyTeam[battle.enemyIndex]!;
   const ace = rivalAce(content, run, rival);

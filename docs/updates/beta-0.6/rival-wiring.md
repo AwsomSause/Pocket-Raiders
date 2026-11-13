@@ -11,3 +11,10 @@
 ## Limits
 - Still not scheduled in live stages: the third meeting, Pseudo Stage forms (Race / Team-Up / Already There / Ambush), the catch step-in roll, and the Friend's four scenes and postcards. Their rules are in `presence.ts` and `friend.ts` and tested; they need the story2 world-scene hook.
 - The won/lost reaction line exists (`rivalResultLine`) but no scene shows it yet.
+
+## Added in the scheduling slice
+- **Friend scenes** play in regions that have the Friend (about half): one of Meet, Mid, Errand, Eve at every second stage start, with a line in their voice; a postcard arrives at the start of the next region. The Friend registers in the friend slot the first time (needs the main rival).
+- **Pseudo Stage beats**: entering a Pseudo Stage, the main rival (65%) or the Friend (30% of the rest) may appear as Race / Team-Up / Already There / Ambush (never under 50% party HP). Text and feelings only.
+- **Catch step-in** for a registered rival is now 3%, once per region (was the old per-stage 20% for rivals without overhaul records). Planning stays pure; the region is marked when the step-in actually happens.
+
+Limits: Race, Team-Up and Ambush are text only (no first-pick reward, partner or forced fight yet). The Friend's optional spar and extra Assist are not offered in a live fight yet (`friendAssist` is ready). The third guaranteed meeting is counted but not placed on a stage map.
