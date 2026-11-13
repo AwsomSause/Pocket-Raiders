@@ -159,7 +159,7 @@
         "acid-armor"
       ],
       "rewards": {
-        "moneyPerLevel": 90,
+        "moneyPerLevel": 80,
         "items": [
           {
             "item": "poison-barb",

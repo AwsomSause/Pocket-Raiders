@@ -98,7 +98,7 @@ describe('Flight North', () => {
     const foe = createPokemon(content, 'venomoth', 20, 'e1');
     hero.hp = Math.floor(hero.hp / 5);
     foe.moves = [{ id: 'splash', pp: 40 }];
-    const battle = createBattle('trainer', [foe], 0, hero.uid, { classId: 'event', name: 'Jessie & James' });
+    const battle = createBattle('trainer', [foe], 0, hero.uid, { classId: 'event', name: 'Jessie & James', leaderId: null });
     battle.eventRule = { shinyRescue: true };
     const ctx: BattleContext = { content, battle, party: [hero], inventory: {}, rng: new Rng(hashSeed('rescue')), captureRng: new Rng(hashSeed('rescue-c')), catchMultiplier: 1 };
     startBattle(ctx);

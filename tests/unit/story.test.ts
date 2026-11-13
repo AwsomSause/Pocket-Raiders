@@ -115,7 +115,7 @@ describe('story foundation: random streams', () => {
     eventsExtra: (RAW_CONTENT.eventsExtra as { events?: { group?: string }[] }[]).map((f) => ({ ...f, events: (f.events ?? []).filter((e) => !String(e.group ?? '').startsWith('Story:') && e.group !== 'Plush Workshop') })),
     // Run events B (trainer battles) came later too.
     eventsRB: { events: [] },
-    eventsCanonKanto: { events: [] }, // Kanto canon spaces came later too
+    eventsCanonKanto: { events: [] }, eventsCanonVermilion: { events: [] }, // Kanto canon spaces came later too
     eventsHelpers: { events: [] },
     eventsMerchants: { events: [] }, // run events A came later too
     // The stage-1 level fix (W13: opening fights at Lv4-6 instead of Lv2-4) came later too; Guard and Brace were removed.
