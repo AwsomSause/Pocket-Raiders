@@ -2028,6 +2028,10 @@ export const BalanceSchema = z.object({
   rarityCaps: z.object({ offRegionShift: z.number().int().min(0), trade: z.enum(['common', 'uncommon', 'rare', 'veryRare', 'epic', 'legendary', 'mythical', 'special']), shopItem: z.enum(['common', 'uncommon', 'rare', 'epic']), rewardItem: z.array(z.object({ badges: z.number().int().min(0), max: z.enum(['common', 'uncommon', 'rare', 'epic']) })).min(1) }).default({ offRegionShift: 0, trade: 'special', shopItem: 'epic', rewardItem: [{ badges: 0, max: 'epic' }] }),
   /** Overhaul slice 3 (core/variety.ts): picks within `window[pool]` of the same pool get weight × `penalty`. A pool with no window keeps no history. */
   variety: z.object({ penalty: z.number().gt(0).max(1), window: z.record(z.string(), z.number().int().min(0).max(50)) }).default({ penalty: 1, window: {} }),
+  /** Beta 0.6 B2 (core/wildDampers.ts): `perMeet` x per time this exact species was met this run, `perFamilyMeet` x per time a relative was; no repeats in the first `noRepeatFirst` wild fights; one "odd one out" uncommon in each stage before `oddOneOutStages` (others weigh `oddOneOutOffWeight`). Off = old odds. */
+  wildDampeners: z.object({ enabled: z.boolean(), perMeet: z.number().gt(0).max(1), perFamilyMeet: z.number().gt(0).max(1), noRepeatFirst: z.number().int().min(0), oddOneOutStages: z.number().int().min(0), oddOneOutOffWeight: z.number().gt(0).max(1) }).default({ enabled: false, perMeet: 1, perFamilyMeet: 1, noRepeatFirst: 0, oddOneOutStages: 0, oddOneOutOffWeight: 1 }),
+  /** Beta 0.6 B3 (core/themes.ts, core/encounters.ts): a trainer's type slot needs `minSlotSpecies` candidates (else the whole theme is used); starters and rival signature Pokémon never join ordinary trainers; one species is fielded by at most `maxPerRegion` trainers a region. */
+  trainerPools: z.object({ enabled: z.boolean(), minSlotSpecies: z.number().int().min(0), maxPerRegion: z.number().int().min(0) }).default({ enabled: false, minSlotSpecies: 0, maxPerRegion: 0 }),
   doubles: z
     .object({ chance: z.number().min(0).max(1), fromStage: z.number().int().min(0), wildChance: z.number().min(0).max(1).default(0), bossIds: z.array(z.string()).default([]) })
     .default({ chance: 0.3, fromStage: 1, wildChance: 0, bossIds: [] }),
@@ -2288,6 +2292,23 @@ export const BalanceSchema = z.object({
     sideWeights: z.object({ heal: z.number().min(0), shop: z.number().min(0) }),
     /** Every node in the column just before the gym gets a healing side stop. */
     healBeforeGym: z.boolean(),
+    /** Beta 0.6 B6 stage pacing: more trainer fights per stage. Only used by runs that have `run.expansion.pacing`. */
+    pacing: z.object({
+      /** One window per possible trainer column; a stage uses the first 4 or 5 (`columns`). */
+      windows: z.array(z.tuple([z.number().int().min(1), z.number().int().min(1)])).min(4),
+      totalMin: z.number().int().min(1),
+      totalMax: z.number().int().min(1),
+      /** How many of the trainer columns are skippable (a wild node beside the trainer), min..max. */
+      avoidableMin: z.number().int().min(0),
+      avoidableMax: z.number().int().min(0),
+      /** The ace trainer's extra levels on its strongest member, and on the rest. */
+      aceTopBonus: z.number().int().min(0),
+      aceRestBonus: z.number().int().min(0),
+      /** From this region index (0-based) one trainer per stage is a doubles battle. */
+      doublesFromRegion: z.number().int().min(0),
+      /** Experience multiplier (0.8 = EXP -20%). */
+      expMultiplier: z.number().min(0.1).max(1),
+    }),
   }),
   /** A theme's wild pool is topped up from wildPool when it has fewer species than this. */
   minThemePool: z.number().int().min(1),
@@ -2509,6 +2530,8 @@ export const BalanceSchema = z.object({
   /** How many different items one Pokémon can hold (trainer perks change it). */
   heldItemSlots: z.number().int().positive(),
   /** Bonus items (held, passive, stat boosts) stack at most this high, unless the No Item Caps modifier is on. */
+  /** Beta 0.6 B7: the League reads the six Pokémon you register at its door. At most `cap` slots of one team answer them, and the Champion answers your top `championTargets`. */
+  leagueCounterPick: z.object({ register: z.number().int().min(1).default(6), swaps: z.number().int().min(0).default(1), cap: z.number().int().min(0).default(4), championTargets: z.number().int().min(0).default(2), minEffect: z.number().min(1).default(2) }).default({ register: 6, swaps: 1, cap: 4, championTargets: 2, minEffect: 2 }),
   itemCaps: z.object({ bonusMax: z.number().int().min(1), healsPerBattle: z.number().int().min(1).default(10), revivesPerBattle: z.number().int().min(1).default(6), moneyMax: z.number().int().min(1).default(999999), buysPerStage: z.number().int().min(1).default(25) }).default({ bonusMax: 3, healsPerBattle: 10, revivesPerBattle: 6, moneyMax: 999999, buysPerStage: 25 }),
   /** Wild species with at least this base stat total count as rare (trainer perks make them turn up more or less). */
   rareEncounterBst: z.number().int().positive(),
@@ -2737,6 +2760,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('milestone') }),
   /** A species in the party. */
   z.object({ kind: z.literal('partySpecies'), species: z.string() }),
+  /** Beta 0.6 B9: the run started with Evolution Encounters on (settings.expansion.evolutionEncounters). Risky Evolutions stay off. */
+  z.object({ kind: z.literal('evoEncounters'), /** Also needs a party Pokémon within this many levels of a level evolution. */ nearEvolution: z.number().int().min(0).max(20).optional() }),
   /** Field moves (S416): a party member knows this move (Cut, Surf, Flash ...). */
   z.object({ kind: z.literal('partyMove'), move: z.string() }),
   /** A party member whose current emotion is this one (Overdrive emotions: kindness, bravery...). */
@@ -2934,6 +2959,11 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('gymPreview') }),
   /** Every hidden "?" stop on this stage shows what it is. */
   z.object({ kind: z.literal('revealStops') }),
+  /**
+   * Beta 0.6 B9 Evolution Encounters. `stone`: a party Pokémon that evolves by an item finds that stone (`item` picks one when it has several).
+   * `nudge`: a party Pokémon within `within` levels of a level evolution evolves right now (`species` limits who). Needs a run with Evolution Encounters on.
+   */
+  z.object({ kind: z.literal('evoEncounter'), mode: z.enum(['stone', 'nudge']), item: z.string().optional(), species: z.string().optional(), within: z.number().int().min(0).max(20).default(8) }),
   /** A party member changes form for good (Therian Forme, Black Kyurem...); `consume` is another species that leaves the party for it. */
   z.object({ kind: z.literal('formChange'), from: z.string(), to: z.string(), consume: z.string().optional() }),
   /** Adds to a run counter: a holiday event's clue, boss or finale (game event objectives count these). */

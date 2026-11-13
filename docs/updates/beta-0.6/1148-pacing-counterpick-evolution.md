@@ -1,0 +1,7 @@
+# 1148 Stage pacing, E4 counter-pick, Evolution Encounters (B6, B7, B9)
+
+**Player gets:** Stages have 4–5 trainer fights (1–2 you can skip by taking a wild node), one ace trainer with a stronger team, and from region 2 one doubles trainer; EXP is 20% lower. At the League door your party is registered and the League tells you which Pokémon it will answer most; you may swap that one for a boxed Pokémon (the new one is unseen). Elite Four members swap up to 4 of their non-ace slots for Pokémon from their own rosters that counter your registered team; the Champion answers your top two. Three evolution events can now appear: The Eevee Who Couldn't Choose, The Pokémon That Wouldn't Evolve, Pidgey's Resolve. Risky Evolutions stay off.
+
+**Save:** none. Three new keys inside `settings.expansion` (`stagePacing`, `leagueCounterPick`, `evolutionEncounters`, default on; Zod fills them for existing settings) and optional fields in `run.expansion` and the timeline genesis, set once when a run starts. Runs without them play exactly as before.
+
+**Limits:** no settings-screen toggles yet. The wild "pre-evolution meets its stone" encounter is not built, only the event form. The League door only shows when the box holds a Pokémon to swap in (the party is still registered). The first-rival stage can lose its ace trainer (its trainer column moves to the rival). The doubles trainer falls back to a single battle with fewer than two able Pokémon.

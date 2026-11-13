@@ -1,7 +1,7 @@
 // The difficulty model, and planning wild, trainer, gym leader,
 // Elite Four and champion encounters.
 
-import { homeStarters, signatureOf } from './rivals/home';
+import { homeStarters, reservedTrainerSpecies, signatureOf } from './rivals/home';
 import { pickTemplate, templateFit } from './teamTemplates';
 import { enemyLevelOffset } from './archetypes';
 import type { Archetype, ArchetypeModifier, BossTeam, Campaign, Content, StatName, Theme, TrainerClass } from './contentSchema';
@@ -299,7 +299,9 @@ export function planTrainer(content: Content, archetype: Archetype, theme: Theme
   const picked: string[] = [];
   const fit = template ? (id: string) => templateFit(content, template, id, { picked, types: trainerClass.types.length > 0 ? trainerClass.types : theme.types, regionId }) : undefined;
   // Anti-repetition (shared generator): families fielded by the last few trainers turn up less.
-  const weightMod = fit || speciesVariety ? (id: string) => (fit?.(id) ?? 1) * (speciesVariety?.(id) ?? 1) : undefined;
+  // Beta 0.6 B3: starters and rival signature Pokémon belong to rivals and named trainers, not ordinary ones.
+  const reserved = content.balance.trainerPools.enabled ? (id: string) => (reservedTrainerSpecies.has(id) ? 0 : 1) : undefined;
+  const weightMod = fit || speciesVariety || reserved ? (id: string) => (fit?.(id) ?? 1) * (speciesVariety?.(id) ?? 1) * (reserved?.(id) ?? 1) : undefined;
   const team = buildTeam(content, archetype, scale, size, content.balance.difficulty.trainerBonus, 0, () => { const id = pickThemeSpecies(content, theme, rng, trainerClass.types, regionId, weightMod, curveLevel(content, scale)); picked.push(id); return id; }, rng);
   return { classId: trainerClass.id, name, leaderId: null, ai: 0, ...(template ? { templateId: template.id } : {}), ...team };
 }
