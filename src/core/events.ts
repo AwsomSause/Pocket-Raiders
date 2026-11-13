@@ -118,6 +118,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return run.expansion?.evoEncounters === true && (c.nearEvolution === undefined || run.party.some((m) => m.hp > 0 && nearLevelEvolution(content, m, c.nearEvolution!)));
     case 'partyMove':
       return run.party.some((m) => m.hp > 0 && m.moves.some((mv) => mv.id === c.move));
+    case 'partyMoveFlag':
+      return run.party.some((m) => m.hp > 0 && m.moves.some((mv) => content.moves.get(mv.id)?.flags.includes(c.flag)));
     case 'starter': {
       const starter = run.party.find((m) => m.uid === run.log.starterUid);
       const species = starter ? content.species.get(starter.speciesId) : undefined;
@@ -277,6 +279,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return `Needs a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party`;
     case 'partyMove':
       return `Needs a Pokémon that knows ${content.moves.get(c.move)?.name ?? c.move}`;
+    case 'partyMoveFlag':
+      return `Needs a Pokémon with a ${c.flag} move`;
     case 'evoEncounters':
       return 'Needs Evolution Encounters turned on';
     case 'partySpecies':
@@ -596,6 +600,12 @@ function outcomeWords(content: Content, o: EventOutcome): string {
   return parts.filter(Boolean).join(', ') || 'nothing';
 }
 
+/** Who a hazard's damage or status hits: the party (or only the lead), minus Pokémon of the spared types. */
+function hazardTargets(content: Content, run: RunState, e: { who: 'party' | 'lead'; except: string[] }) {
+  const able = run.party.filter((m) => m.hp > 0 && !(e.except.length && content.species.get(m.speciesId)?.types.some((t) => e.except.includes(t))));
+  return e.who === 'lead' ? able.slice(0, 1) : able;
+}
+
 const HARMFUL = new Set(['damage', 'status', 'loseItem', 'tradeAway']);
 function harmful(e: EventEffect): boolean {
   return HARMFUL.has(e.kind) || (e.kind === 'money' && e.amount < 0) || (e.kind === 'crisis' && e.amount > 0);
@@ -763,11 +773,11 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'celebrate':
       return 'the day is celebrated';
     case 'damage':
-      return `party loses ${Math.round(e.share * 100)}% HP`;
+      return `${e.who === 'lead' ? 'lead' : 'party'} loses ${Math.round(e.share * 100)}% HP${e.except.length ? ` (not ${e.except.join('/')} types)` : ''}`;
     case 'cure':
       return 'cure status';
     case 'status':
-      return `party ${e.status === 'paralysis' ? 'paralysed' : e.status === 'sleep' ? 'asleep' : e.status === 'burn' ? 'burned' : 'poisoned'}`;
+      return `${e.who === 'lead' ? 'lead' : 'party'} ${e.status === 'paralysis' ? 'paralysed' : e.status === 'sleep' ? 'asleep' : e.status === 'burn' ? 'burned' : 'poisoned'}`;
     case 'friendship':
       return `friendship ${e.amount >= 0 ? '+' : ''}${e.amount}`;
     case 'attribute': {
@@ -977,7 +987,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     }
     case 'damage': {
       // Never knocks a Pokémon out: it stops at 1 HP.
-      for (const m of run.party) if (m.hp > 0) m.hp = Math.max(1, m.hp - Math.floor(maxHp(content, m) * e.share));
+      for (const m of hazardTargets(content, run, e)) m.hp = Math.max(1, m.hp - Math.floor(maxHp(content, m) * e.share));
       return effectWords(content, e);
     }
     case 'cure':
@@ -985,7 +995,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return effectWords(content, e);
     case 'status': {
       const id = ({ poison: 'psn', burn: 'brn', paralysis: 'par', sleep: 'slp' } as const)[e.status];
-      for (const m of run.party) if (m.hp > 0 && !m.status) m.status = id === 'slp' ? { id, turns: 2 } : { id };
+      for (const m of hazardTargets(content, run, e)) if (!m.status) m.status = id === 'slp' ? { id, turns: 2 } : { id };
       return effectWords(content, e);
     }
     case 'friendship': {

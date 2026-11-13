@@ -395,3 +395,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - 2026-11-08 boss-forms: custom form on every boss team, Legendary on Champion regions 6+ (docs/status/boss-forms.md)
 - rival-spread-starter-regions.md: rival style/arc spread, canon rival personalities, rival-class losses never end a run, starter choices from three regions; Starter Sets removal planned.
 - choice-memory.md: events can remember earlier choices (remembers variants, flag registry), Beta 0.6 events revamp slice 1.
+- biome-hazards.md: biome hazards, map stops and NE76-80 as events with choice memory, Beta 0.6.

@@ -1,0 +1,7 @@
+# Biome hazards, map stops and NE76-80
+
+**Player gets:** 25 hazard stops now share one shape: "Push on." (a gamble), "Wait." (safe) and "Use a [type]-type." (the clever way, often a reward or +Bond). Kind hazards (cherry blossoms, oasis, moonlit path, rainbow) never hurt. Six map stops are rewritten (Berry Tree, Pokémon Center, Treasure Cache, Lookout Tower, Rare Sighting, Sinkhole), with two follow-up scenes (Pell Junior, Dale the guide). Five new events: The Bridge That Sings, The Fog That Asks Questions, The Orchard After the Fire, The Lighthouse With Two Keepers, The Snow That Won't Stop. Naming the fog makes every later foggy moor free.
+
+**Save:** none. New flags live in `run.story.flags` (this run only). No cross-run memory.
+
+**Limits:** "a node lost" has no engine effect, so a risky push costs a little HP instead. "+1 Bond" is +5 friendship (+3 whole party). "Reputation +1" and Sign events (Ho-Oh, Lugia) are not built (rewards become Research or Kindness). Not revised: `world-cave-in` (lives in another auto-loaded file, so it cannot be overridden). Not revised (need other systems): Villain Hideout, Hidden Dungeon (Torn Pages), Regional Festival (trade card), Gigantamax Sighting, Runaway Wooloo (real-time Tuesdays), Training Ground (weakest-Pokémon target). NE76 "Exploud voice" and NE79 "Bill's Lighthouse" variants wait for NE1 and SF33. Events are in `src/data/events/hazards.json`, built by `npm run data:hazards` from `tools/events/hazards.ts`.

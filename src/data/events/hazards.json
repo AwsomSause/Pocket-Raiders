@@ -1,0 +1,2929 @@
+{
+ "events": [
+  {
+   "id": "abandoned-power-plant",
+   "name": "Abandoned Power Plant",
+   "group": "Biome Hazards",
+   "rarity": "rare",
+   "minStage": 3,
+   "types": [
+    "electric"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#202008",
+    "effect": "flicker"
+   },
+   "intro": "Sparks spit from a broken generator. A Voltorb rolls out of the dark.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "chance": 0.65,
+     "success": {
+      "text": "You duck the sparks and slip through.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     },
+     "failure": {
+      "text": "A spark catches your lead.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "paralysis",
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You wait. The generator cools, and you cross in the quiet.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Use a Ground-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ground"
+      }
+     ],
+     "success": {
+      "text": "Your Ground-type walks straight through the arcing wires.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use an Electric-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "electric"
+      }
+     ],
+     "success": {
+      "text": "Your Electric-type drains the generator. Your team crackles with it.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "+1 Speed next battle",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 1.5
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "power-plant-fault",
+   "name": "Power Plant Fault",
+   "group": "Biome Hazards",
+   "types": [
+    "electric"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "effect": "flicker"
+   },
+   "intro": "Sparks spit from a broken generator. A Voltorb rolls out of the dark.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "chance": 0.65,
+     "success": {
+      "text": "You duck the sparks and slip through.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     },
+     "failure": {
+      "text": "A spark catches your lead.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "paralysis",
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You wait. The generator cools, and you cross in the quiet.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Use a Ground-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ground"
+      }
+     ],
+     "success": {
+      "text": "Your Ground-type walks straight through the arcing wires.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use an Electric-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "electric"
+      }
+     ],
+     "success": {
+      "text": "Your Electric-type drains the generator. Your team crackles with it.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "+1 Speed next battle",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 1.5
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ancient-forest",
+   "name": "Ancient Forest",
+   "group": "Biome Hazards",
+   "rarity": "rare",
+   "minStage": 4,
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "celebi",
+    "tint": "#103010",
+    "effect": "sparkle"
+   },
+   "intro": "Huge old trees. Time feels slower in here.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "chance": 0.65,
+     "success": {
+      "text": "You find the path by luck.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     },
+     "failure": {
+      "text": "You wander in circles among the trunks, and it tires you.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05,
+        "who": "lead",
+        "except": []
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You sit out the slow hours. The trees let you go.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Use a Grass-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "grass"
+      }
+     ],
+     "success": {
+      "text": "The trees speak to it. It knows the way.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Psychic-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "psychic"
+      }
+     ],
+     "success": {
+      "text": "It feels the way out like a thread.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "blizzard-pass",
+   "name": "Blizzard Pass",
+   "group": "Biome Hazards",
+   "rarity": "uncommon",
+   "types": [
+    "ice"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#203040",
+    "effect": "snow"
+   },
+   "intro": "A pass buried in snow. The wind bites.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You push through. The cold takes a bite out of everyone who is not used to it.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "party",
+        "except": [
+         "ice"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You wait out the worst of the snow.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Use a Fire-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "Your Fire-type melts a path, and the team follows the warmth.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "cherry-blossom",
+   "name": "Cherry Blossoms",
+   "group": "Biome Hazards",
+   "rarity": "common",
+   "scene": {
+    "cast": [],
+    "tint": "#402830",
+    "effect": "hearts"
+   },
+   "intro": "Pink petals drift down. Somewhere, a festival has started. A kind place: nothing here hurts.",
+   "choices": [
+    {
+     "label": "Join the festival.",
+     "success": {
+      "text": "Music, sweets and a long rest under the blossoms.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Grass-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "grass"
+      }
+     ],
+     "success": {
+      "text": "Your Grass-type dances in the petals, and the whole team joins in.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Fairy-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fairy"
+      }
+     ],
+     "success": {
+      "text": "Your Fairy-type dances in the petals, and the whole team joins in.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "crystal-cave",
+   "name": "Crystal Cave",
+   "group": "Biome Hazards",
+   "rarity": "uncommon",
+   "types": [
+    "rock",
+    "ice"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#182838",
+    "effect": "glint"
+   },
+   "intro": "Glowing crystals line the walls. They hum.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "chance": 0.65,
+     "success": {
+      "text": "You keep to the main passage and come out the far side.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     },
+     "failure": {
+      "text": "You lose the way in the glow and come out tired.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05,
+        "who": "lead",
+        "except": []
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Rock-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "rock"
+      }
+     ],
+     "success": {
+      "text": "Your Rock-type follows the hum to a hollow. Inside is a Light Clay.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "light-clay",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Psychic-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "psychic"
+      }
+     ],
+     "success": {
+      "text": "Your Psychic-type follows the hum to a hollow. Inside is a Light Clay.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "light-clay",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "desert-oasis",
+   "name": "Desert Oasis",
+   "group": "Biome Hazards",
+   "rarity": "uncommon",
+   "types": [
+    "ground",
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#403018",
+    "effect": "float"
+   },
+   "intro": "Palm trees and a clear pool. A kind place: nothing here hurts.",
+   "choices": [
+    {
+     "label": "Drink.",
+     "success": {
+      "text": "Cool water. The team feels better.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Water-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Your Water-type swims in the pool, delighted.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "foggy-moor",
+   "name": "Foggy Moor",
+   "group": "Biome Hazards",
+   "rarity": "common",
+   "types": [
+    "ghost",
+    "dark"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#182020",
+    "effect": "fog"
+   },
+   "intro": "Thick fog. You cannot see your own feet.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "chance": 0.65,
+     "success": {
+      "text": "You feel your way across.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     },
+     "failure": {
+      "text": "A dead end, and a long walk back.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05,
+        "who": "lead",
+        "except": []
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You wait for the fog to thin.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Use a Flying-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "Your Flying-type clears the fog with a gust.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "fog-named",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "fog-named",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The fog says your name, softly, and lifts.",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Walk on.",
+       "success": {
+        "text": "The fog parts all the way across the moor. It costs you nothing.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "amount": 3,
+          "who": "party"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "heatwave",
+   "name": "Heatwave",
+   "group": "Biome Hazards",
+   "rarity": "common",
+   "types": [
+    "fire"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#402010",
+    "effect": "fire"
+   },
+   "intro": "The sun burns. The team pants.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "chance": 0.55,
+     "success": {
+      "text": "You make it to the shade.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     },
+     "failure": {
+      "text": "The heat gets to your lead, and it comes out burned.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "status",
+        "status": "burn",
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You rest in the shade and cross at dusk.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Use a Water-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Your Water-type mists the whole party. Everyone cools down.",
+      "effects": [
+       {
+        "kind": "cure"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "moonlit-path",
+   "name": "Moonlit Path",
+   "group": "Biome Hazards",
+   "rarity": "uncommon",
+   "types": [
+    "fairy",
+    "dark"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#101830",
+    "effect": "sparkle"
+   },
+   "intro": "A full moon. Fairy Pokémon dance in a ring. A kind place: nothing here hurts.",
+   "choices": [
+    {
+     "label": "Join the ring.",
+     "success": {
+      "text": "You dance with them until the moon sets.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Fairy-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fairy"
+      }
+     ],
+     "success": {
+      "text": "Your Fairy-type joins the ring. The dancers leave a Moon Stone behind.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "moon-stone",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rainbow-bridge",
+   "name": "Rainbow Bridge",
+   "group": "Biome Hazards",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#203048",
+    "effect": "sparkle"
+   },
+   "intro": "A rainbow after the rain. A kind place: nothing here hurts.",
+   "choices": [
+    {
+     "label": "Walk under it.",
+     "success": {
+      "text": "Everything smells of rain and grass. It feels like a good sign.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Flying-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "Your Flying-type flies through the rainbow and comes back glowing.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sandstorm",
+   "name": "Sandstorm",
+   "group": "Biome Hazards",
+   "rarity": "common",
+   "types": [
+    "ground",
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#403018",
+    "effect": "fog"
+   },
+   "intro": "Sand scours the route. A burrow shows in a dune.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You push through. The sand scours everyone not built for it.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "party",
+        "except": [
+         "rock",
+         "ground",
+         "steel"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shelter in the burrow.",
+     "success": {
+      "text": "You wait it out in the burrow. A young Sandile watches you from the back, and shares its corner.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0,
+        "who": "party",
+        "except": []
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Ground-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ground"
+      }
+     ],
+     "success": {
+      "text": "Your Ground-type leads the way through the sand.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Use a Rock-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "rock"
+      }
+     ],
+     "success": {
+      "text": "Your Rock-type leads the way through the sand.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "r122-sandstorm-burrow",
+   "name": "Sandstorm Burrow",
+   "group": "Biome Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "ground",
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "dugtrio",
+    "tint": "#3a3018",
+    "effect": "fog"
+   },
+   "intro": "Sand scours the route. A burrow shows in a dune.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You push through. The sand scours everyone not built for it.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "party",
+        "except": [
+         "rock",
+         "ground",
+         "steel"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shelter in the burrow.",
+     "success": {
+      "text": "You wait it out in the burrow. A young Sandile watches you from the back, and shares its corner.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0,
+        "who": "party",
+        "except": []
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Ground-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ground"
+      }
+     ],
+     "success": {
+      "text": "Your Ground-type leads the way through the sand.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Use a Rock-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "rock"
+      }
+     ],
+     "success": {
+      "text": "Your Rock-type leads the way through the sand.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "volcano-rim",
+   "name": "Volcano Rim",
+   "group": "Biome Hazards",
+   "rarity": "rare",
+   "minStage": 3,
+   "types": [
+    "fire"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#400808",
+    "effect": "fire"
+   },
+   "intro": "A narrow rim. Lava glows below.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "chance": 0.55,
+     "success": {
+      "text": "You edge along the rim.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     },
+     "failure": {
+      "text": "Heat and ash: your lead is burned.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "burn",
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You wait for the vents to quieten.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Use a Fire-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "Your Fire-type walks the rim as if it were home.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Use a Rock-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "rock"
+      }
+     ],
+     "success": {
+      "text": "Your Rock-type finds the cool ledges.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "cave-in",
+   "name": "Cave-In",
+   "group": "Biome Hazards",
+   "types": [
+    "rock"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "effect": "shake"
+   },
+   "intro": "Rubble seals a chamber. Something metallic glints between the stones.",
+   "choices": [
+    {
+     "label": "Dig by hand.",
+     "success": {
+      "text": "You dig it free, scraped and sore. A Metal Coat.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "item",
+        "id": "metal-coat",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You go round and leave the glint behind.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Use a Fighting-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fighting"
+      }
+     ],
+     "success": {
+      "text": "Your Fighting-type clears the rubble. The glint is a Metal Coat.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "metal-coat",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Ground-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ground"
+      }
+     ],
+     "success": {
+      "text": "Your Ground-type clears the rubble. The glint is a Metal Coat.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "metal-coat",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "frozen-lake",
+   "name": "Frozen Lake",
+   "group": "Biome Hazards",
+   "types": [
+    "ice"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.snow_worker_m"
+    ],
+    "tint": "#a0c0e0",
+    "effect": "snow"
+   },
+   "intro": "Something shines in the ice. Crossing is a shortcut.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "chance": 0.67,
+     "success": {
+      "text": "The ice holds. You cross.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     },
+     "failure": {
+      "text": "The ice cracks under your lead, and it goes in.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You go round the long way.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Use an Ice-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ice"
+      }
+     ],
+     "success": {
+      "text": "Your Ice-type walks it easily. The shine is a Never-Melt Ice.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "nevermeltice",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "w4-winter-lake",
+   "name": "The Frozen Lake",
+   "group": "Biome Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "ice"
+   ],
+   "requires": [
+    {
+     "kind": "season",
+     "in": [
+      "Winter"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a3a",
+    "effect": "snow"
+   },
+   "intro": "Something shines in the ice. Crossing is a shortcut.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "chance": 0.67,
+     "success": {
+      "text": "The ice holds. You cross.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     },
+     "failure": {
+      "text": "The ice cracks under your lead, and it goes in.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You go round the long way.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Use an Ice-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ice"
+      }
+     ],
+     "success": {
+      "text": "Your Ice-type walks it easily. The shine is a Never-Melt Ice.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "nevermeltice",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-floating-ice-floes",
+   "name": "Floating Ice Floes",
+   "group": "Biome Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "ice",
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a4a5a",
+    "effect": "snow"
+   },
+   "intro": "Ice floes crowd a channel. A shiny object sits on the far one.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "chance": 0.7,
+     "success": {
+      "text": "You jump from floe to floe.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     },
+     "failure": {
+      "text": "You slip between two floes.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Water-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Your Water-type ferries the team across. The object is a Pearl.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "pearl",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "junkyard",
+   "name": "Junkyard",
+   "group": "Biome Hazards",
+   "types": [
+    "steel"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "rattle"
+   },
+   "intro": "Piles of scrap metal in every direction.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "chance": 0.8,
+     "success": {
+      "text": "You climb over without a scratch.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     },
+     "failure": {
+      "text": "A pile shifts and clips your lead.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05,
+        "who": "lead",
+        "except": []
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Steel-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "steel"
+      }
+     ],
+     "success": {
+      "text": "Your Steel-type sorts the scrap, and turns up a held item.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "life-orb"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "toxic-swamp",
+   "name": "Toxic Swamp",
+   "group": "Biome Hazards",
+   "types": [
+    "poison"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#283010",
+    "effect": "fog"
+   },
+   "intro": "Purple bubbles rise from the swamp.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "chance": 0.55,
+     "success": {
+      "text": "You pick a dry line through.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     },
+     "failure": {
+      "text": "Fumes get your lead: poisoned.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "poison",
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You wait for the bubbles to settle.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Use a Poison-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "poison"
+      }
+     ],
+     "success": {
+      "text": "Your Poison-type leads you through. The fumes do not bother it.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Use a Steel-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "steel"
+      }
+     ],
+     "success": {
+      "text": "Your Steel-type leads you through. The fumes do not reach it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "w4-quicksand",
+   "name": "Quicksand!",
+   "group": "Biome Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2010",
+    "effect": "shake"
+   },
+   "intro": "A hiker is sinking in the sand, shouting. The more he struggles, the deeper he goes.",
+   "choices": [
+    {
+     "label": "Pull with your hands.",
+     "prompt": {
+      "id": "pull-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You haul him out, scraped and filthy. He is Dale.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "flag",
+        "key": "quicksand-dale",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You lose your grip. A passing Pokémon finally drags him free.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Ground-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ground"
+      }
+     ],
+     "success": {
+      "text": "Your Ground-type firms the sand, and the hiker walks out. \"Dale,\" he says. \"I will not forget it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "quicksand-dale",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Grass-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "grass"
+      }
+     ],
+     "success": {
+      "text": "Your Grass-type lowers a vine, and the hiker climbs out. \"Dale,\" he says. \"I will not forget it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "quicksand-dale",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-quicksand-flats",
+   "name": "Quicksand Flats",
+   "group": "Biome Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3018",
+    "effect": "shake"
+   },
+   "intro": "A hiker is sinking in the sand, shouting. The more he struggles, the deeper he goes.",
+   "choices": [
+    {
+     "label": "Pull with your hands.",
+     "prompt": {
+      "id": "pull-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You haul him out, scraped and filthy. He is Dale.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "flag",
+        "key": "quicksand-dale",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You lose your grip. A passing Pokémon finally drags him free.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Ground-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ground"
+      }
+     ],
+     "success": {
+      "text": "Your Ground-type firms the sand, and the hiker walks out. \"Dale,\" he says. \"I will not forget it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "quicksand-dale",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Grass-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "grass"
+      }
+     ],
+     "success": {
+      "text": "Your Grass-type lowers a vine, and the hiker climbs out. \"Dale,\" he says. \"I will not forget it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "quicksand-dale",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "w4-spring-flood",
+   "name": "The Flooded Meadow",
+   "group": "Biome Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "water",
+    "grass"
+   ],
+   "requires": [
+    {
+     "kind": "season",
+     "in": [
+      "Spring"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#14283a",
+    "effect": "rain"
+   },
+   "intro": "A meadow has turned into a shallow lake, with flowers standing in the water.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You wade across. Wet feet slow everyone down.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "-1 Speed next battle",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 0.67
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You wait for the water to drop.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Use a Water-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Your Water-type carries the team across.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-earthquake-tremor",
+   "name": "Earthquake Tremor",
+   "group": "Biome Hazards",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a18",
+    "effect": "shake"
+   },
+   "intro": "The ground rumbles, then shakes.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "chance": 0.6,
+     "success": {
+      "text": "You ride it out on your feet.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     },
+     "failure": {
+      "text": "The ground jumps and your lead falls.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You crouch low and wait for it to pass.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Use a Ground-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ground"
+      }
+     ],
+     "success": {
+      "text": "Your Ground-type steadies the party.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Rock-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "rock"
+      }
+     ],
+     "success": {
+      "text": "Your Rock-type steadies the party.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "berry-tree",
+   "name": "Berry Tree",
+   "group": "Map stops",
+   "stop": "berry",
+   "types": [
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "A lone Berry tree, heavy with fruit.",
+   "choices": [
+    {
+     "label": "Strip it.",
+     "success": {
+      "text": "You strip every branch. Four Berries.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take a few, leave the rest.",
+     "success": {
+      "text": "Two Berries, and plenty left for the next traveller.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "berrytree-left",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pokemon-center",
+   "name": "Pokémon Center",
+   "group": "Map stops",
+   "stop": "heal",
+   "scene": {
+    "cast": [],
+    "effect": "hearts"
+   },
+   "intro": "A small Pokémon Center with a shop counter. The nurse is yawning.",
+   "choices": [
+    {
+     "label": "Heal.",
+     "success": {
+      "text": "Everyone is healed.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "cure"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Heal, and ask how she is.",
+     "success": {
+      "text": "She has been on all night. Your lead keeps her company while the team rests.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "flag",
+        "key": "center-nurse-kept",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shop (₽500).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "Supplies.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "item",
+        "id": "super-potion",
+        "count": 2
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 2
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "nurse-thanks",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "center-nurse-kept",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It is the nurse you kept company. She slips you something from behind the counter.",
+     "hide": [],
+     "addChoices": [
+      {
+       "label": "Take the Revive.",
+       "success": {
+        "text": "\"For next time. Do not tell my manager.\"",
+        "effects": [
+         {
+          "kind": "item",
+          "id": "revive",
+          "count": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "treasure-cache",
+   "name": "Treasure Cache",
+   "group": "Map stops",
+   "stop": "treasure",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A box sticks out of the dirt. A name is scratched on the lid: \"R. Tanner.\"",
+   "choices": [
+    {
+     "label": "Open it.",
+     "check": "luck",
+     "success": {
+      "text": "Inside: one of the finds a cache like this holds.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "life-orb",
+         "choice-band",
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "A trap! Poison gas.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "poison",
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find R. Tanner.",
+     "success": {
+      "text": "Tanner is a kid who buried his savings. He lets you keep one thing, and tells everyone you were kind.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "lookout-tower",
+   "name": "Old Lookout Tower",
+   "group": "Exploration",
+   "rarity": "common",
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2430",
+    "effect": "none"
+   },
+   "intro": "A leaning tower, a rope ladder and a rusted telescope. The top is above the fog.",
+   "choices": [
+    {
+     "label": "Climb.",
+     "check": "strength",
+     "success": {
+      "text": "The whole stage lies below you, haze and all.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 9
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     },
+     "failure": {
+      "text": "The ladder gives halfway. You see a little, and fall a little.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "damage",
+        "share": 0.08,
+        "who": "lead",
+        "except": []
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Flying-type up.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "It circles twice and comes back with a full report.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 8
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Move on.",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rare-sighting",
+   "name": "A Rare Sighting",
+   "group": "Map stops",
+   "stop": "special",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1c2a38",
+    "effect": "float"
+   },
+   "intro": "Fresh tracks lead to a Pokémon never seen on this route. It has noticed you.",
+   "choices": [
+    {
+     "label": "Approach.",
+     "check": "luck",
+     "success": {
+      "text": "It lets you close in, then squares up!",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Faced a rare sighting.",
+        "importance": 30
+       }
+      ]
+     },
+     "failure": {
+      "text": "A twig snaps and it bolts. Gone.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Stay still.",
+     "requires": [
+      {
+       "kind": "attribute",
+       "key": "luck",
+       "atLeast": 20
+      }
+     ],
+     "success": {
+      "text": "You stay still. It comes closer, curious, and then squares up!",
+      "effects": []
+     }
+    },
+    {
+     "label": "Leave it be.",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-sinkhole",
+   "name": "Sinkhole",
+   "group": "Weather & Hazards",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a2a",
+    "effect": "shake"
+   },
+   "intro": "The ground opens and you fall into a cave below.",
+   "choices": [
+    {
+     "label": "Look for a way up.",
+     "success": {
+      "text": "You find a ledge and climb right back out.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Explore down.",
+     "success": {
+      "text": "Down here, the cave is full of old loot. The climb back is bruising.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "revive",
+         "nugget",
+         "big-pearl",
+         "star-piece",
+         "max-ether"
+        ]
+       },
+       {
+        "kind": "damage",
+        "share": 0.05,
+        "who": "lead",
+        "except": []
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hz-pell-junior",
+   "name": "Pell Junior",
+   "group": "Map stops",
+   "callback": true,
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "berrytree-left",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "types": [
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a14",
+    "effect": "sparkle"
+   },
+   "intro": "A hiker flags you down on the road. \"Pell Junior. My father says you left him a tree with fruit on it. Take this.\"",
+   "choices": [
+    {
+     "label": "Take the Rare Berry.",
+     "success": {
+      "text": "A Berry you do not see every day. \"Pass it on.\"",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "lum-berry",
+         "sitrus-berry"
+        ]
+       },
+       {
+        "kind": "item",
+        "id": "leppa-berry",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hz-dale-guide",
+   "name": "Dale, the Free Guide",
+   "group": "Biome Hazards",
+   "callback": true,
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "quicksand-dale",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "types": [
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "Dale the hiker waves from a ridge. \"You pulled me out of the sand. Let me show you the good path. No charge.\"",
+   "choices": [
+    {
+     "label": "Follow Dale.",
+     "success": {
+      "text": "Dale knows every shortcut on this stage. He shows you ahead and heads home.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 6
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne76-bridge-that-sings",
+   "name": "The Bridge That Sings",
+   "group": "Biome Hazards",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "flying",
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#14243a",
+    "effect": "float"
+   },
+   "intro": "A rope bridge hums in the wind over a gorge. Each plank is a different note, and some are missing. The tune has gaps. A mender, Winifred, looks up: \"Walk it right and it plays her song. Walk it wrong and it throws you.\"",
+   "choices": [
+    {
+     "label": "Walk by ear.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "The notes come up through your boots. You hit them all, and the bridge plays. A Metronome hangs on the last post.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "metronome",
+        "count": 1
+       },
+       {
+        "kind": "research",
+        "amount": 8
+       }
+      ]
+     },
+     "failure": {
+      "text": "A wrong step. The bridge bucks and your lead takes a bump. You make it across.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a sound-move Pokémon first.",
+     "requires": [
+      {
+       "kind": "partyMoveFlag",
+       "flag": "sound"
+      }
+     ],
+     "success": {
+      "text": "It sings the missing notes. The path lights up plank by plank.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help her tune the new planks.",
+     "requires": [
+      {
+       "kind": "partyMoveFlag",
+       "flag": "sound"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon gives Winifred each pitch. The bridge is whole, and it plays her song. She presses a Metronome on you.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "metronome",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bridge-tuned",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bridge-song",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "bridge-tuned",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Travellers whistle the bridge's song now.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Cross, whistling.",
+       "success": {
+        "text": "The bridge plays your tune back to you.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "amount": 3,
+          "who": "party"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ne77-fog-that-asks",
+   "name": "The Fog That Asks Questions",
+   "group": "Biome Hazards",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "ghost",
+    "dark"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#202428",
+    "effect": "fog"
+   },
+   "intro": "The fog here has a voice, and it is polite. \"Excuse me. Who goes there? I ask everybody. Nobody answers properly.\" Shapes move in it: a Froslass, perhaps, or only weather.",
+   "choices": [
+    {
+     "label": "Give my name.",
+     "success": {
+      "text": "\"Thank you.\" The fog parts. It will remember.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-named",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give a false name.",
+     "success": {
+      "text": "The fog parts, but its voice has gone small. It will not forget the lie.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "honest-lied",
+        "amount": 1
+       },
+       {
+        "kind": "damage",
+        "share": 0.05,
+        "who": "lead",
+        "except": []
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask who it is.",
+     "success": {
+      "text": "\"I have forgotten. I was hoping one of you would know.\" You call it Mistral. It is delighted.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-named",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne78-orchard-after-fire",
+   "name": "The Orchard After the Fire",
+   "group": "Biome Hazards",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "grass",
+    "bug",
+    "fire"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c10",
+    "effect": "glint"
+   },
+   "intro": "Black trunks stand in rows. One tree in the middle is green, with a Leavanny sitting in it, sewing leaves onto its neighbours. Cuthbert the orchardist sighs: \"Fire took the lot. I have not the heart to stop it.\"",
+   "choices": [
+    {
+     "label": "Help it.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "bug"
+      }
+     ],
+     "success": {
+      "text": "You sew with it all afternoon. The orchard looks alive from the road. It is not, but it is kind.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help it (Grass-type).",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "grass"
+      }
+     ],
+     "success": {
+      "text": "You sew with it all afternoon. The orchard looks alive from the road. It is not, but it is kind.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Plant new trees (three Berries).",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "Three Berries go into the ground. The Leavanny stops sewing and starts watering.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "orchard-planted",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell it gently.",
+     "success": {
+      "text": "It listens. It sews one more leaf, and stops. You say nothing more.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "orchard-green",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "orchard-planted",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A green row of young trees stands where the orchard burned. Your Berries are in it.",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Pick the Berries.",
+       "success": {
+        "text": "The trees have fruited already. Three times what you planted.",
+        "effects": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "oran-berry",
+           "sitrus-berry",
+           "lum-berry"
+          ]
+         },
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "oran-berry",
+           "sitrus-berry",
+           "lum-berry"
+          ]
+         },
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "oran-berry",
+           "sitrus-berry",
+           "lum-berry"
+          ]
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ne79-lighthouse-two-keepers",
+   "name": "The Lighthouse With Two Keepers",
+   "group": "Biome Hazards",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "water",
+    "electric",
+    "flying"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#0c1c30",
+    "effect": "glint"
+   },
+   "intro": "The lighthouse flashes twice as fast as it should. Inside, two keepers each turn the lamp their own way. Aloysius: \"Slow and steady. Ships expect it.\" Benedicta: \"Fast! There is a wreck on the shoal.\" Out at sea, a ship's lights.",
+   "choices": [
+    {
+     "label": "Slow.",
+     "success": {
+      "text": "The ship reads the light and misses the shoal by luck. No thanks.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Fast.",
+     "success": {
+      "text": "The ship is confused, and stops. It is safe, and a little cross.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Pokémon out with a light.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon marks the wreck itself. The ship steers round. The captain gives you a Rare item, and the keepers name a small lamp after your Pokémon.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "life-orb"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "lighthouse-marked",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Flying-type out with a light.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon marks the wreck itself. The ship steers round. The captain gives you a Rare item, and the keepers name a small lamp after your Pokémon.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "life-orb"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "lighthouse-marked",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne80-snow-that-wont-stop",
+   "name": "The Snow That Won't Stop",
+   "group": "Biome Hazards",
+   "rarity": "rare",
+   "minStage": 3,
+   "types": [
+    "ice"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a3a",
+    "effect": "snow"
+   },
+   "intro": "It has been snowing on this pass for a month. At the top, a Vanilluxe is crying, and every tear is a blizzard. Guide Halden Vey: \"Its trainer left it at the summit to toughen it. He did not come back. It thinks enough snow will keep him stuck up here, and bring him back.\"",
+   "choices": [
+    {
+     "label": "Climb to it.",
+     "prompt": {
+      "id": "dodge-tap",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You climb through the whistling white. At the top: \"Come down with me.\" It does, sniffling, and it stops snowing.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "vanilluxe"
+        ],
+        "lv": 1,
+        "shadow": false
+       },
+       {
+        "kind": "flag",
+        "key": "snow-stopped",
+        "amount": 1
+       },
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "party",
+        "except": [
+         "ice",
+         "fire"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "The blizzard turns you back at the last ridge. You rest in a hut below.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "party",
+        "except": [
+         "ice",
+         "fire"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find the trainer.",
+     "success": {
+      "text": "He is in the valley inn, ashamed. You say \"Go up yourself.\" He does, and you watch the snow stop from below. Halden gives you a Never-Melt Ice.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "snow-trainer-climbed",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "item",
+        "id": "nevermeltice",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for it to tire.",
+     "success": {
+      "text": "Three long hours. The snow stops. The Vanilluxe is alone on the summit, and you are not sure you did right by it.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}
