@@ -5,6 +5,8 @@ import { expansionData as EXPANSION } from '../../data/expansion';
 import { FORMATS, startFormat } from '../formats/registry';
 import { beginCut, currentFormat, cutOf, markCheckpoint } from '../formats/store';
 import type { FormatId } from '../formats/types';
+import { launchFormatBattle } from '../formats/battle';
+import { hashSeed, Rng } from '../rng';
 import type { Content } from '../contentSchema';
 import type { RunState } from '../state';
 
@@ -32,7 +34,7 @@ const FORMAT_BY_LABEL: Record<string, FormatId> = {
   'Siege Map': 'siege', Blackout: 'blackout', Convoy: 'convoy', Rest: 'breather', Colossus: 'colossus', Front: 'front', Debate: 'debate',
 };
 
-export interface ClimaxStep { phase: string; name: string; kind: PhaseKind; }
+export interface ClimaxStep { phase: string; name: string; kind: PhaseKind; /** The script's battle count text ("4–6") and format label ("Gauntlet"). */ battles: string; label: string; }
 
 /** The phases of this region's Extended Cut, in order. Front and Debate stay in the list; `nextStep` skips them while their format is not built. */
 export function climaxPhases(region: string): ClimaxStep[] {
@@ -40,17 +42,17 @@ export function climaxPhases(region: string): ClimaxStep[] {
   return (rec?.phases ?? []).map((p): ClimaxStep => {
     const id = FORMAT_BY_LABEL[p.format];
     const kind: PhaseKind = id ? { kind: 'format', id } : p.battles === '0' ? { kind: 'story' } : { kind: 'battles' };
-    return { phase: p.phase, name: p.name, kind };
+    return { phase: p.phase, name: p.name, kind, battles: p.battles, label: p.format };
   });
 }
 
 /** The region of the running climax (Kanto only for now; other regions pass theirs to `beginClimax`). */
 const regionOf = (run: RunState): string => (typeof run.expansion?.cut?.region === 'string' ? run.expansion.cut.region : 'kanto');
 
-interface Dir { idx: number; shots: number; /** The step whose format was started (so a closed format means the step is done). */ started?: number; }
+interface Dir { idx: number; shots: number; /** The step whose format was started (so a closed format means the step is done). */ started?: number; /** Battles won in the current battle phase, and how many it needs. */ fought?: number; need?: number; }
 const dirOf = (run: RunState): Dir => {
   const d = cutOf(run).director as Partial<Dir> | undefined;
-  return { idx: Math.max(0, Number(d?.idx) || 0), shots: Math.max(0, Number(d?.shots) || 0), ...(typeof d?.started === 'number' ? { started: d.started } : {}) };
+  return { idx: Math.max(0, Number(d?.idx) || 0), shots: Math.max(0, Number(d?.shots) || 0), ...(typeof d?.started === 'number' ? { started: d.started } : {}), ...(typeof d?.fought === 'number' ? { fought: d.fought } : {}), ...(typeof d?.need === 'number' ? { need: d.need } : {}) };
 };
 const save = (run: RunState, d: Dir): void => { cutOf(run).director = d; };
 
@@ -97,6 +99,7 @@ export function finishStep(run: RunState): ClimaxStep | null {
 export function climaxLost(run: RunState): 'retry' | 'worst' {
   const d = dirOf(run);
   d.shots += 1;
+  delete d.fought; delete d.need; delete d.started;
   if (d.shots >= SECOND_SHOT_TRIES) { d.idx = climaxPhases(regionOf(run)).length; save(run, d); return 'worst'; }
   const steps = climaxPhases(regionOf(run));
   const cp = cutOf(run).checkpoint;
@@ -124,7 +127,39 @@ export function climaxTick(content: Content, run: RunState): boolean {
       save(run, { ...dirOf(run), started: d.idx });
       return true;
     }
+    if (step.kind.kind === 'battles' && RANK_BY_LABEL[step.label]) {
+      const need = d.need ?? battleCount(run, step);
+      if ((d.fought ?? 0) >= need) { delete d.fought; delete d.need; save(run, d); finishStep(run); continue; }
+      save(run, { ...d, need, fought: d.fought ?? 0 });
+      return launchClimaxBattle(content, run, step, d.fought ?? 0);
+    }
     finishStep(run);
   }
   return false;
+}
+
+/** Foe rank and team size for each battle phase (Gauntlet = grunts, Duels = officers, Set piece = specialists, Boss = the leader). */
+const RANK_BY_LABEL: Record<string, { evil: 'grunt' | 'specialist' | 'executive' | 'leader'; size: number }> = {
+  Gauntlet: { evil: 'grunt', size: 4 }, Duels: { evil: 'executive', size: 5 }, 'Set piece': { evil: 'specialist', size: 5 }, Boss: { evil: 'leader', size: 6 },
+};
+
+/** How many battles this phase needs: the script's range ("4–6"), picked once from a seeded stream of its own. */
+function battleCount(run: RunState, step: ClimaxStep): number {
+  const [lo, hi] = step.battles.split(/[–-]/).map((x) => Number.parseInt(x, 10));
+  const a = Number.isFinite(lo) ? lo! : 1, b = Number.isFinite(hi) ? hi! : a;
+  return new Rng(hashSeed(`${run.seed}::climax-count::${step.phase}::${dirOf(run).shots}`)).int(a, Math.max(a, b));
+}
+
+/** Launches battle number `n` of a battle phase as an ordinary event fight (`format:climax`): a loss heals the party and the run goes on. */
+function launchClimaxBattle(content: Content, run: RunState, step: ClimaxStep, n: number): boolean {
+  const r = RANK_BY_LABEL[step.label]!;
+  return launchFormatBattle(content, run, 'climax', { key: `${step.phase}.${n}`, name: step.name, size: r.size, evil: r.evil });
+}
+
+/** A climax battle ended: a win counts toward the phase; a loss is Second Shot (the party is healed by the pseudo-battle loss path). */
+export function climaxBattleEnded(run: RunState, won: boolean): void {
+  if (climaxCutOf(run) !== 'extended' || !cutOf(run).director) return;
+  if (!won) { climaxLost(run); return; }
+  const d = dirOf(run);
+  save(run, { ...d, fought: (d.fought ?? 0) + 1 });
 }

@@ -265,6 +265,8 @@ export class MapScene extends Phaser.Scene {
     }
     // Wide formats (Breather and the rest): a running format shows its plain screen on top of the map.
     if (run.phase === 'map' && climaxTick(session.content, run)) session.saveRunNow();
+    // The director launched a climax battle: the battle screen takes over.
+    if (run.phase === 'battle') { this.time.delayedCall(0, () => this.scene.start('Battle')); return; }
     if (pendingFormat(run)) {
       this.time.delayedCall(0, () => {
         this.scene.launch(sceneForFormat(run), { from: 'Map' });
