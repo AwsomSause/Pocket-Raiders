@@ -2957,7 +2957,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** A trade: the lowest-level party Pokémon that fits `want` leaves with the partner. The choice stays locked without one (and while only one Pokémon is left). */
   z.object({ kind: z.literal('tradeAway'), want: TradeWantSchema }),
   /** A healing spot, shop or fishing spot opens beside this node. */
-  z.object({ kind: z.literal('addStop'), stop: z.enum(['heal', 'shop', 'fish', 'minigame']), /** With `minigame`: the game (minigames.json) that waits at the new stop (Safari Land). */ minigameId: z.string().min(1).optional() }),
+  z.object({ kind: z.literal('addStop'), stop: z.enum(['heal', 'shop', 'fish', 'minigame']) }),
   /** A ferry: jump to a node next to the gym (SS Ticket). */
   z.object({ kind: z.literal('skipAhead') }),
   /** Ideas W4: a trainer starts tailing you and steps out to challenge you after this many nodes (core/wanderer.ts). */

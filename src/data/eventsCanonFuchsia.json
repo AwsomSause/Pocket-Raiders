@@ -769,7 +769,7 @@
     {
      "label": "Pay ₽500 and go in",
      "success": {
-      "text": "The warden hands you 30 Safari Balls. A Safari gate opens on the road.",
+      "text": "The warden hands you 30 Safari Balls. Something big stirs in the grass right away.",
       "effects": [
        {
         "kind": "money",
@@ -784,13 +784,37 @@
         "kind": "flag",
         "key": "kanto-safari-steps",
         "amount": 500
-       },
-       {
-        "kind": "addStop",
-        "stop": "minigame",
-        "minigameId": "safari-land"
        }
-      ]
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "chansey",
+        "kangaskhan",
+        "tauros",
+        "scyther",
+        "pinsir",
+        "dratini",
+        "dragonair",
+        "heracross",
+        "nidorina",
+        "nidorino",
+        "exeggcute",
+        "rhyhorn",
+        "venonat",
+        "paras",
+        "doduo",
+        "parasect",
+        "tangela",
+        "psyduck",
+        "slowpoke",
+        "rhydon"
+       ],
+       "chain": 1,
+       "levelBonus": 2,
+       "win": []
+      }
      },
      "requires": [
       {

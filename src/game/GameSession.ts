@@ -479,7 +479,7 @@ export class GameSession {
   }
 
   leaveMinigame(): RunState {
-    return this.setRun(Mini.leaveMinigame(this.requireRun(), this.content));
+    return this.setRun(Mini.leaveMinigame(this.requireRun()));
   }
 
   private setRun(run: RunState): RunState {

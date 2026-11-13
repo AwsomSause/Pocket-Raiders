@@ -15,8 +15,6 @@ const RewardSchema = z.object({
 
 export const MinigameDefSchema = z.object({
   id: z.string().regex(/^[a-z0-9-]+$/),
-  /** Canon-space zone games (Safari Land): only an event opens one; never a random stop, and it pays no medal reward. */
-  zone: z.boolean().default(false),
   name: z.string().min(1),
   category: z.enum(['memory', 'timing', 'knowledge', 'resource', 'puzzle', 'skill']),
   blurb: z.string().min(1),

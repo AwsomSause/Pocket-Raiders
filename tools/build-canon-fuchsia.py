@@ -88,9 +88,11 @@ pick('factory-pick', 'Polluted Factory: Rescued', 'With Magmuk gone, three Poké
 
 # ---------------------------------------------------------------- 8.3 Safari Land
 S = '#6b8f3a'
+SAFARI_POOL = ['chansey', 'kangaskhan', 'tauros', 'scyther', 'pinsir', 'dratini', 'dragonair', 'heracross', 'nidorina', 'nidorino', 'exeggcute', 'rhyhorn', 'venonat', 'paras', 'doduo', 'parasect', 'tangela', 'psyduck', 'slowpoke', 'rhydon']
 ev('safari', 'Safari Land', 'A wide gate and a ticket booth. "Welcome to Safari Land! ₽500 gets you 30 Safari Balls and 500 steps. No battling inside." Beyond the fence the grass moves with a huge crowd of Pokémon.', [
-    ch('Pay ₽500 and go in', 'The warden hands you 30 Safari Balls. A Safari gate opens on the road.',
-       [{'kind': 'money', 'amount': -500}, F('kanto-safari-balls', 30), F('kanto-safari-steps', 500), {'kind': 'addStop', 'stop': 'minigame', 'minigameId': 'safari-land'}],
+    ch('Pay ₽500 and go in', 'The warden hands you 30 Safari Balls. Something big stirs in the grass right away.',
+       [{'kind': 'money', 'amount': -500}, F('kanto-safari-balls', 30), F('kanto-safari-steps', 500)],
+       wild(SAFARI_POOL, None, bonus=2),
        requires=[{'kind': 'money', 'atLeast': 500}]),
     ch('Walk on', 'You watch the herd for a while, then move along.'),
 ], S, 'cs.kanto.fuchsia.safari', room=False)

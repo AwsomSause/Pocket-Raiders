@@ -3158,63 +3158,6 @@
         "slowFactor": 1,
         "noTimerOption": false
       }
-    },
-    {
-      "id": "safari-land",
-      "zone": true,
-      "name": "Safari Land",
-      "category": "resource",
-      "blurb": "Thirty Safari Balls, five hundred steps, a huge crowd of Pokémon.",
-      "instructions": "No battles here. Throw a Safari Ball to catch, bait to make it easier but flightier, or a rock to make it harder but calmer. Every Pokémon you catch joins you at the gate. Walking on or losing a Pokémon costs 10 steps.",
-      "unlockRequirements": {
-        "badges": 0,
-        "regionIndex": 0
-      },
-      "difficultyTiers": [
-        {
-          "id": "standard",
-          "label": "Standard",
-          "params": {
-            "steps": 500,
-            "balls": 30
-          }
-        }
-      ],
-      "durationLimit": 0,
-      "attemptLimit": 1,
-      "scoringRules": "Every catch comes home with you. No medals.",
-      "medals": {
-        "bronze": 0.34,
-        "silver": 0.67,
-        "gold": 1
-      },
-      "rewardTable": {
-        "bronze": {
-          "money": 0,
-          "item": null,
-          "effect": null
-        },
-        "silver": {
-          "money": 0,
-          "item": null,
-          "effect": null
-        },
-        "gold": {
-          "money": 0,
-          "item": null,
-          "effect": null
-        }
-      },
-      "failureOutcome": "You leave with whatever you caught.",
-      "replayRules": "One visit per Safari Land entry (₽500).",
-      "uiConfiguration": {
-        "layout": "choices",
-        "tickMs": 0
-      },
-      "accessibilityOptions": {
-        "slowFactor": 1,
-        "noTimerOption": true
-      }
     }
   ]
 }
