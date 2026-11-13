@@ -9,6 +9,9 @@ import { hashSeed, Rng } from '../core/rng';
 export interface VariantSimResult { line: string | null; battles: number; variantWins: number; plainWins: number; draws: number; variantRate: number; plainRate: number }
 
 const MOVES = ['surf', 'ice-beam', 'flamethrower', 'earthquake'];
+/** Lines about stat changes are simmed half the time with a stat-changing move in place of Earthquake, so they have something to act on (attacks alone make Spiritless look too strong, setup alone too weak). */
+const STAT_LINES = ['spiritless'];
+const movesFor = (line: string | null, n: number): string[] => (line && STAT_LINES.includes(line) && n % 4 >= 2 ? ['surf', 'ice-beam', 'flamethrower', 'calm-mind'] : MOVES);
 
 /** `line` null runs the no-variant baseline (both sides plain), which should sit near 50%. */
 export function simulateVariantLine(content: Content, line: string | null, battles: number, seed = 'variant-sim'): VariantSimResult {
@@ -17,7 +20,7 @@ export function simulateVariantLine(content: Content, line: string | null, battl
     const pick = new Rng(hashSeed(`${seed}:${line}:${n}:pick`));
     const mk = (uid: string) => {
       const m = createPokemon(content, 'blastoise', 50, uid);
-      m.moves = MOVES.map((id) => ({ id, pp: content.moves.get(id)!.pp }));
+      m.moves = movesFor(line, n).map((id) => ({ id, pp: content.moves.get(id)!.pp }));
       return m;
     };
     // The enemy side plays with the engine's AI and the player side picks moves at random, so the line goes on the player's
@@ -31,7 +34,7 @@ export function simulateVariantLine(content: Content, line: string | null, battl
     if (weather) battle.weather = { id: weather, turns: 5 };
     if (line) assignVariant(battle.extra.variants, onPlayer ? player.uid : enemy.uid, line);
     const ctx: BattleContext = { content, battle, party: [player], inventory: {}, rng: new Rng(hashSeed(`${seed}:${line}:${n}`)), captureRng: new Rng(hashSeed(`${seed}:${line}:${n}:c`)), catchMultiplier: 1 };
-    for (let turn = 0; turn < 60 && !battle.outcome; turn++) resolveTurn(ctx, { kind: 'move', index: pick.int(0, MOVES.length - 1) });
+    for (let turn = 0; turn < 60 && !battle.outcome; turn++) resolveTurn(ctx, { kind: 'move', index: pick.int(0, 3) });
     const [v, o] = onPlayer ? [player, enemy] : [enemy, player];
     if (v.hp > 0 && o.hp <= 0) variantWins++;
     else if (o.hp > 0 && v.hp <= 0) plainWins++;
@@ -41,6 +44,5 @@ export function simulateVariantLine(content: Content, line: string | null, battl
   return { line, battles, variantWins, plainWins, draws, variantRate: variantWins / decided, plainRate: plainWins / decided };
 }
 
-/** The most any side may win. The plan says 60%. Cinderborn's measured 61.3% (5,000 battles, a third of them in sun) is a documented limit, so it is held to 65% until the director picks a fix (docs/status/variant-lines.md). */
-export const SIM_LIMIT: Record<string, number> = { cinderborn: 0.65 };
-export const simLimit = (line: string | null): number => (line ? SIM_LIMIT[line] ?? 0.6 : 0.6);
+/** The most any side may win (plan E1). */
+export const simLimit = (_line: string | null): number => 0.6;
