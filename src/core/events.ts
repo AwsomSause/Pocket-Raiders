@@ -112,6 +112,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return (run.inventory[c.id] ?? 0) >= (c.count ?? 1) || (run.passives?.[c.id] ?? 0) > 0;
     case 'emotion':
       return run.party.some((m) => emotionOf(content, run, m.uid)?.id === c.id);
+    case 'memorial':
+      return (run.nuzlocke?.memorial.length ?? 0) >= c.atLeast;
     case 'partyLevelOver':
       return (!!run.stage && run.party.some((m) => m.level >= curveLevel(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, run.stage!.index, 1)) + c.over)) !== (c.absent === true);
     case 'partyMoveType':
@@ -314,6 +316,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs a milestone day';
     case 'partyType':
       return c.absent ? `Only without a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party` : `Needs a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party`;
+    case 'memorial':
+      return c.atLeast <= 1 ? 'Needs a Pokémon lost for good' : `Needs ${c.atLeast} Pokémon lost for good`;
     case 'partyLevelOver':
       return c.over >= 0 ? `Needs a Pokémon ${c.over} levels above this stage` : 'Needs a strong Pokémon';
     case 'partyMoveType':
@@ -1541,6 +1545,8 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
   }
   if (b.format && !run.battle.doubles) applyEventFormat(content, run, b.format);
   run.battle.event = event;
+  // Rock Tunnel is a dark cave: every fight inside it has its accuracy cut by a tenth.
+  if (event.eventId.startsWith('cs-kanto-lavender-rock')) run.battle.accuracyMult = 0.9;
   // Veridian Forest fog: every fight inside the forest has its accuracy cut by a tenth.
   if (event.eventId.startsWith('cs-kanto-pewter-forest') && Number(run.story.flags['ev:kanto-forest-fog'] ?? 0) > 0) run.battle.accuracyMult = 0.9;
   for (const mon of run.battle.enemyTeam) discover(run, mon.speciesId, false);

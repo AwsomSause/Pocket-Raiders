@@ -7092,6 +7092,2473 @@
     }
    ],
    "canon": "cs.kanto.celadon.rooftop"
+  },
+  {
+   "id": "cs-kanto-lavender-tower",
+   "name": "Pokémon Tower",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "A tall grey tower of graves. The air is cold, and the candles lean toward you. Seven floors up, someone is calling for help.",
+   "choices": [
+    {
+     "label": "Climb the tower",
+     "success": {
+      "text": "You go in.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You turn back. Nothing here is forced.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.lavender.tower"
+  },
+  {
+   "id": "cs-kanto-lavender-tower-n1",
+   "name": "Pokémon Tower: Floor 1",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "Rows of memorial stones. Something drifts between them, and without the Silph Scope it shows up only as \"???\".",
+   "choices": [
+    {
+     "label": "Face what is in the dark (needs the Silph Scope)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "silph-scope"
+      }
+     ],
+     "success": {
+      "text": "The Scope shows them: shapes in the stone.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "gastly",
+        "haunter"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-tower-n2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Without the Scope: fight a Channeler",
+     "success": {
+      "text": "\"???\" slips past you. A possessed medium steps out instead.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Channeler",
+       "size": 2,
+       "types": [
+        "ghost"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-tower-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-tower-n2",
+   "name": "Pokémon Tower: Floor 2",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "More stones, more names. A cold hand brushes the back of your neck.",
+   "choices": [
+    {
+     "label": "Face what is in the dark (needs the Silph Scope)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "silph-scope"
+      }
+     ],
+     "success": {
+      "text": "The Scope shows them: shapes in the stone.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "gastly",
+        "haunter",
+        "duskull"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-tower-n3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Without the Scope: fight a Channeler",
+     "success": {
+      "text": "\"???\" slips past you. A possessed medium steps out instead.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Channeler",
+       "size": 2,
+       "types": [
+        "ghost"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-tower-n3"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-tower-n3",
+   "name": "Pokémon Tower: The Channelers",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "Mediums in white robes sway between the candles. Their eyes are empty.",
+   "choices": [
+    {
+     "label": "Break the possession",
+     "success": {
+      "text": "A Channeler turns and throws a Poké Ball.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Channeler",
+       "size": 2,
+       "types": [
+        "ghost"
+       ],
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Freed a Channeler in Pokémon Tower."
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-tower-n4"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-tower-n4",
+   "name": "Pokémon Tower: The Channelers",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "Another floor, another medium. This one is chanting a name that is not their own.",
+   "choices": [
+    {
+     "label": "Break the possession",
+     "success": {
+      "text": "The medium lunges.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Channeler",
+       "size": 3,
+       "types": [
+        "ghost"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-tower-n5"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-tower-n5",
+   "name": "Pokémon Tower: Haunter's Prank",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "The stairs are right there. Something giggles behind them.",
+   "choices": [
+    {
+     "label": "Climb to the next floor",
+     "chance": 0.25,
+     "success": {
+      "text": "A Haunter pops out of the wall and sticks out its tongue!",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-prank"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Only the wind. The next flight of stairs is clear.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-n6"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-tower-prank",
+   "name": "Haunter's Prank",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "A Haunter hangs upside down in front of you, grinning, holding your hat.",
+   "choices": [
+    {
+     "label": "Laugh along",
+     "prompt": {
+      "id": "shout-tap",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You burst out laughing. The Haunter laughs too, and tosses you a Spell Tag from the shadows.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "spell-tag"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-n6"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You were too slow to get the joke. The Haunter shrugs and fades.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-n6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Chase it",
+     "success": {
+      "text": "The Haunter shrieks with joy and turns to fight.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "haunter"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-tower-n6"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-tower-n6",
+   "name": "Pokémon Tower: The Marowak",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "On the top floors, a ghostly Marowak stands over a small grave. It cannot be caught. It has not left its child.",
+   "choices": [
+    {
+     "label": "Calm the ghost Marowak",
+     "success": {
+      "text": "It rushes you, bone raised.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Ghost Marowak",
+       "size": 1,
+       "team": [
+        "marowak"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-tower-marowak",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Set the ghost Marowak free in Pokémon Tower."
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-tower-memorial"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Slip past it",
+     "success": {
+      "text": "You edge around the grave and keep climbing. The Marowak does not turn.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-memorial"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-tower-memorial",
+   "name": "The Memorial Wall",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "A wall of names, one for every Pokémon you have lost for good. Fresh flowers lie below it. The ghosts will answer up to three.",
+   "choices": [
+    {
+     "label": "Leave flowers: a Spell Tag from the ghosts",
+     "requires": [
+      {
+       "kind": "memorial",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "The flowers fade. A Spell Tag is left on the stone.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "spell-tag"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tower-memorial",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-memorial-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave flowers: a Ghost Gem from the ghosts",
+     "requires": [
+      {
+       "kind": "memorial",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "The flowers fade. A Ghost Gem glints on the stone.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "ghost-gem"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tower-memorial",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-memorial-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave flowers: a Ghost-type Egg from the ghosts",
+     "requires": [
+      {
+       "kind": "memorial",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "The flowers fade. A small warm Egg waits on the stone.",
+      "effects": [
+       {
+        "kind": "egg",
+        "types": [
+         "ghost"
+        ],
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tower-memorial",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-memorial-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Move on",
+     "success": {
+      "text": "You bow your head and climb to the top.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-top"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-tower-memorial-2",
+   "name": "The Memorial Wall",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "Another name, another set of flowers.",
+   "choices": [
+    {
+     "label": "Leave flowers: a Spell Tag from the ghosts",
+     "requires": [
+      {
+       "kind": "memorial",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "The flowers fade. A Spell Tag is left on the stone.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "spell-tag"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tower-memorial",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-memorial-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave flowers: a Ghost Gem from the ghosts",
+     "requires": [
+      {
+       "kind": "memorial",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "The flowers fade. A Ghost Gem glints on the stone.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "ghost-gem"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tower-memorial",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-memorial-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave flowers: a Ghost-type Egg from the ghosts",
+     "requires": [
+      {
+       "kind": "memorial",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "The flowers fade. A small warm Egg waits on the stone.",
+      "effects": [
+       {
+        "kind": "egg",
+        "types": [
+         "ghost"
+        ],
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tower-memorial",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-memorial-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Move on",
+     "success": {
+      "text": "You bow your head and climb to the top.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-top"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-tower-memorial-3",
+   "name": "The Memorial Wall",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "The last of the ghosts that will answer you.",
+   "choices": [
+    {
+     "label": "Leave flowers: a Spell Tag from the ghosts",
+     "requires": [
+      {
+       "kind": "memorial",
+       "atLeast": 3
+      }
+     ],
+     "success": {
+      "text": "The flowers fade. A Spell Tag is left on the stone.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "spell-tag"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tower-memorial",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-top"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave flowers: a Ghost Gem from the ghosts",
+     "requires": [
+      {
+       "kind": "memorial",
+       "atLeast": 3
+      }
+     ],
+     "success": {
+      "text": "The flowers fade. A Ghost Gem glints on the stone.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "ghost-gem"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tower-memorial",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-top"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave flowers: a Ghost-type Egg from the ghosts",
+     "requires": [
+      {
+       "kind": "memorial",
+       "atLeast": 3
+      }
+     ],
+     "success": {
+      "text": "The flowers fade. A small warm Egg waits on the stone.",
+      "effects": [
+       {
+        "kind": "egg",
+        "types": [
+         "ghost"
+        ],
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tower-memorial",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-top"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Move on",
+     "success": {
+      "text": "You bow your head and climb to the top.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-top"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-tower-top",
+   "name": "Pokémon Tower: The Top",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "At the very top, an old man is tied to a chair in a ring of candles. Mr. Fuji looks up. \"Please, untie me.\"",
+   "choices": [
+    {
+     "label": "Free Mr. Fuji (the Marowak is at peace)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-tower-marowak",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "The Rockets are gone. Mr. Fuji sits up. \"Thank you. Take this. The tower is quiet again.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "silph-scope"
+       },
+       {
+        "kind": "relic",
+        "id": "pokemon-tower-scroll",
+        "name": "Pokémon Tower Scroll",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "type": "ghost",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spa",
+          "type": "ghost",
+          "value": 1.1
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tower-cleared",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "xk-tower-cleansed",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Cleared Pokémon Tower and found Mr. Fuji."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-fuji"
+       },
+       {
+        "kind": "join",
+        "species": [
+         "cubone"
+        ],
+        "levelBonus": 0,
+        "ability": "lightning-rod"
+       },
+       {
+        "kind": "teachMove",
+        "move": "bone-rush",
+        "species": "cubone"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Free Mr. Fuji",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-tower-marowak",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "The Rockets are gone. Mr. Fuji sits up. \"Thank you. Take this. The tower is quiet again.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "silph-scope"
+       },
+       {
+        "kind": "relic",
+        "id": "pokemon-tower-scroll",
+        "name": "Pokémon Tower Scroll",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "type": "ghost",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spa",
+          "type": "ghost",
+          "value": 1.1
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tower-cleared",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "xk-tower-cleansed",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Cleared Pokémon Tower and found Mr. Fuji."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-fuji"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-tower-fuji",
+   "name": "Mr. Fuji's Thanks",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "\"Come to my house in town if you can. There are many lost Pokémon who need a friend.\" He presses something into your hand.",
+   "choices": [
+    {
+     "label": "Thank him and go down",
+     "success": {
+      "text": "The candles go out one by one as you leave. The tower is only a tower now.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-fuji",
+   "name": "Mr. Fuji's House",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "A small house full of cushions and sleeping Pokémon. Mr. Fuji looks after the ones nobody came for. \"Take one of them,\" he says. \"They are three years old, in Pokémon years. And they are strong for it.\"",
+   "choices": [
+    {
+     "label": "Adopt the little Pichu",
+     "success": {
+      "text": "Pichu toddles over and falls asleep on your boot. Mr. Fuji smiles and hands you a flute.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "pichu"
+        ],
+        "levelBonus": 3
+       },
+       {
+        "kind": "item",
+        "id": "poke-flute"
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "Adopted Pichu from Mr. Fuji's home for lost Pokémon."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Adopt the little Cleffa",
+     "success": {
+      "text": "Cleffa toddles over and falls asleep on your boot. Mr. Fuji smiles and hands you a flute.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "cleffa"
+        ],
+        "levelBonus": 3
+       },
+       {
+        "kind": "item",
+        "id": "poke-flute"
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "Adopted Cleffa from Mr. Fuji's home for lost Pokémon."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Adopt the little Togepi",
+     "success": {
+      "text": "Togepi toddles over and falls asleep on your boot. Mr. Fuji smiles and hands you a flute.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "togepi"
+        ],
+        "levelBonus": 3
+       },
+       {
+        "kind": "item",
+        "id": "poke-flute"
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "Adopted Togepi from Mr. Fuji's home for lost Pokémon."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just say hello",
+     "success": {
+      "text": "You pet a sleeping Meowth and leave quietly.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.lavender.fuji"
+  },
+  {
+   "id": "cs-kanto-lavender-fanclub",
+   "name": "Pokémon Fan Club",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "The chairman is already talking. \"My Rapidash! Do you know how fast my Rapidash is? Let me tell you...\" The room is packed with club members nodding politely.",
+   "choices": [
+    {
+     "label": "Listen with patience",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You hold your smile for twenty minutes. The chairman is moved to tears and gives you a Bike Voucher.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "bike-voucher"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your attention drifts to the Rapidash plushie. The chairman sees it and sniffs. \"Well. Thank you for coming.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "Interrupt him",
+     "success": {
+      "text": "\"Oh! I am so sorry. Here, take this for your trouble.\" He hands you a Poké Doll to leave sooner.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "poke-doll"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk past",
+     "success": {
+      "text": "You slip out. The talk follows you down the street.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.lavender.fanclub"
+  },
+  {
+   "id": "cs-kanto-lavender-rocktunnel",
+   "name": "Rock Tunnel Blackout",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "The tunnel mouth is pitch black. A sign says: \"Flash recommended.\" Every fight in here is fought half-blind: accuracy drops a tenth.",
+   "choices": [
+    {
+     "label": "Walk into the dark",
+     "success": {
+      "text": "The walls close in.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-rocktunnel-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You turn back. Nothing here is forced.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.lavender.rocktunnel"
+  },
+  {
+   "id": "cs-kanto-lavender-rocktunnel-n1",
+   "name": "Rock Tunnel: Node 1",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "The dark presses on your eyes. Wings flutter overhead.",
+   "choices": [
+    {
+     "label": "Light the way: face the Zubat (Flashlight)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "flashlight"
+      }
+     ],
+     "success": {
+      "text": "The beam shows a Zubat.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "zubat"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-rocktunnel-n2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Light the way: face the Geodude (Flashlight)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "flashlight"
+      }
+     ],
+     "success": {
+      "text": "The beam shows a Geodude.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "geodude"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-rocktunnel-n2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Light the way with Flash: face the Zubat",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "flash"
+      }
+     ],
+     "success": {
+      "text": "Flash lights the cave. A Zubat.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "zubat"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-rocktunnel-n2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Feel your way forward (no light: a random encounter)",
+     "success": {
+      "text": "Something moves in the dark.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "zubat",
+        "geodude",
+        "machop"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-rocktunnel-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-rocktunnel-n2",
+   "name": "Rock Tunnel: Node 2",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "Water drips somewhere. Your own footsteps echo back at you.",
+   "choices": [
+    {
+     "label": "Light the way: face the Machop (Flashlight)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "flashlight"
+      }
+     ],
+     "success": {
+      "text": "The beam shows a Machop.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "machop"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-rocktunnel-n3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Light the way: face the Geodude (Flashlight)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "flashlight"
+      }
+     ],
+     "success": {
+      "text": "The beam shows a Geodude.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "geodude"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-rocktunnel-n3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Light the way with Flash: face the Machop",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "flash"
+      }
+     ],
+     "success": {
+      "text": "Flash lights the cave. A Machop.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "machop"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-rocktunnel-n3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Feel your way forward (no light: a random encounter)",
+     "success": {
+      "text": "Something moves in the dark.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "zubat",
+        "geodude",
+        "machop",
+        "mankey"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-rocktunnel-n3"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-rocktunnel-n3",
+   "name": "Rock Tunnel: Node 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "A narrow ledge. You cannot see the bottom.",
+   "choices": [
+    {
+     "label": "Light the way: face the Mankey (Flashlight)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "flashlight"
+      }
+     ],
+     "success": {
+      "text": "The beam shows a Mankey.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "mankey"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-rocktunnel-n4"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Light the way: face the Zubat (Flashlight)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "flashlight"
+      }
+     ],
+     "success": {
+      "text": "The beam shows a Zubat.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "zubat"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-rocktunnel-n4"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Light the way with Flash: face the Mankey",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "flash"
+      }
+     ],
+     "success": {
+      "text": "Flash lights the cave. A Mankey.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "mankey"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-rocktunnel-n4"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Feel your way forward (no light: a random encounter)",
+     "success": {
+      "text": "Something moves in the dark.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "zubat",
+        "geodude",
+        "machop",
+        "onix"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-rocktunnel-n4"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-rocktunnel-n4",
+   "name": "Rock Tunnel: Node 4",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "A faint draft: the exit is near. So is something very large.",
+   "choices": [
+    {
+     "label": "Light the way: face the Onix (Flashlight)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "flashlight"
+      }
+     ],
+     "success": {
+      "text": "The beam shows a Onix.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "onix"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-rocktunnel-n5"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Light the way: face the Machop (Flashlight)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "flashlight"
+      }
+     ],
+     "success": {
+      "text": "The beam shows a Machop.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "machop"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-rocktunnel-n5"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Light the way with Flash: face the Onix",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "flash"
+      }
+     ],
+     "success": {
+      "text": "Flash lights the cave. A Onix.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "onix"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-rocktunnel-n5"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Feel your way forward (no light: a random encounter)",
+     "success": {
+      "text": "Something moves in the dark.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "geodude",
+        "machop",
+        "onix"
+       ],
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-rocktunnel-n5"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-rocktunnel-n5",
+   "name": "Rock Tunnel: The Way Out",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "Light at last. A sleepy Onix blocks the way out, and a rock face shows an old crack to pry open.",
+   "choices": [
+    {
+     "label": "Befriend the Onix",
+     "success": {
+      "text": "The Onix lets you stroke its nose and decides to follow you.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "onix"
+        ],
+        "levelBonus": 0,
+        "ability": "sturdy"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rocktunnel-cleared",
+        "amount": 1
+       },
+       {
+        "kind": "teachMove",
+        "move": "rock-slide",
+        "type": "rock"
+       },
+       {
+        "kind": "item",
+        "id": "flashlight"
+       },
+       {
+        "kind": "moment",
+        "text": "Crossed Rock Tunnel in the dark."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-powerplant",
+   "name": "Abandoned Power Plant",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "A rusted gate hangs open. Inside, a dead plant hums with something that should not still be running. Items are scattered across the floor.",
+   "choices": [
+    {
+     "label": "Go inside",
+     "success": {
+      "text": "The lights flicker on one by one.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-powerplant-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You turn back. Nothing here is forced.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.lavender.powerplant"
+  },
+  {
+   "id": "cs-kanto-lavender-powerplant-n1",
+   "name": "Power Plant: Hall 1",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "Dim lights. A Poké Ball lies in the middle of the hall.",
+   "choices": [
+    {
+     "label": "Pick up the Poké Ball on the floor",
+     "chance": 0.5,
+     "success": {
+      "text": "A real item, left behind.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "repel"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-powerplant-n2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It was a Voltorb! It rolls into you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "voltorb"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-powerplant-n2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave the ball and sneak by",
+     "success": {
+      "text": "You step around it carefully. It does not follow.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-powerplant-n2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-powerplant-n2",
+   "name": "Power Plant: Hall 2",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "A line of balls on a broken conveyor belt.",
+   "choices": [
+    {
+     "label": "Pick up the Poké Ball on the floor",
+     "chance": 0.5,
+     "success": {
+      "text": "A real item, left behind.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "x-attack"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-powerplant-n3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It was a Voltorb! It rolls into you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "voltorb"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-powerplant-n3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave the ball and sneak by",
+     "success": {
+      "text": "You step around it carefully. It does not follow.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-powerplant-n3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-powerplant-n3",
+   "name": "Power Plant: Hall 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "A side room full of stacked crates and one very round crate.",
+   "choices": [
+    {
+     "label": "Pick up the Poké Ball on the floor",
+     "chance": 0.5,
+     "success": {
+      "text": "A real item, left behind.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "x-attack"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-powerplant-n4"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It was a Voltorb! It rolls into you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "voltorb"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-powerplant-n4"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave the ball and sneak by",
+     "success": {
+      "text": "You step around it carefully. It does not follow.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-powerplant-n4"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-powerplant-n4",
+   "name": "Power Plant: Hall 4",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "Sparks fall from the ceiling. A single ball rocks in the corner.",
+   "choices": [
+    {
+     "label": "Pick up the Poké Ball on the floor",
+     "chance": 0.5,
+     "success": {
+      "text": "A real item, left behind.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "repel"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-powerplant-n5"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It was a Voltorb! It rolls into you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "voltorb"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-powerplant-n5"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave the ball and sneak by",
+     "success": {
+      "text": "You step around it carefully. It does not follow.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-powerplant-n5"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-powerplant-n5",
+   "name": "Power Plant: The Control Room",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "The main control room. The air tastes like metal. Something enormous is perched on the generators.",
+   "choices": [
+    {
+     "label": "Climb to the generator",
+     "chance": 0.4,
+     "success": {
+      "text": "Lightning cracks. A legendary bird spreads its wings.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "zapdos"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-powerplant-n6"
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "The \"legend\" is only a horde of Electrode, ticking.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "electrode"
+       ],
+       "levelBonus": 2,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-powerplant-n6"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-powerplant-n6",
+   "name": "Power Plant: The Last Hall",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "The humming stops. Whatever was in here is gone. The dust settles on a few useful things.",
+   "choices": [
+    {
+     "label": "Take what is left",
+     "success": {
+      "text": "A Magnet on a workbench and a Thunder Stone behind a panel.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "magnet"
+       },
+       {
+        "kind": "item",
+        "id": "thunderstone"
+       },
+       {
+        "kind": "moment",
+        "text": "Searched the Abandoned Power Plant."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-volunteers",
+   "name": "Lavender Volunteers",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "Volunteers in white aprons run a small stall of ghost goods and a donation jar. \"We keep the town going. Please take what you need.\"",
+   "choices": [
+    {
+     "label": "Buy a Spell Tag (₽600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "A volunteer wraps the tag in tissue paper.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -600
+       },
+       {
+        "kind": "item",
+        "id": "spell-tag"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-volunteers-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a Ghost Gem (₽400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "The gem is cold to the touch.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "item",
+        "id": "ghost-gem"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-volunteers-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy an Escape Rope (₽250)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 250
+      }
+     ],
+     "success": {
+      "text": "\"For the next time a tower gets too tall.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -250
+       },
+       {
+        "kind": "item",
+        "id": "escape-rope"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-volunteers-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about a Revive, or leave",
+     "success": {
+      "text": "A volunteer lowers their voice.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-volunteers-revive"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.lavender.volunteers"
+  },
+  {
+   "id": "cs-kanto-lavender-volunteers-2",
+   "name": "Lavender Volunteers",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "\"Anything else?\"",
+   "choices": [
+    {
+     "label": "Buy a Spell Tag (₽600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "A volunteer wraps the tag in tissue paper.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -600
+       },
+       {
+        "kind": "item",
+        "id": "spell-tag"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-volunteers-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a Ghost Gem (₽400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "The gem is cold to the touch.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "item",
+        "id": "ghost-gem"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-volunteers-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy an Escape Rope (₽250)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 250
+      }
+     ],
+     "success": {
+      "text": "\"For the next time a tower gets too tall.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -250
+       },
+       {
+        "kind": "item",
+        "id": "escape-rope"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-volunteers-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about a Revive, or leave",
+     "success": {
+      "text": "A volunteer lowers their voice.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-volunteers-revive"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-volunteers-revive",
+   "name": "Lavender Volunteers",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "\"We can hold a small ceremony and give you a Revive for ₽500. Only once, though; the town is poor.\"",
+   "choices": [
+    {
+     "label": "Pay ₽500 for a Revive",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-volunteers-revive",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "The volunteers hold a short, quiet ceremony, then hand you a Revive.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "item",
+        "id": "revive"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-volunteers-revive",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thank them and go",
+     "success": {
+      "text": "The volunteers wave. A candle burns in the window.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-volunteers-3",
+   "name": "Lavender Volunteers",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a6a"
+   },
+   "intro": "\"One last thing, and then we have to close.\"",
+   "choices": [
+    {
+     "label": "Buy a Spell Tag (₽600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "A volunteer wraps the tag in tissue paper.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -600
+       },
+       {
+        "kind": "item",
+        "id": "spell-tag"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a Ghost Gem (₽400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "The gem is cold to the touch.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "item",
+        "id": "ghost-gem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy an Escape Rope (₽250)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 250
+      }
+     ],
+     "success": {
+      "text": "\"For the next time a tower gets too tall.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -250
+       },
+       {
+        "kind": "item",
+        "id": "escape-rope"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about a Revive, or leave",
+     "success": {
+      "text": "A volunteer lowers their voice.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-volunteers-revive"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
   }
  ]
 }
