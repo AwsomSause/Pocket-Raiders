@@ -29,6 +29,7 @@ import { catchProbability, resolveCatchRoll } from '../capture';
 import { styleProbability, styleProblem, type StyleInput } from '../captureStyles';
 import { applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem, lastStandItemId } from '../items';
 import { abilityOf, calcStats, createPokemon, getSpecies, maxHp } from '../pokemon';
+import { rallyStages } from './rally';
 import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
 import type { Rng } from '../rng';
 import { cooldownKey, hasBattleEffect, markBattleEffect } from '../story/ledger';
@@ -4487,7 +4488,10 @@ function trainerAiTurn(ctx: BattleContext, enemy: Combatant, events: BattleEvent
   if (guard.kos > 0 && (battle.trainer?.leaderId || battle.rival) && battle.sweep && battle.sweep.kos >= guard.kos && battle.sweep.braced !== mon.uid && ctx.party.filter((p) => p.hp > 0).length > 1) {
     battle.sweep = { ...battle.sweep, braced: mon.uid, used: battle.sweep.used + 1 };
     events.push(say('enemy', 'rally', `${getSpecies(content, mon.speciesId).name} steels itself to stop the winning streak!`, mon.uid));
-    for (const stat of guard.stats) applyStageChange(ctx, enemy, stat, guard.stages, events);
+    for (const stat of guard.stats) {
+      const gain = rallyStages(guard, battle.sweep.kos, enemy.stages[stat]);
+      if (gain > 0) applyStageChange(ctx, enemy, stat, gain, events);
+    }
   }
   if (battle.enemySwitches >= cfg.maxSwitches || enemy.vol.turnsOut < 1 || enemy.vol.trapped || enemy.vol.bound > 0) return false;
   if ((mon.friendship ?? 0) >= 230 && !(battle.enemyMoments ??= []).includes(`refuse:${mon.uid}`) && mon.hp / max >= 0.2) {
