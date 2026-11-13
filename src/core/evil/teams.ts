@@ -12,6 +12,7 @@
 //  - Recurring villains: the executive and leader remember every meeting. Their teams grow and their lines change
 //    (first meeting, after you beat them, after they beat you, grudging respect).
 
+import { standingLine } from '../arc/standWithExtended';
 import { impoundFor } from '../raid/storyRaids';
 import type { Content, EventBattle, EventCondition, EventEffect } from '../contentSchema';
 import { hashSeed, Rng } from '../rng';
@@ -19,6 +20,7 @@ import type { RunState } from '../state';
 import { emit } from '../story/record';
 import { evilConfig, HIDEOUT_AT_LEAGUE } from '../campaign/circuit';
 import { recordChoice } from './choices';
+import { trackOnClimax, trackOnOperation } from '../expansion/trackRun';
 import { freshEvil, type EvilRank, type EvilState, type EvilTeam, type VillainRecord } from './schema';
 
 type EvilCondition = Extract<EventCondition, { kind: 'evil' }>;
@@ -51,8 +53,10 @@ export function plannedEvilTeamId(content: Content, run: Pick<RunState, 'seed' |
   if (run.story.evil?.teamId) return run.story.evil.teamId;
   // Story Runs draw from the six original teams (Design v2 Part IV); Classic never sees them, so its draw is unchanged.
   const story = !!run.story.v2;
-  const own = content.evilTeams.teams.filter((t) => t.storyOnly === story);
-  const pool = own.length > 0 ? own : content.evilTeams.teams;
+  // Roaming teams (Cipher, Rocket Remnants, Snag'em) are never a run's team.
+  const drawable = content.evilTeams.teams.filter((t) => !t.roaming);
+  const own = drawable.filter((t) => t.storyOnly === story);
+  const pool = own.length > 0 ? own : drawable;
   if (pool.length === 0) return null;
   const focus = (run.perkEffects ?? []).flatMap((m) => (m.kind === 'evilTeamFocus' ? m.teams : []));
   const focused = pool.filter((t) => focus.includes(t.id));
@@ -120,6 +124,8 @@ export function applyEvilEffect(content: Content, run: RunState, e: EvilEffect):
   if (e.talk) words.push(`${team.ranks[e.talk].name}: ${villainLine(team, e.talk, s.villains[e.talk])}`);
   if (e.beat && s.beat < 7) {
     s.beat += 1;
+    // E2: the real plan comes out (beat 6): the climax is now scheduled, so the region's track rises once.
+    if (s.beat === 6) trackOnClimax(run, run.regionIndex);
     const cfg = evilConfig(content, run);
     // Story Run (Appendix S.7): after beat 6 the hideout waits for League entry (core/campaign/storyDirector.ts places it).
     s.nextAt = s.beat === 6 && cfg.hideoutAtLeague ? HIDEOUT_AT_LEAGUE : s.stages + cfg.beatEvery;
@@ -151,6 +157,8 @@ export function applyEvilEffect(content: Content, run: RunState, e: EvilEffect):
 /** Ends an operation and adds its lasting consequence to the run (once per operation). */
 function resolveOp(content: Content, run: RunState, team: EvilTeam, op: EvilState['ops'][number], outcome: Exclude<EvilState['ops'][number]['outcome'], 'running'>): string {
   op.outcome = outcome;
+  // E2: a stopped operation counts as a raid won (the world-state track falls), one let through as a raid lost (it rises).
+  trackOnOperation(run, op.region, op.id, outcome);
   const def = team.ops.find((o) => o.id === op.id);
   const cons = def ? content.evilTeams.consequences[def.kind] : undefined;
   const stopped = outcome === 'foiled' || outcome === 'infiltrated';
@@ -182,17 +190,24 @@ export interface EvilBattlePlan {
   shadow: number;
 }
 
+/** The record key of a villain: the rank, or `team:rank` for a roaming team. */
+const villainKey = (b: TrainerBattle): string => (b.evilTeam ? `${b.evilTeam}:${b.evil}` : b.evil!);
+
 /** The team, levels and rule for an Evil Team battle at this rank; counts the meeting for a recurring villain. */
 export function evilBattle(content: Content, run: RunState, b: TrainerBattle): EvilBattlePlan | null {
-  const team = evilTeam(content, run);
+  // A roaming team (`evilTeam` on the battle) fights by its own rules: no heat, no operations, and its own villain records.
+  const roaming = b.evilTeam ? content.evilTeams.teams.find((t) => t.id === b.evilTeam && t.roaming) : undefined;
+  const team = roaming ?? evilTeam(content, run);
   if (!team || !b.evil) return null;
   const s = evilOf(run);
   const cfg = content.evilTeams.config;
   const rank = team.ranks[b.evil];
-  const rec = s.villains[b.evil] ?? { met: 0, won: 0, lost: 0, last: 'none' };
+  const key = villainKey(b);
+  const rec = s.villains[key] ?? { met: 0, won: 0, lost: 0, last: 'none' };
+  const heat = roaming ? 0 : s.heat;
   const recurring = b.evil === 'executive' || b.evil === 'leader';
-  let size = b.size + (s.heat >= cfg.reinforceAt ? 1 : 0) + (recurring ? Math.min(2, rec.met) : 0);
-  let levelBonus = Math.floor(s.heat / cfg.heatPerLevel) + successCount(s) * cfg.levelsPerSuccess + (recurring ? rec.met * cfg.levelsPerMeeting : 0);
+  let size = b.size + (heat >= cfg.reinforceAt ? 1 : 0) + (recurring ? Math.min(2, rec.met) : 0);
+  let levelBonus = Math.floor(heat / cfg.heatPerLevel) + (roaming ? 0 : successCount(s)) * cfg.levelsPerSuccess + (recurring ? rec.met * cfg.levelsPerMeeting : 0);
   let shadow = b.shadow;
   if (team.rule.kind === 'swarm') size += 1;
   if (team.rule.kind === 'elite') {
@@ -202,16 +217,17 @@ export function evilBattle(content: Content, run: RunState, b: TrainerBattle): E
   if (team.rule.kind === 'shadow') shadow = Math.max(shadow, 1);
   size = Math.max(1, Math.min(6, size));
   // The meeting counts as theirs until you win it (evilBattleWon).
-  s.villains[b.evil] = { met: rec.met + 1, won: rec.won, lost: rec.lost + 1, last: 'lost' };
+  s.villains[key] = { met: rec.met + 1, won: rec.won, lost: rec.lost + 1, last: 'lost' };
   return { name: rank.name, species: rank.species.slice(0, size), size, levelBonus, shadow: Math.min(shadow, size) };
 }
 
 /** You won an Evil Team battle: the villain remembers it. */
 export function evilBattleWon(run: RunState, b: TrainerBattle): void {
   if (!b.evil) return;
-  const rec = evilOf(run).villains[b.evil];
+  const key = villainKey(b);
+  const rec = evilOf(run).villains[key];
   if (!rec) return;
-  evilOf(run).villains[b.evil] = { met: rec.met, won: rec.won + 1, lost: Math.max(0, rec.lost - 1), last: 'won' };
+  evilOf(run).villains[key] = { met: rec.met, won: rec.won + 1, lost: Math.max(0, rec.lost - 1), last: 'won' };
 }
 
 /** The Story screen's summary of the run's Evil Team. */
@@ -226,6 +242,8 @@ export function evilSummary(content: Content, run: RunState): { title: string; l
     const def = team.ops.find((o) => o.id === op.id);
     lines.push(`Region ${op.region + 1}: ${def?.name ?? op.id} (${op.outcome === 'running' ? 'still running' : op.outcome})`);
   }
+  const standing = standingLine(run);
+  if (standing) lines.push(standing);
   for (const rank of ['executive', 'leader'] as const) {
     const rec = s.villains[rank];
     if (rec && rec.met > 0) lines.push(`${team.ranks[rank].name}: met ${rec.met}, you won ${rec.won}.`);

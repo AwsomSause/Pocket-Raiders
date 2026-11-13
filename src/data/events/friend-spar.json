@@ -20,9 +20,10 @@
       "battle": {
        "kind": "trainer",
        "pseudo": true,
+       "friend": true,
        "classId": "ace-trainer",
        "name": "Your Friend",
-       "size": 2,
+       "size": 3,
        "levelBonus": -2,
        "win": [
         { "kind": "moment", "text": "You won the friendly spar. Nothing was riding on it, and you both laughed.", "importance": 40 }

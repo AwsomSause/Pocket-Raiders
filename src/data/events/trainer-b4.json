@@ -549,11 +549,12 @@
       "effects": [],
       "battle": {
        "kind": "trainer",
+       "format": "doubles",
        "name": "The Twins",
        "classId": "ace-trainer",
-       "size": 1,
+       "size": 2,
        "types": [],
-       "levelBonus": 5,
+       "levelBonus": 3,
        "win": [
         {
          "kind": "money",

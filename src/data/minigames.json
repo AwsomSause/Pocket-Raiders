@@ -3425,6 +3425,639 @@
         "slowFactor": 2,
         "noTimerOption": false
       }
+    },
+    {
+      "id": "orchestra",
+      "name": "Orchestra",
+      "category": "timing",
+      "blurb": "Conduct the orchestra.",
+      "instructions": "Cue each section as its part comes up. Swell cues use the Swell button, or a loud sound when mic input is on. Perfect timing scores most.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "beta06": true,
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "cues": 10,
+            "swellChance": 20,
+            "window": 1
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "cues": 14,
+            "swellChance": 25,
+            "window": 1
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "cues": 18,
+            "swellChance": 30,
+            "window": 0
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "2 for a perfect cue, 1 for a good one, +1 every 4th in a row.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.55,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 70,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 119,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 189,
+          "item": {
+            "item": "ultra-ball",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "heal",
+            "amount": 25,
+            "chance": 0.5
+          }
+        }
+      },
+      "failureOutcome": "The piece falls apart; you keep what you earned.",
+      "replayRules": "Two tries per stop; the best medal counts.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 600
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "stealth-escape",
+      "name": "Stealth Escape",
+      "category": "puzzle",
+      "blurb": "Slip past the guards.",
+      "instructions": "Sneak to the exit past patrolling guards. Red cells are watched; being seen sends you back and costs an alert. Keys are bonus points.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "beta06": true,
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "guards": 2,
+            "keys": 1,
+            "alerts": 4,
+            "ticks": 50
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "guards": 3,
+            "keys": 2,
+            "alerts": 3,
+            "ticks": 45
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "guards": 4,
+            "keys": 3,
+            "alerts": 3,
+            "ticks": 40
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "6 for escaping, 2 per key.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.55,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 70,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 119,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 189,
+          "item": {
+            "item": "ultra-ball",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "heal",
+            "amount": 25,
+            "chance": 0.5
+          }
+        }
+      },
+      "failureOutcome": "You are caught; you keep any keys you grabbed.",
+      "replayRules": "Two tries per stop; the best medal counts.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 600
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "arcade-ball-breaker",
+      "name": "Arcade: Ball Breaker",
+      "category": "skill",
+      "blurb": "Break the bricks.",
+      "instructions": "Move the paddle under the Poké Ball and break every brick before you run out of balls or time.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "beta06": true,
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "density": 55,
+            "balls": 4,
+            "ticks": 80
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "density": 70,
+            "balls": 3,
+            "ticks": 80
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "density": 85,
+            "balls": 3,
+            "ticks": 70
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "1 per brick.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.55,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 70,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 119,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 189,
+          "item": {
+            "item": "ultra-ball",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "heal",
+            "amount": 25,
+            "chance": 0.5
+          }
+        }
+      },
+      "failureOutcome": "The cabinet resets; you keep your bricks.",
+      "replayRules": "Two tries per stop; the best medal counts.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 600
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "arcade-snowball-shooter",
+      "name": "Arcade: Snowball Shooter",
+      "category": "skill",
+      "blurb": "Stop the snowmen.",
+      "instructions": "Tap a column to throw a snowball at the lowest snowman in it. Do not let them reach you.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "beta06": true,
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "targets": 8,
+            "lives": 4,
+            "ticks": 40
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "targets": 12,
+            "lives": 3,
+            "ticks": 45
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "targets": 16,
+            "lives": 3,
+            "ticks": 50
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "1 per snowman hit.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.55,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 70,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 119,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 189,
+          "item": {
+            "item": "ultra-ball",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "heal",
+            "amount": 25,
+            "chance": 0.5
+          }
+        }
+      },
+      "failureOutcome": "The snowmen win; you keep your hits.",
+      "replayRules": "Two tries per stop; the best medal counts.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 600
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "arcade-berry-stacker",
+      "name": "Arcade: Berry Stacker",
+      "category": "timing",
+      "blurb": "Stack the crates.",
+      "instructions": "Tap to drop the sliding crate. Only the part that lands on the stack stays, so the stack gets narrower.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "beta06": true,
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "width": 5,
+            "goal": 6
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "width": 4,
+            "goal": 8
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "width": 3,
+            "goal": 10
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "1 per crate stacked.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.55,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 70,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 119,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 189,
+          "item": {
+            "item": "ultra-ball",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "heal",
+            "amount": 25,
+            "chance": 0.5
+          }
+        }
+      },
+      "failureOutcome": "The stack topples; you keep its height.",
+      "replayRules": "Two tries per stop; the best medal counts.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 600
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "debate-club",
+      "name": "Debate Club",
+      "category": "knowledge",
+      "blurb": "Win the crowd.",
+      "instructions": "Each round pick Facts, Heart or Humor to suit the crowd. Facts win over Skeptics, Heart over the Kind, Humor over the Stern. Each argument can be used only a few times.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "beta06": true,
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "rounds": 6,
+            "mood": 3,
+            "uses": 3
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "rounds": 8,
+            "mood": 3,
+            "uses": 3
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "rounds": 10,
+            "mood": 2,
+            "uses": 4
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "2 for the right argument, 1 for a near one.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.55,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 70,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 119,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 189,
+          "item": {
+            "item": "ultra-ball",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "heal",
+            "amount": 25,
+            "chance": 0.5
+          }
+        }
+      },
+      "failureOutcome": "The crowd walks out; you keep your points.",
+      "replayRules": "Two tries per stop; the best medal counts.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 600
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": false
+      }
+    },
+    {
+      "id": "safari-trek",
+      "name": "Safari Trek",
+      "category": "skill",
+      "blurb": "Track it, then shoot it.",
+      "instructions": "Follow the tracks along the path the Pokémon took, within a step limit. Then use the film to take photos: the centre frame scores most.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "beta06": true,
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "legs": 4,
+            "steps": 8,
+            "clueChance": 80,
+            "film": 3
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "legs": 5,
+            "steps": 9,
+            "clueChance": 60,
+            "film": 3
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "legs": 6,
+            "steps": 10,
+            "clueChance": 40,
+            "film": 3
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "1 per right path, then 3 per centre photo.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.55,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 70,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 119,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 189,
+          "item": {
+            "item": "ultra-ball",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "heal",
+            "amount": 25,
+            "chance": 0.5
+          }
+        }
+      },
+      "failureOutcome": "You lose the trail; you keep what you found.",
+      "replayRules": "Two tries per stop; the best medal counts.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 600
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": false
+      }
     }
   ]
 }

@@ -2063,6 +2063,8 @@ export const BalanceSchema = z.object({
   leaderMoods: z.boolean().default(true),
   /** Rebalance: Gym Leaders, Elite Four, Champions and Rivals get held items, IVs, EVs and training (core/bossGear.ts). */
   bossGear: z.boolean().default(true),
+  /** Beta 0.6: Pokémon-specific moments (core/moments); off = the rules before them (old-seed tests). */
+  pokemonMoments: z.boolean().default(true),
   sos: z.object({ enabled: z.boolean() }).default({ enabled: true }),
   /** Battle Drama spectacle (APPROVED §7): Last Stand, Perfect Counter, Momentum, Guard Break, Revenge Moment, boss phases, Boss Revenge Rematch (core/battle/spectacle.ts). */
   spectacle: SpectacleConfigSchema,
@@ -2319,6 +2321,10 @@ export const BalanceSchema = z.object({
       expMultiplier: z.number().min(0.1).max(1),
     }),
   }),
+  /** Beta 0.6 E2: the Kanto world-state track's numbers (core/expansion/track.ts). */
+  expansionTrack: z.object({ shopMarkup: z.number().min(0).max(0.15), wildShrink: z.number().min(0).max(0.5) }),
+  /** Beta 0.6 E3: story events per region by density (core/expansion/scheduler.ts). */
+  expansionEvents: z.object({ density: z.object({ low: z.number().int().min(0), normal: z.number().int().min(0), full: z.number().int().min(0) }) }),
   /** A theme's wild pool is topped up from wildPool when it has fewer species than this. */
   minThemePool: z.number().int().min(1),
   /** Weight multiplier for species that have both of the theme's types. */
@@ -2541,6 +2547,8 @@ export const BalanceSchema = z.object({
   /** Bonus items (held, passive, stat boosts) stack at most this high, unless the No Item Caps modifier is on. */
   /** Beta 0.6 B7: the League reads the six Pokémon you register at its door. At most `cap` slots of one team answer them, and the Champion answers your top `championTargets`. */
   leagueCounterPick: z.object({ register: z.number().int().min(1).default(6), swaps: z.number().int().min(0).default(1), cap: z.number().int().min(0).default(4), championTargets: z.number().int().min(0).default(2), minEffect: z.number().min(1).default(2) }).default({ register: 6, swaps: 1, cap: 4, championTargets: 2, minEffect: 2 }),
+  /** Beta 0.6 B9: the chance a wild Pokémon that evolves by a stone stands beside one (win or catch it to take the stone). Needs Evolution Encounters on. */
+  evolutionEncounter: z.object({ wildStoneChance: z.number().min(0).max(1).default(0.15) }).default({ wildStoneChance: 0.15 }),
   itemCaps: z.object({ bonusMax: z.number().int().min(1), healsPerBattle: z.number().int().min(1).default(10), revivesPerBattle: z.number().int().min(1).default(6), moneyMax: z.number().int().min(1).default(999999), buysPerStage: z.number().int().min(1).default(25) }).default({ bonusMax: 3, healsPerBattle: 10, revivesPerBattle: 6, moneyMax: 999999, buysPerStage: 25 }),
   /** Wild species with at least this base stat total count as rare (trainer perks make them turn up more or less). */
   rareEncounterBst: z.number().int().positive(),
@@ -2816,6 +2824,14 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** A Blissful Pokémon is in the party / a Shadow Pokémon is in the party (APPROVED.md §12-14). */
   z.object({ kind: z.literal('partyBlissful') }),
   z.object({ kind: z.literal('partyShadow') }),
+  /** Grand Arc: this run has the arc on, and (when `rom` is set) does not hold that ROM yet. */
+  z.object({ kind: z.literal('grandArc'), missingRom: z.string().length(1).optional() }),
+  /** Beta 0.6 E2: the current region's world-state track is at least / at most this step (no track = step 0). */
+  z.object({ kind: z.literal('track'), atLeast: z.number().int().min(0).max(5).default(0), atMost: z.number().int().min(0).max(5).default(5) }),
+  /** Beta 0.6 E3: the run has the Kanto saga's story events turned on (run.expansion.density). */
+  z.object({ kind: z.literal('xevents') }),
+  /** Stand With Them: you have joined the run's team (`joined`, the default) or can still join it (`joined: false`); optionally at least this reputation. */
+  z.object({ kind: z.literal('standWith'), joined: z.boolean().default(true), minRep: z.number().int().optional(), /** The [Stand with them] climax can be played now. */ playable: z.boolean().optional(), /** The climax was won and the verdict is waiting (with `verdict`, that choice is open). */ verdictPending: z.boolean().optional(), verdict: z.enum(['rise', 'throne', 'turn']).optional(), /** A rival is featured in this run (or not). */ rival: z.boolean().optional() }),
   /** Story Overhaul: only in a Story Run (Alphas, story tournaments). Classic never draws these, so its event rolls never move. */
   z.object({ kind: z.literal('storyRun') }),
   /** Event Director: two of your Pokémon share an open bond. */
@@ -2876,6 +2892,14 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
     defector: z.boolean().optional(),
     ends: z.array(z.enum(['none', 'defeated', 'exposed', 'allied'])).optional(),
     stopped: z.number().int().min(0).optional(),
+  }),
+  /** Beta 0.6 rival questlines: the featured rival's overhaul state (core/rivals/overhaul.ts): a feeling at least this (0 to 10), their Lead in a range (-3 to +3, rival ahead is positive), or a mark they hold. Never true without a rival. */
+  z.object({
+    kind: z.literal('rivalState'),
+    feeling: z.object({ key: z.enum(['friendship', 'respect', 'trust', 'rivalry', 'resentment', 'admiration']), atLeast: z.number().int().min(0).max(10) }).optional(),
+    leadAtLeast: z.number().int().min(-3).max(3).optional(),
+    leadAtMost: z.number().int().min(-3).max(3).optional(),
+    mark: z.string().optional(),
   }),
   /** Permanent choices (spec §17): a choice made earlier this run (`pick`: that answer; `made: false`: not made yet). */
   z.object({ kind: z.literal('choice'), id: z.string().min(1), pick: z.string().optional(), made: z.boolean().default(true) }),
@@ -2992,6 +3016,23 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('recoverKeepsake') }),
   /** Legacy Egg (F118): hands over the egg a past Ace left, at a Daycare or Ranch. */
   z.object({ kind: z.literal('legacyEgg') }),
+  /** Grand Arc: earns a Data ROM (a liaison's proof of one Shadow method). Does nothing when the arc is off for this run. */
+  z.object({ kind: z.literal('grandArcRom'), rom: z.string().length(1) }),
+  /** Beta 0.6 E2: move the current region's world-state track (once per event id). */
+  z.object({ kind: z.literal('track'), input: z.enum(['raidFailed', 'raidDeclined', 'climaxScheduled', 'raidSuccess', 'officerTurned']) }),
+  /** Grand Arc: gains a Stock step (1 to 5). */
+  z.object({ kind: z.literal('grandArcStock'), step: z.number().int().min(1).max(5) }),
+  /** Stand With Them: join the run's team as an Inside Man, or move your reputation with it (`change` names a row of standWith.json repChanges), or note a small mercy. */
+  z.object({ kind: z.literal('standWith'), action: z.enum(['join', 'rep', 'mercy', 'climaxWon', 'verdict']), change: z.string().optional(), noticed: z.boolean().default(false), verdict: z.enum(['rise', 'throne', 'turn']).optional(), /** With a verdict: what happens to your rival (a featured rival only). */ rival: z.enum(['release', 'handOver']).optional(), keepApexBound: z.boolean().optional() }),
+  /** Shadow II: hands over a Named Shadow Pokémon (an `ss.*` id with a key in shadow2.json) at this level, through the usual caught choice. */
+  z.object({ kind: z.literal('namedShadow'), id: z.string().regex(/^ss\.[a-z0-9-]+\.[a-z0-9-]+$/), level: z.number().int().min(1).max(500).default(20) }),
+  /** Beta 0.6 rival questlines: moves the featured rival's feelings (each kept in 0..10), their Lead (kept in -3..+3) and adds a mark they hold. Does nothing without a rival. */
+  z.object({
+    kind: z.literal('rivalChange'),
+    feelings: z.partialRecord(z.enum(['friendship', 'respect', 'trust', 'rivalry', 'resentment', 'admiration']), z.number().int().min(-10).max(10)).default({}),
+    lead: z.number().int().min(-3).max(3).default(0),
+    mark: z.string().optional(),
+  }),
   /** World-state callback (catalog 75): adds to a named story flag that later events can read. */
   z.object({ kind: z.literal('flag'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), amount: z.number().int().default(1) }),
   /** Living Rival: writes a line to the run's Chronicle / journal (a photo, a promise, a letter). */
@@ -3093,6 +3134,10 @@ export const EventRuleSchema = z.object({
   cursedHat: z.boolean().optional(),
   /** Each of your Pokémon that faints comes back once with a quarter of its HP (Pinch Hitter). */
   pinchHitter: z.boolean().optional(),
+  /** Blackout's Seal (Beta 0.6 E4): no voluntary switching on the first turn of the fight. */
+  noSwitchFirstTurn: z.boolean().optional(),
+  /** Blackout's Seal: moves of this type hit this many percent harder, for both sides. */
+  typeBoost: z.object({ type: TypeNameSchema, pct: z.number().int().min(1).max(100) }).optional(),
   surviveTurns: z.number().int().min(1).max(30).optional(),
   suddenDeath: z.boolean().optional(),
   turnLimit: z.number().int().min(1).max(30).optional(),
@@ -3102,9 +3147,18 @@ export const EventRuleSchema = z.object({
 });
 export type EventRule = z.infer<typeof EventRuleSchema>;
 
+/**
+ * Beta 0.6 T4: an event fight fought two or three a side. Wild: that many wild Pokémon appear. Triples need three healthy
+ * Pokémon on each side and only run while the triple battle is switched on (balance.triples.enabled or the Triples Only rule);
+ * otherwise the fight drops to doubles, and to a single battle when doubles can't be made either.
+ */
+export const EventBattleFormatSchema = z.enum(['doubles', 'triples']);
+export type EventBattleFormat = z.infer<typeof EventBattleFormatSchema>;
+
 export const EventBattleSchema = z.discriminatedUnion('kind', [
   z.object({
     kind: z.literal('wild'),
+    format: EventBattleFormatSchema.optional(),
     species: z.array(z.string()).default([]),
     types: z.array(TypeNameSchema).default([]),
     levelBonus: z.number().int().default(0),
@@ -3122,6 +3176,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
   }),
   z.object({
     kind: z.literal('trainer'),
+    /** Fought as a double or triple battle (see EventBattleFormatSchema); `size` should be at least 2 or 3. */
+    format: EventBattleFormatSchema.optional(),
     /** A trainer class from trainers.json, or a boss id (its signature team). */
     classId: z.string().optional(),
     bossId: z.string().optional(),
@@ -3135,15 +3191,23 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     ally: z.string().optional(),
     /** Evil Teams: a member of the run's team at this rank (their Pokémon, name and battle rule; core/evil). */
     evil: z.enum(['grunt', 'specialist', 'executive', 'leader']).optional(),
+    /** Grand Arc: with `evil`, fight this roaming team (cipher, rocket-remnants, snagem) instead of the run's own team. */
+    evilTeam: z.string().optional(),
+    /** Stand With Them: this is a Stand-with climax battle. A loss is Second Shot (the party is healed and you go back to the map; the second loss is the worst ending). Needs `pseudo`. */
+    standWith: z.boolean().optional(),
     /** Shadow Boxing: the foe is a copy of your lead (same species, its level plus `levelBonus`); `size` is ignored. */
     mirror: z.boolean().optional(),
     /** Mentors: the team is your fellow apprentice's (their preferred types; they take the name). A loss is friendly: nobody is out and the run goes on. */
     apprentice: z.boolean().optional(),
+    /** Beta 0.6 R8: the foe is your Friend (their team by personality, their name; core/rivals/live.ts). */
+    friend: z.boolean().optional(),
     name: z.string(),
     size: z.number().int().min(1).max(6).default(2),
     /** How many of the trainer's Pokémon (the first ones) are Shadow Pokémon a Snag Ball can take. */
     shadow: z.number().int().min(0).max(6).default(0),
     types: z.array(TypeNameSchema).default([]),
+    /** Beta 0.6 wide formats: the foe's Pokémon come from this species list (a pick per slot); empty = from `types`. */
+    species: z.array(z.string()).optional(),
     levelBonus: z.number().int().default(0),
     chain: z.number().int().min(1).max(3).default(1),
     /** Run events B: the field is forced to this weather / terrain for the whole fight (Umbrella Squad). */
@@ -3251,6 +3315,25 @@ export const GameEventSchema = z.object({
 export type GameEvent = z.infer<typeof GameEventSchema>;
 export const GameEventsFileSchema = z.object({ events: z.array(GameEventSchema).min(1) });
 
+/**
+ * Choice memory ("Remembers", Beta 0.6): a variant of an event that applies when remembered flags hold.
+ * The first variant whose `when` holds is used (never more than one). It may add a line to the intro, hide
+ * base choices (by index) and add choices; base choices keep their index, so battles and saves never shift.
+ */
+export const EventVariantSchema = z.object({
+  id: z.string().regex(/^[a-z][a-z0-9-]*$/),
+  /** All must hold. Read run flags with `{ kind: 'flag', key }` (see core/eventMemory.ts for the key rules). */
+  when: z.array(EventConditionSchema).min(1),
+  /** Replaces the intro when set. */
+  intro: z.string().min(1).optional(),
+  /** Added after the intro (or the replacement): the line that names the remembered act. */
+  notice: z.string().min(1).optional(),
+  hide: z.array(z.number().int().min(0)).default([]),
+  addChoices: z.array(EventChoiceSchema).max(3).default([]),
+});
+export type EventVariant = z.infer<typeof EventVariantSchema>;
+export const MAX_EVENT_VARIANTS = 3;
+
 export const EventDefSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
@@ -3297,7 +3380,12 @@ export const EventDefSchema = z.object({
   scene: EventSceneSchema.default({ cast: [], effect: 'none' }),
   intro: z.string(),
   choices: z.array(EventChoiceSchema).min(1).max(4),
-}).refine((e) => e.choices.every((c) => (c.check === undefined && c.chance === undefined && c.prompt === undefined) || c.failure), { message: 'a choice with a check, chance or prompt needs a failure outcome' });
+  /** Choice memory: at most 3 variants that change what the scene shows when remembered flags hold. */
+  remembers: z.array(EventVariantSchema).max(MAX_EVENT_VARIANTS).default([]),
+}).refine((e) => new Set(e.remembers.map((v) => v.id)).size === e.remembers.length, { message: 'remembers variant ids must be unique' })
+  .refine((e) => e.remembers.every((v) => v.hide.every((i) => i < e.choices.length) && e.choices.length - new Set(v.hide).size >= 1 && e.choices.length - new Set(v.hide).size + v.addChoices.length <= 4), { message: 'a remembers variant must leave 1 to 4 choices and only hide base choices' })
+  .refine((e) => e.remembers.every((v) => v.addChoices.every((c) => (c.check === undefined && c.chance === undefined && c.prompt === undefined) || c.failure)), { message: 'an added choice with a check, chance or prompt needs a failure outcome' })
+  .refine((e) => e.choices.every((c) => (c.check === undefined && c.chance === undefined && c.prompt === undefined) || c.failure), { message: 'a choice with a check, chance or prompt needs a failure outcome' });
 export type EventDef = z.infer<typeof EventDefSchema>;
 
 /** Ideas W5: story text banks (npcStory.json): lore fragments, trainer backstories, evolution diary, newspaper, ending hints, New Game+ variants. */

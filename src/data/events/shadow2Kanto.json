@@ -1,0 +1,404 @@
+{
+ "events": [
+  {
+   "id": "kanto-amber-lab",
+   "name": "The Amber Lab",
+   "group": "Shadow Pokémon",
+   "rarity": "rare",
+   "tags": [
+    "Evil Team",
+    "Pokémon",
+    "Story"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "grandArc"
+    },
+    {
+     "kind": "flag",
+     "key": "xk-amber-technician-beaten",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A Rocket lab built into the rock, its windows blacked out. A technician in Namba's colours is guarding a cage. Inside, a Shadow Aerodactyl has not seen the sky in years.",
+   "choices": [
+    {
+     "label": "Take on Namba's technician",
+     "success": {
+      "text": "The technician folds. The cage is open.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "classId": "worker",
+       "name": "Namba's Technician",
+       "size": 3,
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "xk-amber-technician-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "namedShadow",
+         "id": "ss.rocket.amberjack",
+         "level": 30
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it for now.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "kanto-fossil-vault",
+   "name": "The Fossil Vault",
+   "group": "Shadow Pokémon",
+   "rarity": "rare",
+   "tags": [
+    "Evil Team",
+    "Pokémon",
+    "Story"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "grandArc"
+    },
+    {
+     "kind": "flag",
+     "key": "xk-shellshock-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "Rocket has a Kabutops out of a Dome Fossil, wired to a rig and sealed in a vault below Pewter. Someone has to stop the machine before it takes the rest of its heart.",
+   "choices": [
+    {
+     "label": "Break the rig (a Rocket battle)",
+     "success": {
+      "text": "The rig powers down. The Kabutops does not move, but it watches you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "classId": "worker",
+       "name": "Vault Guard",
+       "size": 3,
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "xk-shellshock-met",
+         "amount": 1
+        },
+        {
+         "kind": "namedShadow",
+         "id": "ss.rocket.shellshock",
+         "level": 32
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it for now.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "kanto-pewter-registry",
+   "name": "The Pewter Museum Registry",
+   "group": "Shadow Pokémon",
+   "rarity": "uncommon",
+   "tags": [
+    "Evil Team",
+    "Pokémon",
+    "Story"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "grandArc"
+    },
+    {
+     "kind": "flag",
+     "key": "xk-shellshock-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "xk-fossil-registered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A museum curator looks at the papers you carry. \"If this fossil were officially registered, nobody could ever claim it was theirs again.\"",
+   "choices": [
+    {
+     "label": "Register the fossil",
+     "success": {
+      "text": "The curator stamps the paper. \"Registered. Now it belongs to itself.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "xk-fossil-registered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it for now.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "kanto-safari-truck",
+   "name": "The Poachers' Truck",
+   "group": "Shadow Pokémon",
+   "rarity": "rare",
+   "tags": [
+    "Evil Team",
+    "Pokémon",
+    "Story"
+   ],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "grandArc"
+    },
+    {
+     "kind": "flag",
+     "key": "xk-matron-child-returned",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A Safari Zone truck idles with its lights off. A Kangaskhan stands in front of it in a Rocket collar, not attacking, only staring at the rear doors. Poachers loiter between her and the truck.",
+   "choices": [
+    {
+     "label": "Drive off the poachers",
+     "success": {
+      "text": "The doors swing open. A small Kangaskhan tumbles out. The Matron's collar goes slack in your hands.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "classId": "hiker",
+       "name": "Poacher",
+       "size": 3,
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "xk-matron-child-returned",
+         "amount": 1
+        },
+        {
+         "kind": "namedShadow",
+         "id": "ss.rocket.matron",
+         "level": 34
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it for now.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "kanto-lavender-fog",
+   "name": "Fog Over Lavender",
+   "group": "Shadow Pokémon",
+   "rarity": "rare",
+   "tags": [
+    "Evil Team",
+    "Pokémon",
+    "Story"
+   ],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "grandArc"
+    },
+    {
+     "kind": "flag",
+     "key": "xk-fog-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A fog that does not move with the wind sits on Lavender Town after dark. In it, a Haunter is crying without sound, and a Rocket scientist is taking notes.",
+   "choices": [
+    {
+     "label": "Chase off the scientist",
+     "success": {
+      "text": "The scientist runs. The fog follows the Haunter and settles on you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "classId": "psychic",
+       "name": "Rocket Scientist",
+       "size": 2,
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "xk-fog-met",
+         "amount": 1
+        },
+        {
+         "kind": "namedShadow",
+         "id": "ss.rocket.black-fog",
+         "level": 36
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it for now.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "kanto-tower-rites",
+   "name": "The Old Rites",
+   "group": "Shadow Pokémon",
+   "rarity": "uncommon",
+   "tags": [
+    "Evil Team",
+    "Pokémon",
+    "Story"
+   ],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "grandArc"
+    },
+    {
+     "kind": "flag",
+     "key": "xk-fog-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "xk-tower-cleansed",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A priest at Pokémon Tower lights a row of candles. \"Only the Tower can clear that fog. If you have the Pokémon with you, bring it to the rites.\"",
+   "choices": [
+    {
+     "label": "Take part in the Site Cleansing",
+     "success": {
+      "text": "The candles gutter and go out together. Somewhere in the Tower, the fog thins and is gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "xk-tower-cleansed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You leave it for now.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

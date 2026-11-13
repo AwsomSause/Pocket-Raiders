@@ -12,6 +12,7 @@
 // (Elite Four, then the champion); beating the champion moves the run to the
 // next region, or wins the run after the last one.
 
+import { battleEnded as formatBattleEnded } from './formats/registry';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
 import { recordStoryLoss, storyLossApplies } from './story2/loss';
@@ -25,7 +26,10 @@ import { eliteRematchDue } from './story/eliteRematch';
 import { markAssisted } from './tools/assisted';
 import { crossObstacle, placeDungeon, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
 import { wandererStageStart, wandererStep } from './wanderer';
+import { freeHandedOverRival, standWithClimaxLost, standWithOf } from './arc/standWithExtended';
 import { makeShadow, rollShadowHeart, soothePartyAfterBattle } from './shadow';
+import { leaveRegion, startGrandArc } from './grandArc';
+import { checkFlagKeys, checkLeadWinKey, SHADOW_SLOT_CAP, heavyShadowCount, shadowTierOf } from './shadow2';
 import { advanceShadowWorld, addFlag, gangNotes, gangRaidWon, liberatedHpDiscount, outbreakShadow, placeGangDen } from './shadowWorld/world';
 import { blissfulAfterBattle, blissfulAtRest } from './shadowWorld/blissful';
 import { wildBehavior, wildCatchMultiplier } from './wildBehavior';
@@ -85,7 +89,7 @@ import { bumpEventCounters } from './eventToolkit';
 import { blackMarketMarkup, fieldResearchMoney, spookyEncounterChance, voiceAsksToJoin } from './trainerEvolution';
 import { growGarden } from './berries';
 import { layEgg, tickEggs } from './eggs';
-import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isPseudoBattle, isStoryEventBattle } from './events';
+import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
@@ -182,6 +186,7 @@ import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
 import { applyTrainerParity, trainerHistoryLine, trainerKey } from './trainerWorld/trainerWorld';
 import { planTrainerGimmicks, returningPlan, trainerKit } from './trainerWorld/behavior';
 import { castGymLeader, castLeague, record } from './rolePool';
+import type { MomentHooks } from './moments/pokemonMoments';
 import { galarScope, lastStandUsed, markLastStand, pickCounterSpecies } from './galarCrowd';
 import { GALAR_SHOP_COLUMNS, ballGuyLimit, ballGuyStock, galarEliteFour, usesGalarTournament } from './galarTournament';
 import { getTheme, pickGymLeader, typesPool, wildEligibleSpecies } from './themes';
@@ -236,6 +241,7 @@ import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
 import { recapRegion, tellAct } from './campaign/director';
+import { healStopShut, trackShopFactor, trackWildWeight } from './expansion/trackRun';
 import { freshClock, migrationWildWeight, periodOf, periodWildWeight, shopHoursMultiplier, stepClock, tideShopMultiplier, tideWildWeight } from './clock';
 import { bulkTotal, currentShopType, haggleWins, pokenetDeal, shopTypeAt, typedStock, typePriceFactor } from './shopTypes';
 import { finalRivalLine, tellCampfire } from './story/highHype';
@@ -269,6 +275,7 @@ import { StoryV2Schema } from './story2/schema';
 import type { PronounSet } from './story2/identity';
 import { castAuthoredLeague, circuitLeader, guestMatch, noteGymWin } from './campaign/circuitCast';
 import { applyLeagueDoorChoice, leagueDoorDecision } from './campaign/leagueDoor';
+import { wildStoneFor } from './evoEncounter';
 import { counterPickMembers, counterTargets } from './campaign/counterPick';
 import { applyCircuitChoice, forkDecision, isCircuitRun, nextGymIndex, rematchDecision } from './campaign/circuitGate';
 import { ensureStoryRun, placeStoryStops, playFinaleStops, playNodeStops, playStageEndStops } from './campaign/storyDirector';
@@ -326,7 +333,11 @@ export interface NewRunOptions {
   /** Story Run: the player's name, pronouns and Look from the prologue (profile.story.protagonist). */
   protagonist?: { look: string; name: string; pronouns: string | PronounSet; backstory?: string };
   /** Beta 0.6: which expansion settings were on at run start (settings.expansion). Each flag is stored in `run.expansion` once and never changes. */
+<<<<<<< HEAD
   expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean };
+=======
+  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; grandArc?: boolean; worldTracks?: boolean; eventsDensity?: 'low' | 'normal' | 'full' };
+>>>>>>> origin/beta-0.6
 }
 
 export function createRun(content: Content, opts: NewRunOptions): RunState {
@@ -429,8 +440,13 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
   }
   if (opts.expansion) {
     const e = opts.expansion;
+<<<<<<< HEAD
     const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.kantoCanon ? { canon: { flags: [], completed: [], menus: {} } } : {}) };
+=======
+    const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.worldTracks ? { tracks: true } : {}), ...(e.eventsDensity ? { density: e.eventsDensity } : {}) };
+>>>>>>> origin/beta-0.6
     if (Object.keys(flags).length > 0) run.expansion = { ...run.expansion, ...flags };
+    if (e.grandArc) startGrandArc(run);
   }
   recordRunStarted(content, run);
   return run;
@@ -480,6 +496,7 @@ export function endRunEarly(current: RunState): RunState {
   assertPhase(current, 'map');
   if (!wipeStatus(current)) throw new Error('Only Adventure runs can be ended from the map');
   const run = structuredClone(current);
+  freeHandedOverRival(run);
   run.phase = 'over';
   run.victory = false;
   return run;
@@ -858,6 +875,7 @@ function enterNextRegion(content: Content, run: RunState): void {
   if (run.regionIndex + 1 >= run.regionOrder.length) {
     playFinaleStops(content, run);
     run.victory = true;
+    freeHandedOverRival(run);
     run.phase = 'over';
     return;
   }
@@ -1908,7 +1926,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     const metWild = wildMetWeight(content, run);
     const oddWild = isOddOneOutNode(content, run, run.regionIndex * campaign.stagesPerRegion + stage.index, node.id) ? oddOneOutWeight(content) : () => 1;
     const recentWild = (key: string) => recentWild0(key);
-    const dampen = (id: string) => metWild(id) * oddWild(id);
+    const dampen = (id: string) => metWild(id) * oddWild(id) * trackWildWeight(content, run, id);
     const plan = withStream(run.rng, 'encounter', (r) => {
       const [lo, hi] = content.balance.difficulty.harderBonus;
       const bonus = (node.harder ? r.int(lo, hi) : 0) + wildLevelBonus(content, run, mods);
@@ -1956,6 +1974,13 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       run.battle.enemyStages.def = 1;
     }
     run.battle.levelInfo = [plan.levelInfo];
+    if (!legendary && !back && !mrBack) {
+      const stone = wildStoneFor(content, run, enemy.speciesId, `${run.encountersCompleted}:${node.id}`);
+      if (stone) {
+        run.battle.evoStone = stone;
+        run.battle.rivalNote = [`A ${content.items.get(stone)!.name} glints beside it.`, run.battle.rivalNote].filter(Boolean).join(' ');
+      }
+    }
     if (nemesis && back) beginNemesisBattle(content, run, nemesis, back.change, null);
     if (monRival && mrBack) run.battle.rivalNote = beginMonRivalBattle(content, run, monRival, enemy);
     else {
@@ -2459,6 +2484,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
   const run = structuredClone(current);
   const runSide = findNode(run.stage!.map, stage.current).sides.find((s) => s.id === sideId)!;
   if (side.kind === 'heal' && noHealStops(run.rules)) return { run: current, message: 'Your No Rest contract forbids healing stops.' };
+  if (side.kind === 'heal' && healStopShut(content, run, sideId)) return { run: current, message: 'The Pokémon Center is shut for the night: the Ledger says so. Try again in the morning.' };
   if (side.kind === 'heal') {
     healParty(content, run);
     careRest(run, content);
@@ -2586,7 +2612,7 @@ export function shopPrice(content: Content, run: RunState, entry: Content['shop'
   // Coupons lower the price; a full Point Card makes it free.
   const markup = isBlackMarket(content, run, entry) ? blackMarketMarkup(runPerks(content, run))! : 1;
   const deal = currentShopType(run) === 'pokenet' ? pokenetDeal(content, run, shopStock(content, run), shopSaleItem(content, run)) : null;
-  return Math.round(entry.price * markup * buildPriceFactor(content, run.party, entry.item) * typePriceFactor(content, run, entry.item, deal) * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * tideShopMultiplier(content, run, content.items.get(entry.item)?.category) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story) * dynamicPriceFactor(content, run, entry.item));
+  return Math.round(entry.price * markup * buildPriceFactor(content, run.party, entry.item) * typePriceFactor(content, run, entry.item, deal) * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * tideShopMultiplier(content, run, content.items.get(entry.item)?.category) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story) * dynamicPriceFactor(content, run, entry.item) * trackShopFactor(content, run));
 }
 
 /** Base price for an item the shop doesn't list (urge items and other finds), by rarity. */
@@ -2789,6 +2815,26 @@ function galarLastStandMon(content: Content, run: RunState): PokemonInstance | n
   return mon;
 }
 
+/** Pokémon moments (core/moments): the seed, the run's saved flags and the cinematic budget, all read from the run. */
+function pokemonMomentHooks(content: Content, run: RunState): MomentHooks {
+  return {
+    seed: `${run.seed}:${run.encountersCompleted}`,
+    flags: run.story.flags,
+    cinematic: (tier) => momentAllowed(content, run, tier),
+    noteCinematic: (tier) => noteMoments(run, tier),
+    // Only a wipe with nothing left to catch it ends the run: no checkpoint to return to, no Safety Net, no VS Recorder.
+    runWouldEnd: () => {
+      const battle = run.battle;
+      if (!battle || battle.outcome === 'win' || battle.outcome === 'caught') return false;
+      if (battle.expedition || battle.raid || battle.totem || battle.narrative || battle.event || battle.stepIn || battle.doubles) return false;
+      if (storyLossApplies(run, battle, content)) return false;
+      if (run.recorder && (vsRecorderReady(content, run) || safetyNetReady(content, run))) return false;
+      if (run.checkpoint && (getMode(run.rules.modeId)?.checkpoints === true || (run.rules.deathBlock && !run.rules.deathBlockUsed && run.encountersCompleted < RUN_RULES.deathBlock.battles))) return false;
+      return true;
+    },
+  };
+}
+
 function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rng, hyperRng?: Rng): BattleContext {
   const archetype = runArchetype(content, run);
   syncHpPerks(content, archetype.modifiers, run.party);
@@ -2822,6 +2868,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     disabledMechanics: run.disabledMechanics,
     manualMega: true,
     hyper: hyperRng ? buildHyperContext(content, run, hyperRng) : undefined,
+    moments: content.balance.pokemonMoments === false ? undefined : pokemonMomentHooks(content, run),
     teamItems: run.passives,
     noBattleItems: noBattleItems(run.rules),
     setStyle: isHardcore(run.rules),
@@ -2962,6 +3009,11 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const reveal = [revealMove(content, run, 'player', false), revealMove(content, run, 'enemy', Boolean(rivalHere) && rivalBond(rivalHere, currentEnemy(battle).speciesId).confidence >= 40)];
   for (const r of reveal) if (r) events.push(r);
   events.push(...trackFeelings(content, current, run, events as BattleEvent[]));
+  if ((battle.outcome === 'win' || battle.outcome === 'caught') && battle.evoStone) {
+    addItem(run.inventory, battle.evoStone, 1);
+    events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: `You pick up the ${content.items.get(battle.evoStone)?.name ?? battle.evoStone}.` });
+    delete battle.evoStone;
+  }
   if (battle.outcome === 'win') bondVictory(run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));
   if (battle.outcome === 'win') heartbondVictory(run, `b${run.encountersCompleted}`, isBossFight(battle) || Boolean(battle.rivalId), underdogXpMultiplier(content, run.party, battle.enemyTeam) > 1);
   // S6 Keepsakes: Gym, rival, League and type-disadvantage wins leave marks (Story Runs only).
@@ -3010,6 +3062,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // Battle Replay: the big fights keep a short turn-by-turn record, sealed when the fight ends.
   noteReplayTurn(content, run, current.battle!, events as BattleEvent[]);
   if (battle.outcome) sealReplay(content, run);
+  // Wide formats (Beta 0.6 E4): a fight a format launched tells the format how it ended, before any loss tail runs.
+  if (battle.outcome && battle.event?.eventId.startsWith('format:')) formatBattleEnded({ content, run }, battle.outcome === 'win' || battle.outcome === 'caught');
   // Mega Evolution and other transformations end with the battle, and so do "next battle" item effects.
   if (battle.outcome) {
     revertTransformations(content, battle, run.party, runArchetype(content, run).modifiers);
@@ -3058,6 +3112,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     return { run, events, end: null, defeated: false, cues, drama, raidFailed: true };
   }
   if (battle.outcome === 'lose' && battle.event && isPseudoBattle(content, battle.event)) {
+    // Stand With Them: a lost climax battle is Second Shot (core/arc/standWithExtended.ts); the run always goes on.
+    if (isStandWithBattle(content, battle.event) && standWithOf(run)) standWithClimaxLost(run);
     pseudoLost(content, run);
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, clubLost: true };
@@ -3106,6 +3162,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
       recordChanges(content, current, back, 'battle');
       return { run: back, events, end: null, defeated: false, cues, drama, wiped: true };
     }
+    freeHandedOverRival(run);
     run.phase = 'over';
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: true, cues, drama };
@@ -3399,6 +3456,11 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     }
     // Shadow Pokémon that fought are soothed; at 0 the haze lifts.
     shadowPurified = soothePartyAfterBattle(content, run, battle.participants, shadowStages);
+    // Shadow II keys: a Named Shadow that led a won battle outdoors (a wild fight), or whose key flag is set, is freed.
+    for (const line of [...checkLeadWinKey(content, run, battle.participants[0], battle.kind === 'wild'), ...checkFlagKeys(content, run)]) {
+      shadowStages.push(line);
+      shadowPurified.push(line.split(':')[0]!);
+    }
     // Freeing a Pokémon from the haze is a kindness the world remembers.
     if (shadowPurified.length > 0) addFlag(run, 'kindness', shadowPurified.length);
     blissfulHealed = blissfulAfterBattle(content, run);
@@ -3548,6 +3610,9 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     regionCleared = currentRegion(content, run).id;
     run.regionsCleared.push(regionCleared);
     count(run, 'regionsCleared');
+    // Grand Arc: a liaison nobody beat in this region leaves with a sample (Stock step 1).
+    const liaisonNote = leaveRegion(run, regionCleared);
+    if (liaisonNote) shadowStages.push(liaisonNote);
     if (!run.log.charmUsedInRegion) count(run, 'regionsClearedNoCharm');
     if (run.log.starterUid && run.party.some((m) => m.uid === run.log.starterUid)) count(run, 'regionsClearedWithStarter');
     if (run.regionIndex + 1 >= run.regionOrder.length && !extendEndless(run)) run.victory = true;
@@ -3633,6 +3698,7 @@ export function continueAfterDecisions(content: Content, run: RunState): void {
     // The last champion is beaten: the run is won. A Story Run tells its Finale and Epilogue Stops first (S19 found they never played here).
     playFinaleStops(content, run);
     run.draft = null;
+    freeHandedOverRival(run);
     run.phase = 'over';
     return;
   }
@@ -3818,6 +3884,7 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
     const name = speciesName(content, caught.speciesId);
     if (choice.kind === 'addToParty') {
       if (run.party.length >= partyCapacity(content, run)) throw new Error('Your party is full');
+      if (shadowTierOf(caught)?.countsAgainstCap && heavyShadowCount(run.party) >= SHADOW_SLOT_CAP) throw new Error(`A party can hold only ${SHADOW_SLOT_CAP} Gripped or Fallen Shadow Pokémon. Send it to the PC.`);
       const problem = joinProblem(content, run, caught.speciesId);
       if (problem) throw new Error(problem);
       run.party.push(caught);
@@ -3827,6 +3894,7 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
       const old = run.party[choice.partyIndex];
       if (!old) throw new Error('Choose a party member to replace');
       if (old.care?.favourite) throw new Error('A favourite cannot be swapped out. Unmark it in Care first.');
+      if (shadowTierOf(caught)?.countsAgainstCap && heavyShadowCount(run.party.filter((m) => m.uid !== old.uid)) >= SHADOW_SLOT_CAP) throw new Error(`A party can hold only ${SHADOW_SLOT_CAP} Gripped or Fallen Shadow Pokémon.`);
       const problem = joinProblem(content, run, caught.speciesId, old.uid);
       if (problem) throw new Error(problem);
       run.party[choice.partyIndex] = caught;
@@ -4071,6 +4139,7 @@ export function withdrawFromBox(content: Content, current: RunState, boxIndex: n
   assertPhase(current, 'map');
   if (!current.box[boxIndex]) throw new Error('No Pokémon in that PC slot');
   if (current.party.length >= partyCapacity(content, current)) throw new Error('Your party is full');
+  if (shadowTierOf(current.box[boxIndex]!)?.countsAgainstCap && heavyShadowCount(current.party) >= SHADOW_SLOT_CAP) throw new Error(`A party can hold only ${SHADOW_SLOT_CAP} Gripped or Fallen Shadow Pokémon.`);
   const run = structuredClone(current);
   run.party.push(run.box.splice(boxIndex, 1)[0]!);
   return run;

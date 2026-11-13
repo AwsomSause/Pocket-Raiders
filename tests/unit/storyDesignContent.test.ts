@@ -19,7 +19,7 @@ describe('six original Evil Teams', () => {
   });
 
   it('Classic never draws them, and its draw is the same as before they were added', () => {
-    const classicTeams = content.evilTeams.teams.filter((t) => !t.storyOnly);
+    const classicTeams = content.evilTeams.teams.filter((t) => !t.storyOnly && !t.roaming);
     for (const seed of seeds) {
       const run = classic(seed);
       const expected = classicTeams[new Rng(hashSeed(`${run.seed}::evil-team`)).int(0, classicTeams.length - 1)]!.id;

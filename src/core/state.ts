@@ -20,6 +20,7 @@ import { ArchivedRivalSchema, MENTOR_TYPES, StoryStateSchema } from './story/sch
 import { PartyLifeStateSchema, createPartyLife } from './partyLife/schema';
 import { freshHyperBattle } from './battle/hyper';
 import { SpectacleBattleSchema } from './battle/spectacle';
+import { VariantsSchema, type Variants } from './expansion/variantLines';
 import { ArenaSchema, SkillInputSchema } from './battle/w1Play';
 
 const RngStateSchema = z.object({ a: z.number(), b: z.number(), c: z.number(), d: z.number() });
@@ -124,8 +125,20 @@ export const PokemonInstanceSchema = z.object({
   awakened: z.array(z.string()).optional(),
   /** In battle only: Dynamaxed, so its HP is doubled (core/battle/transform.ts). */
   dynamaxed: z.literal(true).optional(),
+  /** In battle only: Overcharged (Failure Will (NOT) Be Tolerated, core/battle/pokemonMoments.ts): all stats doubled, HP x1.5, moves on a one-turn cooldown. */
+  overcharged: z.literal(true).optional(),
   /** Shadow Pokémon (catalog #76-77, core/shadow.ts): the Heart Gauge, 100 (sealed) down to 0 (purified). */
-  shadow: z.object({ heart: z.number().int().min(1).max(100) }).optional(),
+  shadow: z.object({
+    heart: z.number().int().min(1).max(100),
+    /** Shadow II (core/shadow2): the id of the Named Shadow this is (`ss.*`), whose purification key sets it free. */
+    named: z.string().optional(),
+    /** Shadow II: the key became impossible in this run, so it is a Common Shadow from now on. */
+    keyGone: z.boolean().optional(),
+    /** Shadow II: how many of its key's three hints the player has been given (0 to 3). */
+    hints: z.number().int().min(0).max(3).optional(),
+  }).optional(),
+  /** Shadow II heart scars (core/shadow2/scars.ts): small marks a purified Pokémon keeps, at most two. */
+  scars: z.array(z.string()).max(2).optional(),
   /** Blissful Pokémon (core/shadowWorld/blissful.ts): touched by a benevolent force. `aura` picks its look (bloom, glow, chime). */
   blissful: z.object({ aura: z.string().min(1) }).optional(),
   /** Care & party life (core/care): mood, fatigue, journal counters, nickname, talent, training. */
@@ -201,6 +214,8 @@ export const VolatileSchema = z.object({
   abilityOverride: z.string().nullable().default(null),
   /** Focus Energy: critical hits are two stages likelier. */
   focusEnergy: z.boolean().default(false),
+  /** Pokémon moments: extra critical-hit stages (fades or lasts the battle; gone on switch-out). */
+  momentCrit: z.number().int().min(0).max(3).default(0),
   /** S164 charge-up stacks waiting for the next damaging move. */
   bank: z.number().int().min(0).default(0),
   /** Laser Focus: the next attack is a critical hit. */
@@ -360,6 +375,7 @@ export const freshVolatile = (): Volatile => ({
   typeShift: null,
   abilityOverride: null,
   focusEnergy: false,
+  momentCrit: 0,
   bank: 0,
   laserFocus: false,
   sureHit: false,
@@ -516,6 +532,7 @@ export const freshExtra = () => ({
   ionDeluge: false,
   wonderRoom: 0,
   brokenFace: [] as string[],
+  variants: {} as Variants,
   galar: [] as string[],
   delta: false,
   mimic: {} as Record<string, { kind: 'mimic' | 'transform'; slot: number; moves: { id: string; pp: number }[] }>,
@@ -736,6 +753,8 @@ export const BattleStateSchema = z.object({
     wonderRoom: z.number().int().default(0),
     /** Pokémon whose Disguise / Ice Face is already used up. */
     brokenFace: z.array(z.string()).default([]),
+    /** Beta 0.6 variant lines (core/expansion/variantLines.ts): uid -> its line and counters for this battle. */
+    variants: VariantsSchema,
     /** Galar big-battle moments already used (evolve-and-survive per Pokémon, the thread, the cheat) and ones pending this hit (galarMoments.ts). */
     galar: z.array(z.string()).default([]),
     delta: z.boolean().default(false),
@@ -802,6 +821,8 @@ export const BattleStateSchema = z.object({
   held: HeldStateSchema.default(freshHeldState),
   /** Map items in this battle: turns the wild Pokémon loses (Poké Doll), and the catch-rate items for ball throws. */
   mapItems: z.object({ freeTurns: z.number().int().min(0), thrown: z.number().int().min(0) }).optional(),
+  /** Beta 0.6 B9: an evolution stone this wild Pokémon stands beside; win or catch the fight to take it. */
+  evoStone: z.string().optional(),
   /** A VS Seeker rematch: double prize money. */
   rematch: z.boolean().optional(),
   /** "This Trainer Will Return": the enemy profile id of a trainer back for its rematch. */

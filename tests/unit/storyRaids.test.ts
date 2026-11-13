@@ -40,7 +40,7 @@ describe('gates', () => {
     resolveStoryRaid(content, r, 2, 'partial');
     expect(raidOffered(r, 4)).toBe(true);
     expect(raidOffered(r, 5)).toBe(false);
-    r.expansion!.track = { step: 4 };
+    r.expansion!.track = { kanto: { step: 4, peak: 4, applied: [], log: [] } };
     expect(raidOffered(r, 5)).toBe(true);
     const r2 = mk('sr2');
     resolveStoryRaid(content, r2, 3, 'declined');
@@ -172,5 +172,67 @@ describe('the live operations: letting one through impounds once', () => {
     applyEvilEffect(content, r, { op: 'succeeded', heat: 0 } as never);
     expect(r.party).toHaveLength(n);
     expect(pendingRescue(content, r)).toBeNull();
+  });
+});
+
+describe('failure costs (C2, C3, C8, C10, C11)', () => {
+  const failed = (n: number, setup: (r: RunState) => void = () => undefined, seed = 'cost') => {
+    const r = mk(seed);
+    r.money = 1000;
+    r.plaza.rep = 20;
+    r.inventory = { potion: 5, 'poke-ball': 5, ...Object.fromEntries([...content.items.values()].filter((i) => i.category === 'key').slice(0, 1).map((i) => [i.id, 1])) };
+    setup(r);
+    const out = resolveStoryRaid(content, r, n, 'failure');
+    return { r, out };
+  };
+  it('Raid 4 failure: a fine of 40-60%, reputation -15, a 3-battle setback; items and party untouched', () => {
+    const { r, out } = failed(4);
+    expect(r.money).toBeGreaterThanOrEqual(400);
+    expect(r.money).toBeLessThanOrEqual(600);
+    expect(r.plaza.rep).toBe(5);
+    expect(r.tempEffects.at(-1)).toMatchObject({ battles: 3, effects: [{ kind: 'moneyMultiplier', value: 0.75 }] });
+    expect(out.record.costs).toEqual(['C2', 'C8', 'C11']);
+    expect(Object.values(r.inventory).reduce((a, b) => a + b, 0)).toBe(11);
+    expect(r.party.some((p) => p.shadow)).toBe(false);
+  });
+  it('Raid 5 failure: 2-4 items taken (never Key Items), one Pokémon shadowed with a high Heart Gauge, a setback', () => {
+    const { r, out } = failed(5);
+    const keyId = [...content.items.values()].find((i) => i.category === 'key')!.id;
+    expect(r.inventory[keyId]).toBe(1);
+    const left = Object.entries(r.inventory).filter(([id]) => id !== keyId).reduce((a, [, b]) => a + b, 0);
+    expect(left).toBeGreaterThanOrEqual(6);
+    expect(left).toBeLessThanOrEqual(8);
+    const sh = r.party.filter((p) => p.shadow);
+    expect(sh).toHaveLength(1);
+    expect(sh[0]!.shadow!.heart).toBeGreaterThanOrEqual(80);
+    expect(out.record.costs).toEqual(['C3', 'C10', 'C11']);
+    expect(r.tempEffects.length).toBe(1);
+  });
+  it('boundary: no money, no bag, no rep means nothing to take and nothing breaks', () => {
+    const { r, out } = failed(4, (x) => { x.money = 0; x.plaza.rep = 0; }, 'poor');
+    expect(r.money).toBe(0);
+    expect(r.plaza.rep).toBe(0);
+    expect(out.record.costs).toEqual(['C11']);
+    const bare = failed(5, (x) => { x.inventory = {}; x.party.forEach((p) => { p.shadow = { heart: 50 }; }); }, 'bare');
+    expect(bare.out.record.costs).toEqual(['C11']);
+  });
+  it('costs apply once, same numbers on replay, and only on failure', () => {
+    const a = failed(4, undefined, 'rep1');
+    const b = failed(4, undefined, 'rep1');
+    expect(a.r.money).toBe(b.r.money);
+    const again = resolveStoryRaid(content, a.r, 4, 'failure');
+    expect(again.alreadyResolved).toBe(true);
+    expect(a.r.money).toBe(b.r.money);
+    const ok = mk('win');
+    ok.money = 1000;
+    resolveStoryRaid(content, ok, 4, 'partial');
+    expect(ok.money).toBe(1000);
+    expect(ok.tempEffects).toHaveLength(0);
+  });
+  it('save and reload keeps the shadow taint and the setback', () => {
+    const { r } = failed(5);
+    const back = JSON.parse(JSON.stringify(r));
+    expect(back.party.filter((p: { shadow?: unknown }) => p.shadow)).toHaveLength(1);
+    expect(back.tempEffects).toHaveLength(1);
   });
 });

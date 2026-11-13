@@ -150,3 +150,36 @@ describe('the optional Friend spar', () => {
     expect(win.some((e) => e.kind === 'money' || e.kind === 'item')).toBe(false);
   });
 });
+
+import { assistModeOf, FRIEND_LINES, FRIEND_TEAMS, friendPackLine, friendTeam } from '../../src/core/rivals/live';
+import { OVERHAUL } from '../../src/core/rivals/overhaul';
+import { friendAssist } from '../../src/core/rivals/friend';
+
+describe('the Friend has a real team, pack lines and the Extended cap', () => {
+  it('every personality has a three-species team that exists in the game, and 8 archetypes of pack lines', () => {
+    for (const k of Object.keys(OVERHAUL.personalities)) {
+      const t = FRIEND_TEAMS.teams[k];
+      expect(t, k).toBeDefined();
+      for (const id of t!.team) expect(content.species.has(id), `${k}:${id}`).toBe(true);
+      for (const kind of ['meet', 'mid', 'support-1']) expect(FRIEND_LINES.lines.some((l) => l.archetype === t!.archetype && l.kind === kind), `${t!.archetype}/${kind}`).toBe(true);
+    }
+  });
+  it('the team and the pack lines follow the Friend personality; tokens are filled', () => {
+    const r = run();
+    reg(r);
+    registerRival(r, { id: `friend-${r.seed}`, role: 'friend', personality: 'bitter-challenger', style: 'blitz', arc: 'rivals-become-friends' });
+    expect(friendTeam(content, r, 3)).toEqual(['sneasel', 'houndour', 'murkrow']);
+    expect(friendTeam(content, r, 1)).toEqual(['sneasel']);
+    const line = friendPackLine(content, r, 'meet')!;
+    expect(line).toBeTruthy();
+    expect(line).not.toMatch(/\{/);
+  });
+  it('Extended Cut raises the Assist cap to 6, Standard stays 4', () => {
+    const r = run();
+    expect(assistModeOf(r)).toBe('standard');
+    r.expansion = { ...(r.expansion ?? {}), cut: { climaxCut: 'extended' } };
+    expect(assistModeOf(r)).toBe('extended');
+    expect(friendAssist(5, 'extended')).toBe(1);
+    expect(friendAssist(5, 'standard')).toBe(0);
+  });
+});
