@@ -120,8 +120,9 @@ export const flagIs = (key: string, atLeast = 1, atMost = 99): Json => ({ kind: 
 export const ability = (label: string, ...abilities: string[]): Json => ({ kind: 'partyAbility', abilities, label });
 
 // ---------- battles ----------
-export const wild = (o: { species?: string[]; types?: string[]; lv?: number; shiny?: number; win?: Json[]; recall?: boolean; chain?: number; shadow?: boolean; blissful?: boolean } = {}): Json => ({
+export const wild = (o: { format?: 'doubles' | 'triples'; species?: string[]; types?: string[]; lv?: number; shiny?: number; win?: Json[]; recall?: boolean; chain?: number; shadow?: boolean; blissful?: boolean } = {}): Json => ({
   kind: 'wild',
+  ...(o.format ? { format: o.format } : {}),
   ...(o.shadow ? { shadow: true } : {}),
   ...(o.blissful ? { blissful: true } : {}),
   ...(o.chain ? { chain: o.chain } : {}),
@@ -132,8 +133,9 @@ export const wild = (o: { species?: string[]; types?: string[]; lv?: number; shi
   shinyMultiplier: o.shiny ?? 1,
   win: o.win ?? [],
 });
-export const trainer = (name: string, o: { cls?: string; boss?: string; size?: number; types?: string[]; lv?: number; win?: Json[]; ghost?: boolean; retired?: boolean; rival?: boolean; ally?: string; chain?: number; mirror?: boolean } = {}): Json => ({
+export const trainer = (name: string, o: { format?: 'doubles' | 'triples'; cls?: string; boss?: string; size?: number; types?: string[]; lv?: number; win?: Json[]; ghost?: boolean; retired?: boolean; rival?: boolean; ally?: string; chain?: number; mirror?: boolean } = {}): Json => ({
   kind: 'trainer',
+  ...(o.format ? { format: o.format } : {}),
   ...(o.chain ? { chain: o.chain } : {}),
   name,
   ...(o.cls ? { classId: o.cls } : {}),

@@ -36,6 +36,9 @@ export const LONG_RANGE = new Set([
   'pluck', 'sky-attack', 'sky-drop', 'water-pulse', 'wing-attack',
 ]);
 
+/** The Front's lane rule is on for this fight. */
+export const lanesOn = (battle: Pick<BattleState, 'eventRule'>): boolean => battle.eventRule?.lanes === true;
+
 /** True when the move reaches any Pokémon on the field (only matters in a triple battle). */
 export function isLongRange(move: Pick<Move, 'id'>): boolean {
   return LONG_RANGE.has(move.id);
@@ -55,8 +58,10 @@ export function alliesAdjacent(a: number, b: number): boolean {
  * Whether a single-target move from `user` can be aimed at `target` (spots and sides).
  * `size` is the number of spots per side (2 doubles, 3 triples); in doubles anything on the field can be aimed at.
  */
-export function canReach(size: number, user: { side: Side; spot: number }, target: { side: Side; spot: number }, move: Pick<Move, 'id'>): boolean {
+export function canReach(size: number, user: { side: Side; spot: number }, target: { side: Side; spot: number }, move: Pick<Move, 'id'>, lanes = false): boolean {
   if (user.side === target.side && user.spot === target.spot) return false;
+  // Front (Beta 0.6): the lane rule. Only the foe in your own lane (same spot) can be aimed at, never an ally.
+  if (lanes) return user.side !== target.side && user.spot === target.spot;
   if (size < 3 || isLongRange(move)) return true;
   return user.side === target.side ? alliesAdjacent(user.spot, target.spot) : foesAdjacent(user.spot, target.spot);
 }
