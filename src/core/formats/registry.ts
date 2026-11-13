@@ -3,6 +3,8 @@
 
 import { blackout } from './blackout';
 import { breather } from './breather';
+import { convoy } from './convoy';
+import { siege } from './siege';
 import { clearFormat, currentFormat, doneFormats, storeFormat } from './store';
 import type { FormatCard, FormatCtx, FormatId, WideFormat } from './types';
 
@@ -10,12 +12,16 @@ import type { FormatCard, FormatCtx, FormatId, WideFormat } from './types';
 export const FORMATS: Partial<Record<FormatId, WideFormat<any>>> = {
   breather,
   blackout,
+  convoy,
+  siege,
 };
 
-/** Starts a format, once per run for formats that are one-shot (the Breather). False when one is running or it already ran. */
+const ONE_SHOT: readonly FormatId[] = ['breather', 'blackout', 'convoy', 'siege'];
+
+/** Starts a format, once per climax for one-shot formats (the director calls `beginCut` at the start of each climax). False when one is running or it already ran. */
 export function startFormat(id: FormatId, ctx: FormatCtx, input?: unknown): boolean {
   const fmt = FORMATS[id];
-  if (!fmt || currentFormat(ctx.run) || (id === 'breather' && doneFormats(ctx.run).includes(id))) return false;
+  if (!fmt || (fmt.canStart && !fmt.canStart(ctx, input)) || currentFormat(ctx.run) || (ONE_SHOT.includes(id) && doneFormats(ctx.run).includes(id))) return false;
   storeFormat(ctx.run, id, fmt.setup(ctx, input));
   return true;
 }

@@ -183,6 +183,7 @@
   "pacing": { "windows": [[3, 5], [7, 9], [11, 13], [15, 17], [18, 19]], "totalMin": 4, "totalMax": 5, "avoidableMin": 1, "avoidableMax": 2, "aceTopBonus": 3, "aceRestBonus": 1, "doublesFromRegion": 1, "expMultiplier": 0.8 }
  },
  "expansionTrack": { "shopMarkup": 0.1, "wildShrink": 0.25 },
+ "expansionEvents": { "density": { "low": 3, "normal": 5, "full": 8 } },
  "minThemePool": 3,
  "dualTypeWeight": 3,
  "typeRarity": {

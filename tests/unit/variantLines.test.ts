@@ -2,7 +2,7 @@
 // into the engine; the pure rules are tested directly and the engine hooks through short battles.
 import { describe, expect, it } from 'vitest';
 import { createBattle, resolveTurn, type BattleContext } from '../../src/core/battle/engine';
-import { createPokemon } from '../../src/core/pokemon';
+import { calcStats, createPokemon } from '../../src/core/pokemon';
 import { hashSeed, Rng } from '../../src/core/rng';
 import { BattleStateSchema } from '../../src/core/state';
 import { assignVariant, UNWIRED_LINES, variantNeverMisses, variantOnEntry, WIRED_LINES, type Variants } from '../../src/core/expansion/variantLines';
@@ -27,8 +27,8 @@ const lost = (es: Events, side: 'player' | 'enemy') => es.reduce((n, e) => (e.ty
 const texts = (es: Events) => es.filter((e) => e.type === 'raid').map((e) => (e as { text: string }).text);
 
 describe('variant line registry', () => {
-  it('wires five lines, lists the other nine, and refuses to assign an unwired one', () => {
-    expect(WIRED_LINES).toHaveLength(5);
+  it('wires eight lines, lists the other six, and refuses to assign an unwired one', () => {
+    expect(WIRED_LINES).toHaveLength(8);
     expect(WIRED_LINES.length + UNWIRED_LINES.length).toBe(14);
     expect(() => assignVariant({}, 'x', 'loud')).toThrow('not wired');
   });
@@ -94,13 +94,13 @@ describe('Dark Ball in battle', () => {
 });
 
 describe('Preserved in battle', () => {
-  it('enters with -1 Speed, takes 25% less on the first hit, and cannot be given a status', () => {
+  it('enters with -1 Speed, takes 20% less on the first hit, and cannot be given a status', () => {
     const base = duel(), pre = duel({ line: 'preserved' });
     const b1 = lost(base.go(), 'enemy');
     const p1Events = pre.go();
     expect(pre.battle.enemyStages.spe).toBe(-1);
-    expect(lost(p1Events, 'enemy') / b1).toBeGreaterThan(0.65);
-    expect(lost(p1Events, 'enemy') / b1).toBeLessThan(0.85);
+    expect(lost(p1Events, 'enemy') / b1).toBeGreaterThan(0.7);
+    expect(lost(p1Events, 'enemy') / b1).toBeLessThan(0.9);
     const thunder = duel({ line: 'preserved', pMove: 'thunder-wave' });
     thunder.go();
     expect(thunder.enemy.status).toBeNull();
@@ -111,7 +111,7 @@ describe('Preserved in battle', () => {
 });
 
 describe('Tidebound and Cinderborn', () => {
-  it('Tidebound: +1 Speed in rain, nothing in sun; Cinderborn: +1 Defense in sun', () => {
+  it('Tidebound: +1 Speed in rain, nothing in sun; Cinderborn: +1 Special Defense in sun', () => {
     const rain = duel({ line: 'tidebound', weather: 'rain' });
     rain.go();
     expect(rain.battle.enemyStages.spe).toBe(1);
@@ -120,7 +120,7 @@ describe('Tidebound and Cinderborn', () => {
     expect(sun.battle.enemyStages.spe).toBe(0);
     const warm = duel({ line: 'cinderborn', weather: 'sun' });
     warm.go();
-    expect(warm.battle.enemyStages.def).toBe(1);
+    expect(warm.battle.enemyStages.spd).toBe(1);
   });
   it('their moves cannot miss under their own weather only', () => {
     const v: Variants = {};
@@ -133,6 +133,63 @@ describe('Tidebound and Cinderborn', () => {
     expect(variantNeverMisses(v, 'b', 'rain', 'fire')).toBe(false);
     expect(variantOnEntry(v, 'a', 'sun').message).toBe('The tide is out.');
     expect(variantOnEntry(v, 'b', 'rain').message).toBe('The ground is cold.');
+  });
+});
+
+describe('Spiritless in battle', () => {
+  it('cannot be lowered by the foe or raised by anyone, announced', () => {
+    const d = duel({ line: 'spiritless', pMove: 'growl' });
+    const es = d.go();
+    expect(d.battle.enemyStages.atk).toBe(0);
+    expect(texts(es)).toContain('It feels nothing about that.');
+    const control = duel({ pMove: 'growl' });
+    control.go();
+    expect(control.battle.enemyStages.atk).toBe(-1);
+  });
+  it('cannot be taunted or infatuated', () => {
+    const d = duel({ line: 'spiritless', pMove: 'taunt' });
+    d.go();
+    expect(d.battle.enemyVolatile.taunt).toBe(0);
+    const control = duel({ pMove: 'taunt' });
+    control.go();
+    expect(control.battle.enemyVolatile.taunt).toBeGreaterThan(0);
+  });
+});
+
+describe('Overclocked in battle', () => {
+  it('its first move goes first, and it overheats (-1 Speed) at the end of its third turn', () => {
+    const d = duel({ line: 'overclocked', pMove: 'tackle' });
+    const first = d.go();
+    const order = first.filter((e) => e.type === 'move').map((e) => (e as { side: string }).side);
+    expect(order[0]).toBe('enemy');
+    d.go();
+    expect(d.battle.enemyStages.atk).toBe(0);
+    const third = d.go();
+    expect(texts(third)).toContain('The machine has asked too much.');
+    expect(d.battle.enemyStages.spe).toBe(-1);
+    d.go();
+    expect(d.battle.enemyStages.spe).toBe(-1);
+  });
+});
+
+describe('Tagged-Up in battle', () => {
+  it('sprays a tag on entry; a foe coming in is called out and loses 1/16 HP once', () => {
+    const d = duel({ line: 'tagged-up' });
+    expect(texts(d.go())).toContain('It sprays a tag on the field.');
+    expect(d.battle.extra.variants[d.enemy.uid]!.flags.sprayed).toBe(1);
+    const base = duel();
+    const es = d.go();
+    expect(es.length).toBeGreaterThan(0);
+    expect(base.battle.extra.variants).toEqual({});
+  });
+  it('the called-out foe loses 1/16 HP on entry, once, and an unrelated line never does it', () => {
+    const d = duel({ line: 'tagged-up' });
+    const hp = d.player.hp;
+    const es = d.go();
+    expect(texts(es).some((t) => t.endsWith('is called out!'))).toBe(true);
+    expect(hp - d.player.hp).toBeGreaterThanOrEqual(Math.floor(calcStats(content, d.player).hp / 16));
+    expect(texts(d.go()).some((t) => t.endsWith('is called out!'))).toBe(false);
+    expect(texts(duel({ line: 'dark-ball' }).go()).some((t) => t.endsWith('is called out!'))).toBe(false);
   });
 });
 

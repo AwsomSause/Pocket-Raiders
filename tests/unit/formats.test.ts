@@ -185,3 +185,134 @@ describe('Blackout', () => {
     expect(loaded.battle!.eventRule!.typeBoost).toEqual({ type: 'psychic', pct: 10 });
   });
 });
+
+describe('Convoy', () => {
+  const next = (run: ReturnType<typeof mk>, id: string, won: boolean) => {
+    chooseOption(ctxOf(run), id);
+    expect(run.phase).toBe('battle');
+    expect(run.battle!.event!.eventId).toBe('format:convoy');
+    battleEnded(ctxOf(run), won);
+    run.battle = null;
+    run.phase = 'map';
+  };
+
+  it('three legs, no healing between; winning the car with "You\'re a list" gives the ledger', () => {
+    const run = mk('cv1');
+    startFormat('convoy', ctxOf(run), { short: false });
+    expect(currentFormat(run)!.state.legs).toHaveLength(3);
+    next(run, 'fight', true);
+    next(run, 'fight', true);
+    expect(cardOf(ctxOf(run))!.options.map((o) => o.id)).toEqual(['list', 'witness']);
+    next(run, 'list', true);
+    expect(formatOver(ctxOf(run))).toBe(true);
+    expect(run.expansion!.cut!.ledger).toBe('won');
+    expect(run.expansion!.cut!.done).toContain('convoy');
+  });
+
+  it('"You\'re a witness" skips the last battle and LEDGER joins', () => {
+    const run = mk('cv2');
+    startFormat('convoy', ctxOf(run), { short: false });
+    next(run, 'fight', true);
+    next(run, 'fight', true);
+    chooseOption(ctxOf(run), 'witness');
+    expect(run.phase).not.toBe('battle');
+    expect(formatOver(ctxOf(run))).toBe(true);
+    expect(run.expansion!.cut!.ledger).toBe('joined');
+  });
+
+  it('a Raid 4 Triumph makes it one leg shorter', () => {
+    const run = mk('cv3');
+    run.expansion = { raids: { n4: { id: 'pr.kanto.x', result: 'triumph', node: 0, os: -3 } } };
+    startFormat('convoy', ctxOf(run));
+    expect((currentFormat(run)!.state.legs as { id: string }[]).map((l) => l.id)).toEqual(['van', 'car']);
+  });
+
+  it('losing a leg fails the Convoy, loses only the ledger, and applies once', () => {
+    const run = mk('cv4');
+    startFormat('convoy', ctxOf(run), { short: false });
+    next(run, 'fight', false);
+    expect(formatOver(ctxOf(run))).toBe(true);
+    expect(run.expansion!.cut!.ledger).toBe('none');
+    const before = JSON.stringify(run.expansion);
+    chooseOption(ctxOf(run), 'fight');
+    battleEnded(ctxOf(run), true);
+    expect(JSON.stringify(run.expansion)).toBe(before);
+  });
+
+  it('survives save and reload with a leg running', () => {
+    const run = mk('cv5');
+    startFormat('convoy', ctxOf(run), { short: false });
+    chooseOption(ctxOf(run), 'fight');
+    const loaded = RunStateSchema.parse(JSON.parse(JSON.stringify(run)));
+    expect(currentFormat(loaded)!.state.pending).toBe(true);
+    battleEnded(ctxOf(loaded as typeof run), true);
+    expect(currentFormat(loaded)!.state.index).toBe(1);
+  });
+});
+
+describe('Siege Map', () => {
+  const rec = (result: string) => ({ id: 'pr.kanto.x', result, node: 0, os: 0 });
+  const withRaids = (run: ReturnType<typeof mk>, raids: Record<string, unknown>, flags: Record<string, number | boolean> = {}) => {
+    run.expansion = { raids };
+    Object.assign(run.story.flags, flags);
+  };
+  const st = (run: ReturnType<typeof mk>) => Object.fromEntries((currentFormat(run)!.state.districts as { id: string; status: string }[]).map((d) => [d.id, d.status]));
+
+  it('works the statuses out from the raids and flags, and never loses the Center', () => {
+    const run = mk('sg1');
+    withRaids(run, { n3: rec('triumph'), n4: rec('failure'), n5: rec('partial') });
+    startFormat('siege', ctxOf(run));
+    expect(st(run)).toEqual({ 'north-gate': 'contested', 'east-gate': 'held', 'south-gate': 'lost', 'west-gate': 'contested', center: 'contested' });
+    const run2 = mk('sg2');
+    withRaids(run2, { n5: rec('success') }, { 'rocket.x.wire': 1, 'rocket.x.surge-down': 1 });
+    run2.expansion!.cut = { rivalRole: 'help' };
+    startFormat('siege', ctxOf(run2));
+    expect(st(run2)).toMatchObject({ 'north-gate': 'held', 'east-gate': 'held', 'south-gate': 'held', 'west-gate': 'held' });
+  });
+
+  it('a Held gate is a free entry and writes the lost list; a lost West Gate makes the Breather heal 35%', () => {
+    const run = mk('sg3');
+    withRaids(run, { n3: rec('triumph'), n5: rec('declined') });
+    startFormat('siege', ctxOf(run));
+    chooseOption(ctxOf(run), 'east-gate');
+    expect(run.phase).not.toBe('battle');
+    expect(formatOver(ctxOf(run))).toBe(true);
+    expect(run.expansion!.siege!.lost).toEqual(['kanto.west-gate']);
+    expect(run.expansion!.siege!.entered).toBe('kanto.east-gate');
+    expect(run.expansion!.cut!.checkpoint).toBe('siege');
+    closeFormat(ctxOf(run));
+    run.party[0]!.hp = 1;
+    const max = maxHp(content, run.party[0]!);
+    startFormat('breather', ctxOf(run));
+    chooseOption(ctxOf(run), 'rest');
+    expect(run.party[0]!.hp).toBe(Math.min(max, 1 + Math.ceil(max * 0.35)));
+  });
+
+  it('a Contested gate costs one battle; losing it lets the player try again; winning it enters', () => {
+    const run = mk('sg4');
+    startFormat('siege', ctxOf(run));
+    chooseOption(ctxOf(run), 'west-gate');
+    expect(run.phase).toBe('battle');
+    expect(run.battle!.event!.eventId).toBe('format:siege');
+    battleEnded(ctxOf(run), false);
+    run.battle = null;
+    run.phase = 'map';
+    expect(formatOver(ctxOf(run))).toBe(false);
+    expect(currentFormat(run)!.state.tries).toBe(1);
+    chooseOption(ctxOf(run), 'north-gate');
+    battleEnded(ctxOf(run), true);
+    expect(formatOver(ctxOf(run))).toBe(true);
+    expect(currentFormat(run)!.state.entered).toBe('north-gate');
+  });
+
+  it('the Center is not a gate, an unknown region cannot start, and a reload keeps the map', () => {
+    const run = mk('sg5');
+    expect(startFormat('siege', ctxOf(run), { region: 'johto' })).toBe(false);
+    expect(startFormat('siege', ctxOf(run), { region: 'kanto' })).toBe(true);
+    chooseOption(ctxOf(run), 'center');
+    expect(run.phase).not.toBe('battle');
+    expect(cardOf(ctxOf(run))!.options.map((o) => o.id)).toEqual(['north-gate', 'east-gate', 'south-gate', 'west-gate']);
+    const loaded = RunStateSchema.parse(JSON.parse(JSON.stringify(run)));
+    expect(currentFormat(loaded)!.state.districts).toEqual(currentFormat(run)!.state.districts);
+  });
+});

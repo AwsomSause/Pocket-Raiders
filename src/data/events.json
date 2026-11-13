@@ -1989,6 +1989,7 @@
       "effects": [],
       "battle": {
        "kind": "trainer",
+       "format": "doubles",
        "name": "Twins",
        "size": 2,
        "types": [],
@@ -13285,17 +13286,18 @@
     ],
     "effect": "shake"
    },
-   "intro": "Three kids challenge you at once. \"All of us! Right now!\"",
+   "intro": "Three kids line up side by side. \"All three of us! Right now!\"",
    "choices": [
     {
-     "label": "Take them all",
+     "label": "Battle all three",
      "success": {
-      "text": "Three teams, one after another!",
+      "text": "Three Pokémon hit the field at once!",
       "effects": [],
       "battle": {
        "kind": "trainer",
+       "format": "triples",
        "name": "Kid Squad",
-       "size": 4,
+       "size": 3,
        "types": [],
        "levelBonus": 1,
        "win": [
@@ -45984,7 +45986,7 @@
     "tint": "#1a2d1c",
     "effect": "fog"
    },
-   "intro": "A ring of mossy stones. Something is humming a lullaby.",
+   "intro": "A ring of mossy stones. An old Jigglypuff hums a lullaby to nobody, and every wild Pokémon in the ring is fast asleep.",
    "choices": [
     {
      "label": "Push on",
@@ -46001,6 +46003,35 @@
        "species": [],
        "types": [
         "fairy"
+       ],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 30
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Wake them",
+     "success": {
+      "text": "Three grumpy Pokémon open their eyes at once.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "whispering-grove-2"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "format": "triples",
+       "species": [],
+       "types": [
+        "fairy",
+        "grass"
        ],
        "levelBonus": 2,
        "shinyMultiplier": 1,

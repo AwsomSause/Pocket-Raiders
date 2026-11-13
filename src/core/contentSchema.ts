@@ -2323,6 +2323,8 @@ export const BalanceSchema = z.object({
   }),
   /** Beta 0.6 E2: the Kanto world-state track's numbers (core/expansion/track.ts). */
   expansionTrack: z.object({ shopMarkup: z.number().min(0).max(0.15), wildShrink: z.number().min(0).max(0.5) }),
+  /** Beta 0.6 E3: story events per region by density (core/expansion/scheduler.ts). */
+  expansionEvents: z.object({ density: z.object({ low: z.number().int().min(0), normal: z.number().int().min(0), full: z.number().int().min(0) }) }),
   /** A theme's wild pool is topped up from wildPool when it has fewer species than this. */
   minThemePool: z.number().int().min(1),
   /** Weight multiplier for species that have both of the theme's types. */
@@ -2824,8 +2826,12 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('partyShadow') }),
   /** Grand Arc: this run has the arc on, and (when `rom` is set) does not hold that ROM yet. */
   z.object({ kind: z.literal('grandArc'), missingRom: z.string().length(1).optional() }),
+  /** Beta 0.6 E2: the current region's world-state track is at least / at most this step (no track = step 0). */
+  z.object({ kind: z.literal('track'), atLeast: z.number().int().min(0).max(5).default(0), atMost: z.number().int().min(0).max(5).default(5) }),
+  /** Beta 0.6 E3: the run has the Kanto saga's story events turned on (run.expansion.density). */
+  z.object({ kind: z.literal('xevents') }),
   /** Stand With Them: you have joined the run's team (`joined`, the default) or can still join it (`joined: false`); optionally at least this reputation. */
-  z.object({ kind: z.literal('standWith'), joined: z.boolean().default(true), minRep: z.number().int().optional() }),
+  z.object({ kind: z.literal('standWith'), joined: z.boolean().default(true), minRep: z.number().int().optional(), /** The [Stand with them] climax can be played now. */ playable: z.boolean().optional(), /** The climax was won and the verdict is waiting (with `verdict`, that choice is open). */ verdictPending: z.boolean().optional(), verdict: z.enum(['rise', 'throne', 'turn']).optional(), /** A rival is featured in this run (or not). */ rival: z.boolean().optional() }),
   /** Story Overhaul: only in a Story Run (Alphas, story tournaments). Classic never draws these, so its event rolls never move. */
   z.object({ kind: z.literal('storyRun') }),
   /** Event Director: two of your Pokémon share an open bond. */
@@ -2888,6 +2894,14 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
     defector: z.boolean().optional(),
     ends: z.array(z.enum(['none', 'defeated', 'exposed', 'allied'])).optional(),
     stopped: z.number().int().min(0).optional(),
+  }),
+  /** Beta 0.6 rival questlines: the featured rival's overhaul state (core/rivals/overhaul.ts): a feeling at least this (0 to 10), their Lead in a range (-3 to +3, rival ahead is positive), or a mark they hold. Never true without a rival. */
+  z.object({
+    kind: z.literal('rivalState'),
+    feeling: z.object({ key: z.enum(['friendship', 'respect', 'trust', 'rivalry', 'resentment', 'admiration']), atLeast: z.number().int().min(0).max(10) }).optional(),
+    leadAtLeast: z.number().int().min(-3).max(3).optional(),
+    leadAtMost: z.number().int().min(-3).max(3).optional(),
+    mark: z.string().optional(),
   }),
   /** Permanent choices (spec §17): a choice made earlier this run (`pick`: that answer; `made: false`: not made yet). */
   z.object({ kind: z.literal('choice'), id: z.string().min(1), pick: z.string().optional(), made: z.boolean().default(true) }),
@@ -3006,12 +3020,21 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('legacyEgg') }),
   /** Grand Arc: earns a Data ROM (a liaison's proof of one Shadow method). Does nothing when the arc is off for this run. */
   z.object({ kind: z.literal('grandArcRom'), rom: z.string().length(1) }),
+  /** Beta 0.6 E2: move the current region's world-state track (once per event id). */
+  z.object({ kind: z.literal('track'), input: z.enum(['raidFailed', 'raidDeclined', 'climaxScheduled', 'raidSuccess', 'officerTurned']) }),
   /** Grand Arc: gains a Stock step (1 to 5). */
   z.object({ kind: z.literal('grandArcStock'), step: z.number().int().min(1).max(5) }),
   /** Stand With Them: join the run's team as an Inside Man, or move your reputation with it (`change` names a row of standWith.json repChanges), or note a small mercy. */
-  z.object({ kind: z.literal('standWith'), action: z.enum(['join', 'rep', 'mercy']), change: z.string().optional(), noticed: z.boolean().default(false) }),
+  z.object({ kind: z.literal('standWith'), action: z.enum(['join', 'rep', 'mercy', 'climaxWon', 'verdict']), change: z.string().optional(), noticed: z.boolean().default(false), verdict: z.enum(['rise', 'throne', 'turn']).optional(), /** With a verdict: what happens to your rival (a featured rival only). */ rival: z.enum(['release', 'handOver']).optional(), keepApexBound: z.boolean().optional() }),
   /** Shadow II: hands over a Named Shadow Pokémon (an `ss.*` id with a key in shadow2.json) at this level, through the usual caught choice. */
   z.object({ kind: z.literal('namedShadow'), id: z.string().regex(/^ss\.[a-z0-9-]+\.[a-z0-9-]+$/), level: z.number().int().min(1).max(500).default(20) }),
+  /** Beta 0.6 rival questlines: moves the featured rival's feelings (each kept in 0..10), their Lead (kept in -3..+3) and adds a mark they hold. Does nothing without a rival. */
+  z.object({
+    kind: z.literal('rivalChange'),
+    feelings: z.partialRecord(z.enum(['friendship', 'respect', 'trust', 'rivalry', 'resentment', 'admiration']), z.number().int().min(-10).max(10)).default({}),
+    lead: z.number().int().min(-3).max(3).default(0),
+    mark: z.string().optional(),
+  }),
   /** World-state callback (catalog 75): adds to a named story flag that later events can read. */
   z.object({ kind: z.literal('flag'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), amount: z.number().int().default(1) }),
   /** Living Rival: writes a line to the run's Chronicle / journal (a photo, a promise, a letter). */
@@ -3126,9 +3149,18 @@ export const EventRuleSchema = z.object({
 });
 export type EventRule = z.infer<typeof EventRuleSchema>;
 
+/**
+ * Beta 0.6 T4: an event fight fought two or three a side. Wild: that many wild Pokémon appear. Triples need three healthy
+ * Pokémon on each side and only run while the triple battle is switched on (balance.triples.enabled or the Triples Only rule);
+ * otherwise the fight drops to doubles, and to a single battle when doubles can't be made either.
+ */
+export const EventBattleFormatSchema = z.enum(['doubles', 'triples']);
+export type EventBattleFormat = z.infer<typeof EventBattleFormatSchema>;
+
 export const EventBattleSchema = z.discriminatedUnion('kind', [
   z.object({
     kind: z.literal('wild'),
+    format: EventBattleFormatSchema.optional(),
     species: z.array(z.string()).default([]),
     types: z.array(TypeNameSchema).default([]),
     levelBonus: z.number().int().default(0),
@@ -3146,6 +3178,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
   }),
   z.object({
     kind: z.literal('trainer'),
+    /** Fought as a double or triple battle (see EventBattleFormatSchema); `size` should be at least 2 or 3. */
+    format: EventBattleFormatSchema.optional(),
     /** A trainer class from trainers.json, or a boss id (its signature team). */
     classId: z.string().optional(),
     bossId: z.string().optional(),
@@ -3161,6 +3195,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     evil: z.enum(['grunt', 'specialist', 'executive', 'leader']).optional(),
     /** Grand Arc: with `evil`, fight this roaming team (cipher, rocket-remnants, snagem) instead of the run's own team. */
     evilTeam: z.string().optional(),
+    /** Stand With Them: this is a Stand-with climax battle. A loss is Second Shot (the party is healed and you go back to the map; the second loss is the worst ending). Needs `pseudo`. */
+    standWith: z.boolean().optional(),
     /** Shadow Boxing: the foe is a copy of your lead (same species, its level plus `levelBonus`); `size` is ignored. */
     mirror: z.boolean().optional(),
     /** Mentors: the team is your fellow apprentice's (their preferred types; they take the name). A loss is friendly: nobody is out and the run goes on. */
