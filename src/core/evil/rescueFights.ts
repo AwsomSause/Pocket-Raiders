@@ -1,5 +1,6 @@
 // PS-RESCUE guard fights (Beta 0.6 R9): the Door and Cage battles of Quiet Extraction and Loud Grab.
-// Quiet: a guard at the Door and another at the Cage, each only if that beat was not played well (clean play skips them).
+// Quiet: always at least one fight, at most two. A guard at the Door if that beat was not played well, and one at the Cage if that beat
+// was not played well or no guard has fought yet (so clean play meets exactly one, at the Cage; poor choices meet two).
 // Loud: a guard fight after every beat (a three-battle gauntlet), with the rival's first Pokémon fighting beside you when it has one.
 // The Inside Job, the Deal and the Exchange have no fights. Losing a fight resolves the plan as a Fail (the party is patched up
 // by the pseudo-stage rule and nobody's run ends). Nothing here rolls a gameplay stream: the foes are hashed from seed + hold + spot.
@@ -23,7 +24,7 @@ export function fightAfterAnswer(run: RunState): FightSpot | null {
   const spot = BEATS[pr.plan]![idx] as FightSpot | undefined;
   const rating = pr.beats[idx];
   if (!spot || !rating) return null;
-  const due = pr.plan === 'loud' ? true : pr.plan === 'quiet' ? spot !== 'approach' && rating !== 'good' : false;
+  const due = pr.plan === 'loud' ? true : pr.plan === 'quiet' ? (spot === 'door' ? rating !== 'good' : spot === 'cage' ? rating !== 'good' || pr.fights.length === 0 : false) : false;
   if (!due) return null;
   pr.fightNow = spot;
   return spot;

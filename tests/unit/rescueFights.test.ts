@@ -25,9 +25,10 @@ const start = (plan: 'quiet' | 'loud' | 'inside', seed = 'pf1', team = 'rocket')
 const answer = (r: ReturnType<typeof mk>, ratings: ('good' | 'neutral' | 'bad')[]) => ratings.map((x) => { answerBeat(r, x); const spot = fightAfterAnswer(r); if (spot) rescueFightEnded(r, true); return spot; });
 
 describe('which beats lead to a guard fight', () => {
-  it('Quiet: none at the Approach; the Door and the Cage only when not played well', () => {
-    expect(answer(start('quiet'), ['bad', 'good', 'good'])).toEqual([null, null, null]);
+  it('Quiet: none at the Approach; always at least one fight, two when the choices were poor', () => {
+    expect(answer(start('quiet'), ['bad', 'good', 'good'])).toEqual([null, null, 'cage']);
     expect(answer(start('quiet', 'pf2'), ['good', 'neutral', 'good'])).toEqual([null, 'door', null]);
+    expect(answer(start('quiet', 'pf4'), ['good', 'bad', 'neutral'])).toEqual([null, 'door', 'cage']);
     const r = start('quiet', 'pf3');
     answerBeat(r, 'good'); fightAfterAnswer(r);
     answerBeat(r, 'good'); fightAfterAnswer(r);
