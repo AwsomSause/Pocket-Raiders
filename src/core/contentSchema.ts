@@ -2831,11 +2831,15 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** Beta 0.6 E3: the run has the Kanto saga's story events turned on (run.expansion.density). */
   z.object({ kind: z.literal('xevents') }),
   /** Stand With Them: you have joined the run's team (`joined`, the default) or can still join it (`joined: false`); optionally at least this reputation. */
+  /** Beta 0.6 E3b: one of the Expanded flags that run events wait on. */
+  z.object({ kind: z.literal('xflag'), flag: z.enum(['extendedCut', 'hasShadow', 'keyHinted', 'grandArc', 'liaisonSeen', 'romHeld', 'friendPresent', 'trioFriendly', 'wesMet']) }),
   z.object({ kind: z.literal('standWith'), joined: z.boolean().default(true), minRep: z.number().int().optional(), /** The [Stand with them] climax can be played now. */ playable: z.boolean().optional(), /** The climax was won and the verdict is waiting (with `verdict`, that choice is open). */ verdictPending: z.boolean().optional(), verdict: z.enum(['rise', 'throne', 'turn']).optional(), /** A rival is featured in this run (or not). */ rival: z.boolean().optional() }),
   /** Story Overhaul: only in a Story Run (Alphas, story tournaments). Classic never draws these, so its event rolls never move. */
   z.object({ kind: z.literal('storyRun') }),
   /** Event Director: two of your Pokémon share an open bond. */
   z.object({ kind: z.literal('bond') }),
+  /** A party Pokémon fainted in the last few battles and nobody has slept since (camp scenes). */
+  z.object({ kind: z.literal('memberFainted'), within: z.number().int().min(1).max(30).default(6) }),
   /** W10: Pokémon photographed at camp this run. */
   z.object({ kind: z.literal('photos'), atLeast: z.number().int().min(1) }),
   /** Event Director: the region's focus (mystery, rivals, raids, exploration). */
@@ -2892,6 +2896,14 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
     defector: z.boolean().optional(),
     ends: z.array(z.enum(['none', 'defeated', 'exposed', 'allied'])).optional(),
     stopped: z.number().int().min(0).optional(),
+  }),
+  /** Beta 0.6 rival questlines: the featured rival's overhaul state (core/rivals/overhaul.ts): a feeling at least this (0 to 10), their Lead in a range (-3 to +3, rival ahead is positive), or a mark they hold. Never true without a rival. */
+  z.object({
+    kind: z.literal('rivalState'),
+    feeling: z.object({ key: z.enum(['friendship', 'respect', 'trust', 'rivalry', 'resentment', 'admiration']), atLeast: z.number().int().min(0).max(10) }).optional(),
+    leadAtLeast: z.number().int().min(-3).max(3).optional(),
+    leadAtMost: z.number().int().min(-3).max(3).optional(),
+    mark: z.string().optional(),
   }),
   /** Permanent choices (spec §17): a choice made earlier this run (`pick`: that answer; `made: false`: not made yet). */
   z.object({ kind: z.literal('choice'), id: z.string().min(1), pick: z.string().optional(), made: z.boolean().default(true) }),
@@ -3011,6 +3023,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Grand Arc: earns a Data ROM (a liaison's proof of one Shadow method). Does nothing when the arc is off for this run. */
   z.object({ kind: z.literal('grandArcRom'), rom: z.string().length(1) }),
   /** Beta 0.6 E2: move the current region's world-state track (once per event id). */
+  /** Beta 0.6 E3b: lowers every party Shadow Pokémon's corruption by `amount` (never below 1: the last step stays with its own key). */
+  z.object({ kind: z.literal('shadowHeart'), amount: z.number().int().min(-20).max(0) }),
   z.object({ kind: z.literal('track'), input: z.enum(['raidFailed', 'raidDeclined', 'climaxScheduled', 'raidSuccess', 'officerTurned']) }),
   /** Grand Arc: gains a Stock step (1 to 5). */
   z.object({ kind: z.literal('grandArcStock'), step: z.number().int().min(1).max(5) }),
@@ -3018,6 +3032,13 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('standWith'), action: z.enum(['join', 'rep', 'mercy', 'climaxWon', 'verdict']), change: z.string().optional(), noticed: z.boolean().default(false), verdict: z.enum(['rise', 'throne', 'turn']).optional(), /** With a verdict: what happens to your rival (a featured rival only). */ rival: z.enum(['release', 'handOver']).optional(), keepApexBound: z.boolean().optional() }),
   /** Shadow II: hands over a Named Shadow Pokémon (an `ss.*` id with a key in shadow2.json) at this level, through the usual caught choice. */
   z.object({ kind: z.literal('namedShadow'), id: z.string().regex(/^ss\.[a-z0-9-]+\.[a-z0-9-]+$/), level: z.number().int().min(1).max(500).default(20) }),
+  /** Beta 0.6 rival questlines: moves the featured rival's feelings (each kept in 0..10), their Lead (kept in -3..+3) and adds a mark they hold. Does nothing without a rival. */
+  z.object({
+    kind: z.literal('rivalChange'),
+    feelings: z.partialRecord(z.enum(['friendship', 'respect', 'trust', 'rivalry', 'resentment', 'admiration']), z.number().int().min(-10).max(10)).default({}),
+    lead: z.number().int().min(-3).max(3).default(0),
+    mark: z.string().optional(),
+  }),
   /** World-state callback (catalog 75): adds to a named story flag that later events can read. */
   z.object({ kind: z.literal('flag'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), amount: z.number().int().default(1) }),
   /** Living Rival: writes a line to the run's Chronicle / journal (a photo, a promise, a letter). */
@@ -3132,9 +3153,18 @@ export const EventRuleSchema = z.object({
 });
 export type EventRule = z.infer<typeof EventRuleSchema>;
 
+/**
+ * Beta 0.6 T4: an event fight fought two or three a side. Wild: that many wild Pokémon appear. Triples need three healthy
+ * Pokémon on each side and only run while the triple battle is switched on (balance.triples.enabled or the Triples Only rule);
+ * otherwise the fight drops to doubles, and to a single battle when doubles can't be made either.
+ */
+export const EventBattleFormatSchema = z.enum(['doubles', 'triples']);
+export type EventBattleFormat = z.infer<typeof EventBattleFormatSchema>;
+
 export const EventBattleSchema = z.discriminatedUnion('kind', [
   z.object({
     kind: z.literal('wild'),
+    format: EventBattleFormatSchema.optional(),
     species: z.array(z.string()).default([]),
     types: z.array(TypeNameSchema).default([]),
     levelBonus: z.number().int().default(0),
@@ -3152,6 +3182,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
   }),
   z.object({
     kind: z.literal('trainer'),
+    /** Fought as a double or triple battle (see EventBattleFormatSchema); `size` should be at least 2 or 3. */
+    format: EventBattleFormatSchema.optional(),
     /** A trainer class from trainers.json, or a boss id (its signature team). */
     classId: z.string().optional(),
     bossId: z.string().optional(),

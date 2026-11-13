@@ -12,24 +12,26 @@
 import { modifierEventWeight } from './runModifiers';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
 import { PSEUDO } from './dungeon/pseudo';
+import { addMark, overhaulOf, type FeelingKey } from './rivals/overhaul';
 import { friendName, friendTeam, pseudoRivalBeat } from './rivals/live';
 import { repAtLeast } from './rivals/reputation';
 import type { ChoiceKind } from './presentation/eventStyles';
 import { befriendWanderer, startWanderer } from './wanderer';
 import { emotionOf } from './story/emotions';
 import { featuredMapEvents, runGameEventIds } from './gameEvents';
-import { eventChanceScale } from './rules';
+import { eventChanceScale, triplesOnly } from './rules';
 import { getArchetype, runPerks } from './archetypes';
 import { ATTRIBUTE_LABELS, addRunAttribute, effectiveAttributes, runAttributeEffects } from './attributes';
 import { createBattle } from './battle/engine';
-import type { Content, EventBattle, EventChoice, EventCondition, EventDef, EventEffect, EventOutcome, TradeWant, TypeName } from './contentSchema';
+import type { Content, EventBattle, EventBattleFormat, EventChoice, EventCondition, EventDef, EventEffect, EventOutcome, TradeWant, TypeName } from './contentSchema';
 import { curveLevel, enemyLevel, evolvedFormAt, levelScale, rollShiny, withPartyStrength } from './encounters';
 import { changeFriendship } from './friendship';
 import { atLeast, promptById, type Grade, type PromptResult } from './interaction/prompt';
 import { applyCatalog, catalogTargetProblem, isFreeReroll } from './catalog';
 import { addItem } from './items';
 import { evolve } from './evolution';
-import { makeDoubles } from './battle/doubles';
+import { canBeDoubles, makeDoubles } from './battle/doubles';
+import { canBeTriples, makeTriples } from './battle/triples';
 import { championTeam, retiredTeam } from './story/championDefense';
 import { oldFoe } from './story/promises';
 import { featuredRival, rivalBeaten, rivalFightTeam, rivalLastResult, rivalPath } from './rivals/living';
@@ -140,6 +142,10 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return evilConditionMet(content, run, c);
     case 'choice':
       return choiceMade(run, c.id, c.pick) === c.made;
+    case 'memberFainted': {
+      const f = run.expansion?.lastFaint;
+      return !!f && run.encountersCompleted - f.at <= c.within;
+    }
     case 'friendship':
       return run.party.some((m) => m.friendship >= c.atLeast);
     case 'rivalMet':
@@ -170,6 +176,11 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return crisisAid(run) >= c.atLeast;
     case 'tournament':
       return tournamentRound(run) === c.round;
+    case 'rivalState': {
+      const rec = featuredRival(run) ? overhaulOf(run, featuredRival(run)!.id) : undefined;
+      if (!rec) return false;
+      return (!c.feeling || rec.feelings[c.feeling.key] >= c.feeling.atLeast) && (c.leadAtLeast === undefined || rec.lead >= c.leadAtLeast) && (c.leadAtMost === undefined || rec.lead <= c.leadAtMost) && (!c.mark || rec.marks.includes(c.mark));
+    }
     case 'flag':
       return Number(run.story.flags[`ev:${c.key}`] ?? 0) >= c.atLeast && Number(run.story.flags[`ev:${c.key}`] ?? 0) <= c.atMost;
     case 'partyBlissful':
@@ -196,6 +207,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       if (c.rival !== undefined && (featuredRival(run) !== null) !== c.rival) return false;
       return true;
     }
+    case 'xflag':
+      return xflagHolds(run, c.flag);
     case 'storyRun':
       return !!run.story.v2;
     case 'oldFoe':
@@ -302,6 +315,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return `Needs an earlier delivery`;
     case 'noTrainerTag':
       return `Your trainer won't do this`;
+    case 'memberFainted':
+      return 'Needs a team member who fainted recently';
     case 'friendship':
       return `Needs a Pokémon with friendship ${c.atLeast}`;
     case 'rivalAlly':
@@ -342,6 +357,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs allies gathered in this region';
     case 'tournament':
       return 'Needs the tournament bracket to be at this round';
+    case 'rivalState':
+      return 'Needs a rival who feels a certain way about you';
     case 'flag':
       return 'Needs something you did earlier';
     case 'partyBlissful':
@@ -355,6 +372,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs the world to have changed more';
     case 'xevents':
       return 'Only with the Kanto story events on';
+    case 'xflag':
+      return 'Needs something from the Beta 0.6 story in play';
     case 'storyRun':
       return 'Only in a Story Run';
     case 'oldFoe':
@@ -486,7 +505,10 @@ export function addEventStops(content: Content, run: RunState): void {
   const candidates = stage.map.nodes.filter((n) => n.column < stage.map.columns);
   const taken = new Set<string>();
   const place = (eventId: string, hidden: boolean) => {
-    const node = rng.pick(candidates);
+    // E3b: a run event (`xr.*`) keeps one column away from every story event (`xe.*`) on the stage, when the map allows it.
+    const xe = eventId.startsWith('xr.') ? xeColumns(run) : [];
+    const apart = xe.length > 0 ? candidates.filter((n) => xe.every((c) => Math.abs(c - n.column) > 1)) : candidates;
+    const node = rng.pick(apart.length > 0 ? apart : candidates);
     node.sides.push({ id: `event-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId, ...(hidden ? { hidden: true } : {}) });
   };
   // A running tournament round and a serious crisis always get their stop (until played), so neither can be missed by luck.
@@ -548,6 +570,24 @@ export function addEventStops(content: Content, run: RunState): void {
   if (effectiveAttributes(content, run).intelligence >= cfg.revealIntelligence) {
     const hidden = stage.map.nodes.flatMap((n) => n.sides).find((s) => s.kind === 'event' && s.hidden);
     if (hidden) delete hidden.hidden;
+  }
+}
+
+/** The ten Expanded flags of RUN_EVENTS_EXPANDED X2, read from the run. */
+export function xflagHolds(run: RunState, flag: string): boolean {
+  const flags = run.story.flags;
+  const seen = (k: string) => Number(flags[`ev:${k}`] ?? 0) >= 1;
+  switch (flag) {
+    case 'extendedCut': return run.expansion?.climaxCut === 'extended';
+    case 'hasShadow': return run.party.some((m) => !!m.shadow);
+    case 'keyHinted': return run.party.some((m) => !!m.shadow?.named && (m.shadow.hints ?? 1) >= 1);
+    case 'grandArc': return grandArcOf(run) !== null;
+    case 'liaisonSeen': return seen('liaison-seen');
+    case 'romHeld': { const g = grandArcOf(run); return !!g && romsHeld(g).length > 0; }
+    case 'friendPresent': return Object.values(run.expansion?.rival ?? {}).some((r) => r.role === 'friend');
+    case 'trioFriendly': return seen('rocket-trio-debt');
+    case 'wesMet': return seen('wes-met');
+    default: return false;
   }
 }
 
@@ -891,6 +931,7 @@ export function effectWords(content: Content, e: EventEffect): string {
       return e.amount < 0 ? 'the crisis eases' : 'the crisis grows';
     case 'aid':
       return 'allies gathered';
+    case 'rivalChange':
     case 'flag':
       return '';
     case 'grandArcRom':
@@ -898,6 +939,8 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'grandArcStock':
     case 'standWith':
       return '';
+    case 'shadowHeart':
+      return 'a Shadow Pokémon eases';
     case 'track':
       return e.input === 'raidSuccess' || e.input === 'officerTurned' ? 'the world eases' : 'the world tightens';
     case 'namedShadow':
@@ -1149,6 +1192,11 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'grandArcStock':
       gainStock(run, e.step);
       return '';
+    case 'shadowHeart': {
+      let eased = 0;
+      for (const m of run.party) if (m.shadow && m.shadow.heart > 1) { m.shadow.heart = Math.max(1, m.shadow.heart + e.amount); eased += 1; }
+      return eased > 0 ? 'Their Shadow loosens its hold a little.' : '';
+    }
     case 'track': {
       // The key is this node, so one stop moves the track once however often it is replayed.
       const before = trackStep(run, currentRegion(content, run).id);
@@ -1166,6 +1214,15 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       else if (e.action === 'verdict' && e.verdict) return resolveVerdict(content, run, e.verdict, { apex: 'none', ...(e.rival && featuredRival(run) ? { rival: e.rival } : {}), ...(e.keepApexBound !== undefined ? { keepApexBound: e.keepApexBound } : {}) }).lines.join(' ');
       else if (e.change) changeRep(run, e.change);
       return '';
+    case 'rivalChange': {
+      const rival = featuredRival(run);
+      const rec = rival ? overhaulOf(run, rival.id) : undefined;
+      if (!rec) return '';
+      for (const [k, d] of Object.entries(e.feelings)) rec.feelings[k as FeelingKey] = Math.min(10, Math.max(0, rec.feelings[k as FeelingKey] + (d ?? 0)));
+      rec.lead = Math.min(3, Math.max(-3, rec.lead + e.lead));
+      if (e.mark) addMark(rec, e.mark);
+      return '';
+    }
     case 'flag':
       run.story.flags[`ev:${e.key}`] = Math.max(0, Number(run.story.flags[`ev:${e.key}`] ?? 0) + e.amount);
       // Shadow II: a story flag may be exactly the key a Shadow in your party or PC has been waiting for.
@@ -1235,6 +1292,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return effectWords(content, e);
     case 'rest': {
       restUntilMorning(run);
+      if (run.expansion?.lastFaint) delete run.expansion.lastFaint;
       const warmed = warmEggs(run, 1);
       return warmed > 0 ? `${effectWords(content, e)}; your Egg${warmed === 1 ? ' is' : 's are'} snug by the fire` : effectWords(content, e);
     }
@@ -1353,7 +1411,16 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     if (enemy.shiny) countShiny(run, enemy.speciesId);
     if (b.shadow) makeShadow(enemy, rollShadowHeart(content, new Rng(hashSeed(`${run.seed}::shadow-foe::${enemy.uid}`))));
     if (b.blissful) makeBlissful(content, enemy);
-    run.battle = createBattle('wild', [enemy], activeIndex, run.party[activeIndex]!.uid);
+    // T4: a doubles / triples wild fight brings one or two more wild Pokémon, rolled by their own generator (old rolls stay the same).
+    const extra = b.format === 'triples' ? 2 : b.format === 'doubles' ? 1 : 0;
+    const formatRng = new Rng(hashSeed(`${run.seed}::event-format::${event.eventId}::${run.encountersCompleted}`));
+    const others = Array.from({ length: extra }, () => {
+      const mon = newMon(content, run, evolvedFormAt(content, pickSpecies(content, run, b.species, b.types, formatRng), level, formatRng), level, 'e');
+      mon.shiny = rollShiny(content, formatRng, runAttributeEffects(content, run).shinyChance * b.shinyMultiplier);
+      if (mon.shiny) countShiny(run, mon.speciesId);
+      return mon;
+    });
+    run.battle = createBattle('wild', [enemy, ...others], activeIndex, run.party[activeIndex]!.uid);
   } else {
     const boss = b.bossId ? content.bosses.get(b.bossId) : undefined;
     const ghost = b.retired ? retiredTeam(run.story) : b.ghost ? championTeam(run.story) : [];
@@ -1419,10 +1486,29 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       run.battle.loaner = ally.uid;
     }
   }
+  if (b.format && !run.battle.doubles) applyEventFormat(content, run, b.format);
   run.battle.event = event;
   for (const mon of run.battle.enemyTeam) discover(run, mon.speciesId, false);
   run.phase = 'battle';
   recordBattleStarted(content, run);
+}
+
+/**
+ * T4: turns a new event battle into a triple battle (when it is switched on and both sides have three healthy Pokémon) or a double
+ * battle; it stays a single battle when neither can be made. No random numbers.
+ */
+export function applyEventFormat(content: Content, run: RunState, format: EventBattleFormat): 'singles' | 'doubles' | 'triples' {
+  const battle = run.battle!;
+  const triplesOn = content.balance.triples.enabled || triplesOnly(run.rules);
+  if (format === 'triples' && triplesOn && canBeTriples(run.party, battle.enemyTeam)) {
+    makeTriples(battle, run.party);
+    return 'triples';
+  }
+  if (canBeDoubles(run.party, battle.enemyTeam)) {
+    makeDoubles(battle, run.party);
+    return 'doubles';
+  }
+  return 'singles';
 }
 
 /** Whether this event battle is a sparring match with the fellow apprentice: losing it is friendly (nobody is out). */

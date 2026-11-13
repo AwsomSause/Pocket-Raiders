@@ -1,0 +1,1147 @@
+{
+ "events": [
+  {
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "id": "rq-empty-slot",
+   "name": "The Rival's Empty Slot",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The rival has five Pokémon out at camp. The sixth Ball sits on the log beside them, and it is cracked. \"Don't ask,\" they say. A long silence. \"...It was a wild battle. A stupid one. I pushed. I keep the Ball. I don't know why.\"",
+   "choices": [
+    {
+     "label": "Sit with them.",
+     "success": {
+      "text": "Nobody talks. The fire does the work.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-grief-shared",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell them about one I lost.",
+     "requires": [
+      {
+       "kind": "oldFoe"
+      }
+     ],
+     "success": {
+      "text": "You tell them about the one a wild foe took from you. They listen, then ask its name.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 3
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-knows-lost",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle. It'll help.",
+     "success": {
+      "text": "They stand up too fast. \"Fine.\" They are distracted, and it shows.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -1
+        },
+        "lead": 0
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "rival": true,
+       "name": "Your rival",
+       "size": 5,
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "winning",
+     "when": [
+      {
+       "kind": "rivalState",
+       "leadAtLeast": 2
+      }
+     ],
+     "notice": "\"I was winning,\" they say, to nobody. \"That's the stupid part.\""
+    }
+   ]
+  },
+  {
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "id": "rq-help-wanted",
+   "name": "The Rival Applies for Your Job",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    }
+   ],
+   "intro": "A shop has a HELP WANTED sign. You and the rival reach for it at the same time. The shopkeeper, Mr. Abernathy-Finch, folds his arms. \"One position. A day's work. ₽600. Convince me.\" \"I'm faster,\" says the rival.",
+   "choices": [
+    {
+     "label": "Out-argue them.",
+     "check": "charisma",
+     "success": {
+      "text": "Three questions, three good answers. The job is yours.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 600
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {},
+        "lead": -1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You lose the argument. They get the job and a smug look.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {},
+        "lead": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them have it.",
+     "success": {
+      "text": "They are suspicious, then grateful.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Split it.",
+     "success": {
+      "text": "Both of you work. Both are bad at it. ₽300 each, and a complaint about 'the two shouting ones'.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-split-job",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "id": "rq-old-man-sign",
+   "name": "The Sign Changes",
+   "rarity": "common",
+   "callback": true,
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-split-job"
+    }
+   ],
+   "intro": "Mr. Abernathy-Finch has rehung his sign. It now reads: NO RIVALS. Under it, in smaller letters: 'Except the two shouting ones. They know why.'",
+   "choices": [
+    {
+     "label": "Smile and move on.",
+     "success": {
+      "text": "Some jobs you only do once.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "id": "rq-letter",
+   "name": "The Thing They Never Said",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    },
+    {
+     "kind": "rivalState",
+     "feeling": {
+      "key": "trust",
+      "atLeast": 4
+     }
+    }
+   ],
+   "intro": "At the night camp the rival holds a letter over the fire. \"It's to my dad. He wanted me to win a League. I want to. I don't know if it's mine or his.\" They look up. \"Burn it or send it?\"",
+   "choices": [
+    {
+     "label": "Send it.",
+     "success": {
+      "text": "They post it at the next town.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-letter-sent",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Burn it.",
+     "success": {
+      "text": "They watch it go, and say nothing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-letter-burnt",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it to me first.",
+     "success": {
+      "text": "They do. It is short. It ends: \"I met someone who makes me want to be good at this for me.\" They post it at the next town.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 3
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-read-letter",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-letter-sent",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "id": "rq-old-man-stands",
+   "name": "The Man in the Stands",
+   "rarity": "common",
+   "callback": true,
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-letter-sent"
+    }
+   ],
+   "intro": "At the edge of the arena an older man stands alone, hat in his hands, watching the rival warm up. He has the rival's way of standing. He nods at you once.",
+   "choices": [
+    {
+     "label": "Nod back.",
+     "success": {
+      "text": "Whatever the letter said, it arrived.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "id": "rq-swap-day",
+   "name": "Swap Day",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    }
+   ],
+   "intro": "The rival holds out their whole belt. \"One spar. You prove mine are badly trained. I prove yours are.\" Their grin is the old one. \"Prove it.\"",
+   "choices": [
+    {
+     "label": "Swap spar (3 v 3).",
+     "success": {
+      "text": "A friendly three-on-three, each side learning the other's tricks. Both teams come back closer, and one has picked up something new.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "eggMove"
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-swap",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "rival": true,
+       "name": "Your rival",
+       "size": 3,
+       "levelBonus": -1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "One loan each way.",
+     "success": {
+      "text": "A single loan each way, a single afternoon. It goes better than either expected.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Scared.\" They put the belt away, grinning.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "id": "rq-asks-you-to-lose",
+   "name": "The Rival Asks You to Lose",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalState",
+     "feeling": {
+      "key": "trust",
+      "atLeast": 3
+     }
+    }
+   ],
+   "intro": "The rival is waiting in the tunnel before a match against you. They don't have their usual face on. \"If I lose this, my sponsor drops me. I go home. That's it.\" A breath. \"I'm not asking. ...I'm asking.\"",
+   "choices": [
+    {
+     "label": "I'll fight you properly.",
+     "success": {
+      "text": "A full battle, nothing held back. Whatever happens, they thank you after.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-honest-match",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "rival": true,
+       "name": "Your rival",
+       "size": 6,
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "I'll throw it.",
+     "success": {
+      "text": "You lose on purpose. They know. They can't look at you.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -2
+        },
+        "lead": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-thrown",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let's tell the sponsor to watch a real match.",
+     "success": {
+      "text": "You both fight flat out in front of the sponsor, and the whole tunnel hears it.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 3
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-real-match",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "rival": true,
+       "name": "Your rival",
+       "size": 6,
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "id": "rq-rival-in-trouble",
+   "name": "A Rival in Trouble",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    }
+   ],
+   "intro": "Off the road, the rival is on one knee. Two of their Pokémon have fainted. Wild ones are closing in, and a Beartic rears up behind them. \"Don't just stand there!\" ...a pause. \"Please.\"",
+   "choices": [
+    {
+     "label": "Fight beside them.",
+     "success": {
+      "text": "You step in beside them and the Beartic goes down.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        },
+        "lead": 0,
+        "mark": "stood-beside-you"
+       },
+       {
+        "kind": "flag",
+        "key": "rival-helped",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "beartic"
+       ],
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Help, then leave before they can thank you.",
+     "success": {
+      "text": "You chase the wild ones off and slip away. They will find out later.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1,
+         "admiration": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-helped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-anonymous",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk past.",
+     "success": {
+      "text": "They get out alone. They saw you go.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -2
+        },
+        "lead": 0,
+        "mark": "left-you-behind"
+       },
+       {
+        "kind": "flag",
+        "key": "rival-abandoned",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait and see.",
+     "success": {
+      "text": "They manage, barely. They saw you watching.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1,
+         "friendship": -1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-watched",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "group": "Rival questline",
+   "stop": "heal",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "id": "rq-favour-returned",
+   "name": "The Favour Returned",
+   "rarity": "common",
+   "callback": true,
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-helped"
+    },
+    {
+     "kind": "flag",
+     "key": "rival-anonymous",
+     "atMost": 0
+    }
+   ],
+   "intro": "At the Center the rival is leaning on the wall, arms crossed. \"I don't owe anyone. So don't think this is that.\" The room is paid for. Their best potion is on the pillow.",
+   "choices": [
+    {
+     "label": "Accept it.",
+     "success": {
+      "text": "You pretend not to notice each other.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "item",
+        "id": "super-potion",
+        "count": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-helped",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "id": "rq-someone-helped",
+   "name": "Somebody Helped Me",
+   "rarity": "common",
+   "callback": true,
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-anonymous"
+    }
+   ],
+   "intro": "The rival does not look up. \"Somebody helped me back there. Didn't stay. If I find out who...\" They glance at you, then away.",
+   "choices": [
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You keep it to yourself. They half-know, and that is enough.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "admiration": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-anonymous",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell them it was you.",
+     "success": {
+      "text": "They go very quiet, then very loud about it not being a big deal.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-anonymous",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "id": "rq-bitter-rival",
+   "name": "A Bitter Rival",
+   "rarity": "common",
+   "callback": true,
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-abandoned"
+    }
+   ],
+   "intro": "The rival blocks the path. \"You left me out there. I haven't forgotten.\"",
+   "choices": [
+    {
+     "label": "Apologise.",
+     "success": {
+      "text": "It costs you something to say. They don't answer. They also don't leave.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "resentment": -1,
+         "trust": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay silent.",
+     "success": {
+      "text": "They shoulder past. The grudge stays where it is.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "resentment": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "id": "rq-in-trouble-again",
+   "name": "A Second Chance",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-abandoned"
+    }
+   ],
+   "intro": "Further on, the rival is in trouble again, worse than before. This time you are close enough to hear them counting their last Pokémon.",
+   "choices": [
+    {
+     "label": "Fight beside them.",
+     "success": {
+      "text": "You do not leave. When it is over they say nothing, but the grudge is gone.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 3,
+         "resentment": -3
+        },
+        "lead": 0,
+        "mark": "stood-beside-you"
+       },
+       {
+        "kind": "flag",
+        "key": "rival-abandoned",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-amends",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "beartic"
+       ],
+       "levelBonus": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Walk past again.",
+     "success": {
+      "text": "They do not call after you this time.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -1,
+         "resentment": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  },
+  {
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "id": "rq-stone-on-the-hill",
+   "name": "The Stone on the Hill",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalState",
+     "feeling": {
+      "key": "friendship",
+      "atLeast": 2
+     }
+    }
+   ],
+   "intro": "A small stone on a hill, wilted flowers at its foot. Beside it hangs a Poké Ball charm you recognise: the rival's. Carved into the stone, badly, with a knife, is a Pokémon's name.",
+   "choices": [
+    {
+     "label": "Leave fresh flowers.",
+     "success": {
+      "text": "They will find them and know.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-memorial-flowers",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for them.",
+     "success": {
+      "text": "At dusk they come. \"It wasn't a battle,\" they say, not looking at you. \"It just... wasn't there one morning.\" They say the name aloud for the first time.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2,
+         "friendship": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-memorial-waited",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the charm to give back.",
+     "success": {
+      "text": "They are angry. Then they are not.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "resentment": 1,
+         "trust": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-memorial-charm",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "two-stones",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-knows-lost"
+      }
+     ],
+     "notice": "Beside it stands a second stone, newer, with a name you remember telling them."
+    }
+   ]
+  },
+  {
+   "group": "Rival questline",
+   "stop": "event",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "id": "rq-the-young-one",
+   "name": "\"This One's New\"",
+   "rarity": "common",
+   "callback": true,
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-memorial-waited"
+    }
+   ],
+   "intro": "The rival has a new Pokémon at their side, young and nervous, of the same kind as the one on the hill. \"This one's new,\" they say. \"I'm going to do it right this time.\"",
+   "choices": [
+    {
+     "label": "Say it will be great.",
+     "success": {
+      "text": "They almost smile.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1,
+         "admiration": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": []
+  }
+ ]
+}

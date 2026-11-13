@@ -13,3 +13,14 @@
 **Save:** no bump. The Factory's `triples` flag is optional in the minigame state.
 
 **Limits:** no wild triples; no boss is listed in `bossIds` yet; the Factory foe AI picks the strongest move, not the smartest.
+
+## T4: Triple Battle event scenes
+- Event battles take an optional `format` (`doubles` | `triples`; `EventBattleFormatSchema`). `applyEventFormat` (core/events.ts) makes triples only while triples are on (`balance.triples.enabled` or Triples Only) and both sides have three healthy Pokémon. Otherwise it makes doubles if it can, or leaves a single battle. It uses no random numbers.
+- Wild fights with a format bring one or two more wild Pokémon, rolled on their own seed (`::event-format::<event>::<encounters>`). The first foe is the same as without a format.
+- Data: `triple-battle` (triples, 3 foes), `whispering-grove-1` gets a new "Wake them" choice (a wild triple battle, fairy/grass, still opens the grove's next event), and `double-trouble`, `twin-trainers` and `hot-dog-duelists` become doubles. The Hot Dog Duelists are one double battle of 4 instead of a chain of two.
+- Tests: `tests/unit/triplesEvents.test.ts`.
+
+## T2 prep: layout-free battle menu rules
+- `src/core/battle/fieldMenu.ts`: `commandPlan` (which of your spots to ask, skip, or fill with a forced move), `targetChoices` (foes in reach plus partners for ally moves, with the best-by-type marker), `shiftOptionProblem` (edges of a triple battle only, one Shift a turn). These follow the same rules as `resolveDoublesTurn`, so anything offered is accepted.
+- The double battle screen (`BattleScene.promptSpot` / `openTargetPicker`) now uses them. What's left for T2: the spot positions (`DUO_POS` for 3), the Shift button, and the art.
+- Tests: `tests/unit/fieldMenu.test.ts`; `doubles.spec.ts` and `raidDoubles.spec.ts` pass.

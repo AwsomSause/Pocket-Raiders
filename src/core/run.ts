@@ -73,6 +73,7 @@ import {
 } from './encounters';
 import { evolutionGift, evolve, evolveFully, type EvolutionResult } from './evolution';
 import { changeFriendship } from './friendship';
+import { joinMoments, restMoments } from './moments/runMoments';
 import { followStep } from './followMode';
 import { addItem, applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem, STACK_MAX } from './items';
 import { addLevels, createPokemon, gainXp, getSpecies, MAX_PP_UPS, maxHp, maxPp, xpForDefeat, xpForLevel } from './pokemon';
@@ -333,7 +334,7 @@ export interface NewRunOptions {
   /** Story Run: the player's name, pronouns and Look from the prologue (profile.story.protagonist). */
   protagonist?: { look: string; name: string; pronouns: string | PronounSet; backstory?: string };
   /** Beta 0.6: which expansion settings were on at run start (settings.expansion). Each flag is stored in `run.expansion` once and never changes. */
-  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; grandArc?: boolean; worldTracks?: boolean; eventsDensity?: 'low' | 'normal' | 'full' };
+  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; grandArc?: boolean; worldTracks?: boolean; eventsDensity?: 'low' | 'normal' | 'full'; climaxCut?: 'standard' | 'extended' };
 }
 
 export function createRun(content: Content, opts: NewRunOptions): RunState {
@@ -436,7 +437,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
   }
   if (opts.expansion) {
     const e = opts.expansion;
-    const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.worldTracks ? { tracks: true } : {}), ...(e.eventsDensity ? { density: e.eventsDensity } : {}) };
+    const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.worldTracks ? { tracks: true } : {}), ...(e.eventsDensity ? { density: e.eventsDensity } : {}), ...(e.climaxCut === 'extended' ? { climaxCut: 'extended' as const } : {}) };
     if (Object.keys(flags).length > 0) run.expansion = { ...run.expansion, ...flags };
     if (e.grandArc) startGrandArc(run);
   }
@@ -2496,7 +2497,9 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     const sigPartner = run.party.find((m) => m.uid === run.story.v2?.heartbond.partner);
     const sigLines = sigPartner ? checkSignatures(content, run, 'recovery').map((u) => learnedLine(content, run, displayName(content, sigPartner), u)).join(' ') : '';
     const camp = campQuirkLine(run.party, campMoment(content, run), campKey, nameOf) ?? quirkReaction(run.party, 'rest_node', campKey, nameOf) ?? partyNarration(run.party, 'rest_node', campKey, nameOf, (m) => content.species.get(m.speciesId)?.types ?? []);
-    return { run, message: `Your Pokémon were fully healed!${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}${heartbondScenes ? ` ${heartbondScenes}` : ''}${sigLines ? ` ${sigLines}` : ''}` };
+    // Pokémon moments (Beta 0.6): a party member's rest moment can add a line.
+    const momentLine = restMoments(content, run).join(' ');
+    return { run, message: `Your Pokémon were fully healed!${momentLine ? ` ${momentLine}` : ''}${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}${heartbondScenes ? ` ${heartbondScenes}` : ''}${sigLines ? ` ${sigLines}` : ''}` };
   }
   run.phase = 'shop';
   noteMapGrowth(content, run, run.party[0]?.uid, 'shopVisit');
@@ -2523,6 +2526,12 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     return { run, message: `Welcome to the shop! You already have a ${entry.name}, so the voucher was worth ₽${voucher.refund}.` };
   }
   return { run, message: 'Welcome to the shop!' };
+}
+
+/** The lines Pokémon moments add when a caught Pokémon joins the party (a legendary heals the team, Ditto rolls a talent). */
+function joinLine(content: Content, run: RunState, joined: PokemonInstance): string {
+  const lines = joinMoments(content, run, joined, () => healParty(content, run));
+  return lines.length ? ` ${lines.join(' ')}` : '';
 }
 
 export function healParty(content: Content, run: RunState): void {
@@ -2978,6 +2987,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     const fainted = e.type === 'faint' && e.side === 'player' ? run.party.find((p) => p.uid === e.uid) : undefined;
     if (fainted) {
       noteKeepsakeFaint(run);
+      run.expansion = { ...run.expansion, lastFaint: { uid: fainted.uid, at: run.encountersCompleted } };
       changeFriendship(content, fainted, content.balance.friendship.perFaint);
       careFaint(fainted);
       if (fainted.care?.ace) careAceFell(run, fainted.uid);
@@ -3882,7 +3892,7 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
       if (problem) throw new Error(problem);
       run.party.push(caught);
       count(run, 'caughtKept');
-      message = `${name} joined your party!`;
+      message = `${name} joined your party!${joinLine(content, run, caught)}`;
     } else if (choice.kind === 'replace') {
       const old = run.party[choice.partyIndex];
       if (!old) throw new Error('Choose a party member to replace');
@@ -3892,7 +3902,7 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
       if (problem) throw new Error(problem);
       run.party[choice.partyIndex] = caught;
       count(run, 'caughtKept');
-      message = `${speciesName(content, old.speciesId)} left the party. ${name} joined!`;
+      message = `${speciesName(content, old.speciesId)} left the party. ${name} joined!${joinLine(content, run, caught)}`;
     } else if (choice.kind === 'sendToBox') {
       if (run.box.length >= boxCapacity(runPerks(content, run))) throw new Error('The PC is full');
       run.box.push(caught);
