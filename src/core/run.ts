@@ -2826,7 +2826,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     disabledMechanics: run.disabledMechanics,
     manualMega: true,
     hyper: hyperRng ? buildHyperContext(content, run, hyperRng) : undefined,
-    moments: pokemonMomentHooks(content, run),
+    moments: content.balance.pokemonMoments === false ? undefined : pokemonMomentHooks(content, run),
     teamItems: run.passives,
     noBattleItems: noBattleItems(run.rules),
     setStyle: isHardcore(run.rules),
