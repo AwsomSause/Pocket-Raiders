@@ -738,5 +738,67 @@
   "processed": "It keeps looking at the mark they left. It doesn't seem to mind when you look too.",
   "assigned": "It did what they told it. It would rather not talk about it.",
   "held-too-long": "It knows you came. It took a while to be sure."
+ },
+ "beats": {
+  "quiet": {
+   "approach": {
+    "good": "Wait for the shift change",
+    "neutral": "Go at once",
+    "bad": "Go at once, with a light"
+   },
+   "door": {
+    "good": "Use the service entrance the receipt names",
+    "neutral": "Pick the main lock",
+    "bad": "Try the window. There is always a window. It is always alarmed"
+   },
+   "cage": {
+    "good": "Let the Pokémon recognise the player before opening",
+    "neutral": "Open every cage at once",
+    "bad": "Carry the cage out, closed"
+   }
+  },
+  "loud": {
+   "approach": {
+    "good": "Let the rival go first and be the noise",
+    "neutral": "Go in together",
+    "bad": "Go first and be the noise yourself"
+   },
+   "door": {
+    "good": "Break the hinge side",
+    "neutral": "Break the lock",
+    "bad": "Argue with the guard"
+   },
+   "cage": {
+    "good": "Shield the cages before the last fight",
+    "neutral": "Fight in the open",
+    "bad": "Fight beside the cages"
+   }
+  },
+  "inside": {
+   "approach": {
+    "good": "Arrive exactly when the insider said",
+    "neutral": "Arrive early",
+    "bad": "Arrive late"
+   },
+   "cage": {
+    "good": "Leave the way the insider says, even though it is longer",
+    "neutral": "Leave the way the player came",
+    "bad": "Stop to take something else"
+   }
+  }
+ },
+ "exchange": {
+  "opening": {
+   "good": "Put the item on the table first",
+   "wrong": "Ask to see the Pokémon first"
+  },
+  "middle": {
+   "good": "Say nothing while they inspect it",
+   "wrong": "Explain what it is worth"
+  },
+  "close": {
+   "good": "Take the Pokémon and leave",
+   "wrong": "Ask for something extra"
+  }
  }
 }

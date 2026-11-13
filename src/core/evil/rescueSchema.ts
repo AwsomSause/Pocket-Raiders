@@ -31,6 +31,9 @@ export const RescueDataSchema = z.object({
   effects: z.record(z.string(), z.object({ processed: text, assigned: text, heldTooLong: text })),
   sites: z.array(z.object({ team: z.string(), name: text, site: text, annexPr: z.string().regex(/^pr\.[a-z0-9-]+\.[a-z0-9-]+$/), note: text, approach: text, door: text, cage: text, jailer: text, jailerLine: text })).length(14),
   complications: z.array(z.object({ id: z.number().int().min(1).max(12), name: text, sees: text, good: text, poor: text })).length(12),
+  /** The choice text of each beat (PS-RESCUE), by plan and beat; the Exchange has right and wrong lines. */
+  beats: z.record(z.enum(['quiet', 'loud', 'inside']), z.record(z.string(), z.object({ good: text, neutral: text, bad: text }))),
+  exchange: z.record(z.string(), z.object({ good: text, wrong: text })),
   /** Cellmate species (weakest first) for teams that have no entry in evilTeams.json. */
   gruntPools: z.record(z.string(), z.array(z.string()).min(2)),
   tuning: z.object({

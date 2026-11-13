@@ -381,3 +381,38 @@ describe('save', () => {
 });
 
 const activeHoldCount = (r: ReturnType<typeof mk>) => rescueOf(r).holds.reduce((n, h) => n + h.pokemon.length, 0);
+
+describe('screen view-models', () => {
+  const names = { player: 'Kice', mon: 'Pikachu' };
+  it('the offer view lists five plans, words not numbers, the receipt and the clock', async () => {
+    const { offerView, nextBeatView, exchangeView, resultView } = await import('../../src/core/evil/rescueView');
+    const r = mk();
+    const h = hold(r);
+    const v = offerView(r, { holdId: h.id, kind: 'first' }, ctx({ archetype: 'hotshot' }), h.impoundNode + 1, names);
+    expect(v.plans.map((p) => p.plan)).toEqual(['quiet', 'loud', 'deal', 'inside', 'exchange']);
+    expect(v.plans.find((p) => p.plan === 'loud')!.preferred).toBe(true);
+    for (const p of v.plans) if (p.readiness) expect(['Risky', 'Even', 'Likely', 'Safe']).toContain(p.readiness);
+    expect(v.plans.find((p) => p.plan === 'deal')!.readiness).toBeNull();
+    expect(v.plans.find((p) => p.plan === 'inside')!.available).toBe(false);
+    expect(v.receipt).toContain('claim ticket');
+    expect(v.clock.state).toBe('logged');
+    expect(v.lines.join(' ')).toContain('Kice');
+    expect(JSON.stringify(v.plans.map((p) => p.readiness))).not.toMatch(/\d/);
+    // beats: three, then the complication, then done; the order is stable per run
+    acceptOffer(r, h.id, 'quiet', ctx(), h.dueAt);
+    const seq: string[] = [];
+    for (let i = 0; i < 4; i++) {
+      const b = nextBeatView(r, ctx())!;
+      expect(b.choices).toHaveLength(i < 3 ? 3 : 2);
+      expect(b).toEqual(nextBeatView(r, ctx()));
+      seq.push(b.kind);
+      if (b.kind === 'beat') answerBeat(r, 'good');
+      else answerComplication(r, 'good');
+    }
+    expect(seq).toEqual(['beat', 'beat', 'beat', 'complication']);
+    expect(nextBeatView(r, ctx())).toBeNull();
+    const out = finishPlan(r, ctx(), h.dueAt);
+    expect(resultView(out, 'prodigy', { ...names, site: 'x' }).lines.every((l) => l.length > 0)).toBe(true);
+    expect(exchangeView(r, 0).choices.map((c) => c.wrong).sort()).toEqual([false, true]);
+  });
+});
