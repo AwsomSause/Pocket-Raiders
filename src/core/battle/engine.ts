@@ -6532,6 +6532,15 @@ function recordFaints(ctx: BattleContext, player: Combatant, enemy: Combatant, e
 function settleFaints(ctx: BattleContext, events: BattleEvent[]): void {
   const { battle } = ctx;
   const enemy = currentEnemy(battle);
+  // Flight North (Beta 0.6 Vermilion): when the lone Bug-type drops under a quarter of its HP, a shiny copy of it arrives and knocks the foe out, once. No random numbers.
+  if (battle.eventRule?.shinyRescue && !battle.storyEffects.includes('shiny-rescue') && enemy.hp > 0) {
+    const hero = ctx.party[battle.activeIndex];
+    if (hero && hero.hp > 0 && hero.hp * 4 < calcStats(ctx.content, hero).hp) {
+      battle.storyEffects.push('shiny-rescue');
+      events.push({ type: 'raid', tone: 'phase', text: `A shiny ${nameOf(ctx, hero)} swoops in and knocks out ${getSpecies(ctx.content, enemy.speciesId).name} with one move!` });
+      enemy.hp = 0;
+    }
+  }
   // Colossus: whatever hurt it (recoil, poison...), it cannot fall while a seal remains.
   if (battle.colossus && enemy.hp <= 0 && battle.colossus.seals.some((s) => !s.broken)) enemy.hp = 1;
   if (enemy.hp <= 0) {

@@ -1,0 +1,18 @@
+[
+ {
+  "id": "network-machine",
+  "name": "Network Machine",
+  "family": "TMs and HMs",
+  "description": "Single use: teach one Pok\u00e9mon any move it can learn",
+  "rarity": "epic",
+  "stacksOn": "pokemon",
+  "max": null,
+  "how": "use",
+  "icon": "library/machine-fairy",
+  "status": "supported",
+  "effect": {
+   "kind": "teachMove",
+   "mode": "hm"
+  }
+ }
+]

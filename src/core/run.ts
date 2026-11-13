@@ -288,7 +288,7 @@ import { answerMentorship, graduateMentorships, planMentorship } from './story/m
 import { mentorshipsAfterBattle } from './story/mentorBond';
 import { answerReturn, planReturn, recordDefeats, returningPokemon } from './story/returnProtege';
 import { PSEUDO } from './dungeon/pseudo';
-import { addCanonStops } from './expansion/canonRun';
+import { addCanonStops, failCanonRaid, finishCanonRaid, restoreStash } from './expansion/canonRun';
 import { addFinaleCanonStops, addOpeningCanonStops, addRouteCanonStops } from './expansion/canonEnds';
 import { leaveCanonStash, ruleEvolution } from './expansion/canonSaffron';
 import { apprenticeLost, applyLessons, bondOf, mentorBadgeWon, startMentorship } from './mentors';
@@ -1775,13 +1775,15 @@ function failRaid(content: Content, run: RunState): void {
   const battle = run.battle!;
   const raidId = battle.raid?.id ?? battle.totem!.id;
   buryFallen(content, run, battleCause(content, battle));
+  const lostCanon = battle.raid ? getRaid(content, battle.raid.id).canon : null;
+  if (lostCanon) failCanonRaid(content, run, lostCanon);
   if (battle.raid && getRaid(content, battle.raid.id).grand) endGrandBattle(content, run, false, run.party[battle.activeIndex]?.uid);
   const frac = battle.totem ? content.totems.failureHealFraction : content.raids.failureHealFraction;
   // The timer ran out: the boss escapes and comes back in a later stage, changed (once).
   const raid = battle.raid;
   const rawRaid = raid ? getRaid(content, raid.id) : null;
   // S408 Boss Revenge Rematch: a boss that beat you (not a practice fight, not a story raid) comes back stronger in a later stage, once.
-  const beaten = Boolean(raid && !raid.practice && !raid.returning && rawRaid && !rawRaid.grand && !rawRaid.gang && !rawRaid.legendary && !rawRaid.special && battle.outcome === 'lose' && !(raid.timerLeft !== null && raid.timerLeft <= 0));
+  const beaten = Boolean(raid && !raid.practice && !raid.returning && rawRaid && !rawRaid.grand && !rawRaid.gang && !rawRaid.legendary && !rawRaid.canon && !rawRaid.special && battle.outcome === 'lose' && !(raid.timerLeft !== null && raid.timerLeft <= 0));
   if (beaten && !run.raids.escaped.includes(raid!.id)) run.raids.escaped.push(raid!.id);
   if (raid && raid.timerLeft !== null && raid.timerLeft <= 0 && !raid.returning) {
     run.raids.escaped.push(raid.id);
@@ -1873,6 +1875,23 @@ function claimRaidRewards(content: Content, run: RunState, battle: BattleState):
   // Kept as a counter so the account remembers it (profile best "raidBestTier") and opens the next tier in later runs.
   run.log.counters.raidBestTier = run.raids.bestTier;
   run.raids.done.push(def.id);
+  // Beta 0.6 Canon Spaces: a canon raid finishes its space and may hand over a gift Pokémon (Kaiju Tentacruel's Tentacool).
+  if (def.canon) finishCanonRaid(run, def.canon);
+  const gift = def.rewards.gift;
+  if (gift) {
+    const level = Math.max(1, boss.level - gift.levelDrop);
+    const given = newMon(content, run, gift.species, level, 'p');
+    if (gift.ability) given.fixedAbility = gift.ability;
+    for (const id of gift.moves) {
+      const mv = content.moves.get(id);
+      if (!mv || given.moves.some((m) => m.id === id)) continue;
+      if (given.moves.length < 4) given.moves.push({ id, pp: mv.pp });
+      else given.moves[3] = { id, pp: mv.pp };
+    }
+    count(run, 'pokemonCaught');
+    discover(run, given.speciesId, true);
+    run.pending.unshift({ kind: 'caught', mon: given, raidTier: def.tier });
+  }
   if (def.grand) endGrandBattle(content, run, true, run.party[battle.activeIndex]?.uid);
   let notes: string[] | undefined = def.gang ? gangRaidWon(content, run, def) : undefined;
   if (battle.raid!.coop) {
@@ -1887,6 +1906,8 @@ function claimRaidRewards(content: Content, run: RunState, battle: BattleState):
  * a generator of its own, so the encounter stream (and every later battle) is unchanged.
  */
 export function startEncounter(content: Content, run: RunState, node: MapNode, rematch?: Rng): void {
+  // Flight North: stepping back onto the ordinary map with only the Bug-type gives the stolen party back first.
+  restoreStash(run);
   startEncounterBase(content, run, node, rematch);
   addPlayFeatures(content, run, node);
 }
@@ -4251,6 +4272,8 @@ function assignField(content: Content, run: RunState, boss: boolean): void {
 
 /** W7 rule P5: a loss inside a pseudo stage sends the party back to the map, partly healed (fainted Pokémon at the failure share of their HP), and the run goes on. */
 export function pseudoLost(content: Content, run: RunState): void {
+  // Flight North: a loss inside the Bug-type's stage sends you home with your own team back.
+  restoreStash(run);
   for (const m of run.party) {
     const floor = Math.max(1, Math.floor(maxHp(content, m) * PSEUDO.rules.failureHeal));
     if (m.hp < floor) m.hp = floor;
