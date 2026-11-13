@@ -109,6 +109,8 @@ import { ARENA_IMMUNE, foeStake, aimAccuracy, arenaText, dealOffer, mindReader, 
 import { benchSupporter, addBleed, bleedDamage, causesBleed, curseMultiplier, resonanceMultiplier } from './w1Rules';
 import { sacrificeFor } from './sacrificeRule';
 import { berserkDue, berserkMove, isBerserk } from './berserk';
+import { guardAmount, tryLethalMoment, tryRunEndMoment } from './pokemonMoments';
+import type { MomentHooks } from '../moments/pokemonMoments';
 import { freshHyperBattle, rollHyper, type EnemyRage, type HyperContext, type HyperEligibility } from './hyper';
 import { applyTransformations, battleMove, battleTypes, endDynamax, maxMoveExtras, maxMoveTerrain, maxMoveWeather, stabMultiplier, teraPower, tickDynamax, transformProblem, zMoveFor, type TransformEvent, type TransformRequest, type TransformStepEvent } from './transform';
 import { hiddenPowerType } from '../ivs';
@@ -133,6 +135,8 @@ export type BattleEvent =
   | { type: 'cured'; side: Side }
   /** Became confused; `confusion` is the "is confused!" check at the start of its move; `confusionEnd` snapped out. */
   | { type: 'confused'; side: Side }
+  /** A Pokémon moment (core/moments): `cinematic` false means it is told as a plain line; `scene` is the full-screen run-end revive. */
+  | { type: 'pmoment'; side: Side; uid: string; speciesId: string; id: string; name: string; tier: 'minor' | 'major' | 'landmark'; hpAfter: number; cinematic: boolean; scene: boolean }
   | { type: 'confusion'; side: Side }
   | { type: 'confusionEnd'; side: Side }
   | { type: 'confusionHit'; side: Side; amount: number; hpAfter: number }
@@ -322,6 +326,10 @@ export interface BattleContext {
   bondPartners?: (uid: string) => string[];
   /** Hyper moments for your Pokémon (none when absent). */
   hyper?: HyperContext;
+  /** Pokémon moments (Beta 0.6, core/moments); none when absent. */
+  moments?: MomentHooks;
+  /** Events queued by moments deep inside damage code; added to the turn's events when it ends. */
+  momentQueue?: BattleEvent[];
   /** Set during a turn once a Hyper moment has changed the battle (one per turn). */
   hyperUsed?: boolean;
   /** The same for the opposing side (its rage). */
@@ -997,6 +1005,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   // A narrative fight that drags on ends as the story loss (the rival cannot be beaten, so it must end).
   if (battle.narrative && !battle.outcome && battle.turn > battle.narrative.maxTurns) battle.outcome = 'lose';
   applyHype(ctx, events);
+  if (ctx.momentQueue?.length) events.push(...ctx.momentQueue.splice(0));
   return events;
 }
 
@@ -2573,6 +2582,7 @@ function takeHp(
       chargedLanded = raid.charging;
     }
   }
+  amount = guardAmount(ctx, c, amount);
   let lost = Math.min(Math.max(0, amount), c.mon.hp);
   if (c.side === 'enemy' && lost > 0 && ctx.battle.raid && ctx.battle.raid.minionUid !== c.mon.uid) {
     const hero = ctx.party[ctx.battle.activeIndex]?.uid;
@@ -2598,6 +2608,15 @@ function takeHp(
       lost = c.mon.hp - (hyper.hpAfter > 0 && !hyper.revived ? hyper.hpAfter : 0);
       c.mon.hp = hyper.hpAfter;
       return { lost, lastStand: null, hyper: hyper.event, knockedDown: hyper.revived };
+    }
+  }
+  // Beta 0.6 Pokémon moments: a species, line, type or group may hang on (core/moments). A Hyper moment this turn comes first.
+  if (hit !== null && c.side === 'player' && lost > 0 && lost >= c.mon.hp) {
+    const left = tryLethalMoment(ctx, c);
+    if (left !== null) {
+      lost = c.mon.hp - left;
+      c.mon.hp = left;
+      return { lost, lastStand: null, hyper: null, knockedDown: false, stand: false };
     }
   }
   // Last Stand: a deeply bonded Pokémon may hold on at 1 HP (rare, once per battle; battle/spectacle.ts).
@@ -3042,6 +3061,7 @@ function executeMove(
     const stopped =
       (v.disabled && v.disabled.turns > 0 && v.disabled.moveId === move.id) ||
       (v.torment && v.lastMove === move.id) ||
+      (user.mon.overcharged && v.lastMove === move.id && user.mon.moves.filter((m) => m.pp > 0).length > 1) ||
       (v.taunt > 0 && move.category === 'status') ||
       (v.throat > 0 && move.flags.includes('sound')) ||
       (target.vol.imprison && target.mon.moves.some((m) => m.id === move.id));
@@ -6359,7 +6379,7 @@ function settleFaints(ctx: BattleContext, events: BattleEvent[]): void {
   }
   if (active.hp <= 0) {
     if (ctx.party.some((p) => p.hp > 0)) battle.needsSwitch = true;
-    else battle.outcome = 'lose';
+    else if (!tryRunEndMoment(ctx, events)) battle.outcome = 'lose';
   }
   // The trainer's next Pokémon's entry ability (after the player's replacement, if one is needed).
   resolveEntries(ctx, events);

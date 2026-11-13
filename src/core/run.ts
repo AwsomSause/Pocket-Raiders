@@ -182,6 +182,7 @@ import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
 import { applyTrainerParity, trainerHistoryLine, trainerKey } from './trainerWorld/trainerWorld';
 import { planTrainerGimmicks, returningPlan, trainerKit } from './trainerWorld/behavior';
 import { castGymLeader, castLeague, record } from './rolePool';
+import type { MomentHooks } from './moments/pokemonMoments';
 import { galarScope, lastStandUsed, markLastStand, pickCounterSpecies } from './galarCrowd';
 import { GALAR_SHOP_COLUMNS, ballGuyLimit, ballGuyStock, galarEliteFour, usesGalarTournament } from './galarTournament';
 import { getTheme, pickGymLeader, typesPool, wildEligibleSpecies } from './themes';
@@ -269,6 +270,7 @@ import { StoryV2Schema } from './story2/schema';
 import type { PronounSet } from './story2/identity';
 import { castAuthoredLeague, circuitLeader, guestMatch, noteGymWin } from './campaign/circuitCast';
 import { applyLeagueDoorChoice, leagueDoorDecision } from './campaign/leagueDoor';
+import { wildStoneFor } from './evoEncounter';
 import { counterPickMembers, counterTargets } from './campaign/counterPick';
 import { applyCircuitChoice, forkDecision, isCircuitRun, nextGymIndex, rematchDecision } from './campaign/circuitGate';
 import { ensureStoryRun, placeStoryStops, playFinaleStops, playNodeStops, playStageEndStops } from './campaign/storyDirector';
@@ -1954,6 +1956,13 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       run.battle.enemyStages.def = 1;
     }
     run.battle.levelInfo = [plan.levelInfo];
+    if (!legendary && !back && !mrBack) {
+      const stone = wildStoneFor(content, run, enemy.speciesId, `${run.encountersCompleted}:${node.id}`);
+      if (stone) {
+        run.battle.evoStone = stone;
+        run.battle.rivalNote = [`A ${content.items.get(stone)!.name} glints beside it.`, run.battle.rivalNote].filter(Boolean).join(' ');
+      }
+    }
     if (nemesis && back) beginNemesisBattle(content, run, nemesis, back.change, null);
     if (monRival && mrBack) run.battle.rivalNote = beginMonRivalBattle(content, run, monRival, enemy);
     else {
@@ -2787,6 +2796,26 @@ function galarLastStandMon(content: Content, run: RunState): PokemonInstance | n
   return mon;
 }
 
+/** Pokémon moments (core/moments): the seed, the run's saved flags and the cinematic budget, all read from the run. */
+function pokemonMomentHooks(content: Content, run: RunState): MomentHooks {
+  return {
+    seed: `${run.seed}:${run.encountersCompleted}`,
+    flags: run.story.flags,
+    cinematic: (tier) => momentAllowed(content, run, tier),
+    noteCinematic: (tier) => noteMoments(run, tier),
+    // Only a wipe with nothing left to catch it ends the run: no checkpoint to return to, no Safety Net, no VS Recorder.
+    runWouldEnd: () => {
+      const battle = run.battle;
+      if (!battle || battle.outcome === 'win' || battle.outcome === 'caught') return false;
+      if (battle.expedition || battle.raid || battle.totem || battle.narrative || battle.event || battle.stepIn || battle.doubles) return false;
+      if (storyLossApplies(run, battle, content)) return false;
+      if (run.recorder && (vsRecorderReady(content, run) || safetyNetReady(content, run))) return false;
+      if (run.checkpoint && (getMode(run.rules.modeId)?.checkpoints === true || (run.rules.deathBlock && !run.rules.deathBlockUsed && run.encountersCompleted < RUN_RULES.deathBlock.battles))) return false;
+      return true;
+    },
+  };
+}
+
 function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rng, hyperRng?: Rng): BattleContext {
   const archetype = runArchetype(content, run);
   syncHpPerks(content, archetype.modifiers, run.party);
@@ -2820,6 +2849,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     disabledMechanics: run.disabledMechanics,
     manualMega: true,
     hyper: hyperRng ? buildHyperContext(content, run, hyperRng) : undefined,
+    moments: content.balance.pokemonMoments === false ? undefined : pokemonMomentHooks(content, run),
     teamItems: run.passives,
     noBattleItems: noBattleItems(run.rules),
     setStyle: isHardcore(run.rules),
@@ -2960,6 +2990,11 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const reveal = [revealMove(content, run, 'player', false), revealMove(content, run, 'enemy', Boolean(rivalHere) && rivalBond(rivalHere, currentEnemy(battle).speciesId).confidence >= 40)];
   for (const r of reveal) if (r) events.push(r);
   events.push(...trackFeelings(content, current, run, events as BattleEvent[]));
+  if ((battle.outcome === 'win' || battle.outcome === 'caught') && battle.evoStone) {
+    addItem(run.inventory, battle.evoStone, 1);
+    events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: `You pick up the ${content.items.get(battle.evoStone)?.name ?? battle.evoStone}.` });
+    delete battle.evoStone;
+  }
   if (battle.outcome === 'win') bondVictory(run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));
   if (battle.outcome === 'win') heartbondVictory(run, `b${run.encountersCompleted}`, isBossFight(battle) || Boolean(battle.rivalId), underdogXpMultiplier(content, run.party, battle.enemyTeam) > 1);
   // S6 Keepsakes: Gym, rival, League and type-disadvantage wins leave marks (Story Runs only).

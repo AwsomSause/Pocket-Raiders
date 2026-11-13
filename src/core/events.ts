@@ -12,7 +12,7 @@
 import { modifierEventWeight } from './runModifiers';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
 import { PSEUDO } from './dungeon/pseudo';
-import { pseudoRivalBeat } from './rivals/live';
+import { friendName, friendTeam, pseudoRivalBeat } from './rivals/live';
 import { repAtLeast } from './rivals/reputation';
 import type { ChoiceKind } from './presentation/eventStyles';
 import { befriendWanderer, startWanderer } from './wanderer';
@@ -1251,6 +1251,7 @@ function startEventBattle(content: Content, run: RunState, node: MapNode, b: Eve
     const rivalTeam = rival && ghost.length === 0 ? rivalFightTeam(content, rival) : [];
     const evil = evilBattle(content, run, b);
     const fellow = b.apprentice ? run.mentor?.fellow ?? null : null;
+    const friendFoes = b.kind === 'trainer' && b.friend ? friendTeam(content, run, b.size) : [];
     // S274 Mirror Match: a copy of your team (your lead first, then the others still standing, up to the fight's size), with your moves.
     const mirrored = b.mirror ? [run.party[activeIndex]!, ...run.party.filter((p, i) => i !== activeIndex && p.hp > 0)].slice(0, Math.max(1, b.kind === 'trainer' ? b.size : 1)) : [];
     const team = mirrored.length > 0 ? mirrored.map((src) => {
@@ -1261,6 +1262,9 @@ function startEventBattle(content: Content, run: RunState, node: MapNode, b: Eve
       const level = Math.min(cap, Math.max(1, base + apprenticeLevelBonus(fellow) + (i === b.size - 1 ? 1 : 0)));
       const type = fellow.types[i % Math.max(1, fellow.types.length)];
       return newMon(content, run, evolvedFormAt(content, pickSpecies(content, run, [], type ? [type] : [], rng), level, rng), level, 'e');
+    }) : friendFoes.length > 0 ? friendFoes.map((speciesId, i) => {
+      const level = Math.min(cap, Math.max(1, base + (i === friendFoes.length - 1 ? 1 : 0)));
+      return newMon(content, run, evolvedFormAt(content, speciesId, level, rng), level, 'e');
     }) : evil ? evil.species.map((speciesId, i) => {
       const level = Math.min(cap, Math.max(1, base + evil.levelBonus + (i === evil.size - 1 ? 1 : 0)));
       return newMon(content, run, evolvedFormAt(content, speciesId, level, rng), level, 'e');
@@ -1278,7 +1282,7 @@ function startEventBattle(content: Content, run: RunState, node: MapNode, b: Eve
     const strategyKey = evil ? { kind: 'evil' as const, key: evilTeam(content, run)?.id ?? '' } : rival && rivalTeam.length > 0 ? { kind: 'rival' as const, key: rival.style } : null;
     const shaped = strategyKey && team.length > 0 ? shapeInstances(content, strategyIdForGroup(content, strategyKey.kind, strategyKey.key), strategyKey.kind, team, 0) : null;
     if (shaped) team.splice(0, team.length, ...shaped.team);
-    run.battle = createBattle('trainer', team, activeIndex, run.party[activeIndex]!.uid, { classId: b.classId ?? 'event', name: evil ? evil.name : rival ? rival.name : fellow ? fellow.name : b.name, leaderId: null });
+    run.battle = createBattle('trainer', team, activeIndex, run.party[activeIndex]!.uid, { classId: b.classId ?? 'event', name: evil ? evil.name : rival ? rival.name : fellow ? fellow.name : b.kind === 'trainer' && b.friend ? friendName(run) : b.name, leaderId: null });
     if (shaped) {
       run.battle.ai = Math.max(run.battle.ai, shaped.ai);
       if (shaped.strategy) run.battle.strategy = shaped.strategy.id;

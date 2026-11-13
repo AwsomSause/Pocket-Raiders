@@ -2063,6 +2063,8 @@ export const BalanceSchema = z.object({
   leaderMoods: z.boolean().default(true),
   /** Rebalance: Gym Leaders, Elite Four, Champions and Rivals get held items, IVs, EVs and training (core/bossGear.ts). */
   bossGear: z.boolean().default(true),
+  /** Beta 0.6: Pokémon-specific moments (core/moments); off = the rules before them (old-seed tests). */
+  pokemonMoments: z.boolean().default(true),
   sos: z.object({ enabled: z.boolean() }).default({ enabled: true }),
   /** Battle Drama spectacle (APPROVED §7): Last Stand, Perfect Counter, Momentum, Guard Break, Revenge Moment, boss phases, Boss Revenge Rematch (core/battle/spectacle.ts). */
   spectacle: SpectacleConfigSchema,
@@ -2541,6 +2543,8 @@ export const BalanceSchema = z.object({
   /** Bonus items (held, passive, stat boosts) stack at most this high, unless the No Item Caps modifier is on. */
   /** Beta 0.6 B7: the League reads the six Pokémon you register at its door. At most `cap` slots of one team answer them, and the Champion answers your top `championTargets`. */
   leagueCounterPick: z.object({ register: z.number().int().min(1).default(6), swaps: z.number().int().min(0).default(1), cap: z.number().int().min(0).default(4), championTargets: z.number().int().min(0).default(2), minEffect: z.number().min(1).default(2) }).default({ register: 6, swaps: 1, cap: 4, championTargets: 2, minEffect: 2 }),
+  /** Beta 0.6 B9: the chance a wild Pokémon that evolves by a stone stands beside one (win or catch it to take the stone). Needs Evolution Encounters on. */
+  evolutionEncounter: z.object({ wildStoneChance: z.number().min(0).max(1).default(0.15) }).default({ wildStoneChance: 0.15 }),
   itemCaps: z.object({ bonusMax: z.number().int().min(1), healsPerBattle: z.number().int().min(1).default(10), revivesPerBattle: z.number().int().min(1).default(6), moneyMax: z.number().int().min(1).default(999999), buysPerStage: z.number().int().min(1).default(25) }).default({ bonusMax: 3, healsPerBattle: 10, revivesPerBattle: 6, moneyMax: 999999, buysPerStage: 25 }),
   /** Wild species with at least this base stat total count as rare (trainer perks make them turn up more or less). */
   rareEncounterBst: z.number().int().positive(),
@@ -3139,6 +3143,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     mirror: z.boolean().optional(),
     /** Mentors: the team is your fellow apprentice's (their preferred types; they take the name). A loss is friendly: nobody is out and the run goes on. */
     apprentice: z.boolean().optional(),
+    /** Beta 0.6 R8: the foe is your Friend (their team by personality, their name; core/rivals/live.ts). */
+    friend: z.boolean().optional(),
     name: z.string(),
     size: z.number().int().min(1).max(6).default(2),
     /** How many of the trainer's Pokémon (the first ones) are Shadow Pokémon a Snag Ball can take. */

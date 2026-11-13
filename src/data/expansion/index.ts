@@ -3,6 +3,8 @@
 
 import { ExpansionFileSchemas } from '../../core/expansion/data';
 import type { ExpansionData } from '../../core/expansion/data';
+import { CanonSpacesFileSchema } from '../../core/expansion/canonSpaces';
+import canonSpacesKanto from './canonSpacesKanto.json';
 import apex from './apex.json';
 import characters from './characters.json';
 import climaxExtended from './climax_extended.json';
@@ -28,3 +30,6 @@ export const expansionData: ExpansionData = {
   climax_extended: ExpansionFileSchemas.climax_extended.parse(climaxExtended),
   apex: ExpansionFileSchemas.apex.parse(apex),
 };
+
+/** Workstream 18: the Kanto Canon Spaces catalog and stage slots (built by `npm run data:canon-spaces`). */
+export const canonKanto = CanonSpacesFileSchema.parse(canonSpacesKanto);

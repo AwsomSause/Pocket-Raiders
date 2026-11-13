@@ -3427,6 +3427,96 @@
       }
     },
     {
+      "id": "orchestra",
+      "name": "Orchestra",
+      "category": "timing",
+      "blurb": "Conduct the orchestra.",
+      "instructions": "Cue each section as its part comes up. Swell cues use the Swell button, or a loud sound when mic input is on. Perfect timing scores most.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "beta06": true,
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "cues": 10,
+            "swellChance": 20,
+            "window": 1
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "cues": 14,
+            "swellChance": 25,
+            "window": 1
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "cues": 18,
+            "swellChance": 30,
+            "window": 0
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "2 for a perfect cue, 1 for a good one, +1 every 4th in a row.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.55,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 70,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 119,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 189,
+          "item": {
+            "item": "ultra-ball",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "heal",
+            "amount": 25,
+            "chance": 0.5
+          }
+        }
+      },
+      "failureOutcome": "The piece falls apart; you keep what you earned.",
+      "replayRules": "Two tries per stop; the best medal counts.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 600
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": false
+      }
+    },
+    {
       "id": "stealth-escape",
       "name": "Stealth Escape",
       "category": "puzzle",

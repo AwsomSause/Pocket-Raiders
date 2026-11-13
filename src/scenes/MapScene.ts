@@ -49,6 +49,7 @@ import { stageModifier } from '../core/runModifiers';
 import type { MapNode, SideStop } from '../core/state';
 import { services } from '../game/services';
 import { pendingRescue } from '../core/evil/rescueGlue';
+import { pendingFormat } from '../core/formats/glue';
 import { rescueOf } from '../core/evil/rescue';
 import { device } from '../game/deviceTools';
 import { flagOn } from '../core/tools/featureFlags';
@@ -246,6 +247,13 @@ export class MapScene extends Phaser.Scene {
       const mon = hold ? session.content.species.get(String(hold.pokemon[0]?.speciesId))?.name ?? 'your Pokémon' : 'your Pokémon';
       this.time.delayedCall(0, () => {
         this.scene.launch('Rescue', { ...rescue, names: { player: session.content.archetypes.get(run.archetypeId)?.name ?? 'friend', mon }, from: 'Map' });
+        this.scene.pause();
+      });
+    }
+    // Wide formats (Breather and the rest): a running format shows its plain screen on top of the map.
+    if (pendingFormat(run)) {
+      this.time.delayedCall(0, () => {
+        this.scene.launch('Format', { from: 'Map' });
         this.scene.pause();
       });
     }
