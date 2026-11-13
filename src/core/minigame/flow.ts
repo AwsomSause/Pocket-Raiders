@@ -4,10 +4,7 @@
 import { addItem } from '../items';
 import { hashSeed, Rng } from '../rng';
 import { maxHp } from '../pokemon';
-import { continueAfterDecisions, newMon, requireStage } from '../run';
-import { curveLevel, levelScale } from '../encounters';
-import { getCampaign, runLevelCap } from '../regions';
-import { discover } from '../progress';
+import { requireStage } from '../run';
 import type { Content } from '../contentSchema';
 import type { RunState } from '../state';
 import { gameModule, type MinigameView } from './games';
@@ -58,17 +55,9 @@ export function beginMinigame(content: Content, current: RunState, sideId: strin
   if (used + 1 >= def.attemptLimit) findStop(run, sideId).used = true;
   const stage = requireStage(run);
   const rs = new Rng(hashSeed(`${run.seed}::minigame::${stage.index}:${sideId}:${used}:${tier}`)).state;
-  run.minigame = { id: def.id, sideId, tier, state: gameModule(def.id).start(content, { ...def.difficultyTiers[tier]!.params, ...conditionParams(run), ...zoneParams(content, run, def.id) }, rs), outcome: null };
+  run.minigame = { id: def.id, sideId, tier, state: gameModule(def.id).start(content, { ...def.difficultyTiers[tier]!.params, ...conditionParams(run) }, rs), outcome: null };
   run.phase = 'minigame';
   return run;
-}
-
-/** Safari Land: the level its catches arrive at (the stage's opening level plus one) and the balls a Safari Pass adds. */
-function zoneParams(content: Content, run: RunState, id: string): Record<string, number> {
-  if (id !== 'safari-land') return {};
-  const stage = requireStage(run);
-  const level = curveLevel(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, stage.index, 1)) + 1;
-  return { level: Math.min(runLevelCap(content, run), level), bonus: 10 * Number(run.story.flags['ev:kanto-safari-pass'] ?? 0) };
 }
 
 /** The conditions of your lead Pokémon as game parameters c0..c4 (S487); every game ignores the ones it does not read. */
@@ -123,14 +112,6 @@ function settle(content: Content, run: RunState): RunState {
   const mod = gameModule(s.id);
   if (!(s.state as { done: boolean }).done || s.outcome) return run;
   const { score, max } = mod.result(s.state as never);
-  if (s.id === 'safari-land') {
-    // A zone game pays no medal: the catches come home when you leave, and the balls left are kept for later spaces (Tauros Stampede).
-    const st = s.state as { balls: number; steps: number; caught: unknown[] };
-    run.story.flags['ev:kanto-safari-balls'] = st.balls;
-    run.story.flags['ev:kanto-safari-steps'] = st.steps;
-    s.outcome = { score, max, medal: 'none', money: 0, item: null, lines: [`${st.caught.length} caught. ${st.balls} Safari Balls left.`] };
-    return run;
-  }
   s.outcome = payout(content, run, getMinigame(content, s.id), s.tier, score, max);
   if (s.id === 'berry-blending') {
     const line = poffinConditions(run, s.state as never, s.outcome.medal);
@@ -212,22 +193,11 @@ function applyEffect(content: Content, run: RunState, kind: 'heal' | 'research' 
 }
 
 /** Back to the map. Leaving before the end forfeits the attempt (it was already counted) and pays nothing. */
-export function leaveMinigame(current: RunState, content?: Content): RunState {
+export function leaveMinigame(current: RunState): RunState {
   const run = structuredClone(current);
   const s = session(run);
-  // Safari Land: every caught Pokémon comes home through the usual catch decision (once: the session is cleared right after).
-  const caught = s.id === 'safari-land' && s.outcome ? (s.state as { caught: { id: string }[]; level: number }) : null;
   run.minigame = null;
   run.phase = 'map';
-  if (caught && content) {
-    for (const c of caught.caught) {
-      const mon = newMon(content, run, c.id, caught.level, 'p');
-      discover(run, mon.speciesId, true);
-      run.pending.push({ kind: 'caught', mon });
-    }
-    run.afterDecisions = 'map';
-    continueAfterDecisions(content, run);
-  }
   return run;
 }
 

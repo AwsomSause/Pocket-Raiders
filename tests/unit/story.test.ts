@@ -115,7 +115,7 @@ describe('story foundation: random streams', () => {
     eventsExtra: (RAW_CONTENT.eventsExtra as { events?: { group?: string }[] }[]).map((f) => ({ ...f, events: (f.events ?? []).filter((e) => !String(e.group ?? '').startsWith('Story:') && e.group !== 'Plush Workshop' && e.group !== 'Canon Spaces: Kanto') })),
     // Run events B (trainer battles) came later too.
     eventsRB: { events: [] },
-    eventsCanonKanto: { events: [] }, eventsCanonFuchsia: { events: [] }, // Kanto canon spaces came later too
+    eventsCanonKanto: { events: [] }, eventsCanonVermilion: { events: [] }, eventsCanonFuchsia: { events: [] }, // Kanto canon spaces came later too
     eventsCanonSaffron: { events: [] },
     eventsHelpers: { events: [] },
     eventsMerchants: { events: [] }, // run events A came later too

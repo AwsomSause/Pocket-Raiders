@@ -49,7 +49,6 @@ import { chooseAutoAction, setStance, type AutoPick, type Stance } from '../core
 import type { DramaLine } from '../core/drama';
 import * as Exp from '../core/expedition/flow';
 import * as Mini from '../core/minigame/flow';
-import * as Arcade from '../core/minigame/arcade';
 import { claim } from '../core/quests';
 import { claimCollectionMilestones } from '../core/collection';
 import * as Run from '../core/run';
@@ -463,10 +462,6 @@ export class GameSession {
     return this.setRun(Exp.extractExpedition(this.content, this.requireRun()));
   }
 
-  chooseArcadeCabinet(sideId: string, cabinetId: string): RunState {
-    return this.setRun(Arcade.chooseCabinet(this.content, this.requireRun(), sideId, cabinetId));
-  }
-
   beginMinigame(sideId: string, tier: number): RunState {
     return this.setRun(Mini.beginMinigame(this.content, this.requireRun(), sideId, tier));
   }
@@ -484,7 +479,7 @@ export class GameSession {
   }
 
   leaveMinigame(): RunState {
-    return this.setRun(Mini.leaveMinigame(this.requireRun(), this.content));
+    return this.setRun(Mini.leaveMinigame(this.requireRun()));
   }
 
   private setRun(run: RunState): RunState {

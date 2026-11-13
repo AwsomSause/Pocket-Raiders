@@ -38,7 +38,6 @@ import { boxCapacity } from '../core/trainerPerks';
 import { hiddenItemNode, mapItemSummary, repelActive } from '../core/mapItems';
 import { expeditionPreview } from '../core/expedition/flow';
 import { minigamePreview } from '../core/minigame/flow';
-import { arcadeCabinets, canChooseCabinet } from '../core/minigame/arcade';
 import { ROUTE_LABELS, routeKind } from '../core/campaign/director';
 import { anomalyLine, stageAnomaly } from '../core/story/anomaly';
 import { StopCard, type StopLook } from '../ui/stopLooks';
@@ -1374,40 +1373,8 @@ export class MapScene extends Phaser.Scene {
   }
 
   /** A minigame stop: shows the rules and the attempts left, and the pick of a difficulty starts the game. */
-  /** Rocket Row Arcade: pick a cabinet (Pinball, Whack-a-Diglett, Claw Machine), then the usual difficulty picker. */
-  private openArcade(sideId: string): void {
+  private openMinigame(sideId: string): void {
     const { session } = services();
-    const cabinets = arcadeCabinets(session.content, session.run!);
-    const picker: Picker = new Picker(this, {
-      title: 'Rocket Row Arcade - pick a cabinet',
-      columns: 1,
-      rowHeight: 90,
-      rows: cabinets.map((c) => ({
-        problem: null,
-        hint: c.blurb,
-        draw: (scene, box, w) => {
-          box.add(scene.add.text(16, 8, c.name.replace(/^Arcade: /, ''), textStyle(24)));
-          box.add(scene.add.text(16, 44, `${c.blurb}  ·  Best: ${c.best}`, textStyle(15, '#ffd0a0', { wordWrap: { width: w - 32 } })));
-        },
-      })),
-      onSelect: (i) => {
-        picker.close();
-        this.picker = null;
-        playSfx(this, 'ui.select');
-        session.chooseArcadeCabinet(sideId, cabinets[i]!.id);
-        this.openMinigame(sideId, true);
-      },
-      onBack: () => {
-        picker.close();
-        this.picker = null;
-      },
-    });
-    this.picker = picker;
-  }
-
-  private openMinigame(sideId: string, cabinetChosen = false): void {
-    const { session } = services();
-    if (!cabinetChosen && canChooseCabinet(session.run!, sideId)) return this.openArcade(sideId);
     const pv = minigamePreview(session.content, session.run!, sideId, session.settings.expansion.minigamesDifficulty);
     const picker: Picker = new Picker(this, {
       title: `${pv.name} - ${pv.attemptsLeft} attempt${pv.attemptsLeft === 1 ? '' : 's'} left`,
@@ -1930,7 +1897,7 @@ export class MapScene extends Phaser.Scene {
     if (this.report || this.busy || this.picker || this.legend) return;
     const run = services().session.run;
     if (!run) return;
-    this.fieldNotes = drawFieldNotes(this, fieldNotesView(services().session.content, run), () => this.toggleFieldNotes());
+    this.fieldNotes = drawFieldNotes(this, fieldNotesView(services().session.content, run), (id) => services().session.content.species.get(id), () => this.toggleFieldNotes());
     this.busy = true;
   }
 

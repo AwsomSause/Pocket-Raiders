@@ -614,6 +614,10 @@
         "kind": "flag",
         "key": "rocket-trio-debt",
         "amount": 1
+       },
+       {
+        "kind": "fieldNote",
+        "special": "sv.rocket.meowth"
        }
       ]
      }
@@ -653,6 +657,10 @@
         "kind": "attribute",
         "key": "goodEvil",
         "amount": 5
+       },
+       {
+        "kind": "fieldNote",
+        "special": "sv.rocket.meowth"
        }
       ]
      }

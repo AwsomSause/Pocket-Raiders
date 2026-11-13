@@ -2,6 +2,8 @@
 // Pure rules, no Phaser. State lives in run.expansion.raids (keys n1..n6) plus the lever flags in siege / apex / cast / cut
 // (a raid may write nothing else, design 6.6). No random stream: the one roll (how many Pokémon are impounded) is hashed from seed + region + label.
 
+import { meetTeamHeads } from '../expansion/cast/dossier';
+import { fromRaidResult } from '../expansion/cast/meet';
 import { trackOnRaid, trackStep } from '../expansion/trackRun';
 import { z } from 'zod';
 import raidData from '../../data/storyRaids.json';
@@ -132,6 +134,9 @@ export function resolveStoryRaid(content: Content, run: RunState, n: number, res
   b.cut = { ...rec(b.cut), mods: climaxMods(run) };
   // E2: a raid won turns the region's world-state track back one step, a raid failed or declined adds one (a partial changes nothing).
   trackOnRaid(run, run.regionOrder[run.regionIndex], n, result);
+  // E1: dealing with an operation, won or lost, puts the team's top names in the Dossier (not when you stayed out of it).
+  // The Dossier is its own block (`run.expansion.dossier`), not one of the lever blocks above.
+  fromRaidResult(run, def.team, result, meetTeamHeads);
   return { record, hold, alreadyResolved: false, lines };
 }
 

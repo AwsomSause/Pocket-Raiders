@@ -52,9 +52,9 @@ export const XE_KANTO_EVENTS: Json[] = [
     ]),
   ev('xe.kanto.trio-conscience', 'Growlie', G, { stop: 'event', rarity: 'rare', minStage: 2, requires: base, cast: ['trainer.roughneck'], tint: '#1c2018', effect: 'none' } as never,
     'A kennel van, door open. James is kneeling by a cage. "Shh. I had one just like you." Jessie: "James. We are paid to deliver these." Meowth: "We ain\'t been paid since Mt. Moon." James opens the cage and a tagged Growlithe bolts into the grass. They see you. "...You saw nothing, twerp."', [
-      ch('"I saw nothing."', out('Jessie nods once. They owe you.', flag('rocket-trio-debt'))),
-      ch('"I\'m telling Domino."', fight('They do not let you leave quietly.', grunt('Jessie and James', 2, 1, [heat(4)]))),
-      ch('"Need help with the other cages?"', out('Six more go free. Meowth: "Don\'t make it weird."', flag('rocket-trio-debt'), good(5))),
+      ch('"I saw nothing."', out('Jessie nods once. They owe you.', flag('rocket-trio-debt'), note('sv.rocket.meowth'))),
+      ch('"I\'m telling Domino."', fight('They do not let you leave quietly.', grunt('Jessie and James', 2, 1, [heat(4)])), note('sv.rocket.meowth')),
+      ch('"Need help with the other cages?"', out('Six more go free. Meowth: "Don\'t make it weird."', flag('rocket-trio-debt'), good(5), note('sv.rocket.meowth'))),
     ]),
   ev('xe.kanto.orphan', 'Orphan', G, { stop: 'event', rarity: 'uncommon', minStage: 2, requires: base, cast: ['trainer.aroma_lady'], tint: '#1c1830', effect: 'none' } as never,
     'A Cubone sits outside the Tower and will not go in. A volunteer: "It waits there every evening. Something upstairs cries, and it cries back."', [

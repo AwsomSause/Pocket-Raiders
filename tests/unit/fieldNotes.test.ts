@@ -1,7 +1,7 @@
 // Beta 0.6 Field Notes: recording (special Pokémon, Shadow hints), the view per tab, the save shape and the event effect.
 
 import { describe, expect, it } from 'vitest';
-import { FIELD_TABS, fieldNotesView, noteShadow, noteSpecial, syncFieldNotes } from '../../src/core/expansion/fieldNotes';
+import { FIELD_TABS, fieldNotesView, noteBattle, noteShadow, noteSpecial, syncFieldNotes } from '../../src/core/expansion/fieldNotes';
 import { ExpansionRunSchema } from '../../src/core/expansion/schema';
 import { earnRom, startGrandArc } from '../../src/core/grandArc';
 import { makeNamedShadow } from '../../src/core/shadow2/grant';
@@ -92,5 +92,41 @@ describe('save shape', () => {
     expect(ExpansionRunSchema.safeParse({ fieldNotes: { shadow: { x: 9 } } }).success).toBe(false);
     const v = fieldNotesView(content, run('fn-empty'));
     for (const t of FIELD_TABS) expect(v.tabs[t]).toBeDefined();
+  });
+});
+
+describe('noteBattle (a normal Kanto run fills the tabs)', () => {
+  const withBattle = (seed: string, battle: unknown) => {
+    const r = run(seed);
+    (r as { battle: unknown }).battle = battle;
+    return r;
+  };
+  const foe = (speciesId: string, uid = 'e1') => ({ uid, speciesId });
+
+  it('notes a Black-Label Pokémon of a listed species, and not a plain one or one of another line', () => {
+    const r = withBattle('fn-b1', { enemyTeam: [foe('raticate', 'a'), foe('persian', 'b'), foe('rhydon', 'c')], extra: { variants: { a: { line: 'tagged' }, c: { line: 'dark-ball' } } } });
+    noteBattle(content, r);
+    expect(r.expansion?.fieldNotes?.special).toEqual(['sv.rocket.big-tab']);
+  });
+
+  it('notes a Named Shadow on the foe side at its hints, and a Colossus Apex', () => {
+    const r = withBattle('fn-b2', { enemyTeam: [{ ...foe('aerodactyl'), shadow: { heart: 60, named: 'ss.rocket.amberjack', hints: 2 } }], extra: { variants: {} }, colossus: { id: 'ss.rocket.m2' } });
+    noteBattle(content, r);
+    expect(r.expansion?.fieldNotes?.shadow).toEqual({ 'ss.rocket.amberjack': 2, 'ss.rocket.m2': 1 });
+  });
+
+  it('a won or joined Convoy ledger notes LEDGER; a lost one does not', () => {
+    const r = run('fn-ledger');
+    r.expansion = { ...r.expansion, cut: { ledger: 'none' } };
+    syncFieldNotes(r);
+    expect(r.expansion?.fieldNotes).toBeUndefined();
+    r.expansion = { ...r.expansion, cut: { ledger: 'won' } };
+    syncFieldNotes(r);
+    expect(r.expansion?.fieldNotes?.special).toEqual(['sv.rocket.ledger']);
+  });
+
+  it('every Kanto special Pokémon with a team line can be reached by some variant rule', () => {
+    const kanto = fieldNotesView(content, run('fn-all')).tabs.special;
+    expect(kanto.length).toBe(9);
   });
 });

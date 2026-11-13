@@ -21,6 +21,7 @@ import type { RunState } from '../state';
 import { emit } from '../story/record';
 import { evilConfig, HIDEOUT_AT_LEAGUE } from '../campaign/circuit';
 import { recordChoice } from './choices';
+import { beatTeamLeaders } from '../expansion/cast/dossier';
 import { trackOnClimax, trackOnOperation } from '../expansion/trackRun';
 import { freshEvil, type EvilRank, type EvilState, type EvilTeam, type VillainRecord } from './schema';
 
@@ -132,6 +133,8 @@ export function applyEvilEffect(content: Content, run: RunState, e: EvilEffect):
     if (s.beat === 6) { trackOnClimax(run, run.regionIndex); beginClimax(run, run.regionOrder[run.regionIndex]); }
     const cfg = evilConfig(content, run);
     // Story Run (Appendix S.7): after beat 6 the hideout waits for League entry (core/campaign/storyDirector.ts places it).
+    // E1: the story's last beat comes after the final climax fight is won: the team's Leader is beaten for the Dossier.
+    if (s.beat === 7) beatTeamLeaders(run, team.id);
     s.nextAt = s.beat === 6 && cfg.hideoutAtLeague ? HIDEOUT_AT_LEAGUE : s.stages + cfg.beatEvery;
     words.push(s.beat === 7 ? `the ${team.name} story reaches its end` : `the ${team.name} story moves on (${s.beat}/7)`);
   }

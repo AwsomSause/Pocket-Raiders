@@ -11,6 +11,7 @@ import { ARCHETYPES, PLAN_IDS, RescueDataSchema, RescueStateSchema } from './res
 import type { Archetype, Hold, HoldState, PlanId, PlanRun, RescueResult, RescueState, ShortcutId } from './rescueSchema';
 
 export { PLAN_IDS, ARCHETYPES };
+import { meetFromInsideJob } from '../expansion/cast/meet';
 export type { Archetype, Hold, HoldState, PlanId, PlanRun, RescueResult, RescueState, ShortcutId };
 
 export const RESCUE = RescueDataSchema.parse(data);
@@ -287,6 +288,7 @@ export function acceptOffer(run: RunState, holdId: string, plan: PlanId, ctx: Re
   h.lateDue = false;
   const pr: PlanRun = { holdId, plan, complication: drawComplication(run, h.regionId), beats: [], complicationAnswer: null, exchangeWrong: 0, penalty: 0, late: h.late, heatDone: 0, fights: [], fightNow: null, wiped: false };
   s.active = pr;
+  if (plan === 'inside' && ctx.sideWith) meetFromInsideJob(run);
   log(s, `rescue.accepted:${h.id}:${plan}`);
   return pr;
 }

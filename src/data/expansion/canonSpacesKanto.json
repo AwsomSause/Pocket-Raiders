@@ -665,7 +665,12 @@
     "max": 20
    },
    "length": 7,
-   "flags": [],
+   "flags": [
+    "kanto.flight.stolen",
+    "kanto.flight.bug",
+    "kanto.flight.rescue.used",
+    "kanto.flight.keeps"
+   ],
    "section": "5.4"
   },
   {
