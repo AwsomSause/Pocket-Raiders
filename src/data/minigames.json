@@ -4238,6 +4238,96 @@
         "slowFactor": 2,
         "noTimerOption": false
       }
+    },
+    {
+      "id": "orchestra-pit",
+      "name": "The Orchestra Pit",
+      "category": "timing",
+      "blurb": "Keep the orchestra in time.",
+      "instructions": "Four lanes (D F J K). Tap a lane as its note crosses the line. Long notes: tap to hold, tap again to let go. Misses quiet the crowd; if the applause hits zero the show ends.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "beta06": true,
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "notes": 14,
+            "longChance": 20,
+            "applause": 6
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "notes": 18,
+            "longChance": 30,
+            "applause": 5
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "notes": 24,
+            "longChance": 35,
+            "applause": 4
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "2 for a perfect tap, 1 for a good one, +1 each 5 in a row, +1 per beat a long note is held.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.55,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 70,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 119,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 189,
+          "item": {
+            "item": "ultra-ball",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "heal",
+            "amount": 25,
+            "chance": 0.5
+          }
+        }
+      },
+      "failureOutcome": "The crowd goes home; you keep what you scored.",
+      "replayRules": "Two tries per stop; the best medal counts.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 600
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": false
+      }
     }
   ]
 }
