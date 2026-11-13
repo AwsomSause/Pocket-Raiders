@@ -65,6 +65,8 @@ test('Shadow Pokémon get an aura and variant-tagged Pokémon get a mark, a labe
     b.showSprite('player', mine, false);
     return { enemy: b.markObjs.enemy.length, player: b.markObjs.player.length };
   });
+  const tinted = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').enemySprite.tintTopLeft ?? -1);
+  expect(tinted).toBe(0xb890ff);
   expect(n.enemy).toBeGreaterThan(0);
   expect(n.player).toBeGreaterThan(0);
   await page.waitForTimeout(1200);
