@@ -234,7 +234,7 @@
  "legendaryWildChance": 0.0025,
  "legendaryMinRegion": 2,
  "heldItemSlots": 8,
- "itemCaps": { "bonusMax": 3, "revivesPerBattle": 6, "moneyMax": 999999, "buysPerStage": 25 },
+ "itemCaps": { "bonusMax": 3, "healsPerBattle": 10, "revivesPerBattle": 6, "moneyMax": 999999, "buysPerStage": 25 },
  "rareEncounterBst": 480,
  "evolution": {
   "trainerItemLevel": 30,
