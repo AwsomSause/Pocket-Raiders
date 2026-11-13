@@ -73,3 +73,14 @@ describe('stage pacing map (B6)', () => {
     expect(content.balance.stage.pacing.expMultiplier).toBe(0.8);
   });
 });
+
+describe('stage pacing on every campaign', () => {
+  it('a short campaign (dev) keeps a valid old-style map instead of an invalid one', () => {
+    for (const [id, campaign] of content.campaigns) {
+      for (let i = 0; i < 40; i++) {
+        const map = generateStageMap(content, campaign, new Rng(hashSeed(`pace-all::${id}::${i}`)), { regionIndex: i % 3 });
+        expect(validateStageMap(map), `${id} #${i}`).toEqual([]);
+      }
+    }
+  });
+});

@@ -32,6 +32,8 @@ export function generateStageMap(content: Content, campaign: Campaign, rng: Rng,
   // 1. Pick the trainer columns, one from each configured range.
   const trainerColumns: number[] = [];
   let optionalColumns: number[] = [];
+  // Stage pacing needs room for its windows; a short campaign (the dev campaign) has too few columns, so it keeps the old two-trainer-column stage.
+  let usePacing = !!pacing;
   if (pacing) {
     // Stage pacing: 4–5 trainer columns, one from each window; 1–2 of them skippable (a wild node beside the trainer).
     const total = Math.min(rng.int(pc.totalMin, pc.totalMax), pc.windows.length);
@@ -43,12 +45,16 @@ export function generateStageMap(content: Content, campaign: Campaign, rng: Rng,
       while (picked.includes(col) && col < hi) col += 1;
       if (!picked.includes(col)) picked.push(col);
     }
-    const avoidable = Math.min(rng.int(pc.avoidableMin, pc.avoidableMax), Math.max(0, picked.length - 3));
-    const pool = [...picked];
-    while (optionalColumns.length < avoidable) optionalColumns.push(pool.splice(rng.int(0, pool.length - 1), 1)[0]!);
-    optionalColumns.sort((a, b) => a - b);
-    trainerColumns.push(...picked.filter((c) => !optionalColumns.includes(c)));
-  } else {
+    if (picked.length < pc.totalMin) usePacing = false;
+    else {
+      const avoidable = Math.min(rng.int(pc.avoidableMin, pc.avoidableMax), Math.max(0, picked.length - 3));
+      const pool = [...picked];
+      while (optionalColumns.length < avoidable) optionalColumns.push(pool.splice(rng.int(0, pool.length - 1), 1)[0]!);
+      optionalColumns.sort((a, b) => a - b);
+      trainerColumns.push(...picked.filter((c) => !optionalColumns.includes(c)));
+    }
+  }
+  if (!usePacing) {
     for (const [first, last] of cfg.trainerColumns) {
       let col = rng.int(first, last);
       while (trainerColumns.includes(col) && col < last) col += 1;
@@ -129,7 +135,7 @@ export function generateStageMap(content: Content, campaign: Campaign, rng: Rng,
     if (kind) node.sides.push({ id: `s${++sideCount}`, kind, used: false });
   }
 
-  if (pacing) {
+  if (pacing && usePacing) {
     // One ace trainer (the last column every route must cross) and, from region 2, one doubles trainer. Their own streams.
     const forced = [...trainerColumns].sort((a, b) => a - b);
     const aceCol = forced[forced.length - 1];
@@ -143,7 +149,7 @@ export function generateStageMap(content: Content, campaign: Campaign, rng: Rng,
   }
 
   const trainerOut = [...trainerColumns].sort((a, b) => a - b);
-  return { columns: C, nodes, trainerColumns: trainerOut, ...(pacing ? { optionalTrainerColumns: optionalColumns } : {}) };
+  return { columns: C, nodes, trainerColumns: trainerOut, ...(pacing && usePacing ? { optionalTrainerColumns: optionalColumns } : {}) };
 }
 
 /**
