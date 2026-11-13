@@ -2,6 +2,7 @@
 // and the permanent profile. These schemas double as save-file validators,
 // so the game refuses to load a save that doesn't match.
 
+import { ExpansionRunSchema, ExpansionSettingsSchema, EXPANSION_SETTINGS_DEFAULTS } from './expansion/schema';
 import { ProfileStorySchema, StorySettingsSchema, STORY_SETTINGS_DEFAULTS } from './story2/schema';
 import { TreasureHuntSchema } from './treasureHunt';
 import { EVENT_STYLE_IDS } from './presentation/eventStyles';
@@ -1436,6 +1437,8 @@ export const RunStateSchema = z.object({
   streaks: z.object({ wins: z.number().int().min(0), best: z.number().int().min(0), faintedSeen: z.number().int().min(0), rareMisses: z.number().int().min(0) }).default(() => ({ wins: 0, best: 0, faintedSeen: 0, rareMisses: 0 })),
   /** A past run's Pokémon waiting to meet you after this many battles (story slice 5); unset when none was chosen. */
   reunion: z.object({ mon: PastPokemonSchema, afterEncounters: z.number().int().min(1), done: z.boolean() }).optional(),
+  /** Beta 0.6 INSTRUMENTALITY run state (run v43). Absent until a slice that uses it writes it; older runs load untouched. */
+  expansion: ExpansionRunSchema.optional(),
 });
 export type RunState = z.infer<typeof RunStateSchema>;
 
@@ -1773,6 +1776,8 @@ export type Profile = z.infer<typeof ProfileSchema>;
 export const SettingsSchema = z.object({
   /** Story Overhaul v2 settings (settings v39). */
   story: StorySettingsSchema.default(STORY_SETTINGS_DEFAULTS),
+  /** Beta 0.6 INSTRUMENTALITY settings (settings v42), all at their safe defaults. */
+  expansion: ExpansionSettingsSchema.default(EXPANSION_SETTINGS_DEFAULTS),
   musicVolume: z.number().min(0).max(1),
   sfxVolume: z.number().min(0).max(1),
   muted: z.boolean(),

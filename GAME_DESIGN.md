@@ -259,6 +259,7 @@ Six plain attributes from 0 to 100 (Strength, Intelligence, Speed, Charisma, Luc
 - **D14 Level caps.** Decided (2026-10-25): each region raises the level cap by 50. **Levels go above 100, up to a maximum of 500** (director, 2026-10-25). Built in Milestone 8.75 part G; until then levels stop at 100. The balancing plan asks for +100 per region (2026-10-30); that waits for part G because `maxLevel` is 100 (see `docs/quality/encounter-audit.md`).
 - **D15 Evolution.** Decided (2026-10-25): standard level-up evolution.
 - **D16 Currencies.** Decided (2026-10-25): four currencies. Poké Dollars (spent during a run), Bank Credits (permanent upgrades and unlocks), Research Points (Pokédex, starters, research) and candies (kept as a separate fourth currency, D7).
+- **D17 Beta 0.6 decisions.** Decided (2026-11-12, Kice): the 23 answers A–W in `docs/plans/instrumentality/INSTRUMENTALITY_DEFINITION.md` §7. Headlines: a climax gives two shots and never ends the run; 10 healing items + 6 revives per battle, same for E4, rivals and Champion; one transformation per gimmick per side; Triple Battles added; Evolution Encounters on; mic input; harder minigames; listed story bosses may field 7 Pokémon; no cross-run rival memory.
 
 ## 14. Out-of-Run and Run-Prep (director design, 2026-10-25)
 
