@@ -135,3 +135,16 @@ export function fieldIndexes(battle: Pick<BattleState, 'doubles' | 'activeIndex'
   const others = !d ? [] : d.trio ? d.trio[side].map((s) => s.index) : [d[side].index];
   return [main, ...others].filter((i) => i >= 0);
 }
+
+type SlotState = NonNullable<BattleState['doubles']>['player'];
+
+/**
+ * A triple battle's three spots on one side, left to right, with the main fields standing in for the focused spot
+ * (index -1 = empty). For engine code outside the turn loop (ally abilities, field-wide abilities). Empty array if not triples.
+ */
+export function trioSpots(battle: Pick<BattleState, 'doubles' | 'activeIndex' | 'enemyIndex' | 'playerStages' | 'enemyStages' | 'playerVolatile' | 'enemyVolatile'>, side: Side): SlotState[] {
+  const t = battle.doubles?.trio;
+  if (!t) return [];
+  const main: SlotState = side === 'player' ? { index: battle.activeIndex, stages: battle.playerStages, vol: battle.playerVolatile } : { index: battle.enemyIndex, stages: battle.enemyStages, vol: battle.enemyVolatile };
+  return t[side].map((s, spot) => (spot === t.at[side] ? main : s));
+}
