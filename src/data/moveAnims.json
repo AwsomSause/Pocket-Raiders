@@ -12127,6 +12127,14 @@
       "telegraph": "normal",
       "script": "airslash"
     },
+    "haunting": {
+      "anim": "night-shade",
+      "source": "type",
+      "shake": 2,
+      "flash": null,
+      "hitStopMs": 60,
+      "telegraph": "normal"
+    },
     "samurai-slash": {
       "anim": "slash",
       "source": "type",

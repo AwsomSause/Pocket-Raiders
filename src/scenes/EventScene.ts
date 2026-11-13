@@ -190,7 +190,7 @@ export class EventScene extends Phaser.Scene {
     const bg = this.add.graphics();
     paintGlass(bg, -w / 2, -BOTTOM_H / 2, w, BOTTOM_H, { tint: AERO.glassLow, glow: false, alpha: 0.98, radius: 14 });
     box.add(bg);
-    box.add(this.add.text(0, -BOTTOM_H / 2 + 12, 'Pick a Pokémon to trade (Esc: back)', textStyle(12, '#f8e8a0')).setOrigin(0.5, 0.5));
+    box.add(this.add.text(0, -BOTTOM_H / 2 + 12, 'Pick a Pokémon (Esc: back)', textStyle(12, '#f8e8a0')).setOrigin(0.5, 0.5));
     const rows = picks.map((p, i) => {
       const t = this.add.text(0, -BOTTOM_H / 2 + 34 + i * rowH, p.label, textStyle(14, COLORS.textLight)).setOrigin(0.5, 0).setInteractive({ useHandCursor: true });
       t.on('pointerover', () => this.pickAt(i));

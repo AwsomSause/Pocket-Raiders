@@ -103,6 +103,7 @@ import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow
 import { DEFAULT_BALL } from '../core/ballLook';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { PlayerTrainerActor, playerLookForBattle, preloadPlayerTrainer } from '../ui/playerTrainer';
+import { addMarks } from '../ui/battleFx/markAura';
 import { itemVisual, pokemonIcon, pokemonVisual, trainerBackVisual, trainerVisual, type Visual } from '../ui/sprites';
 import { bossVictory } from '../ui/battleFx/victoryLook';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, STATUS_LABELS, TYPE_COLORS, mixColor, textStyle } from '../ui/theme';
@@ -303,6 +304,9 @@ export class BattleScene extends Phaser.Scene {
   private field!: Phaser.GameObjects.Container;
   /** The battle arena's backdrop texture (the Z-Move scene reuses it as its stage). */
   private arenaBgKey: string | null = null;
+  private msgBaseSize: string | undefined;
+  /** Shadow aura and variant marks drawn with each side's sprite. */
+  private markObjs: Record<'player' | 'enemy', Phaser.GameObjects.GameObject[]> = { player: [], enemy: [] };
   /** Index in `field` just above the arena art. */
   private fieldBase = 0;
   /** The player's trainer on the field (Overhaul P2): null in doubles and for trainers that keep their own throwing sprite. */
@@ -591,6 +595,7 @@ export class BattleScene extends Phaser.Scene {
     this.commandWindow = (cw && this.skin?.commandWindow ? this.skin.commandWindow(this, cw) : cw && !this.skin ? drawGlass(this, cw[0], cw[1], cw[2], cw[3], { tint: AERO.glassLow, rim: AERO.sky, glow: false, radius: 18 }) : this.add.graphics()).setVisible(false);
     const msg = L?.message ?? { x: 36, y: MESSAGE_Y + 40, w: 520, size: 30 };
     this.message = this.add.text(msg.align === 'center' ? msg.x + msg.w / 2 : msg.x, msg.y, '', this.skinText(msg.size, this.panelText, { wordWrap: { width: msg.w }, lineSpacing: 6, align: msg.align ?? 'left' })).setOrigin(msg.align === 'center' ? 0.5 : 0, 0);
+    this.msgBaseSize = undefined;
     const info = L?.moveInfo ?? { x: COMMAND_X + 30, y: MESSAGE_Y + 24 };
     this.moveInfo = this.add.text(info.x, info.y, '', this.skinText(L ? Math.min(20, msg.size) : 24, this.panelText, { lineSpacing: 8 })).setVisible(false);
     this.skinHud = this.skin?.frame?.(this, this.frameInfo()) ?? null;
@@ -1202,6 +1207,19 @@ export class BattleScene extends Phaser.Scene {
     if (cry) playCry(this, species, side === 'player' ? mon.care?.cryVolume ?? 100 : 100);
     // Gigantamax art is already drawn huge, so only a plain Dynamax grows.
     const grow = mon.dynamaxed && species.form?.kind !== 'gigantamax' ? DYNAMAX_SCALE : 1;
+    this.markObjs[side].forEach((o) => o.destroy());
+    this.markObjs[side] = [];
+    const visual = this.showSpriteBody(side, mon, species, cry, grow);
+    try {
+      const vs = this.run.battle?.extra?.variants?.[mon.uid];
+      this.markObjs[side] = addMarks(this, this.field, visual, { shadow: Boolean(mon.shadow), variant: vs?.line ?? null, accessoryIcon: vs?.accessory ? services().session.content.items.get(vs.accessory)?.iconAssetId ?? `item.${vs.accessory}` : null, motion: this.motion });
+    } catch {
+      /* presentation only */
+    }
+    return visual;
+  }
+
+  private showSpriteBody(side: 'player' | 'enemy', mon: PokemonInstance, species: ReturnType<typeof getSpecies>, cry: boolean, grow: number): Visual {
     if (side === 'player') {
       this.dropSprite(this.playerSprite);
       const at = this.spotXY('player');
@@ -3122,7 +3140,10 @@ export class BattleScene extends Phaser.Scene {
     const featReady = !this.duo && featCharged(this.run) && featV2?.heartbond.partner === this.activeMon().uid;
     const featLine = featReady ? (featV2!.feats.armed ? 'Memory stirs: the Feat is armed.\n' : 'Memory stirs: a Feat is charged.\n') : '';
     const coopRaid = this.run.battle?.raid?.coop ? coopOwner(this.run.battle.raid, this.activeMon().uid) + 1 : 0;
-    this.message.setText(`${coopRaid ? `PLAYER ${coopRaid}: you're up! Pass the controller.\n` : ''}${intent ? `${intent.text}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${featLine}${shadow ? `${shadowPreviewLine((id) => content.moves.get(id)?.name ?? id, this.activeMon(), battleNow.turn, this.run.rng.battle)}\nHeart Gauge: ${heartStage(content, shadow.heart)}\n` : ''}${this.pilotTag(this.activeMon())}What will ${this.speciesName(this.activeMon())} do?${ready}`);
+    // A Shadow's preview adds lines: shrink the text so the box never clips (restored for every other prompt).
+    this.msgBaseSize ??= String(this.message.style.fontSize);
+    this.message.setFontSize(shadow ? '20px' : this.msgBaseSize);
+    this.message.setText(`${coopRaid ? `PLAYER ${coopRaid}: you're up! Pass the controller.\n` : ''}${intent ? `${intent.text}\n` : ''}${this.rallyChoice ? 'Rally ON: your next attack is a Surge Strike!\n' : ''}${featLine}${shadow ? `${shadowPreviewLine((id) => content.moves.get(id)?.name ?? id, this.activeMon(), battleNow.turn, this.run.rng.battle, heartStage(content, shadow.heart))}\n` : ''}${this.pilotTag(this.activeMon())}What will ${this.speciesName(this.activeMon())} do?${ready}`);
     const options = [{ label: 'Fight' }, { label: 'Bag' }, { label: 'Pokémon' }];
     const label = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z', dynamax: 'Max', mega: 'Mega' })[c.kind];
     const onLabel = (c: TransformRequest) => ({ tera: 'Tera', zmove: 'Z-Move', dynamax: 'Dynamax', mega: 'Mega Evolution' })[c.kind];

@@ -97,7 +97,7 @@ describe('story foundation: random streams', () => {
   const eventItemIds = catalog.filter(eventItem).map((e) => `"${e.id}"`);
   // The ideas W1 battle rules (resonance, bleed, curse tags, hazard burst, bench support, underdog XP, wild luck) came later too: switched off for old seeds.
   // Economy slice 5 items (Oval Charm, Glass Cannon, Weather Idols, strong vitamins, Mild Revive) joined the reward pool later.
-  const LATE_ITEMS = new Set(['perfume-vial', 'cool-shades', 'unofficial-badge', 'oval-charm', 'glass-cannon-band', 'glass-cannon-lens', 'sunny-idol', 'rain-idol', 'sand-idol', 'snow-idol', 'hp-up-plus', 'protein-plus', 'iron-plus', 'calcium-plus', 'zinc-plus', 'carbos-plus', 'mild-revive', 'augurs-bell', 'last-chance-charm', 'dawn-orb', 'vigor-orb', 'fury-orb', 'aegis-orb', 'gale-orb', 'tm-deck', 'lock-breaker', 'fleeting-adamant-mint', 'fleeting-modest-mint', 'fleeting-jolly-mint', 'fleeting-timid-mint', 'fleeting-bold-mint', 'fleeting-calm-mint', ...DRIVE_ITEMS.filter((id) => id !== 'key-charm'), ...LIBRARY_ITEMS, ...LIBRARY3_ITEMS, ...HOOK_ITEMS, ...BALL_ITEMS]);
+  const LATE_ITEMS = new Set(['perfume-vial', 'cool-shades', 'tauros-charm', 'unofficial-badge', 'oval-charm', 'glass-cannon-band', 'glass-cannon-lens', 'sunny-idol', 'rain-idol', 'sand-idol', 'snow-idol', 'hp-up-plus', 'protein-plus', 'iron-plus', 'calcium-plus', 'zinc-plus', 'carbos-plus', 'mild-revive', 'augurs-bell', 'last-chance-charm', 'dawn-orb', 'vigor-orb', 'fury-orb', 'aegis-orb', 'gale-orb', 'tm-deck', 'lock-breaker', 'fleeting-adamant-mint', 'fleeting-modest-mint', 'fleeting-jolly-mint', 'fleeting-timid-mint', 'fleeting-bold-mint', 'fleeting-calm-mint', ...DRIVE_ITEMS.filter((id) => id !== 'key-charm'), ...LIBRARY_ITEMS, ...LIBRARY3_ITEMS, ...HOOK_ITEMS, ...BALL_ITEMS]);
   const NO_W1 = { resonance: { minParty: 3, bonus: 1 }, bleed: { maxStacks: 1, perStack: 0, moves: ['none'] }, curse: { bonus: 1, followUpTypes: ['ghost'] }, hazardBurst: { fraction: 0 }, luck: { meterBonus: 0, meterCap: 1, chainBonus: 0, chainCap: 1, alphaChance: 0, alphaLevels: 0, alphaMoney: 1 }, bench: { minFriendship: 255 }, play: { combo: { bonus: 1 }, aim: { moves: ['none'], accuracy: { miss: 1, ok: 1, good: 1, perfect: 1 } }, shout: { damage: { miss: 1, ok: 1, good: 1, perfect: 1 } }, throw: { catch: { miss: 1, ok: 1, good: 1, perfect: 1 }, weakenedBelow: 0 }, deal: { below: 0, money: 1, classes: [] }, mindRead: { types: ['none'] }, grudge: { boost: {} }, spectator: { chance: 0, boost: {}, names: ['x'] }, arena: { every: 99, fraction: 0, interact: 0, types: {} } }, underdog: { levels: 99, xpBonus: 1 } };
   const noHyper = buildContent({
     ...structuredClone(RAW_CONTENT),
@@ -112,10 +112,11 @@ describe('story foundation: random streams', () => {
     })(),
     // The six original Evil Teams are Story Run only (Classic never draws them) and name the story Legends.
     evilTeams: { ...structuredClone(RAW_CONTENT.evilTeams as object), teams: (RAW_CONTENT.evilTeams as { teams: { storyOnly?: boolean }[] }).teams.filter((t) => !t.storyOnly) },
-    eventsExtra: (RAW_CONTENT.eventsExtra as { events?: { group?: string }[] }[]).map((f) => ({ ...f, events: (f.events ?? []).filter((e) => !String(e.group ?? '').startsWith('Story:') && e.group !== 'Plush Workshop') })),
+    eventsExtra: (RAW_CONTENT.eventsExtra as { events?: { group?: string }[] }[]).map((f) => ({ ...f, events: (f.events ?? []).filter((e) => !String(e.group ?? '').startsWith('Story:') && e.group !== 'Plush Workshop' && e.group !== 'Canon Spaces: Kanto') })),
     // Run events B (trainer battles) came later too.
     eventsRB: { events: [] },
-    eventsCanonKanto: { events: [] }, // Kanto canon spaces came later too
+    eventsCanonKanto: { events: [] }, eventsCanonFuchsia: { events: [] }, // Kanto canon spaces came later too
+    eventsCanonSaffron: { events: [] },
     eventsHelpers: { events: [] },
     eventsMerchants: { events: [] }, // run events A came later too
     // The stage-1 level fix (W13: opening fights at Lv4-6 instead of Lv2-4) came later too; Guard and Brace were removed.
