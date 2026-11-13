@@ -2957,7 +2957,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** A trade: the lowest-level party Pokémon that fits `want` leaves with the partner. The choice stays locked without one (and while only one Pokémon is left). */
   z.object({ kind: z.literal('tradeAway'), want: TradeWantSchema }),
   /** A healing spot, shop or fishing spot opens beside this node. */
-  z.object({ kind: z.literal('addStop'), stop: z.enum(['heal', 'shop', 'fish']) }),
+  z.object({ kind: z.literal('addStop'), stop: z.enum(['heal', 'shop', 'fish', 'minigame']), /** With `minigame`: the game (minigames.json) that waits at the new stop (Safari Land). */ minigameId: z.string().min(1).optional() }),
   /** A ferry: jump to a node next to the gym (SS Ticket). */
   z.object({ kind: z.literal('skipAhead') }),
   /** Ideas W4: a trainer starts tailing you and steps out to challenge you after this many nodes (core/wanderer.ts). */
@@ -3193,6 +3193,19 @@ export const EventBattleFormatSchema = z.enum(['doubles', 'triples']);
 export type EventBattleFormat = z.infer<typeof EventBattleFormatSchema>;
 
 export const EventBattleSchema = z.discriminatedUnion('kind', [
+  /** Beta 0.6 canon spaces: a raid (raids.json) fought as an event battle. The boss is not catchable unless the raid sets `capture`; `win` and `lose` apply after the raid result. */
+  z.object({
+    kind: z.literal('raid'),
+    raidId: z.string().min(1),
+    name: z.string().default('Raid'),
+    levelBonus: z.number().int().default(0),
+    chain: z.literal(1).default(1),
+    pseudo: z.boolean().optional(),
+    /** Toxic Spikes lie on your side when the fight opens, unless this story flag (`flag` effect key) reached `atLeast` (the Polluted Factory's valves). */
+    spikesUnless: z.object({ flag: z.string().min(1), atLeast: z.number().int().min(1) }).optional(),
+    win: z.array(EventEffectSchema).default([]),
+    lose: z.array(EventEffectSchema).optional(),
+  }),
   z.object({
     kind: z.literal('wild'),
     format: EventBattleFormatSchema.optional(),
