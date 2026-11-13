@@ -24,6 +24,7 @@ import {
 } from '../core/state';
 import { emptyTimelineStore, TimelineStoreSchema, type TimelineStore } from '../core/timeline/schema';
 import { freshEvil } from '../core/evil/schema';
+import { EXPANSION_SETTINGS_DEFAULTS } from '../core/expansion/schema';
 import { freshProfileStory, STORY_SETTINGS_DEFAULTS } from '../core/story2/schema';
 import { StorageUnavailableError, type StorageProvider } from './storage';
 
@@ -40,7 +41,7 @@ export const ACTIVE_SLOT_KEY = `${KEY_PREFIX}.slot`;
 export type RecordName = 'profile' | 'run' | 'settings' | 'meta' | 'timeline';
 
 /** Current schema version of each record. Bump when a record's shape changes and add a migration. */
-export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 20, run: 42, settings: 41, meta: 1, timeline: 1 };
+export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 20, run: 43, settings: 42, meta: 1, timeline: 1 };
 
 /** v41: walks a saved run and gives every Pokémon (anything with uid, speciesId, level and vitamins) IVs and empty EVs. */
 function withIvs(node: unknown): unknown {
@@ -384,6 +385,8 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
       const story = (run.story ?? {}) as Json;
       return { ...run, story: { ...story, mentoring: story.mentoring ?? { bonds: {}, defeated: [], returned: [], lastReturnBattle: null, returns: 0 } } };
     },
+    // v43 (Beta 0.6 INSTRUMENTALITY F2): the optional run.expansion block. Old runs simply have none, so nothing changes.
+    42: (data) => data,
   },
   settings: {
     // v2 (Milestone 9): battle animation settings.
@@ -469,6 +472,8 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
     39: (data) => ({ ...(data as Json), speechSpeed: 'normal' }),
     // v41 (W11 accessibility): Bigger small print and Map quest contrast, both off.
     40: (data) => ({ ...(data as Json), smallTextBoost: false, questContrast: false }),
+    // v42 (Beta 0.6 INSTRUMENTALITY F1): the expansion settings start at their defaults; every old key is unchanged.
+    41: (data) => ({ ...(data as Json), expansion: { ...EXPANSION_SETTINGS_DEFAULTS } }),
   },
   meta: {},
   timeline: {},
@@ -498,7 +503,7 @@ export interface SlotPeek {
 
 export type SaveResult = { ok: true } | { ok: false; reason: string };
 
-export const DEFAULT_SETTINGS: Settings = { musicVolume: 0.5, sfxVolume: 0.7, muted: false, battleAnimations: 'full', effectIntensity: 1, shakeIntensity: 1, reduceParticles: false, textSpeed: 'instant', speechSpeed: 'normal', autoAdvance: false, messageDelay: 'normal', highContrast: false, typeMarkers: false, smallTextBoost: false, questContrast: false, uiScale: 'full', spriteAnimations: true, damageNumbers: true, catchDetail: 'full', battleSpeed: 'normal', dialogueFrequency: 'normal', damageDetails: false, accessibilityProfile: 'custom', trainerSort: 'default', trainerSortReverse: false, battleUi: 'aero', abilityAnimations: true, battleTextAnimations: true, interactionAnimations: true, hyperAnimations: true, rivalAnimations: true, evolutionAnimations: true, transformAnimations: true, battleScreenEffects: true, menuAnimations: true, animationSpeed: 'normal', animationIntensity: 'normal', disableAllAnimations: false, autoBattle: false, autoExplain: true, autoRules: [], uiTheme: 'classic', fontSize: 'normal', dyslexiaFont: false, reducedFlash: false, tooltipDelay: 'normal', popupScale: 1, transitionStyle: 'fade', cursorTrail: false, holdToConfirm: false, haptics: false, oneHanded: 'off', gamepadMap: { up: 12, down: 13, left: 14, right: 15, confirm: 0, back: 1 }, victoryJingle: 'badge', skipSeenDialogue: false, eventStyle: 'diorama', screenStyles: {}, plazaStyle: 'aero', hubStyle: 'town', crtFilter: 'off', critLetterbox: false, soundPack: 'original', shakeHits: 1, shakeStory: 1, mapDayNight: false, skipRecap: false, skipGuard: true, rememberChoices: true, fastZMove: false, fastDynamax: false, fastTera: false, fastMega: false, livelyTeam: false, victoryPoses: false, trainerExpressions: false, battleCamera: 'off', mapParallax: false, moveAnimPack: 'mixed', stickers: false, lastSeenUpdate: '', tutorialOffered: false, tutorialDone: [], skillPrompts: false, hotbar: [], skippedIntros: [], adaptiveMusic: true, performancePreset: 'high', story: { ...STORY_SETTINGS_DEFAULTS } };
+export const DEFAULT_SETTINGS: Settings = { musicVolume: 0.5, sfxVolume: 0.7, muted: false, battleAnimations: 'full', effectIntensity: 1, shakeIntensity: 1, reduceParticles: false, textSpeed: 'instant', speechSpeed: 'normal', autoAdvance: false, messageDelay: 'normal', highContrast: false, typeMarkers: false, smallTextBoost: false, questContrast: false, uiScale: 'full', spriteAnimations: true, damageNumbers: true, catchDetail: 'full', battleSpeed: 'normal', dialogueFrequency: 'normal', damageDetails: false, accessibilityProfile: 'custom', trainerSort: 'default', trainerSortReverse: false, battleUi: 'aero', abilityAnimations: true, battleTextAnimations: true, interactionAnimations: true, hyperAnimations: true, rivalAnimations: true, evolutionAnimations: true, transformAnimations: true, battleScreenEffects: true, menuAnimations: true, animationSpeed: 'normal', animationIntensity: 'normal', disableAllAnimations: false, autoBattle: false, autoExplain: true, autoRules: [], uiTheme: 'classic', fontSize: 'normal', dyslexiaFont: false, reducedFlash: false, tooltipDelay: 'normal', popupScale: 1, transitionStyle: 'fade', cursorTrail: false, holdToConfirm: false, haptics: false, oneHanded: 'off', gamepadMap: { up: 12, down: 13, left: 14, right: 15, confirm: 0, back: 1 }, victoryJingle: 'badge', skipSeenDialogue: false, eventStyle: 'diorama', screenStyles: {}, plazaStyle: 'aero', hubStyle: 'town', crtFilter: 'off', critLetterbox: false, soundPack: 'original', shakeHits: 1, shakeStory: 1, mapDayNight: false, skipRecap: false, skipGuard: true, rememberChoices: true, fastZMove: false, fastDynamax: false, fastTera: false, fastMega: false, livelyTeam: false, victoryPoses: false, trainerExpressions: false, battleCamera: 'off', mapParallax: false, moveAnimPack: 'mixed', stickers: false, lastSeenUpdate: '', tutorialOffered: false, tutorialDone: [], skillPrompts: false, hotbar: [], skippedIntros: [], adaptiveMusic: true, performancePreset: 'high', story: { ...STORY_SETTINGS_DEFAULTS }, expansion: { ...EXPANSION_SETTINGS_DEFAULTS } };
 
 /** True when the browser asks for less motion (then new players start with reduced battle animations). */
 function prefersReducedMotion(): boolean {
