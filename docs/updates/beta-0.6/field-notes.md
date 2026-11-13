@@ -11,7 +11,12 @@
 ## Save
 - None. New optional `run.expansion.fieldNotes` (special Pokémon met; hints given per Shadow). Old runs simply have none. It is per run: nothing carries to the next run.
 
+## How it fills in play
+- Battle start: a foe carrying its Evil Team's variant line (Black-Label) whose species is on the region's special list is noted; a Named Shadow on the foe's side is noted at its hints; a Colossus Apex (M2) is noted.
+- Events: The Roadblock and the Jessie and James event (Meowth) note their special Pokémon. Other events can use the `fieldNote` effect.
+- Shadows: noted when granted, and again when a battle earns the next hint. LEDGER is noted when the Convoy's last leg is won or joined. Data ROMs are read from the Grand Arc state, so every ROM you earn shows. Keys are read from the Shadow hints you have been given.
+- Pokémon icons are the game's real icons (they load on first use; a missing one falls back to a letter badge).
+
 ## Limits
-- Only the Roadblock writes a special-Pokémon note today; the other 109 fill as their events are built (each uses the `fieldNote` effect). Named Shadows are noted when granted or when a battle earns the next hint; only 7 Shadows have purification keys in the data so far, so the others show their ability and "key not written down yet".
-- Entries use letter badges as in the picked mock-up; Pokémon sprites are not drawn yet.
+- Special Pokémon that no event or variant fight reaches yet (for example Jackpot at the Game Corner) stay "???" until their scenes are built. Only 7 Shadows have purification keys in the data, so the others show their ability and "key not written down yet".
 - Unmet entries of other regions stay hidden until met, so the page does not spoil later regions.
