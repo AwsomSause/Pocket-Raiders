@@ -1019,9 +1019,15 @@
    "chance": 0.2,
    "limit": "battle",
    "tier": "minor",
-   "status": "disabled",
-   "effectText": "Spe +1 and the first move gains +1 priority.",
-   "presentation": "Claw glint | \"Attack from the shadows.\""
+   "status": "supported",
+   "effectText": "Spe +1 and its first move goes first (+1 priority).",
+   "presentation": "Claw glint | \"Attack from the shadows.\"",
+   "effect": {
+    "boost": {
+     "spe": 1
+    },
+    "firstPriority": 1
+   }
   },
   {
    "id": "growlithe-loyal",
@@ -1061,9 +1067,12 @@
    "chance": 0.25,
    "limit": "battle",
    "tier": "major",
-   "status": "disabled",
-   "effectText": "Copies the first foe's type(s) for the battle.",
-   "presentation": "Goo shimmer | \"Ditto becomes you.\""
+   "status": "supported",
+   "effectText": "Takes on the foe's type(s) for the battle.",
+   "presentation": "Goo shimmer | \"Ditto becomes you.\"",
+   "effect": {
+    "typeCopy": true
+   }
   },
   {
    "id": "smeargle-sketch",
@@ -1077,9 +1086,12 @@
    "chance": 0.25,
    "limit": "battle",
    "tier": "major",
-   "status": "disabled",
-   "effectText": "Learns one move the foe knows (replaces slot 4) for the battle.",
-   "presentation": "Brush strokes | \"It sketched your move.\""
+   "status": "supported",
+   "effectText": "Sketches one move the foe knows into its last slot for the battle.",
+   "presentation": "Brush strokes | \"It sketched your move.\"",
+   "effect": {
+    "learnFoeMove": true
+   }
   },
   {
    "id": "cubone-mourn",
@@ -1204,9 +1216,12 @@
    "chance": 0.3,
    "limit": "battle",
    "tier": "major",
-   "status": "disabled",
-   "effectText": "Randomly learns 1 TM-learnable move for this battle (seeded).",
-   "presentation": "Playful trail | \"It wants to try that.\""
+   "status": "supported",
+   "effectText": "Randomly picks up one move it could learn by TM, for this battle (seeded).",
+   "presentation": "Playful trail | \"It wants to try that.\"",
+   "effect": {
+    "learnTmMove": true
+   }
   },
   {
    "id": "mewtwo-armored",
@@ -1221,13 +1236,14 @@
    "limit": "battle",
    "tier": "major",
    "status": "supported",
-   "effectText": "SpA +1, SpD +1.",
+   "effectText": "SpA +1, SpD +1, and flinching can't stop it.",
    "presentation": "Dark pulse ring | \"Its mind is armor.\"",
    "effect": {
     "boost": {
      "spa": 1,
      "spd": 1
-    }
+    },
+    "noFlinch": true
    }
   },
   {
@@ -1242,9 +1258,12 @@
    "chance": 0.4,
    "limit": "battle",
    "tier": "major",
-   "status": "disabled",
-   "effectText": "Foes fall into Nightmare (lose 12% per turn while asleep).",
-   "presentation": "Dark swirl | \"Bad dreams.\""
+   "status": "supported",
+   "effectText": "Nightmares: the foe loses 12% max HP each turn while asleep.",
+   "presentation": "Dark swirl | \"Bad dreams.\"",
+   "effect": {
+    "foeNightmarePct": 12
+   }
   },
   {
    "id": "arceus-judgment",
@@ -1450,12 +1469,13 @@
    "limit": "battle",
    "tier": "minor",
    "status": "supported",
-   "effectText": "Atk +1 at battle start.",
+   "effectText": "Atk +1 and +1 friendship at battle start.",
    "presentation": "Trainer shout | \"You and me.\"",
    "effect": {
     "boost": {
      "atk": 1
-    }
+    },
+    "friendship": 1
    }
   },
   {
@@ -1539,12 +1559,13 @@
    "limit": "battle",
    "tier": "minor",
    "status": "supported",
-   "effectText": "Foe Evasion -1.",
+   "effectText": "Foe Evasion -1; own crit stage +1 for the battle.",
    "presentation": "Low drone | \"Menacing.\"",
    "effect": {
     "foeStage": {
      "eva": -1
-    }
+    },
+    "critStage": 1
    }
   },
   {

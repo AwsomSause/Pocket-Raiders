@@ -50,6 +50,20 @@ export const MomentEffectSchema = z.object({
   critStage: z.number().int().min(1).max(3).optional(),
   /** Starts this weather for this many turns (never over a primal weather). */
   weather: z.object({ id: z.enum(['rain', 'sun', 'sand', 'snow', 'hail']), turns: z.number().int().min(1).max(8) }).optional(),
+  /** Ditto's copy: it takes on the foe's types for the battle. */
+  typeCopy: z.boolean().optional(),
+  /** Smeargle's sketch: replaces its last move with one the foe knows, for the battle. */
+  learnFoeMove: z.boolean().optional(),
+  /** Mew's curiosity: replaces its last move with a random move it could learn by TM, for the battle (seeded). */
+  learnTmMove: z.boolean().optional(),
+  /** Flinch can't stop it for the battle. */
+  noFlinch: z.boolean().optional(),
+  /** Its first move goes with this much extra priority (turn 1 only). */
+  firstPriority: z.number().int().min(1).max(2).optional(),
+  /** While the foe is asleep it loses this percent of its max HP each turn. */
+  foeNightmarePct: z.number().int().min(1).max(25).optional(),
+  /** Friendship gained at once (0-255 scale). */
+  friendship: z.number().int().min(1).max(10).optional(),
   /** Entry moments: HP restored now, as a percent of max HP. */
   healNowPct: z.number().int().min(1).max(100).optional(),
   /** Own stat boosts from `boost` / `boostBest` fade after this many turns (absent = last the battle). */

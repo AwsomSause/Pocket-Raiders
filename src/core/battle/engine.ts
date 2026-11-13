@@ -111,7 +111,7 @@ import { ARENA_IMMUNE, foeStake, aimAccuracy, arenaText, dealOffer, mindReader, 
 import { benchSupporter, addBleed, bleedDamage, causesBleed, curseMultiplier, resonanceMultiplier } from './w1Rules';
 import { sacrificeFor } from './sacrificeRule';
 import { berserkDue, berserkMove, isBerserk } from './berserk';
-import { fadeMomentBoosts, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
+import { fadeMomentBoosts, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
 import type { MomentHooks } from '../moments/pokemonMoments';
 import { freshHyperBattle, rollHyper, type EnemyRage, type HyperContext, type HyperEligibility } from './hyper';
 import { applyTransformations, battleMove, battleTypes, endDynamax, maxMoveExtras, maxMoveTerrain, maxMoveWeather, stabMultiplier, teraPower, tickDynamax, transformProblem, zMoveFor, type TransformEvent, type TransformRequest, type TransformStepEvent } from './transform';
@@ -1017,7 +1017,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   // A trainer's next Pokémon saw its ally fall.
   if (!battle.outcome && battle.enemyIndex !== enemyBefore) warnRage(ctx, currentEnemy(battle), events);
   if (ctx.moments) tryReactiveMoments(ctx, events, events);
-  fadeMomentBoosts(ctx);
+  fadeMomentBoosts(ctx, events);
   battle.turn += 1;
   eventRuleEnd(battle, events, ctx.party, ctx.content);
   if (raidTimeout && !battle.outcome) battle.outcome = 'lose';
@@ -2015,6 +2015,8 @@ function restoreMoves(ctx: BattleContext, mon: PokemonInstance): void {
   if (rec.kind === 'mimic') {
     const orig = rec.moves[rec.slot];
     if (orig && mon.moves[rec.slot]) mon.moves[rec.slot] = { ...orig };
+    // A move a Pokémon moment added to an empty slot goes away again.
+    else if (!orig && mon.moves[rec.slot]) mon.moves.splice(rec.slot, 1);
   } else mon.moves = rec.moves.map((m) => ({ ...m }));
   delete ctx.battle.extra.mimic[mon.uid];
 }
@@ -2367,7 +2369,7 @@ function speedOf(ctx: BattleContext, c: Combatant): number {
 function priorityOf(ctx: BattleContext, c: Combatant, move: Move): number {
   // §29 enraged after a rival's sacrifice: its next moves go first.
   const rage = ctx.battle.enraged;
-  return basePriority(ctx, c, move) + (rage && rage.left > 0 && c.side === 'player' && rage.uid === c.mon.uid ? rage.priority : 0);
+  return basePriority(ctx, c, move) + (rage && rage.left > 0 && c.side === 'player' && rage.uid === c.mon.uid ? rage.priority : 0) + momentPriority(ctx, c);
 }
 
 function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
@@ -4326,7 +4328,7 @@ function elementalReaction(ctx: BattleContext, user: Combatant, target: Combatan
 
 /** Makes the target flinch, unless Inner Focus stops it or it is Dynamaxed. */
 function flinch(ctx: BattleContext, user: Combatant, target: Combatant): void {
-  if (targetAbility(ctx, user, target) !== 'inner-focus' && !target.mon.dynamaxed) target.flinched = true;
+  if (targetAbility(ctx, user, target) !== 'inner-focus' && !target.mon.dynamaxed && !momentNoFlinch(ctx, target)) target.flinched = true;
 }
 
 /**
