@@ -3139,6 +3139,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     mirror: z.boolean().optional(),
     /** Mentors: the team is your fellow apprentice's (their preferred types; they take the name). A loss is friendly: nobody is out and the run goes on. */
     apprentice: z.boolean().optional(),
+    /** Beta 0.6 R8: the foe is your Friend (their team by personality, their name; core/rivals/live.ts). */
+    friend: z.boolean().optional(),
     name: z.string(),
     size: z.number().int().min(1).max(6).default(2),
     /** How many of the trainer's Pokémon (the first ones) are Shadow Pokémon a Snag Ball can take. */

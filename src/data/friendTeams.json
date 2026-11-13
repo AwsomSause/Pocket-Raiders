@@ -1,0 +1,69 @@
+{
+ "note": "Beta 0.6 R8: the Friend's team by personality (pack archetype in brackets in SECOND_RIVAL.md: hotshot, prodigy, friendly, bitter, scholar, heir, lone wolf, mirror). Three bases; they evolve by level.",
+ "teams": {
+  "champion-chaser": {
+   "archetype": "hotshot",
+   "team": [
+    "ponyta",
+    "growlithe",
+    "charmander"
+   ]
+  },
+  "prodigy": {
+   "archetype": "prodigy",
+   "team": [
+    "abra",
+    "ralts",
+    "gible"
+   ]
+  },
+  "enthusiast": {
+   "archetype": "friendly",
+   "team": [
+    "eevee",
+    "pikachu",
+    "togepi"
+   ]
+  },
+  "bitter-challenger": {
+   "archetype": "bitter",
+   "team": [
+    "sneasel",
+    "houndour",
+    "murkrow"
+   ]
+  },
+  "strategist": {
+   "archetype": "scholar",
+   "team": [
+    "bronzor",
+    "porygon",
+    "slowpoke"
+   ]
+  },
+  "idealist": {
+   "archetype": "heir",
+   "team": [
+    "vulpix",
+    "snubbull",
+    "skitty"
+   ]
+  },
+  "underdog": {
+   "archetype": "lone-wolf",
+   "team": [
+    "zigzagoon",
+    "rattata",
+    "riolu"
+   ]
+  },
+  "protector": {
+   "archetype": "mirror",
+   "team": [
+    "munchlax",
+    "bidoof",
+    "geodude"
+   ]
+  }
+ }
+}
