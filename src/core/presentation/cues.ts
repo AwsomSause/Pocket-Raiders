@@ -53,7 +53,7 @@ export type Cue =
   /** A Hyper/Overdrive moment or an interaction flourish (registry ids `overdrive.*`, `interaction.*`). */
   | { kind: 'storyAnim'; side: Side; anim: string }
   /** A Pokémon moment's full-screen scene (core/moments `scene`): fade to black, static, then each line. */
-  | { kind: 'momentScene'; id: string; fadeMs: number; staticMs: number; lines: string[]; clips?: string[] };
+  | { kind: 'momentScene'; id: string; speciesId: string; fadeMs: number; staticMs: number; lines: string[]; clips?: string[] };
 
 const other = (side: Side): Side => (side === 'player' ? 'enemy' : 'player');
 
@@ -165,7 +165,7 @@ export function planCues(
         break;
       case 'pmoment': {
         const def = pokemonMoment(e.id);
-        if (animated && e.scene && def?.scene) cues.push({ kind: 'momentScene', id: e.id, fadeMs: def.scene.fadeMs, staticMs: def.scene.staticMs, lines: def.scene.lines, clips: def.scene.clips });
+        if (animated && e.scene && def?.scene) cues.push({ kind: 'momentScene', id: e.id, speciesId: e.speciesId, fadeMs: def.scene.fadeMs, staticMs: def.scene.staticMs, lines: def.scene.lines, clips: def.scene.clips });
         else if (animated && e.cinematic) cues.push({ kind: 'storyAnim', side: e.side, anim: 'overdrive.rise' });
         else if (animated) cues.push({ kind: 'storyAnim', side: e.side, anim: 'overdrive.hung' });
         break;

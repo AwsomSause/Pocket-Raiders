@@ -118,8 +118,10 @@ export function eventText(content: Content, names: Names, e: RunEvent, details =
     case 'pmoment': {
       // A Pokémon moment (core/moments): its name and one line; a refused cinematic is told this same way.
       const def = pokemonMoment(e.id);
-      const line = def?.scene ? def.scene.lines.join(' ') : (def?.presentation.split(' | ').pop() ?? '').replace(/^"|"$/g, '');
-      return `${e.name}! ${who(e.side)} ${e.scene ? 'rises again, Overcharged!' : 'hangs on!'}${line ? ` ${line}` : ''}`;
+      // A full-screen scene already told its story; the box only says what happened.
+      if (e.scene) return `${who(e.side)} rises again, Overcharged!`;
+      const line = (def?.presentation.split(' | ').pop() ?? '').replace(/^"|"$/g, '');
+      return `${e.name}! ${who(e.side)} hangs on!${line ? ` ${line}` : ''}`;
     }
     case 'hyper':
       // The story layer normally shows the moment's own lines instead.

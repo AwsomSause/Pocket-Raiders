@@ -4082,6 +4082,21 @@ export class BattleScene extends Phaser.Scene {
           if (sprite) this.tweens.add({ targets: sprite, x: sprite.x + 8, yoyo: true, repeat: 3, duration: 50 });
           await this.refreshInfoBox(box, mon!, true);
           break;
+        case 'pmoment': {
+          // A revived Pokémon stands back up on the field (the full-screen scene, if any, has already played).
+          const live = this.findLive(e.side, e.uid) ?? mon;
+          if (live && e.side === 'player') {
+            live.hp = e.hpAfter;
+            this.shown.player = structuredClone(live);
+            this.showSprite('player', this.shown.player, false);
+            await this.refreshInfoBox(this.playerBox, this.shown.player, true);
+          } else if (mon && mon.uid === e.uid) {
+            mon.hp = e.hpAfter;
+            if (sprite && sprite.alpha < 1) sprite.setAlpha(1);
+            await this.refreshInfoBox(box, mon, true);
+          }
+          break;
+        }
         case 'hyper':
           // The first time a Hyper or Overdrive state happens, the battle stops and explains it (why, what it does, what it costs).
           if (e.side === 'player') await this.explainHyper(e.defId);

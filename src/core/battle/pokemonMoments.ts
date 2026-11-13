@@ -56,7 +56,7 @@ function cinematicNow(ctx: BattleContext, tier: PokemonMoment['tier'], force = f
 }
 
 function eventFor(ctx: BattleContext, c: Combatant, m: PokemonMoment, hpAfter: number, cinematic: boolean): PMomentEvent {
-  return { type: 'pmoment', side: c.side, uid: c.mon.uid, id: m.id, name: m.name, tier: m.tier, hpAfter, cinematic, scene: Boolean(m.scene) && cinematic };
+  return { type: 'pmoment', side: c.side, uid: c.mon.uid, speciesId: c.mon.speciesId, id: m.id, name: m.name, tier: m.tier, hpAfter, cinematic, scene: Boolean(m.scene) && cinematic };
 }
 
 /** Halves damage while a Dig-In style guard is up. */
@@ -113,6 +113,6 @@ export function tryRunEndMoment(ctx: BattleContext, events: BattleEvent[]): bool
   ctx.battle.playerVolatile = freshVolatile();
   ctx.battle.needsSwitch = false;
   ctx.battle.outcome = null;
-  events.push({ type: 'pmoment', side: 'player', uid: mon.uid, id: m.id, name: m.name, tier: m.tier, hpAfter: mon.hp, cinematic: cinematicNow(ctx, 'landmark', true), scene: true });
+  events.push({ type: 'pmoment', side: 'player', uid: mon.uid, speciesId: mon.speciesId, id: m.id, name: m.name, tier: m.tier, hpAfter: mon.hp, cinematic: cinematicNow(ctx, 'landmark', true), scene: true });
   return true;
 }
