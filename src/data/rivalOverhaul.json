@@ -1,0 +1,35 @@
+{
+  "note": "Beta 0.6 rival overhaul (R1-R3, R10). The 8 pack personalities map onto existing profile ids; styles and arcs are the 8 the overhaul uses, by existing id. Lead never changes levels.",
+  "roles": ["main", "friend"],
+  "personalities": {
+    "champion-chaser": "showboat",
+    "bitter-challenger": "avenger",
+    "enthusiast": "golden-retriever",
+    "idealist": "idealist",
+    "strategist": "tactician",
+    "protector": "caretaker",
+    "prodigy": "prodigy",
+    "underdog": "underdog"
+  },
+  "styles": ["blitz", "snowball", "fortress", "counterpuncher", "trapper", "disruptor", "scout", "ace-centric"],
+  "arcs": ["prodigy-learns-humility", "underdog-finds-their-method", "perfectionist-accepts-failure", "loner-learns-to-trust", "showboat-finds-meaning", "burnout-rediscovers-joy", "friends-become-rivals", "rivals-become-friends"],
+  "lead": { "min": -3, "max": 3, "rivalWon": 1, "rivalLost": -1 },
+  "marks": { "max": 5, "names": ["beaten-by-you", "beat-you", "owes-you", "saved-by-you", "shown-mercy", "outplayed-by-you", "stood-beside-you", "left-you-behind"] },
+  "feelings": {
+    "min": 0,
+    "max": 10,
+    "start": { "friendship": 3, "respect": 3, "trust": 3, "rivalry": 3, "resentment": 0, "admiration": 2 },
+    "changes": {
+      "rivalWon": { "rivalry": 1, "resentment": -1, "admiration": 0, "respect": 0 },
+      "rivalLost": { "rivalry": 1, "resentment": 1, "respect": 1, "admiration": 1 },
+      "closeFight": { "respect": 1, "rivalry": 1 },
+      "flawlessWin": { "admiration": 1, "resentment": 1 },
+      "assisted": { "friendship": 1, "trust": 1 },
+      "rescued": { "friendship": 2, "trust": 2, "resentment": -2 },
+      "keptPromise": { "trust": 2, "friendship": 1 },
+      "brokePromise": { "trust": -3, "resentment": 2, "friendship": -1 },
+      "showedMercy": { "respect": 1, "resentment": -1, "friendship": 1 }
+    }
+  },
+  "pity": { "afterLosses": 5, "levelDelta": -2, "aiTier": 3, "firstStageMax": 2 }
+}
