@@ -12,6 +12,7 @@
 import { modifierEventWeight } from './runModifiers';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
 import { PSEUDO } from './dungeon/pseudo';
+import { addMark, overhaulOf, type FeelingKey } from './rivals/overhaul';
 import { friendName, friendTeam, pseudoRivalBeat } from './rivals/live';
 import { repAtLeast } from './rivals/reputation';
 import type { ChoiceKind } from './presentation/eventStyles';
@@ -170,6 +171,11 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return crisisAid(run) >= c.atLeast;
     case 'tournament':
       return tournamentRound(run) === c.round;
+    case 'rivalState': {
+      const rec = featuredRival(run) ? overhaulOf(run, featuredRival(run)!.id) : undefined;
+      if (!rec) return false;
+      return (!c.feeling || rec.feelings[c.feeling.key] >= c.feeling.atLeast) && (c.leadAtLeast === undefined || rec.lead >= c.leadAtLeast) && (c.leadAtMost === undefined || rec.lead <= c.leadAtMost) && (!c.mark || rec.marks.includes(c.mark));
+    }
     case 'flag':
       return Number(run.story.flags[`ev:${c.key}`] ?? 0) >= c.atLeast && Number(run.story.flags[`ev:${c.key}`] ?? 0) <= c.atMost;
     case 'partyBlissful':
@@ -342,6 +348,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs allies gathered in this region';
     case 'tournament':
       return 'Needs the tournament bracket to be at this round';
+    case 'rivalState':
+      return 'Needs a rival who feels a certain way about you';
     case 'flag':
       return 'Needs something you did earlier';
     case 'partyBlissful':
@@ -891,6 +899,7 @@ export function effectWords(content: Content, e: EventEffect): string {
       return e.amount < 0 ? 'the crisis eases' : 'the crisis grows';
     case 'aid':
       return 'allies gathered';
+    case 'rivalChange':
     case 'flag':
       return '';
     case 'grandArcRom':
@@ -1166,6 +1175,15 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       else if (e.action === 'verdict' && e.verdict) return resolveVerdict(content, run, e.verdict, { apex: 'none', ...(e.rival && featuredRival(run) ? { rival: e.rival } : {}), ...(e.keepApexBound !== undefined ? { keepApexBound: e.keepApexBound } : {}) }).lines.join(' ');
       else if (e.change) changeRep(run, e.change);
       return '';
+    case 'rivalChange': {
+      const rival = featuredRival(run);
+      const rec = rival ? overhaulOf(run, rival.id) : undefined;
+      if (!rec) return '';
+      for (const [k, d] of Object.entries(e.feelings)) rec.feelings[k as FeelingKey] = Math.min(10, Math.max(0, rec.feelings[k as FeelingKey] + (d ?? 0)));
+      rec.lead = Math.min(3, Math.max(-3, rec.lead + e.lead));
+      if (e.mark) addMark(rec, e.mark);
+      return '';
+    }
     case 'flag':
       run.story.flags[`ev:${e.key}`] = Math.max(0, Number(run.story.flags[`ev:${e.key}`] ?? 0) + e.amount);
       // Shadow II: a story flag may be exactly the key a Shadow in your party or PC has been waiting for.
