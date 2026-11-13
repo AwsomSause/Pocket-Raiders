@@ -3515,6 +3515,99 @@
         "slowFactor": 2,
         "noTimerOption": false
       }
+    },
+    {
+      "id": "stealth-escape",
+      "name": "Stealth Escape",
+      "category": "puzzle",
+      "blurb": "Slip past the guards.",
+      "instructions": "Sneak to the exit past patrolling guards. Red cells are watched; being seen sends you back and costs an alert. Keys are bonus points.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "beta06": true,
+      "difficultyTiers": [
+        {
+          "id": "easy",
+          "label": "Easy",
+          "params": {
+            "guards": 2,
+            "keys": 1,
+            "alerts": 4,
+            "ticks": 50
+          }
+        },
+        {
+          "id": "normal",
+          "label": "Normal",
+          "params": {
+            "guards": 3,
+            "keys": 2,
+            "alerts": 3,
+            "ticks": 45
+          }
+        },
+        {
+          "id": "hard",
+          "label": "Hard",
+          "params": {
+            "guards": 4,
+            "keys": 3,
+            "alerts": 3,
+            "ticks": 40
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 2,
+      "scoringRules": "6 for escaping, 2 per key.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.55,
+        "gold": 0.85
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 70,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 119,
+          "item": {
+            "item": "super-potion",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "research",
+            "amount": 1,
+            "chance": 0.5
+          }
+        },
+        "gold": {
+          "money": 189,
+          "item": {
+            "item": "ultra-ball",
+            "chance": 0.5
+          },
+          "effect": {
+            "kind": "heal",
+            "amount": 25,
+            "chance": 0.5
+          }
+        }
+      },
+      "failureOutcome": "You are caught; you keep any keys you grabbed.",
+      "replayRules": "Two tries per stop; the best medal counts.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 600
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": false
+      }
     }
   ]
 }
