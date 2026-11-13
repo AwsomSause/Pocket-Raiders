@@ -57,7 +57,8 @@ export function trackBannerLine(content: Content, run: RunState): string {
 /** An Evil Team operation ended. Stopped = a raid won (-1); let through = a raid lost (+1). Only runs with the expansion block move the track. */
 export function trackOnOperation(run: RunState, regionIndex: number, opId: string, outcome: string): void {
   const region = run.regionOrder[regionIndex];
-  if (!run.expansion?.tracks || !region || outcome === 'running') return;
+  // Once story raids are being played they drive the track, so the operation stand-in steps aside.
+  if (!run.expansion?.tracks || !region || outcome === 'running' || Object.keys(run.expansion.raids ?? {}).length > 0) return;
   const stopped = outcome === 'foiled' || outcome === 'infiltrated';
   advanceTrack(run, region, stopped ? 'raidSuccess' : 'raidFailed', `op:${opId}:${regionIndex}`);
 }
@@ -67,4 +68,11 @@ export function trackOnClimax(run: RunState, regionIndex: number): void {
   const region = run.regionOrder[regionIndex];
   if (!run.expansion?.tracks || !region) return;
   advanceTrack(run, region, 'climaxScheduled', `climax:${regionIndex}`);
+}
+
+/** A story raid was resolved (raid n of the region). Triumph and success lower the track, failure and declined raise it, partial leaves it. */
+export function trackOnRaid(run: RunState, region: string | undefined, n: number, result: string): void {
+  if (!run.expansion?.tracks || !region) return;
+  const input = result === 'triumph' || result === 'success' ? 'raidSuccess' : result === 'failure' ? 'raidFailed' : result === 'declined' ? 'raidDeclined' : null;
+  if (input) advanceTrack(run, region, input, `raid:${n}`);
 }

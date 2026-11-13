@@ -10,7 +10,7 @@
 - None bumped. `run.expansion.track` is now a typed record by region (step, peak, applied keys, last 12 changes); older runs have no track and load untouched. New run flag `run.expansion.tracks` and setting `expansion.worldTracks` (default on, added with its default, no version change). Old-seed fingerprints do not move: runs without the flag never touch the track.
 
 ## Limits
-- The raid inputs use the existing Evil Team operations as the stand-in for raids (stopped = raid won, let through = raid lost). The raid slice (E5/E5b) calls the same `advanceTrack` with `raidFailed`, `raidDeclined`, `raidSuccess`, `officerTurned`.
+- Story raids (E5b) already call the track: a won raid (triumph, success) removes a step, a failed or declined one adds a step, a partial changes nothing. Raids are not offered on the live map yet, so until one is played the existing Evil Team operations stand in (stopped = raid won, let through = raid lost; story beat 6 = climax scheduled). Once any raid is resolved the operation stand-in stops, so nothing counts twice.
 - Only Kanto's track is built. In this game a stage is a "city" and Kanto has no Vermilion stage yet, so step 4 thins all Kanto wild pools; the canon-spaces slice can narrow it.
 - Game Corner Black-Label prizes (step 2) and "Saffron's gates are shut" (step 5) are not built: the first needs the event data changed for every run, the second needs the Extended Cut climax. They are listed as the next steps, not faked.
 - Dossier (Case Folders + Org Pyramid) belongs to the Cast slice (E1), not this one.

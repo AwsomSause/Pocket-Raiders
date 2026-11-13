@@ -5,6 +5,7 @@ import { ExpansionRunSchema } from '../../src/core/expansion/schema';
 import { freshTrack, insuredIndex, kantoEffects, reduceTrack, trackEffectsFor, TRACK_INPUTS, TrackStateSchema, wildTaken, type TrackInput } from '../../src/core/expansion/track';
 import { advanceTrack, healStopShut, trackEffects, trackOnClimax, trackOnOperation, trackShopFactor, trackStep, trackWildWeight } from '../../src/core/expansion/trackRun';
 import { trackPage } from '../../src/core/expansion/trackView';
+import { resolveStoryRaid } from '../../src/core/raid/storyRaids';
 import { createRun, chooseStarter } from '../../src/core/run';
 import { content } from './helpers';
 
@@ -140,5 +141,20 @@ describe('Notebook track page', () => {
     expect(p.steps[4]!.rule).toBe('???');
     expect(p.scales[3]!.text).toContain('???');
     expect(p.scales[2]!.seen).toBe(true);
+  });
+});
+
+describe('story raids drive the track', () => {
+  it('failed and declined raids add a step, a won raid removes one, a partial changes nothing, and operations step aside', () => {
+    const r = run('wt-raid');
+    resolveStoryRaid(content, r, 1, 'failure');
+    resolveStoryRaid(content, r, 2, 'declined');
+    expect(trackStep(r, 'kanto')).toBe(2);
+    resolveStoryRaid(content, r, 3, 'partial');
+    expect(trackStep(r, 'kanto')).toBe(2);
+    resolveStoryRaid(content, r, 4, 'success');
+    expect(trackStep(r, 'kanto')).toBe(1);
+    trackOnOperation(r, 0, 'op-z', 'succeeded');
+    expect(trackStep(r, 'kanto')).toBe(1);
   });
 });
