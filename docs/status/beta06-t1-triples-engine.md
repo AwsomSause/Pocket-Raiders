@@ -14,6 +14,8 @@
 
 **Tests:** `tests/unit/triples.test.ts` (26: targeting table for every position, spread, Shift, Ally Switch, refill order, centring, determinism, save round trip). All doubles tests and `story.test.ts` fingerprints unchanged.
 
-**Limits:** in runs only behind `balance.triples` and the Triples Only rule, both off until the screen exists (T3, `beta06-t3-triples-in-runs.md`); the battle screen still draws doubles only (T2). The foe AI never Shifts. A status move with nobody in reach still runs (only attacks fail). The W1 combo attack still needs exactly two attackers.
+**Limits:** in runs only behind `balance.triples` and the Triples Only rule, both off until the screen exists (T3, `beta06-t3-triples-in-runs.md`); the battle screen still draws doubles only (T2). A status move with nobody in reach still runs (only attacks fail). The W1 combo attack still needs exactly two attackers.
 
 **Save:** no version bump. `doubles.trio` is optional and `refill` / `aims` widen to spot 2, so every old save loads (tested).
+
+**Foe AI (follow-up PR):** an edge foe with no player Pokémon in reach and no long-range attack Shifts into the centre, but only when the centre is free or held by a partner with no attack, so two foes never swap back and forth. In triples a foe never picks a move that can't hit anyone while another move can. Neither rule uses random numbers. Doubles are unchanged: every move reaches there, so the move list the AI picks from is the same. Limit: an edge foe that can't reach, standing next to a centre partner with attacks, still wastes its turn.

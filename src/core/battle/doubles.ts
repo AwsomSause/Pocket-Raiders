@@ -502,6 +502,17 @@ export function resolveDoublesTurn(ctx: BattleContext, action: PlayerAction): Ba
     if (other) events.push({ type: 'shift', side: 'player', uid: other.mon.uid, from: 1, to: spot });
     turn.acted.add(c.mon.uid);
   }
+  // The foe Shifts too: an edge Pokémon with nobody in reach steps into the centre (one per turn; no random numbers).
+  const foeShift = enemyShiftSpot(ctx, field);
+  if (foeShift !== null) {
+    const c = field.at('enemy', foeShift)!;
+    field.on(c, events);
+    exchangeSpots(ctx, 'enemy', foeShift, 1);
+    events.push({ type: 'shift', side: 'enemy', uid: c.mon.uid, from: foeShift, to: 1 });
+    const other = field.at('enemy', foeShift);
+    if (other) events.push({ type: 'shift', side: 'enemy', uid: other.mon.uid, from: 1, to: foeShift });
+    turn.acted.add(c.mon.uid);
+  }
 
   // 2. Transformations (Mega Evolution, Tera, Dynamax) before any move, so they count for turn order.
   for (const spot of SPOTS) {
@@ -536,7 +547,7 @@ export function resolveDoublesTurn(ctx: BattleContext, action: PlayerAction): Ba
     turn.queue.push(plan(c, move, index, cmd.target));
   }
   for (const foe of field.alive('enemy')) {
-    if (battle.doubles!.commanding?.includes(foe.mon.uid)) continue;
+    if (battle.doubles!.commanding?.includes(foe.mon.uid) || turn.acted.has(foe.mon.uid)) continue;
     const choice = enemyChoice(ctx, field, foe, events);
     if (!choice) continue;
     turn.queue.push(plan(foe, choice.move, choice.slot, choice.target));
@@ -750,6 +761,11 @@ function enemyChoice(ctx: BattleContext, field: Field, foe: Combatant, events: B
     return { score: value(best), target: { side: 'player', spot: field.spotOf(best)! } };
   };
   const usable = foe.mon.moves.map((m, i) => ({ m, i })).filter((x) => x.m.pp > 0);
+  // Triple battles: a move that can't reach anyone is never picked while another one can (doubles: every move reaches).
+  if (field.size === 3) {
+    const hitting = usable.filter((x) => canHit(field, foe, S.resolveMove(content, foe.mon, x.i)));
+    if (hitting.length > 0 && hitting.length < usable.length) usable.splice(0, usable.length, ...hitting);
+  }
   let slot: number;
   if (lockedIndex >= 0) slot = lockedIndex;
   else if (usable.length === 0) slot = -1;
@@ -759,6 +775,41 @@ function enemyChoice(ctx: BattleContext, field: Field, foe: Combatant, events: B
   } else slot = rng.pick(usable).i;
   const move = battleMove(content, battle, foe.mon, S.resolveMove(content, foe.mon, slot));
   return { move, slot, target: worth(move).target };
+}
+
+/** Whether `move` from `user` would land on somebody: a foe or partner in reach, or the user / its side for self moves. */
+function canHit(field: Field, user: Combatant, move: Move): boolean {
+  const kind = targetKind(move);
+  if (kind === 'self' || kind === 'userAndAllies' || kind === 'userOrAlly') return true;
+  if (kind === 'ally') return field.allies(user).length > 0;
+  if (kind === 'single') {
+    if (move.category === 'status' && !ALLY_AIMED.has(move.id)) return true; // side and field moves (Stealth Rock, Rain Dance) need nobody in reach
+    const pool = ALLY_AIMED.has(move.id) ? field.allies(user) : field.alive(otherSide(user.side));
+    return pool.some((t) => field.reaches(user, t, move));
+  }
+  return field.nearFoes(user).length > 0 || (kind === 'others' && field.allies(user).length > 0);
+}
+
+/**
+ * Triple battles: the edge foe that should Shift this turn, or null. It shifts when no player Pokémon is next to it, none of
+ * its usable attacks can reach one (long-range moves can), it isn't locked into a move, and the centre is free or held by a
+ * partner with no attack (so two foes never swap back and forth).
+ */
+function enemyShiftSpot(ctx: BattleContext, field: Field): Spot | null {
+  if (field.size !== 3 || field.alive('player').length === 0) return null;
+  const commanding = ctx.battle.doubles!.commanding ?? [];
+  const attacksOf = (c: Combatant) => c.mon.moves.filter((m) => m.pp > 0).map((m) => ctx.content.moves.get(m.id)).filter((m): m is Move => Boolean(m) && m!.category !== 'status');
+  const centre = field.at('enemy', 1);
+  if (centre && centre.mon.hp > 0 && (attacksOf(centre).length > 0 || commanding.includes(centre.mon.uid))) return null;
+  for (const spot of [0, 2] as const) {
+    const foe = field.at('enemy', spot);
+    if (!foe || foe.mon.hp <= 0 || commanding.includes(foe.mon.uid) || forcedMoveId(foe.vol) || foe.vol.trapped) continue;
+    if (field.nearFoes(foe).length > 0) continue;
+    const attacks = attacksOf(foe);
+    if (attacks.length === 0 || attacks.some((m) => canHit(field, foe, m))) continue;
+    return spot;
+  }
+  return null;
 }
 
 // ---------- running a move ----------
