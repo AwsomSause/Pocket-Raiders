@@ -1,0 +1,12 @@
+# Kice's picks (2026-11-12, Pacific)
+- Siege Map: 7 (Rocket Ledger)
+- Notebook track page ("Ledger - 1", read as Notebook option 1, Open Notebook)
+- Dossier: 8 (Case Folders) mixed with 4 (Org Pyramid)
+- Field Notes: 2 (Bestiary Book) mixed with 6 (Type Tabs)
+- Colossus Plate: 5 (Blueprint)
+- Format HUDs: scrapped, redo from scratch later if wanted
+- Situation Report: 2 (Radio Dispatch) mixed with 5 (Front Page)
+- Rival Report: 1 (News Broadcast) mixed with 9 (Front Page)
+- Stage Map: no mockup; use the normal map with the slider attached
+- Legendary Blessing opening: option 11 (Side Plinth), using real in-game item sprites (items/gen5/rainbow-wing.png for Ho-Oh). Final: legendary-blessing-ho-oh/final-ho-oh-side-plinth.mp4. Each blessing uses its own item sprite.
+- FINAL (Kice approved 2026-11-13): Ho-Oh opening = promo/beta-0.6-screens/ho-oh-opening-final-v2.mp4 (Side Plinth, Rainbow Wing sprite, no platform, cry plays first at ~0.7s). Cries library: /mnt/project-files/audio/pokemon-cries/ (new/ old/ index.json).
