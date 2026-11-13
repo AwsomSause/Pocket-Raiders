@@ -97,6 +97,8 @@ export const PokemonInstanceSchema = z.object({
   abilitySlot: z.number().int().min(-1).default(0),
   /** An ability it was given outright (Squirtle Squad's Contrary); it beats the slot. Optional, so older saves load as they are. */
   fixedAbility: z.string().optional(),
+  /** New Island clones have no ability at all. Optional, so older saves load as they are. */
+  abilityless: z.boolean().optional(),
   /** Its nature (core/natures.ts). Missing in saves from before natures: neutral. */
   nature: z.enum(NATURE_IDS).optional(),
   /** S418 temporary mint: this nature counts instead of `nature` until `battles` more won battles have passed. */

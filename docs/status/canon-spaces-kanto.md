@@ -9,3 +9,4 @@ Celadon City (Department Store, Game Corner, Mansion, Eeveelution Brothers, Tea,
 
 
 Lavender Town built (interlude-3, shown on the Stage 4 map): Pokémon Tower, Fuji's House, Fan Club, Rock Tunnel, Power Plant, Volunteers. See docs/updates/beta-0.6/lavender-canon.md.
+Cinnabar Island built (Lab, Mansion, Seafoam, New Island, Volcano); see docs/updates/beta-0.6/cinnabar-canon.md.
