@@ -3,6 +3,7 @@
 // really happened and never decides an outcome itself (Hyper moments are
 // decided by the battle engine; this file only tells their story).
 
+import { recordRivalBattle, registerFromRival } from '../rivals/overhaul';
 import { grantSignatureMoves } from '../story2/signature';
 import { periodOf } from '../clock';
 import { addGrowth, bumpGrowth, doublesTurnFacts, bumpGrowthOnce, hitCounters, moveCounters, moveRoleCounters, noteGrowthKo, turnCounters, turnFacts } from '../overhaul/growth';
@@ -713,6 +714,7 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
     }
     // A narrative defeat (M12) is the rival's story win, not an ordinary one.
     rivalProgress(content, run, rivalBack, result === 'win' ? 'lostToPlayer' : battle.narrative ? 'narrativeWin' : 'beatPlayer');
+    recordRivalBattle(run, rivalBack.id, { rivalWon: result !== 'win', stageIndex: run.stage?.index ?? 0, playerHpShare: totalHp > 0 ? hpLeft / totalHp : 0 });
     rivalBack.memory.lastBattle = { eventId: ended.id, result: result === 'win' ? 'win' : 'lose', hpLeftShare: hpShare, turns: battle.turn - 1, team: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.speciesId), foes: fought };
     recordSeenMoves(content, rivalBack, battle.playerMovesSeen, ended.id);
     // W2: everything else it watched (setup, switches, your lead, a sweep, a legend...) for its adaptation triggers.
@@ -753,7 +755,9 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
     if (major) {
       tagPrimary(content, run, major);
       recordAce(content, major, battle.enemyTeam, result === 'lose');
+      registerFromRival(run, major, 'main');
       rivalProgress(content, run, major, result === 'win' ? 'lostToPlayer' : 'beatPlayer');
+      recordRivalBattle(run, major.id, { rivalWon: result !== 'win', stageIndex: run.stage?.index ?? 0, playerHpShare: totalHp > 0 ? hpLeft / totalHp : 0 });
       emit(content, run, 'rivalryFormed', { where, actors: fought, data: { rival: major.id, archetype: major.archetype, outcome: 'major' }, text: `${trainer.name} swore to keep up with you all the way. A rivalry for the whole journey has begun` });
       for (const text of learnFromBattle(content, run, major, enemyKos, where)) emit(content, run, 'rivalryFormed', { where, actors: fought, data: { rival: major.id, outcome: 'studied' }, text });
     }

@@ -3,6 +3,7 @@
 // defaults the game plays exactly as it did before (see tests/unit/expansionFoundation.test.ts).
 
 import { z } from 'zod';
+import { RivalOverhaulStateSchema } from '../rivals/overhaulSchema';
 
 /** F1: every expansion setting at its default (plan section 10). Lives in `settings.expansion` (settings v42). */
 export const ExpansionSettingsSchema = z.object({
@@ -53,6 +54,8 @@ export const ExpansionRunSchema = z.object({
   siege: z.record(z.string(), z.unknown()).optional(),
   apex: z.record(z.string(), z.unknown()).optional(),
   friend: z.record(z.string(), z.unknown()).optional(),
+  /** Rival overhaul state by rival id (R1-R3, R10; core/rivals/overhaul.ts). */
+  rival: z.record(z.string(), RivalOverhaulStateSchema).optional(),
   rescue: z.record(z.string(), z.unknown()).optional(),
 });
 export type ExpansionRun = z.infer<typeof ExpansionRunSchema>;
