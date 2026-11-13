@@ -179,6 +179,7 @@ import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
 import { applyTrainerParity, trainerHistoryLine, trainerKey } from './trainerWorld/trainerWorld';
 import { planTrainerGimmicks, returningPlan, trainerKit } from './trainerWorld/behavior';
 import { castGymLeader, castLeague, record } from './rolePool';
+import type { MomentHooks } from './moments/pokemonMoments';
 import { galarScope, lastStandUsed, markLastStand, pickCounterSpecies } from './galarCrowd';
 import { GALAR_SHOP_COLUMNS, ballGuyLimit, ballGuyStock, galarEliteFour, usesGalarTournament } from './galarTournament';
 import { getTheme, pickGymLeader, typesPool, wildEligibleSpecies } from './themes';
@@ -2714,6 +2715,26 @@ function galarLastStandMon(content: Content, run: RunState): PokemonInstance | n
   return mon;
 }
 
+/** Pokémon moments (core/moments): the seed, the run's saved flags and the cinematic budget, all read from the run. */
+function pokemonMomentHooks(content: Content, run: RunState): MomentHooks {
+  return {
+    seed: `${run.seed}:${run.encountersCompleted}`,
+    flags: run.story.flags,
+    cinematic: (tier) => momentAllowed(content, run, tier),
+    noteCinematic: (tier) => noteMoments(run, tier),
+    // Only a wipe with nothing left to catch it ends the run: no checkpoint to return to, no Safety Net, no VS Recorder.
+    runWouldEnd: () => {
+      const battle = run.battle;
+      if (!battle || battle.outcome === 'win' || battle.outcome === 'caught') return false;
+      if (battle.expedition || battle.raid || battle.totem || battle.narrative || battle.event || battle.stepIn || battle.doubles) return false;
+      if (storyLossApplies(run, battle, content)) return false;
+      if (run.recorder && (vsRecorderReady(content, run) || safetyNetReady(content, run))) return false;
+      if (run.checkpoint && (getMode(run.rules.modeId)?.checkpoints === true || (run.rules.deathBlock && !run.rules.deathBlockUsed && run.encountersCompleted < RUN_RULES.deathBlock.battles))) return false;
+      return true;
+    },
+  };
+}
+
 function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rng, hyperRng?: Rng): BattleContext {
   const archetype = runArchetype(content, run);
   syncHpPerks(content, archetype.modifiers, run.party);
@@ -2747,6 +2768,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     disabledMechanics: run.disabledMechanics,
     manualMega: true,
     hyper: hyperRng ? buildHyperContext(content, run, hyperRng) : undefined,
+    moments: pokemonMomentHooks(content, run),
     teamItems: run.passives,
     noBattleItems: noBattleItems(run.rules),
     setStyle: isHardcore(run.rules),

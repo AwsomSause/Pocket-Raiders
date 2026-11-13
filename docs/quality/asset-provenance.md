@@ -177,3 +177,6 @@ Dataset: `src/data/moveTargets.json` (which moves hit both foes, everyone, the p
 
 ## Galar stadium crowd sounds (2026-11-08)
 `audio/se/crowd_applause.ogg` and `crowd_uproar.ogg` copied unchanged from Pokemon-Decades-main `Audio/SE/Anim/Applause.ogg` and `Uproar.ogg` (same files in Essentials 21 EBDX). `audio/se/crowd_murmur.mp3` is 12 s (from 0:05, 1 s fades, mono 64 kbps) of `Audio/BGM/Pokemon Colosseum Nascour Battle Crowd Noise.ogg`. Catalog ids `se.crowd_applause|uproar|murmur`; played by the Galar stadium director for `crowd.roar|swell|murmur`. Original game audio, community-ripped; repo stays private (D4).
+
+## Pokémon moments: "Failure Will (NOT) Be Tolerated" audio (2026-11-13)
+`public/assets/audio/moments/failure-*.ogg` were supplied by the director (Kice) and converted from mp3 to ogg: the six voice lines (`failure-primary`, `-secondary`, `-backup`, `-this-pokemon`, `-dead-or-alive`, `-is-mine`), `failure-static` (electrical short circuit sound effect, leading 0.45 s trimmed), `failure-flash` (flash sound effect, leading silence trimmed to 2.3 s) and `failure-theme` (Sonic Generations OST, "Vs. Metal Sonic, Stardust Speedway Bad Future (JP)"). Sega / third-party material; the repo stays private (D4). The director can replace any file with the same name.

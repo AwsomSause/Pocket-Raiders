@@ -8,6 +8,7 @@
 // network), the fallback plays or the cue is skipped; battle state is never
 // touched. Animation files are loaded the first time a move is used.
 
+import { playMomentScene } from './momentScene';
 import { capFlash } from '../../core/presentation/uiPrefs';
 import Phaser from 'phaser';
 import { MASTERY_VFX, type MoveRank } from '../../core/moveMastery';
@@ -166,6 +167,8 @@ export class BattleFx {
         return;
       case 'storyAnim':
         return this.flourish(cue.side, cue.anim);
+      case 'momentScene':
+        return playMomentScene(this.scene, { fadeMs: cue.fadeMs, staticMs: cue.staticMs, lines: cue.lines, clips: cue.clips, sprite: this.opts.sprite('player'), fast: this.skipping || this.settings.battleAnimations !== 'full' });
     }
   }
 

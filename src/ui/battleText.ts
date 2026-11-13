@@ -1,5 +1,6 @@
 // Turns battle events into the sentences shown in the battle message box.
 
+import { pokemonMoment } from '../core/moments/pokemonMoments';
 import type { Side } from '../core/battle/engine';
 import type { Content, Terrain, Weather } from '../core/contentSchema';
 import type { RunEvent } from '../core/run';
@@ -114,6 +115,12 @@ export function eventText(content: Content, names: Names, e: RunEvent, details =
     }
     case 'lastStand':
       return `${who(e.side)} hung on using its ${content.items.get(e.itemId)?.name ?? 'charm'}!`;
+    case 'pmoment': {
+      // A Pokémon moment (core/moments): its name and one line; a refused cinematic is told this same way.
+      const def = pokemonMoment(e.id);
+      const line = def?.scene ? def.scene.lines.join(' ') : (def?.presentation.split(' | ').pop() ?? '').replace(/^"|"$/g, '');
+      return `${e.name}! ${who(e.side)} ${e.scene ? 'rises again, Overcharged!' : 'hangs on!'}${line ? ` ${line}` : ''}`;
+    }
     case 'hyper':
       // The story layer normally shows the moment's own lines instead.
       return e.cured ? `${who(e.side)} shook off its status!` : `${who(e.side)} won't give up!`;

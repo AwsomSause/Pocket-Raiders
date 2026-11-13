@@ -625,7 +625,15 @@ export function revertTransformations(content: Content, battle: BattleState, par
   const limit = megaPartyLimit(perks) ?? Infinity;
   let megas = party.filter((p) => getSpecies(content, p.speciesId).form?.kind === 'mega' && !battle.transform.forms[p.uid]).length;
   endMegaMoves([...party, ...battle.enemyTeam]);
-  for (const mon of party) endDynamax(content, battle, 'player', mon);
+  for (const mon of party) {
+    // Overcharged ends with the battle: HP is scaled back to the normal maximum.
+    if (mon.overcharged) {
+      const before = calcStats(content, mon).hp;
+      delete mon.overcharged;
+      if (mon.hp > 0) mon.hp = Math.max(1, Math.min(calcStats(content, mon).hp, Math.round((mon.hp * calcStats(content, mon).hp) / before)));
+    }
+    endDynamax(content, battle, 'player', mon);
+  }
   for (const mon of battle.enemyTeam) endDynamax(content, battle, 'enemy', mon);
   for (const mon of [...party, ...battle.enemyTeam]) {
     const record = battle.transform.forms[mon.uid];
