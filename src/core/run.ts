@@ -26,7 +26,7 @@ import { eliteRematchDue } from './story/eliteRematch';
 import { markAssisted } from './tools/assisted';
 import { crossObstacle, placeDungeon, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
 import { wandererStageStart, wandererStep } from './wanderer';
-import { freeHandedOverRival } from './arc/standWithExtended';
+import { freeHandedOverRival, standWithClimaxLost, standWithOf } from './arc/standWithExtended';
 import { makeShadow, rollShadowHeart, soothePartyAfterBattle } from './shadow';
 import { leaveRegion, startGrandArc } from './grandArc';
 import { checkFlagKeys, checkLeadWinKey, SHADOW_SLOT_CAP, heavyShadowCount, shadowTierOf } from './shadow2';
@@ -89,7 +89,7 @@ import { bumpEventCounters } from './eventToolkit';
 import { blackMarketMarkup, fieldResearchMoney, spookyEncounterChance, voiceAsksToJoin } from './trainerEvolution';
 import { growGarden } from './berries';
 import { layEgg, tickEggs } from './eggs';
-import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isPseudoBattle, isStoryEventBattle } from './events';
+import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
@@ -3102,6 +3102,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     return { run, events, end: null, defeated: false, cues, drama, raidFailed: true };
   }
   if (battle.outcome === 'lose' && battle.event && isPseudoBattle(content, battle.event)) {
+    // Stand With Them: a lost climax battle is Second Shot (core/arc/standWithExtended.ts); the run always goes on.
+    if (isStandWithBattle(content, battle.event) && standWithOf(run)) standWithClimaxLost(run);
     pseudoLost(content, run);
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, clubLost: true };
