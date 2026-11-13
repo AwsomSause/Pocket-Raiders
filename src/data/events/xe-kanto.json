@@ -1,6 +1,96 @@
 {
  "events": [
   {
+   "id": "xe.kanto.count-room",
+   "name": "The Count Room",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#241a10",
+    "effect": "glint"
+   },
+   "intro": "A basement room under the Game Corner with a brass door and the hum of coin counters. A pit boss in a waistcoat: \"Welcome to the only honest room in the building. Every coin that lies upstairs tells the truth down here.\" On a velvet stand, a Dratini coils on a prize card: JACKPOT, 9,900 coins. \"Nobody has ever won her. The machine isn't built to count that high.\"",
+   "choices": [
+    {
+     "label": "\"Whose is she?\"",
+     "success": {
+      "text": "\"A dealer's. Was. He had a good week once.\" Vesper taps the card, and the address behind it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-jackpot-lead",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll play you for her.\"",
+     "success": {
+      "text": "\"House pays. First time for everything.\" Jackpot uncoils, looks at the empty chips on the felt, and chooses you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "magnemite",
+        "dratini"
+       ],
+       "special": "sv.rocket.jackpot",
+       "name": "Pit Boss Vesper",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "dratini"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rocket-jackpot-won",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "\"Come back when the machine can count that high.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
    "id": "xe.kanto.small-print",
    "name": "Small Print",
    "group": "Tricksters, villains and teams",
@@ -282,6 +372,7 @@
       ],
       "battle": {
        "kind": "wild",
+       "special": "sv.rocket.roadblock",
        "species": [
         "snorlax"
        ],

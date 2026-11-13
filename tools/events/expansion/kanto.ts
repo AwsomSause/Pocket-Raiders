@@ -2,16 +2,23 @@
 // Built into src/data/events/xe-kanto.json by tools/build-expansion-events.ts (npm run data:xe-events).
 // How the script maps onto this game: Heat is the Evil Team heat; Intel and Operational Strength do not exist yet, so an
 // event writes a story flag (`ev:rocket-...`) for the slices that will read them; money is scaled to this game's prices.
-import { ch, ev, fight, flag, good, has, inRegion, leave, lose, money, out, rest, trainer, $, wild, companion, type Json } from '../dsl.ts';
+import { ch, ev, fight, flag, good, has, inRegion, join, leave, lose, money, out, rest, trainer, $, wild, companion, type Json } from '../dsl.ts';
 
 const G = 'Tricksters, villains and teams';
 const heat = (n: number): Json => ({ kind: 'evil', heat: n });
 const track = (input: string): Json => ({ kind: 'track', input });
 const note = (special: string): Json => ({ kind: 'fieldNote', special });
 const base: Json[] = [inRegion('kanto'), { kind: 'xevents' }];
+const countRoom = (): Json => ev('xe.kanto.count-room', 'The Count Room', G, { stop: 'event', rarity: 'rare', minStage: 3, requires: [...base, { kind: 'track', atLeast: 2 }], cast: ['trainer.gentleman'], tint: '#241a10', effect: 'glint' } as never,
+  'A basement room under the Game Corner with a brass door and the hum of coin counters. A pit boss in a waistcoat: "Welcome to the only honest room in the building. Every coin that lies upstairs tells the truth down here." On a velvet stand, a Dratini coils on a prize card: JACKPOT, 9,900 coins. "Nobody has ever won her. The machine isn\'t built to count that high."', [
+    ch('"Whose is she?"', out('"A dealer\'s. Was. He had a good week once." Vesper taps the card, and the address behind it.', flag('rocket-jackpot-lead'))),
+    ch('"I\'ll play you for her."', fight('"House pays. First time for everything." Jackpot uncoils, looks at the empty chips on the felt, and chooses you.', trainer('Pit Boss Vesper', { cls: 'roughneck', size: 2, lv: 1, team: ['magnemite', 'dratini'], special: 'sv.rocket.jackpot', win: [join({ species: ['dratini'], lv: 0 }), flag('rocket-jackpot-won')] }))),
+    ch('Leave', leave('"Come back when the machine can count that high."')),
+  ]);
 const grunt = (name: string, size = 2, lv = 0, win: Json[] = []) => trainer(name, { cls: 'roughneck', size, lv, win });
 
 export const XE_KANTO_EVENTS: Json[] = [
+  countRoom(),
   ev('xe.kanto.small-print', 'Small Print', G, { stop: 'event', rarity: 'uncommon', priority: 100, minStage: 2, requires: base, cast: ['trainer.worker_m', 'trainer.roughneck'], tint: '#2a1414', effect: 'flicker' } as never,
     'A bike shop with its shutter half down. The owner: "We\'re closed. We\'re not closed. We\'re... between payments." A Rocket Collector steps out with a receipt book. "Insurance. Fires, floods, people like me."', [
       ch('"How much does he owe?" (₽4,000)', out('"Four thousand. For you, four thousand." The shop reopens with a permanent 10% discount for you. The Collectors will ask again.', $(-4000), heat(-3), flag('rocket-paid-once'), { kind: 'relic', id: 'xe-kanto-insured', name: 'Insured Shop', effects: [{ kind: 'priceMultiplier', group: 'all', value: 0.9 }] }), { requires: [money(4000)] }),
@@ -28,7 +35,7 @@ export const XE_KANTO_EVENTS: Json[] = [
     ]),
   ev('xe.kanto.roadblock', 'The Roadblock', G, { stop: 'event', rarity: 'uncommon', minStage: 2, requires: [...base, { kind: 'track', atLeast: 3 }], cast: ['trainer.roughneck'], tint: '#241818', effect: 'none' } as never,
     'A Snorlax sleeps across the road. A catering truck with a red R is parked beside it, and two grunts are shovelling food. "Forty kilos a day. Each. Boss says it\'s cheaper than a wall."', [
-      ch('Play the Poké Flute', fight('The Roadblock wakes hungry and angry.', wild({ species: ['snorlax'], lv: 3 }), flag('rocket-roadblock-flute'), note('sv.rocket.roadblock')), { requires: [has('poke-flute')] }),
+      ch('Play the Poké Flute', fight('The Roadblock wakes hungry and angry.', wild({ species: ['snorlax'], lv: 3, special: 'sv.rocket.roadblock' }), flag('rocket-roadblock-flute'), note('sv.rocket.roadblock')), { requires: [has('poke-flute')] }),
       ch('Stop the food truck', fight('Three fights, and the truck never reaches the second Snorlax. Both wander off by morning.', trainer('Rocket Driver', { cls: 'roughneck', size: 2, chain: 3, win: [track('raidSuccess'), flag('rocket-roadblock-truck')] })), note('sv.rocket.roadblock')),
       ch('Feed it yourself (3 Oran Berries)', out('It rolls over. The road opens for you.', lose('oran-berry'), lose('oran-berry'), lose('oran-berry'), flag('rocket-roadblock-fed'), note('sv.rocket.roadblock')), { requires: [{ kind: 'item', id: 'oran-berry', count: 3 }] }),
     ]),
