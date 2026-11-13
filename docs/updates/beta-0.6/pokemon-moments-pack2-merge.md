@@ -15,7 +15,7 @@ These match a moment we already have or have designed. Nothing new is built; the
 
 ## 2. Good for 0.6 (small, uses hooks we already have or one new trigger)
 New trigger "Faint" (this Pokémon is knocked out) is the main hook needed.
-- Faint: PT2 (Embers Left, needs Kindled), PT5-style revenge moments, PT8, PT14 (no, see 0.7), PS2 Shedinja (Ninjask +2 Speed).
+- Faint: PT2 (Embers Left, with a small Kindled status) and PS2 Shedinja (Ninjask +2 Speed).
 - Battle start or face-off boosts: PT16, PA8-style pack bonus, PG4, PG7, PG11, PG13, PG14, PG16, PS11, PS12 (Illusion), PS19, PS24, PS25, PS29, PS30, PS40.
 - Low HP or hit: PT10, PS14, PS38 (Wishiwashi school form), PS32.
 - Status "Resolute" (small: cannot fall below 1 HP for a turn): PT7, PG6.
