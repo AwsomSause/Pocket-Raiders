@@ -63,6 +63,8 @@ import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } fro
 import { hashSeed, Rng } from './rng';
 import { continueAfterDecisions, healParty, newMon } from './run';
 import { earnRom, gainStock, grandArcOf, romById, romsHeld } from './grandArc';
+import { checkFlagKeys } from './shadow2/keys';
+import { grantNamedShadow } from './shadow2/grant';
 import type { MapNode, RunState, SideStop } from './state';
 import { applyReward, rewardTargetProblem } from './rewards';
 import { focusIs, MYSTERY_EXTRA_STOPS, regionFocus } from './campaign/focus';
@@ -828,6 +830,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return `Data ROM ${e.rom}`;
     case 'grandArcStock':
       return '';
+    case 'namedShadow':
+      return 'a Shadow Pokémon is offered to you';
     case 'mentor':
       return 'your mentor';
     case 'moment':
@@ -1075,8 +1079,14 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'grandArcStock':
       gainStock(run, e.step);
       return '';
+    case 'namedShadow': {
+      const name = grantNamedShadow(content, run, e.id, e.level);
+      return name ? `${name} is yours to keep, if you can hold it` : 'there was nobody to hand over';
+    }
     case 'flag':
       run.story.flags[`ev:${e.key}`] = Math.max(0, Number(run.story.flags[`ev:${e.key}`] ?? 0) + e.amount);
+      // Shadow II: a story flag may be exactly the key a Shadow in your party or PC has been waiting for.
+      for (const line of checkFlagKeys(content, run)) recordChoice(content, run, { id: `shadow-key-${e.key}`, pick: 'yes', text: line, weight: 2 });
       return '';
     case 'mentor':
       return applyMentorEffect(content, run, e);

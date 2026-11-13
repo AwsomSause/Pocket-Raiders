@@ -27,6 +27,7 @@ import { crossObstacle, placeDungeon, placeLandmark, placeObstacles, placeWeekSt
 import { wandererStageStart, wandererStep } from './wanderer';
 import { makeShadow, rollShadowHeart, soothePartyAfterBattle } from './shadow';
 import { leaveRegion, startGrandArc } from './grandArc';
+import { checkFlagKeys, checkLeadWinKey, SHADOW_SLOT_CAP, heavyShadowCount, shadowTierOf } from './shadow2';
 import { advanceShadowWorld, addFlag, gangNotes, gangRaidWon, liberatedHpDiscount, outbreakShadow, placeGangDen } from './shadowWorld/world';
 import { blissfulAfterBattle, blissfulAtRest } from './shadowWorld/blissful';
 import { wildBehavior, wildCatchMultiplier } from './wildBehavior';
@@ -3434,6 +3435,11 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     }
     // Shadow Pokémon that fought are soothed; at 0 the haze lifts.
     shadowPurified = soothePartyAfterBattle(content, run, battle.participants, shadowStages);
+    // Shadow II keys: a Named Shadow that led a won battle outdoors (a wild fight), or whose key flag is set, is freed.
+    for (const line of [...checkLeadWinKey(content, run, battle.participants[0], battle.kind === 'wild'), ...checkFlagKeys(content, run)]) {
+      shadowStages.push(line);
+      shadowPurified.push(line.split(':')[0]!);
+    }
     // Freeing a Pokémon from the haze is a kindness the world remembers.
     if (shadowPurified.length > 0) addFlag(run, 'kindness', shadowPurified.length);
     blissfulHealed = blissfulAfterBattle(content, run);
@@ -3856,6 +3862,7 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
     const name = speciesName(content, caught.speciesId);
     if (choice.kind === 'addToParty') {
       if (run.party.length >= partyCapacity(content, run)) throw new Error('Your party is full');
+      if (shadowTierOf(caught)?.countsAgainstCap && heavyShadowCount(run.party) >= SHADOW_SLOT_CAP) throw new Error(`A party can hold only ${SHADOW_SLOT_CAP} Gripped or Fallen Shadow Pokémon. Send it to the PC.`);
       const problem = joinProblem(content, run, caught.speciesId);
       if (problem) throw new Error(problem);
       run.party.push(caught);
@@ -3865,6 +3872,7 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
       const old = run.party[choice.partyIndex];
       if (!old) throw new Error('Choose a party member to replace');
       if (old.care?.favourite) throw new Error('A favourite cannot be swapped out. Unmark it in Care first.');
+      if (shadowTierOf(caught)?.countsAgainstCap && heavyShadowCount(run.party.filter((m) => m.uid !== old.uid)) >= SHADOW_SLOT_CAP) throw new Error(`A party can hold only ${SHADOW_SLOT_CAP} Gripped or Fallen Shadow Pokémon.`);
       const problem = joinProblem(content, run, caught.speciesId, old.uid);
       if (problem) throw new Error(problem);
       run.party[choice.partyIndex] = caught;
@@ -4109,6 +4117,7 @@ export function withdrawFromBox(content: Content, current: RunState, boxIndex: n
   assertPhase(current, 'map');
   if (!current.box[boxIndex]) throw new Error('No Pokémon in that PC slot');
   if (current.party.length >= partyCapacity(content, current)) throw new Error('Your party is full');
+  if (shadowTierOf(current.box[boxIndex]!)?.countsAgainstCap && heavyShadowCount(current.party) >= SHADOW_SLOT_CAP) throw new Error(`A party can hold only ${SHADOW_SLOT_CAP} Gripped or Fallen Shadow Pokémon.`);
   const run = structuredClone(current);
   run.party.push(run.box.splice(boxIndex, 1)[0]!);
   return run;

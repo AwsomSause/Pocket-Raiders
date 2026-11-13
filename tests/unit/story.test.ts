@@ -71,12 +71,13 @@ describe('story foundation: random streams', () => {
   // play on purpose. Re-pinned again when special forms (Delta, Z, Spooky, regional) left the ordinary pools (Untitled doc §8), and for the gentle opening (weaker first wild fights, no fixed-damage enemy moves at low level, an attacking move always known), and for the item audit (10 new catalog items, wider heal and berry event pools, uncommon and higher drafts 15% rarer, Terrain Seeds, Canari Plushes, Exp. Candies, special balls, Hyper Berries, the rarity order fix, natures, Silvally Memories), and for wild type and type-combo rarity (balance.json typeRarity, comboRarity), and for four new berries (Roseli, Hyper Roseli, Kee, Maranga) joining the reward pool,, five Hisuian fossils, and five Tuning Dusts, and for the Beta 4.4 battle fixes (sleep 2-4 turns, the first rival on Stage 1 level 5, set boss aces, one Mega per battle, Choice locks only the move).
   // Re-pinned for gym leaders one level lower (gymBonus -1). Re-pinned again for the flatter early curve and +1 HP per level. Re-pinned for second-wind healing and the 6-fight gentle opening (early-deaths-difficulties). Premier Ball rewards (instead of Hyper Potions) re-pinned STORY8. Role Pool Casting re-baselined these (leaders now come from the whole pool, not the region's own list); the 'map' stream itself did not move. Re-pinned STORY8 for Fury Cutter's streak power and Alluring Voice's confusion (content-audit-2). Re-pinned for IVs and EVs (W5, ivs-evs.md) and for the second library item batch (#1021: 3,000+ lines of new catalog items change drafts, shops and rewards).
   // Re-pinned for starters drawn from Remembrances (all seven change: the starter draw is new). Re-pinned for the boss teams (custom forms, lore Legendaries; #1063/#1066/boss-forms fix): STORY1, 2, 5 and 8 meet a changed gym. Re-pinned three seeds (STORY2/0, STORY5/0 and one more) for the Beta 0.6 boss item budget (bosses and rivals now heal up to 10 times and revive fallen teammates; verified it is the only cause by switching the budget off, which restored the old hash).
+  // Re-pinned STORY6/0 for Shadow II (Shadow tiers replace the flat Shadow damage and the old Sealed ignore roll; a player Shadow fights in that seed).
   const BEFORE_STORY: Record<string, string> = {
     'STORY1/0': '1dda0e89a180298f',
     'STORY2/0': 'b24a1a0604f703b8', // STORY2, 5, 6 re-pinned after #1098 (Starter Sets removal); cause not isolated, see PR
     'STORY4/0': '927fbd65e715ebbc',
     'STORY5/0': '93fa407c6ffa3882',
-    'STORY6/0': 'ed7f038060b34922',
+    'STORY6/0': '4a35f9c7e5c84a54',
     'STORY7/0': '2db6e08d823e4f4c',
     'STORY8/0': '2fa3b04267e0313a',
   };
