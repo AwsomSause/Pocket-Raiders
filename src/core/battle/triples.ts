@@ -124,3 +124,14 @@ export function isTriples(battle: Pick<BattleState, 'doubles'>): boolean {
 export function spotCount(battle: Pick<BattleState, 'doubles'>): 1 | 2 | 3 {
   return battle.doubles ? (battle.doubles.trio ? 3 : 2) : 1;
 }
+
+/**
+ * The party (or team) indexes of every Pokémon on one side's field, main fields first: one in singles, two in doubles, up to three
+ * in triples. For run-level helpers that don't run a turn (companion support, story counters).
+ */
+export function fieldIndexes(battle: Pick<BattleState, 'doubles' | 'activeIndex' | 'enemyIndex'>, side: Side): number[] {
+  const main = side === 'player' ? battle.activeIndex : battle.enemyIndex;
+  const d = battle.doubles;
+  const others = !d ? [] : d.trio ? d.trio[side].map((s) => s.index) : [d[side].index];
+  return [main, ...others].filter((i) => i >= 0);
+}

@@ -55,6 +55,7 @@ import { createMajorRival, learnFromBattle, recordAce, type Knockout } from '../
 import { maybeFormMonRival, monRivalAfterBattle, monRivalCandidate } from '../rivals/monRivals';
 import { recordSacrifice } from '../rivals/sacrifice';
 import { longestSweep, recordSightings } from '../rivals/adaptTriggers';
+import { fieldIndexes } from '../battle/triples';
 
 const ENGINE_EFFECTS = new Set<string>(Object.values(HYPER_EFFECTS));
 
@@ -178,7 +179,7 @@ export function recordBattleTurn(content: Content, before: RunState, run: RunSta
   // Growth paths: what this turn tells the counters of the Pokémon that started it (turns, hits, misses).
   if (prior.doubles) {
     // Doubles: each player Pokémon that began the turn gets its own facts (who moved, hit, was hit).
-    const uids = [before.party[prior.activeIndex]?.uid, prior.doubles.player.index >= 0 ? before.party[prior.doubles.player.index]?.uid : undefined].filter((u): u is string => Boolean(u));
+    const uids = fieldIndexes(prior, 'player').map((i) => before.party[i]?.uid).filter((u): u is string => Boolean(u));
     const trainerClass = battle.trainer?.classId ?? null;
     const facts = doublesTurnFacts(events, { player: active.player ?? '', enemy: active.enemy });
     for (const uid of uids) {

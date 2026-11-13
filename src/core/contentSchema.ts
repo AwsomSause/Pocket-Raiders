@@ -2035,6 +2035,14 @@ export const BalanceSchema = z.object({
   doubles: z
     .object({ chance: z.number().min(0).max(1), fromStage: z.number().int().min(0), wildChance: z.number().min(0).max(1).default(0), bossIds: z.array(z.string()).default([]) })
     .default({ chance: 0.3, fromStage: 1, wildChance: 0, bossIds: [] }),
+  /**
+   * Beta 0.6 T3 Triple Battles (core/battle/triples.ts): ordinary trainers from region `fromRegion` (0 = the first) fight three at a
+   * time with `chance` (their own seed), and bosses in `bossIds` always do. `enabled` off = no random triples (the Triples Only rule
+   * still applies); it stays off until the battle screen can draw three a side (T2).
+   */
+  triples: z
+    .object({ enabled: z.boolean(), chance: z.number().min(0).max(1), fromRegion: z.number().int().min(0), bossIds: z.array(z.string()).default([]) })
+    .default({ enabled: false, chance: 0, fromRegion: 2, bossIds: [] }),
   /** SOS calls (core/battle/sos.ts): hurt wild Pokémon may call a friend. Off = never (old-seed checks switch it off). */
   /** Campaign Director focus effects (mystery: more event stops; rivals: sooner returns). */
   focusEffects: z.boolean().default(true),

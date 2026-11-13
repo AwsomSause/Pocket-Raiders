@@ -25,7 +25,7 @@ function duel(c: Content, s: FrontState, mine: ExhibitionFighter[], foeLevel: nu
   const foe: ExhibitionTeam = { trainer: r.pick(TRAINERS), fighters: draw(c, r, 3, foeLevel) };
   keep(s, r);
   s.fights += 1;
-  const res = fight(c, s.fseed, `f${s.fights}`, { trainer: 'You', fighters: mine }, foe, { palace: palaceRules });
+  const res = fight(c, s.fseed, `f${s.fights}`, { trainer: 'You', fighters: mine }, foe, { palace: palaceRules, triples: s.triples });
   s.msg = res.winner === 0 ? `Round won against ${foe.trainer}.` : `Lost to ${foe.trainer}.`;
   return res.winner === 0;
 }
@@ -40,6 +40,8 @@ interface FrontState extends BaseState {
   pool: ExhibitionFighter[];
   team: number[];
   phase: 'pick' | 'between';
+  /** Battle Factory option (Beta 0.6 T3): rounds are triple battles, all three rentals on the field at once. */
+  triples?: boolean;
 }
 const roundLevel = (s: FrontState) => s.level + s.round * 2;
 const poolCells = (s: FrontState, id: (i: number) => string): Cell[] =>
@@ -62,7 +64,11 @@ const factory: MinigameModule<FrontState> = {
   start: (c, p, rs) => startFront(c, p, rs, 6),
   view(_c, s) {
     const hud = [`Round ${Math.min(s.round + 1, s.rounds)}/${s.rounds}`, `Won: ${s.won}`, s.msg];
-    if (s.phase === 'pick') return { hud, prompt: `Rent three Pokémon (${s.team.length}/3). Tap to choose or drop.`, cols: 3, cells: poolCells(s, (i) => `r${i}`), done: s.done };
+    if (s.phase === 'pick') {
+      // Before the first rental: choose single or triple battles for the whole run.
+      const format: Cell = { id: 'triples', label: s.triples ? 'Format: Triple' : 'Format: Single', detail: s.triples ? 'All three fight at once' : 'One at a time', tone: s.triples ? 'hot' : 'dim', disabled: s.done || s.team.length > 0 };
+      return { hud, prompt: `Rent three Pokémon (${s.team.length}/3). Tap to choose or drop.`, cols: 3, cells: [...poolCells(s, (i) => `r${i}`), format], done: s.done };
+    }
     return {
       hud,
       prompt: 'Swap a rental for a fresh one, or go on. Team: ' + s.team.map((i) => s.pool[i]!.name).join(', '),
@@ -73,7 +79,9 @@ const factory: MinigameModule<FrontState> = {
   },
   act(c, s, id) {
     if (s.done) return;
-    if (s.phase === 'pick' && id.startsWith('r')) {
+    if (s.phase === 'pick' && id === 'triples') {
+      if (s.team.length === 0 && s.round === 0) s.triples = !s.triples;
+    } else if (s.phase === 'pick' && id.startsWith('r')) {
       const i = Number(id.slice(1));
       s.team = s.team.includes(i) ? s.team.filter((x) => x !== i) : s.team.length < 3 ? [...s.team, i] : s.team;
       if (s.team.length === 3) {

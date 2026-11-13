@@ -692,6 +692,12 @@
    "cress"
   ]
  },
+ "triples": {
+  "enabled": false,
+  "chance": 0.15,
+  "fromRegion": 2,
+  "bossIds": []
+ },
  "modeShops": {
   "spooky": [
    { "item": "reaper-cloth", "price": 2200, "minBadges": 0 },
