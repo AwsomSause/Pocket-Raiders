@@ -2509,7 +2509,7 @@ export const BalanceSchema = z.object({
   /** How many different items one Pokémon can hold (trainer perks change it). */
   heldItemSlots: z.number().int().positive(),
   /** Bonus items (held, passive, stat boosts) stack at most this high, unless the No Item Caps modifier is on. */
-  itemCaps: z.object({ bonusMax: z.number().int().min(1), revivesPerBattle: z.number().int().min(1).default(6), moneyMax: z.number().int().min(1).default(999999), buysPerStage: z.number().int().min(1).default(25) }).default({ bonusMax: 3, revivesPerBattle: 6, moneyMax: 999999, buysPerStage: 25 }),
+  itemCaps: z.object({ bonusMax: z.number().int().min(1), healsPerBattle: z.number().int().min(1).default(10), revivesPerBattle: z.number().int().min(1).default(6), moneyMax: z.number().int().min(1).default(999999), buysPerStage: z.number().int().min(1).default(25) }).default({ bonusMax: 3, healsPerBattle: 10, revivesPerBattle: 6, moneyMax: 999999, buysPerStage: 25 }),
   /** Wild species with at least this base stat total count as rare (trainer perks make them turn up more or less). */
   rareEncounterBst: z.number().int().positive(),
   /** The first rival: met on the first ordinary trainer of `stage` (0-based, counted from the run start) with one Pokémon of `level`. The Exp. Share (and bench EXP) switch on after that fight. */
