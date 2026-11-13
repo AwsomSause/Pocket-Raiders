@@ -1,0 +1,2415 @@
+{
+ "status": "supported",
+ "note": "Pokémon-specific moments (Beta 0.6). Catalog: docs/updates/beta-0.6/pokemon-moments-catalog.md. Entries with status \"disabled\" are designed but not built yet (later batches).",
+ "groups": {
+  "constructs": [
+   "rotom",
+   "magnezone",
+   "golurk",
+   "golett",
+   "porygon2",
+   "porygon-z",
+   "claydol",
+   "metagross",
+   "bronzong",
+   "klinklang",
+   "genesect",
+   "cryogonal",
+   "bastiodon",
+   "probopass"
+  ],
+  "starters": [
+   "venusaur",
+   "charizard",
+   "blastoise",
+   "meganium",
+   "typhlosion",
+   "feraligatr",
+   "sceptile",
+   "blaziken",
+   "swampert",
+   "torterra",
+   "infernape",
+   "empoleon",
+   "serperior",
+   "emboar",
+   "samurott",
+   "chesnaught",
+   "delphox",
+   "greninja",
+   "decidueye",
+   "incineroar",
+   "primarina",
+   "rillaboom",
+   "cinderace",
+   "inteleon",
+   "meowscarada",
+   "skeledirge",
+   "quaquaval"
+  ],
+  "fossils": [
+   "omanyte",
+   "omastar",
+   "kabuto",
+   "kabutops",
+   "aerodactyl",
+   "lileep",
+   "cradily",
+   "anorith",
+   "armaldo",
+   "cranidos",
+   "rampardos",
+   "shieldon",
+   "bastiodon",
+   "tirtouga",
+   "carracosta",
+   "archen",
+   "archeops",
+   "tyrunt",
+   "tyrantrum",
+   "amaura",
+   "aurorus",
+   "dracozolt",
+   "arctozolt",
+   "dracovish",
+   "arctovish"
+  ],
+  "pseudo-legendaries": [
+   "dragonite",
+   "tyranitar",
+   "salamence",
+   "metagross",
+   "garchomp",
+   "hydreigon",
+   "goodra",
+   "kommo-o",
+   "dragapult",
+   "baxcalibur"
+  ],
+  "paradox": [
+   "great-tusk",
+   "scream-tail",
+   "brute-bonnet",
+   "flutter-mane",
+   "slither-wing",
+   "sandy-shocks",
+   "roaring-moon",
+   "walking-wake",
+   "gouging-fire",
+   "raging-bolt",
+   "iron-treads",
+   "iron-bundle",
+   "iron-hands",
+   "iron-jugulis",
+   "iron-moth",
+   "iron-thorns",
+   "iron-valiant",
+   "iron-leaves",
+   "iron-boulder",
+   "iron-crown"
+  ],
+  "ultra-beasts": [
+   "nihilego",
+   "buzzwole",
+   "pheromosa",
+   "xurkitree",
+   "celesteela",
+   "kartana",
+   "guzzlord",
+   "poipole",
+   "naganadel",
+   "stakataka",
+   "blacephalon"
+  ],
+  "duos": [
+   "plusle",
+   "minun",
+   "nidoking",
+   "nidoqueen",
+   "volbeat",
+   "illumise",
+   "lunatone",
+   "solrock",
+   "latias",
+   "latios"
+  ]
+ },
+ "moments": [
+  {
+   "id": "failure-not-tolerated",
+   "name": "Failure Will (NOT) Be Tolerated",
+   "scope": {
+    "groups": [
+     "constructs"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.5,
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "effectText": "Instead of the run-end screen: revive at 150% max HP (heal fully, then max HP x1.5 for the battle), gain Overcharged for the rest of the battle. Overcharged: every move has a 1-turn cooldown (cannot be used two turns in a row), all five stats x2. Ends when the battle ends. One claim per run, win or lose the roll.",
+   "presentation": "Screen fades to black, static + electrical crackle 1.2 s, robotic voice reads 4 lines (see catalog notes), electric flare, Overcharged theme loop while active | stand-in voice + theme | \"Primary Goal: Protect father. Failed.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 2200,
+    "lines": [
+     "Primary objective: protect father. Failed.",
+     "Secondary objective: save allies. Failed.",
+     "Backup objective: engaged.",
+     "This Pokémon.",
+     "Dead or alive.",
+     "Is mine."
+    ],
+    "clips": [
+     "failure-primary",
+     "failure-secondary",
+     "failure-backup",
+     "failure-this-pokemon",
+     "failure-dead-or-alive",
+     "failure-is-mine"
+    ],
+    "after": "overcharged"
+   },
+   "effect": {
+    "reviveHpMult": 1.5,
+    "overcharged": true
+   }
+  },
+  {
+   "id": "stone-sturdy",
+   "name": "Stone Sturdy",
+   "scope": {
+    "lines": [
+     "geodude",
+     "onix",
+     "rhyhorn",
+     "larvitar",
+     "nosepass",
+     "aron",
+     "bonsly",
+     "roggenrola"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.25,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "Survive at 1 HP.",
+   "presentation": "Rock crack sfx, small shake | \"Held together.\"",
+   "effect": {}
+  },
+  {
+   "id": "rock-pride",
+   "name": "Rock Pride",
+   "scope": {
+    "types": [
+     "rock"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.12,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, Def +1.",
+   "presentation": "Dust puff | \"Not today.\"",
+   "effect": {
+    "boost": {
+     "def": 1
+    }
+   }
+  },
+  {
+   "id": "dragon-pride",
+   "name": "Dragon's Pride",
+   "scope": {
+    "types": [
+     "dragon"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, Atk +2.",
+   "presentation": "Cry + red vignette | \"A dragon does not kneel.\"",
+   "effect": {
+    "boost": {
+     "atk": 2
+    }
+   }
+  },
+  {
+   "id": "ghost-between",
+   "name": "Between Worlds",
+   "scope": {
+    "types": [
+     "ghost"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, Evasion +2.",
+   "presentation": "Sprite fades to outline, whisper sfx | \"It slipped between.\"",
+   "effect": {
+    "boost": {
+     "eva": 2
+    }
+   }
+  },
+  {
+   "id": "fighting-fuel",
+   "name": "Pain Is Fuel",
+   "scope": {
+    "types": [
+     "fighting"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, Atk +1, Spe +1.",
+   "presentation": "Fist-clench sfx | \"Hit me again.\"",
+   "effect": {
+    "boost": {
+     "atk": 1,
+     "spe": 1
+    }
+   }
+  },
+  {
+   "id": "eevee-promise",
+   "name": "Eevee's Promise",
+   "scope": {
+    "lines": [
+     "eevee",
+     "vaporeon",
+     "jolteon",
+     "flareon",
+     "espeon",
+     "umbreon",
+     "leafeon",
+     "glaceon",
+     "sylveon"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.18,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, heal 25% max HP.",
+   "presentation": "Warm glow, soft chime | \"Not yet. Not you.\"",
+   "effect": {
+    "healPct": 25
+   }
+  },
+  {
+   "id": "starter-fire",
+   "name": "Starter's Spark",
+   "scope": {
+    "groups": [
+     "starters"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, best attacking stat +1.",
+   "presentation": "Trainer-call sfx, spark | \"It remembers its first day.\"",
+   "effect": {
+    "boostBest": 1
+   }
+  },
+  {
+   "id": "fossil-roar",
+   "name": "Ancient Roar",
+   "scope": {
+    "groups": [
+     "fossils"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, Atk +1, Def +1.",
+   "presentation": "Deep roar, stone dust | \"Older than fear.\"",
+   "effect": {
+    "boost": {
+     "atk": 1,
+     "def": 1
+    }
+   }
+  },
+  {
+   "id": "baby-cry",
+   "name": "Tiny Cry",
+   "scope": {
+    "tags": [
+     "baby"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, heal 20% max HP, foe Atk -1 (it hesitates).",
+   "presentation": "High cry, foe flinch | \"The foe can't hit that.\"",
+   "effect": {
+    "healPct": 20,
+    "foeStage": {
+     "atk": -1
+    }
+   }
+  },
+  {
+   "id": "pseudo-pride",
+   "name": "Pseudo-Legend Pride",
+   "scope": {
+    "groups": [
+     "pseudo-legendaries"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.22,
+   "limit": "run",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Survive at 1 HP and heal 33% max HP. Once per run per Pokémon.",
+   "presentation": "Aura ring, cry | \"Built for this.\"",
+   "effect": {
+    "healPct": 33
+   }
+  },
+  {
+   "id": "paradox-rewind",
+   "name": "Paradox Rewind",
+   "scope": {
+    "groups": [
+     "paradox"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, restore 5 PP to every move.",
+   "presentation": "Time-ripple wipe | \"Rewound.\"",
+   "effect": {
+    "ppRestore": 5
+   }
+  },
+  {
+   "id": "ultra-breach",
+   "name": "Breach",
+   "scope": {
+    "groups": [
+     "ultra-beasts"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, foe confused.",
+   "presentation": "Rift sfx, purple tear | \"It was never from here.\"",
+   "effect": {
+    "foeConfuse": true
+   }
+  },
+  {
+   "id": "legend-duty",
+   "name": "Legendary Duty",
+   "scope": {
+    "tags": [
+     "legendary"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.3,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, heal 50% max HP.",
+   "presentation": "Gold flash, cry | \"A legend is not so easily ended.\"",
+   "effect": {
+    "healPct": 50
+   }
+  },
+  {
+   "id": "mythical-whisper",
+   "name": "Mythical Whisper",
+   "scope": {
+    "tags": [
+     "mythical"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.25,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, cure all status conditions.",
+   "presentation": "Soft choir | \"The wish held.\"",
+   "effect": {
+    "cure": true
+   }
+  },
+  {
+   "id": "bug-swarm",
+   "name": "Last Swarm",
+   "scope": {
+    "types": [
+     "bug"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, Spe +2.",
+   "presentation": "Wing buzz | \"They scatter... and return.\"",
+   "effect": {
+    "boost": {
+     "spe": 2
+    }
+   }
+  },
+  {
+   "id": "fairy-wish",
+   "name": "Last Wish",
+   "scope": {
+    "types": [
+     "fairy"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "effectText": "Survive at 1 HP; the rest of the party heals 10% max HP.",
+   "presentation": "Star shimmer | \"A wish for you.\"",
+   "effect": {
+    "partyHealPct": 10
+   }
+  },
+  {
+   "id": "steel-resolve",
+   "name": "Steel Resolve",
+   "scope": {
+    "types": [
+     "steel"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, Def +1, SpD +1.",
+   "presentation": "Clang | \"Bent, not broken.\"",
+   "effect": {
+    "boost": {
+     "def": 1,
+     "spd": 1
+    }
+   }
+  },
+  {
+   "id": "ice-shell",
+   "name": "Ice Shell",
+   "scope": {
+    "types": [
+     "ice"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, attacker Spe -1.",
+   "presentation": "Frost crack | \"Frozen in place.\"",
+   "effect": {
+    "foeStage": {
+     "spe": -1
+    }
+   }
+  },
+  {
+   "id": "water-rebound",
+   "name": "Rebound Tide",
+   "scope": {
+    "types": [
+     "water"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.12,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, heal 15% max HP.",
+   "presentation": "Splash | \"Washed back up.\"",
+   "effect": {
+    "healPct": 15
+   }
+  },
+  {
+   "id": "elec-overload",
+   "name": "Overload",
+   "scope": {
+    "types": [
+     "electric"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.12,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, foe loses 20% of its max HP.",
+   "presentation": "Arc flash | \"Zap!\"",
+   "effect": {
+    "foeHpPct": 20
+   }
+  },
+  {
+   "id": "poison-defiant",
+   "name": "Poison Defiance",
+   "scope": {
+    "types": [
+     "poison"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.12,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, attacker poisoned.",
+   "presentation": "Green bubble | \"Toxic pride.\"",
+   "effect": {
+    "foeStatus": "psn"
+   }
+  },
+  {
+   "id": "dark-cornered",
+   "name": "Cornered Beast",
+   "scope": {
+    "types": [
+     "dark"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.12,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, Atk +1, Accuracy +1.",
+   "presentation": "Low growl | \"It stopped running.\"",
+   "effect": {
+    "boost": {
+     "atk": 1,
+     "acc": 1
+    }
+   }
+  },
+  {
+   "id": "psychic-foresight",
+   "name": "Foresight",
+   "scope": {
+    "types": [
+     "psychic"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.12,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, SpA +1, SpD +1.",
+   "presentation": "Eye glow | \"It saw this coming.\"",
+   "effect": {
+    "boost": {
+     "spa": 1,
+     "spd": 1
+    }
+   }
+  },
+  {
+   "id": "grass-regrowth",
+   "name": "Regrowth",
+   "scope": {
+    "types": [
+     "grass"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.12,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, heal 12% max HP, SpD +1.",
+   "presentation": "Leaf sprout | \"Roots hold.\"",
+   "effect": {
+    "healPct": 12,
+    "boost": {
+     "spd": 1
+    }
+   }
+  },
+  {
+   "id": "fire-last-blaze",
+   "name": "Last Blaze",
+   "scope": {
+    "types": [
+     "fire"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.12,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, attacker burned 50%.",
+   "presentation": "Ember burst | \"Burn bright.\"",
+   "effect": {
+    "foeStatus": "brn",
+    "foeStatusChance": 50
+   }
+  },
+  {
+   "id": "normal-courage",
+   "name": "Ordinary Courage",
+   "scope": {
+    "types": [
+     "normal"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.1,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, Atk +1.",
+   "presentation": "Plain thump | \"Just a normal Pokémon.\"",
+   "effect": {
+    "boost": {
+     "atk": 1
+    }
+   }
+  },
+  {
+   "id": "flying-updraft",
+   "name": "Updraft",
+   "scope": {
+    "types": [
+     "flying"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.12,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, Spe +1, evasion +1.",
+   "presentation": "Wind gust | \"Caught the wind.\"",
+   "effect": {
+    "boost": {
+     "spe": 1,
+     "eva": 1
+    }
+   }
+  },
+  {
+   "id": "ground-dig-in",
+   "name": "Dig In",
+   "scope": {
+    "types": [
+     "ground"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.12,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "effectText": "Survive at 1 HP, takes half damage for the next 2 turns.",
+   "presentation": "Rumble | \"Dug in deep.\"",
+   "effect": {
+    "guard": 2
+   }
+  },
+  {
+   "id": "partner-fall",
+   "name": "Don't You Dare",
+   "scope": {
+    "groups": [
+     "duos"
+    ]
+   },
+   "trigger": "ally",
+   "chance": 0.4,
+   "limit": "battle",
+   "tier": "major",
+   "status": "disabled",
+   "effectText": "When its partner faints: Atk +1, SpA +1, Spe +1.",
+   "presentation": "Cry together | \"Its partner's cry fades.\""
+  },
+  {
+   "id": "latios-latias",
+   "name": "Eon Bond",
+   "scope": {
+    "species": [
+     "latios",
+     "latias"
+    ]
+   },
+   "trigger": "ally",
+   "chance": 0.6,
+   "limit": "battle",
+   "tier": "major",
+   "status": "disabled",
+   "effectText": "When the other Eon faints: heal 30% max HP and +1 to all stats.",
+   "presentation": "Twin cry echo | \"They shared one heart.\""
+  },
+  {
+   "id": "pikachu-ash",
+   "name": "Cheer Up",
+   "scope": {
+    "species": [
+     "pikachu",
+     "raichu"
+    ]
+   },
+   "trigger": "ally",
+   "chance": 0.25,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "When an ally faints: ally-friendship +3, Spe +1.",
+   "presentation": "Pika cry | \"Pika-pi!\""
+  },
+  {
+   "id": "nidoking-queen",
+   "name": "Royal Pair",
+   "scope": {
+    "species": [
+     "nidoking",
+     "nidoqueen"
+    ]
+   },
+   "trigger": "ally",
+   "chance": 0.7,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "If the other royal is on your team and a teammate faints: Atk +1 / SpA +1.",
+   "presentation": "Crown ping | \"For the pair.\""
+  },
+  {
+   "id": "legendary-birds",
+   "name": "Wings Together",
+   "scope": {
+    "species": [
+     "articuno",
+     "zapdos",
+     "moltres"
+    ]
+   },
+   "trigger": "ally",
+   "chance": 0.5,
+   "limit": "battle",
+   "tier": "major",
+   "status": "disabled",
+   "effectText": "A fallen legendary bird of the trio: survivors +1 SpA, +1 Spe.",
+   "presentation": "Triple screech | \"Three become two, two become one.\""
+  },
+  {
+   "id": "lake-guardians",
+   "name": "Lake Trio Oath",
+   "scope": {
+    "species": [
+     "uxie",
+     "mesprit",
+     "azelf"
+    ]
+   },
+   "trigger": "ally",
+   "chance": 0.5,
+   "limit": "battle",
+   "tier": "major",
+   "status": "disabled",
+   "effectText": "A fallen guardian: survivors heal 25% max HP.",
+   "presentation": "Chime | \"Will, Emotion, Knowledge.\""
+  },
+  {
+   "id": "legendary-beasts",
+   "name": "Beast Pack",
+   "scope": {
+    "species": [
+     "raikou",
+     "entei",
+     "suicune"
+    ]
+   },
+   "trigger": "ally",
+   "chance": 0.5,
+   "limit": "battle",
+   "tier": "major",
+   "status": "disabled",
+   "effectText": "A fallen beast: survivors Atk +1, Spe +1.",
+   "presentation": "Thunder, flame and water crash | \"The pack runs on.\""
+  },
+  {
+   "id": "swords-justice",
+   "name": "Swords of Justice",
+   "scope": {
+    "species": [
+     "cobalion",
+     "terrakion",
+     "virizion",
+     "keldeo"
+    ]
+   },
+   "trigger": "ally",
+   "chance": 0.5,
+   "limit": "battle",
+   "tier": "major",
+   "status": "disabled",
+   "effectText": "A fallen sword: survivors Def +1, Atk +1.",
+   "presentation": "Blade ring | \"Justice stands.\""
+  },
+  {
+   "id": "regis",
+   "name": "Regi Chain",
+   "scope": {
+    "species": [
+     "regirock",
+     "regice",
+     "registeel",
+     "regigigas",
+     "regieleki",
+     "regidrago"
+    ]
+   },
+   "trigger": "ally",
+   "chance": 0.5,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "A fallen Regi: survivors Def +1, SpD +1.",
+   "presentation": "Dot tones | \"...\""
+  },
+  {
+   "id": "tapu-guardians",
+   "name": "Island Guardians",
+   "scope": {
+    "species": [
+     "tapu-koko",
+     "tapu-lele",
+     "tapu-bulu",
+     "tapu-fini"
+    ]
+   },
+   "trigger": "ally",
+   "chance": 0.5,
+   "limit": "battle",
+   "tier": "major",
+   "status": "disabled",
+   "effectText": "A fallen Tapu: survivors heal 20% max HP, terrain sets (matching).",
+   "presentation": "Terrain shimmer | \"The island answers.\""
+  },
+  {
+   "id": "pikachu-static",
+   "name": "Static Cling",
+   "scope": {
+    "lines": [
+     "pikachu",
+     "pichu",
+     "raichu"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.12,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "First foe is paralyzed at battle start.",
+   "presentation": "Spark sfx | \"The air crackles.\""
+  },
+  {
+   "id": "gastly-grin",
+   "name": "Shadow Grin",
+   "scope": {
+    "lines": [
+     "gastly",
+     "haunter",
+     "gengar"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "First foe Accuracy -1.",
+   "presentation": "Laugh sfx | \"It's grinning.\""
+  },
+  {
+   "id": "lucario-aura",
+   "name": "Aura Sense",
+   "scope": {
+    "lines": [
+     "riolu",
+     "lucario"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.3,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Accuracy +1 and see the foe's moves for the battle.",
+   "presentation": "Aura ping | \"It senses you.\""
+  },
+  {
+   "id": "sneasel-ambush",
+   "name": "Ambush Instinct",
+   "scope": {
+    "lines": [
+     "sneasel",
+     "weavile",
+     "sneasler"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Spe +1 and the first move gains +1 priority.",
+   "presentation": "Claw glint | \"Attack from the shadows.\""
+  },
+  {
+   "id": "growlithe-loyal",
+   "name": "Loyal Bark",
+   "scope": {
+    "lines": [
+     "growlithe",
+     "arcanine",
+     "houndour",
+     "poochyena",
+     "lillipup"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Whole team: Atk +1 for 1 turn.",
+   "presentation": "Bark | \"Fight together.\""
+  },
+  {
+   "id": "ditto-copy",
+   "name": "Perfect Copy",
+   "scope": {
+    "species": [
+     "ditto"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.25,
+   "limit": "battle",
+   "tier": "major",
+   "status": "disabled",
+   "effectText": "Copies the first foe's type(s) for the battle.",
+   "presentation": "Goo shimmer | \"Ditto becomes you.\""
+  },
+  {
+   "id": "smeargle-sketch",
+   "name": "Masterpiece",
+   "scope": {
+    "species": [
+     "smeargle"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.25,
+   "limit": "battle",
+   "tier": "major",
+   "status": "disabled",
+   "effectText": "Learns one move the foe knows (replaces slot 4) for the battle.",
+   "presentation": "Brush strokes | \"It sketched your move.\""
+  },
+  {
+   "id": "cubone-mourn",
+   "name": "Mourning Mask",
+   "scope": {
+    "lines": [
+     "cubone",
+     "marowak"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Def +1, SpD +1.",
+   "presentation": "Hollow tone | \"Its skull glints.\""
+  },
+  {
+   "id": "magikarp-splash",
+   "name": "Destiny Splash",
+   "scope": {
+    "species": [
+     "magikarp"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.05,
+   "limit": "run",
+   "tier": "major",
+   "status": "disabled",
+   "effectText": "A huge splash: every foe loses 10% max HP and gains nothing. Once per run.",
+   "presentation": "Giant splash | \"It just splashed. Strangely.\""
+  },
+  {
+   "id": "gyarados-rage",
+   "name": "Rage Rising",
+   "scope": {
+    "species": [
+     "gyarados"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.25,
+   "limit": "battle",
+   "tier": "major",
+   "status": "disabled",
+   "effectText": "Atk +2 at below 50% HP.",
+   "presentation": "Roar, red tint | \"Its eyes turn red.\""
+  },
+  {
+   "id": "snorlax-nap",
+   "name": "Power Nap",
+   "scope": {
+    "species": [
+     "snorlax"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.25,
+   "limit": "battle",
+   "tier": "major",
+   "status": "disabled",
+   "effectText": "At below 40% HP: sleeps 2 turns and heals 50% max HP.",
+   "presentation": "Zzz bubbles | \"It's... asleep?\""
+  },
+  {
+   "id": "slowpoke-yawn",
+   "name": "Slow-Mo Insight",
+   "scope": {
+    "lines": [
+     "slowpoke",
+     "slowbro",
+     "slowking"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Foe Spe -1, own SpA +1.",
+   "presentation": "Delayed splash | \"Hm. Right.\""
+  },
+  {
+   "id": "mew-curious",
+   "name": "Curiosity",
+   "scope": {
+    "species": [
+     "mew"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.3,
+   "limit": "battle",
+   "tier": "major",
+   "status": "disabled",
+   "effectText": "Randomly learns 1 TM-learnable move for this battle (seeded).",
+   "presentation": "Playful trail | \"It wants to try that.\""
+  },
+  {
+   "id": "mewtwo-armored",
+   "name": "Armored Mind",
+   "scope": {
+    "species": [
+     "mewtwo"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.5,
+   "limit": "battle",
+   "tier": "major",
+   "status": "disabled",
+   "effectText": "SpA +1, SpD +1, immune to flinch.",
+   "presentation": "Dark pulse ring | \"Its mind is armor.\""
+  },
+  {
+   "id": "darkrai-nightmare",
+   "name": "Nightmare Veil",
+   "scope": {
+    "species": [
+     "darkrai"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.4,
+   "limit": "battle",
+   "tier": "major",
+   "status": "disabled",
+   "effectText": "Foes fall into Nightmare (lose 12% per turn while asleep).",
+   "presentation": "Dark swirl | \"Bad dreams.\""
+  },
+  {
+   "id": "arceus-judgment",
+   "name": "Plate of Judgment",
+   "scope": {
+    "species": [
+     "arceus"
+    ]
+   },
+   "trigger": "start",
+   "chance": 1,
+   "limit": "run",
+   "tier": "landmark",
+   "status": "disabled",
+   "effectText": "All stats +1 for the battle. Once per run.",
+   "presentation": "Slow cry, light pillar | \"The god arrives.\""
+  },
+  {
+   "id": "legendary-entrance",
+   "name": "Legendary Entrance",
+   "scope": {
+    "tags": [
+     "legendary"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "major",
+   "status": "disabled",
+   "effectText": "Atk +1, SpA +1 for 3 turns.",
+   "presentation": "Cry first, gold flash | \"Its presence is felt.\""
+  },
+  {
+   "id": "mythical-grace",
+   "name": "Mythical Grace",
+   "scope": {
+    "tags": [
+     "mythical"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Evasion +1 for 3 turns.",
+   "presentation": "Sparkle | \"Hard to touch.\""
+  },
+  {
+   "id": "ultra-rift",
+   "name": "Rift Presence",
+   "scope": {
+    "groups": [
+     "ultra-beasts"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.25,
+   "limit": "battle",
+   "tier": "major",
+   "status": "disabled",
+   "effectText": "Foes' Accuracy -1 and they are flustered (confused 25%).",
+   "presentation": "Rift hum | \"Reality bends.\""
+  },
+  {
+   "id": "paradox-resonance",
+   "name": "Paradox Resonance",
+   "scope": {
+    "groups": [
+     "paradox"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.25,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Highest stat +1.",
+   "presentation": "Glitch ripple | \"Time is wrong.\""
+  },
+  {
+   "id": "pseudo-presence",
+   "name": "Pseudo Presence",
+   "scope": {
+    "groups": [
+     "pseudo-legendaries"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.12,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Foe Atk -1.",
+   "presentation": "Cry | \"They feel small.\""
+  },
+  {
+   "id": "fossil-awaken",
+   "name": "Fossil Awakening",
+   "scope": {
+    "groups": [
+     "fossils"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Atk +1, Spe +1.",
+   "presentation": "Dust | \"It remembers the age.\""
+  },
+  {
+   "id": "eevee-bond",
+   "name": "Eeveelution Bond",
+   "scope": {
+    "lines": [
+     "eevee",
+     "vaporeon",
+     "jolteon",
+     "flareon",
+     "espeon",
+     "umbreon",
+     "leafeon",
+     "glaceon",
+     "sylveon"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "major",
+   "status": "disabled",
+   "effectText": "All stats +1 if the player's party has 2+ Eeveelutions.",
+   "presentation": "Chorus | \"Siblings.\""
+  },
+  {
+   "id": "starter-trainers",
+   "name": "Partner Present",
+   "scope": {
+    "groups": [
+     "starters"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.18,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Atk +1 and +1 friendship at battle start.",
+   "presentation": "Trainer shout | \"You and me.\""
+  },
+  {
+   "id": "baby-bravery",
+   "name": "Baby Bravery",
+   "scope": {
+    "tags": [
+     "baby"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Def +1, SpD +1; foe underestimates it (-1 Acc).",
+   "presentation": "Giggle | \"Too small to hit.\""
+  },
+  {
+   "id": "dragon-aura",
+   "name": "Dragon Aura",
+   "scope": {
+    "types": [
+     "dragon"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.08,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Atk +1 for 3 turns.",
+   "presentation": "Low roar | \"Dragon's aura.\""
+  },
+  {
+   "id": "ghost-chill",
+   "name": "Chill Down Spine",
+   "scope": {
+    "types": [
+     "ghost"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.08,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Foe Atk -1 on first turn.",
+   "presentation": "Cold whisper | \"A chill runs down.\""
+  },
+  {
+   "id": "dark-menace",
+   "name": "Dark Menace",
+   "scope": {
+    "types": [
+     "dark"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.08,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Foe loses 1 stage of Evasion; own crit stage +1.",
+   "presentation": "Low drone | \"Menacing.\""
+  },
+  {
+   "id": "psychic-focus",
+   "name": "Psychic Focus",
+   "scope": {
+    "types": [
+     "psychic"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.08,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "SpA +1 for 3 turns.",
+   "presentation": "Focus ring | \"Calm mind.\""
+  },
+  {
+   "id": "fighting-spirit",
+   "name": "Fighting Spirit",
+   "scope": {
+    "types": [
+     "fighting"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.08,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Atk +1 for 3 turns.",
+   "presentation": "Kiai | \"Fired up.\""
+  },
+  {
+   "id": "fairy-charm",
+   "name": "Fairy Charm",
+   "scope": {
+    "types": [
+     "fairy"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.08,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Foe Atk -1.",
+   "presentation": "Chime | \"Charmed.\""
+  },
+  {
+   "id": "fire-last-stand",
+   "name": "Burning Bright",
+   "scope": {
+    "types": [
+     "fire"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At below 25% HP: Atk +1, SpA +1, burned status immunity.",
+   "presentation": "Flame flare | \"Fire burns fiercest at the end.\""
+  },
+  {
+   "id": "water-rising",
+   "name": "Rising Tide",
+   "scope": {
+    "types": [
+     "water"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At below 25% HP: SpD +1, heal 10%.",
+   "presentation": "Wave | \"The tide returns.\""
+  },
+  {
+   "id": "grass-chloro",
+   "name": "Photosynthesis Surge",
+   "scope": {
+    "types": [
+     "grass"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At below 25% HP in sun: heal 25% max HP.",
+   "presentation": "Leaf burst | \"Soaking up the light.\""
+  },
+  {
+   "id": "elec-surge",
+   "name": "Last Surge",
+   "scope": {
+    "types": [
+     "electric"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At below 25% HP: Spe +2.",
+   "presentation": "Spark | \"A last spark.\""
+  },
+  {
+   "id": "bug-swarm-low",
+   "name": "Swarm Strikes",
+   "scope": {
+    "types": [
+     "bug"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At below 25% HP: next Bug move +25% damage.",
+   "presentation": "Buzz | \"Swarm!\""
+  },
+  {
+   "id": "poison-toxic-blood",
+   "name": "Toxic Blood",
+   "scope": {
+    "types": [
+     "poison"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At below 25% HP: contact attackers get poisoned.",
+   "presentation": "Bubble | \"Poison pulses.\""
+  },
+  {
+   "id": "rock-tank",
+   "name": "Rock Tank",
+   "scope": {
+    "types": [
+     "rock"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At below 25% HP: Def +2.",
+   "presentation": "Thud | \"A mountain doesn't shake.\""
+  },
+  {
+   "id": "ice-flash-freeze",
+   "name": "Flash Freeze",
+   "scope": {
+    "types": [
+     "ice"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At below 25% HP: hail starts (3 turns).",
+   "presentation": "Frost wind | \"Winter.\""
+  },
+  {
+   "id": "normal-resolve",
+   "name": "Normal Resolve",
+   "scope": {
+    "types": [
+     "normal"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At below 25% HP: Atk +1, Def +1.",
+   "presentation": "Clap | \"Hang in there.\""
+  },
+  {
+   "id": "steel-adamant",
+   "name": "Adamant Will",
+   "scope": {
+    "types": [
+     "steel"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At below 25% HP: Def +1, SpD +1, immune to stat drops 2 turns.",
+   "presentation": "Ring | \"Adamant.\""
+  },
+  {
+   "id": "ghost-haunt",
+   "name": "Haunting Frenzy",
+   "scope": {
+    "types": [
+     "ghost"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At below 25% HP: foe loses 10% max HP (curse).",
+   "presentation": "Chime | \"A curse sets in.\""
+  },
+  {
+   "id": "fairy-moonlight",
+   "name": "Moonlight Mend",
+   "scope": {
+    "types": [
+     "fairy"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At below 25% HP: heal 15%.",
+   "presentation": "Chime | \"Moon's blessing.\""
+  },
+  {
+   "id": "ground-quake",
+   "name": "Fault Line",
+   "scope": {
+    "types": [
+     "ground"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At below 25% HP: foes' Spe -1.",
+   "presentation": "Rumble | \"The ground shifts.\""
+  },
+  {
+   "id": "flying-gale",
+   "name": "Gale Force",
+   "scope": {
+    "types": [
+     "flying"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At below 25% HP: Spe +1, evasion +1.",
+   "presentation": "Wind | \"Caught a gale.\""
+  },
+  {
+   "id": "fighting-second-wind",
+   "name": "Second Wind",
+   "scope": {
+    "types": [
+     "fighting"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At below 25% HP: heal 15%, Atk +1.",
+   "presentation": "Breath | \"Breathe in.\""
+  },
+  {
+   "id": "dragon-rage",
+   "name": "Dragon's Rage",
+   "scope": {
+    "types": [
+     "dragon"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At below 25% HP: Atk +1, SpA +1.",
+   "presentation": "Roar | \"Rage.\""
+  },
+  {
+   "id": "psychic-mind",
+   "name": "Mind Over Matter",
+   "scope": {
+    "types": [
+     "psychic"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At below 25% HP: SpD +2.",
+   "presentation": "Hum | \"Concentrate.\""
+  },
+  {
+   "id": "dark-desperate",
+   "name": "Desperate Gambit",
+   "scope": {
+    "types": [
+     "dark"
+    ]
+   },
+   "trigger": "low",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At below 25% HP: crit stage +2 for 2 turns.",
+   "presentation": "Heartbeat | \"All in.\""
+  },
+  {
+   "id": "pikachu-victory",
+   "name": "Victory Pose",
+   "scope": {
+    "species": [
+     "pikachu"
+    ]
+   },
+   "trigger": "ko",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Spe +1 after a KO.",
+   "presentation": "Pose, jingle | \"Pika!\""
+  },
+  {
+   "id": "charizard-roar",
+   "name": "Victory Roar",
+   "scope": {
+    "species": [
+     "charizard",
+     "charmeleon"
+    ]
+   },
+   "trigger": "ko",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Atk +1 after a KO.",
+   "presentation": "Roar | \"It roars its triumph.\""
+  },
+  {
+   "id": "gengar-cackle",
+   "name": "Cackle",
+   "scope": {
+    "lines": [
+     "gastly",
+     "haunter",
+     "gengar"
+    ]
+   },
+   "trigger": "ko",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Foe loses 1 stage of Atk and SpA.",
+   "presentation": "Laugh | \"Heh heh heh.\""
+  },
+  {
+   "id": "absol-disaster",
+   "name": "Omen Fulfilled",
+   "scope": {
+    "species": [
+     "absol"
+    ]
+   },
+   "trigger": "ko",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Crit stage +1 after a KO.",
+   "presentation": "Low note | \"It foresaw this.\""
+  },
+  {
+   "id": "lucario-flow",
+   "name": "Aura Flow",
+   "scope": {
+    "lines": [
+     "riolu",
+     "lucario"
+    ]
+   },
+   "trigger": "ko",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Heal 10% after a KO.",
+   "presentation": "Aura | \"Aura flows.\""
+  },
+  {
+   "id": "scizor-precision",
+   "name": "Precision Strike",
+   "scope": {
+    "species": [
+     "scizor",
+     "scyther"
+    ]
+   },
+   "trigger": "ko",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Acc +1 after a KO.",
+   "presentation": "Slice | \"Precise.\""
+  },
+  {
+   "id": "shark-frenzy",
+   "name": "Blood in the Water",
+   "scope": {
+    "lines": [
+     "sharpedo",
+     "carvanha",
+     "wishiwashi",
+     "mareanie"
+    ]
+   },
+   "trigger": "ko",
+   "chance": 0.25,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Atk +1 and Spe +1 after a KO.",
+   "presentation": "Splash | \"Frenzy.\""
+  },
+  {
+   "id": "hunter-pack",
+   "name": "Pack Hunt",
+   "scope": {
+    "lines": [
+     "growlithe",
+     "poochyena",
+     "houndour",
+     "lycanroc",
+     "zigzagoon",
+     "lillipup"
+    ]
+   },
+   "trigger": "ko",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Whole team Atk +1 for 2 turns after a KO.",
+   "presentation": "Howl | \"The pack howls.\""
+  },
+  {
+   "id": "dragon-pride-ko",
+   "name": "Dragon Conquest",
+   "scope": {
+    "types": [
+     "dragon"
+    ]
+   },
+   "trigger": "ko",
+   "chance": 0.1,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Heal 15% after a KO.",
+   "presentation": "Roar | \"Conquest.\""
+  },
+  {
+   "id": "ice-chill-ko",
+   "name": "Cold Triumph",
+   "scope": {
+    "types": [
+     "ice"
+    ]
+   },
+   "trigger": "ko",
+   "chance": 0.1,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "Foes' Spe -1.",
+   "presentation": "Frost | \"Cold.\""
+  },
+  {
+   "id": "starter-entrance",
+   "name": "Starter Entrance",
+   "scope": {
+    "groups": [
+     "starters"
+    ]
+   },
+   "trigger": "enter",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "On switch-in: Atk +1.",
+   "presentation": "Cry | \"Back in the ring.\""
+  },
+  {
+   "id": "legend-entrance",
+   "name": "Legendary Switch-In",
+   "scope": {
+    "tags": [
+     "legendary"
+    ]
+   },
+   "trigger": "enter",
+   "chance": 0.25,
+   "limit": "battle",
+   "tier": "major",
+   "status": "disabled",
+   "effectText": "On switch-in: heal 10% and +1 SpA.",
+   "presentation": "Cry first | \"Present again.\""
+  },
+  {
+   "id": "wall-entrance",
+   "name": "Wall Reset",
+   "scope": {
+    "role": "wall"
+   },
+   "trigger": "enter",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "On switch-in: Def +1, SpD +1.",
+   "presentation": "Clang | \"A wall rises.\""
+  },
+  {
+   "id": "glass-cannon-entrance",
+   "name": "Glass Cannon Smirk",
+   "scope": {
+    "role": "glass-cannon"
+   },
+   "trigger": "enter",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "On switch-in: Atk +1 or SpA +1 (higher stat) but Def -1.",
+   "presentation": "Spark | \"Dangerous.\""
+  },
+  {
+   "id": "support-entrance",
+   "name": "Helping Hand",
+   "scope": {
+    "role": "support"
+   },
+   "trigger": "enter",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "On switch-in: whole team heals 5% max HP.",
+   "presentation": "Chime | \"Here to help.\""
+  },
+  {
+   "id": "steel-no-effect",
+   "name": "Tough Skin",
+   "scope": {
+    "types": [
+     "steel"
+    ]
+   },
+   "trigger": "super",
+   "chance": 0.12,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "After a super-effective hit: Def +1.",
+   "presentation": "Clang | \"It held.\""
+  },
+  {
+   "id": "rock-hold",
+   "name": "Held The Line",
+   "scope": {
+    "lines": [
+     "graveler",
+     "golem",
+     "rhydon",
+     "rhyperior",
+     "tyranitar"
+    ]
+   },
+   "trigger": "super",
+   "chance": 0.15,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "After a super-effective hit: Def +1 and heal 5%.",
+   "presentation": "Dust | \"Held the line.\""
+  },
+  {
+   "id": "ice-brittle",
+   "name": "Brittle Ice",
+   "scope": {
+    "types": [
+     "ice"
+    ]
+   },
+   "trigger": "super",
+   "chance": 0.12,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "After a super-effective hit: Spe +1.",
+   "presentation": "Shatter | \"Cracked, not broken.\""
+  },
+  {
+   "id": "bug-aggressive",
+   "name": "Bug Grit",
+   "scope": {
+    "types": [
+     "bug"
+    ]
+   },
+   "trigger": "super",
+   "chance": 0.12,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "After a super-effective hit: Atk +1.",
+   "presentation": "Skitter | \"Swarm angry.\""
+  },
+  {
+   "id": "grass-bend",
+   "name": "Bend Not Break",
+   "scope": {
+    "types": [
+     "grass"
+    ]
+   },
+   "trigger": "super",
+   "chance": 0.12,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "After a super-effective hit: SpD +1.",
+   "presentation": "Rustle | \"It bent.\""
+  },
+  {
+   "id": "normal-brush",
+   "name": "Brush It Off",
+   "scope": {
+    "types": [
+     "normal"
+    ]
+   },
+   "trigger": "super",
+   "chance": 0.12,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "After a super-effective hit: heal 8%.",
+   "presentation": "Pat | \"Shook it off.\""
+  },
+  {
+   "id": "fighting-spite",
+   "name": "Spite",
+   "scope": {
+    "types": [
+     "fighting"
+    ]
+   },
+   "trigger": "crit",
+   "chance": 0.25,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "After taking a critical hit: Atk +1 and crit stage +1.",
+   "presentation": "Growl | \"That hurt.\""
+  },
+  {
+   "id": "dark-grudge",
+   "name": "Grudge",
+   "scope": {
+    "types": [
+     "dark"
+    ]
+   },
+   "trigger": "crit",
+   "chance": 0.25,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "After a crit: foe loses 8% max HP.",
+   "presentation": "Hiss | \"It will remember.\""
+  },
+  {
+   "id": "sunny-day-fire",
+   "name": "Solar Joy",
+   "scope": {
+    "types": [
+     "fire"
+    ]
+   },
+   "trigger": "weather",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "When sun starts: Spe +1.",
+   "presentation": "Fanfare | \"Burning bright.\""
+  },
+  {
+   "id": "rain-dance-water",
+   "name": "Rain Dance",
+   "scope": {
+    "types": [
+     "water"
+    ]
+   },
+   "trigger": "weather",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "When rain starts: SpA +1.",
+   "presentation": "Drum | \"Rain dance.\""
+  },
+  {
+   "id": "sand-rock",
+   "name": "Sandstorm Strength",
+   "scope": {
+    "types": [
+     "rock"
+    ]
+   },
+   "trigger": "weather",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "When sand starts: SpD +1.",
+   "presentation": "Gust | \"Wind-hardened.\""
+  },
+  {
+   "id": "hail-ice",
+   "name": "Hail Hail",
+   "scope": {
+    "types": [
+     "ice"
+    ]
+   },
+   "trigger": "weather",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "When hail starts: Atk +1.",
+   "presentation": "Frost | \"Home turf.\""
+  },
+  {
+   "id": "poison-tolerance",
+   "name": "Poison Tolerance",
+   "scope": {
+    "types": [
+     "poison"
+    ]
+   },
+   "trigger": "status",
+   "chance": 0.3,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "When poisoned: cures after 1 turn instead.",
+   "presentation": "Hiss | \"Immune system.\""
+  },
+  {
+   "id": "fire-thaw",
+   "name": "Heat Wave",
+   "scope": {
+    "types": [
+     "fire"
+    ]
+   },
+   "trigger": "status",
+   "chance": 0.3,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "When frozen: instantly thaws.",
+   "presentation": "Hiss | \"Melted.\""
+  },
+  {
+   "id": "psychic-clear",
+   "name": "Clear Mind",
+   "scope": {
+    "types": [
+     "psychic"
+    ]
+   },
+   "trigger": "status",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "When confused/asleep: cures.",
+   "presentation": "Ring | \"Clear.\""
+  },
+  {
+   "id": "normal-hold",
+   "name": "Hold On",
+   "scope": {
+    "types": [
+     "normal"
+    ]
+   },
+   "trigger": "status",
+   "chance": 0.2,
+   "limit": "battle",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "When statused: Def +1.",
+   "presentation": "Pat | \"Hold on.\""
+  },
+  {
+   "id": "snorlax-rest",
+   "name": "Lazy Afternoon",
+   "scope": {
+    "species": [
+     "snorlax"
+    ]
+   },
+   "trigger": "rest",
+   "chance": 1,
+   "limit": "run",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At the next rest node: +8 friendship and a free berry.",
+   "presentation": "Snore | \"Snuggle.\""
+  },
+  {
+   "id": "pikachu-spark-night",
+   "name": "Spark Night",
+   "scope": {
+    "species": [
+     "pikachu"
+    ]
+   },
+   "trigger": "rest",
+   "chance": 0.4,
+   "limit": "run",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At rest: +5 friendship, charges item.",
+   "presentation": "Soft spark | \"Pika-pika.\""
+  },
+  {
+   "id": "eevee-curl",
+   "name": "Curl Up",
+   "scope": {
+    "species": [
+     "eevee"
+    ]
+   },
+   "trigger": "rest",
+   "chance": 0.4,
+   "limit": "run",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At rest: +5 friendship.",
+   "presentation": "Purr | \"Cuddle.\""
+  },
+  {
+   "id": "fire-campfire",
+   "name": "Campfire Tale",
+   "scope": {
+    "types": [
+     "fire"
+    ]
+   },
+   "trigger": "rest",
+   "chance": 0.25,
+   "limit": "run",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At rest: whole team +2 friendship.",
+   "presentation": "Crackle | \"Warm.\""
+  },
+  {
+   "id": "ghost-story",
+   "name": "Ghost Story",
+   "scope": {
+    "types": [
+     "ghost"
+    ]
+   },
+   "trigger": "rest",
+   "chance": 0.25,
+   "limit": "run",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At rest: reveals one hidden event hint.",
+   "presentation": "Whisper | \"A tale.\""
+  },
+  {
+   "id": "water-song",
+   "name": "Water Song",
+   "scope": {
+    "types": [
+     "water"
+    ]
+   },
+   "trigger": "rest",
+   "chance": 0.25,
+   "limit": "run",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At rest: heal 10% to all.",
+   "presentation": "Lullaby | \"Soothing.\""
+  },
+  {
+   "id": "grass-sprout",
+   "name": "Seed Sprout",
+   "scope": {
+    "types": [
+     "grass"
+    ]
+   },
+   "trigger": "rest",
+   "chance": 0.25,
+   "limit": "run",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At rest: free berry.",
+   "presentation": "Rustle | \"A sprout.\""
+  },
+  {
+   "id": "psychic-dream",
+   "name": "Dream Walk",
+   "scope": {
+    "types": [
+     "psychic"
+    ]
+   },
+   "trigger": "rest",
+   "chance": 0.25,
+   "limit": "run",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "At rest: +1 level progress (EXP).",
+   "presentation": "Chime | \"A dream.\""
+  },
+  {
+   "id": "ditto-join",
+   "name": "Ditto Delight",
+   "scope": {
+    "species": [
+     "ditto"
+    ]
+   },
+   "trigger": "catch",
+   "chance": 1,
+   "limit": "run",
+   "tier": "minor",
+   "status": "disabled",
+   "effectText": "On joining: gets a one-time trait roll.",
+   "presentation": "Squelch | \"It's... you?\""
+  },
+  {
+   "id": "legend-joined",
+   "name": "Legend Joins",
+   "scope": {
+    "tags": [
+     "legendary"
+    ]
+   },
+   "trigger": "catch",
+   "chance": 1,
+   "limit": "run",
+   "tier": "landmark",
+   "status": "disabled",
+   "effectText": "On joining: team heals fully, +10 friendship.",
+   "presentation": "Cry first, gold | \"A legend joins your side.\""
+  }
+ ]
+}

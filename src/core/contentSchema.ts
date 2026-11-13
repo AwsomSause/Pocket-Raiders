@@ -2063,6 +2063,8 @@ export const BalanceSchema = z.object({
   leaderMoods: z.boolean().default(true),
   /** Rebalance: Gym Leaders, Elite Four, Champions and Rivals get held items, IVs, EVs and training (core/bossGear.ts). */
   bossGear: z.boolean().default(true),
+  /** Beta 0.6: Pokémon-specific moments (core/moments); off = the rules before them (old-seed tests). */
+  pokemonMoments: z.boolean().default(true),
   sos: z.object({ enabled: z.boolean() }).default({ enabled: true }),
   /** Battle Drama spectacle (APPROVED §7): Last Stand, Perfect Counter, Momentum, Guard Break, Revenge Moment, boss phases, Boss Revenge Rematch (core/battle/spectacle.ts). */
   spectacle: SpectacleConfigSchema,

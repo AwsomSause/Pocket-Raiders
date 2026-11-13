@@ -124,6 +124,8 @@ export const PokemonInstanceSchema = z.object({
   awakened: z.array(z.string()).optional(),
   /** In battle only: Dynamaxed, so its HP is doubled (core/battle/transform.ts). */
   dynamaxed: z.literal(true).optional(),
+  /** In battle only: Overcharged (Failure Will (NOT) Be Tolerated, core/battle/pokemonMoments.ts): all stats doubled, HP x1.5, moves on a one-turn cooldown. */
+  overcharged: z.literal(true).optional(),
   /** Shadow Pokémon (catalog #76-77, core/shadow.ts): the Heart Gauge, 100 (sealed) down to 0 (purified). */
   shadow: z.object({ heart: z.number().int().min(1).max(100) }).optional(),
   /** Blissful Pokémon (core/shadowWorld/blissful.ts): touched by a benevolent force. `aura` picks its look (bloom, glow, chime). */
