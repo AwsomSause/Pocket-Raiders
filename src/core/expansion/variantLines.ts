@@ -3,20 +3,21 @@
 // engine calls these pure functions at its hook points: entry, hit taken, forced switch, status, miss roll, end of turn, item moves.
 // No Phaser, and no gameplay RNG stream: the few random picks (Patchwork's gadget, Snagged's refusal) come from a throwaway generator seeded by the Pokémon's uid and a salt the engine passes in, so they replay the same and never move another roll. A line's damage effect is at most 20% (VARIANT_DAMAGE_CAP) and counts in the +30% cap.
 //
-// Wired so far (11 of 14): Tagged (Kanto), Dark Ball (Johto), Tidebound and Cinderborn (Hoenn), Spiritless (Sinnoh),
-// Overclocked (Unova), Tagged-Up and Preserved (Alola), Patchwork (Rocket Remnants), Snagged (Team Snag'em), Loud (Team Yell). The rest are listed in UNWIRED_LINES and are added by the next E1 PRs;
+// Wired (all 14): Tagged (Kanto), Dark Ball (Johto), Tidebound and Cinderborn (Hoenn), Spiritless (Sinnoh),
+// Overclocked (Unova), Tagged-Up and Preserved (Alola), Patchwork (Rocket Remnants), Snagged (Team Snag'em), Loud (Team Yell), Couture, Overcharged (Macro Cosmos), Tuned. The rest are listed in UNWIRED_LINES and are added by the next E1 PRs;
 // assigning one throws, so none can silently do nothing.
 
 import { z } from 'zod';
 import { Rng, hashSeed } from '../rng';
 
 export const VARIANT_DAMAGE_CAP = 0.2;
-export const WIRED_LINES = ['tagged', 'dark-ball', 'tidebound', 'cinderborn', 'preserved', 'spiritless', 'overclocked', 'tagged-up', 'patchwork', 'snagged', 'loud'] as const;
-export const UNWIRED_LINES = ['couture', 'overcharged', 'tuned'] as const;
+export const WIRED_LINES = ['tagged', 'dark-ball', 'tidebound', 'cinderborn', 'preserved', 'spiritless', 'overclocked', 'tagged-up', 'patchwork', 'snagged', 'loud', 'couture', 'overcharged', 'tuned'] as const;
+/** Every line in the script is wired now; the list stays so a new line added to the data cannot silently do nothing. */
+export const UNWIRED_LINES: readonly string[] = [];
 export type VariantLineId = (typeof WIRED_LINES)[number];
 
 /** One Pokémon's line and its counters ("firstHit" 1 once the first hit is taken, "tag" 1 while the tag is on, ...). */
-export const VariantStateSchema = z.object({ line: z.enum(WIRED_LINES), flags: z.record(z.string(), z.number()).default({}) });
+export const VariantStateSchema = z.object({ line: z.enum(WIRED_LINES), flags: z.record(z.string(), z.number()).default({}), accessory: z.string().optional() });
 export type VariantState = z.infer<typeof VariantStateSchema>;
 export const VariantsSchema = z.record(z.string(), VariantStateSchema).default({});
 export type Variants = z.infer<typeof VariantsSchema>;
@@ -25,17 +26,23 @@ export type Weather = 'rain' | 'sun' | 'sand' | 'snow' | 'hail' | null;
 export type StageKey = 'atk' | 'def' | 'spa' | 'spd' | 'spe';
 
 /** Gives a Pokémon a line for this battle. Throws for a line that is not wired yet. */
+/** Accessories a Couture Pokémon may wear: supported held items worth at most about +20% (the line's cap), each measured in the mirror sim. Anything else is refused. */
+export const COUTURE_ACCESSORIES = ['focus-sash', 'expert-belt', 'wide-lens', 'muscle-band', 'scope-lens', 'black-belt', 'silk-scarf', 'choice-band'] as const;
+
 export interface AssignOptions {
   /** Loud: a Yell Grunt is watching from the stands (the event or track that builds the battle says so). */
   crowd?: boolean;
   /** Loud: the player holds Marnie's League Card. */
   marnie?: boolean;
+  /** Couture: the item id of its accessory (a second held item). Required for that line. */
+  accessory?: string;
 }
 export function assignVariant(variants: Variants, uid: string, line: string, opts: AssignOptions = {}): void {
   if (!(WIRED_LINES as readonly string[]).includes(line)) throw new Error(`variant line "${line}" is not wired into battles yet`);
   const f: Record<string, number> = line === 'tagged' ? { tag: 1 } : {};
   if (line === 'loud') { f.crowd = opts.crowd ? 1 : 0; f.shame = opts.marnie ? 1 : 0; }
-  variants[uid] = { line: line as VariantLineId, flags: f };
+  if (line === 'couture' && !(COUTURE_ACCESSORIES as readonly string[]).includes(opts.accessory ?? '')) throw new Error(`a Couture Pokémon needs an accessory from: ${COUTURE_ACCESSORIES.join(', ')}`);
+  variants[uid] = { line: line as VariantLineId, flags: f, ...(line === 'couture' ? { accessory: opts.accessory } : {}) };
 }
 
 /** A stat change that wears off: Patchwork's net (Speed -2) and smoke ball (accuracy -1) last 2 turns. Saved in `battle.extra.variantTimed`. */
@@ -66,6 +73,7 @@ export function variantOnEntry(variants: Variants, uid: string, weather: Weather
   }
   if (line === 'snagged') { f.refusals = 0; f.skip = 0; return { stages: {}, message: null }; }
   if (line === 'loud') return { stages: {}, message: null };
+  if (line === 'couture' || line === 'overcharged' || line === 'tuned') return { stages: {}, message: null };
   if (line === 'preserved') { f.guard = 1; return { stages: { spe: -1 }, message: 'It was kept very carefully.' }; }
   if (line === 'tidebound') {
     f.tide = weather === 'rain' ? 1 : 0;
@@ -201,6 +209,50 @@ export function variantLosesTurn(variants: Variants, uid: string): string | null
   const line = lineOf(variants, uid);
   const f = flags(variants, uid);
   if (line === 'snagged' && f.skip === 1) { f.skip = 0; return 'It refuses to move.'; }
+  if (line === 'overcharged' && f.pay === 1) { f.pay = 0; return 'It is paying for that.'; }
   if (line === 'loud' && f.shame === 1) { f.shame = 0; return 'It has remembered who it is cheering for.'; }
   return null;
 }
+
+/** Overcharged (once per battle, no Power Spot) and Tuned (once, no charged Tera Orb) fire by themselves on their second turn out. Returns which gimmick to start, or null. */
+export function variantGimmickDue(variants: Variants, uid: string, turnsOut: number): 'dynamax' | 'tera' | null {
+  const line = lineOf(variants, uid);
+  if (line !== 'overcharged' && line !== 'tuned') return null;
+  const f = flags(variants, uid);
+  if (f.used === 1 || f.ended || turnsOut < 1) return null;
+  f.used = 1;
+  if (line === 'overcharged') { f.maxed = 1; return 'dynamax'; }
+  f.tera = 2;
+  return 'tera';
+}
+
+/** End of each of its turns: Overcharged's Dynamax ends after one turn and it pays on the next; Tuned's Tera ends after 2 turns and it stalls (-1 Speed, kept as a single stage, the script says for the rest of the battle). */
+export function variantGimmickTick(variants: Variants, uid: string): { endDynamax: boolean; endTera: boolean; stages: Partial<Record<StageKey, number>>; message: string | null } {
+  const none = { endDynamax: false, endTera: false, stages: {}, message: null };
+  const line = lineOf(variants, uid);
+  const f = flags(variants, uid);
+  if (line === 'overcharged' && f.maxed === 1) { f.maxed = 2; f.pay = 1; return { ...none, endDynamax: true }; }
+  if (line === 'tuned' && (f.tera ?? 0) > 0) {
+    f.tera = (f.tera ?? 0) - 1;
+    if (f.tera === 0) return { ...none, endTera: true, stages: { spe: -1 }, message: "It's borrowed. It has to give it back." };
+  }
+  return none;
+}
+
+/** Couture: the accessory to put on when it first comes in (once), or null. */
+export function variantAccessory(variants: Variants, uid: string): string | null {
+  const v = variants[uid];
+  if (!v || v.line !== 'couture' || !v.accessory || v.flags.dressed === 1) return null;
+  v.flags.dressed = 1;
+  v.flags.worn = 1;
+  return v.accessory;
+}
+
+/** Couture: Knock Off, Thief and the like take the accessory first. Returns its item id the first time. */
+export function variantAccessoryTorn(variants: Variants, uid: string, moveId: string): string | null {
+  const v = variants[uid];
+  if (!v || v.line !== 'couture' || v.flags.worn !== 1 || (moveId !== 'knock-off' && moveId !== 'thief')) return null;
+  v.flags.worn = 0;
+  return v.accessory ?? null;
+}
+export const ACCESSORY_TORN_MESSAGE = 'Its accessory is knocked askew.';
