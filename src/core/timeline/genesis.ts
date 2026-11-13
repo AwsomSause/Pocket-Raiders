@@ -36,7 +36,7 @@ export function captureGenesis(run: RunState, opts: GenesisOptions, grants: RunG
     licenses: opts.licenses ?? [],
     candyPerks: opts.candyPerks ?? [],
     ownedTrainers: [...(opts.ownedTrainers ?? [])],
-    ...(run.expansion && (run.expansion.pacing || run.expansion.evoEncounters || run.expansion.counterPick) ? { expansion: { ...(run.expansion.pacing ? { stagePacing: true } : {}), ...(run.expansion.evoEncounters ? { evolutionEncounters: true } : {}), ...(run.expansion.counterPick ? { leagueCounterPick: true } : {}) } } : {}),
+    ...(run.expansion && (run.expansion.pacing || run.expansion.evoEncounters || run.expansion.counterPick || run.expansion.canon) ? { expansion: { ...(run.expansion.pacing ? { stagePacing: true } : {}), ...(run.expansion.evoEncounters ? { evolutionEncounters: true } : {}), ...(run.expansion.counterPick ? { leagueCounterPick: true } : {}), ...(run.expansion.canon ? { kantoCanon: true } : {}) } } : {}),
     legacyRival: run.legacyRival,
     reunion: run.reunion ?? null,
     storyFlags: run.story.flags,

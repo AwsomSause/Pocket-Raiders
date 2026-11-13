@@ -58,6 +58,7 @@ import { addFlag } from './shadowWorld/world';
 import { grantBlessing, makeBlissful } from './shadowWorld/blissful';
 import { eggMoveOptions, familyId, teachEggMove } from './mastery';
 import { applyTrainEffect, trainEffectText } from './trainingEffects';
+import { noteCanonEvent } from './expansion/canonRun';
 import { currentRegion, getCampaign, levelCap, runLevelCap } from './regions';
 import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } from './encounterDirector';
 import { hashSeed, Rng } from './rng';
@@ -397,6 +398,7 @@ export function eligibleEvents(content: Content, run: RunState): EventDef[] {
       // A roaming Legendary's stop and the camp are placed by core/world.ts, not drawn.
       e.stop !== 'roamer' &&
       !e.room &&
+      !e.canon &&
       e.id !== CAMP_EVENT_ID &&
       e.minStage <= n &&
       // An event pack's own stops (e.g. Spooky) only appear in runs started while it is on (or a trainer who brings them).
@@ -688,6 +690,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
     const words = applyEffect(content, run, doubled, rng, tradeUid);
     if (words) changes.push(words);
   }
+  noteCanonEvent(run, event);
   // Explorer Kit: every finished event stop turns up one more item.
   if (hasPerk(content, run, 'eventBonus')) {
     const words = giveItem(content, run, rng.pick(content.balance.events.explorerItems), 1, rng);

@@ -278,6 +278,7 @@ import { answerMentorship, graduateMentorships, planMentorship } from './story/m
 import { mentorshipsAfterBattle } from './story/mentorBond';
 import { answerReturn, planReturn, recordDefeats, returningPokemon } from './story/returnProtege';
 import { PSEUDO } from './dungeon/pseudo';
+import { addCanonStops } from './expansion/canonRun';
 import { apprenticeLost, applyLessons, bondOf, mentorBadgeWon, startMentorship } from './mentors';
 import { answerAskLead, planAskLead } from './story/askLead';
 import { planReunion, reunionPokemon } from './story/reunion';
@@ -325,7 +326,7 @@ export interface NewRunOptions {
   /** Story Run: the player's name, pronouns and Look from the prologue (profile.story.protagonist). */
   protagonist?: { look: string; name: string; pronouns: string | PronounSet; backstory?: string };
   /** Beta 0.6: which expansion settings were on at run start (settings.expansion). Each flag is stored in `run.expansion` once and never changes. */
-  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean };
+  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean };
 }
 
 export function createRun(content: Content, opts: NewRunOptions): RunState {
@@ -428,7 +429,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
   }
   if (opts.expansion) {
     const e = opts.expansion;
-    const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}) };
+    const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.kantoCanon ? { canon: { flags: [], completed: [], menus: {} } } : {}) };
     if (Object.keys(flags).length > 0) run.expansion = { ...run.expansion, ...flags };
   }
   recordRunStarted(content, run);
@@ -706,6 +707,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   // Rods, and Wave, Tropic and Harbor Mail, add stops to the new map; then the event ("?") stops.
   addItemStops(content, run);
   addEventStops(content, run);
+  addCanonStops(content, run);
   spawnRoamers(content, run);
   placeObstacles(content, run);
   placeLandmark(content, run);

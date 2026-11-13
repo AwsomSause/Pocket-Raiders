@@ -103,6 +103,7 @@ import { RaidFileSchema } from '../core/raid/schema';
 import { PROMPTS } from '../core/interaction/prompt';
 import eventsJson from './events.json';
 import eventsW5Json from './eventsW5.json';
+import eventsCanonKantoJson from './eventsCanonKanto.json';
 import eventsFacesJson from './eventsFaces.json';
 import eventsStoryJson from './eventsStory.json';
 import eventsGamesJson from './eventsGames.json';
@@ -172,6 +173,8 @@ export interface RawContent {
   npcStory: unknown;
   /** Ideas W5 map events (eventsW5.json), added to `events`. */
   eventsW5: unknown;
+  /** Beta 0.6 Canon Spaces: Kanto events (eventsCanonKanto.json), added to `events`. */
+  eventsCanonKanto?: unknown;
   /** Story and characters ideas (S110-S131): eventsStory.json, added to `events`. Optional so older test fixtures stay valid. */
   eventsStory?: unknown;
   /** Famous faces, rivals and cameos (R436-R470): eventsFaces.json, added to `events`. */
@@ -312,6 +315,7 @@ export const RAW_CONTENT: RawContent = {
   maxMoves: maxMovesJson,
   npcStory: npcStoryJson,
   eventsW5: eventsW5Json,
+  eventsCanonKanto: eventsCanonKantoJson,
   eventsStory: eventsStoryJson,
   eventsFaces: eventsFacesJson,
   eventsGames: eventsGamesJson,
@@ -386,7 +390,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const shadowWorld = parse(ShadowWorldFileSchema, raw.shadowWorld, 'shadowWorld.json', problems);
   const evilTeams = parse(EvilFileSchema, raw.evilTeams, 'evilTeams.json', problems);
   // Evil Team storyline and operation stops are expanded from templates into ordinary events (core/evil/content.ts).
-  const w5Events = [...((raw.eventsW5 as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsHelpers as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsWeather as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsMysteries as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsTraining as { events?: unknown[] } | undefined)?.events ?? [])];
+  const w5Events = [...((raw.eventsW5 as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsHelpers as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsWeather as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsMysteries as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsTraining as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsCanonKanto as { events?: unknown[] } | undefined)?.events ?? [])];
   const storyEvents = [...((raw.eventsStory as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsFaces as { events?: unknown[] } | undefined)?.events ?? [])];
   const gamesEvents = [...((raw.eventsGames as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsRK as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsVillain as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsMerchants as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsRB as { events?: unknown[] } | undefined)?.events ?? [])];
   for (const file of (raw.eventsExtra ?? []) as { events?: unknown[] }[]) gamesEvents.push(...(file.events ?? []));
