@@ -38,7 +38,8 @@ export interface SiegeState {
 }
 
 const slug = (name: string): string => name.toLowerCase().replace(/^the /, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-const flag = (run: RunState, key: string): boolean => Boolean(run.story.flags[key]);
+/** A Rocket flag counts when a format wrote it (`rocket.x.wire`) or a Kanto run event did (`ev:rocket-wire`). */
+const flag = (run: RunState, key: string): boolean => Boolean(run.story.flags[key] ?? run.story.flags[`ev:${key.replace('rocket.x.', 'rocket-')}`]);
 const good = (r?: string): boolean => r === 'triumph' || r === 'success';
 const bad = (r?: string): boolean => r === 'failure' || r === 'declined';
 
