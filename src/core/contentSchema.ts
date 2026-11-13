@@ -3279,6 +3279,25 @@ export const GameEventSchema = z.object({
 export type GameEvent = z.infer<typeof GameEventSchema>;
 export const GameEventsFileSchema = z.object({ events: z.array(GameEventSchema).min(1) });
 
+/**
+ * Choice memory ("Remembers", Beta 0.6): a variant of an event that applies when remembered flags hold.
+ * The first variant whose `when` holds is used (never more than one). It may add a line to the intro, hide
+ * base choices (by index) and add choices; base choices keep their index, so battles and saves never shift.
+ */
+export const EventVariantSchema = z.object({
+  id: z.string().regex(/^[a-z][a-z0-9-]*$/),
+  /** All must hold. Read run flags with `{ kind: 'flag', key }` (see core/eventMemory.ts for the key rules). */
+  when: z.array(EventConditionSchema).min(1),
+  /** Replaces the intro when set. */
+  intro: z.string().min(1).optional(),
+  /** Added after the intro (or the replacement): the line that names the remembered act. */
+  notice: z.string().min(1).optional(),
+  hide: z.array(z.number().int().min(0)).default([]),
+  addChoices: z.array(EventChoiceSchema).max(3).default([]),
+});
+export type EventVariant = z.infer<typeof EventVariantSchema>;
+export const MAX_EVENT_VARIANTS = 3;
+
 export const EventDefSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
@@ -3323,7 +3342,12 @@ export const EventDefSchema = z.object({
   scene: EventSceneSchema.default({ cast: [], effect: 'none' }),
   intro: z.string(),
   choices: z.array(EventChoiceSchema).min(1).max(4),
-}).refine((e) => e.choices.every((c) => (c.check === undefined && c.chance === undefined && c.prompt === undefined) || c.failure), { message: 'a choice with a check, chance or prompt needs a failure outcome' });
+  /** Choice memory: at most 3 variants that change what the scene shows when remembered flags hold. */
+  remembers: z.array(EventVariantSchema).max(MAX_EVENT_VARIANTS).default([]),
+}).refine((e) => new Set(e.remembers.map((v) => v.id)).size === e.remembers.length, { message: 'remembers variant ids must be unique' })
+  .refine((e) => e.remembers.every((v) => v.hide.every((i) => i < e.choices.length) && e.choices.length - new Set(v.hide).size >= 1 && e.choices.length - new Set(v.hide).size + v.addChoices.length <= 4), { message: 'a remembers variant must leave 1 to 4 choices and only hide base choices' })
+  .refine((e) => e.remembers.every((v) => v.addChoices.every((c) => (c.check === undefined && c.chance === undefined && c.prompt === undefined) || c.failure)), { message: 'an added choice with a check, chance or prompt needs a failure outcome' })
+  .refine((e) => e.choices.every((c) => (c.check === undefined && c.chance === undefined && c.prompt === undefined) || c.failure), { message: 'a choice with a check, chance or prompt needs a failure outcome' });
 export type EventDef = z.infer<typeof EventDefSchema>;
 
 /** Ideas W5: story text banks (npcStory.json): lore fragments, trainer backstories, evolution diary, newspaper, ending hints, New Game+ variants. */
