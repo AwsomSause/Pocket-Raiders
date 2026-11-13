@@ -1307,7 +1307,7 @@ export class MapScene extends Phaser.Scene {
   /** A minigame stop: shows the rules and the attempts left, and the pick of a difficulty starts the game. */
   private openMinigame(sideId: string): void {
     const { session } = services();
-    const pv = minigamePreview(session.content, session.run!, sideId);
+    const pv = minigamePreview(session.content, session.run!, sideId, session.settings.expansion.minigamesDifficulty);
     const picker: Picker = new Picker(this, {
       title: `${pv.name} - ${pv.attemptsLeft} attempt${pv.attemptsLeft === 1 ? '' : 's'} left`,
       columns: 1,
@@ -1316,7 +1316,7 @@ export class MapScene extends Phaser.Scene {
         problem: pv.attemptsLeft > 0 ? null : 'No attempts left',
         hint: `${pv.instructions} ${pv.scoring}`,
         draw: (scene, box, w) => {
-          box.add(scene.add.text(16, 8, `${pv.name}  ·  ${t.label}`, textStyle(22)));
+          box.add(scene.add.text(16, 8, `${pv.name}  ·  ${t.label}${t.index === pv.recommendedTier ? '  (your setting)' : ''}`, textStyle(22)));
           box.add(scene.add.text(16, 40, `${pv.instructions} ${pv.scoring}`, textStyle(15, '#ffd0a0', { wordWrap: { width: w - 32 } })));
           box.add(scene.add.text(16, 92, `${pv.medals}  ·  Best: ${pv.best}`, textStyle(14, '#a0d0ff', { wordWrap: { width: w - 32 } })));
         },

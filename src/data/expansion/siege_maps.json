@@ -1,0 +1,410 @@
+[
+ {
+  "id": "siege.any",
+  "region": "any",
+  "title": "The Alliance (Siege Map)",
+  "unit": "Approach",
+  "rules": [
+   "Citadark Isle has four approaches and a dome. Each approach is Held by whoever the player's run has earned.",
+   "For every approach that is Held, one named ally fights one battle for the player somewhere in Phases 1 to 4."
+  ],
+  "districts": [
+   {
+    "name": "The Whirlpool Gate",
+    "location": "sea",
+    "heldIf": "Hoenn's titans both rest; or Johto's young Lugia went home; or Chobin is free",
+    "ifLost": "The Crossing has three battles, not two"
+   },
+   {
+    "name": "The Lava Flats",
+    "location": null,
+    "heldIf": "Paldea's Engine was pulled apart (five Starmobiles arrive, honking); or Kanto's Blaine walked with the player",
+    "ifLost": "Lava hazard in Phase 2 (1/16 HP every third turn to non-Fire Pokémon)"
+   },
+   {
+    "name": "The Sky Lift",
+    "location": null,
+    "heldIf": "Any one of: Lance (Johto), N with a dragon (Unova), Leon (Galar)",
+    "ifLost": "Phase 2 has one more wave"
+   },
+   {
+    "name": "The Cliff Stair",
+    "location": null,
+    "heldIf": "Any one of: Cynthia or Looker (Sinnoh), Nanu (Alola), Diantha (Kalos)",
+    "ifLost": "The Breather heals 35%"
+   },
+   {
+    "name": "The Dome",
+    "location": null,
+    "heldIf": "Never",
+    "ifLost": "See Phase 4"
+   }
+  ]
+ },
+ {
+  "id": "siege.kanto",
+  "region": "kanto",
+  "title": "The Sealed City (Siege Map)",
+  "unit": "District",
+  "rules": [
+   "Saffron has four gates and five districts. Each district is Held, Contested or Lost when the climax begins.",
+   "The player chooses a gate. A Held gate is a free entry. A Contested gate costs one battle. A Lost gate costs one battle and its effect."
+  ],
+  "districts": [
+   {
+    "name": "North Gate",
+    "location": "Route 5",
+    "heldIf": "The rival is in the Help variant",
+    "ifLost": "The rival's battle is added to Phase 1 instead of removed"
+   },
+   {
+    "name": "East Gate",
+    "location": "Route 8",
+    "heldIf": "Raid 3 Triumph (the ghosts) or rocket.x.wire (the police)",
+    "ifLost": "Reinforcements arrive one turn sooner in Phase 4"
+   },
+   {
+    "name": "South Gate",
+    "location": "Route 6",
+    "heldIf": "Raid 4 Success or better, or rocket.x.surge-down",
+    "ifLost": "Major Surge joins Phase 3 as a third duel"
+   },
+   {
+    "name": "West Gate",
+    "location": "Route 7",
+    "heldIf": "Raid 5 Success or better",
+    "ifLost": "Shinobi Koga poisons the Breather (heal 35% instead of 50%)"
+   },
+   {
+    "name": "The Center",
+    "location": null,
+    "heldIf": "Never; Oracle Sabrina holds it",
+    "ifLost": "See Phase 1"
+   }
+  ]
+ },
+ {
+  "id": "siege.johto",
+  "region": "johto",
+  "title": "Goldenrod Under Static (Siege Map)",
+  "unit": "District",
+  "rules": [],
+  "districts": [
+   {
+    "name": "Magnet Train Station",
+    "location": null,
+    "heldIf": "The Heir is an ally, or Lance was sent here",
+    "ifLost": "The signal reaches the border: world state stays 5 in the next region's opening"
+   },
+   {
+    "name": "Department Store",
+    "location": null,
+    "heldIf": "Raid 1 Success or better (no tail money)",
+    "ifLost": "Shops are closed for the Last Rest"
+   },
+   {
+    "name": "The Underground",
+    "location": null,
+    "heldIf": "rocket-return.x.director-known",
+    "ifLost": "Phase 1 has no shortcut"
+   },
+   {
+    "name": "Harbor Road",
+    "location": "to Olivine",
+    "heldIf": "Ampharos was calmed, or Raid 5 Success or better",
+    "ifLost": "Two Black-Label Pokémon join Phase 2"
+   },
+   {
+    "name": "The Plaza",
+    "location": null,
+    "heldIf": "Raid 4 Triumph (a beast is standing in it)",
+    "ifLost": "The plaza battle in Phase 2 is a Double Battle"
+   }
+  ]
+ },
+ {
+  "id": "siege.hoenn",
+  "region": "hoenn",
+  "title": "Sootopolis Divided (Siege Map)",
+  "unit": "District",
+  "rules": [
+   "Sootopolis sits inside a crater. Aqua holds the west ledge, Magma the east."
+  ],
+  "districts": [
+   {
+    "name": "The Harbor Tunnel",
+    "location": null,
+    "heldIf": "Raid 2 Success or better, or Stern turned",
+    "ifLost": "Entry costs one underwater battle"
+   },
+   {
+    "name": "West Ledge",
+    "location": null,
+    "heldIf": "Tilt is +1 or more (Aqua is behind), or Amber was beaten",
+    "ifLost": "Aqua's pedestal in Phase 4 has one more defender"
+   },
+   {
+    "name": "East Ledge",
+    "location": null,
+    "heldIf": "Tilt is −1 or less (Magma is behind), or Blaise was beaten",
+    "ifLost": "Magma's pedestal in Phase 4 has one more defender"
+   },
+   {
+    "name": "The White Rock",
+    "location": null,
+    "heldIf": "Steven holds it, or the Keepers do",
+    "ifLost": "The Last Rest shop is closed"
+   },
+   {
+    "name": "The Cave Mouth",
+    "location": null,
+    "heldIf": "Never; both teams are fighting over it",
+    "ifLost": "See Phase 2"
+   }
+  ]
+ },
+ {
+  "id": "siege.sinnoh",
+  "region": "sinnoh",
+  "title": "The Mountain Under Siege (Siege Map)",
+  "unit": "District",
+  "rules": [
+   "Mt. Coronet has four approaches and one summit."
+  ],
+  "districts": [
+   {
+    "name": "Oreburgh Gate",
+    "location": "south",
+    "heldIf": "Raid 1 Success or better, or Volkner turned",
+    "ifLost": "The Last Rest heals 80% (brownout)"
+   },
+   {
+    "name": "Hearthome Road",
+    "location": "east",
+    "heldIf": "Looker is free and Raid 5 was not Failed",
+    "ifLost": "Entry costs one battle with Warden Pell"
+   },
+   {
+    "name": "Celestic Path",
+    "location": "north-east",
+    "heldIf": "Cynthia is coming up the mountain (The Wall at Celestic)",
+    "ifLost": "Cynthia arrives one phase late"
+   },
+   {
+    "name": "Snowpoint Trail",
+    "location": "north",
+    "heldIf": "Raid 4 Success or better (Buck holds it)",
+    "ifLost": "Hunter J's airship has a clear run: +1 battle in Phase 2"
+   },
+   {
+    "name": "The Summit",
+    "location": null,
+    "heldIf": "Never",
+    "ifLost": "See Phase 4"
+   }
+  ]
+ },
+ {
+  "id": "siege.unova",
+  "region": "unova",
+  "title": "The Five Bridges (Siege Map)",
+  "unit": "Bridge",
+  "rules": [
+   "Unova is held together by five bridges. Ghetsis is closing them."
+  ],
+  "districts": [
+   {
+    "name": "Skyarrow",
+    "location": "to Castelia",
+    "heldIf": "Snattle was beaten, or the debate was won",
+    "ifLost": "The Last Rest shop sells at +25%"
+   },
+   {
+    "name": "Driftveil Drawbridge",
+    "location": null,
+    "heldIf": "Raid 3 Success or better",
+    "ifLost": "Anthea and Concordia cannot reach the Breather (heal 35%)"
+   },
+   {
+    "name": "Tubeline",
+    "location": "to Opelucid",
+    "heldIf": "Raid 4 Success or better (Drayden)",
+    "ifLost": "Hail starts one tier thicker in Phase 4"
+   },
+   {
+    "name": "Village Bridge",
+    "location": null,
+    "heldIf": "Hugh is still searching (The Stolen One, any choice but the last)",
+    "ifLost": "Aldith's vans reach the Chasm: +1 battle in Phase 2"
+   },
+   {
+    "name": "Marvelous Bridge",
+    "location": null,
+    "heldIf": "Raid 5 Success or better (the faithful walked out across it)",
+    "ifLost": "The news of a king reaches the next region: its opening world state is +1"
+   }
+  ]
+ },
+ {
+  "id": "siege.kalos",
+  "region": "kalos",
+  "title": "Kalos on Every Screen (Siege Map)",
+  "unit": "District",
+  "rules": [
+   "Lysandre's announcement plays on every Holo Caster in the region at once. Each city either listens or looks away."
+  ],
+  "districts": [
+   {
+    "name": "Lumiose",
+    "location": null,
+    "heldIf": "Raid 1 Success or better (the lights are on), or Sycamore with Sina and Dexio",
+    "ifLost": "The Last Rest has no shop"
+   },
+   {
+    "name": "Laverre",
+    "location": null,
+    "heldIf": "Valerie turned",
+    "ifLost": "Grunts in the climax carry accessories (+1 Couture Pokémon each)"
+   },
+   {
+    "name": "Shalour",
+    "location": null,
+    "heldIf": "The player has Mega Evolved at least once this region",
+    "ifLost": "Mega Evolution takes a turn to trigger in Phase 2"
+   },
+   {
+    "name": "Anistar",
+    "location": null,
+    "heldIf": "Raid 5 Success or better",
+    "ifLost": "Phase 7 is certain"
+   },
+   {
+    "name": "Geosenge",
+    "location": null,
+    "heldIf": "Never",
+    "ifLost": "See Phase 1"
+   }
+  ]
+ },
+ {
+  "id": "siege.alola",
+  "region": "alola",
+  "title": "Four Islands (Siege Map)",
+  "unit": "District",
+  "rules": [],
+  "districts": [
+   {
+    "name": "Melemele",
+    "location": null,
+    "heldIf": "The player rapped back, or waited for the bus",
+    "ifLost": "Skull's blockade in Phase 1 has one more boat"
+   },
+   {
+    "name": "Akala",
+    "location": null,
+    "heldIf": "Raid 4 Success or better (Olivia and Tapu Lele)",
+    "ifLost": "Thin Light is stronger: glimpses every 2 turns"
+   },
+   {
+    "name": "Ula'ula",
+    "location": null,
+    "heldIf": "Nanu was asked",
+    "ifLost": "Rent Money, if not returned, fights in Phase 2"
+   },
+   {
+    "name": "Poni",
+    "location": null,
+    "heldIf": "Dulse and Zossie were met, and the player was civil",
+    "ifLost": "No warning before Phase 7"
+   },
+   {
+    "name": "Aether Paradise",
+    "location": null,
+    "heldIf": "Never",
+    "ifLost": "See Phase 2"
+   }
+  ]
+ },
+ {
+  "id": "siege.galar",
+  "region": "galar",
+  "title": "Five Stadiums (Siege Map)",
+  "unit": "Stadium",
+  "rules": [
+   "When the sky turns, Galar goes where it always goes: to the nearest stadium. Each one is a shelter if its crowd is calm, and a disaster if it is not."
+  ],
+  "districts": [
+   {
+    "name": "Motostoke",
+    "location": null,
+    "heldIf": "Raid 1 Success or better (the Plant is throttled)",
+    "ifLost": "A forced Dynamax on the pitch: +1 Pulse in Phase 4"
+   },
+   {
+    "name": "Hulbury",
+    "location": null,
+    "heldIf": "Raid 4 Success or better (Lighthouse is ferrying people)",
+    "ifLost": "Rail and sea are both shut: the Last Rest has no shop"
+   },
+   {
+    "name": "Hammerlocke",
+    "location": null,
+    "heldIf": "Peony is in Wyndon and Sonia has the permit",
+    "ifLost": "The Vault's records are taken: Rose's Doctrine triggers twice"
+   },
+   {
+    "name": "Spikemuth",
+    "location": null,
+    "heldIf": "Always. It has no Power Spot, and nothing there can be forced to Dynamax",
+    "ifLost": "—"
+   },
+   {
+    "name": "Wyndon",
+    "location": null,
+    "heldIf": "Raid 5 Success or better",
+    "ifLost": "Their Majesties have the pitch: Phase 7 is certain"
+   }
+  ]
+ },
+ {
+  "id": "siege.paldea",
+  "region": "paldea",
+  "title": "The Five Bases (Siege Map)",
+  "unit": "Base",
+  "rules": [
+   "Each Base either trusts the player or does not. A Base that trusts the player keeps its own Starmobile out of Cipher's hands when the link is taken."
+  ],
+  "districts": [
+   {
+    "name": "Segin",
+    "location": "Dark",
+    "heldIf": "Raid 1 Success or better",
+    "ifLost": "Its core in Phase 6 has an extra shield"
+   },
+   {
+    "name": "Schedar",
+    "location": "Fire",
+    "heldIf": "Raid 2 Success or better, or the player stood next to Mela",
+    "ifLost": "Starfall Street is burning in Phase 2"
+   },
+   {
+    "name": "Navi",
+    "location": "Poison",
+    "heldIf": "Raid 3 Success or better, or the player wears Atticus's badge",
+    "ifLost": "The leak reaches the Street: poison hazard in Phase 2"
+   },
+   {
+    "name": "Ruchbah",
+    "location": "Fairy",
+    "heldIf": "Raid 4 Success or better",
+    "ifLost": "Six cores, not five"
+   },
+   {
+    "name": "Caph",
+    "location": "Fighting",
+    "heldIf": "Kieran chose Star, or Arven is the squad's cook",
+    "ifLost": "The Applicant fights in Phase 2 with Overlooked"
+   }
+  ]
+ }
+]

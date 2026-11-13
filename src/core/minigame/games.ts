@@ -8,6 +8,7 @@ import { Rng, type RngState } from '../rng';
 import { FRONTIER_GAMES } from './frontier';
 import { MINIGAMES_2 } from './games2';
 import { MINIGAMES_3 } from './games3';
+import { MINIGAMES_4 } from './games4';
 
 export interface Cell {
   id: string;
@@ -849,6 +850,7 @@ export const MINIGAMES: Record<string, MinigameModule<never>> = {
   'reaction-challenge': reaction as never,
   ...MINIGAMES_2,
   ...MINIGAMES_3,
+  ...MINIGAMES_4,
   ...FRONTIER_GAMES,
 };
 

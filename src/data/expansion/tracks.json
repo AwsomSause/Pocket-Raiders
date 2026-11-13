@@ -1,0 +1,394 @@
+[
+ {
+  "id": "track.any",
+  "region": "any",
+  "name": "The Stock",
+  "gain": "Stored in cipher.x.stock (0–5). This track is not per region. It runs across the whole run and is read at the Finale.",
+  "steps": [
+   {
+    "step": "1",
+    "name": "Samples",
+    "rule": "Any liaison leaves a region unbeaten",
+    "note": "+1 Admin duel in Phase 3"
+   },
+   {
+    "step": "2",
+    "name": "Shipments",
+    "rule": "Any region's Apex Shadow enters the Region of Doom",
+    "note": "That Apex stands guard in Phase 4"
+   },
+   {
+    "step": "3",
+    "name": "Three Beasts",
+    "rule": "Raikou, Entei and Suicune were all shipped from Johto",
+    "note": "The three liaisons who hold them return together"
+   },
+   {
+    "step": "4",
+    "name": "The Reading",
+    "rule": "cipher.lugia-reading is set (Johto Raid 5 Failed or Declined)",
+    "note": "XD001 has one extra lock"
+   },
+   {
+    "step": "5",
+    "name": "Complete",
+    "rule": "Five or more regions were lost or stayed out of",
+    "note": "The Finale's timer is 2 turns shorter"
+   }
+  ]
+ },
+ {
+  "id": "track.kanto",
+  "region": "kanto",
+  "name": "The Ledger Fills",
+  "gain": "A step is gained when a raid is failed or declined, or when the climax is scheduled. A step is removed by a raid Success or better. Stored in rocket.x.ledger (0–5).",
+  "steps": [
+   {
+    "step": "1",
+    "name": "Small Print",
+    "rule": "One shop per city charges +10% (\"insurance\")",
+    "note": "Nervous"
+   },
+   {
+    "step": "2",
+    "name": "House Rules",
+    "rule": "Game Corner prizes are Black-Label; one Pokémon Center per city closes at night",
+    "note": "Careful"
+   },
+   {
+    "step": "3",
+    "name": "Closed Roads",
+    "rule": "Two routes are blocked by a Snorlax; detour nodes appear",
+    "note": "Angry"
+   },
+   {
+    "step": "4",
+    "name": "Export",
+    "rule": "Wild encounter pools near Vermilion shrink by a quarter (poached)",
+    "note": "Frightened"
+   },
+   {
+    "step": "5",
+    "name": "Under New Management",
+    "rule": "Saffron's gates are shut before the climax; the news runs Rocket adverts",
+    "note": "Silent"
+   }
+  ]
+ },
+ {
+  "id": "track.johto",
+  "region": "johto",
+  "name": "The Signal Spreads",
+  "gain": "Stored in rocket-return.x.signal (0–5). Gained and removed as in the design note §4.",
+  "steps": [
+   {
+    "step": "1",
+    "name": "Static",
+    "rule": "Radios in rest nodes play static; the Pokégear map loses one node of preview",
+    "note": "Puzzled"
+   },
+   {
+    "step": "2",
+    "name": "Jingle",
+    "rule": "Shops play the Rocket jingle; Slowpoke tails appear in one shop per city",
+    "note": "Uneasy"
+   },
+   {
+    "step": "3",
+    "name": "Rage",
+    "rule": "Wild Pokémon near water are one evolution stage higher at 20% odds",
+    "note": "Frightened"
+   },
+   {
+    "step": "4",
+    "name": "Carrier Wave",
+    "rule": "The signal reaches the next region's border; one Kanto-style Black-Label Pokémon appears on Executive teams",
+    "note": "Tired"
+   },
+   {
+    "step": "5",
+    "name": "The Call",
+    "rule": "Every radio carries Archer's voice; the climax is scheduled",
+    "note": "Listening"
+   }
+  ]
+ },
+ {
+  "id": "track.hoenn",
+  "region": "hoenn",
+  "name": "The Long Weather",
+  "gain": "Stored in hoenn.x.weather (0–5). A second value, hoenn.x.tilt (−3 to +3), records which team is ahead: Aqua negative, Magma positive. Raids against one team move the tilt toward the other.",
+  "steps": [
+   {
+    "step": "1",
+    "name": "Drizzle and Drought",
+    "rule": "One route is rainy and one is sunny at all times",
+    "note": "Complaining"
+   },
+   {
+    "step": "2",
+    "name": "Blue Dawn, Red Dusk",
+    "rule": "Weather at each node is set by the tilt (ties alternate)",
+    "note": "Taking sides"
+   },
+   {
+    "step": "3",
+    "name": "The Swing",
+    "rule": "Weather flips every two turns in wild battles",
+    "note": "Exhausted"
+   },
+   {
+    "step": "4",
+    "name": "Spill",
+    "rule": "Berry trees fail on one side of the region; ferries or cable cars stop, by tilt",
+    "note": "Leaving"
+   },
+   {
+    "step": "5",
+    "name": "The Awakening",
+    "rule": "Rain and harsh sun arrive together; the climax is scheduled",
+    "note": "Praying"
+   }
+  ]
+ },
+ {
+  "id": "track.sinnoh",
+  "region": "sinnoh",
+  "name": "The Subtraction",
+  "gain": "Stored in galactic.x.subtraction (0–5). Step 3 has three parts, one per lake, and each is its own flag.",
+  "steps": [
+   {
+    "step": "1",
+    "name": "Quiet",
+    "rule": "One clinic per city; a Pokémon left there for a node returns with the Spiritless rule for 3 battles",
+    "note": "Polite"
+   },
+   {
+    "step": "2",
+    "name": "Brownout",
+    "rule": "Pokémon Centers heal to 80%; night nodes are darker (accuracy −5% for both sides)",
+    "note": "Tired"
+   },
+   {
+    "step": "3a",
+    "name": "Lake Acuity taken (Uxie)",
+    "rule": "Memory: the map shows one fewer node ahead",
+    "note": "Forgetful"
+   },
+   {
+    "step": "3b",
+    "name": "Lake Verity taken (Mesprit)",
+    "rule": "Feeling: friendship and bond gains are halved",
+    "note": "Flat"
+   },
+   {
+    "step": "3c",
+    "name": "Lake Valor taken (Azelf)",
+    "rule": "Will: the player's Pokémon cannot land critical hits",
+    "note": "Listless"
+   },
+   {
+    "step": "4",
+    "name": "The Hum",
+    "rule": "Wild Pokémon flee less and fight less; shops forget one item in stock",
+    "note": "Vacant"
+   },
+   {
+    "step": "5",
+    "name": "Zero Hour",
+    "rule": "Clocks stop at each rest node until the player leaves; the climax is scheduled",
+    "note": "Still"
+   }
+  ]
+ },
+ {
+  "id": "track.unova",
+  "region": "unova",
+  "name": "The Frost Line",
+  "gain": "Stored in plasma.x.frost (0–5).",
+  "steps": [
+   {
+    "step": "1",
+    "name": "Pamphlets",
+    "rule": "One speech per city; wild pools gain \"released\" Pokémon that will not fight back on the first turn",
+    "note": "Thoughtful"
+   },
+   {
+    "step": "2",
+    "name": "Let Go",
+    "rule": "The PC holds four fewer Pokémon (\"on deposit for liberation\"); returned when the step is removed",
+    "note": "Guilty"
+   },
+   {
+    "step": "3",
+    "name": "The Frost Line",
+    "rule": "The northern third of the map is under snow: ice hazards, Ice moves +10% for both sides",
+    "note": "Cold"
+   },
+   {
+    "step": "4",
+    "name": "The Bridges",
+    "rule": "Two of five bridges are closed; routes across them cost an extra node",
+    "note": "Trapped"
+   },
+   {
+    "step": "5",
+    "name": "The Crown",
+    "rule": "Snow everywhere; the climax is scheduled",
+    "note": "Waiting for a king"
+   }
+  ]
+ },
+ {
+  "id": "track.kalos",
+  "region": "kalos",
+  "name": "The Guest List",
+  "gain": "Stored in flare.x.guest-list (0–5).",
+  "steps": [
+   {
+    "step": "1",
+    "name": "Invitations",
+    "rule": "One boutique per city refuses the player; Flare recruiters appear at city nodes",
+    "note": "Flattered"
+   },
+   {
+    "step": "2",
+    "name": "Blackout",
+    "rule": "Half of each city is dark: night rules apply there at all hours",
+    "note": "Irritated"
+   },
+   {
+    "step": "3",
+    "name": "Members First",
+    "rule": "Pokémon Centers heal members first: the player's heal is 85% unless carrying a Flare badge",
+    "note": "Dividing"
+   },
+   {
+    "step": "4",
+    "name": "Prime Time",
+    "rule": "The Holo Caster interrupts once per stage; shop stock shows \"reserved for members\" on two items",
+    "note": "Afraid to be seen"
+   },
+   {
+    "step": "5",
+    "name": "Countdown",
+    "rule": "A timer on every screen; the climax is scheduled",
+    "note": "Dressed in red, or hiding"
+   }
+  ]
+ },
+ {
+  "id": "track.alola",
+  "region": "alola",
+  "name": "Noise and Silence",
+  "gain": "Stored in alola.x.quiet (0–5).",
+  "steps": [
+   {
+    "step": "1",
+    "name": "Tags",
+    "rule": "One trial-site node per island is vandalized and closed",
+    "note": "Annoyed"
+   },
+   {
+    "step": "2",
+    "name": "Borrowed",
+    "rule": "After any lost battle a random benched Pokémon may be \"borrowed\" for 3 nodes (always returned)",
+    "note": "Wary"
+   },
+   {
+    "step": "3",
+    "name": "Donations",
+    "rule": "Aether staff stand at Pokémon Centers; wild encounter pools shrink by a fifth",
+    "note": "Grateful, mostly"
+   },
+   {
+    "step": "4",
+    "name": "Thin Places",
+    "rule": "Once per stage a wild battle is interrupted by a glimpse of an Ultra Beast (one attack, then gone)",
+    "note": "Frightened"
+   },
+   {
+    "step": "5",
+    "name": "The Gate",
+    "rule": "Daylight dims by a third; the climax is scheduled",
+    "note": "Looking up"
+   }
+  ]
+ },
+ {
+  "id": "track.galar",
+  "region": "galar",
+  "name": "The Forecast",
+  "gain": "Stored in galar.x.forecast (0–5).",
+  "steps": [
+   {
+    "step": "1",
+    "name": "Sponsored",
+    "rule": "Partner shops sell at −5%; each purchase there adds +1 Heat (they report it)",
+    "note": "Cheerful"
+   },
+   {
+    "step": "2",
+    "name": "Tremors",
+    "rule": "Once per stage a wild Pokémon Dynamaxes for one turn with no Power Spot",
+    "note": "Excited, then not"
+   },
+   {
+    "step": "3",
+    "name": "Red Cloud",
+    "rule": "Wild Area weather is fixed; Dynamax in dens lasts one extra turn for the foe",
+    "note": "Uneasy"
+   },
+   {
+    "step": "4",
+    "name": "Service Suspended",
+    "rule": "Rail and air nodes cost an extra step; one shop per city has \"supply issues\"",
+    "note": "Stranded"
+   },
+   {
+    "step": "5",
+    "name": "Launch Day",
+    "rule": "The sky is red; the climax is scheduled",
+    "note": "Watching the big screen"
+   }
+  ]
+ },
+ {
+  "id": "track.paldea",
+  "region": "paldea",
+  "name": "Attendance",
+  "gain": "Stored in star.x.attendance (0–5). Here the track does not measure the team's progress. It measures how badly the adults are handling it.",
+  "steps": [
+   {
+    "step": "1",
+    "name": "Empty Desks",
+    "rule": "Star flyers at school and town nodes; Star Grunts ask a toll of nothing but a battle",
+    "note": "Tutting"
+   },
+   {
+    "step": "2",
+    "name": "Five Bases",
+    "rule": "Routes near a Base have a checkpoint; friendly if the player has a Star badge",
+    "note": "Curious"
+   },
+   {
+    "step": "3",
+    "name": "Ultimatum",
+    "rule": "The Academy posts expulsion notices; shops near the Academy will not serve anyone with a Star badge",
+    "note": "Taking sides"
+   },
+   {
+    "step": "4",
+    "name": "Buyers",
+    "rule": "\"Scholarship officers\" at every Base gate; one in three Star Grunts met is a Cipher Peon in costume",
+    "note": "Uneasy"
+   },
+   {
+    "step": "5",
+    "name": "Barrage",
+    "rule": "Five engines audible from anywhere in Mesagoza; the climax is scheduled",
+    "note": "Gathering to watch"
+   }
+  ]
+ }
+]

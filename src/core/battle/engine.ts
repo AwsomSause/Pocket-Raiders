@@ -383,6 +383,8 @@ export function createBattle(
     turn: 1,
     hype: 0,
     revivesUsed: 0,
+    healsUsed: 0,
+    enemyRevivesUsed: 0,
     hypeTurns: 0,
     hypeLoaded: false,
     activeIndex,
@@ -1428,6 +1430,7 @@ export function itemProblem(ctx: Pick<BattleContext, 'content' | 'battle' | 'par
   if (itemCount(ctx.inventory, itemId) <= 0) return `You have no ${item.name} left.`;
   if (!item.usableInBattle) return `${item.name} can't be used in battle.`;
   if (item.category === 'revive' && (ctx.battle.revivesUsed ?? 0) >= ctx.content.balance.itemCaps.revivesPerBattle) return `You've already used ${ctx.content.balance.itemCaps.revivesPerBattle} revives this battle.`;
+  if (item.category === 'healing' && (ctx.battle.healsUsed ?? 0) >= ctx.content.balance.itemCaps.healsPerBattle) return `You've already used ${ctx.content.balance.itemCaps.healsPerBattle} healing items this battle.`;
   const noHeal = raidItemProblem(ctx.content, ctx.battle, item.category === 'healing' || item.category === 'revive');
   if (noHeal) return noHeal;
   if (item.effect.kind === 'catch') {
@@ -1521,6 +1524,7 @@ function useItemInBattle(ctx: BattleContext, itemId: string, targetIndex: number
   const item = getItem(content, itemId);
   consumeItem(ctx.inventory, itemId);
   if (item.category === 'revive') battle.revivesUsed = (battle.revivesUsed ?? 0) + 1;
+  if (item.category === 'healing') battle.healsUsed = (battle.healsUsed ?? 0) + 1;
   if (item.effect.kind === 'catch' && item.effect.rule === 'snag') {
     // Snagging never fails. The Pokémon leaves the trainer's team and joins you when the battle is won.
     const foe = currentEnemy(battle);
@@ -4467,13 +4471,26 @@ function trainerAiTurn(ctx: BattleContext, enemy: Combatant, events: BattleEvent
   if (lent) events.push(...lent);
   const max = calcStats(content, mon).hp;
   const wealth = battle.trainerWealth;
-  const kit = wealth === undefined ? cfg.maxItems : WEALTH_POTIONS[wealth]!;
+  // Beta 0.6 B5: bosses, rivals, the Elite Four and Champions get the player's budget: 10 heals + 6 revives.
+  const bossy = Boolean(battle.trainer?.leaderId || battle.rival);
+  const caps = content.balance.itemCaps;
+  const kit = bossy ? Math.max(wealth === undefined ? cfg.maxItems : WEALTH_POTIONS[wealth]!, caps.healsPerBattle) : wealth === undefined ? cfg.maxItems : WEALTH_POTIONS[wealth]!;
   if (battle.enemyItemsUsed < kit && mon.hp / max < cfg.healBelow) {
     const gain = Math.min(max - mon.hp, Math.floor(max * (wealth === undefined ? cfg.healFraction : WEALTH_HEAL[wealth]!)));
     if (gain > 0) {
       battle.enemyItemsUsed += 1;
       mon.hp += gain;
       events.push({ type: 'item', itemId: 'hyper-potion', targetUid: mon.uid, message: `The trainer used a Hyper Potion on ${getSpecies(content, mon.speciesId).name}!`, hpAfter: mon.hp });
+      return true;
+    }
+  }
+  if (bossy && (battle.enemyRevivesUsed ?? 0) < caps.revivesPerBattle) {
+    // Revive the strongest fallen teammate once the team is down to its last two; never on a full team.
+    const fallen = battle.enemyTeam.filter((m) => m.hp <= 0).sort((a, b) => b.level - a.level)[0];
+    if (fallen && battle.enemyTeam.filter((m) => m.hp > 0).length <= 2) {
+      battle.enemyRevivesUsed = (battle.enemyRevivesUsed ?? 0) + 1;
+      fallen.hp = Math.max(1, Math.floor(calcStats(content, fallen).hp * 0.5));
+      events.push({ type: 'item', itemId: 'revive', targetUid: fallen.uid, message: `The trainer used a Revive on ${getSpecies(content, fallen.speciesId).name}!`, hpAfter: fallen.hp });
       return true;
     }
   }

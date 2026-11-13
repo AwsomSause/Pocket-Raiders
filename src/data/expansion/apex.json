@@ -1,0 +1,300 @@
+[
+ {
+  "id": "ss.cipher.xd001",
+  "code": "XD001",
+  "team": "cipher",
+  "region": "any",
+  "name": "XD001",
+  "species": [
+   "Lugia"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Contract Clause",
+  "moves": [
+   "Hollow Tide",
+   "Null Pulse",
+   "Heart Eclipse",
+   "Storm Without a Song"
+  ],
+  "purification": "Story only: nine locks, nine ROMs",
+  "where": "Citadark Isle, Phase 6",
+  "phase": {
+   "heading": "Phase 6 — XD001",
+   "format": "XD001 (ss.cipher.xd001) is a Colossus behind nine locks. Each lock is one of the nine methods. Each Data ROM earned in its own region removes its own lock before the fight begins (a late ROM does not). Each lock that remains is a shield bar to be broken, and while it stands it applies its region's condition to the field.",
+   "timer": "14 turns"
+  }
+ },
+ {
+  "id": "ss.rocket.m2",
+  "code": "XD002",
+  "team": "rocket",
+  "region": "kanto",
+  "name": "M2",
+  "species": [
+   "Mewtwo",
+   "Mega Mewtwo X"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Contract Clause",
+  "moves": [
+   "Null Pulse",
+   "Heart Eclipse",
+   "Mind Vault"
+  ],
+  "purification": "Story only: break the four armor seals (Phase 6)",
+  "where": "The roof of Silph Co.",
+  "phase": {
+   "heading": "Phase 6 — The Roof: Project M2 (Colossus)",
+   "format": "M2 (ss.rocket.m2, XD002) is a Colossus with four armor seals (two shoulders, chest, crown), each with its own shield bar. It cannot be knocked out while a seal remains. Breaking a seal removes one of its moves, in this order: Mind Vault, Null Pulse, Heart Eclipse, and last its obedience.",
+   "timer": "10 turns"
+  }
+ },
+ {
+  "id": "ss.rocket-return.dark-celebi",
+  "code": "XD003",
+  "team": "rocket-return",
+  "region": "johto",
+  "name": "Dark Celebi",
+  "species": [
+   "Celebi"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Echo of Another",
+  "moves": [
+   "Pale Echo",
+   "Heart Eclipse",
+   "Yesterday's Thorn"
+  ],
+  "purification": "Story only: break the three Thorn Rings and call it by the name Kurt gave you",
+  "where": "The Tower roof, Phase 6",
+  "phase": {
+   "heading": "Phase 6 — The Welcome: Dark Celebi (Colossus)",
+   "format": "Dark Celebi (ss.rocket-return.dark-celebi, XD003) is a Colossus inside three Thorn Rings. Each ring is a shield bar and a rule.",
+   "timer": "12 turns"
+  }
+ },
+ {
+  "id": "ss.aqua.abyssal",
+  "code": "XD004",
+  "team": "aqua",
+  "region": "hoenn",
+  "name": "Abyssal",
+  "species": [
+   "Kyogre",
+   "Primal Kyogre"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Squall Mantle",
+  "moves": [
+   "Hollow Tide",
+   "Chain Hymn",
+   "Drowned Sky"
+  ],
+  "purification": "Story only: break the Blue Orb's three links",
+  "where": "The Cave of Origin, Phase 6",
+  "phase": {
+   "heading": "Phase 6 — The Awakening: Abyssal and Cinderheart (Colossus)",
+   "format": "Two Colossi at once: Abyssal (ss.aqua.abyssal, XD004) and Cinderheart (ss.magma.cinderheart, XD005). Neither can be knocked out. Each is held by its Orb through three links, and each link is a shield bar. The player wins when all six links are broken, or when one titan's three are broken and the other's are held shut by allies.",
+   "timer": "14 turns"
+  }
+ },
+ {
+  "id": "ss.magma.cinderheart",
+  "code": "XD005",
+  "team": "magma",
+  "region": "hoenn",
+  "name": "Cinderheart",
+  "species": [
+   "Groudon",
+   "Primal Groudon"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Frost Oath",
+  "moves": [
+   "Ember of Grief",
+   "Gloam Crash",
+   "Scorched Dawn"
+  ],
+  "purification": "Story only: break the Red Orb's three links",
+  "where": "The Cave of Origin, Phase 6",
+  "phase": {
+   "heading": "Phase 6 — The Awakening: Abyssal and Cinderheart (Colossus)",
+   "format": "Two Colossi at once: Abyssal (ss.aqua.abyssal, XD004) and Cinderheart (ss.magma.cinderheart, XD005). Neither can be knocked out. Each is held by its Orb through three links, and each link is a shield bar. The player wins when all six links are broken, or when one titan's three are broken and the other's are held shut by allies.",
+   "timer": "14 turns"
+  }
+ },
+ {
+  "id": "ss.galactic.stillhour",
+  "code": "XD006",
+  "team": "galactic",
+  "region": "sinnoh",
+  "name": "Stillhour",
+  "species": [
+   "Dialga",
+   "Origin Dialga"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Contract Clause",
+  "moves": [
+   "Chain Hymn",
+   "Heart Eclipse",
+   "Stopped Clock"
+  ],
+  "purification": "Story only: break its two Red Chains",
+  "where": "The Spear Pillar, Phase 6",
+  "phase": {
+   "heading": "Phase 6 — Zero Hour: Stillhour and Farshore (Colossus)",
+   "format": "Two Colossi: Stillhour (ss.galactic.stillhour, XD006) and Farshore (ss.galactic.farshore, XD007). Each is held by two Red Chains (three after a Raid 5 Failure). They cannot be knocked out; the chains are the targets.",
+   "timer": "12 turns"
+  }
+ },
+ {
+  "id": "ss.galactic.farshore",
+  "code": "XD007",
+  "team": "galactic",
+  "region": "sinnoh",
+  "name": "Farshore",
+  "species": [
+   "Palkia",
+   "Origin Palkia"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Contract Clause",
+  "moves": [
+   "Rift Step",
+   "Gloam Crash",
+   "Folded Distance"
+  ],
+  "purification": "Story only: break its two Red Chains",
+  "where": "The Spear Pillar, Phase 6",
+  "phase": {
+   "heading": "Phase 6 — Zero Hour: Stillhour and Farshore (Colossus)",
+   "format": "Two Colossi: Stillhour (ss.galactic.stillhour, XD006) and Farshore (ss.galactic.farshore, XD007). Each is held by two Red Chains (three after a Raid 5 Failure). They cannot be knocked out; the chains are the targets.",
+   "timer": "12 turns"
+  }
+ },
+ {
+  "id": "ss.plasma.absolute",
+  "code": "XD008",
+  "team": "plasma",
+  "region": "unova",
+  "name": "Absolute",
+  "species": [
+   "Kyurem",
+   "Black Kyurem",
+   "White Kyurem"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Contract Clause",
+  "moves": [
+   "Null Pulse",
+   "Heart Eclipse",
+   "Empty Crown"
+  ],
+  "purification": "Story only: pull the three Splicer wedges",
+  "where": "The Giant Chasm, Phase 6",
+  "phase": {
+   "heading": "Phase 6 — The Crown: Absolute (Colossus)",
+   "format": "Absolute (ss.plasma.absolute, XD008) is a Colossus held together by three Splicer wedges, each a shield bar. It cannot be knocked out while a wedge holds.",
+   "timer": "12 turns"
+  }
+ },
+ {
+  "id": "ss.flare.battery",
+  "code": "XD009",
+  "team": "flare",
+  "region": "kalos",
+  "name": "The Battery",
+  "species": [
+   "Xerneas",
+   "Yveltal"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Contract Clause",
+  "moves": [
+   "Siphon Lull",
+   "Null Pulse",
+   "Borrowed Years"
+  ],
+  "purification": "Story only: close the flower's three petals",
+  "where": "Geosenge, Phase 6",
+  "phase": {
+   "heading": "Phase 6 — The Flower Opens: The Battery (Colossus)",
+   "format": "The Battery (ss.flare.battery, XD009) is a Colossus. It does not wake and cannot be knocked out. It is fought through the flower's three petals, each a shield bar and a rule. Closing a petal needs its shield broken and one free action at its housing.",
+   "timer": "12 turns"
+  }
+ },
+ {
+  "id": "ss.aether.mother-beast",
+  "code": "XD010",
+  "team": "aether",
+  "region": "alola",
+  "name": "The Mother Beast",
+  "species": [
+   "Nihilego"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Contract Clause",
+  "moves": [
+   "Siphon Lull",
+   "Chain Hymn",
+   "Keepsake"
+  ],
+  "purification": "Story only: part the three veils and be heard",
+  "where": "Ultra Space, Phase 6",
+  "phase": {
+   "heading": "Phase 6 — The Deep: The Mother Beast (Colossus)",
+   "format": "The Mother Beast (ss.aether.mother-beast, XD010) is a Colossus wrapped in three veils. It cannot be knocked out. Each veil is a shield bar, and behind each is something she is holding.",
+   "timer": "12 turns"
+  }
+ },
+ {
+  "id": "ss.macro-cosmos.darkest-day",
+  "code": "XD011",
+  "team": "macro-cosmos",
+  "region": "galar",
+  "name": "The Darkest Day",
+  "species": [
+   "Eternatus",
+   "Eternamax Eternatus"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Contract Clause",
+  "moves": [
+   "Hollow Tide",
+   "Heart Eclipse",
+   "Red Star"
+  ],
+  "purification": "Story only: cut the three feeds, then outlast it",
+  "where": "Above Hammerlocke, Phase 6",
+  "phase": {
+   "heading": "Phase 6 — The Darkest Day (Colossus)",
+   "format": "The Darkest Day (ss.macro-cosmos.darkest-day, XD011) is a Colossus fed by three feeds, each a shield bar. While a feed stands, it cannot be knocked out and the player's Pokémon cannot Dynamax (it is drinking it all).",
+   "timer": "14 turns"
+  }
+ },
+ {
+  "id": "ss.star.cassiopeia-engine",
+  "code": "XD012",
+  "team": "star",
+  "region": "paldea",
+  "name": "The Cassiopeia Engine",
+  "species": [
+   "Revavroom"
+  ],
+  "tier": "4 Fallen",
+  "ability": "Unbound Spark",
+  "moves": [
+   "Null Pulse",
+   "Heart Eclipse",
+   "Starfall Barrage"
+  ],
+  "purification": "Story only: five Bosses pull five cores",
+  "where": "Starfall Street, Phase 6",
+  "phase": {
+   "heading": "Phase 6 — The Cassiopeia Engine (Colossus)",
+   "format": "The Cassiopeia Engine (ss.star.cassiopeia-engine, XD012) is a Colossus with five cores, one per Starmobile, each a shield bar (four after a Raid 4 Triumph, six after a Failure). It cannot be knocked out while a core is seated.",
+   "timer": "12 turns"
+  }
+ }
+]

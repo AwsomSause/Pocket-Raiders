@@ -45,6 +45,7 @@ Update this file when you add, move or delete a folder or a key file.
 | `src/core/traversal.ts`, `src/core/wanderer.ts` | Ideas W4: map traversal obstacles (data `src/data/traversal.json`) and regional landmarks; the wandering trainer and travelling companion. Set-piece events: `tools/events/w4.ts` (`npm run data:w4-events`). |
 | `src/core/mastery.ts` | Species Mastery: per-species counters and ranks (Seen → Master), family view, unlocks applied to joining Pokémon (`run.mastery`), the Mastered starter set. |
 | `src/core/gameEvents.ts` | Weekly/holiday game events: ISO-week rotation, yearly windows, the Event Archive, holiday calendar, edition keys, themed rules for runs, objectives and once-only rewards (`gameEvents.json`, `npm run data:game-events`). |
+| `src/core/expansion/`, `src/data/expansion/` | Beta 0.6 expansion: settings/run schema (`schema.ts`), data shapes (`data.ts`), generated data `src/data/expansion/*.json` (built by `npm run data:expansion` from `tools/sources/expansion/`; `docs/status/expansion-data-pipeline.md`). |
 | `src/core/directive.ts` | Research Directive: the studied type's progress and bonus (`balance.directive`). |
 | `src/core/wardrobe.ts` | Wardrobe card frames (`src/data/wardrobe.json`): which are open, putting one on. |
 | `src/core/trainerEvolution.ts` | Trainer Evolutions: the six evolved trainers' mechanics (Last Stand, first strike, Champion's Aura, Black Market, Voice of Pokémon, Field Research). |

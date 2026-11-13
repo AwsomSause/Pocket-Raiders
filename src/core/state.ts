@@ -686,6 +686,10 @@ export const BattleStateSchema = z.object({
   turn: z.number().int().min(1),
   /** Revive items used in this battle (capped by balance.itemCaps.revivesPerBattle). */
   revivesUsed: z.number().int().min(0).default(0),
+  /** Healing items used in this battle (capped by balance.itemCaps.healsPerBattle). */
+  healsUsed: z.number().int().min(0).default(0),
+  /** Revives a boss, rival, Elite Four member or Champion used this battle (same cap as the player's). */
+  enemyRevivesUsed: z.number().int().min(0).default(0),
   /** Encore! Hype (core/battle/engine.ts applyHype): the meter, turns of boost left, and whether the run's Hype was loaded in. */
   hype: z.number().int().min(0).default(0),
   hypeTurns: z.number().int().min(0).default(0),
