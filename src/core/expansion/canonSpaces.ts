@@ -97,7 +97,6 @@ const met = (sp: CanonSpace, flags: ReadonlySet<string>, have: ReadonlySet<strin
  * the design, and the pseudo stages were never built). Their data and events stay in the catalog; they are only never offered.
  */
 export const RETIRED_SPACES: ReadonlySet<string> = new Set([
-  'cs.kanto.saffron.labyrinth',
   'cs.kanto.saffron.route25',
   'cs.kanto.saffron.tournament',
 ]);
