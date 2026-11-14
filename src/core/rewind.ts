@@ -13,7 +13,7 @@
 
 import type { Content } from './contentSchema';
 import { maxHp } from './pokemon';
-import type { RunState } from './state';
+import { RunStateSchema, type RunState } from './state';
 import { RewindStateSchema, type PatchOp, type RewindState } from './rewindSchema';
 
 export { RewindStateSchema, type PatchOp, type RewindState };
@@ -36,12 +36,13 @@ function diffInto(a: unknown, b: unknown, path: (string | number)[], out: PatchO
     return;
   }
   if (isObj(a) && isObj(b)) {
-    for (const k of Object.keys(b)) {
+    // Sorted keys: the patch doesn't depend on key order (a save reload can reorder keys).
+    for (const k of Object.keys(b).sort()) {
       if (b[k] === undefined) continue;
       if (a[k] === undefined) out.push({ p: [...path, k], v: jsonCopy(b[k]) });
       else diffInto(a[k], b[k], [...path, k], out);
     }
-    for (const k of Object.keys(a)) if (a[k] !== undefined && b[k] === undefined) out.push({ p: [...path, k], d: 1 });
+    for (const k of Object.keys(a).sort()) if (a[k] !== undefined && b[k] === undefined) out.push({ p: [...path, k], d: 1 });
     return;
   }
   if (typeof a === 'number' && typeof b === 'number' && Number.isNaN(a) && Number.isNaN(b)) return;
@@ -163,7 +164,8 @@ export function rewindTurnsAvailable(content: Content, run: RunState): number {
 
 /** Builds the restored run around a snapshot state: live RNG streams, checkpoint, recorder and rewind block. */
 function rebuild(live: RunState, state: Record<string, unknown>, rewind: RewindState, keepRecorder: boolean): RunState {
-  const out = state as unknown as RunState;
+  // Read back through the save schema, exactly as a reload would, so a rewound run and a reloaded one never differ.
+  const out = RunStateSchema.parse(state);
   out.rng = structuredClone(live.rng);
   if (live.checkpoint) out.checkpoint = structuredClone(live.checkpoint);
   if (keepRecorder && live.recorder) out.recorder = structuredClone(live.recorder);
