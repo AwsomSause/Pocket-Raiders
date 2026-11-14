@@ -115,6 +115,7 @@ describe('Fighting Tournament', () => {
     expect(abilityOf(content, champ)).toBe('champions-fury');
     expect(champ.moves.map((m) => m.id)).toContain('dynamic-punch');
     expect(champ.champion).toBe(true);
+    expect(champ.look).toBe('champion');
     expect(evolutionTarget(content, champ)).toBeNull();
   });
 });

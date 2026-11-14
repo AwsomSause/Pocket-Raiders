@@ -112,6 +112,7 @@ export function applyCanonEffect(content: Content, run: RunState, e: CanonEffect
       if (!mon) return '';
       mon.fixedAbility = 'champions-fury';
       mon.champion = true;
+      if (mon.speciesId === 'primeape') mon.look = 'champion';
       mon.evoBlock = [...new Set([...(mon.evoBlock ?? []), 'annihilape'])];
       const move = 'dynamic-punch';
       if (content.moves.has(move) && !mon.moves.some((m) => m.id === move)) {
