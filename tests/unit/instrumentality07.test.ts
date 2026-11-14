@@ -134,10 +134,12 @@ describe('Mythical Promises (M1)', () => {
     run.party[0]!.hatched = true;
     expect(rollVisit(content, run, 0)).toBeNull();
     expect(rollVisit(content, run, 0)).toBeNull();
-    expect(believed(run, 'zarude')).toBe(false); // entering the first stage already told one
+    expect(believed(run, 'zarude')).toBe(false); // the run's first stage tells nothing
+    expect(run.stagePlan?.lines ?? []).toEqual([]);
     expect(hearTelling(run, 1)).toContain('Rogue of the Jungle');
+    expect(hearTelling(run, 2)).toContain('Rogue of the Jungle');
     expect(believed(run, 'zarude')).toBe(false);
-    expect(hearTelling(run, 2)).toContain('You begin to believe it');
+    expect(hearTelling(run, 3)).toContain('You begin to believe it');
     expect(believed(run, 'zarude')).toBe(true);
     expect(hearTelling(run, 9)).toBeNull();
   });

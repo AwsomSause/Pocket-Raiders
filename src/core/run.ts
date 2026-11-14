@@ -747,7 +747,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   placePlaza(run);
   placeStoryStops(content, run); // Story Run: last, so it can adopt the evil beat's stop
   // Beta 0.7 M1: one Telling of a Mythical per new stage (in-run only), and a Visit offer at the first stage of a region.
-  const telling = hearTelling(run, run.regionIndex * 100 + index);
+  const telling = run.regionIndex === 0 && index === 0 ? null : hearTelling(run, run.regionIndex * 100 + index); // never on a run's very first stage: it keeps that stage's plan empty
   const planLines = [themeLine, ...tailorStage(content, run, signals), telling].filter((l): l is string => !!l);
   snapshotStagePlan(run, planLines);
   run.battle = null;
