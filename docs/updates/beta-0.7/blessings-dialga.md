@@ -1,0 +1,5 @@
+# Legendary Blessings: Dialga (follow-up to #1271)
+
+- **Player gets:** a run whose blessing is Dialga (The Time Keeper) gets the Rewinds system switched on: a Rewind button in singles battles takes the fight back 1 to 5 turns, once per stage, and a wipe rewinds by itself. With Communion (Dialga in party or PC), the Run menu's Blessing row offers the Rite of Time: back to the start of the stage once per run, from the map; the team keeps its levels, moves and species, and items and events of the stage are not kept.
+- **Save:** none. Uses the existing optional `run.expansion.rewind` block (granted with source "blessing") and `run.expansion.blessing`.
+- **Limits:** off with the rest of Blessings (setting off by default). Rewinds are singles only (no button in doubles or triples). The Rite's stage snapshot is the one taken at stage start. The blessing state (Rite used, Sacred Ash regions) is kept live through the Rite so it cannot be used twice. Divine tier now has two blessings (Ho-Oh, Dialga).
