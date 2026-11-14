@@ -158,7 +158,7 @@ export function brainFor(rec: RivalOverhaulState, rivalId: string, runSeed: stri
   if (pityTier !== null && pityTier < 5) return null;
   const l = rec.ledger;
   const switchRate = l && l.turns >= 8 ? Math.min(1, l.switches / l.turns) : 0.25;
-  return { tier: 5, winCondition, personality: rec.personality, seenMoves: l?.moves ?? [], seenSpecies: l?.species ?? [], switchRate, lostLast: rec.marks.includes('beaten-by-you'), seed: `${runSeed}:${rivalId}` };
+  return { tier: 5, winCondition, personality: rec.personality, seenMoves: [...(l?.moves ?? [])], seenSpecies: [...(l?.species ?? [])], switchRate, lostLast: rec.marks.includes('beaten-by-you'), seed: `${runSeed}:${rivalId}` };
 }
 
 /** Writes what a finished battle showed into the ledger (moves, species, turns, switches), capped. */
