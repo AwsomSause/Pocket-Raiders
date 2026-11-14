@@ -179,10 +179,10 @@ describe('Extended Cut: Siege Map for Sinnoh and Hoenn', () => {
     const after = (currentFormat(r2)!.state.anchors as { beaten: boolean }[]).filter((a) => a.beaten).length;
     expect(after).toBe(before + 1);
   });
-  it('the climax director starts in these regions and Johto still cannot', () => {
+  it('the climax director starts in these regions and an unwired region still cannot', () => {
     const r = mk('sg-dir');
     r.expansion = { cut: { climaxCut: 'extended' } };
     expect(beginClimax(r, 'sinnoh')).toBe(true);
-    expect(beginClimax(r, 'johto')).toBe(false);
+    expect(beginClimax(r, 'nowhere')).toBe(false);
   });
 });

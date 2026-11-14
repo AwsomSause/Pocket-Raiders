@@ -84,3 +84,19 @@ describe('Johto and Unova world-state tracks', () => {
     }
   });
 });
+
+describe('Extended Cut for Johto and Unova', () => {
+  it('begins, plays its own phase list, and Kanto-only formats skip themselves', async () => {
+    const { beginClimax, climaxPhases, EXTENDED_REGIONS, nextStep } = await import('../../src/core/arc/climaxExtended');
+    const { startFormat } = await import('../../src/core/formats/registry');
+    for (const region of ['johto', 'unova'] as const) {
+      const r = chooseStarter(content, createRun(content, { runId: `cut-${region}`, seed: `cut-${region}`, archetypeId: 'red', expansion: { worldTracks: true, climaxCut: 'extended' } }), 0);
+      r.regionOrder[r.regionIndex] = region;
+      expect(EXTENDED_REGIONS).toContain(region);
+      expect(beginClimax(r, region)).toBe(true);
+      expect(climaxPhases(region).length).toBeGreaterThan(6);
+      expect(nextStep(r)).not.toBeNull();
+      for (const id of ['siege', 'blackout', 'colossus', 'convoy', 'front'] as const) expect(startFormat(id, { content, run: r })).toBe(false);
+    }
+  });
+});
