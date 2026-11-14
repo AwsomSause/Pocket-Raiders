@@ -2,7 +2,7 @@
 
 Done: a run-wide companion story, built exactly to Kice's spec with the text expanded. Source of the text: `tools/episodes/build-poli-pond.mjs` (writes `src/data/events/poli-pond.json`, 9 events); rules: `src/core/episodes/poliPond.ts`.
 
-- **Cold open** (`pp-cold-open`, forced, from stage 2): a Poliwag joins (3 choices, all start the story). The three lessons and the pond visit are placed on later nodes of the same stage; anything unplayed comes back at the next stage start.
+- **Cold open** (`pp-cold-open`, a callback stop from stage 2): a Poliwag joins (3 choices, all start the story). The three lessons and the pond visit are placed on later nodes of the same stage; anything unplayed comes back at the next stage start.
 - **Shy first battle:** the Poliwag will not attack until its first battle is over.
 - **Three lessons at rests** (aim, footing, standing its ground): each starts with a failed first try, then a retry (attribute check). A lesson taught on the first retry counts; all three first-retry = Exceptional. Each lesson not yet taught is one nerve in normal fights (wild swing every third turn, flinch on its first turn out, tries to run under half HP once) and the same thing as one of the lead bully's tricks in the rematch.
 - **The pond** (`pp-pond-visit`): the Poliwhirl who hangs back; talking to it sets `pp-guilty` (needed for Reconcile).

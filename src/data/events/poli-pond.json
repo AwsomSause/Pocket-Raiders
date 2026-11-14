@@ -22,8 +22,7 @@
    "remembers": [],
    "id": "pp-cold-open",
    "name": "Something Shoved Out of the Reeds",
-   "forced": true,
-   "priority": 62,
+   "callback": true,
    "scene": {
     "cast": [],
     "pokemon": "poliwag",

@@ -21,7 +21,7 @@ const lesson = (id, name, lessonId, attr, intro, retry, win, lose, show, showTex
 
 const events = [
   {
-    ...base, id: 'pp-cold-open', name: 'Something Shoved Out of the Reeds', forced: true, priority: 62, minStage: 2, rarity: 'rare',
+    ...base, id: 'pp-cold-open', name: 'Something Shoved Out of the Reeds', callback: true, minStage: 2, rarity: 'rare',
     requires: [flag('pp-begun', 0, 0)],
     scene: scene('#1f4a63', 'rain'),
     intro: 'The path runs along a pond, and the reeds at its edge are talking in low, ugly voices. Then the reeds part and something small is shoved out of them, hard, and lands on its belly at your feet. A Poliwag. It does not run. It scrambles behind your legs and presses itself against your shins, and you can feel it shaking through your boots. Five round heads rise out of the water one after another, with the slow patience of animals who have done this before. Nobody makes a sound. They are only watching to see what you do.',

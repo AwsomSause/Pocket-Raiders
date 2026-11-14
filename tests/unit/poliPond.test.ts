@@ -23,8 +23,8 @@ describe('Poli-Pond: events', () => {
     expect(ids.sort()).toEqual(['pp-cold-open', 'pp-ending', 'pp-lesson-aim', 'pp-lesson-footing', 'pp-lesson-stand', 'pp-pond-visit', 'pp-rematch', 'pp-rematch-exceptional', 'pp-return-join'].sort());
     for (const id of ids) for (const c of content.events.get(id)!.choices) for (const o of [c.success, c.failure]) for (const e of [...(o?.effects ?? []), ...(o?.battle?.win ?? [])]) if (e.kind === 'addEvent') expect(content.events.has(e.eventId)).toBe(true);
   });
-  it('the cold open is forced, the lessons are rest callbacks, the exceptional rematch evolves the Poliwag mid-fight', () => {
-    expect(content.events.get('pp-cold-open')!.forced).toBe(true);
+  it('the cold open is placed at the first stage from 2 (a callback, not a required forced stop), the lessons are rest callbacks, the exceptional rematch evolves the Poliwag mid-fight', () => {
+    expect(content.events.get('pp-cold-open')).toMatchObject({ callback: true, forced: false });
     for (const l of ['aim', 'footing', 'stand']) expect(content.events.get(`pp-lesson-${l}`)).toMatchObject({ stop: 'rest', callback: true });
     const b = content.events.get('pp-rematch-exceptional')!.choices[0]!.success.battle as unknown as { rule: Record<string, unknown> };
     expect(b.rule).toMatchObject({ pondDuel: true, evolveMid: true, noSwitch: true });
