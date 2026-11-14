@@ -245,7 +245,7 @@ import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
 import { recapRegion, tellAct } from './campaign/director';
-import { applyTrackToBattle, healStopShut, trackEffects, trackShopFactor, trackWildWeight } from './expansion/trackRun';
+import { applyTrackToBattle, healStopShut, trackEffects, trackForgetStock, trackShopFactor, trackWildWeight } from './expansion/trackRun';
 import { freshClock, migrationWildWeight, periodOf, periodWildWeight, shopHoursMultiplier, stepClock, tideShopMultiplier, tideWildWeight } from './clock';
 import { bulkTotal, currentShopType, haggleWins, pokenetDeal, shopTypeAt, typedStock, typePriceFactor } from './shopTypes';
 import { finalRivalLine, tellCampfire } from './story/highHype';
@@ -2612,7 +2612,7 @@ export function shopStock(content: Content, run: Pick<RunState, 'badges' | 'arch
   const selling = stock.filter((e) => (black || open(e) || early.includes(e)) && allowed(e));
   // Shops redesign: each kind of shop sells its own part of that (core/shopTypes.ts).
   const locked = stock.filter((e) => !selling.includes(e) && allowed(e)).sort((a, b) => shopBadgesNeeded(content, run, a) - shopBadgesNeeded(content, run, b));
-  return typedStock(content, run, selling, locked) as Content['shop'];
+  return trackForgetStock(content, run as Partial<RunState>, typedStock(content, run, selling, locked) as Content['shop']) as Content['shop'];
 }
 
 /** Whether an entry is on sale only through the Black Market (your badges haven't opened it). */
@@ -3351,7 +3351,7 @@ function awardExperience(content: Content, run: RunState, events: BattleEvent[])
       if (result.levelsGained > 0) {
         out.push({ type: 'levelUp', uid, level: result.newLevel });
         growthOnLevelUp(content, mon, result.newLevel - result.levelsGained);
-        changeFriendship(content, mon, content.balance.friendship.perLevel * result.levelsGained, effects.friendship);
+        changeFriendship(content, mon, content.balance.friendship.perLevel * result.levelsGained, effects.friendship * trackEffects(content, run).friendshipFactor);
       }
       for (const moveId of result.learnedMoves) out.push({ type: 'learnedMove', uid, moveId });
       for (const moveId of result.skippedMoves) {
@@ -3516,7 +3516,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (battle.rivalId) count(run, 'rivalBattlesWon');
     const { perBattleWon, perBossWon } = content.balance.friendship;
     const boss = classId === GYM_LEADER_CLASS || classId === ELITE_FOUR_CLASS || classId === CHAMPION_CLASS;
-    const gainMultiplier = runAttributeEffects(content, run).friendship;
+    const gainMultiplier = runAttributeEffects(content, run).friendship * trackEffects(content, run).friendshipFactor; // Sinnoh: the lakes' Feeling halves it
     for (const mon of run.party) {
       if (mon.hp > 0 && battle.participants.includes(mon.uid)) changeFriendship(content, mon, boss ? perBossWon : perBattleWon, gainMultiplier);
     }

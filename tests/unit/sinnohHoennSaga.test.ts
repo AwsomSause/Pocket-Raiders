@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { expansionData } from '../../src/data/expansion';
 import { EVENT_MEETINGS, TRACK_MEETINGS_BY_REGION } from '../../src/core/expansion/cast/meet';
 import { hoennEffects, sinnohEffects, trackEffectsFor } from '../../src/core/expansion/track';
-import { advanceTrack, applyTrackToBattle, hoennNodeWeather, trackBannerLine, trackEffects } from '../../src/core/expansion/trackRun';
+import { advanceTrack, applyTrackToBattle, hoennNodeWeather, trackForgetStock, trackBannerLine, trackEffects } from '../../src/core/expansion/trackRun';
 import { trackPage } from '../../src/core/expansion/trackView';
 import { createBattle } from '../../src/core/battle/engine';
 import { chooseStarter, createRun } from '../../src/core/run';
@@ -67,6 +67,23 @@ describe('Sinnoh track effects', () => {
     applyTrackToBattle(content, r);
     expect(r.battle!.noPlayerCrit).toBeUndefined();
     expect(r.battle!.accuracyMult).toBeUndefined();
+  });
+});
+
+describe('Sinnoh lakes and hum', () => {
+  it('step 3 halves friendship gains; step 4 forgets one shop item (stable per run)', () => {
+    expect(sinnohEffects(2).friendshipFactor).toBe(1);
+    expect(sinnohEffects(3).friendshipFactor).toBe(0.5);
+    expect(sinnohEffects(3).shopForgets).toBe(false);
+    expect(sinnohEffects(4).shopForgets).toBe(true);
+    const r = run('sin-shop', 'sinnoh');
+    const stock = ['a', 'b', 'c', 'd'];
+    expect(trackForgetStock(content, r, stock)).toEqual(stock);
+    step(r, 'sinnoh', 4);
+    const some = trackForgetStock(content, r, stock);
+    expect(some).toHaveLength(3);
+    expect(trackForgetStock(content, r, stock)).toEqual(some);
+    expect(trackForgetStock(content, { seed: 'x' }, stock)).toEqual(stock);
   });
 });
 

@@ -62,6 +62,10 @@ export interface TrackEffects {
   nightAccuracy: number;
   /** Sinnoh (Lake Valor taken, Will): the player's Pokémon cannot land critical hits. */
   noPlayerCrit: boolean;
+  /** Sinnoh (Lake Verity taken, Feeling): friendship gains from battles and levels are multiplied by this (1 = normal). */
+  friendshipFactor: number;
+  /** Sinnoh (The Hum): every shop has forgotten one item in its stock. */
+  shopForgets: boolean;
   /** Hoenn (The Long Weather): how the sky is set in battles here. */
   weather: 'none' | 'split' | 'tilt' | 'swing' | 'awakening';
 }
@@ -72,7 +76,7 @@ export interface TrackConfig {
   wildShrink: number;
 }
 
-export const NO_EFFECTS: TrackEffects = { shopMarkup: 0, healShutAtNight: false, roadblocks: false, wildShrink: 0, adverts: false, centerHeal: 1, nightAccuracy: 1, noPlayerCrit: false, weather: 'none' };
+export const NO_EFFECTS: TrackEffects = { shopMarkup: 0, healShutAtNight: false, roadblocks: false, wildShrink: 0, adverts: false, centerHeal: 1, nightAccuracy: 1, noPlayerCrit: false, friendshipFactor: 1, shopForgets: false, weather: 'none' };
 
 /** Kanto's step table (Small Print, House Rules, Closed Roads, Export, Under New Management). */
 export function kantoEffects(step: number, cfg: TrackConfig): TrackEffects {
@@ -85,11 +89,11 @@ export function kantoEffects(step: number, cfg: TrackConfig): TrackEffects {
     ...REST,
   };
 }
-const REST = { centerHeal: 1, nightAccuracy: 1, noPlayerCrit: false, weather: 'none' as const };
+const REST = { centerHeal: 1, nightAccuracy: 1, noPlayerCrit: false, friendshipFactor: 1, shopForgets: false, weather: 'none' as const };
 
 /** Sinnoh's step table (Quiet, Brownout, The Lakes, The Hum, Zero Hour). Step 1 and the lake memory/feeling rules live in events only. */
 export function sinnohEffects(step: number): TrackEffects {
-  return { ...NO_EFFECTS, centerHeal: step >= 2 ? 0.8 : 1, nightAccuracy: step >= 2 ? 0.95 : 1, noPlayerCrit: step >= 3, adverts: step >= 5 };
+  return { ...NO_EFFECTS, centerHeal: step >= 2 ? 0.8 : 1, nightAccuracy: step >= 2 ? 0.95 : 1, noPlayerCrit: step >= 3, friendshipFactor: step >= 3 ? 0.5 : 1, shopForgets: step >= 4, adverts: step >= 5 };
 }
 
 /** Hoenn's step table (Drizzle and Drought, Blue Dawn Red Dusk, The Swing, Spill, The Awakening). Berry trees and ferries are not built. */

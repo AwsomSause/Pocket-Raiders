@@ -60,6 +60,14 @@ export function trackBannerLine(content: Content, run: RunState): string {
 
 const flagCount = (run: RunState, key: string): number => Number(run.story.flags[`ev:${key}`] ?? 0);
 
+/** Sinnoh's Hum: a shop's stock with one entry forgotten (a hash of the seed and region, never the same twice in a row). Any run shape without a region returns the stock as it is. */
+export function trackForgetStock<T>(content: Content, run: Partial<RunState>, stock: readonly T[]): readonly T[] {
+  if (!run.regionOrder || run.regionIndex === undefined || !run.expansion?.tracks || stock.length < 2 || !run.seed) return stock;
+  if (!trackEffects(content, run as RunState).shopForgets) return stock;
+  const skip = fnv1a(`${run.seed}::track:forget::${run.regionIndex}`) % stock.length;
+  return stock.filter((_, i) => i !== skip);
+}
+
 /** Hoenn: the weather a node's battles get at this track step, or null. No random numbers: a hash of the seed and node. */
 export function hoennNodeWeather(run: RunState, step: number, nodeId: string): 'rain' | 'sun' | null {
   const h = fnv1a(`${run.seed}::track:weather::${run.regionIndex}::${run.stage?.index ?? 0}::${nodeId}`);

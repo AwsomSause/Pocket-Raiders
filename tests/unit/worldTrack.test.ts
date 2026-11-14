@@ -67,7 +67,7 @@ describe('Kanto effects', () => {
 
   it('never carries anything that could raise an enemy (closed list of fields)', () => {
     const keys = Object.keys(kantoEffects(5, cfg)).sort();
-    expect(keys).toEqual(['adverts', 'centerHeal', 'healShutAtNight', 'nightAccuracy', 'noPlayerCrit', 'roadblocks', 'shopMarkup', 'weather', 'wildShrink']);
+    expect(keys).toEqual(['adverts', 'centerHeal', 'friendshipFactor', 'healShutAtNight', 'nightAccuracy', 'noPlayerCrit', 'roadblocks', 'shopForgets', 'shopMarkup', 'weather', 'wildShrink']);
     expect(trackEffectsFor('johto', 5, cfg).shopMarkup).toBe(0);
   });
 
