@@ -73,7 +73,7 @@ describe('Extended Cut for Alola and Paldea', () => {
     expect(EXTENDED_REGIONS).toEqual(expect.arrayContaining(['kanto', 'alola', 'paldea']));
     expect(beginClimax(extended('alola'), 'alola')).toBe(true);
     expect(beginClimax(extended('paldea'), 'paldea')).toBe(true);
-    expect(beginClimax(extended('johto'), 'johto')).toBe(false);
+    expect(beginClimax(extended('hoenn'), 'hoenn')).toBe(false);
   });
   it('formats with only Kanto content do not start in these regions', () => {
     for (const region of ['alola', 'paldea']) {
