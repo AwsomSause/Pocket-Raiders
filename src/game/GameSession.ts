@@ -55,6 +55,7 @@ import { claim } from '../core/quests';
 import { claimCollectionMilestones } from '../core/collection';
 import * as Run from '../core/run';
 import { rewindBattle } from '../core/rewind';
+import { useBlessingRite } from '../core/blessings';
 import { markRumorShown, nodeHint } from '../core/worldSim/tick';
 import { applyNursery, type NurseryChoice } from '../core/nursery';
 import { applyFormShift } from '../core/formShift';
@@ -274,7 +275,7 @@ export class GameSession {
     if (story && next.starter && !starterOverride?.length) starterOverride = [next.starter];
     if (story && (next.starter || next.backstory)) this.profile = { ...this.profile, story: clearNextRun(this.profile.story) };
     const opts = { seed, archetypeId, campaignId, prep, rules, attributes: this.profile.attributes, mastery: this.profile.mastery, gameEvents: rules?.weeks === false ? [] : activeGameEvents(this.content, new Date()).map((a) => a.edition), raidTierUnlocked: this.profile.best.raidBestTier ?? 0, licenses: runBankFlags(this.profile), candyPerks: this.profile.candyPerks, ownedTrainers: this.profile.unlockedArchetypes, dexCaught: dexCaughtCount(this.profile), mentorBonds: this.profile.mentorBonds, npcMemory: this.profile.npcMemory, treasureHunt: this.profile.treasureHunt, ...(story ? { protagonist: { look: me.look, name: me.nameSet ? me.name : '', pronouns: me.pronouns, ...(next.backstory ? { backstory: next.backstory } : {}) } } : {}) };
-    this.run = Run.createRun(this.content, { ...opts, expansion: { stagePacing: this.settings.expansion.stagePacing, evolutionEncounters: this.settings.expansion.evolutionEncounters, leagueCounterPick: this.settings.expansion.leagueCounterPick, kantoCanon: this.settings.expansion.kantoSevii, grandArc: this.settings.expansion.grandArcEnabled, worldTracks: this.settings.expansion.worldTracks, eventsDensity: this.settings.expansion.eventsDensity, climaxCut: this.settings.expansion.climaxCut, storyTraits: this.settings.expansion.storyTraits, rewinds: this.settings.expansion.rewinds, nodeMenus: this.settings.expansion.nodeMenus, blessings: this.settings.expansion.blessingsEnabled, ultraBeasts: this.settings.expansion.ultraBeastsEnabled, secondChancePct: this.settings.expansion.secondChancePct, heatedMoments: this.settings.expansion.heatedMoments, mythicalPromises: this.settings.expansion.mythicalsEnabled }, ...(story && starterOverride?.length ? { starterOverride } : {}), runId: randomId('run'), pastPokemon: this.profile.pastPokemon, rivalArchive: this.profile.rivalArchive, runHistory: this.profile.runHistory });
+    this.run = Run.createRun(this.content, { ...opts, expansion: { finale: this.settings.expansion.finaleEnabled, doomEpilogue: this.settings.expansion.doomEpilogue, stagePacing: this.settings.expansion.stagePacing, evolutionEncounters: this.settings.expansion.evolutionEncounters, leagueCounterPick: this.settings.expansion.leagueCounterPick, kantoCanon: this.settings.expansion.kantoSevii, grandArc: this.settings.expansion.grandArcEnabled, worldTracks: this.settings.expansion.worldTracks, eventsDensity: this.settings.expansion.eventsDensity, climaxCut: this.settings.expansion.climaxCut, storyTraits: this.settings.expansion.storyTraits, rewinds: this.settings.expansion.rewinds, nodeMenus: this.settings.expansion.nodeMenus, blessings: this.settings.expansion.blessingsEnabled, ultraBeasts: this.settings.expansion.ultraBeastsEnabled, secondChancePct: this.settings.expansion.secondChancePct, heatedMoments: this.settings.expansion.heatedMoments, mythicalPromises: this.settings.expansion.mythicalsEnabled }, ...(story && starterOverride?.length ? { starterOverride } : {}), runId: randomId('run'), pastPokemon: this.profile.pastPokemon, rivalArchive: this.profile.rivalArchive, runHistory: this.profile.runHistory });
     const grants = startGrants(this.content, this.profile, archetypeId);
     applyStartGrants(this.content, this.run, this.profile);
     // Memories: what earlier runs left behind (ghosts, keepsakes, old friends, the chosen heirloom). Picked from the profile, not rolled.
@@ -665,6 +666,15 @@ export class GameSession {
     this.run = back;
     this.persistRun();
     return true;
+  }
+
+  /** Beta 0.7 Legendary Blessings: uses the run's Rite (Tapu Lele's heal, Dialga's stage rewind). Returns the message, or null when it can't be used. */
+  useBlessingRite(): string | null {
+    const result = useBlessingRite(this.content, this.requireRun());
+    if (!result) return null;
+    this.run = result.run;
+    this.persistRun();
+    return result.message;
   }
 
   takeTurn(action: PlayerAction): Run.TurnResult {

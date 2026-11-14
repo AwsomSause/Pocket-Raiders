@@ -6,6 +6,7 @@ import { effectiveAttributes } from './attributes';
 import { runStamps } from './recap';
 import { memoryLines } from './overhaul/memories';
 import { aftermathLines } from './overhaul/aftermath';
+import { epilogueEndLines } from './grandArc/finale';
 
 export type EndingId = 'storm' | 'untouched' | 'rivals' | 'champion';
 
@@ -37,7 +38,7 @@ export function buildEpilogue(content: Content, run: RunState): string[] {
   if (Number(f['ev:charity'] ?? 0) > 0) out.push('The orphanage ledger keeps your name at the top of its page.');
   if (Number(f['ev:oath-steel'] ?? 0) > 0 || Number(f['ev:oath-mercy'] ?? 0) > 0) out.push('The shrine keeper marks your oath as kept.');
   if (Number(f['ev:umbrella-friend'] ?? 0) > 0) out.push('Somewhere, a stranger remembers the umbrella you shared.');
-  out.push(...endingVariationLines(content, run), ...secretEndingLines(run), ...factionLines(run), ...memoryLines(content, run), ...aftermathLines(run));
+  out.push(...endingVariationLines(content, run), ...secretEndingLines(run), ...factionLines(run), ...memoryLines(content, run), ...aftermathLines(run), ...epilogueEndLines(run));
   return out;
 }
 

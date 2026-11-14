@@ -78,7 +78,7 @@ describe('Dossier', () => {
     meetFromEvent(r, { id: 'x', canon: 'cs.kanto.fuchsia.safari' });
     meetFromEvent(r, { id: 'xe.kanto.appointment' });
     meetFromTrack(r, 'kanto', 3);
-    meetFromTrack(r, 'johto', 5);
+    meetFromTrack(r, 'paldea', 5);
     meetFromJoin(r, 'rocket');
     meetFromJoin(r, 'aqua');
     expect(Object.keys(r.expansion.dossier).sort()).toEqual(['sc.rocket.matori', 'sc.rocket.player-agent', 'sc.rocket.rudd', 'sc.rocket.triad-koga', 'sc.rocket.triad-surge', 'sc.rocket.vesper']);

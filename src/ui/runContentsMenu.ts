@@ -1,7 +1,7 @@
 // "What's in this run": every rule, pick, world effect and event on for this run. Opens from the map's menu.
 
 import type Phaser from 'phaser';
-import { blessingRite, getBlessing, syncCommunion, useBlessingRite } from '../core/blessings';
+import { blessingRite, getBlessing, syncCommunion } from '../core/blessings';
 import { runContents } from '../core/runContents';
 import { services } from '../game/services';
 import type { FieldMenuHost } from './fieldMenus';
@@ -36,11 +36,10 @@ export function openRunContentsMenu(host: FieldMenuHost): void {
     })),
     onSelect: (i) => {
       if (i !== 0 || blessingRow.length === 0 || !rite?.ready) return;
-      const message = useBlessingRite(content, run);
+      const message = session.useBlessingRite();
       if (!message) return;
       picker.close();
       host.setPicker(null);
-      session.saveRunNow();
       host.changed(message);
     },
     onBack: () => { picker.close(); host.setPicker(null); },

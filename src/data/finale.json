@@ -1,0 +1,60 @@
+{
+  "companions": [
+    { "id": "remnants", "name": "The Rocket Remnants", "who": "Jessie, James and Meowth", "flag": "rocket-trio-debt", "role": "Their balloon takes out the Carrier Beat in the finale.", "postcards": ["A bottle cap arrives with a drawing of a cat in a balloon. \"We are NOT lost,\" it says. It is signed three times.", "A crate of mismatched Poké Balls turns up at the Center. The note says only: \"Owed.\""] },
+    { "id": "wes", "name": "Wes", "who": "the man on the wall", "flag": "wes-met", "role": "Stands beside you at the gate in the finale.", "postcards": ["A plain card with one line: \"Still out. Still walking.\"", "A postcard of a quiet harbor. On the back, in careful letters: \"Somebody I know would have liked it here.\""] },
+    { "id": "rui", "name": "Rui", "who": "a girl who hears hearts", "flag": "comp-rui", "role": "Helps your Pokémon in a fight, and lights the Breather in the finale.", "postcards": ["A pressed flower. \"They are lighter when someone listens,\" Rui writes.", "A tiny drawing of your lead Pokémon, smiling. She has never met you in a city that has one."] },
+    { "id": "krane", "name": "Professor Krane", "who": "a scientist with a card table", "flag": "comp-krane", "role": "Carries the Purify Chamber: it counts as one Data ROM at XD001.", "postcards": ["A scrap of graph paper with a diagram and the words \"held together with tape\".", "A short note: \"It turns. That's most of science. Waiting near something.\""] },
+    { "id": "chobin", "name": "Chobin", "who": "a very serious boy", "flag": "comp-chobin", "role": "Drives the boat: the Whirlpool Gate is held.", "postcards": ["A sketch of a boat, five Pokémon, and the words \"CHOBIN IS DRIVING\" in capital letters.", "A drawing of your party, better than it has any right to be. He pretends he did not send it."] },
+    { "id": "looker", "name": "Detective Looker", "who": "of the International Police", "flag": "looker-evidence", "role": "Holds the Cliff Stair, and takes Greevil's number as evidence.", "postcards": ["A card with a badge stamped on it. \"Your notes were enough. Thank you.\"", "A very short report, in a very neat hand, that ends: \"Be careful.\""] }
+  ],
+  "approaches": [
+    { "id": "gate", "name": "The Whirlpool Gate", "heldBy": ["companion:chobin", "flag:hoenn-titans-rest"], "ifLost": "The Crossing has three battles, not two." },
+    { "id": "flats", "name": "The Lava Flats", "heldBy": ["flag:rocket-blaine-ally", "flag:paldea-engine-pulled"], "ifLost": "The Climb has one more wave of Cipher Peons." },
+    { "id": "lift", "name": "The Sky Lift", "heldBy": ["flag:lance-allied", "flag:n-with-dragon", "flag:leon-allied"], "ifLost": "The Climb has one more wave of Cipher Peons." },
+    { "id": "stair", "name": "The Cliff Stair", "heldBy": ["companion:looker", "flag:cynthia-allied", "flag:nanu-allied", "flag:diantha-allied"], "ifLost": "The Climb has one more wave of Cipher Peons." }
+  ],
+  "apexFlags": ["rocket.x.m2"],
+  "doom": {
+    "districts": [
+      { "id": "rocket-row", "name": "Rocket Row", "theme": "Game Corner arcades, shuttered Silph floors, a dusty radio studio", "teams": ["rocket", "rocket-remnants"] },
+      { "id": "tide-and-ember", "name": "Tide and Ember", "theme": "Flooded caves, volcano rims, two stolen Orbs", "teams": ["aqua", "magma"] },
+      { "id": "chain-quarter", "name": "Chain Quarter", "theme": "Pillar stairs, red-chain markets", "teams": ["galactic"] },
+      { "id": "frost-crown", "name": "Frost Crown", "theme": "Frozen bridges, frigate wrecks", "teams": ["plasma"] },
+      { "id": "weapon-yard", "name": "Weapon Yard", "theme": "Lab ruins, cafes with locked basements", "teams": ["flare"] },
+      { "id": "po-quarter", "name": "Po Quarter", "theme": "Graffiti streets, pink-walled mansions", "teams": ["skull", "aether"] },
+      { "id": "wormhole-beach", "name": "Wormhole Beach", "theme": "Paradise gates, Snag Machine stalls", "teams": ["aether", "snagem"] },
+      { "id": "plant-and-tower", "name": "Plant and Tower", "theme": "An energy plant, a lit-up tower, a fan hall", "teams": ["yell"] },
+      { "id": "starfall-avenue", "name": "Starfall Avenue", "theme": "Parked Starmobiles, five Bases", "teams": ["star"] },
+      { "id": "black-market-mile", "name": "Black Market Mile", "theme": "A hub of fences and brokers", "teams": [] },
+      { "id": "pale-garden", "name": "The Pale Garden", "theme": "Where purification sites hide. Always safe", "teams": [] },
+      { "id": "wire-row", "name": "Wire Row", "theme": "Hacker dens and rumor mills", "teams": [] },
+      { "id": "crown-yard", "name": "Crown Yard", "theme": "Where the strongest teams meet", "teams": ["cipher"] },
+      { "id": "undercroft", "name": "The Undercroft", "theme": "The final district", "teams": [] }
+    ],
+    "gyms": [
+      { "slot": 1, "source": "executive", "district": "rocket-row", "rule": "Standard", "types": ["dark", "poison"] },
+      { "slot": 2, "source": "specialist", "district": "tide-and-ember", "rule": "Standard", "types": ["water", "fire"] },
+      { "slot": 3, "source": "pardoned", "district": "chain-quarter", "rule": "Mercy battle: your Pokémon are healed afterwards", "types": ["psychic", "ghost"] },
+      { "slot": 4, "source": "exposed", "district": "frost-crown", "rule": "Ambush", "types": ["dark", "ice"] },
+      { "slot": 5, "source": "defector", "district": "weapon-yard", "rule": "Standard", "types": ["fairy", "steel"] },
+      { "slot": 6, "source": "rival", "district": "po-quarter", "rule": "Rival callback", "types": ["normal", "fighting"] },
+      { "slot": 7, "source": "leader", "district": "crown-yard", "rule": "Doctrine active", "types": ["dragon", "dark"] },
+      { "slot": 8, "source": "chair", "district": "undercroft", "rule": "Final", "types": ["dark", "ghost", "psychic"] }
+    ],
+    "leaders": [
+      { "name": "Sable Marrow", "title": "Gym 1" },
+      { "name": "Ivo Gantry", "title": "Gym 2" },
+      { "name": "Wren Ashcombe", "title": "Gym 3" },
+      { "name": "Doctor Pell Moth", "title": "Gym 4" },
+      { "name": "Cass Verrick", "title": "Gym 5" },
+      { "name": "Tamsin Rook", "title": "Gym 6" },
+      { "name": "Orla Quillfeather", "title": "Gym 7" },
+      { "name": "The Chairperson", "title": "The Undercroft" }
+    ],
+    "levelsPerDoomLevel": 2,
+    "districtDrop": 0.2,
+    "ambushBase": 20,
+    "ambushPerLevel": 3,
+    "ambushCap": 35
+  }
+}
