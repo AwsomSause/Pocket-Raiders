@@ -3729,7 +3729,8 @@
          "kind": "addEvent",
          "eventId": "cs-kanto-cerulean-squad-n2"
         }
-       ]
+       ],
+       "look": "squad-lesser"
       }
      }
     }
@@ -3768,7 +3769,8 @@
          "kind": "addEvent",
          "eventId": "cs-kanto-cerulean-squad-n3"
         }
-       ]
+       ],
+       "look": "squad-leader"
       }
      }
     }
@@ -3813,7 +3815,8 @@
          "kind": "addEvent",
          "eventId": "cs-kanto-cerulean-squad-reward"
         }
-       ]
+       ],
+       "look": "squad-leader"
       }
      }
     },
@@ -3866,7 +3869,8 @@
          "squirtle"
         ],
         "levelBonus": 0,
-        "ability": "contrary"
+        "ability": "contrary",
+        "look": "squad-leader"
        },
        {
         "kind": "teachMove",

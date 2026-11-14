@@ -4,6 +4,7 @@
 
 import { NATURE_IDS } from './natures';
 import { z } from 'zod';
+import { ANIME_LOOKS } from './animeLooks';
 import { GRADES as PROMPT_GRADES } from './interaction/prompt';
 import { SpectacleConfigSchema } from './battle/spectacleConfig';
 import { W1ConfigSchema } from './battle/w1Rules';
@@ -3009,7 +3010,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('research'), amount: z.number().int().positive() }),
   z.object({ kind: z.literal('levels'), amount: z.number().int().positive(), who: z.enum(['lead', 'party', 'weakest']).default('lead') }),
   /** A Pokémon joins (or goes to storage when the party is full): a listed species, or one of the types, or the stage's theme. */
-  z.object({ kind: z.literal('join'), species: z.array(z.string()).default([]), types: z.array(TypeNameSchema).default([]), levelBonus: z.number().int().default(0), shinyMultiplier: z.number().min(1).default(1), shadow: z.boolean().default(false), blissful: z.boolean().default(false), hiddenAbility: z.boolean().default(false), /** It joins with this ability instead of its own (Squad Squirtle: Contrary). */ ability: z.string().optional(), /** Beta 0.6 Vermilion: it joins at exactly this level (Flight North's Caterpie is level 5), not the stage's event level. */ level: z.number().int().min(1).max(100).optional(), /** Beta 0.6 Vermilion: it joins knowing these moves too (the Kaiju Tentacool's Liquidation); a full moveset loses its last move. */ moves: z.array(z.string()).max(4).default([]), /** Beta 0.6 Vermilion: it goes straight into the party with no accept prompt (a companion for a stage; the lone Bug-type of Flight North). */ direct: z.boolean().default(false) }),
+  z.object({ kind: z.literal('join'), species: z.array(z.string()).default([]), types: z.array(TypeNameSchema).default([]), levelBonus: z.number().int().default(0), shinyMultiplier: z.number().min(1).default(1), shadow: z.boolean().default(false), blissful: z.boolean().default(false), hiddenAbility: z.boolean().default(false), /** It joins with this ability instead of its own (Squad Squirtle: Contrary). */ ability: z.string().optional(), /** Anime Forms art (core/animeLooks.ts; the Squad Squirtle). Presentation only. */ look: z.enum(ANIME_LOOKS).optional(), /** Beta 0.6 Vermilion: it joins at exactly this level (Flight North's Caterpie is level 5), not the stage's event level. */ level: z.number().int().min(1).max(100).optional(), /** Beta 0.6 Vermilion: it joins knowing these moves too (the Kaiju Tentacool's Liquidation); a full moveset loses its last move. */ moves: z.array(z.string()).max(4).default([]), /** Beta 0.6 Vermilion: it goes straight into the party with no accept prompt (a companion for a stage; the lone Bug-type of Flight North). */ direct: z.boolean().default(false) }),
   /** A seedling grows in the Berry Garden (core/berries.ts): a held-berry plot, optionally mutated; the garden must have room. */
   z.object({ kind: z.literal('seedling'), berry: z.string().min(1), mutated: z.boolean().default(false) }),
   /** A sanctuary's blessing (shadowWorld.json): a few battles of a small, narrow boost. */
@@ -3265,6 +3266,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     chain: z.number().int().min(1).max(3).default(1),
     /** The wild Pokémon knows these moves (replacing its last ones): Route 25's Primeape uses Rage. */
     foeMoves: z.array(z.string()).max(2).optional(),
+    /** Anime Forms art for the foe (core/animeLooks.ts; the Squirtle Squad). Presentation only. */
+    look: z.enum(ANIME_LOOKS).optional(),
     /** Beta 0.6: a named special Pokémon (dossier id, e.g. sv.rocket.roadblock) is the foe, so it fights with its signature trait. */
     special: z.string().optional(),
     win: z.array(EventEffectSchema).default([]),

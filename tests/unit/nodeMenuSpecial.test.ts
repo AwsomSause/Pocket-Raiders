@@ -6,6 +6,9 @@ import { RunStateSchema, type MapNode, type RunState } from '../../src/core/stat
 import { SPECIAL } from '../../src/core/nodeMenu/special/data';
 import { arriveAtNode, onSkipped, pickSpecial, rivalSpoilLevels, specialEntriesFor, specialState, spendRivalSpoils } from '../../src/core/nodeMenu/special';
 import { isGiftable } from '../../src/core/events';
+import { closeNodeMenu, currentMenu, ensureNodeMenu } from '../../src/core/nodeMenu/flow';
+import { playSpecialEntry } from '../../src/core/nodeMenu/special/menu';
+import { autoplay } from './autoplay';
 import { content } from './helpers';
 
 const freshRun = (seed = 'nm-special') => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red' }), 0);
@@ -150,5 +153,53 @@ describe('rolls and saves', () => {
     const run = freshRun();
     arriveAtNode(ctx(run, 2));
     expect(run.expansion?.nodeMenuSpecial).toBeUndefined();
+  });
+});
+
+describe('in the node menu (composer hooks)', () => {
+  /** Plays seeded runs with menus on and returns the first node whose menu holds a special card. */
+  function menuWithSpecial(): { run: RunState; ids: string[] } {
+    for (let i = 0; i < 40; i++) {
+      let hit: { run: RunState; ids: string[] } | null = null;
+      autoplay({ seed: `nms-${i}`, steps: 500, smart: true, healOnMap: true, expansion: { nodeMenus: true }, onStep: (r) => {
+        if (hit || r.phase !== 'map' || r.stage?.kind !== 'stage' || !r.stage.current) return undefined;
+        const run = ensureNodeMenu(content, r);
+        const menu = currentMenu(run);
+        if (!menu) return undefined;
+        expect(menu.entries.filter((e) => e.kind !== 'encounter').length).toBeLessThanOrEqual(5);
+        const ids = menu.entries.filter((e) => e.kind === 'special').map((e) => e.id);
+        if (ids.length) hit = { run, ids };
+        return undefined;
+      } });
+      if (hit) return hit;
+    }
+    throw new Error('no special card in 40 seeds');
+  }
+
+  it('special cards show up in menus, play once, and close the other half of a fork', () => {
+    const { run, ids } = menuWithSpecial();
+    const id = ids.find((x) => !x.endsWith(':end')) ?? ids[0]!;
+    const played = playSpecialEntry(content, run, id);
+    expect(played.text.length).toBeGreaterThan(0);
+    const menu = currentMenu(played.run)!;
+    expect(menu.entries.find((e) => e.id === id)!.done).toBe(true);
+    if (id.startsWith('sp:fork:')) expect(menu.entries.filter((e) => e.kind === 'special' && e.id.startsWith(id.slice(0, -1))).every((e) => e.done)).toBe(true);
+    expect(() => playSpecialEntry(content, played.run, id)).toThrow();
+  });
+
+  it('leaving a node with a skipped card may let a rival take it', () => {
+    let taken = 0;
+    for (let i = 0; i < 25; i++) {
+      autoplay({ seed: `nmr-${i}`, steps: 300, smart: true, healOnMap: true, expansion: { nodeMenus: true }, onStep: (r) => {
+        if (r.phase !== 'map' || r.stage?.kind !== 'stage' || !r.stage.current) return undefined;
+        const run = structuredClone(ensureNodeMenu(content, r));
+        if (!currentMenu(run)) return undefined;
+        if (!run.story.rivals.length) addRival(run);
+        closeNodeMenu(content, run);
+        taken += (run.expansion?.nodeMenuSpecial?.spoils ?? []).length;
+        return undefined;
+      } });
+    }
+    expect(taken).toBeGreaterThan(0);
   });
 });

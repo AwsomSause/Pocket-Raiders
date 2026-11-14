@@ -1,0 +1,58 @@
+{
+  "sizeWeights": { "2": 30, "3": 40, "4": 25, "5": 5 },
+  "picks": { "base": 1, "bonus": 2 },
+  "maxRequired": 2,
+  "micro": [
+    {
+      "id": "forage",
+      "name": "Forage",
+      "category": "treasure",
+      "blurb": "Search the bushes for a berry.",
+      "effects": [{ "kind": "itemFrom", "ids": ["oran-berry", "pecha-berry", "cheri-berry", "rawst-berry", "aspear-berry", "chesto-berry", "persim-berry", "leppa-berry"] }]
+    },
+    {
+      "id": "catnap",
+      "name": "Catnap",
+      "category": "recovery",
+      "blurb": "A short rest in the shade. Heals 15% HP.",
+      "effects": [{ "kind": "heal", "share": 0.15 }]
+    },
+    {
+      "id": "odd-job",
+      "name": "Odd job",
+      "category": "social",
+      "blurb": "Help a passer-by for a little pocket money.",
+      "effects": [{ "kind": "money", "amount": 120 }]
+    },
+    {
+      "id": "spar",
+      "name": "Light spar",
+      "category": "training",
+      "blurb": "A friendly practice round. Your lead grows a little fonder of you.",
+      "effects": [{ "kind": "friendship", "amount": 3, "who": "lead" }]
+    },
+    {
+      "id": "scout",
+      "name": "Scout ahead",
+      "category": "explore",
+      "blurb": "Climb a tree and look ahead. Reveals hidden stops on this stage.",
+      "effects": [{ "kind": "revealStops" }]
+    },
+    {
+      "id": "notes",
+      "name": "Field notes",
+      "category": "story",
+      "blurb": "Jot down what you saw. A little research.",
+      "effects": [{ "kind": "research", "amount": 2 }]
+    },
+    {
+      "id": "sparkle",
+      "name": "Something shiny",
+      "category": "treasure",
+      "blurb": "Something glints by the path.",
+      "minStage": 3,
+      "effects": [{ "kind": "itemFrom", "ids": ["stardust", "pearl", "honey"] }]
+    }
+  ],
+  "tagOverrides": {}
+}

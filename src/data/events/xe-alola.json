@@ -1,0 +1,702 @@
+{
+ "events": [
+  {
+   "id": "xe.alola.yo",
+   "name": "Yo",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "tint": "#2a1a30",
+    "effect": "none"
+   },
+   "intro": "Three Skull Grunts are blocking a bus stop. Tupp: \"Yo, yo, yo! This stop's closed, 'cause we got exposed, to the, uh—\" Rapp: \"Don't.\" Tupp: \"—to the road!\" Zipp: \"Road!\" Rapp: \"We're blocking a bus stop on an island with one bus. It comes Tuesdays. It's Thursday.\"",
+   "choices": [
+    {
+     "label": "Battle them",
+     "success": {
+      "text": "They go one after another. Each time one falls, Zipp announces the next is \"hyped\".",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Skull Trio",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "alola-trio-beaten",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Rap back",
+     "chance": 0.7,
+     "success": {
+      "text": "Three beats, and you land the last one. Tupp: \"Okay that was actually—\" Rapp: \"Better than yours. Say it.\" Tupp: \"Different than mine.\" They move.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": -2
+       },
+       {
+        "kind": "flag",
+        "key": "alola-bars",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Zipp: \"Road!\" The bus does not come. You leave with a pat on the back for trying.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-bars-tried",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for the bus",
+     "success": {
+      "text": "It is Thursday. No bus comes. At dusk Rapp shares her malasada without comment.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "heal",
+        "share": 0.2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.alola.aether-house",
+   "name": "The Aether House",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "priority": 100,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.acerola",
+     "boss.plumeria"
+    ],
+    "tint": "#241a24",
+    "effect": "none"
+   },
+   "intro": "A worn building with a white logo and a lot of children. One of them is not playing. \"They took Cap'n. The Skull guys. They said they were borrowing him. I said for how long. They laughed.\" Acerola: \"The Foundation built this place for kids with nobody. Then it stopped sending money. Then it stopped sending letters. I do the cooking now. I'm eleven.\"",
+   "choices": [
+    {
+     "label": "Ask Plumeria: \"Why stay with him?\"",
+     "success": {
+      "text": "Plumeria, at the door with a Yungoos held by the scruff like a kitten: \"He took every one of us in when the island said we were nothing. He's a mess. He's our mess.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-plumeria-respect",
+        "amount": 1
+       },
+       {
+        "kind": "fieldNote",
+        "special": "sv.skull.capn"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the Yungoos in for her",
+     "success": {
+      "text": "\"One of my idiots took this from an orphan. I've dealt with it.\" The Hood watches from the roof and follows you out of town.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-plumeria-respect",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-hood-follows",
+        "amount": 1
+       },
+       {
+        "kind": "fieldNote",
+        "special": "sv.skull.the-hood"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who paid for Po Town?\"",
+     "success": {
+      "text": "She says nothing for a while. \"White boat. Every month. I never asked. I should've asked.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-white-boat",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.alola.rent",
+   "name": "Rent",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.nanu"
+    ],
+    "tint": "#1c2430",
+    "effect": "none"
+   },
+   "intro": "Outside the Po Town wall, an old man in a red shirt sleeps on a sofa under eleven Alolan Meowth. \"Mm. Visitor. Don't mind the cats. They're the staff. I'm the kahuna here. I'm also the police. I'm also the landlord. Those kids over the wall pay me rent to exist near them. Somebody ought to be watching.\" You say he could clear the town in an afternoon. \"Sure. And then forty kids with nowhere to go are forty kids with nowhere to go and no wall.\"",
+   "choices": [
+    {
+     "label": "\"Who's really behind them?\"",
+     "success": {
+      "text": "\"Somebody with money and a boat and a nice smile. I used to hunt things that came through holes in the sky. Lost a partner doing it. Don't ask.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-nanu-intel",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for help",
+     "success": {
+      "text": "\"Since I live here anyway.\" He will hold Ula'ula when the islands are in danger.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-nanu-ally",
+        "amount": 1
+       },
+       {
+        "kind": "fieldNote",
+        "special": "sv.skull.landlord"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pet a Meowth",
+     "success": {
+      "text": "It allows it.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.alola.guzmas-room",
+   "name": "The Trophy Room",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "flag",
+     "key": "alola-plumeria-respect",
+     "atLeast": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.guzma"
+    ],
+    "tint": "#241a14",
+    "effect": "flicker"
+   },
+   "intro": "A tired woman lets you into a house on Route 2. A man is watching golf with the sound up. \"His room's upstairs. I haven't moved anything. He was such a serious little boy.\" A shelf of trophies, every one second place. A rack of golf clubs, each bent in the middle the same way. From downstairs, not turning round: \"Kid never could finish anything. I tried to toughen him up. You see how that went.\" Under the bed, a Wimpod looks at the door as it has every day for years.",
+   "choices": [
+    {
+     "label": "Touch nothing; sit on the floor",
+     "success": {
+      "text": "The Wimpod comes out and stays. It follows you now.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "wimpod"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-room-seen",
+        "amount": 1
+       },
+       {
+        "kind": "fieldNote",
+        "special": "sv.skull.lil-g"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take a trophy",
+     "success": {
+      "text": "A Key Item: Second Place. Guzma will not like seeing it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-second-place",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Straighten a golf club",
+     "success": {
+      "text": "It will not straighten. The father says, \"Leave those.\" It is the only time he sounds afraid.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-room-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.alola.gallery",
+   "name": "The Gallery",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#d8e4f0",
+    "effect": "glint"
+   },
+   "intro": "A private room in Aether Paradise. White. Very cold. Rows of glass: a Pikachu mid-leap, a Slowpoke yawning, a Corsola, a Petilil. Frost on the inside of every tube. At the end, in the tallest case, a palm-necked Exeggutor with three grinning heads. Lillie stands in the doorway and does not come in: \"Mother calls them her children. She says she's keeping them beautiful. She used to say the same about me. That one was Father's. It used to carry me on its neck.\"",
+   "choices": [
+    {
+     "label": "Open one case",
+     "success": {
+      "text": "The Petilil thaws, blinks and bolts. The alarm trips.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "petilil"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 3
+       },
+       {
+        "kind": "flag",
+        "key": "alola-gallery-opened",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Open Tall Tale's case",
+     "success": {
+      "text": "All three heads are crying. It does not stop smiling.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-gallery-talltale",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "special": "ss.aether.tall-tale",
+       "species": [
+        "exeggutor-alola"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Leave them; mark the room",
+     "success": {
+      "text": "You mark the room on your map. Lillie: \"I ran away with a Pokémon in a bag because I couldn't watch her put it in a tube. That's the bravest thing I've ever done, and I did it shaking.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-gallery-marked",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.alola.consultant",
+   "name": "The Consultant",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1c1c24",
+    "effect": "none"
+   },
+   "intro": "A tall man in a dark coat among all the white. \"You are the trainer from the reports. Kanto, Johto, Hoenn, further. You have met my colleagues. I will not apologize for them. I will say that I am not like them, and I will understand if you find the distinction thin. I advise the President on the Conservation Hold. It preserves a Pokémon exactly as it is. No pain. No change. She finds that consoling.\" And you? \"I have been asked not to mention a certain small island to her. I have been asked. You have been asked nothing at all.\"",
+   "choices": [
+    {
+     "label": "\"Which island?\"",
+     "success": {
+      "text": "\"I could not possibly say that it is north of Akala and has a great many beans.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-pelago-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cipher-seen-eldes",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Challenge him",
+     "success": {
+      "text": "\"I will not use my strongest. That is not contempt. I am simply tired of winning for them.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Eldes",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "alola-eldes-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "cipher-seen-eldes",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "He nods as if you had said something sensible.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.alola.recon",
+   "name": "Recon",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 4
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#102030",
+    "effect": "glint"
+   },
+   "intro": "Two figures in white-and-blue suits are examining a palm tree with instruments. They greet you by raising the wrong hand, in the wrong shape, with great sincerity. Dulse: \"We are from a place you would call elsewhere. Our world's light was taken, a long time ago, by a being that was in pain.\" Zossie: \"Your sun is so bright! Is it always on? Do you get to keep it? This is Beans! He's a Poipole!\" Dulse: \"The wall between your world and the others is being worn thin from this side. On purpose. Please do not. What lives in the thin places is only lost, and frightened, and very strong.\"",
+   "choices": [
+    {
+     "label": "Ask about the light-thief",
+     "success": {
+      "text": "Dulse tells you what little they know. You write it down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-lightthief-lead",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -3
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Can I hold Beans?\"",
+     "success": {
+      "text": "Zossie: \"Do you want to keep him? Captain said I mustn't ask anyone. But you asked me!\" Beans floats into your arms.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "poipole"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-beans-joined",
+        "amount": 1
+       },
+       {
+        "kind": "fieldNote",
+        "special": "sv.aether.beans"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show them a Poké Ball",
+     "success": {
+      "text": "Dulse: \"A container for a friend. Our world has no such thing. Perhaps that is why we lost ours.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-ball-shown",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.alola.pelago",
+   "name": "The Pelago",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "flag",
+     "key": "alola-pelago-known",
+     "atLeast": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#183024",
+    "effect": "none"
+   },
+   "intro": "A dot of an island, bean rows and hammocks, stray Pokémon everywhere, all of them content. \"Hello, hello! A visitor! Sit, have a bean. I grow them. I don't know why. My hands seemed to know how. I woke up on that beach some years back. Not a thing in my head. The Pokémon here looked after me, so now I look after them.\" He hums a lullaby as he works.",
+   "choices": [
+    {
+     "label": "\"What's the song?\"",
+     "success": {
+      "text": "\"This? I don't know. It comes when I'm happy. I think I used to sing it to someone. Two someones? Small.\" He stops humming and looks at his hands. \"Isn't that strange.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-mohn-found",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing; help with the beans",
+     "success": {
+      "text": "You work until dusk. He gives you a Rainbow Bean.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell him who he is",
+     "success": {
+      "text": "\"I… no. That's a lovely story. I'd like it to be mine. But I can't find it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-mohn-found",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
