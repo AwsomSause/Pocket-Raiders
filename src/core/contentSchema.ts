@@ -3198,6 +3198,8 @@ export const EventRuleSchema = z.object({
   /** Each of your Pokémon that faints comes back once with a quarter of its HP (Pinch Hitter). */
   pinchHitter: z.boolean().optional(),
   /** Blackout's Seal (Beta 0.6 E4): no voluntary switching on the first turn of the fight. */
+  /** Beta 0.7 Sinnoh (Whiteout): accuracy for both sides is multiplied by this in the fight. */
+  accuracyMult: z.number().min(0.5).max(1).optional(),
   noSwitchFirstTurn: z.boolean().optional(),
   /** Beta 0.6 Foresight Tax: the foe sees your first chosen move each turn until one of its Pokémon faints. */
   foresight: z.boolean().optional(),

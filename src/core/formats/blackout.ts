@@ -25,7 +25,11 @@ export interface Anchor {
   sabrina?: boolean;
 }
 
+export type BlackoutRegion = 'sinnoh' | 'hoenn';
+
 export interface BlackoutState {
+  /** Absent = Kanto (older saves). */
+  region?: BlackoutRegion;
   anchors: Anchor[];
   triad: boolean;
   /** The anchor whose fight is running right now. */
@@ -33,6 +37,38 @@ export interface BlackoutState {
   /** Fights lost so far (each healed the party; the anchor stays up). */
   losses: number;
 }
+
+/** Beta 0.7 E9: Sinnoh's White Tunnel and Hoenn's Crater Lake. Same shape as Kanto's streets: three fights, a condition that holds until two fall. */
+interface RegionBlackout { title: string; intro: string; holds: string; broken: string; done: string; anchors: Omit<Anchor, 'beaten'>[]; classId: string; types: string[]; rule: NonNullable<Parameters<typeof launchFormatBattle>[3]['rule']>; weather?: 'hail'; bossName?: string }
+const REGIONS: Record<BlackoutRegion, RegionBlackout> = {
+  sinnoh: {
+    title: 'The White Tunnel',
+    intro: 'The climb through the mountain. Snow blows sideways down the shaft.',
+    holds: 'While the Whiteout holds: hail, and accuracy is 10% lower for both sides. It ends at the upper mouth (two anchors fall), or at once if Friday lifts you above the snow.',
+    broken: 'The Whiteout is over. The wind drops and the snow settles.',
+    done: 'The upper mouth is open.',
+    anchors: [
+      { id: 'a1', place: 'the wayside camp', name: 'Galactic Scientist (anchor)', species: ['kadabra', 'chansey', 'bronzong'], size: 2 },
+      { id: 'a2', place: 'the ice cut', name: 'Galactic Commander Grunt (anchor)', species: ['golbat', 'stunky', 'glameow', 'croagunk'], size: 2 },
+      { id: 'a3', place: 'the midpoint, by a camp stove', name: 'Commander Sird', species: ['starmie', 'persian', 'banette'], size: 3, sabrina: true },
+    ],
+    classId: 'worker', types: ['ice'], rule: { accuracyMult: 0.9 }, weather: 'hail', bossName: 'Commander Sird',
+  },
+  hoenn: {
+    title: 'The Crater Lake',
+    intro: 'The lake crossing to the cave. Nobody can tell whether it is raining.',
+    holds: 'While the Swing holds: the weather flips between rain and sun every two turns. It ends when two anchors fall, or at once if Forecast calls the weather before it turns.',
+    broken: 'The Swing has stopped. The sky is only a sky again.',
+    done: 'The cave mouth is open.',
+    anchors: [
+      { id: 'a1', place: 'a rowing boat (Aqua)', name: 'Aqua Grunt (anchor)', species: ['sharpedo', 'mightyena', 'carvanha'], size: 2 },
+      { id: 'a2', place: 'a raft (Magma)', name: 'Magma Grunt (anchor)', species: ['camerupt', 'numel', 'mightyena'], size: 2 },
+      { id: 'a3', place: 'the lakeside resonator', name: 'Resonator Guard (anchor)', species: ['golem', 'swalot', 'sableye'], size: 2 },
+    ],
+    classId: 'roughneck', types: ['water', 'fire'], rule: { weatherCycle: ['rain', 'rain', 'sun', 'sun'] },
+  },
+};
+const evSet = (run: FormatCtx['run'], key: string): boolean => Number(run.story.flags[`ev:${key}`] ?? 0) >= 1;
 
 const STREETS = [
   { id: 'a1', place: 'the Nugget Bridge crossing' },
@@ -52,7 +88,21 @@ function open(s: BlackoutState): Anchor[] {
   return rest.filter((a) => !a.sabrina || others.every((o) => o.beaten));
 }
 
+function setupRegion(region: BlackoutRegion, { content, run }: FormatCtx): BlackoutState {
+  const cfg = REGIONS[region];
+  const anchors: Anchor[] = cfg.anchors.map((a) => ({ ...a, species: a.species.filter((id) => content.species.has(id)), beaten: false }));
+  // Hoenn: the lunch-break grunts row you across, so one battle is skipped.
+  if (region === 'hoenn' && evSet(run, 'hoenn-truce-seed')) anchors[1]!.beaten = true;
+  return { region, anchors, triad: region === 'sinnoh', pending: null, losses: 0 };
+}
+
+/** The region's condition holds while fewer than two anchors fell, unless a helper lifted it (Friday, Forecast). */
+const lifted = (region: BlackoutRegion, run: FormatCtx['run']): boolean => (region === 'sinnoh' ? evSet(run, 'galactic-friday-lent') : evSet(run, 'hoenn-forecast-saved'));
+
 function setup({ content, run }: FormatCtx, input?: unknown): BlackoutState {
+  const asked = input && typeof input === 'object' && 'region' in input ? String((input as { region: unknown }).region) : '';
+  const region = asked === 'sinnoh' || asked === 'hoenn' ? asked : climaxRegion(run) === 'sinnoh' || climaxRegion(run) === 'hoenn' ? (climaxRegion(run) as BlackoutRegion) : null;
+  if (region) return setupRegion(region, { content, run });
   const triad = typeof input === 'object' && input && 'triad' in input ? Boolean((input as { triad: unknown }).triad) : Boolean(run.story.flags['rocket.x.triad']);
   const mime = ['mr-mime'].filter((id) => content.species.has(id));
   const sabrinaTeam = ['alakazam', 'mr-mime', 'hypno', 'kadabra'].filter((id) => content.species.has(id));
@@ -71,7 +121,8 @@ function setup({ content, run }: FormatCtx, input?: unknown): BlackoutState {
   return { anchors, triad, pending: null, losses: 0 };
 }
 
-function describe(s: BlackoutState): FormatCard {
+function describe(s: BlackoutState, run?: FormatCtx['run']): FormatCard {
+  if (s.region) return describeRegion(s, run);
   const left = s.anchors.filter((a) => !a.beaten);
   const sealed = sealHolds(s);
   const lines = [
@@ -92,8 +143,29 @@ function describe(s: BlackoutState): FormatCard {
   return { title: 'The Streets', lines, options, over: false };
 }
 
+function describeRegion(s: BlackoutState, run?: FormatCtx['run']): FormatCard {
+  const cfg = REGIONS[s.region!];
+  const holds = sealHolds(s) && !(run && lifted(s.region!, run));
+  const lines = [cfg.intro, holds ? cfg.holds : cfg.broken, `Anchors beaten: ${beatenCount(s)} of ${s.anchors.length}.${s.losses ? ` Fights lost: ${s.losses} (your team was healed each time).` : ''}`];
+  if (blackoutOver(s)) return { title: cfg.title, lines: [...lines, cfg.done], options: [], over: true };
+  const can = open(s);
+  const options = s.anchors.filter((a) => !a.beaten).map((a) => ({ id: a.id, label: `${a.name} at ${a.place}`, enabled: can.some((c) => c.id === a.id), ...(can.some((c) => c.id === a.id) ? {} : { note: 'Waits for the others to fall.' }) }));
+  return { title: cfg.title, lines, options, over: false };
+}
+
 function choose(s: BlackoutState, id: string, ctx: FormatCtx): BlackoutState {
   if (s.pending) return s;
+  if (s.region) {
+    const a = open(s).find((x) => x.id === id);
+    if (!a) return s;
+    const cfg = REGIONS[s.region];
+    const on = sealHolds(s) && !lifted(s.region, ctx.run);
+    const ok = launchFormatBattle(ctx.content, ctx.run, 'blackout', {
+      key: a.id, name: a.name, classId: cfg.classId, types: cfg.types as never, species: a.species, size: a.size, levelBonus: a.sabrina ? 2 : 0,
+      ...(on ? { rule: cfg.rule, ...(cfg.weather ? { weather: cfg.weather } : {}) } : { rule: {} }),
+    });
+    return ok ? { ...s, pending: a.id } : s;
+  }
   const a = open(s).find((x) => x.id === id);
   if (!a) return s;
   const ok = launchFormatBattle(ctx.content, ctx.run, 'blackout', {
@@ -123,10 +195,10 @@ function onBattleEnd(s: BlackoutState, won: boolean, { run }: FormatCtx): Blacko
 }
 
 export const blackout: WideFormat<BlackoutState> = {
-  canStart: (ctx, input) => input !== undefined || climaxRegion(ctx.run) === 'kanto',
+  canStart: (ctx, input) => input !== undefined || ['kanto', 'sinnoh', 'hoenn'].includes(climaxRegion(ctx.run)),
   id: 'blackout',
   setup,
-  describe: (s) => describe(s),
+  describe: (s, ctx) => describe(s, ctx.run),
   choose,
   onBattleEnd,
   isOver: blackoutOver,

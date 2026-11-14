@@ -159,6 +159,26 @@ describe('Extended Cut: Siege Map for Sinnoh and Hoenn', () => {
     expect(r.battle!.event!.eventId).toBe('format:siege');
     expect(r.battle!.trainer!.name).toMatch(/Crater Cordon/);
   });
+  it('Blackout: Sinnoh White Tunnel has three anchors, hail rule, Lunar-style lift with Friday', () => {
+    const r = mk('bo-sin');
+    expect(startFormat('blackout', ctxOf(r), { region: 'sinnoh' })).toBe(true);
+    expect(currentFormat(r)!.state.anchors).toHaveLength(3);
+    expect(currentFormat(r)!.state.region).toBe('sinnoh');
+    const r2 = mk('bo-sin2');
+    r2.story.flags['ev:galactic-friday-lent'] = 1;
+    expect(startFormat('blackout', ctxOf(r2), { region: 'sinnoh' })).toBe(true);
+    expect(currentFormat(r2)!.state.anchors).toHaveLength(3);
+  });
+  it('Blackout: Hoenn Crater Lake, a lunch-break truce pre-beats one anchor', () => {
+    const r = mk('bo-hoe');
+    expect(startFormat('blackout', ctxOf(r), { region: 'hoenn' })).toBe(true);
+    const before = (currentFormat(r)!.state.anchors as { beaten: boolean }[]).filter((a) => a.beaten).length;
+    const r2 = mk('bo-hoe2');
+    r2.story.flags['ev:hoenn-truce-seed'] = 1;
+    expect(startFormat('blackout', ctxOf(r2), { region: 'hoenn' })).toBe(true);
+    const after = (currentFormat(r2)!.state.anchors as { beaten: boolean }[]).filter((a) => a.beaten).length;
+    expect(after).toBe(before + 1);
+  });
   it('the climax director starts in these regions and Johto still cannot', () => {
     const r = mk('sg-dir');
     r.expansion = { cut: { climaxCut: 'extended' } };
