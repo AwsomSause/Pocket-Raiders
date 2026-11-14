@@ -1389,6 +1389,26 @@
      }
     },
     {
+     "label": "Shout to wake it",
+     "prompt": {
+      "id": "snorlax-shout",
+      "needs": "good"
+     },
+     "success": {
+      "text": "The Snorlax jolts awake, blinks, and shuffles off the road, grumbling. It leaves its snack behind.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "leftovers"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It rolls over and snores on. You find a long way around.",
+      "effects": []
+     }
+    },
+    {
      "label": "Fight it",
      "success": {
       "text": "You poke it. It opens one eye, then both.",

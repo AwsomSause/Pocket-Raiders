@@ -1,0 +1,708 @@
+{
+ "events": [
+  {
+   "id": "xe.galar.ball-guy",
+   "name": "Have a Ball",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "priority": 100,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.juggler"
+    ],
+    "tint": "#2a1020",
+    "effect": "glint"
+   },
+   "intro": "A figure with a Poké Ball for a head, arms wide. \"Heya, Trainer! Have a ball! Go on! It's free! Everything's free when you're the product!\" You: \"...What?\" \"I said, have a ball!\"",
+   "choices": [
+    {
+     "label": "Take it",
+     "success": {
+      "text": "A fine Ball. Inside the hinge, a tiny grey bead: Macro Cosmos will always know where you are until you crush it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "quick-ball",
+        "count": 2
+       },
+       {
+        "kind": "evil",
+        "heat": 8
+       },
+       {
+        "kind": "flag",
+        "key": "galar-bead",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Inspect it first",
+     "success": {
+      "text": "You find the bead. The cheer does not change at all: \"Whoopsie! That's just a little something to help us help you! Customer Insights loves you!\" The Ball is simply a very good Ball.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "quick-ball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "galar-ball-guy",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Are you all right in there?\"",
+     "success": {
+      "text": "A long pause. The head tilts. Very quietly, same pitch: \"I've a mortgage with Macro Cosmos Bank and a pension with Macro Cosmos Life. I am having a ball.\" Then, bright again: \"Heya, Trainer!\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-ball-guy",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.galar.road-closed",
+   "name": "Road Closed",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man",
+     "boss.drive/galarian-swsh-yell-grunt-woman"
+    ],
+    "tint": "#1c1020",
+    "effect": "none"
+   },
+   "intro": "Six people in black and pink, with towels and horns, stand across the road. Behind them a Silicobra sleeps in a sunbeam. Cheer Captain Gaz: \"OI! Road's shut! Li'l fella's havin' a kip and we'll not have him disturbed!\" Chant Leader Shaz: \"One, two, three: Let! Him! Sleep!\" The whole crew: \"LET! HIM! SLEEP!\" The Silicobra wakes up. Gaz: \"...Now look what you made us do.\"",
+   "choices": [
+    {
+     "label": "Battle through",
+     "success": {
+      "text": "\"Fair's fair. But you tell anyone we lost, we'll cheer at you. Up close.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Cheer Captain Gaz",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "galar-road-closed",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Join the chant, quietly",
+     "success": {
+      "text": "Three soft claps. The Silicobra goes back to sleep. Shaz: \"That's dynamics, that is. Piano. We never do piano.\" You are given a Team Yell Towel.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-road-closed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-yell-honorary",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go round",
+     "success": {
+      "text": "They wave. It costs you an afternoon.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-road-closed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.galar.insurance",
+   "name": "Darkest Day Cover",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "tint": "#1c1428",
+    "effect": "none"
+   },
+   "intro": "A neat kiosk: MACRO COSMOS INSURANCE, PEACE OF MIND. \"Could I interest you in our new product? Darkest Day cover. Very reasonable.\" You: \"What's a Darkest Day?\" \"I asked that in training! It's an old legend, so the risk is theoretical, so the premium's nearly all margin. It's sold forty thousand policies. Head office is very keen. For a legend.\"",
+   "choices": [
+    {
+     "label": "Buy a policy (₽3,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 3000
+      }
+     ],
+     "success": {
+      "text": "A glossy policy. If the climax is won it pays out in the Aftermath.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -3000
+       },
+       {
+        "kind": "flag",
+        "key": "galar-policy",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the small print",
+     "success": {
+      "text": "The policy start date is printed. It is the day after the Champion Cup final.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-intel",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who set the start date?\"",
+     "success": {
+      "text": "\"It came down from the fiftieth floor. Everything does.\" She looks at the leaflet as if it had changed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-intel",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.galar.press-release",
+   "name": "For Immediate Release",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "tint": "#20202a",
+    "effect": "glint"
+   },
+   "intro": "The lobby of Rose Tower. A printer by reception is still warm; one page sits in the tray. \"FOR IMMEDIATE RELEASE. Macro Cosmos is proud to announce that the unprecedented energy event of [DATE] has been safely contained by Chairman Rose's Eternal Energy Initiative... [INSERT CASUALTY FIGURE IF LOW.]\" Heels on marble. Oleana: \"That is not yours.\"",
+   "choices": [
+    {
+     "label": "Hand it back",
+     "success": {
+      "text": "She takes it. She does not thank you. Her hand is not steady.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-oleana",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it",
+     "success": {
+      "text": "The Draft Release can be shown to Leon, to Magnolia, or to the stadium crowd later.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 8
+       },
+       {
+        "kind": "flag",
+        "key": "galar-draft-release",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Did you write this?\"",
+     "success": {
+      "text": "\"I typed it. He dictated it walking up and down, the way he does when he is happy. I have worked for him since I was nineteen. He paid for my mother's operation. He remembers every cleaner's name. And he said 'if low' without stopping.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-oleana-shaken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-oleana",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.galar.mine",
+   "name": "The Old Seam",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker",
+     "trainer.worker_m"
+    ],
+    "tint": "#241c14",
+    "effect": "none"
+   },
+   "intro": "Old men on a bench by a closed pithead. One enormous man in a hard hat tells a story with his whole body. Peony: \"And I says to him, I says, Rose, the seam's gone! And he goes quiet. He counted the lamps coming up that last day. Counted them twice. 'This'll happen to the whole region,' he says. 'Not for a thousand years. But it'll happen.' And I laughed.\" He takes the hard hat off. \"He's my little brother. Nobody else were ever going to tell him it was all right to stop counting.\"",
+   "choices": [
+    {
+     "label": "Ask him to come to Wyndon",
+     "success": {
+      "text": "\"Aye. Somebody should tell him in person.\" He will stand by you when it matters.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-peony-ally",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the Rolycoly",
+     "success": {
+      "text": "A wild Rolycoly was listening. It wants a lump of coal and a fair fight.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "rolycoly"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "galar-rolycoly",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Is he wrong?\"",
+     "success": {
+      "text": "\"About the thousand years? No. That's what's so flamin' awful about it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-peony-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.galar.their-majesties",
+   "name": "Their Majesties",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#241a20",
+    "effect": "glint"
+   },
+   "intro": "Two men with hair shaped like a sword and a shield are being ignored by an entire pub. Sordward: \"We are celebrities.\" Shielbert: \"We are in fact descended from the first kings of Galar. There were two kings. People forget.\" Sordward: \"The Chairman has retained us to wake our ancestors' weapons. We'll be giving them a little tonic.\" He holds up a vial that glows the wrong red.",
+   "choices": [
+    {
+     "label": "\"Weapons?\"",
+     "success": {
+      "text": "\"A sword. And a shield. Very old. They've been asleep in the woods.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-intel",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "galar-brothers-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle them",
+     "success": {
+      "text": "Sordward: \"This is treason.\" Shielbert: \"Against whom?\" \"...Us. Presumably.\"",
+      "effects": [
+       {
+        "kind": "track",
+        "input": "raidSuccess"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Sordward and Shielbert",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "galar-brothers-down",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask for an autograph",
+     "success": {
+      "text": "They are so pleased they tell you the day they are going to the Weald.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-brothers-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-weald-early",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.galar.partner-firm",
+   "name": "The Partner Firm",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 4
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.scientist"
+    ],
+    "tint": "#14141c",
+    "effect": "flicker"
+   },
+   "intro": "Wyndon station. Every departure is cancelled. On the one platform still lit, the Chairman shakes hands with a tall man in a dark uniform. Rose: \"Your people supplied the regulator for the Plant, I supply the energy; that is what I call a partnership.\" Ardos: \"My father calls it a purchase.\" Rose laughs, warmly, as if it were a joke. Ardos sees you: \"You have interfered with eight operations. My brother has gone soft and my colleagues have been careless. I am neither.\"",
+   "choices": [
+    {
+     "label": "Follow the crates",
+     "success": {
+      "text": "Wishing Stars, hundreds, labelled for an island with no name.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-intel",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "galar-raid4-open",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cipher-seen-ardos",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Challenge him",
+     "success": {
+      "text": "He never switches, and he never wastes a move. He walks away without a word.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Ardos",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "cipher-seen-ardos",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "galar-ardos-down",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask Rose what he sold",
+     "success": {
+      "text": "\"Sold? My dear young friend, I have shared. One doesn't solve a thousand-year problem alone!\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cipher-seen-ardos",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.galar.gig",
+   "name": "The Gig",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "flag",
+     "key": "galar-road-closed",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#14101c",
+    "effect": "glint"
+   },
+   "intro": "Spikemuth. A shuttered arcade, a stage made of pallets, a thin man with a microphone and two Pokémon with amplifier chests. Piers: \"This one's for Spikemuth. No Power Spot. No stadium. No sponsors. Just us. Always was.\" Halfway through a Yell Grunt's Linoone, spooked by a tremor, swells to the size of a bus between the shopfronts. Marnie, level, not loud: \"Oi. Stripes. It's all right.\" Team Yell, low and in time: \"Stripes. Stripes. Stripes.\" It looks down at forty people saying its name, and gets smaller. Piers, deadpan: \"...And that's why we don't Dynamax in Spikemuth.\"",
+   "choices": [
+    {
+     "label": "Stay to the end",
+     "success": {
+      "text": "The Encore follows you: the chant is yours to call, once, when a fight gets too big.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-chant",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask Marnie how she did that",
+     "success": {
+      "text": "\"Didn't do anythin'. Just said her name. They forget who they are when they're that big.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-chant",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-intel",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave early",
+     "success": {
+      "text": "Piers notices.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -4,10 +4,12 @@
 import type { Content } from '../contentSchema';
 import { currentRegion } from '../regions';
 import { ADVERT_LINE } from './trackRegions';
+import { ADVERT_LINE_KG } from './trackKalosGalar';
 import type { RunState } from '../state';
 import { periodOf } from '../clock';
+import { fnv1a } from './hash';
 import { meetFromTrack } from './cast/meet';
-import { freshTrack, insuredIndex, NO_EFFECTS, reduceTrack, trackEffectsFor, wildTaken, type TrackEffects, type TrackInput, type TrackState } from './track';
+import { freshTrack, FULL_EFFECTS, insuredIndex, NO_EFFECTS, reduceTrack, trackEffectsFor, wildTaken, type FullTrackEffects, type TrackEffects, type TrackInput, type TrackState } from './track';
 
 export const trackOf = (run: Pick<RunState, 'expansion'>, regionId: string): TrackState | undefined => run.expansion?.track?.[regionId];
 export const trackStep = (run: Pick<RunState, 'expansion'>, regionId: string): number => trackOf(run, regionId)?.step ?? 0;
@@ -23,10 +25,11 @@ export function advanceTrack(run: RunState, regionId: string, input: TrackInput,
 }
 
 /** The effects in force where the player is now. */
-export function trackEffects(content: Content, run: RunState): TrackEffects {
-  const region = currentRegion(content, run).id;
+export function trackEffects(content: Content, run: RunState): FullTrackEffects {
+  const region = run.regionOrder[run.regionIndex]; // an old save may have no current region yet
+  if (!region) return FULL_EFFECTS;
   const step = trackStep(run, region);
-  return step === 0 ? NO_EFFECTS : trackEffectsFor(region, step, content.balance.expansionTrack);
+  return step === 0 ? FULL_EFFECTS : { ...FULL_EFFECTS, ...trackEffectsFor(region, step, content.balance.expansionTrack) };
 }
 
 /** Price factor for the shop being used: exactly one shop node per stage charges the "insurance" markup (chosen by a hash). */
@@ -54,7 +57,52 @@ export function healStopShut(content: Content, run: RunState, sideId: string): b
 /** One line for the map when the track has a visible effect (adverts), else ''. */
 export function trackBannerLine(content: Content, run: RunState): string {
   const fx = trackEffects(content, run);
-  return fx.adverts ? (ADVERT_LINE[currentRegion(content, run).id] ?? 'The news is running Rocket adverts all day.') : '';
+  return fx.adverts ? (ADVERT_LINE[currentRegion(content, run).id] ?? ADVERT_LINE_KG[currentRegion(content, run).id] ?? 'The news is running Rocket adverts all day.') : '';
+}
+
+/** Share of HP a Pokémon Center gives back right now: 1, or less when the region's track says members come first (a Flare Key lifts it). */
+export function trackHealShare(content: Content, run: RunState): number {
+  return Number(run.story.flags['ev:flare-member'] ?? 0) > 0 ? 1 : (trackEffects(content, run).healShare ?? 1);
+}
+
+const flagCount = (run: RunState, key: string): number => Number(run.story.flags[`ev:${key}`] ?? 0);
+
+/** Sinnoh's Hum: a shop's stock with one entry forgotten (a hash of the seed and region, never the same twice in a row). Any run shape without a region returns the stock as it is. */
+export function trackForgetStock<T>(content: Content, run: Partial<RunState>, stock: readonly T[]): readonly T[] {
+  if (!run.regionOrder || run.regionIndex === undefined || !run.expansion?.tracks || stock.length < 2 || !run.seed) return stock;
+  if (!trackEffects(content, run as RunState).shopForgets) return stock;
+  const skip = fnv1a(`${run.seed}::track:forget::${run.regionIndex}`) % stock.length;
+  return stock.filter((_, i) => i !== skip);
+}
+
+/** Hoenn: the weather a node's battles get at this track step, or null. No random numbers: a hash of the seed and node. */
+export function hoennNodeWeather(run: RunState, step: number, nodeId: string): 'rain' | 'sun' | null {
+  const h = fnv1a(`${run.seed}::track:weather::${run.regionIndex}::${run.stage?.index ?? 0}::${nodeId}`);
+  if (step === 1) return h % 3 === 0 ? 'rain' : h % 3 === 1 ? 'sun' : null; // one route rainy, one sunny, the rest as they are
+  if (step === 2) {
+    const aqua = flagCount(run, 'aqua-ahead');
+    const magma = flagCount(run, 'magma-ahead');
+    return aqua > magma ? 'rain' : magma > aqua ? 'sun' : h % 2 === 0 ? 'rain' : 'sun'; // ties alternate
+  }
+  return null;
+}
+
+/** Applies the track's battle effects (Sinnoh night accuracy and no player crits; Hoenn weather) to a battle that was just created. */
+export function applyTrackToBattle(content: Content, run: RunState): void {
+  const battle = run.battle;
+  if (!battle) return;
+  const fx = trackEffects(content, run);
+  if (fx.nightAccuracy < 1 && periodOf(run) === 'night') battle.accuracyMult = Math.min(battle.accuracyMult ?? 1, fx.nightAccuracy);
+  if (fx.noPlayerCrit) battle.noPlayerCrit = true;
+  if (fx.weather === 'none' || battle.eventRule?.weatherCycle) return;
+  const step = trackStep(run, currentRegion(content, run).id);
+  if (fx.weather === 'swing' || fx.weather === 'awakening') {
+    battle.eventRule = { ...(battle.eventRule ?? {}), weatherCycle: fx.weather === 'swing' ? ['rain', 'rain', 'sun', 'sun'] : ['rain', 'sun'] };
+    battle.weather = { id: 'rain', turns: 5 };
+    return;
+  }
+  const w = hoennNodeWeather(run, step, run.stage?.current ?? '');
+  if (w && !battle.weather) battle.weather = { id: w, turns: 999 };
 }
 
 /** An Evil Team operation ended. Stopped = a raid won (-1); let through = a raid lost (+1). Only runs with the expansion block move the track. */

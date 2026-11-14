@@ -299,6 +299,8 @@ describe('landmarks and dungeons', () => {
     for (const o of TRAVERSAL.obstacles) for (const ef of o.pass) if (ef.kind === 'addEvent') opened.add(ef.eventId);
     for (const id of [WANDERER_CHALLENGE, WANDERER_VISIT, TREASURE_DIG_EVENT]) opened.add(id);
     for (const e of content.events.values()) if (e.stop === LANDMARK_STOP) opened.add(e.id);
+    // Beta 0.7 U1: the code places each Ultra Beast Tear (core/ultra/run.ts placeTear).
+    for (const id of content.events.keys()) if (id.startsWith('ultra-tear-')) opened.add(id);
     for (const id of opened) expect(content.events.get(id)?.room, id).toBe(true);
     for (const e of content.events.values()) if (e.room) expect(opened.has(e.id), e.id).toBe(true);
   });

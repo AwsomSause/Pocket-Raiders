@@ -85,8 +85,10 @@ export function step(content: Content, run: RunState, smart = false, strong = fa
       const midMove = forcedMoveIndex(battle, run.party) !== null;
       const ownShare = run.party[battle.activeIndex]!.hp / maxHp(content, run.party[battle.activeIndex]!);
       // The smart player stops throwing balls once its own Pokémon is in trouble (it used to faint to a level 2 wild while throwing).
-      if (!midMove && !(smart && ownShare < 0.4) && battle.kind === 'wild' && run.party.length < partyCapacity(content, run) && (run.inventory['poke-ball'] ?? 0) > 0 && enemy.hp <= maxHp(content, enemy) / 2 && itemProblem({ content, battle, party: run.party, inventory: run.inventory, catchBlocked: nuzlockeCatchProblem(battle) }, 'poke-ball') === null) {
-        const turn = takeTurn(content, run, { kind: 'item', itemId: 'poke-ball' });
+      // The strong player throws its best ball in stock (the shop and rewards give great, ultra and premier balls too), so the party fills up.
+      const ballId = (strong ? ['ultra-ball', 'great-ball', 'premier-ball', 'poke-ball'] : ['poke-ball']).find((id) => (run.inventory[id] ?? 0) > 0);
+      if (!midMove && !(smart && ownShare < 0.4) && battle.kind === 'wild' && ballId && run.party.length < partyCapacity(content, run) && enemy.hp <= maxHp(content, enemy) / (strong ? 1.5 : 2) && itemProblem({ content, battle, party: run.party, inventory: run.inventory, catchBlocked: nuzlockeCatchProblem(battle) }, ballId) === null) {
+        const turn = takeTurn(content, run, { kind: 'item', itemId: ballId });
         return { run: turn.run, turn };
       }
       const mon = run.party[battle.activeIndex]!;
@@ -122,7 +124,7 @@ export function step(content: Content, run: RunState, smart = false, strong = fa
         let weakest = 0;
         run.party.forEach((m, i) => { if (bst(m.speciesId) < bst(run.party[weakest]!.speciesId)) weakest = i; });
         try {
-          if (!full && got >= (run.party.length < 4 ? 240 : 330)) return { run: resolveDecision(content, run, { kind: 'addToParty' }).run, turn: null };
+          if (!full && got >= (run.party.length < 4 ? 0 : run.party.length < 6 ? 280 : 330)) return { run: resolveDecision(content, run, { kind: 'addToParty' }).run, turn: null };
           if (full && got > bst(run.party[weakest]!.speciesId) + 60) return { run: resolveDecision(content, run, { kind: 'replace', partyIndex: weakest }).run, turn: null };
         } catch {
           // Refused by a modifier: let it go.
@@ -236,6 +238,8 @@ function rewardRank(content: Content, id: string): number {
   return content.catalog.get(id)?.effect?.kind === 'held' ? 40 : 20;
 }
 
+let potionStreak = 0;
+
 /** The smart player's choice for one battle turn, or null to fall back to the plain player. */
 function smartBattleTurn(content: Content, run: RunState, strong = false): TurnResult | null {
   const battle = run.battle!;
@@ -247,11 +251,16 @@ function smartBattleTurn(content: Content, run: RunState, strong = false): TurnR
   // The strong player revives a fallen teammate when two or more are down and the active Pokémon is healthy.
   if (strong && hpShare >= 0.6 && (run.inventory['revive'] ?? 0) > 0) {
     const down = run.party.findIndex((p) => p.hp <= 0);
-    if (down >= 0 && run.party.filter((p) => p.hp <= 0).length >= 2) {
+    if (down >= 0 && (run.party.filter((p) => p.hp <= 0).length >= 2 || (battle.kind === 'trainer' && (run.inventory['revive'] ?? 0) > 1))) {
       try { return takeTurn(content, run, { kind: 'item', itemId: 'revive', targetIndex: down }); } catch { /* not allowed here: carry on */ }
     }
   }
-  if (potion && hpShare < (strong ? 0.5 : 0.35)) return takeTurn(content, run, { kind: 'item', itemId: potion, targetIndex: battle.activeIndex });
+  // The strong player never heals more than twice in a row (a potion that heals less than the foe hits only stalls the fight until the potions run out).
+  if (potion && hpShare < (strong ? 0.5 : 0.35) && !(strong && potionStreak >= 2)) {
+    potionStreak++;
+    return takeTurn(content, run, { kind: 'item', itemId: potion, targetIndex: battle.activeIndex });
+  }
+  potionStreak = 0;
   // Leave a bad matchup for a healthy teammate that does much better.
   const mine = bestScore(content, mon, enemy);
   let bestIndex = -1;

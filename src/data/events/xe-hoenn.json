@@ -1,0 +1,719 @@
+{
+ "events": [
+  {
+   "id": "xe.hoenn.wet-cellar",
+   "name": "Wet Cellar, Dry Well",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "priority": 100,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m",
+     "trainer.fisherman"
+    ],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "intro": "Two neighbors. One is bailing out a cellar: \"Three days of rain on my roof.\" The other lowers a bucket into a well and brings it up empty: \"And not a drop on mine. Same street!\" At the end of the street an Aqua Grunt and a Magma Grunt stand over two small humming boxes, twenty paces apart, glaring. \"Ours was here first!\" \"Yours is leaking!\"",
+   "choices": [
+    {
+     "label": "Break the blue box",
+     "success": {
+      "text": "The Aqua Grunt goes down, the box cracks, and the cellar drains.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "magma-ahead",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "sharpedo",
+        "mightyena"
+       ],
+       "name": "Aqua Grunt",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Break the red box",
+     "success": {
+      "text": "The Magma Grunt goes down, the box cracks, and the well fills.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aqua-ahead",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "camerupt",
+        "mightyena"
+       ],
+       "name": "Magma Grunt",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Swap them",
+     "success": {
+      "text": "The boxes cancel out. Both Grunts stare. \"...Is it supposed to do that?\" \"Nobody tell the admins.\" The weather settles.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-cancel-trick",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.hoenn.weather-institute",
+   "name": "The Institute",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#d8d8e0",
+    "effect": "flicker"
+   },
+   "intro": "A scientist under a desk: \"They want the long-range model. I told them it's a guess! We put error bars on it! They took the error bars off!\" Upstairs a small grey Pokémon changes shape every few seconds: sun, rain, sun, rain. An admin, reading it like a ledger: \"This one knows what the sky's going to do before the sky does. It's coming with us.\"",
+   "choices": [
+    {
+     "label": "Battle the admin",
+     "success": {
+      "text": "\"Ahyahyahya! ...That was a nervous laugh. I want that noted.\" The Institute lets you keep Forecast company.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 3
+       },
+       {
+        "kind": "fieldNote",
+        "special": "sv.aqua.forecast"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "camerupt",
+        "sharpedo",
+        "swalot"
+       ],
+       "name": "Weather Admin",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hoenn-forecast-saved",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask Forecast what it sees",
+     "success": {
+      "text": "It turns into a shape it has no form for: half sun, half rain, and it shivers.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-forecast-seen",
+        "amount": 1
+       },
+       {
+        "kind": "fieldNote",
+        "special": "sv.aqua.forecast"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "Forecast is taken. The other team's weather shifts will no longer be announced a turn ahead.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.hoenn.stern-and-cozmo",
+   "name": "Stern and Cozmo",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman",
+     "trainer.sailor"
+    ],
+    "tint": "#1a2a3a",
+    "effect": "none"
+   },
+   "intro": "Two men are arguing in front of a model submarine. \"They gave me a team, Stern. Forty people who want to hear about meteorites! Do you know how long I've waited for forty people?\" \"And mine paid for the pressure hull in cash. I'm aware of what that means. I built it anyway.\" \"They can't both be the villains.\" \"...Can't they?\"",
+   "choices": [
+    {
+     "label": "\"What did you tell them?\"",
+     "success": {
+      "text": "Each admits one fact: where the meteorite goes, and how deep the sub can dive.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-fact-meteorite",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-fact-dive",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Quit.\"",
+     "success": {
+      "text": "Whichever man belongs to the team in this world quits on the spot, and will not be at his own raid.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-stern-or-cozmo-turned",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 4
+       },
+       {
+        "kind": "evil",
+        "heat": -4
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Compare notes.\"",
+     "success": {
+      "text": "They lay a sea chart over a geological survey. The two plans point at the same cave. \"Who gave you your map?\" \"A consultant. Lovely young woman. Red hood.\" \"...Blue.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-maps-compared",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.hoenn.two-hoods",
+   "name": "Two Hoods",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a1a24",
+    "effect": "glint"
+   },
+   "intro": "A young woman in a hood is talking to a cave wall. A Whismur sits on her shoulder. \"...and he'll believe it, because it's true. That's the trick. You don't lie. You just stop reading halfway down.\" She turns, grinning, and the grin does not reach very far. \"Oh! A witness. Which hood am I today? Blue? I'm the Tidereader. Big fan of oceans.\"",
+   "choices": [
+    {
+     "label": "\"What does the rest of the mural say?\"",
+     "success": {
+      "text": "\"That something's coming down. That only the one in the sky can meet it. That it only comes when the two below are loud enough to wake it.\" The grin is gone. \"So I'm making them loud.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-two-hoods",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"People will die.\"",
+     "success": {
+      "text": "\"Some. Not all. I did the sums. I do them every night, and I get the same answer, and I hate it every time. You got a better answer? I'd love one.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-two-hoods",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle her",
+     "success": {
+      "text": "\"Strong. Good. Stay strong. If I'm wrong, somebody's going to have to stop me, and it should be someone who can.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 2
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "salamence",
+        "altaria",
+        "noivern"
+       ],
+       "name": "Zinnia",
+       "classId": "dragon-tamer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hoenn-zinnia-down",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.hoenn.arms-dealer",
+   "name": "The Arms Dealer",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "tint": "#2a2018",
+    "effect": "none"
+   },
+   "intro": "\"Ha! Same model, friend, same model! Yours is red. Red is extra.\" A huge man unloads crates while an Aqua admin leaves and a Magma admin arrives. \"The other side has last year's. You want to lose to last year's?\" He sees you. \"A third customer! You want a box that makes weather? No? You want to fight? Good. I was getting bored of money.\"",
+   "choices": [
+    {
+     "label": "Fight him",
+     "success": {
+      "text": "\"Strong! Stronger than both my customers. You should sell them something.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 2
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "golem",
+        "nidoking",
+        "donphan"
+       ],
+       "name": "Dakim",
+       "classId": "black-belt",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "cipher-seen-dakim",
+         "amount": 1
+        },
+        {
+         "kind": "money",
+         "amount": 2000
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Show him the swap trick",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "hoenn-cancel-trick",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "\"...They cancel? Hah! Don't tell the customers.\" He pays for your silence.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 8000
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-dakim-bought",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the crates",
+     "success": {
+      "text": "The crates go to one place, and you write the road down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-crates-followed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cipher-seen-dakim",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.hoenn.truce-lunch",
+   "name": "Lunch Break",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#e0d8a0",
+    "effect": "none"
+   },
+   "intro": "An Aqua Grunt and a Magma Grunt are sharing a bench and a lunchbox. \"We're on break.\" \"Union rules. Well. Not union. We asked for a union.\" \"Archie said the sea doesn't unionize.\" \"Maxie said it'd be inefficient.\"",
+   "choices": [
+    {
+     "label": "Sit down",
+     "success": {
+      "text": "They share. \"Honestly? I joined for the hood.\" \"I joined for the boat.\" The grunts give you half a sandwich.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.2
+       },
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-truce-seed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Report them",
+     "success": {
+      "text": "Both are reassigned to the front line. Somebody will be in the way later.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-grunts-reassigned",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "\"If it all goes wrong in that cave,\" one calls after you, \"I'm not hitting him. I'll hit anyone else.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.hoenn.steven-letter",
+   "name": "A Letter for Steven",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#303038",
+    "effect": "none"
+   },
+   "intro": "A man in a suit is examining a cave wall with a small hammer. \"Devon has had six resonators fall off a truck this year. All six were returned in better condition than we shipped them. Someone has been improving our rejects and selling them back to the region. I'd like to know who. I'd also like this stone. Hold my lamp?\"",
+   "choices": [
+    {
+     "label": "Hold the lamp",
+     "success": {
+      "text": "He gives you a good stone for your trouble and a small, serious nod.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 3000
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-steven-lamp",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell him about Dakim",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "cipher-seen-dakim",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "\"A fighter turned supplier. That's worse than a scientist. A scientist wants it to work. He only wants it to sell.\" He will stand beside you when the time comes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-steven-ally",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.hoenn.keepers",
+   "name": "The Keepers",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac",
+     "trainer.hiker"
+    ],
+    "tint": "#241a28",
+    "effect": "glint"
+   },
+   "intro": "An old man and an old woman sit by two empty cushions. \"They aren't weapons, you know. People keep thinking that.\" \"The land made one and gave it to the sea. The sea made one and gave it to the land.\" \"They're apologies.\" \"You don't use an apology. You keep it where you can see it.\"",
+   "choices": [
+    {
+     "label": "Ask how to return them",
+     "success": {
+      "text": "They tell you, slowly, as if hoping you will be the one to ask. Each Orb goes to the other titan.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-orbs-swap",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Promise to bring them back",
+     "success": {
+      "text": "\"We'll keep the cushions warm.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-keepers-promise",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
