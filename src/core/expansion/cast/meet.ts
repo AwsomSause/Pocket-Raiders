@@ -4,6 +4,7 @@
 
 import type { RunState } from '../../state';
 import { ALOLA_PALDEA_MEETINGS } from './meetRegions';
+import { SINNOH_HOENN_BOSS_CAST, SINNOH_HOENN_EVENT_MEETINGS, SINNOH_HOENN_TRACK_MEETINGS } from './meetSinnohHoenn';
 import { beatTeamHeads, markBeaten, recordCast, type CastStatus } from './dossier';
 
 type Meeting = string | [id: string, status: CastStatus];
@@ -34,6 +35,7 @@ export const EVENT_MEETINGS: Record<string, readonly Meeting[]> = {
   'grand-arc-ein': ['sc.rocket.ein'],
   'rainbow-rocket': ['sc.rocket-remnants.rainbow-giovanni'],
   ...ALOLA_PALDEA_MEETINGS,
+  ...SINNOH_HOENN_EVENT_MEETINGS,
 };
 
 /** Kanto canon spaces (Kanto run events): the person who runs that place for Rocket. */
@@ -60,8 +62,10 @@ export const TRACK_MEETINGS: Record<number, readonly Meeting[]> = {
   5: ['sc.rocket.madame-boss'],
 };
 
-/** The other regions' tracks, same idea: reaching a step puts the person behind it in the Dossier. */
-const OTHER_TRACK_MEETINGS: Record<string, Record<number, readonly Meeting[]>> = {
+/** Every other region's track: reaching a step puts the person behind it in the Dossier. */
+export const TRACK_MEETINGS_BY_REGION: Record<string, Record<number, readonly Meeting[]>> = {
+  kanto: TRACK_MEETINGS,
+  ...SINNOH_HOENN_TRACK_MEETINGS,
   kalos: { 1: ['sc.flare.garance'], 2: ['sc.flare.corbeau'], 3: ['sc.flare.valerie'], 4: ['sc.flare.venus'], 5: ['sc.flare.essentia'] },
   galar: { 1: ['sc.macro-cosmos.ball-guy'], 2: ['sc.yell.gaz'], 3: ['sc.macro-cosmos.sordward'], 4: ['sc.macro-cosmos.hollis'], 5: ['sc.macro-cosmos.pryce'] },
 };
@@ -72,9 +76,9 @@ export function meetFromEvent(run: RunState, event: { id: string; canon?: string
   if (event.canon) meet(run, CANON_MEETINGS[event.canon] ?? []);
 }
 
-/** After Kanto's track moves: everyone up to the highest step reached. */
+/** After a region's track moves: everyone up to the highest step reached. */
 export function meetFromTrack(run: RunState, regionId: string, peak: number): void {
-  const table = regionId === 'kanto' ? TRACK_MEETINGS : OTHER_TRACK_MEETINGS[regionId];
+  const table = TRACK_MEETINGS_BY_REGION[regionId];
   if (!table) return;
   for (let s = 1; s <= peak; s++) meet(run, table[s] ?? []);
 }
@@ -95,6 +99,7 @@ export const BOSS_CAST: Record<string, string> = {
   koga: 'sc.rocket.triad-koga',
   'lt-surge': 'sc.rocket.triad-surge',
   blaine: 'sc.rocket.blaine',
+  ...SINNOH_HOENN_BOSS_CAST,
 };
 
 /** A gym leader, Elite Four or Champion fight was won. */

@@ -3,6 +3,7 @@
 // can change an enemy's level or team.
 
 import { NO_EFFECTS, type TrackEffects } from './track';
+import { HOENN_PAGE, SINNOH_HOENN_ADVERT_LINE, SINNOH_PAGE } from './trackSinnohHoenn';
 
 /** Alola: step 3 "Donations" takes a fifth off the wild pool. Steps 1, 2, 4 and 5 (closed trial sites, borrowed Pokémon, Ultra Beast glimpses, dimmer daylight) are not built: they stay as page text only. */
 export function alolaEffects(step: number): TrackEffects {
@@ -13,7 +14,7 @@ export function alolaEffects(step: number): TrackEffects {
 export const paldeaEffects = (step: number): TrackEffects => ({ ...NO_EFFECTS, adverts: step >= 5 });
 
 /** The map line when step 5 shows (the `adverts` effect), by region. */
-export const ADVERT_LINE: Record<string, string> = { alola: 'Daylight is a third dimmer than it should be, and everyone is looking up.', paldea: 'Five engines are audible from anywhere in Mesagoza.' };
+export const ADVERT_LINE: Record<string, string> = { ...SINNOH_HOENN_ADVERT_LINE, alola: 'Daylight is a third dimmer than it should be, and everyone is looking up.', paldea: 'Five engines are audible from anywhere in Mesagoza.' };
 
 export interface TrackPageText { scale: string; scaleNote: string; sighting: string; civilian: string }
 
@@ -34,4 +35,4 @@ export const PALDEA_PAGE: Record<number, TrackPageText> = {
 };
 
 /** The page text for a region that has its own table here, else undefined. */
-export const trackPageTextFor = (regionId: string): Record<number, TrackPageText> | undefined => (regionId === 'alola' ? ALOLA_PAGE : regionId === 'paldea' ? PALDEA_PAGE : undefined);
+export const trackPageTextFor = (regionId: string): Record<number, TrackPageText> | undefined => (regionId === 'alola' ? ALOLA_PAGE : regionId === 'paldea' ? PALDEA_PAGE : regionId === 'sinnoh' ? SINNOH_PAGE : regionId === 'hoenn' ? HOENN_PAGE : undefined);

@@ -1,0 +1,718 @@
+{
+ "events": [
+  {
+   "id": "xe.sinnoh.clinic",
+   "name": "The Clinic",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "priority": 100,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady",
+     "trainer.worker_m"
+    ],
+    "tint": "#e8eef4",
+    "effect": "none"
+   },
+   "intro": "A clean white storefront: GALACTIC WELLNESS, FREE CHECK-UPS. A small girl sits on the step with a Buneary that is looking at nothing. \"They said she was anxious. She's not anxious now. She's not anything now. She used to hide my socks.\" Orderly Vance, gently, in the doorway: \"Stress responses are down ninety percent. That's a wonderful result. You should be pleased.\"",
+   "choices": [
+    {
+     "label": "\"Put it back.\"",
+     "success": {
+      "text": "\"Put what back? Nothing was removed that she needed.\" His Pokémon stare straight ahead, and do not flinch.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 2
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "chansey",
+        "bronzong",
+        "kadabra"
+       ],
+       "name": "Orderly Vance",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "galactic-vance-down",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave one of your Pokémon for a check-up",
+     "success": {
+      "text": "It comes back healthy, quiet, and a little far away. It will not sulk, flinch or play for a while. You have seen the machine.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-clinic-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-spiritless-checkup",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit with the Buneary",
+     "success": {
+      "text": "It does nothing. At the end it picks up one of the girl's socks, looks at it for a while, and puts it down again.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-sock",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.sinnoh.fridays",
+   "name": "Fridays",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#d8e4f0",
+    "effect": "none"
+   },
+   "intro": "A little girl stands outside the Windworks fence while a sky full of Drifloon carries Grunts toward the roof, one each, like an airline. \"They're only supposed to come on Fridays. They come for me on Fridays. Now they come every day and they don't even look.\" A Grunt drifts past at head height, embarrassed: \"It's very fuel-efficient.\"",
+   "choices": [
+    {
+     "label": "Call one down (an Oran Berry)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "Friday lands on the girl's head. \"My papa runs the turbines inside. He said to tell anyone who asks that he's not helping them, he's just bad at saying no.\" Friday will carry you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-friday-lent",
+        "amount": 1
+       },
+       {
+        "kind": "fieldNote",
+        "special": "sv.galactic.friday"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "drifloon"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pop one",
+     "success": {
+      "text": "A Grunt falls in a hedge. The girl will not speak to you.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 3
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-popped",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "\"Fridays are for me,\" the girl says, to nobody.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.sinnoh.grunt-836",
+   "name": "Grunt No. 836",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "evil",
+     "heat": 30
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1a1c24",
+    "effect": "none"
+   },
+   "intro": "A Galactic Grunt is standing behind a signpost. The signpost is narrower than he is. A stage whisper: \"Psst. You have not seen me. My codename is Looker. I should not have told you that. I have infiltrated this organization for six weeks and nobody suspects! They are a people without curiosity. It is the perfect cover and it is breaking my heart.\"",
+   "choices": [
+    {
+     "label": "Get the key from the canteen",
+     "success": {
+      "text": "A short, quiet fight over a ring of keys. \"A side entrance,\" Looker whispers. \"You have the gift of the unobserved.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-looker-ally",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Canteen Grunt",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "galactic-storage-key",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Your wig is crooked.\"",
+     "success": {
+      "text": "\"It is not a wig. It is the regulation haircut, and it is the bravest thing I have done.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"What have you found?\"",
+     "success": {
+      "text": "\"A room where they keep three small Pokémon in three large machines. I am not a sentimental man. I walked past that room once and I have not slept.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-three-machines",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.sinnoh.grandfather",
+   "name": "The Bench in Sunyshore",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#e0c890",
+    "effect": "none"
+   },
+   "intro": "An old man on a bench is feeding Wingull. \"I had a grandson. Clever. Too clever for the house. His parents wanted the top of the class, and when he wasn't, they wanted to know why, at length. He stopped coming down for supper. Machines don't ask you why. I used to stand at the bottom of the stairs and think, leave him be, he's busy. That's what I've got. I left him be.\"",
+   "choices": [
+    {
+     "label": "\"What was his name?\"",
+     "success": {
+      "text": "He tells you. It is a short name and a quiet one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-grandfather",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit a while",
+     "success": {
+      "text": "He gives you a Soothe Bell, and does not ask for anything for it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "soothe-bell",
+        "count": 1
+       },
+       {
+        "kind": "rest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Would you want to see him?\"",
+     "success": {
+      "text": "\"I'd want him to want it. That's a different thing, and I'm old enough to know.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.sinnoh.marsh-test",
+   "name": "The Marsh Test",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#2a2418",
+    "effect": "flicker"
+   },
+   "intro": "A boom from the Great Marsh. Smoke. A Grunt sprints the other way: \"It worked! It worked! I didn't think it would. Oh no. Oh, it worked.\" A black airship turns slowly overhead and a bored voice comes from its loudspeaker. \"Test confirmed. Crater radius acceptable. Invoice to follow. And you, on the boardwalk: you are standing in a workplace.\"",
+   "choices": [
+    {
+     "label": "Chase the Grunt",
+     "success": {
+      "text": "He gives up at once: \"I just pressed it. They said press it. I thought it was a drill.\" The next bomb is meant for a lake.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-next-bomb-lake",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Signal the airship",
+     "success": {
+      "text": "Hunter J sends one henchman down by cable. \"She will come for you personally,\" he says, wiping his nose.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 3
+       },
+       {
+        "kind": "fieldNote",
+        "special": "sv.galactic.warrant"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "drapion",
+        "ariados"
+       ],
+       "name": "Hunter J's Henchman",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "galactic-j-marked",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Help the Marsh wardens",
+     "success": {
+      "text": "Three bronzed Pokémon are found in the reeds. One of them can be restored at a Pokémon Center and kept.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 5
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "stunky"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.sinnoh.celestic-wall",
+   "name": "The Wall at Celestic",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman",
+     "trainer.hex_maniac"
+    ],
+    "tint": "#1a1820",
+    "effect": "glint"
+   },
+   "intro": "A man in grey is looking at a cave painting. A tall woman in black is looking at him. \"It shows three beings around a light. People have read it as a creation story for two thousand years.\" \"It is an instruction diagram. People have been sentimental for two thousand years.\" Then Cyrus turns to you. \"You have interfered four times. I have reviewed each instance. You were efficient. You did not gloat. You are the least wasteful person I have encountered this year. I would prefer that you were not standing in its way. This is not a threat. I do not have the capacity for those anymore. It is a preference.\"",
+   "choices": [
+    {
+     "label": "\"And joy?\"",
+     "success": {
+      "text": "\"Subtracted with the rest. They share a mechanism. I checked.\" Cynthia, after he has gone: \"I'm coming up that mountain with you.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-cynthia-ally",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happened to you?\"",
+     "success": {
+      "text": "A pause that would be hesitation in anyone else. \"Nothing is happening to me. That is the result.\" Cynthia: \"I've met a great many dangerous people. He's the first one I've wanted to make a cup of tea for. Don't tell anyone.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-cynthia-ally",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-cyrus-tested",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing",
+     "success": {
+      "text": "\"Yes. Exactly that.\" He leaves. Cynthia watches him go, then turns to you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-cynthia-ally",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.sinnoh.town-slept",
+   "name": "The Town That Slept",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#10162a",
+    "effect": "flicker"
+   },
+   "intro": "The harbor is silent at noon. People are asleep at café tables, on benches, at the wheel of a moored ferry. A sailor's wife, awake and grey with it: \"Three days. My boy first, then the street. They're not in pain. They're just not here.\" At night a shape stands at the end of the pier, watching the windows like a nurse on a ward.",
+   "choices": [
+    {
+     "label": "Approach it",
+     "success": {
+      "text": "It does not attack first. If you do not attack for three turns it says, without a voice: \"They will not have to feel it end.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-long-night-met",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "special": "ss.galactic.long-night",
+       "shadow": true,
+       "species": [
+        "darkrai"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Fetch a Lunar Wing (two nodes away)",
+     "success": {
+      "text": "The town wakes. The shape bows its head and is purified where it stands.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 8
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-town-woke",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them sleep",
+     "success": {
+      "text": "Canalave is quiet, and stays quiet. Nobody there will feel the end.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-town-slept",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.sinnoh.ribbon",
+   "name": "The Ribbon",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#e8c8e0",
+    "effect": "glint"
+   },
+   "intro": "A young woman with pink hair is buying every ribbon on the shelf while a Galactic Scientist carries her bags. \"The chain is so drab. Red, red, red. I told the little bald doctor: if it's going to hold a god, it should at least be cute.\" She looks at your lead Pokémon the way a jeweller looks at a stone. \"Ooh. What a strong little heart it has. Those are the fun ones to close.\"",
+   "choices": [
+    {
+     "label": "Follow her",
+     "success": {
+      "text": "She does not notice, or does not mind. Her notes are signed with a heart.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-lovrina-followed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cipher-seen-lovrina",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Challenge her",
+     "success": {
+      "text": "\"Hmph. Fine. One little dance.\" Her Pokémon wear pink ribbons on their paws.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cipher-seen-lovrina",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "gardevoir",
+        "mismagius",
+        "roserade"
+       ],
+       "name": "Lovrina",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "galactic-lovrina-down",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Who do you work for?\"",
+     "success": {
+      "text": "\"Someone with a much bigger chain to fill. Byeee.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cipher-seen-lovrina",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

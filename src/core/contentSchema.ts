@@ -3203,6 +3203,8 @@ export const EventRuleSchema = z.object({
   /** Each of your Pokémon that faints comes back once with a quarter of its HP (Pinch Hitter). */
   pinchHitter: z.boolean().optional(),
   /** Blackout's Seal (Beta 0.6 E4): no voluntary switching on the first turn of the fight. */
+  /** Beta 0.7 Sinnoh (Whiteout): accuracy for both sides is multiplied by this in the fight. */
+  accuracyMult: z.number().min(0.5).max(1).optional(),
   noSwitchFirstTurn: z.boolean().optional(),
   /** Beta 0.7 Alola Crossing, Thin Light: at the end of every third turn a glimpse from the far side of the sky strikes one Pokémon on the field for an eighth of its HP (never a knockout). */
   thinLight: z.boolean().optional(),

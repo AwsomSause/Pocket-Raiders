@@ -28,8 +28,8 @@ const lost = (es: Events, side: 'player' | 'enemy') => es.reduce((n, e) => (e.ty
 const texts = (es: Events) => es.filter((e) => e.type === 'raid').map((e) => (e as { text: string }).text);
 
 describe('registry and assignment', () => {
-  it('nine traits, each tied to a dossier row that exists', () => {
-    expect(TRAIT_IDS).toHaveLength(9);
+  it('sixteen traits, each tied to a dossier row that exists', () => {
+    expect(TRAIT_IDS).toHaveLength(16);
     const ids = new Set(expansionData.specialPokemon.map((p) => p.id));
     for (const t of TRAIT_IDS) expect(ids.has(TRAIT_CAST[t].dossier), t).toBe(true);
   });

@@ -250,7 +250,7 @@ import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
 import { recapRegion, tellAct } from './campaign/director';
-import { healStopShut, trackHealShare, trackShopFactor, trackWildWeight } from './expansion/trackRun';
+import { applyTrackToBattle, healStopShut, trackEffects, trackForgetStock, trackHealShare, trackShopFactor, trackWildWeight } from './expansion/trackRun';
 import { freshClock, migrationWildWeight, periodOf, periodWildWeight, shopHoursMultiplier, stepClock, tideShopMultiplier, tideWildWeight } from './clock';
 import { bulkTotal, currentShopType, haggleWins, pokenetDeal, shopTypeAt, typedStock, typePriceFactor } from './shopTypes';
 import { finalRivalLine, tellCampfire } from './story/highHype';
@@ -2063,6 +2063,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     rememberPick(content, run, WILD_MET_POOL, enemy.speciesId);
     const setup = wildBattleSetup(content, run, mods);
     if (setup.weather) run.battle.weather = { id: setup.weather, turns: 999 };
+    applyTrackToBattle(content, run);
     if (setup.drop) run.itemCounters = { ...run.itemCounters, 'pinap-drop': 1 };
     if (setup.freeTurns > 0) run.battle.mapItems = { freeTurns: setup.freeTurns, thrown: 0 };
     if (setup.foeSpeed !== 0) run.battle.enemyStages.spe = Math.max(-6, Math.min(6, run.battle.enemyStages.spe + setup.foeSpeed));
@@ -2279,6 +2280,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     const order = plan.leaderId || isRival || rivalBack || nemesis || bossBack || trainingIndex >= 0 ? built.map((_, i) => i) : roleOrder(content, built);
     const team = order.map((i) => built[i]!);
     run.battle = createBattle('trainer', team, activeIndex, activeUid, { classId: plan.classId, name: plan.name, leaderId: plan.leaderId });
+    applyTrackToBattle(content, run);
     assignField(content, run, !!plan.leaderId);
     run.battle.ai = plan.ai;
     if (parity) {
@@ -2558,6 +2560,9 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     // Kalos step 3 (Members First): the Center gives back only part of each Pokémon's HP.
     const share = trackHealShare(content, run);
     if (share < 1) run.party.forEach((m, i) => { m.hp = Math.min(m.hp, Math.max(before[i] ?? 0, Math.ceil(maxHp(content, m) * share))); });
+    // Sinnoh's Brownout: the Pokémon Center only restores part of each Pokémon's HP.
+    const centerHeal = trackEffects(content, run).centerHeal;
+    if (centerHeal < 1) for (const mon of run.party) mon.hp = Math.max(1, Math.min(mon.hp, Math.floor(maxHp(content, mon) * centerHeal)));
     careRest(run, content);
     partyLifeCamp(run);
     const comboLine = [partyLifeCombos(content, run), ...assignGrowthPaths(content, run.party, run.story.histories)].filter(Boolean).join(' ');
@@ -2650,7 +2655,7 @@ export function shopStock(content: Content, run: Pick<RunState, 'badges' | 'arch
   const selling = stock.filter((e) => (black || open(e) || early.includes(e)) && allowed(e));
   // Shops redesign: each kind of shop sells its own part of that (core/shopTypes.ts).
   const locked = stock.filter((e) => !selling.includes(e) && allowed(e)).sort((a, b) => shopBadgesNeeded(content, run, a) - shopBadgesNeeded(content, run, b));
-  return typedStock(content, run, selling, locked) as Content['shop'];
+  return trackForgetStock(content, run as Partial<RunState>, typedStock(content, run, selling, locked) as Content['shop']) as Content['shop'];
 }
 
 /** Whether an entry is on sale only through the Black Market (your badges haven't opened it). */
@@ -3417,7 +3422,7 @@ function awardExperience(content: Content, run: RunState, events: BattleEvent[])
       if (result.levelsGained > 0) {
         out.push({ type: 'levelUp', uid, level: result.newLevel });
         growthOnLevelUp(content, mon, result.newLevel - result.levelsGained);
-        changeFriendship(content, mon, content.balance.friendship.perLevel * result.levelsGained, effects.friendship);
+        changeFriendship(content, mon, content.balance.friendship.perLevel * result.levelsGained, effects.friendship * trackEffects(content, run).friendshipFactor);
       }
       for (const moveId of result.learnedMoves) out.push({ type: 'learnedMove', uid, moveId });
       for (const moveId of result.skippedMoves) {
@@ -3584,7 +3589,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (battle.rivalId) count(run, 'rivalBattlesWon');
     const { perBattleWon, perBossWon } = content.balance.friendship;
     const boss = classId === GYM_LEADER_CLASS || classId === ELITE_FOUR_CLASS || classId === CHAMPION_CLASS;
-    const gainMultiplier = runAttributeEffects(content, run).friendship;
+    const gainMultiplier = runAttributeEffects(content, run).friendship * trackEffects(content, run).friendshipFactor; // Sinnoh: the lakes' Feeling halves it
     for (const mon of run.party) {
       if (mon.hp > 0 && battle.participants.includes(mon.uid)) changeFriendship(content, mon, boss ? perBossWon : perBattleWon, gainMultiplier);
     }

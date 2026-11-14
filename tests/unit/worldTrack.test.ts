@@ -2,7 +2,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { ExpansionRunSchema } from '../../src/core/expansion/schema';
-import { freshTrack, insuredIndex, kantoEffects, NO_EFFECTS, reduceTrack, trackEffectsFor, TRACK_INPUTS, TrackStateSchema, wildTaken, type TrackInput } from '../../src/core/expansion/track';
+import { NO_EFFECTS, freshTrack, insuredIndex, kantoEffects, reduceTrack, trackEffectsFor, TRACK_INPUTS, TrackStateSchema, wildTaken, type TrackInput } from '../../src/core/expansion/track';
 import { advanceTrack, healStopShut, trackEffects, trackOnClimax, trackOnOperation, trackShopFactor, trackStep, trackWildWeight } from '../../src/core/expansion/trackRun';
 import { trackPage } from '../../src/core/expansion/trackView';
 import { resolveStoryRaid } from '../../src/core/raid/storyRaids';
@@ -84,7 +84,7 @@ describe('Kalos and Galar effects (Beta 0.7 E9)', () => {
 describe('Kanto effects', () => {
   it('turn on step by step and stack', () => {
     const at = (n: number) => kantoEffects(n, cfg);
-    expect(at(0)).toEqual({ shopMarkup: 0, healShutAtNight: false, roadblocks: false, wildShrink: 0, adverts: false });
+    expect(at(0)).toEqual(NO_EFFECTS);
     expect(at(1).shopMarkup).toBe(0.1);
     expect(at(2).healShutAtNight).toBe(true);
     expect(at(3).roadblocks).toBe(true);

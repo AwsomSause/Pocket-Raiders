@@ -71,7 +71,7 @@ describe('Johto and Unova world-state tracks', () => {
     expect(trackEffectsFor('johto', 1, cfg).shopMarkup).toBe(0);
     expect(trackEffectsFor('unova', 3, cfg).healShutAtNight).toBe(true);
     expect(trackEffectsFor('unova', 2, cfg).healShutAtNight).toBe(false);
-    expect(trackEffectsFor('hoenn', 5, cfg)).toEqual(trackEffectsFor('nowhere', 0, cfg));
+    expect(trackEffectsFor('orre', 5, cfg)).toEqual(trackEffectsFor('nowhere', 0, cfg));
   });
   it('show a Notebook page that reveals only reached steps', () => {
     for (const region of ['johto', 'unova']) {
