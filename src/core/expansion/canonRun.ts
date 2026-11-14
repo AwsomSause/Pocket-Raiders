@@ -6,6 +6,7 @@ import type { Content } from '../contentSchema';
 import { Rng, hashSeed } from '../rng';
 import { currentRegion } from '../regions';
 import type { RunState } from '../state';
+import { rememberFlightBug } from '../instrumentality/flightNorth';
 import { ghostReturnEvent } from './canonSaffron';
 import { enterCanonSlot, finishCanonSpace } from './canonSpaces';
 
@@ -111,6 +112,7 @@ export function stashParty(run: RunState): boolean {
 export function restoreStash(run: RunState): boolean {
   const st = run.expansion?.canon;
   if (!st?.stash || st.solo) return false; // `solo` means Saffron's own stash (Tournament, Labyrinth): its restore owns it
+  rememberFlightBug(run, run.party); // the Bug-type is leaving: Flight North's return remembers it
   run.party = st.stash as RunState['party'];
   run.pending = run.pending.filter((p) => p.kind !== 'caught');
   const { stash: _gone, ...rest } = st;
