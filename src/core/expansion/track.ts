@@ -119,7 +119,7 @@ export function unovaEffects(step: number, cfg: TrackConfig): TrackEffects {
 /** The effects a region's track has at a step. Built for Kanto, Johto, Unova, Kalos, Galar, Alola, Paldea, Sinnoh and Hoenn. */
 export function trackEffectsFor(regionId: string, step: number, cfg: TrackConfig): TrackEffects {
   if (regionId === 'alola') return alolaEffects(step);
-  if (regionId === 'paldea') return paldeaEffects(step);
+  if (regionId === 'paldea') return paldeaEffects(step, cfg);
   if (regionId === 'kalos') return kalosEffects(step, cfg);
   if (regionId === 'galar') return galarEffects(step, cfg);
   if (regionId === 'kanto') return kantoEffects(step, cfg);

@@ -3208,6 +3208,8 @@ export const EventRuleSchema = z.object({
   noSwitchFirstTurn: z.boolean().optional(),
   /** Beta 0.7 Alola Crossing, Thin Light: at the end of every third turn a glimpse from the far side of the sky strikes one Pokémon on the field for an eighth of its HP (never a knockout). */
   thinLight: z.boolean().optional(),
+  /** Beta 0.7 Alola forced-switch boss: every N turns (2 or more) your active Pokémon is driven out and you choose who replaces it. Does nothing with no healthy Pokémon on the bench. */
+  forceSwitch: z.number().int().min(2).max(6).optional(),
   /** Beta 0.6 Foresight Tax: the foe sees your first chosen move each turn until one of its Pokémon faints. */
   foresight: z.boolean().optional(),
   /** Front (Beta 0.6): each Pokémon fights only the foe in its own lane (spot n faces spot n); no moves reach other lanes or allies. */

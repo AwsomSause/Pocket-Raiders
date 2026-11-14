@@ -1,10 +1,10 @@
-// Beta 0.7 E9: team-wide battle traits for Alola and Paldea story events (Hype Man, Reluctant Hand). They are off unless the
+// Beta 0.7 E9: team-wide battle traits for Alola and Paldea story events (Hype Man, Reluctant Hand, Old Habits). They are off unless the
 // run started with the `storyTraits` setting on. State lives in `battle.extra.storyTraits` (uid -> trait, saved with the battle).
 // Pure, no RNG. An event battle names its trait with `special: 'st.<trait>'`.
 
 import { z } from 'zod';
 
-export const STORY_TRAIT_IDS = ['hype-man', 'reluctant-hand'] as const;
+export const STORY_TRAIT_IDS = ['hype-man', 'reluctant-hand', 'old-habits'] as const;
 export type StoryTraitId = (typeof STORY_TRAIT_IDS)[number];
 
 export const StoryTraitsSchema = z.record(z.string(), z.object({ trait: z.enum(STORY_TRAIT_IDS), turn: z.number().int().optional() })).default({});
@@ -36,3 +36,7 @@ export function storyHype(store: StoryTraits, uid: string, beaten: number, turn:
   if (s.turn === undefined) s.turn = turn;
   return s.turn === turn ? HYPE_POWER : 1;
 }
+
+/** Old Habits: the foe goes for the weakest. In a one-on-one fight that means it hits 25% harder once your Pokémon is under half HP. */
+export const OLD_HABITS_POWER = 1.25;
+export const storyOldHabits = (store: StoryTraits, uid: string, hp: number, max: number): number => (store[uid]?.trait === 'old-habits' && max > 0 && hp * 2 < max ? OLD_HABITS_POWER : 1);

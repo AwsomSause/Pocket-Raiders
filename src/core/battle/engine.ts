@@ -34,7 +34,7 @@ import * as Ultra from '../ultra/rules';
 import type { UltraRuleId } from '../ultra/beasts';
 import { abilityOf, calcStats, createPokemon, getSpecies, maxHp } from '../pokemon';
 import { rallyStages } from './rally';
-import { storyHype, storyNoCrit } from '../expansion/storyTraits';
+import { storyHype, storyNoCrit, storyOldHabits } from '../expansion/storyTraits';
 import { HOUSE_WINS_STAGES, LIGHTS_OUT_ACCURACY, LIGHTS_OUT_TURNS, housePending, isHousePair, takeHousePending, traitDoubleEntry, traitDrill, traitFeedHeal, traitFoodKnocked, traitLightsOut, traitOverhears, traitPayout, traitSeatMessage, traitTakesBerry, GRID_TIE_SHARE, traitBloodScent, traitGridTie, traitLingering, traitOnSchedule, traitSubtraction, traitUndertow, traitUpdraft } from '../expansion/traits';
 import { ACCESSORY_TORN_MESSAGE, SPIRITLESS_MESSAGE, variantBlocksForcedSwitch, variantBlocksMind, variantBlocksStage, variantBlocksStatus, variantEndTurnLoss, variantAccessory, variantAccessoryTorn, variantCheer, variantEndTurnStages, variantGimmickTick, variantGadget, variantIncoming, variantItemMove, variantLosesTurn, variantNeverMisses, variantOnEntry, variantOutgoing, variantPriorityBonus, variantSnagRefuses, variantTagCall } from '../expansion/variantLines';
 import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
@@ -1067,6 +1067,11 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
       target.hp -= amount;
       events.push({ type: 'raid', tone: 'info', text: 'A glimpse from the far side of the sky strikes!' }, { type: 'damage', side: onEnemy ? 'enemy' : 'player', amount, hpAfter: target.hp, effectiveness: 1, crit: false });
     }
+  }
+  if (rule.forceSwitch && mine && mine.hp > 0 && !battle.needsSwitch && battle.turn > 0 && battle.turn % rule.forceSwitch === 0 && party?.some((m, i) => i !== battle.activeIndex && m.hp > 0)) {
+    // Beta 0.7 Alola: the foe's pivot drives your Pokémon out; you pick who comes in (a free switch, no turn used).
+    battle.needsSwitch = true;
+    events.push({ type: 'raid', tone: 'info', text: 'The foe barges in and drives your Pokémon off the field!' });
   }
   if (rule.cursedHat && mine && mine.hp > 0) {
     const foe = currentEnemy(battle);
@@ -4000,7 +4005,10 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       let attackBoost = 1;
       let powerMult = 1;
       if (changedType) powerMult *= 1.2;
-      if (user.side === 'enemy') powerMult *= storyHype(ctx.battle.extra.storyTraits, user.mon.uid, ctx.battle.enemyIndex, ctx.battle.turn);
+      if (user.side === 'enemy') {
+        powerMult *= storyHype(ctx.battle.extra.storyTraits, user.mon.uid, ctx.battle.enemyIndex, ctx.battle.turn);
+        powerMult *= storyOldHabits(ctx.battle.extra.storyTraits, user.mon.uid, target.mon.hp, maxHp(ctx.content, target.mon));
+      }
       if (userAbility === 'technician' && power <= 60) powerMult *= 1.5;
       const flagBoost = userAbility ? FLAG_BOOST[userAbility] : undefined;
       if (flagBoost && move.flags.includes(flagBoost.flag)) powerMult *= flagBoost.multiplier;

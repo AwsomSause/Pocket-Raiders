@@ -2,7 +2,7 @@
 // Kept apart from track.ts / trackView.ts so each region's thread adds its own file. No random numbers; nothing here
 // can change an enemy's level or team.
 
-import { NO_EFFECTS, type TrackEffects } from './track';
+import { NO_EFFECTS, type TrackConfig, type TrackEffects } from './track';
 import { HOENN_PAGE, SINNOH_HOENN_ADVERT_LINE, SINNOH_PAGE } from './trackSinnohHoenn';
 
 /** Alola: step 3 "Donations" takes a fifth off the wild pool. Steps 1, 2, 4 and 5 (closed trial sites, borrowed Pokémon, Ultra Beast glimpses, dimmer daylight) are not built: they stay as page text only. */
@@ -10,8 +10,14 @@ export function alolaEffects(step: number): TrackEffects {
   return { ...NO_EFFECTS, wildShrink: step >= 3 ? 0.2 : 0, adverts: step >= 5 };
 }
 
-/** Paldea's track measures how badly the adults are handling it; only step 5 has a map line. Steps 1 to 4 (flyers, checkpoints, expulsion notices, Cipher Peons in costume) are page text. */
-export const paldeaEffects = (step: number): TrackEffects => ({ ...NO_EFFECTS, adverts: step >= 5 });
+/** Paldea's track measures how badly the adults are handling it. Step 1 (flyers) marks one shop per stage up, step 2 (checkpoints) shuts the first healing stop at night, step 3 (expulsion notices) takes a share off the wild pool, step 4 (officers, costumed Grunts) allows roadblock scenes, and step 5 adds the map line. They stack. The numbers come from the same balance entry as Kanto's. */
+export const paldeaEffects = (step: number, cfg: TrackConfig): TrackEffects => ({
+  shopMarkup: step >= 1 ? cfg.shopMarkup : 0,
+  healShutAtNight: step >= 2,
+  roadblocks: step >= 4,
+  wildShrink: step >= 3 ? cfg.wildShrink : 0,
+  adverts: step >= 5,
+});
 
 /** The map line when step 5 shows (the `adverts` effect), by region. */
 export const ADVERT_LINE: Record<string, string> = { ...SINNOH_HOENN_ADVERT_LINE, alola: 'Daylight is a third dimmer than it should be, and everyone is looking up.', paldea: 'Five engines are audible from anywhere in Mesagoza.' };
