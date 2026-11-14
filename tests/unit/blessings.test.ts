@@ -2,7 +2,7 @@
 
 import { existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { assignBlessing, BLESSINGS, BLESSING_TIER_ODDS, blessingAfterBattle, blessingShopFactor, BlessingStateSchema, getBlessing, rollBlessing, runBlessing } from '../../src/core/blessings';
+import { assignBlessing, blessingPerks, blessingRite, syncCommunion, useBlessingRite, BLESSINGS, BLESSING_TIER_ODDS, blessingAfterBattle, blessingShopFactor, BlessingStateSchema, getBlessing, rollBlessing, runBlessing } from '../../src/core/blessings';
 import { ExpansionRunSchema } from '../../src/core/expansion/schema';
 import { maxHp } from '../../src/core/pokemon';
 import { chooseStarter, createRun } from '../../src/core/run';
@@ -14,7 +14,7 @@ const start = (seed: string, blessings = true): RunState =>
 const withBlessing = (id: string): RunState => {
   const run = start('bless-fixed');
   const def = getBlessing(id)!;
-  run.expansion = { ...run.expansion, blessing: { id, tier: def.tier, influence: BLESSING_TIER_ODDS[def.tier].influence, seen: false, ashRegions: [] } };
+  run.expansion = { ...run.expansion, blessing: { id, tier: def.tier, influence: BLESSING_TIER_ODDS[def.tier].influence, seen: false, ashRegions: [], communion: false, riteUsed: false, stagesDone: [] } };
   return run;
 };
 const twoMons = (run: RunState) => {
@@ -78,7 +78,7 @@ describe('run glue and save shape', () => {
     const r = start('s2');
     expect(ExpansionRunSchema.parse(JSON.parse(JSON.stringify(r.expansion))).blessing).toEqual(r.expansion?.blessing);
     expect(ExpansionRunSchema.parse({}).blessing).toBeUndefined();
-    expect(BlessingStateSchema.parse({ id: 'ho-oh', tier: 'divine', influence: 1 })).toMatchObject({ seen: false, ashRegions: [] });
+    expect(BlessingStateSchema.parse({ id: 'ho-oh', tier: 'divine', influence: 1 })).toMatchObject({ seen: false, ashRegions: [], communion: false, riteUsed: false, stagesDone: [] });
   });
   it('a blessing id the game no longer knows is ignored, not a crash', () => {
     const r = start('s3');
@@ -121,5 +121,53 @@ describe('effects', () => {
     expect(blessingShopFactor(withBlessing('fezandipiti'))).toBeCloseTo(0.9);
     expect(blessingShopFactor(withBlessing('ho-oh'))).toBe(1);
     expect(blessingShopFactor(start('plain', false))).toBe(1);
+  });
+});
+
+describe('perk blessings', () => {
+  it('Tornadus gives its Tailwind only until the first battle of the stage is done', () => {
+    const run = withBlessing('tornadus');
+    expect(blessingPerks(run)).toEqual([{ kind: 'battleStart', tailwind: true, turns: 2 }]);
+    blessingAfterBattle(content, run);
+    expect(blessingPerks(run)).toEqual([]);
+    run.stage!.index += 1;
+    expect(blessingPerks(run)).toHaveLength(1);
+  });
+  it('Zacian, Regidrago, Moltres and Munkidori add their perks every battle; Lele adds none', () => {
+    for (const id of ['zacian', 'regidrago', 'moltres', 'munkidori']) expect(blessingPerks(withBlessing(id)), id).toHaveLength(1);
+    expect(blessingPerks(withBlessing('tapu-lele'))).toEqual([]);
+  });
+});
+
+describe('Communion and Rites', () => {
+  it('Communion starts when the run owns the blessing Legendary, once', () => {
+    const run = withBlessing('tapu-lele');
+    expect(syncCommunion(run)).toBe(false);
+    run.box.push({ ...structuredClone(run.party[0]!), uid: 'lele', speciesId: 'tapu-lele' });
+    expect(syncCommunion(run)).toBe(true);
+    expect(run.expansion!.blessing!.communion).toBe(true);
+    expect(syncCommunion(run)).toBe(false);
+  });
+  it("Tapu Lele's Rite restores the whole party once, and only after Communion", () => {
+    const run = twoMons(withBlessing('tapu-lele'));
+    run.party.forEach((m) => (m.hp = 1));
+    expect(useBlessingRite(content, run)).toBeNull();
+    run.expansion!.blessing!.communion = true;
+    expect(blessingRite(run)!.ready).toBe(true);
+    expect(useBlessingRite(content, run)).toContain('restored');
+    expect(run.party.every((m) => m.hp === maxHp(content, m))).toBe(true);
+    expect(useBlessingRite(content, run)).toBeNull();
+  });
+  it("Lele's Communion heals the rest of the party 5% and Fezandipiti's shops drop to 20% off", () => {
+    const run = twoMons(withBlessing('tapu-lele'));
+    run.expansion!.blessing!.communion = true;
+    const [a, b] = run.party;
+    const max = maxHp(content, a!);
+    a!.hp = Math.floor(max / 2); b!.hp = Math.floor(max / 4);
+    blessingAfterBattle(content, run);
+    expect(a!.hp).toBe(Math.floor(max / 2) + Math.ceil(max * 0.05));
+    const fez = withBlessing('fezandipiti');
+    fez.expansion!.blessing!.communion = true;
+    expect(blessingShopFactor(fez)).toBeCloseTo(0.8);
   });
 });

@@ -4,7 +4,9 @@
 
 import { z } from 'zod';
 import raw from '../../data/blessings.json';
-import type { Content } from '../contentSchema';
+import { ArchetypeModifierSchema, type Content } from '../contentSchema';
+import type { Perks } from '../archetypes';
+import { isBossClass } from '../trainerPerks';
 import { hashSeed, Rng } from '../rng';
 import { maxHp } from '../pokemon';
 import type { RunState } from '../state';
@@ -16,14 +18,18 @@ const BlessingDefSchema = z.object({
   id: z.string().min(1), name: z.string().min(1), legendary: z.string().min(1), speciesId: z.string().min(1),
   tier: z.enum(BLESSING_TIERS), item: z.string().min(1), objectText: z.string().min(1), passage: z.string().min(1),
   headline: z.string().min(1), summary: z.string().min(1),
-  effect: z.object({ kind: z.enum(['none', 'healMostHurt', 'shopDiscount', 'sacredAsh']) }),
+  effect: z.object({ kind: z.enum(['none', 'healMostHurt', 'shopDiscount', 'sacredAsh', 'perks']) }),
+  /** Battle perks (the same rules trainers use) that this blessing adds. */
+  perks: z.array(ArchetypeModifierSchema).default([]),
+  /** The perks apply only to the first battle of each stage. */
+  firstBattleOfStage: z.boolean().default(false),
   status: z.enum(['supported', 'limited', 'disabled']), limits: z.string(),
 });
 export type BlessingDef = z.infer<typeof BlessingDefSchema>;
 
 const FileSchema = z.object({
   tiers: z.record(z.enum(BLESSING_TIERS), z.object({ chance: z.number().positive(), influence: z.number().int().min(0) })),
-  balance: z.object({ lele: z.object({ healPercent: z.number() }), fezandipiti: z.object({ discountPercent: z.number() }) }),
+  balance: z.object({ lele: z.object({ healPercent: z.number(), communionPartyPercent: z.number() }), fezandipiti: z.object({ discountPercent: z.number(), communionDiscountPercent: z.number() }) }),
   blessings: z.array(BlessingDefSchema).min(1),
 });
 const data = FileSchema.parse(raw);
@@ -40,6 +46,12 @@ export const BlessingStateSchema = z.object({
   seen: z.boolean().default(false),
   /** Regions where Sacred Ash has already been used. */
   ashRegions: z.array(z.number().int()).default([]),
+  /** Communion: the player has obtained this blessing's own Legendary. The blessing becomes its stronger form. */
+  communion: z.boolean().default(false),
+  /** The Rite (one act per run) has been used. */
+  riteUsed: z.boolean().default(false),
+  /** Stages (`region:stage`) whose first battle has been fought (for first-battle-of-the-stage blessings). */
+  stagesDone: z.array(z.string()).default([]),
 });
 export type BlessingState = z.infer<typeof BlessingStateSchema>;
 
@@ -66,7 +78,7 @@ export function rollBlessing(seed: string): BlessingState | null {
   const useTier = order.find((t) => pool.some((b) => b.tier === t))!;
   const inTier = pool.filter((b) => b.tier === useTier);
   const pick = inTier[new Rng(hashSeed(`${seed}::blessing-pick`)).int(0, inTier.length - 1)]!;
-  return { id: pick.id, tier: pick.tier, influence: data.tiers[pick.tier]!.influence, seen: false, ashRegions: [] };
+  return { id: pick.id, tier: pick.tier, influence: data.tiers[pick.tier]!.influence, seen: false, ashRegions: [], communion: false, riteUsed: false, stagesDone: [] };
 }
 
 /** Run start: gives the run its blessing when the setting was on (stored once; never changes). */
@@ -84,7 +96,45 @@ export function runBlessing(run: RunState): BlessingDef | undefined {
 
 /** Price factor for shops (Fezandipiti): 0.9 with the blessing, otherwise 1. */
 export function blessingShopFactor(run: RunState): number {
-  return runBlessing(run)?.effect.kind === 'shopDiscount' ? 1 - data.balance.fezandipiti.discountPercent / 100 : 1;
+  if (runBlessing(run)?.effect.kind !== 'shopDiscount') return 1;
+  const pct = run.expansion?.blessing?.communion ? data.balance.fezandipiti.communionDiscountPercent : data.balance.fezandipiti.discountPercent;
+  return 1 - pct / 100;
+}
+
+/** Battle perks this blessing adds right now (empty for most). First-battle blessings drop out once the stage's first battle is done. */
+export function blessingPerks(run: RunState): Perks {
+  const def = runBlessing(run);
+  if (!def || def.perks.length === 0) return [];
+  if (def.firstBattleOfStage && run.stage && run.expansion?.blessing?.stagesDone.includes(`${run.regionIndex}:${run.stage.index}`)) return [];
+  return def.perks;
+}
+
+/** Communion: obtaining the blessing's own Legendary (party or PC) turns the blessing into its stronger form. Returns true the moment it happens. */
+export function syncCommunion(run: RunState): boolean {
+  const state = run.expansion?.blessing;
+  const def = runBlessing(run);
+  if (!state || !def || state.communion) return false;
+  if (![...run.party, ...run.box].some((m) => m.speciesId === def.speciesId)) return false;
+  state.communion = true;
+  run.journal = [...(run.journal ?? []), `${def.legendary} answered: the ${def.name} blessing is now in Communion.`];
+  return true;
+}
+
+/** The Rite (once per run, after Communion): what it is and whether it can be used. Only Tapu Lele's is built. */
+export function blessingRite(run: RunState): { label: string; hint: string; ready: boolean } | null {
+  const def = runBlessing(run);
+  const state = run.expansion?.blessing;
+  if (!def || !state?.communion || def.effect.kind !== 'healMostHurt') return null;
+  return { label: 'Rite of Healing', hint: 'Restore the whole party fully, once this run.', ready: !state.riteUsed };
+}
+
+/** Uses the Rite (mutates `run`). Returns the message, or null when it can't be used. */
+export function useBlessingRite(content: Content, run: RunState): string | null {
+  const rite = blessingRite(run);
+  if (!rite?.ready) return null;
+  for (const m of run.party) { m.hp = maxHp(content, m); m.status = null; }
+  run.expansion!.blessing!.riteUsed = true;
+  return 'Tapu Lele scatters its petals: the whole party is restored.';
 }
 
 /**
@@ -97,6 +147,11 @@ export function blessingAfterBattle(content: Content, run: RunState): string[] {
   const state = run.expansion?.blessing;
   if (!def || !state) return [];
   const touched: string[] = [];
+  syncCommunion(run);
+  if (def.firstBattleOfStage && run.stage) {
+    const key = `${run.regionIndex}:${run.stage.index}`;
+    if (!state.stagesDone.includes(key)) state.stagesDone = [...state.stagesDone, key];
+  }
   if (def.effect.kind === 'sacredAsh' && !state.ashRegions.includes(run.regionIndex)) {
     const fallen = run.party.filter((m) => m.hp <= 0 && m.uid !== run.battle?.loaner);
     if (fallen.length > 0) {
@@ -116,6 +171,18 @@ export function blessingAfterBattle(content: Content, run: RunState): string[] {
       m.hp = Math.min(maxHp(content, m), m.hp + Math.max(1, Math.ceil(maxHp(content, m) * data.balance.lele.healPercent / 100)));
       touched.push(m.uid);
     }
+    // Communion: the rest of the party recovers a little too.
+    if (state.communion) {
+      for (const m of run.party) {
+        if (m.hp <= 0 || m.uid === run.battle?.loaner || m.uid === worst?.uid) continue;
+        m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * data.balance.lele.communionPartyPercent / 100));
+      }
+    }
+  }
+  // Ho-Oh in Communion: after a boss battle the first fainted Pokémon (party order) rises at half HP.
+  if (def.effect.kind === 'sacredAsh' && state.communion && run.battle && isBossClass(run.battle.trainer?.classId)) {
+    const m = run.party.find((p) => p.hp <= 0 && p.uid !== run.battle?.loaner);
+    if (m) { m.hp = Math.max(1, Math.floor(maxHp(content, m) / 2)); touched.push(m.uid); }
   }
   return touched;
 }
