@@ -34,7 +34,7 @@ export const ExpansionSettingsSchema = z.object({
   minigamesDifficulty: z.enum(['easy', 'normal', 'hard']).default('normal'),
   blessingsEnabled: z.boolean().default(true),
   mythicalsEnabled: z.boolean().default(true),
-  ultraBeastsEnabled: z.boolean().default(true),
+  ultraBeastsEnabled: z.boolean().default(false),
   /** Whole Run Events: chance a run has one, in percent. */
   wholeRunEventsPct: z.number().min(0).max(100).default(35),
   /** Rocket "what-if" casts (rocket.x.triad and the other what-if switches). */

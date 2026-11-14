@@ -1,7 +1,7 @@
 # Ultra Beast Incursions (INSTRUMENTALITY U1)
 
 PR: into `beta-0.7` (rename this file to `<pr>-ultra-beasts.md` once the number is known).
-Plan: `docs/plans/instrumentality/notes-pack/ULTRA_BEAST_INCURSIONS.md`. Setting: Settings > Ultra Beast Incursions (`expansion.ultraBeastsEnabled`, on by default; read when a run starts).
+Plan: `docs/plans/instrumentality/notes-pack/ULTRA_BEAST_INCURSIONS.md`. Setting: Settings > Ultra Beast Incursions (`expansion.ultraBeastsEnabled`, OFF by default per the update rules; read when a run starts).
 
 ## Player gets
 - **Hidden Appetites.** Ten tallies of how you play (one Pokémon doing most of the damage, one-hit knockouts, flawless wins, stat raises, long battles, crits, items used, full-party battles, one-hit/self-KO showmanship, Pokémon lost). Nothing is shown.

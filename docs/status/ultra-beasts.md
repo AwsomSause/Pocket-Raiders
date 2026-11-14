@@ -2,7 +2,7 @@
 
 See `docs/updates/beta-0.7/` for the per-PR note (same content). Files: `src/core/ultra/` (beasts, rules, run), engine hooks at the end of `src/core/battle/engine.ts`, events in `src/data/events/ultraBeasts.json`, tests in `tests/unit/ultraBeasts.test.ts`.
 
-Plan: `docs/plans/instrumentality/notes-pack/ULTRA_BEAST_INCURSIONS.md`. Setting: Settings > Ultra Beast Incursions (`expansion.ultraBeastsEnabled`, on by default; read when a run starts).
+Plan: `docs/plans/instrumentality/notes-pack/ULTRA_BEAST_INCURSIONS.md`. Setting: Settings > Ultra Beast Incursions (`expansion.ultraBeastsEnabled`, OFF by default per the update rules; read when a run starts).
 
 ## Player gets
 - **Hidden Appetites.** Ten tallies of how you play (one Pokémon doing most of the damage, one-hit knockouts, flawless wins, stat raises, long battles, crits, items used, full-party battles, one-hit/self-KO showmanship, Pokémon lost). Nothing is shown.
