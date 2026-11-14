@@ -397,3 +397,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - choice-memory.md: events can remember earlier choices (remembers variants, flag registry), Beta 0.6 events revamp slice 1.
 - biome-hazards.md: biome hazards, map stops and NE76-80 as events with choice memory, Beta 0.6.
 - rival-questlines.md: 14 rival questline events (NE36-40, R2, R4), rivalState condition and rivalChange effect, Beta 0.6.
+- poli-pond.md: Poli-Pond miniature episode (Poliwag companion, 3 lessons, rematch duel, Kindness, return as Poliwrath), Beta 0.7.

@@ -2975,6 +2975,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
    */
   z.object({ kind: z.literal('tradeFor'), want: TradeWantSchema, table: z.record(z.string(), z.string()).default({}), similar: z.object({ pool: z.array(z.string()).min(1), bst: z.number().int().min(0).max(200) }).optional() }),
   /** Beta 0.6 Vermilion Flight North: the whole party is taken away (kept in run.expansion.canon.stash) until `restoreParty` or a lost fight inside the stage hands it back. */
+  /** Poli-Pond (core/episodes/poliPond.ts): one step of the story. `lesson` names the lesson (with `lesson`); `firstTry` is true when it was taught on the first retry. */
+  z.object({ kind: z.literal('pond'), action: z.enum(['begin', 'lesson', 'guilty', 'rematchWon', 'keep', 'release', 'reconcile', 'returnJoin']), lesson: z.enum(['aim', 'footing', 'stand']).optional(), firstTry: z.boolean().default(false), gentle: z.boolean().default(false) }),
   z.object({ kind: z.literal('stashParty') }),
   /** Beta 0.6 Vermilion Flight North: the stashed party returns. Whoever is in the party now (the Bug-type) leaves. Does nothing when nothing is stashed. */
   z.object({ kind: z.literal('restoreParty') }),
@@ -3166,6 +3168,8 @@ export type EventEffect = z.infer<typeof EventEffectSchema>;
 export const EventRuleSchema = z.object({
   /** Beta 0.7 U1: an Ultra Beast's rule holds in this fight (home-world fights), for both sides. */
   ultra: UltraRuleIdSchema.optional(),
+  /** Poli-Pond rematch: a one-on-one duel; the story Poliwag leads and cannot be switched out, and the fight is lost if it goes down. */
+  pondDuel: z.boolean().optional(),
   /** A duel: your first conscious Pokémon of this type leads (Samurai face-off). */
   leadType: TypeNameSchema.optional(),
   /** The foe's level equals your lead's level (Samurai face-off). */

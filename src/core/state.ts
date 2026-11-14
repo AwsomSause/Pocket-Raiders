@@ -24,6 +24,7 @@ import { freshHyperBattle } from './battle/hyper';
 import { SpectacleBattleSchema } from './battle/spectacle';
 import { TraitsSchema, type Traits } from './expansion/traits';
 import { StoryTraitsSchema, type StoryTraits } from './expansion/storyTraits';
+import { PondMarkSchema } from './episodes/poliPond';
 import { TimedStageSchema, VariantsSchema, type TimedStage, type Variants } from './expansion/variantLines';
 import { ArenaSchema, SkillInputSchema } from './battle/w1Play';
 
@@ -99,6 +100,8 @@ export const PokemonInstanceSchema = z.object({
    * Pokémon from saves made before abilities existed get the first one.
    */
   abilitySlot: z.number().int().min(-1).default(0),
+  /** Poli-Pond (Beta 0.7): the Poliwag of the story (or what it grew into) carries its lessons here. Optional, so older saves load as they are. */
+  pond: PondMarkSchema.optional(),
   /** An ability it was given outright (Squirtle Squad's Contrary); it beats the slot. Optional, so older saves load as they are. */
   fixedAbility: z.string().optional(),
   /** New Island clones have no ability at all. Optional, so older saves load as they are. */

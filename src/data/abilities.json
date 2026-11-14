@@ -1568,5 +1568,10 @@
   "id": "champions-fury",
   "name": "Champion's Fury",
   "description": "Each time it is sent out, a random stat rises by two stages, and its first attack since then goes first."
+ },
+ {
+  "id": "kindness",
+  "name": "Kindness",
+  "description": "When its bearer steps out of a fight, the Pokémon that comes in moves first with its first move. Twice per battle."
  }
 ]
