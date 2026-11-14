@@ -4,6 +4,7 @@
 
 import type { RunState } from '../../state';
 import { ALOLA_PALDEA_MEETINGS } from './meetRegions';
+import { JOHTO_UNOVA_EVENT_MEETINGS, JOHTO_UNOVA_TRACK_MEETINGS } from './meetJohtoUnova';
 import { SINNOH_HOENN_BOSS_CAST, SINNOH_HOENN_EVENT_MEETINGS, SINNOH_HOENN_TRACK_MEETINGS } from './meetSinnohHoenn';
 import { beatTeamHeads, markBeaten, recordCast, type CastStatus } from './dossier';
 
@@ -35,6 +36,7 @@ export const EVENT_MEETINGS: Record<string, readonly Meeting[]> = {
   'grand-arc-ein': ['sc.rocket.ein'],
   'rainbow-rocket': ['sc.rocket-remnants.rainbow-giovanni'],
   ...ALOLA_PALDEA_MEETINGS,
+  ...JOHTO_UNOVA_EVENT_MEETINGS,
   ...SINNOH_HOENN_EVENT_MEETINGS,
 };
 
@@ -66,6 +68,7 @@ export const TRACK_MEETINGS: Record<number, readonly Meeting[]> = {
 export const TRACK_MEETINGS_BY_REGION: Record<string, Record<number, readonly Meeting[]>> = {
   kanto: TRACK_MEETINGS,
   ...SINNOH_HOENN_TRACK_MEETINGS,
+  ...JOHTO_UNOVA_TRACK_MEETINGS,
   kalos: { 1: ['sc.flare.garance'], 2: ['sc.flare.corbeau'], 3: ['sc.flare.valerie'], 4: ['sc.flare.venus'], 5: ['sc.flare.essentia'] },
   galar: { 1: ['sc.macro-cosmos.ball-guy'], 2: ['sc.yell.gaz'], 3: ['sc.macro-cosmos.sordward'], 4: ['sc.macro-cosmos.hollis'], 5: ['sc.macro-cosmos.pryce'] },
 };
