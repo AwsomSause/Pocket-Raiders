@@ -17,3 +17,6 @@ Full campaign, par 40, 24 runs, no errors or stuck runs, 0 cleared. Runs ended i
 Reproduce: `node tools/playtest.ts 0 24 out.jsonl --deep --heal --full --par=40 && node tools/late-report.mjs out.jsonl`
 
 Follow-up: late-game gym leaders hit hard enough that par +40 still loses 38% of runs in region 4; a boss-tanky check and a bot that uses gimmicks are the next steps for the X1 balance pass.
+
+## Tried and dropped
+Weighting moves by the attacking stat and preferring attackers when building the team made the 24-run Full sim worse (14 of 24 runs ended before region 4 instead of 11, noise-level but not better), so it is not in. Diagnosis of the region 4 wall: foes hit for 100%+ of a bot Pokémon's HP (Dragon Dance Gyarados, Aqua Tail 540-750 vs ~540 HP) while the bot deals 10-45% of a foe's HP, even 44 levels ahead. That is bot play (no setup or counters, random catches) as much as boss numbers, so no balance change is proposed from this data.
