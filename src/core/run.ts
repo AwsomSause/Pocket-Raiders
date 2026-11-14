@@ -34,6 +34,8 @@ import { climaxBattleEnded, setClimaxCut } from './arc/climaxExtended';
 import { freeHandedOverRival, standWithClimaxLost, standWithOf } from './arc/standWithExtended';
 import { makeShadow, rollShadowHeart, soothePartyAfterBattle } from './shadow';
 import { leaveRegion, startGrandArc } from './grandArc';
+import { epilogueActive, epilogueBattleEnded, startEpilogue } from './epilogue/director';
+import { EpilogueStateSchema } from './grandArc/schema';
 import { checkFlagKeys, checkLeadWinKey, SHADOW_SLOT_CAP, heavyShadowCount, shadowTierOf } from './shadow2';
 import { advanceShadowWorld, addFlag, gangNotes, gangRaidWon, liberatedHpDiscount, outbreakShadow, placeGangDen } from './shadowWorld/world';
 import { blissfulAfterBattle, blissfulAtRest } from './shadowWorld/blissful';
@@ -909,6 +911,7 @@ function enterNextRegion(content: Content, run: RunState): void {
     playFinaleStops(content, run);
     run.victory = true;
     freeHandedOverRival(run);
+    if (startEpilogue(run)) return; // Beta 0.7: optional Citadark finale / Region of Doom after the win
     run.phase = 'over';
     return;
   }
@@ -3192,6 +3195,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // Wide formats (Beta 0.6 E4): a fight a format launched tells the format how it ended, before any loss tail runs.
   if (battle.outcome && battle.event?.eventId === 'format:climax') climaxBattleEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
   if (battle.outcome === 'win' && battle.event?.eventId === 'format:climax') beatClimax(run);
+  if (battle.outcome && (battle.event?.eventId === 'format:finale' || battle.event?.eventId === 'format:doom')) epilogueBattleEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
   if (battle.outcome && battle.event?.eventId.startsWith('format:')) formatBattleEnded({ content, run }, battle.outcome === 'win' || battle.outcome === 'caught');
   // PS-RESCUE (Beta 0.6 R9): a guard fight tells the running rescue plan how it ended.
   if (battle.outcome && battle.event?.eventId.startsWith('rescue:')) rescueFightEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
@@ -3846,12 +3850,18 @@ export function continueAfterDecisions(content: Content, run: RunState): void {
     run.phase = 'decision';
     return;
   }
-  if (run.victory) {
+  if (run.victory && !epilogueActive(run)) {
     // The last champion is beaten: the run is won. A Story Run tells its Finale and Epilogue Stops first (S19 found they never played here).
     playFinaleStops(content, run);
     run.draft = null;
     freeHandedOverRival(run);
+    if (startEpilogue(run)) return;
     run.phase = 'over';
+    return;
+  }
+  // An epilogue fight is over: back to the map, where the epilogue director shows the next step.
+  if (epilogueActive(run)) {
+    run.phase = 'map';
     return;
   }
   if (run.afterDecisions === 'eventChain') return continueEventChain(content, run);

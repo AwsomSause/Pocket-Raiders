@@ -141,5 +141,7 @@ export const ExpansionRunSchema = z.object({
     kept: z.array(z.string()).default([]),
     left: z.array(z.string()).default([]),
   }).optional(),
+  /** Beta 0.7 workstream 13: in-run epilogue (Citadark finale, Region of Doom). */
+  epilogue: EpilogueStateSchema.optional(),
 });
 export type ExpansionRun = z.infer<typeof ExpansionRunSchema>;
