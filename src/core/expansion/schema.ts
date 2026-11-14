@@ -105,6 +105,8 @@ export const ExpansionRunSchema = z.object({
   climaxCut: z.enum(['standard', 'extended']).optional(),
   /** The `storyTraits` setting the run started with. */
   storyTraits: z.boolean().optional(),
+  /** Stages whose Galar tremor (a wild Dynamax, track step 2) has already happened: `regionIndex:stageIndex`. */
+  tremors: z.array(z.string()).max(24).optional(),
   /** Story events placed per region so far (E3 scheduler), by region id. */
   xe: z.record(z.string(), z.number().int().min(0)).optional(),
   /** Runs with the world-state tracks on (E2). Set once at run start. */

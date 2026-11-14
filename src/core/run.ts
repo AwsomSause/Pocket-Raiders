@@ -250,6 +250,7 @@ import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
 import { recapRegion, tellAct } from './campaign/director';
+import { applyTremor } from './expansion/galarDynamax';
 import { applyTrackToBattle, healStopShut, trackEffects, trackForgetStock, trackHealShare, trackShopFactor, trackWildWeight } from './expansion/trackRun';
 import { freshClock, migrationWildWeight, periodOf, periodWildWeight, shopHoursMultiplier, stepClock, tideShopMultiplier, tideWildWeight } from './clock';
 import { bulkTotal, currentShopType, haggleWins, pokenetDeal, shopTypeAt, typedStock, typePriceFactor } from './shopTypes';
@@ -2029,6 +2030,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     }
     outbreakShadow(content, run, enemy, node.id);
     run.battle = createBattle('wild', [enemy], activeIndex, activeUid);
+    applyTremor(content, run);
     if (incursion) {
       // Ultra Aura: +1 to all its stats. Beast Boost comes with the Beast's own ability.
       for (const s of ['atk', 'def', 'spa', 'spd', 'spe'] as const) run.battle.enemyStages[s] = 1;
