@@ -752,7 +752,7 @@ export const BattleStateSchema = z.object({
   /** Index into run.party of the Pokémon currently fighting. */
   activeIndex: z.number().int().min(0),
   /** The opposing team (one Pokémon for wild battles). */
-  enemyTeam: z.array(PokemonInstanceSchema).min(1).max(6),
+  enemyTeam: z.array(PokemonInstanceSchema).min(1).max(7), // 7 only for listed story bosses (EventBattle `seventh`); the player stays at 6
   /** Which member of enemyTeam is out. */
   enemyIndex: z.number().int().min(0),
   /** The opposing trainer. `leaderId` is set for gym leaders (classId is then "gym-leader"). */

@@ -3307,7 +3307,9 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     /** Beta 0.6 R8: the foe is your Friend (their team by personality, their name; core/rivals/live.ts). */
     friend: z.boolean().optional(),
     name: z.string(),
-    size: z.number().int().min(1).max(6).default(2),
+    size: z.number().int().min(1).max(7).default(2),
+    /** Beta 0.7: a listed story boss (Cassiopeia, Ghetsis + Kyurem, Rose + Eternatus...) may field a 7th Pokémon. Only data sets it, never random; without it a team is cut to 6. The player stays at 6. */
+    seventh: z.boolean().optional(),
     /** How many of the trainer's Pokémon (the first ones) are Shadow Pokémon a Snag Ball can take. */
     shadow: z.number().int().min(0).max(6).default(0),
     types: z.array(TypeNameSchema).default([]),

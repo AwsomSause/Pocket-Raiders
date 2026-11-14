@@ -97,6 +97,7 @@ import { BERRIES } from './berries';
 import { choiceAt, effectiveEvent, visibleChoices } from './eventMemory';
 import { getTheme, typesPool } from './themes';
 import { anyRoaming, endRoamer, healConvoy, startConvoy, partyHasAbility, placeCamp, scoutAhead, CAMP_EVENT_ID } from './world';
+import { MAX_FOES, MAX_FOES_LISTED } from './bossLimits';
 
 // ---------- placing event stops ----------
 
@@ -1626,6 +1627,9 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       const speciesId = boss ? boss.signature[i % boss.signature.length]! : lane && content.species.has(lane) ? lane : b.rule?.bstMatch && b.species?.length ? nearestBst(content, b.species, run.party[activeIndex]!) : pickSpecies(content, run, b.species ?? [], b.types, rng);
       return newMon(content, run, evolvedFormAt(content, speciesId, level, rng), level, 'e');
     });
+    // Beta 0.7: only a listed story boss (`seventh`) fields a 7th foe; every other team is cut to 6.
+    if (team.length > MAX_FOES && !(b.kind === 'trainer' && b.seventh)) team.length = MAX_FOES;
+    else if (team.length > MAX_FOES_LISTED) team.length = MAX_FOES_LISTED;
     if (authored) for (const mon of team) auditEncounter(content, 'event', mon, authored);
     team.slice(0, evil ? evil.shadow : b.shadow).forEach((mon) => makeShadow(mon, rollShadowHeart(content, new Rng(hashSeed(`${run.seed}::shadow-foe::${mon.uid}`)))));
     // Overhaul slice 17: Evil Team and rival fights follow their named strategy (opener, ace item, sharper AI).
