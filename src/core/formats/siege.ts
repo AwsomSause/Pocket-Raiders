@@ -3,7 +3,7 @@
 // gate costs one battle (a lost fight heals the party and the player may try again or pick another gate). Every Lost district's
 // effect applies (announced on the map) and is written to `run.expansion.siege.lost` for the later phases to read: the Breather
 // reads it (West Gate, Cliff Stair). Statuses are worked out once at setup and kept in the state, so a reload shows the same map.
-// Kanto only for now (the other regions' rules come with their saga slices). No RNG here.
+// Kanto, Sinnoh and Hoenn have maps (the other regions' rules come with their saga slices). No RNG here.
 // The screen is the picked "Rocket Ledger" (Siege Map 7): src/scenes/SiegeScene.ts.
 
 import { expansionData } from '../../data/expansion';
@@ -12,6 +12,9 @@ import type { RunState } from '../state';
 import { launchFormatBattle } from './battle';
 import { climaxRegion, markCheckpoint, markDone } from './store';
 import type { FormatCard, FormatCtx, WideFormat } from './types';
+
+export type SiegeRegion = 'kanto' | 'sinnoh' | 'hoenn';
+export const SIEGE_REGIONS: readonly string[] = ['kanto', 'sinnoh', 'hoenn'];
 
 export type DistrictStatus = 'held' | 'contested' | 'lost';
 
@@ -28,7 +31,7 @@ export interface District {
 }
 
 export interface SiegeState {
-  region: 'kanto';
+  region: SiegeRegion;
   districts: District[];
   /** The gate the player went in by. */
   entered: string | null;
@@ -62,18 +65,61 @@ export function kantoStatuses(run: RunState): Record<string, { status: DistrictS
   };
 }
 
+const evFlag = (run: RunState, key: string): boolean => Number(run.story.flags[`ev:${key}`] ?? 0) >= 1;
+const evNum = (run: RunState, key: string): number => Number(run.story.flags[`ev:${key}`] ?? 0);
+const st = (status: DistrictStatus, heldBy = ''): { status: DistrictStatus; heldBy: string } => ({ status, heldBy });
+
+/** Sinnoh's four approaches: held by what the run earned (Raid 1, Looker, Cynthia, Raid 4); the Summit is Cyrus's. */
+export function sinnohStatuses(run: RunState): Record<string, { status: DistrictStatus; heldBy: string }> {
+  const r = (n: number) => raidRecord(run, n)?.result;
+  return {
+    'oreburgh-gate': good(r(1)) ? st('held', 'The Oreburgh miners') : st(bad(r(1)) ? 'lost' : 'contested'),
+    'hearthome-road': evFlag(run, 'galactic-looker-ally') && r(5) !== 'failure' ? st('held', 'Looker') : st(r(5) === 'failure' ? 'lost' : 'contested'),
+    'celestic-path': evFlag(run, 'galactic-cynthia-ally') ? st('held', 'Cynthia') : st('contested'),
+    'snowpoint-trail': good(r(4)) ? st('held', 'Buck') : st(bad(r(4)) ? 'lost' : 'contested'),
+    summit: st('contested', 'Cyrus'),
+  };
+}
+
+/** Hoenn's Sootopolis: the ledges follow the tilt (which team is behind), the tunnel and the White Rock what the run earned. */
+export function hoennStatuses(run: RunState): Record<string, { status: DistrictStatus; heldBy: string }> {
+  const r = (n: number) => raidRecord(run, n)?.result;
+  const aqua = evNum(run, 'aqua-ahead');
+  const magma = evNum(run, 'magma-ahead');
+  return {
+    'harbor-tunnel': good(r(2)) || evFlag(run, 'hoenn-stern-or-cozmo-turned') ? st('held', 'The turned officer') : st(bad(r(2)) ? 'lost' : 'contested'),
+    'west-ledge': magma > aqua ? st('held', 'Aqua, falling behind') : st('contested'),
+    'east-ledge': aqua > magma ? st('held', 'Magma, falling behind') : st('contested'),
+    'white-rock': evFlag(run, 'hoenn-steven-lamp') || evFlag(run, 'hoenn-keepers-promise') ? st('held', 'Steven and the Keepers') : st('contested'),
+    'cave-mouth': st('contested', 'Both teams'),
+  };
+}
+
+const NON_GATES = ['center', 'summit', 'cave-mouth'];
+const SIEGE_TEXT: Record<SiegeRegion, { title: string; foe: string; types: string[] }> = {
+  kanto: { title: 'THE LONG LEDGER · SAFFRON', foe: 'Rocket Cordon', types: ['poison', 'normal'] },
+  sinnoh: { title: 'THE MOUNTAIN UNDER SIEGE · CORONET', foe: 'Galactic Cordon', types: ['poison', 'dark'] },
+  hoenn: { title: 'SOOTOPOLIS DIVIDED · THE CRATER', foe: 'Crater Cordon', types: ['water', 'fire'] },
+};
+const siegeRegionOf = (run: RunState): SiegeRegion => {
+  const r = climaxRegion(run);
+  return r === 'sinnoh' || r === 'hoenn' ? r : 'kanto';
+};
+
 /** Districts that count as Lost (their effect applies). The Center is never Lost: Sabrina holds it by design. */
 export const lostIds = (s: SiegeState): string[] => s.districts.filter((d) => d.status === 'lost').map((d) => `${s.region}.${d.id}`);
 
-function setup({ run }: FormatCtx): SiegeState {
-  const map = expansionData.siege_maps.find((m) => m.id === 'siege.kanto')!;
-  const st = kantoStatuses(run);
+function setup({ run }: FormatCtx, input?: unknown): SiegeState {
+  const asked = input && typeof input === 'object' && 'region' in input ? String((input as { region: unknown }).region) : '';
+  const region: SiegeRegion = asked === 'sinnoh' || asked === 'hoenn' || asked === 'kanto' ? asked : siegeRegionOf(run);
+  const map = expansionData.siege_maps.find((m) => m.id === `siege.${region}`)!;
+  const found = region === 'sinnoh' ? sinnohStatuses(run) : region === 'hoenn' ? hoennStatuses(run) : kantoStatuses(run);
   const districts: District[] = map.districts.map((d) => {
     const id = slug(d.name);
-    const s = st[id] ?? { status: 'contested' as const, heldBy: '' };
-    return { id, name: d.name, place: d.location, status: s.status, heldBy: s.heldBy, ifLost: d.ifLost, gate: id !== 'center' };
+    const s = found[id] ?? { status: 'contested' as const, heldBy: '' };
+    return { id, name: d.name, place: d.location, status: s.status, heldBy: s.heldBy, ifLost: d.ifLost, gate: !NON_GATES.includes(id) };
   });
-  return { region: 'kanto', districts, entered: null, pending: null, tries: 0 };
+  return { region, districts, entered: null, pending: null, tries: 0 };
 }
 
 export interface SiegeRow {
@@ -99,9 +145,9 @@ export interface SiegeView {
 
 /** What the Rocket Ledger screen shows. Nothing is hidden: the effects of a Lost district are all on the page. */
 export function siegeView(s: SiegeState): SiegeView {
-  const map = expansionData.siege_maps.find((m) => m.id === 'siege.kanto')!;
+  const map = expansionData.siege_maps.find((m) => m.id === `siege.${s.region}`)!;
   return {
-    title: 'THE LONG LEDGER · SAFFRON',
+    title: SIEGE_TEXT[s.region].title,
     subtitle: 'Who holds what. Nothing here is hidden.',
     rows: s.districts.map((d) => ({ id: d.id, name: d.name, place: d.place, status: d.status, heldBy: d.heldBy, ifHeld: d.gate ? 'Free entry' : 'Never held', ifLost: d.ifLost, gate: d.gate })),
     lostCount: s.districts.filter((d) => d.status === 'lost').length,
@@ -143,9 +189,9 @@ function choose(s: SiegeState, id: string, ctx: FormatCtx): SiegeState {
   if (d.status === 'held') return enter(s, id, ctx.run);
   const ok = launchFormatBattle(ctx.content, ctx.run, 'siege', {
     key: d.id,
-    name: `Rocket Cordon (${d.name})`,
+    name: `${SIEGE_TEXT[s.region].foe} (${d.name})`,
     classId: 'roughneck',
-    types: ['poison', 'normal'],
+    types: SIEGE_TEXT[s.region].types as never,
     size: 3,
     levelBonus: d.status === 'lost' ? 1 : 0,
   });
@@ -159,8 +205,8 @@ function onBattleEnd(s: SiegeState, won: boolean, { run }: FormatCtx): SiegeStat
 
 export const siege: WideFormat<SiegeState> = {
   id: 'siege',
-  canStart: (ctx, input) => (!input || typeof input !== 'object' || !('region' in input) ? climaxRegion(ctx.run) === 'kanto' : (input as { region: unknown }).region === 'kanto'),
-  setup,
+  canStart: (ctx, input) => (!input || typeof input !== 'object' || !('region' in input) ? SIEGE_REGIONS.includes(climaxRegion(ctx.run)) : SIEGE_REGIONS.includes(String((input as { region: unknown }).region))),
+  setup: (ctx, input) => setup(ctx, input),
   describe: (s) => describe(s),
   choose,
   onBattleEnd,

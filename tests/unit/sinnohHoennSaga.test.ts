@@ -6,6 +6,9 @@ import { hoennEffects, sinnohEffects, trackEffectsFor } from '../../src/core/exp
 import { advanceTrack, applyTrackToBattle, hoennNodeWeather, trackForgetStock, trackBannerLine, trackEffects } from '../../src/core/expansion/trackRun';
 import { trackPage } from '../../src/core/expansion/trackView';
 import { createBattle } from '../../src/core/battle/engine';
+import { beginClimax, EXTENDED_REGIONS } from '../../src/core/arc/climaxExtended';
+import { cardOf, chooseOption, formatOver, startFormat } from '../../src/core/formats/registry';
+import { currentFormat } from '../../src/core/formats/store';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { content } from './helpers';
 
@@ -117,5 +120,49 @@ describe('Track page', () => {
       expect(page.scales).toHaveLength(5);
       expect(page.steps[0]!.state).toBe('seen');
     }
+  });
+});
+
+describe('Extended Cut: Siege Map for Sinnoh and Hoenn', () => {
+  const mk = (seed: string) => {
+    const r = chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red' }), 0);
+    r.party = Array.from({ length: 3 }, (_, i) => ({ ...structuredClone(r.party[0]!), uid: `m${i}` }));
+    return r;
+  };
+  const ctxOf = (r: ReturnType<typeof mk>) => ({ content, run: r });
+  const rec = (result: string) => ({ id: 'pr.x.x', result, node: 0, os: 0 });
+  const st = (r: ReturnType<typeof mk>) => Object.fromEntries((currentFormat(r)!.state.districts as { id: string; status: string }[]).map((d) => [d.id, d.status]));
+
+  it('both regions are in the Extended Cut list', () => {
+    expect(EXTENDED_REGIONS).toEqual(expect.arrayContaining(['sinnoh', 'hoenn']));
+  });
+  it('Sinnoh: four gates, the Summit is not one, statuses follow raids and flags', () => {
+    const r = mk('sg-sin');
+    r.expansion = { raids: { n1: rec('success'), n4: rec('failure'), n5: rec('partial') } };
+    r.story.flags['ev:galactic-looker-ally'] = 1;
+    r.story.flags['ev:galactic-cynthia-ally'] = 1;
+    expect(startFormat('siege', ctxOf(r), { region: 'sinnoh' })).toBe(true);
+    expect(st(r)).toEqual({ 'oreburgh-gate': 'held', 'hearthome-road': 'held', 'celestic-path': 'held', 'snowpoint-trail': 'lost', summit: 'contested' });
+    expect(cardOf(ctxOf(r))!.options.map((o) => o.id)).toEqual(['oreburgh-gate', 'hearthome-road', 'celestic-path', 'snowpoint-trail']);
+    chooseOption(ctxOf(r), 'oreburgh-gate');
+    expect(formatOver(ctxOf(r))).toBe(true);
+    expect(r.expansion!.siege!.lost).toEqual(['sinnoh.snowpoint-trail']);
+    expect(r.expansion!.siege!.entered).toBe('sinnoh.oreburgh-gate');
+  });
+  it('Hoenn: the ledges follow the tilt, a contested gate costs a battle', () => {
+    const r = mk('sg-hoe');
+    r.story.flags['ev:magma-ahead'] = 1;
+    r.story.flags['ev:hoenn-keepers-promise'] = 1;
+    expect(startFormat('siege', ctxOf(r), { region: 'hoenn' })).toBe(true);
+    expect(st(r)).toEqual({ 'harbor-tunnel': 'contested', 'west-ledge': 'held', 'east-ledge': 'contested', 'white-rock': 'held', 'cave-mouth': 'contested' });
+    chooseOption(ctxOf(r), 'east-ledge');
+    expect(r.battle!.event!.eventId).toBe('format:siege');
+    expect(r.battle!.trainer!.name).toMatch(/Crater Cordon/);
+  });
+  it('the climax director starts in these regions and Johto still cannot', () => {
+    const r = mk('sg-dir');
+    r.expansion = { cut: { climaxCut: 'extended' } };
+    expect(beginClimax(r, 'sinnoh')).toBe(true);
+    expect(beginClimax(r, 'johto')).toBe(false);
   });
 });
