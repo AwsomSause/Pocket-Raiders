@@ -47,6 +47,8 @@ export const ExpansionSettingsSchema = z.object({
   leagueCounterPick: z.boolean().default(true),
   /** E2 world-state tracks (the Kanto Rocket Ledger): shops, shut Centers and thinner wild pools follow how the team's operations go. */
   worldTracks: z.boolean().default(true),
+  /** H1 heated-moment moves (BALANCE 6): the Hyper slot move needs the conditions, a 6% roll and the per-region/per-run caps. Read when a run starts. */
+  heatedMoments: z.boolean().default(true),
   /** Beta 0.7: team-wide battle traits for Alola and Paldea story events (Hype Man, Reluctant Hand). Off by default; read when a run starts. */
   storyTraits: z.boolean().default(false),
 });
@@ -106,5 +108,21 @@ export const ExpansionRunSchema = z.object({
   lastFaint: z.object({ uid: z.string(), at: z.number().int().min(0) }).optional(),
   /** B7: the Pokémon (uids) registered at the League door. Only these are ever countered; a swapped-in Pokémon is unseen. `swapped` = the one swap is used. */
   league: z.object({ registered: z.array(z.string()), swapped: z.boolean().default(false) }).optional(),
+  /** Beta 0.7 S1: the Second Chance percent this run started with (0 or missing = off) and whether it has been used. In-run only. */
+  secondChancePct: z.number().min(0).max(100).optional(),
+  secondChance: z.object({ at: z.number().int().min(0), rival: z.string().nullable() }).optional(),
+  /** Beta 0.7 H1: runs with heated-moment limits on, and what has been granted (per region, total, and which Pokémon). */
+  heated: z.boolean().optional(),
+  heatedLog: z.object({ perRegion: z.record(z.string(), z.number().int().min(0)).default({}), total: z.number().int().min(0).default(0), mons: z.array(z.string()).default([]) }).optional(),
+  /** Beta 0.7 M1: runs with Mythical Promises on, and this run's Tellings, visit and Guest (core/instrumentality/promises.ts). In-run only: no Storybook, no Keepsakes. */
+  promises: z.boolean().optional(),
+  promise: z.object({
+    tellings: z.record(z.string(), z.number().int().min(0)).default({}),
+    /** The one Mythical that has visited this run (declined, accepted or lost), or null. */
+    visited: z.string().nullable().default(null),
+    guest: z.object({ id: z.string(), forgiven: z.boolean().default(false) }).nullable().default(null),
+    kept: z.array(z.string()).default([]),
+    left: z.array(z.string()).default([]),
+  }).optional(),
 });
 export type ExpansionRun = z.infer<typeof ExpansionRunSchema>;

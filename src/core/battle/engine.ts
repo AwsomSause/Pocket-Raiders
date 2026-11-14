@@ -116,6 +116,7 @@ import { sacrificeFor } from './sacrificeRule';
 import { berserkDue, berserkMove, isBerserk } from './berserk';
 import { momentContactPoison, momentDamageMult, spendMomentBoost, applyPendingMoments, fadeMomentBoosts, tryFaintMoments, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
 import type { MomentHooks } from '../moments/pokemonMoments';
+import { reapplyBoost } from '../instrumentality/secondChance';
 import { freshHyperBattle, rollHyper, type EnemyRage, type HyperContext, type HyperEligibility } from './hyper';
 import { applyTransformations, battleMove, battleTypes, endDynamax, maxMoveExtras, maxMoveTerrain, maxMoveWeather, stabMultiplier, teraPower, tickDynamax, transformProblem, zMoveFor, type TransformEvent, type TransformRequest, type TransformStepEvent } from './transform';
 import { hiddenPowerType } from '../ivs';
@@ -1734,7 +1735,7 @@ function switchIn(ctx: BattleContext, partyIndex: number, events: BattleEvent[])
     if (pivoted) battle.growthMarks.push(`pivotIn:${mon.uid}`);
   }
   battle.activeIndex = partyIndex;
-  battle.playerStages = freshStages();
+  battle.playerStages = battle.secondChance ? reapplyBoost(freshStages()) : freshStages();
   battle.playerVolatile = freshVolatile();
   if (!battle.participants.includes(mon.uid)) battle.participants.push(mon.uid);
   events.push({ type: 'switchIn', side: 'player', uid: mon.uid, speciesId: mon.speciesId, level: mon.level });

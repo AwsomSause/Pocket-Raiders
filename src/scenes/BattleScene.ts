@@ -3711,6 +3711,13 @@ export class BattleScene extends Phaser.Scene {
       this.scene.start(sceneForRun(result.run));
       return;
     }
+    if (result.secondChance) {
+      // Beta 0.7 S1: the six lines, then back into the same fight with the partner beside you (the scene reloads from the saved battle).
+      for (const line of result.secondChance.lines) await this.say(line);
+      await this.say(result.secondChance.silhouette ? 'A silhouette you do not recognise stands beside you.' : `${result.secondChance.partner} stands beside you!`);
+      this.scene.start(sceneForRun(result.run));
+      return;
+    }
     if (this.stadium && (result.wiped || result.defeated)) await this.stadium.interview('post', false);
     if (result.wiped || result.defeated) void this.trainerIn().then((a) => a?.play('defeat'));
     if (result.wiped) {
