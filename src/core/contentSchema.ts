@@ -2854,6 +2854,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('track'), atLeast: z.number().int().min(0).max(5).default(0), atMost: z.number().int().min(0).max(5).default(5) }),
   /** Beta 0.6 E3: the run has the Kanto saga's story events turned on (run.expansion.density). */
   z.object({ kind: z.literal('xevents') }),
+  /** Beta 0.7 Pidgey's Resolve: where the Rivalry of the Sky stands (core/sky/story.ts skyCondition). */
+  z.object({ kind: z.literal('sky'), when: z.enum(['opening', 'meet', 'alone', 'finale', 'giftBerry', 'giftItem', 'overhead', 'rematch']) }),
   /** Stand With Them: you have joined the run's team (`joined`, the default) or can still join it (`joined: false`); optionally at least this reputation. */
   /** Beta 0.6 E3b: one of the Expanded flags that run events wait on. */
   z.object({ kind: z.literal('xflag'), flag: z.enum(['extendedCut', 'hasShadow', 'keyHinted', 'grandArc', 'liaisonSeen', 'romHeld', 'friendPresent', 'trioFriendly', 'wesMet']) }),
@@ -3070,6 +3072,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Beta 0.6 E2: move the current region's world-state track (once per event id). */
   /** Beta 0.6 E3b: lowers every party Shadow Pokémon's corruption by `amount` (never below 1: the last step stays with its own key). */
   z.object({ kind: z.literal('shadowHeart'), amount: z.number().int().min(-20).max(0) }),
+  /** Beta 0.7 Pidgey's Resolve: one step of the Rivalry of the Sky (core/sky/story.ts applySky). */
+  z.object({ kind: z.literal('sky'), act: z.enum(['duel', 'meetSpar', 'sparWon', 'sparLost', 'giftBerry', 'giftItem', 'finaleGiftBerry', 'finaleGiftItem', 'meetAlone', 'aloneGift', 'finaleWatch', 'cheer', 'joinBird', 'freeBird', 'overhead', 'rematchWon', 'rematchLost', 'passBy']), side: z.enum(['pidgey', 'spearow']).optional(), bird: z.enum(['pidgeot', 'fearow']).optional() }),
   z.object({ kind: z.literal('track'), input: z.enum(['raidFailed', 'raidDeclined', 'climaxScheduled', 'raidSuccess', 'officerTurned']) }),
   /** Grand Arc: gains a Stock step (1 to 5). */
   /** Field Notes: the player has now met this special Pokémon (`sv.*`). */
