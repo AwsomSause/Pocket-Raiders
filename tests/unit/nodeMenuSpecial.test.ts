@@ -128,7 +128,7 @@ describe('rolls and saves', () => {
         const a = specialEntriesFor({ content, run, node: n });
         expect(specialEntriesFor({ content, run, node: n })).toEqual(a);
         const fresh = a.filter((e) => !e.id.endsWith(':end'));
-        const forks = fresh.filter((e) => e.category === 'fork').length;
+        const forks = fresh.filter((e) => e.special === 'fork').length;
         expect(fresh.length - (forks ? forks - 1 : 0)).toBeLessThanOrEqual(SPECIAL.rules.maxSpecialPerMenu);
         seen += fresh.length;
       }

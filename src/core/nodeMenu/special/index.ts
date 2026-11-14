@@ -21,11 +21,19 @@ export interface SpecialCtx {
 }
 
 /** A card the composer can show. Matches the menu entry shape (core/nodeMenu/schema.ts) with kind 'special'. */
+export type SpecialKind = 'fork' | 'linked' | 'escort';
+const CATEGORY: Record<SpecialKind, SpecialEntry['category']> = { fork: 'explore', linked: 'story', escort: 'social' };
+
 export interface SpecialEntry {
   id: string;
   kind: 'special';
-  category: 'fork' | 'linked' | 'escort';
+  /** The menu category (core/nodeMenu MENU_CATEGORIES): fork explore, linked story, escort social. */
+  category: 'explore' | 'story' | 'social';
+  /** Which special kind this card is. */
+  special: SpecialKind;
   required: false;
+  /** Special cards can be trimmed like any optional card. */
+  keep: false;
   label: string;
   /** One line under the label. */
   text: string;
@@ -65,7 +73,7 @@ const forkDef = (id: string) => SPECIAL.forks.find((f) => f.id === id);
 const linkDef = (id: string) => SPECIAL.links.find((l) => l.id === id);
 const escortDef = (id: string) => SPECIAL.escorts.find((e) => e.id === id);
 
-const entry = (id: string, category: SpecialEntry['category'], label: string, text: string): SpecialEntry => ({ id, kind: 'special', category, required: false, label, text, done: false, locked: false });
+const entry = (id: string, special: SpecialKind, label: string, text: string): SpecialEntry => ({ id, kind: 'special', category: CATEGORY[special], special, required: false, keep: false, label, text, done: false, locked: false });
 
 /**
  * Called when the player arrives at a node (safe to call again for the same node): pays fork halves that are due,
