@@ -44,13 +44,57 @@ describe.each(['alola', 'paldea'])('%s story events', (region) => {
 });
 
 describe('track effects', () => {
-  it('Alola thins the wild pool by a fifth from step 3; Paldea has none', () => {
+  it('Alola thins the wild pool by a fifth from step 3; Paldea only adverts at step 5', () => {
     expect(trackEffectsFor('alola', 2, cfg).wildShrink).toBe(0);
     expect(trackEffectsFor('alola', 3, cfg).wildShrink).toBe(0.2);
-    expect(trackEffectsFor('paldea', 5, cfg)).toEqual(NO_EFFECTS);
+    expect(trackEffectsFor('paldea', 4, cfg)).toEqual(NO_EFFECTS);
+    expect(trackEffectsFor('paldea', 5, cfg).adverts).toBe(true);
   });
 });
 
 it('the event files are current', () => {
   expect(() => execFileSync('node', ['tools/build-xe-alola-paldea.ts', '--check'], { stdio: 'pipe' })).not.toThrow();
+});
+
+import { climaxPhases, beginClimax, nextStep, EXTENDED_REGIONS } from '../../src/core/arc/climaxExtended';
+import { startFormat } from '../../src/core/formats/registry';
+import { DEBATE_TABLE } from '../../src/core/formats/debate';
+import { trackBannerLine } from '../../src/core/expansion/trackRun';
+
+describe('Extended Cut for Alola and Paldea', () => {
+  const extended = (region: string) => {
+    const r = chooseStarter(content, createRun(content, { runId: `cut-${region}`, seed: `cut-${region}`, archetypeId: 'red', expansion: { worldTracks: true, climaxCut: 'extended' } }), 0);
+    r.regionOrder[r.regionIndex] = region;
+    return r;
+  };
+  it('begins in Alola and Paldea but not in an unwired region', () => {
+    expect(EXTENDED_REGIONS).toEqual(expect.arrayContaining(['kanto', 'alola', 'paldea']));
+    expect(beginClimax(extended('alola'), 'alola')).toBe(true);
+    expect(beginClimax(extended('paldea'), 'paldea')).toBe(true);
+    expect(beginClimax(extended('johto'), 'johto')).toBe(false);
+  });
+  it('formats with only Kanto content do not start in these regions', () => {
+    for (const region of ['alola', 'paldea']) {
+      const r = extended(region);
+      beginClimax(r, region);
+      for (const id of ['siege', 'blackout', 'colossus', 'convoy', 'front'] as const) expect(startFormat(id, { content, run: r })).toBe(false);
+    }
+  });
+  it('Alola skips to the Gauntlet; Paldea keeps the Debate in its list', () => {
+    const r = extended('alola');
+    beginClimax(r, 'alola');
+    expect(climaxPhases('paldea').some((p) => p.label === 'Debate')).toBe(true);
+    expect(nextStep(r)).not.toBeNull();
+  });
+  it('Debate evidence counts the Paldea event flags', () => {
+    const script = DEBATE_TABLE.find((d) => d.region === 'paldea')!;
+    expect(script.evidence.filter((e) => e.ev).length).toBeGreaterThanOrEqual(4);
+  });
+  it('step 5 shows a map line in both regions', () => {
+    for (const region of ['alola', 'paldea']) {
+      const r = extended(region);
+      for (let i = 0; i < 5; i++) advanceTrack(r, region, 'raidFailed', `k${i}`);
+      expect(trackBannerLine(content, r).length).toBeGreaterThan(10);
+    }
+  });
 });
