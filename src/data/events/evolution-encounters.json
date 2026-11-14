@@ -138,6 +138,7 @@
    "id": "evo-pidgeys-resolve",
    "name": "Pidgey's Resolve",
    "group": "Evolution Encounters",
+   "disabled": true,
    "stop": "event",
    "rarity": "uncommon",
    "minStage": 2,
