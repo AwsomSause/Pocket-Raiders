@@ -6,6 +6,8 @@ import { XE_JOHTO_EVENTS } from './events/expansion/johto.ts';
 import { XE_UNOVA_EVENTS } from './events/expansion/unova.ts';
 import { XE_KALOS_EVENTS } from './events/expansion/kalos.ts';
 import { XE_GALAR_EVENTS } from './events/expansion/galar.ts';
+import { XE_SINNOH_EVENTS } from './events/expansion/sinnoh.ts';
+import { XE_HOENN_EVENTS } from './events/expansion/hoenn.ts';
 
 // One line per region: add the next region here.
 const REGIONS: Record<string, readonly Record<string, unknown>[]> = {
@@ -14,6 +16,8 @@ const REGIONS: Record<string, readonly Record<string, unknown>[]> = {
   unova: XE_UNOVA_EVENTS,
   kalos: XE_KALOS_EVENTS,
   galar: XE_GALAR_EVENTS,
+  sinnoh: XE_SINNOH_EVENTS,
+  hoenn: XE_HOENN_EVENTS,
 };
 
 const ids = new Set<string>();

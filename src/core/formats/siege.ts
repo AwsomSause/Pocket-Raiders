@@ -3,7 +3,7 @@
 // gate costs one battle (a lost fight heals the party and the player may try again or pick another gate). Every Lost district's
 // effect applies (announced on the map) and is written to `run.expansion.siege.lost` for the later phases to read: the Breather
 // reads it (West Gate, Cliff Stair). Statuses are worked out once at setup and kept in the state, so a reload shows the same map.
-// Kanto only for now (the other regions' rules come with their saga slices). No RNG here.
+// Kanto, Sinnoh and Hoenn have maps (the other regions' rules come with their saga slices). No RNG here.
 // The screen is the picked "Rocket Ledger" (Siege Map 7): src/scenes/SiegeScene.ts.
 
 import { expansionData } from '../../data/expansion';
@@ -13,6 +13,7 @@ import { launchFormatBattle } from './battle';
 import { climaxRegion, markCheckpoint, markDone } from './store';
 import type { TypeName } from '../contentSchema';
 import type { FormatCard, FormatCtx, WideFormat } from './types';
+
 
 export type DistrictStatus = 'held' | 'contested' | 'lost';
 
@@ -64,6 +65,35 @@ export function kantoStatuses(run: RunState): Record<string, { status: DistrictS
 }
 
 type Statuses = Record<string, { status: DistrictStatus; heldBy: string }>;
+const evNum = (run: RunState, key: string): number => Number(run.story.flags[`ev:${key}`] ?? 0);
+const st = (status: DistrictStatus, heldBy = ''): { status: DistrictStatus; heldBy: string } => ({ status, heldBy });
+
+/** Sinnoh's four approaches: held by what the run earned (Raid 1, Looker, Cynthia, Raid 4); the Summit is Cyrus's. */
+export function sinnohStatuses(run: RunState): Statuses {
+  const r = (n: number) => raidRecord(run, n)?.result;
+  return {
+    'oreburgh-gate': good(r(1)) ? st('held', 'The Oreburgh miners') : st(bad(r(1)) ? 'lost' : 'contested'),
+    'hearthome-road': evFlag(run, 'galactic-looker-ally') && r(5) !== 'failure' ? st('held', 'Looker') : st(r(5) === 'failure' ? 'lost' : 'contested'),
+    'celestic-path': evFlag(run, 'galactic-cynthia-ally') ? st('held', 'Cynthia') : st('contested'),
+    'snowpoint-trail': good(r(4)) ? st('held', 'Buck') : st(bad(r(4)) ? 'lost' : 'contested'),
+    summit: st('contested', 'Cyrus'),
+  };
+}
+
+/** Hoenn's Sootopolis: the ledges follow the tilt (which team is behind), the tunnel and the White Rock what the run earned. */
+export function hoennStatuses(run: RunState): Statuses {
+  const r = (n: number) => raidRecord(run, n)?.result;
+  const aqua = evNum(run, 'aqua-ahead');
+  const magma = evNum(run, 'magma-ahead');
+  return {
+    'harbor-tunnel': good(r(2)) || evFlag(run, 'hoenn-stern-or-cozmo-turned') ? st('held', 'The turned officer') : st(bad(r(2)) ? 'lost' : 'contested'),
+    'west-ledge': magma > aqua ? st('held', 'Aqua, falling behind') : st('contested'),
+    'east-ledge': aqua > magma ? st('held', 'Magma, falling behind') : st('contested'),
+    'white-rock': evFlag(run, 'hoenn-steven-lamp') || evFlag(run, 'hoenn-keepers-promise') ? st('held', 'Steven and the Keepers') : st('contested'),
+    'cave-mouth': st('contested', 'Both teams'),
+  };
+}
+
 /** An event story flag (`ev:<key>`) the run holds. */
 const evFlag = (run: RunState, key: string): boolean => Number(run.story.flags[`ev:${key}`] ?? 0) >= 1;
 const heldBy = (held: boolean, by: string, lostIf: boolean): { status: DistrictStatus; heldBy: string } => (held ? { status: 'held', heldBy: by } : { status: lostIf ? 'lost' : 'contested', heldBy: '' });
@@ -96,6 +126,8 @@ export function paldeaStatuses(run: RunState): Statuses {
 const SIEGE_REGIONS: Record<string, { statuses: (run: RunState) => Statuses; noGate: readonly string[]; title: string; cordon: string; classId: string; types: TypeName[] }> = {
   kanto: { statuses: kantoStatuses, noGate: ['center'], title: 'THE LONG LEDGER · SAFFRON', cordon: 'Rocket Cordon', classId: 'roughneck', types: ['poison', 'normal'] },
   alola: { statuses: alolaStatuses, noGate: ['aether-paradise'], title: 'FOUR ISLANDS · ALOLA', cordon: 'Skull Blockade', classId: 'roughneck', types: ['dark', 'poison'] },
+  sinnoh: { statuses: sinnohStatuses, noGate: ['summit'], title: 'THE MOUNTAIN UNDER SIEGE · CORONET', cordon: 'Galactic Cordon', classId: 'roughneck', types: ['poison', 'dark'] },
+  hoenn: { statuses: hoennStatuses, noGate: ['cave-mouth'], title: 'SOOTOPOLIS DIVIDED · THE CRATER', cordon: 'Crater Cordon', classId: 'roughneck', types: ['water', 'fire'] },
   paldea: { statuses: paldeaStatuses, noGate: [], title: 'THE FIVE BASES · PALDEA', cordon: 'Star Picket', classId: 'roughneck', types: ['dark', 'fighting'] },
 };
 export const SIEGE_REGION_IDS = Object.keys(SIEGE_REGIONS);

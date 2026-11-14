@@ -424,10 +424,11 @@
     {
      "label": "Battle them",
      "success": {
-      "text": "They go for your weakest Pokémon first, every time.",
+      "text": "They go for your weakest Pokémon first, every time. Once yours is under half health, they hit 25% harder.",
       "effects": [],
       "battle": {
        "kind": "trainer",
+       "special": "st.old-habits",
        "name": "Peon Brask, Odette and Tully",
        "classId": "roughneck",
        "size": 3,

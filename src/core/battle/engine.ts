@@ -34,8 +34,8 @@ import * as Ultra from '../ultra/rules';
 import type { UltraRuleId } from '../ultra/beasts';
 import { abilityOf, calcStats, createPokemon, getSpecies, maxHp } from '../pokemon';
 import { rallyStages } from './rally';
-import { storyHype, storyNoCrit } from '../expansion/storyTraits';
-import { HOUSE_WINS_STAGES, LIGHTS_OUT_ACCURACY, LIGHTS_OUT_TURNS, housePending, isHousePair, takeHousePending, traitDoubleEntry, traitDrill, traitFeedHeal, traitFoodKnocked, traitLightsOut, traitOverhears, traitPayout, traitSeatMessage, traitTakesBerry } from '../expansion/traits';
+import { storyHype, storyNoCrit, storyOldHabits } from '../expansion/storyTraits';
+import { HOUSE_WINS_STAGES, LIGHTS_OUT_ACCURACY, LIGHTS_OUT_TURNS, housePending, isHousePair, takeHousePending, traitDoubleEntry, traitDrill, traitFeedHeal, traitFoodKnocked, traitLightsOut, traitOverhears, traitPayout, traitSeatMessage, traitTakesBerry, GRID_TIE_SHARE, traitBloodScent, traitGridTie, traitLingering, traitOnSchedule, traitSubtraction, traitUndertow, traitUpdraft } from '../expansion/traits';
 import { ACCESSORY_TORN_MESSAGE, SPIRITLESS_MESSAGE, variantBlocksForcedSwitch, variantBlocksMind, variantBlocksStage, variantBlocksStatus, variantEndTurnLoss, variantAccessory, variantAccessoryTorn, variantCheer, variantEndTurnStages, variantGimmickTick, variantGadget, variantIncoming, variantItemMove, variantLosesTurn, variantNeverMisses, variantOnEntry, variantOutgoing, variantPriorityBonus, variantSnagRefuses, variantTagCall } from '../expansion/variantLines';
 import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
 import type { Rng } from '../rng';
@@ -1068,6 +1068,11 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
       events.push({ type: 'raid', tone: 'info', text: 'A glimpse from the far side of the sky strikes!' }, { type: 'damage', side: onEnemy ? 'enemy' : 'player', amount, hpAfter: target.hp, effectiveness: 1, crit: false });
     }
   }
+  if (rule.forceSwitch && mine && mine.hp > 0 && !battle.needsSwitch && battle.turn > 0 && battle.turn % rule.forceSwitch === 0 && party?.some((m, i) => i !== battle.activeIndex && m.hp > 0)) {
+    // Beta 0.7 Alola: the foe's pivot drives your Pokémon out; you pick who comes in (a free switch, no turn used).
+    battle.needsSwitch = true;
+    events.push({ type: 'raid', tone: 'info', text: 'The foe barges in and drives your Pokémon off the field!' });
+  }
   if (rule.cursedHat && mine && mine.hp > 0) {
     const foe = currentEnemy(battle);
     if (foe.hp > 0 && (mine.status || foe.status)) {
@@ -2023,6 +2028,10 @@ function resolveEntries(ctx: BattleContext, events: BattleEvent[]): void {
   for (const { c } of sides) applyHazards(ctx, c, events);
   for (const { c, other } of sides) {
     // Beta 0.6 traits: Seat at the Table sweeps away the foe's boosts; a waiting House Wins bonus lands as the partner comes in.
+    if (c.mon.hp > 0 && other.mon.hp > 0 && traitUndertow(ctx.battle.extra.traits, other.mon.uid)) {
+      events.push({ type: 'raid', tone: 'info', text: 'Undertow Song: the current drags at it.' });
+      applyStageChange(ctx, c, 'spe', -1, events, other);
+    }
     const seat = c.mon.hp > 0 && other.mon.hp > 0 ? traitSeatMessage(ctx.battle.extra.traits, c.mon.uid) : null;
     if (seat) {
       events.push({ type: 'raid', tone: 'info', text: seat });
@@ -3811,6 +3820,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (foeAbility === 'tangled-feet' && target.vol.confusion > 0) accuracy *= 0.5;
       if (ctx.battle.field.gravity > 0) accuracy *= 5 / 3;
       if (ctx.battle.accuracyMult) accuracy *= ctx.battle.accuracyMult;
+      if (ctx.battle.eventRule?.accuracyMult) accuracy *= ctx.battle.eventRule.accuracyMult;
       if (target.side === 'player') accuracy /= evasionPerk(ctx.perks, getSpecies(content, target.mon.speciesId).types) * growthEvasionMultiplier(content.balance.overhaulGrowth, target.mon, target.mon.hp / Math.max(1, calcStats(content, target.mon).hp));
       if (foeAbility === 'wonder-skin' && move.category === 'status') accuracy = Math.min(accuracy, 0.5);
       // S157 Focus: a focused Pokémon aims a little better.
@@ -3977,6 +3987,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (userAbility === 'merciless' && target.mon.status?.id === 'psn') crit = true;
       if (foeAbility === 'battle-armor' || foeAbility === 'shell-armor' || ctx.battle.sideEffects[target.side].luckyChant > 0) crit = false;
       if (storyNoCrit(ctx.battle.extra.storyTraits, user.mon.uid)) crit = false;
+      if (user.side === 'player' && ctx.battle.noPlayerCrit) crit = false;
       if (crit) user.vol.laserFocus = false;
       (ctx.battle.critStreak ??= {})[user.mon.uid] = crit ? (ctx.battle.critStreak[user.mon.uid] ?? 0) + 1 : 0;
       const randomFactor = rng.int(content.ruleset.randomFactorMin, 100);
@@ -3994,7 +4005,10 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       let attackBoost = 1;
       let powerMult = 1;
       if (changedType) powerMult *= 1.2;
-      if (user.side === 'enemy') powerMult *= storyHype(ctx.battle.extra.storyTraits, user.mon.uid, ctx.battle.enemyIndex, ctx.battle.turn);
+      if (user.side === 'enemy') {
+        powerMult *= storyHype(ctx.battle.extra.storyTraits, user.mon.uid, ctx.battle.enemyIndex, ctx.battle.turn);
+        powerMult *= storyOldHabits(ctx.battle.extra.storyTraits, user.mon.uid, target.mon.hp, maxHp(ctx.content, target.mon));
+      }
       if (userAbility === 'technician' && power <= 60) powerMult *= 1.5;
       const flagBoost = userAbility ? FLAG_BOOST[userAbility] : undefined;
       if (flagBoost && move.flags.includes(flagBoost.flag)) powerMult *= flagBoost.multiplier;
@@ -4268,6 +4282,29 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     }
   }
   if (dealt > 0) {
+    // Beta 0.7 traits: Subtraction takes a boost, Grid Tie drinks Electric moves, Blood in the Water smells a Pokémon dropping below half.
+    const taken = target.mon.hp > 0 ? traitSubtraction(ctx.battle.extra.traits, user.mon.uid, target.stages) : null;
+    if (taken) {
+      target.stages[taken as BoostStat] -= 1;
+      events.push({ type: 'raid', tone: 'info', text: 'Subtraction: one boost is taken away.' });
+      events.push({ type: 'stat', side: target.side, stat: taken as BoostStat, change: -1 });
+    }
+    const pair = activeCombatants(ctx);
+    for (const holder of [pair.player, pair.enemy]) {
+      if (holder.mon.hp <= 0) continue;
+      const holderMax = calcStats(ctx.content, holder.mon).hp;
+      if (moveType === 'electric' && traitGridTie(ctx.battle.extra.traits, holder.mon.uid) && holder.mon.hp < holderMax) {
+        const gain = Math.min(holderMax - holder.mon.hp, Math.max(1, Math.floor(holderMax * GRID_TIE_SHARE)));
+        holder.mon.hp += gain;
+        events.push({ type: 'raid', tone: 'info', text: 'Grid Tie: the current feeds it.' });
+        events.push({ type: 'heal', side: holder.side, amount: gain, hpAfter: holder.mon.hp });
+      }
+      const targetMax = calcStats(ctx.content, target.mon).hp;
+      if (target.mon.hp > 0 && (target.mon.hp + dealt) * 2 >= targetMax && target.mon.hp * 2 < targetMax && traitBloodScent(ctx.battle.extra.traits, holder.mon.uid)) {
+        events.push({ type: 'raid', tone: 'info', text: 'Blood in the Water: it smells a weak Pokémon.' });
+        applyStageChange(ctx, holder, 'atk', 1, events);
+      }
+    }
     const food = traitFoodKnocked(ctx.battle.extra.traits, target.mon.uid, move.id);
     if (food) events.push({ type: 'raid', tone: 'info', text: food });
     const torn = variantItemMove(ctx.battle.extra.variants, target.mon.uid, move.id);
@@ -4984,6 +5021,15 @@ function endTurnMon(ctx: BattleContext, c: Combatant, foe: Combatant, events: Ba
       if (t.left <= 0) c.stages[t.stat] = Math.max(-6, Math.min(6, c.stages[t.stat] - t.amount));
     }
     ctx.battle.extra.variantTimed = ctx.battle.extra.variantTimed.filter((x) => x.left > 0);
+    if (traitOnSchedule(ctx.battle.extra.traits, c.mon.uid, ctx.battle.turn) && ctx.battle.weather?.id !== 'sun') {
+      ctx.battle.weather = { id: 'sun', turns: 5 };
+      events.push({ type: 'raid', tone: 'info', text: 'On Schedule: the sun comes out.' });
+      events.push({ type: 'weather', weather: 'sun' });
+    }
+    if (traitUpdraft(ctx.battle.extra.traits, c.mon.uid, ctx.battle.weather?.id ?? null)) {
+      events.push({ type: 'raid', tone: 'info', text: 'Updraft: it rides the heat.' });
+      applyStageChange(ctx, c, 'spe', 1, events);
+    }
     const feed = traitFeedHeal(ctx.battle.extra.traits, c.mon.uid, max);
     if (feed > 0 && c.mon.hp < max) {
       c.mon.hp = Math.min(max, c.mon.hp + feed);
@@ -6608,6 +6654,10 @@ function recordFaints(ctx: BattleContext, player: Combatant, enemy: Combatant, e
     }
     events.push({ type: 'faint', side: c.side, uid: c.mon.uid, participants });
     // Beta 0.6 traits: Lights Out darkens the field; the other of the House pair is lifted.
+    if (traitLingering(ctx.battle.extra.traits, c.mon.uid)) {
+      const facing = c.side === 'enemy' ? player : enemy;
+      if (facing.mon.hp > 0 && tryInflictStatus(ctx, c, facing, 'psn', undefined, events, false)) events.push({ type: 'raid', tone: 'warn', text: 'Lingering: the fumes stay behind.' });
+    }
     if (traitLightsOut(ctx.battle.extra.traits, c.mon.uid)) {
       ctx.battle.extra.darkTurns = LIGHTS_OUT_TURNS;
       events.push({ type: 'raid', tone: 'warn', text: 'Lights Out: the field goes dark.' });

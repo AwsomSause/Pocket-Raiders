@@ -34,6 +34,8 @@ import { climaxBattleEnded, setClimaxCut } from './arc/climaxExtended';
 import { freeHandedOverRival, standWithClimaxLost, standWithOf } from './arc/standWithExtended';
 import { makeShadow, rollShadowHeart, soothePartyAfterBattle } from './shadow';
 import { leaveRegion, startGrandArc } from './grandArc';
+import { epilogueActive, epilogueBattleEnded, startEpilogue } from './epilogue/director';
+import { EpilogueStateSchema } from './grandArc/schema';
 import { checkFlagKeys, checkLeadWinKey, SHADOW_SLOT_CAP, heavyShadowCount, shadowTierOf } from './shadow2';
 import { advanceShadowWorld, addFlag, gangNotes, gangRaidWon, liberatedHpDiscount, outbreakShadow, placeGangDen } from './shadowWorld/world';
 import { blissfulAfterBattle, blissfulAtRest } from './shadowWorld/blissful';
@@ -250,7 +252,8 @@ import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
 import { recapRegion, tellAct } from './campaign/director';
-import { healStopShut, trackHealShare, trackShopFactor, trackWildWeight } from './expansion/trackRun';
+import { applyTremor } from './expansion/galarDynamax';
+import { applyTrackToBattle, healStopShut, trackEffects, trackForgetStock, trackHealShare, trackShopFactor, trackWildWeight } from './expansion/trackRun';
 import { freshClock, migrationWildWeight, periodOf, periodWildWeight, shopHoursMultiplier, stepClock, tideShopMultiplier, tideWildWeight } from './clock';
 import { bulkTotal, currentShopType, haggleWins, pokenetDeal, shopTypeAt, typedStock, typePriceFactor } from './shopTypes';
 import { finalRivalLine, tellCampfire } from './story/highHype';
@@ -347,7 +350,7 @@ export interface NewRunOptions {
   /** Story Run: the player's name, pronouns and Look from the prologue (profile.story.protagonist). */
   protagonist?: { look: string; name: string; pronouns: string | PronounSet; backstory?: string };
   /** Beta 0.6: which expansion settings were on at run start (settings.expansion). Each flag is stored in `run.expansion` once and never changes. */
-  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean; grandArc?: boolean; worldTracks?: boolean; ultraBeasts?: boolean; eventsDensity?: 'low' | 'normal' | 'full'; climaxCut?: 'standard' | 'extended'; storyTraits?: boolean; rewinds?: boolean; nodeMenus?: boolean; blessings?: boolean; secondChancePct?: number; heatedMoments?: boolean; mythicalPromises?: boolean };
+  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean; grandArc?: boolean; worldTracks?: boolean; ultraBeasts?: boolean; eventsDensity?: 'low' | 'normal' | 'full'; climaxCut?: 'standard' | 'extended'; storyTraits?: boolean; rewinds?: boolean; nodeMenus?: boolean; blessings?: boolean; secondChancePct?: number; heatedMoments?: boolean; mythicalPromises?: boolean; finale?: boolean; doomEpilogue?: boolean };
 }
 
 export function createRun(content: Content, opts: NewRunOptions): RunState {
@@ -458,6 +461,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     if (e.nodeMenus && nodeMenusAllowed(run.rules.modifierIds)) run.expansion = { ...run.expansion, nodeMenus: freshNodeMenuState() };
     setClimaxCut(run, e.climaxCut);
     if (e.grandArc) startGrandArc(run);
+    if (e.finale || e.doomEpilogue) run.expansion = { ...run.expansion, epilogue: EpilogueStateSchema.parse({ finale: Boolean(e.finale && e.grandArc), doom: Boolean(e.doomEpilogue) }) };
     if (e.rewinds) {
       grantRewinds(run, 'setting');
       if (run.stage) takeStageSnapshot(run);
@@ -907,6 +911,7 @@ function enterNextRegion(content: Content, run: RunState): void {
     playFinaleStops(content, run);
     run.victory = true;
     freeHandedOverRival(run);
+    if (startEpilogue(run)) return; // Beta 0.7: optional Citadark finale / Region of Doom after the win
     run.phase = 'over';
     return;
   }
@@ -2029,6 +2034,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     }
     outbreakShadow(content, run, enemy, node.id);
     run.battle = createBattle('wild', [enemy], activeIndex, activeUid);
+    applyTremor(content, run);
     if (incursion) {
       // Ultra Aura: +1 to all its stats. Beast Boost comes with the Beast's own ability.
       for (const s of ['atk', 'def', 'spa', 'spd', 'spe'] as const) run.battle.enemyStages[s] = 1;
@@ -2063,6 +2069,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     rememberPick(content, run, WILD_MET_POOL, enemy.speciesId);
     const setup = wildBattleSetup(content, run, mods);
     if (setup.weather) run.battle.weather = { id: setup.weather, turns: 999 };
+    applyTrackToBattle(content, run);
     if (setup.drop) run.itemCounters = { ...run.itemCounters, 'pinap-drop': 1 };
     if (setup.freeTurns > 0) run.battle.mapItems = { freeTurns: setup.freeTurns, thrown: 0 };
     if (setup.foeSpeed !== 0) run.battle.enemyStages.spe = Math.max(-6, Math.min(6, run.battle.enemyStages.spe + setup.foeSpeed));
@@ -2279,6 +2286,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     const order = plan.leaderId || isRival || rivalBack || nemesis || bossBack || trainingIndex >= 0 ? built.map((_, i) => i) : roleOrder(content, built);
     const team = order.map((i) => built[i]!);
     run.battle = createBattle('trainer', team, activeIndex, activeUid, { classId: plan.classId, name: plan.name, leaderId: plan.leaderId });
+    applyTrackToBattle(content, run);
     assignField(content, run, !!plan.leaderId);
     run.battle.ai = plan.ai;
     if (parity) {
@@ -2558,6 +2566,9 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     // Kalos step 3 (Members First): the Center gives back only part of each Pokémon's HP.
     const share = trackHealShare(content, run);
     if (share < 1) run.party.forEach((m, i) => { m.hp = Math.min(m.hp, Math.max(before[i] ?? 0, Math.ceil(maxHp(content, m) * share))); });
+    // Sinnoh's Brownout: the Pokémon Center only restores part of each Pokémon's HP.
+    const centerHeal = trackEffects(content, run).centerHeal;
+    if (centerHeal < 1) for (const mon of run.party) mon.hp = Math.max(1, Math.min(mon.hp, Math.floor(maxHp(content, mon) * centerHeal)));
     careRest(run, content);
     partyLifeCamp(run);
     const comboLine = [partyLifeCombos(content, run), ...assignGrowthPaths(content, run.party, run.story.histories)].filter(Boolean).join(' ');
@@ -2650,7 +2661,7 @@ export function shopStock(content: Content, run: Pick<RunState, 'badges' | 'arch
   const selling = stock.filter((e) => (black || open(e) || early.includes(e)) && allowed(e));
   // Shops redesign: each kind of shop sells its own part of that (core/shopTypes.ts).
   const locked = stock.filter((e) => !selling.includes(e) && allowed(e)).sort((a, b) => shopBadgesNeeded(content, run, a) - shopBadgesNeeded(content, run, b));
-  return typedStock(content, run, selling, locked) as Content['shop'];
+  return trackForgetStock(content, run as Partial<RunState>, typedStock(content, run, selling, locked) as Content['shop']) as Content['shop'];
 }
 
 /** Whether an entry is on sale only through the Black Market (your badges haven't opened it). */
@@ -3184,6 +3195,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // Wide formats (Beta 0.6 E4): a fight a format launched tells the format how it ended, before any loss tail runs.
   if (battle.outcome && battle.event?.eventId === 'format:climax') climaxBattleEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
   if (battle.outcome === 'win' && battle.event?.eventId === 'format:climax') beatClimax(run);
+  if (battle.outcome && (battle.event?.eventId === 'format:finale' || battle.event?.eventId === 'format:doom')) epilogueBattleEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
   if (battle.outcome && battle.event?.eventId.startsWith('format:')) formatBattleEnded({ content, run }, battle.outcome === 'win' || battle.outcome === 'caught');
   // PS-RESCUE (Beta 0.6 R9): a guard fight tells the running rescue plan how it ended.
   if (battle.outcome && battle.event?.eventId.startsWith('rescue:')) rescueFightEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
@@ -3417,7 +3429,7 @@ function awardExperience(content: Content, run: RunState, events: BattleEvent[])
       if (result.levelsGained > 0) {
         out.push({ type: 'levelUp', uid, level: result.newLevel });
         growthOnLevelUp(content, mon, result.newLevel - result.levelsGained);
-        changeFriendship(content, mon, content.balance.friendship.perLevel * result.levelsGained, effects.friendship);
+        changeFriendship(content, mon, content.balance.friendship.perLevel * result.levelsGained, effects.friendship * trackEffects(content, run).friendshipFactor);
       }
       for (const moveId of result.learnedMoves) out.push({ type: 'learnedMove', uid, moveId });
       for (const moveId of result.skippedMoves) {
@@ -3584,7 +3596,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (battle.rivalId) count(run, 'rivalBattlesWon');
     const { perBattleWon, perBossWon } = content.balance.friendship;
     const boss = classId === GYM_LEADER_CLASS || classId === ELITE_FOUR_CLASS || classId === CHAMPION_CLASS;
-    const gainMultiplier = runAttributeEffects(content, run).friendship;
+    const gainMultiplier = runAttributeEffects(content, run).friendship * trackEffects(content, run).friendshipFactor; // Sinnoh: the lakes' Feeling halves it
     for (const mon of run.party) {
       if (mon.hp > 0 && battle.participants.includes(mon.uid)) changeFriendship(content, mon, boss ? perBossWon : perBattleWon, gainMultiplier);
     }
@@ -3838,12 +3850,18 @@ export function continueAfterDecisions(content: Content, run: RunState): void {
     run.phase = 'decision';
     return;
   }
-  if (run.victory) {
+  if (run.victory && !epilogueActive(run)) {
     // The last champion is beaten: the run is won. A Story Run tells its Finale and Epilogue Stops first (S19 found they never played here).
     playFinaleStops(content, run);
     run.draft = null;
     freeHandedOverRival(run);
+    if (startEpilogue(run)) return;
     run.phase = 'over';
+    return;
+  }
+  // An epilogue fight is over: back to the map, where the epilogue director shows the next step.
+  if (epilogueActive(run)) {
+    run.phase = 'map';
     return;
   }
   if (run.afterDecisions === 'eventChain') return continueEventChain(content, run);

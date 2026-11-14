@@ -47,7 +47,15 @@ describe('track effects', () => {
   it('Alola thins the wild pool by a fifth from step 3; Paldea only adverts at step 5', () => {
     expect(trackEffectsFor('alola', 2, cfg).wildShrink).toBe(0);
     expect(trackEffectsFor('alola', 3, cfg).wildShrink).toBe(0.2);
-    expect(trackEffectsFor('paldea', 4, cfg)).toEqual(NO_EFFECTS);
+  });
+  it('Paldea steps 1 to 4 are mechanics', () => {
+    expect(trackEffectsFor('paldea', 0, cfg)).toEqual(NO_EFFECTS);
+    expect(trackEffectsFor('paldea', 1, cfg)).toMatchObject({ shopMarkup: cfg.shopMarkup, healShutAtNight: false, wildShrink: 0 });
+    expect(trackEffectsFor('paldea', 2, cfg).healShutAtNight).toBe(true);
+    expect(trackEffectsFor('paldea', 3, cfg).wildShrink).toBe(cfg.wildShrink);
+    expect(trackEffectsFor('paldea', 4, cfg)).toMatchObject({ roadblocks: true, adverts: false });
+  });
+  it('Paldea step 5 adds the map line', () => {
     expect(trackEffectsFor('paldea', 5, cfg).adverts).toBe(true);
   });
 });
@@ -73,7 +81,7 @@ describe('Extended Cut for Alola and Paldea', () => {
     expect(EXTENDED_REGIONS).toEqual(expect.arrayContaining(['kanto', 'alola', 'paldea']));
     expect(beginClimax(extended('alola'), 'alola')).toBe(true);
     expect(beginClimax(extended('paldea'), 'paldea')).toBe(true);
-    expect(beginClimax(extended('hoenn'), 'hoenn')).toBe(false);
+    expect(beginClimax(extended('hoenn'), 'nowhere')).toBe(false);
   });
   it('formats with only Kanto content do not start in these regions', () => {
     for (const region of ['alola', 'paldea']) {

@@ -59,7 +59,7 @@ const save = (run: RunState, d: Dir): void => { cutOf(run).director = d; };
 
 /** The climax begins: forgets the last climax's formats and starts at phase 0. Standard-cut runs do nothing. */
 /** Regions whose Extended Cut is wired. Formats with no content for a region skip themselves (`canStart`). */
-export const EXTENDED_REGIONS: readonly string[] = ['kanto', 'alola', 'paldea', 'kalos', 'galar', 'johto', 'unova'];
+export const EXTENDED_REGIONS: readonly string[] = ['kanto', 'alola', 'paldea', 'kalos', 'galar', 'sinnoh', 'hoenn', 'johto', 'unova'];
 
 export function beginClimax(run: RunState, region = 'kanto'): boolean {
   if (climaxCutOf(run) !== 'extended' || !EXTENDED_REGIONS.includes(region)) return false;
