@@ -34,6 +34,7 @@
       "effects": [],
       "battle": {
        "kind": "trainer",
+       "special": "st.hype-man",
        "name": "Skull Trio",
        "classId": "roughneck",
        "size": 3,
@@ -504,8 +505,9 @@
       "effects": [],
       "battle": {
        "kind": "trainer",
+       "special": "st.reluctant-hand",
        "name": "Eldes",
-       "classId": "roughneck",
+       "classId": "gentleman",
        "size": 3,
        "types": [],
        "levelBonus": 1,

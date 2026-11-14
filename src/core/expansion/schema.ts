@@ -47,6 +47,8 @@ export const ExpansionSettingsSchema = z.object({
   leagueCounterPick: z.boolean().default(true),
   /** E2 world-state tracks (the Kanto Rocket Ledger): shops, shut Centers and thinner wild pools follow how the team's operations go. */
   worldTracks: z.boolean().default(true),
+  /** Beta 0.7: team-wide battle traits for Alola and Paldea story events (Hype Man, Reluctant Hand). Off by default; read when a run starts. */
+  storyTraits: z.boolean().default(false),
 });
 export type ExpansionSettings = z.infer<typeof ExpansionSettingsSchema>;
 export const EXPANSION_SETTINGS_DEFAULTS: ExpansionSettings = ExpansionSettingsSchema.parse({});
@@ -94,6 +96,8 @@ export const ExpansionRunSchema = z.object({
   density: z.enum(['low', 'normal', 'full']).optional(),
   /** The climax length the run started with (the `climaxCut` setting); run events that need the Extended Cut read it. */
   climaxCut: z.enum(['standard', 'extended']).optional(),
+  /** The `storyTraits` setting the run started with. */
+  storyTraits: z.boolean().optional(),
   /** Story events placed per region so far (E3 scheduler), by region id. */
   xe: z.record(z.string(), z.number().int().min(0)).optional(),
   /** Runs with the world-state tracks on (E2). Set once at run start. */
