@@ -4,11 +4,12 @@
 import type { Content } from '../contentSchema';
 import { currentRegion } from '../regions';
 import { ADVERT_LINE } from './trackRegions';
+import { ADVERT_LINE_KG } from './trackKalosGalar';
 import type { RunState } from '../state';
 import { periodOf } from '../clock';
 import { fnv1a } from './hash';
 import { meetFromTrack } from './cast/meet';
-import { freshTrack, insuredIndex, NO_EFFECTS, reduceTrack, trackEffectsFor, wildTaken, type TrackEffects, type TrackInput, type TrackState } from './track';
+import { freshTrack, FULL_EFFECTS, insuredIndex, NO_EFFECTS, reduceTrack, trackEffectsFor, wildTaken, type FullTrackEffects, type TrackEffects, type TrackInput, type TrackState } from './track';
 
 export const trackOf = (run: Pick<RunState, 'expansion'>, regionId: string): TrackState | undefined => run.expansion?.track?.[regionId];
 export const trackStep = (run: Pick<RunState, 'expansion'>, regionId: string): number => trackOf(run, regionId)?.step ?? 0;
@@ -24,11 +25,11 @@ export function advanceTrack(run: RunState, regionId: string, input: TrackInput,
 }
 
 /** The effects in force where the player is now. */
-export function trackEffects(content: Content, run: RunState): TrackEffects {
+export function trackEffects(content: Content, run: RunState): FullTrackEffects {
   const region = run.regionOrder[run.regionIndex]; // an old save may have no current region yet
-  if (!region) return NO_EFFECTS;
+  if (!region) return FULL_EFFECTS;
   const step = trackStep(run, region);
-  return step === 0 ? NO_EFFECTS : trackEffectsFor(region, step, content.balance.expansionTrack);
+  return step === 0 ? FULL_EFFECTS : { ...FULL_EFFECTS, ...trackEffectsFor(region, step, content.balance.expansionTrack) };
 }
 
 /** Price factor for the shop being used: exactly one shop node per stage charges the "insurance" markup (chosen by a hash). */
@@ -56,7 +57,12 @@ export function healStopShut(content: Content, run: RunState, sideId: string): b
 /** One line for the map when the track has a visible effect (adverts), else ''. */
 export function trackBannerLine(content: Content, run: RunState): string {
   const fx = trackEffects(content, run);
-  return fx.adverts ? (ADVERT_LINE[currentRegion(content, run).id] ?? 'The news is running Rocket adverts all day.') : '';
+  return fx.adverts ? (ADVERT_LINE[currentRegion(content, run).id] ?? ADVERT_LINE_KG[currentRegion(content, run).id] ?? 'The news is running Rocket adverts all day.') : '';
+}
+
+/** Share of HP a Pokémon Center gives back right now: 1, or less when the region's track says members come first (a Flare Key lifts it). */
+export function trackHealShare(content: Content, run: RunState): number {
+  return Number(run.story.flags['ev:flare-member'] ?? 0) > 0 ? 1 : (trackEffects(content, run).healShare ?? 1);
 }
 
 const flagCount = (run: RunState, key: string): number => Number(run.story.flags[`ev:${key}`] ?? 0);

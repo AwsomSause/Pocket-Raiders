@@ -171,14 +171,18 @@ test('switch Pokémon from the party menu, and give a reward to a chosen Pokémo
     await page.keyboard.press('Enter');
     await page.waitForTimeout(120);
   }
-  while ((await scene(page)) === 'Decision') {
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('Enter'); // "Don't learn"
-    await page.keyboard.press('Enter'); // Yes
-    await page.waitForTimeout(1600);
+  // Move-learning decisions can appear one after another, with a short scene change between them: keep answering
+  // them until the reward screen shows, instead of stopping at the first moment no Decision is on screen.
+  for (let t = Date.now(); (await scene(page)) !== 'Reward' && Date.now() - t < 40_000; ) {
+    if ((await scene(page)) === 'Decision') {
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('Enter'); // "Don't learn"
+      await page.keyboard.press('Enter'); // Yes
+      await page.waitForTimeout(1600);
+    } else await page.waitForTimeout(250);
   }
   await waitForScene(page, 'Reward');
 

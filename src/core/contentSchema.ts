@@ -6,6 +6,7 @@ import { NATURE_IDS } from './natures';
 import { z } from 'zod';
 import { ANIME_LOOKS } from './animeLooks';
 import { GRADES as PROMPT_GRADES } from './interaction/prompt';
+import { UltraRuleIdSchema } from './ultra/beasts';
 import { SpectacleConfigSchema } from './battle/spectacleConfig';
 import { W1ConfigSchema } from './battle/w1Rules';
 import { TypeRulesSchema, DEFAULT_TYPE_RULES } from './battle/typeRulesConfig';
@@ -2144,6 +2145,8 @@ export const BalanceSchema = z.object({
   eliteRematch: z.object({ enabled: z.boolean().default(true), winsPerRegion: z.number().int().positive().default(25) }).default({ enabled: true, winsPerRegion: 25 }),
   /** Growth S61: experience a capped Pokémon cannot use turns into one Bag item per `xpPerItem` (0 = off). */
   overlevel: z.object({ xpPerItem: z.number().int().min(0), item: z.string() }).default({ xpPerItem: 400, item: 'hyper-potion' }),
+  /** Beta 0.7 L3 Rewinds (core/rewind.ts): how far back a battle rewind may go, and how many rewinds a stage allows. */
+  rewind: z.object({ maxTurnsBack: z.number().int().min(1), usesPerStage: z.number().int().min(0) }).default({ maxTurnsBack: 5, usesPerStage: 1 }),
   badgePower: z.object({ damagePerBadge: z.number().min(0).default(0.03), weaknessCutPerBadge: z.number().min(0).default(0.03), maxStacks: z.number().int().min(1).default(4) }).default({ damagePerBadge: 0.03, weaknessCutPerBadge: 0.03, maxStacks: 4 }),
   /** Item rework (Kice, 2026-11-07): charm odds in the draft, and how much of each Luck gain a run keeps. */
   itemRework: z
@@ -3161,6 +3164,8 @@ export type EventEffect = z.infer<typeof EventEffectSchema>;
  * `foeAsleep`: the foe's Pokémon start asleep. `reversed`: your last conscious Pokémon leads. `stages`: both sides start with these stat stages.
  */
 export const EventRuleSchema = z.object({
+  /** Beta 0.7 U1: an Ultra Beast's rule holds in this fight (home-world fights), for both sides. */
+  ultra: UltraRuleIdSchema.optional(),
   /** A duel: your first conscious Pokémon of this type leads (Samurai face-off). */
   leadType: TypeNameSchema.optional(),
   /** The foe's level equals your lead's level (Samurai face-off). */
@@ -3201,6 +3206,8 @@ export const EventRuleSchema = z.object({
   /** Beta 0.7 Sinnoh (Whiteout): accuracy for both sides is multiplied by this in the fight. */
   accuracyMult: z.number().min(0.5).max(1).optional(),
   noSwitchFirstTurn: z.boolean().optional(),
+  /** Beta 0.7 Alola Crossing, Thin Light: at the end of every third turn a glimpse from the far side of the sky strikes one Pokémon on the field for an eighth of its HP (never a knockout). */
+  thinLight: z.boolean().optional(),
   /** Beta 0.6 Foresight Tax: the foe sees your first chosen move each turn until one of its Pokémon faints. */
   foresight: z.boolean().optional(),
   /** Front (Beta 0.6): each Pokémon fights only the foe in its own lane (spot n faces spot n); no moves reach other lanes or allies. */
@@ -3272,6 +3279,10 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     look: z.enum(ANIME_LOOKS).optional(),
     /** Beta 0.6: a named special Pokémon (dossier id, e.g. sv.rocket.roadblock) is the foe, so it fights with its signature trait. */
     special: z.string().optional(),
+    /** Beta 0.7 U1: special rules for this wild fight (the Ultra Rule of an Ultra Beast's home world). */
+    rule: EventRuleSchema.optional(),
+    /** Beta 0.7 U1: Ultra Aura: every foe starts with +1 to all its stats. */
+    aura: z.boolean().optional(),
     win: z.array(EventEffectSchema).default([]),
   }),
   z.object({

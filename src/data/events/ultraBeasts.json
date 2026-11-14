@@ -1,0 +1,1359 @@
+{
+ "events": [
+  {
+   "id": "ultra-tear-ub-symbiont",
+   "name": "A Tear in the Sky",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "The sky has a crack in it, and behind the crack is a dark sea with stone drifting through it like leaves. Something glassy turns over in the deep. Whatever lives there is not interested in you. The Beast's rule has leaked into this whole stage.",
+   "choices": [
+    {
+     "label": "Step through",
+     "success": {
+      "text": "You step through. The air changes first, then the rules.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-crossed",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "types": [
+        "water",
+        "poison"
+       ],
+       "chain": 2,
+       "levelBonus": 2,
+       "rule": {
+        "ultra": "host"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 2
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ultra-home-ub-symbiont"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it alone",
+     "success": {
+      "text": "You back away. If it is left open, the Beast may come out on its own.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-home-ub-symbiont",
+   "name": "The Beast at Home",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "At the end of the crossing it is there, at home, and not hostile until you move. Its rule is at full strength here.",
+   "choices": [
+    {
+     "label": "Approach it",
+     "success": {
+      "text": "It sees you, and it is afraid.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "nihilego"
+       ],
+       "levelBonus": 6,
+       "aura": true,
+       "rule": {
+        "ultra": "host"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take the shards and go",
+     "success": {
+      "text": "You leave it be, and bring a few Ultra Shards back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-shard",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-tear-ub-absorption",
+   "name": "A Tear in the Sky",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "The crack opens onto a jungle of black stone and steam. Everything in it is standing in a pose. Whatever lives there is not interested in you. The Beast's rule has leaked into this whole stage.",
+   "choices": [
+    {
+     "label": "Step through",
+     "success": {
+      "text": "You step through. The air changes first, then the rules.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-crossed",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "types": [
+        "grass",
+        "fighting"
+       ],
+       "chain": 2,
+       "levelBonus": 2,
+       "rule": {
+        "ultra": "flex"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 2
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ultra-home-ub-absorption"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it alone",
+     "success": {
+      "text": "You back away. If it is left open, the Beast may come out on its own.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-home-ub-absorption",
+   "name": "The Beast at Home",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "At the end of the crossing it is there, at home, and not hostile until you move. Its rule is at full strength here.",
+   "choices": [
+    {
+     "label": "Approach it",
+     "success": {
+      "text": "It sees you, and it is afraid.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "buzzwole"
+       ],
+       "levelBonus": 6,
+       "aura": true,
+       "rule": {
+        "ultra": "flex"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take the shards and go",
+     "success": {
+      "text": "You leave it be, and bring a few Ultra Shards back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-shard",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-tear-ub-beauty",
+   "name": "A Tear in the Sky",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "Through the crack: white dunes, crystal, and not one thing out of place. It is very quiet and very clean. Whatever lives there is not interested in you. The Beast's rule has leaked into this whole stage.",
+   "choices": [
+    {
+     "label": "Step through",
+     "success": {
+      "text": "You step through. The air changes first, then the rules.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-crossed",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "types": [
+        "ground",
+        "bug"
+       ],
+       "chain": 2,
+       "levelBonus": 2,
+       "rule": {
+        "ultra": "untouchable"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 2
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ultra-home-ub-beauty"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it alone",
+     "success": {
+      "text": "You back away. If it is left open, the Beast may come out on its own.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-home-ub-beauty",
+   "name": "The Beast at Home",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "At the end of the crossing it is there, at home, and not hostile until you move. Its rule is at full strength here.",
+   "choices": [
+    {
+     "label": "Approach it",
+     "success": {
+      "text": "It sees you, and it is afraid.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "pheromosa"
+       ],
+       "levelBonus": 6,
+       "aura": true,
+       "rule": {
+        "ultra": "untouchable"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take the shards and go",
+     "success": {
+      "text": "You leave it be, and bring a few Ultra Shards back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-shard",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-tear-ub-lighting",
+   "name": "A Tear in the Sky",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "Cables hang through the crack like roots, under a sky that never stops discharging. Whatever lives there is not interested in you. The Beast's rule has leaked into this whole stage.",
+   "choices": [
+    {
+     "label": "Step through",
+     "success": {
+      "text": "You step through. The air changes first, then the rules.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-crossed",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "types": [
+        "electric",
+        "grass"
+       ],
+       "chain": 2,
+       "levelBonus": 2,
+       "rule": {
+        "ultra": "overload"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 2
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ultra-home-ub-lighting"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it alone",
+     "success": {
+      "text": "You back away. If it is left open, the Beast may come out on its own.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-home-ub-lighting",
+   "name": "The Beast at Home",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "At the end of the crossing it is there, at home, and not hostile until you move. Its rule is at full strength here.",
+   "choices": [
+    {
+     "label": "Approach it",
+     "success": {
+      "text": "It sees you, and it is afraid.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "xurkitree"
+       ],
+       "levelBonus": 6,
+       "aura": true,
+       "rule": {
+        "ultra": "overload"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take the shards and go",
+     "success": {
+      "text": "You leave it be, and bring a few Ultra Shards back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-shard",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-tear-ub-blaster",
+   "name": "A Tear in the Sky",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "The crack opens on a scorched launch field of great stalks. The air on the other side is heavy. Whatever lives there is not interested in you. The Beast's rule has leaked into this whole stage.",
+   "choices": [
+    {
+     "label": "Step through",
+     "success": {
+      "text": "You step through. The air changes first, then the rules.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-crossed",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "types": [
+        "steel",
+        "fire"
+       ],
+       "chain": 2,
+       "levelBonus": 2,
+       "rule": {
+        "ultra": "slow-burn"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 2
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ultra-home-ub-blaster"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it alone",
+     "success": {
+      "text": "You back away. If it is left open, the Beast may come out on its own.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-home-ub-blaster",
+   "name": "The Beast at Home",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "At the end of the crossing it is there, at home, and not hostile until you move. Its rule is at full strength here.",
+   "choices": [
+    {
+     "label": "Approach it",
+     "success": {
+      "text": "It sees you, and it is afraid.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "celesteela"
+       ],
+       "levelBonus": 6,
+       "aura": true,
+       "rule": {
+        "ultra": "slow-burn"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take the shards and go",
+     "success": {
+      "text": "You leave it be, and bring a few Ultra Shards back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-shard",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-tear-ub-blade",
+   "name": "A Tear in the Sky",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "A forest of folded paper shows through the crack. Every edge in it catches the light. Whatever lives there is not interested in you. The Beast's rule has leaked into this whole stage.",
+   "choices": [
+    {
+     "label": "Step through",
+     "success": {
+      "text": "You step through. The air changes first, then the rules.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-crossed",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "types": [
+        "grass",
+        "steel"
+       ],
+       "chain": 2,
+       "levelBonus": 2,
+       "rule": {
+        "ultra": "paper-cut"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 2
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ultra-home-ub-blade"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it alone",
+     "success": {
+      "text": "You back away. If it is left open, the Beast may come out on its own.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-home-ub-blade",
+   "name": "The Beast at Home",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "At the end of the crossing it is there, at home, and not hostile until you move. Its rule is at full strength here.",
+   "choices": [
+    {
+     "label": "Approach it",
+     "success": {
+      "text": "It sees you, and it is afraid.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "kartana"
+       ],
+       "levelBonus": 6,
+       "aura": true,
+       "rule": {
+        "ultra": "paper-cut"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take the shards and go",
+     "success": {
+      "text": "You leave it be, and bring a few Ultra Shards back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-shard",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-tear-ub-glutton",
+   "name": "A Tear in the Sky",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "The crack opens onto a city very like one you know, a long time after. Nothing is left in it. Whatever lives there is not interested in you. The Beast's rule has leaked into this whole stage.",
+   "choices": [
+    {
+     "label": "Step through",
+     "success": {
+      "text": "You step through. The air changes first, then the rules.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-crossed",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "types": [
+        "dark",
+        "ground"
+       ],
+       "chain": 2,
+       "levelBonus": 2,
+       "rule": {
+        "ultra": "devour"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 2
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ultra-home-ub-glutton"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it alone",
+     "success": {
+      "text": "You back away. If it is left open, the Beast may come out on its own.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-home-ub-glutton",
+   "name": "The Beast at Home",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "At the end of the crossing it is there, at home, and not hostile until you move. Its rule is at full strength here.",
+   "choices": [
+    {
+     "label": "Approach it",
+     "success": {
+      "text": "It sees you, and it is afraid.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "guzzlord"
+       ],
+       "levelBonus": 6,
+       "aura": true,
+       "rule": {
+        "ultra": "devour"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take the shards and go",
+     "success": {
+      "text": "You leave it be, and bring a few Ultra Shards back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-shard",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-tear-ub-assembly",
+   "name": "A Tear in the Sky",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "Through the crack is one wall, in every direction, made of things that are looking at you. Whatever lives there is not interested in you. The Beast's rule has leaked into this whole stage.",
+   "choices": [
+    {
+     "label": "Step through",
+     "success": {
+      "text": "You step through. The air changes first, then the rules.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-crossed",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "types": [
+        "rock",
+        "steel"
+       ],
+       "chain": 2,
+       "levelBonus": 2,
+       "rule": {
+        "ultra": "many-as-one",
+        "noSwitch": true
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 2
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ultra-home-ub-assembly"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it alone",
+     "success": {
+      "text": "You back away. If it is left open, the Beast may come out on its own.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-home-ub-assembly",
+   "name": "The Beast at Home",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "At the end of the crossing it is there, at home, and not hostile until you move. Its rule is at full strength here.",
+   "choices": [
+    {
+     "label": "Approach it",
+     "success": {
+      "text": "It sees you, and it is afraid.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "stakataka"
+       ],
+       "levelBonus": 6,
+       "aura": true,
+       "rule": {
+        "ultra": "many-as-one"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take the shards and go",
+     "success": {
+      "text": "You leave it be, and bring a few Ultra Shards back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-shard",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-tear-ub-burst",
+   "name": "A Tear in the Sky",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "A fairground at night, endless, with nobody on the rides. The music is playing anyway. Whatever lives there is not interested in you. The Beast's rule has leaked into this whole stage.",
+   "choices": [
+    {
+     "label": "Step through",
+     "success": {
+      "text": "You step through. The air changes first, then the rules.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-crossed",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "types": [
+        "ghost",
+        "fire"
+       ],
+       "chain": 2,
+       "levelBonus": 2,
+       "rule": {
+        "ultra": "finale"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 2
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ultra-home-ub-burst"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it alone",
+     "success": {
+      "text": "You back away. If it is left open, the Beast may come out on its own.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-home-ub-burst",
+   "name": "The Beast at Home",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "At the end of the crossing it is there, at home, and not hostile until you move. Its rule is at full strength here.",
+   "choices": [
+    {
+     "label": "Approach it",
+     "success": {
+      "text": "It sees you, and it is afraid.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "blacephalon"
+       ],
+       "levelBonus": 6,
+       "aura": true,
+       "rule": {
+        "ultra": "finale"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take the shards and go",
+     "success": {
+      "text": "You leave it be, and bring a few Ultra Shards back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-shard",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-tear-ub-adhesive",
+   "name": "A Tear in the Sky",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "A great city with its light taken, seen through the crack. They are fond of small things there. Whatever lives there is not interested in you. The Beast's rule has leaked into this whole stage.",
+   "choices": [
+    {
+     "label": "Step through",
+     "success": {
+      "text": "You step through. The air changes first, then the rules.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-crossed",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "types": [
+        "dark",
+        "poison"
+       ],
+       "chain": 2,
+       "levelBonus": 2,
+       "rule": {
+        "ultra": "cling"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 2
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ultra-home-ub-adhesive"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it alone",
+     "success": {
+      "text": "You back away. If it is left open, the Beast may come out on its own.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-home-ub-adhesive",
+   "name": "The Beast at Home",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "At the end of the crossing it is there, at home, and not hostile until you move. Its rule is at full strength here.",
+   "choices": [
+    {
+     "label": "Approach it",
+     "success": {
+      "text": "It sees you, and it is afraid.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "poipole"
+       ],
+       "levelBonus": 6,
+       "aura": true,
+       "rule": {
+        "ultra": "cling"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take the shards and go",
+     "success": {
+      "text": "You leave it be, and bring a few Ultra Shards back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-shard",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-tear-ub-stinger",
+   "name": "A Tear in the Sky",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "The same dark city, and something grown-up and stinging in its streets. Whatever lives there is not interested in you. The Beast's rule has leaked into this whole stage.",
+   "choices": [
+    {
+     "label": "Step through",
+     "success": {
+      "text": "You step through. The air changes first, then the rules.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-crossed",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "types": [
+        "dark",
+        "poison"
+       ],
+       "chain": 2,
+       "levelBonus": 2,
+       "rule": {
+        "ultra": "beast-boost-all"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 2
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ultra-home-ub-stinger"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it alone",
+     "success": {
+      "text": "You back away. If it is left open, the Beast may come out on its own.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ultra-home-ub-stinger",
+   "name": "The Beast at Home",
+   "group": "Ultra Beasts",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Mystery",
+    "Combat"
+   ],
+   "room": true,
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f4a",
+    "effect": "glint"
+   },
+   "intro": "At the end of the crossing it is there, at home, and not hostile until you move. Its rule is at full strength here.",
+   "choices": [
+    {
+     "label": "Approach it",
+     "success": {
+      "text": "It sees you, and it is afraid.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "naganadel"
+       ],
+       "levelBonus": 6,
+       "aura": true,
+       "rule": {
+        "ultra": "beast-boost-all"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ultra-shard",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take the shards and go",
+     "success": {
+      "text": "You leave it be, and bring a few Ultra Shards back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ultra-shard",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

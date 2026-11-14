@@ -9,6 +9,7 @@
 
 import { markCheckpoint, markDone, climaxRegion } from './store';
 import { launchFormatBattle } from './battle';
+import type { TypeName } from '../contentSchema';
 import type { FormatCard, FormatCtx, WideFormat } from './types';
 
 export const SEAL = { noSwitchFirstTurn: true, typeBoost: { type: 'psychic' as const, pct: 10 } };
@@ -26,10 +27,11 @@ export interface Anchor {
 }
 
 export type BlackoutRegion = 'sinnoh' | 'hoenn';
+const isSH = (r: unknown): r is BlackoutRegion => r === 'sinnoh' || r === 'hoenn';
 
 export interface BlackoutState {
-  /** Absent = Kanto (older saves). */
-  region?: BlackoutRegion;
+  /** The region whose streets these are (absent in older saves: Kanto). */
+  region?: string;
   anchors: Anchor[];
   triad: boolean;
   /** The anchor whose fight is running right now. */
@@ -69,6 +71,19 @@ const REGIONS: Record<BlackoutRegion, RegionBlackout> = {
   },
 };
 const evSet = (run: FormatCtx['run'], key: string): boolean => Number(run.story.flags[`ev:${key}`] ?? 0) >= 1;
+/** Alola's Crossing and Paldea's stair (Beta 0.7 E9). Same anchor rules; the condition is Thin Light in Alola (Beans cancels it) and none yet in Paldea (Tera Flicker is not built). */
+export const BLACKOUT_REGIONS: Record<string, { places: string[]; foe: string; species: string[]; types: TypeName[]; title: string; intro: string[]; over: string; thinLight: boolean }> = {
+  alola: {
+    places: ['the first rowing boat', 'the second rowing boat', 'the third rowing boat'], foe: 'Skull Grunt (blockade)', species: ['salandit', 'yungoos', 'wimpod', 'mareanie'], types: ['dark', 'poison'], title: 'The Crossing', thinLight: true,
+    intro: ['A boat to the Paradise under a sky with holes in it. Skull\'s last blockade is three rowing boats lashed together.', 'Tupp: "End of the line! By order of Kahuna Boss!" Rapp: "He came back from that party different."'],
+    over: 'The blockade is broken. The dock is ahead.',
+  },
+  paldea: {
+    places: ['the lower landing', 'the middle landing', 'the top landing'], foe: 'Peon (landing)', species: ['pawniard', 'houndour', 'mabosstiff', 'gimmighoul'], types: ['dark', 'fighting'], title: 'The Long Walk to School', thinLight: false,
+    intro: ['Mesagoza\'s great stair, every step of it. Peons in Star costume hold the landings.', 'Peon Brask: "Team Star says nobody gets to school today! That\'s what you\'ll tell them!" A real Star Grunt, very small and very angry: "We\'ve never stopped anyone getting to school! We just didn\'t go!"'],
+    over: 'You reach the top of the stair.',
+  },
+};
 
 const STREETS = [
   { id: 'a1', place: 'the Nugget Bridge crossing' },
@@ -101,8 +116,15 @@ const lifted = (region: BlackoutRegion, run: FormatCtx['run']): boolean => (regi
 
 function setup({ content, run }: FormatCtx, input?: unknown): BlackoutState {
   const asked = input && typeof input === 'object' && 'region' in input ? String((input as { region: unknown }).region) : '';
-  const region = asked === 'sinnoh' || asked === 'hoenn' ? asked : climaxRegion(run) === 'sinnoh' || climaxRegion(run) === 'hoenn' ? (climaxRegion(run) as BlackoutRegion) : null;
-  if (region) return setupRegion(region, { content, run });
+  const sh = isSH(asked) ? asked : isSH(climaxRegion(run)) ? (climaxRegion(run) as BlackoutRegion) : null;
+  if (sh) return setupRegion(sh, { content, run });
+  const region = climaxRegion(run);
+  const rc = BLACKOUT_REGIONS[region];
+  if (rc && input === undefined) {
+    const species = rc.species.filter((id) => content.species.has(id));
+    const anchors: Anchor[] = rc.places.map((place, i) => ({ id: `a${i + 1}`, place, name: rc.foe, species, size: 2, beaten: false }));
+    return { region, anchors, triad: false, pending: null, losses: 0 };
+  }
   const triad = typeof input === 'object' && input && 'triad' in input ? Boolean((input as { triad: unknown }).triad) : Boolean(run.story.flags['rocket.x.triad']);
   const mime = ['mr-mime'].filter((id) => content.species.has(id));
   const sabrinaTeam = ['alakazam', 'mr-mime', 'hypno', 'kadabra'].filter((id) => content.species.has(id));
@@ -122,7 +144,14 @@ function setup({ content, run }: FormatCtx, input?: unknown): BlackoutState {
 }
 
 function describe(s: BlackoutState, run?: FormatCtx['run']): FormatCard {
-  if (s.region) return describeRegion(s, run);
+  if (isSH(s.region)) return describeRegion(s, run);
+  const rc = s.region ? BLACKOUT_REGIONS[s.region] : undefined;
+  if (rc) {
+    const done = blackoutOver(s);
+    const lines = [...rc.intro, `Anchors beaten: ${beatenCount(s)} of ${s.anchors.length}.${s.losses ? ` Fights lost: ${s.losses} (your team was healed each time).` : ''}`];
+    if (done) return { title: rc.title, lines: [...lines, rc.over], options: [], over: true };
+    return { title: rc.title, lines: rc.thinLight && sealHolds(s) ? [...lines, 'Thin Light: every third turn a glimpse from the far side of the sky strikes one Pokémon on the field. It ends when two blockades fall.'] : lines, options: s.anchors.filter((a) => !a.beaten).map((a) => ({ id: a.id, label: `${a.name} at ${a.place}`, enabled: true })), over: false };
+  }
   const left = s.anchors.filter((a) => !a.beaten);
   const sealed = sealHolds(s);
   const lines = [
@@ -144,8 +173,8 @@ function describe(s: BlackoutState, run?: FormatCtx['run']): FormatCard {
 }
 
 function describeRegion(s: BlackoutState, run?: FormatCtx['run']): FormatCard {
-  const cfg = REGIONS[s.region!];
-  const holds = sealHolds(s) && !(run && lifted(s.region!, run));
+  const cfg = REGIONS[s.region as BlackoutRegion];
+  const holds = sealHolds(s) && !(run && lifted(s.region as BlackoutRegion, run));
   const lines = [cfg.intro, holds ? cfg.holds : cfg.broken, `Anchors beaten: ${beatenCount(s)} of ${s.anchors.length}.${s.losses ? ` Fights lost: ${s.losses} (your team was healed each time).` : ''}`];
   if (blackoutOver(s)) return { title: cfg.title, lines: [...lines, cfg.done], options: [], over: true };
   const can = open(s);
@@ -155,7 +184,7 @@ function describeRegion(s: BlackoutState, run?: FormatCtx['run']): FormatCard {
 
 function choose(s: BlackoutState, id: string, ctx: FormatCtx): BlackoutState {
   if (s.pending) return s;
-  if (s.region) {
+  if (isSH(s.region)) {
     const a = open(s).find((x) => x.id === id);
     if (!a) return s;
     const cfg = REGIONS[s.region];
@@ -168,6 +197,12 @@ function choose(s: BlackoutState, id: string, ctx: FormatCtx): BlackoutState {
   }
   const a = open(s).find((x) => x.id === id);
   if (!a) return s;
+  const rc = s.region ? BLACKOUT_REGIONS[s.region] : undefined;
+  if (rc) {
+    const beans = Number(ctx.run.story.flags['ev:alola-beans-joined'] ?? 0) >= 1;
+    const ok = launchFormatBattle(ctx.content, ctx.run, 'blackout', { key: a.id, name: a.name, classId: 'roughneck', types: rc.types, species: a.species, size: a.size, levelBonus: 0, ...(rc.thinLight && sealHolds(s) && !beans ? { rule: { thinLight: true } } : {}) });
+    return ok ? { ...s, pending: a.id } : s;
+  }
   const ok = launchFormatBattle(ctx.content, ctx.run, 'blackout', {
     key: a.id,
     name: a.name,
@@ -195,7 +230,7 @@ function onBattleEnd(s: BlackoutState, won: boolean, { run }: FormatCtx): Blacko
 }
 
 export const blackout: WideFormat<BlackoutState> = {
-  canStart: (ctx, input) => input !== undefined || ['kanto', 'sinnoh', 'hoenn'].includes(climaxRegion(ctx.run)),
+  canStart: (ctx, input) => input !== undefined || climaxRegion(ctx.run) === 'kanto' || climaxRegion(ctx.run) in BLACKOUT_REGIONS || isSH(climaxRegion(ctx.run)),
   id: 'blackout',
   setup,
   describe: (s, ctx) => describe(s, ctx.run),
