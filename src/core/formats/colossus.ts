@@ -11,7 +11,7 @@
 // moves (Mind Vault, Null Pulse, Heart Eclipse are not real moves yet).
 
 import { launchFormatBattle } from './battle';
-import { markDone } from './store';
+import { markDone, climaxRegion } from './store';
 import type { FormatCard, FormatCtx, WideFormat } from './types';
 
 export const M2_RAID = 'ss-rocket-m2';
@@ -71,6 +71,7 @@ function onBattleEnd(s: ColossusState, won: boolean, { run }: FormatCtx): Coloss
 }
 
 export const colossus: WideFormat<ColossusState> = {
+  canStart: (ctx, input) => input !== undefined || climaxRegion(ctx.run) === 'kanto',
   id: 'colossus',
   setup: () => ({ apex: { id: 'ss.rocket.m2', name: 'M2', code: 'XD002' }, pending: false, result: null }),
   describe: (s) => describe(s),

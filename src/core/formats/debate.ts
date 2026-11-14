@@ -21,6 +21,8 @@ export interface Evidence {
   flag?: string;
   /** The flag must equal this value (default: any non-empty value). */
   flagValue?: string;
+  /** An event story flag (`ev:<key>`) that also counts: the Paldea story events set these. */
+  ev?: string;
   item?: string;
 }
 
@@ -74,12 +76,12 @@ export const DEBATE_TABLE: DebateScript[] = [
     objection: 'Harrow\'s lawyer objects. Clavell overrules him.',
     settle: 'Harrow demands the matter be settled "in the customary manner of this region".',
     evidence: [
-      { id: 'deletion-log', label: 'The deletion log', flag: 'star.x.deletion-log' },
-      { id: 'tully', label: 'Tully, standing in the back row', flag: 'star.x.tully-stood' },
-      { id: 'boots', label: 'The wrong boots', flag: 'star.x.wrong-boots' },
+      { id: 'deletion-log', label: 'The deletion log', flag: 'star.x.deletion-log', ev: 'star-reports-seen' },
+      { id: 'tully', label: 'Tully, standing in the back row', flag: 'star.x.tully-stood', ev: 'star-tully-cracking' },
+      { id: 'boots', label: 'The wrong boots', flag: 'star.x.wrong-boots', ev: 'star-oldhallway-beaten' },
       { id: 'drum', label: 'The unmarked drum', flag: 'star.x.navi-drum' },
-      { id: 'engine', label: 'The First Engine, pink', flag: 'star.x.first-engine' },
-      { id: 'brochure', label: 'Nascour\'s brochure', item: 'nascour-brochure' },
+      { id: 'engine', label: 'The First Engine, pink', flag: 'star.x.first-engine', ev: 'star-first-engine' },
+      { id: 'brochure', label: 'Nascour\'s brochure', item: 'nascour-brochure', ev: 'star-brochure' },
     ],
     exchanges: [
       {
@@ -146,6 +148,7 @@ const holds = (e: Evidence, { run }: FormatCtx): boolean => {
     const v = run.story.flags[e.flag];
     if (e.flagValue !== undefined ? v === e.flagValue : Boolean(v)) return true;
   }
+  if (e.ev !== undefined && Number(run.story.flags[`ev:${e.ev}`] ?? 0) >= 1) return true;
   return e.item !== undefined && itemCount(run.inventory, e.item) > 0;
 };
 

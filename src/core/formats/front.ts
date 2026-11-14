@@ -10,7 +10,7 @@
 // Only Kanto's lane (M2 taken) has content so far: the other regions' lanes come with their saga slices as rows of `LANE_TABLE`.
 
 import { launchFormatBattle } from './battle';
-import { markDone } from './store';
+import { markDone, climaxRegion } from './store';
 import type { FormatCard, FormatCtx, WideFormat } from './types';
 
 export interface FrontLane {
@@ -109,6 +109,7 @@ function onBattleEnd(s: FrontState, won: boolean, { run }: FormatCtx): FrontStat
 }
 
 export const front: WideFormat<FrontState> = {
+  canStart: (ctx, input) => input !== undefined || climaxRegion(ctx.run) === 'kanto',
   id: 'front',
   setup,
   describe: (s) => describe(s),

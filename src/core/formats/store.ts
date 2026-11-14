@@ -51,3 +51,6 @@ export function beginCut(run: RunState): void {
   delete cut.checkpoint;
   delete cut.ledger;
 }
+
+/** The region of the running climax (Kanto when none was set). Formats with content for one region check this in `canStart`. */
+export const climaxRegion = (run: Pick<RunState, 'expansion'>): string => (typeof run.expansion?.cut?.region === 'string' ? run.expansion.cut.region : 'kanto');

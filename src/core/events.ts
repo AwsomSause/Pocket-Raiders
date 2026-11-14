@@ -51,6 +51,7 @@ import { shapeInstances, strategyIdForGroup } from './bossStrategy';
 import { choiceMade, recordChoice } from './evil/choices';
 import { recordCast } from './expansion/cast/dossier';
 import { meetFromEvent, meetFromJoin } from './expansion/cast/meet';
+import { assignStoryTraits } from './expansion/storyTraits';
 import { assignEvilTraits, assignEvilVariants, assignSpecialTrait, holdsMarnieCard } from './expansion/variantAssign';
 import { changeAid, changeCrisis, crisisAid, crisisEventIds, crisisLevel, setTournament, tournamentEventId, tournamentRound } from './story/crisis';
 import { activePerks, hasPerk, perkItem, perksOf, spendUse, stageKey } from './mapItems';
@@ -97,6 +98,7 @@ import { BERRIES } from './berries';
 import { choiceAt, effectiveEvent, visibleChoices } from './eventMemory';
 import { getTheme, typesPool } from './themes';
 import { anyRoaming, endRoamer, healConvoy, startConvoy, partyHasAbility, placeCamp, scoutAhead, CAMP_EVENT_ID } from './world';
+import { MAX_FOES, MAX_FOES_LISTED } from './bossLimits';
 
 // ---------- placing event stops ----------
 
@@ -1628,6 +1630,9 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       const speciesId = boss ? boss.signature[i % boss.signature.length]! : lane && content.species.has(lane) ? lane : b.rule?.bstMatch && b.species?.length ? nearestBst(content, b.species, run.party[activeIndex]!) : pickSpecies(content, run, b.species ?? [], b.types, rng);
       return newMon(content, run, evolvedFormAt(content, speciesId, level, rng), level, 'e');
     });
+    // Beta 0.7: only a listed story boss (`seventh`) fields a 7th foe; every other team is cut to 6.
+    if (team.length > MAX_FOES && !(b.kind === 'trainer' && b.seventh)) team.length = MAX_FOES;
+    else if (team.length > MAX_FOES_LISTED) team.length = MAX_FOES_LISTED;
     if (authored) for (const mon of team) auditEncounter(content, 'event', mon, authored);
     team.slice(0, evil ? evil.shadow : b.shadow).forEach((mon) => makeShadow(mon, rollShadowHeart(content, new Rng(hashSeed(`${run.seed}::shadow-foe::${mon.uid}`)))));
     // Overhaul slice 17: Evil Team and rival fights follow their named strategy (opener, ace item, sharper AI).
@@ -1637,6 +1642,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     run.battle = createBattle('trainer', team, activeIndex, run.party[activeIndex]!.uid, { classId: b.classId ?? 'event', name: evil ? evil.name : rival ? rival.name : fellow ? fellow.name : b.kind === 'trainer' && b.friend ? friendName(run) : b.name, leaderId: null });
     if (b.kind === 'trainer' && b.sprite && run.battle.trainer) run.battle.trainer.spriteBoss = b.sprite;
     if (b.special) assignSpecialTrait(run.battle.extra.traits, team, b.special);
+    assignStoryTraits(run.battle.extra.storyTraits, team, b.special, !!run.expansion?.storyTraits);
     // Beta 0.6: the team's special Pokémon carry its variant line (Specialists one, Executives and Leaders two).
     const variantTeam = b.evil ? (b.evilTeam ?? evilTeam(content, run)?.id) : undefined;
     if (b.evil && variantTeam) {
