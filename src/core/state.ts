@@ -755,6 +755,8 @@ export const BattleStateSchema = z.object({
   /** Growth paths (core/overhaul/growth.ts): the first battle of a clock day, and once-per-battle marks. Optional, so no save bump. */
   firstOfDay: z.boolean().optional(),
   growthMarks: z.array(z.string()).optional(),
+  /** Beta 0.7 S1 Second Chance: this fight was revived once; every Pokémon sent in gets +1 to all stats (core/instrumentality/secondChance.ts). */
+  secondChance: z.boolean().optional(),
   /** Index into run.party of the Pokémon currently fighting. */
   activeIndex: z.number().int().min(0),
   /** The opposing team (one Pokémon for wild battles). */
@@ -1126,6 +1128,8 @@ export const PendingDecisionSchema = z.discriminatedUnion('kind', [
   }),
   /** Beta 0.6 B7: the League door. Your party is registered; option 0 keeps it, option N swaps the Pokémon the League answers most for boxed Pokémon `swapIns[N-1]`. */
   z.object({ kind: z.literal('leagueDoor'), title: z.string(), outUid: z.string(), swapIns: z.array(z.string()), options: z.array(z.object({ label: z.string(), description: z.string() })).min(1) }),
+  /** Beta 0.7 M1: a Mythical visits and offers a Promise. Option 0 accepts (it becomes the Guest), option 1 declines (core/instrumentality/promises.ts). */
+  z.object({ kind: z.literal('mythicalVisit'), mythicalId: z.string(), title: z.string(), options: z.array(z.object({ label: z.string(), description: z.string() })).min(2) }),
   /** A PP Up or PP Max: pick which move gets the extra PP. */
   z.object({ kind: z.literal('ppUp'), uid: z.string(), itemName: z.string(), ups: z.number().int().min(1).max(3) }),
   /** A trainer's signature mechanic: pick one of the options (core/signature.ts). */

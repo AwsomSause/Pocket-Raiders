@@ -1,0 +1,584 @@
+{
+ "events": [
+  {
+   "id": "rd-mt-moon-dig-1",
+   "name": "Mt. Moon: The Fossil Dig",
+   "group": "Raid Doors: Kanto",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [],
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "evil",
+     "team": "rocket"
+    },
+    {
+     "kind": "storyRaid",
+     "n": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b3f3f"
+   },
+   "intro": "A rope ladder drops into a floodlit pit under Mt. Moon. Rocket diggers are crating fossils for the black market.",
+   "choices": [
+    {
+     "label": "Go in",
+     "success": {
+      "text": "You slip inside. The rocket diggers spot you at once.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rocket Diggers",
+       "size": 2,
+       "evil": "grunt",
+       "chain": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rd-mt-moon-dig-2"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "storyRaid",
+         "n": 1,
+         "result": "failure"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stay out of it",
+     "success": {
+      "text": "You leave it alone. The Organisation carries on.",
+      "effects": [
+       {
+        "kind": "storyRaid",
+        "n": 1,
+        "result": "declined"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rd-mt-moon-dig-2",
+   "name": "Mt. Moon: The Fossil Dig (finale)",
+   "group": "Raid Doors: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b3f3f"
+   },
+   "intro": "A Rocket Scientist waves a crate of fossils. \"These are the Organisation's now.\"",
+   "choices": [
+    {
+     "label": "Take on the Rocket Scientist",
+     "success": {
+      "text": "The Rocket Scientist throws a ball.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rocket Scientist",
+       "size": 3,
+       "evil": "executive",
+       "win": [
+        {
+         "kind": "storyRaid",
+         "n": 1,
+         "result": "triumph"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "storyRaid",
+         "n": 1,
+         "result": "failure"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Sabotage it and slip out",
+     "check": "intelligence",
+     "success": {
+      "text": "You wreck what you can and vanish before anyone notices.",
+      "effects": [
+       {
+        "kind": "storyRaid",
+        "n": 1,
+        "result": "success"
+       }
+      ]
+     },
+     "failure": {
+      "text": "An alarm sounds. You get away with a little.",
+      "effects": [
+       {
+        "kind": "storyRaid",
+        "n": 1,
+        "result": "partial"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rd-pokemon-tower-1",
+   "name": "Pokémon Tower: The Masked Floor",
+   "group": "Raid Doors: Kanto",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "types": [],
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "evil",
+     "team": "rocket"
+    },
+    {
+     "kind": "storyRaid",
+     "n": 3
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b3f3f"
+   },
+   "intro": "Lavender's tower is humming and the lights flicker. Masked Rocket members are stripping the graves and the spirits are angry.",
+   "choices": [
+    {
+     "label": "Go in",
+     "success": {
+      "text": "You slip inside. The masked rockets spot you at once.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Masked Rockets",
+       "size": 2,
+       "evil": "grunt",
+       "chain": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rd-pokemon-tower-2"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "storyRaid",
+         "n": 3,
+         "result": "failure"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stay out of it",
+     "success": {
+      "text": "You leave it alone. The Organisation carries on.",
+      "effects": [
+       {
+        "kind": "storyRaid",
+        "n": 3,
+        "result": "declined"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rd-pokemon-tower-2",
+   "name": "Pokémon Tower: The Masked Floor (finale)",
+   "group": "Raid Doors: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b3f3f"
+   },
+   "intro": "At the top a Rocket Executive holds the tower's Silph Scope hostage. \"Another visitor to the dead.\"",
+   "choices": [
+    {
+     "label": "Take on the Rocket Executive",
+     "success": {
+      "text": "The Rocket Executive throws a ball.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rocket Executive",
+       "size": 3,
+       "evil": "executive",
+       "win": [
+        {
+         "kind": "storyRaid",
+         "n": 3,
+         "result": "triumph"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "storyRaid",
+         "n": 3,
+         "result": "failure"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Sabotage it and slip out",
+     "check": "intelligence",
+     "success": {
+      "text": "You wreck what you can and vanish before anyone notices.",
+      "effects": [
+       {
+        "kind": "storyRaid",
+        "n": 3,
+        "result": "success"
+       }
+      ]
+     },
+     "failure": {
+      "text": "An alarm sounds. You get away with a little.",
+      "effects": [
+       {
+        "kind": "storyRaid",
+        "n": 3,
+        "result": "partial"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rd-vermilion-docks-1",
+   "name": "Vermilion Docks: The Night Shipment",
+   "group": "Raid Doors: Kanto",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "types": [],
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "evil",
+     "team": "rocket"
+    },
+    {
+     "kind": "storyRaid",
+     "n": 4
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b3f3f"
+   },
+   "intro": "A cargo ship idles at the docks after dark. Crates of stolen Pokémon wait for the next boat.",
+   "choices": [
+    {
+     "label": "Go in",
+     "success": {
+      "text": "You slip inside. The dock rockets spot you at once.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Dock Rockets",
+       "size": 2,
+       "evil": "grunt",
+       "chain": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rd-vermilion-docks-2"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "storyRaid",
+         "n": 4,
+         "result": "failure"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stay out of it",
+     "success": {
+      "text": "You leave it alone. The Organisation carries on.",
+      "effects": [
+       {
+        "kind": "storyRaid",
+        "n": 4,
+        "result": "declined"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rd-vermilion-docks-2",
+   "name": "Vermilion Docks: The Night Shipment (finale)",
+   "group": "Raid Doors: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b3f3f"
+   },
+   "intro": "The shipping boss steps off the gangway with the manifest in hand. \"Nothing leaves this dock without me.\"",
+   "choices": [
+    {
+     "label": "Take on the Rocket Shipping Boss",
+     "success": {
+      "text": "The Rocket Shipping Boss throws a ball.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rocket Shipping Boss",
+       "size": 3,
+       "evil": "executive",
+       "win": [
+        {
+         "kind": "storyRaid",
+         "n": 4,
+         "result": "triumph"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "storyRaid",
+         "n": 4,
+         "result": "failure"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Sabotage it and slip out",
+     "check": "intelligence",
+     "success": {
+      "text": "You wreck what you can and vanish before anyone notices.",
+      "effects": [
+       {
+        "kind": "storyRaid",
+        "n": 4,
+        "result": "success"
+       }
+      ]
+     },
+     "failure": {
+      "text": "An alarm sounds. You get away with a little.",
+      "effects": [
+       {
+        "kind": "storyRaid",
+        "n": 4,
+        "result": "partial"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rd-safari-night-1",
+   "name": "Safari Zone: The Night Hunt",
+   "group": "Raid Doors: Kanto",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 4,
+   "types": [],
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "evil",
+     "team": "rocket"
+    },
+    {
+     "kind": "storyRaid",
+     "n": 5
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b3f3f"
+   },
+   "intro": "The Safari Zone is closed, but lanterns move between the trees. Rocket hunters are rounding up the herd.",
+   "choices": [
+    {
+     "label": "Go in",
+     "success": {
+      "text": "You slip inside. The rocket hunters spot you at once.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rocket Hunters",
+       "size": 2,
+       "evil": "grunt",
+       "chain": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rd-safari-night-2"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "storyRaid",
+         "n": 5,
+         "result": "failure"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stay out of it",
+     "success": {
+      "text": "You leave it alone. The Organisation carries on.",
+      "effects": [
+       {
+        "kind": "storyRaid",
+        "n": 5,
+        "result": "declined"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rd-safari-night-2",
+   "name": "Safari Zone: The Night Hunt (finale)",
+   "group": "Raid Doors: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b3f3f"
+   },
+   "intro": "The hunt leader cocks a tranquiliser rifle at a sleeping herd. \"Move, kid.\"",
+   "choices": [
+    {
+     "label": "Take on the Rocket Hunt Leader",
+     "success": {
+      "text": "The Rocket Hunt Leader throws a ball.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rocket Hunt Leader",
+       "size": 3,
+       "evil": "executive",
+       "win": [
+        {
+         "kind": "storyRaid",
+         "n": 5,
+         "result": "triumph"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "storyRaid",
+         "n": 5,
+         "result": "failure"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Sabotage it and slip out",
+     "check": "intelligence",
+     "success": {
+      "text": "You wreck what you can and vanish before anyone notices.",
+      "effects": [
+       {
+        "kind": "storyRaid",
+        "n": 5,
+        "result": "success"
+       }
+      ]
+     },
+     "failure": {
+      "text": "An alarm sounds. You get away with a little.",
+      "effects": [
+       {
+        "kind": "storyRaid",
+        "n": 5,
+        "result": "partial"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  }
+ ]
+}

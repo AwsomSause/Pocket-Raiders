@@ -20,6 +20,7 @@ import { LocalStorageProvider, MemoryStorageProvider, type StorageProvider } fro
 import { BattleScene } from './scenes/BattleScene';
 import { BootScene } from './scenes/BootScene';
 import { BriefingScene } from './scenes/BriefingScene';
+import { BlessingScene } from './scenes/BlessingScene';
 import { PrologueScene } from './scenes/PrologueScene';
 import { ExpeditionScene } from './scenes/ExpeditionScene';
 import { MinigameScene } from './scenes/MinigameScene';
@@ -121,7 +122,7 @@ function start(): void {
     backgroundColor: '#1d1a24',
     pixelArt: true,
     scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
-    scene: [BootScene, MainMenuScene, SaveSlotsScene, SettingsScene, HubScene, TownScene, TrainerSelectScene, RunPrepScene, RunModifiersScene, RunSeedScene, RunChoicesScene, StarterSelectScene, BriefingScene, MapScene, PlazaScene, ShopScene, EventScene, RescueScene, FormatScene, SiegeScene, StoryScene, FieldTrialScene, TradeScene, BattleScene, DecisionScene, RewardScene, ExpeditionScene, MinigameScene, GameOverScene, CreditsScene, WelcomeScene, TutorialScene, HallOfFameScene, LegacyGalleryScene, MemoriesScene, PrologueScene],
+    scene: [BootScene, MainMenuScene, SaveSlotsScene, SettingsScene, HubScene, TownScene, TrainerSelectScene, RunPrepScene, RunModifiersScene, RunSeedScene, RunChoicesScene, StarterSelectScene, BlessingScene, BriefingScene, MapScene, PlazaScene, ShopScene, EventScene, RescueScene, FormatScene, SiegeScene, StoryScene, FieldTrialScene, TradeScene, BattleScene, DecisionScene, RewardScene, ExpeditionScene, MinigameScene, GameOverScene, CreditsScene, WelcomeScene, TutorialScene, HallOfFameScene, LegacyGalleryScene, MemoriesScene, PrologueScene],
     callbacks: {
       preBoot: (g) => g.registry.set('session', session),
       postBoot: (g) => {
@@ -149,7 +150,7 @@ function start(): void {
         g.canvas.setAttribute('aria-label', 'Pocket Raiders, a Pokémon roguelike. Keyboard: arrows, Z/Enter to confirm, X/Esc to go back.');
         // Every screen fades in. Screens without their own scenery get a dimmed,
         // slowly changing battlefield behind them (the battle and map draw their own).
-        const ownScenery = new Set(['Boot', 'Battle', 'Map', 'Hub', 'Town', 'MainMenu', 'TrainerSelect']);
+        const ownScenery = new Set(['Boot', 'Battle', 'Map', 'Hub', 'Town', 'MainMenu', 'TrainerSelect', 'Blessing']);
         // Gameplay screens in the Aero look (M10) get the glossy sky-and-bubbles backdrop instead.
         const aeroScenery = new Set(['SaveSlots', 'Reward', 'Shop', 'Event', 'Decision', 'Briefing', 'Expedition', 'Minigame', 'StarterSelect', 'RunPrep', 'RunModifiers', 'RunSeed', 'RunChoices', 'GameOver', 'HallOfFame', 'LegacyGallery', 'Memories', 'Credits']);
         for (const scene of g.scene.getScenes(false)) {

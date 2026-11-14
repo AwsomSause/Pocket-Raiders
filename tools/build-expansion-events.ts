@@ -1,21 +1,32 @@
-// Writes src/data/events/xe-kanto.json from tools/events/expansion/*.ts. Run with: npm run data:xe-events
-// `--check` fails when the file is out of date (a unit test runs it).
+// Writes src/data/events/xe-<region>.json from tools/events/expansion/<region>.ts, one file per region. Run with: npm run data:xe-events
+// `--check` fails when a file is out of date (a unit test runs it).
 import { readFileSync, writeFileSync } from 'node:fs';
 import { XE_KANTO_EVENTS } from './events/expansion/kanto.ts';
+import { XE_KALOS_EVENTS } from './events/expansion/kalos.ts';
+import { XE_GALAR_EVENTS } from './events/expansion/galar.ts';
 
-const events = [...XE_KANTO_EVENTS];
+// One line per region: add the next region here.
+const REGIONS: Record<string, readonly Record<string, unknown>[]> = {
+  kanto: XE_KANTO_EVENTS,
+  kalos: XE_KALOS_EVENTS,
+  galar: XE_GALAR_EVENTS,
+};
+
 const ids = new Set<string>();
-for (const e of events) {
-  const id = String(e.id);
-  if (ids.has(id)) throw new Error(`duplicate event id ${id}`);
-  ids.add(id);
-}
-const text = JSON.stringify({ events }, null, 1) + '\n';
-const url = new URL('../src/data/events/xe-kanto.json', import.meta.url);
-if (process.argv.includes('--check')) {
-  if (readFileSync(url, 'utf8') !== text) {
-    console.error('xe-kanto.json is out of date: run npm run data:xe-events');
-    process.exit(1);
+let stale = false;
+for (const [region, events] of Object.entries(REGIONS)) {
+  for (const e of events) {
+    const id = String(e.id);
+    if (ids.has(id)) throw new Error(`duplicate event id ${id}`);
+    ids.add(id);
   }
-} else writeFileSync(url, text);
-console.log(`xe-kanto.json: ${events.length} events`);
+  const text = JSON.stringify({ events }, null, 1) + '\n';
+  const url = new URL(`../src/data/events/xe-${region}.json`, import.meta.url);
+  if (process.argv.includes('--check')) {
+    let have = '';
+    try { have = readFileSync(url, 'utf8'); } catch { /* missing counts as stale */ }
+    if (have !== text) { console.error(`xe-${region}.json is out of date: run npm run data:xe-events`); stale = true; }
+  } else writeFileSync(url, text);
+  console.log(`xe-${region}.json: ${events.length} events`);
+}
+if (stale) process.exit(1);
