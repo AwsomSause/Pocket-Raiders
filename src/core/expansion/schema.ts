@@ -7,7 +7,7 @@ import { CastEntrySchema } from './cast/entry';
 import { CanonStateSchema } from './canonSpaces';
 import { TrackStateSchema } from './track';
 import { RescueStateSchema } from '../evil/rescueSchema';
-import { GrandArcStateSchema } from '../grandArc/schema';
+import { EpilogueStateSchema, GrandArcStateSchema } from '../grandArc/schema';
 import { StandWithStateSchema } from '../arc/standWithSchema';
 import { RivalOverhaulStateSchema } from '../rivals/overhaulSchema';
 
@@ -49,6 +49,10 @@ export const ExpansionSettingsSchema = z.object({
   worldTracks: z.boolean().default(true),
   /** Beta 0.7: team-wide battle traits for Alola and Paldea story events (Hype Man, Reluctant Hand). Off by default; read when a run starts. */
   storyTraits: z.boolean().default(false),
+  /** Beta 0.7 E11: the Citadark finale is offered after the last region to a run with three Data ROMs (needs the Grand Arc). */
+  finaleEnabled: z.boolean().default(true),
+  /** Beta 0.7 D1: the Region of Doom ("The Margin") as an in-run epilogue after the win. Off until the final balance pass. */
+  doomEpilogue: z.boolean().default(false),
 });
 export type ExpansionSettings = z.infer<typeof ExpansionSettingsSchema>;
 export const EXPANSION_SETTINGS_DEFAULTS: ExpansionSettings = ExpansionSettingsSchema.parse({});
@@ -84,6 +88,8 @@ export const ExpansionRunSchema = z.object({
   stageMods: z.array(z.object({ key: z.string(), amount: z.number().int(), region: z.number().int(), stage: z.number().int() })).optional(),
   /** Grand Arc (E7): Data ROMs and the Stock track. Present only when the setting was on at run start. */
   grandArc: GrandArcStateSchema.optional(),
+  /** Beta 0.7 epilogue (E10/E11/D1): the finale and Region of Doom switches this run started with, and how each ended. In-run only. */
+  epilogue: EpilogueStateSchema.optional(),
   /** Stand With Them (E8): the Inside Man route, once you have joined a team at Ignition. */
   standWith: StandWithStateSchema.optional(),
   /** Runs that started with the stage-pacing setting on (B6). Set once at run start, never changed. */

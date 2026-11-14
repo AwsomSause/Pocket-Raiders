@@ -2509,6 +2509,72 @@
         "joinChance": 0
       },
       "special": "canon"
+    },
+    {
+      "id": "ss-cipher-xd001",
+      "name": "XD001 · The Dome",
+      "tier": 6,
+      "blurb": "XD001, the Shadow Lugia of Citadark Isle, silent under the dome. Every three locks still standing is a shield to break before the timer runs out. It cannot be caught.",
+      "species": [
+        "lugia"
+      ],
+      "levelBonus": 6,
+      "hpBoostPercent": 300,
+      "entryCost": 0,
+      "shield": {
+        "at": [
+          0.75,
+          0.5,
+          0.25
+        ],
+        "points": 0.15
+      },
+      "phases": [
+        {
+          "atHp": 0.75,
+          "text": "A lock gives way. The storm over the dome stutters."
+        },
+        {
+          "atHp": 0.5,
+          "text": "Another lock opens. XD001 flinches from its own silence.",
+          "boost": {
+            "spa": 1
+          }
+        },
+        {
+          "atHp": 0.25,
+          "text": "Only the last locks hold. The wings are almost silver at the tips.",
+          "boost": {
+            "spe": 1
+          },
+          "clearPlayerStages": true
+        }
+      ],
+      "telegraph": {
+        "everyTurns": 3,
+        "boost": 1.5,
+        "text": "XD001 gathers the storm!",
+        "interruptedBy": [
+          "slp",
+          "par",
+          "frz"
+        ]
+      },
+      "extraActions": {
+        "belowHp": 0.3,
+        "max": 2
+      },
+      "timerTurns": 14,
+      "kind": "wild",
+      "extraMoves": [],
+      "modifiers": {},
+      "rewards": {
+        "moneyPerLevel": 250,
+        "items": [],
+        "draftExtra": 0,
+        "joinChance": 0
+      },
+      "special": "canon"
     }
   ],
   "denTriggers": [

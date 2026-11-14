@@ -29,9 +29,11 @@ import { markAssisted } from './tools/assisted';
 import { crossObstacle, placeDungeon, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
 import { wandererStageStart, wandererStep } from './wanderer';
 import { climaxBattleEnded, setClimaxCut } from './arc/climaxExtended';
+import { epilogueActive, epilogueBattleEnded, startEpilogue } from './epilogue/director';
 import { freeHandedOverRival, standWithClimaxLost, standWithOf } from './arc/standWithExtended';
 import { makeShadow, rollShadowHeart, soothePartyAfterBattle } from './shadow';
 import { leaveRegion, startGrandArc } from './grandArc';
+import { EpilogueStateSchema } from './grandArc/schema';
 import { checkFlagKeys, checkLeadWinKey, SHADOW_SLOT_CAP, heavyShadowCount, shadowTierOf } from './shadow2';
 import { advanceShadowWorld, addFlag, gangNotes, gangRaidWon, liberatedHpDiscount, outbreakShadow, placeGangDen } from './shadowWorld/world';
 import { blissfulAfterBattle, blissfulAtRest } from './shadowWorld/blissful';
@@ -341,7 +343,7 @@ export interface NewRunOptions {
   /** Story Run: the player's name, pronouns and Look from the prologue (profile.story.protagonist). */
   protagonist?: { look: string; name: string; pronouns: string | PronounSet; backstory?: string };
   /** Beta 0.6: which expansion settings were on at run start (settings.expansion). Each flag is stored in `run.expansion` once and never changes. */
-  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean; grandArc?: boolean; worldTracks?: boolean; eventsDensity?: 'low' | 'normal' | 'full'; climaxCut?: 'standard' | 'extended'; storyTraits?: boolean };
+  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean; grandArc?: boolean; worldTracks?: boolean; eventsDensity?: 'low' | 'normal' | 'full'; climaxCut?: 'standard' | 'extended'; storyTraits?: boolean; finale?: boolean; doomEpilogue?: boolean };
 }
 
 export function createRun(content: Content, opts: NewRunOptions): RunState {
@@ -448,6 +450,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     if (Object.keys(flags).length > 0) run.expansion = { ...run.expansion, ...flags };
     setClimaxCut(run, e.climaxCut);
     if (e.grandArc) startGrandArc(run);
+    if (e.finale || e.doomEpilogue) run.expansion = { ...run.expansion, epilogue: EpilogueStateSchema.parse({ finale: Boolean(e.finale && e.grandArc), doom: Boolean(e.doomEpilogue) }) };
   }
   recordRunStarted(content, run);
   return run;
@@ -881,6 +884,7 @@ function enterNextRegion(content: Content, run: RunState): void {
     playFinaleStops(content, run);
     run.victory = true;
     freeHandedOverRival(run);
+    if (startEpilogue(run)) return; // Beta 0.7: the Citadark finale and the Region of Doom are optional chapters of a won run
     run.phase = 'over';
     return;
   }
@@ -3126,6 +3130,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // Wide formats (Beta 0.6 E4): a fight a format launched tells the format how it ended, before any loss tail runs.
   if (battle.outcome && battle.event?.eventId === 'format:climax') climaxBattleEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
   if (battle.outcome === 'win' && battle.event?.eventId === 'format:climax') beatClimax(run);
+  if (battle.outcome && (battle.event?.eventId === 'format:finale' || battle.event?.eventId === 'format:doom')) epilogueBattleEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
   if (battle.outcome && battle.event?.eventId.startsWith('format:')) formatBattleEnded({ content, run }, battle.outcome === 'win' || battle.outcome === 'caught');
   // PS-RESCUE (Beta 0.6 R9): a guard fight tells the running rescue plan how it ended.
   if (battle.outcome && battle.event?.eventId.startsWith('rescue:')) rescueFightEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
@@ -3763,11 +3768,12 @@ export function continueAfterDecisions(content: Content, run: RunState): void {
     run.phase = 'decision';
     return;
   }
-  if (run.victory) {
+  if (run.victory && !epilogueActive(run)) {
     // The last champion is beaten: the run is won. A Story Run tells its Finale and Epilogue Stops first (S19 found they never played here).
     playFinaleStops(content, run);
     run.draft = null;
     freeHandedOverRival(run);
+    if (startEpilogue(run)) return; // Beta 0.7: optional Citadark finale / Region of Doom chapters after the win
     run.phase = 'over';
     return;
   }
@@ -3783,6 +3789,11 @@ export function continueAfterDecisions(content: Content, run: RunState): void {
     const weights = luckWeights(better ? content.balance.bossRarityWeights : rewardWeights(content, run), runAttributeEffects(content, run));
     run.draft = newDraft(content, run, weights);
     run.phase = 'reward';
+    return;
+  }
+  // An epilogue fight is over: back to the map, where the epilogue director shows the next step (never the next region).
+  if (epilogueActive(run)) {
+    run.phase = 'map';
     return;
   }
   // Back to the map. After the gym leader, the next stage (or the league) begins;

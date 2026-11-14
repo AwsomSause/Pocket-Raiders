@@ -8,6 +8,7 @@
 // (Visual Bible: "a deliberate escalation from normal stages").
 
 import { climaxTick } from '../core/arc/climaxExtended';
+import { epilogueTick } from '../core/epilogue/director';
 import { nodeHint } from '../core/worldSim/tick';
 import { mapOmens, type Omen, type OmenTier } from '../core/omens';
 import { wealthTaxNotice } from '../core/priceSwing';
@@ -268,6 +269,12 @@ export class MapScene extends Phaser.Scene {
     }
     // Wide formats (Breather and the rest): a running format shows its plain screen on top of the map.
     if (run.phase === 'map' && climaxTick(session.content, run)) session.saveRunNow();
+    // Beta 0.7: the Citadark finale and the Region of Doom (optional chapters of a won run) play on the same map.
+    if (run.phase === 'map') {
+      const ep = epilogueTick(session.content, run);
+      if (ep === 'over') { session.finishRun(); this.time.delayedCall(0, () => this.scene.start('GameOver')); return; }
+      if (ep !== 'idle') session.saveRunNow();
+    }
     // The director launched a climax battle: the battle screen takes over.
     if (run.phase === 'battle') { this.time.delayedCall(0, () => this.scene.start('Battle')); return; }
     if (pendingFormat(run)) {
