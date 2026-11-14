@@ -3,7 +3,7 @@
 // Art from Kice's Story Stuff pack lives in public/assets/images/bosses/cast-*.png (boss.cast-*). Cipher's cast still needs art
 // (see docs/updates/beta-0.7/cast-sprites.md); until then it shows the silhouette.
 
-const SAGE = 'trainer.pr/zinzolin';
+const SAGE = 'boss.cast-sage';
 const c = (name: string): string => `boss.cast-${name}`;
 export const CAST_SPRITES: Record<string, readonly string[]> = {
   // Team Plasma: the Sages share the one Sage sprite; the rest use the Story Stuff art.

@@ -781,7 +781,7 @@
     },
     "executive": {
      "name": "Sage Zinzolin",
-     "sprite": "boss.npc_psychic_m",
+     "sprite": "boss.cast-sage",
      "species": [
       "sneasel",
       "cryogonal",
