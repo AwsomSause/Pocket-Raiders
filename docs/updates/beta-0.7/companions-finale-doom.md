@@ -14,7 +14,7 @@ None bumped. New optional block `run.expansion.epilogue` (finale/doom switches, 
 
 ## Limits
 
-- The Siege Map "Alliance" screen is not built: approaches are worked out from flags and companions. The Rainbow Door's Front is not built: its result (`empty`/`open`) is written and shown, no battle. Lost approaches (not the gate) add one Climb wave each instead of lava hazards or a lower Breather heal.
+- The Siege Map "Alliance" screen is not built: approaches are worked out from flags and companions. The Rainbow Door is plain fights (one per lost Apex, up to four) instead of a Front; with no Apex lost nobody comes (`empty`). Lost approaches (not the gate) add one Climb wave each instead of lava hazards or a lower Breather heal.
 - The XD001 raid format allows three shields, so every three standing locks is one shield. Per-lock field conditions (no item healing, no switching, ...) and the Reservoir's tank effects on Shadow tiers are not applied.
 - Doom: Takeover raids, the Black Market, ambush/Shadow wild rates (shown on the doorway card, not applied), annexes (first on the cut list) and Echo Abilities are not built. Several approach flags (`blaine`, Lance, N, Leon, Cynthia, Nanu, Diantha, Hoenn titans, Paldea Engine) only count if the event that sets them exists; most do not yet.
 - Only Kanto climaxes exist today, so reaching three ROMs needs the other regions (workstream E9). The finale and Doom were driven by unit tests and the director, not a browser run; the Format screen is the plain existing one.

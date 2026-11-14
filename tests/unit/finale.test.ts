@@ -204,6 +204,19 @@ describe('epilogue director (E11 + D1)', () => {
   });
 });
 
+describe('Rainbow Door', () => {
+  it('has no fight with no Apex lost, and one lane per taken Apex', () => {
+    const none = planFinale(fresh('rd0', { roms: ['K', 'J', 'H'] })).find((s) => s.t === 'battles' && s.key === 'rainbow') as { n: number };
+    expect(none.n).toBe(0);
+    const run = fresh('rd1', { roms: ['K', 'J', 'H'] });
+    run.story.flags['rocket.x.m2'] = 'taken';
+    expect((planFinale(run).find((s) => s.t === 'battles' && s.key === 'rainbow') as { n: number }).n).toBe(1);
+    startEpilogue(run);
+    expect(drive(run).filter((x) => x.startsWith('battle:rainbow')).length).toBe(1);
+    expect(run.expansion!.epilogue!.rainbow).toBe('open');
+  });
+});
+
 describe('Region of Doom (D1)', () => {
   it('always has 14 districts and 8 gyms, with the fixed districts present', () => {
     const run = fresh('r0', { doom: true });

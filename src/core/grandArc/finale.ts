@@ -4,7 +4,7 @@
 // anywhere in it ends the finale as `silent` and never undoes the win (decision D1 relaxed in the player's favor).
 // Pure rules: this file builds the plan and the cards; `epilogue/director.ts` plays it. Own seeded stream `finale-<phase>`, no gameplay RNG.
 // Not built (limited, see docs/updates/beta-0.7/): the Siege Map alliance screen (approaches are worked out from flags and companions),
-// the Rainbow Door's Front (its outcome is written, no battle), the Reservoir's tank effects on Shadow tiers, per-lock field conditions.
+// the Rainbow Door is plain fights, one per lost Apex, not a Front, the Reservoir's tank effects on Shadow tiers, per-lock field conditions.
 
 import type { RunState } from '../state';
 import { hashSeed, Rng } from '../rng';
@@ -82,6 +82,8 @@ export function planFinale(run: Pick<RunState, 'expansion' | 'story' | 'seed'>):
     { t: 'card', id: 'greevil' },
     { t: 'battles', key: 'greevil', name: 'Grand Master Greevil', n: 1, size: 6, evil: 'leader', team: 'cipher' },
     { t: 'xd001' },
+    // The Rainbow Door: one lane (one fight) for each regional Apex lost, up to four; none lost means nobody comes.
+    { t: 'battles', key: 'rainbow', name: 'Rainbow Rocket', n: Math.min(4, finaleData.apexFlags.filter((f) => run.story.flags[f] === 'taken').length), size: 5, evil: 'leader', team: 'rocket' },
     { t: 'card', id: 'greevil-end' },
     { t: 'card', id: 'machines' },
   );
