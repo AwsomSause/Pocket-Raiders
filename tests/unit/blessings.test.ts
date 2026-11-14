@@ -53,9 +53,9 @@ describe('rollBlessing', () => {
     for (let i = 0; i < 4000; i++) { const r = rollBlessing(`odds-${i}`)!; counts[r.id] = (counts[r.id] ?? 0) + 1; }
     const playable = BLESSINGS.filter((b) => b.status !== 'disabled');
     for (const b of playable) expect(counts[b.id] ?? 0, b.id).toBeGreaterThan(0);
-    // Divine 17% + the Primordial and Origin rolls (8%) that fall down to it; Greater rolls fall to Lesser.
-    expect(counts['ho-oh']! / 4000).toBeGreaterThan(0.22);
-    expect(counts['ho-oh']! / 4000).toBeLessThan(0.29);
+    // Divine 17% + the Primordial and Origin rolls (8%) that fall down to it, shared by Ho-Oh and Dialga.
+    expect(counts['ho-oh']! / 4000).toBeGreaterThan(0.09);
+    expect(counts['ho-oh']! / 4000).toBeLessThan(0.17);
   });
 });
 
@@ -154,7 +154,7 @@ describe('Communion and Rites', () => {
     expect(useBlessingRite(content, run)).toBeNull();
     run.expansion!.blessing!.communion = true;
     expect(blessingRite(run)!.ready).toBe(true);
-    expect(useBlessingRite(content, run)).toContain('restored');
+    expect(useBlessingRite(content, run)!.message).toContain('restored');
     expect(run.party.every((m) => m.hp === maxHp(content, m))).toBe(true);
     expect(useBlessingRite(content, run)).toBeNull();
   });
@@ -169,5 +169,29 @@ describe('Communion and Rites', () => {
     const fez = withBlessing('fezandipiti');
     fez.expansion!.blessing!.communion = true;
     expect(blessingShopFactor(fez)).toBeCloseTo(0.8);
+  });
+});
+
+describe('Dialga', () => {
+  const dialgaSeed = (() => { for (let i = 0; i < 500; i++) if (rollBlessing(`dg-${i}`)?.id === 'dialga') return `dg-${i}`; throw new Error('no dialga seed'); })();
+  it("grants the run Rewinds at the start; the Rite goes back a stage once, after Communion, keeping the team's growth", () => {
+    const run = start(dialgaSeed);
+    expect(run.expansion?.rewind).toBeDefined();
+    expect(blessingRite(run)).toBeNull();
+    const lead = run.party[0]!;
+    lead.level += 3;
+    run.money += 500;
+    run.box.push({ ...structuredClone(lead), uid: 'dialga-mon', speciesId: 'dialga' });
+    syncCommunion(run);
+    expect(blessingRite(run)!.ready).toBe(true);
+    const out = useBlessingRite(content, run)!;
+    expect(out.message).toContain('Dialga');
+    expect(out.run.party[0]!.level).toBe(lead.level);
+    expect(out.run.money).toBeLessThan(run.money);
+    expect(out.run.expansion!.blessing!.riteUsed).toBe(true);
+    expect(useBlessingRite(content, out.run)).toBeNull();
+  });
+  it('without Communion there is no Rite', () => {
+    expect(blessingRite(start(dialgaSeed))).toBeNull();
   });
 });
