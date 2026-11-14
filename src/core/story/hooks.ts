@@ -3,6 +3,7 @@
 // really happened and never decides an outcome itself (Hyper moments are
 // decided by the battle engine; this file only tells their story).
 
+import { spendRivalSpoils } from '../nodeMenu/special';
 import { endRivalBrain } from '../rivals/brainSetup';
 import { recordRivalBattle, registerFromRival } from '../rivals/overhaul';
 import { grantSignatureMoves } from '../story2/signature';
@@ -717,6 +718,7 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
     // A narrative defeat (M12) is the rival's story win, not an ordinary one.
     rivalProgress(content, run, rivalBack, result === 'win' ? 'lostToPlayer' : battle.narrative ? 'narrativeWin' : 'beatPlayer');
     recordRivalBattle(run, rivalBack.id, { rivalWon: result !== 'win', stageIndex: run.stage?.index ?? 0, playerHpShare: totalHp > 0 ? hpLeft / totalHp : 0 });
+    spendRivalSpoils(run, rivalBack.id);
     endRivalBrain(run, rivalBack.id);
     rivalBack.memory.lastBattle = { eventId: ended.id, result: result === 'win' ? 'win' : 'lose', hpLeftShare: hpShare, turns: battle.turn - 1, team: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.speciesId), foes: fought };
     recordSeenMoves(content, rivalBack, battle.playerMovesSeen, ended.id);

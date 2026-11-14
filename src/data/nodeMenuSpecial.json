@@ -1,0 +1,99 @@
+{
+  "rules": {
+    "rivalTakes": { "chance": 0.3, "maxPerStage": 2, "levelsPerSpoil": 1, "maxLevels": 2, "rivalStates": ["recurring", "active", "nemesis", "contender", "recognized"] },
+    "forkChance": 0.18,
+    "linkChance": 0.15,
+    "escortChance": 0.08,
+    "linkWindow": [1, 3],
+    "escortNerve": 3,
+    "maxSpecialPerMenu": 1
+  },
+  "forks": [
+    {
+      "id": "fork-ridge",
+      "label": "Fork in the path",
+      "text": "The trail splits: a steep ridge or a long valley road.",
+      "a": { "label": "Climb the ridge", "text": "Hard going, but you find a cache at the top.", "now": [{ "kind": "damage", "share": 0.1 }, { "kind": "item", "id": "rare-candy", "count": 1 }], "later": [] },
+      "b": { "label": "Take the valley road", "text": "Slow and safe. A traveller meets you further on.", "now": [], "later": [{ "kind": "heal", "share": 0.5 }, { "kind": "money", "amount": 400 }] }
+    },
+    {
+      "id": "fork-river",
+      "label": "River crossing",
+      "text": "A river blocks the way. There is a ferry and a rope bridge.",
+      "a": { "label": "Pay the ferry", "text": "The ferryman tells you where the berries grow.", "now": [{ "kind": "money", "amount": -200 }], "later": [{ "kind": "item", "id": "sitrus-berry", "count": 2 }] },
+      "b": { "label": "Cross the bridge", "text": "It sways, but holds. Your team trusts you a little more.", "now": [{ "kind": "friendship", "amount": 10 }], "later": [] }
+    },
+    {
+      "id": "fork-camp",
+      "label": "Camp or press on",
+      "text": "Dusk falls. You could make camp, or push on in the dark.",
+      "a": { "label": "Make camp", "text": "Everyone rests by the fire.", "now": [{ "kind": "heal", "share": 0.35 }], "later": [] },
+      "b": { "label": "Press on", "text": "You arrive early and catch a vendor before the rush.", "now": [], "later": [{ "kind": "money", "amount": 700 }] }
+    },
+    {
+      "id": "fork-cave",
+      "label": "Two tunnels",
+      "text": "Two tunnels lead out. One glitters, one breathes cold air.",
+      "a": { "label": "The glittering tunnel", "text": "Shards line the walls.", "now": [{ "kind": "item", "id": "star-piece", "count": 1 }], "later": [] },
+      "b": { "label": "The cold tunnel", "text": "It comes out at a spring further on.", "now": [], "later": [{ "kind": "restorePp" }, { "kind": "heal", "share": 0.4 }] }
+    },
+    {
+      "id": "fork-training",
+      "label": "Training or treasure",
+      "text": "An old trainer offers a lesson, or a map to buried coins.",
+      "a": { "label": "Take the lesson", "text": "Your team sharpens up.", "now": [{ "kind": "levels", "amount": 1 }], "later": [] },
+      "b": { "label": "Take the map", "text": "You dig up the coins on the next stretch.", "now": [], "later": [{ "kind": "item", "id": "nugget", "count": 1 }] }
+    },
+    {
+      "id": "fork-berries",
+      "label": "Berry grove",
+      "text": "A grove of ripe berries. Eat now, or pack them for later.",
+      "a": { "label": "Eat now", "text": "Fresh berries perk everyone up.", "now": [{ "kind": "heal", "share": 0.25 }, { "kind": "cure" }], "later": [] },
+      "b": { "label": "Pack them", "text": "They keep well.", "now": [{ "kind": "item", "id": "oran-berry", "count": 2 }, { "kind": "item", "id": "lum-berry", "count": 1 }], "later": [] }
+    }
+  ],
+  "links": [
+    {
+      "id": "link-parcel",
+      "start": { "label": "Dropped parcel", "text": "A hiker dropped a parcel. You pick it up to return it.", "effects": [] },
+      "end": { "label": "Return the parcel", "text": "The hiker is overjoyed and pays you for the trouble.", "effects": [{ "kind": "money", "amount": 900 }] }
+    },
+    {
+      "id": "link-egg-nest",
+      "start": { "label": "Fallen nest", "text": "You put a fallen nest back in its tree.", "effects": [{ "kind": "friendship", "amount": 5 }] },
+      "end": { "label": "The parents return", "text": "A flock leaves you a shiny gift.", "effects": [{ "kind": "item", "id": "star-piece", "count": 1 }] }
+    },
+    {
+      "id": "link-map-half",
+      "start": { "label": "Half a map", "text": "Half of a torn treasure map. The other half must be nearby.", "effects": [] },
+      "end": { "label": "The other half", "text": "The map leads to an old stash.", "effects": [{ "kind": "item", "id": "big-nugget", "count": 1 }] }
+    },
+    {
+      "id": "link-lost-pokemon",
+      "start": { "label": "Lost Pokémon", "text": "A lost Pokémon follows you. Its trainer must be ahead.", "effects": [] },
+      "end": { "label": "Reunion", "text": "Its trainer thanks you with a rare candy.", "effects": [{ "kind": "item", "id": "rare-candy", "count": 1 }, { "kind": "friendship", "amount": 5 }] }
+    },
+    {
+      "id": "link-message",
+      "start": { "label": "A message to deliver", "text": "A ranger asks you to carry a warning up the route.", "effects": [] },
+      "end": { "label": "Deliver the warning", "text": "The next ranger post patches up your team.", "effects": [{ "kind": "heal", "share": 0.6 }, { "kind": "cure" }] }
+    },
+    {
+      "id": "link-seed",
+      "start": { "label": "Plant a seed", "text": "A gardener gives you a seed to plant by the trail.", "effects": [] },
+      "end": { "label": "Ripe harvest", "text": "On the way back the plant has fruited.", "effects": [{ "kind": "item", "id": "sitrus-berry", "count": 2 }, { "kind": "item", "id": "lum-berry", "count": 1 }] }
+    }
+  ],
+  "escorts": [
+    { "id": "escort-kid", "label": "Escort a lost kid", "text": "A kid is lost. Walk them to the next town.", "nodes": 3, "done": "The kid's family thanks you warmly.", "fail": "The kid got scared and ran home alone.", "reward": [{ "kind": "money", "amount": 1200 }, { "kind": "friendship", "amount": 10 }] },
+    { "id": "escort-professor", "label": "Escort a researcher", "text": "A researcher wants company through the wilds.", "nodes": 3, "done": "The researcher shares their notes and a gift.", "fail": "The researcher turned back after the last fight.", "reward": [{ "kind": "research", "amount": 2 }, { "kind": "item", "id": "rare-candy", "count": 1 }] },
+    { "id": "escort-merchant", "label": "Guard a merchant", "text": "A merchant needs a guard for a few stops.", "nodes": 2, "done": "The merchant pays you in coin.", "fail": "The merchant hired someone tougher.", "reward": [{ "kind": "money", "amount": 1500 }] },
+    { "id": "escort-elder", "label": "Walk an elder home", "text": "An elder asks for an arm to lean on.", "nodes": 2, "done": "The elder's family heals your team.", "fail": "The elder's family came to fetch them.", "reward": [{ "kind": "heal", "share": 1 }, { "kind": "item", "id": "max-revive", "count": 1 }] }
+  ],
+  "rivalLines": [
+    "{rival} got there first and took the {entry}.",
+    "{rival} grabbed the {entry} while you looked the other way.",
+    "You hear {rival} laughing. They took the {entry}.",
+    "{rival} left a note: \"Thanks for the {entry}!\""
+  ]
+}
