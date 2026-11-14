@@ -10,7 +10,7 @@ Branch: `claude/project-thread-846rbm` into `beta-0.7`. Covers INSTRUMENTALITY E
 
 ## Save
 
-None bumped. New optional block `run.expansion.epilogue` (finale/doom switches, results, picks, marks, taken districts; defaults filled, old runs have none) and the loose `run.expansion.cut.epilogue` director state. Tests: `tests/unit/finale.test.ts` ("saves" and "save and reload in the middle"). New settings `expansion.finaleEnabled` (default on, still needs the Grand Arc and 3 ROMs) and `expansion.doomEpilogue` (default **off** until the final balance pass); both default-filled, no settings bump.
+None bumped. New optional block `run.expansion.epilogue` (finale/doom switches, results, picks, marks, taken districts; defaults filled, old runs have none) and the loose `run.expansion.cut.epilogue` director state. Tests: `tests/unit/finale.test.ts` ("saves" and "save and reload in the middle"). New settings `expansion.finaleEnabled` (default **off**, needs needs the Grand Arc and 3 ROMs) and `expansion.doomEpilogue` (default **off** until the final balance pass); both default-filled, no settings bump.
 
 ## Limits
 
