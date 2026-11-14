@@ -6,6 +6,8 @@
 //   - on entering a map node, using a side stop, or buying at a shop
 //   - when the run ends (profile first, then the run record is cleared)
 
+import * as NodeMenu from '../core/nodeMenu/flow';
+import { playSpecialEntry } from '../core/nodeMenu/special/menu';
 import { playerTrainerFor } from '../core/archetypes';
 import { wearKeepsake, type KeepsakeSlot } from '../core/story2/keepsakes';
 import { nameSignature } from '../core/story2/signature';
@@ -52,6 +54,7 @@ import * as Mini from '../core/minigame/flow';
 import { claim } from '../core/quests';
 import { claimCollectionMilestones } from '../core/collection';
 import * as Run from '../core/run';
+import { rewindBattle } from '../core/rewind';
 import { markRumorShown, nodeHint } from '../core/worldSim/tick';
 import { applyNursery, type NurseryChoice } from '../core/nursery';
 import { applyFormShift } from '../core/formShift';
@@ -271,7 +274,7 @@ export class GameSession {
     if (story && next.starter && !starterOverride?.length) starterOverride = [next.starter];
     if (story && (next.starter || next.backstory)) this.profile = { ...this.profile, story: clearNextRun(this.profile.story) };
     const opts = { seed, archetypeId, campaignId, prep, rules, attributes: this.profile.attributes, mastery: this.profile.mastery, gameEvents: rules?.weeks === false ? [] : activeGameEvents(this.content, new Date()).map((a) => a.edition), raidTierUnlocked: this.profile.best.raidBestTier ?? 0, licenses: runBankFlags(this.profile), candyPerks: this.profile.candyPerks, ownedTrainers: this.profile.unlockedArchetypes, dexCaught: dexCaughtCount(this.profile), mentorBonds: this.profile.mentorBonds, npcMemory: this.profile.npcMemory, treasureHunt: this.profile.treasureHunt, ...(story ? { protagonist: { look: me.look, name: me.nameSet ? me.name : '', pronouns: me.pronouns, ...(next.backstory ? { backstory: next.backstory } : {}) } } : {}) };
-    this.run = Run.createRun(this.content, { ...opts, expansion: { stagePacing: this.settings.expansion.stagePacing, evolutionEncounters: this.settings.expansion.evolutionEncounters, leagueCounterPick: this.settings.expansion.leagueCounterPick, kantoCanon: this.settings.expansion.kantoSevii, grandArc: this.settings.expansion.grandArcEnabled, worldTracks: this.settings.expansion.worldTracks, eventsDensity: this.settings.expansion.eventsDensity, climaxCut: this.settings.expansion.climaxCut, storyTraits: this.settings.expansion.storyTraits, finale: this.settings.expansion.finaleEnabled, doomEpilogue: this.settings.expansion.doomEpilogue }, ...(story && starterOverride?.length ? { starterOverride } : {}), runId: randomId('run'), pastPokemon: this.profile.pastPokemon, rivalArchive: this.profile.rivalArchive, runHistory: this.profile.runHistory });
+    this.run = Run.createRun(this.content, { ...opts, expansion: { finale: this.settings.expansion.finaleEnabled, doomEpilogue: this.settings.expansion.doomEpilogue, stagePacing: this.settings.expansion.stagePacing, evolutionEncounters: this.settings.expansion.evolutionEncounters, leagueCounterPick: this.settings.expansion.leagueCounterPick, kantoCanon: this.settings.expansion.kantoSevii, grandArc: this.settings.expansion.grandArcEnabled, worldTracks: this.settings.expansion.worldTracks, eventsDensity: this.settings.expansion.eventsDensity, climaxCut: this.settings.expansion.climaxCut, storyTraits: this.settings.expansion.storyTraits, rewinds: this.settings.expansion.rewinds, nodeMenus: this.settings.expansion.nodeMenus, blessings: this.settings.expansion.blessingsEnabled, ultraBeasts: this.settings.expansion.ultraBeastsEnabled, secondChancePct: this.settings.expansion.secondChancePct, heatedMoments: this.settings.expansion.heatedMoments, mythicalPromises: this.settings.expansion.mythicalsEnabled }, ...(story && starterOverride?.length ? { starterOverride } : {}), runId: randomId('run'), pastPokemon: this.profile.pastPokemon, rivalArchive: this.profile.rivalArchive, runHistory: this.profile.runHistory });
     const grants = startGrants(this.content, this.profile, archetypeId);
     applyStartGrants(this.content, this.run, this.profile);
     // Memories: what earlier runs left behind (ghosts, keepsakes, old friends, the chosen heirloom). Picked from the profile, not rolled.
@@ -530,6 +533,28 @@ export class GameSession {
     return ok;
   }
 
+  /** Beta 0.7 Node Event Menus: composes the current node's menu (once) and returns its view, or null when menus are off. */
+  nodeMenu(): NodeMenu.NodeMenuView | null {
+    const run = this.requireRun();
+    const next = NodeMenu.ensureNodeMenu(this.content, run);
+    if (next !== run) {
+      this.run = next;
+      this.persistRun();
+    }
+    return NodeMenu.nodeMenuView(this.requireRun());
+  }
+
+  /** Picks a menu entry: a micro entry plays now (its words come back); a side stop comes back for the map to open. */
+  pickMenuEntry(entryId: string): NodeMenu.PickResult {
+    const run = this.requireRun();
+    // P5 special entries (fork, linked, escort) play in their own module and come back with their words.
+    const special = NodeMenu.currentMenu(run)?.entries.find((e) => e.id === entryId)?.kind === 'special';
+    const result: NodeMenu.PickResult = special ? { ...playSpecialEntry(this.content, run, entryId), sideId: null } : NodeMenu.pickMenuEntry(this.content, run, entryId);
+    this.run = result.run;
+    this.persistRun();
+    return result;
+  }
+
     visitSide(sideId: string): string {
     const result = Run.visitSide(this.content, this.requireRun(), sideId);
     this.run = result.run;
@@ -631,6 +656,15 @@ export class GameSession {
     if (v2) v2.autonomy = this.settings.story.autonomy;
     if (v2) v2.dramatic = this.settings.story.dramaticMoments;
     if (v2) v2.intensity = this.settings.story.intensity;
+  }
+
+  /** L3 Rewinds: takes the battle back `turns` turns (see core/rewind.ts). False when the rewind isn't available. */
+  rewindBattle(turns: number): boolean {
+    const back = rewindBattle(this.content, this.requireRun(), turns);
+    if (!back) return false;
+    this.run = back;
+    this.persistRun();
+    return true;
   }
 
   takeTurn(action: PlayerAction): Run.TurnResult {

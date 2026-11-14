@@ -1,0 +1,624 @@
+{
+ "events": [
+  {
+   "id": "xe.johto.tail-market",
+   "name": "The Tail Market",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "priority": 100,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#2a1a14",
+    "effect": "flicker"
+   },
+   "intro": "A folding table and a handwritten sign: SLOWPOKE TAIL. NUTRITIOUS. ₽1,000,000. The vendor, a Grunt in a paper hat: \"One million. It's a premium product.\" You ask if anyone has ever paid. \"No. Between us? I think the price is so nobody asks where they come from.\"",
+   "choices": [
+    {
+     "label": "Tip over the table",
+     "success": {
+      "text": "\"I *hated* the hat.\" The delivery slip in his pocket names Azalea.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Tail Vendor",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "rocket-return-tail-slip",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Do they grow back?\"",
+     "success": {
+      "text": "\"...Yeah. That's what they told us. So it's fine.\" He packs up and leaves, and one fewer Grunt will be waiting at the Well.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": -2
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-return-tail-quit",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "The sign is still there when you look back. The price has gone up.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.johto.false-director",
+   "name": "The False Director",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman",
+     "trainer.worker_m"
+    ],
+    "tint": "#14182a",
+    "effect": "glint"
+   },
+   "intro": "The Radio Tower runs tours, and the Director greets the group himself: \"Welcome, welcome, to the, ah. The Radio Tower. Which I direct.\" A staffer whispers: \"He asked me my name this morning. I've had the slot after his for six years.\" He salutes with the wrong hand. His office plant is dead. His mug says WORLD'S BEST EXECUTIVE.",
+   "choices": [
+    {
+     "label": "\"What's today's password?\"",
+     "success": {
+      "text": "\"The pass-- of course. It's. 'Radio.'\" \"It's *never* 'Radio',\" the staffer says. He bolts for the lift. Somewhere below, the real Director can now be found.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-return-director-known",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "track",
+        "input": "officerTurned"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing",
+     "success": {
+      "text": "You finish the tour. The Director thanks you for visiting, twice.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Accuse him on a hunch",
+     "success": {
+      "text": "Security escorts you out, and not gently.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Tower Security",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "evil",
+         "heat": 4
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.johto.black-hour",
+   "name": "The Black Hour",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 2
+    },
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#0e1018",
+    "effect": "flicker"
+   },
+   "intro": "The radio is on at the rest stop. The host: \"...and that was 'Lullaby for a Lapras'. It's midnight, Johto. This is the, um. The Black Hour. Tonight's weather for our friends in the north: heavy cloud, three trucks, by the lake, before the second bell. And in the west: no rain. The well is dry.\" A chair scrapes. Someone coughs who is not the host. \"And remember, listeners: Rocket's future is bright!\"",
+   "choices": [
+    {
+     "label": "Write it down",
+     "success": {
+      "text": "Three trucks, a lake, the second bell. You underline \"the well is dry\".",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-return-black-hour-notes",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call the station",
+     "success": {
+      "text": "\"We have a caller. Go ahead, caller. ...Yes. *Yes*, I'd love to take a request.\" Her voice is steady, and she is not alone in the room.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-return-mary-called",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn it off",
+     "success": {
+      "text": "The quiet is worse.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.johto.dragon-tamer",
+   "name": "The Dragon Tamer",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#2a1414",
+    "effect": "none"
+   },
+   "intro": "A man in a cape stands at the red water of the Lake of Rage. \"Gyarados don't gather. They don't share a lake. Something is telling them to. I've traced a signal to a souvenir shop. I intend to be direct about it. You may come, if you can keep up.\"",
+   "choices": [
+    {
+     "label": "\"I'll keep up.\"",
+     "success": {
+      "text": "He nods. \"Dragonite. The door, please.\" Offscreen, a crash. \"That is what direct means.\" The corridor behind the shop is already clear.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-return-lance-ally",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I work alone.\"",
+     "success": {
+      "text": "\"Then I will hold the road.\" He turns back to the water, and the Gyarados quiet a little.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-return-lance-road",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.johto.olivine-arrival",
+   "name": "Olivine Arrival",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck",
+     "trainer.gentleman"
+    ],
+    "tint": "#101820",
+    "effect": "none"
+   },
+   "intro": "A freighter with no name. In the lighthouse, Ampharos's light is flickering in four-four time. A dancer on the dock talks to a boombox, then to you: \"And one and two and-- oh! An audience! Don't mind the crates, darling, the crates are boring. Three more are coming that are not boring.\" You ask what he gets. The dancing stops for exactly one second. \"Mine is the music. Everyone forgets the music.\"",
+   "choices": [
+    {
+     "label": "Ask about the music",
+     "success": {
+      "text": "He hands over a cassette marked SIDE B. You will know the beat when you hear it again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-return-carrier-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cipher-seen-miror-b",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Challenge him",
+     "success": {
+      "text": "\"Fabulous! You've no rhythm but such conviction!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Miror B.",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "cipher-seen-miror-b",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Go up the lighthouse",
+     "success": {
+      "text": "You calm the Ampharos with a little patience. The light settles into an honest rhythm.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-return-lighthouse",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.johto.heir",
+   "name": "The Chair",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#241420",
+    "effect": "none"
+   },
+   "intro": "Outside a souvenir shop, a red-haired boy is followed by a man in a white-trimmed coat. \"Your father's office is as he left it. I have had it dusted every week.\" \"Burn it.\" \"You have his eyes. You have his name.\" \"He lost. He lost to a kid and he walked off. Don't put a coat on it.\" The man leaves a folded coat on the bench anyway.",
+   "choices": [
+    {
+     "label": "\"You'd be better at it than him.\"",
+     "success": {
+      "text": "He looks at the coat for a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-return-heir-tempted",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Then help me end it.\"",
+     "success": {
+      "text": "\"I'm not helping you. I'm going the same direction.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-return-heir-ally",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit down beside him",
+     "success": {
+      "text": "A minute passes. \"...It's a nice coat. That's the worst part.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-return-heir-undecided",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.johto.shrine-keeper",
+   "name": "The Shrine Keeper",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#18241a",
+    "effect": "none"
+   },
+   "intro": "An old man sits in front of a forest shrine with a calendar. \"Tuesday. I went to bed Tuesday. I woke up Thursday. The apricorns on the sill had ripened and nobody had turned them. The forest's guardian keeps the days in order. Something has taken it out of its place, so the days are loose.\"",
+   "choices": [
+    {
+     "label": "Ask what his grandfather called it",
+     "success": {
+      "text": "He tells you, quietly, a name only a child would give a friend. You will not forget it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-return-child-name",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the Poké Balls",
+     "success": {
+      "text": "\"A Ball should be a door. That fellow in the mask has made one with no inside handle.\" He gives you a pouch of Apricorns.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-return-apricorn",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.johto.counterfeit-boss",
+   "name": "Bwa-ha-ha",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "epic",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "johto"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1830",
+    "effect": "flicker"
+   },
+   "intro": "Inside the hideout, a door is ajar and someone is rehearsing. \"I am Giovanni! The magnificent! Bwa-ha-ha! No. Lower. 'I am... Giovanni.' Pause. Menace. Do I have a cat? He has a cat.\" A Grunt: \"Sir, the real one never laughed.\" \"Well, that's why nobody liked him!\"",
+   "choices": [
+    {
+     "label": "Walk in",
+     "success": {
+      "text": "\"Did it sound like him at all? Be honest. ...Archer misses him so much it's embarrassing. Somebody had to try.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Petrel",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "rocket-return-petrel-down",
+         "amount": 1
+        },
+        {
+         "kind": "track",
+         "input": "raidSuccess"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Listen longer",
+     "success": {
+      "text": "He practises the door passwords aloud. Two locks will open for you without a fight.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-return-passwords",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave",
+     "success": {
+      "text": "The laughter follows you down the corridor.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

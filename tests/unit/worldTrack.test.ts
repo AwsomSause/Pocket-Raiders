@@ -2,7 +2,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { ExpansionRunSchema } from '../../src/core/expansion/schema';
-import { freshTrack, insuredIndex, kantoEffects, reduceTrack, trackEffectsFor, TRACK_INPUTS, TrackStateSchema, wildTaken, type TrackInput } from '../../src/core/expansion/track';
+import { NO_EFFECTS, freshTrack, insuredIndex, kantoEffects, reduceTrack, trackEffectsFor, TRACK_INPUTS, TrackStateSchema, wildTaken, type TrackInput } from '../../src/core/expansion/track';
 import { advanceTrack, healStopShut, trackEffects, trackOnClimax, trackOnOperation, trackShopFactor, trackStep, trackWildWeight } from '../../src/core/expansion/trackRun';
 import { trackPage } from '../../src/core/expansion/trackView';
 import { resolveStoryRaid } from '../../src/core/raid/storyRaids';
@@ -53,10 +53,38 @@ describe('reduceTrack', () => {
   });
 });
 
+describe('Kalos and Galar effects (Beta 0.7 E9)', () => {
+  it('Kalos: invitations, blackout, members first, prime time', () => {
+    const at = (n: number) => trackEffectsFor('kalos', n, cfg);
+    expect(at(0)).toEqual(NO_EFFECTS);
+    expect(at(1).shopMarkup).toBe(0.1);
+    expect(at(2).healShutAtNight).toBe(true);
+    expect(at(2).healShare ?? 1).toBe(1);
+    expect(at(3).healShare).toBe(0.85);
+    expect(at(4).adverts).toBe(true);
+    expect(at(5).healShare).toBe(0.85);
+  });
+
+  it('Galar: sponsored discount, supply issues, red sky', () => {
+    const at = (n: number) => trackEffectsFor('galar', n, cfg);
+    expect(at(1).shopMarkup).toBe(-0.05);
+    expect(at(3).shopMarkup).toBe(-0.05);
+    expect(at(4).shopMarkup).toBe(0.1);
+    expect(at(4).adverts).toBe(false);
+    expect(at(5).adverts).toBe(true);
+    expect(at(5).wildShrink).toBe(0);
+  });
+
+  it('stay inside the closed field list', () => {
+    expect(Object.keys(trackEffectsFor('kalos', 5, cfg)).sort()).toEqual(['adverts', 'healShare', 'healShutAtNight', 'roadblocks', 'shopMarkup', 'wildShrink']);
+    expect(Object.keys(trackEffectsFor('galar', 5, cfg)).sort()).toEqual(['adverts', 'healShutAtNight', 'roadblocks', 'shopMarkup', 'wildShrink']);
+  });
+});
+
 describe('Kanto effects', () => {
   it('turn on step by step and stack', () => {
     const at = (n: number) => kantoEffects(n, cfg);
-    expect(at(0)).toEqual({ shopMarkup: 0, healShutAtNight: false, roadblocks: false, wildShrink: 0, adverts: false });
+    expect(at(0)).toEqual(NO_EFFECTS);
     expect(at(1).shopMarkup).toBe(0.1);
     expect(at(2).healShutAtNight).toBe(true);
     expect(at(3).roadblocks).toBe(true);
@@ -68,7 +96,7 @@ describe('Kanto effects', () => {
   it('never carries anything that could raise an enemy (closed list of fields)', () => {
     const keys = Object.keys(kantoEffects(5, cfg)).sort();
     expect(keys).toEqual(['adverts', 'healShutAtNight', 'roadblocks', 'shopMarkup', 'wildShrink']);
-    expect(trackEffectsFor('johto', 5, cfg).shopMarkup).toBe(0);
+    expect(trackEffectsFor('hoenn', 5, cfg).shopMarkup).toBe(0);
   });
 
   it('marks exactly one of N shops and a stable quarter of species', () => {

@@ -2511,6 +2511,135 @@
       "special": "canon"
     },
     {
+      "id": "ss-aether-mother-beast",
+      "name": "The Mother Beast · The Deep",
+      "tier": 6,
+      "blurb": "XD010: Lusamine, wrapped in Nihilego's bell and three veils (the Collection, the Children, the Husband). Nebby pulls everyone out when the timer runs out. It cannot be caught.",
+      "species": [
+        "nihilego"
+      ],
+      "levelBonus": 4,
+      "hpBoostPercent": 300,
+      "entryCost": 0,
+      "shield": {
+        "at": [
+          0.75,
+          0.5,
+          0.25
+        ],
+        "points": 0.15
+      },
+      "phases": [
+        {
+          "atHp": 0.75,
+          "text": "The Collection thins: glass shapes crack and drift away."
+        },
+        {
+          "atHp": 0.5,
+          "text": "The Children's veil parts. Two small figures in white look up.",
+          "boost": {
+            "spd": 1
+          }
+        },
+        {
+          "atHp": 0.25,
+          "text": "The Husband's veil is all that is left. The chord under her voice wavers.",
+          "boost": {
+            "spa": 1
+          },
+          "clearPlayerStages": true
+        }
+      ],
+      "telegraph": {
+        "everyTurns": 3,
+        "boost": 1.5,
+        "text": "The Mother Beast gathers the threads!",
+        "interruptedBy": [
+          "slp",
+          "par",
+          "frz"
+        ]
+      },
+      "extraActions": {
+        "belowHp": 0.3,
+        "max": 2
+      },
+      "timerTurns": 12,
+      "kind": "wild",
+      "extraMoves": [],
+      "modifiers": {},
+      "rewards": {
+        "moneyPerLevel": 250,
+        "items": [],
+        "draftExtra": 0,
+        "joinChance": 0
+      },
+      "special": "canon"
+    },
+    {
+      "id": "ss-star-cassiopeia-engine",
+      "name": "The Cassiopeia Engine · Starfall Street",
+      "tier": 6,
+      "blurb": "XD012: five Starmobiles locked nose to tail, one core each (shown as three shield stages). Fought beside Team Star. If the timer runs out, the Engine fires once and nobody is hurt. It cannot be caught.",
+      "species": [
+        "revavroom"
+      ],
+      "levelBonus": 4,
+      "hpBoostPercent": 300,
+      "entryCost": 0,
+      "shield": {
+        "at": [
+          0.75,
+          0.5,
+          0.25
+        ],
+        "points": 0.1
+      },
+      "phases": [
+        {
+          "atHp": 0.75,
+          "text": "The first cores are pulled (Segin and Schedar). The ring slows.",
+          "boost": {
+            "spe": 1
+          }
+        },
+        {
+          "atHp": 0.5,
+          "text": "Navi's core is out. The spikes stop."
+        },
+        {
+          "atHp": 0.25,
+          "text": "Ruchbah's core is out and Caph's is the last seated. The light flickers.",
+          "clearPlayerStages": true
+        }
+      ],
+      "telegraph": {
+        "everyTurns": 3,
+        "boost": 1.5,
+        "text": "The Engine spins up a Starfall Barrage!",
+        "interruptedBy": [
+          "slp",
+          "par",
+          "frz"
+        ]
+      },
+      "extraActions": {
+        "belowHp": 0.3,
+        "max": 2
+      },
+      "timerTurns": 12,
+      "kind": "wild",
+      "extraMoves": [],
+      "modifiers": {},
+      "rewards": {
+        "moneyPerLevel": 250,
+        "items": [],
+        "draftExtra": 0,
+        "joinChance": 0
+      },
+      "special": "canon"
+    },
+    {
       "id": "ss-cipher-xd001",
       "name": "XD001 · The Dome",
       "tier": 6,

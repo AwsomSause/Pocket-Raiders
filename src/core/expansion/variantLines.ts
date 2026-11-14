@@ -231,6 +231,7 @@ export function variantGimmickTick(variants: Variants, uid: string): { endDynama
   const none = { endDynamax: false, endTera: false, stages: {}, message: null };
   const line = lineOf(variants, uid);
   const f = flags(variants, uid);
+  if (line === 'overcharged' && f.maxed === 1 && f.long === 1) { f.long = 0; return none; } // Red Cloud: one more turn
   if (line === 'overcharged' && f.maxed === 1) { f.maxed = 2; f.pay = 1; return { ...none, endDynamax: true }; }
   if (line === 'tuned' && (f.tera ?? 0) > 0) {
     f.tera = (f.tera ?? 0) - 1;

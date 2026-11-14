@@ -4,7 +4,7 @@
 
 import { z } from 'zod';
 
-export const TRAIT_IDS = ['seat-at-the-table', 'drill-through', 'house-wins', 'double-entry', 'collections', 'fed-and-paid', 'payout', 'lights-out', 'translator'] as const;
+export const TRAIT_IDS = ['seat-at-the-table', 'drill-through', 'house-wins', 'double-entry', 'collections', 'fed-and-paid', 'payout', 'lights-out', 'translator', 'subtraction', 'lingering', 'grid-tie', 'blood-in-the-water', 'undertow-song', 'on-schedule', 'updraft'] as const;
 export type TraitId = (typeof TRAIT_IDS)[number];
 
 export const TraitStateSchema = z.object({ trait: z.enum(TRAIT_IDS), flags: z.record(z.string(), z.number()).default({}) });
@@ -12,7 +12,7 @@ export const TraitsSchema = z.record(z.string(), TraitStateSchema).default({});
 export type Traits = z.infer<typeof TraitsSchema>;
 
 /** The special-Pokémon id (data) each trait belongs to, and the species that carry it in a fight. */
-export const TRAIT_CAST: Record<TraitId, { dossier: string; species: readonly string[]; team: string }> = {
+export const TRAIT_CAST: Record<TraitId, { dossier: string; species: readonly string[]; team: string; region?: string }> = {
   'seat-at-the-table': { dossier: 'sv.rocket.chairman', species: ['persian'], team: 'rocket' },
   'drill-through': { dossier: 'sv.rocket.vault-breaker', species: ['rhydon', 'rhyperior'], team: 'rocket' },
   'house-wins': { dossier: 'sv.rocket.house-pair', species: ['nidoking', 'nidoqueen'], team: 'rocket' },
@@ -22,6 +22,14 @@ export const TRAIT_CAST: Record<TraitId, { dossier: string; species: readonly st
   payout: { dossier: 'sv.rocket.jackpot', species: ['dratini', 'dragonair'], team: 'rocket' },
   'lights-out': { dossier: 'sv.rocket.blackout', species: ['voltorb', 'electrode'], team: 'rocket' },
   translator: { dossier: 'sv.rocket.meowth', species: ['meowth'], team: 'rocket-remnants' },
+  // Beta 0.7 E9: Sinnoh (Galactic) and Hoenn (Aqua, Magma). The rest of those regions' special Pokémon are named in the Dossier only.
+  subtraction: { dossier: 'sv.galactic.remainder', species: ['gyarados'], team: 'galactic', region: 'sinnoh' },
+  lingering: { dossier: 'sv.galactic.miasma', species: ['stunky', 'skuntank'], team: 'galactic', region: 'sinnoh' },
+  'grid-tie': { dossier: 'sv.galactic.relay', species: ['electivire'], team: 'galactic', region: 'sinnoh' },
+  'blood-in-the-water': { dossier: 'sv.aqua.riptide', species: ['sharpedo'], team: 'aqua', region: 'hoenn' },
+  'undertow-song': { dossier: 'sv.aqua.siren', species: ['milotic'], team: 'aqua', region: 'hoenn' },
+  'on-schedule': { dossier: 'sv.magma.old-faithful', species: ['torkoal'], team: 'magma', region: 'hoenn' },
+  updraft: { dossier: 'sv.magma.thermal', species: ['swellow'], team: 'magma', region: 'hoenn' },
 };
 
 /** The trait a Pokémon of this species carries in a fight against this team in this region, or null. Kanto Rocket carries eight; Meowth's Translator belongs to the Rocket Remnants trio. */
@@ -30,6 +38,7 @@ export function traitForSpecies(teamId: string, regionId: string, speciesId: str
     const c = TRAIT_CAST[id];
     if (!c.species.includes(speciesId) || c.team !== teamId) continue;
     if (c.team === 'rocket' && regionId !== 'kanto') continue;
+    if (c.region && c.region !== regionId) continue;
     return id;
   }
   return null;
@@ -111,3 +120,24 @@ export function traitOverhears(traits: Traits, uid: string): boolean {
 export const traitOfDossier = (dossierId: string): TraitId | null => TRAIT_IDS.find((t) => TRAIT_CAST[t].dossier === dossierId) ?? null;
 /** Whether a species can be this trait's holder (a Dratini stands in for Jackpot, a Dragonair too). */
 export const traitHolds = (trait: TraitId, speciesId: string): boolean => TRAIT_CAST[trait].species.includes(speciesId);
+
+// ---- Beta 0.7 E9: Sinnoh and Hoenn traits (pure; the engine calls these at its hook points) ----
+
+/** Subtraction (Remainder): each damaging hit removes one positive stat boost from the target. Returns the stat to lower, or null. */
+export function traitSubtraction(traits: Traits, uid: string, targetStages: Record<string, number>): string | null {
+  if (traitOf(traits, uid) !== 'subtraction') return null;
+  return Object.keys(targetStages).find((k) => (targetStages[k] ?? 0) > 0) ?? null;
+}
+/** Lingering (Miasma): when it faints, the Pokémon facing it is badly poisoned. */
+export const traitLingering = (traits: Traits, uid: string): boolean => traitOf(traits, uid) === 'lingering';
+/** Grid Tie (Relay): Electric moves used by anyone on the field heal it by 10%. */
+export const GRID_TIE_SHARE = 0.1;
+export const traitGridTie = (traits: Traits, uid: string): boolean => traitOf(traits, uid) === 'grid-tie';
+/** Blood in the Water (Riptide): +1 Attack whenever a Pokémon on the field drops below half HP (announced). */
+export const traitBloodScent = (traits: Traits, uid: string): boolean => traitOf(traits, uid) === 'blood-in-the-water';
+/** Undertow Song (Siren): a Pokémon that switches in against it loses 1 Speed. */
+export const traitUndertow = (traits: Traits, uid: string): boolean => traitOf(traits, uid) === 'undertow-song';
+/** On Schedule (Old Faithful): every third turn it sets the sun for free. */
+export const traitOnSchedule = (traits: Traits, uid: string, turn: number): boolean => traitOf(traits, uid) === 'on-schedule' && turn > 0 && turn % 3 === 0;
+/** Updraft (Thermal): +1 Speed at the end of each turn of sun. */
+export const traitUpdraft = (traits: Traits, uid: string, weather: string | null): boolean => traitOf(traits, uid) === 'updraft' && weather === 'sun';

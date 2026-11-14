@@ -47,7 +47,15 @@ describe('track effects', () => {
   it('Alola thins the wild pool by a fifth from step 3; Paldea only adverts at step 5', () => {
     expect(trackEffectsFor('alola', 2, cfg).wildShrink).toBe(0);
     expect(trackEffectsFor('alola', 3, cfg).wildShrink).toBe(0.2);
-    expect(trackEffectsFor('paldea', 4, cfg)).toEqual(NO_EFFECTS);
+  });
+  it('Paldea steps 1 to 4 are mechanics', () => {
+    expect(trackEffectsFor('paldea', 0, cfg)).toEqual(NO_EFFECTS);
+    expect(trackEffectsFor('paldea', 1, cfg)).toMatchObject({ shopMarkup: cfg.shopMarkup, healShutAtNight: false, wildShrink: 0 });
+    expect(trackEffectsFor('paldea', 2, cfg).healShutAtNight).toBe(true);
+    expect(trackEffectsFor('paldea', 3, cfg).wildShrink).toBe(cfg.wildShrink);
+    expect(trackEffectsFor('paldea', 4, cfg)).toMatchObject({ roadblocks: true, adverts: false });
+  });
+  it('Paldea step 5 adds the map line', () => {
     expect(trackEffectsFor('paldea', 5, cfg).adverts).toBe(true);
   });
 });
@@ -59,6 +67,8 @@ it('the event files are current', () => {
 import { climaxPhases, beginClimax, nextStep, EXTENDED_REGIONS } from '../../src/core/arc/climaxExtended';
 import { startFormat } from '../../src/core/formats/registry';
 import { DEBATE_TABLE } from '../../src/core/formats/debate';
+import { adjustShields, COLOSSUS_REGIONS } from '../../src/core/formats/colossus';
+import { chooseOption } from '../../src/core/formats/registry';
 import { trackBannerLine } from '../../src/core/expansion/trackRun';
 
 describe('Extended Cut for Alola and Paldea', () => {
@@ -77,7 +87,7 @@ describe('Extended Cut for Alola and Paldea', () => {
     for (const region of ['alola', 'paldea']) {
       const r = extended(region);
       beginClimax(r, region);
-      for (const id of ['siege', 'blackout', 'colossus', 'convoy', 'front'] as const) expect(startFormat(id, { content, run: r })).toBe(false);
+      for (const id of ['convoy'] as const) expect(startFormat(id, { content, run: r })).toBe(false);
     }
   });
   it('Alola skips to the Gauntlet; Paldea keeps the Debate in its list', () => {
@@ -96,5 +106,139 @@ describe('Extended Cut for Alola and Paldea', () => {
       for (let i = 0; i < 5; i++) advanceTrack(r, region, 'raidFailed', `k${i}`);
       expect(trackBannerLine(content, r).length).toBeGreaterThan(10);
     }
+  });
+});
+
+describe('Siege Map for Alola and Paldea', () => {
+  const siegeRun = (region: string) => {
+    const r = chooseStarter(content, createRun(content, { runId: `sg-${region}`, seed: `sg-${region}`, archetypeId: 'red', expansion: { worldTracks: true, climaxCut: 'extended' } }), 0);
+    r.regionOrder[r.regionIndex] = region;
+    beginClimax(r, region);
+    return r;
+  };
+  it('starts in both regions with the right districts and gates', () => {
+    for (const [region, n, gates] of [['alola', 5, 4], ['paldea', 5, 5]] as const) {
+      const r = siegeRun(region);
+      expect(startFormat('siege', { content, run: r })).toBe(true);
+      const s = r.expansion!.cut!.format as { state: { region: string; districts: { gate: boolean }[] } };
+      expect(s.state.region).toBe(region);
+      expect(s.state.districts).toHaveLength(n);
+      expect(s.state.districts.filter((d) => d.gate)).toHaveLength(gates);
+    }
+  });
+  it('story flags hold districts', () => {
+    const r = siegeRun('alola');
+    r.story.flags['ev:alola-nanu-ally'] = 1;
+    r.story.flags['ev:alola-bars'] = 1;
+    startFormat('siege', { content, run: r });
+    const st = (r.expansion!.cut!.format as { state: { districts: { id: string; status: string }[] } }).state.districts;
+    expect(st.find((d) => d.id === 'ula-ula')!.status).toBe('held');
+    expect(st.find((d) => d.id === 'melemele')!.status).toBe('held');
+    expect(st.find((d) => d.id === 'akala')!.status).toBe('contested');
+  });
+});
+
+describe('Colossus for Alola and Paldea', () => {
+  const colRun = (region: string) => {
+    const r = chooseStarter(content, createRun(content, { runId: `col-${region}`, seed: `col-${region}`, archetypeId: 'red', expansion: { worldTracks: true, climaxCut: 'extended' } }), 0);
+    r.regionOrder[r.regionIndex] = region;
+    beginClimax(r, region);
+    return r;
+  };
+  it('both raids exist and the fight launches with their own shields', () => {
+    for (const region of ['alola', 'paldea']) {
+      const rc = COLOSSUS_REGIONS[region]!;
+      expect(content.raids.raids.some((x) => x.id === rc.raidId)).toBe(true);
+      expect(content.species.has(rc.species)).toBe(true);
+      const r = colRun(region);
+      expect(startFormat('colossus', { content, run: r })).toBe(true);
+      expect(chooseOption({ content, run: r }, 'fight')).toBe(true);
+      expect(r.battle?.raid?.pendingShields.length).toBeGreaterThanOrEqual(2);
+    }
+  });
+  it('earlier choices change the shield count; at least two always stay', () => {
+    const a = colRun('alola');
+    expect(adjustShields('alola', a, [0.75, 0.5, 0.25])).toHaveLength(3);
+    a.story.flags['ev:alola-mohn-found'] = 1;
+    expect(adjustShields('alola', a, [0.75, 0.5, 0.25])).toEqual([0.5, 0.25]);
+    const p = colRun('paldea');
+    expect(adjustShields('paldea', p, [0.75, 0.5, 0.25]).length).toBeGreaterThanOrEqual(2);
+  });
+});
+
+describe('Blackout for Alola and Paldea', () => {
+  const bRun = (region: string) => {
+    const r = chooseStarter(content, createRun(content, { runId: `bo-${region}`, seed: `bo-${region}`, archetypeId: 'red', expansion: { worldTracks: true, climaxCut: 'extended' } }), 0);
+    r.regionOrder[r.regionIndex] = region;
+    beginClimax(r, region);
+    return r;
+  };
+  it('starts with three anchors in both regions and launches a fight', () => {
+    for (const region of ['alola', 'paldea']) {
+      const r = bRun(region);
+      expect(startFormat('blackout', { content, run: r })).toBe(true);
+      const st = (r.expansion!.cut!.format as { state: { region: string; anchors: unknown[] } }).state;
+      expect(st.region).toBe(region);
+      expect(st.anchors).toHaveLength(3);
+      expect(chooseOption({ content, run: r }, 'a1')).toBe(true);
+      expect(r.battle).toBeTruthy();
+    }
+  });
+  it('Alola\'s fights carry Thin Light unless Beans came along; Paldea has no condition', () => {
+    const a = bRun('alola');
+    startFormat('blackout', { content, run: a });
+    chooseOption({ content, run: a }, 'a1');
+    expect(a.battle?.eventRule?.thinLight).toBe(true);
+    const b = bRun('alola');
+    b.story.flags['ev:alola-beans-joined'] = 1;
+    startFormat('blackout', { content, run: b });
+    chooseOption({ content, run: b }, 'a1');
+    expect(b.battle?.eventRule?.thinLight).toBeFalsy();
+    const p = bRun('paldea');
+    startFormat('blackout', { content, run: p });
+    chooseOption({ content, run: p }, 'a1');
+    expect(p.battle?.eventRule?.thinLight).toBeFalsy();
+  });
+});
+
+import { createBattle, eventRuleEnd } from '../../src/core/battle/engine';
+import { createPokemon } from '../../src/core/pokemon';
+
+describe('Thin Light', () => {
+  it('strikes one Pokémon for an eighth on every third turn, never to a knockout', () => {
+    const me = createPokemon(content, 'snorlax', 50, 'p');
+    const foe = createPokemon(content, 'machop', 50, 'f');
+    const b = createBattle('trainer', [foe], 0, me.uid);
+    b.eventRule = { thinLight: true } as never;
+    const events: never[] = [];
+    b.turn = 2;
+    eventRuleEnd(b, events, [me], content);
+    expect(events).toHaveLength(0);
+    b.turn = 3;
+    const before = me.hp + foe.hp;
+    eventRuleEnd(b, events, [me], content);
+    expect(events.length).toBe(2);
+    expect(before - (me.hp + foe.hp)).toBeGreaterThan(0);
+    expect(me.hp).toBeGreaterThanOrEqual(1);
+    expect(foe.hp).toBeGreaterThanOrEqual(1);
+    me.hp = 1; foe.hp = 1;
+    eventRuleEnd(b, [], [me], content);
+    expect(me.hp).toBe(1);
+  });
+});
+
+describe('Alola beast Front', () => {
+  it('only runs after the Mother Beast was taken, then fights three lanes', () => {
+    const r = chooseStarter(content, createRun(content, { runId: 'fr1', seed: 'fr1', archetypeId: 'red', expansion: { worldTracks: true, climaxCut: 'extended' } }), 0);
+    r.regionOrder[r.regionIndex] = 'alola';
+    beginClimax(r, 'alola');
+    expect(startFormat('front', { content, run: r })).toBe(false);
+    r.story.flags['alola.x.mother-beast'] = 'taken';
+    expect(startFormat('front', { content, run: r })).toBe(true);
+    const st = (r.expansion!.cut!.format as { state: { region: string; lanes: unknown[] } }).state;
+    expect(st.region).toBe('alola');
+    expect(st.lanes).toHaveLength(3);
+    expect(chooseOption({ content, run: r }, 'begin')).toBe(true);
+    expect(r.battle?.eventRule?.lanes).toBe(true);
   });
 });

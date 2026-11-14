@@ -1,0 +1,21 @@
+# 1271: Legendary Blessings (L1 + L2, in-run)
+
+- **Player gets:** with the "Legendary Blessings" setting on, each run opens (after the starter) with a Side Plinth screen showing the run's one blessing. Eight blessings work:
+  - Ho-Oh *Sacred Ash* (once per region, after a fight, every fainted Pokémon is restored).
+  - Tapu Lele (after every fight the most hurt Pokémon heals 10%).
+  - Fezandipiti (shops 10% cheaper).
+  - Tornadus (Tailwind for 2 turns in the first battle of each stage).
+  - Zacian (first damaging move of each battle +20%).
+  - Regidrago (Dragon moves +15%), Moltres (burn does half damage), Munkidori (status moves +10% accurate).
+  - **Communion** (own Legendary in party or PC; Run menu shows it): Lele heals the rest of the party 5% too, Fezandipiti shops 20% off, Ho-Oh revives the first fainted Pokémon at half HP after a boss battle.
+  - **Rite**: Tapu Lele's (restore the whole party, once) from the new Blessing row at the top of the Run menu.
+- **Save:** none. Optional `run.expansion.blessing` (id, tier, influence, seen, ashRegions, communion, riteUsed, stagesDone); old runs load unchanged. Setting `expansion.blessingsEnabled` already existed (settings 42); its default is now **off**, so old seeds play exactly as before. A Settings toggle was added.
+- **Limits:**
+  - Off by default until the 0.7 balance pass; the integration lead flips the default (and must handle the e2e specs that press Enter from Starter to Briefing, because the opening adds a screen).
+  - Influence is stored (tier start value) but nothing raises it, and Signs, Echoes, Trial, Recognition and Presence are not built (they need per-blessing events). Communion for the five newer blessings is flagged only; their stronger forms are not built.
+  - Only Tapu Lele has a Rite. Fezandipiti's beguile and Ho-Oh's bring-back are not built.
+  - Per-blessing gaps are in the `limits` field of `src/data/blessings.json` (shown on the Run menu row): Moltres has no burn cleanup or rest Bond, Munkidori no puzzle hint, Regidrago no full-HP bonus, Fezandipiti no charming event answer, Ho-Oh's Communion revives the first fainted in party order.
+  - Dialga (needs battle rewind) and Palkia (needs a map-rearrange screen) are `disabled`. The other blessings are not in the data yet.
+  - Empty tiers fall down to the next lower tier with a playable blessing.
+  - The opening is skippable every time (no cross-run memory). The Divine shadow and the Primordial/Origin interrupt are not built.
+  - Streams `::blessing-tier::` and `::blessing-pick::` are hashed from the seed, not saved.
