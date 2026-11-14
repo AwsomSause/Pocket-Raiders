@@ -6,11 +6,14 @@ import { NO_EFFECTS, type TrackEffects } from './track';
 
 /** Alola: step 3 "Donations" takes a fifth off the wild pool. Steps 1, 2, 4 and 5 (closed trial sites, borrowed Pokémon, Ultra Beast glimpses, dimmer daylight) are not built: they stay as page text only. */
 export function alolaEffects(step: number): TrackEffects {
-  return { ...NO_EFFECTS, wildShrink: step >= 3 ? 0.2 : 0 };
+  return { ...NO_EFFECTS, wildShrink: step >= 3 ? 0.2 : 0, adverts: step >= 5 };
 }
 
-/** Paldea's track measures how badly the adults are handling it; every step is story and page text. No mechanical effects yet (limited, see docs/updates/beta-0.7). */
-export const paldeaEffects = (_step: number): TrackEffects => NO_EFFECTS;
+/** Paldea's track measures how badly the adults are handling it; only step 5 has a map line. Steps 1 to 4 (flyers, checkpoints, expulsion notices, Cipher Peons in costume) are page text. */
+export const paldeaEffects = (step: number): TrackEffects => ({ ...NO_EFFECTS, adverts: step >= 5 });
+
+/** The map line when step 5 shows (the `adverts` effect), by region. */
+export const ADVERT_LINE: Record<string, string> = { alola: 'Daylight is a third dimmer than it should be, and everyone is looking up.', paldea: 'Five engines are audible from anywhere in Mesagoza.' };
 
 export interface TrackPageText { scale: string; scaleNote: string; sighting: string; civilian: string }
 

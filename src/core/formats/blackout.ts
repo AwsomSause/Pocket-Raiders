@@ -7,7 +7,7 @@
 // Sabrina's executive ability "Foresight Tax" is the battle rule `foresight` (core/battle/foresight.ts): she sees your first chosen
 // move each turn until one of her Pokémon faints.
 
-import { markCheckpoint, markDone } from './store';
+import { markCheckpoint, markDone, climaxRegion } from './store';
 import { launchFormatBattle } from './battle';
 import type { FormatCard, FormatCtx, WideFormat } from './types';
 
@@ -123,6 +123,7 @@ function onBattleEnd(s: BlackoutState, won: boolean, { run }: FormatCtx): Blacko
 }
 
 export const blackout: WideFormat<BlackoutState> = {
+  canStart: (ctx, input) => input !== undefined || climaxRegion(ctx.run) === 'kanto',
   id: 'blackout',
   setup,
   describe: (s) => describe(s),

@@ -9,7 +9,7 @@
 
 import { raidRecord } from '../raid/storyRaids';
 import { launchFormatBattle } from './battle';
-import { cutOf, markDone } from './store';
+import { cutOf, markDone, climaxRegion } from './store';
 import type { FormatCard, FormatCtx, WideFormat } from './types';
 
 export interface ConvoyLeg {
@@ -95,6 +95,7 @@ function onBattleEnd(s: ConvoyState, won: boolean, { run }: FormatCtx): ConvoySt
 }
 
 export const convoy: WideFormat<ConvoyState> = {
+  canStart: (ctx, input) => input !== undefined || climaxRegion(ctx.run) === 'kanto',
   id: 'convoy',
   setup,
   describe: (s) => describe(s),
