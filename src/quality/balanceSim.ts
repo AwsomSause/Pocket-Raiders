@@ -19,7 +19,8 @@
 // Read-only: nothing here changes game rules or data.
 
 import { gearTeam, type GearTier } from '../core/bossGear';
-import { chooseEnemyMove, createBattle, resolveTurn, type BattleContext } from '../core/battle/engine';
+import { chooseEnemyMove, createBattle, resolveTurn, startBattle, type BattleContext } from '../core/battle/engine';
+import type { UltraRuleId } from '../core/ultra/beasts';
 import { transformProblem, type TransformRequest } from '../core/battle/transform';
 import type { Archetype, Content } from '../core/contentSchema';
 import { createPlannedPokemon, evolvedFormAt, leagueScale, levelScale, planChampion, planEliteFour, planGymLeader, type TrainerPlan } from '../core/encounters';
@@ -51,13 +52,18 @@ const MECHANICS: TransformRequest['kind'][] = ['tera', 'zmove', 'dynamax'];
  * switching except to replace a fainted Pokémon), choosing its move like a
  * boss with `PLAYER_AI`. The teams are copied, never changed.
  */
-export function simulateBattle(content: Content, playerTeam: PokemonInstance[], enemyTeam: PokemonInstance[], enemyAi: number, seed: string, kit = false): BattleOutcome {
+export function simulateBattle(content: Content, playerTeam: PokemonInstance[], enemyTeam: PokemonInstance[], enemyAi: number, seed: string, kit = false, ultra?: UltraRuleId[]): BattleOutcome {
   const party = structuredClone(playerTeam);
   const battle = createBattle('trainer', structuredClone(enemyTeam), 0, party[0]!.uid, { classId: 'sim', name: 'Sim', leaderId: null });
   battle.ai = enemyAi;
   const streams = hashSeed(seed);
   const ctx: BattleContext = { content, battle, party, inventory: kit ? fullKit(content) : {}, rng: new Rng(streams), captureRng: new Rng(hashSeed(`${seed}#capture`)), catchMultiplier: 1 };
   const choices = new Rng(hashSeed(`${seed}#player`));
+  // Beta 0.7 U1: with Ultra Rules the battle is opened the way the game opens it (entry stage changes, Devour), so each rule can be measured.
+  if (ultra) {
+    battle.ultra = ultra;
+    startBattle(ctx);
+  }
   while (!battle.outcome && battle.turn <= MAX_TURNS) {
     if (battle.needsSwitch) {
       resolveTurn(ctx, { kind: 'switch', partyIndex: party.findIndex((p) => p.hp > 0) });

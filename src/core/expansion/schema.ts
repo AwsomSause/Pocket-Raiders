@@ -8,6 +8,7 @@ import { CanonStateSchema } from './canonSpaces';
 import { TrackStateSchema } from './track';
 import { RescueStateSchema } from '../evil/rescueSchema';
 import { GrandArcStateSchema } from '../grandArc/schema';
+import { UltraRunStateSchema } from '../ultra/schema';
 import { StandWithStateSchema } from '../arc/standWithSchema';
 import { RivalOverhaulStateSchema } from '../rivals/overhaulSchema';
 import { BlessingStateSchema } from '../blessings';
@@ -43,6 +44,8 @@ export const ExpansionSettingsSchema = z.object({
   rewinds: z.boolean().default(false),
   /** Legendary Blessings (Beta 0.7): each run opens with one Legendary's blessing. Off until the 0.7 balance pass. */
   blessingsEnabled: z.boolean().default(false),
+  /** Beta 0.7 U1 Ultra Beast Incursions: off until the 0.7 balance pass. Read when a run starts. */
+  ultraBeastsEnabled: z.boolean().default(false),
   /** Beta 0.7 S1 Second Chance: the percent chance a run-ending loss is turned into a revive, once per run (0 = off). Read when a run starts. */
   secondChancePct: z.number().min(0).max(100).default(5),
   /** H1 heated-moment moves (BALANCE 6): the Hyper slot move needs the conditions, a 6% roll and the per-region/per-run caps. Read when a run starts. */
@@ -110,6 +113,8 @@ export const ExpansionRunSchema = z.object({
   rewind: RewindStateSchema.optional(),
   /** Camp scenes: the last player Pokémon to faint and the encounter count then (cleared by a night's rest). */
   lastFaint: z.object({ uid: z.string(), at: z.number().int().min(0) }).optional(),
+  /** Beta 0.7 U1 Ultra Beast Incursions (core/ultra/run.ts). Present only when the setting was on at run start. No save bump: old runs have none. */
+  ultra: UltraRunStateSchema.optional(),
   /** B7: the Pokémon (uids) registered at the League door. Only these are ever countered; a swapped-in Pokémon is unseen. `swapped` = the one swap is used. */
   league: z.object({ registered: z.array(z.string()), swapped: z.boolean().default(false) }).optional(),
   /** Beta 0.7 Node Event Menus (core/nodeMenu): present only in runs started with the setting on. No save bump. */

@@ -6,6 +6,7 @@ import { NATURE_IDS } from './natures';
 import { z } from 'zod';
 import { ANIME_LOOKS } from './animeLooks';
 import { GRADES as PROMPT_GRADES } from './interaction/prompt';
+import { UltraRuleIdSchema } from './ultra/beasts';
 import { SpectacleConfigSchema } from './battle/spectacleConfig';
 import { W1ConfigSchema } from './battle/w1Rules';
 import { TypeRulesSchema, DEFAULT_TYPE_RULES } from './battle/typeRulesConfig';
@@ -3163,6 +3164,8 @@ export type EventEffect = z.infer<typeof EventEffectSchema>;
  * `foeAsleep`: the foe's Pokémon start asleep. `reversed`: your last conscious Pokémon leads. `stages`: both sides start with these stat stages.
  */
 export const EventRuleSchema = z.object({
+  /** Beta 0.7 U1: an Ultra Beast's rule holds in this fight (home-world fights), for both sides. */
+  ultra: UltraRuleIdSchema.optional(),
   /** A duel: your first conscious Pokémon of this type leads (Samurai face-off). */
   leadType: TypeNameSchema.optional(),
   /** The foe's level equals your lead's level (Samurai face-off). */
@@ -3274,6 +3277,10 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     look: z.enum(ANIME_LOOKS).optional(),
     /** Beta 0.6: a named special Pokémon (dossier id, e.g. sv.rocket.roadblock) is the foe, so it fights with its signature trait. */
     special: z.string().optional(),
+    /** Beta 0.7 U1: special rules for this wild fight (the Ultra Rule of an Ultra Beast's home world). */
+    rule: EventRuleSchema.optional(),
+    /** Beta 0.7 U1: Ultra Aura: every foe starts with +1 to all its stats. */
+    aura: z.boolean().optional(),
     win: z.array(EventEffectSchema).default([]),
   }),
   z.object({

@@ -30,6 +30,8 @@ import type { BoostStat, Content, ItemEffect, Move, PowerRule, Semi, SideMove, S
 import { catchProbability, resolveCatchRoll } from '../capture';
 import { styleProbability, styleProblem, type StyleInput } from '../captureStyles';
 import { applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem, lastStandItemId } from '../items';
+import * as Ultra from '../ultra/rules';
+import type { UltraRuleId } from '../ultra/beasts';
 import { abilityOf, calcStats, createPokemon, getSpecies, maxHp } from '../pokemon';
 import { rallyStages } from './rally';
 import { storyHype, storyNoCrit } from '../expansion/storyTraits';
@@ -1001,6 +1003,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
     recordFaints(ctx, playerC, enemy, events);
   }
 
+  if (!battle.outcome) ultraEndOfTurn(ctx, [playerC, enemy], events);
   if (spec) spectacleEndOfTurn(ctx, spec, action, events);
 
   // Hyper moments that come from how the turn went (Hung In There, a bond that shakes off a status).
@@ -1701,6 +1704,12 @@ function useItemInBattle(ctx: BattleContext, itemId: string, targetIndex: number
 
 /** The ball's catch multiplier once its condition (Level, Lure, Quick Ball ...) is counted. */
 export function ballBonus(ctx: BattleContext, effect: Extract<ItemEffect, { kind: 'catch' }>, enemy: PokemonInstance, species: Species): number {
+  const bonus = ballBonusBase(ctx, effect, enemy, species);
+  // Beta 0.7 U1: with Ultra Beast Incursions on, ordinary balls work at a tenth on an Ultra Beast; only a Beast Ball catches it at the normal rate.
+  return ctx.battle.ultra && effect.rule !== 'beast' && isUltraBeast(species.id) ? bonus / 10 : bonus;
+}
+
+function ballBonusBase(ctx: BattleContext, effect: Extract<ItemEffect, { kind: 'catch' }>, enemy: PokemonInstance, species: Species): number {
   const base = effect.multiplier;
   const mine = ctx.party[ctx.battle.activeIndex];
   const water = species.types.includes('water');
@@ -1725,7 +1734,7 @@ export function ballBonus(ctx: BattleContext, effect: Extract<ItemEffect, { kind
     case 'quick': return ctx.battle.turn === 1 ? base : 1;
     case 'dusk': return species.types.includes('dark') || species.types.includes('ghost') ? base : 1;
     case 'dream': return enemy.status?.id === 'slp' ? base : 1;
-    case 'beast': return species.tags.includes('legendary') || species.tags.includes('mythical') ? base : 0.1;
+    case 'beast': return species.tags.includes('legendary') || species.tags.includes('mythical') || isUltraBeast(species.id) ? base : 0.1;
     case 'safari': return enemy.hp >= maxHp(ctx.content, enemy) ? base : 1;
     case 'sport': return species.types.includes('bug') || species.types.includes('fighting') ? base : 1;
     case 'flyer': return species.types.includes('flying') ? base : 1;
@@ -1778,10 +1787,13 @@ function enterField(ctx: BattleContext, holder: Held.Holder): void {
   // Legendary roles: a Legendary or Mythical enters with one stage for its role (legendary/roles.ts).
   const boost = roleEntryBoost(ctx.content, holder.mon.speciesId);
   if (boost) holder.stages[boost.stat] = clampStage(holder.stages[boost.stat] + boost.stages);
+  ultraEnter(ctx, holder);
 }
 
 function leaveField(ctx: BattleContext, mon: PokemonInstance): void {
   delete ctx.battle.held?.used[`entered:${mon.uid}`];
+  // Host: a possessed Pokémon that leaves the field is freed.
+  ctx.battle.storyEffects = ctx.battle.storyEffects.filter((e) => e !== `ultra-host:${mon.uid}`);
   Held.onSwitchOut(ctx, mon);
 }
 
@@ -2460,7 +2472,7 @@ function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
 
 function decideOrder(ctx: BattleContext, rng: Rng, player: Combatant, pMove: Move, enemy: Combatant, eMove: Move): Side {
   // Trick Room: slower Pokémon move first within a priority.
-  const trickSign = ctx.battle.field.trickRoom > 0 ? -1 : 1;
+  const trickSign = (ctx.battle.field.trickRoom > 0 ? -1 : 1) * (Ultra.reversesOrder(ultraRulesOf(ctx.battle)) ? -1 : 1);
   const quickDraw = (c: Combatant, m: Move): number => (abilityIn(ctx, c) === 'quick-draw' && m.category !== 'status' && rng.chance(0.3) ? 0.2 : 0);
   // Custap Berry moves first and Lagging Tail last within the same priority.
   const result = compareTurnOrder(
@@ -3961,6 +3973,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       const userStatus = user.mon.status?.id;
       crit = rng.chance(scaleCrit(Math.min(1, critChance(content.ruleset, move.critStage + Held.critStageBonus(ctx, user) + (userAbility === 'super-luck' ? 1 : 0) + (user.vol.focusEnergy ? 2 : 0) + (user.vol.momentCrit ?? 0)) * (user.side === 'player' ? critChancePerk(ctx.perks) : 1) + (user.side === 'player' ? critChanceBonusPerk(ctx.perks) : 0) + (user.side === 'enemy' && ctx.battle.eventRule?.beginnersLuck ? 0.2 : 0) + focusCrit(content, user.mon) + (user.side === 'player' ? growthCritBonus(content.balance.overhaulGrowth, user.mon) : 0) + (user.side === 'enemy' && classPassiveOf(content, ctx.battle)?.kind === 'crit' ? classPassiveOf(content, ctx.battle)!.amount : 0)), content.balance.critScaling.softCap, content.balance.critScaling.excessFactor));
       if (fx.alwaysCrit || user.vol.laserFocus) crit = true;
+      if (!crit && Ultra.forcesCrit(ultraRulesOf(ctx.battle), target.mon.hp >= maxHp(content, target.mon))) crit = true;
       if (userAbility === 'merciless' && target.mon.status?.id === 'psn') crit = true;
       if (foeAbility === 'battle-armor' || foeAbility === 'shell-armor' || ctx.battle.sideEffects[target.side].luckyChant > 0) crit = false;
       if (storyNoCrit(ctx.battle.extra.storyTraits, user.mon.uid)) crit = false;
@@ -4132,6 +4145,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (target.protected && (move.flags.includes('zmove') || move.flags.includes('max') || userAbility === 'piercing-drill')) damage = Math.max(1, Math.floor(damage / 4));
     }
     damage = spectacleDamage(ctx, user, target, move, damage, events);
+    damage = ultraDamage(ctx, target, move, damage);
     damage = Held.survive(ctx, target, damage, events as Held.HeldEvent[]);
     damage = galarHold(ctx, user, target, damage);
     if (fx.leaveOne || target.vol.endure || ((ctx.battle.pacifist || ctx.battle.eventRule?.spare || ctx.battle.eventRule?.contest) && target.side === 'enemy')) damage = Math.min(damage, target.mon.hp - 1);
@@ -4187,6 +4201,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (hyper) events.push(hyper);
     if (stand) lastStandMoment(ctx, target, events);
     spectacleAfterHit(ctx, user, target, lost, effectiveness, events);
+    ultraAfterHit(ctx, user, target, move, lost, events);
     // Eye of the Gale: surviving a super-effective hit raises Speed.
     if (effectiveness > 1 && target.mon.hp > 0 && target.stages.spe < 6 && abilityIn(ctx, target) === 'eye-of-the-gale') {
       announce(target, 'eye-of-the-gale', events);
@@ -6285,6 +6300,7 @@ function applyStageChange(ctx: BattleContext, c: Combatant, stat: BoostStat, sta
   if (ability === 'contrary') stages = -stages;
   if (ctx.battle.eventRule?.contrary) stages = -stages;
   if (ability === 'simple') stages *= 2;
+  stages *= Ultra.stageScale(ultraRulesOf(ctx.battle));
   if (source && stages < 0 && ability) {
     const guard = DROP_GUARD[ability];
     if (guard === 'all' || guard === stat) {
@@ -6705,6 +6721,7 @@ export function startBattle(ctx: BattleContext): BattleEvent[] {
   if (ctx.battle.totem) totemAura(ctx, events);
   championsAura(ctx, events);
   eventStartRules(ctx, events);
+  ultraBattleStart(ctx);
   overhaulFieldStart(ctx, events);
   trapBeforeBattle(ctx, events);
   const passive = classPassiveOf(ctx.content, ctx.battle);
@@ -7133,4 +7150,87 @@ function smashArena(ctx: BattleContext, events: BattleEvent[]): void {
   const { battle } = ctx;
   const foe: Combatant = { side: 'enemy', mon: currentEnemy(battle), stages: battle.enemyStages, vol: battle.enemyVolatile, flinched: false, protected: false };
   smashArenaOn(ctx, ctx.party[battle.activeIndex]!, [foe], events);
+}
+
+// ---------- Beta 0.7 U1: Ultra Rules (the numbers are in core/ultra/rules.ts; both sides get every rule alike) ----------
+
+/** The Ultra Rules in force: the stage's (Tear, held Beast) plus a home-world fight's own. Undefined when none. */
+function ultraRulesOf(battle: BattleState): readonly UltraRuleId[] | undefined {
+  const stage = battle.ultra ?? [];
+  const own = battle.eventRule?.ultra;
+  if (!stage.length && !own) return undefined;
+  return own && !stage.includes(own) ? [...stage, own] : stage;
+}
+
+/** A Pokémon comes onto the field: entry stage changes (Host: leads only, Untouchable: everyone). */
+function ultraEnter(ctx: BattleContext, holder: Held.Holder): void {
+  const rules = ultraRulesOf(ctx.battle);
+  if (!rules) return;
+  const lead = ctx.battle.turn <= 1;
+  for (const [stat, n] of Object.entries(Ultra.entryStages(rules, lead)) as [BoostStat, number][]) holder.stages[stat] = clampStage(holder.stages[stat] + n);
+  if (lead && rules.includes('host')) ctx.battle.storyEffects.push(`ultra-host:${holder.mon.uid}`);
+}
+
+/** Battle start: Devour's foes arrive with no held items. */
+function ultraBattleStart(ctx: BattleContext): void {
+  if (!Ultra.devours(ultraRulesOf(ctx.battle))) return;
+  for (const foe of ctx.battle.enemyTeam) delete foe.held;
+}
+
+/** One hit's damage under the rules: Flex, Slow Burn, Finale and Many as One change it; Slow Burn caps early hits. */
+function ultraDamage(ctx: BattleContext, target: Combatant, move: Move, damage: number): number {
+  const rules = ultraRulesOf(ctx.battle);
+  if (!rules) return damage;
+  const side = target.side === 'enemy' ? ctx.battle.enemyTeam : ctx.party;
+  const behind = side.filter((m) => m.hp > 0 && m.uid !== target.mon.uid).length;
+  const mult = Ultra.damageMultiplier(rules, { special: move.category === 'special', power: move.power ?? 0, turn: ctx.battle.turn, healthyBehind: behind });
+  let out = mult === 1 ? damage : Math.max(1, Math.floor(damage * mult));
+  const cap = Ultra.damageCap(rules, ctx.battle.turn, maxHp(ctx.content, target.mon));
+  if (cap !== null) out = Math.min(out, cap);
+  return out;
+}
+
+/** After a hit lands: Flex heals, Finale recoils and bursts, Beast Boost for All raises the knocker-out's best stat. */
+function ultraAfterHit(ctx: BattleContext, user: Combatant, target: Combatant, move: Move, lost: number, events: BattleEvent[]): void {
+  const rules = ultraRulesOf(ctx.battle);
+  if (!rules || user === target) return;
+  const userMax = maxHp(ctx.content, user.mon);
+  const heal = Ultra.contactHeal(rules, move.flags.includes('contact'), lost);
+  if (heal > 0 && user.mon.hp > 0) {
+    user.mon.hp = Math.min(userMax, user.mon.hp + heal);
+    events.push({ type: 'heal', side: user.side, amount: heal, hpAfter: user.mon.hp });
+  }
+  const recoil = Ultra.finaleRecoil(rules, move.power ?? 0, lost);
+  if (recoil > 0 && user.mon.hp > 0) {
+    user.mon.hp = Math.max(0, user.mon.hp - recoil);
+    events.push({ type: 'recoil', side: user.side, amount: recoil, hpAfter: user.mon.hp });
+  }
+  if (target.mon.hp > 0) return;
+  const burst = Ultra.faintBurstShare(rules);
+  if (burst > 0 && user.mon.hp > 0) {
+    const amount = Math.max(1, Math.floor(userMax * burst));
+    user.mon.hp = Math.max(0, user.mon.hp - amount);
+    events.push({ type: 'raid', tone: 'info', text: 'Finale! The fallen bursts.' });
+    events.push({ type: 'damage', side: user.side, amount, hpAfter: user.mon.hp, effectiveness: 1, crit: false });
+  }
+  if (Ultra.boostsOnKo(rules) && user.mon.hp > 0) {
+    const stats = calcStats(ctx.content, user.mon);
+    const stat = (['atk', 'def', 'spa', 'spd', 'spe'] as const).reduce((best, s) => (stats[s] > stats[best] ? s : best));
+    applyStageChange(ctx, user, stat, 1, events);
+  }
+}
+
+/** End of turn: Host's possessed leads and Overload's boosted Pokémon lose HP. */
+function ultraEndOfTurn(ctx: BattleContext, actives: Combatant[], events: BattleEvent[]): void {
+  const rules = ultraRulesOf(ctx.battle);
+  if (!rules) return;
+  for (const c of actives) {
+    if (c.mon.hp <= 0) continue;
+    const boosted = (['atk', 'def', 'spa', 'spd', 'spe', 'acc', 'eva'] as const).some((s) => c.stages[s] > 0);
+    const share = Ultra.endOfTurnLoss(rules, { possessed: ctx.battle.storyEffects.includes(`ultra-host:${c.mon.uid}`), boosted });
+    if (share <= 0) continue;
+    const amount = Math.max(1, Math.floor(maxHp(ctx.content, c.mon) * share));
+    c.mon.hp = Math.max(0, c.mon.hp - amount);
+    events.push({ type: 'damage', side: c.side, amount, hpAfter: c.mon.hp, effectiveness: 1, crit: false });
+  }
 }
