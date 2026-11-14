@@ -183,3 +183,5 @@ Dataset: `src/data/moveTargets.json` (which moves hit both foes, everyone, the p
 
 ## Evil Team cast sprites, Story Stuff pack (2026-11-14)
 `public/assets/images/bosses/cast-*.png` (80x80 trainer sprites, one per name) were supplied by the director (Kice) in `Story Stuff.zip`, copied unchanged and renamed: aldith, anthea, attila, barret, brodie, buck, butch, cassidy, concordia, cozmo, dj-mary, domino, hun, hunter-j, kurt, madame-boss, mairin, marauder, matori, mohn, namba, schwarz, sebastian, sird, stern, tyson, weiss. Wired in `src/core/expansion/cast/sprites.ts`; Butch is also Rocket Remnants' Executive sprite. Domino, Kurt and Mairin are not in the cast list yet. Not copied: Giratina Cultist frames, Mysterious_Grunt, the Plasma Sages sheet (jpg), Animations.
+
+`public/assets/images/bosses/cast-sage.png` (2026-11-14): the first Sage cut out of Kice's `Plasma Sages.jpg` sheet (white background removed, cropped and placed on an 80x80 canvas). Used for all Team Plasma Sages (Gorm, Bronius, Ryoku) and Sage Zinzolin's rank slot.

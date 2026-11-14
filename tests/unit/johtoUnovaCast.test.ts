@@ -32,7 +32,7 @@ describe('Johto and Unova cast meetings', () => {
   });
   it('the three Sages share one sprite, and the art file exists', () => {
     expect(new Set(['gorm', 'bronius', 'ryoku'].map((n) => CAST_SPRITES[`sc.plasma.${n}`]![0])).size).toBe(1);
-    expect(existsSync('public/assets/images/trainer/pr/zinzolin.png')).toBe(true);
+    expect(existsSync('public/assets/images/bosses/cast-sage.png')).toBe(true);
   });
   it('sprite table only names cast ids', () => {
     for (const id of Object.keys(CAST_SPRITES)) expect(ids.has(id)).toBe(true);
