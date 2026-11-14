@@ -35,6 +35,7 @@ import type { UltraRuleId } from '../ultra/beasts';
 import { abilityOf, calcStats, createPokemon, getSpecies, maxHp } from '../pokemon';
 import { rallyStages } from './rally';
 import { storyHype, storyNoCrit, storyOldHabits } from '../expansion/storyTraits';
+import { KINDNESS_USES } from '../episodes/poliPond';
 import { HOUSE_WINS_STAGES, LIGHTS_OUT_ACCURACY, LIGHTS_OUT_TURNS, housePending, isHousePair, takeHousePending, traitDoubleEntry, traitDrill, traitFeedHeal, traitFoodKnocked, traitLightsOut, traitOverhears, traitPayout, traitSeatMessage, traitTakesBerry, GRID_TIE_SHARE, traitBloodScent, traitGridTie, traitLingering, traitOnSchedule, traitSubtraction, traitUndertow, traitUpdraft } from '../expansion/traits';
 import { ACCESSORY_TORN_MESSAGE, SPIRITLESS_MESSAGE, variantBlocksForcedSwitch, variantBlocksMind, variantBlocksStage, variantBlocksStatus, variantEndTurnLoss, variantAccessory, variantAccessoryTorn, variantCheer, variantEndTurnStages, variantGimmickTick, variantGadget, variantIncoming, variantItemMove, variantLosesTurn, variantNeverMisses, variantOnEntry, variantOutgoing, variantPriorityBonus, variantSnagRefuses, variantTagCall } from '../expansion/variantLines';
 import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
@@ -1772,6 +1773,12 @@ function switchIn(ctx: BattleContext, partyIndex: number, events: BattleEvent[])
   const outgoing = ctx.party[battle.activeIndex];
   if (outgoing) leaveField(ctx, outgoing);
   const mon = ctx.party[partyIndex]!;
+  // Poli-Pond (Kindness): when its bearer steps out of the fight alive, whoever steps in gets +1 priority on its first move (twice a battle).
+  battle.storyEffects = battle.storyEffects.filter((e) => !e.startsWith('kind:'));
+  if (outgoing && outgoing.hp > 0 && outgoing.uid !== mon.uid && abilityOf(ctx.content, outgoing) === 'kindness' && battle.storyEffects.filter((e) => e === 'kind-used').length < KINDNESS_USES) {
+    battle.storyEffects.push('kind-used', `kind:${mon.uid}`);
+    events.push({ type: 'raid', tone: 'info', text: `Kindness: ${nameOf(ctx, outgoing)} makes room, and ${nameOf(ctx, mon)} moves first!` });
+  }
   // Pivot: the Pokémon sent in right after a U-turn-style exit gets its edge for its first turn out.
   if (battle.growthMarks?.length) {
     const pivoted = battle.growthMarks.includes('pivoted');
@@ -2497,6 +2504,7 @@ function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
   if (move.category === 'status' && !c.vol.movesUsed.includes(move.id) && Held.hasHook(ctx, c.mon, c.side, 'coolShades')) return move.priority + 1;
   if (ability === 'silent-cloak' && !c.vol.cloakUsed) return move.priority + 1;
   if ((ability === 'champions-fury' || ability === 'champions-entrance') && !c.vol.furyUsed && move.category !== 'status') return move.priority + 1;
+  if (c.side === 'player' && c.vol.movesUsed.length === 0 && ctx.battle.storyEffects.includes(`kind:${c.mon.uid}`)) return move.priority + 1;
   if (ability === 'gale-wings' && move.type === 'flying' && c.mon.hp >= calcStats(ctx.content, c.mon).hp) return move.priority + 1;
   if (ability === 'triage' && (move.effects.heal || move.effects.drain)) return move.priority + 3;
   if (ability === 'mycelium-might' && move.category === 'status') return move.priority - 0.5;

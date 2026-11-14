@@ -1578,5 +1578,10 @@
   "id": "champions-entrance",
   "name": "Champion's Entrance",
   "description": "When sent out, a random stat rises by two stages (never the same stat twice running, and never more than +4 in total per battle). Its first attack after entering goes first."
+ },
+ {
+  "id": "kindness",
+  "name": "Kindness",
+  "description": "When its bearer steps out of a fight, the Pokémon that comes in moves first with its first move. Twice per battle."
  }
 ]
