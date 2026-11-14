@@ -341,7 +341,7 @@ export interface NewRunOptions {
   /** Story Run: the player's name, pronouns and Look from the prologue (profile.story.protagonist). */
   protagonist?: { look: string; name: string; pronouns: string | PronounSet; backstory?: string };
   /** Beta 0.6: which expansion settings were on at run start (settings.expansion). Each flag is stored in `run.expansion` once and never changes. */
-  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean; grandArc?: boolean; worldTracks?: boolean; eventsDensity?: 'low' | 'normal' | 'full'; climaxCut?: 'standard' | 'extended' };
+  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean; grandArc?: boolean; worldTracks?: boolean; eventsDensity?: 'low' | 'normal' | 'full'; climaxCut?: 'standard' | 'extended'; storyTraits?: boolean };
 }
 
 export function createRun(content: Content, opts: NewRunOptions): RunState {
@@ -444,7 +444,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
   }
   if (opts.expansion) {
     const e = opts.expansion;
-    const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.kantoCanon ? { canon: { flags: [], completed: [], menus: {} } } : {}), ...(e.worldTracks ? { tracks: true } : {}), ...(e.eventsDensity ? { density: e.eventsDensity } : {}), ...(e.climaxCut === 'extended' ? { climaxCut: 'extended' as const } : {}) };
+    const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.kantoCanon ? { canon: { flags: [], completed: [], menus: {} } } : {}), ...(e.worldTracks ? { tracks: true } : {}), ...(e.eventsDensity ? { density: e.eventsDensity } : {}), ...(e.climaxCut === 'extended' ? { climaxCut: 'extended' as const } : {}), ...(e.storyTraits ? { storyTraits: true } : {}) };
     if (Object.keys(flags).length > 0) run.expansion = { ...run.expansion, ...flags };
     setClimaxCut(run, e.climaxCut);
     if (e.grandArc) startGrandArc(run);

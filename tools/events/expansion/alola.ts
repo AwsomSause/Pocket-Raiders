@@ -14,7 +14,7 @@ const grunt = (name: string, size = 2, lv = 0, win: Json[] = []) => trainer(name
 export const XE_ALOLA_EVENTS: Json[] = [
   ev('xe.alola.yo', 'Yo', G, { stop: 'event', rarity: 'uncommon', minStage: 1, requires: base, cast: ['trainer.biker'], tint: '#2a1a30', effect: 'none' } as never,
     'Three Skull Grunts are blocking a bus stop. Tupp: "Yo, yo, yo! This stop\'s closed, \'cause we got exposed, to the, uh—" Rapp: "Don\'t." Tupp: "—to the road!" Zipp: "Road!" Rapp: "We\'re blocking a bus stop on an island with one bus. It comes Tuesdays. It\'s Thursday."', [
-      ch('Battle them', fight('They go one after another. Each time one falls, Zipp announces the next is "hyped".', grunt('Skull Trio', 3, 0, [flag('alola-trio-beaten')])), heat(-1)),
+      ch('Battle them', fight('They go one after another. Each time one falls, Zipp announces the next is "hyped".', trainer('Skull Trio', { cls: 'roughneck', size: 3, special: 'st.hype-man', win: [flag('alola-trio-beaten')] })), heat(-1)),
       ch('Rap back', out('Three beats, and you land the last one. Tupp: "Okay that was actually—" Rapp: "Better than yours. Say it." Tupp: "Different than mine." They move.', heat(-2), flag('alola-bars')), { chance: 0.7, fail: out('Zipp: "Road!" The bus does not come. You leave with a pat on the back for trying.', flag('alola-bars-tried')) }),
       ch('Wait for the bus', out('It is Thursday. No bus comes. At dusk Rapp shares her malasada without comment.', rest(), heal(0.2))),
     ]),
@@ -45,7 +45,7 @@ export const XE_ALOLA_EVENTS: Json[] = [
   ev('xe.alola.consultant', 'The Consultant', G, { stop: 'event', rarity: 'rare', minStage: 4, requires: [...base, { kind: 'track', atLeast: 3 }], cast: ['trainer.gentleman'], tint: '#1c1c24', effect: 'none' } as never,
     'A tall man in a dark coat among all the white. "You are the trainer from the reports. Kanto, Johto, Hoenn, further. You have met my colleagues. I will not apologize for them. I will say that I am not like them, and I will understand if you find the distinction thin. I advise the President on the Conservation Hold. It preserves a Pokémon exactly as it is. No pain. No change. She finds that consoling." And you? "I have been asked not to mention a certain small island to her. I have been asked. You have been asked nothing at all."', [
       ch('"Which island?"', out('"I could not possibly say that it is north of Akala and has a great many beans."', flag('alola-pelago-known'), flag('cipher-seen-eldes'))),
-      ch('Challenge him', fight('"I will not use my strongest. That is not contempt. I am simply tired of winning for them."', grunt('Eldes', 3, 1, [flag('alola-eldes-beaten'), flag('cipher-seen-eldes')]))),
+      ch('Challenge him', fight('"I will not use my strongest. That is not contempt. I am simply tired of winning for them."', trainer('Eldes', { cls: 'gentleman', size: 3, lv: 1, special: 'st.reluctant-hand', win: [flag('alola-eldes-beaten'), flag('cipher-seen-eldes')] }))),
       ch('Leave', leave('He nods as if you had said something sensible.')),
     ]),
   ev('xe.alola.recon', 'Recon', G, { stop: 'event', rarity: 'rare', minStage: 5, requires: [...base, { kind: 'track', atLeast: 4 }], cast: ['trainer.psychic_m'], tint: '#102030', effect: 'glint' } as never,

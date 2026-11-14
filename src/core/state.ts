@@ -22,6 +22,7 @@ import { PartyLifeStateSchema, createPartyLife } from './partyLife/schema';
 import { freshHyperBattle } from './battle/hyper';
 import { SpectacleBattleSchema } from './battle/spectacle';
 import { TraitsSchema, type Traits } from './expansion/traits';
+import { StoryTraitsSchema, type StoryTraits } from './expansion/storyTraits';
 import { TimedStageSchema, VariantsSchema, type TimedStage, type Variants } from './expansion/variantLines';
 import { ArenaSchema, SkillInputSchema } from './battle/w1Play';
 
@@ -556,6 +557,7 @@ export const freshExtra = () => ({
   variants: {} as Variants,
   variantTimed: [] as TimedStage[],
   traits: {} as Traits,
+  storyTraits: {} as StoryTraits,
   /** Lights Out: turns of darkness left (accuracy -10% for both sides). */
   darkTurns: 0,
   /** Payout: its holder knocked out a foe this battle, so the prize money is doubled. */
@@ -786,6 +788,8 @@ export const BattleStateSchema = z.object({
     variantTimed: z.array(TimedStageSchema).default([]),
     /** Beta 0.6 signature traits (core/expansion/traits.ts): uid -> trait and counters. */
     traits: TraitsSchema,
+    /** Beta 0.7 team-wide story traits (core/expansion/storyTraits.ts): uid -> trait. Off unless the run's `storyTraits` setting is on. */
+    storyTraits: StoryTraitsSchema,
     darkTurns: z.number().int().min(0).default(0),
     payout: z.boolean().default(false),
     /** Galar big-battle moments already used (evolve-and-survive per Pokémon, the thread, the cheat) and ones pending this hit (galarMoments.ts). */
