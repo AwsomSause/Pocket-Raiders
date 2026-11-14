@@ -80,6 +80,7 @@ import { onInputAction, type InputAction } from '../ui/input';
 import { bagRow, partyRows, Picker } from '../ui/partyPanel';
 import { itemCard, itemFooter } from '../core/itemPreview';
 import { runHealMultiplier } from '../core/run';
+import { rewindTurnsAvailable } from '../core/rewind';
 import { partyPreviews, quickSummaryText } from '../ui/itemScreen';
 import { animationStrength, animationTimeScale, animSettingsFrom } from '../core/accessibility';
 import { transformAnimId } from '../core/presentation/transformAnims';
@@ -3173,6 +3174,10 @@ export class BattleScene extends Phaser.Scene {
     const lastResortOffered = lastResortOffer(content, this.run, this.activeMon());
     const lastResortAt = lastResortOffered ? options.length : -1;
     if (lastResortAt >= 0) options.push({ label: "Mentor ♥" });
+    // Beta 0.7 L3: the Time Keeper's rewind (once per stage, up to 5 turns back).
+    const rewindMax = this.duo ? 0 : rewindTurnsAvailable(content, this.run);
+    const rewindAt = rewindMax > 0 ? options.length : -1;
+    if (rewindAt >= 0) options.push({ label: 'Rewind' });
     // A combined style (Wii channel grid) puts the moves in place of Fight: picking one opens the move menu and uses it.
     const combined = this.skin?.layout.combined && !this.duo ? this.combinedMoves() : [];
     const k = combined.length;
@@ -3210,6 +3215,7 @@ export class BattleScene extends Phaser.Scene {
         } else if (i === smashAt) this.submit({ kind: 'arena' });
         else if (i === shiftAt) this.submit({ kind: 'shift' });
         else if (i === scanAt) void this.scanFoe();
+        else if (i === rewindAt) this.showRewindMenu(rewindMax);
         else if (i === lastResortAt) {
           void this.playLastResort();
         } else if (i >= hotbarAt && i < hotbarAt + hotbar.length) this.submit({ kind: 'item', itemId: hotbar[i - hotbarAt]! });
@@ -3273,6 +3279,30 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** The three raid cheers: Offense, Defense, Healing (each costs one of three cheers and the turn). */
+  /** L3 Rewinds: pick how many turns to go back (the state comes back exactly; the turns then play out afresh). */
+  private showRewindMenu(most: number): void {
+    this.clearMenus();
+    this.message.setText('The hourglass turns... How far back? (Once this stage.)');
+    const options = Array.from({ length: most }, (_, i) => ({ label: `${i + 1} turn${i ? 's' : ''}` }));
+    this.menu = new Menu(this, {
+      x: COMMAND_X + 24,
+      y: MESSAGE_Y + 26,
+      options,
+      columns: options.length > 4 ? 3 : 2,
+      itemWidth: options.length > 4 ? 114 : 170,
+      itemHeight: options.length > 4 ? 36 : 50,
+      fontSize: options.length > 4 ? 20 : 26,
+      color: this.btnText,
+      glass: { paint: this.skin?.pill, tints: options.map(() => 0x2c6ad8), motion: this.motion },
+      onSelect: (i) => {
+        if (!services().session.rewindBattle(i + 1)) return this.showRootMenu();
+        this.clearMenus();
+        void this.say(`Time bends... the battle goes back ${i + 1} turn${i ? 's' : ''}.`).then(() => this.scene.start(sceneForRun(services().session.run!)));
+      },
+      onBack: () => this.showRootMenu(),
+    });
+  }
+
   private showCheerMenu(): void {
     const battle = this.run.battle!;
     const content = services().session.content;
@@ -3720,6 +3750,11 @@ export class BattleScene extends Phaser.Scene {
     }
     if (this.stadium && (result.wiped || result.defeated)) await this.stadium.interview('post', false);
     if (result.wiped || result.defeated) void this.trainerIn().then((a) => a?.play('defeat'));
+    if (result.rewound) {
+      await this.say(`Your team fell... but the Time Keeper remembers. The battle goes back ${result.rewound} turn${result.rewound > 1 ? 's' : ''}!`);
+      this.scene.start(sceneForRun(result.run));
+      return;
+    }
     if (result.wiped) {
       await this.say(result.run.phase === 'battle' ? 'The VS Recorder rewinds the tape... the battle starts again!' : result.run.rules.modeId === 'adventure' ? 'Your party fainted... you return to the start of the stage, healed.' : 'Death-Block! You return to the start of the stage with your party healed.');
       this.scene.start(sceneForRun(result.run));

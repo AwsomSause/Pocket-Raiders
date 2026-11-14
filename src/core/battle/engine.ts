@@ -37,6 +37,7 @@ import { HOUSE_WINS_STAGES, LIGHTS_OUT_ACCURACY, LIGHTS_OUT_TURNS, housePending,
 import { ACCESSORY_TORN_MESSAGE, SPIRITLESS_MESSAGE, variantBlocksForcedSwitch, variantBlocksMind, variantBlocksStage, variantBlocksStatus, variantEndTurnLoss, variantAccessory, variantAccessoryTorn, variantCheer, variantEndTurnStages, variantGimmickTick, variantGadget, variantIncoming, variantItemMove, variantLosesTurn, variantNeverMisses, variantOnEntry, variantOutgoing, variantPriorityBonus, variantSnagRefuses, variantTagCall } from '../expansion/variantLines';
 import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
 import type { Rng } from '../rng';
+import { fnv1a } from '../expansion/hash';
 import { cooldownKey, hasBattleEffect, markBattleEffect } from '../story/ledger';
 import type { StoryTriggerKind } from '../story/schema';
 import { freshSos, rollSos } from './sos';
@@ -1053,6 +1054,17 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
   const rule = battle.eventRule;
   if (!rule || battle.outcome) return;
   const mine = party?.[battle.activeIndex];
+  if (rule.thinLight && content && battle.turn > 0 && battle.turn % 3 === 0) {
+    // A glimpse: which side is hashed from the battle and turn (no RNG), and it never knocks anything out.
+    const foe = currentEnemy(battle);
+    const onEnemy = (fnv1a(`${foe.uid}::thin-light::${battle.turn}`) & 1) === 1;
+    const target = onEnemy ? foe : mine;
+    if (target && target.hp > 1) {
+      const amount = Math.min(target.hp - 1, Math.max(1, Math.floor(maxHp(content, target) / 8)));
+      target.hp -= amount;
+      events.push({ type: 'raid', tone: 'info', text: 'A glimpse from the far side of the sky strikes!' }, { type: 'damage', side: onEnemy ? 'enemy' : 'player', amount, hpAfter: target.hp, effectiveness: 1, crit: false });
+    }
+  }
   if (rule.cursedHat && mine && mine.hp > 0) {
     const foe = currentEnemy(battle);
     if (foe.hp > 0 && (mine.status || foe.status)) {
