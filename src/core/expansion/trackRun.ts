@@ -25,7 +25,8 @@ export function advanceTrack(run: RunState, regionId: string, input: TrackInput,
 
 /** The effects in force where the player is now. */
 export function trackEffects(content: Content, run: RunState): TrackEffects {
-  const region = currentRegion(content, run).id;
+  const region = run.regionOrder[run.regionIndex]; // an old save may have no current region yet
+  if (!region) return NO_EFFECTS;
   const step = trackStep(run, region);
   return step === 0 ? NO_EFFECTS : trackEffectsFor(region, step, content.balance.expansionTrack);
 }
