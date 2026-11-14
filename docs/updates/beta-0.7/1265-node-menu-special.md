@@ -1,0 +1,10 @@
+# Node Event Menus: special entries (P5-P7)
+
+**Player gets:** with Node Event Menus on, a node's menu can hold four new kinds of card. **Fork**: one choice with two halves (one pays now, the other can pay at the next node). **Linked**: a start card ("Dropped parcel") whose follow-up ("Return the parcel") shows up 1 to 3 columns later in the same stage; miss it and the chance passes. **Escort**: a companion walks with you for 2-3 nodes and pays at the end, but leaves if you keep arriving with fainted Pokémon. **Rival Takes It**: an optional card you skip may be taken by one of your rivals, who fights you 1 level higher next time (once).
+
+**Save:** none. Optional `run.expansion.nodeMenuSpecial` (forks waiting to pay, open follow-ups, the escort, what rivals took, done keys).
+
+**Limits:** 6 forks, 6 linked pairs, 4 escorts (data `src/data/nodeMenuSpecial.json`); no new art (stop-card look). Not in the League. Rival Takes It needs a rival you have met; at most 1 per stage.
+
+**Sim:** `tests/unit/nodeMenuSpecialSim.test.ts`, 12 seeded bot runs that take every special card: 426 menus, about 1 in 5 with a special card (follow-ups included), at most 1 rival spoil per stage. Menus stay at 5 cards max (a special replaces filler micro entries).
+Run length (`npm run sim:node-menus -- 30`, bot skips special cards so rivals take them): menus off 34.8 battles, menus on 36.1 (core alone 36.3). An earlier tuning (+2 levels, 2 per stage) cut runs to 32.2, so Rival Takes It was softened to +1 level, 1 per stage, 20% chance.
