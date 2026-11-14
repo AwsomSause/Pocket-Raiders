@@ -9,7 +9,7 @@ import { nuzlockeCatchProblem } from '../../src/core/nuzlocke';
 import type { RulesChoice } from '../../src/core/rules';
 import { evolvedFormAt } from '../../src/core/encounters';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
-import { buyItem, chooseReward, chooseStarter, createRun, debugHealParty, leaveShop, partyCapacity, releaseLimitReached, resolveDecision, takeTurn, type TurnResult } from '../../src/core/run';
+import { buyItem, chooseReward, chooseStarter, createRun, debugHealParty, leaveShop, partyCapacity, releaseLimitReached, resolveDecision, takeTurn, type NewRunOptions, type TurnResult } from '../../src/core/run';
 import { currentEnemy, type PokemonInstance, type RunState } from '../../src/core/state';
 import { content as defaultContent, toBattle } from './helpers';
 
@@ -26,6 +26,8 @@ export interface AutoplayOptions {
   starterLevel?: number;
   /** Stop after this many actions. */
   steps: number;
+  /** Beta 0.6 expansion settings the run starts with (default: none, the pre-0.6 rules). The game itself starts runs with every one on. */
+  expansion?: NewRunOptions['expansion'];
   /** A smarter player: best-scoring move by type and STAB, potions when low, switching away from a bad matchup, and shopping for potions. */
   smart?: boolean;
   /** S20: a stronger player on top of `smart`: best switch-in, earlier switching and potions, candies to the weakest Pokémon, stat boosters and healing before junk, and revives from the shop. */
@@ -98,7 +100,9 @@ export function step(content: Content, run: RunState, smart = false, strong = fa
         if (smartTurn) return { run: smartTurn.run, turn: smartTurn };
       }
       const damaging = mon.moves.findIndex((m) => m.pp > 0 && (content.moves.get(m.id)!.power ?? 0) > 0);
-      const index = damaging >= 0 ? damaging : mon.moves.findIndex((m) => m.pp > 0);
+      // The Pacifist Challenge refuses an attack while the Pokémon still has a status move: use that one.
+      const peaceful = battle.eventRule?.noAttacks ? mon.moves.findIndex((m) => m.pp > 0 && content.moves.get(m.id)!.category === 'status') : -1;
+      const index = peaceful >= 0 ? peaceful : damaging >= 0 ? damaging : mon.moves.findIndex((m) => m.pp > 0);
       const turn = takeTurn(content, run, { kind: 'move', index });
       return { run: turn.run, turn };
     }
@@ -159,7 +163,7 @@ export function step(content: Content, run: RunState, smart = false, strong = fa
 
 export function autoplay(opts: AutoplayOptions): RunState {
   const content = opts.content ?? defaultContent;
-  let run = createRun(content, { runId: `test-${opts.seed}`, seed: opts.seed, archetypeId: opts.archetypeId ?? 'red', campaignId: opts.campaignId ?? 'full', attributes: opts.attributes, rules: opts.rules });
+  let run = createRun(content, { runId: `test-${opts.seed}`, seed: opts.seed, archetypeId: opts.archetypeId ?? 'red', campaignId: opts.campaignId ?? 'full', attributes: opts.attributes, rules: opts.rules, ...(opts.expansion ? { expansion: opts.expansion } : {}) });
   let maxFoe = 0;
   for (let i = 0; i < opts.steps && run.phase !== 'over'; i++) {
     if (run.battle) for (const e of run.battle.enemyTeam) maxFoe = Math.max(maxFoe, e.level);

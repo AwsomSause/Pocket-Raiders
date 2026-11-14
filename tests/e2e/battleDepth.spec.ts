@@ -51,7 +51,9 @@ async function startBattle(page: Page, doubles: boolean) {
   const ready = () =>
     page.evaluate((dbl) => {
       const b = (window as any).__pkr.game.scene.getScene('Battle');
-      return Boolean(b.playerSprite?.frame && b.enemySprite?.frame && (!dbl || (b.duo?.other.enemy.sprite && b.duo?.other.player.sprite)));
+      // The second Pokémon of a side is the one filled slot in `duo.slots[side]` (the Triple Battle layout, #1225).
+      const other = (side: 'player' | 'enemy') => b.duo?.slots[side].find((o: any) => o?.sprite)?.sprite;
+      return Boolean(b.playerSprite?.frame && b.enemySprite?.frame && (!dbl || (other('enemy') && other('player'))));
     }, doubles);
   for (let i = 0; i < 30 && !(await ready()); i++) {
     await page.keyboard.press('Enter');
@@ -92,7 +94,8 @@ test('doubles: both foes share the enemy platform and both of yours stand in the
   const s = await page.evaluate(() => {
     const b = (window as any).__pkr.game.scene.getScene('Battle');
     const xs = (a: any, o: any) => [a.x, o.x, a.y, o.y];
-    return { e: xs(b.enemySprite, b.duo.other.enemy.sprite), p: xs(b.playerSprite, b.duo.other.player.sprite), masked: Boolean(b.duo.other.player.sprite.mask) };
+    const other = (side: 'player' | 'enemy') => b.duo.slots[side].find((o: any) => o?.sprite).sprite;
+    return { e: xs(b.enemySprite, other('enemy')), p: xs(b.playerSprite, other('player')), masked: Boolean(other('player').mask) };
   });
   for (const x of s.e.slice(0, 2)) {
     expect(x).toBeGreaterThan(456);

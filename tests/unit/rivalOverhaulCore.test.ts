@@ -49,9 +49,11 @@ describe('marks and feelings', () => {
     const r = run();
     const rec = reg(r);
     for (const m of OVERHAUL.marks.names) addMark(rec, m);
-    addMark(rec, OVERHAUL.marks.names[7]!);
+    // Adding the last mark a second time changes nothing (the list grew when Route 22's Rival Token joined it, so "last" is read from the data).
+    const last = OVERHAUL.marks.names.at(-1)!;
+    addMark(rec, last);
     expect(rec.marks).toHaveLength(5);
-    expect(rec.marks.at(-1)).toBe(OVERHAUL.marks.names[7]);
+    expect(rec.marks.at(-1)).toBe(last);
     expect(() => addMark(rec, 'nope')).toThrow();
   });
   it('applies the change table and clamps to 0..10', () => {

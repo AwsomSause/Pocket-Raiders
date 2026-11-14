@@ -5,6 +5,10 @@ import { addFinaleCanonStops, addOpeningCanonStops, addRouteCanonStops } from '.
 import { canonRoutesKanto } from '../../src/data/expansion';
 import { generateLeagueMap } from '../../src/core/map';
 import { chooseStarter, createRun, debugForceEvent } from '../../src/core/run';
+import { featuredRival } from '../../src/core/rivals/living';
+import { registerRival } from '../../src/core/rivals/overhaul';
+import rivalOverhaul from '../../src/data/rivalOverhaul.json';
+import { step } from './autoplay';
 import { content } from './helpers';
 
 const begin = (seed: string, on = true) => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', ...(on ? { expansion: { kantoCanon: true } } : {}) }), 0);
@@ -141,5 +145,34 @@ describe('Viridian, Indigo, road and cast events: playing them', () => {
     const out = chooseEvent(content, run, sideId, 0).run;
     expect(out.battle?.kind).toBe('trainer');
     expect(out.expansion!.canon!.flags).toContain('kanto.route22.fought');
+  });
+  it('Route 22 with a registered rival gives the Rival Token mark and starts the fight (it used to throw "Unknown rival mark")', () => {
+    // Play on until the run has met a rival and is back on the map.
+    let base = structuredClone(begin(kantoSeeds[0]!));
+    for (let i = 0; i < 400 && !(base.phase === 'map' && featuredRival(base)); i++) base = step(content, base, true).run;
+    const rival = featuredRival(base)!;
+    expect(rival).toBeTruthy();
+    expect(base.phase).toBe('map');
+    registerRival(base, { id: rival.id, role: 'main', personality: 'underdog', style: 'blitz', arc: 'prodigy-learns-humility' });
+    const { run, sideId } = debugForceEvent(content, base, 'cs-kanto-viridian-route22');
+    const out = chooseEvent(content, run, sideId, 0).run;
+    expect(out.battle?.kind).toBe('trainer');
+    expect(out.expansion!.rival![rival.id]!.marks).toContain('route22-token');
+  });
+});
+
+describe('rival marks in event data', () => {
+  it('every mark an event gives or asks for is a known rival mark (an unknown one throws when the choice is taken)', () => {
+    const known = new Set(rivalOverhaul.marks.names);
+    const bad: string[] = [];
+    const walk = (node: unknown, where: string): void => {
+      if (Array.isArray(node)) return node.forEach((x) => walk(x, where));
+      if (!node || typeof node !== 'object') return;
+      const o = node as Record<string, unknown>;
+      if ((o.kind === 'rivalChange' || o.kind === 'rivalState') && typeof o.mark === 'string' && !known.has(o.mark)) bad.push(`${where}: ${o.mark}`);
+      for (const v of Object.values(o)) walk(v, where);
+    };
+    for (const e of content.events.values()) walk(e, e.id);
+    expect(bad).toEqual([]);
   });
 });

@@ -14,7 +14,7 @@
   "styles": ["blitz", "snowball", "fortress", "counterpuncher", "trapper", "disruptor", "scout", "ace-centric"],
   "arcs": ["prodigy-learns-humility", "underdog-finds-their-method", "perfectionist-accepts-failure", "loner-learns-to-trust", "showboat-finds-meaning", "burnout-rediscovers-joy", "friends-become-rivals", "rivals-become-friends"],
   "lead": { "min": -3, "max": 3, "rivalWon": 1, "rivalLost": -1 },
-  "marks": { "max": 5, "names": ["beaten-by-you", "beat-you", "owes-you", "saved-by-you", "shown-mercy", "outplayed-by-you", "stood-beside-you", "left-you-behind"] },
+  "marks": { "max": 5, "names": ["beaten-by-you", "beat-you", "owes-you", "saved-by-you", "shown-mercy", "outplayed-by-you", "stood-beside-you", "left-you-behind", "route22-token"] },
   "feelings": {
     "min": 0,
     "max": 10,

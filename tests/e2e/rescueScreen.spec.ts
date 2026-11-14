@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 // Rival Rescue (R9): a due plan opens the Rescue screen over the map; the player can pick a plan, answer the beats and
-// the complication, see the result, and land back on a map with the Pokémon returned. No console errors.
+// the complication, beat the guard(s) of Quiet Extraction, see the result, and land back on a map. No console errors.
 
 const scene = (page: Page) => page.evaluate(() => (window as any).__pkr?.activeScene() ?? null);
 async function waitForScene(page: Page, key: string) {
@@ -14,7 +14,7 @@ const shot = async (page: Page, name: string) => {
 };
 
 test('the rival rescue plan opens over the map and plays through', async ({ page }) => {
-  test.setTimeout(180_000);
+  test.setTimeout(300_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
@@ -47,16 +47,61 @@ test('the rival rescue plan opens over the map and plays through', async ({ page
   await waitForScene(page, 'Rescue');
   await shot(page, '1-offer');
 
-  // Quiet Extraction (first plan), then the three beats and the complication.
+  // Quiet Extraction (first plan). Since the PS-RESCUE fights, Quiet always meets at least one guard: answer each beat,
+  // fight every guard that steps in, and carry on when the map reopens the Rescue screen after the fight.
   await page.keyboard.press('Enter');
-  for (let i = 0; i < 4; i++) {
+  const plan = () => page.evaluate(() => (window as any).__pkr.session.run.expansion?.rescue?.active ?? null);
+  const rescueUp = () => page.evaluate(() => (window as any).__pkr.game.scene.isActive('Rescue'));
+  await expect.poll(async () => Boolean(await plan()), { timeout: 10_000 }).toBe(true);
+  let fights = 0;
+  let step = 2;
+  const end = Date.now() + 240_000;
+  for (let active = await plan(); active && Date.now() < end; active = await plan()) {
     await page.waitForTimeout(300);
-    await shot(page, `${i + 2}-beat`);
+    if (active.fightNow) {
+      // The guard panel: Fight starts a pseudo battle. Win it (the foes are set to 1 HP) and the plan resumes.
+      await shot(page, `${step++}-guard-${active.fightNow}`);
+      await page.keyboard.press('Enter');
+      await waitForScene(page, 'Battle');
+      fights++;
+      await page.evaluate(() => { for (const m of (window as any).__pkr.session.run.battle.enemyTeam) m.hp = 1; });
+      while (Date.now() < end && (await scene(page)) === 'Battle') {
+        const menu = await page.evaluate(() => Boolean((window as any).__pkr.game.scene.getScene('Battle')?.menu));
+        await page.keyboard.press('Enter');
+        await page.waitForTimeout(menu ? 350 : 150);
+      }
+      // A level-up after the fight can offer a move first. Decline each one: Esc closes any confirm, Up wraps to the last
+      // row ("Don't learn"), Enter picks it, Left focuses Yes, Enter confirms. (Keys only go to the Decision screen.)
+      const pending = () => page.evaluate(() => (window as any).__pkr.session.run.pending.length);
+      await page.waitForTimeout(600);
+      while (Date.now() < end && (await pending()) > 0) {
+        for (const [key, pause] of [['Escape', 300], ['ArrowUp', 200], ['Enter', 400], ['ArrowLeft', 200], ['Enter', 900]] as const) {
+          if ((await scene(page)) !== 'Decision' || (await pending()) === 0) break;
+          await page.keyboard.press(key);
+          await page.waitForTimeout(pause);
+        }
+        await page.waitForTimeout(250);
+      }
+      await expect.poll(rescueUp, { timeout: 30_000 }).toBe(true);
+      const after = await plan();
+      expect(after.fights).toHaveLength(fights);
+      expect(after.wiped).toBe(false);
+      continue;
+    }
+    // The third row is the clean answer for this seed (the rows are shuffled by seed): no guard at the Door, one at the Cage.
+    await shot(page, `${step++}-beat`);
+    await page.keyboard.press('ArrowDown');
+    await page.waitForTimeout(120);
+    await page.keyboard.press('ArrowDown');
+    await page.waitForTimeout(120);
     await page.keyboard.press('Enter');
   }
   await page.waitForTimeout(400);
-  await shot(page, '6-result');
-  expect(await scene(page)).toBe('Rescue');
+  await shot(page, `${step}-result`);
+  // The plan is settled (nothing running) and the result panel is still on the Rescue screen.
+  expect(await plan()).toBeNull();
+  expect(fights).toBeGreaterThanOrEqual(1);
+  expect(await rescueUp()).toBe(true);
   await page.keyboard.press('Enter');
   await waitForScene(page, 'Map');
   await shot(page, '7-map-after');

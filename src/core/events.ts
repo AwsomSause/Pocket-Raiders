@@ -1737,6 +1737,8 @@ export function continueEventChain(content: Content, run: RunState): void {
     const activeIndex = run.party.findIndex((p) => p.hp > 0);
     const enemy = newMon(content, run, species!, level, 'e');
     run.battle = createBattle('wild', [enemy], activeIndex, run.party[activeIndex]!.uid);
+    // After a move-learning or evolution prompt the run is in 'decision': without this it stayed there with nothing to decide (a stuck screen and a save that would not load).
+    run.phase = 'battle';
     return;
   }
   const ref = run.eventChain;
