@@ -276,7 +276,7 @@ export const MoveSchema = z.object({
       perishSong: z.literal(true).optional(),
       /** Yawn: the target falls asleep at the end of the next turn. */
       yawn: z.literal(true).optional(),
-      /** Haunting (Sabrina's Labyrinth ghost): four spirits strike once each, then the foe is Haunted (a stat drop and confusion in turn). */
+      /** Haunting (Sabrina's Labyrinth ghost): after its damage the target is Haunted (a fixed four-turn cycle). */
       haunting: z.literal(true).optional(),
       /** Magnet Rise: the user floats for five turns. */
       magnetRise: z.literal(true).optional(),
@@ -3096,9 +3096,9 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   }),
   /**
    * Saffron canon spaces (core/expansion/canonSaffron.ts). `solo` / `unsolo`: the party waits in a stash while one Pokémon of `species` fights alone (Fighting Tournament).
-   * `ghostStart` / `ghostLevel` / `ghostFree` / `ghostEnd` / `ghostReturn`: Sabrina's Labyrinth and the ghost that joins in the next region. `champion`: the Tournament title.
+   * `ghostStart` / `ghostLevel` / `ghostFree` / `ghostEnd` / `ghostReturn` / `labRoom` (level = the next room's number) / `labRetry` (after a loss, opens the first room, or with the accessibility setting the room where you fell): Sabrina's Labyrinth and the ghost that joins in the next region. `champion`: the Tournament title.
    */
-  z.object({ kind: z.literal('canon'), action: z.enum(['solo', 'unsolo', 'ghostStart', 'ghostLevel', 'ghostFree', 'ghostEnd', 'ghostReturn', 'champion', 'flawless']), species: z.array(z.string()).default([]), level: z.number().int().min(1).max(500).optional() }),
+  z.object({ kind: z.literal('canon'), action: z.enum(['solo', 'unsolo', 'ghostStart', 'ghostLevel', 'ghostFree', 'ghostEnd', 'ghostReturn', 'labRoom', 'labRetry', 'champion', 'flawless']), species: z.array(z.string()).default([]), level: z.number().int().min(1).max(500).optional() }),
   /** World-state callback (catalog 75): adds to a named story flag that later events can read. */
   z.object({ kind: z.literal('flag'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), amount: z.number().int().default(1) }),
   /** Clone Core (New Island): your lead's moves are copied onto the other party Pokémon you pick (the lowest-level one when none is picked). */
@@ -3232,6 +3232,8 @@ export const EventRuleSchema = z.object({
   bstMatch: z.boolean().optional(),
   /** Saffron canon: when your only Pokémon would faint, the ghost calls the other spirits, the foe goes down instead and you win (Sabrina's Labyrinth). */
   ghostRescue: z.boolean().optional(),
+  /** Beta 0.7 Sabrina's Labyrinth: each turn one of your move slots is false (shows one move, does another); every second turn the companion marks it. */
+  falseSlot: z.boolean().optional(),
   surviveTurns: z.number().int().min(1).max(30).optional(),
   suddenDeath: z.boolean().optional(),
   turnLimit: z.number().int().min(1).max(30).optional(),

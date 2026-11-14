@@ -41,6 +41,8 @@ export const ExpansionSettingsSchema = z.object({
   worldTracks: z.boolean().default(true),
   /** Beta 0.7: team-wide battle traits for Alola and Paldea story events (Hype Man, Reluctant Hand). Off by default; read when a run starts. */
   storyTraits: z.boolean().default(false),
+  /** Beta 0.7 Sabrina's Labyrinth accessibility: after losing there, resume from the last Pokémon found instead of starting the Labyrinth over. Read at run start. */
+  labyrinthResume: z.boolean().default(false),
   /** Beta 0.7 E11: the Citadark finale is offered after the last region to a run with three Data ROMs (needs the Grand Arc). Off until the final balance pass. */
   finaleEnabled: z.boolean().default(false),
   /** Beta 0.7 D1: the Region of Doom ("The Margin") as an in-run epilogue after the win. Off until the final balance pass. */

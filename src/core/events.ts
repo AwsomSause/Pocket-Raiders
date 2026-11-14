@@ -66,7 +66,7 @@ import { eggMoveOptions, familyId, teachEggMove } from './mastery';
 import { applyTrainEffect, trainEffectText } from './trainingEffects';
 import { noteCanonEvent, restoreStash, stashParty } from './expansion/canonRun';
 import { flightNorthEffect } from './instrumentality/flightNorth';
-import { applyCanonEffect, ghostReturns, nearestBst } from './expansion/canonSaffron';
+import { applyCanonEffect, ghostReturns, labRetryEvent, nearestBst } from './expansion/canonSaffron';
 import { addStageAttribute } from './expansion/stageMods';
 import { raidOffered, resolveStoryRaid } from './raid/storyRaids';
 import { advanceTrack, trackStep } from './expansion/trackRun';
@@ -1265,6 +1265,13 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (e.action === 'ghostReturn') {
         const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
         return ghostReturns(content, run, eventLevel(content, run, node, rng));
+      }
+      if (e.action === 'labRetry') {
+        const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+        const next = labRetryEvent(content, run);
+        here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId: next });
+        if (run.itemCounters) delete run.itemCounters[`event-seen:${next}`];
+        return 'The dark folds back to where you began.';
       }
       return applyCanonEffect(content, run, e, rng);
     }
