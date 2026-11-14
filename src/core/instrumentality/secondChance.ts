@@ -76,6 +76,7 @@ export function applySecondChance(content: Content, run: RunState): { lines: str
 
 /** True when this loss may roll: the setting was on at run start and it has not happened yet this run. */
 export function secondChanceOpen(run: Pick<RunState, 'expansion'>): boolean {
+  if (run.expansion?.flightNorth) return false; // Flight North's return, once in the run, is the rescue: Second Chance cannot also trigger
   return (run.expansion?.secondChancePct ?? 0) > 0 && !run.expansion?.secondChance;
 }
 

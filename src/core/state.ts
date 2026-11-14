@@ -757,6 +757,8 @@ export const BattleStateSchema = z.object({
   growthMarks: z.array(z.string()).optional(),
   /** Beta 0.7 S1 Second Chance: this fight was revived once; every Pokémon sent in gets +1 to all stats (core/instrumentality/secondChance.ts). */
   secondChance: z.boolean().optional(),
+  /** Beta 0.7 Flight North: this fight is the Bug-type's return (core/instrumentality/flightNorth.ts). */
+  flightNorth: z.boolean().optional(),
   /** Index into run.party of the Pokémon currently fighting. */
   activeIndex: z.number().int().min(0),
   /** The opposing team (one Pokémon for wild battles). */
