@@ -112,6 +112,7 @@ import { allyDue, allyLevel, getTotem } from '../totem/totem';
 import { enemyLastResort } from './lastResort';
 import { friendshipBond, WEALTH_HEAL, WEALTH_POTIONS } from '../trainerWorld/trainerWorld';
 import { specializationBonus, specializationPersonality } from '../trainerWorld/behavior';
+import { falseSlotFor } from '../expansion/labyrinth';
 import { addMomentum, cfgOf as spectacleCfg, duePhases, isBossFight, rallyProblem, rollLastStand, spectacleOf, spectacleRoll as spectacleRollExt, type SpectacleEvent } from './spectacle';
 import { ARENA_IMMUNE, foeStake, aimAccuracy, arenaText, dealOffer, mindReader, shoutDamage, throwCatch, type SkillInput } from './w1Play';
 import { benchSupporter, addBleed, bleedDamage, causesBleed, curseMultiplier, resonanceMultiplier } from './w1Rules';
@@ -792,6 +793,15 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
     if (berserkSpec && isBerserk(berserkSpec, me) && (action.kind === 'move' || action.kind === 'switch' || action.kind === 'item')) {
       const pick = berserkMove(content, me);
       if (pick >= 0) action = { kind: 'move', index: pick };
+    }
+  }
+  // Sabrina's Labyrinth: the false slot shows its own move and does another (the companion marks it every second turn).
+  if (battle.eventRule?.falseSlot && action.kind === 'move' && action.index >= 0) {
+    const me = ctx.party[battle.activeIndex]!;
+    const lie = falseSlotFor(battle.turn, me.uid, me.moves.length, me.moves.map((m) => m.pp > 0));
+    if (lie && lie.slot === action.index && me.moves[lie.to]) {
+      events.push({ type: 'raid', tone: 'phase', text: `The move twists in ${nameOf(ctx, me)}'s mind: ${content.moves.get(me.moves[lie.slot]!.id)?.name ?? 'it'} was never real. It uses ${content.moves.get(me.moves[lie.to]!.id)?.name ?? 'another move'} instead!` });
+      action = { ...action, index: lie.to };
     }
   }
   // Ideas W1: this turn's skill grade (a prompt result is an input, like the move itself); a surrender deal; smashing the arena.
@@ -3723,7 +3733,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     user.vol.typeShift = move.type;
   }
   const foeAbility = targetsEnemy ? targetAbility(ctx, user, target) : null;
-  const noGuard = userAbility === 'no-guard' || abilityIn(ctx, target) === 'no-guard';
+  const noGuard = userAbility === 'no-guard' || abilityIn(ctx, target) === 'no-guard' || userAbility === 'skys-resolve' || abilityIn(ctx, target) === 'skys-resolve';
   // A hidden target can only be hit by the moves that reach it (Earthquake hits Dig), or with No Guard.
   if (targetsEnemy && target.vol.semi && fx.hitsSemi?.semi !== target.vol.semi && !noGuard) {
     events.push({ type: 'avoided', side: target.side });
@@ -4439,6 +4449,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     else if (fx.flinchChance && movedFirst && roll(fx.flinchChance)) flinch(ctx, user, target);
     else if (!fx.flinchChance && userAbility === 'stench' && movedFirst && rng.chance(0.1)) flinch(ctx, user, target);
     if (fx.confuse && roll(fx.confuse.chance, 'confusion')) tryConfuse(ctx, user, target, events, false);
+    if (fx.haunting && target.vol.haunted === 0 && target.vol.hauntLock === 0) {
+      target.vol.haunted = 1;
+      target.vol.hauntedTurns = target.side === 'enemy' && (isBossClass(ctx.battle.trainer?.classId) || isBossFight(ctx.battle)) ? 2 : 4;
+      events.push({ type: 'selfState', side: target.side, state: 'haunted' });
+    }
   }
   if (target.mon.hp > 0 && fx.bind && target.vol.bound === 0) {
     target.vol.bound = rng.int(4, 5) + growthExtraTurn(ctx, user, 'trapper');
@@ -5130,14 +5145,18 @@ function endTurnMon(ctx: BattleContext, c: Combatant, foe: Combatant, events: Ba
       tryInflictStatus(ctx, foe, c, 'slp', undefined, events, false);
     }
     if (c.vol.haunted > 0 && c.mon.hp > 0) {
-      // Haunted: odd turns lower a random stat, even turns roll confusion; the cycle repeats until it switches out.
+      // Haunted: a fixed four-turn cycle (bosses two): stat falls, 50% confusion, stat falls, 50% confusion, then it ends.
       const turn = c.vol.haunted++;
       if (turn % 2 === 1) {
         const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
         const down = stats.filter((st) => c.stages[st] > -6);
         if (down.length) applyStageChange(ctx, c, down[ctx.rng.int(0, down.length - 1)]!, -1, events);
-      } else tryConfuse(ctx, foe, c, events, false);
-    }
+      } else if (ctx.rng.chance(0.5)) tryConfuse(ctx, foe, c, events, false);
+      if (turn >= c.vol.hauntedTurns) {
+        c.vol.haunted = 0;
+        c.vol.hauntLock = 2;
+      }
+    } else if (c.vol.hauntLock > 0) c.vol.hauntLock -= 1;
     if (c.vol.perish > 0) {
       c.vol.perish -= 1;
       events.push({ type: 'perish', side: c.side, count: c.vol.perish });
@@ -5753,6 +5772,16 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
     events.push({ type: 'selfState', side: user.side, state: 'revived' });
     return;
   }
+  if (fx.northsWind) {
+    const team = user.side === 'player' ? ctx.party : ctx.battle.enemyTeam;
+    const down = team.find((m) => m.hp <= 0);
+    if (!down) return void events.push({ type: 'fail', side: user.side });
+    down.hp = Math.max(1, Math.floor(calcStats(content, down).hp / 2));
+    events.push({ type: 'selfState', side: user.side, state: 'revived' });
+    changeStage(ctx, user, user, 'spa', 1, events);
+    changeStage(ctx, user, user, 'spe', 1, events);
+    return;
+  }
   if (fx.shedTail) {
     const cost = Math.floor(calcStats(content, user.mon).hp / 2);
     const team = user.side === 'player' ? ctx.party : ctx.battle.enemyTeam;
@@ -5879,27 +5908,6 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
       }
     }
     events.push(any ? { type: 'selfState', side: user.side, state: 'perishSong' } : { type: 'fail', side: user.side });
-    return;
-  }
-  if (fx.haunting) {
-    // Haunting: four stage-one Ghost spirits each strike once (power 25, through Substitute), then the foe is Haunted.
-    if (user.vol.prevMove === move.id || target.mon.hp <= 0) {
-      events.push({ type: 'fail', side: user.side });
-      return;
-    }
-    const stats = calcStats(ctx.content, user.mon);
-    const foeStats = calcStats(ctx.content, target.mon);
-    const eff = typeEffectiveness(ctx.content.typeChart, 'ghost', getSpecies(ctx.content, target.mon.speciesId).types);
-    const base = Math.floor(((2 * user.mon.level) / 5 + 2) * 25 * (stats.spa / Math.max(1, foeStats.spd)) / 50) + 2;
-    const one = eff === 0 ? 0 : Math.max(1, Math.floor(base * eff));
-    for (let i = 0; i < 4 && target.mon.hp > 0; i++) {
-      const { lost } = takeHp(ctx, target, one);
-      events.push({ type: 'damage', side: target.side, amount: lost, hpAfter: target.mon.hp, effectiveness: eff, crit: false });
-    }
-    if (target.mon.hp > 0 && target.vol.haunted === 0) {
-      target.vol.haunted = 1;
-      events.push({ type: 'selfState', side: target.side, state: 'haunted' });
-    }
     return;
   }
   if (fx.yawn) {

@@ -795,6 +795,11 @@
   "description": "Neutralizes abilities of all Pokémon in battle."
  },
  {
+  "id": "skys-resolve",
+  "name": "Sky's Resolve",
+  "description": "Normal-type moves become Flying-type and gain 20% power, and the Pokémon's moves cannot miss. Moves used against it cannot miss either."
+ },
+ {
   "id": "no-guard",
   "name": "No Guard",
   "description": "Ensures all moves used by and against the Pokémon hit."

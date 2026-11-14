@@ -38,6 +38,28 @@ const setCanon = (run: RunState, canon: CanonState): void => {
 };
 const nameOf = (content: Content, mon: Pick<PokemonInstance, 'speciesId'>): string => content.species.get(mon.speciesId)?.name ?? mon.speciesId;
 
+/** The Labyrinth's rooms in order (event ids without the `cs-kanto-saffron-` prefix). */
+export const LAB_ROOMS = ['lab-n1', 'lab-n2', 'lab-n3', 'lab-n4', 'lab-n5', 'lab-n6', 'lab-final'] as const;
+const LAB_PREFIX = 'cs-kanto-saffron-';
+
+/**
+ * After a loss in the Labyrinth: the event to open next. The stage's progress resets (nobody is freed, the ghost is healed)
+ * and the first room opens; with the accessibility setting it resumes at the room the player had reached and keeps the Pokémon already found.
+ */
+export function labRetryEvent(content: Content, run: RunState): string {
+  const canon = canonOf(run);
+  const lab = canon.lab;
+  if (!lab?.active) return LAB_PREFIX + LAB_ROOMS[0];
+  if (canon.labResume && (lab.room ?? 0) > 0) return LAB_PREFIX + LAB_ROOMS[Math.min(lab.room ?? 0, LAB_ROOMS.length - 1)];
+  setCanon(run, { ...canon, lab: { ...lab, freed: [], room: 0 } });
+  const ghost = run.party.find((m) => m.uid === lab.ghostUid);
+  if (ghost) {
+    ghost.hp = maxHp(content, ghost);
+    ghost.status = null;
+  }
+  return LAB_PREFIX + LAB_ROOMS[0];
+}
+
 /** True while the party waits in the stash (a Tournament bout or the Labyrinth). */
 export const isStashed = (run: RunState): boolean => Boolean(canonOf(run).solo);
 
@@ -177,6 +199,13 @@ export function applyCanonEffect(content: Content, run: RunState, e: CanonEffect
       holder.held = { ...holder.held, [belt]: (holder.held?.[belt] ?? 0) + 1 };
       return `Flawless! ${nameOf(content, holder)} is handed a Black Belt.`;
     }
+    case 'labRoom': {
+      const lab = canon.lab;
+      if (!lab?.active) return '';
+      setCanon(run, { ...canon, lab: { ...lab, room: Math.max(lab.room ?? 0, e.level ?? 0) } });
+      return '';
+    }
+    case 'labRetry':
     case 'ghostReturn':
       return '';
   }
