@@ -5,3 +5,5 @@
 **Save:** none. Optional `run.expansion.nodeMenuSpecial` (forks waiting to pay, open follow-ups, the escort, what rivals took, done keys).
 
 **Limits:** 6 forks, 6 linked pairs, 4 escorts (data `src/data/nodeMenuSpecial.json`); no new art (stop-card look). Not in the League. Rival Takes It needs a rival you have met; at most 2 per stage.
+
+**Sim:** `tests/unit/nodeMenuSpecialSim.test.ts`, 12 seeded bot runs that take every special card: 426 menus, about 1 in 5 with a special card (follow-ups included), at most 2 rival spoils per stage. Menus stay at 5 cards max (a special replaces filler micro entries).
