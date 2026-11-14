@@ -37,4 +37,8 @@ describe('Johto and Unova cast meetings', () => {
   it('sprite table only names cast ids', () => {
     for (const id of Object.keys(CAST_SPRITES)) expect(ids.has(id)).toBe(true);
   });
+  it('every cast-art file the table names is in the repo', () => {
+    for (const list of Object.values(CAST_SPRITES)) for (const id of list) if (id.startsWith('boss.cast-')) expect(existsSync(`public/assets/images/bosses/${id.slice(5)}.png`)).toBe(true);
+    expect(existsSync('public/assets/images/bosses/cast-butch.png')).toBe(true);
+  });
 });

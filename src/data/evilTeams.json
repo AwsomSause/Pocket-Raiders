@@ -2394,7 +2394,7 @@
     },
     "executive": {
      "name": "Butch and Cassidy",
-     "sprite": "trainer.pr/rocket_grunt_m",
+     "sprite": "boss.cast-butch",
      "species": [
       "raticate",
       "golbat",

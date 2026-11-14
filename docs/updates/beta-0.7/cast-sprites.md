@@ -17,3 +17,5 @@
 Optional own art for Johto: `trainer/rocket-return/{attila,hun,sebastian,tyson}` and `trainer/cipher/marauder`.
 
 **Limits:** Dossier appearances, not new battle scenes. The Johto Commanders' fights (Raids 4-5) are still unbuilt.
+
+**Update (Story Stuff pack):** real art now shows for Aldith, Barret, Schwarz/Weiss, Anthea/Concordia, Matori, Dr. Namba, Madame Boss, Marauder, Attila, Hun, Sebastian, Tyson, DJ Mary, Stern, Brodie, Cozmo, Sird, Hunter J, Buck and Mohn (`images/bosses/cast-*.png`), and Butch is Rocket Remnants' Executive. Still no art: all 7 Cipher characters; Rocket Remnants' Trio (Jessie/James), Gonzap, Wes; and the other stand-ins in `evilTeams.json` (Mars, Celosia, Shelly-era supporting ranks, and the six invented teams). Unused pack art: Domino, Kurt, Mairin (not in the cast list), Giratina Cultists, Mysterious Grunt, Plasma Sages sheet.
