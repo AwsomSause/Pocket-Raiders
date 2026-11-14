@@ -42,7 +42,7 @@ export const XE_PALDEA_EVENTS: Json[] = [
     ]),
   ev('xe.paldea.old-hallway', 'The Old Hallway', G, { stop: 'event', rarity: 'rare', minStage: 4, requires: [...base, { kind: 'track', atLeast: 4 }], cast: ['trainer.roughneck'], tint: '#1c1c1c', effect: 'none' } as never,
     'Three "Star Grunts" at a checkpoint. The helmets are right. The boots are wrong. Peon Brask: "Hahaha— toll! Team Star toll! Hand it over, that\'s what we do, we\'re delinquents—" Peon Odette, a smile like a paper cut: "You\'ll want to pay. Otherwise people will say Team Star beats up travellers. Again. That\'s rather the idea." Peon Tully says nothing and looks at his boots.', [
-      ch('Battle them', fight('They go for your weakest Pokémon first, every time.', grunt('Peon Brask, Odette and Tully', 3, 1, [flag('star-oldhallway-beaten')]))),
+      ch('Battle them', fight('They go for your weakest Pokémon first, every time. Once yours is under half health, they hit 25% harder.', trainer('Peon Brask, Odette and Tully', { cls: 'roughneck', size: 3, lv: 1, special: 'st.old-habits', win: [flag('star-oldhallway-beaten')] }))),
       ch('"You\'re the ones from before."', out('Odette: "We were children. It was years ago." Tully: "…It was eighteen months." They both look at him.', flag('star-tully-cracking'), heat(-3))),
       ch('Call a real Star Grunt over', out('Eri arrives. She does not say a word. She is a head taller than all three of them now. They leave. Tully, last to go, very low: "Tell her— no. Don\'t tell her anything. I don\'t get to."', flag('star-eri-called'), heat(-2))),
     ]),

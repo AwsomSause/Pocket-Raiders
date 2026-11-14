@@ -80,7 +80,7 @@ export function kantoEffects(step: number, cfg: TrackConfig): TrackEffects {
 /** The effects a region's track has at a step. Only Kanto's track is built; other regions have none yet. */
 export function trackEffectsFor(regionId: string, step: number, cfg: TrackConfig): TrackEffects {
   if (regionId === 'alola') return alolaEffects(step);
-  if (regionId === 'paldea') return paldeaEffects(step);
+  if (regionId === 'paldea') return paldeaEffects(step, cfg);
   return regionId === 'kanto' ? kantoEffects(step, cfg) : NO_EFFECTS;
 }
 
