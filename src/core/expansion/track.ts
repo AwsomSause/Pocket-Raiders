@@ -57,6 +57,18 @@ export interface TrackEffects {
   wildShrink: number;
   /** The news runs the team's adverts (a line on the map). */
   adverts: boolean;
+  /** Sinnoh (Brownout): the share of max HP a Pokémon Center restores (1 = all of it). */
+  centerHeal?: number;
+  /** Sinnoh (Brownout): accuracy for both sides in night battles (1 = normal). */
+  nightAccuracy?: number;
+  /** Sinnoh (Lake Valor taken, Will): the player's Pokémon cannot land critical hits. */
+  noPlayerCrit?: boolean;
+  /** Sinnoh (Lake Verity taken, Feeling): friendship gains from battles and levels are multiplied by this (1 = normal). */
+  friendshipFactor?: number;
+  /** Sinnoh (The Hum): every shop has forgotten one item in its stock. */
+  shopForgets?: boolean;
+  /** Hoenn (The Long Weather): how the sky is set in battles here. */
+  weather?: 'none' | 'split' | 'tilt' | 'swing' | 'awakening';
   /** Share of HP a Pokémon Center gives back (1 or absent = all of it). Kalos step 3: members first. */
   healShare?: number;
 }
@@ -67,7 +79,10 @@ export interface TrackConfig {
   wildShrink: number;
 }
 
+export type FullTrackEffects = Required<Omit<TrackEffects, 'healShare'>> & TrackEffects;
 export const NO_EFFECTS: TrackEffects = { shopMarkup: 0, healShutAtNight: false, roadblocks: false, wildShrink: 0, adverts: false };
+/** Every field filled in: what the run-level accessor returns, so the readers never see an absent one. */
+export const FULL_EFFECTS: FullTrackEffects = { ...NO_EFFECTS, centerHeal: 1, nightAccuracy: 1, noPlayerCrit: false, friendshipFactor: 1, shopForgets: false, weather: 'none' };
 
 /** Kanto's step table (Small Print, House Rules, Closed Roads, Export, Under New Management). */
 export function kantoEffects(step: number, cfg: TrackConfig): TrackEffects {
@@ -80,13 +95,39 @@ export function kantoEffects(step: number, cfg: TrackConfig): TrackEffects {
   };
 }
 
-/** The effects a region's track has at a step. Only Kanto's track is built; other regions have none yet. */
+/** Sinnoh's step table (Quiet, Brownout, The Lakes, The Hum, Zero Hour). Step 1 and the lake memory/feeling rules live in events only. */
+export function sinnohEffects(step: number): TrackEffects {
+  return { ...FULL_EFFECTS, centerHeal: step >= 2 ? 0.8 : 1, nightAccuracy: step >= 2 ? 0.95 : 1, noPlayerCrit: step >= 3, friendshipFactor: step >= 3 ? 0.5 : 1, shopForgets: step >= 4, adverts: step >= 5 };
+}
+
+/** Hoenn's step table (Drizzle and Drought, Blue Dawn Red Dusk, The Swing, Spill, The Awakening). Berry trees and ferries are not built. */
+export function hoennEffects(step: number): TrackEffects {
+  const weather = step >= 5 ? 'awakening' : step >= 3 ? 'swing' : step >= 2 ? 'tilt' : step >= 1 ? 'split' : 'none';
+  return { ...FULL_EFFECTS, weather, adverts: step >= 5 };
+}
+
+/** Johto's step table (Static, Jingle, Rage, Carrier Wave, The Call): shops play the jingle and mark up, the signal thins the wild pools, every radio carries the call. */
+export function johtoEffects(step: number, cfg: TrackConfig): TrackEffects {
+  return { shopMarkup: step >= 2 ? cfg.shopMarkup : 0, healShutAtNight: false, roadblocks: false, wildShrink: step >= 4 ? cfg.wildShrink : 0, adverts: step >= 5 };
+}
+
+/** Unova's step table (Pamphlets, Let Go, The Frost Line, The Bridges, The Crown): released Pokémon leave the pools, the frost shuts a centre at night, closed bridges are roadblocks. */
+export function unovaEffects(step: number, cfg: TrackConfig): TrackEffects {
+  return { shopMarkup: 0, healShutAtNight: step >= 3, roadblocks: step >= 4, wildShrink: step >= 2 ? cfg.wildShrink : 0, adverts: step >= 5 };
+}
+
+/** The effects a region's track has at a step. Built for Kanto, Johto, Unova, Kalos, Galar, Alola, Paldea, Sinnoh and Hoenn. */
 export function trackEffectsFor(regionId: string, step: number, cfg: TrackConfig): TrackEffects {
   if (regionId === 'alola') return alolaEffects(step);
-  if (regionId === 'paldea') return paldeaEffects(step);
+  if (regionId === 'paldea') return paldeaEffects(step, cfg);
   if (regionId === 'kalos') return kalosEffects(step, cfg);
   if (regionId === 'galar') return galarEffects(step, cfg);
-  return regionId === 'kanto' ? kantoEffects(step, cfg) : NO_EFFECTS;
+  if (regionId === 'kanto') return kantoEffects(step, cfg);
+  if (regionId === 'johto') return johtoEffects(step, cfg);
+  if (regionId === 'unova') return unovaEffects(step, cfg);
+  if (regionId === 'sinnoh') return sinnohEffects(step);
+  if (regionId === 'hoenn') return hoennEffects(step);
+  return NO_EFFECTS;
 }
 
 /** Which of `count` shops in a stage is the insured one: a hash of the seed and stage, not a roll. */

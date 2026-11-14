@@ -8,8 +8,10 @@ import { CanonStateSchema } from './canonSpaces';
 import { TrackStateSchema } from './track';
 import { RescueStateSchema } from '../evil/rescueSchema';
 import { GrandArcStateSchema } from '../grandArc/schema';
+import { UltraRunStateSchema } from '../ultra/schema';
 import { StandWithStateSchema } from '../arc/standWithSchema';
 import { RivalOverhaulStateSchema } from '../rivals/overhaulSchema';
+import { BlessingStateSchema } from '../blessings';
 import { NodeMenuStateSchema } from '../nodeMenu/state';
 import { NodeMenuSpecialStateSchema } from '../nodeMenu/special/schema';
 import { RewindStateSchema } from '../rewindSchema';
@@ -18,29 +20,13 @@ import { RewindStateSchema } from '../rewindSchema';
 export const ExpansionSettingsSchema = z.object({
   /** Climax length: the current climax, or the Extended Cut. Extended becomes the default only after final balance. */
   climaxCut: z.enum(['standard', 'extended']).default('standard'),
-  /** Second Shot (decision A): the first climax loss retries; the second never ends the run. */
-  climaxSecondShot: z.boolean().default(true),
   /** How many quiet-node story events appear. */
   eventsDensity: z.enum(['low', 'normal', 'full']).default('normal'),
   grandArcEnabled: z.boolean().default(true),
-  rivalOverhaul: z.boolean().default(true),
-  rivalFriend: z.boolean().default(true),
-  /** Second Chance chance, in percent (0 turns it off). */
-  secondChancePct: z.number().min(0).max(100).default(5),
-  /** Decision D: healing items and revives allowed per battle (E4, rivals and the Champion use the same). */
-  healsPerBattle: z.number().int().min(0).max(99).default(10),
-  revivesPerBattle: z.number().int().min(0).max(99).default(6),
   /** Decision N: mic input, off until the player turns it on. A button always does the same thing. */
   micInput: z.boolean().default(false),
   /** Decision O: minigame difficulty. */
   minigamesDifficulty: z.enum(['easy', 'normal', 'hard']).default('normal'),
-  blessingsEnabled: z.boolean().default(true),
-  mythicalsEnabled: z.boolean().default(true),
-  ultraBeastsEnabled: z.boolean().default(true),
-  /** Whole Run Events: chance a run has one, in percent. */
-  wholeRunEventsPct: z.number().min(0).max(100).default(35),
-  /** Rocket "what-if" casts (rocket.x.triad and the other what-if switches). */
-  whatIfCasts: z.boolean().default(true),
   kantoSevii: z.boolean().default(true),
   /** B6 stage pacing: 4–5 trainer fights per stage (1–2 skippable), an ace trainer, doubles from region 2, EXP −20%. Read when a run starts. */
   stagePacing: z.boolean().default(true),
@@ -56,6 +42,16 @@ export const ExpansionSettingsSchema = z.object({
   storyTraits: z.boolean().default(false),
   /** Beta 0.7 L3 Rewinds (test switch until the blessings grant them): the Time Keeper's rewind in every run, once per stage. Read at run start. */
   rewinds: z.boolean().default(false),
+  /** Legendary Blessings (Beta 0.7): each run opens with one Legendary's blessing. Off until the 0.7 balance pass. */
+  blessingsEnabled: z.boolean().default(false),
+  /** Beta 0.7 U1 Ultra Beast Incursions: off until the 0.7 balance pass. Read when a run starts. */
+  ultraBeastsEnabled: z.boolean().default(false),
+  /** Beta 0.7 S1 Second Chance: the percent chance a run-ending loss is turned into a revive, once per run (0 = off). Read when a run starts. */
+  secondChancePct: z.number().min(0).max(100).default(5),
+  /** H1 heated-moment moves (BALANCE 6): the Hyper slot move needs the conditions, a 6% roll and the per-region/per-run caps. Read when a run starts. */
+  heatedMoments: z.boolean().default(true),
+  /** Beta 0.7 M1 Mythical Promises (in-run only): Mythicals can be told of, visit and ask for a promise. Read when a run starts. */
+  mythicalsEnabled: z.boolean().default(true),
 });
 export type ExpansionSettings = z.infer<typeof ExpansionSettingsSchema>;
 export const EXPANSION_SETTINGS_DEFAULTS: ExpansionSettings = ExpansionSettingsSchema.parse({});
@@ -95,6 +91,8 @@ export const ExpansionRunSchema = z.object({
   grandArc: GrandArcStateSchema.optional(),
   /** Stand With Them (E8): the Inside Man route, once you have joined a team at Ignition. */
   standWith: StandWithStateSchema.optional(),
+  /** Legendary Blessing (Beta 0.7): this run's one blessing. Present only when the setting was on at run start; old saves have none, no save-version bump. */
+  blessing: BlessingStateSchema.optional(),
   /** Runs that started with the stage-pacing setting on (B6). Set once at run start, never changed. */
   pacing: z.boolean().optional(),
   /** Runs with Evolution Encounters on (B9). */
@@ -107,6 +105,8 @@ export const ExpansionRunSchema = z.object({
   climaxCut: z.enum(['standard', 'extended']).optional(),
   /** The `storyTraits` setting the run started with. */
   storyTraits: z.boolean().optional(),
+  /** Stages whose Galar tremor (a wild Dynamax, track step 2) has already happened: `regionIndex:stageIndex`. */
+  tremors: z.array(z.string()).max(24).optional(),
   /** Story events placed per region so far (E3 scheduler), by region id. */
   xe: z.record(z.string(), z.number().int().min(0)).optional(),
   /** Runs with the world-state tracks on (E2). Set once at run start. */
@@ -115,9 +115,27 @@ export const ExpansionRunSchema = z.object({
   rewind: RewindStateSchema.optional(),
   /** Camp scenes: the last player Pokémon to faint and the encounter count then (cleared by a night's rest). */
   lastFaint: z.object({ uid: z.string(), at: z.number().int().min(0) }).optional(),
+  /** Beta 0.7 U1 Ultra Beast Incursions (core/ultra/run.ts). Present only when the setting was on at run start. No save bump: old runs have none. */
+  ultra: UltraRunStateSchema.optional(),
   /** B7: the Pokémon (uids) registered at the League door. Only these are ever countered; a swapped-in Pokémon is unseen. `swapped` = the one swap is used. */
   league: z.object({ registered: z.array(z.string()), swapped: z.boolean().default(false) }).optional(),
   /** Beta 0.7 Node Event Menus (core/nodeMenu): present only in runs started with the setting on. No save bump. */
   nodeMenus: NodeMenuStateSchema.optional(),
+  /** Beta 0.7 S1: the Second Chance percent this run started with (0 or missing = off) and whether it has been used. In-run only. */
+  secondChancePct: z.number().min(0).max(100).optional(),
+  secondChance: z.object({ at: z.number().int().min(0), rival: z.string().nullable() }).optional(),
+  /** Beta 0.7 H1: runs with heated-moment limits on, and what has been granted (per region, total, and which Pokémon). */
+  heated: z.boolean().optional(),
+  heatedLog: z.object({ perRegion: z.record(z.string(), z.number().int().min(0)).default({}), total: z.number().int().min(0).default(0), mons: z.array(z.string()).default([]) }).optional(),
+  /** Beta 0.7 M1: runs with Mythical Promises on, and this run's Tellings, visit and Guest (core/instrumentality/promises.ts). In-run only: no Storybook, no Keepsakes. */
+  promises: z.boolean().optional(),
+  promise: z.object({
+    tellings: z.record(z.string(), z.number().int().min(0)).default({}),
+    /** The one Mythical that has visited this run (declined, accepted or lost), or null. */
+    visited: z.string().nullable().default(null),
+    guest: z.object({ id: z.string(), forgiven: z.boolean().default(false) }).nullable().default(null),
+    kept: z.array(z.string()).default([]),
+    left: z.array(z.string()).default([]),
+  }).optional(),
 });
 export type ExpansionRun = z.infer<typeof ExpansionRunSchema>;

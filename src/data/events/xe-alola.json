@@ -339,6 +339,38 @@
      }
     },
     {
+     "label": "Wait for Guzma to come home",
+     "success": {
+      "text": "He drops through the window mid-swing. \"Do not touch my stuff!\" Every third turn he lunges in and your Pokémon is knocked off the field: you choose who comes next.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Guzma",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [
+        "bug"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "alola-guzma-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "alola-room-seen",
+         "amount": 1
+        }
+       ],
+       "rule": {
+        "forceSwitch": 3
+       }
+      }
+     }
+    },
+    {
      "label": "Straighten a golf club",
      "success": {
       "text": "It will not straighten. The father says, \"Leave those.\" It is the only time he sounds afraid.",

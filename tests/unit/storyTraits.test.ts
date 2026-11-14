@@ -1,11 +1,11 @@
 // Beta 0.7 E9: team-wide story traits (Hype Man, Reluctant Hand). Off unless the run's `storyTraits` setting is on.
 
 import { describe, expect, it } from 'vitest';
-import { createBattle, resolveTurn, type BattleContext } from '../../src/core/battle/engine';
+import { createBattle, eventRuleEnd, resolveTurn, type BattleContext } from '../../src/core/battle/engine';
 import { createPokemon } from '../../src/core/pokemon';
 import { hashSeed, Rng } from '../../src/core/rng';
 import { BattleStateSchema } from '../../src/core/state';
-import { assignStoryTraits, storyHype, storyNoCrit, storyTraitOf, type StoryTraits } from '../../src/core/expansion/storyTraits';
+import { assignStoryTraits, storyHype, storyNoCrit, storyOldHabits, OLD_HABITS_POWER, storyTraitOf, type StoryTraits } from '../../src/core/expansion/storyTraits';
 import { ExpansionSettingsSchema } from '../../src/core/expansion/schema';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { content } from './helpers';
@@ -63,5 +63,40 @@ describe('story traits', () => {
     const r = chooseStarter(content, createRun(content, { runId: 'st1', seed: 'st1', archetypeId: 'red', expansion: { storyTraits: true } }), 0);
     expect(r.expansion?.storyTraits).toBe(true);
     expect(chooseStarter(content, createRun(content, { runId: 'st2', seed: 'st2', archetypeId: 'red' }), 0).expansion?.storyTraits).toBeUndefined();
+  });
+});
+
+describe('Old Habits', () => {
+  it('hits harder only once the target is under half HP, and only for the named foe', () => {
+    const s: StoryTraits = { a: { trait: 'old-habits' } };
+    expect(storyOldHabits(s, 'a', 60, 100)).toBe(1);
+    expect(storyOldHabits(s, 'a', 50, 100)).toBe(1);
+    expect(storyOldHabits(s, 'a', 49, 100)).toBe(OLD_HABITS_POWER);
+    expect(storyOldHabits(s, 'b', 10, 100)).toBe(1);
+  });
+  it('is read by Paldea\'s Old Hallway fight and off without the setting', () => {
+    const s: StoryTraits = {};
+    expect(assignStoryTraits(s, [{ uid: 'a' }], 'st.old-habits', false)).toBe(0);
+    expect(assignStoryTraits(s, [{ uid: 'a' }], 'st.old-habits', true)).toBe(1);
+  });
+});
+
+describe('forced-switch rule', () => {
+  const mk = (turn: number, benchHp: number, forceSwitch?: number) => {
+    const a = createPokemon(content, 'snorlax', 50, 'a');
+    const b = createPokemon(content, 'machop', 50, 'b');
+    b.hp = benchHp;
+    const battle = createBattle('trainer', [createPokemon(content, 'machop', 40, 'e')], 0, a.uid);
+    battle.turn = turn;
+    battle.eventRule = forceSwitch ? { forceSwitch } : undefined;
+    const events: never[] = [];
+    eventRuleEnd(battle, events, [a, b], content);
+    return { battle, events };
+  };
+  it('drives the player out every Nth turn when a healthy Pokémon waits on the bench', () => {
+    expect(mk(3, 10, 3).battle.needsSwitch).toBe(true);
+    expect(mk(2, 10, 3).battle.needsSwitch).toBe(false);
+    expect(mk(3, 0, 3).battle.needsSwitch).toBe(false);
+    expect(mk(3, 10).battle.needsSwitch).toBe(false);
   });
 });

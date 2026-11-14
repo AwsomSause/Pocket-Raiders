@@ -8,6 +8,7 @@ import { strongestMoves } from '../bossBands';
 import { getSpecies, isUsableMove } from '../pokemon';
 import type { PokemonInstance, RunState } from '../state';
 import type { BattleEvent } from './engine';
+import { heatedAllows } from '../instrumentality/heated';
 
 /** The move a Pokémon taps into: the strongest one it could know at its level that it doesn't know yet, or null. */
 export function hyperMoveFor(content: Content, mon: PokemonInstance): string | null {
@@ -26,6 +27,8 @@ export function grantHyperMoves(content: Content, run: RunState, events: readonl
     if (!mon || mon.hp <= 0 || mon.moves.some((m) => m.hyper) || battle.hyperMoved?.includes(mon.uid)) continue;
     const id = hyperMoveFor(content, mon);
     if (!id) continue;
+    // Beta 0.7 H1: with heated-moment limits on, only a real heated moment (conditions + 6% roll + caps) grants the move.
+    if (!heatedAllows(content, run, battle, mon)) continue;
     const move = content.moves.get(id)!;
     mon.moves.push({ id, pp: Math.min(move.pp, content.balance.hyperMove.pp), hyper: true });
     battle.hyperMoved = [...(battle.hyperMoved ?? []), mon.uid];
