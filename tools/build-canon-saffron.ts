@@ -1,6 +1,7 @@
 // Beta 0.6 workstream 18, Saffron City (CANON_SPACES_KANTO.md section 9): writes src/data/eventsCanonSaffron.json.
 // Route 25, Fighting Tournament, Fighting Dojo, Copycat Girl, Silph Co. Lobby, Magnet Train and Sabrina's Labyrinth, as event rooms.
 // Run: node tools/build-canon-saffron.ts   (the rules these use live in src/core/expansion/canonSaffron.ts)
+// NOTE (Beta 0.7): the Labyrinth rooms in src/data/eventsCanonSaffron.json were later edited by hand; re-running this tool would overwrite them with the older version. Route 25 and the Tournament (9.3, 9.4) are current here.
 
 import { writeFileSync } from 'node:fs';
 
