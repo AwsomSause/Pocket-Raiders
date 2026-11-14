@@ -94,6 +94,8 @@ To look something up: `grep -n '"id": "pikachu"' src/data/species.json` then rea
 
 ## `tools/` — Node scripts behind `npm run data:*`, `assets:*`, `report:*`
 
+`tools/bughunt/` (2026-11-14): whole-game checks that are too slow for CI: `fuzz-events.ts` (every choice of every event), `fuzz-roundtrip.ts` (same seed = same result, reloads change nothing), `old-saves.ts` (older builds' saves load here). `tools/playtest.ts --expansion` plays with the Beta 0.6 settings on (CI runs 50). Notes: `docs/status/bughunt-2026-11-14.md`.
+
 `import-*` bring in the director's data; `build-*` generate data files; `report-content.ts` / `report-balance.ts` write `docs/quality/`; `content-baseline.json` is the CI gate baseline; `lib/gameModules.ts` lets tools import game code. `overhaul-sim.ts` (`npm run sim:overhaul`) plays 100 seeded bot runs and prints rare-event, repeat and run-length numbers (Overhaul slice 29).
 
 ## `docs/`

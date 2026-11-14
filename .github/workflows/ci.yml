@@ -58,6 +58,8 @@ jobs:
       - run: npm run report:perf
       # Bot playtest: 50 seeded runs with side stops; any crash, stuck run or broken number fails the PR.
       - run: node tools/playtest.ts 0 50 --heal --sides --strict > /dev/null
+      # The same 50 runs started the way the game starts them: every Beta 0.6 expansion setting at its shipped default (all on).
+      - run: node tools/playtest.ts 0 50 --heal --sides --strict --expansion > /dev/null
       # Deep playtest: a stronger bot on the multi-region mode; fails unless a run reaches the third region (late-game coverage).
       - run: node tools/playtest.ts 1000 4 --heal --sides --strict --deep > /dev/null
         env:

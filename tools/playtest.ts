@@ -40,6 +40,9 @@ const HEAL = process.argv.includes('--heal');
 const SIDES = process.argv.includes('--sides');
 // --deep: a stronger bot (best switches, par-level party) and a long step budget, so runs reach region 3+ and the late game gets exercised too.
 const DEEP = process.argv.includes('--deep');
+// --expansion: start every run the way the game does, with the Beta 0.6 expansion settings at their shipped defaults (all on).
+const EXPANSION = process.argv.includes('--expansion');
+const SHIPPED_EXPANSION = { stagePacing: true, evolutionEncounters: true, leagueCounterPick: true, kantoCanon: true, grandArc: true, worldTracks: true, eventsDensity: 'normal', climaxCut: 'standard' } as const;
 const STEPS = DEEP ? 40000 : 4000;
 const STUCK_STEPS = DEEP ? 4000 : 1500;
 
@@ -85,6 +88,7 @@ for (let i = from; i < from + count; i++) {
       smart: true,
       ...(DEEP ? { strong: true, parLevel: 25 } : {}),
       healOnMap: HEAL,
+      ...(EXPANSION ? { expansion: SHIPPED_EXPANSION } : {}),
       onStep: (r0) => {
         const r = visit ? visit(r0) : r0;
         steps++;
