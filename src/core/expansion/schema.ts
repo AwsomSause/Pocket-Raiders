@@ -43,6 +43,12 @@ export const ExpansionSettingsSchema = z.object({
   rewinds: z.boolean().default(false),
   /** Legendary Blessings (Beta 0.7): each run opens with one Legendary's blessing. Off until the 0.7 balance pass. */
   blessingsEnabled: z.boolean().default(false),
+  /** Beta 0.7 S1 Second Chance: the percent chance a run-ending loss is turned into a revive, once per run (0 = off). Read when a run starts. */
+  secondChancePct: z.number().min(0).max(100).default(5),
+  /** H1 heated-moment moves (BALANCE 6): the Hyper slot move needs the conditions, a 6% roll and the per-region/per-run caps. Read when a run starts. */
+  heatedMoments: z.boolean().default(true),
+  /** Beta 0.7 M1 Mythical Promises (in-run only): Mythicals can be told of, visit and ask for a promise. Read when a run starts. */
+  mythicalsEnabled: z.boolean().default(true),
 });
 export type ExpansionSettings = z.infer<typeof ExpansionSettingsSchema>;
 export const EXPANSION_SETTINGS_DEFAULTS: ExpansionSettings = ExpansionSettingsSchema.parse({});
@@ -108,5 +114,21 @@ export const ExpansionRunSchema = z.object({
   league: z.object({ registered: z.array(z.string()), swapped: z.boolean().default(false) }).optional(),
   /** Beta 0.7 Node Event Menus (core/nodeMenu): present only in runs started with the setting on. No save bump. */
   nodeMenus: NodeMenuStateSchema.optional(),
+  /** Beta 0.7 S1: the Second Chance percent this run started with (0 or missing = off) and whether it has been used. In-run only. */
+  secondChancePct: z.number().min(0).max(100).optional(),
+  secondChance: z.object({ at: z.number().int().min(0), rival: z.string().nullable() }).optional(),
+  /** Beta 0.7 H1: runs with heated-moment limits on, and what has been granted (per region, total, and which Pokémon). */
+  heated: z.boolean().optional(),
+  heatedLog: z.object({ perRegion: z.record(z.string(), z.number().int().min(0)).default({}), total: z.number().int().min(0).default(0), mons: z.array(z.string()).default([]) }).optional(),
+  /** Beta 0.7 M1: runs with Mythical Promises on, and this run's Tellings, visit and Guest (core/instrumentality/promises.ts). In-run only: no Storybook, no Keepsakes. */
+  promises: z.boolean().optional(),
+  promise: z.object({
+    tellings: z.record(z.string(), z.number().int().min(0)).default({}),
+    /** The one Mythical that has visited this run (declined, accepted or lost), or null. */
+    visited: z.string().nullable().default(null),
+    guest: z.object({ id: z.string(), forgiven: z.boolean().default(false) }).nullable().default(null),
+    kept: z.array(z.string()).default([]),
+    left: z.array(z.string()).default([]),
+  }).optional(),
 });
 export type ExpansionRun = z.infer<typeof ExpansionRunSchema>;

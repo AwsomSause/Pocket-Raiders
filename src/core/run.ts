@@ -15,6 +15,8 @@
 import { noteBattle } from './expansion/fieldNotes';
 import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
+import { applySecondChance, secondChanceOpen, secondChanceRolls } from './instrumentality/secondChance';
+import { hearTelling, noteEvent as notePromiseEvent, resolveVisit, rollVisit, wonderAfterBattle } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
 import { recordStoryLoss, storyLossApplies } from './story2/loss';
@@ -344,7 +346,7 @@ export interface NewRunOptions {
   /** Story Run: the player's name, pronouns and Look from the prologue (profile.story.protagonist). */
   protagonist?: { look: string; name: string; pronouns: string | PronounSet; backstory?: string };
   /** Beta 0.6: which expansion settings were on at run start (settings.expansion). Each flag is stored in `run.expansion` once and never changes. */
-  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean; grandArc?: boolean; worldTracks?: boolean; eventsDensity?: 'low' | 'normal' | 'full'; climaxCut?: 'standard' | 'extended'; storyTraits?: boolean; rewinds?: boolean; nodeMenus?: boolean; blessings?: boolean };
+  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean; grandArc?: boolean; worldTracks?: boolean; eventsDensity?: 'low' | 'normal' | 'full'; climaxCut?: 'standard' | 'extended'; storyTraits?: boolean; rewinds?: boolean; nodeMenus?: boolean; blessings?: boolean; secondChancePct?: number; heatedMoments?: boolean; mythicalPromises?: boolean };
 }
 
 export function createRun(content: Content, opts: NewRunOptions): RunState {
@@ -449,6 +451,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     const e = opts.expansion;
     const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.kantoCanon ? { canon: { flags: [], completed: [], menus: {} } } : {}), ...(e.worldTracks ? { tracks: true } : {}), ...(e.eventsDensity ? { density: e.eventsDensity } : {}), ...(e.climaxCut === 'extended' ? { climaxCut: 'extended' as const } : {}), ...(e.storyTraits ? { storyTraits: true } : {}) };
     if (Object.keys(flags).length > 0) run.expansion = { ...run.expansion, ...flags };
+    if (e.secondChancePct || e.heatedMoments || e.mythicalPromises) run.expansion = { ...run.expansion, ...(e.secondChancePct ? { secondChancePct: e.secondChancePct } : {}), ...(e.heatedMoments ? { heated: true } : {}), ...(e.mythicalPromises ? { promises: true } : {}) };
     if (e.blessings) assignBlessing(run);
     // Beta 0.7 Node Event Menus: on for this run when the setting is on, except in speedrun, boss rush and time attack.
     if (e.nodeMenus && nodeMenusAllowed(run.rules.modifierIds)) run.expansion = { ...run.expansion, nodeMenus: freshNodeMenuState() };
@@ -755,12 +758,20 @@ function enterStage(content: Content, run: RunState, index: number): void {
   placeServiceStop(run);
   placePlaza(run);
   placeStoryStops(content, run); // Story Run: last, so it can adopt the evil beat's stop
-  const planLines = [themeLine, ...tailorStage(content, run, signals)].filter((l): l is string => !!l);
+  // Beta 0.7 M1: one Telling of a Mythical per new stage (in-run only; never on a run's very first stage, which keeps its plan empty), and a Visit offer at the first stage of a region.
+  const telling = run.regionIndex === 0 && index === 0 ? null : hearTelling(run, run.regionIndex * 100 + index);
+  const planLines = [themeLine, ...tailorStage(content, run, signals), telling].filter((l): l is string => !!l);
   snapshotStagePlan(run, planLines);
   run.battle = null;
   run.phase = 'map';
   takeCheckpoint(run);
   takeStageSnapshot(run); // L3 Rewinds: the run snapshot (only when rewinds are on)
+  const visit = index === 0 ? rollVisit(content, run, run.regionIndex) : null;
+  if (visit) {
+    run.pending.unshift(visit);
+    run.afterDecisions = 'map';
+    run.phase = 'decision';
+  }
 }
 
 /**
@@ -2830,6 +2841,8 @@ export interface TurnResult {
   clubLost?: boolean;
   /** The whole party fainted but the rules sent the run back to its checkpoint. */
   wiped?: boolean;
+  /** Beta 0.7 S1: a Second Chance fired. The fight goes on with the team revived; the screen shows the six lines and the partner. */
+  secondChance?: { lines: string[]; partner: string; silhouette: boolean };
   /** L3 Rewinds: the whole party fainted and the Time Keeper turned the battle back this many turns (the battle goes on). */
   rewound?: number;
   /** A narrative rival defeat (M12): the battle was lost for the story, the party is healed and the run goes on. Never a game over. */
@@ -3065,9 +3078,11 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (engineEvents.some((e) => e.type === 'lastStand' && e.side === 'player')) run.log.charmUsedInRegion = true;
   countAttributeGrowth(content, run, engineEvents);
   applyHeldAttributes(content, run, engineEvents);
+  const promiseLines: string[] = [];
   for (const e of engineEvents) {
     const fainted = e.type === 'faint' && e.side === 'player' ? run.party.find((p) => p.uid === e.uid) : undefined;
     if (fainted) {
+      promiseLines.push(...notePromiseEvent(content, run, { kind: 'faint', uid: fainted.uid }));
       noteKeepsakeFaint(run);
       run.expansion = { ...run.expansion, lastFaint: { uid: fainted.uid, at: run.encountersCompleted } };
       changeFriendship(content, fainted, content.balance.friendship.perFaint);
@@ -3098,6 +3113,12 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     addItem(run.inventory, battle.evoStone, 1);
     events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: `You pick up the ${content.items.get(battle.evoStone)?.name ?? battle.evoStone}.` });
     delete battle.evoStone;
+  }
+  // Beta 0.7 M1: a broken Promise speaks, and a Guest's Wonder acts after a won battle.
+  for (const text of promiseLines) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text });
+  if (battle.outcome === 'win') {
+    const wonder = wonderAfterBattle(content, run, (m) => maxHp(content, m));
+    if (wonder) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: wonder });
   }
   if (battle.outcome === 'win') bondVictory(run, Object.values(run.story.histories).filter((h) => h.lastBattle === run.encountersCompleted && run.party.some((m) => m.uid === h.uid)).map((h) => h.uid));
   if (battle.outcome === 'win') heartbondVictory(run, `b${run.encountersCompleted}`, isBossFight(battle) || Boolean(battle.rivalId), underdogXpMultiplier(content, run.party, battle.enemyTeam) > 1);
@@ -3258,6 +3279,12 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     if (back) {
       recordChanges(content, current, back, 'battle');
       return { run: back, events, end: null, defeated: false, cues, drama, wiped: true };
+    }
+    // Beta 0.7 S1 Second Chance: 5% (setting), once per run, after the rescues above it (rewind first). See instrumentality/secondChance.ts.
+    if (secondChanceOpen(run) && secondChanceRolls(run.seed, run.encountersCompleted, run.expansion!.secondChancePct!)) {
+      const sc = applySecondChance(content, run);
+      recordChanges(content, current, run, 'battle');
+      return { run, events, end: null, defeated: false, cues, drama, secondChance: { lines: sc.lines, partner: sc.companion.name, silhouette: sc.companion.silhouette } };
     }
     freeHandedOverRival(run);
     run.phase = 'over';
@@ -3946,6 +3973,12 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
   let message: string;
   let followUp: PendingDecision | null = null;
 
+  if (decision.kind === 'mythicalVisit') {
+    run.pending.shift();
+    const message = resolveVisit(run, decision, choice.kind === 'circuit' ? choice.optionIndex : 1);
+    continueAfterDecisions(content, run);
+    return { run, message };
+  }
   if (decision.kind === 'leagueDoor') {
     run.pending.shift();
     const at = choice.kind === 'circuit' ? choice.optionIndex : 0;
