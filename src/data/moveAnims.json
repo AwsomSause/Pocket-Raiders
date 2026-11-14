@@ -18184,6 +18184,14 @@
       "telegraph": "normal",
       "script": "superpower"
     },
+    "norths-wind": {
+      "anim": "revival-blessing",
+      "source": "type",
+      "shake": 0,
+      "flash": null,
+      "hitStopMs": 0,
+      "telegraph": "normal"
+    },
     "revival-blessing": {
       "anim": "revival-blessing",
       "source": "own",
