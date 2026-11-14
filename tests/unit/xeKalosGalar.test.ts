@@ -10,6 +10,8 @@ import { meetFromEvent, meetFromTrack } from '../../src/core/expansion/cast/meet
 import { chooseStarter, createRun } from '../../src/core/run';
 import { expansionData } from '../../src/data/expansion';
 import type { RunState } from '../../src/core/state';
+import { beginClimax, climaxPhases, EXTENDED_REGIONS, nextStep } from '../../src/core/arc/climaxExtended';
+import { startFormat } from '../../src/core/formats/registry';
 import { content } from './helpers';
 
 const KALOS = ['boutique', 'cafe', 'courier', 'essentia', 'factory', 'squishy', 'tall-man', 'under-time'].map((s) => `xe.kalos.${s}`);
@@ -118,5 +120,23 @@ describe('Kalos and Galar world-state effects in a run', () => {
     meetFromEvent(r, { id: 'xe.kalos.cafe' });
     meetFromTrack(r, 'galar', 2);
     expect(Object.keys(r.expansion!.dossier!).sort()).toEqual(['sc.flare.diantha', 'sc.flare.sycamore', 'sc.macro-cosmos.ball-guy', 'sc.yell.gaz']);
+  });
+});
+
+describe('Extended Cut for Kalos and Galar', () => {
+  const extended = (region: 'kalos' | 'galar') => {
+    const r = chooseStarter(content, createRun(content, { runId: `cut-${region}`, seed: `cut-${region}`, archetypeId: 'red', expansion: { worldTracks: true, climaxCut: 'extended' } }), 0);
+    r.regionOrder[r.regionIndex] = region;
+    return r;
+  };
+  it('begins, plays its own phase list, and Kanto-only formats skip themselves', () => {
+    for (const region of ['kalos', 'galar'] as const) {
+      const r = extended(region);
+      expect(EXTENDED_REGIONS).toContain(region);
+      expect(beginClimax(r, region)).toBe(true);
+      expect(climaxPhases(region).length).toBeGreaterThan(6);
+      expect(nextStep(r)).not.toBeNull();
+      for (const id of ['siege', 'blackout', 'colossus', 'convoy', 'front'] as const) expect(startFormat(id, { content, run: r })).toBe(false);
+    }
   });
 });

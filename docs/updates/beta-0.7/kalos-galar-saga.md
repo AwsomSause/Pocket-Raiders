@@ -15,3 +15,4 @@
 - Kalos and Galar Evil Team variant lines (Couture, Loud) were already wired in 0.6; the Overcharged line stays unrouted.
 - Squishy joins nobody; Mimi (Essentia) and Peony are flags plus a companion; no sprites added (art is not needed now).
 - Tests: `tests/unit/xeKalosGalar.test.ts`, `worldTrack.test.ts` (new Kalos/Galar rows).
+- **Extended Cut (E9b for Kalos and Galar):** with the Extended Cut on, both climaxes use the Extended Cut director (Gauntlet, Duels, Breather save point, Set piece, Boss, Second Shot). Siege Map, Blackout, Convoy, Colossus and Front still have only Kanto content, so they skip themselves in these regions. Kalos Couture and Galar Dynamax rules are not built (each needs a new engine hook); the events set flags only.
