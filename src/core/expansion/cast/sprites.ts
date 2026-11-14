@@ -1,20 +1,38 @@
 // Dossier portraits (Beta 0.7). Each cast id lists sprite ids to try in order; the first one the game has wins. Ids the art
 // pack does not hold yet are listed first, so when Kice adds the file it shows with no code change.
-// Cipher's cast still needs art (see docs/updates/beta-0.7/cast-sprites.md); until then it shows the silhouette.
+// Art from Kice's Story Stuff pack lives in public/assets/images/bosses/cast-*.png (boss.cast-*). Cipher's cast still needs art
+// (see docs/updates/beta-0.7/cast-sprites.md); until then it shows the silhouette.
 
-const SAGE = 'trainer.pr/zinzolin';
-/** Existing art reused for Johto's Rocket Commanders (placeholders until their own art exists). */
+const SAGE = 'boss.cast-sage';
+const c = (name: string): string => `boss.cast-${name}`;
 export const CAST_SPRITES: Record<string, readonly string[]> = {
-  // Team Plasma's Sages all share the one Sage sprite.
+  // Team Plasma: the Sages share the one Sage sprite; the rest use the Story Stuff art.
   'sc.plasma.gorm': [SAGE],
   'sc.plasma.bronius': [SAGE],
   'sc.plasma.ryoku': [SAGE],
-  // Johto's Rocket Commanders: their own art first, then a stand-in.
-  'sc.rocket-return.marauder': ['trainer.cipher/marauder', 'boss.drive/executive3'],
-  'sc.rocket-return.attila': ['trainer.rocket-return/attila', 'boss.drive/executive'],
-  'sc.rocket-return.hun': ['trainer.rocket-return/hun', 'boss.drive/executive2'],
-  'sc.rocket-return.sebastian': ['trainer.rocket-return/sebastian', 'boss.drive/johtoian-hgss-scientist'],
-  'sc.rocket-return.tyson': ['trainer.rocket-return/tyson', 'boss.drive/teamrocket-m'],
+  'sc.plasma.aldith': [c('aldith')],
+  'sc.plasma.barret': [c('barret')],
+  'sc.plasma.schwarz-weiss': [c('schwarz'), c('weiss')],
+  'sc.plasma.anthea-concordia': [c('anthea'), c('concordia')],
+  // Team Rocket (Kanto) and Rocket's return (Johto).
+  'sc.rocket.matori': [c('matori')],
+  'sc.rocket.namba': [c('namba')],
+  'sc.rocket-return.namba': [c('namba')],
+  'sc.rocket.madame-boss': [c('madame-boss')],
+  'sc.rocket-return.marauder': [c('marauder'), 'boss.drive/executive3'],
+  'sc.rocket-return.attila': [c('attila'), 'boss.drive/executive'],
+  'sc.rocket-return.hun': [c('hun'), 'boss.drive/executive2'],
+  'sc.rocket-return.sebastian': [c('sebastian'), 'boss.drive/johtoian-hgss-scientist'],
+  'sc.rocket-return.tyson': [c('tyson'), 'boss.drive/teamrocket-m'],
+  'sc.rocket-return.black-hour': [c('dj-mary')],
+  // Hoenn, Sinnoh, Alola.
+  'sc.aqua.navigator-stern': [c('stern')],
+  'sc.magma.brodie': [c('brodie')],
+  'sc.magma.geologist-cozmo': [c('cozmo')],
+  'sc.galactic.sird': [c('sird')],
+  'sc.galactic.hunter-j': [c('hunter-j')],
+  'sc.galactic.buck': [c('buck')],
+  'sc.aether.mohn': [c('mohn')],
   // Cipher: no art yet. Drop trainer.cipher/<name>.png into public/assets/images/trainer/cipher/ and it appears.
   'sc.cipher.greevil': ['trainer.cipher/greevil'],
   'sc.cipher.evice': ['trainer.cipher/evice'],
