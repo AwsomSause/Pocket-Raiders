@@ -11,7 +11,7 @@ import { EpilogueStateSchema, GrandArcStateSchema } from '../grandArc/schema';
 import { UltraRunStateSchema } from '../ultra/schema';
 import { StandWithStateSchema } from '../arc/standWithSchema';
 import { RivalOverhaulStateSchema } from '../rivals/overhaulSchema';
-import { BlessingStateSchema } from '../blessings';
+import { BlessingStateSchema } from '../blessings/schema';
 import { NodeMenuStateSchema } from '../nodeMenu/state';
 import { NodeMenuSpecialStateSchema } from '../nodeMenu/special/schema';
 import { RewindStateSchema } from '../rewindSchema';

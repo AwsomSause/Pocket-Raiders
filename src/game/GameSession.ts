@@ -55,6 +55,7 @@ import { claim } from '../core/quests';
 import { claimCollectionMilestones } from '../core/collection';
 import * as Run from '../core/run';
 import { rewindBattle } from '../core/rewind';
+import { useBlessingRite } from '../core/blessings';
 import { markRumorShown, nodeHint } from '../core/worldSim/tick';
 import { applyNursery, type NurseryChoice } from '../core/nursery';
 import { applyFormShift } from '../core/formShift';
@@ -665,6 +666,15 @@ export class GameSession {
     this.run = back;
     this.persistRun();
     return true;
+  }
+
+  /** Beta 0.7 Legendary Blessings: uses the run's Rite (Tapu Lele's heal, Dialga's stage rewind). Returns the message, or null when it can't be used. */
+  useBlessingRite(): string | null {
+    const result = useBlessingRite(this.content, this.requireRun());
+    if (!result) return null;
+    this.run = result.run;
+    this.persistRun();
+    return result.message;
   }
 
   takeTurn(action: PlayerAction): Run.TurnResult {

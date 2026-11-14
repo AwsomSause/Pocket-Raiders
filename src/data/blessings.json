@@ -94,12 +94,12 @@
       "objectText": "an ancient hourglass, turning by itself",
       "passage": "And from the beginning, time was set into motion. Yet even the river of eternity may be made to flow backward, for the Keeper remembers what has passed.",
       "headline": "TIME BENDS TO YOUR WILL",
-      "summary": "The next five turns need not be your last.",
+      "summary": "Once per stage, take a battle back up to five turns (the Rewind button), and after a whole-team wipe it happens by itself.",
       "effect": {
-        "kind": "none"
+        "kind": "rewinds"
       },
-      "status": "disabled",
-      "limits": "Needs battle rewind (milestone 3.0 Second Chance)."
+      "status": "limited",
+      "limits": "Rewinds follow the Rewinds system (singles only; no button in doubles or triples). Communion: obtaining Dialga unlocks its Rite, going back to the start of the stage (team keeps its levels, moves and species; items and events of the stage are not kept), from the Run menu on the map."
     },
     {
       "id": "palkia",
