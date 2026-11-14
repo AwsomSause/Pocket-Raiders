@@ -71,6 +71,7 @@
     "data:events": "node tools/build-events.ts",
     "data:hazards": "node tools/build-hazard-events.ts",
     "data:xe-events": "node tools/build-expansion-events.ts",
+    "data:xe-alola-paldea": "node tools/build-xe-alola-paldea.ts",
     "data:run-events": "node tools/build-run-events.ts",
     "data:quests": "node tools/build-quests.ts",
     "data:story": "node tools/build-story.ts",

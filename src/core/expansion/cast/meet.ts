@@ -3,6 +3,7 @@
 // against the cast data by tests/unit/dossier.test.ts.
 
 import type { RunState } from '../../state';
+import { ALOLA_PALDEA_MEETINGS } from './meetRegions';
 import { beatTeamHeads, markBeaten, recordCast, type CastStatus } from './dossier';
 
 type Meeting = string | [id: string, status: CastStatus];
@@ -20,6 +21,7 @@ export const EVENT_MEETINGS: Record<string, readonly Meeting[]> = {
   'kanto-amber-lab': ['sc.rocket.namba'],
   'grand-arc-ein': ['sc.rocket.ein'],
   'rainbow-rocket': ['sc.rocket-remnants.rainbow-giovanni'],
+  ...ALOLA_PALDEA_MEETINGS,
 };
 
 /** Kanto canon spaces (Kanto run events): the person who runs that place for Rocket. */

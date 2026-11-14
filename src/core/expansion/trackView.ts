@@ -7,6 +7,7 @@ import type { Content } from '../contentSchema';
 import { currentRegion } from '../regions';
 import type { RunState } from '../state';
 import { TRACK_MAX } from './track';
+import { trackPageTextFor } from './trackRegions';
 import { trackOf } from './trackRun';
 
 /** Kanto's page text per step: where the player might notice it ("scale"), a sighting, and what a civilian says. */
@@ -39,7 +40,8 @@ export function trackPage(content: Content, run: RunState): TrackPage | null {
   if (!run.expansion?.tracks) return null;
   const region = currentRegion(content, run);
   const def = expansionData.tracks.find((t) => t.region === region.id);
-  if (!def || region.id !== 'kanto') return null;
+  const PAGE = region.id === 'kanto' ? KANTO_PAGE : trackPageTextFor(region.id);
+  if (!def || !PAGE) return null;
   const st = trackOf(run, region.id);
   const now = st?.step ?? 0;
   const peak = st?.peak ?? 0;
@@ -48,7 +50,7 @@ export function trackPage(content: Content, run: RunState): TrackPage | null {
     const state: StepState = n === now ? 'now' : n <= peak ? 'seen' : n === Math.max(now, peak) + 1 ? 'next' : 'locked';
     return { step: n, name: state === 'locked' ? '' : s.name, rule: state === 'locked' ? '???' : s.rule, state };
   });
-  const scales = [1, 2, 3, 4, 5].map((n) => ({ scale: KANTO_PAGE[n]!.scale, note: KANTO_PAGE[n]!.scaleNote, text: n <= peak ? KANTO_PAGE[n]!.sighting : '??? (not seen yet)', seen: n <= peak }));
+  const scales = [1, 2, 3, 4, 5].map((n) => ({ scale: PAGE[n]!.scale, note: PAGE[n]!.scaleNote, text: n <= peak ? PAGE[n]!.sighting : '??? (not seen yet)', seen: n <= peak }));
   const nextStep = steps.find((s) => s.state === 'next');
   return {
     region: region.id,
@@ -57,7 +59,7 @@ export function trackPage(content: Content, run: RunState): TrackPage | null {
     steps,
     seenCount: peak,
     scales,
-    civilian: now > 0 ? KANTO_PAGE[now]!.civilian : 'Nobody has noticed anything yet.',
+    civilian: now > 0 ? PAGE[now]!.civilian : 'Nobody has noticed anything yet.',
     nextLine: nextStep ? `Next: ${nextStep.name || 'the next step'}, if a raid is failed or declined.` : now >= TRACK_MAX ? 'The ledger is full. A raid won turns it back.' : 'A raid won turns it back.',
   };
 }
