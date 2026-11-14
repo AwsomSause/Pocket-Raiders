@@ -46,6 +46,7 @@ describe('Town Roll', () => {
   });
   it('fires trigger spaces only when their flag is set', () => {
     expect(menu('X', 'stage-2', ['kanto.bridge.fell'])).toContain('cs.kanto.cerulean.hidden-village');
+    // Beta 0.7: the Fighting Tournament is rebuilt (Route 25 rebuild), so the trigger offers it again.
     expect(menu('X', 'stage-6', ['kanto.mankey'])).toContain('cs.kanto.saffron.tournament');
   });
   it('skips the S.S. Anne without the ticket and Safari-dependent spaces without Safari Land', () => {

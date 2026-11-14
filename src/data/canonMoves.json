@@ -23,8 +23,8 @@
    "id": "haunting",
    "name": "Haunting",
    "type": "ghost",
-   "category": "status",
-   "power": null,
+   "category": "special",
+   "power": 80,
    "accuracy": 100,
    "pp": 5,
    "priority": 0,
@@ -33,6 +33,22 @@
    "flags": [],
    "effects": {
     "haunting": true
+   }
+  },
+  {
+   "id": "norths-wind",
+   "name": "North's Wind",
+   "type": "flying",
+   "category": "status",
+   "power": null,
+   "accuracy": null,
+   "pp": 1,
+   "priority": 0,
+   "critStage": 0,
+   "target": "self",
+   "flags": [],
+   "effects": {
+    "northsWind": true
    }
   }
  ]

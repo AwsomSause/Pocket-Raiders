@@ -101,7 +101,7 @@ export const FLAG_BOOST: Record<string, { flag: 'contact' | 'punch' | 'bite' | '
 };
 
 /** Normal moves become this type and are 1.2× as strong. */
-export const TYPE_CHANGE: Record<string, TypeName> = { pixilate: 'fairy', aerilate: 'flying', refrigerate: 'ice', galvanize: 'electric', dragonize: 'dragon' };
+export const TYPE_CHANGE: Record<string, TypeName> = { pixilate: 'fairy', aerilate: 'flying', refrigerate: 'ice', galvanize: 'electric', dragonize: 'dragon', /** Pidgey's Resolve: Normal moves become Flying and 1.2x (it also never misses and cannot be missed: see engine noGuard). */ 'skys-resolve': 'flying' };
 
 /** A contact move on it may give the attacker this status (30%). */
 export const CONTACT_STATUS: Record<string, StatusId> = { static: 'par', 'flame-body': 'brn', 'poison-point': 'psn' };
@@ -190,7 +190,7 @@ export const ABILITY_FORMS = new Set<string>([
 /** Abilities the battle engine runs. */
 const SUPPORTED = new Set<string>([
   'cute-charm', 'rivalry', 'wise-eye', 'eye-of-the-gale', 'grid-surfer',
-  'dread-jaws', 'storm-talons', 'clinging-dust', 'sovereign-plumage', 'coral-veil', 'eyespot-glare', 'dynamo-down', 'gem-orbit', 'tailwind-rider', 'rune-sigil', 'twin-maw', 'silent-cloak', 'champions-fury',
+  'dread-jaws', 'storm-talons', 'clinging-dust', 'sovereign-plumage', 'coral-veil', 'eyespot-glare', 'dynamo-down', 'gem-orbit', 'tailwind-rider', 'rune-sigil', 'twin-maw', 'silent-cloak', 'champions-fury', 'champions-entrance',
   'thorn-ballad', 'encore-amp', 'adaptive-plating', 'plague-bulwark', 'soul-kindling', 'neon-circuit',
   ...Object.keys(PINCH),
   ...Object.keys(WEATHER_SETTERS),

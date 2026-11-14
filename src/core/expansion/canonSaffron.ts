@@ -38,6 +38,28 @@ const setCanon = (run: RunState, canon: CanonState): void => {
 };
 const nameOf = (content: Content, mon: Pick<PokemonInstance, 'speciesId'>): string => content.species.get(mon.speciesId)?.name ?? mon.speciesId;
 
+/** The Labyrinth's rooms in order (event ids without the `cs-kanto-saffron-` prefix). */
+export const LAB_ROOMS = ['lab-n1', 'lab-n2', 'lab-n3', 'lab-n4', 'lab-n5', 'lab-n6', 'lab-final'] as const;
+const LAB_PREFIX = 'cs-kanto-saffron-';
+
+/**
+ * After a loss in the Labyrinth: the event to open next. The stage's progress resets (nobody is freed, the ghost is healed)
+ * and the first room opens; with the accessibility setting it resumes at the room the player had reached and keeps the Pokémon already found.
+ */
+export function labRetryEvent(content: Content, run: RunState): string {
+  const canon = canonOf(run);
+  const lab = canon.lab;
+  if (!lab?.active) return LAB_PREFIX + LAB_ROOMS[0];
+  if (canon.labResume && (lab.room ?? 0) > 0) return LAB_PREFIX + LAB_ROOMS[Math.min(lab.room ?? 0, LAB_ROOMS.length - 1)];
+  setCanon(run, { ...canon, lab: { ...lab, freed: [], room: 0 } });
+  const ghost = run.party.find((m) => m.uid === lab.ghostUid);
+  if (ghost) {
+    ghost.hp = maxHp(content, ghost);
+    ghost.status = null;
+  }
+  return LAB_PREFIX + LAB_ROOMS[0];
+}
+
 /** True while the party waits in the stash (a Tournament bout or the Labyrinth). */
 export const isStashed = (run: RunState): boolean => Boolean(canonOf(run).solo);
 
@@ -110,7 +132,8 @@ export function applyCanonEffect(content: Content, run: RunState, e: CanonEffect
     case 'champion': {
       const mon = run.party.find((m) => e.species.includes(m.speciesId)) ?? run.party.find((m) => m.hp > 0);
       if (!mon) return '';
-      mon.fixedAbility = 'champions-fury';
+      mon.fixedAbility = 'champions-entrance';
+      setCanon(run, { ...canonOf(run), rival: { species: mon.speciesId, regionIndex: run.regionIndex, returned: false } });
       mon.champion = true;
       if (mon.speciesId === 'primeape') mon.look = 'champion';
       mon.evoBlock = [...new Set([...(mon.evoBlock ?? []), 'annihilape'])];
@@ -120,7 +143,7 @@ export function applyCanonEffect(content: Content, run: RunState, e: CanonEffect
         if (mon.moves.length < 4) mon.moves.push(slot);
         else mon.moves[3] = slot;
       }
-      return `${nameOf(content, mon)} is crowned champion: Champion's Fury, Dynamic Punch and the belt are its own.`;
+      return `${nameOf(content, mon)} is crowned champion: Champion's Entrance, Dynamic Punch and the belt are its own.`;
     }
     case 'ghostStart': {
       if (isStashed(run) || run.party.length < 1) return '';
@@ -176,6 +199,13 @@ export function applyCanonEffect(content: Content, run: RunState, e: CanonEffect
       holder.held = { ...holder.held, [belt]: (holder.held?.[belt] ?? 0) + 1 };
       return `Flawless! ${nameOf(content, holder)} is handed a Black Belt.`;
     }
+    case 'labRoom': {
+      const lab = canon.lab;
+      if (!lab?.active) return '';
+      setCanon(run, { ...canon, lab: { ...lab, room: Math.max(lab.room ?? 0, e.level ?? 0) } });
+      return '';
+    }
+    case 'labRetry':
     case 'ghostReturn':
       return '';
   }
@@ -200,6 +230,23 @@ export function ghostReturns(content: Content, run: RunState, level: number): st
   run.pending.push({ kind: 'caught', mon });
   setCanon(run, { ...canon, lab: { ...lab, owed: false, returned: true } });
   return `${nameOf(content, mon)} asks to join your team.`;
+}
+
+/** Tournament afterstory: the id of the event where the rival returns, wearing a home-made belt. */
+export const RIVAL_RETURN_EVENT = 'cs-kanto-saffron-rival-return';
+
+/** At a stage start in the region after the Tournament: the first stage offers the rival's return (once). Returns the event id, or null. */
+export function rivalReturnEvent(content: Content, run: RunState): string | null {
+  const rival = run.expansion?.canon?.rival;
+  if (!rival || rival.returned || !run.stage || run.stage.kind !== 'stage') return null;
+  if (run.regionIndex !== rival.regionIndex + 1 || !content.events.has(RIVAL_RETURN_EVENT)) return null;
+  return run.stage.index === 0 ? RIVAL_RETURN_EVENT : null;
+}
+
+/** The rival's return is played: it is not offered again. */
+export function markRivalReturned(run: RunState): void {
+  const canon = canonOf(run);
+  if (canon.rival) setCanon(run, { ...canon, rival: { ...canon.rival, returned: true } });
 }
 
 /** The event that carries the ghost's return, by ghost. */

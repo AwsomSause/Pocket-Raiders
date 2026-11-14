@@ -2,6 +2,7 @@
 // battle engine; this scene only shows the state, collects the player's
 // choice (Fight / Bag / Pokémon) and plays back the events each turn produces.
 
+import { falseSlotFor } from '../core/expansion/labyrinth';
 import { lastResortOffer, useLastResort } from '../core/battle/lastResort';
 import { mentorMoment } from '../core/story/mentorMoments';
 import { mentorScene } from '../ui/battleFx/mentorScene';
@@ -62,6 +63,7 @@ import { services } from '../game/services';
 import { launcherReady } from '../core/camp';
 import { moveBlockReason } from '../core/battle/moveBlock';
 import { cheerProblem, coopOwner, exposedWeakSpot, puzzlePattern, raidBot, raidDef, raidRole } from '../core/raid/raid';
+import { RETURN_MUSIC } from '../core/instrumentality/flightNorth';
 import { playCry, playMusic, playMusicLazy, playSfx, playSfxLazy, setMusicIntensity, storyOr, playCue } from '../ui/audio';
 import { storyTeamTrack } from '../core/presentation/storyMusic';
 import { isStoryCampaign } from '../core/campaign/circuit';
@@ -446,6 +448,8 @@ export class BattleScene extends Phaser.Scene {
     if (teamSong) this.baseTrack = teamSong;
     // Galar's stadium: gym and League fights play the Galar gym song (it builds turn by turn); the Champion plays the finale song.
     if (this.stadium && !teamSong && services().assets.has(GALAR_STADIUM.music.battle)) this.baseTrack = this.role === 'champion' ? GALAR_STADIUM.music.finalMon : GALAR_STADIUM.music.buildUp;
+    // Beta 0.7 Flight North: the Bug-type's return has its own song (the usual song plays until a composed file exists).
+    if (battle.flightNorth) this.baseTrack = RETURN_MUSIC;
     this.playingTrack = this.baseTrack;
     // Extra songs load on demand; the default song plays until they arrive.
     const fallback = battleTrack({ raidTrack: null, trainer: battle.kind === 'trainer', role: this.role, gbSounds: false });
@@ -3362,7 +3366,9 @@ export class BattleScene extends Phaser.Scene {
       ? mon.moves.map((slot, i) => {
           const why = moveBlockReason(content, this.run.battle!, mon, i);
           // Beta 4.4: the Hyper slot's move is starred, a Mega signature move has a diamond.
-          const name = (slot.lent ? '♥ ' : slot.hyper ? '★ ' : slot.megaSig ? '◆ ' : slot.storySig ? '✦ ' : '') + zLabel(i, (slot.storySig ? signatureDisplay(this.run, slot.id) : undefined) ?? content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : '');
+          const lie = this.run.battle!.eventRule?.falseSlot ? falseSlotFor(this.run.battle!.turn, mon.uid, mon.moves.length, mon.moves.map((m) => m.pp > 0)) : null;
+          const seenLie = lie?.seen && lie.slot === i ? lie : null;
+          const name = (seenLie ? '⚠ ' : '') + (slot.lent ? '♥ ' : slot.hyper ? '★ ' : slot.megaSig ? '◆ ' : slot.storySig ? '✦ ' : '') + zLabel(i, (slot.storySig ? signatureDisplay(this.run, slot.id) : undefined) ?? content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (seenLie ? ` (false: really ${content.moves.get(mon.moves[seenLie.to]!.id)!.name})` : '') + (why ? ` (${why})` : '');
           const disabled = slot.pp <= 0 || why === 'Choice lock' || (zMoves !== null && !zMoves[i]);
           const move = zMoves?.[i] ?? maxMoves?.[i] ?? content.moves.get(slot.id)!;
           // A battle style may label its buttons its own way (PP, power, type).
@@ -3738,6 +3744,17 @@ export class BattleScene extends Phaser.Scene {
       await this.say(result.narrativeDefeat.defeatLine);
       await this.say(result.narrativeDefeat.victoryLine);
       await exitWipe(this, this.motion, this.wipeMask());
+      this.scene.start(sceneForRun(result.run));
+      return;
+    }
+    if (result.flightNorth) {
+      // Beta 0.7 Flight North: the game-over screen cracks, cracks again and shatters; its own music (falls back to the boss track until composed).
+      const shake = 0.012 * services().session.settings.shakeStory * capFlash(services().session.settings.shakeIntensity, services().session.settings.reducedFlash);
+      for (let i = 0; i < 3; i++) {
+        this.cameras.main.shake(260 + i * 160, shake * (i + 1));
+        await this.say(result.flightNorth.lines[i] ?? '');
+      }
+      for (const line of result.flightNorth.lines.slice(3)) await this.say(line);
       this.scene.start(sceneForRun(result.run));
       return;
     }

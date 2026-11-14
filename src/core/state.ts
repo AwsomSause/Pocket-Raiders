@@ -104,6 +104,8 @@ export const PokemonInstanceSchema = z.object({
   pond: PondMarkSchema.optional(),
   /** An ability it was given outright (Squirtle Squad's Contrary); it beats the slot. Optional, so older saves load as they are. */
   fixedAbility: z.string().optional(),
+  /** Pidgey's Resolve (Beta 0.7): Mega Evolves with no Mega Stone and takes the ability Sky's Resolve while Mega. Optional, so older saves load as they are. */
+  skyMega: z.literal(true).optional(),
   /** New Island clones have no ability at all. Optional, so older saves load as they are. */
   abilityless: z.boolean().optional(),
   /** Evolutions it can never take (the Tournament champion Primeape never becomes Annihilape). Optional, so older saves load as they are. */
@@ -313,8 +315,12 @@ export const VolatileSchema = z.object({
   cloakUsed: z.boolean().default(false),
   /** Champion's Fury: its first attack since switching in has gone off. */
   furyUsed: z.boolean().default(false),
-  /** Haunted (the Haunting move): 0 = no, else the number of foe turns it has haunted (odd turns lower a random stat, even turns confuse). */
+  /** Haunted (the Haunting move): 0 = no, else the number of foe turns it has haunted (a fixed four-turn cycle: odd turns lower a random stat, even turns 50% confuse). */
   haunted: z.number().int().min(0).default(0),
+  /** Haunted lasts this many foe turns (4; bosses 2). */
+  hauntedTurns: z.number().int().min(0).default(4),
+  /** Turns left in which Haunting cannot be re-applied after it ended (2). */
+  hauntLock: z.number().int().min(0).default(0),
   /** Gem Orbit: gems shattered so far (4 per battle). */
   gems: z.number().int().min(0).default(0),
   /** Nightmare: loses HP while asleep. */
@@ -441,6 +447,8 @@ export const freshVolatile = (): Volatile => ({
   cloakUsed: false,
   furyUsed: false,
   haunted: 0,
+  hauntedTurns: 4,
+  hauntLock: 0,
   gems: 0,
   nightmare: false,
   cursed: false,
@@ -760,6 +768,8 @@ export const BattleStateSchema = z.object({
   growthMarks: z.array(z.string()).optional(),
   /** Beta 0.7 S1 Second Chance: this fight was revived once; every Pokémon sent in gets +1 to all stats (core/instrumentality/secondChance.ts). */
   secondChance: z.boolean().optional(),
+  /** Beta 0.7 Flight North: this fight is the Bug-type's return (core/instrumentality/flightNorth.ts). */
+  flightNorth: z.boolean().optional(),
   /** Index into run.party of the Pokémon currently fighting. */
   activeIndex: z.number().int().min(0),
   /** The opposing team (one Pokémon for wild battles). */

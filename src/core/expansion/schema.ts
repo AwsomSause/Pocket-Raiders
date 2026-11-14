@@ -12,6 +12,7 @@ import { UltraRunStateSchema } from '../ultra/schema';
 import { StandWithStateSchema } from '../arc/standWithSchema';
 import { RivalOverhaulStateSchema } from '../rivals/overhaulSchema';
 import { BlessingStateSchema } from '../blessings/schema';
+import { SkyStateSchema } from '../sky/state';
 import { NodeMenuStateSchema } from '../nodeMenu/state';
 import { NodeMenuSpecialStateSchema } from '../nodeMenu/special/schema';
 import { RewindStateSchema } from '../rewindSchema';
@@ -40,6 +41,8 @@ export const ExpansionSettingsSchema = z.object({
   worldTracks: z.boolean().default(true),
   /** Beta 0.7: team-wide battle traits for Alola and Paldea story events (Hype Man, Reluctant Hand). Off by default; read when a run starts. */
   storyTraits: z.boolean().default(false),
+  /** Beta 0.7 Sabrina's Labyrinth accessibility: after losing there, resume from the last Pokémon found instead of starting the Labyrinth over. Read at run start. */
+  labyrinthResume: z.boolean().default(false),
   /** Beta 0.7 E11: the Citadark finale is offered after the last region to a run with three Data ROMs (needs the Grand Arc). Off until the final balance pass. */
   finaleEnabled: z.boolean().default(false),
   /** Beta 0.7 D1: the Region of Doom ("The Margin") as an in-run epilogue after the win. Off until the final balance pass. */
@@ -128,6 +131,16 @@ export const ExpansionRunSchema = z.object({
   /** Beta 0.7 S1: the Second Chance percent this run started with (0 or missing = off) and whether it has been used. In-run only. */
   secondChancePct: z.number().min(0).max(100).optional(),
   secondChance: z.object({ at: z.number().int().min(0), rival: z.string().nullable() }).optional(),
+  /** Beta 0.7 Flight North (core/instrumentality/flightNorth.ts): the Bug-type that left after the stage. `ready` = its return can still save a lost run. Optional, no save bump. */
+  flightNorth: z.object({
+    line: z.enum(['caterpie', 'weedle']),
+    name: z.string().default(''),
+    friendship: z.number().int().min(0).max(255).default(0),
+    shiny: z.boolean().default(false),
+    state: z.enum(['ready', 'fighting', 'offered', 'kept', 'released']).default('ready'),
+    /** The uid the Bug-type has once it is offered again (so keep or release can be told apart). */
+    uid: z.string().optional(),
+  }).optional(),
   /** Beta 0.7 H1: runs with heated-moment limits on, and what has been granted (per region, total, and which Pokémon). */
   heated: z.boolean().optional(),
   heatedLog: z.object({ perRegion: z.record(z.string(), z.number().int().min(0)).default({}), total: z.number().int().min(0).default(0), mons: z.array(z.string()).default([]) }).optional(),
@@ -143,5 +156,7 @@ export const ExpansionRunSchema = z.object({
   }).optional(),
   /** Beta 0.7 workstream 13: in-run epilogue (Citadark finale, Region of Doom). */
   epilogue: EpilogueStateSchema.optional(),
+  /** Beta 0.7: Pidgey's Resolve, the Rivalry of the Sky (core/sky). */
+  sky: SkyStateSchema.optional(),
 });
 export type ExpansionRun = z.infer<typeof ExpansionRunSchema>;
