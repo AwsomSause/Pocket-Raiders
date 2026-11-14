@@ -11,6 +11,7 @@ import { runPerks } from '../archetypes';
 import { rivalCounterBonus, rivalLevelOffset, rivalTeamTypes } from '../trainerPerks';
 import { typeEffectiveness } from '../battle/damage';
 import type { Content, TypeName } from '../contentSchema';
+import { rivalSpoilLevels } from '../nodeMenu/special';
 import type { TrainerPlan } from '../encounters';
 import { getSpecies } from '../pokemon';
 import { wildEligibleSpecies } from '../themes';
@@ -119,7 +120,7 @@ function baseReturn(content: Content, run: RunState, rival: Rival, plan: Trainer
   };
   const mods = rivalMods(rival);
   // Personality: vindictive rivals return stronger. Style: how sharp its move choice is.
-  const revised = { ...revisedTeam(content, run, profile, plan, { ...effect, levelBonus: effect.levelBonus + mods.levelBonus + bondShift(rival) + rivalDebtLevels(run, rival) + rivalLevelOffset(runPerks(content, run)) + pityFor(run, rival.id).levelDelta }), ai: Math.max(plan.ai, mods.ai) };
+  const revised = { ...revisedTeam(content, run, profile, plan, { ...effect, levelBonus: effect.levelBonus + mods.levelBonus + bondShift(rival) + rivalDebtLevels(run, rival) + rivalLevelOffset(runPerks(content, run)) + pityFor(run, rival.id).levelDelta + rivalSpoilLevels(run, rival.id) }), ai: Math.max(plan.ai, mods.ai) };
   const perks = runPerks(content, run);
   const type = mostUsedType(content, run, rival);
   const seen = bondNote(rival);

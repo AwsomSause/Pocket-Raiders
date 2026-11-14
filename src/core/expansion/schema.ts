@@ -10,6 +10,7 @@ import { RescueStateSchema } from '../evil/rescueSchema';
 import { GrandArcStateSchema } from '../grandArc/schema';
 import { StandWithStateSchema } from '../arc/standWithSchema';
 import { RivalOverhaulStateSchema } from '../rivals/overhaulSchema';
+import { NodeMenuSpecialStateSchema } from '../nodeMenu/special/schema';
 
 /** F1: every expansion setting at its default (plan section 10). Lives in `settings.expansion` (settings v42). */
 export const ExpansionSettingsSchema = z.object({
@@ -78,6 +79,8 @@ export const ExpansionRunSchema = z.object({
   canon: CanonStateSchema.optional(),
   /** Field Notes: special Pokémon met (`sv.*`) and, per special Shadow (`ss.*`), how many of its key hints were given (1-3). Observation only; no cross-run memory. */
   fieldNotes: z.object({ special: z.array(z.string()).default([]), shadow: z.record(z.string(), z.number().int().min(1).max(3)).default({}) }).optional(),
+  /** Node Event Menus P5 special entries (core/nodeMenu/special): forks, linked follow-ups, the escort, what rivals took. Optional, no save bump. */
+  nodeMenuSpecial: NodeMenuSpecialStateSchema.optional(),
   /** Attribute changes that last one stage (Celadon's Bad Luck Charm): undone when the stage changes. No save-version bump: old runs have none. */
   stageMods: z.array(z.object({ key: z.string(), amount: z.number().int(), region: z.number().int(), stage: z.number().int() })).optional(),
   /** Grand Arc (E7): Data ROMs and the Stock track. Present only when the setting was on at run start. */
