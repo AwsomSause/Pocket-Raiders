@@ -96,7 +96,7 @@ describe('Kanto effects', () => {
   it('never carries anything that could raise an enemy (closed list of fields)', () => {
     const keys = Object.keys(kantoEffects(5, cfg)).sort();
     expect(keys).toEqual(['adverts', 'healShutAtNight', 'roadblocks', 'shopMarkup', 'wildShrink']);
-    expect(trackEffectsFor('johto', 5, cfg).shopMarkup).toBe(0);
+    expect(trackEffectsFor('hoenn', 5, cfg).shopMarkup).toBe(0);
   });
 
   it('marks exactly one of N shops and a stable quarter of species', () => {
