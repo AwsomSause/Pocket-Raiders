@@ -7,7 +7,7 @@ import { Rng, hashSeed } from '../rng';
 import { currentRegion } from '../regions';
 import type { RunState } from '../state';
 import { rememberFlightBug } from '../instrumentality/flightNorth';
-import { ghostReturnEvent } from './canonSaffron';
+import { ghostReturnEvent, markRivalReturned, rivalReturnEvent } from './canonSaffron';
 import { enterCanonSlot, finishCanonSpace } from './canonSpaces';
 
 /** The story-flag key an event writes for a canon flag: `kanto.flock.seen` -> `ev:kanto-flock-seen`. */
@@ -40,6 +40,7 @@ export function canonInterludeOf(run: RunState): string | null {
 export function addCanonStops(content: Content, run: RunState): void {
   restoreStash(run); // a new stage always returns the party Flight North took
   addGhostReturnStop(content, run);
+  addRivalReturnStop(content, run);
   const slot = canonSlotOf(content, run);
   if (slot) placeCanonSlot(content, run, slot);
   const interlude = run.expansion?.canon && currentRegion(content, run).id === 'kanto' ? canonInterludeOf(run) : null;
@@ -97,6 +98,17 @@ function addGhostReturnStop(content: Content, run: RunState): void {
   const first = stage.map.nodes.filter((n) => n.column < stage.map.columns)[0];
   if (!first || stage.map.nodes.some((n) => n.sides.some((s) => s.eventId === id))) return;
   first.sides.push({ id: `canon-ghost-${first.id}`, kind: 'event', used: false, eventId: id });
+}
+
+/** Tournament afterstory: the rival you beat in the final stands on the first node of the next region, in a home-made belt. Offered once. */
+function addRivalReturnStop(content: Content, run: RunState): void {
+  const id = rivalReturnEvent(content, run);
+  const stage = run.stage;
+  if (!id || !stage) return;
+  const first = stage.map.nodes.filter((n) => n.column < stage.map.columns)[0];
+  if (!first || stage.map.nodes.some((n) => n.sides.some((s) => s.eventId === id))) return;
+  first.sides.push({ id: `canon-rival-${first.id}`, kind: 'event', used: false, eventId: id });
+  markRivalReturned(run);
 }
 
 /** Flight North: the whole party is taken away. The stash lives in the canon state; the party is empty until the Bug-type joins. No-op without canon state or when already stashed. */
