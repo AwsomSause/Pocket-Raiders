@@ -310,8 +310,12 @@ export const VolatileSchema = z.object({
   cloakUsed: z.boolean().default(false),
   /** Champion's Fury: its first attack since switching in has gone off. */
   furyUsed: z.boolean().default(false),
-  /** Haunted (the Haunting move): 0 = no, else the number of foe turns it has haunted (odd turns lower a random stat, even turns confuse). */
+  /** Haunted (the Haunting move): 0 = no, else the number of foe turns it has haunted (a fixed four-turn cycle: odd turns lower a random stat, even turns 50% confuse). */
   haunted: z.number().int().min(0).default(0),
+  /** Haunted lasts this many foe turns (4; bosses 2). */
+  hauntedTurns: z.number().int().min(0).default(4),
+  /** Turns left in which Haunting cannot be re-applied after it ended (2). */
+  hauntLock: z.number().int().min(0).default(0),
   /** Gem Orbit: gems shattered so far (4 per battle). */
   gems: z.number().int().min(0).default(0),
   /** Nightmare: loses HP while asleep. */
@@ -438,6 +442,8 @@ export const freshVolatile = (): Volatile => ({
   cloakUsed: false,
   furyUsed: false,
   haunted: 0,
+  hauntedTurns: 4,
+  hauntLock: 0,
   gems: 0,
   nightmare: false,
   cursed: false,

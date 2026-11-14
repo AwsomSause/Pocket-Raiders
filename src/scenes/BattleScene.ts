@@ -2,6 +2,7 @@
 // battle engine; this scene only shows the state, collects the player's
 // choice (Fight / Bag / Pokémon) and plays back the events each turn produces.
 
+import { falseSlotFor } from '../core/expansion/labyrinth';
 import { lastResortOffer, useLastResort } from '../core/battle/lastResort';
 import { mentorMoment } from '../core/story/mentorMoments';
 import { mentorScene } from '../ui/battleFx/mentorScene';
@@ -3365,7 +3366,9 @@ export class BattleScene extends Phaser.Scene {
       ? mon.moves.map((slot, i) => {
           const why = moveBlockReason(content, this.run.battle!, mon, i);
           // Beta 4.4: the Hyper slot's move is starred, a Mega signature move has a diamond.
-          const name = (slot.lent ? '♥ ' : slot.hyper ? '★ ' : slot.megaSig ? '◆ ' : slot.storySig ? '✦ ' : '') + zLabel(i, (slot.storySig ? signatureDisplay(this.run, slot.id) : undefined) ?? content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : '');
+          const lie = this.run.battle!.eventRule?.falseSlot ? falseSlotFor(this.run.battle!.turn, mon.uid, mon.moves.length, mon.moves.map((m) => m.pp > 0)) : null;
+          const seenLie = lie?.seen && lie.slot === i ? lie : null;
+          const name = (seenLie ? '⚠ ' : '') + (slot.lent ? '♥ ' : slot.hyper ? '★ ' : slot.megaSig ? '◆ ' : slot.storySig ? '✦ ' : '') + zLabel(i, (slot.storySig ? signatureDisplay(this.run, slot.id) : undefined) ?? content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (seenLie ? ` (false: really ${content.moves.get(mon.moves[seenLie.to]!.id)!.name})` : '') + (why ? ` (${why})` : '');
           const disabled = slot.pp <= 0 || why === 'Choice lock' || (zMoves !== null && !zMoves[i]);
           const move = zMoves?.[i] ?? maxMoves?.[i] ?? content.moves.get(slot.id)!;
           // A battle style may label its buttons its own way (PP, power, type).

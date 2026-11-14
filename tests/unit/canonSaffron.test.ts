@@ -4,7 +4,8 @@ import { chooseEvent, conditionMet, eventBattleLost, eventBattleWon } from '../.
 import { createPokemon, abilityOf } from '../../src/core/pokemon';
 import { chooseStarter, createRun, debugForceEvent } from '../../src/core/run';
 import { hashSeed, Rng } from '../../src/core/rng';
-import { applyCanonEffect, ghostReturnEvent, ghostReturns, leaveCanonStash, nearestBst, restoreStash, ruleEvolution } from '../../src/core/expansion/canonSaffron';
+import { applyCanonEffect, ghostReturnEvent, ghostReturns, labRetryEvent, leaveCanonStash, nearestBst, restoreStash, ruleEvolution } from '../../src/core/expansion/canonSaffron';
+import { falseSlotFor } from '../../src/core/expansion/labyrinth';
 import { evolutionTarget } from '../../src/core/evolution';
 import { RunStateSchema } from '../../src/core/state';
 import { content } from './helpers';
@@ -281,30 +282,95 @@ describe("Sabrina's Labyrinth", () => {
 });
 
 describe('Haunting and Haunted', () => {
-  const setup = (seed: string) => {
+  const setup = (seed: string, trainer = false) => {
     const player = createPokemon(content, 'gengar', 50, 'p');
     player.moves = [{ id: 'haunting', pp: 5 }, { id: 'splash', pp: 40 }];
-    const enemy = createPokemon(content, 'blissey', 50, 'e');
+    const enemy = createPokemon(content, 'wailord', 100, 'e');
     enemy.moves = [{ id: 'splash', pp: 40 }];
-    const battle = createBattle('wild', [enemy], 0, player.uid, null);
+    const battle = createBattle(trainer ? 'trainer' : 'wild', [enemy], 0, player.uid, trainer ? { classId: 'gym-leader', name: 'Sabrina', leaderId: null } : null);
     const ctx: BattleContext = { content, battle, party: [player], inventory: {}, rng: new Rng(hashSeed(seed)), captureRng: new Rng(hashSeed(`${seed}c`)), catchMultiplier: 1 };
     return { battle, ctx, enemy, player };
   };
-  it('summons four strikes, then lowers a stat on turn 1 and confuses on turn 2 and so on', () => {
+  it('is an 80-power special Ghost hit that starts the Haunted cycle', () => {
+    const m = content.moves.get('haunting')!;
+    expect([m.type, m.category, m.power]).toEqual(['ghost', 'special', 80]);
     const { battle, ctx, enemy } = setup('hh');
     const ev = resolveTurn(ctx, { kind: 'move', index: 0 });
-    expect(ev.filter((e) => e.type === 'damage' && (e as { side: string }).side === 'enemy')).toHaveLength(4);
-    expect(enemy.hp).toBeLessThan(createPokemon(content, 'blissey', 50, 'z').hp);
-    expect(battle.enemyVolatile.haunted).toBe(2);
-    expect(Object.values(battle.enemyStages).some((n) => n === -1)).toBe(true);
-    resolveTurn(ctx, { kind: 'move', index: 1 });
-    expect(battle.enemyVolatile.haunted).toBe(3);
+    expect(ev.some((e) => e.type === 'damage' && (e as { side: string }).side === 'enemy')).toBe(true);
+    expect(enemy.hp).toBeLessThan(createPokemon(content, 'wailord', 100, 'z').hp);
+    expect(battle.enemyVolatile.hauntedTurns).toBe(4);
   });
-  it('cannot be used twice in a row', () => {
-    const { ctx } = setup('hh2');
+  it('lasts exactly four turns, then ends and cannot be re-applied for two turns', () => {
+    const { battle, ctx } = setup('hh2');
     resolveTurn(ctx, { kind: 'move', index: 0 });
-    const again = resolveTurn(ctx, { kind: 'move', index: 0 });
-    expect(again.some((e) => e.type === 'fail')).toBe(true);
+    expect(battle.enemyVolatile.haunted).toBe(2);
+    resolveTurn(ctx, { kind: 'move', index: 1 });
+    resolveTurn(ctx, { kind: 'move', index: 1 });
+    expect(battle.enemyVolatile.haunted).toBe(4);
+    resolveTurn(ctx, { kind: 'move', index: 1 });
+    expect(battle.enemyVolatile.haunted).toBe(0);
+    expect(battle.enemyVolatile.hauntLock).toBe(2);
+    resolveTurn(ctx, { kind: 'move', index: 0 });
+    expect(battle.enemyVolatile.haunted, `locked, outcome ${battle.outcome} hp ${ctx.battle.enemyTeam[0]!.hp}`).toBe(0);
+    resolveTurn(ctx, { kind: 'move', index: 1 });
+    expect(battle.outcome, 'still running').toBeNull();
+    resolveTurn(ctx, { kind: 'move', index: 0 });
+    expect(battle.enemyVolatile.haunted).toBe(2);
+  });
+  it('a boss is Haunted for two turns only', () => {
+    const { battle, ctx } = setup('hh3', true);
+    resolveTurn(ctx, { kind: 'move', index: 0 });
+    expect(battle.enemyVolatile.hauntedTurns).toBe(2);
+    resolveTurn(ctx, { kind: 'move', index: 1 });
+    expect(battle.enemyVolatile.haunted).toBe(0);
+  });
+});
+
+describe("Sabrina's Labyrinth rebuilt", () => {
+  const ids = ['lab-lost', 'lab-n1', 'lab-n2', 'lab-n3', 'lab-n4', 'lab-n5', 'lab-n6', 'lab-final'];
+  it('has the six rooms and the finale, every one with a way on', () => {
+    for (const id of ids) expect(content.events.has(P + id), id).toBe(true);
+    for (const id of ids.slice(0, -1)) expect(targets(id).length, id).toBeGreaterThan(0);
+  });
+  it('the finale is the false-slot fight with the ghost rescue, and a loss sends you back', () => {
+    const b = room('lab-final').choices[0]!.success.battle as unknown as { rule: Record<string, boolean>; lose: object[] };
+    expect(b.rule).toMatchObject({ falseSlot: true, ghostRescue: true });
+    expect(b.lose).toContainEqual(expect.objectContaining({ action: 'labRetry' }));
+  });
+  it('the false slot is stable, hidden until every second turn, and never points at itself', () => {
+    for (let turn = 1; turn < 30; turn++) {
+      const a = falseSlotFor(turn, 'u1', 4)!;
+      expect(a).toEqual(falseSlotFor(turn, 'u1', 4));
+      expect(a.to).not.toBe(a.slot);
+      expect(a.seen).toBe(turn % 2 === 0);
+    }
+    expect(falseSlotFor(1, 'u1', 1)).toBeNull();
+  });
+  it('a false slot uses another move; a seen one shows nothing different in the engine', () => {
+    const player = createPokemon(content, 'gengar', 50, 'p');
+    player.moves = [{ id: 'shadow-ball', pp: 15 }, { id: 'splash', pp: 40 }];
+    const enemy = createPokemon(content, 'wailord', 100, 'e');
+    enemy.moves = [{ id: 'splash', pp: 40 }];
+    const battle = createBattle('trainer', [enemy], 0, player.uid, { classId: 'gym-leader', name: 'Sabrina', leaderId: null });
+    battle.eventRule = { falseSlot: true } as never;
+    const ctx: BattleContext = { content, battle, party: [player], inventory: {}, rng: new Rng(hashSeed('fs')), captureRng: new Rng(hashSeed('fsc')), catchMultiplier: 1 };
+    const lie = falseSlotFor(battle.turn, player.uid, 2, [true, true])!;
+    const ev = resolveTurn(ctx, { kind: 'move', index: lie.slot });
+    expect(ev.some((e) => e.type === 'raid' && /twists/.test((e as { text: string }).text))).toBe(true);
+    expect(player.moves[lie.to]!.pp).toBeLessThan(player.moves[lie.to]!.id === 'splash' ? 40 : 15);
+  });
+  it('a loss resets the Labyrinth, or resumes at the room reached with the accessibility setting', () => {
+    const run = withParty('LR', ['pikachu', 'eevee']);
+    eff(run, 'ghostStart');
+    eff(run, 'ghostFree');
+    eff(run, 'labRoom', { level: 3 });
+    expect(labRetryEvent(content, run)).toBe(P + 'lab-n1');
+    expect(run.expansion!.canon!.lab!.freed).toEqual([]);
+    eff(run, 'ghostFree');
+    eff(run, 'labRoom', { level: 3 });
+    run.expansion!.canon!.labResume = true;
+    expect(labRetryEvent(content, run)).toBe(P + 'lab-n4');
+    expect(run.expansion!.canon!.lab!.freed).toHaveLength(1);
   });
 });
 

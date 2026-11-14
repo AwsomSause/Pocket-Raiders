@@ -67,9 +67,11 @@ export const CanonStateSchema = z.object({
   menus: z.record(z.string(), z.array(spaceId)).default({}),
   /** Saffron: party members waiting while one Pokémon fights alone (PokemonInstance rows; checked where they are used). */
   stash: z.array(z.unknown()).optional(),
+  /** Accessibility: a loss in Sabrina's Labyrinth resumes from the last room reached instead of starting over (setting `labyrinthResume`). */
+  labResume: z.boolean().optional(),
   solo: z.object({ keep: z.string(), order: z.array(z.string()), mode: z.enum(['tournament', 'labyrinth']) }).optional(),
   /** Saffron: Sabrina's Labyrinth. `owed`: the ghost returns in the next region; `returned`: it already did. */
-  lab: z.object({ ghost: z.string(), ghostUid: z.string(), regionIndex: z.number().int(), stageIndex: z.number().int(), freed: z.array(z.string()), active: z.boolean(), done: z.boolean(), owed: z.boolean(), returned: z.boolean() }).optional(),
+  lab: z.object({ ghost: z.string(), ghostUid: z.string(), regionIndex: z.number().int(), stageIndex: z.number().int(), room: z.number().int().min(0).optional(), freed: z.array(z.string()), active: z.boolean(), done: z.boolean(), owed: z.boolean(), returned: z.boolean() }).optional(),
 });
 export type CanonState = z.infer<typeof CanonStateSchema>;
 
