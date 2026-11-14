@@ -40,11 +40,13 @@ const HEAL = process.argv.includes('--heal');
 const SIDES = process.argv.includes('--sides');
 // --deep: a stronger bot (best switches, par-level party) and a long step budget, so runs reach region 3+ and the late game gets exercised too.
 const DEEP = process.argv.includes('--deep');
+// --par=N: how many levels above the highest foe seen so far the deep bot keeps its party (default 25); raise it to measure how far a stronger team gets.
+const PAR = Number(process.argv.find((a) => a.startsWith('--par='))?.slice(6) ?? 25);
 // --expansion: start every run the way the game does, with the Beta 0.6 expansion settings at their shipped defaults (all on).
 const EXPANSION = process.argv.includes('--expansion');
 const SHIPPED_EXPANSION = { stagePacing: true, evolutionEncounters: true, leagueCounterPick: true, kantoCanon: true, grandArc: true, worldTracks: true, eventsDensity: 'normal', climaxCut: 'standard' } as const;
-const STEPS = DEEP ? 40000 : 4000;
-const STUCK_STEPS = DEEP ? 4000 : 1500;
+const STEPS = DEEP ? (process.argv.includes('--full') ? 120000 : 40000) : 4000;
+const STUCK_STEPS = DEEP ? 6000 : 1500;
 
 export function config(i: number) {
   const rng = new Rng(hashSeed(`playtest-${i}`));
@@ -62,7 +64,7 @@ export function config(i: number) {
   const wantsBlock = rng.int(0, 4) === 0;
   const deathBlock = wantsBlock && rulesProblem({ modeId, difficultyId, modifierIds, deathBlock: true }) === null;
   // Deep runs: the long multi-region mode, easy difficulty, no modifiers and Death-Block, so the run can reach later regions.
-  if (DEEP) return { i, seed: `pt${i}`, archetypeId, modeId: 'multi-region', difficultyId: 'casual', modifierIds: [], deathBlock: false };
+  if (DEEP) return { i, seed: `pt${i}`, archetypeId, modeId: process.argv.includes('--full') ? 'standard' : 'multi-region', difficultyId: 'casual', modifierIds: [], deathBlock: false };
   return { i, seed: `pt${i}`, archetypeId, modeId, difficultyId, modifierIds, deathBlock };
 }
 
@@ -70,7 +72,7 @@ let deepest = 0;
 for (let i = from; i < from + count; i++) {
   const cfg = config(i);
   const t0 = Date.now();
-  const rec: Record<string, unknown> = { ...cfg, heal: HEAL };
+  const rec: Record<string, unknown> = { ...cfg, heal: HEAL, ...(DEEP ? { par: PAR } : {}) };
   let steps = 0;
   let lastProgress = 0;
   let lastKey = '';
@@ -86,7 +88,7 @@ for (let i = from; i < from + count; i++) {
       rules: { modeId: cfg.modeId, difficultyId: cfg.difficultyId, modifierIds: cfg.modifierIds, deathBlock: cfg.deathBlock },
       steps: STEPS,
       smart: true,
-      ...(DEEP ? { strong: true, parLevel: 25 } : {}),
+      ...(DEEP ? { strong: true, parLevel: PAR } : {}),
       healOnMap: HEAL,
       ...(EXPANSION ? { expansion: SHIPPED_EXPANSION } : {}),
       onStep: (r0) => {

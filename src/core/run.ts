@@ -98,6 +98,7 @@ import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } 
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
 import { pickPlannedTheme, snapshotStagePlan, stageSignals, tailorStage } from './stagePlan';
+import { carryRewind, grantRewinds, rewindBattle, rewindTurnsAvailable, takeStageSnapshot, takeTurnSnapshot, withoutRewindSnapshots } from './rewind';
 import { currentColumn, findNode, generateLeagueMap, generateStageMap, nextChoices, validateLeagueMap, validateStageMap } from './map';
 import { addItemAttribute, addRunAttribute, attributeText, effectiveAttributes, luckWeights, readAttributes, runAttributeEffects, zeroAttributes } from './attributes';
 import { count, countShiny, discover } from './progress';
@@ -185,6 +186,7 @@ import { createStreams, hashSeed, Rng, withStream } from './rng';
 import { lastChanceRevive } from './lastChance';
 import { assignBlessing, blessingAfterBattle, blessingPerks, blessingShopFactor, syncCommunion } from './blessings';
 import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPurchase, recentCopies } from './priceSwing';
+import { closeNodeMenu, freshNodeMenuState, menuBlocker, nodeMenusAllowed } from './nodeMenu/flow';
 import { BattleStateSchema, currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
 import { itemSlotLimit } from './trainerPerks';
 import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
@@ -246,7 +248,7 @@ import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
 import { recapRegion, tellAct } from './campaign/director';
-import { healStopShut, trackShopFactor, trackWildWeight } from './expansion/trackRun';
+import { healStopShut, trackHealShare, trackShopFactor, trackWildWeight } from './expansion/trackRun';
 import { freshClock, migrationWildWeight, periodOf, periodWildWeight, shopHoursMultiplier, stepClock, tideShopMultiplier, tideWildWeight } from './clock';
 import { bulkTotal, currentShopType, haggleWins, pokenetDeal, shopTypeAt, typedStock, typePriceFactor } from './shopTypes';
 import { finalRivalLine, tellCampfire } from './story/highHype';
@@ -342,7 +344,7 @@ export interface NewRunOptions {
   /** Story Run: the player's name, pronouns and Look from the prologue (profile.story.protagonist). */
   protagonist?: { look: string; name: string; pronouns: string | PronounSet; backstory?: string };
   /** Beta 0.6: which expansion settings were on at run start (settings.expansion). Each flag is stored in `run.expansion` once and never changes. */
-  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean; grandArc?: boolean; worldTracks?: boolean; eventsDensity?: 'low' | 'normal' | 'full'; climaxCut?: 'standard' | 'extended'; storyTraits?: boolean; blessings?: boolean };
+  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean; grandArc?: boolean; worldTracks?: boolean; eventsDensity?: 'low' | 'normal' | 'full'; climaxCut?: 'standard' | 'extended'; storyTraits?: boolean; rewinds?: boolean; nodeMenus?: boolean; blessings?: boolean };
 }
 
 export function createRun(content: Content, opts: NewRunOptions): RunState {
@@ -448,8 +450,14 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.kantoCanon ? { canon: { flags: [], completed: [], menus: {} } } : {}), ...(e.worldTracks ? { tracks: true } : {}), ...(e.eventsDensity ? { density: e.eventsDensity } : {}), ...(e.climaxCut === 'extended' ? { climaxCut: 'extended' as const } : {}), ...(e.storyTraits ? { storyTraits: true } : {}) };
     if (Object.keys(flags).length > 0) run.expansion = { ...run.expansion, ...flags };
     if (e.blessings) assignBlessing(run);
+    // Beta 0.7 Node Event Menus: on for this run when the setting is on, except in speedrun, boss rush and time attack.
+    if (e.nodeMenus && nodeMenusAllowed(run.rules.modifierIds)) run.expansion = { ...run.expansion, nodeMenus: freshNodeMenuState() };
     setClimaxCut(run, e.climaxCut);
     if (e.grandArc) startGrandArc(run);
+    if (e.rewinds) {
+      grantRewinds(run, 'setting');
+      if (run.stage) takeStageSnapshot(run);
+    }
   }
   recordRunStarted(content, run);
   return run;
@@ -462,7 +470,7 @@ function takeCheckpoint(run: RunState): void {
     return;
   }
   const { checkpoint: _old, ...rest } = run;
-  run.checkpoint = structuredClone(rest) as Record<string, unknown>;
+  run.checkpoint = structuredClone(withoutRewindSnapshots(rest)) as Record<string, unknown>;
 }
 
 /**
@@ -477,6 +485,7 @@ function restoreAfterWipe(content: Content, run: RunState): RunState | null {
   const maxWipes = getMode(run.rules.modeId)?.maxWipes;
   if (adventure && maxWipes !== undefined && run.rules.wipes >= maxWipes) return null;
   const back = structuredClone(run.checkpoint) as unknown as RunState;
+  carryRewind(run, back);
   // A nemesis made (or made stronger) by the wipe is remembered after it.
   back.story.nemeses = structuredClone(run.story.nemeses);
   back.rules = { ...run.rules, wipes: run.rules.wipes + 1, deathBlockUsed: run.rules.deathBlockUsed || block };
@@ -751,6 +760,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   run.battle = null;
   run.phase = 'map';
   takeCheckpoint(run);
+  takeStageSnapshot(run); // L3 Rewinds: the run snapshot (only when rewinds are on)
 }
 
 /**
@@ -960,6 +970,10 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
       return run;
     }
   }
+  // Beta 0.7 Node Event Menus: a required entry must be done first; then the node's menu closes.
+  const blocker = menuBlocker(run);
+  if (blocker) throw new Error(blocker);
+  closeNodeMenu(content, run);
   const mode = run.moveMode;
   delete run.moveMode;
   const node = findNode(stage.map, nodeId);
@@ -1054,7 +1068,7 @@ function recordBattleStart(content: Content, run: RunState): void {
   delete run.recorder;
   if (!run.battle || !(vsRecorderReady(content, run) || safetyNetReady(content, run))) return;
   const { checkpoint: _c, recorder: _r, ...rest } = run;
-  run.recorder = structuredClone(rest) as Record<string, unknown>;
+  run.recorder = structuredClone(withoutRewindSnapshots(rest)) as Record<string, unknown>;
 }
 
 // ---------- map items: getting around (M8.75 slice 3b-2) ----------
@@ -2516,7 +2530,11 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
   if (side.kind === 'heal' && noHealStops(run.rules)) return { run: current, message: 'Your No Rest contract forbids healing stops.' };
   if (side.kind === 'heal' && healStopShut(content, run, sideId)) return { run: current, message: 'The Pokémon Center is shut for the night: the Ledger says so. Try again in the morning.' };
   if (side.kind === 'heal') {
+    const before = run.party.map((m) => m.hp);
     healParty(content, run);
+    // Kalos step 3 (Members First): the Center gives back only part of each Pokémon's HP.
+    const share = trackHealShare(content, run);
+    if (share < 1) run.party.forEach((m, i) => { m.hp = Math.min(m.hp, Math.max(before[i] ?? 0, Math.ceil(maxHp(content, m) * share))); });
     careRest(run, content);
     partyLifeCamp(run);
     const comboLine = [partyLifeCombos(content, run), ...assignGrowthPaths(content, run.party, run.story.histories)].filter(Boolean).join(' ');
@@ -2812,6 +2830,8 @@ export interface TurnResult {
   clubLost?: boolean;
   /** The whole party fainted but the rules sent the run back to its checkpoint. */
   wiped?: boolean;
+  /** L3 Rewinds: the whole party fainted and the Time Keeper turned the battle back this many turns (the battle goes on). */
+  rewound?: number;
   /** A narrative rival defeat (M12): the battle was lost for the story, the party is healed and the run goes on. Never a game over. */
   narrativeDefeat?: { id: string; defeatLine: string; victoryLine: string };
   /** Story Run: a lost rival or story fight that the run survives (party healed, map next). Never a game over. */
@@ -2869,6 +2889,7 @@ function pokemonMomentHooks(content: Content, run: RunState): MomentHooks {
       if (battle.expedition || battle.raid || battle.totem || battle.narrative || battle.event || battle.stepIn || battle.doubles) return false;
       if (storyLossApplies(run, battle, content)) return false;
       if (run.recorder && (vsRecorderReady(content, run) || safetyNetReady(content, run))) return false;
+      if (rewindTurnsAvailable(content, run) > 0) return false;
       if (run.checkpoint && (getMode(run.rules.modeId)?.checkpoints === true || (run.rules.deathBlock && !run.rules.deathBlockUsed && run.encountersCompleted < RUN_RULES.deathBlock.battles))) return false;
       return true;
     },
@@ -2989,6 +3010,7 @@ function escapeBattle(content: Content, run: RunState, itemId: string, rng: Rng,
 export function takeTurn(content: Content, current: RunState, action: PlayerAction, dialogue: DialogueFrequency = 'normal'): TurnResult {
   assertPhase(current, 'battle');
   const run = structuredClone(current);
+  takeTurnSnapshot(current, run); // L3 Rewinds: the battle snapshot as this turn begins (only when rewinds are on)
   const battle = run.battle!;
   const rng = new Rng(run.rng.battle);
   const captureRng = new Rng(run.rng.capture);
@@ -3211,15 +3233,21 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (battle.outcome === 'lose') {
     const enemy = currentEnemy(battle);
     run.log.defeatedBy = { speciesId: enemy.speciesId, level: enemy.level, trainer: battle.trainer?.name ?? null };
+    // L3 Rewinds come first in the rescue order (the loss isn't recorded yet): back as far as the rewind reaches.
+    const turnsBack = rewindTurnsAvailable(content, run);
+    const rewound = turnsBack > 0 ? rewindBattle(content, run, turnsBack) : null;
+    if (rewound) return { run: rewound, events, end: null, defeated: false, cues, drama, rewound: turnsBack };
     // VS Recorder: the trainer battle replays from the start, once per run.
     if (battle.kind === 'trainer' && run.recorder && vsRecorderReady(content, run)) {
       const replay = structuredClone(run.recorder) as unknown as RunState;
+      carryRewind(run, replay);
       replay.itemCounters = { ...replay.itemCounters, 'vs-recorder-used': 1 };
       return { run: replay, events, end: null, defeated: false, cues, drama, wiped: true };
     }
     // Safety Net: the wipe is undone once per run (a real wipe ends the run, Adventure keeps its own checkpoints).
     if (run.recorder && safetyNetReady(content, run)) {
       const replay = structuredClone(run.recorder) as unknown as RunState;
+      carryRewind(run, replay);
       replay.itemCounters = { ...replay.itemCounters, 'safety-net-used': 1 };
       healParty(content, replay);
       recordBattleStart(content, replay);
