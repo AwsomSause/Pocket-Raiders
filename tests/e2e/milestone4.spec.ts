@@ -81,8 +81,10 @@ test('the Pokémon League map leads to an Elite Four introduction', async ({ pag
   await page.keyboard.press('Enter'); // the first Elite Four member
   await waitForScene(page, 'Battle');
   expect((await run(page)).battle.trainer.classId).toBe('elite-four');
+  // The opening (transition, camera sweep over the arena, trainer reveal) runs about 7 s at full frame rate before the first
+  // line, and longer on a slow CI runner because the game clock follows the frames: 10 s was too tight there.
   await expect
-    .poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').message.text), { timeout: 10_000 })
+    .poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').message.text), { timeout: 40_000 })
     .toMatch(/^Elite Four .* would like to battle!/);
   await page.screenshot({ path: 'test-results/m4-elite-four.png' });
   expect(errors).toEqual([]);
