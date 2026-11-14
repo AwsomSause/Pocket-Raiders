@@ -21,7 +21,7 @@ export type EvilRankId = 'grunt' | 'specialist' | 'executive' | 'leader';
 /** One piece of an epilogue track, stored in the run as plain JSON. */
 export type EpiStep =
   | { t: 'card'; id: string }
-  | { t: 'battles'; key: string; name: string; n: number | 'banks'; size: number; evil?: EvilRankId; team?: string; types?: string[]; levelBonus?: number; /** Winning this duel takes this ROM from its liaison, late. */ rom?: string; /** Doom: the district taken back by a win. */ district?: string }
+  | { t: 'battles'; key: string; name: string; n: number | 'banks' | 'annex'; size: number; evil?: EvilRankId; team?: string; types?: string[]; levelBonus?: number; /** Winning this duel takes this ROM from its liaison, late. */ rom?: string; /** Doom: the district taken back by a win. */ district?: string }
   | { t: 'breather' }
   | { t: 'xd001' };
 

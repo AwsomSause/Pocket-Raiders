@@ -5,7 +5,7 @@ import { applyEffect } from '../../src/core/events';
 import { chooseOption, cardOf, closeFormat } from '../../src/core/formats/registry';
 import { currentFormat } from '../../src/core/formats/store';
 import { companionEpilogue, companionsOf, postcards } from '../../src/core/grandArc/companions';
-import { baseDoomLevel, doomDistricts, doomGyms, doomLedger, doomLevelNow, planDoom } from '../../src/core/grandArc/doom';
+import { annexTargets, doomAmbushPct, baseDoomLevel, doomDistricts, doomGyms, doomLedger, doomLevelNow, planDoom } from '../../src/core/grandArc/doom';
 import { epilogueActive, epilogueBattleEnded, epilogueTick, startEpilogue } from '../../src/core/epilogue/director';
 import { finaleAvailable, finaleCard, lostApproaches, planFinale, xd001Locks } from '../../src/core/grandArc/finale';
 import { earnRom, grandArcOf } from '../../src/core/grandArc';
@@ -204,6 +204,26 @@ describe('epilogue director (E11 + D1)', () => {
   });
 });
 
+describe('Doom annexes and ambushes', () => {
+  it('annexes take back held districts after the gyms and lower the Doom Level', () => {
+    const run = fresh('an', { doom: true, finale: false });
+    run.story.evil = { ...(run.story.evil ?? ({} as never)), teamId: 'star', end: 'none', villains: {}, ops: [], heat: 0, beat: 7, defector: false } as never;
+    expect(annexTargets(run)).toEqual(['starfall-avenue']);
+    startEpilogue(run);
+    const seen = drive(run, { picks: { annex: 'take' } });
+    expect(seen.filter((x) => x.startsWith('battle:annex')).length).toBe(1);
+    expect(run.expansion!.epilogue!.taken).toContain('starfall-avenue');
+    expect(run.expansion!.epilogue!.marks).toBe(8);
+  });
+  it('"Leave them" skips the annex fights', () => {
+    const run = fresh('an2', { doom: true, finale: false });
+    run.story.evil = { ...(run.story.evil ?? ({} as never)), teamId: 'star', end: 'none', villains: {}, ops: [], heat: 0, beat: 7, defector: false } as never;
+    startEpilogue(run);
+    const seen = drive(run, { picks: { annex: 'skip' } });
+    expect(seen.some((x) => x.startsWith('battle:annex'))).toBe(false);
+  });
+});
+
 describe('Rainbow Door', () => {
   it('has no fight with no Apex lost, and one lane per taken Apex', () => {
     const none = planFinale(fresh('rd0', { roms: ['K', 'J', 'H'] })).find((s) => s.t === 'battles' && s.key === 'rainbow') as { n: number };
@@ -224,7 +244,10 @@ describe('Region of Doom (D1)', () => {
     expect(ds.length).toBe(14);
     for (const id of ['black-market-mile', 'pale-garden', 'wire-row', 'crown-yard', 'undercroft']) expect(ds.some((d) => d.id === id)).toBe(true);
     expect(doomGyms(run).length).toBe(8);
-    expect(planDoom(run).filter((s) => s.t === 'battles').length).toBe(8);
+    expect(planDoom(run).filter((s) => s.t === 'battles' && s.key.startsWith('gym-')).length).toBe(8);
+    expect(planDoom(run)).toEqual(planDoom(run));
+    expect(doomAmbushPct(1)).toBe(23);
+    expect(doomAmbushPct(5)).toBe(35);
   });
   it('uses invented placeholder leaders when the run supplies none, and the run\'s own ranks when it does', () => {
     const empty = fresh('r1', { doom: true });
@@ -254,6 +277,7 @@ describe('Region of Doom (D1)', () => {
     expect(startEpilogue(win)).toBe(true);
     const seen = drive(win);
     expect(seen.filter((s) => s.startsWith('battle:gym-')).length).toBe(8);
+    expect(win.expansion!.epilogue!.marks).toBe(8); // ambushes give no Mark
     expect(win.expansion!.epilogue!.marks).toBe(8);
     expect(win.expansion!.epilogue!.doomResult).toBe('cleared');
     expect(win.expansion!.epilogue!.taken.length).toBe(8);

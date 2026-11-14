@@ -7,7 +7,7 @@ import { launchFormatBattle } from '../formats/battle';
 import { startFormat } from '../formats/registry';
 import { beginCut, currentFormat, cutOf, markCheckpoint } from '../formats/store';
 import { freeHandedOverRival } from '../arc/standWithExtended';
-import { doomAvailable, doomEnterCard, doomEpitaph, planDoom } from '../grandArc/doom';
+import { annexTargets, doomAnnexCard, doomAvailable, doomEnterCard, doomEpitaph, planDoom } from '../grandArc/doom';
 import { earnRom } from '../grandArc';
 import { apexTaken, epilogueOf, finaleAvailable, finaleCard, finaleEndedEarly, planFinale, reservoirBattles, xd001Locks, XD001_RAID, type EpiCard, type EpiStep } from '../grandArc/finale';
 import type { Content } from '../contentSchema';
@@ -65,6 +65,7 @@ function cardFor(run: RunState, d: Dir, id: string): EpiCard {
   const ep = epilogueOf(run);
   if (id === 'early-end') return finaleEndedEarly((ep?.finaleResult === 'sold' ? 'sold' : ep?.finaleResult === 'declined' ? 'declined' : 'silent'));
   if (id === 'doom-enter') return doomEnterCard(run);
+  if (id === 'doom-annex') return doomAnnexCard(run);
   if (id === 'doom-end') {
     const e = ensureEp(run);
     if (e.doomResult === undefined) e.doomResult = e.marks >= 8 ? 'cleared' : 'fled';
@@ -81,6 +82,7 @@ function applyPick(run: RunState, d: Dir, id: string, pick: string | undefined):
   if (id === 'letter' && pick === 'never') cutToEnd(run, d, 'declined');
   else if (id === 'greevil' && pick === 'number') cutToEnd(run, d, 'sold');
   else if (id === 'doom-enter' && pick === 'leave') cutToEnd(run, d, 'declined');
+  else if (id === 'doom-annex' && pick === 'skip') ep.picks['annex'] = 'skip';
 }
 
 export type TickResult = 'idle' | 'wait' | 'battle' | 'over';
@@ -124,7 +126,7 @@ export function epilogueTick(content: Content, run: RunState): TickResult {
       return 'wait';
     }
     if (step.t === 'battles') {
-      d.need = d.need ?? (step.n === 'banks' ? reservoirBattles(run) : step.n);
+      d.need = d.need ?? (step.n === 'banks' ? reservoirBattles(run) : step.n === 'annex' ? (epilogueOf(run)?.picks['annex'] === 'skip' ? 0 : annexTargets(run).length) : step.n);
       const fought = d.fought ?? 0;
       if (fought >= d.need) { next(); continue; }
       const greevilNine = step.key === 'greevil' && epilogueOf(run)?.picks['greevil'] === 'nine';
@@ -165,6 +167,10 @@ export function epilogueBattleEnded(run: RunState, won: boolean): void {
   } else if (step.t === 'battles') {
     d.fought = (d.fought ?? 0) + 1;
     if (step.rom) earnRom(run, step.rom, true);
+    if (step.n === 'annex') {
+      const next = annexTargets(run)[0];
+      if (next && !ep.taken.includes(next)) ep.taken.push(next);
+    }
     if (step.district) {
       if (!ep.taken.includes(step.district)) ep.taken.push(step.district);
       ep.marks = Math.min(8, ep.marks + 1);

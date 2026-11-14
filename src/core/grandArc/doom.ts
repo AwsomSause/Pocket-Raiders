@@ -80,10 +80,34 @@ export function doomGyms(run: Pick<RunState, 'story' | 'expansion' | 'seed'>): D
   });
 }
 
+/** Chance (percent) of an ambush before a gym: 20% base, +3% per Doom Level, capped at 35%. */
+export const doomAmbushPct = (level: number): number => Math.min(D.ambushCap, D.ambushBase + D.ambushPerLevel * level);
+
 /** The visit: the doorway card, four gyms, the Pale Garden's rest, four gyms, and the epitaph. */
 export function planDoom(run: Pick<RunState, 'story' | 'expansion' | 'seed'>): EpiStep[] {
   const gyms = doomGyms(run).map((g) => g.spec);
-  return [{ t: 'card', id: 'doom-enter' }, ...gyms.slice(0, 4), { t: 'breather' }, ...gyms.slice(4), { t: 'card', id: 'doom-end' }];
+  const level = baseDoomLevel(doomLedger(run));
+  const pct = doomAmbushPct(level);
+  const rng = new Rng(hashSeed(`${run.seed}::doom-ambush`));
+  const own = Boolean(run.story.evil?.teamId);
+  // Ambush: on the way to each gym the streets may jump you (a seeded roll per gym; the Pale Garden's rest is always safe). Winning it gives no Mark.
+  const withAmbush = (g: Extract<EpiStep, { t: 'battles' }>): EpiStep[] => (g.key !== 'gym-1' && rng.chance(pct / 100)
+    ? [{ t: 'battles', key: `ambush-${g.key}`, name: 'Ambush', n: 1, size: 3, ...(own ? { evil: 'grunt' as const } : { types: ['dark'] }) }, g]
+    : [g]);
+  return [{ t: 'card', id: 'doom-enter' }, ...gyms.slice(0, 4).flatMap(withAmbush), { t: 'breather' }, ...gyms.slice(4).flatMap(withAmbush), { t: 'card', id: 'doom-annex' }, { t: 'battles', key: 'annex', name: 'District Holdout', n: 'annex', size: 4, ...(own ? { evil: 'specialist' as const } : { types: ['dark'] }), levelBonus: D.levelsPerDoomLevel * level }, { t: 'card', id: 'doom-end' }];
+}
+
+/** Annexes: districts a ledger team still holds that no gym took back (up to three). Each is one optional fight; a win takes it back and lowers the Doom Level. */
+export const annexTargets = (run: Pick<RunState, 'story' | 'expansion'>): string[] => doomDistricts(run).filter((d) => d.control !== 'unclaimed' && !d.taken).slice(0, 3).map((d) => d.id);
+
+export function doomAnnexCard(run: Pick<RunState, 'story' | 'expansion'>): { title: string; lines: string[]; options: Array<{ id: string; label: string }> } {
+  const t = annexTargets(run);
+  const names = doomDistricts(run).filter((d) => t.includes(d.id)).map((d) => d.name);
+  return {
+    title: 'Annexes',
+    lines: t.length ? [`The eight gyms are down, but ${names.join(', ')} still ${t.length === 1 ? 'holds' : 'hold'} out. Each is one more fight, and each win takes the district back and lowers the Doom Level.`] : ['Every district a team held is yours now.'],
+    options: t.length ? [{ id: 'take', label: 'Take them back' }, { id: 'skip', label: 'Leave them' }] : [],
+  };
 }
 
 /** Is the Region of Doom offered now? On for the run, the run won, and not visited yet. */
@@ -113,12 +137,12 @@ export function doomEnterCard(run: Pick<RunState, 'story' | 'expansion'>): { tit
   const ds = doomDistricts(run);
   const base = baseDoomLevel(doomLedger(run));
   const held = ds.filter((d) => d.control !== 'unclaimed');
-  const ambush = Math.min(D.ambushCap, D.ambushBase + D.ambushPerLevel * base);
+  const ambush = doomAmbushPct(base);
   return {
     title: 'The Region of Doom: the Margin',
     lines: [
       'A tenth region, drawn on the edge of the map from everything this run left unfinished. Fourteen districts, eight Evil Gyms, and a chair at the bottom of the Undercroft.',
-      `Doom Level ${base} of 5. It falls 0.2 for each district you take back. Streets hold about ${ambush}% ambush odds (shown, not applied in this epilogue).`,
+      `Doom Level ${base} of 5. It falls 0.2 for each district you take back. Streets hold about ${ambush}% ambush odds before each gym.`,
       held.length ? `Held right now: ${held.map((d) => `${d.name} (${teamName(d.control)})`).join(', ')}.` : 'No team holds a district: they are all unclaimed.',
       'A loss sends you out of the Margin. It never undoes your win.',
     ],
