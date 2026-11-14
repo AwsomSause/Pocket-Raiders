@@ -10,6 +10,7 @@ import { RescueStateSchema } from '../evil/rescueSchema';
 import { GrandArcStateSchema } from '../grandArc/schema';
 import { StandWithStateSchema } from '../arc/standWithSchema';
 import { RivalOverhaulStateSchema } from '../rivals/overhaulSchema';
+import { RewindStateSchema } from '../rewindSchema';
 
 /** F1: every expansion setting at its default (plan section 10). Lives in `settings.expansion` (settings v42). */
 export const ExpansionSettingsSchema = z.object({
@@ -33,6 +34,8 @@ export const ExpansionSettingsSchema = z.object({
   worldTracks: z.boolean().default(true),
   /** Beta 0.7: team-wide battle traits for Alola and Paldea story events (Hype Man, Reluctant Hand). Off by default; read when a run starts. */
   storyTraits: z.boolean().default(false),
+  /** Beta 0.7 L3 Rewinds (test switch until the blessings grant them): the Time Keeper's rewind in every run, once per stage. Read at run start. */
+  rewinds: z.boolean().default(false),
 });
 export type ExpansionSettings = z.infer<typeof ExpansionSettingsSchema>;
 export const EXPANSION_SETTINGS_DEFAULTS: ExpansionSettings = ExpansionSettingsSchema.parse({});
@@ -86,6 +89,8 @@ export const ExpansionRunSchema = z.object({
   xe: z.record(z.string(), z.number().int().min(0)).optional(),
   /** Runs with the world-state tracks on (E2). Set once at run start. */
   tracks: z.boolean().optional(),
+  /** Beta 0.7 L3 Rewinds (core/rewind.ts): the run and battle snapshots. Present only when rewinds were granted. */
+  rewind: RewindStateSchema.optional(),
   /** Camp scenes: the last player Pokémon to faint and the encounter count then (cleared by a night's rest). */
   lastFaint: z.object({ uid: z.string(), at: z.number().int().min(0) }).optional(),
   /** B7: the Pokémon (uids) registered at the League door. Only these are ever countered; a swapped-in Pokémon is unseen. `swapped` = the one swap is used. */
