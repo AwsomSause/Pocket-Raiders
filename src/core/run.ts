@@ -246,6 +246,7 @@ import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
 import { recapRegion, tellAct } from './campaign/director';
+import { applyTremor } from './expansion/galarDynamax';
 import { healStopShut, trackHealShare, trackShopFactor, trackWildWeight } from './expansion/trackRun';
 import { freshClock, migrationWildWeight, periodOf, periodWildWeight, shopHoursMultiplier, stepClock, tideShopMultiplier, tideWildWeight } from './clock';
 import { bulkTotal, currentShopType, haggleWins, pokenetDeal, shopTypeAt, typedStock, typePriceFactor } from './shopTypes';
@@ -2002,6 +2003,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     }
     outbreakShadow(content, run, enemy, node.id);
     run.battle = createBattle('wild', [enemy], activeIndex, activeUid);
+    applyTremor(content, run);
     assignField(content, run, false);
     if (alphaFoe) {
       run.battle.alpha = true;
