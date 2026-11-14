@@ -1573,5 +1573,10 @@
   "id": "champions-fury",
   "name": "Champion's Fury",
   "description": "Each time it is sent out, a random stat rises by two stages, and its first attack since then goes first."
+ },
+ {
+  "id": "champions-entrance",
+  "name": "Champion's Entrance",
+  "description": "When sent out, a random stat rises by two stages (never the same stat twice running, and never more than +4 in total per battle). Its first attack after entering goes first."
  }
 ]

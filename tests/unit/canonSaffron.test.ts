@@ -24,7 +24,7 @@ const targets = (id: string): string[] => room(id).choices.flatMap((c) => [c.suc
 describe('Saffron canon: the event graph', () => {
   it('every addEvent target exists, and every room is reached from a gate', () => {
     const ids = [...content.events.keys()].filter((id) => id.startsWith(P)).map((id) => id.slice(P.length));
-    const gates = ['r25', 'tournament', 'dojo', 'copycat', 'silph', 'train', 'labyrinth', 'return-shuppet', 'return-duskull', 'return-drifloon', 'return-gastly'];
+    const gates = ['r25', 'tournament', 'dojo', 'copycat', 'silph', 'train', 'labyrinth', 'return-shuppet', 'return-duskull', 'return-drifloon', 'return-gastly', 'rival-return'];
     const reach = new Set<string>(gates);
     for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id)) { expect(content.events.has(t), `${id} -> ${t}`).toBe(true); if (!reach.has(t.slice(P.length))) { reach.add(t.slice(P.length)); again = true; } } }
     expect([...reach].sort()).toEqual(ids.sort());
@@ -34,21 +34,33 @@ describe('Saffron canon: the event graph', () => {
   });
 });
 
-describe('Route 25', () => {
-  it('is five Mankey in a row: three, a breather, one, then a raging Primeape that knows Rage', () => {
-    const first = room('r25').choices[0]!.success.battle!;
-    expect(first).toMatchObject({ kind: 'wild', species: ['mankey'], chain: 3 });
-    expect(room('r25-breath').choices.map((c) => c.success.effects.some((e) => e.kind === 'heal'))).toEqual([true, false]);
-    const last = room('r25-wrath').choices[0]!.success.battle!;
-    expect(last).toMatchObject({ kind: 'wild', species: ['primeape'], foeMoves: ['rage'] });
+describe('Route 25: The Angry Mankey', () => {
+  const win = (id: string) => (room(id).choices[0]!.success.battle as { win: object[] }).win;
+  it('is five Mankey in a row with no healing: three, one, then a fifth that stands guard', () => {
+    expect(room('r25').choices[0]!.success.effects).toContainEqual({ kind: 'addEvent', eventId: `${P}r25-1` });
+    expect(room('r25-1').choices[0]!.success.battle).toMatchObject({ kind: 'wild', species: ['mankey'], chain: 3 });
+    expect(room('r25-4').choices[0]!.success.battle).toMatchObject({ kind: 'wild', species: ['mankey'] });
+    expect(room('r25-5').choices[0]!.success.battle).toMatchObject({ kind: 'wild', species: ['mankey'], rule: { foeStands: 1 } });
+    for (const id of ['r25-1', 'r25-4', 'r25-5']) expect(JSON.stringify(room(id))).not.toContain('"heal"');
   });
-  it('the reward is Mankey with Swords Dance and Mach Punch, the kanto.mankey flag and the Tournament', () => {
-    const win = (room('r25-wrath').choices[0]!.success.battle as { win: object[] }).win;
-    expect(win).toContainEqual(expect.objectContaining({ kind: 'join', species: ['mankey'] }));
-    expect(win).toContainEqual(expect.objectContaining({ kind: 'teachMove', move: 'swords-dance', species: 'mankey' }));
-    expect(win).toContainEqual(expect.objectContaining({ kind: 'teachMove', move: 'mach-punch', species: 'mankey' }));
-    expect(win).toContainEqual({ kind: 'flag', key: 'kanto-mankey', amount: 1 });
-    expect(win).toContainEqual({ kind: 'addEvent', eventId: `${P}tournament` });
+  it("the thieves' camp is one node off the path, before or after the fight, and returns the food", () => {
+    expect(room('r25').choices[1]!.success.effects).toContainEqual({ kind: 'addEvent', eventId: `${P}r25-camp` });
+    expect(win('r25-camp')).toContainEqual({ kind: 'flag', key: 'r25-food', amount: 1 });
+    expect(win('r25-camp-after')).toContainEqual({ kind: 'flag', key: 'r25-food', amount: 1 });
+    expect(room('r25-after').choices.some((c) => c.success.effects.some((e) => e.kind === 'addEvent' && e.eventId === `${P}r25-camp-after`))).toBe(true);
+  });
+  it('the reward is Mankey with Swords Dance and Mach Punch; with the food returned it starts fonder (Bond +2) and the troop is in the crowd', () => {
+    for (const id of ['r25-thanks', 'r25-claim']) {
+      const fx = room(id).choices[0]!.success.effects;
+      expect(fx).toContainEqual(expect.objectContaining({ kind: 'join', species: ['mankey'] }));
+      expect(fx).toContainEqual(expect.objectContaining({ kind: 'teachMove', move: 'swords-dance', species: 'mankey' }));
+      expect(fx).toContainEqual(expect.objectContaining({ kind: 'teachMove', move: 'mach-punch', species: 'mankey' }));
+      expect(fx).toContainEqual({ kind: 'flag', key: 'kanto-mankey', amount: 1 });
+      expect(fx).toContainEqual({ kind: 'addEvent', eventId: `${P}tournament` });
+    }
+    expect(room('r25-thanks').choices[0]!.success.effects.find((e) => e.kind === 'join')).toMatchObject({ friendship: 40 });
+    expect(room('r25-claim').choices[0]!.success.effects.find((e) => e.kind === 'join')).not.toHaveProperty('friendship');
+    expect(room('tc').choices.map((c) => c.requires![0])).toEqual([expect.objectContaining({ key: 'r25-food', atLeast: 1 }), expect.objectContaining({ key: 'r25-food', atMost: 0 })]);
   });
   it('a flawless run pays a Black Belt to the Mankey; a fainted Pokémon does not', () => {
     const run = begin('R25');
@@ -59,14 +71,26 @@ describe('Route 25', () => {
     hurt.party[0]!.hp = 0;
     expect(eff(hurt, 'flawless')).toBe('');
   });
-  it('a won event battle applies the flag and syncs it to the canon state when the gate was played', () => {
-    const { run, sideId } = debugForceEvent(content, structuredClone(begin('R25c')), `${P}r25-wrath`);
+  it('the fifth Mankey does not attack on the first turn, then fights', () => {
+    const player = createPokemon(content, 'pikachu', 30, 'p');
+    player.moves = [{ id: 'tackle', pp: 35 }];
+    const enemy = createPokemon(content, 'mankey', 5, 'e');
+    enemy.hp = 9999;
+    const battle = createBattle('wild', [enemy], 0, player.uid, null);
+    battle.eventRule = { foeStands: 1 };
+    const ctx: BattleContext = { content, battle, party: [player], inventory: {}, rng: new Rng(hashSeed('stand')), captureRng: new Rng(hashSeed('stand-c')), catchMultiplier: 1 };
+    const hp = player.hp;
+    const first = resolveTurn(ctx, { kind: 'move', index: 0 });
+    expect(JSON.stringify(first)).toContain('stands in front of the others');
+    expect(player.hp).toBe(hp);
+    resolveTurn(ctx, { kind: 'move', index: 0 });
+    expect(player.hp).toBeLessThan(hp);
+  });
+  it('a won event battle applies the flag when the reward room is played', () => {
+    const { run, sideId } = debugForceEvent(content, structuredClone(begin('R25c')), `${P}r25-claim`);
     const out = chooseEvent(content, run, sideId, 0);
-    expect(out.battle).toBe(true);
-    const won = structuredClone(out.run);
-    eventBattleWon(content, won, { eventId: `${P}r25-wrath`, choiceIndex: 0, sideId, success: true });
-    expect(won.story.flags['ev:kanto-mankey']).toBe(1);
-    expect(won.pending.some((p) => p.kind === 'caught' && p.mon.speciesId === 'mankey' && p.mon.moves.some((m) => m.id === 'mach-punch'))).toBe(true);
+    expect(out.run.story.flags['ev:kanto-mankey']).toBe(1);
+    expect(out.run.pending.some((p) => p.kind === 'caught' && p.mon.speciesId === 'mankey' && p.mon.moves.some((m) => m.id === 'mach-punch'))).toBe(true);
   });
 });
 
@@ -89,8 +113,8 @@ describe('Fighting Tournament', () => {
     leaveCanonStash(run);
     expect(run.party.map((m) => m.speciesId)).toEqual(['pikachu', 'primeape', 'eevee']);
   });
-  it('is five 1-on-1 rounds; prizes match the table; the foe is matched in level and stat total', () => {
-    const rounds = ['t1', 't2', 't3', 't4', 't5'].map((id) => room(id).choices[0]!.success.battle as never as { size: number; species?: string[]; rule: object; win: { kind: string; id?: string }[]; lose: object[]; mirror?: boolean });
+  it('is five 1-on-1 rounds (Machop, Hawlucha, Throh, Hitmonchan, then a rival); prizes match the table; the foe is matched in level and stat total', () => {
+    const rounds = ['t1', 't2', 't3', 't4', 't5a'].map((id) => room(id).choices[0]!.success.battle as never as { size: number; species?: string[]; rule: object; win: { kind: string; id?: string }[]; lose: object[]; mirror?: boolean });
     expect(rounds.every((r) => r.size === 1)).toBe(true);
     expect(rounds.slice(0, 4).map((r) => r.win.find((w) => w.kind === 'item')!.id)).toEqual(['muscle-band', 'protein', 'focus-sash', 'black-belt']);
     expect(rounds.slice(0, 4).every((r) => (r.rule as { matchLead: boolean; bstMatch: boolean }).matchLead && (r.rule as { bstMatch: boolean }).bstMatch)).toBe(true);
@@ -99,6 +123,22 @@ describe('Fighting Tournament', () => {
     for (const r of rounds) expect(r.lose).toContainEqual(expect.objectContaining({ kind: 'canon', action: 'unsolo' }));
     const mankey = createPokemon(content, 'mankey', 20, 'x');
     expect(nearestBst(content, ['machoke', 'poliwrath'], mankey)).toBe('machoke');
+    expect(['t1', 't2', 't3', 't4'].map((id) => (room(id).choices[0]!.success.battle as { species: string[] }).species[0])).toEqual(['machop', 'hawlucha', 'throh', 'hitmonchan']);
+  });
+  it('has a training montage between rounds (Power, Guard or Footwork) and a rival final with its own reason', () => {
+    for (const n of [1, 2, 3, 4]) {
+      const m = room(`tm${n}`);
+      expect(m.choices.map((c) => c.label)).toEqual(['Power', 'Guard', 'Footwork']);
+      for (const c of m.choices) expect(c.success.effects).toContainEqual(expect.objectContaining({ kind: 'tempEffect', battles: 5 - n }));
+    }
+    expect(room('tm4').choices[0]!.success.effects).toContainEqual({ kind: 'addEventFrom', ids: [`${P}t5a`, `${P}t5b`, `${P}t5c`] });
+    expect(new Set(['t5a', 't5b', 't5c'].map((id) => room(id).intro)).size).toBe(3);
+  });
+  it('the title leaves a rival who returns in the next region wearing a home-made belt, once', () => {
+    const run = withParty('T5', ['mankey']);
+    eff(run, 'champion', { species: ['mankey'] });
+    expect(run.expansion!.canon!.rival).toMatchObject({ species: 'mankey', returned: false });
+    expect(room('rival-return')).toBeTruthy();
   });
   it('losing a round gives the party back', () => {
     const run = withParty('T3', ['mankey', 'pikachu']);
@@ -107,13 +147,13 @@ describe('Fighting Tournament', () => {
     expect(lose.join(' ')).toMatch(/gathers/);
     expect(run.party).toHaveLength(2);
   });
-  it('the title gives Champion’s Fury, Dynamic Punch, the belt and no Annihilape, ever', () => {
+  it("the title gives Champion's Entrance, Dynamic Punch, the belt and no Annihilape, ever", () => {
     const run = withParty('T4', ['primeape']);
     run.party[0]!.level = 80;
     expect(evolutionTarget(content, run.party[0]!)).toBe('annihilape');
     eff(run, 'champion', { species: ['mankey', 'primeape'] });
     const champ = run.party[0]!;
-    expect(abilityOf(content, champ)).toBe('champions-fury');
+    expect(abilityOf(content, champ)).toBe('champions-entrance');
     expect(champ.moves.map((m) => m.id)).toContain('dynamic-punch');
     expect(champ.champion).toBe(true);
     expect(champ.look).toBe('champion');
