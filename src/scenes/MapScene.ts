@@ -102,6 +102,9 @@ import { rivalReport } from '../core/rivals/report';
 import { trackPage } from '../core/expansion/trackView';
 import { fieldNotesView } from '../core/expansion/fieldNotes';
 import { drawFieldNotes, type FieldNotesPage } from '../ui/fieldNotesPage';
+import { drawNodeMenu, type NodeMenuPanel } from '../ui/nodeMenuPanel';
+import { menuBlocker, menuSideIds, type MenuEntryView } from '../core/nodeMenu/flow';
+import { nodeMenuData } from '../core/nodeMenu/data';
 import { drawTrackPage } from '../ui/trackPage';
 import { drawDossier } from '../ui/dossier';
 import { dossierFolders } from '../core/expansion/cast/dossier';
@@ -159,6 +162,7 @@ const serviceReusable = (side: SideStop): boolean => SERVICES.services.find((x) 
 type Option =
   | { kind: 'node'; node: MapNode }
   | { kind: 'side'; side: SideStop }
+  | { kind: 'nodeMenu' }
   | { kind: 'party' }
   | { kind: 'bag' }
   | { kind: 'camp' }
@@ -780,7 +784,15 @@ export class MapScene extends Phaser.Scene {
 
     const buttons: { option: Option; label: string; color: number }[] = [];
     const currentNode = stage.current ? findNode(stage.map, stage.current) : null;
+    // Beta 0.7 Node Event Menus: the node's stops live in its menu (one button); stops the menu doesn't own keep their own.
+    const menuView = services().session.nodeMenu();
+    const owned = menuView ? menuSideIds(run) : new Set<string>();
+    if (menuView && menuView.entries.some((v) => v.entry.kind !== 'encounter')) {
+      const open = menuView.entries.filter((v) => v.entry.kind !== 'encounter' && !v.done && !v.locked).length;
+      buttons.push({ option: { kind: 'nodeMenu' }, label: open > 0 ? `Here (${open})` : 'Here', color: menuBlocker(run) ? 0xc8443c : 0x2f8fd0 });
+    }
     for (const side of currentNode?.sides ?? []) {
+      if (owned.has(side.id)) continue;
       if (side.kind !== 'shop' && side.used && !(side.kind === 'service' && serviceReusable(side))) continue;
       buttons.push({ option: { kind: 'side', side }, label: side.kind === 'expedition' && legendOf(side.expeditionId) ? 'Legendary' : SIDE_LABEL[side.kind], color: side.kind === 'expedition' && legendOf(side.expeditionId) ? LEGEND_STYLE.color : side.kind === 'event' && !stopIsHidden(content, run, currentNode!, side) ? stopStyle(content.events.get(side.eventId ?? '')?.stop).color : SIDE_STYLE[side.kind].color });
     }
@@ -821,6 +833,10 @@ export class MapScene extends Phaser.Scene {
       }
       if (this.fieldNotes) {
         this.fieldNotes.handle(action);
+        return;
+      }
+      if (this.nodeMenuPanel) {
+        this.nodeMenuPanel.handle(action);
         return;
       }
       if (this.report) {
@@ -1055,6 +1071,11 @@ export class MapScene extends Phaser.Scene {
   private describe(option: Option): string {
     const content = services().session.content;
     switch (option.kind) {
+      case 'nodeMenu': {
+        const v = services().session.nodeMenu();
+        const blocker = menuBlocker(services().session.run!);
+        return blocker ?? `What to do here: ${v ? `${v.picksLeft} pick${v.picksLeft === 1 ? '' : 's'} left` : 'nothing'}. Some stops are always open; the rest lock once your picks are used.`;
+      }
       case 'node': {
         const n = option.node;
         const runNow = services().session.run!;
@@ -1156,7 +1177,15 @@ export class MapScene extends Phaser.Scene {
     if (!option) return;
     const { session } = services();
     switch (option.kind) {
+      case 'nodeMenu':
+        this.toggleNodeMenu();
+        break;
       case 'node': {
+        const blocker = menuBlocker(session.run!);
+        if (blocker) {
+          this.scene.restart({ notice: blocker, focus: i });
+          break;
+        }
         this.busy = true;
         playSfx(this, 'ui.select');
         const repelled = option.node.kind === 'wild' && repelActive(session.content, session.run!);
@@ -1776,6 +1805,56 @@ export class MapScene extends Phaser.Scene {
   private legend: Phaser.GameObjects.Container | null = null;
   private report: Phaser.GameObjects.Container | null = null;
   private fieldNotes: FieldNotesPage | null = null;
+  private nodeMenuPanel: NodeMenuPanel | null = null;
+
+  /** Beta 0.7 Node Event Menus: the menu pop-up. Picking a stop opens it as before; a micro entry plays at once. */
+  private toggleNodeMenu(): void {
+    if (this.nodeMenuPanel) {
+      this.nodeMenuPanel.layer.destroy();
+      this.nodeMenuPanel = null;
+      this.busy = false;
+      return;
+    }
+    if (this.report || this.busy || this.picker || this.legend || this.fieldNotes) return;
+    const { session } = services();
+    const view = session.nodeMenu();
+    const run = session.run;
+    if (!view || !run?.stage?.current) return;
+    const content = session.content;
+    const node = findNode(run.stage.map, run.stage.current);
+    const sideOf = (v: MenuEntryView) => node.sides.find((s) => s.id === v.entry.sideId);
+    const label = (v: MenuEntryView): string => {
+      const side = sideOf(v);
+      if (side && side.kind === 'event' && stopIsHidden(content, run, node, side)) return '???';
+      return v.entry.label;
+    };
+    const blurb = (v: MenuEntryView): string => {
+      if (v.entry.kind === 'micro') return nodeMenuData().micro.find((m) => m.id === v.entry.microId)?.blurb ?? '';
+      const side = sideOf(v);
+      if (side) return this.describe({ kind: 'side', side }).split('\n')[0]!;
+      return String(v.entry.data?.text ?? '');
+    };
+    const pick = (v: MenuEntryView): void => {
+      let res: ReturnType<typeof session.pickMenuEntry>;
+      try {
+        res = session.pickMenuEntry(v.entry.id);
+      } catch (err) {
+        console.warn('Menu pick refused', err);
+        return;
+      }
+      this.toggleNodeMenu();
+      const side = res.sideId ? findNode(res.run.stage!.map, res.run.stage!.current!).sides.find((s) => s.id === res.sideId) : undefined;
+      if (side) {
+        const i = this.options.length;
+        this.options.push({ kind: 'side', side });
+        this.activate(i);
+        return;
+      }
+      this.scene.restart({ notice: res.text ?? undefined, focus: this.index });
+    };
+    this.nodeMenuPanel = drawNodeMenu(this, view, label, blurb, pick, () => this.toggleNodeMenu());
+    this.busy = true;
+  }
   private bracket: Phaser.GameObjects.Container | null = null;
 
   /** Galar's Champion Tournament bracket: the five rounds, who is left, your next opponent. Presentation only (core/galarTournament.ts bracketView). */
