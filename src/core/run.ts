@@ -13,6 +13,7 @@
 // next region, or wins the run after the last one.
 
 import { noteBattle } from './expansion/fieldNotes';
+import { settleSky } from './sky/story';
 import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
 import { applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, refusesToLeave, returnedBug } from './instrumentality/flightNorth';
@@ -701,6 +702,7 @@ function forceFirstRivalColumn(content: Content, run: RunState, index: number, m
 
 /** Starts a stage (mutates `run`): picks a fresh theme and gym leader, generates the map, and shows it. */
 function enterStage(content: Content, run: RunState, index: number): void {
+  settleSky(content, run);
   fillRegionOrder(content, run);
   ensureStoryRun(content, run);
   const campaign = getCampaign(content, run.campaignId);
@@ -842,6 +844,7 @@ function enterLeague(content: Content, run: RunState): void {
     extraFronts: [],
     roamers: [],
   };
+  settleSky(content, run);
   ultraStageTick(content, run, (run.regionIndex + 1) * campaign.stagesPerRegion + 1, true);
   addFinaleCanonStops(content, run);
   placeStoryStops(content, run);

@@ -12,6 +12,7 @@ import { UltraRunStateSchema } from '../ultra/schema';
 import { StandWithStateSchema } from '../arc/standWithSchema';
 import { RivalOverhaulStateSchema } from '../rivals/overhaulSchema';
 import { BlessingStateSchema } from '../blessings/schema';
+import { SkyStateSchema } from '../sky/state';
 import { NodeMenuStateSchema } from '../nodeMenu/state';
 import { NodeMenuSpecialStateSchema } from '../nodeMenu/special/schema';
 import { RewindStateSchema } from '../rewindSchema';
@@ -155,5 +156,7 @@ export const ExpansionRunSchema = z.object({
   }).optional(),
   /** Beta 0.7 workstream 13: in-run epilogue (Citadark finale, Region of Doom). */
   epilogue: EpilogueStateSchema.optional(),
+  /** Beta 0.7: Pidgey's Resolve, the Rivalry of the Sky (core/sky). */
+  sky: SkyStateSchema.optional(),
 });
 export type ExpansionRun = z.infer<typeof ExpansionRunSchema>;

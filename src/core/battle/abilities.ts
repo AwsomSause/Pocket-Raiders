@@ -101,7 +101,7 @@ export const FLAG_BOOST: Record<string, { flag: 'contact' | 'punch' | 'bite' | '
 };
 
 /** Normal moves become this type and are 1.2× as strong. */
-export const TYPE_CHANGE: Record<string, TypeName> = { pixilate: 'fairy', aerilate: 'flying', refrigerate: 'ice', galvanize: 'electric', dragonize: 'dragon' };
+export const TYPE_CHANGE: Record<string, TypeName> = { pixilate: 'fairy', aerilate: 'flying', refrigerate: 'ice', galvanize: 'electric', dragonize: 'dragon', /** Pidgey's Resolve: Normal moves become Flying and 1.2x (it also never misses and cannot be missed: see engine noGuard). */ 'skys-resolve': 'flying' };
 
 /** A contact move on it may give the attacker this status (30%). */
 export const CONTACT_STATUS: Record<string, StatusId> = { static: 'par', 'flame-body': 'brn', 'poison-point': 'psn' };
