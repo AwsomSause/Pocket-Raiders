@@ -7,6 +7,7 @@ import { z } from 'zod';
 
 import { fnv1a } from './hash';
 import { alolaEffects, paldeaEffects } from './trackRegions';
+import { galarEffects, kalosEffects } from './trackKalosGalar';
 
 export const TRACK_MAX = 5;
 
@@ -56,6 +57,8 @@ export interface TrackEffects {
   wildShrink: number;
   /** The news runs the team's adverts (a line on the map). */
   adverts: boolean;
+  /** Share of HP a Pokémon Center gives back (1 or absent = all of it). Kalos step 3: members first. */
+  healShare?: number;
 }
 
 export interface TrackConfig {
@@ -81,6 +84,8 @@ export function kantoEffects(step: number, cfg: TrackConfig): TrackEffects {
 export function trackEffectsFor(regionId: string, step: number, cfg: TrackConfig): TrackEffects {
   if (regionId === 'alola') return alolaEffects(step);
   if (regionId === 'paldea') return paldeaEffects(step);
+  if (regionId === 'kalos') return kalosEffects(step, cfg);
+  if (regionId === 'galar') return galarEffects(step, cfg);
   return regionId === 'kanto' ? kantoEffects(step, cfg) : NO_EFFECTS;
 }
 
