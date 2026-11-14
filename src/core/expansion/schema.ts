@@ -10,6 +10,7 @@ import { RescueStateSchema } from '../evil/rescueSchema';
 import { GrandArcStateSchema } from '../grandArc/schema';
 import { StandWithStateSchema } from '../arc/standWithSchema';
 import { RivalOverhaulStateSchema } from '../rivals/overhaulSchema';
+import { BlessingStateSchema } from '../blessings';
 import { NodeMenuStateSchema } from '../nodeMenu/state';
 import { NodeMenuSpecialStateSchema } from '../nodeMenu/special/schema';
 import { RewindStateSchema } from '../rewindSchema';
@@ -40,6 +41,8 @@ export const ExpansionSettingsSchema = z.object({
   storyTraits: z.boolean().default(false),
   /** Beta 0.7 L3 Rewinds (test switch until the blessings grant them): the Time Keeper's rewind in every run, once per stage. Read at run start. */
   rewinds: z.boolean().default(false),
+  /** Legendary Blessings (Beta 0.7): each run opens with one Legendary's blessing. Off until the 0.7 balance pass. */
+  blessingsEnabled: z.boolean().default(false),
 });
 export type ExpansionSettings = z.infer<typeof ExpansionSettingsSchema>;
 export const EXPANSION_SETTINGS_DEFAULTS: ExpansionSettings = ExpansionSettingsSchema.parse({});
@@ -79,6 +82,8 @@ export const ExpansionRunSchema = z.object({
   grandArc: GrandArcStateSchema.optional(),
   /** Stand With Them (E8): the Inside Man route, once you have joined a team at Ignition. */
   standWith: StandWithStateSchema.optional(),
+  /** Legendary Blessing (Beta 0.7): this run's one blessing. Present only when the setting was on at run start; old saves have none, no save-version bump. */
+  blessing: BlessingStateSchema.optional(),
   /** Runs that started with the stage-pacing setting on (B6). Set once at run start, never changed. */
   pacing: z.boolean().optional(),
   /** Runs with Evolution Encounters on (B9). */
