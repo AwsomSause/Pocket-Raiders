@@ -245,7 +245,7 @@ import { withChampionTeam } from './story/championDefense';
 import { grandGauntlet, gauntletRival, markGauntletFight } from './story/gauntlet';
 import { growCrisis } from './story/crisis';
 import { recapRegion, tellAct } from './campaign/director';
-import { healStopShut, trackShopFactor, trackWildWeight } from './expansion/trackRun';
+import { healStopShut, trackHealShare, trackShopFactor, trackWildWeight } from './expansion/trackRun';
 import { freshClock, migrationWildWeight, periodOf, periodWildWeight, shopHoursMultiplier, stepClock, tideShopMultiplier, tideWildWeight } from './clock';
 import { bulkTotal, currentShopType, haggleWins, pokenetDeal, shopTypeAt, typedStock, typePriceFactor } from './shopTypes';
 import { finalRivalLine, tellCampfire } from './story/highHype';
@@ -2514,7 +2514,11 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
   if (side.kind === 'heal' && noHealStops(run.rules)) return { run: current, message: 'Your No Rest contract forbids healing stops.' };
   if (side.kind === 'heal' && healStopShut(content, run, sideId)) return { run: current, message: 'The Pokémon Center is shut for the night: the Ledger says so. Try again in the morning.' };
   if (side.kind === 'heal') {
+    const before = run.party.map((m) => m.hp);
     healParty(content, run);
+    // Kalos step 3 (Members First): the Center gives back only part of each Pokémon's HP.
+    const share = trackHealShare(content, run);
+    if (share < 1) run.party.forEach((m, i) => { m.hp = Math.min(m.hp, Math.max(before[i] ?? 0, Math.ceil(maxHp(content, m) * share))); });
     careRest(run, content);
     partyLifeCamp(run);
     const comboLine = [partyLifeCombos(content, run), ...assignGrowthPaths(content, run.party, run.story.histories)].filter(Boolean).join(' ');
