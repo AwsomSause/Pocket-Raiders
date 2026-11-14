@@ -2612,6 +2612,13 @@ function canAct(ctx: BattleContext, user: Combatant, events: BattleEvent[], move
  * Removes HP, applying the Last Stand Charm if this would knock out the
  * player's last usable Pokémon. Returns the HP actually lost.
  */
+/** Beta 0.7 (X1): a late boss (past balance.lateBoss.fromLevel) hits softer the higher its level, so late gyms stop one-shotting a team that out-levels them. */
+function lateBossDamageScale(ctx: BattleContext, user: Combatant): number {
+  const cfg = ctx.content.balance.lateBoss;
+  if (user.side !== 'enemy' || cfg.damagePerLevel === 0 || user.mon.level <= cfg.fromLevel || ctx.battle.raid || !isBossClass(ctx.battle.trainer?.classId)) return 1;
+  return Math.max(cfg.minDamageScale, 1 - cfg.damagePerLevel * (user.mon.level - cfg.fromLevel));
+}
+
 /**
  * The player's damage bonuses and penalties: the trainer's type passives
  * (more damage from your Pokémon of a type, more super-effective damage taken
@@ -2622,7 +2629,7 @@ function applyTypeModifiers(ctx: BattleContext, user: Combatant, target: Combata
   const mods = ctx.typeModifiers;
   const attrs = ctx.attributes;
   const perks = ctx.perks;
-  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType, physical) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * fieldPowerMultiplier(ctx.battle.overhaulField, moveType, ctx.content.balance.overhaulField) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target) * (user.side === 'player' ? growthDamageMultiplier(ctx.content.balance.overhaulGrowth, user.mon, moveType, effectiveness, user.mon.hp / Math.max(1, maxHp(ctx.content, user.mon)), getSpecies(ctx.content, user.mon.speciesId).types, { foeTypes: getSpecies(ctx.content, target.mon.speciesId).types, rival: Boolean(ctx.battle.rival || ctx.battle.rivalId), trainerClass: ctx.battle.trainer?.classId ?? null, solo: ctx.party.filter((m) => m.hp > 0).length === 1, accuracy: move.accuracy, sound: move.flags.includes('sound'), foeHpFrac: target.mon.hp / Math.max(1, maxHp(ctx.content, target.mon)), turn: ctx.battle.turn, turnsOut: user.vol.turnsOut, waited: user.vol.waited, unhit: user.vol.unhit, contacted: foeContacted(ctx, target), pivoted: user.vol.turnsOut <= 1 && (ctx.battle.growthMarks ?? []).includes(`pivotIn:${user.mon.uid}`), period: ctx.period, ...growthSituation(ctx, user, target) }) : 1) * (target.side === 'player' ? growthIncomingMultiplier(ctx.content.balance.overhaulGrowth, target.mon, moveType) : 1);
+  const rivalry = lateBossDamageScale(ctx, user) * rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType, physical) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * fieldPowerMultiplier(ctx.battle.overhaulField, moveType, ctx.content.balance.overhaulField) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target) * (user.side === 'player' ? growthDamageMultiplier(ctx.content.balance.overhaulGrowth, user.mon, moveType, effectiveness, user.mon.hp / Math.max(1, maxHp(ctx.content, user.mon)), getSpecies(ctx.content, user.mon.speciesId).types, { foeTypes: getSpecies(ctx.content, target.mon.speciesId).types, rival: Boolean(ctx.battle.rival || ctx.battle.rivalId), trainerClass: ctx.battle.trainer?.classId ?? null, solo: ctx.party.filter((m) => m.hp > 0).length === 1, accuracy: move.accuracy, sound: move.flags.includes('sound'), foeHpFrac: target.mon.hp / Math.max(1, maxHp(ctx.content, target.mon)), turn: ctx.battle.turn, turnsOut: user.vol.turnsOut, waited: user.vol.waited, unhit: user.vol.unhit, contacted: foeContacted(ctx, target), pivoted: user.vol.turnsOut <= 1 && (ctx.battle.growthMarks ?? []).includes(`pivotIn:${user.mon.uid}`), period: ctx.period, ...growthSituation(ctx, user, target) }) : 1) * (target.side === 'player' ? growthIncomingMultiplier(ctx.content.balance.overhaulGrowth, target.mon, moveType) : 1);
   if (!mods && !attrs && !perks && rivalry === 1) return damage;
   let multiplier = rivalry;
   const weather = weatherNow(ctx);
@@ -6356,7 +6363,9 @@ function applyStageChange(ctx: BattleContext, c: Combatant, stat: BoostStat, sta
     }
   }
   const before = c.stages[stat];
-  const after = clampStage(before + stages);
+  let after = clampStage(before + stages);
+  // Beta 0.7 (X1): a late boss cannot stack a stat past balance.lateBoss.maxBoostStage (Dragon Dance twice is fine, four times is not).
+  if (stages > 0 && c.side === 'enemy' && c.mon.level > ctx.content.balance.lateBoss.fromLevel && !ctx.battle.raid && isBossClass(ctx.battle.trainer?.classId)) after = Math.min(after, Math.max(before, ctx.content.balance.lateBoss.maxBoostStage));
   if (after === before) {
     events.push({ type: 'statLimit', side: c.side, stat, up: stages > 0 });
     return false;
