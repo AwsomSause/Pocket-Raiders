@@ -8,6 +8,7 @@ import { currentRegion } from '../regions';
 import type { RunState } from '../state';
 import { TRACK_MAX } from './track';
 import { trackPageTextFor } from './trackRegions';
+import { trackPageTextKG } from './trackKalosGalar';
 import { trackOf } from './trackRun';
 
 /** Kanto's page text per step: where the player might notice it ("scale"), a sighting, and what a civilian says. */
@@ -57,7 +58,7 @@ export function trackPage(content: Content, run: RunState): TrackPage | null {
   if (!run.expansion?.tracks) return null;
   const region = currentRegion(content, run);
   const def = expansionData.tracks.find((t) => t.region === region.id);
-  const PAGE = PAGES[region.id] ?? trackPageTextFor(region.id);
+  const PAGE = PAGES[region.id] ?? trackPageTextFor(region.id) ?? trackPageTextKG(region.id);
   if (!def || !PAGE) return null;
   const st = trackOf(run, region.id);
   const now = st?.step ?? 0;
