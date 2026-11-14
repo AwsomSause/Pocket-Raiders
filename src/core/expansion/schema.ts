@@ -8,6 +8,7 @@ import { CanonStateSchema } from './canonSpaces';
 import { TrackStateSchema } from './track';
 import { RescueStateSchema } from '../evil/rescueSchema';
 import { GrandArcStateSchema } from '../grandArc/schema';
+import { UltraRunStateSchema } from '../ultra/schema';
 import { StandWithStateSchema } from '../arc/standWithSchema';
 import { RivalOverhaulStateSchema } from '../rivals/overhaulSchema';
 
@@ -104,6 +105,8 @@ export const ExpansionRunSchema = z.object({
   tracks: z.boolean().optional(),
   /** Camp scenes: the last player Pokémon to faint and the encounter count then (cleared by a night's rest). */
   lastFaint: z.object({ uid: z.string(), at: z.number().int().min(0) }).optional(),
+  /** Beta 0.7 U1 Ultra Beast Incursions (core/ultra/run.ts). Present only when the setting was on at run start. No save bump: old runs have none. */
+  ultra: UltraRunStateSchema.optional(),
   /** B7: the Pokémon (uids) registered at the League door. Only these are ever countered; a swapped-in Pokémon is unseen. `swapped` = the one swap is used. */
   league: z.object({ registered: z.array(z.string()), swapped: z.boolean().default(false) }).optional(),
 });

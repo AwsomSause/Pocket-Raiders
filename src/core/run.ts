@@ -292,6 +292,7 @@ import { answerReturn, planReturn, recordDefeats, returningPokemon } from './sto
 import { PSEUDO } from './dungeon/pseudo';
 import { addCanonStops, failCanonRaid, finishCanonRaid, restoreStash } from './expansion/canonRun';
 import { expireStageMods } from './expansion/stageMods';
+import { freshUltra, markBattle as ultraMarkBattle, tallyEvents as ultraTally, settleBattle as ultraSettle, stageTick as ultraStageTick, incursionBeast, markIncursionFought } from './ultra/run';
 import { addFinaleCanonStops, addOpeningCanonStops, addRouteCanonStops } from './expansion/canonEnds';
 import { leaveCanonStash, ruleEvolution } from './expansion/canonSaffron';
 import { apprenticeLost, applyLessons, bondOf, mentorBadgeWon, startMentorship } from './mentors';
@@ -341,7 +342,7 @@ export interface NewRunOptions {
   /** Story Run: the player's name, pronouns and Look from the prologue (profile.story.protagonist). */
   protagonist?: { look: string; name: string; pronouns: string | PronounSet; backstory?: string };
   /** Beta 0.6: which expansion settings were on at run start (settings.expansion). Each flag is stored in `run.expansion` once and never changes. */
-  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean; grandArc?: boolean; worldTracks?: boolean; eventsDensity?: 'low' | 'normal' | 'full'; climaxCut?: 'standard' | 'extended'; storyTraits?: boolean };
+  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean; grandArc?: boolean; worldTracks?: boolean; ultraBeasts?: boolean; eventsDensity?: 'low' | 'normal' | 'full'; climaxCut?: 'standard' | 'extended'; storyTraits?: boolean };
 }
 
 export function createRun(content: Content, opts: NewRunOptions): RunState {
@@ -444,7 +445,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
   }
   if (opts.expansion) {
     const e = opts.expansion;
-    const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.kantoCanon ? { canon: { flags: [], completed: [], menus: {} } } : {}), ...(e.worldTracks ? { tracks: true } : {}), ...(e.eventsDensity ? { density: e.eventsDensity } : {}), ...(e.climaxCut === 'extended' ? { climaxCut: 'extended' as const } : {}), ...(e.storyTraits ? { storyTraits: true } : {}) };
+    const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.kantoCanon ? { canon: { flags: [], completed: [], menus: {} } } : {}), ...(e.worldTracks ? { tracks: true } : {}), ...(e.ultraBeasts ? { ultra: freshUltra() } : {}), ...(e.eventsDensity ? { density: e.eventsDensity } : {}), ...(e.climaxCut === 'extended' ? { climaxCut: 'extended' as const } : {}), ...(e.storyTraits ? { storyTraits: true } : {}) };
     if (Object.keys(flags).length > 0) run.expansion = { ...run.expansion, ...flags };
     setClimaxCut(run, e.climaxCut);
     if (e.grandArc) startGrandArc(run);
@@ -703,6 +704,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   run.usedLeaders.push(leader.id);
   run.stage = { kind: 'stage', index, themeId: theme.id, leaderId: leader.id, eliteFour: [], map, current: null, visited: [], scoutedTo: 0, foresight: 0, extraFronts: [], roamers: [], convoy: null };
   expireStageMods(run);
+  ultraStageTick(content, run, run.regionIndex * campaign.stagesPerRegion + index + 1, false);
   startStageEffects(run);
   clearRecentPurchases(run);
   applyWealthTax(content, run);
@@ -812,6 +814,7 @@ function enterLeague(content: Content, run: RunState): void {
     extraFronts: [],
     roamers: [],
   };
+  ultraStageTick(content, run, (run.regionIndex + 1) * campaign.stagesPerRegion + 1, true);
   addFinaleCanonStops(content, run);
   placeStoryStops(content, run);
   startStageEffects(run);
@@ -1971,13 +1974,17 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     // A wild nemesis takes this encounter instead (built from the planned level, so no roll changes).
     // §11 "at least once every stage": on the stage's last wild column a waiting Pokémon rival goes ahead of a legendary or a nemesis.
     const lastWild = !!run.stage && !run.stage.map.nodes.some((n) => n.kind === 'wild' && n.column > node.column);
-    const mustMeet = lastWild ? dueMonRival(content, run) : null;
-    const nemesis = legendary || mustMeet ? null : dueNemesis(content, run, 'wild');
+    // Beta 0.7 U1: an Ultra Beast Incursion takes the first wild fight of its stage (like a legendary, it goes ahead of rivals and nemeses).
+    const incursion = legendary ? null : incursionBeast(run);
+    const mustMeet = lastWild && !incursion ? dueMonRival(content, run) : null;
+    const nemesis = legendary || incursion || mustMeet ? null : dueNemesis(content, run, 'wild');
     const back = nemesis ? nemesisMember(content, nemesis, opened.level) : null;
     // §11 a Pokémon rival takes the stage's first wild battle (built from the planned level, so no roll changes).
-    const monRival = mustMeet ?? (legendary || nemesis ? null : dueMonRival(content, run));
+    const monRival = mustMeet ?? (legendary || incursion || nemesis ? null : dueMonRival(content, run));
     const mrBack = monRival ? monRivalMember(content, monRival, opened.level) : null;
-    const enemy = mrBack
+    const enemy = incursion
+      ? newMon(content, run, incursion.speciesId, Math.min(content.balance.difficulty.maxLevel, opened.level + incursion.levelBonus), 'e', content.balance.difficulty.maxLevel)
+      : mrBack
       ? newMon(content, run, mrBack.speciesId, mrBack.level, 'e', content.balance.difficulty.maxLevel)
       : back
       ? newMon(content, run, back.member.speciesId, back.member.level, 'e', content.balance.difficulty.maxLevel)
@@ -1995,6 +2002,11 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     }
     outbreakShadow(content, run, enemy, node.id);
     run.battle = createBattle('wild', [enemy], activeIndex, activeUid);
+    if (incursion) {
+      // Ultra Aura: +1 to all its stats. Beast Boost comes with the Beast's own ability.
+      for (const s of ['atk', 'def', 'spa', 'spd', 'spe'] as const) run.battle.enemyStages[s] = 1;
+      markIncursionFought(run);
+    }
     assignField(content, run, false);
     if (alphaFoe) {
       run.battle.alpha = true;
@@ -2934,6 +2946,7 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   const run = structuredClone(current);
   const rng = new Rng(run.rng.battle);
   const ctx = battleContext(content, run, rng, new Rng(run.rng.capture));
+  ultraMarkBattle(run);
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
   run.rng.battle = rng.state;
   noteBattle(content, run);
@@ -3277,6 +3290,7 @@ function settleMastery(run: RunState, won: boolean): void {
 /** Counts what grows attributes: stats your Pokémon raise on themselves, and enemies defeated or caught by type. */
 function countAttributeGrowth(content: Content, run: RunState, events: BattleEvent[]): void {
   const battle = run.battle!;
+  ultraTally(run, events);
   for (const e of events) {
     if (e.type === 'stat' && e.side === 'player' && e.change > 0) count(run, 'statsBoosted');
     const xform = e.type === 'transform' && e.side === 'player' ? MASTERY_OF[e.kind] : undefined;
@@ -3558,6 +3572,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   }
   count(run, 'evolutions', evolutions.length);
   settleMastery(run, battle.outcome === 'win');
+  ultraSettle(content, run, battle.outcome === 'win');
   const bondTaught = battle.outcome === 'win' ? bondLessons(content, run, battle.participants) : [];
   const recap = battle.outcome === 'win' && battle.kind === 'trainer' && (battle.ai >= 0.5 || battle.trainer?.leaderId || battle.rivalId) ? recapLines(content, run, battle) : [];
   // The caught Pokémon's decision comes first.

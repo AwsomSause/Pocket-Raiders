@@ -2,6 +2,7 @@
 // and the permanent profile. These schemas double as save-file validators,
 // so the game refuses to load a save that doesn't match.
 
+import { UltraRuleIdSchema } from './ultra/beasts';
 import { ExpansionRunSchema, ExpansionSettingsSchema, EXPANSION_SETTINGS_DEFAULTS } from './expansion/schema';
 import { ProfileStorySchema, StorySettingsSchema, STORY_SETTINGS_DEFAULTS } from './story2/schema';
 import { TreasureHuntSchema } from './treasureHunt';
@@ -904,6 +905,8 @@ export const BattleStateSchema = z.object({
   foresight: z.object({ ended: z.boolean(), revealed: z.string().nullable() }).optional(),
   /** Run events B: special rules of this event fight (no switching, no attacks, turn limits...); see EventRuleSchema. */
   eventRule: EventRuleSchema.optional(),
+  /** Beta 0.7 U1: the Ultra Rules in force for this battle (core/ultra/run.ts markBattle): both sides alike. Absent when the system is off. */
+  ultra: z.array(UltraRuleIdSchema).optional(),
   /** Every move's accuracy is multiplied by this for both sides (Veridian Forest fog). */
   accuracyMult: z.number().min(0.1).max(1).optional(),
   /** Overhaul slice 17/18: the boss's named strategy id (balance.bossStrategy); read by the AI and the risk label. */
