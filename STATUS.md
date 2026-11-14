@@ -9,7 +9,8 @@ Current versions (`src/save/saveManager.ts` `CURRENT_VERSIONS`): profile 20, run
 The long "Done" list (about 140 bullets) and the older known-limits notes moved to `docs/archive/status-done-2026-10-30.md`; newer slice notes are in `docs/status/` (run `npm run status:find -- word`, or grep `docs/status/INDEX.md`, one line per note; do not read it whole). To check if a feature exists: `grep -il "<word>" docs/status/*.md docs/archive/status-done-2026-10-30.md` or grep `CHECKLIST.md`. Do not read either whole.
 
 ## In progress / next
-- **Beta 0.6 INSTRUMENTALITY** (branch `beta-0.6`): plan, decisions and screen picks in `docs/plans/instrumentality/`; update log `docs/updates/beta-0.6.md`. Next slice: F1/F2 (settings 42, run 43, empty expansion blocks + all-off replay test).
+- **Beta 0.6 INSTRUMENTALITY** is merged to `main` (#1260, 2026-11-14): update log `docs/updates/beta-0.6.md`, plan and decisions in `docs/plans/instrumentality/`. What shipped, how it works, known gaps and the bug-hunt results: `docs/HANDOFF.md`.
+- **Beta 0.7** is not started and its scope is Kice's call: Node Event Menus and/or the rest of INSTRUMENTALITY (milestones 3.0 and 3.0+1.0). Everything planned or deferred: `docs/HANDOFF.md` section 8.
 - Plan: `docs/plans/left-out-plan.md` (everything asked for but not built, in priority order; each item updates its row there). Waiting on Kice: regional forms mechanic, time of day, online co-op; branch protection on `main` (Settings > Branches, require `check`).
 - Trainers.md perks: all 220 trainers built (limits in `docs/plans/trainers-coverage.md`).
 - Starter sets / quests / mastery / events plan: fully built (see Done).
