@@ -463,7 +463,8 @@ export function applyTransformations(ctx: TransformContext, request: TransformRe
     const due = variantGimmickDue(battle.extra.variants, mon.uid, turnsOut);
     if (due === 'dynamax') {
       dynamax(ctx, side, mon, events);
-      battle.transform.dynamax[mon.uid] = 1;
+      // Galar's Red Cloud (track step 3) gives the foe one extra turn.
+      battle.transform.dynamax[mon.uid] = battle.extra.variants[mon.uid]?.flags.long === 1 ? 2 : 1;
       battle.transform.used[side].pop(); // it did not spend the side's own Dynamax
     } else if (due === 'tera') {
       terastallize(ctx, side, mon, teraTypeOf(content, mon), events);

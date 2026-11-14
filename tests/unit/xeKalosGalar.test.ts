@@ -12,6 +12,11 @@ import { expansionData } from '../../src/data/expansion';
 import type { RunState } from '../../src/core/state';
 import { beginClimax, climaxPhases, EXTENDED_REGIONS, nextStep } from '../../src/core/arc/climaxExtended';
 import { startFormat } from '../../src/core/formats/registry';
+import { applyTremor, tremorDue } from '../../src/core/expansion/galarDynamax';
+import { assignVariant, COUTURE_ACCESSORIES, variantAccessory, variantGimmickDue, variantGimmickTick, type Variants } from '../../src/core/expansion/variantLines';
+import { assignEvilVariants } from '../../src/core/expansion/variantAssign';
+import { createBattle } from '../../src/core/battle/engine';
+import { createPokemon } from '../../src/core/pokemon';
 import { content } from './helpers';
 
 const KALOS = ['boutique', 'cafe', 'courier', 'essentia', 'factory', 'squishy', 'tall-man', 'under-time'].map((s) => `xe.kalos.${s}`);
@@ -138,5 +143,58 @@ describe('Extended Cut for Kalos and Galar', () => {
       expect(nextStep(r)).not.toBeNull();
       for (const id of ['siege', 'blackout', 'colossus', 'convoy', 'front'] as const) expect(startFormat(id, { content, run: r })).toBe(false);
     }
+  });
+});
+
+describe('Galar tremors (wild Dynamax) and Kalos Couture', () => {
+  const galarWild = (seed: string, step: number) => {
+    const r = regionRun(seed, 'galar');
+    for (let i = 0; i < step; i++) advanceTrack(r, 'galar', 'raidFailed', `t${i}`);
+    return r;
+  };
+  it('step 2 makes the next wild fight of a stage tremble, once per stage; step 3 adds a turn; below step 2 nothing', () => {
+    expect(tremorDue(content, galarWild('trem-0', 1))).toBe(false);
+    const r = galarWild('trem-2', 2);
+    expect(tremorDue(content, r)).toBe(true);
+    r.battle = createBattle('wild', [createPokemon(content, 'rattata', 5, 'e1')], 0, r.party[0]!.uid);
+    expect(applyTremor(content, r)).toBe(true);
+    const v = r.battle.extra.variants['e1']!;
+    expect(v.line).toBe('overcharged');
+    expect(v.flags.long).toBeUndefined();
+    expect(tremorDue(content, r)).toBe(false);
+    const r3 = galarWild('trem-3', 3);
+    r3.battle = createBattle('wild', [createPokemon(content, 'rattata', 5, 'e2')], 0, r3.party[0]!.uid);
+    applyTremor(content, r3);
+    expect(r3.battle.extra.variants['e2']!.flags.long).toBe(1);
+  });
+  it('the Overcharged Dynamax with Red Cloud lasts a turn longer, then it pays', () => {
+    const v: Variants = {};
+    assignVariant(v, 'e', 'overcharged');
+    expect(variantGimmickDue(v, 'e', 1)).toBe('dynamax');
+    expect(variantGimmickTick(v, 'e').endDynamax).toBe(true);
+    const w: Variants = {};
+    assignVariant(w, 'e', 'overcharged');
+    w['e']!.flags.long = 1;
+    variantGimmickDue(w, 'e', 1);
+    expect(variantGimmickTick(w, 'e').endDynamax).toBe(false);
+    expect(variantGimmickTick(w, 'e').endDynamax).toBe(true);
+  });
+  it('no tremor in Kalos, or in a run without the world tracks', () => {
+    const k = regionRun('trem-k', 'kalos');
+    for (let i = 0; i < 3; i++) advanceTrack(k, 'kalos', 'raidFailed', `k${i}`);
+    expect(tremorDue(content, k)).toBe(false);
+    const off = galarWild('trem-off', 3);
+    off.expansion = { ...off.expansion!, tracks: false };
+    expect(tremorDue(content, off)).toBe(false);
+  });
+  it('a Flare Specialist in Kalos wears a Couture accessory as a second held item', () => {
+    const team = [createPokemon(content, 'gyarados', 20, 'f1'), createPokemon(content, 'pyroar', 20, 'f2')];
+    const v: Variants = {};
+    const got = assignEvilVariants(v, team, { teamId: 'flare', regionId: 'kalos', rank: 'executive', marnie: false });
+    expect(got).toEqual(['f1', 'f2']);
+    expect(v['f2']!.line).toBe('couture');
+    expect(COUTURE_ACCESSORIES).toContain(v['f2']!.accessory);
+    expect(variantAccessory(v, 'f2')).toBe(v['f2']!.accessory);
+    expect(variantAccessory(v, 'f2')).toBeNull();
   });
 });
