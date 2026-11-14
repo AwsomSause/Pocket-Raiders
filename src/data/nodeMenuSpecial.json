@@ -1,9 +1,9 @@
 {
   "rules": {
     "rivalTakes": { "chance": 0.3, "maxPerStage": 2, "levelsPerSpoil": 1, "maxLevels": 2, "rivalStates": ["recurring", "active", "nemesis", "contender", "recognized"] },
-    "forkChance": 0.18,
-    "linkChance": 0.15,
-    "escortChance": 0.08,
+    "forkChance": 0.08,
+    "linkChance": 0.06,
+    "escortChance": 0.04,
     "linkWindow": [1, 3],
     "escortNerve": 3,
     "maxSpecialPerMenu": 1
