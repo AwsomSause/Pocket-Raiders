@@ -2,20 +2,29 @@
 // `--check` fails when the file is out of date (a unit test runs it).
 import { readFileSync, writeFileSync } from 'node:fs';
 import { XE_KANTO_EVENTS } from './events/expansion/kanto.ts';
+import { XE_JOHTO_EVENTS } from './events/expansion/johto.ts';
+import { XE_UNOVA_EVENTS } from './events/expansion/unova.ts';
 
-const events = [...XE_KANTO_EVENTS];
+const files: [string, Record<string, unknown>[]][] = [
+  ['xe-kanto.json', XE_KANTO_EVENTS],
+  ['xe-johto.json', XE_JOHTO_EVENTS],
+  ['xe-unova.json', XE_UNOVA_EVENTS],
+];
 const ids = new Set<string>();
-for (const e of events) {
-  const id = String(e.id);
-  if (ids.has(id)) throw new Error(`duplicate event id ${id}`);
-  ids.add(id);
-}
-const text = JSON.stringify({ events }, null, 1) + '\n';
-const url = new URL('../src/data/events/xe-kanto.json', import.meta.url);
-if (process.argv.includes('--check')) {
-  if (readFileSync(url, 'utf8') !== text) {
-    console.error('xe-kanto.json is out of date: run npm run data:xe-events');
-    process.exit(1);
+let stale = false;
+for (const [name, events] of files) {
+  for (const e of events) {
+    const id = String(e.id);
+    if (ids.has(id)) throw new Error(`duplicate event id ${id}`);
+    ids.add(id);
   }
-} else writeFileSync(url, text);
-console.log(`xe-kanto.json: ${events.length} events`);
+  const text = JSON.stringify({ events }, null, 1) + '\n';
+  const url = new URL(`../src/data/events/${name}`, import.meta.url);
+  if (process.argv.includes('--check')) {
+    let old = '';
+    try { old = readFileSync(url, 'utf8'); } catch { /* missing */ }
+    if (old !== text) { console.error(`${name} is out of date: run npm run data:xe-events`); stale = true; }
+  } else writeFileSync(url, text);
+  console.log(`${name}: ${events.length} events`);
+}
+if (stale) process.exit(1);

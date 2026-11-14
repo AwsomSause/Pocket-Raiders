@@ -77,11 +77,24 @@ export function kantoEffects(step: number, cfg: TrackConfig): TrackEffects {
   };
 }
 
-/** The effects a region's track has at a step. Only Kanto's track is built; other regions have none yet. */
+/** Johto's step table (Static, Jingle, Rage, Carrier Wave, The Call): shops play the jingle and mark up, the signal thins the wild pools, every radio carries the call. */
+export function johtoEffects(step: number, cfg: TrackConfig): TrackEffects {
+  return { shopMarkup: step >= 2 ? cfg.shopMarkup : 0, healShutAtNight: false, roadblocks: false, wildShrink: step >= 4 ? cfg.wildShrink : 0, adverts: step >= 5 };
+}
+
+/** Unova's step table (Pamphlets, Let Go, The Frost Line, The Bridges, The Crown): released Pokémon leave the pools, the frost shuts a centre at night, closed bridges are roadblocks. */
+export function unovaEffects(step: number, cfg: TrackConfig): TrackEffects {
+  return { shopMarkup: 0, healShutAtNight: step >= 3, roadblocks: step >= 4, wildShrink: step >= 2 ? cfg.wildShrink : 0, adverts: step >= 5 };
+}
+
+/** The effects a region's track has at a step. Built for Kanto, Johto and Unova; other regions have none yet. */
 export function trackEffectsFor(regionId: string, step: number, cfg: TrackConfig): TrackEffects {
   if (regionId === 'alola') return alolaEffects(step);
   if (regionId === 'paldea') return paldeaEffects(step);
-  return regionId === 'kanto' ? kantoEffects(step, cfg) : NO_EFFECTS;
+  if (regionId === 'kanto') return kantoEffects(step, cfg);
+  if (regionId === 'johto') return johtoEffects(step, cfg);
+  if (regionId === 'unova') return unovaEffects(step, cfg);
+  return NO_EFFECTS;
 }
 
 /** Which of `count` shops in a stage is the insured one: a hash of the seed and stage, not a roll. */

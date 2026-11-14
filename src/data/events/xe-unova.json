@@ -1,0 +1,658 @@
+{
+ "events": [
+  {
+   "id": "xe.unova.speech",
+   "name": "The Speech",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "priority": 100,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman",
+     "trainer.roughneck"
+    ],
+    "tint": "#14182a",
+    "effect": "glint"
+   },
+   "intro": "A small crowd in a square. A tall man in a heavy robe, leaning on a cane: \"Love that cannot be refused is not love. It is a cage with a kind jailer. Open the door. If it stays, you will know. If it goes, you will have done the one truly generous thing of your life.\" A boy looks at his Lillipup for a long time, and opens his hands. \"Go on. You can go, if you want.\" The Lillipup sits. When the square is empty, a Plasma Grunt with a carrier picks it up.",
+   "choices": [
+    {
+     "label": "\"Where do they go?\"",
+     "success": {
+      "text": "A smile that arrives a moment late: \"Wherever they wish, child. That is the point.\" Three people in the crowd keep their Pokémon.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 5
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-asked-where",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the carrier",
+     "success": {
+      "text": "A van, already half full. The Lillipup runs home. \"It was *released*. Legally it's nobody's. That's the whole trick-- I wasn't supposed to say trick.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Plasma Grunt",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "plasma-van-found",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 4
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Listen to the end",
+     "success": {
+      "text": "Nothing changes. One of your own Pokémon looks at you, then pointedly sits on your foot.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.unova.dreamyard",
+   "name": "The Dreamyard",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#2a1830",
+    "effect": "flicker"
+   },
+   "intro": "Two Grunts in the new black uniform are kicking a Munna. \"Come on! Dream Mist! Cough it up!\" \"The Sage says it makes people suggestible. Give us the mist and you can go back to sleep!\"",
+   "choices": [
+    {
+     "label": "Step in",
+     "success": {
+      "text": "The Munna floats behind you and will not leave. The fog it leaves behind smells of warm rain.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Plasma Grunt",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "plasma-dream-mist",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Wait",
+     "success": {
+      "text": "A Musharna drifts out of the wall and the yard fills with pink fog. Both Grunts see someone standing over them, saying nothing. They run.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-dream-mist",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.unova.truth-seeker",
+   "name": "The Truth-Seeker",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "evil",
+     "heat": 25
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#101a24",
+    "effect": "glint"
+   },
+   "intro": "A man in a lab coat with a remarkable blue curl of hair falls into step beside you, already talking. \"Excuse me! A question, for science. What brings out a Pokémon's power? Hypothesis one: the bond between Pokémon and trainer. Sentimental, but the data are stubborn. Hypothesis two: a machine that simply insists. One group is loved. The other is plugged in.\"",
+   "choices": [
+    {
+     "label": "\"The bond.\"",
+     "success": {
+      "text": "\"Prove it to me sometime!\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-colress-bond",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The machine, if it works.\"",
+     "success": {
+      "text": "\"A pragmatist! We'd get along. Come by the lab.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-colress-machine",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Did you ask the Pokémon?\"",
+     "success": {
+      "text": "He stops walking. It is the first time. \"...No. That is a variable. I've left out a variable.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-colress-asked",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.unova.cold-storage",
+   "name": "Cold Storage",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#102028",
+    "effect": "none"
+   },
+   "intro": "A refrigerated warehouse. At the back, six Grunts huddle around an old man in a robe sitting perfectly still. \"S-Sage, c-can we please--\" \"No. Here I can feel the edges of myself. Out there everything is lukewarm and I might be anyone.\" To you: \"You're warm. I can tell from here. It is a kind of rudeness.\"",
+   "choices": [
+    {
+     "label": "\"Why follow him?\"",
+     "success": {
+      "text": "\"Because he is the only man I have met who is colder than this room. I wanted to see how far down it went.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-zinzolin-asked",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle",
+     "success": {
+      "text": "\"Hm. Warmer. I resent it. Go away.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Sage Zinzolin",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [
+        "ice"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "plasma-zinzolin-down",
+         "amount": 1
+        },
+        {
+         "kind": "track",
+         "input": "raidSuccess"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Give the Grunts your coat",
+     "success": {
+      "text": "They hand you a duty roster for the frigate, and one of them will remember you later.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-frigate-roster",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.unova.candidate",
+   "name": "The Candidate",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman",
+     "trainer.roughneck"
+    ],
+    "tint": "#241820",
+    "effect": "none"
+   },
+   "intro": "A podium on a pier, bunting, and four Grunts who have been told to clap. \"A firm hand! Clean streets! Every Pokémon in its proper place, which is to say, not yours!\" One clap. \"You there! Voter! A badge?\" It reads SNATTLE FOR GOVERNOR. Under that, smaller: BY APPOINTMENT.",
+   "choices": [
+    {
+     "label": "Take a badge",
+     "success": {
+      "text": "A Campaign Badge. One Grunt checkpoint will wave you through.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-campaign-badge",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Debate him",
+     "success": {
+      "text": "He contradicts himself three times in three questions. The four Grunts stop clapping.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-snattle-debated",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Challenge him",
+     "success": {
+      "text": "\"This will be reflected in the polling!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Snattle",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "cipher-seen-snattle",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.unova.stolen-one",
+   "name": "The Stolen One",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#241818",
+    "effect": "none"
+   },
+   "intro": "A spiky-haired trainer is going through a Grunt's Poké Balls one at a time, in the street. \"Not this one. Not this one. Five years! I gave her that Purrloin for her birthday and one of you took it out of her arms!\" \"It'd be a Liepard by now, kid. It wouldn't even know her.\" \"...Say that again.\"",
+   "choices": [
+    {
+     "label": "Hold him back",
+     "success": {
+      "text": "\"I'm about to unleash my rage, and you're in the way.\" He breathes. He lets the Grunt go.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help him search",
+     "success": {
+      "text": "Commander Aldith's Liepard has a notch in its left ear. So did the Purrloin.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-notch",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The Grunt's right.\"",
+     "success": {
+      "text": "He does not answer. He is in your way anyway.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.unova.kings-room",
+   "name": "The King's Room",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "epic",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#1c1830",
+    "effect": "flicker"
+   },
+   "intro": "Near the League, a half-buried doorway. Inside, untouched: a child's room, a toy train, a basketball, a music box. \"He was kept here. Only Pokémon that had been hurt by people were allowed in to see him. He grew up believing that was all people did.\" Someone sits on the floor beside the music box in a familiar green cap, back to the door.",
+   "choices": [
+    {
+     "label": "Speak to him",
+     "success": {
+      "text": "He turns. The face is right. The eyes are a fox's. The Zoroark bolts through a gap in the wall.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-likeness-seen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wind the music box",
+     "success": {
+      "text": "The figure's shoulders drop. For a moment it is only a Zoroark, listening. Then it is gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-likeness-calmed",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave quietly",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.unova.liberty-garden",
+   "name": "Liberty Garden",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#142018",
+    "effect": "none"
+   },
+   "intro": "A small island with a lighthouse. Grunts in the old white uniform, the faithful kind, stand guard. \"There's a Pokémon under the lighthouse. Shut in for two hundred years. We came to free it. Then the order came down: hold the island, don't open the door. That's not what I joined for.\"",
+   "choices": [
+    {
+     "label": "Open the door",
+     "success": {
+      "text": "The Grunt stands aside. Below, a small room, a small bed, a plate. The captive looks at the open door behind you and flies three circles over the harbor. Your party feels lighter.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-victory-star",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 5
+       },
+       {
+        "kind": "track",
+        "input": "raidSuccess"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Report the Grunt",
+     "success": {
+      "text": "He is replaced by the new uniform, and the island becomes a guarded post.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Plasma Guard",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "evil",
+         "heat": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Then quit.\"",
+     "success": {
+      "text": "He takes off the hood and walks to the ferry.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-faithful-doubt",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
