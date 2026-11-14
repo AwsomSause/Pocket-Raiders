@@ -110,7 +110,8 @@ export function applyCanonEffect(content: Content, run: RunState, e: CanonEffect
     case 'champion': {
       const mon = run.party.find((m) => e.species.includes(m.speciesId)) ?? run.party.find((m) => m.hp > 0);
       if (!mon) return '';
-      mon.fixedAbility = 'champions-fury';
+      mon.fixedAbility = 'champions-entrance';
+      setCanon(run, { ...canonOf(run), rival: { species: mon.speciesId, regionIndex: run.regionIndex, returned: false } });
       mon.champion = true;
       if (mon.speciesId === 'primeape') mon.look = 'champion';
       mon.evoBlock = [...new Set([...(mon.evoBlock ?? []), 'annihilape'])];
@@ -120,7 +121,7 @@ export function applyCanonEffect(content: Content, run: RunState, e: CanonEffect
         if (mon.moves.length < 4) mon.moves.push(slot);
         else mon.moves[3] = slot;
       }
-      return `${nameOf(content, mon)} is crowned champion: Champion's Fury, Dynamic Punch and the belt are its own.`;
+      return `${nameOf(content, mon)} is crowned champion: Champion's Entrance, Dynamic Punch and the belt are its own.`;
     }
     case 'ghostStart': {
       if (isStashed(run) || run.party.length < 1) return '';
@@ -200,6 +201,23 @@ export function ghostReturns(content: Content, run: RunState, level: number): st
   run.pending.push({ kind: 'caught', mon });
   setCanon(run, { ...canon, lab: { ...lab, owed: false, returned: true } });
   return `${nameOf(content, mon)} asks to join your team.`;
+}
+
+/** Tournament afterstory: the id of the event where the rival returns, wearing a home-made belt. */
+export const RIVAL_RETURN_EVENT = 'cs-kanto-saffron-rival-return';
+
+/** At a stage start in the region after the Tournament: the first stage offers the rival's return (once). Returns the event id, or null. */
+export function rivalReturnEvent(content: Content, run: RunState): string | null {
+  const rival = run.expansion?.canon?.rival;
+  if (!rival || rival.returned || !run.stage || run.stage.kind !== 'stage') return null;
+  if (run.regionIndex !== rival.regionIndex + 1 || !content.events.has(RIVAL_RETURN_EVENT)) return null;
+  return run.stage.index === 0 ? RIVAL_RETURN_EVENT : null;
+}
+
+/** The rival's return is played: it is not offered again. */
+export function markRivalReturned(run: RunState): void {
+  const canon = canonOf(run);
+  if (canon.rival) setCanon(run, { ...canon, rival: { ...canon.rival, returned: true } });
 }
 
 /** The event that carries the ghost's return, by ghost. */

@@ -70,6 +70,8 @@ export const CanonStateSchema = z.object({
   solo: z.object({ keep: z.string(), order: z.array(z.string()), mode: z.enum(['tournament', 'labyrinth']) }).optional(),
   /** Saffron: Sabrina's Labyrinth. `owed`: the ghost returns in the next region; `returned`: it already did. */
   lab: z.object({ ghost: z.string(), ghostUid: z.string(), regionIndex: z.number().int(), stageIndex: z.number().int(), freed: z.array(z.string()), active: z.boolean(), done: z.boolean(), owed: z.boolean(), returned: z.boolean() }).optional(),
+  /** Fighting Tournament afterstory: the rival you beat in the final turns up in the next region in a home-made belt. `returned`: it already did. */
+  rival: z.object({ species: z.string(), regionIndex: z.number().int(), returned: z.boolean() }).optional(),
 });
 export type CanonState = z.infer<typeof CanonStateSchema>;
 

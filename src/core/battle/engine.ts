@@ -936,7 +936,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
     actions.forEach((a0, index) => {
       let a = a0;
       if (anyFainted(playerC, enemy) || a.user.mon.hp <= 0) return;
-      if (a.user.side === 'enemy' && (enemyActed || loseFreeTurn(battle, events) || blissfulCalm(ctx, enemy, events))) return;
+      if (a.user.side === 'enemy' && (enemyActed || loseFreeTurn(battle, events) || blissfulCalm(ctx, enemy, events) || foeStands(ctx, enemy, events))) return;
       // Shadow II: a Veiled Pokémon may hesitate; a Gripped or Fallen one may use a move of its own choosing. Decided (and shown) before the turn.
       if (a.user.side === 'player' && a.user.mon.shadow) {
         const plan = shadowTurnPlan(a.user.mon, battle.turn, turnStartState);
@@ -953,7 +953,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
       }
       actWithRage(ctx, a.user, enemy, events, () => executeMove(ctx, a.user, a.target, a.move, a.slot, index === 0, events));
     });
-  } else if (!enemyActed && !loseFreeTurn(battle, events) && !blissfulCalm(ctx, enemy, events)) {
+  } else if (!enemyActed && !loseFreeTurn(battle, events) && !blissfulCalm(ctx, enemy, events) && !foeStands(ctx, enemy, events)) {
     actWithRage(ctx, enemy, enemy, events, () => executeMove(ctx, enemy, playerC, enemyMove, enemyMoveIndex, false, events));
   }
   recordFaints(ctx, playerC, enemy, events);
@@ -1607,6 +1607,14 @@ function ballRuleProblem(ctx: Pick<BattleContext, 'battle'>, rule: Extract<ItemE
 }
 
 /** A Blissful wild Pokémon is calm: it watches you instead of attacking. */
+/** Route 25: with the `foeStands` rule the foe holds its ground for the first turns and does not attack. */
+function foeStands(ctx: BattleContext, enemy: Combatant, events: BattleEvent[]): boolean {
+  const turns = ctx.battle.eventRule?.foeStands;
+  if (!turns || ctx.battle.turn > turns || enemy.mon.hp <= 0) return false;
+  events.push({ type: 'raid', tone: 'info', text: `${getSpecies(ctx.content, enemy.mon.speciesId).name} stands in front of the others, arms wide. It does not attack.` });
+  return true;
+}
+
 function blissfulCalm(ctx: BattleContext, enemy: Combatant, events: BattleEvent[]): boolean {
   const { battle } = ctx;
   if (battle.kind !== 'wild' || battle.raid || !enemy.mon.blissful || enemy.mon.hp <= 0) return false;
@@ -2322,11 +2330,20 @@ function entryAbility(ctx: BattleContext, c: Combatant, other: Combatant, events
     }
     return;
   }
-  if (ability === 'champions-fury') {
-    // Fighting Tournament champion: a random stat rises by two stages each time it is sent out.
+  if (ability === 'champions-fury' || ability === 'champions-entrance') {
+    // Fighting Tournament champion (Champion's Entrance): on entry one random stat rises by two stages, never the same stat as last time
+    // and never more than +4 in total per battle (so it lifts twice at most).
     const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
+    const marks = (ctx.battle.growthMarks ??= []);
+    const prefix = `ce:${c.mon.uid}:`;
+    const mine = marks.filter((m) => m.startsWith(prefix));
+    if (mine.length >= 2) return;
+    const last = mine[mine.length - 1]?.slice(prefix.length);
+    const pool = stats.filter((st) => st !== last);
+    const pick = pool[ctx.rng.int(0, pool.length - 1)]!;
+    marks.push(`${prefix}${pick}`);
     announce(c, ability, events);
-    applyStageChange(ctx, c, stats[ctx.rng.int(0, stats.length - 1)]!, 2, events);
+    applyStageChange(ctx, c, pick, 2, events);
     return;
   }
   if (ability === 'download' && other.mon.hp > 0) {
@@ -2469,7 +2486,7 @@ function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
   if (ability === 'prankster' && move.category === 'status') return move.priority + 1;
   if (move.category === 'status' && !c.vol.movesUsed.includes(move.id) && Held.hasHook(ctx, c.mon, c.side, 'coolShades')) return move.priority + 1;
   if (ability === 'silent-cloak' && !c.vol.cloakUsed) return move.priority + 1;
-  if (ability === 'champions-fury' && !c.vol.furyUsed && move.category !== 'status') return move.priority + 1;
+  if ((ability === 'champions-fury' || ability === 'champions-entrance') && !c.vol.furyUsed && move.category !== 'status') return move.priority + 1;
   if (ability === 'gale-wings' && move.type === 'flying' && c.mon.hp >= calcStats(ctx.content, c.mon).hp) return move.priority + 1;
   if (ability === 'triage' && (move.effects.heal || move.effects.drain)) return move.priority + 3;
   if (ability === 'mycelium-might' && move.category === 'status') return move.priority - 0.5;
@@ -3280,7 +3297,7 @@ function executeMove(
   else runMove(ctx, user, target, hitMove, movedFirst, events);
   user.vol.lastFailed = events.slice(mark).some((e) => (e.type === 'fail' || e.type === 'miss' || e.type === 'noEffect' || e.type === 'protected') && (e.type === 'noEffect' ? e.side === target.side : e.type === 'protected' ? e.side === target.side : e.side === user.side));
   if (abilityIn(ctx, user) === 'silent-cloak') user.vol.cloakUsed = true;
-  if (abilityIn(ctx, user) === 'champions-fury') user.vol.furyUsed = true;
+  if (abilityIn(ctx, user) === 'champions-fury' || abilityIn(ctx, user) === 'champions-entrance') user.vol.furyUsed = true;
   if (abilityIn(ctx, user) === 'encore-amp' && move.flags.includes('sound') && !user.vol.lastFailed) {
     user.vol.ampCount = user.vol.ampMove === move.id ? Math.min(3, user.vol.ampCount + 1) : 1;
     user.vol.ampMove = move.id;
