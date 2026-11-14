@@ -234,7 +234,7 @@ export class EventScene extends Phaser.Scene {
     if (def) {
       this.busy = true;
       try {
-        grade = (await runInteractionPrompt(this, promptById(def.id), { motion: session.settings.battleAnimations, assist: { skipGrade: 'good' } })).grade;
+        grade = (await runInteractionPrompt(this, promptById(def.id), { motion: session.settings.battleAnimations, assist: { skipGrade: 'good' }, mic: session.settings.expansion.micInput })).grade;
       } catch {
         grade = 'ok';
       }

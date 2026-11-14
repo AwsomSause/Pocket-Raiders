@@ -10,9 +10,10 @@ import '../core/interaction/reactions';
 import { animSettingsFrom } from '../core/accessibility';
 import type { Settings } from '../core/state';
 import {
-  judgeDrag, judgeHold, judgeRhythm, judgeTap, judgeTiming, promptLengthMs, skippedResult,
+  judgeDrag, judgeHold, judgeRhythm, judgeShout, judgeTap, judgeTiming, promptLengthMs, skippedResult,
   type PromptAssist, type PromptDef, type PromptResult,
 } from '../core/interaction/prompt';
+import { MicMeter, ShoutDetector } from '../game/micInput';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from './theme';
 
 const BOX = { w: 360, h: 220 };
@@ -24,6 +25,8 @@ export interface PromptOptions {
   at?: { x: number; y: number };
   /** Full / reduced / off motion (from the player's settings). */
   motion?: 'full' | 'reduced' | 'off';
+  /** Shout prompts only: the Settings > Controls > Microphone switch. Off (default) means the button is the only input. */
+  mic?: boolean;
 }
 
 /** Runs one prompt and resolves with its result. Cleans up all its objects and listeners. */
@@ -55,6 +58,11 @@ export function runInteractionPrompt(scene: Phaser.Scene, def: PromptDef, opts: 
     let dragging = false;
     const presses: number[] = [];
     let finished = false;
+    let shouted = false;
+    let level = 0;
+    const meter = def.kind === 'shout' && opts.mic ? new MicMeter() : null;
+    const detector = new ShoutDetector();
+    if (meter) void meter.start(true).then(() => { if (finished) meter.stop(); });
     const toBox = (p: Phaser.Input.Pointer): [number, number] => [((p.x - left) / BOX.w) * 100, ((p.y - top) / BOX.h) * 100];
     const px = (v: [number, number]) => ({ x: left + (v[0] / 100) * BOX.w, y: top + (v[1] / 100) * BOX.h });
 
@@ -67,6 +75,7 @@ export function runInteractionPrompt(scene: Phaser.Scene, def: PromptDef, opts: 
       scene.input.keyboard?.off('keydown', onKeyDown);
       scene.input.keyboard?.off('keyup', onKeyUp);
       tick.destroy();
+      meter?.stop();
       verdict.setText(result.skipped ? 'Skipped' : result.grade.toUpperCase()).setColor(GRADE_COLOR[result.grade] ?? '#ffffff').setAlpha(1);
       if (motion === 'full') scene.tweens.add({ targets: verdict, scale: { from: 0.6, to: 1.1 }, duration: 260, ease: 'Back.easeOut' });
       window.setTimeout(() => { try { root.destroy(true); } catch { /* scene already gone */ } resolve(result); }, motion === 'off' ? 250 : 650);
@@ -79,6 +88,7 @@ export function runInteractionPrompt(scene: Phaser.Scene, def: PromptDef, opts: 
         case 'drag': return judgeDrag(def, dragEnd, dragEnd ? now() - dragStartMs : 0, assist);
         case 'timing': return judgeTiming(def, pressAt, assist);
         case 'rhythm': return judgeRhythm(def, presses, assist);
+        case 'shout': return judgeShout(def, shouted, assist);
       }
     };
 
@@ -90,6 +100,9 @@ export function runInteractionPrompt(scene: Phaser.Scene, def: PromptDef, opts: 
         pulse();
       } else if (def.kind === 'hold') {
         if (pressAt === null) pressAt = t;
+      } else if (def.kind === 'shout') {
+        shouted = true;
+        finish(judge());
       } else if (def.kind === 'tap' || def.kind === 'timing') {
         if (pressAt === null) { pressAt = t; finish(judge()); }
       }
@@ -155,6 +168,15 @@ export function runInteractionPrompt(scene: Phaser.Scene, def: PromptDef, opts: 
           if (dragging && dragEnd) { const p = px(dragEnd); gfx.lineStyle(3, 0x9fe8ff, 0.9).lineBetween(a.x, a.y, p.x, p.y); gfx.fillStyle(0x9fe8ff, 1).fillCircle(p.x, p.y, 8); }
           break;
         }
+        case 'shout': {
+          // A loudness bar (mic on) and a big button that does the same thing as a shout.
+          const k = Math.min(1, level * 3);
+          gfx.fillStyle(0x24283a, 1).fillRoundedRect(left + 30, top + 40, BOX.w - 60, 18, 6);
+          gfx.fillStyle(0x78f090, 1).fillRoundedRect(left + 30, top + 40, (BOX.w - 60) * k, 18, 6);
+          gfx.fillStyle(0xffe060, 1).fillCircle(mid.x, mid.y + 30, 40 + (t % 800 < 120 ? 4 : 0));
+          gfx.lineStyle(4, 0xffffff, 0.9).strokeCircle(mid.x, mid.y + 30, 40);
+          break;
+        }
         case 'rhythm': {
           const y = cy;
           const span = BOX.w - 60;
@@ -172,6 +194,7 @@ export function runInteractionPrompt(scene: Phaser.Scene, def: PromptDef, opts: 
       delay: 16, loop: true,
       callback: () => {
         if (finished) return;
+        if (meter && meter.state === 'on') { level = meter.level(); if (detector.feed(level, now())) { shouted = true; return finish(judge()); } }
         draw();
         // Don't hang: end at the latest when the prompt's length is up.
         if (now() > promptLengthMs(def) + 300 && !(def.kind === 'drag' && dragging)) finish(judge());
