@@ -10,6 +10,7 @@ import { RescueStateSchema } from '../evil/rescueSchema';
 import { GrandArcStateSchema } from '../grandArc/schema';
 import { StandWithStateSchema } from '../arc/standWithSchema';
 import { RivalOverhaulStateSchema } from '../rivals/overhaulSchema';
+import { NodeMenuStateSchema } from '../nodeMenu/state';
 
 /** F1: every expansion setting at its default (plan section 10). Lives in `settings.expansion` (settings v42). */
 export const ExpansionSettingsSchema = z.object({
@@ -43,6 +44,8 @@ export const ExpansionSettingsSchema = z.object({
   stagePacing: z.boolean().default(true),
   /** B9 Evolution Encounters: evolution-themed events and wild pre-evolutions meeting their stone. Risky Evolutions stay off. */
   evolutionEncounters: z.boolean().default(true),
+  /** Beta 0.7 Node Event Menus: every map node becomes a small menu (core/nodeMenu). Off until the P7 sims pass. Read when a run starts. */
+  nodeMenus: z.boolean().default(false),
   /** B7 E4 counter-pick: register 6 at the League door, swap 1. */
   leagueCounterPick: z.boolean().default(true),
   /** E2 world-state tracks (the Kanto Rocket Ledger): shops, shut Centers and thinner wild pools follow how the team's operations go. */
@@ -102,5 +105,7 @@ export const ExpansionRunSchema = z.object({
   lastFaint: z.object({ uid: z.string(), at: z.number().int().min(0) }).optional(),
   /** B7: the Pokémon (uids) registered at the League door. Only these are ever countered; a swapped-in Pokémon is unseen. `swapped` = the one swap is used. */
   league: z.object({ registered: z.array(z.string()), swapped: z.boolean().default(false) }).optional(),
+  /** Beta 0.7 Node Event Menus (core/nodeMenu): present only in runs started with the setting on. No save bump. */
+  nodeMenus: NodeMenuStateSchema.optional(),
 });
 export type ExpansionRun = z.infer<typeof ExpansionRunSchema>;

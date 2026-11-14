@@ -184,6 +184,7 @@ import type { TotemDef } from './totem/schema';
 import { createStreams, hashSeed, Rng, withStream } from './rng';
 import { lastChanceRevive } from './lastChance';
 import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPurchase, recentCopies } from './priceSwing';
+import { closeNodeMenu, freshNodeMenuState, menuBlocker, nodeMenusAllowed } from './nodeMenu/flow';
 import { BattleStateSchema, currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
 import { itemSlotLimit } from './trainerPerks';
 import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
@@ -341,7 +342,7 @@ export interface NewRunOptions {
   /** Story Run: the player's name, pronouns and Look from the prologue (profile.story.protagonist). */
   protagonist?: { look: string; name: string; pronouns: string | PronounSet; backstory?: string };
   /** Beta 0.6: which expansion settings were on at run start (settings.expansion). Each flag is stored in `run.expansion` once and never changes. */
-  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean; grandArc?: boolean; worldTracks?: boolean; eventsDensity?: 'low' | 'normal' | 'full'; climaxCut?: 'standard' | 'extended' };
+  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean; grandArc?: boolean; worldTracks?: boolean; eventsDensity?: 'low' | 'normal' | 'full'; climaxCut?: 'standard' | 'extended'; nodeMenus?: boolean };
 }
 
 export function createRun(content: Content, opts: NewRunOptions): RunState {
@@ -446,6 +447,8 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     const e = opts.expansion;
     const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.kantoCanon ? { canon: { flags: [], completed: [], menus: {} } } : {}), ...(e.worldTracks ? { tracks: true } : {}), ...(e.eventsDensity ? { density: e.eventsDensity } : {}), ...(e.climaxCut === 'extended' ? { climaxCut: 'extended' as const } : {}) };
     if (Object.keys(flags).length > 0) run.expansion = { ...run.expansion, ...flags };
+    // Beta 0.7 Node Event Menus: on for this run when the setting is on, except in speedrun, boss rush and time attack.
+    if (e.nodeMenus && nodeMenusAllowed(run.rules.modifierIds)) run.expansion = { ...run.expansion, nodeMenus: freshNodeMenuState() };
     setClimaxCut(run, e.climaxCut);
     if (e.grandArc) startGrandArc(run);
   }
@@ -958,6 +961,10 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
       return run;
     }
   }
+  // Beta 0.7 Node Event Menus: a required entry must be done first; then the node's menu closes.
+  const blocker = menuBlocker(run);
+  if (blocker) throw new Error(blocker);
+  closeNodeMenu(content, run);
   const mode = run.moveMode;
   delete run.moveMode;
   const node = findNode(stage.map, nodeId);

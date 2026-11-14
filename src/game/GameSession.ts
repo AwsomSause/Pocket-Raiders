@@ -6,6 +6,7 @@
 //   - on entering a map node, using a side stop, or buying at a shop
 //   - when the run ends (profile first, then the run record is cleared)
 
+import * as NodeMenu from '../core/nodeMenu/flow';
 import { playerTrainerFor } from '../core/archetypes';
 import { wearKeepsake, type KeepsakeSlot } from '../core/story2/keepsakes';
 import { nameSignature } from '../core/story2/signature';
@@ -271,7 +272,7 @@ export class GameSession {
     if (story && next.starter && !starterOverride?.length) starterOverride = [next.starter];
     if (story && (next.starter || next.backstory)) this.profile = { ...this.profile, story: clearNextRun(this.profile.story) };
     const opts = { seed, archetypeId, campaignId, prep, rules, attributes: this.profile.attributes, mastery: this.profile.mastery, gameEvents: rules?.weeks === false ? [] : activeGameEvents(this.content, new Date()).map((a) => a.edition), raidTierUnlocked: this.profile.best.raidBestTier ?? 0, licenses: runBankFlags(this.profile), candyPerks: this.profile.candyPerks, ownedTrainers: this.profile.unlockedArchetypes, dexCaught: dexCaughtCount(this.profile), mentorBonds: this.profile.mentorBonds, npcMemory: this.profile.npcMemory, treasureHunt: this.profile.treasureHunt, ...(story ? { protagonist: { look: me.look, name: me.nameSet ? me.name : '', pronouns: me.pronouns, ...(next.backstory ? { backstory: next.backstory } : {}) } } : {}) };
-    this.run = Run.createRun(this.content, { ...opts, expansion: { stagePacing: this.settings.expansion.stagePacing, evolutionEncounters: this.settings.expansion.evolutionEncounters, leagueCounterPick: this.settings.expansion.leagueCounterPick, kantoCanon: this.settings.expansion.kantoSevii, grandArc: this.settings.expansion.grandArcEnabled, worldTracks: this.settings.expansion.worldTracks, eventsDensity: this.settings.expansion.eventsDensity, climaxCut: this.settings.expansion.climaxCut }, ...(story && starterOverride?.length ? { starterOverride } : {}), runId: randomId('run'), pastPokemon: this.profile.pastPokemon, rivalArchive: this.profile.rivalArchive, runHistory: this.profile.runHistory });
+    this.run = Run.createRun(this.content, { ...opts, expansion: { stagePacing: this.settings.expansion.stagePacing, evolutionEncounters: this.settings.expansion.evolutionEncounters, leagueCounterPick: this.settings.expansion.leagueCounterPick, kantoCanon: this.settings.expansion.kantoSevii, grandArc: this.settings.expansion.grandArcEnabled, worldTracks: this.settings.expansion.worldTracks, eventsDensity: this.settings.expansion.eventsDensity, climaxCut: this.settings.expansion.climaxCut, nodeMenus: this.settings.expansion.nodeMenus }, ...(story && starterOverride?.length ? { starterOverride } : {}), runId: randomId('run'), pastPokemon: this.profile.pastPokemon, rivalArchive: this.profile.rivalArchive, runHistory: this.profile.runHistory });
     const grants = startGrants(this.content, this.profile, archetypeId);
     applyStartGrants(this.content, this.run, this.profile);
     // Memories: what earlier runs left behind (ghosts, keepsakes, old friends, the chosen heirloom). Picked from the profile, not rolled.
@@ -528,6 +529,25 @@ export class GameSession {
     const ok = activeScene(this.content, run) ? finishScene(this.content, run, choiceId) : finishRivalScene(run, choiceId);
     if (ok && this.run && this.run.phase !== 'over') this.persistRun(); // a finished run's save is already cleared
     return ok;
+  }
+
+  /** Beta 0.7 Node Event Menus: composes the current node's menu (once) and returns its view, or null when menus are off. */
+  nodeMenu(): NodeMenu.NodeMenuView | null {
+    const run = this.requireRun();
+    const next = NodeMenu.ensureNodeMenu(this.content, run);
+    if (next !== run) {
+      this.run = next;
+      this.persistRun();
+    }
+    return NodeMenu.nodeMenuView(this.requireRun());
+  }
+
+  /** Picks a menu entry: a micro entry plays now (its words come back); a side stop comes back for the map to open. */
+  pickMenuEntry(entryId: string): NodeMenu.PickResult {
+    const result = NodeMenu.pickMenuEntry(this.content, this.requireRun(), entryId);
+    this.run = result.run;
+    this.persistRun();
+    return result;
   }
 
     visitSide(sideId: string): string {
