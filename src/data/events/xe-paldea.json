@@ -1,0 +1,657 @@
+{
+ "events": [
+  {
+   "id": "xe.paldea.flyer",
+   "name": "The Flyer",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "priority": 100,
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "A corridor. A paper star taped inside a locker vent. From the toilets, the sound of someone trying to eat crisps quietly. \"Occupied.\" It is lunchtime. \"I know. That's why I'm in here.\" Under the stall door a flyer slides out, a star and five words: YOU CAN SIT WITH US. \"Someone put that in my locker. Do you think it's a trick? Things like that are usually a trick.\"",
+   "choices": [
+    {
+     "label": "\"It's not a trick.\"",
+     "success": {
+      "text": "The door opens a crack. The first-year looks out for the first time in weeks.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-first-year-hopeful",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit down outside the stall",
+     "success": {
+      "text": "You eat lunch on a corridor floor. After a while a second sandwich comes under the door.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "heal",
+        "share": 0.2
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who made you eat in there?\"",
+     "success": {
+      "text": "\"Nobody. That's the thing. Nobody did anything. They just all know not to sit next to me.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-first-year-heard",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.paldea.clive",
+   "name": "Clive",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A student leans on a wall with a pompadour the size of a loaf. He is sixty. \"Sup. I am Clive. A student. Of this school. I am down with Team Star, as we youths say. Do you know where one might hang with them?\" \"…Director?\" \"Who? I know of no such man. I am Clive. I enjoy… skateboards.\"",
+   "choices": [
+    {
+     "label": "\"Sure, Clive.\"",
+     "success": {
+      "text": "He beams. \"Radical.\" He will stand with you when the Bases are in trouble.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-clive-friend",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -2
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why are you really here?\"",
+     "success": {
+      "text": "The posture goes out of him. \"Because I was appointed to a school whose records for a certain year are blank. Blank records are not an accident. They are a decision. I should like to know whose.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-clive-intel",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -4
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Nice hair.\"",
+     "success": {
+      "text": "\"Thank you. It is my own. It is now my own. I paid for it.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.paldea.sandwich",
+   "name": "Sandwiches",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.arven-s"
+    ],
+    "tint": "#2a2a18",
+    "effect": "none"
+   },
+   "intro": "A tall student with a huge backpack unloads foil parcels onto a wall outside a Base. A very old dog sleeps on his feet. \"Don't get the wrong idea. I'm not with them. I just make too much. Somebody's got to eat it.\" A Star Grunt, mouth full: \"He says that every day. He labels them.\" \"Because you're allergic to pickles, that's just food safety.\"",
+   "choices": [
+    {
+     "label": "Take a sandwich",
+     "success": {
+      "text": "It is very good. You feel ready for anything.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.3
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why here?\"",
+     "success": {
+      "text": "\"My dad was a professor. Never home. I ate a lot of lunches by myself. These kids eat together. I like the noise.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-arven-cook",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pet the dog",
+     "success": {
+      "text": "\"He's had a hard few years. He's getting better. Scratch behind the left ear. Left.\" Your lead Pokémon enjoys it too.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.paldea.read-receipts",
+   "name": "Read Receipts",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.penny"
+    ],
+    "tint": "#241c30",
+    "effect": "flicker"
+   },
+   "intro": "The Academy entrance hall. A girl in an Eevee backpack sits behind a pillar with a laptop. Your phone rings. On the laptop screen, the same call is being placed. \"This is Cassiopeia. I have been watching you. I have a proposal.\" From behind the pillar, quite audible: \"…I have a proposal.\"",
+   "choices": [
+    {
+     "label": "Play along",
+     "success": {
+      "text": "\"The Bosses will not stand down unless they are beaten. They made me promise never to let them be talked out of it. So: beat them. Kindly.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-penny-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk round the pillar",
+     "success": {
+      "text": "She slams the laptop. \"I'm not— I was doing homework. How long did you know?\" \"Since 'I have a proposal'.\" \"Ugh.\" From now on she speaks as herself, which she finds much harder.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-penny-known",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -3
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's on the laptop?\"",
+     "success": {
+      "text": "\"Reports. Eighteen months old. Deleted by someone with staff access at 11:42 on a Friday night. I got them back. They've got my friends' names in them. I can end this any day I like. I just have to show everyone the worst week of their lives.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-reports-seen",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -4
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.paldea.admissions",
+   "name": "Admissions",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#101828",
+    "effect": "glint"
+   },
+   "intro": "A man with long silver hair talks to a ring of Star Grunts, a folder of brochures in hand. \"A full scholarship. Board, tuition, a laboratory of your own. My organization prizes exactly the kind of initiative your schools punish.\" The Base gate bangs open. Mela: \"OI! Shampoo advert! They're not for sale and neither are they!\" He does not raise his voice: \"I heard you both times. I have come back so that you will remember that I asked.\" He sees you. \"The one from the reports. Eight regions. You have cost us a great deal. I am not angry. Anger is for people who are not going to win.\"",
+   "choices": [
+    {
+     "label": "Take a brochure",
+     "success": {
+      "text": "The \"school\" has an island for an address.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-brochure",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cipher-seen-nascour",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stand next to Mela",
+     "success": {
+      "text": "\"…Okay. You can stay.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-mela-ally",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cipher-seen-nascour",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Challenge him",
+     "success": {
+      "text": "\"No. Not here, in front of children. I have some standards. They are simply not the ones you would like.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cipher-seen-nascour",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.paldea.old-hallway",
+   "name": "The Old Hallway",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "track",
+     "atLeast": 4
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1c1c",
+    "effect": "none"
+   },
+   "intro": "Three \"Star Grunts\" at a checkpoint. The helmets are right. The boots are wrong. Peon Brask: \"Hahaha— toll! Team Star toll! Hand it over, that's what we do, we're delinquents—\" Peon Odette, a smile like a paper cut: \"You'll want to pay. Otherwise people will say Team Star beats up travellers. Again. That's rather the idea.\" Peon Tully says nothing and looks at his boots.",
+   "choices": [
+    {
+     "label": "Battle them",
+     "success": {
+      "text": "They go for your weakest Pokémon first, every time.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Peon Brask, Odette and Tully",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "star-oldhallway-beaten",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"You're the ones from before.\"",
+     "success": {
+      "text": "Odette: \"We were children. It was years ago.\" Tully: \"…It was eighteen months.\" They both look at him.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-tully-cracking",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call a real Star Grunt over",
+     "success": {
+      "text": "Eri arrives. She does not say a word. She is a head taller than all three of them now. They leave. Tully, last to go, very low: \"Tell her— no. Don't tell her anything. I don't get to.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-eri-called",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.paldea.applicant",
+   "name": "The Applicant",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "flag",
+     "key": "cipher-seen-nascour",
+     "atLeast": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.kieran"
+    ],
+    "tint": "#241830",
+    "effect": "flicker"
+   },
+   "intro": "Outside Caph Base, a boy with a purple-black fringe holds two pieces of paper: a hand-drawn Star flyer and a glossy brochure. \"I came all the way from Kitakami. I'm sick of being the one who loses. I want to be strong. So strong nobody ever looks past me again. These ones say I can sit with them. The man with the silver hair says he can make me win. I know which one I should pick. I know which one I want.\" His Dipplin looks at the brochure and shrinks back into its apple a little.",
+   "choices": [
+    {
+     "label": "\"Winning won't fix it.\"",
+     "success": {
+      "text": "\"You'd say that. You win.\" He walks toward the silver-haired man.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-kieran-cipher",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle him, and lose on purpose",
+     "success": {
+      "text": "He knows. It makes it worse.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-kieran-cipher",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle him properly, then stay",
+     "success": {
+      "text": "Win or lose, you do not leave afterwards. \"Why are you still here?\" You say nothing. \"Nobody stays after.\" Eri comes out with two water bottles and throws him one. \"We do. Come on. You can hold the pads.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Kieran",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "star-kieran-star",
+         "amount": 1
+        },
+        {
+         "kind": "evil",
+         "heat": -5
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "xe.paldea.shop-class",
+   "name": "Shop Class",
+   "group": "Tricksters, villains and teams",
+   "stop": "event",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "xevents"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#241c14",
+    "effect": "none"
+   },
+   "intro": "Ruchbah Base's garage. Ortega is under a chassis. Captain Zeb is handing him the wrong spanner on purpose. \"The first one was a Varoom Penny found in a skip. We tuned it in my dad's garden shed with a hairdryer and a Tera shard off a field trip. It went whoomp and turned pink and we screamed for about an hour.\" Zeb: \"Torque was awful.\" \"Torque was awful. We loved it. Then some people found the shed. We built five more out of spite. But that first one was the only one we built because it was fun.\"",
+   "choices": [
+    {
+     "label": "Ask what happened to it",
+     "success": {
+      "text": "\"Scrap dealer. I looked. Somebody'd already bought it. Paid ten times what it was worth. Who does that?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-first-engine",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hand him the right spanner",
+     "success": {
+      "text": "Zeb, betrayed: \"Hey.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-zeb-ally",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask how the link works",
+     "success": {
+      "text": "It takes four minutes. It is, you gradually realize, an exact description of how to make a Shadow Pokémon, told by someone who thinks he is describing a go-kart.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-link-explained",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -3
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
