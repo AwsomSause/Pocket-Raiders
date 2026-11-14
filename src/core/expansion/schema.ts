@@ -18,29 +18,13 @@ import { RewindStateSchema } from '../rewindSchema';
 export const ExpansionSettingsSchema = z.object({
   /** Climax length: the current climax, or the Extended Cut. Extended becomes the default only after final balance. */
   climaxCut: z.enum(['standard', 'extended']).default('standard'),
-  /** Second Shot (decision A): the first climax loss retries; the second never ends the run. */
-  climaxSecondShot: z.boolean().default(true),
   /** How many quiet-node story events appear. */
   eventsDensity: z.enum(['low', 'normal', 'full']).default('normal'),
   grandArcEnabled: z.boolean().default(true),
-  rivalOverhaul: z.boolean().default(true),
-  rivalFriend: z.boolean().default(true),
-  /** Second Chance chance, in percent (0 turns it off). */
-  secondChancePct: z.number().min(0).max(100).default(5),
-  /** Decision D: healing items and revives allowed per battle (E4, rivals and the Champion use the same). */
-  healsPerBattle: z.number().int().min(0).max(99).default(10),
-  revivesPerBattle: z.number().int().min(0).max(99).default(6),
   /** Decision N: mic input, off until the player turns it on. A button always does the same thing. */
   micInput: z.boolean().default(false),
   /** Decision O: minigame difficulty. */
   minigamesDifficulty: z.enum(['easy', 'normal', 'hard']).default('normal'),
-  blessingsEnabled: z.boolean().default(true),
-  mythicalsEnabled: z.boolean().default(true),
-  ultraBeastsEnabled: z.boolean().default(true),
-  /** Whole Run Events: chance a run has one, in percent. */
-  wholeRunEventsPct: z.number().min(0).max(100).default(35),
-  /** Rocket "what-if" casts (rocket.x.triad and the other what-if switches). */
-  whatIfCasts: z.boolean().default(true),
   kantoSevii: z.boolean().default(true),
   /** B6 stage pacing: 4–5 trainer fights per stage (1–2 skippable), an ace trainer, doubles from region 2, EXP −20%. Read when a run starts. */
   stagePacing: z.boolean().default(true),
