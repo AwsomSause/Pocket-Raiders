@@ -56,6 +56,14 @@ export interface TrackEffects {
   wildShrink: number;
   /** The news runs the team's adverts (a line on the map). */
   adverts: boolean;
+  /** Sinnoh (Brownout): the share of max HP a Pokémon Center restores (1 = all of it). */
+  centerHeal: number;
+  /** Sinnoh (Brownout): accuracy for both sides in night battles (1 = normal). */
+  nightAccuracy: number;
+  /** Sinnoh (Lake Valor taken, Will): the player's Pokémon cannot land critical hits. */
+  noPlayerCrit: boolean;
+  /** Hoenn (The Long Weather): how the sky is set in battles here. */
+  weather: 'none' | 'split' | 'tilt' | 'swing' | 'awakening';
 }
 
 export interface TrackConfig {
@@ -64,7 +72,7 @@ export interface TrackConfig {
   wildShrink: number;
 }
 
-export const NO_EFFECTS: TrackEffects = { shopMarkup: 0, healShutAtNight: false, roadblocks: false, wildShrink: 0, adverts: false };
+export const NO_EFFECTS: TrackEffects = { shopMarkup: 0, healShutAtNight: false, roadblocks: false, wildShrink: 0, adverts: false, centerHeal: 1, nightAccuracy: 1, noPlayerCrit: false, weather: 'none' };
 
 /** Kanto's step table (Small Print, House Rules, Closed Roads, Export, Under New Management). */
 export function kantoEffects(step: number, cfg: TrackConfig): TrackEffects {
@@ -74,13 +82,28 @@ export function kantoEffects(step: number, cfg: TrackConfig): TrackEffects {
     roadblocks: step >= 3,
     wildShrink: step >= 4 ? cfg.wildShrink : 0,
     adverts: step >= 5,
+    ...REST,
   };
 }
+const REST = { centerHeal: 1, nightAccuracy: 1, noPlayerCrit: false, weather: 'none' as const };
 
-/** The effects a region's track has at a step. Only Kanto's track is built; other regions have none yet. */
+/** Sinnoh's step table (Quiet, Brownout, The Lakes, The Hum, Zero Hour). Step 1 and the lake memory/feeling rules live in events only. */
+export function sinnohEffects(step: number): TrackEffects {
+  return { ...NO_EFFECTS, centerHeal: step >= 2 ? 0.8 : 1, nightAccuracy: step >= 2 ? 0.95 : 1, noPlayerCrit: step >= 3, adverts: step >= 5 };
+}
+
+/** Hoenn's step table (Drizzle and Drought, Blue Dawn Red Dusk, The Swing, Spill, The Awakening). Berry trees and ferries are not built. */
+export function hoennEffects(step: number): TrackEffects {
+  const weather = step >= 5 ? 'awakening' : step >= 3 ? 'swing' : step >= 2 ? 'tilt' : step >= 1 ? 'split' : 'none';
+  return { ...NO_EFFECTS, weather, adverts: step >= 5 };
+}
+
+/** The effects a region's track has at a step. Kanto, Sinnoh and Hoenn have tracks; the other regions have none yet. */
 export function trackEffectsFor(regionId: string, step: number, cfg: TrackConfig): TrackEffects {
   if (regionId === 'alola') return alolaEffects(step);
   if (regionId === 'paldea') return paldeaEffects(step);
+  if (regionId === 'sinnoh') return sinnohEffects(step);
+  if (regionId === 'hoenn') return hoennEffects(step);
   return regionId === 'kanto' ? kantoEffects(step, cfg) : NO_EFFECTS;
 }
 

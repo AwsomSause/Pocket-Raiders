@@ -4,6 +4,7 @@
 
 import type { RunState } from '../../state';
 import { ALOLA_PALDEA_MEETINGS } from './meetRegions';
+import { SINNOH_HOENN_BOSS_CAST, SINNOH_HOENN_EVENT_MEETINGS, SINNOH_HOENN_TRACK_MEETINGS } from './meetSinnohHoenn';
 import { beatTeamHeads, markBeaten, recordCast, type CastStatus } from './dossier';
 
 type Meeting = string | [id: string, status: CastStatus];
@@ -22,6 +23,7 @@ export const EVENT_MEETINGS: Record<string, readonly Meeting[]> = {
   'grand-arc-ein': ['sc.rocket.ein'],
   'rainbow-rocket': ['sc.rocket-remnants.rainbow-giovanni'],
   ...ALOLA_PALDEA_MEETINGS,
+  ...SINNOH_HOENN_EVENT_MEETINGS,
 };
 
 /** Kanto canon spaces (Kanto run events): the person who runs that place for Rocket. */
@@ -48,16 +50,23 @@ export const TRACK_MEETINGS: Record<number, readonly Meeting[]> = {
   5: ['sc.rocket.madame-boss'],
 };
 
+/** Sinnoh's and Hoenn's world-state tracks: the person behind each step. */
+export const TRACK_MEETINGS_BY_REGION: Record<string, Record<number, readonly Meeting[]>> = {
+  kanto: TRACK_MEETINGS,
+  ...SINNOH_HOENN_TRACK_MEETINGS,
+};
+
 /** After an event is played. */
 export function meetFromEvent(run: RunState, event: { id: string; canon?: string | null }): void {
   meet(run, EVENT_MEETINGS[event.id] ?? []);
   if (event.canon) meet(run, CANON_MEETINGS[event.canon] ?? []);
 }
 
-/** After Kanto's track moves: everyone up to the highest step reached. */
+/** After a region's track moves: everyone up to the highest step reached. */
 export function meetFromTrack(run: RunState, regionId: string, peak: number): void {
-  if (regionId !== 'kanto') return;
-  for (let s = 1; s <= peak; s++) meet(run, TRACK_MEETINGS[s] ?? []);
+  const table = TRACK_MEETINGS_BY_REGION[regionId];
+  if (!table) return;
+  for (let s = 1; s <= peak; s++) meet(run, table[s] ?? []);
 }
 
 /** Joining Rocket as the Inside Man: the player's own file ("House Card"). */
@@ -76,6 +85,7 @@ export const BOSS_CAST: Record<string, string> = {
   koga: 'sc.rocket.triad-koga',
   'lt-surge': 'sc.rocket.triad-surge',
   blaine: 'sc.rocket.blaine',
+  ...SINNOH_HOENN_BOSS_CAST,
 };
 
 /** A gym leader, Elite Four or Champion fight was won. */

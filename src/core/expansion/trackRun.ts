@@ -6,6 +6,7 @@ import { currentRegion } from '../regions';
 import { ADVERT_LINE } from './trackRegions';
 import type { RunState } from '../state';
 import { periodOf } from '../clock';
+import { fnv1a } from './hash';
 import { meetFromTrack } from './cast/meet';
 import { freshTrack, insuredIndex, NO_EFFECTS, reduceTrack, trackEffectsFor, wildTaken, type TrackEffects, type TrackInput, type TrackState } from './track';
 
@@ -55,6 +56,38 @@ export function healStopShut(content: Content, run: RunState, sideId: string): b
 export function trackBannerLine(content: Content, run: RunState): string {
   const fx = trackEffects(content, run);
   return fx.adverts ? (ADVERT_LINE[currentRegion(content, run).id] ?? 'The news is running Rocket adverts all day.') : '';
+}
+
+const flagCount = (run: RunState, key: string): number => Number(run.story.flags[`ev:${key}`] ?? 0);
+
+/** Hoenn: the weather a node's battles get at this track step, or null. No random numbers: a hash of the seed and node. */
+export function hoennNodeWeather(run: RunState, step: number, nodeId: string): 'rain' | 'sun' | null {
+  const h = fnv1a(`${run.seed}::track:weather::${run.regionIndex}::${run.stage?.index ?? 0}::${nodeId}`);
+  if (step === 1) return h % 3 === 0 ? 'rain' : h % 3 === 1 ? 'sun' : null; // one route rainy, one sunny, the rest as they are
+  if (step === 2) {
+    const aqua = flagCount(run, 'aqua-ahead');
+    const magma = flagCount(run, 'magma-ahead');
+    return aqua > magma ? 'rain' : magma > aqua ? 'sun' : h % 2 === 0 ? 'rain' : 'sun'; // ties alternate
+  }
+  return null;
+}
+
+/** Applies the track's battle effects (Sinnoh night accuracy and no player crits; Hoenn weather) to a battle that was just created. */
+export function applyTrackToBattle(content: Content, run: RunState): void {
+  const battle = run.battle;
+  if (!battle) return;
+  const fx = trackEffects(content, run);
+  if (fx.nightAccuracy < 1 && periodOf(run) === 'night') battle.accuracyMult = Math.min(battle.accuracyMult ?? 1, fx.nightAccuracy);
+  if (fx.noPlayerCrit) battle.noPlayerCrit = true;
+  if (fx.weather === 'none' || battle.eventRule?.weatherCycle) return;
+  const step = trackStep(run, currentRegion(content, run).id);
+  if (fx.weather === 'swing' || fx.weather === 'awakening') {
+    battle.eventRule = { ...(battle.eventRule ?? {}), weatherCycle: fx.weather === 'swing' ? ['rain', 'rain', 'sun', 'sun'] : ['rain', 'sun'] };
+    battle.weather = { id: 'rain', turns: 5 };
+    return;
+  }
+  const w = hoennNodeWeather(run, step, run.stage?.current ?? '');
+  if (w && !battle.weather) battle.weather = { id: w, turns: 999 };
 }
 
 /** An Evil Team operation ended. Stopped = a raid won (-1); let through = a raid lost (+1). Only runs with the expansion block move the track. */

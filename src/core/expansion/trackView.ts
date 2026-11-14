@@ -35,7 +35,7 @@ export interface TrackPage {
   nextLine: string;
 }
 
-/** The track page for the region the run is in, or null where that region has no track page (only Kanto's is built). */
+/** The track page for the region the run is in, or null where that region has no track page (Kanto, Sinnoh, Hoenn, Alola and Paldea are built). */
 export function trackPage(content: Content, run: RunState): TrackPage | null {
   if (!run.expansion?.tracks) return null;
   const region = currentRegion(content, run);
@@ -45,8 +45,14 @@ export function trackPage(content: Content, run: RunState): TrackPage | null {
   const st = trackOf(run, region.id);
   const now = st?.step ?? 0;
   const peak = st?.peak ?? 0;
-  const steps: TrackPageStep[] = def.steps.slice(0, TRACK_MAX).map((s) => {
-    const n = Number(s.step);
+  // A step with parts (Sinnoh's three lakes, 3a to 3c) is one step on the page.
+  const grouped = [1, 2, 3, 4, 5].flatMap((n) => {
+    const parts = def.steps.filter((x) => parseInt(x.step, 10) === n);
+    if (parts.length === 0) return [];
+    return [parts.length === 1 ? parts[0]! : { ...parts[0]!, name: 'The Lakes Fall', rule: parts.map((x) => `${x.name}: ${x.rule}`).join(' ') }];
+  });
+  const steps: TrackPageStep[] = grouped.slice(0, TRACK_MAX).map((s) => {
+    const n = parseInt(s.step, 10);
     const state: StepState = n === now ? 'now' : n <= peak ? 'seen' : n === Math.max(now, peak) + 1 ? 'next' : 'locked';
     return { step: n, name: state === 'locked' ? '' : s.name, rule: state === 'locked' ? '???' : s.rule, state };
   });
