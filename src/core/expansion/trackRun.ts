@@ -3,6 +3,7 @@
 
 import type { Content } from '../contentSchema';
 import { currentRegion } from '../regions';
+import { ADVERT_LINE } from './trackRegions';
 import type { RunState } from '../state';
 import { periodOf } from '../clock';
 import { meetFromTrack } from './cast/meet';
@@ -53,7 +54,7 @@ export function healStopShut(content: Content, run: RunState, sideId: string): b
 /** One line for the map when the track has a visible effect (adverts), else ''. */
 export function trackBannerLine(content: Content, run: RunState): string {
   const fx = trackEffects(content, run);
-  return fx.adverts ? 'The news is running Rocket adverts all day.' : '';
+  return fx.adverts ? (ADVERT_LINE[currentRegion(content, run).id] ?? 'The news is running Rocket adverts all day.') : '';
 }
 
 /** An Evil Team operation ended. Stopped = a raid won (-1); let through = a raid lost (+1). Only runs with the expansion block move the track. */

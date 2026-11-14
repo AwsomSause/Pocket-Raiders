@@ -10,7 +10,7 @@ import { expansionData } from '../../data/expansion';
 import { raidRecord } from '../raid/storyRaids';
 import type { RunState } from '../state';
 import { launchFormatBattle } from './battle';
-import { markCheckpoint, markDone } from './store';
+import { climaxRegion, markCheckpoint, markDone } from './store';
 import type { FormatCard, FormatCtx, WideFormat } from './types';
 
 export type DistrictStatus = 'held' | 'contested' | 'lost';
@@ -159,7 +159,7 @@ function onBattleEnd(s: SiegeState, won: boolean, { run }: FormatCtx): SiegeStat
 
 export const siege: WideFormat<SiegeState> = {
   id: 'siege',
-  canStart: (_ctx, input) => !input || typeof input !== 'object' || !('region' in input) || (input as { region: unknown }).region === 'kanto',
+  canStart: (ctx, input) => (!input || typeof input !== 'object' || !('region' in input) ? climaxRegion(ctx.run) === 'kanto' : (input as { region: unknown }).region === 'kanto'),
   setup,
   describe: (s) => describe(s),
   choose,
