@@ -129,6 +129,16 @@ export const ExpansionRunSchema = z.object({
   /** Beta 0.7 S1: the Second Chance percent this run started with (0 or missing = off) and whether it has been used. In-run only. */
   secondChancePct: z.number().min(0).max(100).optional(),
   secondChance: z.object({ at: z.number().int().min(0), rival: z.string().nullable() }).optional(),
+  /** Beta 0.7 Flight North (core/instrumentality/flightNorth.ts): the Bug-type that left after the stage. `ready` = its return can still save a lost run. Optional, no save bump. */
+  flightNorth: z.object({
+    line: z.enum(['caterpie', 'weedle']),
+    name: z.string().default(''),
+    friendship: z.number().int().min(0).max(255).default(0),
+    shiny: z.boolean().default(false),
+    state: z.enum(['ready', 'fighting', 'offered', 'kept', 'released']).default('ready'),
+    /** The uid the Bug-type has once it is offered again (so keep or release can be told apart). */
+    uid: z.string().optional(),
+  }).optional(),
   /** Beta 0.7 H1: runs with heated-moment limits on, and what has been granted (per region, total, and which Pokémon). */
   heated: z.boolean().optional(),
   heatedLog: z.object({ perRegion: z.record(z.string(), z.number().int().min(0)).default({}), total: z.number().int().min(0).default(0), mons: z.array(z.string()).default([]) }).optional(),

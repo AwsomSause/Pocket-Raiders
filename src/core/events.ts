@@ -65,6 +65,7 @@ import { grantBlessing, makeBlissful } from './shadowWorld/blissful';
 import { eggMoveOptions, familyId, teachEggMove } from './mastery';
 import { applyTrainEffect, trainEffectText } from './trainingEffects';
 import { noteCanonEvent, restoreStash, stashParty } from './expansion/canonRun';
+import { flightNorthEffect } from './instrumentality/flightNorth';
 import { applyCanonEffect, ghostReturns, nearestBst } from './expansion/canonSaffron';
 import { addStageAttribute } from './expansion/stageMods';
 import { raidOffered, resolveStoryRaid } from './raid/storyRaids';
@@ -913,6 +914,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return 'your Pokémon are taken away';
     case 'restoreParty':
       return 'your Pokémon come back';
+    case 'flightNorth':
+      return e.action === 'name' ? 'you give it a name' : 'you trust it';
     case 'heal':
       return e.share >= 1 ? 'full heal' : `heal ${Math.round(e.share * 100)}%`;
     case 'campBond':
@@ -1175,6 +1178,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return stashParty(run) ? 'Your Pokémon are taken away' : '';
     case 'restoreParty':
       return restoreStash(run) ? 'Your Pokémon come back' : '';
+    case 'flightNorth':
+      return flightNorthEffect(run, e);
     case 'heal': {
       if (e.share >= 1) healParty(content, run);
       else for (const m of run.party) if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * e.share));

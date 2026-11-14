@@ -5736,6 +5736,16 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
     events.push({ type: 'selfState', side: user.side, state: 'revived' });
     return;
   }
+  if (fx.northsWind) {
+    const team = user.side === 'player' ? ctx.party : ctx.battle.enemyTeam;
+    const down = team.find((m) => m.hp <= 0);
+    if (!down) return void events.push({ type: 'fail', side: user.side });
+    down.hp = Math.max(1, Math.floor(calcStats(content, down).hp / 2));
+    events.push({ type: 'selfState', side: user.side, state: 'revived' });
+    changeStage(ctx, user, user, 'spa', 1, events);
+    changeStage(ctx, user, user, 'spe', 1, events);
+    return;
+  }
   if (fx.shedTail) {
     const cost = Math.floor(calcStats(content, user.mon).hp / 2);
     const team = user.side === 'player' ? ctx.party : ctx.battle.enemyTeam;

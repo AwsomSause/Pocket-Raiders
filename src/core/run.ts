@@ -16,6 +16,7 @@ import { noteBattle } from './expansion/fieldNotes';
 import { settleSky } from './sky/story';
 import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
+import { applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, refusesToLeave, returnedBug } from './instrumentality/flightNorth';
 import { applySecondChance, secondChanceOpen, secondChanceRolls } from './instrumentality/secondChance';
 import { hearTelling, noteEvent as notePromiseEvent, resolveVisit, rollVisit, wonderAfterBattle } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
@@ -2869,6 +2870,8 @@ export interface TurnResult {
   wiped?: boolean;
   /** Beta 0.7 S1: a Second Chance fired. The fight goes on with the team revived; the screen shows the six lines and the partner. */
   secondChance?: { lines: string[]; partner: string; silhouette: boolean };
+  /** Beta 0.7 Flight North: the Bug-type's return (crack lines, its name and form, the music id). */
+  flightNorth?: { lines: string[]; name: string; display: string; music: string };
   /** L3 Rewinds: the whole party fainted and the Time Keeper turned the battle back this many turns (the battle goes on). */
   rewound?: number;
   /** A narrative rival defeat (M12): the battle was lost for the story, the party is healed and the run goes on. Never a game over. */
@@ -3308,6 +3311,12 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
       recordChanges(content, current, back, 'battle');
       return { run: back, events, end: null, defeated: false, cues, drama, wiped: true };
     }
+    // Beta 0.7 Flight North: the Bug-type returns once per run, before Second Chance (which then stays shut).
+    if (flightNorthReady(run)) {
+      const fnr = applyFlightNorthReturn(content, run);
+      recordChanges(content, current, run, 'battle');
+      return { run, events, end: null, defeated: false, cues, drama, flightNorth: fnr };
+    }
     // Beta 0.7 S1 Second Chance: 5% (setting), once per run, after the rescues above it (rewind first). See instrumentality/secondChance.ts.
     if (secondChanceOpen(run) && secondChanceRolls(run.seed, run.encountersCompleted, run.expansion!.secondChancePct!)) {
       const sc = applySecondChance(content, run);
@@ -3589,6 +3598,22 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
       addFlag(run, 'rescued');
       caughtPending.push({ kind: 'caught', mon });
       rescued.push(speciesName(content, mon.speciesId));
+    }
+  }
+
+  // Beta 0.7 Flight North: after its return fight the Bug-type may stay (or, at maximum Bond, simply refuses to leave).
+  if (battle.outcome === 'win' && battle.flightNorth) {
+    const bug = returnedBug(content, run, (id, level) => newMon(content, run, id, level, 'p'));
+    if (bug) {
+      discover(run, bug.speciesId, true);
+      if (refusesToLeave(run) && run.party.length < partyCapacity(content, run)) {
+        run.party.push(bug);
+        markOffered(run, bug.uid);
+        markDecided(run, bug, true);
+      } else {
+        markOffered(run, bug.uid);
+        caughtPending.push({ kind: 'caught', mon: bug });
+      }
     }
   }
 
@@ -4060,7 +4085,7 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
       if (problem) throw new Error(problem);
       run.party.push(caught);
       count(run, 'caughtKept');
-      message = `${name} joined your party!${joinLine(content, run, caught)}`;
+      message = `${name} joined your party!${joinLine(content, run, caught)} ${markDecided(run, caught, true)}`.trim();
     } else if (choice.kind === 'replace') {
       const old = run.party[choice.partyIndex];
       if (!old) throw new Error('Choose a party member to replace');
@@ -4070,19 +4095,19 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
       if (problem) throw new Error(problem);
       run.party[choice.partyIndex] = caught;
       count(run, 'caughtKept');
-      message = `${speciesName(content, old.speciesId)} left the party. ${name} joined!${joinLine(content, run, caught)}`;
+      message = `${speciesName(content, old.speciesId)} left the party. ${name} joined!${joinLine(content, run, caught)} ${markDecided(run, caught, true)}`.trim();
     } else if (choice.kind === 'sendToBox') {
       if (run.box.length >= boxCapacity(runPerks(content, run))) throw new Error('The PC is full');
       run.box.push(caught);
       count(run, 'caughtKept');
-      message = `${name} was sent to the PC.`;
+      message = `${name} was sent to the PC. ${markDecided(run, caught, true)}`.trim();
     } else if (choice.kind === 'release') {
       assertCanRelease(content, run, joinProblem(content, run, caught.speciesId) !== null);
       const candies = candiesForRelease(content, caught.level) + releaseGift(content, caught.level);
       run.candies += candies;
       count(run, 'candiesEarned', candies);
       count(run, 'caughtToCandies');
-      message = `${name} was released. You got ${candies} cand${candies === 1 ? 'y' : 'ies'}.`;
+      message = `${name} was released. You got ${candies} cand${candies === 1 ? 'y' : 'ies'}. ${markDecided(run, caught, false)}`.trim();
       recordReleased(content, run, caught);
     } else {
       throw new Error('Choose what to do with the caught Pokémon');

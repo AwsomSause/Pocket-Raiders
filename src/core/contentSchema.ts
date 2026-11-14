@@ -318,6 +318,8 @@ export const MoveSchema = z.object({
       userFaint: z.enum(['memento', 'healingWish', 'lunarDance', 'finalGambit']).optional(),
       /** Revival Blessing: a fainted party member comes back at half HP. */
       revivalBlessing: z.literal(true).optional(),
+      /** North's Wind (Flight North): revives one fainted team member at half HP, then raises the user's Sp. Atk and Speed by one stage. */
+      northsWind: z.literal(true).optional(),
       /** Shed Tail: pays half HP for a Substitute and switches out, passing it on. */
       shedTail: z.literal(true).optional(),
       /** Changes the user's type: copy the target's (Reflect Type), add Grass or Ghost to the target, resist its last move (Conversion 2), or lose a type after the hit. */
@@ -2980,6 +2982,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('stashParty') }),
   /** Beta 0.6 Vermilion Flight North: the stashed party returns. Whoever is in the party now (the Bug-type) leaves. Does nothing when nothing is stashed. */
   z.object({ kind: z.literal('restoreParty') }),
+  /** Beta 0.7 Flight North: names the Bug-type (`name`), or marks the moment it says goodbye. Only the name changes state; the return and its ending live in core/instrumentality/flightNorth.ts. */
+  z.object({ kind: z.literal('flightNorth'), action: z.enum(['name', 'trust']), name: z.string().max(12).optional() }),
   /** A healing spot, shop or fishing spot opens beside this node. */
   z.object({ kind: z.literal('addStop'), stop: z.enum(['heal', 'shop', 'fish', 'minigame']) }),
   /** A ferry: jump to a node next to the gym (SS Ticket). */
