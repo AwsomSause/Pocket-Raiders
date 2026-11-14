@@ -37,7 +37,7 @@ import { commandPlan, shiftOptionProblem, targetChoices } from '../core/battle/f
 /** This screen draws double battles: spot 0 left, 1 right (triple battles get their own layout in Beta 0.6 T2). */
 import { canDynamax, maxMoveOptions, megaOption, ownedZCrystal, permanentForm, stoneForms, teraOption, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
 import { runPerks } from '../core/archetypes';
-import { abilityOf, calcStats, maxHp, getSpecies, maxPp, xpForLevel } from '../core/pokemon';
+import { abilityOf, calcStats, maxHp, getSpecies, lookSpecies, maxPp, xpForLevel } from '../core/pokemon';
 import { heartStage } from '../core/shadow';
 import { shadowPreviewLine } from '../core/shadow2';
 import { formIntro } from '../core/presentation/sceneEffects';
@@ -1203,7 +1203,7 @@ export class BattleScene extends Phaser.Scene {
     const grow = mon.dynamaxed && species.form?.kind !== 'gigantamax' ? DYNAMAX_SCALE : 1;
     this.markObjs[side].forEach((o) => o.destroy());
     this.markObjs[side] = [];
-    const visual = this.showSpriteBody(side, mon, species, cry, grow);
+    const visual = this.showSpriteBody(side, mon, lookSpecies(services().session.content, mon), cry, grow);
     try {
       const vs = this.run.battle?.extra?.variants?.[mon.uid];
       this.markObjs[side] = addMarks(this, this.field, visual, { shadow: Boolean(mon.shadow), variant: vs?.line ?? null, motion: this.motion });

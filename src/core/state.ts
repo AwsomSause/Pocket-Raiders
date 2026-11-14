@@ -8,6 +8,7 @@ import { TreasureHuntSchema } from './treasureHunt';
 import { EVENT_STYLE_IDS } from './presentation/eventStyles';
 import { PLAZA_STYLE_IDS } from './presentation/plazaStyles';
 import { NATURE_IDS } from './natures';
+import { ANIME_LOOKS } from './animeLooks';
 import { CareSchema } from './care/mods';
 import { DramaBattleSchema, freshDrama } from './drama/schema';
 import { z } from 'zod';
@@ -104,6 +105,8 @@ export const PokemonInstanceSchema = z.object({
   evoBlock: z.array(z.string()).optional(),
   /** The Fighting Tournament champion belt (a cosmetic form; shown as a tag). Optional. */
   champion: z.literal(true).optional(),
+  /** Anime Forms art (core/animeLooks.ts): Squirtle Squad members and the Tournament champion Primeape. Presentation only. Optional. */
+  look: z.enum(ANIME_LOOKS).optional(),
   /** Its nature (core/natures.ts). Missing in saves from before natures: neutral. */
   nature: z.enum(NATURE_IDS).optional(),
   /** S418 temporary mint: this nature counts instead of `nature` until `battles` more won battles have passed. */

@@ -13,6 +13,7 @@ import { allPlayerAnims, playerAnimBase, playerAnimId } from './playerArt.ts';
 /** Plaza walk sheets copied from Pokemon Memories (tools/build-plaza-map.py); core/presentation/plazaStyles.ts places them. */
 
 import { STORY_ICONS } from './storyIcons.ts';
+import { ANIME_SPRITE_PATHS } from '../core/animeLooks.ts';
 
 export const VANCE_ANIMS = ['surprised', 'nudge', 'explain', 'tilt', 'adjust', 'confident'] as const;
 export type VanceAnim = (typeof VANCE_ANIMS)[number];
@@ -510,6 +511,8 @@ export function buildCatalog(inputs: CatalogInputs): AssetEntry[] {
   const entries = [
     ...FIXED_ASSETS,
     ...inputs.pokemon.flatMap(pokemonEntries),
+    // Anime Forms art (core/animeLooks.ts); icon and cry stay the base species'.
+    ...ANIME_SPRITE_PATHS.flatMap((sprite) => pokemonEntries({ sprite, icon: '1/7', cry: '7' }).slice(0, 4)),
     ...inputs.trainerAssetIds.map(trainerEntry),
     ...inputs.itemAssetIds.map(itemEntry),
     ...inputs.backgroundAssetIds.map(backgroundEntry),
