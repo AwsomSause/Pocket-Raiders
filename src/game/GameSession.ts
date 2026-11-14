@@ -7,6 +7,7 @@
 //   - when the run ends (profile first, then the run record is cleared)
 
 import * as NodeMenu from '../core/nodeMenu/flow';
+import { playSpecialEntry } from '../core/nodeMenu/special/menu';
 import { playerTrainerFor } from '../core/archetypes';
 import { wearKeepsake, type KeepsakeSlot } from '../core/story2/keepsakes';
 import { nameSignature } from '../core/story2/signature';
@@ -545,7 +546,10 @@ export class GameSession {
 
   /** Picks a menu entry: a micro entry plays now (its words come back); a side stop comes back for the map to open. */
   pickMenuEntry(entryId: string): NodeMenu.PickResult {
-    const result = NodeMenu.pickMenuEntry(this.content, this.requireRun(), entryId);
+    const run = this.requireRun();
+    // P5 special entries (fork, linked, escort) play in their own module and come back with their words.
+    const special = NodeMenu.currentMenu(run)?.entries.find((e) => e.id === entryId)?.kind === 'special';
+    const result: NodeMenu.PickResult = special ? { ...playSpecialEntry(this.content, run, entryId), sideId: null } : NodeMenu.pickMenuEntry(this.content, run, entryId);
     this.run = result.run;
     this.persistRun();
     return result;

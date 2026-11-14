@@ -11,6 +11,8 @@ import { composeNodeMenu, nodeMenuRng } from './compose';
 import { nodeMenuData } from './data';
 import { nodeMenuHooks } from './hooks';
 import { NodeMenuStateSchema, type NodeMenu, type NodeMenuEntry } from './state';
+// P5 special entries register their composer hooks on import.
+import './special/menu';
 
 /** Modes the menus stay off in (decision 6): speedrun, boss rush and time attack. */
 export const NODE_MENU_OFF_MODIFIERS = ['boss-rush', 'speed-clear', 'time-attack'] as const;
