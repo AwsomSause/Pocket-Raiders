@@ -10,6 +10,7 @@ import { RescueStateSchema } from '../evil/rescueSchema';
 import { GrandArcStateSchema } from '../grandArc/schema';
 import { StandWithStateSchema } from '../arc/standWithSchema';
 import { RivalOverhaulStateSchema } from '../rivals/overhaulSchema';
+import { BlessingStateSchema } from '../blessings';
 
 /** F1: every expansion setting at its default (plan section 10). Lives in `settings.expansion` (settings v42). */
 export const ExpansionSettingsSchema = z.object({
@@ -31,7 +32,7 @@ export const ExpansionSettingsSchema = z.object({
   micInput: z.boolean().default(false),
   /** Decision O: minigame difficulty. */
   minigamesDifficulty: z.enum(['easy', 'normal', 'hard']).default('normal'),
-  blessingsEnabled: z.boolean().default(true),
+  blessingsEnabled: z.boolean().default(false),
   mythicalsEnabled: z.boolean().default(true),
   ultraBeastsEnabled: z.boolean().default(true),
   /** Whole Run Events: chance a run has one, in percent. */
@@ -84,6 +85,8 @@ export const ExpansionRunSchema = z.object({
   grandArc: GrandArcStateSchema.optional(),
   /** Stand With Them (E8): the Inside Man route, once you have joined a team at Ignition. */
   standWith: StandWithStateSchema.optional(),
+  /** Legendary Blessing (Beta 0.7): this run's one blessing. Present only when the setting was on at run start; old saves have none, no save-version bump. */
+  blessing: BlessingStateSchema.optional(),
   /** Runs that started with the stage-pacing setting on (B6). Set once at run start, never changed. */
   pacing: z.boolean().optional(),
   /** Runs with Evolution Encounters on (B9). */

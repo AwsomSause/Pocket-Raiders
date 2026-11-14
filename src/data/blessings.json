@@ -1,0 +1,49 @@
+{
+  "_note": "Legendary Blessings (Beta 0.7, workstream 5). Hand-written from docs/plans/instrumentality/notes-pack/LEGENDARY_BLESSINGS.md. In-run only: no cross-run memory. status: supported = the whole effect works; limited = part of the effect works (see limits); disabled = not in the pool until its mechanic exists.",
+  "tiers": {
+    "lesser": { "chance": 45, "influence": 2 },
+    "greater": { "chance": 30, "influence": 2 },
+    "divine": { "chance": 17, "influence": 1 },
+    "primordial": { "chance": 6.5, "influence": 1 },
+    "origin": { "chance": 1.5, "influence": 0 }
+  },
+  "balance": { "lele": { "healPercent": 10 }, "fezandipiti": { "discountPercent": 10 } },
+  "blessings": [
+    {
+      "id": "tapu-lele", "name": "The Guardian of Life", "legendary": "Tapu Lele", "speciesId": "tapu-lele", "tier": "lesser",
+      "item": "item.gen5/heart-scale", "objectText": "a pink shell, dusted with glittering scales",
+      "passage": "It scatters healing as a child scatters petals, and with as much thought for where it lands.",
+      "headline": "THE PETALS FALL WHERE THEY WILL", "summary": "After every battle, your most hurt Pokémon recovers 10% HP.",
+      "effect": { "kind": "healMostHurt" }, "status": "supported", "limits": "Communion and its Rite are not built."
+    },
+    {
+      "id": "fezandipiti", "name": "The Fair Wish", "legendary": "Fezandipiti", "speciesId": "fezandipiti", "tier": "lesser",
+      "item": "item.gen5/wishing-piece", "objectText": "a purple chain worn as a necklace",
+      "passage": "It wished to be lovely, and was made lovely, and has not looked at anything else since.",
+      "headline": "THE WORLD IS KINDER TO THE LOVELY", "summary": "Shops charge 10% less.",
+      "effect": { "kind": "shopDiscount" }, "status": "limited",
+      "limits": "The extra charming event answer is not built. Communion and its Rite are not built."
+    },
+    {
+      "id": "ho-oh", "name": "The Rainbow", "legendary": "Ho-Oh", "speciesId": "ho-oh", "tier": "divine",
+      "item": "item.gen5/rainbow-wing", "objectText": "a golden feather falling through darkness",
+      "passage": "Three perished in the burning tower, and it wept, and they rose and ran. Therefore look up, you who have lost.",
+      "headline": "SACRED ASH", "summary": "Once per region, after a battle, every fainted Pokémon in your party is restored.",
+      "effect": { "kind": "sacredAsh" }, "status": "supported", "limits": "Communion and its Rite are not built."
+    },
+    {
+      "id": "dialga", "name": "The Time Keeper", "legendary": "Dialga", "speciesId": "dialga", "tier": "divine",
+      "item": "item.gen5/rainbow-wing", "objectText": "an ancient hourglass, turning by itself",
+      "passage": "And from the beginning, time was set into motion. Yet even the river of eternity may be made to flow backward, for the Keeper remembers what has passed.",
+      "headline": "TIME BENDS TO YOUR WILL", "summary": "The next five turns need not be your last.",
+      "effect": { "kind": "none" }, "status": "disabled", "limits": "Needs battle rewind (milestone 3.0 Second Chance)."
+    },
+    {
+      "id": "palkia", "name": "The Space Traveller", "legendary": "Palkia", "speciesId": "palkia", "tier": "divine",
+      "item": "item.gen5/rainbow-wing", "objectText": "a pearl with a fold in it that the eye cannot follow",
+      "passage": "It set the near beside the far and called it a road. Ask, and the mountain shall stand behind you that stood before.",
+      "headline": "REARRANGE THE ROAD", "summary": "Once per region, swap any two nodes of a stage before entering it.",
+      "effect": { "kind": "none" }, "status": "disabled", "limits": "Needs a map-rearranging screen."
+    }
+  ]
+}

@@ -225,7 +225,9 @@ export class StarterSelectScene extends Phaser.Scene {
     if (this.chosen) return;
     this.chosen = true;
     services().session.chooseStarter(i);
-    this.scene.start('Briefing');
+    // A run with a Legendary Blessing opens with its plinth screen first (once; a resumed run skips it).
+    const blessing = services().session.run?.expansion?.blessing;
+    this.scene.start(blessing && !blessing.seen ? 'Blessing' : 'Briefing');
   }
 }
 
