@@ -6,7 +6,7 @@
 import type { Content } from '../contentSchema';
 import type { RunState } from '../state';
 
-export const FORMAT_IDS = ['breather', 'blackout', 'convoy', 'siege', 'colossus', 'front', 'debate'] as const;
+export const FORMAT_IDS = ['breather', 'blackout', 'convoy', 'siege', 'colossus', 'front', 'debate', 'card'] as const;
 export type FormatId = (typeof FORMAT_IDS)[number];
 
 export interface FormatCtx {

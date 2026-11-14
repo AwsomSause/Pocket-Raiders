@@ -1,0 +1,54 @@
+{
+  "events": [
+    {
+      "id": "xc.chobin",
+      "name": "Chobin Wants a Ride",
+      "group": "Companions (Beta 0.7)",
+      "tags": ["Story"],
+      "stop": "event",
+      "rarity": "rare",
+      "minStage": 3,
+      "requires": [{ "kind": "grandArc" }],
+      "scene": { "cast": ["trainer.worker_m"], "tint": "#14242c", "effect": "none" },
+      "intro": "The very serious boy from the sketch stall is waiting by a rowboat with a hand-painted sign: CHOBIN DRIVES. \"Chobin has never driven,\" he says, \"but Chobin has a feeling you will need a boat.\"",
+      "choices": [
+        { "label": "Take Chobin along", "success": { "text": "He salutes. He has clearly practised the salute. Chobin will meet you at the water when the water matters.", "effects": [{ "kind": "flag", "key": "comp-chobin", "amount": 1 }, { "kind": "friendship", "amount": 1, "who": "party" }] } },
+        { "label": "Not now", "success": { "text": "\"Chobin will wait,\" he says, and does not look disappointed at all.", "effects": [] } }
+      ]
+    },
+    {
+      "id": "xc.rui",
+      "name": "A Girl Who Hears Hearts",
+      "group": "Companions (Beta 0.7)",
+      "tags": ["Story"],
+      "stop": "event",
+      "rarity": "rare",
+      "minStage": 3,
+      "requires": [{ "kind": "grandArc" }],
+      "scene": { "cast": ["trainer.fairy_tale_girl"], "tint": "#201a34", "effect": "glint" },
+      "intro": "A girl sits very still beside the road with her hand an inch from a hurt Pokémon, not touching it. \"Shh,\" she says to you, kindly. \"It's telling me something.\" Her name is Rui.",
+      "choices": [
+        { "label": "Travel together", "success": { "text": "Rui walks a little behind you, listening. When one of your Pokémon is hurt, she is already there.", "effects": [{ "kind": "flag", "key": "comp-rui", "amount": 1 }, { "kind": "flag", "key": "companion", "amount": 1 }] } },
+        { "label": "Ask what it said", "success": { "text": "\"It said it's a little less afraid than it was.\" She smiles at your party. \"So are they.\"", "effects": [{ "kind": "friendship", "amount": 2, "who": "party" }] } },
+        { "label": "Walk on", "success": { "text": "Rui nods and goes back to listening.", "effects": [] } }
+      ]
+    },
+    {
+      "id": "xc.krane",
+      "name": "The Professor's Card Table",
+      "group": "Companions (Beta 0.7)",
+      "tags": ["Story", "Evil Team"],
+      "stop": "event",
+      "rarity": "rare",
+      "minStage": 3,
+      "requires": [{ "kind": "grandArc" }, { "kind": "partyShadow" }],
+      "scene": { "cast": ["trainer.pr/scientist_m"], "tint": "#14242c", "effect": "glint" },
+      "intro": "A man in a rumpled coat has set up a card table by the road with a ring of small lights on it. Professor Krane. \"It's not my best work,\" he says, looking at your Shadow Pokémon. \"It's held together with tape. But it turns.\"",
+      "choices": [
+        { "label": "Help him carry the Purify Chamber", "success": { "text": "He folds the table and hands you one end. \"Waiting near something,\" he says. \"That's most of science.\"", "effects": [{ "kind": "flag", "key": "comp-krane", "amount": 1 }] } },
+        { "label": "Let him look at your Shadow Pokémon", "success": { "text": "He listens to the haze for a long moment and writes a number on a card. \"Lighter, already.\"", "effects": [{ "kind": "friendship", "amount": 2, "who": "party" }] } },
+        { "label": "Walk on", "success": { "text": "He waves with the hand that is not holding a screwdriver.", "effects": [] } }
+      ]
+    }
+  ]
+}

@@ -3,6 +3,7 @@
 
 import { blackout } from './blackout';
 import { breather } from './breather';
+import { card } from './card';
 import { colossus } from './colossus';
 import { convoy } from './convoy';
 import { debate } from './debate';
@@ -20,6 +21,7 @@ export const FORMATS: Partial<Record<FormatId, WideFormat<any>>> = {
   colossus,
   front,
   debate,
+  card,
 };
 
 const ONE_SHOT: readonly FormatId[] = ['breather', 'blackout', 'convoy', 'siege', 'colossus', 'front', 'debate'];

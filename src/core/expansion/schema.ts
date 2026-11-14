@@ -7,7 +7,7 @@ import { CastEntrySchema } from './cast/entry';
 import { CanonStateSchema } from './canonSpaces';
 import { TrackStateSchema } from './track';
 import { RescueStateSchema } from '../evil/rescueSchema';
-import { GrandArcStateSchema } from '../grandArc/schema';
+import { EpilogueStateSchema, GrandArcStateSchema } from '../grandArc/schema';
 import { UltraRunStateSchema } from '../ultra/schema';
 import { StandWithStateSchema } from '../arc/standWithSchema';
 import { RivalOverhaulStateSchema } from '../rivals/overhaulSchema';
@@ -40,6 +40,10 @@ export const ExpansionSettingsSchema = z.object({
   worldTracks: z.boolean().default(true),
   /** Beta 0.7: team-wide battle traits for Alola and Paldea story events (Hype Man, Reluctant Hand). Off by default; read when a run starts. */
   storyTraits: z.boolean().default(false),
+  /** Beta 0.7 E11: the Citadark finale is offered after the last region to a run with three Data ROMs (needs the Grand Arc). Off until the final balance pass. */
+  finaleEnabled: z.boolean().default(false),
+  /** Beta 0.7 D1: the Region of Doom ("The Margin") as an in-run epilogue after the win. Off until the final balance pass. */
+  doomEpilogue: z.boolean().default(false),
   /** Beta 0.7 L3 Rewinds (test switch until the blessings grant them): the Time Keeper's rewind in every run, once per stage. Read at run start. */
   rewinds: z.boolean().default(false),
   /** Legendary Blessings (Beta 0.7): each run opens with one Legendary's blessing. Off until the 0.7 balance pass. */
@@ -137,5 +141,7 @@ export const ExpansionRunSchema = z.object({
     kept: z.array(z.string()).default([]),
     left: z.array(z.string()).default([]),
   }).optional(),
+  /** Beta 0.7 workstream 13: in-run epilogue (Citadark finale, Region of Doom). */
+  epilogue: EpilogueStateSchema.optional(),
 });
 export type ExpansionRun = z.infer<typeof ExpansionRunSchema>;
