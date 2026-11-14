@@ -1,6 +1,6 @@
 # Ultra Beast Incursions (INSTRUMENTALITY U1)
 
-PR: into `beta-0.7` (rename this file to `<pr>-ultra-beasts.md` once the number is known).
+PR: #1280 into `beta-0.7`.
 Plan: `docs/plans/instrumentality/notes-pack/ULTRA_BEAST_INCURSIONS.md`. Setting: Settings > Ultra Beast Incursions (`expansion.ultraBeastsEnabled`, OFF by default per the update rules; read when a run starts).
 
 ## Player gets
