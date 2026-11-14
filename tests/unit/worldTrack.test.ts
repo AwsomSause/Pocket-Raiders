@@ -76,7 +76,8 @@ describe('Kalos and Galar effects (Beta 0.7 E9)', () => {
   });
 
   it('stay inside the closed field list', () => {
-    for (const r of ['kalos', 'galar']) expect(Object.keys(trackEffectsFor(r, 5, cfg)).sort()).toEqual(['adverts', 'healShutAtNight', 'roadblocks', 'shopMarkup', 'wildShrink']);
+    expect(Object.keys(trackEffectsFor('kalos', 5, cfg)).sort()).toEqual(['adverts', 'healShare', 'healShutAtNight', 'roadblocks', 'shopMarkup', 'wildShrink']);
+    expect(Object.keys(trackEffectsFor('galar', 5, cfg)).sort()).toEqual(['adverts', 'healShutAtNight', 'roadblocks', 'shopMarkup', 'wildShrink']);
   });
 });
 
