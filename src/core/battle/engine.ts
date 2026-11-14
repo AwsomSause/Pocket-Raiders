@@ -3706,7 +3706,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     user.vol.typeShift = move.type;
   }
   const foeAbility = targetsEnemy ? targetAbility(ctx, user, target) : null;
-  const noGuard = userAbility === 'no-guard' || abilityIn(ctx, target) === 'no-guard';
+  const noGuard = userAbility === 'no-guard' || abilityIn(ctx, target) === 'no-guard' || userAbility === 'skys-resolve' || abilityIn(ctx, target) === 'skys-resolve';
   // A hidden target can only be hit by the moves that reach it (Earthquake hits Dig), or with No Guard.
   if (targetsEnemy && target.vol.semi && fx.hitsSemi?.semi !== target.vol.semi && !noGuard) {
     events.push({ type: 'avoided', side: target.side });

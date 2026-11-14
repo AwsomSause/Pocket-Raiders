@@ -101,6 +101,8 @@ export const PokemonInstanceSchema = z.object({
   abilitySlot: z.number().int().min(-1).default(0),
   /** An ability it was given outright (Squirtle Squad's Contrary); it beats the slot. Optional, so older saves load as they are. */
   fixedAbility: z.string().optional(),
+  /** Pidgey's Resolve (Beta 0.7): Mega Evolves with no Mega Stone and takes the ability Sky's Resolve while Mega. Optional, so older saves load as they are. */
+  skyMega: z.literal(true).optional(),
   /** New Island clones have no ability at all. Optional, so older saves load as they are. */
   abilityless: z.boolean().optional(),
   /** Evolutions it can never take (the Tournament champion Primeape never becomes Annihilape). Optional, so older saves load as they are. */

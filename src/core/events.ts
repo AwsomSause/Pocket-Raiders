@@ -77,6 +77,7 @@ import { getSpecies } from './pokemon';
 import { currentRegion, getCampaign, levelCap, runLevelCap } from './regions';
 import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } from './encounterDirector';
 import { hashSeed, Rng } from './rng';
+import { applySky, shapeSkyFoe, skyCondition, skyConditionText } from './sky/story';
 import { continueAfterDecisions, healParty, newMon, startRaidBattle } from './run';
 import { NATURE_IDS } from './natures';
 
@@ -226,6 +227,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
     }
     case 'xevents':
       return run.expansion?.density !== undefined;
+    case 'sky':
+      return skyCondition(content, run, c.when);
     case 'standWith': {
       const sw = standWithOf(run);
       if (!c.joined) return !sw && joinProblem(run) === null;
@@ -414,6 +417,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs something you have not done yet';
     case 'track':
       return 'Needs the world to have changed more';
+    case 'sky':
+      return skyConditionText(c.when);
     case 'xevents':
       return 'Only with the Kanto story events on';
     case 'xflag':
@@ -1017,6 +1022,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return '';
     case 'shadowHeart':
       return 'a Shadow Pokémon eases';
+    case 'sky':
+      return '';
     case 'track':
       return e.input === 'raidSuccess' || e.input === 'officerTurned' ? 'the world eases' : 'the world tightens';
     case 'namedShadow':
@@ -1381,6 +1388,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (e.mark) addMark(rec, e.mark);
       return '';
     }
+    case 'sky':
+      return applySky(content, run, e);
     case 'flag':
       run.story.flags[`ev:${e.key}`] = Math.max(0, Number(run.story.flags[`ev:${e.key}`] ?? 0) + e.amount);
       // Shadow II: a story flag may be exactly the key a Shadow in your party or PC has been waiting for.
@@ -1649,6 +1658,8 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     run.battle = createBattle('trainer', team, activeIndex, run.party[activeIndex]!.uid, { classId: b.classId ?? 'event', name: evil ? evil.name : rival ? rival.name : fellow ? fellow.name : b.kind === 'trainer' && b.friend ? friendName(run) : b.name, leaderId: null });
     if (b.kind === 'trainer' && b.sprite && run.battle.trainer) run.battle.trainer.spriteBoss = b.sprite;
     if (b.special) assignSpecialTrait(run.battle.extra.traits, team, b.special);
+    // Pidgey's Resolve: the sparring Pidgey (and the rematch Pidgeot) is built from the story's state.
+    if (event.eventId === 'sky.meet' || event.eventId === 'sky.rematch') shapeSkyFoe(content, run, event.eventId);
     assignStoryTraits(run.battle.extra.storyTraits, team, b.special, !!run.expansion?.storyTraits);
     // Beta 0.6: the team's special Pokémon carry its variant line (Specialists one, Executives and Leaders two).
     const variantTeam = b.evil ? (b.evilTeam ?? evilTeam(content, run)?.id) : undefined;
