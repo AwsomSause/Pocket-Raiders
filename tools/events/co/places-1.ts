@@ -1,7 +1,7 @@
 // Catalog Overhaul Pack, category "places": the Delves, part 1 (STORY_FAMILIES_14.md, D-1 to D-4).
 // Every room is written to the doc: opening, script, the three buttons, the outcome. Each Delve has a resident with a reason to be there.
-import { $, ch, flag, flagIs, fr, good, has, heal, hurt, item, join, lose, moveFlag, ptype, relic, rp, type Json } from '../dsl.ts';
-import { delve, moment, no, takeNode, variant } from './_delve.ts';
+import { $, ch, flag, flagIs, fr, good, has, heal, hurt, item, join, lose, moveFlag, ptype, relic, rp, takeNode, type Json } from '../dsl.ts';
+import { delve, moment, no, variant } from './_delve.ts';
 
 export const CATEGORY = 'places';
 

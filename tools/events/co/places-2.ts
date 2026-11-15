@@ -1,6 +1,6 @@
 // Catalog Overhaul Pack, category "places": the Delves, part 2 (STORY_FAMILIES_14.md, D-5 to D-8).
-import { $, RARE_HELD, any, ch, egg, ev, flag, flagIs, fr, has, heal, hurt, item, join, lose, money, out, ptype, rp, statusLead, type Json } from '../dsl.ts';
-import { delve, kind, moment, mtype, no, rep, takeNode, variant } from './_delve.ts';
+import { $, RARE_HELD, any, ch, egg, ev, flag, flagIs, fr, has, heal, hurt, item, join, lose, money, out, ptype, rp, statusLead, takeNode, type Json } from '../dsl.ts';
+import { delve, kind, moment, mtype, no, rep, variant } from './_delve.ts';
 
 export const CATEGORY = 'places';
 

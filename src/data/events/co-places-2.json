@@ -2952,9 +2952,8 @@
         "amount": 1
        },
        {
-        "kind": "flag",
-        "key": "co-take-node-pending",
-        "amount": 1
+        "kind": "takeNode",
+        "nodes": 1
        },
        {
         "kind": "flag",
@@ -3052,9 +3051,8 @@
           "amount": -2000
          },
          {
-          "kind": "flag",
-          "key": "co-take-node-pending",
-          "amount": 1
+          "kind": "takeNode",
+          "nodes": 1
          },
          {
           "kind": "flag",
@@ -3127,9 +3125,8 @@
           "amount": -2000
          },
          {
-          "kind": "flag",
-          "key": "co-take-node-pending",
-          "amount": 1
+          "kind": "takeNode",
+          "nodes": 1
          },
          {
           "kind": "flag",

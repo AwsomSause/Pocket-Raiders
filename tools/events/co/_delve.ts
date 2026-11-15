@@ -6,12 +6,6 @@ export const leaveP: Json = { kind: 'leavePseudo' };
 export const moment = (text: string, importance = 45): Json => ({ kind: 'moment', text, importance });
 /** A run flag that is still unset. */
 export const no = (key: string): Json => ({ kind: 'flag', key, atLeast: 0, atMost: 0 });
-/**
- * "(a node)" as a cost: the shared `takeNode` effect (STANDARDS.md; built by the new-events thread in src/core/co/).
- * Until that lands on this branch the cost is carried as a marker flag, so the files build; tests/unit/coPlaces.test.ts fails while any marker is left.
- */
-const TAKE_NODE_READY = false;
-export const takeNode = (nodes = 1): Json => (TAKE_NODE_READY ? { kind: 'takeNode', ...(nodes > 1 ? { nodes } : {}) } : { kind: 'flag', key: 'co-take-node-pending', amount: nodes });
 /** Kindness +1 (STANDARDS.md): Good/Evil +1 and the run's kindness total. */
 export const kind = (n = 1): Json[] => [{ kind: 'attribute', key: 'goodEvil', amount: n }, { kind: 'flag', key: 'kind-total', amount: n }];
 /** Reputation +n / -n (STANDARDS.md): run flags `rep` and `rep-lost`. */
