@@ -1,0 +1,674 @@
+{
+ "pools": [
+  {
+   "id": "coastal-harbour",
+   "name": "Coastal Harbour",
+   "where": "Ports, beaches, ferries",
+   "offers": [
+    {
+     "species": "wingull",
+     "tier": 1
+    },
+    {
+     "species": "krabby",
+     "tier": 1
+    },
+    {
+     "species": "tentacool",
+     "tier": 1
+    },
+    {
+     "species": "shellder",
+     "tier": 1
+    },
+    {
+     "species": "chinchou",
+     "tier": 2
+    },
+    {
+     "species": "corphish",
+     "tier": 2
+    },
+    {
+     "species": "clauncher",
+     "tier": 2
+    },
+    {
+     "species": "finizen",
+     "tier": 2
+    },
+    {
+     "species": "lapras",
+     "tier": 3
+    },
+    {
+     "species": "skrelp",
+     "tier": 3
+    },
+    {
+     "species": "dhelmise",
+     "tier": 3
+    },
+    {
+     "species": "dratini",
+     "tier": 4
+    }
+   ],
+   "wants": {
+    "species": [],
+    "label": "any non-Water Pokémon",
+    "notTypes": [
+     "water"
+    ]
+   },
+   "wantLine": "My boat needs a land-legs Pokémon.",
+   "traders": [
+    {
+     "name": "Old salt Brinner",
+     "line": "Tide's been kind. Swap?"
+    },
+    {
+     "name": "Net-mender Effie",
+     "line": "This one keeps chewing my nets."
+    },
+    {
+     "name": "Lighthouse kid Bodhi",
+     "line": "Trade me something that's never seen the sea!"
+    }
+   ],
+   "quirks": [
+    "loves-rain",
+    "collector",
+    "sings-at-night",
+    "show-off"
+   ]
+  },
+  {
+   "id": "mountain-mine",
+   "name": "Mountain and Mine",
+   "where": "Quarries, passes, caves",
+   "offers": [
+    {
+     "species": "geodude",
+     "tier": 1
+    },
+    {
+     "species": "roggenrola",
+     "tier": 1
+    },
+    {
+     "species": "machop",
+     "tier": 1
+    },
+    {
+     "species": "zubat",
+     "tier": 1
+    },
+    {
+     "species": "onix",
+     "tier": 2
+    },
+    {
+     "species": "nosepass",
+     "tier": 2
+    },
+    {
+     "species": "rolycoly",
+     "tier": 2
+    },
+    {
+     "species": "sandshrew",
+     "tier": 2
+    },
+    {
+     "species": "larvitar",
+     "tier": 3
+    },
+    {
+     "species": "gible",
+     "tier": 3
+    },
+    {
+     "species": "riolu",
+     "tier": 3
+    },
+    {
+     "species": "beldum",
+     "tier": 4
+    }
+   ],
+   "wants": {
+    "species": [],
+    "label": "a Fire- or Electric-type",
+    "types": [
+     "fire",
+     "electric"
+    ]
+   },
+   "wantLine": "Dark down there.",
+   "traders": [
+    {
+     "name": "Miner Gratton",
+     "line": "Dug this one out of a wall."
+    },
+    {
+     "name": "Climber Yolanda",
+     "line": "She's too heavy for my rope."
+    },
+    {
+     "name": "Foreman's kid Rocco",
+     "line": "Dad says I can trade one."
+    }
+   ],
+   "quirks": [
+    "wont-lead",
+    "always-leads",
+    "collector",
+    "night-owl"
+   ]
+  },
+  {
+   "id": "forest-grove",
+   "name": "Forest and Grove",
+   "where": "Woods, groves, orchards",
+   "offers": [
+    {
+     "species": "caterpie",
+     "tier": 1
+    },
+    {
+     "species": "pidgey",
+     "tier": 1
+    },
+    {
+     "species": "oddish",
+     "tier": 1
+    },
+    {
+     "species": "sewaddle",
+     "tier": 1
+    },
+    {
+     "species": "skiddo",
+     "tier": 2
+    },
+    {
+     "species": "teddiursa",
+     "tier": 2
+    },
+    {
+     "species": "shroomish",
+     "tier": 2
+    },
+    {
+     "species": "fomantis",
+     "tier": 2
+    },
+    {
+     "species": "scyther",
+     "tier": 3
+    },
+    {
+     "species": "pinsir",
+     "tier": 3
+    },
+    {
+     "species": "heracross",
+     "tier": 3
+    },
+    {
+     "species": "larvesta",
+     "tier": 4
+    }
+   ],
+   "wants": {
+    "species": [],
+    "label": "a Water-type",
+    "types": [
+     "water"
+    ]
+   },
+   "wantLine": "The grove's thirsty.",
+   "traders": [
+    {
+     "name": "Forester Linnea",
+     "line": "This one keeps wandering into town."
+    },
+    {
+     "name": "Bug Catcher Wade",
+     "line": "Bug for a bug?"
+    },
+    {
+     "name": "Hermit Wennick",
+     "line": "It brings me berries. You need it more."
+    }
+   ],
+   "quirks": [
+    "steals-berries",
+    "gentle",
+    "show-off",
+    "collector"
+   ]
+  },
+  {
+   "id": "city-market",
+   "name": "City and Market",
+   "where": "Towns, markets, the GTS",
+   "offers": [
+    {
+     "species": "rattata",
+     "tier": 1
+    },
+    {
+     "species": "meowth",
+     "tier": 1
+    },
+    {
+     "species": "trubbish",
+     "tier": 1
+    },
+    {
+     "species": "lillipup",
+     "tier": 1
+    },
+    {
+     "species": "eevee",
+     "tier": 2
+    },
+    {
+     "species": "pikachu",
+     "tier": 2
+    },
+    {
+     "species": "porygon",
+     "tier": 2
+    },
+    {
+     "species": "yamper",
+     "tier": 2
+    },
+    {
+     "species": "rotom",
+     "tier": 3
+    },
+    {
+     "species": "zorua",
+     "tier": 3
+    },
+    {
+     "species": "ditto",
+     "tier": 3
+    },
+    {
+     "species": "porygon",
+     "tier": 4,
+     "held": "up-grade"
+    }
+   ],
+   "wants": {
+    "species": [],
+    "label": "any Pokémon (the card shows if it's worth less)"
+   },
+   "wantLine": "Something worth the same. Honestly marked.",
+   "traders": [
+    {
+     "name": "Trading-post Lenny",
+     "line": "Mine's stronger than it looks."
+    },
+    {
+     "name": "Office worker Tamsk",
+     "line": "My flat's too small for it."
+    },
+    {
+     "name": "Shop kid Nell-Bea",
+     "line": "Swap? Please? I'll be good."
+    }
+   ],
+   "quirks": [
+    "always-leads",
+    "show-off",
+    "collector",
+    "steals-berries"
+   ]
+  },
+  {
+   "id": "desert-ruins",
+   "name": "Desert and Ruins",
+   "where": "Flats, ruins, oases",
+   "offers": [
+    {
+     "species": "sandile",
+     "tier": 1
+    },
+    {
+     "species": "trapinch",
+     "tier": 1
+    },
+    {
+     "species": "cacnea",
+     "tier": 1
+    },
+    {
+     "species": "hippopotas",
+     "tier": 1
+    },
+    {
+     "species": "baltoy",
+     "tier": 2
+    },
+    {
+     "species": "yamask",
+     "tier": 2
+    },
+    {
+     "species": "silicobra",
+     "tier": 2
+    },
+    {
+     "species": "skorupi",
+     "tier": 2
+    },
+    {
+     "species": "gible",
+     "tier": 3
+    },
+    {
+     "species": "sigilyph",
+     "tier": 3
+    },
+    {
+     "species": "larvitar",
+     "tier": 3
+    },
+    {
+     "species": "dreepy",
+     "tier": 4
+    }
+   ],
+   "wants": {
+    "species": [],
+    "label": "a Water- or Grass-type",
+    "types": [
+     "water",
+     "grass"
+    ]
+   },
+   "wantLine": "Something that remembers rain.",
+   "traders": [
+    {
+     "name": "Nomad Yusra",
+     "line": "Our caravans trade, always."
+    },
+    {
+     "name": "Ruin Maniac Hadrian",
+     "line": "Found it guarding a door."
+    },
+    {
+     "name": "Oasis keeper Rahim",
+     "line": "It drinks too much."
+    }
+   ],
+   "quirks": [
+    "homesick",
+    "night-owl",
+    "grudge",
+    "bites-strangers"
+   ]
+  },
+  {
+   "id": "snow-ice",
+   "name": "Snow and Ice",
+   "where": "Snowfields, frozen caves",
+   "offers": [
+    {
+     "species": "snover",
+     "tier": 1
+    },
+    {
+     "species": "swinub",
+     "tier": 1
+    },
+    {
+     "species": "spheal",
+     "tier": 1
+    },
+    {
+     "species": "snorunt",
+     "tier": 1
+    },
+    {
+     "species": "cubchoo",
+     "tier": 2
+    },
+    {
+     "species": "sneasel",
+     "tier": 2
+    },
+    {
+     "species": "bergmite",
+     "tier": 2
+    },
+    {
+     "species": "snom",
+     "tier": 2
+    },
+    {
+     "species": "lapras",
+     "tier": 3
+    },
+    {
+     "species": "frigibax",
+     "tier": 3
+    },
+    {
+     "species": "cetoddle",
+     "tier": 3
+    },
+    {
+     "species": "vulpix-alola",
+     "tier": 4
+    }
+   ],
+   "wants": {
+    "species": [],
+    "label": "a Fire-type",
+    "types": [
+     "fire"
+    ]
+   },
+   "wantLine": "Warmth. Please.",
+   "traders": [
+    {
+     "name": "Ice fisher Aurel",
+     "line": "It's never been warm. Show it."
+    },
+    {
+     "name": "Skier Yuki",
+     "line": "She hates skiing. Hates it."
+    },
+    {
+     "name": "Lodge keeper Ingrid",
+     "line": "Fireside for a snowball?"
+    }
+   ],
+   "quirks": [
+    "homesick",
+    "gentle",
+    "wont-lead",
+    "sings-at-night"
+   ]
+  },
+  {
+   "id": "farm-ranch",
+   "name": "Farm and Ranch",
+   "where": "Farms, ranches, daycare",
+   "offers": [
+    {
+     "species": "mareep",
+     "tier": 1
+    },
+    {
+     "species": "miltank",
+     "tier": 1
+    },
+    {
+     "species": "wooloo",
+     "tier": 1
+    },
+    {
+     "species": "lechonk",
+     "tier": 1
+    },
+    {
+     "species": "ponyta",
+     "tier": 2
+    },
+    {
+     "species": "tauros",
+     "tier": 2
+    },
+    {
+     "species": "skiddo",
+     "tier": 2
+    },
+    {
+     "species": "bouffalant",
+     "tier": 2
+    },
+    {
+     "species": "togepi",
+     "tier": 3
+    },
+    {
+     "species": "riolu",
+     "tier": 3
+    },
+    {
+     "species": "munchlax",
+     "tier": 3
+    },
+    {
+     "species": "eevee",
+     "tier": 4,
+     "moves": [
+      "wish"
+     ]
+    }
+   ],
+   "wants": {
+    "species": [],
+    "label": "a Fighting- or Normal-type",
+    "types": [
+     "fighting",
+     "normal"
+    ]
+   },
+   "wantLine": "Strong hands for farm work.",
+   "traders": [
+    {
+     "name": "Rancher Mags",
+     "line": "This one's too lively for the herd."
+    },
+    {
+     "name": "Farmer's daughter Wynne",
+     "line": "Dad won't remember. It's alright."
+    },
+    {
+     "name": "Daycare lady",
+     "line": "Nobody came back for it."
+    }
+   ],
+   "quirks": [
+    "gentle",
+    "always-leads",
+    "sings-at-night",
+    "collector"
+   ]
+  },
+  {
+   "id": "haunted-night",
+   "name": "Haunted and Night",
+   "where": "Graveyards, night nodes",
+   "offers": [
+    {
+     "species": "gastly",
+     "tier": 1
+    },
+    {
+     "species": "misdreavus",
+     "tier": 1
+    },
+    {
+     "species": "duskull",
+     "tier": 1
+    },
+    {
+     "species": "litwick",
+     "tier": 1
+    },
+    {
+     "species": "shuppet",
+     "tier": 2
+    },
+    {
+     "species": "phantump",
+     "tier": 2
+    },
+    {
+     "species": "sinistea",
+     "tier": 2
+    },
+    {
+     "species": "drifloon",
+     "tier": 2
+    },
+    {
+     "species": "honedge",
+     "tier": 3
+    },
+    {
+     "species": "mimikyu",
+     "tier": 3
+    },
+    {
+     "species": "dreepy",
+     "tier": 3
+    },
+    {
+     "species": "sableye",
+     "tier": 4,
+     "hidden": true
+    }
+   ],
+   "wants": {
+    "species": [],
+    "label": "a Fairy- or Psychic-type",
+    "types": [
+     "fairy",
+     "psychic"
+    ]
+   },
+   "wantLine": "Something to keep me company.",
+   "traders": [
+    {
+     "name": "Channeler Hester",
+     "line": "It follows me. Maybe it'd follow you."
+    },
+    {
+     "name": "Medium Orla",
+     "line": "It's not haunted. It's lonely."
+    },
+    {
+     "name": "Gravedigger Mortlake",
+     "line": "Found it in a coffin. Empty coffin. Long story."
+    }
+   ],
+   "quirks": [
+    "night-owl",
+    "sings-at-night",
+    "grudge",
+    "afraid-of-balls"
+   ]
+  }
+ ]
+}

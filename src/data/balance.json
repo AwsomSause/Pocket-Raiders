@@ -946,5 +946,5 @@
   "itemRework": { "charmGate": true, "charmDraftChance": 0.0001, "luckGainScale": 0.25 },
   "overlevel": { "xpPerItem": 2000, "item": "premier-ball" },
   "rewind": { "maxTurnsBack": 5, "usesPerStage": 1 },
-  "co": { "bondFriendship": 5, "bondFriendshipParty": 3, "bondLevelStep": 50 }
+  "co": { "bondFriendship": 5, "bondFriendshipParty": 3, "bondLevelStep": 50, "tradeTierCatchRate": [150, 75, 30], "tradeTierWeights": [50, 30, 15, 5], "tradeMuchBetter": 2 }
 }
