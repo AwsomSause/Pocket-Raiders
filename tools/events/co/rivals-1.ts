@@ -247,7 +247,7 @@ const promise: Json[] = [
     ),
     [
       ch('Throw.', fight('Six on six. Nothing picked to beat you. Only everything they have.', rival({ lv: 2, size: 6, quest: { counter: 'none', full: true }, win: KEPT_WIN, lose: KEPT_LOSE }))),
-      ch('Take the other path. (The flag is on this one.)', out(script(page('The flag is on the other path. You know it is. You go the way that is not that way.'), page('Behind you, somebody waits a whole stage.')), room('rival-map-note'))),
+      ch('Take the other path. (The flag is on this one.)', out(script(page('The flag is on the other path. You know it is. You go the way that is not that way.'), page('Behind you, somebody waits a whole stage.')), quest({ openFirst: ['rival-map-note'] }))),
     ]),
 
   part('rq-r3-handshake', 'The Promise Kept: The Handshake', { tint: '#24202a', effect: 'sparkle' },

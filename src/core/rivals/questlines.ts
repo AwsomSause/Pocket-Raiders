@@ -82,6 +82,8 @@ export const QUESTS = RivalQuestsSchema.parse(json);
 export type QuestBeat = z.infer<typeof BeatSchema>;
 
 const flagOf = (run: Pick<RunState, 'story'>, key: string): number => Number(run.story.flags[`ev:${key}`] ?? 0);
+/** Run flags this engine sets after a fight or a turn (scenes read them; no event effect sets them). */
+export const ENGINE_FLAGS = ['rq-lost-at', 'rq-lost-kind', 'rq-thread', 'rq-thread-won', 'rq-drink-owed', 'rq-r16-calm', 'feud-watch-winner'] as const;
 const setFlag = (run: Pick<RunState, 'story'>, key: string, value: number): void => {
   run.story.flags[`ev:${key}`] = value;
 };
