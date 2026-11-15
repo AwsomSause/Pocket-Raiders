@@ -1689,6 +1689,1187 @@
      }
     }
    ]
+  },
+  {
+   "id": "aq21-ice-wouldnt-break",
+   "name": "The Ice That Wouldn't Break",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 4,
+   "types": [
+    "ice"
+   ],
+   "remembers": [
+    {
+     "id": "unwavering",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "unwavering-joined",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Snorunt sees your Pokémon with Unwavering: one that never evolved, and never needed to. It looks for a long time. Then it plants its feet. It has decided to stay as it is.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Let it stay as it is.",
+       "success": {
+        "text": "You crouch beside it, and so does your Pokémon with Unwavering. The Snorunt looks from one of you to the other and stands a little straighter, exactly the size it is. \"Stay small, then,\" its trainer says, and he is smiling. \"Stay you. Go with them.\" It hops to your side and does not look back at what it might have been.",
+        "effects": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "snorunt"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "moves": [
+           "ice-beam"
+          ],
+          "friendship": 20
+         },
+         {
+          "kind": "flag",
+          "key": "aq21-snorunt-met",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq21-stays",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "A Snorunt saw a Pokémon that never evolved, and decided to stay exactly as it was.",
+          "importance": 60
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/snow_ace_trainer_m"
+    ],
+    "pokemon": "snorunt",
+    "tint": "#1c2836",
+    "effect": "snow"
+   },
+   "intro": "A trainer in a thick coat is sparring in the snow behind a lodge. His Snorunt lowers its head, digs in, and charges: a Headbutt, clear as day. Halfway there its mouth opens and an Ice Beam comes out instead, and the target post freezes solid. The Snorunt stops. It looks at the frozen post as if it had betrayed it. \"It wants to be a fighter,\" the trainer says, very tired. \"It's an ice-thrower. It won't accept it.\" He has the look of someone who has watched this a hundred times. The Snorunt stares at its own feet.",
+   "choices": [
+    {
+     "label": "Teach it Headbutt.",
+     "success": {
+      "text": "You get down in the snow beside it and tap your own forehead. It looks up. For the first time today, somebody is on its side. It lowers its head and copies you. \"Go on, then,\" its trainer says. \"Three goes. I'll make tea.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq21-headbutt",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq21-drill-head"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Teach it to love Ice Beam.",
+     "success": {
+      "text": "You do not teach it anything about heads. You find it a real opponent instead: a black belt from the lodge who has been laughing at the frozen posts all morning. \"Go on,\" you tell it. \"Do the thing you hate.\" It looks at you as if you have lost your mind.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Black Belt Torsten",
+       "classId": "black-belt",
+       "ally": "snorunt",
+       "size": 2,
+       "types": [
+        "fighting"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq-snorunt-ice",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq21-proud"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq21-ice-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq21-proud"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let it evolve.",
+     "success": {
+      "text": "Its trainer looks at you, then at the Snorunt. \"If it can't be a fighter, let it be bigger, then.\" The Snorunt has been ready for weeks, holding it in out of stubbornness. It lets go. It glows, and grows, and the glow hardens into a great round face of ice: a Glalie. It tries a Headbutt. Its mouth opens. The Ice Beam that comes out freezes the post, the fence, the woodpile and a good part of the lodge roof. The Glalie looks at all of it, pleased and very confused. \"Well,\" says the trainer. \"It's yours if you want it. I can't afford the roof.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "glalie"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "moves": [
+         "ice-beam"
+        ],
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq-snorunt-evolved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq21-snorunt-met",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Snorunt that wanted to be a fighter became a Glalie, and froze half a lodge, and was delighted.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq21-drill-head",
+   "name": "Drill One: Head Down",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snorunt",
+    "tint": "#1c2836",
+    "effect": "snow"
+   },
+   "intro": "Drill one. Head down, eyes up. The Snorunt has been charging with its eyes shut, and its mouth open, which is where the Ice Beam comes from. You show it: chin tucked, mouth closed, look at what you mean to hit.",
+   "choices": [
+    {
+     "label": "Run it at a snowbank.",
+     "prompt": {
+      "id": "dodge-tap",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "It charges the snowbank with its mouth clamped shut and its eyes open. It goes in head first and comes out the other side, covered in snow, with no ice anywhere. It looks back at the hole it made as if it were a medal.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq21-drill-post"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It opens its mouth on the last step, out of habit, and the snowbank freezes into a wall. It bounces off. It sits in the snow for a while with its eyes shut. Then it gets up and tries again, mouth closed, and goes through.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq21-drill-post"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq21-drill-post",
+   "name": "Drill Two: The Post",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snorunt",
+    "tint": "#1c2836",
+    "effect": "snow"
+   },
+   "intro": "Drill two. The target post, the same one it has frozen a hundred times. You stand behind it and hold it steady. The Snorunt lowers its head. Its trainer comes out of the lodge with two mugs and stops in the doorway to watch.",
+   "choices": [
+    {
+     "label": "Hold the post.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "It hits the post. A real Headbutt, with a sound like a door knocker. The post rocks, and you rock with it, and nothing freezes. The Snorunt stares at the post. Then it stares at its trainer, who has spilled one of the teas.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq21-drill-spar"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It hits the post and the post hits you. You sit down in the snow. Nothing froze, though. The Snorunt runs round the post to check you are all right, then runs back round to look at the place it hit, very proud.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq21-drill-spar"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq21-drill-spar",
+   "name": "Drill Three: A Real Spar",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/snow_ace_trainer_m"
+    ],
+    "pokemon": "snorunt",
+    "tint": "#1c2836",
+    "effect": "snow"
+   },
+   "intro": "Drill three: a practice spar against its trainer's other Pokémon. The Snorunt knows Headbutt now; it has hit a post and a snowbank and very nearly you. It lowers its head. It charges. And at the last moment, out of pure habit, its mouth opens.",
+   "choices": [
+    {
+     "label": "Let it finish the spar.",
+     "success": {
+      "text": "Ice Beam. Of course. The spar is over in one move, and its trainer's other Pokémon is a statue. The Snorunt looks at the statue, then at you, appalled. Its trainer laughs until he has to sit down. \"It knows Headbutt now. It just doesn't need it.\" He wipes his eyes. \"Take it with you. It listens to you. Maybe one day it'll even use it.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "snorunt"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "moves": [
+         "headbutt",
+         "ice-beam"
+        ],
+        "friendship": 15
+       },
+       {
+        "kind": "flag",
+        "key": "aq21-snorunt-met",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Snorunt learned Headbutt from you, and then used Ice Beam anyway.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq21-proud",
+   "name": "Proud",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "ice-lost",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq21-ice-lost",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You lost the fight. It does not seem to have noticed. The last thing it did was freeze the black belt's last Pokémon to the knees, and that is all it can think about."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/snow_ace_trainer_m"
+    ],
+    "pokemon": "snorunt",
+    "tint": "#1c2836",
+    "effect": "sparkle"
+   },
+   "intro": "The Snorunt is standing in the middle of the yard. Every move it made was an Ice Beam, because that is what it has, and every one of them landed. The black belt is chipping his Pokémon out of the ice with a spoon. The Snorunt is not staring at its feet. It is looking at what it did, and then at its trainer, and it is proud.",
+   "choices": [
+    {
+     "label": "Tell it it was brilliant.",
+     "success": {
+      "text": "You tell it. Its trainer tells it too, kneeling in the snow. \"That's you. That's what you are.\" Then he looks up at you. \"It'll never forgive me if it doesn't see more of the world than this yard. Take it.\" The Snorunt hops to your side and fires a small, perfect Ice Beam at the sky, just for the joy of it.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "snorunt"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "moves": [
+         "ice-beam"
+        ],
+        "friendship": 25
+       },
+       {
+        "kind": "flag",
+        "key": "aq21-snorunt-met",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Snorunt stopped wishing it were a fighter and found out it was brilliant.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it stay with its trainer.",
+     "success": {
+      "text": "You put its trainer's hand on its head. \"It was always good,\" you tell him. \"It just needed to see it.\" He nods, and the Snorunt leans into his glove. It fires a small Ice Beam at the sky as you go, and the flakes come down glittering behind you.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "A Snorunt stopped wishing it were a fighter and found out it was brilliant.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq22-aipom-contests",
+   "name": "The Aipom Who Wanted Contests",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_m",
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "aipom",
+    "tint": "#2a1c30",
+    "effect": "none"
+   },
+   "intro": "Outside a Contest Hall in a forest town, a trainer is trying to coax an Aipom down from the roof. It has been up there all afternoon, hanging by its tail from the gutter, watching the contest through a skylight. Every time the crowd claps, its tail claps too. \"It loves contests,\" the trainer says, and he sounds like he has lost an argument. \"I'm a battler. I don't know what to do.\" On the steps, a coordinator in a sequinned jacket is holding a Buizel by the scruff. It is soaking wet and trying to get back to a battle across the street. She sighs. \"I have the opposite problem.\"",
+   "choices": [
+    {
+     "label": "Suggest a trade.",
+     "success": {
+      "text": "They look at you. They look at each other. They look at the Aipom on the roof and the Buizel in her arms, who has gone very still, listening. \"That's...\" the battler says. \"That's not stupid.\" They swap Balls on the steps of the Contest Hall like two people swapping coats that never fit. The Buizel is across the street and into the battle before anyone can stop it, and it wins. The Aipom swings down off the gutter onto the coordinator's shoulder and strikes a pose. Both trainers turn to you at the same moment. Neither of them knows what to say. Both of them are grinning.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq22-swapped",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "You talked two trainers into swapping, and an Aipom got its contests and a Buizel got its battles.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Enter the Aipom in a contest.",
+     "success": {
+      "text": "You whistle the Aipom down from the roof and walk it in through the front door. The battler follows, holding his hat. The judges look up. The Aipom looks at the stage, at the lights, at the crowd, and its tail goes completely still, the way your breath does before something you have wanted for a very long time.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "rule": {
+        "contest": 3
+       },
+       "name": "Contest Judges",
+       "classId": "psychic",
+       "ally": "aipom",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq22-ribbon",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq22-ribbon"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq22-no-ribbon",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq22-ribbon"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Keep them as they are.",
+     "success": {
+      "text": "\"Give it time,\" you say. \"They'll settle.\" The battler nods slowly. The coordinator nods slowly. Neither of them believes it. The Aipom stays on the roof, and the Buizel stays wet, and as you leave you can hear the crowd clapping inside and one small tail on the gutter clapping along. Both of them are a bit unhappy. Maybe it will pass.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq22-kept",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq22-ribbon",
+   "name": "A Ribbon",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "no-ribbon",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq22-no-ribbon",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "No ribbon this time. The Aipom comes off the stage anyway as if it had won the whole world, tail held high, still bowing to people who stopped clapping a minute ago. Its trainer is crying. He did not know it could look like that. \"I've never seen it that happy,\" he says. \"Not once. Not in a hundred battles.\" He looks at the Aipom, and then at you, and then at the Poké Balls on your belt."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_m"
+    ],
+    "pokemon": "aipom",
+    "tint": "#2a1c30",
+    "effect": "confetti"
+   },
+   "intro": "It wins a ribbon. A real one, red and gold, pinned to its ear by a judge who is laughing. The Aipom does not know what to do with its hands, so it does everything with its tail: bows, waves, catches the ribbon, holds it up to the lights. Its trainer is crying in the front row and not hiding it at all. \"I've never seen it that happy,\" he says. \"Not once. Not in a hundred battles.\" He looks at the Aipom, and then at you, and then at the Poké Balls on your belt.",
+   "choices": [
+    {
+     "label": "Trade a battler for the Aipom.",
+     "success": {
+      "text": "\"It should be with someone who'll take it to contests,\" he says. \"And I could use someone who wants to fight.\" You both say exactly what you are giving and getting before anyone touches a Ball. Then you swap. Your Pokémon squares up beside him as if it has found the trainer it was always meant for. The Aipom climbs onto your shoulder, ribbon first. Two Pokémon, both happy: an honest trade.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon to trade"
+        },
+        "similar": {
+         "pool": [
+          "aipom",
+          "ambipom"
+         ],
+         "bst": 200
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "aq22-traded",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You traded a battler for an Aipom that wanted contests, and both of them were happy.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let him keep it.",
+     "success": {
+      "text": "\"Then I'll learn,\" he says, wiping his face with his sleeve. \"Contests. How hard can it be?\" The Aipom puts its ribbon on his head. You leave them in the lobby reading the entry rules together, his finger on the page and its tail on his shoulder.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "aq22-he-learns",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq23-abandoned-chimchar",
+   "name": "The Abandoned Chimchar",
+   "group": "Pokémon-anime questlines",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_m"
+    ],
+    "pokemon": "chimchar",
+    "tint": "#2a1a14",
+    "effect": "none"
+   },
+   "intro": "At the side of a road, a boy in a purple jacket is standing over a Chimchar. It is scraped and tired from a battle it lost. The flame on its tail is very small. The boy is Paul, and he does not raise his voice. \"It's useless. Its Blaze only comes out when it's losing.\" He looks at the Ball in his hand. \"I want it when I want it.\" He throws the Ball on the ground. It bounces once. He walks off without looking back. The Chimchar sits there, in the dust, looking at the Ball that used to be its home.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "You crouch down and hold out your hand. It flinches. Then it takes a finger, very carefully, and you feel how hot its palm is. When you pick up its old Ball, a spark jumps from its tail and it leaps away from its own flame as if something had bitten it. It is terrified of its own Blaze. You tell it that is all right. You will both have to learn what it is.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "chimchar"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 15
+       },
+       {
+        "kind": "flag",
+        "key": "aq-chimchar-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq23-chimchar-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go after him.",
+     "success": {
+      "text": "You catch him up on the road. He stops and looks at you as if you were weather. You tell him a Blaze that only comes when it is losing is a Blaze that never gives up. He hears it. He does not agree. \"Then you take it.\" He means it, every word, and he walks on. When you go back, the Chimchar is still sitting by its Ball. You pick them both up. It is terrified of its own Blaze, and it has watched you argue for it.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "chimchar"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "flag",
+        "key": "aq-chimchar-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq-paul-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq23-chimchar-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You walk on. It is not your Chimchar. Behind you, after a while, you hear a small girl's voice, very excited, and a Ball clicking open. You do not look back. Someone else has taken it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq23-left",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq23-blaze",
+   "name": "The Field on Fire",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq-chimchar-taken",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq-chimchar-taken",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "chimchar",
+     "bond": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "chimchar",
+    "tint": "#3a1a0c",
+    "effect": "fire"
+   },
+   "intro": "A hard fight, and the Pokémon Paul threw away by the roadside is losing it. Then it is not. Its Blaze comes out all at once, the way it never would for Paul, and it does not stop when the fight does. The flame runs off its tail and into the dry grass, and the whole field goes up. In the middle of it your Pokémon is screaming at its own fire, terrified, and the fire is only getting bigger.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "You walk into the field. It is hot enough to take your breath. You kneel in front of it and put both hands round its face, and you breathe, slowly, until it breathes with you. The fire on its tail shrinks to a flame, then to a candle. The field smoulders out around the two of you. It looks at its tail, and at you, and for the first time it does not look afraid of either.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "chimchar",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq23-blaze-calmed",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Its Blaze burned a field, and you walked in and calmed it.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it burn out.",
+     "success": {
+      "text": "You pull your Pokémon back to the road and wait. The fire runs until it has nothing left to eat, and then it runs out of itself. When it is over the field is black, and your Pokémon is lying in the ash, empty, its tail flame no bigger than a match. It is not afraid now. It is too tired to be. It never did learn where the edge was.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "chimchar",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq23-blaze-burned",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Its Blaze burned a whole field until there was nothing left to burn.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq23-finale",
+   "name": "Paul Again",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq-chimchar-taken",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "eventSeen",
+     "id": "aq23-blaze"
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq-chimchar-taken",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "chimchar",
+     "bond": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "calmed-met",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq23-blaze-calmed",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "aq-paul-met",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"You,\" Paul says. \"You argued for it.\" He looks at it for longer than he needs to. It is not shaking.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Send it out.",
+       "success": {
+        "text": "It steps forward, and its body grows round its fire as it walks: an Infernape, crown of flame and all. Its tail flame does not flare. It burns low and steady and waits to be asked.",
+        "effects": [
+         {
+          "kind": "formChange",
+          "from": "chimchar",
+          "to": "infernape"
+         },
+         {
+          "kind": "formChange",
+          "from": "monferno",
+          "to": "infernape"
+         },
+         {
+          "kind": "tempEffect",
+          "label": "Its Blaze, under control",
+          "effects": [
+           {
+            "kind": "lowHpDamageMultiplier",
+            "below": 0.5,
+            "value": 1.25
+           }
+          ],
+          "battles": 1
+         }
+        ],
+        "battle": {
+         "kind": "trainer",
+         "rule": {
+          "leadType": "fire"
+         },
+         "team": [
+          "electivire"
+         ],
+         "name": "Paul",
+         "classId": "ace-trainer",
+         "size": 1,
+         "types": [],
+         "levelBonus": 0,
+         "win": [
+          {
+           "kind": "flag",
+           "key": "aq23-paul-beaten",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "aq23-controlled"
+          }
+         ],
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "flag",
+           "key": "aq23-paul-lost",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "aq23-controlled"
+          }
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "calmed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq23-blaze-calmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It stands in front of the Electivire with its tail flame low and steady. It is not shaking.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Send it out.",
+       "success": {
+        "text": "It steps forward, and its body grows round its fire as it walks: an Infernape, crown of flame and all. Its tail flame does not flare. It burns low and steady and waits to be asked.",
+        "effects": [
+         {
+          "kind": "formChange",
+          "from": "chimchar",
+          "to": "infernape"
+         },
+         {
+          "kind": "formChange",
+          "from": "monferno",
+          "to": "infernape"
+         },
+         {
+          "kind": "tempEffect",
+          "label": "Its Blaze, under control",
+          "effects": [
+           {
+            "kind": "lowHpDamageMultiplier",
+            "below": 0.5,
+            "value": 1.25
+           }
+          ],
+          "battles": 1
+         }
+        ],
+        "battle": {
+         "kind": "trainer",
+         "rule": {
+          "leadType": "fire"
+         },
+         "team": [
+          "electivire"
+         ],
+         "name": "Paul",
+         "classId": "ace-trainer",
+         "size": 1,
+         "types": [],
+         "levelBonus": 0,
+         "win": [
+          {
+           "kind": "flag",
+           "key": "aq23-paul-beaten",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "aq23-controlled"
+          }
+         ],
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "flag",
+           "key": "aq23-paul-lost",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "aq23-controlled"
+          }
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "met",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-paul-met",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"You,\" Paul says. \"You argued for it.\" Nothing in his face moves. \"Show me.\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_m"
+    ],
+    "pokemon": "electivire",
+    "tint": "#2a1a14",
+    "effect": "flicker"
+   },
+   "intro": "A gate at the edge of a town, and Paul is leaning on it, the way he leans on everything. Beside him stands an Electivire, huge and crackling, cables twitching. Paul looks at your party. He finds the one he gave away. It is not a Chimchar now: it is an Infernape, or it will be by the end of this. \"One on one,\" he says. \"Let's see if it still only works when it's losing.\"",
+   "choices": [
+    {
+     "label": "Send it out.",
+     "success": {
+      "text": "It steps forward. Its body grows round its fire as it walks, and by the time it reaches the line it is an Infernape, crown of flame and all. The Electivire's cables rise. Paul folds his arms.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "chimchar",
+        "to": "infernape"
+       },
+       {
+        "kind": "formChange",
+        "from": "monferno",
+        "to": "infernape"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "rule": {
+        "leadType": "fire"
+       },
+       "team": [
+        "electivire"
+       ],
+       "name": "Paul",
+       "classId": "ace-trainer",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq23-paul-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq23-after"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq23-paul-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq23-after"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk past him.",
+     "success": {
+      "text": "You keep walking. Your Pokémon looks back at the Electivire, and at Paul, and then follows you. \"Thought so,\" Paul says to nobody. That is the last you see of him. Whatever he wanted to know about it, he will have to go on not knowing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq23-walked-past",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq23-after",
+   "name": "Only When It's Losing",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_m"
+    ],
+    "pokemon": "infernape",
+    "tint": "#2a1a14",
+    "effect": "fire"
+   },
+   "intro": "The Blaze came, in the end, when it was losing. It came the way it always does, all at once and too much, and it nearly took the gatepost with it. Paul watches it burn down. \"Same as ever,\" he says, without much in it either way. He calls the Electivire back and goes. Your Infernape stands in the scorch marks, breathing hard, still a little afraid of what it is.",
+   "choices": [
+    {
+     "label": "Stand with it.",
+     "success": {
+      "text": "You stand next to it until its flame settles. It is yours. It always was, from the moment that Ball hit the ground. One day it may learn where the edge of the fire is. Today it leans on you, and that is enough.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "chimchar",
+        "amount": 5
+       },
+       {
+        "kind": "moment",
+        "text": "Your Infernape faced the trainer who threw it away.",
+        "importance": 65
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq23-controlled",
+   "name": "Paul Nods, Once",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_m"
+    ],
+    "pokemon": "infernape",
+    "tint": "#2a1a14",
+    "effect": "sparkle"
+   },
+   "intro": "Halfway through the fight its Blaze comes: not at the edge of losing, but at half strength, exactly when it chose. It comes in like a tide, held, aimed, all of it going where it was sent and none of it into the grass. The field does not burn. The Infernape stands in the middle of its own fire, and it is not afraid of it. Across the line, Paul watches it for a long moment. Then he nods, once.",
+   "choices": [
+    {
+     "label": "Nod back.",
+     "success": {
+      "text": "You nod back. He turns away and goes, his Electivire behind him. Your Infernape lets its fire down slowly, the way you taught it in a burning field, and comes to stand beside you, warm as a hearth.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "controlled-blaze",
+        "name": "Controlled Blaze",
+        "effects": [
+         {
+          "kind": "lowHpDamageMultiplier",
+          "below": 0.5,
+          "value": 1.25
+         }
+        ]
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "chimchar",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq23-blaze-controlled",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-infernape",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your Infernape held its Blaze when it chose, and Paul nodded, once.",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq23-seen-happy",
+   "name": "A Small Flame, Happy",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq23-left",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq23-left",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "chimchar",
+    "tint": "#2a1a14",
+    "effect": "none"
+   },
+   "intro": "In a town square, a little girl is practising with a Chimchar. It is still small. It misses more than it hits. Every time it misses, she cheers anyway, and every time she cheers, its tail flame jumps a little higher. It looks over at you once, the way you look at a face you half remember, and then it goes back to her.",
+   "choices": [
+    {
+     "label": "Wave and walk on.",
+     "success": {
+      "text": "The girl waves back with both arms. The Chimchar waves too, because she did. It is happy, and it is small, and nobody is waiting for it to be anything else.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "A Chimchar someone threw away was happy, and small, with somebody else.",
+        "importance": 50
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }
