@@ -1,6 +1,6 @@
 # Jet Pokédex data
 
-
+All Pokémon: 001 Vine Riff, 002 Electric Oncore, 003 Cataggron, 004 Bastiodoom, 005 Pyro Spirit, 006 Neon Moon, 007 Maliceye, 008 Gemgoyle, 009 Decidueye (Assassian), 010 Dreadodile, 011 Promised Prince, 012 Benovolant Beak, 013 Tyrant King, 014 Fallen Liege, 015 Alolan Trapinch, 016 Alolan Vibrava, 017 Alolan Flygon, 018 Mega Alolan Flygon, 019 Paldean Golett, 020 Paldean Golurk, 021 Alolan Dratini, 022 Alolan Dragonair, 023 Alolan Dragonite, 024 Galarian Grimer, 025 Galarian Muk, 026 Magmuk, 027 Galarian Spearow, 028 Galarian Fearow, 029 Galarian Azurill, 030 Galarian Marill, 031 Galarian Azumarill, 032 Galarian Trubbish, 033 Galarian Garbodor, 034 Galarian Lotad, 035 Galarian Lombre, 036 Galarian Ludicolo, 037 Neocleon, 038 Galarian Magnemite, 039 Galarian Magneton, 040 Galarian Magnezone, 041 Galarian Tangela, 042 Galarian Tangrowth, 043 Galarian Chikorita, 044 Galarian Bayleef, 045 Galarian Meganium, 046 Galarian Cyndaquil, 047 Galarian Quilava, 048 Galarian Typhlosion, 049 Galarian Totodile, 050 Galarian Croconaw, 051 Galarian Feraligatr, 052 Galarian Larvitar, 053 Galarian Pupitar, 054 Galarian Tyranitar, 055 Galarian Onix, 056 Galarian Steelix, 057 Galarian Slugma, 058 Galarian Magcargo, 059 Galarian Snivy, 060 Galarian Servine, 061 Galarian Serperior, 062 Hoopno.
 
 - `pokedex.json`: every Pokémon in one file.
 - `pokemon/`: one JSON file per Pokémon, same schema as an entry in `pokedex.json`.
