@@ -18,9 +18,10 @@ Content: `tools/events/co/singles-<n>.ts` -> `src/data/events/co-singles-<n>.jso
 | 10 | SF154 Choice Rooms (+ the pocket closet's three returns) | 33 | built, re-read 2026-11-15 |
 | 11 | SF155 Games and Shrines, SF156 Roadside, SF157 Seasonal Set Pieces | 29 | built, re-read 2026-11-15 |
 | 12 | SF158 Seasonal and Cultural Festivals (32 weeks + the berry tree room) | 33 | built, re-read 2026-11-15 |
-| later | SF159 to SF161 (market and activity weeks, battle moments) | 65 | not started (old weeks and moments still play) |
+| 13 | SF159 Market Weeks, SF160 Activity and Throwback Weeks (50 weeks + 3 follow-ups) | 53 | built, re-read 2026-11-15 |
+| later | SF161 Battle Moments | 15 | not started (old moments still play) |
 
-Calendar weeks (SF158 to SF160) stay in `gameEvents.json`; each week's doc choice is a co event with the week's own id, drawn only while that week runs (`gameEvent`). Its "for the week" effects last the region. SF161 (15 battle moments) lives in `dramaEvents.json` and needs its own build path.
+Calendar weeks (SF158 to SF160) stay in `gameEvents.json`; each week's doc choice is a co event with the week's own id, drawn only while that week runs (`gameEvent`). Its "for the week" effects last the region; "at every stage" puts that stop on each stage map (`placeEvent`). Five weeks' own rules were changed to match the doc (`gameEvents.json`): Black Friday and Coupon Week lost their flat discount (the choice gives it now), the Bankruptcy Sale lost its flat half price, Inflation Day is +20% prices (not +30%, no money bonus), and the Evolution Festival is 2 levels sooner (not 3). SF161 (15 battle moments) lives in `dramaEvents.json` and needs its own build path.
 
 ## Engine pieces added
 - `coCensus {per}` (SF154 The Census): pays `per` for each different type in the party.
@@ -62,9 +63,11 @@ All checked 2026-11-15 against `STORY_FAMILIES_19.md` and `_20.md`.
 | SF155 | archaeology-dig, fossil-dig, bug-contest, cry-shrine, escape-room/-2, game-show-1/2/3, hide-and-seek, lore-riddle-1/2/3, mind-reader, parrot-teacher, parrot-repeats |
 | SF156 | passing-caravan, sleeping-npc, tap-the-silhouette, voting-booth |
 | SF158 | spooky-season, winter-festival, lunar-new-year, friendship-festival, spring-bloom, summer-splash, valentines-duo-week, cherry-blossom-picnic, pride-rainbow-parade, midsummer-night, fireworks-festival, autumn-harvest-moon, thanksgiving-feast, winter-solstice, spring-equinox, autumn-equinox, diwali-light-walk, mid-autumn-moon-cake, day-of-the-dead, brew-fair, harvest-festival, pokemon-day, earth-week, stargazing-nights, trainer-academy, berry-festival (+ `wk-berry-sprout`), new-moon-night, full-moon-rise, friday-the-13th, palindrome-date, weekend-warm-up, shiny-charm-day (each drawn only in its week) |
+| SF159 | market-week, black-friday-sale, grand-opening-sale, berry-bonanza, held-item-hurricane (+ `wk-hurricane-again`), coupon-week, bankruptcy-sale (+ `wk-bankrupt-shop-open` next region), prize-wheel-weekend, lottery-draw, black-market-week, inflation-day, loyalty-points-week (+ `wk-loyalty-gift`), trade-in-week, tm-tuesday |
+| SF160 | campfire-tales-week, hidden-path-week, mystery-dungeon-week, gen-1/3/5-throwback, treasure-map-week, caravan-week, weather-map-week, cave-expedition-week, island-hopping-week, volcano-eruption, earthquake-tremors, flood-event, blizzard-week, heat-wave, aurora-night, safari-zone-week, bug-contest-day, pokeathlon-day, underground-week, ruins-expedition, sunken-ship-dive, sky-tower-climb, magical-forest-week, ghost-town-week, festival-street-week, lighthouse-beacon-week, map-mutator-week, train-ride-special, friendship-level-week, evolution-festival, move-tutor-tour, ev-boot-camp, contest-spectacular, photography-week |
 | SF157 | academy-exam, earth-week-cleanup, friendship-picnic, harvest-berry-fair, pokemon-day-parade, spring-bloom-guardian, spring-egg-hunt, stargazing-meteor-watch, summer-beach-tournament (each still drawn only in its week) |
 
-SF137 to SF158: every doc button checked by script against the built labels (all match); outcomes checked by hand against the doc row while writing and again after the standards pass.
+SF137 to SF160: every doc button checked by script against the built labels (all match); outcomes checked by hand against the doc row while writing and again after the standards pass.
 Buttons match the doc word for word, except `w4-balloon` (the doc says "pick a reachable node", not a button text): "Hop in, and pick where to land."
 Rooms added so a doc outcome can ask its own question: `berry-tree-pell` (callback), `festival-gift-swap`, `shimmering-grass-close`, `hidden-grotto-den`, `gmax-den-*` (5), `w4-graffiti-tag`, `r145-bonsly-railings`.
 
@@ -150,3 +153,15 @@ Rooms added so a doc outcome can ask its own question: `berry-tree-pell` (callba
 | Day of the Dead "if any `lost.<name>`, see them" | A moment is saved for the friend you remember; no name is read | Named lost Pokémon |
 | Full Moon "25% heal per node at night" | One 25% heal | A heal on each node |
 | Cross-row flags from the weeks | `spooky-costume` (SF16), `roster-trust` (people), `telling-darkrai`, `sign-light`, `sign-cresselia`, `sign-ho-oh`, `sign-shaymin` (legends), `lantern-sea-open` (places), `farmer-forgets-met` (SF3), `mirror-week` (SF41.7) | Those rows reading them |
+| Black Friday "−30% on one item" | One item in every shop at 70% (`shopDeal`) | Picking the item |
+| Held-Item Hurricane "one per stage" | One now and one more five stops on | One every stage |
+| Coupon Week "a 10%-off coupon for the next purchase" | 10% off every purchase for the region | Per-purchase coupons |
+| Loyalty points "₽1,000 spent: a Rare gift" | The gift comes six stops after signing up | Counting money spent |
+| Trade-In Week "with the Honest Trade Card" | A trading post on every stage; flag `honest-trade-week` | The card itself (markets row) |
+| Throwback weeks "the early-game variety slot" | A wild battle with an early Pokémon of that generation (the week already weights the species) | A variety slot |
+| Wicker's Cart (SF5), Weather Station (SF123), Sunken City (SF41.1), Fairground stalls (SF92), Contest Circuit (SF14), Aurora rest (SF137) | The nearest built stop on every stage: merchant cart, weather vane, ghost ship (+ flag `sunken-city-open`), fun-and-games, contest hall, aurora night | Those stops (other rows) |
+| Fairground stalls "every three nodes" | Once per stage | More often |
+| Map Mutator "one oddity from SF135–SF136" | A lookout tower on every stage | A different oddity each stage |
+| Heat Wave "night events up" | A rest and the stops ahead shown | A night weighting |
+| EV Boot Camp "double effort in that stat" | That stat +10% (or +15% for Speed, HP) for the party this region | Effort values |
+| Cross-row flags from SF159/SF160 | `honest-trade-week` (markets), `lost-island-lead`, `sunken-city-open` (places), `safari-pass` | Those rows reading them |

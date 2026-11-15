@@ -5066,15 +5066,11 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Everything in shops costs 40% less.",
-   "modifiers": [
-    {
-     "kind": "priceMultiplier",
-     "group": "all",
-     "value": 0.6
-    }
+   "ruleText": "Queue early for 30% off one item in every shop, or wait for 20% off everything (the week's opening stop).",
+   "modifiers": [],
+   "mapEvents": [
+    "black-friday-sale"
    ],
-   "mapEvents": [],
    "objectives": [
     {
      "id": "spend",
@@ -8029,15 +8025,11 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Everything in shops costs 15% less.",
-   "modifiers": [
-    {
-     "kind": "priceMultiplier",
-     "group": "all",
-     "value": 0.85
-    }
+   "ruleText": "Collect the coupons at the week's opening stop: 10% off every purchase for the region.",
+   "modifiers": [],
+   "mapEvents": [
+    "coupon-week"
    ],
-   "mapEvents": [],
    "objectives": [
     {
      "id": "spend",
@@ -8102,19 +8094,16 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Everything in shops costs half and 3 more locked entries are for sale early.",
+   "ruleText": "3 more locked entries are for sale early. An old shopkeeper is closing for good: buy at half price, or pay full and keep him open.",
    "modifiers": [
-    {
-     "kind": "priceMultiplier",
-     "group": "all",
-     "value": 0.5
-    },
     {
      "kind": "shopEarlyStock",
      "count": 3
     }
    ],
-   "mapEvents": [],
+   "mapEvents": [
+    "bankruptcy-sale"
+   ],
    "objectives": [
     {
      "id": "spend",
@@ -8401,16 +8390,12 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Everything in shops costs 30% more; prize money is 40% higher and rare rewards turn up 30% more often.",
+   "ruleText": "Everything in shops costs 20% more, and rewards come one tier better (rare rewards turn up 30% more often).",
    "modifiers": [
     {
      "kind": "priceMultiplier",
      "group": "all",
-     "value": 1.3
-    },
-    {
-     "kind": "moneyMultiplier",
-     "value": 1.4
+     "value": 1.2
     },
     {
      "kind": "rareItemWeight",
@@ -12235,11 +12220,11 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Pokémon evolve 3 levels sooner.",
+   "ruleText": "Pokémon evolve 2 levels sooner.",
    "modifiers": [
     {
      "kind": "evolutionLevelOffset",
-     "value": -3
+     "value": -2
     }
    ],
    "mapEvents": [],

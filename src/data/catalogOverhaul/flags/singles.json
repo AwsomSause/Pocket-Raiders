@@ -580,6 +580,31 @@
    "key": "mirror-week",
    "setBy": "palindrome-date",
    "readBy": "Mirror matches (SF41.7): they can appear"
+  },
+  {
+   "key": "bankrupt-shop-kept",
+   "setBy": "bankruptcy-sale (Pay full price.), stamped with the region",
+   "readBy": "wk-bankrupt-shop-open: next region, he is still open"
+  },
+  {
+   "key": "bankrupt-shop-seen",
+   "setBy": "wk-bankrupt-shop-open",
+   "readBy": "wk-bankrupt-shop-open: once only"
+  },
+  {
+   "key": "honest-trade-week",
+   "setBy": "trade-in-week",
+   "readBy": "the markets row (Honest Trade Card): trades this region are shown in full"
+  },
+  {
+   "key": "lost-island-lead",
+   "setBy": "ruins-expedition",
+   "readBy": "the places row (SF116 Lost Island): a lead to the island"
+  },
+  {
+   "key": "sunken-city-open",
+   "setBy": "sunken-ship-dive",
+   "readBy": "the places row (SF41.1 Sunken City): it can be reached"
   }
  ]
 }
