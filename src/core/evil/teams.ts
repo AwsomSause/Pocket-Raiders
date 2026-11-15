@@ -35,7 +35,13 @@ type TrainerBattle = Extract<EventBattle, { kind: 'trainer' }>;
 /** The run's Evil Team state (older runs are given a fresh one). */
 export function evilOf(run: RunState): EvilState {
   if (!run.story.evil) run.story.evil = freshEvil();
-  return run.story.evil;
+  // A state written before the region-by-region story (or by a debug tool) gets the schema's defaults for the newer fields.
+  const s = run.story.evil;
+  s.region ??= -1;
+  s.past ??= [];
+  s.planFirst ??= null;
+  s.mods ??= [];
+  return s;
 }
 
 export function evilTeam(content: Content, run: RunState): EvilTeam | null {

@@ -38,10 +38,20 @@ test('losing a raid impounds Pokémon and the rival offers a rescue when the pla
   });
   await waitForScene(page, 'Event');
   await page.waitForTimeout(1200);
-  // "Leave it alone" (the third choice): Team Rocket pulls it off.
-  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Event').focus(2));
-  await page.keyboard.press('Enter');
-  await page.waitForTimeout(1200);
+  // "Let it happen." (the last choice, SF13 Part D): Team Rocket pulls it off.
+  await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    const choices = session.content.events.get('evil-rocket-op-pokemon-heist').choices;
+    game.scene.getScene('Event').focus(choices.findIndex((c: any) => c.label === 'Let it happen.'));
+  });
+  // The intro types out first: the first press may only finish the text, so press until the choice is taken.
+  await expect
+    .poll(async () => {
+      const phase = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Event').phase);
+      if (phase !== 'outcome') await page.keyboard.press('Enter');
+      return page.evaluate(() => (window as any).__pkr.session.run.expansion.rescue?.holds?.length ?? 0);
+    }, { timeout: 15_000, intervals: [1000] })
+    .toBeGreaterThan(0);
   const hold = await page.evaluate(() => {
     const run = (window as any).__pkr.session.run;
     const h = run.expansion.rescue?.holds?.[0];
@@ -99,10 +109,20 @@ test('Loud Grab: a guard fights at the Approach and a win resumes the plan', asy
   });
   await waitForScene(page, 'Event');
   await page.waitForTimeout(1200);
-  // "Leave it alone" (the third choice): Team Rocket pulls it off.
-  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Event').focus(2));
-  await page.keyboard.press('Enter');
-  await page.waitForTimeout(1200);
+  // "Let it happen." (the last choice, SF13 Part D): Team Rocket pulls it off.
+  await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    const choices = session.content.events.get('evil-rocket-op-pokemon-heist').choices;
+    game.scene.getScene('Event').focus(choices.findIndex((c: any) => c.label === 'Let it happen.'));
+  });
+  // The intro types out first: the first press may only finish the text, so press until the choice is taken.
+  await expect
+    .poll(async () => {
+      const phase = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Event').phase);
+      if (phase !== 'outcome') await page.keyboard.press('Enter');
+      return page.evaluate(() => (window as any).__pkr.session.run.expansion.rescue?.holds?.length ?? 0);
+    }, { timeout: 15_000, intervals: [1000] })
+    .toBeGreaterThan(0);
   const hold = await page.evaluate(() => {
     const run = (window as any).__pkr.session.run;
     const h = run.expansion.rescue?.holds?.[0];
