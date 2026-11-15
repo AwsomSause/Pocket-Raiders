@@ -41,7 +41,7 @@ describe('trade data', () => {
     }
   });
   it('a pool with no offers is refused (failure case)', () => {
-    expect(TradePoolFileSchema.safeParse({ pools: [{ id: 'x', name: 'X', where: 'x', offers: [], wants: { label: 'x' }, wantLine: 'x', traders: [{ name: 'a', line: 'b' }], quirks: ['old'] }] }).success).toBe(false);
+    expect(TradePoolFileSchema.safeParse({ pools: [{ id: 'x', name: 'X', where: 'x', offers: [], wants: { label: 'x' }, wantLine: 'x', traders: [{ name: 'a', line: 'b' }], quirks: [] }] }).success).toBe(false);
   });
 });
 
