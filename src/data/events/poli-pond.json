@@ -551,6 +551,7 @@
        "team": [
         "poliwhirl"
        ],
+       "spritePokemon": "poliwhirl",
        "size": 1,
        "levelBonus": 7,
        "pseudo": true,
@@ -649,6 +650,7 @@
        "team": [
         "poliwhirl"
        ],
+       "spritePokemon": "poliwhirl",
        "size": 1,
        "levelBonus": 7,
        "pseudo": true,

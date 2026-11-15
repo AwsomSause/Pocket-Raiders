@@ -23,6 +23,10 @@ describe('Poli-Pond: events', () => {
     expect(ids.sort()).toEqual(['pp-cold-open', 'pp-ending', 'pp-lesson-aim', 'pp-lesson-footing', 'pp-lesson-stand', 'pp-pond-visit', 'pp-rematch', 'pp-rematch-exceptional', 'pp-return-join'].sort());
     for (const id of ids) for (const c of content.events.get(id)!.choices) for (const o of [c.success, c.failure]) for (const e of [...(o?.effects ?? []), ...(o?.battle?.win ?? [])]) if (e.kind === 'addEvent') expect(content.events.has(e.eventId)).toBe(true);
   });
+  it('the bully "trainer" is drawn as the Poliwhirl, and no event shows a human', () => {
+    for (const id of ['pp-rematch', 'pp-rematch-exceptional']) expect((content.events.get(id)!.choices[0]!.success.battle as unknown as { spritePokemon: string }).spritePokemon).toBe('poliwhirl');
+    for (const id of ids) expect(content.events.get(id)!.scene.cast).toEqual([]);
+  });
   it('the cold open is placed at the first stage from 2 (a callback, not a required forced stop), the lessons are rest callbacks, the exceptional rematch evolves the Poliwag mid-fight', () => {
     expect(content.events.get('pp-cold-open')).toMatchObject({ callback: true, forced: false });
     for (const l of ['aim', 'footing', 'stand']) expect(content.events.get(`pp-lesson-${l}`)).toMatchObject({ stop: 'rest', callback: true });
