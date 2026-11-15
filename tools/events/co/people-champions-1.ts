@@ -1,11 +1,10 @@
-// @ts-nocheck: work in progress (stopped 2026-11-15 when Kice capped running threads at five); rename to people-*.ts to build.
 // Catalog Overhaul Pack, people: PAST CHAMPIONS PC1 to PC10 (QUESTLINES_PAST_CHAMPIONS_AND_LEADERS.md lines 1-283; PC8 and PC10 from the
 // rewrites in QUESTLINES_DEEPENED_1.md lines 263-350), Victory Hall (STORY_FAMILIES_8.md C4) and PA4 A Familiar Face
 // (QUESTLINES_PAST_ALLIES_AND_FUTURE.md). Catalog ids: STORY_FAMILIES_8.md Part A. Pattern: people-roster-2.ts, people-mentors-2.ts.
 // Build: npm run co:build -- people-champions-1
-import { $, again, at, ch, companion, egg, fight, flag, flagAgo, flagAt, flagIs, heal, inRegion, item, money, out, ptype, room, stat, type Json } from '../dsl.ts';
-import { CATEGORY as CAT, is, moment, not, oldOf, scene, spar, variant } from './_people.ts';
-import { R as RESSA, regionsLeft, shared } from './_mentors.ts';
+import { $, again, at, ch, companion, takeNode, egg, fight, flag, flagAgo, flagAt, flagIs, heal, inRegion, item, money, out, ptype, room, stat, type Json } from '../dsl.ts';
+import { bond, CATEGORY as CAT, is, moment, not, oldOf, scene, spar, variant } from './_people.ts';
+import { M, mentorIs, R as RESSA, regionsLeft, shared } from './_mentors.ts';
 
 export const CATEGORY = CAT;
 
@@ -127,7 +126,7 @@ const cynthia: Json[] = [
 // ---------- PC4. The Dragon Master's Last Flight (Lance). No old catalog id: a new scene. ----------
 const LA = 'pc-dragon-master-last-flight';
 const lanceRoom = (name: string, title: string, intro: string, choices: Json[]): Json =>
-  scene(`${LA}-${name}`, `The Dragon Master's Last Flight: ${title}`, { group: 'Past Champions and Leaders', rarity: 'uncommon', minStage: 3, room: true, cast: ['boss.lance'], tint: '#2a3448', effect: 'none' }, intro, choices);
+  scene(`${LA}-${name}`, `The Dragon Master's Last Flight: ${title}`, { group: 'Past Champions and Leaders', rarity: 'uncommon', minStage: 3, room: true, cast: [], pokemon: 'dragonite', tint: '#2a3448', effect: 'none' }, intro, choices);
 const lanceOpen: Json[] = [
   // TODO(engine): "the Flying-type must not faint": the flight ends if the picked Flying-type faints. No effect can hurt or check the picked Pokémon yet.
   ch('"My Flying-type can try."', out('Lance looks at your Flying-type for a long time, the way a trainer looks at a stranger\'s Pokémon he is about to trust with everything. Then he nods. Between you, you rig a sling from his cape, and the old Dragonite lets herself be lifted into it with a sigh like wind in a chimney.', room(`${LA}-flight-1`)),
@@ -144,7 +143,7 @@ const walkStep = (n: number, intro: string, tell: string, quiet: string, next: s
     ch('"Walk on quietly."', out(quiet, room(next))),
   ]);
 const lance: Json[] = [
-  scene(LA, 'The Dragon Master\'s Last Flight', { group: 'Past Champions and Leaders', rarity: 'rare', minStage: 3, cast: ['boss.lance'], tint: '#2a3448', effect: 'none' },
+  scene(LA, 'The Dragon Master\'s Last Flight', { group: 'Past Champions and Leaders', rarity: 'rare', minStage: 3, cast: [], pokemon: 'dragonite', tint: '#2a3448', effect: 'none' },
     'A cliff in the high hills, the sea only a grey line far off on the horizon. Lance sits in the grass with his cape folded under him. Beside him lies his Dragonite, chin on her forelegs. She is old. The orange of her scales has faded to the colour of weak tea, and she is grey around the eyes. ' +
     'Lance: "She carried me through three wars and two Leagues. She can\'t fly any more." He rests a hand on her neck, and she leans into it. ' +
     'Lance: "She wants to see the sea from the air one more time. I can\'t carry her."',
@@ -335,7 +334,7 @@ const victoryHall: Json[] = [
       ch('"Send the lead."', fight('Your lead walks out to meet it. Nobody else is coming.', spar('Champion\'s Ace', { team: ['garchomp'], size: 1, lv: 1, rule: { noSwitch: true, suddenDeath: true }, win: [room(`${VH}-memory`)], lose: [moment('A Champion\'s ace beat your lead in Victory Hall', 50)] }))),
       // TODO(engine): the picked Pokémon should be the one that fights; a fight cannot start with the picked Pokémon in front yet.
       ch('"Send the weakest."', fight('You choose the one nobody would choose. The keeper raises an eyebrow, and then nods slowly, like he has seen this before and liked it.',
-        spar('Champion\'s Ace', { team: ['garchomp'], size: 1, lv: 1, rule: { noSwitch: true, suddenDeath: true }, win: [{ kind: 'friendship', amount: 15, who: 'picked' }, moment('Your weakest Pokémon beat a Champion\'s ace alone in Victory Hall', 80), room(`${VH}-memory`)], lose: [moment('Your weakest Pokémon stood against a Champion\'s ace in Victory Hall', 60)] })),
+        spar('Champion\'s Ace', { team: ['garchomp'], size: 1, lv: 1, rule: { noSwitch: true, suddenDeath: true }, win: [bond(3, 'picked'), moment('Your weakest Pokémon beat a Champion\'s ace alone in Victory Hall', 80), room(`${VH}-memory`)], lose: [moment('Your weakest Pokémon stood against a Champion\'s ace in Victory Hall', 60)] })),
         { pick: {} }),
     ]),
   // Cross-run (not built): the statue of the player's own past winning team.
@@ -494,26 +493,27 @@ const ghost: Json[] = [
 ];
 
 // ---------- PA4. A Familiar Face (QUESTLINES_PAST_ALLIES_AND_FUTURE.md; SF5 MS9) ----------
-// "Needs past.mentor.<name>": the existing mentor system's veteran fellow apprentice (a graduate of an earlier run who came back) is the nearest in-run gate.
+// Built in-run only (Kice: no cross-run memory): Ressa, this run's fellow apprentice, already graduated, met as a mentor companion. The doc's "Needs past.mentor.<name>"
+// and "trained beside in a past run" are cross-run and not built (see the report).
 const ressaReward = companion(1); // "Ressa fights beside the player as a tag partner in the next hard battle (boss or rival)". TODO(engine): only the next boss or rival battle.
 const familiar: Json[] = [
   shared('mentor-familiar-face', {
     title: 'A Familiar Face',
-    requires: [{ kind: 'mentor', fellow: 'veteran' }],
+    requires: [mentorIs(), M.is('lesson')],
     intro:
-      '{mentor}\'s training ground, early, dew still on the practice posts. Someone else is already there, stretching against the fence, and she turns when she hears your step. You know her: the apprentice you trained beside before, the one who always had a bandage on her knuckles. ' +
+      '{mentor}\'s training ground, early, dew still on the practice posts. Someone else is already there, stretching against the fence, and she turns when she hears your step. You know her: Ressa, the other apprentice, the one who always has a bandage on her knuckles, who left {mentor} a little ahead of you. ' +
       'Ressa: "Look who it is. I graduated. Came back to help the next ones." {mentor} looks from her to you and back. {mentor}: "You two know each other? Good. Saves me a speech." ' +
-      'Ressa grins, the old grin, a little older. Ressa: "I remember you. You always went first. Even when you shouldn\'t have."',
+      'Ressa grins and points a finger at you. Ressa: "I remember you. You always went first. Even when you shouldn\'t have."',
     choices: [
       // TODO(engine): "Ressa's partner gains a stat point" too; the fellow apprentice's Pokémon cannot take a stat boost yet (flag owed).
-      ch('"Train with me."', out('You train side by side all morning, the way you used to: the same drills, the same posts, Ressa\'s partner and your lead pushing each other until both are panting. By noon both of them are a little stronger, and Ressa says she will be there when the next hard fight comes.',
+      ch('"Train with me."', out('You train side by side all morning, the same drills, the same posts, Ressa\'s partner and your lead pushing each other until both are panting. By noon both of them are a little stronger, and Ressa says she will be there when the next hard fight comes.',
         stat('best'), RESSA.set('trained'), flag('ressa-partner-stat'), ressaReward)),
-      // TODO(engine): "Ressa's partner uses the move the player's old mentor taught them both"; a fight cannot give the apprentice the mentor's move yet.
-      ch('"Show me what you learned."', fight('Ressa\'s eyes light up. She sends out her partner, and in the second turn it uses the move your old mentor taught you both, the one you practised until your hands ached. She is very good now.',
-        spar('Ressa', { apprentice: true, size: 3, lv: 1, win: [moment('You beat Ressa, your old fellow apprentice', 65)], lose: [moment('Ressa, your old fellow apprentice, beat you', 55)] }), RESSA.set('battled'), ressaReward)),
-      // TODO(takeNode): "She sits with the player for a rest node" (the shared takeNode effect is not merged yet); the rest itself is heal(0.5).
+      // TODO(engine): "Ressa's partner uses the move the mentor taught them both"; a fight cannot give the apprentice the mentor's move yet.
+      ch('"Show me what you learned."', fight('Ressa\'s eyes light up. She sends out her partner, and in the second turn it uses the move {mentor} taught you both, the one you practised until your hands ached. She is very good now.',
+        spar('Ressa', { apprentice: true, size: 3, lv: 1, win: [moment('You beat Ressa, your fellow apprentice, now graduated', 65)], lose: [moment('Ressa, your fellow apprentice, now graduated, beat you', 55)] }), RESSA.set('battled'), ressaReward)),
+      // "She sits with the player for a rest node": a rest (heal 0.5) that spends a node.
       ch('"Did it get easier?"', out('Ressa stops stretching. She sits down on the fence rail and thinks about it properly. Ressa: "No. You just get used to the weight." Then she stays, and you sit with her for a whole rest, saying not much, while your team dozes in the sun.',
-        heal(0.5), RESSA.set('talked'), ressaReward)),
+        heal(0.5), takeNode(1), RESSA.set('talked'), ressaReward)),
     ],
   }),
 ];
