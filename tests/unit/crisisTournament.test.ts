@@ -210,12 +210,11 @@ describe('World events', () => {
     expect(oldFoe(run)).toBe('pidgey');
     expect(ids()).toContain('old-foe-returns');
 
+    // The Legend Trail clues and The Legend Appears became the Influence ladder (Catalog Overhaul legends, RULE ids): never drawn now.
     run.regionIndex = Math.min(3, run.regionOrder.length - 1);
-    expect(ids()).toContain('legend-clue-tracks');
-    expect(ids()).not.toContain('legend-encounter');
     run.story.flags['ev:legend-clue'] = 3;
     expect(ids()).not.toContain('legend-clue-tracks');
-    expect(ids()).toContain('legend-encounter');
+    expect(ids()).not.toContain('legend-encounter');
   });
 });
 

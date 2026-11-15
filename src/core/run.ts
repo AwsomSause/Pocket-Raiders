@@ -24,6 +24,7 @@ import { revivalFee } from './battle/revivalStatus';
 import { bondFriendship } from './co/who';
 import { applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, refusesToLeave, returnedBug } from './instrumentality/flightNorth';
 import { applySecondChance, secondChanceOpen, secondChanceRolls } from './instrumentality/secondChance';
+import { syncLegendFlags, weekInfluence } from './legends/signs';
 import { hearTelling, noteEvent as notePromiseEvent, resolveVisit, rollVisit, wonderAfterBattle } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
@@ -93,7 +94,7 @@ import { changeFriendship } from './friendship';
 import { joinMoments, restMoments } from './moments/runMoments';
 import { followStep } from './followMode';
 import { addItem, applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem, STACK_MAX } from './items';
-import { addLevels, createPokemon, gainXp, getSpecies, MAX_PP_UPS, maxHp, maxPp, xpForDefeat, xpForLevel } from './pokemon';
+import { ALPHA_MARK_HP, addLevels, createPokemon, gainXp, getSpecies, MAX_PP_UPS, maxHp, maxPp, xpForDefeat, xpForLevel } from './pokemon';
 import { addEvs, evYield } from './ivs';
 import { bankShopEntries, runLicenses } from './bank';
 import { withTokenAttribute } from './runPrep';
@@ -476,6 +477,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     if (Object.keys(flags).length > 0) run.expansion = { ...run.expansion, ...flags };
     if (e.secondChancePct || e.heatedMoments || e.mythicalPromises) run.expansion = { ...run.expansion, ...(e.secondChancePct ? { secondChancePct: e.secondChancePct } : {}), ...(e.heatedMoments ? { heated: true } : {}), ...(e.mythicalPromises ? { promises: true } : {}) };
     if (e.blessings) assignBlessing(run);
+    weekInfluence(run); // Catalog Overhaul (legends): Legend weeks raise the blessing's starting Influence, or tell of a Mythical
     // Beta 0.7 Node Event Menus: on for this run when the setting is on, except in speedrun, boss rush and time attack.
     if (e.nodeMenus && nodeMenusAllowed(run.rules.modifierIds)) run.expansion = { ...run.expansion, nodeMenus: freshNodeMenuState() };
     setClimaxCut(run, e.climaxCut);
@@ -789,6 +791,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   placeStoryStops(content, run); // Story Run: last, so it can adopt the evil beat's stop
   // Beta 0.7 M1: one Telling of a Mythical per new stage (in-run only; never on a run's very first stage, which keeps its plan empty), and a Visit offer at the first stage of a region.
   const telling = run.regionIndex === 0 && index === 0 ? null : hearTelling(run, run.regionIndex * 100 + index);
+  syncLegendFlags(run); // Catalog Overhaul (legends): read-only mirror flags of the blessing, Guest and Promise for event conditions
   const planLines = [themeLine, ...tailorStage(content, run, signals), telling].filter((l): l is string => !!l);
   snapshotStagePlan(run, planLines);
   run.battle = null;
@@ -3770,6 +3773,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (battle.ball) caught.caughtBall = battle.ball;
     // A raid boss's extra HP pool belongs to the fight, not to the Pokémon you take home.
     if (battle.raid) delete caught.statBoosts;
+    // An Alpha's doubled HP belongs to the wild fight too (events.ts startEventBattle); it keeps only the Alpha Mark (pokemon.ts ALPHA_MARK_HP).
+    if (caught.alpha && caught.statBoosts?.hp) caught.statBoosts = { ...caught.statBoosts, hp: Math.max(0, caught.statBoosts.hp - (100 - ALPHA_MARK_HP)) };
     shiftLevel(content, run, caught, catchLevelOffset(runPerks(content, run)) + palPadLevels(content, run));
     // Friend, Luxury and Heal Ball.
     const ball = battle.ball ? content.items.get(battle.ball)?.effect : undefined;
@@ -4079,7 +4084,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (leadAsk) run.pending.push({ kind: 'askLead', ...leadAsk });
   // An event battle you won pays its own rewards.
   const chained = outcome === 'win' && !!battle.event && eventChainNext(content, run, battle.event);
-  const eventRewards = outcome === 'win' && battle.event && !chained ? (battle.event.eventId === 'plaza:club' ? plazaClubWon(content, run) : eventBattleWon(content, run, battle.event, battle.turn - 1)) : [];
+  const eventRewards = outcome === 'win' && battle.event && !chained ? (battle.event.eventId === 'plaza:club' ? plazaClubWon(content, run) : eventBattleWon(content, run, battle.event, battle.turn - 1, battle.calm?.done === true)) : [];
   // The Betrayal: beating an Evil Team's leader sends you straight into a catchable fight with the Legendary they chased.
   const evilT = outcome === 'win' && battle.trainer ? evilTeam(content, run) : null;
   const betrayal = !!evilT && battle.trainer?.name === evilT.ranks.leader.name && run.story.flags[BETRAYAL_FLAG] === undefined && (run.story.evil?.end === 'defeated' || run.story.evil?.end === 'exposed');

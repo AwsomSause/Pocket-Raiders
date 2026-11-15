@@ -136,6 +136,8 @@ export const PokemonInstanceSchema = z.object({
   evoDeclineBoost: z.number().int().min(0).optional(),
   /** Max HP bonus in percent from the trainer's HP perks (core/trainerPerks.ts syncHpPerks keeps it current). */
   perkHp: z.number().int().optional(),
+  /** Catalog Overhaul (Alphas): the Alpha Mark. It keeps its size (drawn larger) and has +10% HP (a wild Alpha in a fight has double HP through `statBoosts`). Optional, so older saves load as they are. */
+  alpha: z.literal(true).optional(),
   /** Hatched from an Egg this run (core/eggs.ts; Elm's perk gives these more experience). */
   hatched: z.boolean().optional(),
   /** The Egg tier it hatched from (data/eggs.json), for the hatch screen. */
@@ -591,6 +593,7 @@ export const freshExtra = () => ({
   ionDeluge: false,
   wonderRoom: 0,
   brokenFace: [] as string[],
+  packCall: null as 'player' | 'enemy' | null,
   variants: {} as Variants,
   variantTimed: [] as TimedStage[],
   traits: {} as Traits,
@@ -836,6 +839,8 @@ export const BattleStateSchema = z.object({
     /** Galar big-battle moments already used (evolve-and-survive per Pokémon, the thread, the cheat) and ones pending this hit (galarMoments.ts). */
     galar: z.array(z.string()).default([]),
     delta: z.boolean().default(false),
+    /** Pack Call (catalog overhaul legends, Z7): the side whose next ally to switch in on turn 1 gains +1 Attack. */
+    packCall: z.enum(['player', 'enemy']).nullable().default(null),
     mimic: z.record(z.string(), z.object({ kind: z.enum(['mimic', 'transform']), slot: z.number().int(), moves: z.array(z.object({ id: z.string(), pp: z.number().int() })) })).default({}),
     fairyLock: z.number().int().default(-9),
     passSub: z.object({ player: z.number().int().default(0), enemy: z.number().int().default(0) }).default({ player: 0, enemy: 0 }),
@@ -945,6 +950,8 @@ export const BattleStateSchema = z.object({
   foresight: z.object({ ended: z.boolean(), revealed: z.string().nullable() }).optional(),
   /** Run events B: special rules of this event fight (no switching, no attacks, turn limits...); see EventRuleSchema. */
   eventRule: EventRuleSchema.optional(),
+  /** Catalog Overhaul (Alphas): the Calm bar of a calm fight (core/battle/calm.ts). `balm` is what one thrown balm adds (1, or 1.2 with the Warden sash). */
+  calm: z.object({ bar: z.number().min(0), need: z.number().int().min(1), balm: z.number().positive(), done: z.boolean().default(false) }).optional(),
   /** Beta 0.7 U1: the Ultra Rules in force for this battle (core/ultra/run.ts markBattle): both sides alike. Absent when the system is off. */
   ultra: z.array(UltraRuleIdSchema).optional(),
   /** Every move's accuracy is multiplied by this for both sides (Veridian Forest fog). */

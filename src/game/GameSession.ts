@@ -111,6 +111,12 @@ export class GameSession {
     this.profile = profile;
     if (warning) this.warnings.push(warning);
     this.settings = this.saves.loadSettings();
+    // Legendary Blessings and Ultra Beast Incursions are on by default (settings v44). Automated browsers starting from fresh settings
+    // keep them off, so the older browser tests still walk Starter -> Briefing with no Blessing screen and no surprise Incursion;
+    // ?legends=1 gives such a browser the real defaults (tests/e2e/blessings.spec.ts). Players never have navigator.webdriver.
+    if (typeof navigator !== 'undefined' && navigator.webdriver && !this.saves.hasSettings() && !(typeof location !== 'undefined' && location.search.includes('legends=1'))) {
+      this.settings = { ...this.settings, expansion: { ...this.settings.expansion, blessingsEnabled: false, ultraBeastsEnabled: false } };
+    }
     this.savedRun = this.saves.loadRun();
     const timeline = this.saves.loadTimeline();
     this.timeline = timeline.store;

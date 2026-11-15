@@ -1,0 +1,3946 @@
+{
+ "catalogOverhaul": "legends",
+ "override": true,
+ "remove": [
+  "form-clue-fur",
+  "form-clue-sketch",
+  "form-clue-tracks",
+  "form-research-battle"
+ ],
+ "events": [
+  {
+   "id": "co-d1-linden",
+   "name": "The Delta Study",
+   "group": "Story: Delta Anomalies",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "delta-journal",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "pokemon": "bulbasaur-delta",
+    "tint": "#7a9a60",
+    "effect": "none"
+   },
+   "intro": "A path through a meadow. A scale lies on the ground, the wrong colour for anything in this region.\n\nDr. Linden Vale, crouched over it with a jeweller's loupe: \"Don't step on it. Please.\"\nLinden: \"That's a Bulbasaur scale. Bulbasaur don't have scales.\"\nLinden: \"Somewhere near here, something has changed to fit where it lives. I'd like to know where.\"\nLinden: \"I'm too old for the hills. You're not.\"",
+   "choices": [
+    {
+     "label": "\"I'll help.\"",
+     "success": {
+      "text": "He gives you a worn notebook with a pressed leaf on the cover: the Delta Journal. \"Odd nests. Scales out of place. Calls you don't know. Write them down. Three of them, and you'll find the place.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-journal",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Dr. Linden Vale gave you the Delta Journal.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's in it for me?\"",
+     "success": {
+      "text": "Linden: \"Truthfully? Something nobody's seen. And a lens, if you see enough.\" He gives you the Delta Journal anyway. \"Odd nests. Scales out of place. Calls you don't know. Three, and you'll find the place.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-journal",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Dr. Linden Vale gave you the Delta Journal.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not now.\"",
+     "success": {
+      "text": "Linden: \"No. Of course.\" He goes back to his scale. \"I'll be about. I usually am.\" He will be waiting a region from now.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d1-linden-again",
+   "name": "The Delta Study: Linden Again",
+   "group": "Story: Delta Anomalies",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "delta-journal",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "lens",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delta-studied",
+       "atLeast": 5,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "delta-lens",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Linden holds out a brass lens. \"Five. Five, and you left every one where it lived. Here. You'll see them now before they see you.\"",
+     "addChoices": [
+      {
+       "label": "Take the Delta Lens.",
+       "success": {
+        "text": "A brass lens with a green glass eye. Through it, the land looks the same, and a little stranger.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "delta-lens",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Dr. Linden Vale gave you the Delta Lens.",
+          "importance": 80
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "named",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delta-studied",
+       "atLeast": 3,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "delta-named",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Linden, pink in the face: \"I've put you in the paper. A species note. With your name on it. Don't argue.\"",
+     "addChoices": [
+      {
+       "label": "\"Let me see.\"",
+       "success": {
+        "text": "There it is, in small print at the bottom of page nine: a sub-variety, named for you. You read it three times.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "delta-named",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Dr. Linden Vale named a Delta variety after you in his paper.",
+          "importance": 75
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "letter",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delta-caught",
+       "atLeast": 2,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "delta-studied",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "Linden is not on the path today. There is a letter pinned to the signpost with your name on it.\n\n\"I hope they're happy with you. I mean that. I won't be coming any more. L.V.\"",
+     "hide": [
+      0,
+      1
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#7a9a60",
+    "effect": "none"
+   },
+   "intro": "Dr. Linden Vale, on the path again, a little greyer, notebook open: \"There you are. Show me.\"",
+   "choices": [
+    {
+     "label": "Show him the journal.",
+     "success": {
+      "text": "He reads every page twice and hands it back. \"Good. Keep going. They're out there.\"",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 20
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Where should I look next?\"",
+     "success": {
+      "text": "Linden: \"Wherever the ground is wrong. Ash that's cold. Steam in the snow. A shadow on a clear day.\"",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You nod to him and walk on. He is already crouched over something else.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "delta-clue-nest",
+   "name": "An Odd Nest",
+   "group": "Delta Research",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "delta-journal",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a301f",
+    "effect": "sparkle"
+   },
+   "intro": "A nest built from materials that never grew here. Sea-glass and pine needles in a desert thorn. The eggs are missing.",
+   "choices": [
+    {
+     "label": "Write it down in the Delta Journal.",
+     "success": {
+      "text": "You sketch it, note the place and the hour. Linden will want to see this. The pattern is getting clearer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-clue",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it for Linden.",
+     "success": {
+      "text": "You wrap it up and keep it safe. One more piece.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-clue",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it where it lies.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "delta-clue-scales",
+   "name": "Scales Out of Place",
+   "group": "Delta Research",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "delta-journal",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a30",
+    "effect": "sparkle"
+   },
+   "intro": "A shed scale in a colour the field guide does not list. Whatever left it came from another kind of habitat.",
+   "choices": [
+    {
+     "label": "Write it down in the Delta Journal.",
+     "success": {
+      "text": "You sketch it, note the place and the hour. Linden will want to see this. The pattern is getting clearer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-clue",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it for Linden.",
+     "success": {
+      "text": "You wrap it up and keep it safe. One more piece.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-clue",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it where it lies.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "delta-clue-song",
+   "name": "A Call You Do Not Know",
+   "group": "Delta Research",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "delta-journal",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f30",
+    "effect": "sparkle"
+   },
+   "intro": "A cry from the brush that no Pokémon of this region makes. It stops when you hold your breath, and starts again when you let it out.",
+   "choices": [
+    {
+     "label": "Write it down in the Delta Journal.",
+     "success": {
+      "text": "You sketch it, note the place and the hour. Linden will want to see this. The pattern is getting clearer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-clue",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it for Linden.",
+     "success": {
+      "text": "You wrap it up and keep it safe. One more piece.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-clue",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it where it lies.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "delta-research-battle",
+   "name": "The Delta Study",
+   "group": "Delta Research",
+   "rarity": "rare",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "delta-clue",
+     "atLeast": 3,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "pokemon": "bulbasaur-delta",
+    "tint": "#1f2a30",
+    "effect": "glint"
+   },
+   "intro": "The clues point to one clearing. The grass here is the wrong colour, and so is the Bulbasaur sitting in the middle of it: pale pink and violet, its bulb a smooth crystal that hums.\n\nLinden, out of breath behind you: \"There. There it is. Look at it.\"\nLinden, at each habitat, always the same: \"It's fine here. It's the only one of it. What will you do?\"",
+   "choices": [
+    {
+     "label": "Catch it.",
+     "success": {
+      "text": "It does not run. It only looks at you, then at the place it lives, then at you again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-clue",
+        "amount": -3
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "bulbasaur-delta"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "delta-caught",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "delta-caught-bulbasaur",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Study it and leave it.",
+     "success": {
+      "text": "You sit with your notebook until the light changes. Linden reads every page twice.\n\nLinden: \"It's fine here. It's the only one of it. And now someone has written that down. That counts for something.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-studied",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-studied-bulbasaur",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 25
+       },
+       {
+        "kind": "flag",
+        "key": "delta-clue",
+        "amount": -3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bring a sample to the lab.",
+     "success": {
+      "text": "A shed scale, carried carefully in a jar. At the lab a little Delta Ditto looks at it a long time, and then it is that colour too. The original stays where it lives. The Ditto comes with you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-sampled-bulbasaur",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "ditto-delta-psychic"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-clue",
+        "amount": -3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it to its strange, quiet home.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d2-valley",
+   "name": "The Ghost Dragon of the Burnt Valley",
+   "group": "Story: Delta Anomalies",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "charizard-delta",
+    "tint": "#707070",
+    "effect": "fog"
+   },
+   "intro": "A valley burned grey decades ago. Nothing grows. In the middle, a Charizard made of smoke and pale fire, curled around a single ember.\n\nOld forester, at the valley mouth: \"It's been in there since the fire. Hatched after. Everything else was dead.\"\nForester: \"Its fire went inward. That's what I think. Turned it into what it is.\"\nThe Charizard lifts its head. The ember in its claws flickers.\nForester: \"That ember's going out. It knows.\"",
+   "choices": [
+    {
+     "label": "Carry the ember out.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "Your Fire-type takes the ember in its own flame, gently, the way you would hold a bird. The Charizard rises and follows, a long grey shape at the edge of sight. \"Three stages,\" the forester says. \"Don't let it go out.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ghostdragon-carried",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-ho-oh",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Catch it.",
+     "success": {
+      "text": "It does not want to come. It fights with a cold, quiet fire.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "charizard-delta"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ghostdragon-forced",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "delta-caught",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "delta-caught-charizard",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Sit with it.",
+     "success": {
+      "text": "You sit down in the ash. Nobody says anything for a long time. The ember goes out. The Charizard lays its head down beside it and fades like smoke in the morning.\n\nWhen you stand, there is one green blade of grass where the ember was.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ghostdragon-sat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-studied",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-studied-charizard",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You sat with the Ghost Dragon of the Burnt Valley while its ember went out. The valley grew its first grass.",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave the valley to its grey quiet.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d2-ember",
+   "name": "The Ghost Dragon: The Ember",
+   "group": "Story: Delta Anomalies",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ghostdragon-carried",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ghostdragon-lost",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "starter",
+     "when": [
+      {
+       "kind": "starter",
+       "species": "charmander"
+      }
+     ],
+     "notice": "Your Charmander has carried it the whole way, tail held high. It has never once flickered. It will not."
+    },
+    {
+     "id": "dims",
+     "when": [
+      {
+       "kind": "memberFainted",
+       "within": 18
+      }
+     ],
+     "intro": "The ember dims. One of your Pokémon fell, and the flame went small and blue. The Charizard roars from somewhere behind.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Use a Revive to wake it.",
+       "requires": [
+        {
+         "kind": "item",
+         "id": "revive"
+        }
+       ],
+       "success": {
+        "text": "Your Pokémon wakes, and the ember catches again, smaller than before. One stage left.",
+        "effects": [
+         {
+          "kind": "loseItem",
+          "id": "revive"
+         }
+        ]
+       }
+      },
+      {
+       "label": "Let the ember go.",
+       "success": {
+        "text": "You let it go. It drifts up and out like a spark from a fire. The Charizard lies down where it lands and fades. One green blade of grass grows there.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "ghostdragon-lost",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "ghostdragon-sat",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "delta-studied",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "delta-studied-charizard",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "charizard-delta",
+    "tint": "#806050",
+    "effect": "fog"
+   },
+   "intro": "The ember still burns in your Fire-type's keeping. Behind you, at the edge of sight, a grey shape follows.",
+   "choices": [
+    {
+     "label": "Walk on, carefully.",
+     "success": {
+      "text": "Another stage. The ember holds.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ghostdragon-steps",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d2-out",
+   "name": "The Ghost Dragon: Out of the Valley",
+   "group": "Story: Delta Anomalies",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ghostdragon-carried",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ghostdragon-steps",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ghostdragon-lost",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "charizard-delta",
+    "tint": "#c08040",
+    "effect": "sparkle"
+   },
+   "intro": "Green country. The ember flares up, bright and warm for the first time in its life, and the Charizard comes close enough to touch. Its smoke has colour in it now.\n\nThe forester, who has walked all this way behind you: \"Well. Well, look at that.\"",
+   "choices": [
+    {
+     "label": "Hold out the ember to it.",
+     "success": {
+      "text": "It takes the ember back. Its fire goes outward again, and the grey becomes dusk-purple, and it stays. It is yours, and the stone that answers it is yours too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-caught",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-caught-charizard",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "charizard-delta"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "item",
+        "id": "delta-charizardite",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Ghost Dragon followed its ember out of the Burnt Valley and joined you.",
+        "importance": 90
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d3-hill",
+   "name": "The Four Seasons Snorlax",
+   "group": "Story: Delta Anomalies",
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "watching",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "seasons-watch",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You come back to the hill. The child is still there."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "snorlax-delta",
+    "tint": "#80a060",
+    "effect": "none"
+   },
+   "intro": "A hill with four hollows. In one of them, a huge sleeping shape is coloured like the season. The other three are buried under leaves, snow or petals.\n\nA child, sitting on the hill: \"They take turns. My gran says.\"\nChild: \"Blossom wakes in spring, Summer in summer. You know.\"\nChild: \"She says once, she saw all four awake. And a fifth one underneath.\"",
+   "choices": [
+    {
+     "label": "Catch the awake one.",
+     "success": {
+      "text": "You walk down to the hollow whose season it is.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-d3-awake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come back each season.",
+     "success": {
+      "text": "You mark the hill on your map. The child nods very seriously. \"Each season. Then you'll see.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "seasons-watch",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the gran.",
+     "success": {
+      "text": "Two nodes to the farm. The gran gives you Leftovers wrapped in a cloth, and pats your hand.\n\nGran: \"The fifth sleeps under the fourth snow. You'll know it when you see it.\"",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "seasons-gran",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "seasons-watch",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "leftovers",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You let them sleep.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d3-awake",
+   "name": "The Four Seasons Snorlax: The Awake One",
+   "group": "Story: Delta Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax-delta",
+    "tint": "#80a060",
+    "effect": "none"
+   },
+   "intro": "Only the one whose season it is is awake. It looks at you through half-closed eyes.",
+   "choices": [
+    {
+     "label": "Catch the awake one (Blossom).",
+     "requires": [
+      {
+       "kind": "season",
+       "in": [
+        "Spring"
+       ]
+      }
+     ],
+     "success": {
+      "text": "It stands up, yawning, and it is the size of a house.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "snorlax-delta-blossom"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "seasons-blossom",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "seasons-caught",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "delta-caught",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "delta-caught-snorlax",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Catch the awake one (Summer).",
+     "requires": [
+      {
+       "kind": "season",
+       "in": [
+        "Summer"
+       ]
+      }
+     ],
+     "success": {
+      "text": "It stands up, yawning, and it is the size of a house.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "snorlax-delta-summer"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "seasons-summer",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "seasons-caught",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "delta-caught",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "delta-caught-snorlax",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Catch the awake one (Autumn).",
+     "requires": [
+      {
+       "kind": "season",
+       "in": [
+        "Autumn"
+       ]
+      }
+     ],
+     "success": {
+      "text": "It stands up, yawning, and it is the size of a house.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "snorlax-delta-autumn"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "seasons-autumn",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "seasons-caught",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "delta-caught",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "delta-caught-snorlax",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Catch the awake one (Winter).",
+     "requires": [
+      {
+       "kind": "season",
+       "in": [
+        "Winter"
+       ]
+      }
+     ],
+     "success": {
+      "text": "It stands up, yawning, and it is the size of a house.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "snorlax-delta-winter"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "seasons-winter",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "seasons-caught",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "delta-caught",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "delta-caught-snorlax",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d3-visit",
+   "name": "The Four Seasons Snorlax: Another Season",
+   "group": "Story: Delta Anomalies",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "seasons-watch",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "seasons-visit",
+     "atLeast": 0,
+     "atMost": 3
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "snorlax-delta",
+    "tint": "#90b070",
+    "effect": "none"
+   },
+   "intro": "The hill with four hollows. This season, a different one is awake.",
+   "choices": [
+    {
+     "label": "Sit with the Spring one.",
+     "requires": [
+      {
+       "kind": "season",
+       "in": [
+        "Spring"
+       ]
+      },
+      {
+       "kind": "flag",
+       "key": "seasons-visit-blossom",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You sit on the hill a while in spring light, and the blossom Snorlax opens one eye at you. That is enough.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "seasons-visit-blossom",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "seasons-visit",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit with the Summer one.",
+     "requires": [
+      {
+       "kind": "season",
+       "in": [
+        "Summer"
+       ]
+      },
+      {
+       "kind": "flag",
+       "key": "seasons-visit-summer",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You sit on the hill a while in summer light, and the summer Snorlax opens one eye at you. That is enough.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "seasons-visit-summer",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "seasons-visit",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit with the Autumn one.",
+     "requires": [
+      {
+       "kind": "season",
+       "in": [
+        "Autumn"
+       ]
+      },
+      {
+       "kind": "flag",
+       "key": "seasons-visit-autumn",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You sit on the hill a while in autumn light, and the autumn Snorlax opens one eye at you. That is enough.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "seasons-visit-autumn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "seasons-visit",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit with the Winter one.",
+     "requires": [
+      {
+       "kind": "season",
+       "in": [
+        "Winter"
+       ]
+      },
+      {
+       "kind": "flag",
+       "key": "seasons-visit-winter",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You sit on the hill a while in winter light, and the winter Snorlax opens one eye at you. That is enough.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "seasons-visit-winter",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "seasons-visit",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d3-under",
+   "name": "The Four Seasons Snorlax: The Fifth",
+   "group": "Story: Delta Anomalies",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "seasons-visit",
+     "atLeast": 4,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "gran",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "seasons-gran",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The gran comes up the hill with a stick, puffing. \"Told you.\""
+    },
+    {
+     "id": "empty",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "seasons-caught",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "One hollow stays empty: the one whose sleeper you took. Under the hill, the fifth turns over, and does not wake.",
+     "hide": [
+      0
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "snorlax-delta",
+    "tint": "#e0e8f0",
+    "effect": "snow"
+   },
+   "intro": "All four are awake. They stand. Under the hill, something rolls over.",
+   "choices": [
+    {
+     "label": "Take the one underneath.",
+     "success": {
+      "text": "The hill shrugs, and out of it climbs a plain green Snorlax that smells of every season at once. It yawns and follows you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-caught",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-caught-snorlax",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "snorlax-delta"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You found the fifth Snorlax under the hill of four seasons.",
+        "importance": 85
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them all.",
+     "success": {
+      "text": "All four lie down again, one by one. The hill is warm when you leave it, and the hollow you slept in heals you through.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-studied",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-studied-snorlax",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d4-cove",
+   "name": "The Ditto Colony",
+   "group": "Story: Delta Anomalies",
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "own-ditto",
+     "when": [
+      {
+       "kind": "partySpecies",
+       "species": "ditto"
+      }
+     ],
+     "notice": "Your own Ditto wobbles down to the waterline and starts singing. One fewer to find."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "ditto-delta",
+    "tint": "#5080a0",
+    "effect": "rain"
+   },
+   "intro": "A cove. Everything in it is very slightly wrong. A rock blinks.\n\nBeachcomber: \"They've been here so long they've each become whatever they copied most.\"\nBeachcomber: \"There's eighteen. Every type but plain, and two Water. I've found eleven in thirty years.\"\nBeachcomber: \"The old one's the Water one. That's the one that started it.\"",
+   "choices": [
+    {
+     "label": "Look for them.",
+     "success": {
+      "text": "You start at the tide line. Each one has a tell, if you know how to look.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dittos-looking",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-d4-find-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave the cove to its blinking rocks.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d4-find-1",
+   "name": "The Ditto Colony: Find 1",
+   "group": "Story: Delta Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "ditto-delta",
+    "tint": "#6090a0",
+    "effect": "none"
+   },
+   "intro": "A rock at the waterline is warm to the touch, warmer than the sun could make it.",
+   "choices": [
+    {
+     "label": "\"It's a Fire one.\"",
+     "success": {
+      "text": "It drops its disguise with a little pop: a Fire-coloured Ditto, delighted to be found. It joins the chorus.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dittos-found",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dittos-fire",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-d4-find-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's a Rock one.\"",
+     "success": {
+      "text": "It giggles and wobbles off somewhere else. The beachcomber writes something down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dittos-missed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-d4-find-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's a Ground one.\"",
+     "success": {
+      "text": "It giggles and wobbles off somewhere else. The beachcomber writes something down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dittos-missed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-d4-find-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d4-find-2",
+   "name": "The Ditto Colony: Find 2",
+   "group": "Story: Delta Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "ditto-delta",
+    "tint": "#6090a0",
+    "effect": "none"
+   },
+   "intro": "A puddle in the shade has frost around its edge. In summer.",
+   "choices": [
+    {
+     "label": "\"It's a Ice one.\"",
+     "success": {
+      "text": "It drops its disguise with a little pop: a Ice-coloured Ditto, delighted to be found. It joins the chorus.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dittos-found",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dittos-ice",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's a Water one.\"",
+     "success": {
+      "text": "It giggles and wobbles off somewhere else. The beachcomber writes something down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dittos-missed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's a Steel one.\"",
+     "success": {
+      "text": "It giggles and wobbles off somewhere else. The beachcomber writes something down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dittos-missed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d4-find-3",
+   "name": "The Ditto Colony: Find 3",
+   "group": "Story: Delta Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "ditto-delta",
+    "tint": "#6090a0",
+    "effect": "none"
+   },
+   "intro": "A shell on the sand has no shadow at all.",
+   "choices": [
+    {
+     "label": "\"It's a Ghost one.\"",
+     "success": {
+      "text": "It drops its disguise with a little pop: a Ghost-coloured Ditto, delighted to be found. It joins the chorus.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dittos-found",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dittos-ghost",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-d4-find-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's a Dark one.\"",
+     "success": {
+      "text": "It giggles and wobbles off somewhere else. The beachcomber writes something down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dittos-missed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-d4-find-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's a Psychic one.\"",
+     "success": {
+      "text": "It giggles and wobbles off somewhere else. The beachcomber writes something down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dittos-missed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-d4-find-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d4-find-4",
+   "name": "The Ditto Colony: Find 4",
+   "group": "Story: Delta Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "ditto-delta",
+    "tint": "#6090a0",
+    "effect": "none"
+   },
+   "intro": "Seaweed on a post crackles when the wind touches it, and your hair stands up.",
+   "choices": [
+    {
+     "label": "\"It's a Electric one.\"",
+     "success": {
+      "text": "It drops its disguise with a little pop: a Electric-coloured Ditto, delighted to be found. It joins the chorus.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dittos-found",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dittos-electric",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's a Grass one.\"",
+     "success": {
+      "text": "It giggles and wobbles off somewhere else. The beachcomber writes something down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dittos-missed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's a Water one.\"",
+     "success": {
+      "text": "It giggles and wobbles off somewhere else. The beachcomber writes something down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dittos-missed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d4-find-5",
+   "name": "The Ditto Colony: Find 5",
+   "group": "Story: Delta Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "ditto-delta",
+    "tint": "#6090a0",
+    "effect": "none"
+   },
+   "intro": "A sandcastle someone built very carefully. It is breathing.",
+   "choices": [
+    {
+     "label": "\"It's a Ground one.\"",
+     "success": {
+      "text": "It drops its disguise with a little pop: a Ground-coloured Ditto, delighted to be found. It joins the chorus.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dittos-found",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dittos-ground",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-d4-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's a Rock one.\"",
+     "success": {
+      "text": "It giggles and wobbles off somewhere else. The beachcomber writes something down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dittos-missed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-d4-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's a Normal one.\"",
+     "success": {
+      "text": "It giggles and wobbles off somewhere else. The beachcomber writes something down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dittos-missed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-d4-end"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d4-rest",
+   "name": "The Ditto Colony: The Far Rocks",
+   "group": "Story: Delta Anomalies",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "dittos-looking",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "dittos-round",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "ditto-delta",
+    "tint": "#5080a0",
+    "effect": "none"
+   },
+   "intro": "The tide is out. The beachcomber waves you down to the far rocks. \"More of them out here. Come on.\"",
+   "choices": [
+    {
+     "label": "Keep looking.",
+     "success": {
+      "text": "You pick your way out over the rocks.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dittos-round",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-d4-find-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d4-last",
+   "name": "The Ditto Colony: The Last Light",
+   "group": "Story: Delta Anomalies",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "dittos-round",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "dittos-ended",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "ditto-delta",
+    "tint": "#a07050",
+    "effect": "none"
+   },
+   "intro": "Evening on the cove. One more, the beachcomber says. He always says that.",
+   "choices": [
+    {
+     "label": "One more.",
+     "success": {
+      "text": "The light is going. You look hard at the sand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dittos-ended",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-d4-find-5"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d4-end",
+   "name": "The Ditto Colony: The Chorus",
+   "group": "Story: Delta Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "elder-own",
+     "when": [
+      {
+       "kind": "partySpecies",
+       "species": "ditto"
+      },
+      {
+       "kind": "flag",
+       "key": "dittos-found",
+       "atLeast": 4,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "dittos-missed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Your own Ditto sang the missing note. Out of the deep water, slowly, comes a very old blue Ditto. The elder.",
+     "addChoices": [
+      {
+       "label": "Ask the elder.",
+       "success": {
+        "text": "The elder settles into your hands like a cold, kind stone. \"It started it,\" the beachcomber says softly. \"And now it's going with you.\"",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "delta-caught",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "delta-caught-ditto",
+          "amount": 1
+         },
+         {
+          "kind": "join",
+          "species": [
+           "ditto-delta"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "moment",
+          "text": "The elder of the Ditto Colony chose to come with you.",
+          "importance": 85
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "elder",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "dittos-found",
+       "atLeast": 5,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "dittos-missed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Out of the deep water, slowly, comes a very old blue Ditto. The elder. It looks at every one you found, and then at you.",
+     "addChoices": [
+      {
+       "label": "Ask the elder.",
+       "success": {
+        "text": "The elder settles into your hands like a cold, kind stone. \"It started it,\" the beachcomber says softly. \"And now it's going with you.\"",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "delta-caught",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "delta-caught-ditto",
+          "amount": 1
+         },
+         {
+          "kind": "join",
+          "species": [
+           "ditto-delta"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "moment",
+          "text": "The elder of the Ditto Colony chose to come with you.",
+          "importance": 85
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "ditto-delta",
+    "tint": "#80a0c0",
+    "effect": "none"
+   },
+   "intro": "The chorus sings: one note for every Ditto you found, high and wobbly and very proud of itself.\n\nBeachcomber: \"You found more than me. Wonderful.\"",
+   "choices": [
+    {
+     "label": "Pick one of the found.",
+     "success": {
+      "text": "They line up on the sand, each one very sure it is the best one.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-d4-pick"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them.",
+     "success": {
+      "text": "The beachcomber gives you his notebook: every tell, thirty years of them. \"For next time. There's always a next time.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-studied",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-studied-ditto",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 30
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d4-pick",
+   "name": "The Ditto Colony: Pick One",
+   "group": "Story: Delta Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "ditto-delta",
+    "tint": "#80a0c0",
+    "effect": "none"
+   },
+   "intro": "The ones you found wait in a row, wobbling with hope.",
+   "choices": [
+    {
+     "label": "Pick the Fire one.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "dittos-fire",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The warm one hops into your arms.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-caught",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-caught-ditto",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "ditto-delta-fire"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick the Ice one.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "dittos-ice",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The frosty one leaves a little ring of ice in your palm, and stays.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-caught",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-caught-ditto",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "ditto-delta-ice"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick the Ghost one.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "dittos-ghost",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The one with no shadow is suddenly just there, beside you, as if it always had been.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-caught",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-caught-ditto",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "ditto-delta-ghost"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick the Electric one.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "dittos-electric",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The crackling one climbs your sleeve and makes your hair stand up, and stays.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-caught",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-caught-ditto",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "ditto-delta-electric"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d5-dump",
+   "name": "The Six Cages",
+   "group": "Story: Delta Anomalies",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "muk-delta",
+    "tint": "#605040",
+    "effect": "none"
+   },
+   "intro": "Behind a factory, a dumping ground. A brown Muk sits on a hill of junk, holding six round shapes against its body. In each, something moves.\n\nFactory worker, on a smoke break: \"Don't go near it.\"\nWorker: \"People dump things there. Pokémon too, sometimes. Ones they don't want.\"\nWorker: \"It eats the junk. The Pokémon it keeps. I think it's keeping them safe.\"\nWorker: \"Boss wants it gone. He's bringing in an exterminator Friday.\"",
+   "choices": [
+    {
+     "label": "Open the cages.",
+     "success": {
+      "text": "You climb the junk hill. The Muk watches you come.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cages-opened",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-d5-cage-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go to the boss.",
+     "success": {
+      "text": "Two nodes through the factory, past rows of drums with no labels. At the end, an office.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "cages-factory",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-d5-boss"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You walk on. Friday comes. The exterminator wins. The Pokémon are scattered, and nobody keeps them safe now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cages-left",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You left the Six Cages to the exterminator.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d5-cage-1",
+   "name": "The Six Cages: Cage 1",
+   "group": "Story: Delta Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "muk-delta-bug",
+    "tint": "#706048",
+    "effect": "none"
+   },
+   "intro": "The Muk shifts. One of the round shapes against its body is a bug cage, and something inside it presses a small paw to the bars.",
+   "choices": [
+    {
+     "label": "Open it.",
+     "success": {
+      "text": "The Muk will not give it up easily. It takes on the colour of the cage.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "muk-delta-bug"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "cages-freed",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-d5-cage-2"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d5-cage-2",
+   "name": "The Six Cages: Cage 2",
+   "group": "Story: Delta Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "muk-delta-dark",
+    "tint": "#706048",
+    "effect": "none"
+   },
+   "intro": "The Muk shifts. One of the round shapes against its body is a dark cage, and something inside it presses a small paw to the bars.",
+   "choices": [
+    {
+     "label": "Open it.",
+     "success": {
+      "text": "The Muk will not give it up easily. It takes on the colour of the cage.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "muk-delta-dark"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "cages-freed",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-d5-cage-3"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d5-cage-3",
+   "name": "The Six Cages: Cage 3",
+   "group": "Story: Delta Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "muk-delta-fairy",
+    "tint": "#706048",
+    "effect": "none"
+   },
+   "intro": "The Muk shifts. One of the round shapes against its body is a fairy cage, and something inside it presses a small paw to the bars.",
+   "choices": [
+    {
+     "label": "Open it.",
+     "success": {
+      "text": "The Muk will not give it up easily. It takes on the colour of the cage.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "muk-delta-fairy"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "cages-freed",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-d5-cage-4"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d5-cage-4",
+   "name": "The Six Cages: Cage 4",
+   "group": "Story: Delta Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "muk-delta-fire",
+    "tint": "#706048",
+    "effect": "none"
+   },
+   "intro": "The Muk shifts. One of the round shapes against its body is a fire cage, and something inside it presses a small paw to the bars.",
+   "choices": [
+    {
+     "label": "Open it.",
+     "success": {
+      "text": "The Muk will not give it up easily. It takes on the colour of the cage.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "muk-delta-fire"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "cages-freed",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-d5-cage-5"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d5-cage-5",
+   "name": "The Six Cages: Cage 5",
+   "group": "Story: Delta Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "muk-delta-grass",
+    "tint": "#706048",
+    "effect": "none"
+   },
+   "intro": "The Muk shifts. One of the round shapes against its body is a grass cage, and something inside it presses a small paw to the bars.",
+   "choices": [
+    {
+     "label": "Open it.",
+     "success": {
+      "text": "The Muk will not give it up easily. It takes on the colour of the cage.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "muk-delta-grass"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "cages-freed",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-d5-cage-6"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d5-cage-6",
+   "name": "The Six Cages: Cage 6",
+   "group": "Story: Delta Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "muk-delta-water",
+    "tint": "#706048",
+    "effect": "none"
+   },
+   "intro": "The Muk shifts. One of the round shapes against its body is a water cage, and something inside it presses a small paw to the bars.",
+   "choices": [
+    {
+     "label": "Open it.",
+     "success": {
+      "text": "The Muk will not give it up easily. It takes on the colour of the cage.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "muk-delta-water"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "cages-freed",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-d5-calm"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d5-calm",
+   "name": "The Six Cages: Open",
+   "group": "Story: Delta Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "muk-delta",
+    "tint": "#8a7a58",
+    "effect": "none"
+   },
+   "intro": "Six cages open. Six small Pokémon blink in the light. The Muk goes plain brown and very calm, and it does not stop them leaving. One of them stays by your boot.",
+   "choices": [
+    {
+     "label": "\"Come on, then.\"",
+     "success": {
+      "text": "It comes along.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-studied",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-studied-muk",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [],
+        "types": [
+         "bug",
+         "dark",
+         "fairy",
+         "fire",
+         "grass",
+         "water"
+        ],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go home, little one.\"",
+     "success": {
+      "text": "It looks at you, then runs after the others.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-studied",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-studied-muk",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d5-boss",
+   "name": "The Six Cages: The Owner",
+   "group": "Story: Delta Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#504840",
+    "effect": "none"
+   },
+   "intro": "Factory owner: \"It's a waste site. It's legal. What's the problem?\"\nOwner: \"You want me to stop? Fine. Show me what you'd do with a hundred tons of sludge.\"\nBehind him, on a shelf, a crate with a stencilled red letter on it that is not his company's.",
+   "choices": [
+    {
+     "label": "\"Report you.\"",
+     "success": {
+      "text": "Two nodes to the region office. A week later the Region Report has one line about it: SHUT. Whoever was paying him loses a dump site. The Muk lets them all go itself, and then comes to you, plain and calm.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "cages-reported",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-op-shut",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "delta-caught",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-caught-muk",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "muk-delta"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Pay the clean-up.\"",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 3000
+      }
+     ],
+     "success": {
+      "text": "3000. The dumping stops. The owner keeps his factory. The Muk lets them all go itself, and then comes to you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -3000
+       },
+       {
+        "kind": "flag",
+        "key": "cages-paid",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-caught",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-caught-muk",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "muk-delta"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Fight your guards.\"",
+     "success": {
+      "text": "Three guards come out of the back.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Factory Guards",
+       "size": 3,
+       "types": [
+        "poison",
+        "steel"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "cages-fought",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "delta-caught",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "delta-caught-muk",
+         "amount": 1
+        },
+        {
+         "kind": "join",
+         "species": [
+          "muk-delta"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        }
+       ],
+       "evil": "grunt"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d6-marsh",
+   "name": "The Hot Marsh",
+   "group": "Story: Delta Anomalies",
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "groudon",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-groudon",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The ground under your feet is warm, and getting warmer.",
+     "addChoices": [
+      {
+       "label": "Let the ground answer.",
+       "success": {
+        "text": "The vent opens at once with a sound like a held breath let go. Steam rises for a mile. The Quagsire stand in it with their eyes closed.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "marsh-vent",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "delta-studied",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "delta-studied-wooper",
+          "amount": 1
+         },
+         {
+          "kind": "join",
+          "species": [
+           "wooper-delta"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "sign-groudon",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "own-groudon",
+     "when": [
+      {
+       "kind": "partySpecies",
+       "species": "groudon"
+      }
+     ],
+     "notice": "Your Groudon puts one foot on the ice, and it cracks, and steams.",
+     "addChoices": [
+      {
+       "label": "Let the ground answer.",
+       "success": {
+        "text": "The vent opens at once with a sound like a held breath let go. Steam rises for a mile. The Quagsire stand in it with their eyes closed.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "marsh-vent",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "delta-studied",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "delta-studied-wooper",
+          "amount": 1
+         },
+         {
+          "kind": "join",
+          "species": [
+           "wooper-delta"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "sign-groudon",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.snow_worker_m"
+    ],
+    "pokemon": "quagsire-delta",
+    "tint": "#a05030",
+    "effect": "snow"
+   },
+   "intro": "A marsh in deep cold, the only warm water for miles. Little fires burn on lily pads. Quagsire, coloured like coals, tend them.\n\nA Quagsire looks up at you. It holds out a stick, lit at one end.\nTrapper, up a tree: \"They're trying to keep it warm. The vent underneath is closing up.\"\nTrapper: \"Every year it's colder. This year there'll be ice by the full moon.\"",
+   "choices": [
+    {
+     "label": "Reopen the vent.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ground"
+      }
+     ],
+     "success": {
+      "text": "Your Ground-type digs. Cold-water Pokémon come up through the ice to stop it, and you and the Quagsire hold them off.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [],
+       "types": [
+        "water",
+        "ice"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "marsh-vent",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "delta-studied",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "delta-studied-wooper",
+         "amount": 1
+        },
+        {
+         "kind": "join",
+         "species": [
+          "wooper-delta"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take the Wooper somewhere warm.",
+     "success": {
+      "text": "You carry the little ones out, wrapped in your coat. They live. Behind you, the fires go out one by one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "marsh-moved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-caught",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-caught-wooper",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "wooper-delta"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help tend the fires.",
+     "success": {
+      "text": "You spend the rest with them, feeding sticks to the little fires all night. It buys the marsh one more year. The trapper says you could come back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "marsh-tended",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d6-back",
+   "name": "The Hot Marsh: Back Again",
+   "group": "Story: Delta Anomalies",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "marsh-tended",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "marsh-vent",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.snow_worker_m"
+    ],
+    "pokemon": "wooper-delta",
+    "tint": "#b06040",
+    "effect": "snow"
+   },
+   "intro": "The Hot Marsh, a region later. The fires you tended are still burning. The vent is half-open already: the Quagsire have been digging all year.",
+   "choices": [
+    {
+     "label": "Finish the work.",
+     "success": {
+      "text": "It takes an afternoon and every stick on the marsh. Then the steam comes up, and the Quagsire sit in it, and one small Wooper climbs into your bag and will not get out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "marsh-vent",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-studied",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-studied-wooper",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "wooper-delta"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d7-crossing-1",
+   "name": "The Sky Whale: Crossing 1",
+   "group": "Story: Delta Anomalies",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.bird_keeper_m"
+    ],
+    "pokemon": "wailord-delta",
+    "tint": "#a0c0e0",
+    "effect": "none"
+   },
+   "intro": "Every Pokémon on the route looks up at once. A whale crosses the sky, icy, slow, the size of a town.\n\nWeather watcher, with binoculars: \"It was a Wailmer. Twenty years ago. A storm took it up and it never came down.\"\nWatcher: \"It crosses three times a year. It sings. Nobody answers.\"",
+   "choices": [
+    {
+     "label": "Signal it with a Flying-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "Your Flying-type rises as high as it can and calls. The whale turns its head.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "whale-signal",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "whale-seen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Signal it with a sound.",
+     "requires": [
+      {
+       "kind": "partyMoveFlag",
+       "flag": "sound"
+      }
+     ],
+     "success": {
+      "text": "A sound move, as loud as you can make it. Far above, the whale turns its head.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "whale-signal",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "whale-seen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Signal it with a light.",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "flash"
+      }
+     ],
+     "success": {
+      "text": "Flash, three times, from the hilltop. The whale turns its head.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "whale-signal",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "whale-seen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ignore it.",
+     "success": {
+      "text": "It passes over. The song fades.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "whale-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d7-crossing-2",
+   "name": "The Sky Whale: Crossing 2",
+   "group": "Story: Delta Anomalies",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "whale-seen",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.bird_keeper_m"
+    ],
+    "pokemon": "wailord-delta",
+    "tint": "#a0c0e0",
+    "effect": "none"
+   },
+   "intro": "The shadow again, on a clear day. The whale crosses for the second time, singing. The watcher is on the hill with his binoculars.",
+   "choices": [
+    {
+     "label": "Signal it with a Flying-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "Your Flying-type rises as high as it can and calls. The whale turns its head.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "whale-signal",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Signal it with a sound.",
+     "requires": [
+      {
+       "kind": "partyMoveFlag",
+       "flag": "sound"
+      }
+     ],
+     "success": {
+      "text": "A sound move, as loud as you can make it. Far above, the whale turns its head.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "whale-signal",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Signal it with a light.",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "flash"
+      }
+     ],
+     "success": {
+      "text": "Flash, three times, from the hilltop. The whale turns its head.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "whale-signal",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ignore it.",
+     "success": {
+      "text": "It passes over. The song fades.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d7-crossing-3",
+   "name": "The Sky Whale: Crossing 3",
+   "group": "Story: Delta Anomalies",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "whale-seen",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.bird_keeper_m"
+    ],
+    "pokemon": "wailord-delta",
+    "tint": "#a0c0e0",
+    "effect": "none"
+   },
+   "intro": "The third crossing. The whale is lower this time. You can hear the song in your teeth.",
+   "choices": [
+    {
+     "label": "Signal it with a Flying-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "whale-signal",
+         "atLeast": 2,
+         "atMost": 99
+        }
+       ],
+       "text": "Your Flying-type rises as high as it can and calls. The whale turns its head. It turns its whole great body toward you. Then, slowly, it comes down.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "whale-signal",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-d7-check"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Flying-type rises as high as it can and calls. The whale turns its head.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "whale-signal",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Signal it with a sound.",
+     "requires": [
+      {
+       "kind": "partyMoveFlag",
+       "flag": "sound"
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "whale-signal",
+         "atLeast": 2,
+         "atMost": 99
+        }
+       ],
+       "text": "A sound move, as loud as you can make it. Far above, the whale turns its head. It turns its whole great body toward you. Then, slowly, it comes down.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "whale-signal",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-d7-check"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "A sound move, as loud as you can make it. Far above, the whale turns its head.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "whale-signal",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Signal it with a light.",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "flash"
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "whale-signal",
+         "atLeast": 2,
+         "atMost": 99
+        }
+       ],
+       "text": "Flash, three times, from the hilltop. The whale turns its head. It turns its whole great body toward you. Then, slowly, it comes down.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "whale-signal",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-d7-check"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Flash, three times, from the hilltop. The whale turns its head.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "whale-signal",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ignore it.",
+     "success": {
+      "text": "It passes over, singing. Nobody answers.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d7-check",
+   "name": "The Sky Whale: Down",
+   "group": "Story: Delta Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.bird_keeper_m"
+    ],
+    "pokemon": "wailord-delta",
+    "tint": "#c0e0f0",
+    "effect": "snow"
+   },
+   "intro": "It comes down for the first time in its life, onto a frozen lake. It lies there, frightened of its own weight. The ice groans.",
+   "choices": [
+    {
+     "label": "Stay with it.",
+     "success": {
+      "text": "A long night on the ice. You talk to it. Your Pokémon lean against its side for warmth. At dawn it lifts off again, slowly, and sings back to you all the way up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "whale-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-studied",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-studied-wailord",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "sign-lugia",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You stayed the night with the Sky Whale. At dawn it sang back.",
+        "importance": 85
+       }
+      ]
+     }
+    },
+    {
+     "label": "Catch it.",
+     "success": {
+      "text": "It joins you. It cannot fly again. It is heavy and sad, and it looks up, often.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "whale-caught",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-caught",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-caught-wailord",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "wailord-delta"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-lugia",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call the Wailmer pod.",
+     "success": {
+      "text": "Two nodes to the coast. A pod of Wailmer comes up the river, blowing spray, and the whale sees its own kind for the first time. When they go, one small icy Wailmer stays behind with you.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "whale-pod",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-studied",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-studied-wailord",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "wailmer-delta"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-lugia",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d8-cloud",
+   "name": "The Storm-Kissed Pikachu",
+   "group": "Story: Delta Anomalies",
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "starter",
+     "when": [
+      {
+       "kind": "starter",
+       "species": "pikachu"
+      }
+     ],
+     "notice": "It stares at your Pikachu. Your Pikachu stares back. It comes down at once, to look at the other one.",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Let them meet.",
+       "success": {
+        "text": "It lands, sniffs your Pikachu nose to nose, and does not go back up.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "co-d8-land"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "pikachu-delta",
+    "tint": "#e0a0c0",
+    "effect": "rain"
+   },
+   "intro": "Below a thunderhead, a Pikachu peeks over the edge of a cloud. It is pink and white. It has never touched the ground.\n\nIt drops a pink spark. It lands at your feet and fizzes.\nHiker: \"That's been up there all week. Every time someone looks up, it hides.\"\nHiker: \"I left it an apple. It took it. Then it threw the core at me.\"",
+   "choices": [
+    {
+     "label": "Coax it down.",
+     "success": {
+      "text": "You sit very still and do not look up. When you rest, it will come a little lower.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stormpika",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fly up to it.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "Your Flying-type carries you up into the cloud. It panics and flees to another cloud, and is gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stormpika-fled",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw it an apple.",
+     "success": {
+      "text": "It takes it. It throws the core at you. Then it comes one cloud closer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stormpika",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it to its cloud.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d8-rest-1",
+   "name": "The Storm-Kissed Pikachu: Rest 1",
+   "group": "Story: Delta Anomalies",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "stormpika",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "flag",
+     "key": "stormpika-down",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pikachu-delta",
+    "tint": "#e0a0c0",
+    "effect": "rain"
+   },
+   "intro": "You rest under the thunderhead. A pink spark lands on your blanket.",
+   "choices": [
+    {
+     "label": "Rest quietly.",
+     "success": {
+      "text": "It watches you sleep. It does not hide.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stormpika",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d8-rest-2",
+   "name": "The Storm-Kissed Pikachu: Rest 2",
+   "group": "Story: Delta Anomalies",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "stormpika",
+     "atLeast": 2,
+     "atMost": 2
+    },
+    {
+     "kind": "flag",
+     "key": "stormpika-down",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pikachu-delta",
+    "tint": "#e0a0c0",
+    "effect": "rain"
+   },
+   "intro": "Another rest. It is lower now, sitting on the very bottom of its cloud with its feet hanging over.",
+   "choices": [
+    {
+     "label": "Rest quietly.",
+     "success": {
+      "text": "It comes one cloud lower. You can see its whiskers.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stormpika",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d8-land",
+   "name": "The Storm-Kissed Pikachu: The Ground",
+   "group": "Story: Delta Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "pikachu-delta",
+    "tint": "#f0c0d0",
+    "effect": "none"
+   },
+   "intro": "It lands. It looks around. Grass. It pats the grass, very carefully, with one paw.",
+   "choices": [
+    {
+     "label": "\"Stay with me.\"",
+     "success": {
+      "text": "It stays. It climbs onto your shoulder and stays there, fizzing pink.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stormpika-down",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-caught",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-caught-pikachu",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "pikachu-delta"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Storm-Kissed Pikachu came down from its cloud to stay with you.",
+        "importance": 85
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You can go back.\"",
+     "success": {
+      "text": "It looks at you a long time. Then it goes back up. You see it, now and then, on the highest cloud, looking down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stormpika-down",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "stormpika-free",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-studied",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-studied-pikachu",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-d8-rest-3",
+   "name": "The Storm-Kissed Pikachu: Rest 3",
+   "group": "Story: Delta Anomalies",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "stormpika",
+     "atLeast": 3,
+     "atMost": 3
+    },
+    {
+     "kind": "flag",
+     "key": "stormpika-down",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pikachu-delta",
+    "tint": "#f0c0d0",
+    "effect": "none"
+   },
+   "intro": "The third rest. It lands. It looks around.",
+   "choices": [
+    {
+     "label": "\"Stay with me.\"",
+     "success": {
+      "text": "It stays. It climbs onto your shoulder and stays there, fizzing pink.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stormpika-down",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-caught",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-caught-pikachu",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "pikachu-delta"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Storm-Kissed Pikachu came down from its cloud to stay with you.",
+        "importance": 85
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You can go back.\"",
+     "success": {
+      "text": "It looks at you a long time. Then it goes back up. You see it, now and then, on the highest cloud, looking down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stormpika-down",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "stormpika-free",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-studied",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-studied-pikachu",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

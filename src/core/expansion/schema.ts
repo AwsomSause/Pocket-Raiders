@@ -49,10 +49,10 @@ export const ExpansionSettingsSchema = z.object({
   doomEpilogue: z.boolean().default(false),
   /** Beta 0.7 L3 Rewinds (test switch until the blessings grant them): the Time Keeper's rewind in every run, once per stage. Read at run start. */
   rewinds: z.boolean().default(false),
-  /** Legendary Blessings (Beta 0.7): each run opens with one Legendary's blessing. Off until the 0.7 balance pass. */
-  blessingsEnabled: z.boolean().default(false),
-  /** Beta 0.7 U1 Ultra Beast Incursions: off until the 0.7 balance pass. Read when a run starts. */
-  ultraBeastsEnabled: z.boolean().default(false),
+  /** Legendary Blessings (Beta 0.7): each run opens with one Legendary's blessing. On by default (Kice, 2026-11-15, catalog overhaul legends). */
+  blessingsEnabled: z.boolean().default(true),
+  /** Beta 0.7 U1 Ultra Beast Incursions: on by default (Kice, 2026-11-15, catalog overhaul legends). Read when a run starts. */
+  ultraBeastsEnabled: z.boolean().default(true),
   /** Beta 0.7 S1 Second Chance: the percent chance a run-ending loss is turned into a revive, once per run (0 = off). Read when a run starts. */
   secondChancePct: z.number().min(0).max(100).default(5),
   /** H1 heated-moment moves (BALANCE 6): the Hyper slot move needs the conditions, a 6% roll and the per-region/per-run caps. Read when a run starts. */

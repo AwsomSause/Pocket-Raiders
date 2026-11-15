@@ -1,0 +1,1283 @@
+{
+ "category": "legends",
+ "note": "Run flags the legends questlines set (key -> what sets it, who reads it). Same-run only.",
+ "flags": [
+  {
+   "key": "calmed-alpha",
+   "about": "every calmed Alpha (engine adds it on a full Calm bar; out-of-battle calms in A5-A11) -> other categories"
+  },
+  {
+   "key": "tide-sailed",
+   "about": "A2 sail"
+  },
+  {
+   "key": "tide-lamp",
+   "about": "A2 lamp"
+  },
+  {
+   "key": "tide-letters",
+   "about": "A2 keeper's chest -> A2 lamp room"
+  },
+  {
+   "key": "tide-calmed",
+   "about": "A2 calm"
+  },
+  {
+   "key": "tide-beaten",
+   "about": "A2 beaten (region stamp) -> co-tide-beach"
+  },
+  {
+   "key": "tide-sat",
+   "about": "A2 beach"
+  },
+  {
+   "key": "frost-woke",
+   "about": "A3 beaten"
+  },
+  {
+   "key": "frost-warmed",
+   "about": "A3 keep warm"
+  },
+  {
+   "key": "frost-calmed",
+   "about": "A3 calm"
+  },
+  {
+   "key": "hush-crossed",
+   "about": "A4 moor crossed -> A4 Sit"
+  },
+  {
+   "key": "hush-sat",
+   "about": "A4 owl joins"
+  },
+  {
+   "key": "hush-fought",
+   "about": "A4 fight"
+  },
+  {
+   "key": "prince-signs",
+   "about": "READ: AN36 (anime), five signs learned"
+  },
+  {
+   "key": "orchard-full",
+   "about": "A5 harvest kept"
+  },
+  {
+   "key": "orchard-greed",
+   "about": "A5 greed"
+  },
+  {
+   "key": "orchard-settled",
+   "about": "A5 calmed alone"
+  },
+  {
+   "key": "orchard-fought",
+   "about": "A5 beaten"
+  },
+  {
+   "key": "quarry-guarded",
+   "about": "A6"
+  },
+  {
+   "key": "quarry-shift",
+   "about": "A6"
+  },
+  {
+   "key": "quarry-leader-friend",
+   "about": "A6 shift"
+  },
+  {
+   "key": "quarry-held",
+   "about": "A6 poacher beaten"
+  },
+  {
+   "key": "quarry-reserve",
+   "about": "A6 calm"
+  },
+  {
+   "key": "quarry-poachers-escaped",
+   "about": "A6 (region stamp) -> co-quarry-poachers-return"
+  },
+  {
+   "key": "quarry-poachers-stopped",
+   "about": "A6 return"
+  },
+  {
+   "key": "watcher-mended",
+   "about": "A7 fix"
+  },
+  {
+   "key": "watcher-beaten",
+   "about": "A7 fight"
+  },
+  {
+   "key": "watcher-driven",
+   "about": "A7 off"
+  },
+  {
+   "key": "watcher-taxi",
+   "about": "A7 rides left (3) -> co-watcher-taxi"
+  },
+  {
+   "key": "sleeper-seen",
+   "about": "A8"
+  },
+  {
+   "key": "sleeper-shade",
+   "about": "A8"
+  },
+  {
+   "key": "sleeper-forced",
+   "about": "A8"
+  },
+  {
+   "key": "choir-line-1",
+   "about": "A9"
+  },
+  {
+   "key": "choir-line-2",
+   "about": "A9"
+  },
+  {
+   "key": "choir-cut",
+   "about": "A9 lines cut"
+  },
+  {
+   "key": "choir-tripped",
+   "about": "A9 beaten (region stamp)"
+  },
+  {
+   "key": "choir-company",
+   "about": "A9"
+  },
+  {
+   "key": "intel",
+   "about": "A9 (evil-story owns it)"
+  },
+  {
+   "key": "guest-found",
+   "about": "A10"
+  },
+  {
+   "key": "guest-lost",
+   "about": "A10"
+  },
+  {
+   "key": "guest-fought",
+   "about": "A10"
+  },
+  {
+   "key": "guest-applauded",
+   "about": "A10"
+  },
+  {
+   "key": "guest-heckles",
+   "about": "A10"
+  },
+  {
+   "key": "lantern-read",
+   "about": "A11"
+  },
+  {
+   "key": "lantern-mason",
+   "about": "A11"
+  },
+  {
+   "key": "lantern-fought",
+   "about": "A11"
+  },
+  {
+   "key": "mega-meter",
+   "about": "the region Anomaly meter (0-5): unresolved Anomalies raise it, resolving lowers it; reset to 0 on entering a region (core/legends/signs.ts)"
+  },
+  {
+   "key": "mega-meter-region",
+   "about": "which region mega-meter belongs to (core/legends/signs.ts)"
+  },
+  {
+   "key": "mega-resolved",
+   "about": "every resolved Mega Anomaly M1-M6 -> other categories"
+  },
+  {
+   "key": "absol-joined",
+   "about": "M1 Absol came with you"
+  },
+  {
+   "key": "absol-left",
+   "about": "M1 Absol left"
+  },
+  {
+   "key": "absol-stone",
+   "about": "M1 broke the stone"
+  },
+  {
+   "key": "absol-free",
+   "about": "M1 grave"
+  },
+  {
+   "key": "absol-home",
+   "about": "M1 grave: laid to rest"
+  },
+  {
+   "key": "flare-farmer-helped",
+   "about": "M2 farm"
+  },
+  {
+   "key": "flare-bribed",
+   "about": "M2 took the bribe -> M2 seam"
+  },
+  {
+   "key": "flare-stones-taken",
+   "about": "M2 stones"
+  },
+  {
+   "key": "flare-mine-entered",
+   "about": "M2 stage 2 -> co-m2-mine"
+  },
+  {
+   "key": "flare-mine-cleared",
+   "about": "M2 mine -> co-m2-seam"
+  },
+  {
+   "key": "flare-mine-flooded",
+   "about": "M2 mine"
+  },
+  {
+   "key": "flare-mine-running",
+   "about": "M2 left running"
+  },
+  {
+   "key": "flare-mine-shut",
+   "about": "M2 seam: stones returned"
+  },
+  {
+   "key": "twins-cutter",
+   "about": "M3 to the stone-cutter"
+  },
+  {
+   "key": "twins-both",
+   "about": "M3 both fixed -> co-m3-whole"
+  },
+  {
+   "key": "twins-one",
+   "about": "M3 one fixed -> co-m3-scorched"
+  },
+  {
+   "key": "twins-chose",
+   "about": "M3"
+  },
+  {
+   "key": "twins-reunited",
+   "about": "M3 your Charizard calmed it"
+  },
+  {
+   "key": "twins-scorched-beaten",
+   "about": "M3"
+  },
+  {
+   "key": "mirror-started",
+   "about": "M4 rooms"
+  },
+  {
+   "key": "mirror-whole",
+   "about": "M4 merged"
+  },
+  {
+   "key": "mirror-split",
+   "about": "M4 split"
+  },
+  {
+   "key": "tatsu-contest",
+   "about": "M5"
+  },
+  {
+   "key": "tatsu-fed",
+   "about": "M5"
+  },
+  {
+   "key": "tatsu-tie",
+   "about": "M5 tie -> co-m5-ride"
+  },
+  {
+   "key": "tatsu-winner",
+   "about": "M5"
+  },
+  {
+   "key": "floette-followed",
+   "about": "M6"
+  },
+  {
+   "key": "floette-hidden",
+   "about": "M6"
+  },
+  {
+   "key": "floette-saved",
+   "about": "M6 reactor shut"
+  },
+  {
+   "key": "floette-pale",
+   "about": "M6 Floette decided"
+  },
+  {
+   "key": "old-lantern",
+   "about": "M1"
+  },
+  {
+   "key": "delta-journal",
+   "about": "D1 Linden gave the Delta Journal -> clues"
+  },
+  {
+   "key": "delta-clue",
+   "about": "each Delta clue (3 open the habitat, which spends them)"
+  },
+  {
+   "key": "delta-studied",
+   "about": "each Delta left in its home (D1 ladder: 3 named, 5 Delta Lens)"
+  },
+  {
+   "key": "delta-caught",
+   "about": "each Delta taken (D1: 2+ with none studied, Linden stops coming)"
+  },
+  {
+   "key": "delta-studied-<code>",
+   "about": "which Delta was studied"
+  },
+  {
+   "key": "delta-caught-<code>",
+   "about": "which Delta was taken"
+  },
+  {
+   "key": "delta-sampled-<code>",
+   "about": "D1 sample to the lab"
+  },
+  {
+   "key": "delta-lens",
+   "about": "D1 Delta Lens given"
+  },
+  {
+   "key": "delta-named",
+   "about": "D1 variety named for you"
+  },
+  {
+   "key": "ghostdragon-carried",
+   "about": "D2 carrying the ember"
+  },
+  {
+   "key": "ghostdragon-steps",
+   "about": "D2 beat 2 passed"
+  },
+  {
+   "key": "ghostdragon-lost",
+   "about": "D2 ember let go"
+  },
+  {
+   "key": "ghostdragon-sat",
+   "about": "D2 sat with it"
+  },
+  {
+   "key": "ghostdragon-forced",
+   "about": "D2 caught by force (no stone)"
+  },
+  {
+   "key": "seasons-watch",
+   "about": "D3 watching the hill"
+  },
+  {
+   "key": "seasons-visit",
+   "about": "D3 seasons visited (4 wakes the fifth)"
+  },
+  {
+   "key": "seasons-visit-<form>",
+   "about": "D3 visited that season"
+  },
+  {
+   "key": "seasons-<form>",
+   "about": "D3 caught that form"
+  },
+  {
+   "key": "seasons-caught",
+   "about": "D3 took a seasonal one (the fifth stays asleep)"
+  },
+  {
+   "key": "seasons-gran",
+   "about": "D3 asked the gran"
+  },
+  {
+   "key": "dittos-looking",
+   "about": "D4 started"
+  },
+  {
+   "key": "dittos-round",
+   "about": "D4 beat 2"
+  },
+  {
+   "key": "dittos-ended",
+   "about": "D4 beat 3"
+  },
+  {
+   "key": "dittos-found",
+   "about": "D4 finds"
+  },
+  {
+   "key": "dittos-missed",
+   "about": "D4 wrong guesses"
+  },
+  {
+   "key": "dittos-<type>",
+   "about": "D4 found that type"
+  },
+  {
+   "key": "cages-opened",
+   "about": "D5"
+  },
+  {
+   "key": "cages-freed",
+   "about": "D5 cage fights won"
+  },
+  {
+   "key": "cages-factory",
+   "about": "D5 to the boss"
+  },
+  {
+   "key": "cages-left",
+   "about": "D5 left"
+  },
+  {
+   "key": "cages-reported",
+   "about": "D5"
+  },
+  {
+   "key": "cages-paid",
+   "about": "D5"
+  },
+  {
+   "key": "cages-fought",
+   "about": "D5"
+  },
+  {
+   "key": "evil-op-shut",
+   "about": "D5 report shut an evil-team dump site -> evil team reads"
+  },
+  {
+   "key": "marsh-vent",
+   "about": "D6 vent reopened"
+  },
+  {
+   "key": "marsh-moved",
+   "about": "D6"
+  },
+  {
+   "key": "marsh-tended",
+   "about": "D6 tended (stamped region; back a region later)"
+  },
+  {
+   "key": "whale-seen",
+   "about": "D7 first crossing"
+  },
+  {
+   "key": "whale-signal",
+   "about": "D7 signals (3 bring it down)"
+  },
+  {
+   "key": "whale-stayed",
+   "about": "D7"
+  },
+  {
+   "key": "whale-caught",
+   "about": "D7"
+  },
+  {
+   "key": "whale-pod",
+   "about": "D7"
+  },
+  {
+   "key": "stormpika",
+   "about": "D8 coax steps (3 lands it)"
+  },
+  {
+   "key": "stormpika-down",
+   "about": "D8 decided"
+  },
+  {
+   "key": "stormpika-free",
+   "about": "D8 sent back up"
+  },
+  {
+   "key": "stormpika-fled",
+   "about": "D8 flew up"
+  },
+  {
+   "key": "trials-met",
+   "about": "Z1 first Trial seen (the Z-Ring appears)"
+  },
+  {
+   "key": "trials-passed",
+   "about": "Z1 each Trial passed (3 opens the Grand Trial)"
+  },
+  {
+   "key": "trials-calmed",
+   "about": "Z1 each Totem calmed (3: the Kahuna does not battle)"
+  },
+  {
+   "key": "trial-<type>",
+   "about": "Z1 that Trial passed"
+  },
+  {
+   "key": "trial-<type>-started",
+   "about": "Z1"
+  },
+  {
+   "key": "trial-<type>-asked",
+   "about": "Z1 asked the Captain (calm room)"
+  },
+  {
+   "key": "grand-trial",
+   "about": "Z1 Grand Trial passed"
+  },
+  {
+   "key": "sigil-lit",
+   "about": "Z2 first sigil lit (the pool can appear)"
+  },
+  {
+   "key": "sigil-pairs",
+   "about": "Z2 pairs lit"
+  },
+  {
+   "key": "sigil-passed",
+   "about": "Z2 Z-form test passed"
+  },
+  {
+   "key": "sigils-held",
+   "about": "Z2 a pair of sigils kept (Z3/Z4/Z6 spend one for a Z-Mega)"
+  },
+  {
+   "key": "oriel-told",
+   "about": "Z2 Tell me more"
+  },
+  {
+   "key": "sigil-rubbing",
+   "about": "Z2 Oriel's free pair"
+  },
+  {
+   "key": "coldghost-spring",
+   "about": "Z3"
+  },
+  {
+   "key": "coldghost-friend",
+   "about": "Z3"
+  },
+  {
+   "key": "coldghost-stayed",
+   "about": "Z3"
+  },
+  {
+   "key": "spoon-night",
+   "about": "Z4 nights"
+  },
+  {
+   "key": "spoon-followed",
+   "about": "Z4"
+  },
+  {
+   "key": "spoon-grabbed",
+   "about": "Z4"
+  },
+  {
+   "key": "spoon-left",
+   "about": "Z4 three bent spoons"
+  },
+  {
+   "key": "spoon-kept",
+   "about": "Z4"
+  },
+  {
+   "key": "spoon-taken",
+   "about": "Z4"
+  },
+  {
+   "key": "spoon-straight",
+   "about": "Z4 straight spoon"
+  },
+  {
+   "key": "snorlax-sparred",
+   "about": "Z6"
+  },
+  {
+   "key": "snorlax-spar",
+   "about": "Z6 spars done"
+  },
+  {
+   "key": "snorlax-beat-it",
+   "about": "Z6"
+  },
+  {
+   "key": "snorlax-left",
+   "about": "Z6 left (stamped; Alpha a region later)"
+  },
+  {
+   "key": "snorlax-calmed",
+   "about": "Z6 Alpha calmed"
+  },
+  {
+   "key": "doran-friend",
+   "about": "Z6 Doran's friendship -> Final Reunion"
+  },
+  {
+   "key": "alphayena-test",
+   "about": "Z7"
+  },
+  {
+   "key": "alphayena-round",
+   "about": "Z7 rounds passed"
+  },
+  {
+   "key": "alphayena-hunt",
+   "about": "Z7"
+  },
+  {
+   "key": "alphayena-hold",
+   "about": "Z7"
+  },
+  {
+   "key": "alphayena-howl",
+   "about": "Z7"
+  },
+  {
+   "key": "alphayena-bowed",
+   "about": "Z7 bowed"
+  },
+  {
+   "key": "alphayena-respect",
+   "about": "Z7"
+  },
+  {
+   "key": "alphayena-prey",
+   "about": "Z7 marked as prey"
+  },
+  {
+   "key": "alphayena-left",
+   "about": "Z7 backed away"
+  },
+  {
+   "key": "fed-poochyena",
+   "about": "read by Z7 (set by whoever feeds the Starving Poochyena)"
+  },
+  {
+   "key": "noble-beaten",
+   "about": "read by Z7 (A1, families-c: a Noble beaten, not calmed)"
+  },
+  {
+   "key": "blessing-articuno",
+   "about": "Legendary questline (co-legends-5)"
+  },
+  {
+   "key": "blessing-zapdos",
+   "about": "Legendary questline (co-legends-5)"
+  },
+  {
+   "key": "blessing-moltres",
+   "about": "Legendary questline (co-legends-5)"
+  },
+  {
+   "key": "birds-trial-articuno",
+   "about": "L2 questline (co-legends-5)"
+  },
+  {
+   "key": "birds-failed-articuno",
+   "about": "L2 questline (co-legends-5)"
+  },
+  {
+   "key": "birds-seen",
+   "about": "L2 questline (co-legends-5)"
+  },
+  {
+   "key": "birds-trial-zapdos",
+   "about": "L2 questline (co-legends-5)"
+  },
+  {
+   "key": "birds-failed-zapdos",
+   "about": "L2 questline (co-legends-5)"
+  },
+  {
+   "key": "birds-trial-moltres",
+   "about": "L2 questline (co-legends-5)"
+  },
+  {
+   "key": "birds-failed-moltres",
+   "about": "L2 questline (co-legends-5)"
+  },
+  {
+   "key": "birds-passed",
+   "about": "L2 questline (co-legends-5)"
+  },
+  {
+   "key": "zapdos-strikes",
+   "about": "L2 questline (co-legends-5)"
+  },
+  {
+   "key": "moltres-gusts",
+   "about": "L2 questline (co-legends-5)"
+  },
+  {
+   "key": "blessing-influence",
+   "about": "Legendary questline (co-legends-5)"
+  },
+  {
+   "key": "articuno-offered",
+   "about": "L2 questline (co-legends-5)"
+  },
+  {
+   "key": "articuno-beaten",
+   "about": "L2 questline (co-legends-5)"
+  },
+  {
+   "key": "zapdos-offered",
+   "about": "L2 questline (co-legends-5)"
+  },
+  {
+   "key": "zapdos-beaten",
+   "about": "L2 questline (co-legends-5)"
+  },
+  {
+   "key": "moltres-offered",
+   "about": "L2 questline (co-legends-5)"
+  },
+  {
+   "key": "moltres-beaten",
+   "about": "L2 questline (co-legends-5)"
+  },
+  {
+   "key": "birds-jealous",
+   "about": "L2 questline (co-legends-5)"
+  },
+  {
+   "key": "birds-jealous-beaten",
+   "about": "L2 questline (co-legends-5)"
+  },
+  {
+   "key": "hooh-feather",
+   "about": "L3 questline (co-legends-5)"
+  },
+  {
+   "key": "hooh-helped",
+   "about": "L3 questline (co-legends-5)"
+  },
+  {
+   "key": "hooh-helped-1",
+   "about": "L3 questline (co-legends-5)"
+  },
+  {
+   "key": "hooh-helped-2",
+   "about": "L3 questline (co-legends-5)"
+  },
+  {
+   "key": "hooh-helped-3",
+   "about": "L3 questline (co-legends-5)"
+  },
+  {
+   "key": "hooh-ended",
+   "about": "L3 questline (co-legends-5)"
+  },
+  {
+   "key": "blessing-ho-oh",
+   "about": "Legendary questline (co-legends-5)"
+  },
+  {
+   "key": "ho-oh-offered",
+   "about": "Legendary questline (co-legends-5)"
+  },
+  {
+   "key": "hooh-beaten",
+   "about": "L3 questline (co-legends-5)"
+  },
+  {
+   "key": "hooh-thanked",
+   "about": "L3 questline (co-legends-5)"
+  },
+  {
+   "key": "lugia-started",
+   "about": "L4 questline (co-legends-5)"
+  },
+  {
+   "key": "lugia-fragments",
+   "about": "L4 questline (co-legends-5)"
+  },
+  {
+   "key": "blessing-lugia",
+   "about": "Legendary questline (co-legends-5)"
+  },
+  {
+   "key": "lugia-offered",
+   "about": "L4 questline (co-legends-5)"
+  },
+  {
+   "key": "lugia-honest",
+   "about": "L4 questline (co-legends-5)"
+  },
+  {
+   "key": "lugia-beaten",
+   "about": "L4 questline (co-legends-5)"
+  },
+  {
+   "key": "honest-lied",
+   "about": "L4 questline (co-legends-5)"
+  },
+  {
+   "key": "mewtwo-honest",
+   "about": "L5 questline (co-legends-5)"
+  },
+  {
+   "key": "mewtwo-started",
+   "about": "L5 questline (co-legends-5)"
+  },
+  {
+   "key": "mewtwo-answered",
+   "about": "L5 questline (co-legends-5)"
+  },
+  {
+   "key": "mewtwo-beaten",
+   "about": "L5 questline (co-legends-5)"
+  },
+  {
+   "key": "mewtwo-peace",
+   "about": "L5 questline (co-legends-5)"
+  },
+  {
+   "key": "weather-started",
+   "about": "L6 questline (co-legends-5)"
+  },
+  {
+   "key": "weather-done-aqua",
+   "about": "L6 questline (co-legends-5)"
+  },
+  {
+   "key": "weather-orb-aqua",
+   "about": "L6 questline (co-legends-5)"
+  },
+  {
+   "key": "weather-heard-aqua",
+   "about": "L6 questline (co-legends-5)"
+  },
+  {
+   "key": "weather-done-magma",
+   "about": "L6 questline (co-legends-5)"
+  },
+  {
+   "key": "weather-orb-magma",
+   "about": "L6 questline (co-legends-5)"
+  },
+  {
+   "key": "weather-heard-magma",
+   "about": "L6 questline (co-legends-5)"
+  },
+  {
+   "key": "pillar-tried",
+   "about": "L6/L9 questline (co-legends-5)"
+  },
+  {
+   "key": "pillar-climbed",
+   "about": "L6/L9 questline (co-legends-5)"
+  },
+  {
+   "key": "weather-ended",
+   "about": "L6 questline (co-legends-5)"
+  },
+  {
+   "key": "kyogre-beaten",
+   "about": "L6 questline (co-legends-5)"
+  },
+  {
+   "key": "kyogre-calmed",
+   "about": "L6 questline (co-legends-5)"
+  },
+  {
+   "key": "weather-calmed",
+   "about": "L6 questline (co-legends-5)"
+  },
+  {
+   "key": "groudon-beaten",
+   "about": "L6 questline (co-legends-5)"
+  },
+  {
+   "key": "groudon-calmed",
+   "about": "L6 questline (co-legends-5)"
+  },
+  {
+   "key": "rayquaza-beaten",
+   "about": "L6 questline (co-legends-5)"
+  },
+  {
+   "key": "eon-started",
+   "about": "L7 questline (co-legends-5)"
+  },
+  {
+   "key": "eon-lenses",
+   "about": "L7 questline (co-legends-5)"
+  },
+  {
+   "key": "blessing-eon",
+   "about": "Legendary questline (co-legends-5)"
+  },
+  {
+   "key": "eon-both-lived",
+   "about": "L7 questline (co-legends-5)"
+  },
+  {
+   "key": "eon-latios-gone",
+   "about": "L7 questline (co-legends-5)"
+  },
+  {
+   "key": "regi-keystones",
+   "about": "L8 questline (co-legends-5)"
+  },
+  {
+   "key": "regi-regirock",
+   "about": "L8 questline (co-legends-5)"
+  },
+  {
+   "key": "regi-forced",
+   "about": "L8 questline (co-legends-5)"
+  },
+  {
+   "key": "regi-regice",
+   "about": "L8 questline (co-legends-5)"
+  },
+  {
+   "key": "regi-registeel",
+   "about": "L8 questline (co-legends-5)"
+  },
+  {
+   "key": "regi-regieleki",
+   "about": "L8 questline (co-legends-5)"
+  },
+  {
+   "key": "regi-regidrago",
+   "about": "L8 questline (co-legends-5)"
+  },
+  {
+   "key": "regigigas-done",
+   "about": "L8 questline (co-legends-5)"
+  },
+  {
+   "key": "regigigas-beaten",
+   "about": "L8 questline (co-legends-5)"
+  },
+  {
+   "key": "blessing-regigigas",
+   "about": "Legendary questline (co-legends-5)"
+  },
+  {
+   "key": "regigigas-sleeps",
+   "about": "L8 questline (co-legends-5)"
+  },
+  {
+   "key": "colossus-rite",
+   "about": "L8 questline (co-legends-5)"
+  },
+  {
+   "key": "lake-uxie",
+   "about": "L9 questline (co-legends-6)"
+  },
+  {
+   "key": "lake-done-1",
+   "about": "L9 questline (co-legends-6)"
+  },
+  {
+   "key": "lake-uxie-lie",
+   "about": "L9 questline (co-legends-6)"
+  },
+  {
+   "key": "lake-done-2",
+   "about": "L9 questline (co-legends-6)"
+  },
+  {
+   "key": "lake-mesprit",
+   "about": "L9 questline (co-legends-6)"
+  },
+  {
+   "key": "lake-done-3",
+   "about": "L9 questline (co-legends-6)"
+  },
+  {
+   "key": "lake-azelf",
+   "about": "L9 questline (co-legends-6)"
+  },
+  {
+   "key": "pillar-done",
+   "about": "L6/L9 questline (co-legends-6)"
+  },
+  {
+   "key": "blessing-dialga",
+   "about": "Legendary questline (co-legends-6)"
+  },
+  {
+   "key": "dialga-offered",
+   "about": "L9 questline (co-legends-6)"
+  },
+  {
+   "key": "blessing-palkia",
+   "about": "Legendary questline (co-legends-6)"
+  },
+  {
+   "key": "palkia-offered",
+   "about": "L9 questline (co-legends-6)"
+  },
+  {
+   "key": "dialga-beaten",
+   "about": "L9 questline (co-legends-6)"
+  },
+  {
+   "key": "palkia-beaten",
+   "about": "L9 questline (co-legends-6)"
+  },
+  {
+   "key": "pillar-both",
+   "about": "L6/L9 questline (co-legends-6)"
+  },
+  {
+   "key": "tao-started",
+   "about": "L10 questline (co-legends-6)"
+  },
+  {
+   "key": "tao-town",
+   "about": "L10 questline (co-legends-6)"
+  },
+  {
+   "key": "tao-both",
+   "about": "L10 questline (co-legends-6)"
+  },
+  {
+   "key": "tao-done",
+   "about": "L10 questline (co-legends-6)"
+  },
+  {
+   "key": "blessing-reshiram",
+   "about": "Legendary questline (co-legends-6)"
+  },
+  {
+   "key": "reshiram-offered",
+   "about": "L10 questline (co-legends-6)"
+  },
+  {
+   "key": "blessing-zekrom",
+   "about": "Legendary questline (co-legends-6)"
+  },
+  {
+   "key": "zekrom-offered",
+   "about": "L10 questline (co-legends-6)"
+  },
+  {
+   "key": "reshiram-beaten",
+   "about": "L10 questline (co-legends-6)"
+  },
+  {
+   "key": "zekrom-beaten",
+   "about": "L10 questline (co-legends-6)"
+  },
+  {
+   "key": "tao-both-dragons",
+   "about": "L10 questline (co-legends-6)"
+  },
+  {
+   "key": "life-xerneas",
+   "about": "L11 questline (co-legends-6)"
+  },
+  {
+   "key": "life-unwatched",
+   "about": "L11 questline (co-legends-6)"
+  },
+  {
+   "key": "zygarde-cells",
+   "about": "Legendary questline (co-legends-6)"
+  },
+  {
+   "key": "life-zygarde",
+   "about": "L11 questline (co-legends-6)"
+  },
+  {
+   "key": "blessing-xerneas",
+   "about": "Legendary questline (co-legends-6)"
+  },
+  {
+   "key": "xerneas-offered",
+   "about": "Legendary questline (co-legends-6)"
+  },
+  {
+   "key": "blessing-yveltal",
+   "about": "Legendary questline (co-legends-6)"
+  },
+  {
+   "key": "yveltal-offered",
+   "about": "Legendary questline (co-legends-6)"
+  },
+  {
+   "key": "life-ended",
+   "about": "L11 questline (co-legends-6)"
+  },
+  {
+   "key": "blessing-zygarde",
+   "about": "Legendary questline (co-legends-6)"
+  },
+  {
+   "key": "zygarde-offered",
+   "about": "Legendary questline (co-legends-6)"
+  },
+  {
+   "key": "nebby-met",
+   "about": "L12 questline (co-legends-6)"
+  },
+  {
+   "key": "nebby-trust",
+   "about": "L12 questline (co-legends-6)"
+  },
+  {
+   "key": "nebby-chose",
+   "about": "L12 questline (co-legends-6)"
+  },
+  {
+   "key": "nebby-attempts",
+   "about": "L12 questline (co-legends-6)"
+  },
+  {
+   "key": "nebby-done",
+   "about": "L12 questline (co-legends-6)"
+  },
+  {
+   "key": "necrozma-started",
+   "about": "L13 questline (co-legends-6)"
+  },
+  {
+   "key": "faller-rank",
+   "about": "Legendary questline (co-legends-6)"
+  },
+  {
+   "key": "blessing-necrozma",
+   "about": "Legendary questline (co-legends-6)"
+  },
+  {
+   "key": "necrozma-offered",
+   "about": "L13 questline (co-legends-6)"
+  },
+  {
+   "key": "necrozma-beaten",
+   "about": "L13 questline (co-legends-6)"
+  },
+  {
+   "key": "necrozma-given",
+   "about": "L13 questline (co-legends-6)"
+  },
+  {
+   "key": "necrozma-fused",
+   "about": "L13 questline (co-legends-6)"
+  },
+  {
+   "key": "relic-carried",
+   "about": "L14 questline (co-legends-6)"
+  },
+  {
+   "key": "relic-sword",
+   "about": "L14 questline (co-legends-6)"
+  },
+  {
+   "key": "relic-shield",
+   "about": "L14 questline (co-legends-6)"
+  },
+  {
+   "key": "relic-hum",
+   "about": "L14 questline (co-legends-6)"
+  },
+  {
+   "key": "relic-done",
+   "about": "L14 questline (co-legends-6)"
+  },
+  {
+   "key": "blessing-zacian",
+   "about": "Legendary questline (co-legends-6)"
+  },
+  {
+   "key": "zacian-offered",
+   "about": "L14 questline (co-legends-6)"
+  },
+  {
+   "key": "blessing-zamazenta",
+   "about": "Legendary questline (co-legends-6)"
+  },
+  {
+   "key": "zamazenta-offered",
+   "about": "L14 questline (co-legends-6)"
+  },
+  {
+   "key": "zacian-beaten",
+   "about": "L14 questline (co-legends-6)"
+  },
+  {
+   "key": "zamazenta-beaten",
+   "about": "L14 questline (co-legends-6)"
+  },
+  {
+   "key": "wards-tablets",
+   "about": "L15 questline (co-legends-6)"
+  },
+  {
+   "key": "wards-sealed",
+   "about": "L15 questline (co-legends-6)"
+  },
+  {
+   "key": "wards-apologised",
+   "about": "L15 questline (co-legends-6)"
+  },
+  {
+   "key": "blessing-ruin",
+   "about": "Legendary questline (co-legends-6)"
+  },
+  {
+   "key": "wards-seller",
+   "about": "L15 questline (co-legends-6)"
+  },
+  {
+   "key": "wards-broken",
+   "about": "L15 questline (co-legends-6)"
+  },
+  {
+   "key": "wards-clues",
+   "about": "L15 questline (co-legends-6)"
+  },
+  {
+   "key": "wo-chien-met",
+   "about": "L15 questline (co-legends-6)"
+  },
+  {
+   "key": "wo-chien-beaten",
+   "about": "L15 questline (co-legends-6)"
+  },
+  {
+   "key": "chien-pao-met",
+   "about": "L15 questline (co-legends-6)"
+  },
+  {
+   "key": "chien-pao-beaten",
+   "about": "L15 questline (co-legends-6)"
+  },
+  {
+   "key": "ting-lu-met",
+   "about": "L15 questline (co-legends-6)"
+  },
+  {
+   "key": "ting-lu-beaten",
+   "about": "L15 questline (co-legends-6)"
+  },
+  {
+   "key": "chi-yu-met",
+   "about": "L15 questline (co-legends-6)"
+  },
+  {
+   "key": "chi-yu-beaten",
+   "about": "L15 questline (co-legends-6)"
+  }
+ ],
+ "external": {
+  "prince-signs": "anime row AN36 (five signs of the Hushed Prince learned)",
+  "fed-poochyena": "whichever row builds the Starving Poochyena (feeding it)",
+  "noble-beaten": "families-c A1 (a Noble beaten down, not calmed)"
+ }
+}

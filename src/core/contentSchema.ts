@@ -1111,6 +1111,8 @@ export const ItemEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('urge'), what: z.enum(['ability', 'item', 'reset']) }),
   /** Makes the opposing Pokémon drop its held item for the rest of the battle (Item Drop). */
   z.object({ kind: z.literal('itemDrop') }),
+  /** Catalog Overhaul (Alphas): thrown at an Alpha in a calm fight, it adds to the Calm bar (`full`: fills it at once, AZ's Flute). */
+  z.object({ kind: z.literal('balm'), full: z.boolean().optional() }),
   /** Leaves an ordinary wild battle at once: no experience, money or catch, and the item is used up (Poké Doll). */
   z.object({ kind: z.literal('escape') }),
 ]);
@@ -2938,6 +2940,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   }),
   /** A Blissful Pokémon is in the party / a Shadow Pokémon is in the party (APPROVED.md §12-14). */
   z.object({ kind: z.literal('partyBlissful') }),
+  /** Catalog Overhaul (legends): a calmed Alpha (it carries the Alpha Mark) is in the party; `lead`: it is the lead. */
+  z.object({ kind: z.literal('partyAlpha'), lead: z.boolean().default(false) }),
   z.object({ kind: z.literal('partyShadow') }),
   /** Grand Arc: this run has the arc on, and (when `rom` is set) does not hold that ROM yet. */
   z.object({ kind: z.literal('grandArc'), missingRom: z.string().length(1).optional() }),
@@ -3221,7 +3225,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Catalog Overhaul: "+1 to a stat" for one Pokémon (5% per point; `best` = its highest stat), kept inside a per-stat cap of 15%. `until: 'region'` ends when the run moves to the next region. */
   z.object({ kind: z.literal('statBoost'), stat: z.enum(['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'best', 'all']), percent: z.number().int().min(1).max(15).default(5), who: z.union([z.literal('weakest'), CoWhoSchema]).default('lead'), until: z.enum(['run', 'region']).default('run') }),
   /** A Pokémon joins (or goes to storage when the party is full): a listed species, or one of the types, or the stage's theme. */
-  z.object({ kind: z.literal('join'), /** Catalog Overhaul (families-b): the wild Pokémon that beat your team earlier this run joins (the `oldFoe`), else `species` / `types`. */ recall: z.boolean().default(false), species: z.array(z.string()).default([]), types: z.array(TypeNameSchema).default([]), levelBonus: z.number().int().default(0), shinyMultiplier: z.number().min(1).default(1), shadow: z.boolean().default(false), blissful: z.boolean().default(false), hiddenAbility: z.boolean().default(false), /** It joins with this ability instead of its own (Squad Squirtle: Contrary). */ ability: z.string().optional(), /** Anime Forms art (core/animeLooks.ts; the Squad Squirtle). Presentation only. */ look: z.enum(ANIME_LOOKS).optional(), /** Beta 0.6 Vermilion: it joins at exactly this level (Flight North's Caterpie is level 5), not the stage's event level. */ level: z.number().int().min(1).max(100).optional(), /** Beta 0.6 Vermilion: it joins knowing these moves too (the Kaiju Tentacool's Liquidation); a full moveset loses its last move. */ moves: z.array(z.string()).max(4).default([]), /** Beta 0.6 Vermilion: it goes straight into the party with no accept prompt (a companion for a stage; the lone Bug-type of Flight North). */ direct: z.boolean().default(false), /** Beta 0.7 Route 25: it joins fonder of you, with this much extra friendship (the troop's thanks when the food came back). */ friendship: z.number().int().min(1).max(100).optional(), /** Catalog Overhaul: it joins at this share of the event level (the worn-out Manectric at half). */ levelShare: z.number().min(0.1).max(1).optional(), /** Catalog Overhaul: its nature, quirk (core/co/quirks.ts), marks, original trainer and the line about its quirk. */ nature: z.enum(NATURE_IDS).optional(), quirk: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(), marks: z.array(z.string().min(1)).max(8).optional(), ot: z.string().min(1).optional(), quirkNote: z.string().min(1).optional(), /** Catalog Overhaul: it joins as the listed species even at a level where it would have evolved (a juvenile Poipole). */ asIs: z.boolean().optional() , /** Catalog Overhaul, mentors: one of the starter's types instead of `types` (Brook's Recruit). */ starterType: z.boolean().default(false) }),
+  z.object({ kind: z.literal('join'), /** Catalog Overhaul (families-b): the wild Pokémon that beat your team earlier this run joins (the `oldFoe`), else `species` / `types`. */ recall: z.boolean().default(false), species: z.array(z.string()).default([]), types: z.array(TypeNameSchema).default([]), levelBonus: z.number().int().default(0), shinyMultiplier: z.number().min(1).default(1), shadow: z.boolean().default(false), blissful: z.boolean().default(false), hiddenAbility: z.boolean().default(false), /** It joins with this ability instead of its own (Squad Squirtle: Contrary). */ ability: z.string().optional(), /** Anime Forms art (core/animeLooks.ts; the Squad Squirtle). Presentation only. */ look: z.enum(ANIME_LOOKS).optional(), /** Beta 0.6 Vermilion: it joins at exactly this level (Flight North's Caterpie is level 5), not the stage's event level. */ level: z.number().int().min(1).max(100).optional(), /** Beta 0.6 Vermilion: it joins knowing these moves too (the Kaiju Tentacool's Liquidation); a full moveset loses its last move. */ moves: z.array(z.string()).max(4).default([]), /** Beta 0.6 Vermilion: it goes straight into the party with no accept prompt (a companion for a stage; the lone Bug-type of Flight North). */ direct: z.boolean().default(false), /** Beta 0.7 Route 25: it joins fonder of you, with this much extra friendship (the troop's thanks when the food came back). */ friendship: z.number().int().min(1).max(100).optional(), /** Catalog Overhaul: it joins at this share of the event level (the worn-out Manectric at half). */ levelShare: z.number().min(0.1).max(1).optional(), /** Catalog Overhaul: its nature, quirk (core/co/quirks.ts), marks, original trainer and the line about its quirk. */ nature: z.enum(NATURE_IDS).optional(), quirk: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(), marks: z.array(z.string().min(1)).max(8).optional(), ot: z.string().min(1).optional(), quirkNote: z.string().min(1).optional(), /** Catalog Overhaul: it joins as the listed species even at a level where it would have evolved (a juvenile Poipole). */ asIs: z.boolean().optional(), /** Catalog Overhaul (Alphas): it joins with the Alpha Mark (keeps its size, +10% HP) and never evolves on joining. */ alpha: z.boolean().default(false) , /** Catalog Overhaul, mentors: one of the starter's types instead of `types` (Brook's Recruit). */ starterType: z.boolean().default(false) }),
   /** A seedling grows in the Berry Garden (core/berries.ts): a held-berry plot, optionally mutated; the garden must have room. */
   z.object({ kind: z.literal('seedling'), berry: z.string().min(1), mutated: z.boolean().default(false) }),
   /** A sanctuary's blessing (shadowWorld.json): a few battles of a small, narrow boost. */
@@ -3582,6 +3586,19 @@ export const EventRuleSchema = z.object({
   noPokemon: z.boolean().optional(),
   /** Beta 0.7 Sabrina's Labyrinth: each turn one of your move slots is false (shows one move, does another); every second turn the companion marks it. */
   falseSlot: z.boolean().optional(),
+  /**
+   * Catalog Overhaul (Alphas): a calm fight. The Alpha has a Calm bar of `need`. A thrown Calming Balm adds 1 (the bag item `calming-balm`),
+   * a move of yours with a liked flag adds 1 (`sound`; `scent` = Sweet Scent, Aromatherapy, Aromatic Mist), and `perTurn` adds itself at the
+   * end of every turn you are still standing (a lit lamp, a warm fire). When the bar is full the fight ends calmed and the battle's `calm`
+   * effects pay instead of `win`. No ball works until then.
+   */
+  calmBar: z.object({ need: z.number().int().min(1).max(12), start: z.number().min(0).max(11).default(0), perTurn: z.number().min(0).max(4).default(0), likes: z.array(z.enum(['sound', 'scent'])).max(2).default([]) }).optional(),
+  /** Catalog Overhaul (Alphas): the foe gains this many stages of a stat at the end of every turn (the Static Choir drinking the feed lines). The game says so at the start. */
+  foeGrows: z.enum(['atk', 'def', 'spa', 'spd', 'spe']).optional(),
+  /** Catalog Overhaul (Alphas): you cannot give orders (the Hushed One eats sound): each turn your Pokémon uses a move of its own choosing. */
+  noCommands: z.boolean().optional(),
+  /** Catalog Overhaul (Alphas): footing gives way (the breaking dome): at the end of each turn your active Pokémon flinches next turn unless it is a Flying-type or weighs under 20 kg. */
+  breakingFloor: z.boolean().optional(),
   surviveTurns: z.number().int().min(1).max(30).optional(),
   suddenDeath: z.boolean().optional(),
   turnLimit: z.number().int().min(1).max(30).optional(),
@@ -3643,6 +3660,10 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     rule: EventRuleSchema.optional(),
     /** Beta 0.7 U1: Ultra Aura: every foe starts with +1 to all its stats. */
     aura: z.boolean().optional(),
+    /** Catalog Overhaul (Alphas): the foe is an Alpha: double HP, the Alpha look, and no evolving by level (the listed species is the Alpha). */
+    alpha: z.boolean().optional(),
+    /** Catalog Overhaul (Alphas): effects paid instead of `win` when the fight ended with the Calm bar full (`rule.calm`). */
+    calm: z.array(EventEffectSchema).optional(),
     /** Catalog Overhaul: a friendly fight. A loss never ends the run: the party gets back on its feet, you return to the map and `lose` applies. */
     friendly: z.boolean().optional(),
     win: z.array(EventEffectSchema).default([]),

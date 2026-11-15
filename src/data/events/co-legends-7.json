@@ -1,0 +1,2486 @@
+{
+ "catalogOverhaul": "legends",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "co-my1-clearing",
+   "name": "The Playground",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "believed-mew",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mew",
+    "tint": "#f0a0c0",
+    "effect": "sparkle"
+   },
+   "intro": "Something small and pink keeps darting behind your party, just out of sight. In a clearing, pebbles float in a ring. One is not a pebble.\n\nThe not-pebble opens one eye. For a second your lead turns into a Ditto-shaped blob, then back. Nobody did that.\n\nA sign, painted on a stump in a child's letters: PLAY WITH ME OR GO AWAY",
+   "choices": [
+    {
+     "label": "\"Play.\"",
+     "success": {
+      "text": "Three games. Hide-and-seek: it turns into one of your Pokémon and you have to spot which (you do, by the giggle). Tag: it transforms faster than you can run. Copy-me: it copies your last three moves in a mock battle, perfectly, and bows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mew-played",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-mew-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go away.\"",
+     "success": {
+      "text": "It follows anyway, sulking, three steps behind. When you look in your bag, something is missing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mew-sulked",
+        "amount": 1
+       },
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-mew-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit and wait.",
+     "success": {
+      "text": "You sit. A minute passes. Then something light lands on your head and stays there, humming.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mew-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-mew-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my-mew-promise",
+   "name": "Mew: The Promise",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "sulked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mew-sulked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Mew is still sulking a little. It points at you anyway.",
+     "addChoices": []
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mew",
+    "tint": "#f0a0c0",
+    "effect": "sparkle"
+   },
+   "intro": "Mew floats at eye level and points at your party. Then at itself. Then at your party again.\n\nThe Promise: Bring everyone: no two Pokémon in the party share the same pair of types.",
+   "choices": [
+    {
+     "label": "\"I promise.\"",
+     "success": {
+      "text": "Mew spins in the air, delighted, and settles in beside you. Your party counts their types, nervously.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vow-mew",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Mew came to you, and you made it a promise.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this run.\"",
+     "success": {
+      "text": "Mew leaves a small gift (₽500) and goes. No harm done.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "mew-declined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if I break it?\"",
+     "success": {
+      "text": "Mew will forgive you once. The second time, it leaves.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-mew-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my2-shrine",
+   "name": "The Forest of Time",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "believed-celebi",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "celebi",
+    "tint": "#60c060",
+    "effect": "none"
+   },
+   "intro": "A tree you passed an hour ago is a sapling again. A green sparkle hangs where it used to be tall.\n\nA moss-covered shrine. Three bowls. An old forester sits by it, and you realise, slowly, that he is also the boy who carved his initials on that sapling.\n\nForester: \"It takes things back. When it's sad. Someone cut the old wood down. It's been undoing it ever since. A tree at a time.\"",
+   "choices": [
+    {
+     "label": "Fill the bowls.",
+     "success": {
+      "text": "Water, a seed, and a memory: you tell the bowls a story of your run so far. The third bowl fills with light.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "celebi-offered",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my2-visit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Replant the wood.",
+     "success": {
+      "text": "The forester gives you three saplings and marks three clearings on your map, one far ahead of the next. You plant the first.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "celebi-planted",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the forest alone.",
+     "success": {
+      "text": "Behind you, another tree becomes a sapling.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my2-sapling-2",
+   "name": "The Forest of Time: A Sapling",
+   "group": "Story: Mythical",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "celebi-planted",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "celebi",
+    "tint": "#60c060",
+    "effect": "none"
+   },
+   "intro": "The second clearing the forester marked. The stump is old; the ground around it is soft.",
+   "choices": [
+    {
+     "label": "Plant the second sapling.",
+     "success": {
+      "text": "It takes. A little further on, a tree that was a sapling this morning is tall again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "celebi-planted",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The clearing waits.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my2-sapling-3",
+   "name": "The Forest of Time: A Sapling",
+   "group": "Story: Mythical",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "celebi-planted",
+     "atLeast": 2,
+     "atMost": 2
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "celebi",
+    "tint": "#60c060",
+    "effect": "none"
+   },
+   "intro": "The last clearing. You plant the third sapling, and the air goes green.",
+   "choices": [
+    {
+     "label": "Plant the last one.",
+     "success": {
+      "text": "Celebi is there, at the last sapling, as if it had always been.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "celebi-planted",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my2-visit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The clearing waits.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my2-visit",
+   "name": "The Forest of Time: Celebi",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "celebi",
+    "tint": "#60c060",
+    "effect": "sparkle"
+   },
+   "intro": "Celebi flickers. For a moment you see the forest as it was, and a younger forester, running between the trees, laughing.\n\nCelebi holds out its hands.",
+   "choices": [
+    {
+     "label": "Take its hands.",
+     "success": {
+      "text": "The forest is quiet. Nothing more turns back.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-celebi-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my-celebi-promise",
+   "name": "Celebi: The Promise",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "celebi",
+    "tint": "#60c060",
+    "effect": "sparkle"
+   },
+   "intro": "Celebi waits, very small, by your shoulder.\n\nThe Promise: Harm no wood: knock out no wild Grass- or Bug-type.",
+   "choices": [
+    {
+     "label": "\"I promise.\"",
+     "success": {
+      "text": "Celebi rests on your shoulder. Behind you, the old wood grows a little taller.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vow-celebi",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Celebi came to you, and you made it a promise.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this run.\"",
+     "success": {
+      "text": "Celebi leaves a small gift (₽500) and goes. No harm done.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "celebi-declined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if I break it?\"",
+     "success": {
+      "text": "Celebi will forgive you once. The second time, it leaves.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-celebi-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my3-comet",
+   "name": "The Seven Nights",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "believed-jirachi",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "jirachi",
+    "tint": "#e0d060",
+    "effect": "sparkle"
+   },
+   "intro": "A comet. A paper strip drifts down and lands in your hand. It says: \"Wish.\"\n\nThat night, under the stars, a sleepy voice.\nJirachi: \"I'm awake for seven nights. Then I sleep for a thousand years. What do you wish for?\"",
+   "choices": [
+    {
+     "label": "\"For my team.\"",
+     "success": {
+      "text": "Jirachi grants it: something better than you would have found. It frowns a little while it does.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "jirachi-wished-self",
+        "amount": 1
+       },
+       {
+        "kind": "betterDraft",
+        "extra": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-jirachi-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"For someone else.\"",
+     "success": {
+      "text": "You name someone you met this run. Far away, things go a little better for them. Jirachi looks at you properly for the first time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "jirachi-wished-other",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-jirachi-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Nothing.\"",
+     "success": {
+      "text": "Jirachi: \"Nobody says that.\" It sits down next to you and stays.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "jirachi-nothing",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-jirachi-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my-jirachi-promise",
+   "name": "Jirachi: The Promise",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "jirachi",
+    "tint": "#e0d060",
+    "effect": "sparkle"
+   },
+   "intro": "Jirachi yawns. \"Seven nights. Will you keep me company?\"\n\nThe Promise: Refuse no one: agree to every request made of you in an event.",
+   "choices": [
+    {
+     "label": "\"I promise.\"",
+     "success": {
+      "text": "Jirachi tucks itself into your bag, the paper strip on its head, and falls asleep.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vow-jirachi",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Jirachi came to you, and you made it a promise.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this run.\"",
+     "success": {
+      "text": "Jirachi leaves a small gift (₽500) and goes. No harm done.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "jirachi-declined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if I break it?\"",
+     "success": {
+      "text": "Jirachi does not forgive. Break it once and it is gone.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-jirachi-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my4-crater",
+   "name": "The Signal",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "believed-deoxys",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "deoxys",
+    "tint": "#c05040",
+    "effect": "none"
+   },
+   "intro": "A faint repeating signal from a crater that was not there yesterday. It hums in three tones: long, short, long. A rock panel with three slots.\n\nA radio amateur, arriving breathless: \"It's been sending that for six days. It's not random. It's waiting for an answer.\"",
+   "choices": [
+    {
+     "label": "\"Long, short, long.\"",
+     "success": {
+      "text": "The crater hums back, pleased. A new pattern starts.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my4-round-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Short, short, short.\"",
+     "success": {
+      "text": "The crater goes quiet. It will try again later.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "deoxys-quiet",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Long, long, long.\"",
+     "success": {
+      "text": "The crater goes quiet. It will try again later.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "deoxys-quiet",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my4-again",
+   "name": "The Signal: Again",
+   "group": "Story: Mythical",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "deoxys-quiet",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "deoxys-answered",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "deoxys",
+    "tint": "#c05040",
+    "effect": "none"
+   },
+   "intro": "The crater is humming again. Long, short, long. The amateur waves at you from the rim.",
+   "choices": [
+    {
+     "label": "\"Long, short, long.\"",
+     "success": {
+      "text": "The crater hums back, pleased. A new pattern starts.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my4-round-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Short, short, short.\"",
+     "success": {
+      "text": "The crater goes quiet. It will try again later.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "deoxys-quiet",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Long, long, long.\"",
+     "success": {
+      "text": "The crater goes quiet. It will try again later.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "deoxys-quiet",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my4-round-2",
+   "name": "The Signal: Round Two",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "deoxys",
+    "tint": "#c05040",
+    "effect": "none"
+   },
+   "intro": "A new pattern: short, short, short.",
+   "choices": [
+    {
+     "label": "\"Long, short, long.\"",
+     "success": {
+      "text": "The crater goes quiet. It will try again later.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "deoxys-quiet",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Short, short, short.\"",
+     "success": {
+      "text": "The crater hums back, pleased. A new pattern starts.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my4-round-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Long, long, long.\"",
+     "success": {
+      "text": "The crater goes quiet. It will try again later.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "deoxys-quiet",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my4-round-3",
+   "name": "The Signal: Round Three",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "deoxys",
+    "tint": "#c05040",
+    "effect": "none"
+   },
+   "intro": "The last pattern, slower: long, long, long.",
+   "choices": [
+    {
+     "label": "\"Long, short, long.\"",
+     "success": {
+      "text": "The crater goes quiet. It will try again later.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "deoxys-quiet",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Short, short, short.\"",
+     "success": {
+      "text": "The crater goes quiet. It will try again later.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "deoxys-quiet",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Long, long, long.\"",
+     "success": {
+      "text": "The crater hums back, pleased.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my4-visit"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my4-visit",
+   "name": "The Signal: Deoxys",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "deoxys",
+    "tint": "#c05040",
+    "effect": "sparkle"
+   },
+   "intro": "Deoxys is in the crater, changing form every few seconds: arms, then armour, then speed.\n\nThe amateur: \"It's trying on shapes to see which one we'll like.\"",
+   "choices": [
+    {
+     "label": "\"Stay as you are.\"",
+     "success": {
+      "text": "It settles into its Normal Forme, and seems relieved.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "deoxys-answered",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "deoxys-forme-normal",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-deoxys-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Show us the fast one.\"",
+     "success": {
+      "text": "A blur, and it is behind you, and back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "deoxys-answered",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "deoxys-forme-speed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-deoxys-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Show us the strong one.\"",
+     "success": {
+      "text": "Its arms thicken. The crater floor cracks.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "deoxys-answered",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "deoxys-forme-attack",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-deoxys-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my-deoxys-promise",
+   "name": "Deoxys: The Promise",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "deoxys",
+    "tint": "#c05040",
+    "effect": "sparkle"
+   },
+   "intro": "The amateur lowers the radio. Deoxys is looking at you, not the sky.\n\nThe Promise: Change with me: never lead with the same Pokémon two stages running.",
+   "choices": [
+    {
+     "label": "\"I promise.\"",
+     "success": {
+      "text": "Deoxys changes shape one more time, into something almost like your lead, and follows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vow-deoxys",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Deoxys came to you, and you made it a promise.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this run.\"",
+     "success": {
+      "text": "Deoxys leaves a small gift (₽500) and goes. No harm done.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "deoxys-declined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if I break it?\"",
+     "success": {
+      "text": "Deoxys will forgive you once. The second time, it leaves.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-deoxys-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my5-tide",
+   "name": "The Little Egg",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "types": [
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "believed-phione",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "phione",
+    "tint": "#60a0e0",
+    "effect": "none"
+   },
+   "intro": "A tiny bubble-like Pokémon floats on the tide, bobbing along without a care. The tide is pulling it toward a rip current. It does not notice.\n\nA lifeguard, from a tower: \"That's not a swimmer!\"",
+   "choices": [
+    {
+     "label": "\"Swim for it.\"",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Your Water-type is in the sea before you finish saying it, and back with the little one riding on its head.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "phione-saved",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": {
+         "types": [
+          "water"
+         ]
+        }
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-phione-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Throw a line.\"",
+     "success": {
+      "text": "The lifeguard's float, a long throw, and a very wet Phione at your feet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "phione-saved",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-phione-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let it go.\"",
+     "success": {
+      "text": "The current takes it round the point. You hear it laugh, faintly, far out.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my-phione-promise",
+   "name": "Phione: The Promise",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "phione",
+    "tint": "#60a0e0",
+    "effect": "sparkle"
+   },
+   "intro": "Phione shakes itself dry and looks along the coast, then up at you.\n\nThe Promise: Take me along the coast: whenever a path by water is offered, take it.",
+   "choices": [
+    {
+     "label": "\"I promise.\"",
+     "success": {
+      "text": "Phione bobs along beside you, always on the side nearer the water.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vow-phione",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Phione came to you, and you made it a promise.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this run.\"",
+     "success": {
+      "text": "Phione leaves a small gift (₽500) and goes. No harm done.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "phione-declined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if I break it?\"",
+     "success": {
+      "text": "Phione will forgive you once. The second time, it leaves.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-phione-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my6-arena",
+   "name": "The Empty Arena",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "believed-victini",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "victini",
+    "tint": "#e08040",
+    "effect": "none"
+   },
+   "intro": "A ruined arena. An old trophy case is warm to the touch, and a flame flickers inside where no fire could be. The empty stadium cheers. For nobody.\n\nA voice from the stands: \"Do you win for glory, or for them?\"",
+   "choices": [
+    {
+     "label": "\"Glory.\"",
+     "success": {
+      "text": "Victini appears, unimpressed, and challenges your lead to a one-on-one.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "victini"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "victini-glory",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-my-victini-promise"
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-my6-again"
+        }
+       ],
+       "rule": {
+        "noItems": true,
+        "noSwitch": true,
+        "matchLead": true,
+        "suddenDeath": true
+       }
+      }
+     }
+    },
+    {
+     "label": "\"Them.\"",
+     "success": {
+      "text": "Victini appears on your shoulder.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "victini-them",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-victini-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I just like winning.\"",
+     "success": {
+      "text": "Victini laughs. Under it, a subtitle: \"Honest.\" It appears.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "victini-honest",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-victini-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my6-again",
+   "name": "The Empty Arena: Again",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "victini",
+    "tint": "#e08040",
+    "effect": "none"
+   },
+   "intro": "Victini, hovering over your lead: \"Again.\"",
+   "choices": [
+    {
+     "label": "\"Again.\"",
+     "success": {
+      "text": "One more time.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "victini"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "victini-glory",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-my-victini-promise"
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "victini-lost",
+         "amount": 1
+        }
+       ],
+       "rule": {
+        "noItems": true,
+        "noSwitch": true,
+        "matchLead": true,
+        "suddenDeath": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "The stadium stops cheering.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my-victini-promise",
+   "name": "Victini: The Promise",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "victini",
+    "tint": "#e08040",
+    "effect": "sparkle"
+   },
+   "intro": "The stadium is roaring now. Victini holds up two fingers in a V.\n\nThe Promise: Never turn away: flee no battle and decline no challenge.",
+   "choices": [
+    {
+     "label": "\"I promise.\"",
+     "success": {
+      "text": "Victini rides on your lead's head out of the arena. The cheering follows you a long way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vow-victini",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Victini came to you, and you made it a promise.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this run.\"",
+     "success": {
+      "text": "Victini leaves a small gift (₽500) and goes. No harm done.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "victini-declined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if I break it?\"",
+     "success": {
+      "text": "Victini will forgive you once. The second time, it leaves.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-victini-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my7-field",
+   "name": "The Gratitude Garden",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "believed-shaymin",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "shaymin",
+    "tint": "#80d080",
+    "effect": "none"
+   },
+   "intro": "A field blooms out of season. One hedgehog-shaped bush is suspiciously round. In the afternoon heat the flowers wilt, one by one, and the round bush trembles.\n\nA farmer's daughter: \"They come back every year if someone says thank you to them. Nobody's said it for ages.\"",
+   "choices": [
+    {
+     "label": "\"Thank you.\" (to the field)",
+     "success": {
+      "text": "The field un-wilts, all of it, at once. The bush unrolls. It is Shaymin.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shaymin-thanked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-shaymin-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry it to water.",
+     "success": {
+      "text": "Two long stretches of road with a heavy, prickly bush in your arms. At the spring it drinks, revives, and for a moment is something with wings.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shaymin-carried",
+        "amount": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-shaymin-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick a flower.",
+     "success": {
+      "text": "Shaymin wakes, deeply offended, and runs. You will have to find it again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shaymin-offended",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my7-again",
+   "name": "The Gratitude Garden: Again",
+   "group": "Story: Mythical",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "shaymin-offended",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "shaymin",
+    "tint": "#80d080",
+    "effect": "none"
+   },
+   "intro": "Another field, another round bush, very still, pretending to be a bush.",
+   "choices": [
+    {
+     "label": "\"Sorry. And thank you.\"",
+     "success": {
+      "text": "The bush unrolls a little. Then all the way.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-shaymin-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it be.",
+     "success": {
+      "text": "The flowers close behind you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my-shaymin-promise",
+   "name": "Shaymin: The Promise",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "shaymin",
+    "tint": "#80d080",
+    "effect": "sparkle"
+   },
+   "intro": "Shaymin sniffs your hand, then the field, then you.\n\nThe Promise: Take no payment for kindness: choose every generous ending an event offers.",
+   "choices": [
+    {
+     "label": "\"I promise.\"",
+     "success": {
+      "text": "Shaymin rides in a pocket of flowers, and wherever you rest, something blooms.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vow-shaymin",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Shaymin came to you, and you made it a promise.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this run.\"",
+     "success": {
+      "text": "Shaymin leaves a small gift (₽500) and goes. No harm done.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "shaymin-declined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if I break it?\"",
+     "success": {
+      "text": "Shaymin will forgive you once. The second time, it leaves.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-shaymin-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my8-stall",
+   "name": "The Unfinished Song",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "believed-meloetta",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "meloetta",
+    "tint": "#80c0a0",
+    "effect": "none"
+   },
+   "intro": "A music box in a roadside stall plays half a song. A soft voice finishes the next bar, from nowhere.\n\nThe stall owner: \"It does that. I've had three customers faint.\"\nMeloetta, unseen: \"Three notes left. Do you know them?\"\n\nThe music box's last bar went down, down, down.",
+   "choices": [
+    {
+     "label": "Hum low.",
+     "success": {
+      "text": "The voice sings it with you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "meloetta-notes",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my8-note-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hum high.",
+     "success": {
+      "text": "The voice waits, then sings the note you did not.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my8-note-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let your Pokémon sing.",
+     "requires": [
+      {
+       "kind": "partyMoveFlag",
+       "flag": "sound"
+      }
+     ],
+     "success": {
+      "text": "The voice waits, then sings the note you did not.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my8-note-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my8-note-2",
+   "name": "The Unfinished Song: Note 2",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "meloetta",
+    "tint": "#80c0a0",
+    "effect": "none"
+   },
+   "intro": "The second note. The bar before it climbed, like a bird taking off.",
+   "choices": [
+    {
+     "label": "Hum low.",
+     "success": {
+      "text": "The voice waits, then sings the note you did not.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my8-note-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hum high.",
+     "success": {
+      "text": "The voice sings it with you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "meloetta-notes",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my8-note-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let your Pokémon sing.",
+     "requires": [
+      {
+       "kind": "partyMoveFlag",
+       "flag": "sound"
+      }
+     ],
+     "success": {
+      "text": "The voice waits, then sings the note you did not.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my8-note-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my8-note-3",
+   "name": "The Unfinished Song: Note 3",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "meloetta",
+    "tint": "#80c0a0",
+    "effect": "none"
+   },
+   "intro": "The last note. The box falls silent, as if it wants a voice that is not yours.",
+   "choices": [
+    {
+     "label": "Hum low.",
+     "success": {
+      "text": "The voice waits, then sings the note you did not.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my8-song"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hum high.",
+     "success": {
+      "text": "The voice waits, then sings the note you did not.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my8-song"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let your Pokémon sing.",
+     "requires": [
+      {
+       "kind": "partyMoveFlag",
+       "flag": "sound"
+      }
+     ],
+     "success": {
+      "text": "The voice sings it with you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "meloetta-notes",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my8-song"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my8-song",
+   "name": "The Unfinished Song: Meloetta",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "meloetta",
+    "tint": "#80c0a0",
+    "effect": "none"
+   },
+   "intro": "The song is finished, one way or another.",
+   "choices": [
+    {
+     "label": "Listen.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "meloetta-notes",
+         "atLeast": 3,
+         "atMost": 99
+        }
+       ],
+       "text": "Meloetta appears, finishes the song and dances. The whole street stops to watch.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "meloetta-danced",
+         "amount": 1
+        },
+        {
+         "kind": "friendship",
+         "amount": 1,
+         "who": "party"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-my-meloetta-promise"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "meloetta-notes",
+         "atLeast": 1,
+         "atMost": 2
+        }
+       ],
+       "text": "Meloetta appears and corrects you, kindly, humming the right notes until you have them.",
+       "effects": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-my-meloetta-promise"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Meloetta laughs, somewhere, and is gone. Next time the music box plays one extra bar.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "meloetta-missed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my-meloetta-promise",
+   "name": "Meloetta: The Promise",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "meloetta",
+    "tint": "#80c0a0",
+    "effect": "sparkle"
+   },
+   "intro": "Meloetta sits on the music box, swinging her feet.\n\nThe Promise: Finish the song: never quit or skip a minigame once begun.",
+   "choices": [
+    {
+     "label": "\"I promise.\"",
+     "success": {
+      "text": "Meloetta hums the finished song as you walk. Your party walks in step.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vow-meloetta",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Meloetta came to you, and you made it a promise.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this run.\"",
+     "success": {
+      "text": "Meloetta leaves a small gift (₽500) and goes. No harm done.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "meloetta-declined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if I break it?\"",
+     "success": {
+      "text": "Meloetta will forgive you once. The second time, it leaves.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-meloetta-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my9-ring-1",
+   "name": "Rings of Mischief",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "believed-hoopa",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "hoopa",
+    "tint": "#c0a040",
+    "effect": "none"
+   },
+   "intro": "A gold ring hangs in the air over the path. Giggling comes from inside it.",
+   "choices": [
+    {
+     "label": "Reach in.",
+     "success": {
+      "text": "Your hand comes out holding a coin that was never yours. The ring shrinks to nothing, still giggling.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 150
+       },
+       {
+        "kind": "flag",
+        "key": "hoopa-rings",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk around it.",
+     "success": {
+      "text": "It follows you for a step or two, sulks, and pops.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoopa-rings",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my9-ring-2",
+   "name": "Rings of Mischief: The Second Ring",
+   "group": "Story: Mythical",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "hoopa-rings",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "hoopa",
+    "tint": "#c0a040",
+    "effect": "none"
+   },
+   "intro": "The ring is back, over your bag this time.",
+   "choices": [
+    {
+     "label": "Let it take something.",
+     "success": {
+      "text": "Something goes in. Something else comes out: a berry, still warm from wherever it was.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoopa-rings",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold on to your bag.",
+     "success": {
+      "text": "A tug-of-war with thin air. The ring gives up, laughing, and goes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoopa-rings",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my9-ring-3",
+   "name": "Rings of Mischief: Hoopa",
+   "group": "Story: Mythical",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "hoopa-rings",
+     "atLeast": 2,
+     "atMost": 2
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "hoopa",
+    "tint": "#c0a040",
+    "effect": "sparkle"
+   },
+   "intro": "A gold ring hangs in the air. Your hand goes through and comes out holding someone else's sandwich. Three rings float side by side, giggling.\n\nA shopkeeper, furious, running up: \"That was my sandwich!\"",
+   "choices": [
+    {
+     "label": "\"Give it back.\"",
+     "success": {
+      "text": "Hoopa pops out, disappointed that you are no fun, and hands you the shopkeeper's other sandwich.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.2
+       },
+       {
+        "kind": "flag",
+        "key": "hoopa-fair",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-hoopa-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go through a ring.",
+     "success": {
+      "text": "You come out further down the road, holding a coin of your own you lost three stages ago.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-hoopa-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Grab the ring.",
+     "success": {
+      "text": "Hoopa is pulled out by its own ring, upside down, laughing so hard it cannot float.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoopa-grabbed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-hoopa-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my-hoopa-promise",
+   "name": "Hoopa: The Promise",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "hoopa",
+    "tint": "#c0a040",
+    "effect": "sparkle"
+   },
+   "intro": "Hoopa juggles its rings and grins at your bag.\n\nThe Promise: Let me play: it takes one random item a stage; keep at least three items in the bag.",
+   "choices": [
+    {
+     "label": "\"I promise.\"",
+     "success": {
+      "text": "Hoopa hangs a ring on your bag strap, and peeks out of it from time to time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vow-hoopa",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Hoopa came to you, and you made it a promise.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this run.\"",
+     "success": {
+      "text": "Hoopa leaves a small gift (₽500) and goes. No harm done.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "hoopa-declined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if I break it?\"",
+     "success": {
+      "text": "Hoopa will forgive you once. The second time, it leaves.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-hoopa-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my10-shadow",
+   "name": "The Shadow That Punches",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "types": [
+    "ghost",
+    "fighting"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "believed-marshadow",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "marshadow",
+    "tint": "#404040",
+    "effect": "none"
+   },
+   "intro": "All stage your shadow has been throwing punches you did not throw. At dusk it stands apart from you, takes a stance, and waits. Nobody else can see it.",
+   "choices": [
+    {
+     "label": "Take the stance.",
+     "success": {
+      "text": "A sparring match with your own shadow.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "marshadow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "marshadow-sparred",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Your shadow sparred with you once, and bowed.",
+         "importance": 85
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "marshadow-sparred",
+         "amount": 1
+        }
+       ],
+       "rule": {
+        "noItems": true,
+        "noSwitch": true,
+        "matchLead": true,
+        "suddenDeath": true
+       }
+      }
+     }
+    },
+    {
+     "label": "\"What do you want?\"",
+     "success": {
+      "text": "No answer. It points, and in the dark you see your last lost battle, played over again in shadow. Then it is just your shadow.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "marshadow-asked",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look away.",
+     "success": {
+      "text": "When you look back, it is just a shadow, sulking.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my12-shrine",
+   "name": "Three Wishes for a Small Favour",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "believed-pecharunt",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "loyal",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-loyal",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The voice: \"Ah. One of mine.\"",
+     "addChoices": []
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pecharunt",
+    "tint": "#a060c0",
+    "effect": "none"
+   },
+   "intro": "A sweet-smelling peach on a roadside shrine. A thin purple ribbon trails from it into the grass.\n\nA soft voice: \"You look tired. I could help. Three wishes. For a small favour. Just take what I give you. That's all.\"",
+   "choices": [
+    {
+     "label": "\"What's the favour?\"",
+     "success": {
+      "text": "The voice: \"Just accept my gifts. Every one.\" It says it plainly, as if that settles it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-pecharunt-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "Pecharunt rolls out of the peach, delighted.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pecharunt-yes",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-pecharunt-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "The voice: \"You'll come back.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pecharunt-refused",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my12-again",
+   "name": "Three Wishes: You Came Back",
+   "group": "Story: Mythical",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pecharunt-refused",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pecharunt",
+    "tint": "#a060c0",
+    "effect": "none"
+   },
+   "intro": "The same peach, on a different shrine. The voice: \"You came back. I said you would.\"",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "It was right.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-pecharunt-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk past.",
+     "success": {
+      "text": "The ribbon twitches in the grass behind you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-my-pecharunt-promise",
+   "name": "Pecharunt: The Promise",
+   "group": "Story: Mythical",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "pecharunt",
+    "tint": "#a060c0",
+    "effect": "sparkle"
+   },
+   "intro": "Pecharunt holds out a mochi, glistening. It is very sweet. It smells like a promise.\n\nThe Promise: Accept every gift: take whatever is offered to you by anyone.",
+   "choices": [
+    {
+     "label": "\"I promise.\"",
+     "success": {
+      "text": "Pecharunt climbs onto your bag. \"Every gift,\" it says. \"Every one.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vow-pecharunt",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Pecharunt came to you, and you made it a promise.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not this run.\"",
+     "success": {
+      "text": "Pecharunt leaves a small gift (₽500) and goes. No harm done.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "pecharunt-declined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if I break it?\"",
+     "success": {
+      "text": "Pecharunt does not forgive. Break it once and it is gone.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-pecharunt-promise"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

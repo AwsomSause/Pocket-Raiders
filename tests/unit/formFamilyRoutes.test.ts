@@ -1,4 +1,5 @@
-// Delta, Z and Spooky forms each have their own clue chain and battle (not only a starter set).
+// Spooky forms have their own clue chain and battle (not only a starter set). The Delta and Z routes were rebuilt by the
+// Catalog Overhaul Pack (Linden's Delta Study, the Z sigils): tests/unit/coLegendsDelta.test.ts and coLegendsZ.test.ts.
 
 import { describe, expect, it } from 'vitest';
 import { eligibleEvents } from '../../src/core/events';
@@ -7,8 +8,6 @@ import { specialFamily } from '../../src/core/specialForms';
 import { content } from './helpers';
 
 const FAMILIES = [
-  { key: 'delta-clue', met: 'delta-met', battle: 'delta-research-battle', family: 'delta', need: 3, stage: 4, prefix: 'delta-' },
-  { key: 'z-sigil', met: 'z-met', battle: 'z-form-trial', family: 'zform', need: 2, stage: 6, prefix: 'z-' },
   { key: 'spooky-light', met: 'spooky-met', battle: 'spooky-detour-battle', family: 'spooky', need: 2, stage: 4, prefix: 'spooky-light|spooky-detour' },
 ];
 
