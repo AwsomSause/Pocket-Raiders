@@ -4,9 +4,10 @@
 
 import Phaser from 'phaser';
 import type { AssetManifest } from '../../assets/catalog';
+import { rxFileOf } from './assets';
 import { mountRedux, type ReduxCtx, type ReduxView } from './stage';
-import { act, type Area, esc, H, hpb, icon, mini, TX, W } from './kit';
-import { menuView, scrollStart } from './templates';
+import { act, type Area, esc, H, TX, W } from './kit';
+import { gridView, menuView, pic, scrollStart, tabsBar } from './templates';
 
 export interface PickerBridge {
   title: string;
@@ -61,16 +62,7 @@ export function pickerCols(kind: PickerKind, c: Pick<ReduxCtx, 'v'>): number {
 
 interface Scraped { label: string; note: string; tag: string; art: { file: string; atlas: boolean } | null }
 
-let files: Map<string, { path: string; atlas: boolean }> | null = null;
-function fileOf(scene: Phaser.Scene, key: string): { file: string; atlas: boolean } | null {
-  if (!files) {
-    files = new Map();
-    const m = scene.cache.json.get('manifest') as AssetManifest | undefined;
-    for (const a of m?.assets ?? []) if ((a.kind === 'atlas' || a.kind === 'image') && a.path.startsWith('images/')) files.set(a.id, { path: a.path.slice(7), atlas: a.kind === 'atlas' });
-  }
-  const f = files.get(key);
-  return f ? { file: f.atlas ? f.path.replace(/\.png$/, '') : f.path, atlas: f.atlas } : null;
-}
+const fileOf = (scene: Phaser.Scene, key: string): { file: string; atlas: boolean } | null => rxFileOf(scene.cache.json.get('manifest') as AssetManifest | undefined, key);
 
 /** Reads a drawn row: its biggest text is the label, right-aligned text the tag, the rest the note, the first known picture the art. */
 export function scrapeRow(scene: Phaser.Scene, box: Phaser.GameObjects.Container | undefined): Scraped {
@@ -98,7 +90,6 @@ export function scrapeRow(scene: Phaser.Scene, box: Phaser.GameObjects.Container
   };
 }
 
-const pic = (a: Scraped['art'], size: number): string => (a ? (a.atlas ? mini(a.file, size) : icon(a.file, size)) : '');
 const attr = (k: number): string => `${act('pick', k)} data-over="over"`;
 const more = (n: number, s: number, size: number, st: string): string => (n > size ? `<div class="abs sm" style="${st}">${s > 0 ? '▲' : ''} ${s + 1}–${Math.min(n, s + size)} of ${n} ${s + size < n ? '▼' : ''}</div>` : '');
 
@@ -110,7 +101,7 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
   const hints: [string, string][] = [['Enter', 'choose'], ...(p.tabs ? [['←→', 'tab'] as [string, string]] : []), ...(p.canBack ? [['Esc', p.backLabel ?? 'back'] as [string, string]] : [])];
   const row = (i: number): Scraped => scrapeRow(scene, p.box(i));
   const text = n ? p.problem(index) ?? p.hint(index) : p.canBack ? 'Nothing here yet. Press Esc to go back.' : 'Nothing here yet.';
-  const tabs = p.tabs ? `<div class="abs tabs" style="right:24px;top:52px;z-index:3">${p.tabs.labels.map((t, k) => `<span class="${k === p.tabs!.index ? 'on' : ''}"${act('tab', k)}>${esc(t)}</span>`).join('')}</div>` : '';
+  const tabs = p.tabs ? tabsBar(p.tabs.labels, p.tabs.index) : '';
   const back = p.canBack ? `<div class="abs hit" style="left:0;top:0;width:330px;height:48px;z-index:4"${act('back')}></div>` : '';
   const sum = p.summary();
   const over = sum === null ? '' : '<div class="shade" style="z-index:8"></div>' + W(`<div style="white-space:pre-wrap;line-height:22px;font-size:16px">${esc(sum)}</div><div class="sm acc">Press I, Enter or Esc to go back to the list</div>`, 'position:absolute;left:120px;right:120px;top:40px;bottom:50px;display:flex;flex-direction:column;gap:10px;padding:16px 20px;overflow:hidden;z-index:9', '', act('back'));
@@ -118,13 +109,7 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
   if (n === 0) body = H(name, area, hints) + `<div class="abs cen" style="left:0;right:0;top:220px;display:flex;font-size:26px;opacity:.6">Nothing here yet</div>` + TX(esc(text));
   else if (kind === 'grid') {
     const cur = row(index), found = Array.from({ length: n }, (_, i) => p.problem(i) === null).filter(Boolean).length;
-    if (c.v(2) === 1) {
-      const s = Math.floor(scrollStart(n, index, 10) / 5) * 5;
-      body = H(name, area, hints) + `<div class="abs" style="left:24px;right:24px;top:70px;display:grid;grid-template-columns:repeat(5,1fr);gap:14px">${Array.from({ length: Math.min(10, n - s) }, (_, q) => { const i = s + q, r = row(i), ok = p.problem(i) === null; return W(`<div class="cell${ok ? '' : ' off'}" style="width:92px;height:92px;background:#0000">${pic(r.art, 84) || (ok ? '' : '?')}</div><b style="font-size:14px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.label)}</b>`, 'display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px;min-width:0', i === index ? 'sel' : '', attr(i)); }).join('')}</div>` + more(n, s, 10, 'right:28px;top:438px') + TX(esc(text));
-    } else {
-      const s = Math.floor(scrollStart(n, index, 18) / 6) * 6;
-      body = H(name, area, hints) + `<div class="abs col" style="left:24px;top:74px;width:264px;gap:16px">${W(`<div class="row">${pic(cur.art, 56)}<b class="acc" style="font-size:20px">${esc(cur.label)}</b></div><div class="sm" style="line-height:20px">${esc(cur.note)}</div>${cur.tag ? `<div class="row sm"><span class="grow"></span><b>${esc(cur.tag)}</b></div>` : ''}`, 'display:flex;flex-direction:column;gap:8px')}${W(`<div class="row"><span class="grow">Found</span><b>${found}</b><span>/ ${n}</span></div>${hpb(Math.round((found / n) * 100), 0, ' gold')}`, 'display:flex;flex-direction:column;gap:8px')}</div><div class="abs" style="left:316px;right:24px;top:72px;display:grid;grid-template-columns:repeat(6,1fr);gap:10px">${Array.from({ length: Math.min(18, n - s) }, (_, q) => { const i = s + q, r = row(i), ok = p.problem(i) === null; return `<div class="cell${ok ? '' : ' off'}${i === index ? ' sel' : ''}"${attr(i)}>${pic(r.art, 76) || `<span style="font-size:13px;font-weight:700;text-align:center;padding:4px;overflow:hidden">${ok ? esc(r.label) : '?'}</span>`}</div>`; }).join('')}</div>` + more(n, s, 18, 'left:28px;top:438px') + TX(esc(text));
-    }
+    body = gridView(c, { title: name, area, hints, n, cell: (i) => { const r = row(i); return { art: r.art, label: r.label, off: p.problem(i) !== null }; }, index, detail: { title: cur.label, body: cur.note, facts: cur.tag ? [['', cur.tag]] : [], art: cur.art }, found, total: n, text });
   } else if (kind === 'board') {
     if (c.v(2) === 1) {
       const s = scrollStart(n, index, 6) & ~1;

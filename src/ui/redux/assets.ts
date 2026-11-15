@@ -83,3 +83,14 @@ export function rxImage(file: string): [number, number] | undefined {
   });
   return undefined;
 }
+
+let byId: Map<string, { file: string; atlas: boolean }> | null = null;
+/** The file behind one of the game's asset ids (a Phaser texture key), read from the asset manifest. Null when it is not a picture. */
+export function rxFileOf(manifest: { assets: { id: string; kind: string; path: string }[] } | null | undefined, assetId: string): { file: string; atlas: boolean } | null {
+  if (!byId) {
+    if (!manifest) return null;
+    byId = new Map();
+    for (const a of manifest.assets) if ((a.kind === 'atlas' || a.kind === 'image') && a.path.startsWith('images/')) byId.set(a.id, { file: a.kind === 'atlas' ? a.path.slice(7).replace(/\.png$/, '') : a.path.slice(7), atlas: a.kind === 'atlas' });
+  }
+  return byId.get(assetId) ?? null;
+}

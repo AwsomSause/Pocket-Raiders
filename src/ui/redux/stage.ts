@@ -49,6 +49,8 @@ let host: HTMLDivElement | null = null;
 let canvas: HTMLCanvasElement | null = null;
 const views = new Set<{ redraw: () => void }>();
 let lastBox = '';
+/** The scene whose view was last removed, and when: the same screen redrawing itself does not fade in again. */
+let gone = { key: '', at: 0 };
 
 /** True while the New UI is chosen (Settings > Display > UI style). */
 export const reduxOn = (): boolean => services().session.settings.uiStyle === 'new';
@@ -113,6 +115,7 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
   const root = ensureHost(scene.game);
   const el = document.createElement('div');
   el.dataset.scene = scene.scene.key;
+  const again = gone.key === scene.scene.key && performance.now() - gone.at < 400;
   let k = -1;
   let ctx!: ReduxCtx;
   // The look can change while a screen is open (Settings > UI theme): read it at every draw.
@@ -123,7 +126,7 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     if (now === k) return;
     k = now;
     ctx = { k, skin: REDUX_SKINS[k]!, v: (n) => reduxLayout(k, n) };
-    el.className = skinClass(k) + (o.clear ? ' clear' : '');
+    el.className = skinClass(k) + (o.clear ? ' clear' : '') + (again ? ' noin' : '');
   };
   dress();
   root.append(el);
@@ -158,6 +161,7 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     if (dead) return;
     dead = true;
     views.delete(view);
+    gone = { key: scene.scene.key, at: performance.now() };
     el.remove();
     scene.events.off('shutdown', destroy);
     scene.events.off('destroy', destroy);
