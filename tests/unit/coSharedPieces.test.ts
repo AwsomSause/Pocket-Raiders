@@ -3,7 +3,8 @@
 
 import { describe, expect, it } from 'vitest';
 import { EventDefSchema } from '../../src/core/contentSchema';
-import { chooseEvent, conditionMet, isFriendlyBattle } from '../../src/core/events';
+import { boostStat, chooseEvent, conditionMet, endRegionStatBoosts, EVENT_BOOST_CAP, isFriendlyBattle } from '../../src/core/events';
+import { calcStats } from '../../src/core/pokemon';
 import { chooseStarter, createRun, endRegionTempEffects, takeTurn, type TurnResult } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
@@ -131,5 +132,42 @@ describe('"Maybe later"', () => {
     start.story.flags['ev:co-test-later'] = 1;
     const later = chooseEvent(content, start, 'm', 3).run; // position 3 in the view: the added choice
     expect(later.itemCounters?.['event-seen:test-co-shared']).toBeUndefined();
+  });
+});
+
+describe('"+1 to a stat" from a scene', () => {
+  it('raises one stat of one Pokémon by 5% a point, inside the cap', () => {
+    const run = setup();
+    const mon = run.party[0]!;
+    const before = calcStats(content, mon).spe;
+    expect(boostStat(content, mon, 'spe', 5)).toBe(true);
+    expect(mon.eventBoosts).toEqual({ spe: 5 });
+    expect(calcStats(content, mon).spe).toBeGreaterThanOrEqual(before);
+    expect(boostStat(content, mon, 'spe', 15)).toBe(true);
+    expect(mon.eventBoosts!.spe).toBe(EVENT_BOOST_CAP);
+    expect(boostStat(content, mon, 'spe', 5)).toBe(false);
+  });
+
+  it('`best` picks the highest battle stat, `all` every stat', () => {
+    const run = setup();
+    const mon = run.party[0]!;
+    const stats = calcStats(content, mon);
+    const best = (['atk', 'def', 'spa', 'spd', 'spe'] as const).reduce((a, b) => (stats[b] > stats[a] ? b : a));
+    boostStat(content, mon, 'best', 5);
+    expect(mon.eventBoosts).toEqual({ [best]: 5 });
+    boostStat(content, mon, 'all', 5);
+    expect(Object.keys(mon.eventBoosts!).sort()).toEqual(['atk', 'def', 'hp', 'spa', 'spd', 'spe']);
+  });
+
+  it('a region-long boost ends with the region and leaves the lasting share', () => {
+    const run = setup();
+    const mon = run.party[0]!;
+    boostStat(content, mon, 'def', 5);
+    boostStat(content, mon, 'def', 5, true);
+    expect(mon.eventBoosts!.def).toBe(10);
+    endRegionStatBoosts(content, run.party);
+    expect(mon.eventBoosts!.def).toBe(5);
+    expect(mon.eventBoostsRegion).toBeUndefined();
+    expect(mon.hp).toBeLessThanOrEqual(calcStats(content, mon).hp);
   });
 });
