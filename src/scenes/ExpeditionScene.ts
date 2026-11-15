@@ -29,6 +29,10 @@ import { screenStyleOf } from '../core/presentation/screenStyles';
 import { getRaid } from '../core/raid/raid';
 import { getTotem } from '../core/totem/totem';
 import { drawExpeditionLook, type ExpeditionLayout, type ExpeditionLook } from '../ui/expeditionLooks';
+import { arenaFor, getTheme } from '../core/themes';
+import { artOf, partyChips } from '../ui/redux/game';
+import { mountRedux, reduxOn } from '../ui/redux/stage';
+import { mapView } from '../ui/redux/screens/map';
 
 const GLYPH: Record<string, { glyph: string; color: number }> = {
   wild: { glyph: 'W', color: 0x58a858 }, trainer: { glyph: 'T', color: 0xc85858 }, elite: { glyph: 'E', color: 0xa040c0 }, rest: { glyph: '+', color: 0xe06890 },
@@ -86,6 +90,9 @@ export class ExpeditionScene extends Phaser.Scene {
     void loadAssets(this, [song]).then(() => { if (this.scene.isActive()) playMusic(this, song); });
     if (!look && this.textures.exists('ui.raid.adv_header')) this.add.image(GAME_WIDTH / 2, 22, 'ui.raid.adv_header').setDisplaySize(GAME_WIDTH * 0.7, 56).setAlpha(0.5);
     const legend = def.legendary;
+    /** A Legendary stage's title card, while it plays (the New UI route waits for it). */
+    let intro: Promise<unknown> | null = null;
+    let rxArena: string | undefined;
     if (legend) {
       // A Legendary stage has its own colour wash and accent line.
       const layerNow = exp.current ? exp.nodes.find((n) => n.id === exp.current)!.layer + 1 : 0;
@@ -100,12 +107,13 @@ export class ExpeditionScene extends Phaser.Scene {
       const look = legendLook(session.content, def)!;
       // The event's own battleback behind the route (Essentials/UIE art), loaded on demand.
       const arenaId = uieArenaId(look.arena);
+      rxArena = arenaId;
       void loadAssets(this, [arenaId]).then(() => {
         if (!this.scene.isActive() || !this.textures.exists(arenaId)) return;
         this.add.image(0, 0, arenaId).setOrigin(0).setDisplaySize(GAME_WIDTH, GAME_HEIGHT).setAlpha(0.45).setDepth(-2);
       });
       if (opening || finaleNext) playSignature(this, look.shape, resolveAnim(legendAnimId(look.shape), animSettingsFrom(session.settings)));
-      if (opening || finaleNext) titleCard(this, finaleNext ? cards.finale.title : cards.intro.title, finaleNext ? cards.finale.sub : cards.intro.sub, kit.accent, motion);
+      if (opening || finaleNext) intro = titleCard(this, finaleNext ? cards.finale.title : cards.intro.title, finaleNext ? cards.finale.sub : cards.intro.sub, kit.accent, motion).done;
       this.add.text(GAME_WIDTH / 2, 8, `LEGENDARY EVENT  ·  ${legend.epithet}`, textStyle(12, legend.visual.accent)).setOrigin(0.5, 0);
     }
     const loot = exp.loot;
@@ -158,6 +166,60 @@ export class ExpeditionScene extends Phaser.Scene {
     });
     this.add.text(16, GAME_HEIGHT - 22, '←/→/↑/↓ choose  ·  Enter select', textStyle(14, '#8a7f96'));
     onInputAction(this, (a) => this.menu.handle(a));
+    // New UI: the route drawn with the mock-up map (its Expedition piece) unless an Expedition look is picked.
+    if (reduxOn() && !look) {
+      const content = session.content;
+      const layers = Math.max(...exp.nodes.map((n) => n.layer)) + 1;
+      const open = exp.choice || exp.status !== 'route' ? [] : availableNodes(exp);
+      const here = exp.current ? exp.nodes.find((n) => n.id === exp.current) : undefined;
+      const theme = run.stage ? getTheme(content, run.stage.themeId) : undefined;
+      const art = (artOf(this, rxArena) ?? artOf(this, theme ? arenaFor(content, theme) : undefined))?.file ?? null;
+      const trainer = artOf(this, content.archetypes.get(run.archetypeId)?.spriteAssetId)?.file ?? null;
+      const party = partyChips(this).map((p) => ({ file: p.file, hp: p.hp, label: `${p.name} Lv ${p.level}` }));
+      const prompt = exp.choice ? exp.choice.title : 'Choose your next stop';
+      const rules = legend ? stageRules(def, here ? here.layer + 1 : 0) : [];
+      const view = mountRedux(this, {
+        render: (c) =>
+          mapView(c, {
+            title: `${def.name} · Layer ${(here?.layer ?? -1) + 2}`,
+            chips: [legend ? `Legendary event · ${legend.epithet}` : `Tier ${def.tier}`, `₽ ${loot.money}`, `Mega Energy ${loot.energy}/${def.megaCost}`, `Research ${loot.research}/${def.researchGoal}`, ...items],
+            types: [],
+            lines: [...exp.log.slice(-2), ...rules],
+            party,
+            eggs: [],
+            art,
+            trainer,
+            columns: layers,
+            column: here ? here.layer + 1 : 0,
+            nodes: exp.nodes.map((n) => {
+              const col = exp.nodes.filter((x) => x.layer === n.layer);
+              const opt = open.findIndex((x) => x.id === n.id);
+              return { id: n.id, col: n.layer + 1, row: col.indexOf(n), rows: col.length, kind: n.blocked ? 'blocked' : n.kind, fog: false, visited: n.done, cur: n.id === exp.current, go: opt >= 0, dim: !n.done && opt < 0 && n.id !== exp.current, harder: false, opt, sides: [], marks: [], title: nodeLabel(n.kind), text: `Stop ${n.layer + 1}` };
+            }),
+            edges: exp.nodes.flatMap((n) => n.next.map((b) => ({ a: n.id, b, open: open.some((x) => x.id === b) && n.id === exp.current, walked: n.done || n.id === exp.current }))),
+            buttons: options.map((o, i) => ({ label: o.label, opt: i, hot: false })),
+            keys: [],
+            hints: [['Enter', 'choose']],
+            index: this.menu.index,
+            info: `${options[this.menu.index]?.label ?? ''}${options[this.menu.index]?.detail ? `: ${options[this.menu.index]!.detail}` : ''}`,
+            notice: prompt,
+            going: null,
+            banner: null,
+            legend: null,
+          }),
+        acts: {
+          pick: (i) => { this.menu.focus(Number(i), false); this.menu.confirm(); },
+          go: () => this.menu.confirm(),
+        },
+        overs: { over: (i) => this.menu.focus(Number(i), false) },
+      });
+      this.menu.onFocus = () => view.refresh();
+      // The stage's title card plays on the canvas first.
+      if (intro) {
+        view.visible(false);
+        void intro.then(() => view.visible(true));
+      }
+    }
   }
 
   private promptText(layout: ExpeditionLayout | null, text: string): void {

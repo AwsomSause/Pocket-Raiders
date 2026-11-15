@@ -66,6 +66,8 @@ export const act = (name: string, arg: string | number = ''): string => ` data-a
 const NODE_KINDS: Record<string, readonly [string, string]> = {
   wild: ['#3fae5a', 'W'], trainer: ['#d8483a', 'T'], gym: ['#d8a810', 'G'], elite: ['#d8a810', 'E'], champion: ['#d8a810', 'C'], event: ['#9a5ad8', '?'], shop: ['#e8892a', '$'], heal: ['#3d8bea', 'R'], rest: ['#3d8bea', 'R'],
   raid: ['#c03028', '!'], totem: ['#c03028', 'B'], fish: ['#38b0c8', 'F'], expedition: ['#38b0c8', 'X'], minigame: ['#9a5ad8', 'M'], service: ['#e8892a', 'S'], plaza: ['#3d8bea', 'P'],
+  // Mega-Expedition stops.
+  cache: ['#e8892a', '$'], research: ['#3d8bea', '?'], mystery: ['#9a5ad8', '!'], recruit: ['#2aa6a0', 'R'], megaEnergy: ['#d8a810', 'M'], finale: ['#d8483a', '★'], blocked: ['#5a4a4a', '✗'],
 };
 export const nodeStyle = (kind: string): readonly [string, string] => NODE_KINDS[kind] ?? ['#8a8a7a', kind.charAt(0).toUpperCase()];
 export const nodeDot = (kind: string, x: number, y: number, cur = false, off = false, attr = ''): string => { const [c, ch] = nodeStyle(kind); return `<div class="nd${off ? ' off' : ''}" style="left:${x}px;top:${y}px;--c:${c}"${attr}>${ch}${cur ? '<u></u>' : ''}</div>`; };
