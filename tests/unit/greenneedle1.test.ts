@@ -144,12 +144,10 @@ describe('gn.04 Mt. Moon', () => {
     expect(flagOf(run, 'gn-moon-right')).toBe(3);
     expect(scene(run, 'gn-04-dance-end').labels).toEqual(['Let it come with you.']);
     const before = run.party.length + (run.box?.length ?? 0);
-    const r = choose(run, 'gn-04-dance-end', 'Let it come with you.');
-    run = r.run;
+    run = win(choose(run, 'gn-04-dance-end', 'Let it come with you.').run); // the join prompt is accepted
     const clef = [...run.party, ...(run.box ?? [])].find((m) => m.speciesId === 'clefairy');
-    if (clef) expect(clef.moves.some((m) => m.id === 'moonblast')).toBe(true);
-    else expect(r.changes.join(' ') + JSON.stringify(run.pendingJoin ?? '')).toMatch(/lefairy/);
-    expect(run.party.length + (run.box?.length ?? 0)).toBeGreaterThanOrEqual(before);
+    expect(clef?.moves.some((m) => m.id === 'moonblast')).toBe(true);
+    expect(run.party.length + (run.box?.length ?? 0)).toBe(before + 1);
     expect(flagOf(run, 'kanto-moon-clefairy')).toBe(1);
     expect(openSide(run)?.eventId).toBe('gn-04-fossil');
   });
