@@ -1345,6 +1345,30 @@
       }
      ],
      "notice": "The Litwick on your shoulder burns steady and small. Haddon looks at it, and nods to it like a neighbour."
+    },
+    {
+     "id": "why",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-marsh-boardwalk-why",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Fifty years ago he reached this shore with a coffin and could not think what to do next. He is still going back."
+    },
+    {
+     "id": "paid",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-marsh-boardwalk-paid",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Your berry is on his shelf, in the row of things he could not refuse."
     }
    ]
   },
@@ -2929,7 +2953,7 @@
      }
     },
     {
-     "label": "Bring the wages.",
+     "label": "Bring the wages. (a node)",
      "requires": [
       {
        "kind": "flag",
@@ -3026,7 +3050,7 @@
      ],
      "addChoices": [
       {
-       "label": "Bring the wages back.",
+       "label": "Bring the wages back. (a node)",
        "requires": [
         {
          "kind": "money",
@@ -3100,7 +3124,7 @@
      ],
      "addChoices": [
       {
-       "label": "Bring the wages back.",
+       "label": "Bring the wages back. (a node)",
        "requires": [
         {
          "kind": "money",

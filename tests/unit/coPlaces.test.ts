@@ -69,8 +69,8 @@ describe('catalog overhaul: places (schema and reach)', () => {
 });
 
 describe('catalog overhaul: the Delves (STORY_FAMILIES_14)', () => {
-  it('twelve Delves, 76 rooms, each drawn as a map with one room per step from the gate to the exit', () => {
-    expect(DELVES.length).toBe(12);
+  it('twelve Delves with 76 rooms, plus the Celestial Observatory (8), each drawn as a map with one room per step from the gate to the exit', () => {
+    expect(DELVES.length).toBe(13);
     let rooms = 0;
     for (const chain of DELVES) {
       const list = chainRooms(content, chain);
@@ -82,7 +82,7 @@ describe('catalog overhaul: the Delves (STORY_FAMILIES_14)', () => {
       for (const r of list.slice(0, -1)) expect(content.events.get(r.event)!.choices.some((c) => c.success.effects.some((x) => x.kind === 'leavePseudo')), `${r.event} turn back`).toBe(true);
       for (const r of list) for (const c of [...content.events.get(r.event)!.choices, ...content.events.get(r.event)!.remembers.flatMap((v) => v.addChoices)]) for (const o of [c.success, c.failure]) if (o?.battle) expect((o.battle as { pseudo?: boolean }).pseudo, `${r.event}: ${c.label}`).toBe(true);
     }
-    expect(rooms).toBe(76);
+    expect(rooms).toBe(76 + 8);
   });
 
   it('the Forest Path: resting and feeding the Path Keeper both happen in one room, and then it comes along', () => {

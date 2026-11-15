@@ -1027,7 +1027,7 @@
    "intro": "A swarm of Combee circles a fallen hive, bumping into each other, lost. An arrow-shaped leaf is pinned to a tree with a single feather. It points left.",
    "choices": [
     {
-     "label": "Help rebuild the hive.",
+     "label": "Help rebuild the hive. (a node)",
      "success": {
       "text": "You wedge the hive back into the fork of the tree and hold it while they seal it with wax. It takes a long while. They leave two combs of Honey at your feet and will not hear of you refusing.",
       "effects": [
@@ -1321,7 +1321,7 @@
      }
     },
     {
-     "label": "Take its post.",
+     "label": "Take its post. (a node)",
      "success": {
       "text": "You stand at the forest's edge in its place. Near dusk a child comes crying through the ferns, and you walk her out to the road and her mother. On the branch above, the Decidueye watches you do it right. Then it tucks its head under its wing, and lets itself sleep.",
       "effects": [
@@ -1414,6 +1414,30 @@
        }
       }
      ]
+    },
+    {
+     "id": "fed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-dense-forest-path-fed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It ate from your hand, back in the roots. It is standing a little straighter for it."
+    },
+    {
+     "id": "rested",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-dense-forest-path-rested",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It kept your watch while you slept, and it has seen you all the way out, as it does for everyone."
     }
    ]
   },
@@ -1798,11 +1822,16 @@
     {
      "label": "Read the letters.",
      "success": {
-      "text": "You read them in order. R was no great smuggler, and a worse poet. He loved Maud. Every spring he waited at this cove. Every letter ends the same way: \"Perhaps next year.\" She never came.",
+      "text": "You read them in order. R was no great smuggler, and a worse poet. He loved Maud. Every spring he waited at this cove. Every letter ends the same way: \"Perhaps next year.\" She never came. You keep the top one, the last he wrote.",
       "effects": [
        {
         "kind": "flag",
         "key": "delve-coastal-cove-read",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-coastal-cove-letter",
         "amount": 1
        },
        {
@@ -2604,6 +2633,11 @@
         "amount": 1
        },
        {
+        "kind": "item",
+        "id": "cranes-rope",
+        "count": 1
+       },
+       {
         "kind": "flag",
         "key": "crane-rope",
         "amount": 1
@@ -2620,6 +2654,32 @@
        }
       ]
      }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "twelfth",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-mountain-pass-twelfth",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know now why the last two names sit so close together. Elspeth told you by her fire."
+    },
+    {
+     "id": "father",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-mountain-pass-father",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"He went up for the twelfth,\" Elspeth said. This is where he went."
     }
    ]
   }

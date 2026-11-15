@@ -75,7 +75,7 @@ const FOREST: Json[] = [
     n.back,
   ]),
   forest.room('b', 'A swarm of Combee circles a fallen hive, bumping into each other, lost. An arrow-shaped leaf is pinned to a tree with a single feather. It points left.', (n) => [
-    ch('Help rebuild the hive.', n.to('You wedge the hive back into the fork of the tree and hold it while they seal it with wax. It takes a long while. They leave two combs of Honey at your feet and will not hear of you refusing.', takeNode(), item('honey', 2), fr(2))),
+    ch('Help rebuild the hive. (a node)', n.to('You wedge the hive back into the fork of the tree and hold it while they seal it with wax. It takes a long while. They leave two combs of Honey at your feet and will not hear of you refusing.', takeNode(), item('honey', 2), fr(2))),
     ch('Battle.', n.wild('The swarm takes you for whatever knocked their home down.', { species: ['combee'], chain: 2, win: [rp(1)] })),
     ch('Follow the leaf.', n.to('You go left. A second leaf, then a third, each pinned with a brown feather, each one exactly where a tired traveller would start to doubt. Someone has been doing this for a very long time.', flag(n.f('sign')), rp(1))),
     n.back,
@@ -93,9 +93,11 @@ const FOREST: Json[] = [
   forest.room('d', 'Daylight, green and sudden. The Decidueye is on the last branch before the open road, where it has stood to see every traveller out.', (n) => [
     ch('Thank it.', n.to('You bow. It bows back, stiffly, and drops something at your feet: a Sharp Beak, from a Pokémon it guided out long ago and never forgot.', item('sharp-beak'), flag(n.f('done')), flag(n.f('resident-thanked')))),
     ch('"Come with me."', n.to('It looks at the road, then back at the forest full of people who are not lost yet. It hesitates for a long moment. Then it turns back into the trees. It is too tired to go, and too tired to stop.', flag(n.f('done')), flag(n.f('resident-stayed')))),
-    ch('Take its post.', n.to('You stand at the forest\'s edge in its place. Near dusk a child comes crying through the ferns, and you walk her out to the road and her mother. On the branch above, the Decidueye watches you do it right. Then it tucks its head under its wing, and lets itself sleep.', flag(n.f('done')), flag(n.f('resident-relieved')), takeNode(), good(2), moment('You took the Path Keeper\'s post so it could finally sleep.', 60))),
+    ch('Take its post. (a node)', n.to('You stand at the forest\'s edge in its place. Near dusk a child comes crying through the ferns, and you walk her out to the road and her mother. On the branch above, the Decidueye watches you do it right. Then it tucks its head under its wing, and lets itself sleep.', flag(n.f('done')), flag(n.f('resident-relieved')), takeNode(), good(2), moment('You took the Path Keeper\'s post so it could finally sleep.', 60))),
   ], (n) => [
     variant('cared', [flagIs(n.f('rested')), flagIs(n.f('fed'))], { notice: 'It kept your watch, and you fed it. It has not looked away from you since.', hide: [1], add: [ch('"Come with me."', n.to('It looks at the forest. A Rowlet flutters down onto the branch beside it, puffed up and serious, and takes the post. The old Decidueye studies the little one, nods once, and steps off the branch onto your shoulder. It is heavier than it looks, and it is done being alone.', flag(n.f('done')), flag(n.f('resident-joined')), join({ species: ['decidueye'], lv: 2 }), good(2), moment('The Path Keeper left its forest to a Rowlet and came with you.', 70)))] }),
+    variant('fed', [flagIs(n.f('fed'))], { notice: 'It ate from your hand, back in the roots. It is standing a little straighter for it.' }),
+    variant('rested', [flagIs(n.f('rested'))], { notice: 'It kept your watch while you slept, and it has seen you all the way out, as it does for everyone.' }),
   ]),
 ];
 
@@ -130,7 +132,7 @@ const COVE: Json[] = [
   ]),
   cove.room('d', 'A battered chest: smuggled goods, long rotted to rags. And beside it, tied with fishing line, a bundle of unsent letters. Every one is addressed to "Maud".', (n) => [
     ch('Open the goods.', n.to('Under the rot, the part that does not spoil: a Pearl and a Big Pearl, still wrapped in a smuggler\'s handkerchief.', item('pearl'), item('big-pearl'))),
-    ch('Read the letters.', n.to('You read them in order. R was no great smuggler, and a worse poet. He loved Maud. Every spring he waited at this cove. Every letter ends the same way: "Perhaps next year." She never came.', flag(n.f('read')), rp(1))),
+    ch('Read the letters.', n.to('You read them in order. R was no great smuggler, and a worse poet. He loved Maud. Every spring he waited at this cove. Every letter ends the same way: "Perhaps next year." She never came. You keep the top one, the last he wrote.', flag(n.f('read')), flag(n.f('letter')), rp(1))),
     ch('Give them to the Pelipper.', n.to('The Pelipper lands and takes the whole bundle in its beak, gently, like eggs. It looks at you once. Then it flies straight out to sea with thirty years of post, toward somewhere it has decided the letters belong.', flag(n.f('gave-letters')), good(1))),
     n.back,
   ]),
@@ -188,7 +190,10 @@ const PASS: Json[] = [
   pass.room('e', 'Daylight at the top of the pass, hard and clean. A cairn of stones stands here. Twelve names are cut into its flat face, the last two closer together than the rest.', (n) => [
     ch('Add a stone.', n.to('You find a stone that fits and set it on the cairn. The wind drops. Very high up, something with great wings crosses the sun, and for a moment its shadow rests on you like a hand.', flag(n.f('done')), flag('sign-bird'), rp(2))),
     ch('Read the names.', n.to('You read all twelve aloud. Ten strangers. The eleventh name on the stone is CRANE. The twelfth is a boy\'s. Someone has kept the letters clear of lichen with a knife, every year.', flag(n.f('done')), rp(1))),
-    ch('Call Elspeth up.', n.to('You shout down the pass. A long silence. Then she climbs it, fast and perfect, and stops short of the top like a horse at a gate. She has not stood here since. She sits down with the cairn and puts her hand flat on her father\'s name. When you leave, she presses his rope on you. "It\'s brought eleven down. Let it bring you."', flag(n.f('done')), flag(n.f('resident-climbed')), flag('crane-rope'), good(3), moment('Elspeth Crane climbed to her father\'s cairn for the first time, and gave you his rope.', 70))),
+    ch('Call Elspeth up.', n.to('You shout down the pass. A long silence. Then she climbs it, fast and perfect, and stops short of the top like a horse at a gate. She has not stood here since. She sits down with the cairn and puts her hand flat on her father\'s name. When you leave, she presses his rope on you. "It\'s brought eleven down. Let it bring you."', flag(n.f('done')), flag(n.f('resident-climbed')), item('cranes-rope'), flag('crane-rope'), good(3), moment('Elspeth Crane climbed to her father\'s cairn for the first time, and gave you his rope.', 70))),
+  ], (n) => [
+    variant('twelfth', [flagIs(n.f('twelfth'))], { notice: 'You know now why the last two names sit so close together. Elspeth told you by her fire.' }),
+    variant('father', [flagIs(n.f('father'))], { notice: '"He went up for the twelfth," Elspeth said. This is where he went.' }),
   ]),
 ];
 

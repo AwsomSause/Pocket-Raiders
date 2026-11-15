@@ -1,6 +1,6 @@
 {
  "category": "places",
- "note": "The twelve Delves (catalog overhaul pack, STORY_FAMILIES_14.md) as chain pseudo-stages: the map is drawn from the rooms' own links. entry = the gate event (tools/events/co/places-1..3.ts).",
+ "note": "The Delves (catalog overhaul pack, STORY_FAMILIES_14.md) as chain pseudo-stages: the map is drawn from the rooms' own links. entry = the gate event (tools/events/co/places-1..4.ts).",
  "chains": [
   {
    "id": "ps_delve_abandoned_mine_shaft",
@@ -108,6 +108,15 @@
    "themeId": "grass-ghost",
    "tint": "#22352a",
    "mood": "swallowed town",
+   "start": "opened"
+  },
+  {
+   "id": "ps_delve_celestial_observatory",
+   "name": "The Celestial Observatory",
+   "entry": "delve-gate-celestial-observatory",
+   "themeId": "psychic-fairy",
+   "tint": "#221c40",
+   "mood": "old glass dome",
    "start": "opened"
   }
  ]

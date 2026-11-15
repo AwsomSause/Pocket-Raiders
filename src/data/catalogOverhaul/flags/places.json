@@ -1,1 +1,29 @@
-{ "category": "places", "flags": [] }
+{
+ "category": "places",
+ "note": "Run flags the places events use. `from` = set by another category's system and only read here; `for` = set here for another category to read. Every other flag is set and read inside the places files.",
+ "flags": [
+  { "key": "noble-ine", "from": "families-c (A1, Ine the Warden met)", "readBy": "dg-abandoned-mine-shaft-d" },
+  { "key": "delta-d2-done", "from": "legends (Delta chain D2, the Ghost Dragon of the Burnt Valley, finished)", "readBy": "dg-volcanic-core-g" },
+  { "key": "alpha-gyarados-met", "from": "legends (Alpha A2, the lake Gyarados, done)", "readBy": "dg-deep-ocean-h" },
+  { "key": "faller-rank", "from": "legends (Ultra Beast Incursions; places adds +1 at dg-deep-ocean-b)", "readBy": "dg-celestial-observatory-h" },
+  { "key": "calmed-alpha", "for": "legends (Alpha of Alphas at 6)", "setBy": "every Delve den and guardian that is calmed" },
+  { "key": "sign-bird", "for": "legends (Signs)", "setBy": "dg-mountain-pass-e, dg-sky-bridge-c" },
+  { "key": "sign-fire", "for": "legends (Signs)", "setBy": "dg-volcanic-core-i" },
+  { "key": "sign-kyogre", "for": "legends (Signs)", "setBy": "dg-deep-ocean-g" },
+  { "key": "telling-celebi", "for": "legends (Tellings)", "setBy": "dg-overgrown-forest-d, -h" },
+  { "key": "telling-deoxys", "for": "legends (Tellings)", "setBy": "dg-celestial-observatory-h" },
+  { "key": "delta-clue-d1", "for": "legends (Delta Study D1)", "setBy": "dg-coastal-cove-c" },
+  { "key": "delta-clue-d2", "for": "legends (Delta chain D2)", "setBy": "dg-volcanic-core-g" },
+  { "key": "tear-marked", "for": "legends (a Ranger seals the Tear next region)", "setBy": "dg-deep-ocean-b" },
+  { "key": "tear-observatory", "for": "legends (Ultra Beast Tears)", "setBy": "dg-celestial-observatory-h" },
+  { "key": "hollow-lantern-clue", "for": "the Hollow Lantern (SF16)", "setBy": "dg-marsh-boardwalk-c" },
+  { "key": "wailmer-guided", "for": "Whale Song (SF41.2)", "setBy": "dg-deep-ocean-d" },
+  { "key": "farhome-escorted", "for": "The One Far From Home (SF32, families-b)", "setBy": "dg-frozen-cavern-d" },
+  { "key": "farhome-kept", "for": "The One Far From Home (SF32, families-b)", "setBy": "dg-frozen-cavern-d" },
+  { "key": "farhome-herd", "for": "The One Far From Home (SF32, families-b)", "setBy": "dg-frozen-cavern-d" },
+  { "key": "kind-total", "for": "Kindness total (STANDARDS.md)", "setBy": "Kindness +1 outcomes" },
+  { "key": "kind-helped-stranger", "for": "Kindness Ledger (MEMORY_AND_FORMAT 2.1)", "setBy": "dg-marsh-boardwalk-e" },
+  { "key": "rep", "for": "Reputation (families-c)", "setBy": "Reputation +N outcomes" },
+  { "key": "rep-lost", "for": "Reputation (families-c)", "setBy": "Reputation -N outcomes" }
+ ]
+}

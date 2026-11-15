@@ -116,6 +116,8 @@ const CORE: Json[] = [
     ch('Battle.', n.wild('The Alpha does not wait for the pack.', { species: ['houndoom'], lv: 3, win: [rp(2)] })),
     ch('Back away from the pups.', n.to('You show your hands and walk backwards, away from the hollow, keeping the whole width of the cave between you and the pups. The Alpha paces you every step. At the far tunnel it stops, and lets you go.', flag(n.f('backed-away')), rp(1))),
     n.back,
+  ], (n) => [
+    variant('known', [flagIs(n.f('backed-away')), no(n.f('den-calmed'))], { notice: 'The Alpha knows your smell: the one who backed away from the pups. It does not rise this time.', hide: [0], add: [ch('Calm it. (it remembers you)', n.to('You sit down where you are and wait. The Alpha walks over, slow, and sniffs your open hands. Then it turns its back on you, which from a Houndoom is everything, and lies down across the mouth of the hollow.', flag(n.f('den-calmed')), flag('calmed-alpha'), rp(3)))] }),
   ]),
   core.room('e', 'A dry, warm corner. A hot spring bubbles in a basin of smooth stone, steam curling off it, the water milky blue.', (n) => [
     ch('Rest.', n.to('You sleep beside the spring with the warmth soaking into your back.', heal(0.5))),
@@ -239,6 +241,10 @@ const OCEAN: Json[] = [
     ch('Thank it.', n.to('You thank it, out loud, like a person. It flicks water at you with its tail, pleased, and waits to see what you will do next.', flag(n.f('done')), flag(n.f('resident-thanked')), fr(2))),
     ch('Ask it to come.', n.to('It thinks about it for as long as a wave takes to pass. Then it swims into your hands. It is old, and slow, and it has lit the way for strangers all its life; it would like, for once, to see where one of them goes.', flag(n.f('done')), flag(n.f('resident-joined')), join({ species: ['lanturn'], lv: 3 }), fr(10, 'newest'), moment('The Lantern Fish of the Deep Ocean came up into the sun with you.', 70))),
     ch('Let it go down.', n.to('It turns and sinks, its light going gold again as the water darkens round it, down and down, to wait for the next diver who needs showing home.', flag(n.f('done')), flag(n.f('resident-down')), rp(1))),
+  ], (n) => [
+    variant('calmed', [flagIs(n.f('resident-calmed'))], { notice: 'It put a Gyarados to sleep for you with nothing but its own small light. It looks rather pleased with itself.' }),
+    variant('lanturn', [flagIs('delve-deep-ocean-lanturn')], { notice: 'You put yourself between it and a Sharpedo, down there. It has not forgotten.' }),
+    variant('fought', [flagIs(n.f('resident-fought'))], { notice: 'It watched you fight the Gyarados in the dark, and lit the way up for you anyway.' }),
   ]),
 ];
 
