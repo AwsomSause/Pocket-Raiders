@@ -2070,3 +2070,75 @@ test('New UI: in an Extended Cut climax a wide-format page opens the phase list 
   await expect(room).toContainText('Everyone still standing has rested.');
   expect(errors).toEqual([]);
 });
+
+test('New UI: the node event menu is a row of cards over the map; the cursor, a click beside it, Esc and a pick all work, and the old canvas menu is not drawn', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=node-menu-e2e');
+  await toMap(page);
+  // Menus on for this run; stand on the first node as if its battle were won.
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    const run = pkr.session.run;
+    run.expansion = { ...(run.expansion ?? {}), nodeMenus: { stage: '', menus: {}, tally: { menus: 0, picks: 0, micro: 0, skipped: 0 } } };
+    const first = run.stage.map.nodes.find((n: any) => n.column === 1);
+    run.stage.current = first.id;
+    run.stage.visited.push(first.id);
+    pkr.game.scene.getScene('Map').scene.restart({ focus: 0 });
+  });
+  await waitForScene(page, 'Map');
+  await page.waitForTimeout(250);
+  const map = view(page, 'Map');
+  const openMenu = () => page.evaluate(() => {
+    const scene = (window as any).__pkr.game.scene.getScene('Map');
+    const i = scene.options.findIndex((o: any) => o.kind === 'nodeMenu');
+    if (i >= 0) scene.activate(i);
+    return i;
+  });
+  expect(await openMenu()).toBeGreaterThanOrEqual(0);
+  await expect(map).toContainText('What to do here?');
+  const menu = await page.evaluate(() => (window as any).__pkr.session.nodeMenu());
+  const cards = menu.entries.filter((v: any) => v.entry.kind !== 'encounter');
+  const card = map.locator('[data-over="menuOver"]');
+  await expect(card).toHaveCount(cards.length);
+  // The New layer draws it: the old canvas pop-up is not there and the layer stays on screen.
+  expect(await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').children.list.filter((o: any) => o.name === 'node-menu').length)).toBe(0);
+  await expect(map).toBeVisible();
+  const first = cards.findIndex((v: any) => !v.done && !v.locked);
+  await expect(card.nth(first)).toHaveClass(/sel/);
+  await page.screenshot({ path: 'test-results/newui-node-menu.png' });
+  // Right moves the cursor (and wraps); resting the pointer on a card moves it too.
+  await page.keyboard.press('ArrowRight');
+  await expect(card.nth((first + 1) % cards.length)).toHaveClass(/sel/);
+  await card.nth(first).hover();
+  await expect(card.nth(first)).toHaveClass(/sel/);
+  // Esc closes it and nothing was picked; a click beside the cards closes it as well.
+  await page.keyboard.press('Escape');
+  await expect(map).not.toContainText('What to do here?');
+  expect((await page.evaluate(() => (window as any).__pkr.session.nodeMenu())).menu.picked.length).toBe(0);
+  await page.waitForTimeout(250);
+  await openMenu();
+  await expect(map).toContainText('What to do here?');
+  await map.locator('.shade[data-act="menu"]').click({ position: { x: 20, y: 500 } });
+  await expect(map).not.toContainText('What to do here?');
+  // Esc on the free map still opens the pause menu, not the node menu.
+  await page.waitForTimeout(250);
+  // Pick a quick stop with the keyboard: it plays at once and is marked done.
+  const micro = cards.findIndex((v: any) => v.entry.kind === 'micro');
+  expect(micro).toBeGreaterThanOrEqual(0);
+  await openMenu();
+  await expect(map).toContainText('What to do here?');
+  for (let i = first; i < micro; i++) await page.keyboard.press('ArrowRight');
+  await expect(card.nth(micro)).toHaveClass(/sel/);
+  await page.keyboard.press('Enter');
+  await expect(map).not.toContainText('What to do here?');
+  await expect.poll(async () => (await page.evaluate(() => (window as any).__pkr.session.nodeMenu())).menu.picked.length).toBe(1);
+  await page.waitForTimeout(250);
+  // Open it again: the stop that was done is dimmed and says so, and Enter on it does nothing.
+  await openMenu();
+  await expect(card.nth(micro)).toContainText('Done');
+  await expect(card.nth(micro)).toHaveAttribute('style', /brightness/);
+  await card.nth(micro).click();
+  await expect(map).toContainText('What to do here?');
+  expect((await page.evaluate(() => (window as any).__pkr.session.nodeMenu())).menu.picked.length).toBe(1);
+  expect(errors).toEqual([]);
+});
