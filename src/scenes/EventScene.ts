@@ -26,6 +26,8 @@ import { eventBackdrop, eventStyleOf } from '../core/presentation/eventStyles';
 import { layoutFor } from '../ui/eventStyles';
 import type { ChoiceWidget, EventCtx, EventLayoutHandles, Rect } from '../ui/eventStyles/types';
 import { sceneForRun } from './routing';
+import { tourneyBracket } from '../core/expansion/tourney';
+import { drawChampionStage, drawTourneyPanel, drawTourneyStrip } from '../ui/tourneyBracket';
 
 
 const BOTTOM_H = 168;
@@ -48,6 +50,7 @@ export class EventScene extends Phaser.Scene {
   private calm = false;
   private moneyText: Phaser.GameObjects.Text | null = null;
   private layout: EventLayoutHandles | null = null;
+  private bracketPanel: Phaser.GameObjects.Container | null = null;
 
   constructor() {
     super('Event');
@@ -109,6 +112,21 @@ export class EventScene extends Phaser.Scene {
       this.add.text(GAME_WIDTH - 24, 56, `${clockLabel(run)}  ·  ${seasonOf(content, run)}${specialDateToday(content, run) ? `  ·  ${specialDateToday(content, run)!.label}` : ''}  ·  ${look.ambient}`, textStyle(16, '#f4ecd0', { stroke: '#101010', strokeThickness: 3 })).setOrigin(1, 0).setName('camp-clock').setDepth(30);
     }
     this.moneyPill(run.money, this.layout.moneyAt);
+    // Beta 0.7 Fighting Tournament: the bracket strip on every tournament event, B for the full bracket, the podium at the end.
+    this.bracketPanel = null;
+    if (scene.tourney !== undefined) {
+      const tv = tourneyBracket(content, run, scene.tourney);
+      const toggle = (): void => {
+        if (this.bracketPanel) { this.bracketPanel.destroy(); this.bracketPanel = null; return; }
+        this.bracketPanel = drawTourneyPanel(this, content, tv, toggle);
+      };
+      drawTourneyStrip(this, tv, toggle);
+      this.input.keyboard?.on('keydown-B', toggle);
+      if (scene.tourney === 6) {
+        const champ = run.party.find((m) => m.champion) ?? run.party.find((m) => m.speciesId === 'primeape' || m.speciesId === 'mankey');
+        drawChampionStage(this, content, champ?.speciesId ?? 'primeape', Number(run.story.flags['ev:r25-food'] ?? 0) > 0, this.calm);
+      }
+    }
     if (!this.calm) this.ambient(scene.effect, area, layers.fx);
     if (area.w < GAME_WIDTH || area.h < GAME_HEIGHT) layers.fx.setMask(this.make.graphics({}, false).fillRect(area.x, area.y, area.w, area.h).createGeometryMask());
     this.cards = this.layout.widgets.map((w, i) => ({ box: w.box, view: view.choices[i]!, widget: w }));
@@ -141,6 +159,11 @@ export class EventScene extends Phaser.Scene {
   }
 
   private handle(action: InputAction): void {
+    if (this.bracketPanel) {
+      this.bracketPanel.destroy();
+      this.bracketPanel = null;
+      return;
+    }
     if (this.phase === 'outcome') {
       if (action === 'confirm' || action === 'back') this.leave();
       return;
@@ -371,6 +394,8 @@ export class EventScene extends Phaser.Scene {
       case 'sparkle':
       case 'glint':
         return spawn(() => this.add.star(rnd(r.x + r.w * 0.1, r.x + r.w * 0.9), rnd(r.y + r.h * 0.17, r.y + r.h * 0.52), 4, 2, rnd(5, 9), 0xfff4a0, 1), -20, 10, 900, effect === 'glint' ? 240 : 120);
+      case 'confetti':
+        return;
       case 'fog':
         return spawn(() => this.add.ellipse(rnd(r.x - 60, r.x + r.w), rnd(r.y + r.h * 0.3, r.y + r.h * 0.56), rnd(120, 220), rnd(30, 50), 0xd8d8e8, 0.18), 0, 160, 4000, 500);
       case 'float':
