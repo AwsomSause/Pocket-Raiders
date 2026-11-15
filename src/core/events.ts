@@ -9,6 +9,7 @@
 // one seeded by the stop. No existing stream is touched, so adding events
 // changes no other roll, and choosing again after a reload gives the same result.
 
+import { flagAge, lineHolds, lineMember, queueLaterEvent, stampFlagStage } from './events/questline';
 import { modifierEventWeight } from './runModifiers';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
 import { PSEUDO, enterPseudoStage, leavePseudoStage, routeChainEvent } from './dungeon/pseudo';
@@ -162,6 +163,12 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
     }
     case 'eventSeen':
       return (run.itemCounters?.[`event-seen:${c.id}`] ?? 0) > 0;
+    case 'flagAge': {
+      const age = flagAge(run, c.key, stageNumber(content, run));
+      return age !== null && age >= c.atLeast && age <= c.atMost;
+    }
+    case 'partyLine':
+      return c.absent ? !lineHolds(content, run, c.species) : lineHolds(content, run, c.species, c.bond);
     case 'noTrainerTag':
       return !getArchetype(content, run.archetypeId).eventTags.includes(c.tag);
     case 'partyAbility':
@@ -374,6 +381,10 @@ export function conditionText(content: Content, c: EventCondition): string {
       return `Needs a ${c.id.charAt(0).toUpperCase()}${c.id.slice(1)} Pokémon in your party`;
     case 'eventSeen':
       return `Needs an earlier delivery`;
+    case 'flagAge':
+      return 'Needs more time to pass';
+    case 'partyLine':
+      return c.absent ? `Needs no ${content.species.get(c.species)?.name ?? c.species} in your party` : c.bond > 0 ? `Needs ${content.species.get(c.species)?.name ?? c.species} to trust you more` : `Needs ${content.species.get(c.species)?.name ?? c.species} in your party`;
     case 'noTrainerTag':
       return `Your trainer won't do this`;
     case 'memberFainted':
@@ -1033,7 +1044,10 @@ export function effectWords(content: Content, e: EventEffect): string {
       return 'allies gathered';
     case 'rivalChange':
     case 'flag':
+    case 'laterEvent':
       return '';
+    case 'friendshipLine':
+      return `${content.species.get(e.species)?.name ?? e.species}: friendship ${e.amount >= 0 ? '+' : ''}${e.amount}`;
     case 'cast':
       return 'a new file in your Dossier';
     case 'grandArcRom':
@@ -1428,9 +1442,18 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     }
     case 'sky':
       return applySky(content, run, e);
+    case 'laterEvent':
+      queueLaterEvent(run, e.eventId, e.nodes);
+      return '';
+    case 'friendshipLine': {
+      const mon = lineMember(content, run, e.species);
+      if (mon) changeFriendship(content, mon, e.amount);
+      return '';
+    }
     case 'flag':
       run.story.flags[`ev:${e.key}`] = Math.max(0, Number(run.story.flags[`ev:${e.key}`] ?? 0) + e.amount);
       if (e.stamp === 'region' && run.story.flags[`ev:${e.key}-at`] === undefined) run.story.flags[`ev:${e.key}-at`] = run.regionIndex + 1;
+      if (e.amount > 0) stampFlagStage(run, e.key, stageNumber(content, run));
       // Shadow II: a story flag may be exactly the key a Shadow in your party or PC has been waiting for.
       for (const line of checkFlagKeys(content, run)) recordChoice(content, run, { id: `shadow-key-${e.key}`, pick: 'yes', text: line, weight: 2 });
       return '';
