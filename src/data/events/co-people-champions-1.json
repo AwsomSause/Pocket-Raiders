@@ -1483,40 +1483,6 @@
    ],
    "remembers": [
     {
-     "id": "free-statue",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "champ-invite-free-statue",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "The caretaker reads the invitation you hand over, twice, and coughs. One statue, on the house.",
-     "hide": [
-      0
-     ],
-     "addChoices": [
-      {
-       "label": "\"Fight a Champion.\"",
-       "success": {
-        "text": "The caretaker waves the invitation at the nearest plinth, and stone grinds on stone as the statue turns its head toward you. No donation needed, this once.",
-        "effects": [
-         {
-          "kind": "flag",
-          "key": "champ-invite-free-statue",
-          "amount": -1
-         },
-         {
-          "kind": "addEvent",
-          "eventId": "mr-hall-champions-wing-1"
-         }
-        ]
-       }
-      }
-     ]
-    },
-    {
      "id": "plate",
      "when": [
       {

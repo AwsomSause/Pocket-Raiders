@@ -263,11 +263,6 @@ const hallFight = (text: string, ...fx: Json[]): Json => out(text, ...fx, room(w
 const hall: Json[] = [
   scene(HALL, 'The Hall of Past Champions', {
     remembers: [
-      variant('free-statue', [is('champ-invite-free-statue')], {
-        notice: 'The caretaker reads the invitation you hand over, twice, and coughs. One statue, on the house.',
-        hide: [0],
-        add: [ch('"Fight a Champion."', hallFight('The caretaker waves the invitation at the nearest plinth, and stone grinds on stone as the statue turns its head toward you. No donation needed, this once.', flag('champ-invite-free-statue', -1)))],
-      }),
       variant('plate', [is('ghost-plate')], { notice: `At the far end, the empty plinth is not quite empty any more. A new brass plate is fixed to its front, still bright: ${GHOST_NAME.toUpperCase()}. Someone has left a sprig of wildflowers beside it.` }),
       variant('glass-plaque', [is('glass-plaque')], { notice: 'By the door hangs a small plaque of clear glass, new since anyone last dusted in here. You remember promising someone it would be.' }),
     ],
@@ -558,4 +553,4 @@ export const AFTERSTORY: { match: string; readBy: string }[] = [
   { match: 'ressa-(trained|battled|talked|partner-stat)', readBy: 'QPAF PA4 Afterstory: Ressa at the Final Reunion; ressa-partner-stat needs engine (her partner\'s stat point)' },
 ];
 
-export const EXTERNAL: string[] = ['champ-invite-free-statue', 'glass-plaque'];
+export const EXTERNAL: string[] = ['glass-plaque'];
