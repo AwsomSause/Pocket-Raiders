@@ -33,7 +33,7 @@ export const PseudoRecordSchema = z.object({
 });
 export type PseudoRecord = z.infer<typeof PseudoRecordSchema>;
 /** A pseudo-stage made from an existing chain of story events (Flight North, Sabrina's Labyrinth, Route 25, the Fighting Tournament): the map is drawn from the events' own links, so none of their text, fights or rules change. */
-export const ChainSchema = z.object({ id: z.string().regex(/^ps_[a-z0-9_]+$/), name: z.string().min(1), entry: z.string().min(1), themeId: z.string(), tint: z.string().regex(/^#[0-9a-f]{6}$/i), mood: z.string() });
+export const ChainSchema = z.object({ id: z.string().regex(/^ps_[a-z0-9_]+$/), name: z.string().min(1), entry: z.string().min(1), themeId: z.string(), tint: z.string().regex(/^#[0-9a-f]{6}$/i), mood: z.string(), /** `opened`: the player starts on the room the entry's chosen choice opened (a questline whose first choice picks the route). Without it the map lets the player pick among every room the entry opens. */ start: z.enum(['opened']).optional(), /** Evil Team hideouts (evil-story): the team this chain belongs to. */ team: z.string().optional() });
 export type PseudoChain = z.infer<typeof ChainSchema>;
 export const PseudoFileSchema = z.object({
   chains: z.array(ChainSchema).default([]),
@@ -42,6 +42,11 @@ export const PseudoFileSchema = z.object({
   records: z.array(PseudoRecordSchema).length(10),
 });
 export const PSEUDO = PseudoFileSchema.parse(json);
+/** Catalog Overhaul Pack: each category adds its own chain pseudo-stages in src/data/catalogOverhaul/pseudo/<category>.json, so threads never share a file. */
+export const PseudoExtraFileSchema = z.object({ category: z.string().optional(), note: z.string().optional(), chains: z.array(ChainSchema) });
+const extraChainFiles = Object.values(import.meta.glob<unknown>('../../data/catalogOverhaul/pseudo/*.json', { eager: true, import: 'default' }));
+/** Every chain pseudo-stage: the four Kanto lines, then each category's own. */
+export const PSEUDO_CHAINS: readonly PseudoChain[] = [...PSEUDO.chains, ...extraChainFiles.flatMap((f) => PseudoExtraFileSchema.parse(f).chains)];
 
 const asDungeon = (r: PseudoRecord): DungeonDef => ({
   id: r.id, name: r.name, kind: 'themed', tier: r.tier, theme: r.mood, types: [], wild: r.wild, nodes: r.nodes,
@@ -146,8 +151,8 @@ export function opensNext(event: Pick<EventDef, 'choices'>): string[] {
   return [...new Set(out)];
 }
 
-const chainOfEntry = (event: string) => PSEUDO.chains.find((c) => c.entry === event);
-export const chainById = (id: string): PseudoChain | undefined => PSEUDO.chains.find((c) => c.id === id);
+const chainOfEntry = (event: string) => PSEUDO_CHAINS.find((c) => c.entry === event);
+export const chainById = (id: string): PseudoChain | undefined => PSEUDO_CHAINS.find((c) => c.id === id);
 
 /** The chain's rooms: the events its entry opens (column 1) and everything they open, by shortest distance from the entry. */
 export function chainRooms(content: Content, chain: PseudoChain): { event: string; depth: number; next: string[]; battle: 'trainer' | 'wild' | null }[] {
@@ -204,11 +209,19 @@ export function routeChainEvent(content: Content, run: RunState, eventId: string
   const st = run.stage;
   if (!st) return false;
   if (!st.pseudo) {
-    const chain = PSEUDO.chains.find((c) => chainRooms(content, c).some((r) => r.depth === 1 && r.event === eventId));
+    const chain = PSEUDO_CHAINS.find((c) => chainRooms(content, c).some((r) => r.depth === 1 && r.event === eventId));
     // Only the entry's own targets step in; the entry event stays on the parent node.
     if (!chain || !opensNext(content.events.get(chain.entry)!).includes(eventId)) return false;
     run.pseudoParent = structuredClone(st);
     run.stage = buildChainStage(content, chain, st);
+    if (chain.start === 'opened') {
+      // The entry's choice picked the route: stand on that room at once, and the map opens it.
+      const first = run.stage.map.nodes.find((n) => n.roomEvent === eventId)!;
+      run.stage.current = first.id;
+      run.stage.visited.push(first.id);
+      first.sides.push({ id: `event-room-1-${first.id}`, kind: 'event', used: false, eventId });
+      if (run.itemCounters) delete run.itemCounters[`event-seen:${eventId}`];
+    }
     return true;
   }
   if (!st.pseudo.chain) return false;
