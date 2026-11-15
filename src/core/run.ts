@@ -13,6 +13,7 @@
 // next region, or wins the run after the last one.
 
 import { regionGifts, regionInterest } from './flagPerks';
+import { noteReleased } from './co/familiesA';
 import { noteBattle } from './expansion/fieldNotes';
 import { settleSky } from './sky/story';
 import { finishSpectate } from './sky/spectate';
@@ -4204,6 +4205,7 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
       count(run, 'caughtToCandies');
       message = `${name} was released. You got ${candies} cand${candies === 1 ? 'y' : 'ies'}. ${markDecided(run, caught, false)}`.trim();
       recordReleased(content, run, caught);
+      noteReleased(run, caught);
     } else {
       throw new Error('Choose what to do with the caught Pokémon');
     }

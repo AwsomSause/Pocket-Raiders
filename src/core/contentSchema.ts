@@ -3057,6 +3057,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('blessing'), id: z.string().min(1) }),
   /** A Blissful awakening: the healthiest, fondest party Pokémon that is not Shadow becomes Blissful for good (needs friendship 150). */
   z.object({ kind: z.literal('awaken') }),
+  /** Catalog overhaul SF16 (families-a): the last Pokémon released this run comes back and asks to join, at its old level (nothing without a release). */
+  z.object({ kind: z.literal('rejoinReleased') }),
   /** You get an Egg (core/eggs.ts) that hatches after `left` battles or stages; it carries up to two egg moves. */
   z.object({
     kind: z.literal('egg'),

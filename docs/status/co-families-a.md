@@ -10,6 +10,11 @@ Docs: `STORY_FAMILIES_1.md`, `_2`, `_3`, `_4`, `_7` in `/mnt/project-files/catal
 - Shared pieces used (cherry-picked): people's region stamps and friendly battles, anime's `flagAge` / `laterEvent` / `partyLine`, new-events' `takeNode` and `who` selectors, families-c's text tokens.
 - Save: none.
 
+## Where this stopped (paused 2026-11-15, Kice: five threads at a time)
+- Done: docs 1 and 2 (built, re-read, tested). Shared pieces cherry-picked, plus the engine part of people's `statBoost`.
+- Doc 3 (`STORY_FAMILIES_3.md`) read in full, not built yet. Engine piece for SF16 already in: `src/core/co/familiesA.ts` (the last Pokémon released this run: flag `released-count`, text tokens `{released}` / `{releasedType}`, effect `rejoinReleased`). Plan for doc 3: the Exhibition Bracket as a chain pseudo-stage; the Rival Circuit keeps the `tournament` rounds; contests use the battle rule `contest`; the convoy keeps the `convoy` effects; the informant and the convoy secret are chosen by region.
+- Still to do: docs 3, 4, 7; placement file; update notes; browser test; `npm run check`; mark PR #1315 ready.
+
 ## Known limits (honest list)
 Doc 1 (SF1 to SF6)
 - The rival's lines "by personality" use one neutral line (no personality condition yet).

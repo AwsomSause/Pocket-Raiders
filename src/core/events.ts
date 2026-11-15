@@ -9,6 +9,7 @@
 // one seeded by the stop. No existing stream is touched, so adding events
 // changes no other roll, and choosing again after a reload gives the same result.
 
+import { lastReleased } from './co/familiesA';
 import { flagAge, lineHolds, lineMember, queueLaterEvent, stampFlagStage } from './events/questline';
 import { applyCoEffect, coConditionMet, coConditionText, coEffectWords, fillCoText, restoreMachine } from './events/coToolkit';
 import { modifierEventWeight } from './runModifiers';
@@ -26,6 +27,7 @@ import { getArchetype, runPerks } from './archetypes';
 import { ATTRIBUTE_LABELS, addRunAttribute, effectiveAttributes, runAttributeEffects } from './attributes';
 import { createBattle } from './battle/engine';
 import type { Content, EventBattle, EventBattleFormat, EventChoice, EventCondition, EventDef, EventEffect, EventOutcome, TradeWant, TypeName } from './contentSchema';
+import { EventEffectSchema } from './contentSchema';
 import { curveLevel, enemyLevel, evolvedFormAt, levelScale, rollShiny, withPartyStrength } from './encounters';
 import { changeFriendship } from './friendship';
 import { atLeast, promptById, type Grade, type PromptResult } from './interaction/prompt';
@@ -1001,6 +1003,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return content.shadowWorld.blessings.find((b) => b.id === e.id)?.name ?? 'a blessing';
     case 'awaken':
       return 'a Pokémon awakens';
+    case 'rejoinReleased':
+      return 'the one you let go asks to come back';
     case 'egg':
       return 'you get an Egg';
     case 'eggMove':
@@ -1350,6 +1354,11 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     }
     case 'blessing':
       return grantBlessing(content, run, e.id);
+    case 'rejoinReleased': {
+      const back = lastReleased(run);
+      if (!back || !content.species.has(back.speciesId)) return '';
+      return applyEffect(content, run, EventEffectSchema.parse({ kind: 'join', species: [back.speciesId], level: Math.min(100, back.level) }), rng, tradeUid);
+    }
     case 'awaken': {
       const pick = run.party.filter((m) => m.hp > 0 && !m.shadow && !m.blissful && m.friendship >= 150).sort((a, b) => b.friendship - a.friendship)[0];
       if (!pick) return '';

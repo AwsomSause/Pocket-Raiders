@@ -3,6 +3,7 @@
 // in `run.story.flags` (`ev:<key>` numbers, like the `flag` effect; `co:<key>` strings for the Time Machine).
 // Guide: docs/status/co-families-c.md.
 
+import { fillFamiliesAText } from '../co/familiesA';
 import data from '../../data/catalogOverhaul/familiesC.json';
 import type { Content, EventCondition, EventEffect } from '../contentSchema';
 import { getSpecies, maxHp } from '../pokemon';
@@ -56,6 +57,7 @@ export function fillCoText(content: Content, run: Run, text: string): string {
     least: () => nameOf(content, leastUsed(run)),
     impostorType: () => (imp ? getSpecies(content, imp.speciesId).types[0]! : 'normal'),
   };
+  text = fillFamiliesAText(content, run as RunState, text);
   return text.replace(/\{(lead|starter|most|least|impostorType)\}/g, (_, k: string) => table[k]!()).replace(/\{flag:([a-z][a-z0-9-]*)\}/g, (_, k: string) => String(num(run, k)));
 }
 
