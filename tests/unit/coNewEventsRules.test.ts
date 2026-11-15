@@ -69,6 +69,10 @@ describe('{nextRegion} in event text (NE17)', () => {
     expect(fillCoText(content, run, 'After this comes {nextRegion}.')).toBe(`After this comes ${next}.`);
     run.regionIndex = run.regionOrder.length - 1;
     expect(fillCoText(content, run, '{nextRegion}')).toBe('the League');
+    const two = withTwo();
+    two.party[0]!.friendship = 200;
+    two.party[1]!.friendship = 10;
+    expect(fillCoText(content, two, '{lowestBond}')).toBe(content.species.get(two.party[1]!.speciesId)!.name);
     expect(fillCoText(content, run, '{finalRegion}')).toBe(content.regions.get(run.regionOrder[run.regionOrder.length - 1]!)!.name);
   });
 });

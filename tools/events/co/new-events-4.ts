@@ -222,7 +222,7 @@ const NE80: Json[] = [
     ]),
   after(80, 'ne80-the-rescue-hut', 'The Rescue Hut', GROUP.hazard, [flagIs('snow-trainer-climbed'), age('snow-trainer-climbed')], { minStage: 6, stop: 'rest', pokemon: 'vanilluxe', tint: '#1c2a3a' },
     P('A hut on a high pass, with a lamp in the window and a sign: RESCUE. KNOCK ANY HOUR.', 'The trainer from the valley inn opens the door, and behind him a Vanilluxe is making ice for the water jug. They run the pass together now. Nobody gets left up here.'), [
-      ch('Come in out of the cold.', out('They give you the warm seat and a hot drink and do not ask you for anything. The Vanilluxe sits against the trainer\'s leg all evening.', heal(0.5))),
+      ch('Come in out of the cold.', out('They give you the warm seat and a hot drink and do not ask you for anything. The Vanilluxe sits against the trainer\'s leg all evening.')),
     ]),
 ];
 
@@ -308,7 +308,7 @@ const NE83: Json[] = [
       'It is a chase. It is a long, loud, undignified chase, through the camp and round the tree and twice across the river.',
       'In the end everyone is in, and everyone is clean, and every sting of poison and burn has washed away downstream.',
       'The Fire- and Rock-types sit on the bank afterwards, dripping and betrayed. The rest are splashing and won\'t come out.',
-    ), cure(), fr(3, 'party'), fr(-8, { types: ['fire', 'rock'] }), CLEAN)),
+    ), cure(), bondUp(1, 'party'), bondUp(-2, { types: ['fire', 'rock'] }), CLEAN)),
     ch('Only the ones who want to.', out(P(
       'You let them choose. About half the team wades in, shrieking at the cold, then refusing to get out.',
       'Afterwards they sit by the fire, clean and fluffy and very smug, and make a point of sitting upwind of the others.',
@@ -394,7 +394,7 @@ const WRONG_DOOR = (where: string): Json => ch(where, out(P(
 const NE86: Json[] = [
   ne(86, 'town-where-everyone-lies', 'The Town Where Everyone Lies on Tuesdays', GROUP.puzzle, {
     place: { earliest: 'A3', home: 16, window: [14, 18], sits: 'must-see', attaches: 'town', note: 'The town; else Step 16. The Gym key is in it, so it cannot fail: Wait for Wednesday always works and takes Step 19. The header shows the day.' },
-    tags: ['Mystery', 'Puzzle'], cast: ['trainer.youngster_m'], pokemon: 'sableye', effect: 'flicker', tint: '#2a2234',
+    tags: ['Mystery', 'Exploration'], cast: ['trainer.youngster_m'], pokemon: 'sableye', effect: 'flicker', tint: '#2a2234',
   },
   P(
     'A painted sign at the town gate: WELCOME. TODAY IS NOT TUESDAY.',
@@ -479,7 +479,7 @@ const NE87: Json[] = [
 const NE88: Json[] = [
   ne(88, 'well-with-two-bottoms', 'The Well With Two Bottoms', GROUP.puzzle, {
     place: { earliest: 'A2', home: 7, window: [4, 10], sits: 'optional', attaches: 'town', level: 'A+0', note: 'The town; else Step 7. A+0 for the battle if a Pokémon is sent down.' },
-    tags: ['Puzzle', 'Exploration'], pokemon: 'shellos', effect: 'glint', tint: '#14242a',
+    tags: ['Mystery', 'Exploration'], pokemon: 'shellos', effect: 'glint', tint: '#14242a',
   },
   P(
     'An old stone well in the village square. A woman lowers a bucket into it. It goes down dry. It comes up dry.',
@@ -584,7 +584,7 @@ const NE90: Json[] = [
       ch('Just knock, and say thank you.', out('A thimble of nectar is passed out to you, formally, and the door closes.')),
     ]),
   after(90, 'ne90-the-last-door', 'The Last Door', GROUP.puzzle, [flagIs('tree-gifted'), place({ lastRegion: true, regionEnd: true })], { minStage: 4, pokemon: 'flabebe', tint: '#1c2a1c', effect: 'sparkle' },
-    P('Near the very end of your journey, one more small door, in one more old tree.', 'It is standing open. Inside there is a tiny room with tiny chairs, and on a shelf above the tiny fireplace, kept like a treasure, is the Oran Berry you left on the very first step. Dried, and polished, and kept.'), [
+    P('Near the very end of your journey, one more small door, in one more old tree.', 'It is standing open. Inside there is a tiny room with tiny chairs. On a shelf above the tiny fireplace, kept like a treasure, is the Oran Berry you left on the very first step. Dried, and polished, and kept.'), [
       ch('Close the door softly.', out('You close it very gently. Behind it someone small says something that might be goodbye.', moment('At the last small door, your first gift was on a shelf.'))),
     ]),
 ];
@@ -631,7 +631,7 @@ const NE91: Json[] = [
 const NE92: Json[] = [
   ne(92, 'tutor-who-forgot-the-move', 'The Move Tutor Who Forgot the Move', GROUP.shop, {
     place: { earliest: 'A4', home: 12, window: [9, 15], sits: 'side-branch', attaches: 'instead', tags: ['city'], note: 'City stages and Fighting stages.' },
-    tags: ['Training', 'Story'], cast: ['trainer.black_belt_m'], effect: 'none', tint: '#2a1c1c',
+    tags: ['Pokémon', 'Story'], cast: ['trainer.black_belt_m'], effect: 'none', tint: '#2a1c1c',
     requires: [stageIs('fighting')],
   },
   P(
@@ -677,9 +677,9 @@ const NE93: Json[] = [
       'No warning. No advice. Just what is true. The Xatu\'s head turns back to the front.',
     ), $(-100), { kind: 'gymPreview' }), FORTUNE_COST),
     ch('Ask about my team.', out(P(
-      'The card says: {least}.',
-      'Underneath, in smaller type: You have hardly sent it out. It has noticed.',
-      'You look over at {least}. It is pretending not to be listening.',
+      'The card says: {lowestBond}. The bond there is the thinnest on your team.',
+      'Underneath, in smaller type: {least} is the one you have sent out least. Some of the why is in that.',
+      'You look over at {lowestBond}. It is pretending not to be listening.',
     ), $(-100)), FORTUNE_COST),
     ch('Ask about me.', out('The card says something true about you.', $(-100), flag('fortune-told')), {
       ...FORTUNE_COST,
@@ -695,7 +695,7 @@ const NE93: Json[] = [
 const NE94: Json[] = [
   ne(94, 'auction-of-useless-things', 'The Auction of Useless Things', GROUP.shop, {
     place: { earliest: 'A3', home: 10, window: [7, 13], sits: 'optional', attaches: 'town', tags: ['city'], note: 'The town; else Step 10.' },
-    tags: ['Shop', 'Comedy'], effect: 'none', tint: '#2a2218',
+    tags: ['Shop', 'Story'], effect: 'none', tint: '#2a2218',
   },
   P(
     'In a tent at the back of the market, an auctioneer in a tall hat holds up a bent spoon, as if it were a crown.',
@@ -764,7 +764,7 @@ const FESTIVAL = temp('Festival: shops are 10% off', 5, 'battle', prices(0.9));
 const NE96: Json[] = [
   ne(96, 'festival-of-first-catches', 'The Festival of First Catches', GROUP.fest, {
     place: { earliest: 'A4', home: 10, sits: 'optional', attaches: 'town', note: 'The Town node of Stage 4 or 5 of any region; until towns exist, Step 10. The header reads Festival for the whole stage.' },
-    tags: ['Festival', 'Pokémon'], effect: 'confetti', tint: '#2a2410',
+    tags: ['Story', 'Pokémon'], effect: 'confetti', tint: '#2a2410',
     requires: [place({ stage: [4, 5] })],
   },
   P(
@@ -838,7 +838,7 @@ const tableOf = (n: number): Json[] => Array.from({ length: n }, TABLE);
 const NE98: Json[] = [
   ne(98, 'regions-thank-you', 'The Region\'s Thank-You', GROUP.fest, {
     place: { earliest: 'A8', sits: 'must-see', attaches: 'after', often: 'region', note: 'After Step 20 of a region\'s eighth stage, before the next region\'s first. Once per region. The gifts depend on the region\'s Kindness count.' },
-    tags: ['Story', 'Festival'], cast: ['trainer.worker_m'], effect: 'none', tint: '#2a2418',
+    tags: ['Story', 'Relationship'], cast: ['trainer.worker_m'], effect: 'none', tint: '#2a2418',
     repeat: true,
     requires: [place({ regionEnd: true })],
   },
