@@ -34,6 +34,7 @@ import { eliteRematchDue } from './story/eliteRematch';
 import { markAssisted } from './tools/assisted';
 import { crossObstacle, placeDungeon, placeLandmark, placeObstacles, placeWeekStops, tremorStep } from './traversal';
 import { wandererStageStart, wandererStep } from './wanderer';
+import { laterEventStep } from './events/questline';
 import { climaxBattleEnded, setClimaxCut } from './arc/climaxExtended';
 import { freeHandedOverRival, standWithClimaxLost, standWithOf } from './arc/standWithExtended';
 import { makeShadow, rollShadowHeart, soothePartyAfterBattle } from './shadow';
@@ -101,7 +102,9 @@ import { bumpEventCounters } from './eventToolkit';
 import { blackMarketMarkup, fieldResearchMoney, spookyEncounterChance, voiceAsksToJoin } from './trainerEvolution';
 import { growGarden } from './berries';
 import { layEgg, tickEggs } from './eggs';
-import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
+import { spendTakenNode } from './co/takeNode';
+import { attachBlocker, holdNodeBattle, releaseNodeBattle, takeNodeLevelShift } from './co/attach';
+import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, endRegionStatBoosts, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
@@ -120,6 +123,7 @@ import { timeOfDay } from './arenaStyle';
 import { recordAftermath } from './overhaul/aftermath';
 import { assignGrowthPaths, noteMapGrowth } from './overhaul/growth';
 import { tickChainTimers } from './overhaul/chains';
+import { coBattleBegin, coFled, coHealStop, coNodeEnter, coStageStart, coWildKo } from './events/coToolkit';
 import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
 import { endLastResort } from './battle/lastResort';
 import { defaultPrep, startingResources } from './runPrep';
@@ -729,6 +733,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   expireStageMods(run);
   ultraStageTick(content, run, run.regionIndex * campaign.stagesPerRegion + index + 1, false);
   startStageEffects(run);
+  coStageStart(run);
   clearRecentPurchases(run);
   applyWealthTax(content, run);
   hatchEggs(content, run);
@@ -851,11 +856,28 @@ function enterLeague(content: Content, run: RunState): void {
   addFinaleCanonStops(content, run);
   placeStoryStops(content, run);
   startStageEffects(run);
+  coStageStart(run);
   syncHpPerks(content, runArchetype(content, run).modifiers, run.party);
   if (!gauntlet(run.rules)) healParty(content, run);
   run.battle = null;
   run.phase = 'map';
   takeCheckpoint(run);
+}
+
+/** Catalog Overhaul (people): "for the region" bonuses (`tempEffect` with `until: 'region'`) end when the run moves on (mutates `run`). */
+export function endRegionTempEffects(run: RunState): void {
+  const kept: RunState['tempEffects'] = [];
+  for (const temp of run.tempEffects) {
+    if (temp.until !== 'region') {
+      kept.push(temp);
+      continue;
+    }
+    for (const effect of temp.effects) {
+      const at = run.perkEffects.findIndex((m) => JSON.stringify(m) === JSON.stringify(effect));
+      if (at >= 0) run.perkEffects.splice(at, 1);
+    }
+  }
+  run.tempEffects = kept;
 }
 
 /** Signature effects that run out: counts this battle against each and removes the finished ones from the run's perks (mutates `run`). */
@@ -923,6 +945,8 @@ function enterNextRegion(content: Content, run: RunState): void {
   }
   run.regionIndex += 1;
   run.log.charmUsedInRegion = false;
+  endRegionTempEffects(run);
+  endRegionStatBoosts(content, [...run.party, ...run.box]);
   shiftPartyLevels(content, run, regionLevelOffset(runArchetype(content, run).modifiers));
   // Pass Orbs turn into money in each new region.
   const orbMoney = regionMoneyFromItems(content, run);
@@ -998,6 +1022,9 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   // Beta 0.7 Node Event Menus: a required entry must be done first; then the node's menu closes.
   const blocker = menuBlocker(run);
   if (blocker) throw new Error(blocker);
+  // Catalog Overhaul: an event that comes before (or instead of) this node's battle is played before moving on.
+  const waiting = attachBlocker(content, run);
+  if (waiting) throw new Error(waiting);
   closeNodeMenu(content, run);
   // A pseudo-stage plays like a stage, but its nodes play their room event (no route items, roamers or stage extras on its small map).
   if (stage.pseudo) return moveInPseudo(content, run, nodeId);
@@ -1018,6 +1045,7 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   stage.visited.push(nodeId);
   tickChainTimers(run.story.flags);
   stepClock(content, run);
+  coStep(content, run);
   // Bridge Mail adds a stop beside the node the player reaches.
   addBridgeStops(content, run, nodeId);
   // Roaming Legendaries move on as you do.
@@ -1057,27 +1085,42 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   if (notes) onCross(notes);
   // A trainer tailing you steps out after a few nodes (ideas W4, wandering trainer).
   wandererStep(content, run);
+  // Catalog Overhaul questlines: an event queued for "N nodes on" opens beside this node (a node spent on work below moves it one on).
+  laterEventStep(content, run);
+  // Catalog Overhaul: a choice that cost "(a node)" spends this stop on the work: no battle and no reward, but the level counts.
+  const taken = spendTakenNode(content, run, node);
+  if (taken) {
+    onCross(taken.text);
+    if (taken.spent) return run;
+  }
   // The Mach Bike rides past a wild Pokémon: no battle, but the reward draft still comes.
   if (mode === 'machBike' && node.kind === 'wild') {
     run.afterDecisions = 'reward';
     continueAfterDecisions(content, run);
     return run;
   }
+  // Catalog Overhaul: an event placed before (or instead of) the battle plays first; the map opens it at once (core/co/attach.ts).
+  if (holdNodeBattle(content, run, node)) return run;
+  fightNode(content, run, node);
+  return run;
+}
+
+/** The node's own battle. Also started when an event that came before it is done (continueAfterDecisions). */
+function fightNode(content: Content, run: RunState, node: MapNode): void {
   // A Nap Pod (run events G): the party sleeps through the next wild stop: no battle and no reward.
   if (node.kind === 'wild' && (run.itemCounters?.['nap'] ?? 0) > 0) {
     run.itemCounters = { ...run.itemCounters, nap: 0 };
-    return run;
+    return;
   }
   // A Repel keeps a wild Pokémon away: no battle and no reward, but the level counts.
   if (node.kind === 'wild' && repelActive(content, run)) {
     useRepel(content, run);
-    return run;
+    return;
   }
   startEncounter(content, run, node);
   // A weather front over the node sets the battle's weather.
   applyFrontWeather(content, run, node);
   recordBattleStart(content, run);
-  return run;
 }
 
 /** Walks to a node of a pseudo-stage: time passes as on any stage, then the node's room event opens beside it (the map opens it at once). */
@@ -1089,6 +1132,7 @@ function moveInPseudo(content: Content, run: RunState, nodeId: string): RunState
   stage.visited.push(nodeId);
   tickChainTimers(run.story.flags);
   stepClock(content, run);
+  coStep(content, run);
   if (node.roomEvent && !node.sides.some((x) => x.eventId === node.roomEvent)) {
     node.sides.push({ id: `event-room-1-${node.id}`, kind: 'event', used: false, eventId: node.roomEvent });
     if (run.itemCounters) delete run.itemCounters[`event-seen:${node.roomEvent}`];
@@ -1998,7 +2042,9 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
   const archetype = runArchetype(content, run);
   const theme = getTheme(content, stage.themeId);
   const campaign = getCampaign(content, run.campaignId);
-  const scale = withPartyStrength(content, stage.kind === 'league' ? leagueScale(content, run.regionIndex) : levelScale(content, campaign, run.regionIndex, stage.index, node.column), run.party.map((p) => p.level));
+  // Catalog Overhaul: an event that came first may have made this battle some stages easier or harder (read once).
+  const shift = takeNodeLevelShift(run);
+  const scale = withPartyStrength(content, stage.kind === 'league' ? leagueScale(content, run.regionIndex) : levelScale(content, campaign, run.regionIndex, Math.max(0, stage.index + shift), node.column), run.party.map((p) => p.level));
   // Counts stages from the start of the run (trainer and gym teams grow with it).
   const stageNumber = run.regionIndex * campaign.stagesPerRegion + stage.index;
   const activeIndex = run.party.findIndex((p) => p.hp > 0);
@@ -2589,6 +2635,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
   if (side.kind === 'heal') {
     const before = run.party.map((m) => m.hp);
     healParty(content, run);
+    coHealStop(content, run, before);
     // Kalos step 3 (Members First): the Center gives back only part of each Pokémon's HP.
     const share = trackHealShare(content, run);
     if (share < 1) run.party.forEach((m, i) => { m.hp = Math.min(m.hp, Math.max(before[i] ?? 0, Math.ceil(maxHp(content, m) * share))); });
@@ -3024,6 +3071,7 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   const rng = new Rng(run.rng.battle);
   const ctx = battleContext(content, run, rng, new Rng(run.rng.capture));
   ultraMarkBattle(run);
+  coBattleBegin(content, run);
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
   run.rng.battle = rng.state;
   noteBattle(content, run);
@@ -3057,6 +3105,15 @@ function doublesAction(ctx: BattleContext, action: PlayerAction): PlayerAction {
   return { kind: 'double', commands };
 }
 
+/** Catalog Overhaul (families-c): one step on the map; a remembered scene may open beside the node reached. */
+function coStep(content: Content, run: RunState): void {
+  const eventId = coNodeEnter(content, run);
+  const stage = run.stage;
+  if (!eventId || !stage || stage.current === null || !content.events.has(eventId)) return;
+  const here = findNode(stage.map, stage.current);
+  here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId });
+}
+
 /** A Poké Doll: slips out of an ordinary wild battle. The item is used up; nothing is earned and the fight does not count as won or lost. */
 function escapeBattle(content: Content, run: RunState, itemId: string, rng: Rng, captureRng: Rng, hyperRng: Rng): TurnResult {
   const battle = run.battle!;
@@ -3064,6 +3121,7 @@ function escapeBattle(content: Content, run: RunState, itemId: string, rng: Rng,
   if (problem) throw new Error(problem);
   consumeItem(run.inventory, itemId);
   revertTransformations(content, battle, run.party, runArchetype(content, run).modifiers);
+  coFled(run);
   for (const mon of run.party) endHeldBattle(mon);
   endSignatureMoves(run.party);
   endLastResort(run);
@@ -3292,6 +3350,12 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     // Stand With Them: a lost climax battle is Second Shot (core/arc/standWithExtended.ts); the run always goes on.
     if (isStandWithBattle(content, battle.event) && standWithOf(run)) standWithClimaxLost(run);
     pseudoLost(content, run);
+    eventBattleLost(content, run, battle.event);
+    recordChanges(content, current, run, 'battle');
+    return { run, events, end: null, defeated: false, cues, drama, clubLost: true };
+  }
+  if (battle.outcome === 'lose' && battle.event && isFriendlyBattle(content, battle.event)) {
+    friendlyLost(content, run);
     eventBattleLost(content, run, battle.event);
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, clubLost: true };
@@ -3804,6 +3868,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
       if (run.party.length === 1) count(run, 'bossWinsSolo');
     } else {
       count(run, battle.kind === 'wild' ? 'wildDefeated' : 'trainersDefeated');
+      if (battle.kind === 'wild' && !battle.event) coWildKo(run);
       if (battle.kind === 'trainer' && battle.trainer && !battle.trainer.leaderId && !battle.event && !battle.rival) noteFoe(run, battle.trainer.name, battle.trainer.classId);
     }
   }
@@ -3960,6 +4025,9 @@ export function continueAfterDecisions(content: Content, run: RunState): void {
   } else {
     run.phase = 'map';
     settleChain(run);
+    // Catalog Overhaul: the event that came before this node's battle is done, so the battle starts now.
+    const held = releaseNodeBattle(content, run);
+    if (held) fightNode(content, run, held);
   }
 }
 
@@ -4464,6 +4532,17 @@ function assignField(content: Content, run: RunState, boss: boolean): void {
 }
 
 /** W7 rule P5: a loss inside a pseudo stage sends the party back to the map, partly healed (fainted Pokémon at the failure share of their HP), and the run goes on. */
+/** Catalog Overhaul: a friendly event fight was lost (`friendly: true`). Nobody is out: the party gets back on its feet and the run goes on from the same node. */
+export function friendlyLost(content: Content, run: RunState): void {
+  for (const m of run.party) {
+    const floor = Math.max(1, Math.floor(maxHp(content, m) * PSEUDO.rules.failureHeal));
+    if (m.hp < floor) m.hp = floor;
+    m.status = null;
+  }
+  run.battle = null;
+  run.phase = 'map';
+}
+
 export function pseudoLost(content: Content, run: RunState): void {
   // Flight North: a loss inside the Bug-type's stage sends you home with your own team back.
   restoreStash(run);
