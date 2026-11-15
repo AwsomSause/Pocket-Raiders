@@ -37,7 +37,7 @@ import { runPerks } from '../core/archetypes';
 import { frontRunner, isFalseProtagonist, rivalTitle, TIMELINE } from '../core/timeline/frontRunner';
 import { bondOf } from '../core/bond';
 import { boxCapacity } from '../core/trainerPerks';
-import { hiddenItemNode, mapItemSummary, repelActive } from '../core/mapItems';
+import { mapItemSummary, repelActive, visibleHiddenItemNode } from '../core/mapItems';
 import { expeditionPreview } from '../core/expedition/flow';
 import { minigamePreview } from '../core/minigame/flow';
 import { ROUTE_LABELS, routeKind } from '../core/campaign/director';
@@ -96,7 +96,7 @@ import { screenStyleOf } from '../core/presentation/screenStyles';
 import { MAP_SKINS } from '../ui/mapStyles';
 import { drawNextStop } from '../ui/mapStyles/nextstopCards';
 import { HUB_LIGHT, hubPeriod } from '../core/hubTown/daylight';
-import { eggLabel, eggRevealed, eggTier } from '../core/eggs';
+import { eggLabel, eggRevealed, eggTier, eggsHatchSooner } from '../core/eggs';
 import { protagonistTitle, topHeadline } from '../core/rivals/recognition';
 import { mentorHudLine } from '../core/mentors';
 import { ensureNarration } from '../core/overhaul/partyNarration';
@@ -734,7 +734,8 @@ export class MapScene extends Phaser.Scene {
     // ---------- the map (scrolls sideways) ----------
     // A bike chosen from the Items menu changes where the player can go.
     const choices = mapChoices(content, run);
-    const hidden = hiddenItemNode(content, run);
+    // Itemfinder / Looker: the ✦ stop; with only Juno's lesson it shows once it is a few steps ahead.
+    const hidden = visibleHiddenItemNode(content, run);
     const choiceIds = new Set(choices.map((n) => n.id));
     const mapLayer = this.add.container(0, 0);
     this.mapLayer = mapLayer;
@@ -1428,7 +1429,7 @@ export class MapScene extends Phaser.Scene {
         }
         return option.side.kind === 'heal' ? 'Healing spot: fully heals your party and restores PP (once).' : 'Shop: buy Poké Balls and medicine with your money.';
       case 'party':
-        return ['Your Pokémon: rearrange the party, make one lead, and read stats, moves, held items, bonds and history.', ...services().session.run!.eggs.map((e) => `${eggLabel(e)}.`)].join(' ');
+        return ['Your Pokémon: rearrange the party, make one lead, and read stats, moves, held items, bonds and history.', ...services().session.run!.eggs.map((e) => `${eggLabel(e, eggsHatchSooner(services().session.content, services().session.run!))}.`)].join(' ');
       case 'bag':
         return 'Everything you own in one place: medicine, balls, held items (and who holds them), passive items and map items.';
       case 'camp':
@@ -1674,7 +1675,9 @@ export class MapScene extends Phaser.Scene {
     if (!preview) return '';
     const content = services().session.content;
     const item = preview.source;
-    const names = preview.team.map((m) => `${content.species.get(m.speciesId)?.name ?? m.speciesId}${withLevels && m.level ? ` Lv${m.level}` : ''}`).join(', ');
+    // Linden's Notebook adds each wild Pokémon's moves.
+    const moves = (ids: string[] | undefined) => (ids && ids.length > 0 ? ` (${ids.map((id) => content.moves.get(id)?.name ?? id).join('/')})` : '');
+    const names = preview.team.map((m) => `${content.species.get(m.speciesId)?.name ?? m.speciesId}${withLevels && m.level ? ` Lv${m.level}` : ''}${moves(m.moves)}`).join(', ');
     if (n.kind === 'gym') return `${item}: ${preview.team.length === 1 ? 'the ace is' : 'the team is'} ${names}`;
     return `${item}: ${preview.trainerName ? `${preview.trainerName} with ` : ''}${names}`;
   }
