@@ -320,7 +320,7 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
     case 'partyTag':
       return run.party.some((m) => content.species.get(m.speciesId)?.tags.includes(c.tag));
     case 'partyGroup':
-      return run.party.some((m) => MOMENT_GROUPS[c.group]?.includes(m.speciesId) ?? false);
+      return run.party.filter((m) => MOMENT_GROUPS[c.group]?.includes(m.speciesId) ?? false).length >= c.atLeast;
     case 'photos':
       return (run.camp?.photos.length ?? 0) >= c.atLeast;
     case 'bond':
@@ -481,7 +481,7 @@ export function conditionText(content: Content, c: EventCondition): string {
     case 'partyTag':
       return `Needs a ${c.tag} Pokémon in your party`;
     case 'partyGroup':
-      return `Needs one of the ${c.group.replace(/-/g, ' ')} in your party`;
+      return c.atLeast > 1 ? `Needs ${c.atLeast} of the ${c.group.replace(/-/g, ' ')} in your party` : `Needs one of the ${c.group.replace(/-/g, ' ')} in your party`;
     case 'starter':
       return 'Needs a particular starter';
     case 'photos':

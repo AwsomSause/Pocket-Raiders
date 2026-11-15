@@ -60,10 +60,16 @@ export function fillCoText(content: Content, run: Run, text: string): string {
     nextRegion: () => content.regions.get(run.regionOrder[run.regionIndex + 1] ?? '')?.name ?? 'the League',
     // New events (NE93): the party Pokémon with the lowest friendship (the first of them on a tie).
     lowestBond: () => nameOf(content, [...run.party].sort((a, b) => a.friendship - b.friendship)[0] ?? lead),
+    // Pokémon Moments (PG18): the appliance Rotom found, by the stage's theme (the same order the choice's branches use).
+    rotomAppliance: () => {
+      // Read the theme here rather than import co/neRules: that import changes module load order, which moved old-seed fingerprints.
+      const types: readonly string[] = (run.stage && content.themes.get(run.stage.themeId)?.types) || [];
+      return types.includes('fire') ? 'an old oven' : types.includes('ice') ? 'a broken fridge' : types.includes('flying') ? 'an electric fan' : types.includes('grass') ? 'a lawnmower' : 'a washing machine';
+    },
     // New events (NE41): the run's last region.
     finalRegion: () => content.regions.get(run.regionOrder[run.regionOrder.length - 1] ?? '')?.name ?? 'the League',
   };
-  return text.replace(/\{(lead|starter|most|least|impostorType|nextRegion|finalRegion|lowestBond)\}/g, (_, k: string) => table[k]!())
+  return text.replace(/\{(lead|starter|most|least|impostorType|nextRegion|finalRegion|lowestBond|rotomAppliance)\}/g, (_, k: string) => table[k]!())
     // Pokémon Moments (PA11): the first party Pokémon from a moment group, by name (the lead when none is in the party).
     .replace(/\{group:([a-z0-9-]+)\}/g, (_, g: string) => nameOf(content, run.party.find((m) => MOMENT_GROUPS[g]?.includes(m.speciesId)) ?? lead)).replace(/\{flag:([a-z][a-z0-9-]*)\}/g, (_, k: string) => String(num(run, k)));
 }

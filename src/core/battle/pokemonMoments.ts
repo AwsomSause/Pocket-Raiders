@@ -6,7 +6,7 @@ import { calcStats, maxPp } from '../pokemon';
 import { Rng, hashSeed } from '../rng';
 import { currentEnemy, freshStages, freshVolatile, type PokemonInstance } from '../state';
 import { calcDamage, clampStage, isStatusImmune, typeEffectiveness } from './damage';
-import { POKEMON_MOMENTS, MOMENT_COUNTERPARTS, MOMENT_GROUPS, momentKey, momentMatches, momentRoll, momentsFor, pokemonMoment, runClaimKey, type MomentEffect, type MomentTrigger, type PokemonMoment } from '../moments/pokemonMoments';
+import { POKEMON_MOMENTS, STARTER_TRIOS, MOMENT_COUNTERPARTS, MOMENT_GROUPS, momentKey, momentMatches, momentRoll, momentsFor, pokemonMoment, runClaimKey, type MomentEffect, type MomentTrigger, type PokemonMoment } from '../moments/pokemonMoments';
 import { bondLevel } from '../co/who';
 import type { BattleContext, BattleEvent, Combatant } from './engine';
 import { startRevivalStatus } from './revivalStatus';
@@ -42,6 +42,11 @@ const SUPERCUT = 'pm-supercut:';
 const STATPCT = 'pm-statpct:';
 const PARADOX = 'pm-paradox:';
 const BRAVE = 'pm-brave:';
+// Group moments (PG1 to PG18).
+const STATONE = 'pm-statone:';
+const RUINX = 'pm-ruinx:';
+const NOATTACK = 'pm-noattack:';
+const TYPEGUARD = 'pm-typeguard:';
 /** PA4: a baby that landed a move this battle (run.ts reads it when the battle ends). */
 export const BRAVE_HIT = 'pm-brave-hit:';
 /** PA4: how many times a baby has been brave this run (a run flag, `pm-brave-count:<uid>`). */
@@ -86,6 +91,45 @@ export function momentStatMult(ctx: Pick<BattleContext, 'battle'>, c: Pick<Comba
   const prefix = `${STATPCT}${c.mon.uid}:`;
   const pack = tags.filter((t) => t.startsWith(prefix)).reduce((n, t) => n + Number(t.slice(prefix.length)), 0);
   return (tags.includes(`${REMEMBERED}${c.mon.uid}`) ? 1.1 : 1) * (1 + pack / 100);
+}
+
+/** Sibling Rivalry and Two Halves (PG1, PG15): percent on single stats for the battle. Empty when none. */
+export function momentStatPcts(ctx: Pick<BattleContext, 'battle'>, c: Pick<Combatant, 'side' | 'mon'>): Partial<Record<'atk' | 'def' | 'spa' | 'spd' | 'spe', number>> {
+  const out: Partial<Record<'atk' | 'def' | 'spa' | 'spd' | 'spe', number>> = {};
+  if (c.side !== 'player') return out;
+  const prefix = `${STATONE}${c.mon.uid}:`;
+  for (const t of ctx.battle.storyEffects) {
+    if (!t.startsWith(prefix)) continue;
+    const [stat, pct] = t.slice(prefix.length).split(':') as ['atk' | 'def' | 'spa' | 'spd' | 'spe', string];
+    out[stat] = (out[stat] ?? 0) + Number(pct);
+  }
+  return out;
+}
+
+/** Four Seals (PG11): the extra stat its Ruin ability lowers, or null. */
+export function momentRuinExtra(ctx: Pick<BattleContext, 'battle'>, c: Pick<Combatant, 'side' | 'mon'>): string | null {
+  if (c.side !== 'player') return null;
+  const t = ctx.battle.storyEffects.find((x) => x.startsWith(`${RUINX}${c.mon.uid}:`));
+  return t ? t.split(':').pop()! : null;
+}
+
+/** The Ones Who Were Angry (PG12): it won't attack this foe. A line saying so, or null. */
+export function momentRefusal(ctx: Pick<BattleContext, 'battle' | 'content'>, user: Pick<Combatant, 'side' | 'mon'>, target: Pick<Combatant, 'mon'>, category: string): string | null {
+  if (user.side !== 'player' || category === 'status') return null;
+  const t = ctx.battle.storyEffects.find((x) => x.startsWith(`${NOATTACK}${user.mon.uid}:`));
+  if (!t || !t.slice(`${NOATTACK}${user.mon.uid}:`.length).split(',').includes(target.mon.speciesId)) return null;
+  const name = (id: string) => ctx.content.species.get(id)?.name ?? id;
+  return `${name(user.mon.speciesId)} won't look at ${name(target.mon.speciesId)}. It won't attack it.`;
+}
+
+/** The Same Lab (PG13): damage it takes from the type its own type beats is cut. 1 when not. */
+const BEATS: Record<string, string> = { grass: 'water', fire: 'grass', water: 'fire' };
+export function momentTypeGuard(ctx: Pick<BattleContext, 'battle' | 'content'>, target: Pick<Combatant, 'side' | 'mon'>, moveType: string): number {
+  if (target.side !== 'player') return 1;
+  const t = ctx.battle.storyEffects.find((x) => x.startsWith(`${TYPEGUARD}${target.mon.uid}:`));
+  if (!t) return 1;
+  const own = ctx.content.species.get(target.mon.speciesId)?.types ?? [];
+  return own.some((ty) => BEATS[ty] === moveType) ? 1 - Number(t.split(':').pop()) / 100 : 1;
 }
 
 /** Out of Time (PA12): its Protosynthesis or Quark Drive is on without sun or terrain. */
@@ -306,6 +350,28 @@ function applyEffect(ctx: BattleContext, c: Combatant, fx: MomentEffect, m: Poke
     const pack = ctx.party.filter((p) => momentMatches(content, m, p.speciesId));
     for (const p of pack) add(`${STATPCT}${p.uid}:${fx.packStat * (pack.length - 1)}`);
   }
+  // Group moments (PG).
+  const scoped = (): PokemonInstance[] => ctx.party.filter((p) => p.hp > 0 && momentMatches(content, m, p.speciesId));
+  const bestOf = (mon: PokemonInstance): 'atk' | 'def' | 'spa' | 'spd' | 'spe' => {
+    const st = calcStats(content, mon);
+    return (['atk', 'def', 'spa', 'spd', 'spe'] as const).reduce((a, b) => (st[b] > st[a] ? b : a));
+  };
+  if (fx.packBest) for (const p of scoped()) add(`${STATONE}${p.uid}:${bestOf(p)}:${fx.packBest}`);
+  for (const [stat, pct] of Object.entries(fx.statPct ?? {})) add(`${STATONE}${c.mon.uid}:${stat}:${pct}`);
+  const skyWeather = fx.weatherBySpecies?.[c.mon.speciesId];
+  if (skyWeather && !ctx.battle.weather?.primal && !ctx.battle.extra.delta) ctx.battle.weather = { id: skyWeather, turns: 1 };
+  if (fx.resoluteAll) for (const p of scoped()) { add(`${NOFLINCH}${p.uid}`); add(`${NOCONFUSE}${p.uid}`); }
+  if (fx.bestDefStage) {
+    const st = calcStats(content, c.mon);
+    raise(st.spd > st.def ? 'spd' : 'def', fx.bestDefStage);
+  }
+  if (fx.boostTop) raise(bestOf(c.mon), fx.boostTop);
+  if (fx.trickRoom) ctx.battle.field.trickRoom = Math.max(ctx.battle.field.trickRoom ?? 0, fx.trickRoom);
+  if (fx.terrainTurns && ctx.battle.terrain) ctx.battle.terrain.turns = Math.max(ctx.battle.terrain.turns, fx.terrainTurns);
+  const ruin = fx.ruinExtra?.[c.mon.speciesId];
+  if (ruin) add(`${RUINX}${c.mon.uid}:${ruin}`);
+  if (fx.noAttackFoe) add(`${NOATTACK}${c.mon.uid}:${fx.noAttackFoe.join(',')}`);
+  if (fx.typeGuard) for (const p of scoped()) add(`${TYPEGUARD}${p.uid}:${fx.typeGuard}`);
   if (fx.haunting) add(`${HAUNT}${c.mon.uid}:${ctx.battle.turn + fx.haunting.turns}:${fx.haunting.pct}:${fx.haunting.foeAccDown ?? 0}`);
   return hp;
 }
@@ -502,6 +568,12 @@ export function tryRunEndMoment(ctx: BattleContext, events: BattleEvent[]): bool
   return true;
 }
 
+/** The Same Lab (PG13): all three starter lines of one region are in the party, this Pokémon among them. */
+export function hasStarterTrio(content: BattleContext['content'], party: readonly PokemonInstance[], mon: PokemonInstance): boolean {
+  const inLine = (line: readonly string[], p: PokemonInstance) => line.includes(p.speciesId);
+  return STARTER_TRIOS.some((trio) => trio.some((line) => inLine(line, mon)) && trio.every((line) => party.some((p) => inLine(line, p))));
+}
+
 /** A moment's extra conditions: enough matching party members, or a weather on the field. */
 function requirementsMet(ctx: BattleContext, m: PokemonMoment, c?: Combatant): boolean {
   const r = m.requires;
@@ -517,6 +589,10 @@ function requirementsMet(ctx: BattleContext, m: PokemonMoment, c?: Combatant): b
   if (r.foeLevelAbove && !(c && currentEnemy(ctx.battle).level - c.mon.level >= r.foeLevelAbove)) return false;
   if (r.flagAtLeast && !(c && Number(ctx.moments?.flags[r.flagAtLeast.key.replace('{uid}', c.mon.uid)] ?? 0) >= r.flagAtLeast.n)) return false;
   if (r.flagBelow && !(c && Number(ctx.moments?.flags[r.flagBelow.key.replace('{uid}', c.mon.uid)] ?? 0) < r.flagBelow.n)) return false;
+  if (r.partyGroups && !r.partyGroups.every((g) => ctx.party.filter((p) => p.hp > 0 && MOMENT_GROUPS[g.group]?.includes(p.speciesId)).length >= g.n)) return false;
+  if (r.foeSpecies && !r.foeSpecies.includes(currentEnemy(ctx.battle).speciesId)) return false;
+  if (r.starterTrio && !(c && hasStarterTrio(ctx.content, ctx.party, c.mon))) return false;
+  if (r.topBond && !(c && ctx.party.every((p) => p === c.mon || !momentMatches(ctx.content, m, p.speciesId) || bondLevel(ctx.content, p) < bondLevel(ctx.content, c.mon) || (bondLevel(ctx.content, p) === bondLevel(ctx.content, c.mon) && p.friendship <= c.mon.friendship)))) return false;
   if (r.starter && !(c && ctx.moments?.starterUid === c.mon.uid)) return false;
   if (r.notVsOwnTrio && c) {
     const trios = Object.entries(MOMENT_GROUPS).filter(([g, ids]) => g.startsWith('trio-') && ids.includes(c.mon.speciesId)).map(([, ids]) => ids);

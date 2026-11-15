@@ -2873,7 +2873,7 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** Event Director: a party member with a species tag (legendary, mythical, delta, zform...). */
   z.object({ kind: z.literal('partyTag'), tag: z.enum(SPECIES_TAGS) }),
   /** Pokémon Moments (PA11): a party member from one of the moment groups in pokemonMoments.json (ultra-beasts, starters...). */
-  z.object({ kind: z.literal('partyGroup'), group: z.string().min(1) }),
+  z.object({ kind: z.literal('partyGroup'), group: z.string().min(1), atLeast: z.number().int().min(1).max(6).default(1) }),
   /** The Pokémon you started with (still in the party) has this type, species or species tag: starter-tagged events. */
   z.object({ kind: z.literal('starter'), type: TypeNameSchema.optional(), species: z.string().optional(), tag: z.enum(SPECIES_TAGS).optional() }).refine((c) => c.type !== undefined || c.species !== undefined || c.tag !== undefined, { message: 'a starter condition needs a type, species or tag' }),
   /** Mentors (spec section 15): you train under a mentor, optionally this one / this category, with enough trust or loyalty, having learned a lesson, or at a mission state. */

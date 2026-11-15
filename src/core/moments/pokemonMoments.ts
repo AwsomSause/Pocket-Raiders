@@ -126,6 +126,31 @@ export const MomentEffectSchema = z.object({
   firstSuperCut: z.number().int().min(1).max(100).optional(),
   /** The Pack: every matching party member gets +pct% to every stat but HP for each other matching member in the party. */
   packStat: z.number().int().min(1).max(25).optional(),
+  // Group moments (PG1 to PG18).
+  /** Each party member in scope gets this percent on its best stat (PG1 Sibling Rivalry). */
+  packBest: z.number().int().min(1).max(50).optional(),
+  /** Percent on named stats for the battle (PG15 Two Halves). */
+  statPct: z.partialRecord(z.enum(['atk', 'def', 'spa', 'spd', 'spe']), z.number().int().min(1).max(50)).optional(),
+  /** This species' weather, for one turn (PG3 The Three Skies). */
+  weatherBySpecies: z.record(z.string(), z.enum(['rain', 'sun', 'sand', 'snow', 'hail'])).optional(),
+  /** Resolute (no flinch, no confusion) on every party member in scope (PG6). */
+  resoluteAll: z.boolean().optional(),
+  /** +N to its higher defence, Defence or Sp. Def (PG7). */
+  bestDefStage: z.number().int().min(1).max(3).optional(),
+  /** +N to its highest stat of the five (PG16). */
+  boostTop: z.number().int().min(1).max(3).optional(),
+  /** Trick Room for this many turns (PG9, Palkia). */
+  trickRoom: z.number().int().min(1).max(8).optional(),
+  /** The terrain on the field lasts this many turns (PG10). */
+  terrainTurns: z.number().int().min(1).max(12).optional(),
+  /** Its Ruin ability also lowers this stat (PG11), by species. */
+  ruinExtra: z.record(z.string(), z.enum(['atk', 'def', 'spa', 'spd'])).optional(),
+  /** It won't attack these species (PG12). */
+  noAttackFoe: z.array(z.string()).optional(),
+  /** It takes this percent less from the type its own type beats (PG13: grass from water, fire from grass, water from fire). */
+  typeGuard: z.number().int().min(1).max(50).optional(),
+  /** Rest: names the next region's legend (PG5). */
+  legendHint: z.boolean().optional(),
   /** Its Protosynthesis or Quark Drive is on without sun or terrain. */
   paradoxDrive: z.boolean().optional(),
   /** The Little Ones (PA4): if it lands a move this battle, it gains this much Bond afterwards, win or lose. */
@@ -191,6 +216,14 @@ export const PokemonMomentSchema = z.object({
       starter: z.boolean().optional(),
       /** The foe in front is at least this many levels higher. */
       foeLevelAbove: z.number().int().min(1).max(100).optional(),
+      /** At least `n` living party members from each named group (PG9, PG15). */
+      partyGroups: z.array(z.object({ group: z.string(), n: z.number().int().min(1).max(6) })).optional(),
+      /** The foe in front is one of these species (PG12). */
+      foeSpecies: z.array(z.string()).optional(),
+      /** All three starter lines of one region are in the party (PG13), this Pokémon among them. */
+      starterTrio: z.boolean().optional(),
+      /** It has the highest Bond of the party members in scope (PG14). */
+      topBond: z.boolean().optional(),
       /** A run flag (with `{uid}` standing for this Pokémon) is at least `n`. */
       flagAtLeast: z.object({ key: z.string(), n: z.number().int().min(1) }).optional(),
       /** The same kind of run flag is still below `n` (PA4: a baby that hasn't grown brave yet). */
@@ -284,13 +317,17 @@ const RevivalStatusSchema = z.object({
 });
 export type RevivalStatus = z.infer<typeof RevivalStatusSchema>;
 
-const FileSchema = z.object({ status: z.string(), note: z.string(), groups: z.record(z.string(), z.array(z.string())), counterparts: z.record(z.string(), z.array(z.string())).default({}), revivalStatuses: z.record(z.string(), RevivalStatusSchema).default({}), moments: z.array(PokemonMomentSchema) });
+const FileSchema = z.object({ status: z.string(), note: z.string(), groups: z.record(z.string(), z.array(z.string())), counterparts: z.record(z.string(), z.array(z.string())).default({}), revivalStatuses: z.record(z.string(), RevivalStatusSchema).default({}), regionLegends: z.record(z.string(), z.array(z.string())).default({}), starterTrios: z.array(z.tuple([z.array(z.string()), z.array(z.string()), z.array(z.string())])).default([]), moments: z.array(PokemonMomentSchema) });
 const file = FileSchema.parse(raw);
 
 export const MOMENT_GROUPS: Readonly<Record<string, readonly string[]>> = file.groups;
 /** PA12: a Paradox Pokémon and the modern species it mirrors. */
 /** PA17 to PA31: the last-stand statuses by id. */
 export const REVIVAL_STATUSES: Readonly<Record<string, RevivalStatus>> = file.revivalStatuses;
+/** PG5: each region's legend, by region id (the hint names the next one). */
+export const REGION_LEGENDS: Readonly<Record<string, readonly string[]>> = file.regionLegends;
+/** PG13: each region's starter lines as [grass, fire, water]. */
+export const STARTER_TRIOS: readonly (readonly [readonly string[], readonly string[], readonly string[]])[] = file.starterTrios;
 export const MOMENT_COUNTERPARTS: Readonly<Record<string, readonly string[]>> = file.counterparts;
 export const POKEMON_MOMENTS: readonly PokemonMoment[] = file.moments;
 const BY_ID = new Map(POKEMON_MOMENTS.map((m) => [m.id, m]));

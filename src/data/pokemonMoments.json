@@ -535,6 +535,88 @@
    "thievul",
    "zoroark-hisui",
    "lucario"
+  ],
+  "eeveelutions": [
+   "eevee",
+   "vaporeon",
+   "jolteon",
+   "flareon",
+   "espeon",
+   "umbreon",
+   "leafeon",
+   "glaceon",
+   "sylveon"
+  ],
+  "pg4-galar-birds": [
+   "articuno-galar",
+   "zapdos-galar",
+   "moltres-galar"
+  ],
+  "pg15-nidos": [
+   "nidoran-f",
+   "nidorina",
+   "nidoqueen",
+   "nidoran-m",
+   "nidorino",
+   "nidoking"
+  ],
+  "pg15-nido-f": [
+   "nidoran-f",
+   "nidorina",
+   "nidoqueen"
+  ],
+  "pg15-nido-m": [
+   "nidoran-m",
+   "nidorino",
+   "nidoking"
+  ],
+  "pg15-royals": [
+   "nidoqueen",
+   "nidoking"
+  ],
+  "pg16-hisui": [
+   "growlithe-hisui",
+   "arcanine-hisui",
+   "voltorb-hisui",
+   "electrode-hisui",
+   "typhlosion-hisui",
+   "qwilfish-hisui",
+   "sneasel-hisui",
+   "samurott-hisui",
+   "lilligant-hisui",
+   "zorua-hisui",
+   "zoroark-hisui",
+   "braviary-hisui",
+   "sliggoo-hisui",
+   "goodra-hisui",
+   "avalugg-hisui",
+   "decidueye-hisui"
+  ],
+  "pg17-galar": [
+   "meowth-galar",
+   "ponyta-galar",
+   "rapidash-galar",
+   "slowpoke-galar",
+   "slowbro-galar",
+   "farfetchd-galar",
+   "weezing-galar",
+   "mr-mime-galar",
+   "articuno-galar",
+   "zapdos-galar",
+   "moltres-galar",
+   "slowking-galar",
+   "corsola-galar",
+   "zigzagoon-galar",
+   "linoone-galar",
+   "darumaka-galar",
+   "yamask-galar",
+   "stunfisk-galar"
+  ],
+  "pg2-eevee": [
+   "eevee"
+  ],
+  "pg18-rotom": [
+   "rotom"
   ]
  },
  "moments": [
@@ -1905,42 +1987,6 @@
      "atk": 1,
      "spe": 1
     }
-   }
-  },
-  {
-   "id": "eevee-bond",
-   "name": "Eeveelution Bond",
-   "scope": {
-    "lines": [
-     "eevee",
-     "vaporeon",
-     "jolteon",
-     "flareon",
-     "espeon",
-     "umbreon",
-     "leafeon",
-     "glaceon",
-     "sylveon"
-    ]
-   },
-   "trigger": "start",
-   "chance": 0.15,
-   "limit": "battle",
-   "tier": "major",
-   "status": "supported",
-   "effectText": "All stats +1 if the player's party has 2+ Eeveelutions.",
-   "presentation": "Chorus | \"Siblings.\"",
-   "effect": {
-    "boost": {
-     "atk": 1,
-     "def": 1,
-     "spa": 1,
-     "spd": 1,
-     "spe": 1
-    }
-   },
-   "requires": {
-    "partyMatching": 2
    }
   },
   {
@@ -5318,6 +5364,765 @@
    },
    "effectText": "It is looking at a place that isn't here. (A stop opens: sit with it, or leave it be.)",
    "presentation": "It looks up at the sky | [Name] is looking at a place that isn't here."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "limited",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg1-sibling-rivalry",
+   "name": "Sibling Rivalry",
+   "scope": {
+    "groups": [
+     "eeveelutions"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "partyMatching": 2
+   },
+   "effect": {
+    "packBest": 10
+   },
+   "effectText": "Two or more Eeveelutions in the party: each gets +10% to its best stat for the battle. (Limited: the family photo for all nine is not built yet.)",
+   "presentation": "They argue for a second, then turn to the opponent together | [Name] and its siblings argue, then face the foe as one."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "group",
+   "chance": 0.25,
+   "id": "pg2-any-road",
+   "name": "Any Road",
+   "scope": {
+    "species": [
+     "eevee"
+    ]
+   },
+   "trigger": "rest",
+   "effect": {
+    "openEvent": "pg2-any-road"
+   },
+   "effectText": "Eevee is looking at the stones in your bag. (A stop opens: let it choose its road, or not yet.)",
+   "presentation": "It noses at your bag | Eevee is looking at the stones in your bag."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg3-the-three-skies",
+   "name": "The Three Skies",
+   "scope": {
+    "species": [
+     "articuno",
+     "zapdos",
+     "moltres"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "partyMatching": 2
+   },
+   "effect": {
+    "weatherBySpecies": {
+     "articuno": "hail",
+     "zapdos": "rain",
+     "moltres": "sun"
+    }
+   },
+   "effectText": "Two or more legendary birds: each bird brings its own sky for one turn when it comes out (Articuno hail, Zapdos storm, Moltres sun).",
+   "presentation": "The weather flickers between hail, storm and heat | The sky remembers [Name]."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg3-the-three-skies-entry",
+   "name": "The Three Skies",
+   "scope": {
+    "species": [
+     "articuno",
+     "zapdos",
+     "moltres"
+    ]
+   },
+   "trigger": "enter",
+   "requires": {
+    "partyMatching": 2
+   },
+   "effect": {
+    "weatherBySpecies": {
+     "articuno": "hail",
+     "zapdos": "rain",
+     "moltres": "sun"
+    }
+   },
+   "effectText": "A legendary bird comes out with its own sky for one turn.",
+   "presentation": "The weather flickers | The sky changes for [Name]."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg4-the-wrong-feathers",
+   "name": "The Wrong Feathers",
+   "scope": {
+    "groups": [
+     "pg4-galar-birds"
+    ]
+   },
+   "trigger": "enter",
+   "requires": {
+    "foeCounterpart": true
+   },
+   "effect": {
+    "boost": {
+     "spe": 1,
+     "spa": 1
+    }
+   },
+   "effectText": "Facing the Kanto bird of the same name: Speed +1 and Sp. Atk +1. It has something to prove.",
+   "presentation": "Both stop and stare; the Galarian bird looks away first | [Name] has something to prove."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg4-the-wrong-feathers-face-off",
+   "name": "The Wrong Feathers",
+   "scope": {
+    "groups": [
+     "pg4-galar-birds"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "foeCounterpart": true
+   },
+   "effect": {
+    "boost": {
+     "spe": 1,
+     "spa": 1
+    }
+   },
+   "effectText": "Facing the Kanto bird of the same name: Speed +1 and Sp. Atk +1. It has something to prove.",
+   "presentation": "Both stop and stare; the Galarian bird looks away first | [Name] has something to prove."
+  },
+  {
+   "limit": "battle",
+   "tier": "landmark",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg5-knowledge-emotion-willpower",
+   "name": "Knowledge, Emotion, Willpower",
+   "scope": {
+    "groups": [
+     "trio-lake"
+    ]
+   },
+   "trigger": "rest",
+   "requires": {
+    "partyMatching": 3
+   },
+   "effect": {
+    "legendHint": true
+   },
+   "effectText": "All three guardians rest together. You dream of three lakes.",
+   "presentation": "You dream of three lakes | Three lakes, three voices, one name."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg6-we-fight-together",
+   "name": "We Fight Together",
+   "scope": {
+    "groups": [
+     "trio-swords"
+    ]
+   },
+   "trigger": "ally",
+   "allyScope": "any",
+   "requires": {
+    "partyMatching": 2
+   },
+   "effect": {
+    "resoluteAll": true
+   },
+   "effectText": "An ally falls with two or more Swords of Justice in the party: every Sword is Resolute (no flinch, no confusion).",
+   "presentation": "A ring of steel | [Name] steps forward. They fight together."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 0.5,
+   "id": "pg7-keys-without-locks",
+   "name": "Keys Without Locks",
+   "scope": {
+    "groups": [
+     "trio-regis"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "partyMatching": 2
+   },
+   "effect": {
+    "bestDefStage": 1
+   },
+   "effectText": "Two or more Regis: half the time, each Regi gets +1 to its higher defence when it comes out.",
+   "presentation": "Braille glows on the battle border | [Name] hums."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 0.5,
+   "id": "pg7-keys-without-locks-entry",
+   "name": "Keys Without Locks",
+   "scope": {
+    "groups": [
+     "trio-regis"
+    ]
+   },
+   "trigger": "enter",
+   "requires": {
+    "partyMatching": 2
+   },
+   "effect": {
+    "bestDefStage": 1
+   },
+   "effectText": "Two or more Regis: half the time, each Regi gets +1 to its higher defence when it comes out.",
+   "presentation": "Braille glows on the battle border | [Name] hums."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg8-old-quarrels",
+   "name": "Old Quarrels",
+   "scope": {
+    "groups": [
+     "trio-weather"
+    ]
+   },
+   "trigger": "rest",
+   "requires": {
+    "partyMatching": 2
+   },
+   "effect": {
+    "openEvent": "pg8-old-quarrels"
+   },
+   "effectText": "They won't sleep near each other. (A stop opens: sleep between them, or make separate camps.)",
+   "presentation": "They won't sleep near each other | [Name] glares across the fire."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg9-the-order-of-things-palkia",
+   "name": "The Order of Things",
+   "scope": {
+    "species": [
+     "palkia"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "partyGroups": [
+     {
+      "group": "trio-creation",
+      "n": 2
+     }
+    ]
+   },
+   "effect": {
+    "trickRoom": 2
+   },
+   "effectText": "Two of the creation trio, Palkia leading: space bends, Trick Room for 2 turns.",
+   "presentation": "Space bends | [Name] folds the field."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg9-the-order-of-things-dialga",
+   "name": "The Order of Things",
+   "scope": {
+    "species": [
+     "dialga"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "partyGroups": [
+     {
+      "group": "trio-creation",
+      "n": 2
+     }
+    ]
+   },
+   "effect": {
+    "boost": {
+     "spe": 1
+    }
+   },
+   "effectText": "Two of the creation trio, Dialga leading: time slows for everyone else, Speed +1.",
+   "presentation": "Time slows | [Name] moves between the seconds."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg9-the-order-of-things-giratina",
+   "name": "The Order of Things",
+   "scope": {
+    "species": [
+     "giratina"
+    ]
+   },
+   "trigger": "faint",
+   "requires": {
+    "partyGroups": [
+     {
+      "group": "trio-creation",
+      "n": 2
+     }
+    ]
+   },
+   "effect": {
+    "haunting": {
+     "turns": 2,
+     "pct": 40
+    }
+   },
+   "effectText": "Two of the creation trio, and Giratina falls: it haunts the foe for 2 turns.",
+   "presentation": "The shadows lengthen | [Name] is not gone. Not from here."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg10-the-islands-eye",
+   "name": "The Island's Eye",
+   "scope": {
+    "groups": [
+     "trio-tapus"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "terrainTurns": 8
+   },
+   "effectText": "Its terrain lasts 8 turns instead of 5.",
+   "presentation": "The Tapu's terrain hums | The island watches through [Name]."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg10-the-islands-eye-entry",
+   "name": "The Island's Eye",
+   "scope": {
+    "groups": [
+     "trio-tapus"
+    ]
+   },
+   "trigger": "enter",
+   "effect": {
+    "terrainTurns": 8
+   },
+   "effectText": "Its terrain lasts 8 turns instead of 5.",
+   "presentation": "The Tapu's terrain hums | The island watches through [Name]."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg11-four-seals",
+   "name": "Four Seals",
+   "scope": {
+    "groups": [
+     "trio-ruin"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "partyMatching": 2
+   },
+   "effect": {
+    "ruinExtra": {
+     "wo-chien": "spa",
+     "chien-pao": "spd",
+     "ting-lu": "atk",
+     "chi-yu": "def"
+    }
+   },
+   "effectText": "Two or more Treasures of Ruin: each one's Ruin also lowers one more stat (Wo-Chien Sp. Atk, Chien-Pao Sp. Def, Ting-Lu Attack, Chi-Yu Defence).",
+   "presentation": "Chains rattle | [Name]'s seal weighs on the field."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg11-four-seals-entry",
+   "name": "Four Seals",
+   "scope": {
+    "groups": [
+     "trio-ruin"
+    ]
+   },
+   "trigger": "enter",
+   "requires": {
+    "partyMatching": 2
+   },
+   "effect": {
+    "ruinExtra": {
+     "wo-chien": "spa",
+     "chien-pao": "spd",
+     "ting-lu": "atk",
+     "chi-yu": "def"
+    }
+   },
+   "effectText": "Its Ruin also lowers one more stat (Wo-Chien Sp. Atk, Chien-Pao Sp. Def, Ting-Lu Attack, Chi-Yu Defence).",
+   "presentation": "Chains rattle | [Name]'s seal weighs on the field."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg12-the-ones-who-were-angry",
+   "name": "The Ones Who Were Angry",
+   "scope": {
+    "species": [
+     "okidogi",
+     "munkidori",
+     "fezandipiti"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "foeSpecies": [
+     "ogerpon",
+     "ogerpon-wellspring-mask",
+     "ogerpon-hearthflame-mask",
+     "ogerpon-cornerstone-mask"
+    ],
+    "flagBelow": {
+     "key": "kieran-met",
+     "n": 1
+    }
+   },
+   "effect": {
+    "noAttackFoe": [
+     "ogerpon",
+     "ogerpon-wellspring-mask",
+     "ogerpon-hearthflame-mask",
+     "ogerpon-cornerstone-mask"
+    ]
+   },
+   "effectText": "Against Ogerpon: it won't look at it, and can't attack it this battle. (Once you have heard Kieran's story, they bow to it instead and can fight.)",
+   "presentation": "They won't look at it | [Name] turns its face away."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg12-the-ones-who-were-angry-entry",
+   "name": "The Ones Who Were Angry",
+   "scope": {
+    "species": [
+     "okidogi",
+     "munkidori",
+     "fezandipiti"
+    ]
+   },
+   "trigger": "enter",
+   "requires": {
+    "foeSpecies": [
+     "ogerpon",
+     "ogerpon-wellspring-mask",
+     "ogerpon-hearthflame-mask",
+     "ogerpon-cornerstone-mask"
+    ],
+    "flagBelow": {
+     "key": "kieran-met",
+     "n": 1
+    }
+   },
+   "effect": {
+    "noAttackFoe": [
+     "ogerpon",
+     "ogerpon-wellspring-mask",
+     "ogerpon-hearthflame-mask",
+     "ogerpon-cornerstone-mask"
+    ]
+   },
+   "effectText": "Against Ogerpon: it won't look at it, and can't attack it this battle.",
+   "presentation": "They won't look at it | [Name] turns its face away."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg13-the-same-lab",
+   "name": "The Same Lab",
+   "scope": {
+    "groups": [
+     "pa10-starter-lines"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "starterTrio": true
+   },
+   "effect": {
+    "typeGuard": 10
+   },
+   "effectText": "All three starters of one region: each takes 10% less from the type it beats (Grass from Water, Fire from Grass, Water from Fire).",
+   "presentation": "They stand side by side | [Name] remembers the same lab."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 0.5,
+   "id": "pg14-whos-the-real-one",
+   "name": "Who's the Real One",
+   "scope": {
+    "groups": [
+     "pa16-mascots"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "partyMatching": 2,
+    "topBond": true
+   },
+   "effect": {
+    "boost": {
+     "spe": 1
+    }
+   },
+   "effectText": "Two or more electric mice: half the time they squabble, and the one with the highest Bond gets Speed +1 (when it leads).",
+   "presentation": "They squabble | [Name] is the real one. Obviously."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg15-two-halves",
+   "name": "Two Halves",
+   "scope": {
+    "groups": [
+     "pg15-nidos"
+    ]
+   },
+   "trigger": "rest",
+   "requires": {
+    "partyGroups": [
+     {
+      "group": "pg15-nido-f",
+      "n": 1
+     },
+     {
+      "group": "pg15-nido-m",
+      "n": 1
+     }
+    ]
+   },
+   "effect": {
+    "bond": 1
+   },
+   "effectText": "Both Nidoran lines in the party: they sleep curled together. +1 Bond each.",
+   "presentation": "They sleep curled together | [Name] sleeps curled against the other."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg15-two-halves-royal",
+   "name": "Two Halves",
+   "scope": {
+    "groups": [
+     "pg15-royals"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "partyGroups": [
+     {
+      "group": "pg15-royals",
+      "n": 2
+     }
+    ]
+   },
+   "effect": {
+    "statPct": {
+     "atk": 10
+    }
+   },
+   "effectText": "Nidoqueen and Nidoking together: +10% Attack while the other is in the party.",
+   "presentation": "It glances at the other | [Name] fights for two."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg15-two-halves-royal-entry",
+   "name": "Two Halves",
+   "scope": {
+    "groups": [
+     "pg15-royals"
+    ]
+   },
+   "trigger": "enter",
+   "requires": {
+    "partyGroups": [
+     {
+      "group": "pg15-royals",
+      "n": 2
+     }
+    ]
+   },
+   "effect": {
+    "statPct": {
+     "atk": 10
+    }
+   },
+   "effectText": "Nidoqueen and Nidoking together: +10% Attack while the other is in the party.",
+   "presentation": "It glances at the other | [Name] fights for two."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg16-from-before",
+   "name": "From Before",
+   "scope": {
+    "groups": [
+     "pg16-hisui"
+    ]
+   },
+   "trigger": "enter",
+   "requires": {
+    "foeCounterpart": true
+   },
+   "effect": {
+    "boostTop": 1
+   },
+   "effectText": "Facing its modern form: +1 to its best stat.",
+   "presentation": "A distant bell | [Name] was here first."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "group",
+   "chance": 1,
+   "id": "pg16-from-before-face-off",
+   "name": "From Before",
+   "scope": {
+    "groups": [
+     "pg16-hisui"
+    ]
+   },
+   "trigger": "start",
+   "requires": {
+    "foeCounterpart": true
+   },
+   "effect": {
+    "boostTop": 1
+   },
+   "effectText": "Facing its modern form: +1 to its best stat.",
+   "presentation": "A distant bell | [Name] was here first."
+  },
+  {
+   "limit": "region",
+   "tier": "minor",
+   "status": "limited",
+   "layer": "group",
+   "chance": 0.15,
+   "id": "pg17-far-from-home",
+   "name": "Far From Home",
+   "scope": {
+    "groups": [
+     "pg17-galar"
+    ]
+   },
+   "trigger": "rest",
+   "effect": {
+    "bond": 1
+   },
+   "effectText": "+1 Bond, once per region. (Limited: the Galarica Twig gift waits for the item to exist.)",
+   "presentation": "It looks west | [Name] looks west."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "group",
+   "chance": 0.2,
+   "id": "pg18-change-of-clothes",
+   "name": "Change of Clothes",
+   "scope": {
+    "species": [
+     "rotom"
+    ]
+   },
+   "trigger": "rest",
+   "effect": {
+    "openEvent": "pg18-change-of-clothes"
+   },
+   "effectText": "Rotom has got into an appliance it found. (A stop opens: let it stay, or out you get.)",
+   "presentation": "A whirr and a clank | Rotom has got into an appliance it found."
   }
  ],
  "counterparts": {
@@ -5381,6 +6186,63 @@
   ],
   "iron-crown": [
    "cobalion"
+  ],
+  "growlithe-hisui": [
+   "growlithe"
+  ],
+  "arcanine-hisui": [
+   "arcanine"
+  ],
+  "voltorb-hisui": [
+   "voltorb"
+  ],
+  "electrode-hisui": [
+   "electrode"
+  ],
+  "typhlosion-hisui": [
+   "typhlosion"
+  ],
+  "qwilfish-hisui": [
+   "qwilfish"
+  ],
+  "sneasel-hisui": [
+   "sneasel"
+  ],
+  "samurott-hisui": [
+   "samurott"
+  ],
+  "lilligant-hisui": [
+   "lilligant"
+  ],
+  "zorua-hisui": [
+   "zorua"
+  ],
+  "zoroark-hisui": [
+   "zoroark"
+  ],
+  "braviary-hisui": [
+   "braviary"
+  ],
+  "sliggoo-hisui": [
+   "sliggoo"
+  ],
+  "goodra-hisui": [
+   "goodra"
+  ],
+  "avalugg-hisui": [
+   "avalugg"
+  ],
+  "decidueye-hisui": [
+   "decidueye"
+  ],
+  "articuno-galar": [
+   "articuno"
+  ],
+  "zapdos-galar": [
+   "zapdos"
+  ],
+  "moltres-galar": [
+   "moltres"
   ]
  },
  "revivalStatuses": {
@@ -5558,5 +6420,206 @@
    },
    "evasionCap": 1
   }
- }
+ },
+ "regionLegends": {
+  "kanto": [
+   "mewtwo"
+  ],
+  "johto": [
+   "ho-oh",
+   "lugia"
+  ],
+  "hoenn": [
+   "groudon",
+   "kyogre",
+   "rayquaza"
+  ],
+  "sinnoh": [
+   "dialga",
+   "palkia",
+   "giratina"
+  ],
+  "unova": [
+   "reshiram",
+   "zekrom",
+   "kyurem"
+  ],
+  "kalos": [
+   "xerneas",
+   "yveltal",
+   "zygarde"
+  ],
+  "alola": [
+   "solgaleo",
+   "lunala",
+   "necrozma"
+  ],
+  "galar": [
+   "zacian",
+   "zamazenta",
+   "eternatus"
+  ],
+  "paldea": [
+   "koraidon",
+   "miraidon"
+  ]
+ },
+ "starterTrios": [
+  [
+   [
+    "bulbasaur",
+    "ivysaur",
+    "venusaur"
+   ],
+   [
+    "charmander",
+    "charmeleon",
+    "charizard"
+   ],
+   [
+    "squirtle",
+    "wartortle",
+    "blastoise"
+   ]
+  ],
+  [
+   [
+    "chikorita",
+    "bayleef",
+    "meganium"
+   ],
+   [
+    "cyndaquil",
+    "quilava",
+    "typhlosion",
+    "typhlosion-hisui"
+   ],
+   [
+    "totodile",
+    "croconaw",
+    "feraligatr"
+   ]
+  ],
+  [
+   [
+    "treecko",
+    "grovyle",
+    "sceptile"
+   ],
+   [
+    "torchic",
+    "combusken",
+    "blaziken"
+   ],
+   [
+    "mudkip",
+    "marshtomp",
+    "swampert"
+   ]
+  ],
+  [
+   [
+    "turtwig",
+    "grotle",
+    "torterra"
+   ],
+   [
+    "chimchar",
+    "monferno",
+    "infernape"
+   ],
+   [
+    "piplup",
+    "prinplup",
+    "empoleon"
+   ]
+  ],
+  [
+   [
+    "snivy",
+    "servine",
+    "serperior"
+   ],
+   [
+    "tepig",
+    "pignite",
+    "emboar"
+   ],
+   [
+    "oshawott",
+    "dewott",
+    "samurott",
+    "samurott-hisui"
+   ]
+  ],
+  [
+   [
+    "chespin",
+    "quilladin",
+    "chesnaught"
+   ],
+   [
+    "fennekin",
+    "braixen",
+    "delphox"
+   ],
+   [
+    "froakie",
+    "frogadier",
+    "greninja"
+   ]
+  ],
+  [
+   [
+    "rowlet",
+    "dartrix",
+    "decidueye",
+    "decidueye-hisui"
+   ],
+   [
+    "litten",
+    "torracat",
+    "incineroar"
+   ],
+   [
+    "popplio",
+    "brionne",
+    "primarina"
+   ]
+  ],
+  [
+   [
+    "grookey",
+    "thwackey",
+    "rillaboom"
+   ],
+   [
+    "scorbunny",
+    "raboot",
+    "cinderace"
+   ],
+   [
+    "sobble",
+    "drizzile",
+    "inteleon"
+   ]
+  ],
+  [
+   [
+    "sprigatito",
+    "floragato",
+    "meowscarada"
+   ],
+   [
+    "fuecoco",
+    "crocalor",
+    "skeledirge"
+   ],
+   [
+    "quaxly",
+    "quaxwell",
+    "quaquaval"
+   ]
+  ]
+ ]
 }

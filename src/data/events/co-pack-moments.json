@@ -182,6 +182,361 @@
      ]
     }
    ]
+  },
+  {
+   "id": "pg2-any-road",
+   "name": "Any Road",
+   "group": "Rests, camp and bond",
+   "room": true,
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "partyGroup",
+     "group": "pg2-eevee"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "You wake to a small, careful rustling. Eevee has its nose in your bag.\n\nIt is not after food. It has rolled the evolution stones out onto the blanket, one by one, and it is looking at them very seriously.\n\nThen it looks at the sky. Then at you. It is asking something.",
+   "choices": [
+    {
+     "label": "Let it choose.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "weather",
+         "in": [
+          "rain"
+         ]
+        }
+       ],
+       "text": "The rain is falling soft on the tent. Eevee walks out into it and stands there, eyes closed, until the water seems to go right into it.\n\nIt chose the rain. It is a Vaporeon now.",
+       "effects": [
+        {
+         "kind": "formChange",
+         "from": "eevee",
+         "to": "vaporeon"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "weather",
+         "in": [
+          "sun"
+         ]
+        }
+       ],
+       "text": "The sun is hot on the grass already. Eevee lies down in the brightest patch and lets it soak in.\n\nIt chose the heat. It is a Flareon now.",
+       "effects": [
+        {
+         "kind": "formChange",
+         "from": "eevee",
+         "to": "flareon"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "weather",
+         "in": [
+          "snow",
+          "hail"
+         ]
+        }
+       ],
+       "text": "Snow on the tent roof. Eevee pushes the flap open with its nose and breathes the cold in, deep.\n\nIt chose the cold. It is a Glaceon now.",
+       "effects": [
+        {
+         "kind": "formChange",
+         "from": "eevee",
+         "to": "glaceon"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "stageTypes",
+         "types": [
+          "electric"
+         ]
+        }
+       ],
+       "text": "The air here crackles. Eevee's fur stands up on end, and it does not mind at all.\n\nIt chose the storm. It is a Jolteon now.",
+       "effects": [
+        {
+         "kind": "formChange",
+         "from": "eevee",
+         "to": "jolteon"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "stageTypes",
+         "types": [
+          "grass",
+          "bug"
+         ]
+        }
+       ],
+       "text": "Eevee pads to the oldest tree at the edge of the camp and presses its face to the moss.\n\nIt chose the forest. It is a Leafeon now.",
+       "effects": [
+        {
+         "kind": "formChange",
+         "from": "eevee",
+         "to": "leafeon"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "stageTypes",
+         "types": [
+          "fairy"
+         ]
+        }
+       ],
+       "text": "Eevee climbs into your lap and stays there, ribbons of something warm already curling around your wrist.\n\nIt chose you. It is a Sylveon now.",
+       "effects": [
+        {
+         "kind": "formChange",
+         "from": "eevee",
+         "to": "sylveon"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "period",
+         "in": [
+          "evening",
+          "night"
+         ]
+        }
+       ],
+       "text": "It is dark still. Eevee sits under the moon until the rings on its body begin to glow.\n\nIt chose the night. It is an Umbreon now.",
+       "effects": [
+        {
+         "kind": "formChange",
+         "from": "eevee",
+         "to": "umbreon"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "The light comes through the trees. Eevee turns to face it, and the light seems to stay in its eyes.\n\nIt chose the day. It is an Espeon now.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "eevee",
+        "to": "espeon"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not yet.",
+     "success": {
+      "text": "You gather the stones and put them back. Eevee watches each one go.\n\nThen it curls up in your bag on top of them, like it is keeping them safe. There is time. There is still time.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "pg8-old-quarrels",
+   "name": "Old Quarrels",
+   "group": "Rests, camp and bond",
+   "room": true,
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "partyGroup",
+     "group": "trio-weather",
+     "atLeast": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "The fire is lit, the team is fed, and two of them will not lie down.\n\nThey stand on opposite sides of the camp. The ground under one is hot. The air over the other is wet. Neither will look away first.\n\nThis is older than you. Much older. But they are both yours.",
+   "choices": [
+    {
+     "label": "Sleep between them.",
+     "success": {
+      "text": "You drag your bedroll into the middle, right between them, and lie down.\n\nFor a long time neither moves. Then, very slowly, they lie down too, one on each side of you. The heat and the damp meet over your head all night.\n\nYou do not sleep much. Nobody does. But they slept near each other, for you.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": {
+         "species": [
+          "groudon"
+         ]
+        }
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": {
+         "species": [
+          "kyogre"
+         ]
+        }
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": {
+         "species": [
+          "rayquaza"
+         ]
+        }
+       },
+       {
+        "kind": "damage",
+        "share": 0.5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Separate camps.",
+     "success": {
+      "text": "You build a second fire on the far side of the clearing. One of them goes to it without being asked.\n\nThey sleep apart. The rest is a good one. The quarrel will keep.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "pg18-change-of-clothes",
+   "name": "Change of Clothes",
+   "group": "Rests, camp and bond",
+   "room": true,
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "partyGroup",
+     "group": "pg18-rotom"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2228",
+    "effect": "none"
+   },
+   "intro": "A whirr. A clank. A very pleased crackle of static.\n\nRotom has got into {rotomAppliance} somebody left by the road. Its eyes peer out of the front, delighted.\n\nIt hums at you hopefully.",
+   "choices": [
+    {
+     "label": "Let it stay.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "stageTypes",
+         "types": [
+          "fire"
+         ]
+        }
+       ],
+       "text": "The oven door bangs shut with Rotom inside. It glows orange and very proud.\n\nRotom is Heat Rotom now.",
+       "effects": [
+        {
+         "kind": "formChange",
+         "from": "rotom",
+         "to": "rotom-heat"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "stageTypes",
+         "types": [
+          "ice"
+         ]
+        }
+       ],
+       "text": "Frost creeps across the fridge door. Rotom hums, cold and smug.\n\nRotom is Frost Rotom now.",
+       "effects": [
+        {
+         "kind": "formChange",
+         "from": "rotom",
+         "to": "rotom-frost"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "stageTypes",
+         "types": [
+          "flying"
+         ]
+        }
+       ],
+       "text": "The fan blades spin up with a roar. Your hat is gone. Rotom is thrilled.\n\nRotom is Fan Rotom now.",
+       "effects": [
+        {
+         "kind": "formChange",
+         "from": "rotom",
+         "to": "rotom-fan"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "stageTypes",
+         "types": [
+          "grass"
+         ]
+        }
+       ],
+       "text": "The lawnmower coughs into life. Rotom does one very neat lap of the camp.\n\nRotom is Mow Rotom now.",
+       "effects": [
+        {
+         "kind": "formChange",
+         "from": "rotom",
+         "to": "rotom-mow"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "The washing machine shudders and starts to spin. Rotom sloshes happily inside.\n\nRotom is Wash Rotom now.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "rotom",
+        "to": "rotom-wash"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Out you get.",
+     "success": {
+      "text": "You knock on the side. A long, sulky pause. Then Rotom drifts out, crackling under its breath.\n\nIt sits on your shoulder for the rest of the night, still sulking. It is warm, at least.",
+      "effects": []
+     }
+    }
+   ]
   }
  ]
 }

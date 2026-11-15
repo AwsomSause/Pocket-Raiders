@@ -468,7 +468,7 @@ describe('pack archetype moments: milestones, camp and gifts (batch 2b)', () => 
 
   it('PA11 Not From Here: the camp scene needs an Ultra Beast and names it; after three nights its Beast Boost fires at battle start', () => {
     const run = runWith('pa11', [mon('pikachu', 30, 'k', ['tackle']), mon('buzzwole', 50, 'b', ['tackle'])]);
-    const c = { kind: 'partyGroup', group: 'ultra-beasts' } as const;
+    const c = { kind: 'partyGroup', group: 'ultra-beasts', atLeast: 1 } as const;
     expect(conditionMet(content, run, c)).toBe(true);
     expect(conditionText(content, c)).toContain('ultra beasts');
     expect(fillCoText(content, run, '{group:ultra-beasts} looks up.')).toBe('Buzzwole looks up.');

@@ -226,19 +226,11 @@ describe('Battle-start and switch-in moments (batch 2)', () => {
     throw new Error('no seed played Static Cling');
   });
 
-  it("Eevee's Bond needs two Eeveelutions in the party", () => {
-    const alone = lead('eevee', 'bond-alone');
-    for (let i = 0; i < 80; i++) {
-      const s = lead('eevee', `bond-${i}`);
-      expect(startEvents(turn(s.ctx)).some((e) => e.type === 'pmoment' && e.id === 'eevee-bond')).toBe(false);
-    }
-    void alone;
-    let played = 0;
-    for (let i = 0; i < 200; i++) {
-      const s = lead('eevee', `bond2-${i}`, {}, [createPokemon(content, 'vaporeon', 40, 'vap-p')]);
-      if (startEvents(turn(s.ctx)).some((e) => e.type === 'pmoment' && e.id === 'eevee-bond')) { played++; expect(s.battle.playerStages.spe).toBe(1); }
-    }
-    expect(played).toBeGreaterThan(0);
+  it("Sibling Rivalry (PG1, which replaced Eevee's Bond) needs two Eeveelutions in the party", () => {
+    expect(startEvents(turn(lead('eevee', 'bond-alone').ctx)).some((e) => e.type === 'pmoment' && e.id === 'pg1-sibling-rivalry')).toBe(false);
+    expect(startEvents(turn(lead('jolteon', 'bond-one').ctx)).some((e) => e.type === 'pmoment' && e.id === 'pg1-sibling-rivalry')).toBe(false);
+    const s = lead('jolteon', 'bond-two', {}, [createPokemon(content, 'vaporeon', 40, 'vap-p')]);
+    expect(startEvents(turn(s.ctx)).some((e) => e.type === 'pmoment' && e.id === 'pg1-sibling-rivalry')).toBe(true);
   });
 
   it('a switch-in moment plays for the Pokémon that comes out, and never for a fainted one', () => {

@@ -120,7 +120,7 @@ import { benchSupporter, addBleed, bleedDamage, causesBleed, curseMultiplier, re
 import { sacrificeFor } from './sacrificeRule';
 import { berserkDue, berserkMove, isBerserk } from './berserk';
 import { REVIVAL_NIGHT, revivalActed, revivalBlocked, revivalEndOfTurn, revivalEvasionCap, revivalForcedSlot, revivalFreeze, revivalImmune, revivalNoFlinch, revivalNoHeal, revivalNoSwitch, revivalNoteHp, revivalOnHit, revivalPower, revivalPrimal, revivalStatusImmune, revivalTakeHit, revivalTwice } from './revivalStatus';
-import { noteBraveHit, momentGuardHit, momentParadoxDrive, momentSuperCut, tryAllyLethalMoment, hauntAccuracyCut, momentGroundTypes, momentNoConfuse, momentRooted, momentStatMult, noteContactHit, tryHauntStrikes, momentContactPoison, momentDamageMult, spendMomentBoost, applyPendingMoments, fadeMomentBoosts, tryFaintMoments, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
+import { momentRefusal, momentRuinExtra, momentStatPcts, momentTypeGuard, noteBraveHit, momentGuardHit, momentParadoxDrive, momentSuperCut, tryAllyLethalMoment, hauntAccuracyCut, momentGroundTypes, momentNoConfuse, momentRooted, momentStatMult, noteContactHit, tryHauntStrikes, momentContactPoison, momentDamageMult, spendMomentBoost, applyPendingMoments, fadeMomentBoosts, tryFaintMoments, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
 import type { MomentHooks } from '../moments/pokemonMoments';
 import { quirkAccuracy, quirkDamageMult, quirkEntryStages, quirkGuard, quirkNoCrits, quirkOf, quirkPriority, quirkSurvives } from '../co/quirks';
 import { reapplyBoost } from '../instrumentality/secondChance';
@@ -2537,7 +2537,9 @@ function statsOf(ctx: BattleContext, c: Combatant): ReturnType<typeof calcStats>
   const raw = Object.keys(o).length ? { ...base, ...o } : base;
   // Remembered (Pokémon moments): +10% to every stat but HP.
   const remembered = momentStatMult(ctx, c);
-  const stats = remembered === 1 ? raw : { ...raw, atk: Math.floor(raw.atk * remembered), def: Math.floor(raw.def * remembered), spa: Math.floor(raw.spa * remembered), spd: Math.floor(raw.spd * remembered), spe: Math.floor(raw.spe * remembered) };
+  const one = momentStatPcts(ctx, c);
+  const pct = (st: 'atk' | 'def' | 'spa' | 'spd' | 'spe') => remembered * (1 + (one[st] ?? 0) / 100);
+  const stats = remembered === 1 && Object.keys(one).length === 0 ? raw : { ...raw, atk: Math.floor(raw.atk * pct('atk')), def: Math.floor(raw.def * pct('def')), spa: Math.floor(raw.spa * pct('spa')), spd: Math.floor(raw.spd * pct('spd')), spe: Math.floor(raw.spe * pct('spe')) };
   const ability = abilityIn(ctx, c);
   // Primal (PA28): Protosynthesis on, sun or not, the bonus doubled, on its two best stats.
   const primal = revivalPrimal(c);
@@ -3347,7 +3349,7 @@ function executeMove(
       return;
     }
     // Revival statuses: Transcendent can't use physical moves, a Swarm can't Protect, Absolute Zero rests the turn after it acts.
-    const why = revivalBlocked(ctx, user, move);
+    const why = revivalBlocked(ctx, user, move) ?? (ctx.moments ? momentRefusal(ctx, user, target, move.category) : null);
     if (why) {
       events.push({ type: 'raid', tone: 'info', text: why });
       events.push({ type: 'blocked', side: user.side, moveId: move.id });
@@ -4237,6 +4239,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (physical && (userAbility === 'hustle' || userAbility === 'gorilla-tactics')) attackMult *= 1.5;
       if (physical && userAbility === 'flower-gift' && weather === 'sun') attackMult *= 1.5;
       if (foeAbility && RUINS[foeAbility] === (physical ? 'atk' : 'spa')) attackMult *= 0.75;
+      // Four Seals (PG11): the target's Ruin ability also lowers one more stat.
+      else if (foeAbility && RUINS[foeAbility] && momentRuinExtra(ctx, target) === (physical ? 'atk' : 'spa')) attackMult *= 0.75;
       if (userAbility === 'supreme-overlord') {
         const fallen = ctx.party.filter((m) => m.hp <= 0).length;
         attackMult *= 1 + 0.1 * Math.min(5, user.side === 'player' ? fallen : ctx.battle.enemyTeam.filter((m) => m.hp <= 0).length);
@@ -4261,6 +4265,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (hitsDefense && foeAbility === 'fur-coat') defense *= 2;
       if (!hitsDefense && foeAbility === 'flower-gift' && weather === 'sun') defense = Math.floor(defense * 1.5);
       if (userAbility && RUINS[userAbility] === (hitsDefense ? 'def' : 'spd')) defense = Math.floor(defense * 0.75);
+      else if (userAbility && RUINS[userAbility] && momentRuinExtra(ctx, user) === (hitsDefense ? 'def' : 'spd')) defense = Math.floor(defense * 0.75);
       if (hitsDefense && foeAbility === 'grass-pelt' && ctx.battle.terrain?.id === 'grassy') defense = Math.floor(defense * 1.5);
       if (target.side === 'player') defense = Math.floor(defense * growthVanguardMultiplier(content.balance.overhaulGrowth, target.mon, target.vol.turnsOut));
       if (hitsDefense && target.side === 'player') defense = Math.floor(defense * growthDefenseMultiplier(content.balance.overhaulGrowth, target.mon, target.mon.hp / Math.max(1, targetStats.hp)));
@@ -4284,6 +4289,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (ctx.moments && target.side === 'player') final *= momentSuperCut(ctx, target, effectiveness);
       // Revival statuses: move power (Revenant, Spiteful), type power (Supernova, Eclipsed, Crushing Depth), damage taken (Alpha's Howl), Swarm's split hits.
       final *= revivalPower(user, target, moveType) * (twice ? twice / 100 : 1);
+      // The Same Lab (PG13): a starter takes less from the type it beats.
+      if (ctx.moments) final *= momentTypeGuard(ctx, target, moveType);
       if (user.mon.awakened?.includes(move.id)) final *= content.story.awakening.boost;
       if (user.mon.mastered?.includes(move.id)) final *= 1 + content.balance.trainerWorld.masteryPower;
       if (user.side === 'player' && ctx.battle.comboUid === user.mon.uid) final *= content.balance.w1.play.combo.bonus;

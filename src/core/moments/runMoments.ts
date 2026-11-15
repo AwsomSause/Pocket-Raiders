@@ -12,7 +12,7 @@ import { gainXp, getSpecies, xpForLevel } from '../pokemon';
 import { bossInfo, runLevelCap } from '../regions';
 import { hashSeed, Rng } from '../rng';
 import type { PokemonInstance, RunState } from '../state';
-import { momentMatches, momentRoll, momentsFor, runClaimKey, type PokemonMoment } from './pokemonMoments';
+import { REGION_LEGENDS, momentMatches, momentRoll, momentsFor, runClaimKey, type PokemonMoment } from './pokemonMoments';
 
 const BERRIES = ['oran-berry', 'sitrus-berry'];
 const TALENT_STATS = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
@@ -98,6 +98,12 @@ export function restMoments(content: Content, run: RunState): string[] {
       if (m.effect.giveItem && !m.effect.giveItem[mon.speciesId]) continue;
       // Dream Walk does nothing for a Pokémon already at the level cap, so it is neither played nor claimed.
       if (m.effect.xpPct && mon.xp >= xpForLevel(getSpecies(content, mon.speciesId).growthRate, Math.min(content.balance.difficulty.maxLevel, runLevelCap(content, run)), content.balance.difficulty.highLevelXp)) continue;
+      // A scene already open beside this stop, or the legend already named this region (PG5), is not played again.
+      const here = run.stage?.map.nodes.find((n) => n.id === run.stage!.current);
+      if (m.effect.openEvent && (!here || !content.events.has(m.effect.openEvent) || here.sides.some((x) => x.kind === 'event' && x.eventId === m.effect!.openEvent && !x.used))) continue;
+      const nextRegion = run.regionOrder[run.regionIndex + 1];
+      const legends = nextRegion ? REGION_LEGENDS[nextRegion] ?? [] : [];
+      if (m.effect.legendHint && (legends.length === 0 || run.story.flags[`pm-legend-hint:r${run.regionIndex}`] !== undefined)) continue;
       if (!plays(run, m, mon)) continue;
       const fx = m.effect;
       if (fx.friendship) changeFriendship(content, mon, fx.friendship);
@@ -115,9 +121,11 @@ export function restMoments(content: Content, run: RunState): string[] {
       }
       if (fx.weaknessHint && run.stage) extra = ` ${weaknessLine(content, run)}`;
       // A scene with choices opens as a stop beside this one.
-      if (fx.openEvent && run.stage && content.events.has(fx.openEvent)) {
-        const here = run.stage.map.nodes.find((n) => n.id === run.stage!.current);
-        if (here && !here.sides.some((x) => x.kind === 'event' && x.eventId === fx.openEvent && !x.used)) here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId: fx.openEvent });
+      if (fx.openEvent && here) here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId: fx.openEvent });
+      if (fx.legendHint) {
+        run.story.flags[`pm-legend-hint:r${run.regionIndex}`] = 1;
+        const names = legends.map((id) => content.species.get(id)?.name ?? id);
+        extra = ` In the dream, the next region's legend has a name: ${names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}` : names[0]}.`;
       }
       lines.push(`${nameOf(content, mon)}: ${m.name}. ${m.effectText}${extra}`);
       break;

@@ -1,4 +1,5 @@
 import { PSEUDO } from '../../src/core/dungeon/pseudo';
+import { POKEMON_MOMENTS } from '../../src/core/moments/pokemonMoments';
 // Exploration (APPROVED.md §5-6): fog of war, weather fronts, roaming Legendaries, camps, secret
 // paths, callbacks, landmark rooms and the stops of the limited-time events.
 
@@ -315,6 +316,8 @@ describe('landmarks and dungeons', () => {
     for (const id of content.events.keys()) if (id.startsWith('ultra-tear-')) opened.add(id);
     // Beta 0.7: Pidgey's Resolve places its join rooms from code (core/sky/story.ts pushRoom).
     for (const id of content.events.keys()) if (id.startsWith('sky.join.')) opened.add(id);
+    // Row 17: a rest moment opens its camp scene beside the stop (core/moments/runMoments.ts openEvent).
+    for (const m of POKEMON_MOMENTS) if (m.effect?.openEvent) opened.add(m.effect.openEvent);
     for (const id of opened) expect(content.events.get(id)?.room, id).toBe(true);
     for (const e of content.events.values()) if (e.room) expect(opened.has(e.id) || questOpened.has(e.id), e.id).toBe(true);
   });
