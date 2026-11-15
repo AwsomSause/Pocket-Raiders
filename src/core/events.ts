@@ -90,6 +90,7 @@ import { addMercy, changeRep, joinInsideMan, joinProblem, resolveVerdict, standW
 import { checkFlagKeys } from './shadow2/keys';
 import { bondLevel, bondLevelMet, fitsMatch, whoOf, whoWords } from './co/who';
 import { oweNodes } from './co/takeNode';
+import { clearNodeHold, setNodeBattle } from './co/attach';
 import { noteSpecial } from './expansion/fieldNotes';
 import { grantNamedShadow } from './shadow2/grant';
 import type { MapNode, RunState, SideStop } from './state';
@@ -953,6 +954,8 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   placeEarnedCoBeats(content, run);
   let battle = false;
   if (outcome.battle && run.party.some((p) => p.hp > 0)) {
+    // An event placed before the node's battle that starts a battle of its own: that one takes the node's battle's place.
+    clearNodeHold(run);
     startEventBattle(content, run, node, outcome.battle, rng, { eventId: event.id, choiceIndex, sideId, success });
     battle = true;
   } else {
@@ -1024,6 +1027,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return `${e.who === 'lead' ? 'lead' : 'party'} ${e.status === 'paralysis' ? 'paralysed' : e.status === 'sleep' ? 'asleep' : e.status === 'burn' ? 'burned' : 'poisoned'}`;
     case 'friendship':
       return `${e.who === 'party' ? '' : `${whoWords(e.who)}: `}friendship ${e.amount >= 0 ? '+' : ''}${e.amount}`;
+    case 'nodeBattle':
+      return e.skip ? 'the fight here does not happen' : e.level ? `the fight here is ${e.level > 0 ? 'harder' : 'easier'}` : '';
     case 'takeNode':
       return e.back ? 'a step back along the road (nothing is refought)' : `takes your next ${e.nodes === 1 ? 'node' : `${e.nodes} nodes`} (no battle there)`;
     case 'attribute': {
@@ -1308,6 +1313,9 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       for (const m of who) changeFriendship(content, m, e.amount, e.amount > 0 ? gain : 1);
       return who.length > 0 ? effectWords(content, e) : '';
     }
+    case 'nodeBattle':
+      setNodeBattle(run, { skip: e.skip, level: e.level });
+      return effectWords(content, e);
     case 'takeNode':
       if (!e.back) oweNodes(run, e.nodes);
       return effectWords(content, e);
