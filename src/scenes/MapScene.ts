@@ -888,7 +888,7 @@ export class MapScene extends Phaser.Scene {
         title: league ? `${region.name} Pokémon League` : stage.pseudo ? stage.pseudo.name : `${region.name} · Stage ${stage.index + 1}`,
         chips: [league ? `Battle ${column} / ${stage.map.columns}` : stage.pseudo ? `Inside Stage ${stage.index + 1}` : `Stage ${stage.index + 1} / ${stages}`, league ? `Elite Four, then ${leader.title}` : stage.pseudo ? 'Clear the rooms to walk out' : `Gym in ${Math.max(0, stage.map.columns - column)} stops`, `₽ ${run.money.toLocaleString('en-US')}`, ...hudBits],
         types: league || blindMap(run.rules) ? [] : theme.types,
-        lines: [league ? 'Healed after every battle' : `${blindMap(run.rules) ? '???' : theme.name}${blindMap(run.rules) ? '' : ` (${theme.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' / ')})`} · ${leader.title}${stageModifier(run) ? ` · ${stageModifier(run)!.name}` : ''}`, ...lines],
+        lines: [league ? 'Healed after every battle' : `${blindMap(run.rules) ? '???' : theme.name}${blindMap(run.rules) ? '' : ` (${theme.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' / ')})`} · ${stage.pseudo ? `Inside Stage ${stage.index + 1}, not a stage of its own` : leader.title}${stageModifier(run) ? ` · ${stageModifier(run)!.name}` : ''}`, ...lines],
         party: run.party.map((mon) => { const sp = content.species.get(mon.speciesId)!; return { file: rxFileOf(manifest, pokemonAssetIds(sp.assets).front)?.file ?? null, hp: Math.round((mon.hp / Math.max(1, maxHp(content, mon))) * 100), label: `${sp.name} Lv${mon.level}` }; }),
         eggs: run.eggs.map((egg) => `${egg.left}${egg.unit === 'battle' ? 'B' : 'S'}`),
         art: bg ? rxFileOf(manifest, bg)?.file ?? null : null,

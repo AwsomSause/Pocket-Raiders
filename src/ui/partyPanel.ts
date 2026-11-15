@@ -39,6 +39,8 @@ export interface PickerRow {
   problem: string | null;
   /** Shown at the bottom when the row is focused and can be picked. */
   hint?: string;
+  /** The item this row stands for, when it is one (the New UI's Bag shows who in the party it would help). */
+  item?: string;
 }
 
 export interface PickerConfig {
@@ -266,6 +268,7 @@ export class Picker implements PickerLike {
         box: (i) => this.boxes[i],
         problem: (i) => config.rows[i]?.problem ?? null,
         hint: (i) => config.rows[i]?.hint ?? '',
+        item: (i) => config.rows[i]?.item,
         tabs: config.tabs,
         canBack: Boolean(config.onBack),
         backLabel: config.backLabel,
@@ -575,6 +578,7 @@ export function bagRow(content: Content, inventory: Record<string, number>, item
   return {
     problem,
     hint: item.description,
+    item: itemId,
     draw: (scene, box, w, h) => {
       box.add(itemVisual(scene, item.iconAssetId, 26, h / 2, 2));
       box.add(scene.add.text(56, h / 2, item.name, textStyle(24)).setOrigin(0, 0.5));

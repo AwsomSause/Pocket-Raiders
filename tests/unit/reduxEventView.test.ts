@@ -22,6 +22,18 @@ describe('New UI event screen', () => {
         for (const l of ['A', 'B', 'C', 'D', 'E', 'F', 'G']) expect(html).toContain(`Option ${l}`);
       });
 
+      it('lets a long choice label wrap inside its button, and leaves short labels as they are', () => {
+        const long = 'Tell him the truth about the midnight clock, all of it, gently, and stay until he has heard every word.';
+        const short = eventView(ctx(layout), model());
+        const html = eventView(ctx(layout), model({ choices: [choice('Heal.'), choice(long)] }));
+        expect(html).toContain(long);
+        // The card layout (3) wraps by itself; the button layouts switch wrapping on only for the long label.
+        if (layout !== 3) {
+          expect(short).not.toContain('white-space:normal');
+          expect(count(html, 'white-space:normal')).toBe(1);
+        }
+      });
+
       it('holds the choices back while pages of text remain, and turns the page on a click anywhere', () => {
         const html = eventView(ctx(layout), model({ page: { at: 0, of: 3 } }));
         expect(count(html, 'data-act="pick"')).toBe(0);

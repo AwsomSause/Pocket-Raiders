@@ -330,7 +330,7 @@ export function tradeCandidates(content: Content, run: RunState, want: TradeWant
     .sort((a, b) => a.level - b.level);
 }
 
-function tradePicksOf(content: Content, run: RunState, choice: EventChoice): { uid: string; label: string }[] | null {
+function tradePicksOf(content: Content, run: RunState, choice: EventChoice): TradePick[] | null {
   // Clone Core: the player picks which other party Pokémon gets the lead's moves.
   if (choice.success.effects.some((f) => f.kind === 'copyMoves')) return run.party.slice(1).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
   const e = choice.success.effects.find((f) => f.kind === 'tradeAway' || f.kind === 'tradeFor');
@@ -340,7 +340,9 @@ function tradePicksOf(content: Content, run: RunState, choice: EventChoice): { u
     return run.party.filter((m) => fitsMatch(content, m, { ...(types.length > 0 ? { types } : {}), ...(moveFlag ? { moveFlag } : {}) }) && (bond === undefined || bondLevel(content, m) >= bond)).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
   }
   if (!e || (e.kind !== 'tradeAway' && e.kind !== 'tradeFor')) return null;
-  return tradeCandidates(content, run, e.want).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
+  // A swap from a fixed table says what comes back before the player commits (the Honest Trade Card). A "similar strength" swap is rolled, so it stays unknown.
+  const table = e.kind === 'tradeFor' ? e.table : {};
+  return tradeCandidates(content, run, e.want).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}`, ...(e.kind === 'tradeFor' ? { gets: table[m.speciesId] && content.species.has(table[m.speciesId]!) ? table[m.speciesId]! : null } : {}) }));
 }
 
 /** Why a choice's trade cannot happen yet, in words (null when it can or the choice has no trade). */
@@ -816,6 +818,9 @@ export function stopIsHidden(content: Content, run: RunState, node: MapNode, sid
 
 // ---------- the scene and its choices ----------
 
+/** A party Pokémon a choice can take. `gets` (swaps only): the species that comes back, or null when it is not known until the swap happens. */
+export interface TradePick { uid: string; label: string; gets?: string | null }
+
 export interface ChoiceView {
   label: string;
   /** Why it can't be chosen, or null. */
@@ -833,7 +838,7 @@ export interface ChoiceView {
   /** What kind of uncertainty it carries, in words ("Depends on your Luck · a setback if it fails"). */
   risk: string;
   /** For a trade: the party Pokémon the partner would take (the player picks one), else null. */
-  tradePicks: { uid: string; label: string }[] | null;
+  tradePicks: TradePick[] | null;
   /** Battle, trade, chance, cost or safe: the tag and colour every event style shows. */
   kind: ChoiceKind;
 }
