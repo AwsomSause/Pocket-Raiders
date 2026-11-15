@@ -1,4 +1,3 @@
-// @ts-nocheck: work in progress (stopped 2026-11-15 when Kice capped running threads at five); rename to people-*.ts to build.
 // Catalog Overhaul Pack, people: PAST GYM LEADERS GL3 to GL10 (QUESTLINES_PAST_CHAMPIONS_AND_LEADERS.md lines 340 to 602).
 // GL5 and GL6 follow the rewrite in QUESTLINES_DEEPENED_1.md (lines 351 to 438); GL6's last stage is STORY_FAMILIES_8.md B14 "The Coin Hums".
 // GL3 builds the three wings only: the vault (`mr-ancient-gym-vault`) is another file's, and reads `forgotten-badge` (3 opens it).
@@ -213,7 +212,7 @@ const borrowedBadge: Json[] = [
     [
       lend('You open your badge case and hold out the oldest one. Jem looks at it as if you have handed him something alive. He wraps it in a clean handkerchief, then in another, and puts it inside his coat, over his heart. "I\'ll bring it back," he says again, and this time it does not sound like a lie at all. The badge is lent, not given; it cannot be lost for good.'),
       ch('"Why?"', out('Jem looks at the gravel for a long time. Then it comes out all at once. Jem: "My dad\'s a Leader. Was. He\'s in the hospital at the next town. He doesn\'t know me, most days. He knows badges." ' +
-        'Jem: "He\'ll hold one and tell you who made it and what year and who lost it. They took his when he retired." His voice cracks. Jem: "I just want him to hold one."',
+        'Jem: "He\'ll hold one and tell you who made it and what year and who lost it. I can\'t... they took his when he retired." His voice cracks. Jem: "I just want him to hold one."',
         flag('borrowed-badge-asked'), room(`${BB}-s1-why`))),
       ch('"No."', out('Jem nods quickly, as if he expected nothing else, and goes away down the road with his hands deep in his pockets. He does not look back.', flag('borrowed-badge-refused'), stageDone(BB, 1))),
     ]),
@@ -337,10 +336,10 @@ const stolenBadge: Json[] = [
     'The treehouse again, and this time someone is in it: a girl of eleven in an oversized hood, arms folded, an Elekid on her shoulder with a Volt-yellow ribbon round its arm. Sorrel\'s daughter. Imma: "Dad gives badges to anyone. Not to me. He says I\'m \'not ready.\'" ' +
     'Her voice wobbles and she makes it stop. Imma: "He won\'t even battle me." She pushes the jam jar of badges across the floor toward you. Imma: "So I made people come and get them. From me."',
     [
-      ch('"Give them back."', out('Imma hands the jar over, sulking, and climbs down without a word. Sorrel grounds her for a month. The badges are returned to their owners, and Pell holds his Volt Badge up to the sun and does not stop grinning for an hour. He presses a Cell Battery into your hand.', flag('badge-returned'), ...pellThanks())),
+      ch('"Give them back."', out('Imma hands the jar over, sulking, and climbs down without a word. Sorrel grounds her for a month. The badges are returned to their owners, and Pell holds his Volt Badge up to the sun and does not stop grinning for an hour. He presses a Cell Battery into your hand.', flag('badge-returned'), stageDone(SB, 2), ...pellThanks())),
       ch('"Challenge her."', fight('Imma\'s whole face changes. She is down the ladder before you are, and her Elekid is on the grass sparking, and for the first time she looks exactly like her father. She loses or she wins, and either way she glows. Afterwards she gives back the badges without being asked, and Pell gives you a Cell Battery.',
-        immaBattle([moment('You battled Imma and her Elekid under the treehouse')], [moment('Imma\'s Elekid beat you under the treehouse')]), flag('badge-challenged'), ...pellThanks())),
-      ch('"Take her to her father."', out('Imma goes white. But she comes down the ladder, and walks beside you across the garden to the back door, with the jam jar in both hands.', flag('badge-father'), room(`${SB}-s3`))),
+        immaBattle([moment('You battled Imma and her Elekid under the treehouse')], [moment('Imma\'s Elekid beat you under the treehouse')]), flag('badge-challenged'), stageDone(SB, 2), ...pellThanks())),
+      ch('"Take her to her father."', out('Imma goes white. But she comes down the ladder, and walks beside you across the garden to the back door, with the jam jar in both hands.', flag('badge-father'), stageDone(SB, 2), room(`${SB}-s3`))),
     ]),
   scene(`${SB}-s3`, 'The Stolen Badge: Father and Daughter', { room: true, requires: [is('badge-father')], pokemon: 'elekid' },
     'Sorrel\'s kitchen. He sees the jam jar of badges, and then his daughter holding it, and he sits down very slowly at the table. Sorrel: "Imma. Why." Imma puts the jar down. Her chin is shaking. Imma: "You never battled me. Not once."',
@@ -583,7 +582,7 @@ const towerApprentice: Json[] = [
   floorScene(5, 'The fifth floor is the last before the top. The oldest of Varn\'s students waits there, grey at the temples, with a Hitmonlee and a Hitmonchan. "I was his first. Forty years ago. Win and you can go up and tell him he\'s a stubborn old fool."',
     'Singles. He is very, very good. Win or lose, he stands aside from the last stair, and the light from the top of the tower falls on you.',
     'A double, the hardest yet, Wren beside you. Win or lose, Varn\'s first student stands aside from the last stair and puts a hand on Wren\'s shoulder as Wren goes by.'),
-  scene(`${TA}-s3`, 'The Tower Apprentice: At the Top', { room: true, requires: [is('ovc-tower-apprentice-s2')], pokemon: 'hariyama', remembers: topVariants() },
+  scene(`${TA}-s3`, 'The Tower Apprentice: At the Top', { room: true, requires: [is('ovc-tower-apprentice-s2'), not('ovc-tower-apprentice-s3')], pokemon: 'hariyama', remembers: topVariants() },
     'The top of the tower is open to the sky, all wind and cloud. An old man in a frayed gi sits cross-legged on the stone, with a Hariyama sitting cross-legged beside him the same way. Neither of them has eaten in a week. ' +
     'Varn: "Forty years. Every challenger came in shaking. My own apprentice shakes." Varn: "I\'m not coming down until someone beats me who isn\'t afraid of me." ' +
     'He looks past you at Wren, who has come up the last stairs anyway, breathless, holding the cold food bag.',

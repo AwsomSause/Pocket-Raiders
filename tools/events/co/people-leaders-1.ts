@@ -1,4 +1,3 @@
-// @ts-nocheck: work in progress (stopped 2026-11-15 when Kice capped running threads at five); rename to people-*.ts to build.
 // Catalog Overhaul Pack, people: PAST GYM LEADERS, the Day Off frame and scenes B1 to B13, B15, B16 (STORY_FAMILIES_8.md lines 1 to 438;
 // B14 "The Coin Hums" is GL6 stage 3, built elsewhere), with GL1 "A Leader's Day Off" (QUESTLINES_PAST_CHAMPIONS_AND_LEADERS.md lines 284 to 313)
 // folded into the frame. Pattern: people-roster-2.ts.
@@ -106,7 +105,7 @@ const elesa = leader({
     'Elesa: "Strike a pose. No. Better." She says it to Zebstrika, but her eyes slide to the man in the coat. Then, quietly, without moving her lips: Elesa: "That man. Every shoot for a month. He doesn\'t work for anyone."',
   choices: [
     ch('"Chase him off."', fight('You walk straight at the man in the coat. He fumbles a Poké Ball out of his pocket rather than answer, and the flashes turn towards you.',
-      spar('Photographer in a Long Coat', { size: 1, win: [moment('You chased the man in the long coat off Elesa\'s pier')], lose: [moment('The man in the long coat beat you, and ran anyway')] }),
+      spar('Photographer in a Long Coat', { size: 1, win: [moment('You chased the man in the long coat off Elesa\'s pier; he ran, and Elesa reported him')], lose: [moment('The man in the long coat beat you, then ran anyway, and Elesa reported him')] }),
       ...help('elesa'), ...elesaReward())),
     ch('"Pose with her so he gets bored."', out('For ten minutes you and Elesa pose as dully as two people can: standing, sitting, holding a cup. Zebstrika yawns. One by one the cameras go down, and finally the man in the coat sighs and walks away down the pier. Elesa signs a photo for you, laughing, and gives you a Magnet.', ...help('elesa'), ...elesaReward())),
     ch('"Talk to him."', out('Up close he is old, and shaking. He is not a stalker: he is her old photography teacher, the one who first put a camera in her hands, too shy to say hello after all these years. Elesa is stunned. Then she crosses the pier in four steps and hugs him, and every camera on the pier goes off at once. She signs a photo for you with both their names, and gives you a Magnet.',
