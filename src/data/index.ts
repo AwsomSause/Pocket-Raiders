@@ -132,14 +132,15 @@ import { dungeonEvents } from '../core/dungeon/compile';
 import { validateAllDungeons } from '../core/dungeon/schema';
 import { pseudoEvents, validateAllPseudo } from '../core/dungeon/pseudo';
 
-/** Catalog Overhaul: merges the placement files. An id in two files, or one that is no event, is a data problem. */
+/** Catalog Overhaul: merges the placement files. An id in two files is a data problem. An id that is no event is skipped: cut-down copies of
+ *  the content (old-seed fingerprints, small test catalogs) drop events but keep the placement files. Each category's gate test checks that
+ *  its placed ids are real events in the full content (tests/unit/coPeople.test.ts for people). */
 function readCoPlacement(files: Record<string, Record<string, unknown>>[], eventIds: Set<string>, problems: string[]): Map<string, CoPlacement> {
   const out = new Map<string, CoPlacement>();
   for (const file of files) for (const [id, raw] of Object.entries(file)) {
     if (id.startsWith('$')) continue; // "$note" and the like
     if (out.has(id)) problems.push(`catalogOverhaul/placement: ${id} is placed in two files`);
-    else if (!eventIds.has(id)) problems.push(`catalogOverhaul/placement: ${id} is not an event`);
-    else out.set(id, readPlacement(raw));
+    else if (eventIds.has(id)) out.set(id, readPlacement(raw));
   }
   return out;
 }

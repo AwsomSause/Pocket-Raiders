@@ -1,0 +1,422 @@
+{
+ "catalogOverhaul": "people",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "mentor-quiz",
+   "name": "The Trivia Mentor",
+   "group": "NPC Stories",
+   "stop": "tutor",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#241f3a",
+    "effect": "none"
+   },
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "intro": "A silver-haired woman sits on a folding stool by the path, a thermos of tea at her feet and a notebook open on her knee, every page full of tiny handwriting about moves. She closes it and folds her hands on top. She: \"Answer three questions and I will teach you a move nobody remembers.\" She looks at your team, one by one, and something in her face softens. She: \"Not questions from a book. Questions about you.\"",
+   "choices": [
+    {
+     "label": "\"Ask.\"",
+     "success": {
+      "text": "She pours herself a cup of tea and does not offer you one yet. She: \"First question, then.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-quiz-q1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not today.\"",
+     "success": {
+      "text": "She shrugs and opens the notebook again. She: \"The move will still be forgotten tomorrow.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-quiz-q1",
+   "name": "The Trivia Mentor: The First Question",
+   "group": "NPC Stories",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#241f3a",
+    "effect": "none"
+   },
+   "room": true,
+   "requires": [],
+   "intro": "She: \"Which of these was with you on the first day?\" She waits, the cup halfway to her lips, while your team shuffles in front of her.",
+   "choices": [
+    {
+     "label": "\"This one.\"",
+     "pick": {},
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "picked",
+         "types": [],
+         "starter": true
+        }
+       ],
+       "text": "She looks at the one you chose, then at you, and smiles. She: \"Of course. You did not even have to think.\" She makes a small tick in the notebook.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "mentor-quiz-right",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-quiz-q2"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "She looks at the one you chose for a long moment, then shakes her head gently. She: \"Not that one. But you love it like it was.\" She makes a mark in the notebook.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-quiz-q2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-quiz-q2",
+   "name": "The Trivia Mentor: The Second Question",
+   "group": "NPC Stories",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#241f3a",
+    "effect": "none"
+   },
+   "room": true,
+   "requires": [],
+   "intro": "She sets the cup down. Her voice goes quieter. She: \"Second question. Has anyone in your care fallen on this road, and not got up again?\"",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "memorial",
+         "atLeast": 1
+        }
+       ],
+       "text": "She nods, and for a moment neither of you says anything. She: \"Then you remember them. Good. That is the right answer, though I am sorry it is.\" A small tick.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "mentor-quiz-right",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-quiz-q3"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "She studies you, and then your team, and shakes her head slowly. She: \"No. Not yet. Keep it that way.\" She does not tick the notebook, but she does not seem to mind.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-quiz-q3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "memorial",
+         "atLeast": 1
+        }
+       ],
+       "text": "She looks at you a long time, and you look away first. She: \"That is not true, and you know it is not.\" She does not tick the notebook.",
+       "effects": [
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-quiz-q3"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "She looks at your team, all of them, and nods. She: \"Good. Then you know exactly how many you have.\" A small tick in the notebook.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-quiz-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-quiz-q3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-quiz-q3",
+   "name": "The Trivia Mentor: The Third Question",
+   "group": "NPC Stories",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#241f3a",
+    "effect": "none"
+   },
+   "room": true,
+   "requires": [],
+   "intro": "She finishes her tea. She: \"Last one. How many Gym badges are in your case?\"",
+   "choices": [
+    {
+     "label": "\"None yet.\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "badges",
+         "atLeast": 1
+        }
+       ],
+       "text": "She taps your bag, where the badge case clinks. She: \"Count again.\" No tick.",
+       "effects": [
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-quiz-verdict"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "She: \"None. Honest. The badges will come.\" A small tick.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-quiz-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-quiz-verdict"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"One or two.\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "badges",
+         "atLeast": 3
+        }
+       ],
+       "text": "She shakes her head. She: \"More than that. You have stopped counting.\" No tick.",
+       "effects": [
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-quiz-verdict"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "badges",
+         "atLeast": 1
+        }
+       ],
+       "text": "She: \"Yes. Every one of them earned.\" A small tick.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "mentor-quiz-right",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-quiz-verdict"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "She shakes her head. She: \"Count again.\" No tick.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-quiz-verdict"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Three or more.\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "badges",
+         "atLeast": 3
+        }
+       ],
+       "text": "She: \"Three or more, and you still remember every Gym.\" A small tick.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "mentor-quiz-right",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-quiz-verdict"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "She shakes her head. She: \"Not yet. But you will.\" No tick.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-quiz-verdict"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-quiz-verdict",
+   "name": "The Trivia Mentor: Nobody Remembers It",
+   "group": "NPC Stories",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#241f3a",
+    "effect": "none"
+   },
+   "room": true,
+   "requires": [],
+   "intro": "She closes the notebook and looks at the page of ticks. She: \"Not enough. But you answered honestly about the ones you love, and that is worth something.\" She tucks a pressed leaf into your hand and goes back to her tea.",
+   "choices": [
+    {
+     "label": "\"Thank you.\"",
+     "success": {
+      "text": "The leaf smells faintly of mint. She waves you on without looking up.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "The Trivia Mentor quizzed you about your own journey",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "passed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mentor-quiz-right",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "intro": "She closes the notebook and looks at the page of ticks. She: \"Enough. You know your own road. Now choose what to remember.\" She opens the notebook to a page so old the ink is brown, three moves written on it.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "\"Counter.\"",
+       "success": {
+        "text": "She rests two fingers on your lead's brow and hums a few notes of something very old. When she steps back, your lead knows Counter, a move tutors stopped teaching before you were born. She: \"Nobody remembers it. Now somebody does.\"",
+        "effects": [
+         {
+          "kind": "teachMove",
+          "move": "counter"
+         },
+         {
+          "kind": "moment",
+          "text": "The Trivia Mentor taught your lead Counter",
+          "importance": 60
+         }
+        ]
+       }
+      },
+      {
+       "label": "\"Seismic Toss.\"",
+       "success": {
+        "text": "She rests two fingers on your lead's brow and hums a few notes of something very old. When she steps back, your lead knows Seismic Toss, a move tutors stopped teaching before you were born. She: \"Nobody remembers it. Now somebody does.\"",
+        "effects": [
+         {
+          "kind": "teachMove",
+          "move": "seismic-toss"
+         },
+         {
+          "kind": "moment",
+          "text": "The Trivia Mentor taught your lead Seismic Toss",
+          "importance": 60
+         }
+        ]
+       }
+      },
+      {
+       "label": "\"Metronome.\"",
+       "success": {
+        "text": "She rests two fingers on your lead's brow and hums a few notes of something very old. When she steps back, your lead knows Metronome, a move tutors stopped teaching before you were born. She: \"Nobody remembers it. Now somebody does.\"",
+        "effects": [
+         {
+          "kind": "teachMove",
+          "move": "metronome"
+         },
+         {
+          "kind": "moment",
+          "text": "The Trivia Mentor taught your lead Metronome",
+          "importance": 60
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
