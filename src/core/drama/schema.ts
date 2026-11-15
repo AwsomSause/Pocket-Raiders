@@ -110,6 +110,10 @@ export const DramaEventDefSchema = z.object({
   aiShift: z.number().min(-1).max(1).optional(),
   traitShift: z.record(z.string(), z.number().int()).optional(),
   shiftText: z.string().optional(),
+  /** Catalog Overhaul SF161: a narrated moment. The line is spoken under your Pokémon's name (`foe`) or the foe's (`name`), not the trainer's. */
+  narrate: z.enum(['foe', 'name']).optional(),
+  /** Catalog Overhaul SF161: the room (events id) that offers the one after-battle choice; it opens beside the next node. */
+  after: z.string().optional(),
 });
 export type DramaEventDef = z.infer<typeof DramaEventDefSchema>;
 

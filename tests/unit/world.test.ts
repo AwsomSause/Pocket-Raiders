@@ -6,6 +6,7 @@ import { canonKantoPlaced } from '../../src/data/expansion';
 
 import { LANDMARK_STOP, TRAVERSAL } from '../../src/core/traversal';
 import { TREASURE_DIG_EVENT } from '../../src/core/run';
+import { DRAMA_LIBRARY } from '../../src/core/drama/schema';
 import { describe, expect, it } from 'vitest';
 import type { Content } from '../../src/core/contentSchema';
 import { addEventStops, chooseEvent, eligibleEvents, stopIsHidden } from '../../src/core/events';
@@ -329,6 +330,8 @@ describe('landmarks and dungeons', () => {
     for (const o of TRAVERSAL.obstacles) for (const ef of o.pass) if (ef.kind === 'addEvent') opened.add(ef.eventId);
     // (The W4 wanderer's two scenes are R13's now, The One Who Follows: they open from the rival questline, not from code.)
     for (const id of [TREASURE_DIG_EVENT]) opened.add(id);
+    // Catalog Overhaul SF161: a Battle Moment with an after-battle choice opens its room beside the next node (core/drama/events.ts).
+    for (const d of DRAMA_LIBRARY.events) if (d.after) opened.add(d.after);
     for (const e of content.events.values()) if (e.stop === LANDMARK_STOP) opened.add(e.id);
     // Beta 0.7: a pseudo-stage's rooms are the nodes of its own map (core/dungeon/pseudo.ts), entered by walking there.
     for (const r of PSEUDO.records) for (const n of r.nodes) opened.add(`${r.id.replace(/_/g, '-')}-${n.id}`);

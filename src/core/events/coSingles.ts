@@ -7,8 +7,10 @@ import { typeEffectiveness } from '../battle/damage';
 import type { Rng } from '../rng';
 import type { PokemonInstance, RunState } from '../state';
 import { leastUsed, mostUsed } from './coToolkit';
+import { whoOf, whoWords } from '../co/who';
+import { adjustBond, bondOf } from '../bond';
 
-export type SinglesEffect = Extract<EventEffect, { kind: 'coAdvice' | 'coFog' | 'coEpitaph' | 'coCensus' }>;
+export type SinglesEffect = Extract<EventEffect, { kind: 'coAdvice' | 'coFog' | 'coEpitaph' | 'coCensus' | 'coTrust' }>;
 
 const FOG = 'co:fog-items';
 export const EPITAPH = 'co:epitaph';
@@ -88,6 +90,7 @@ export function singlesEffectWords(e: SinglesEffect): string {
     case 'coFog': return e.action === 'take' ? `up to ${e.count} item${e.count === 1 ? '' : 's'} lost in the fog` : 'what the fog took comes back';
     case 'coEpitaph': return 'your line becomes the run\'s epitaph';
     case 'coCensus': return `₽${e.per} for each different type in your party`;
+    case 'coTrust': return `${whoWords(e.who)} trusts you ${e.amount >= 0 ? 'more' : 'less'}`;
   }
 }
 
@@ -105,6 +108,11 @@ export function applySinglesEffect(content: Content, run: RunState, e: SinglesEf
       const pay = e.per * partyTypes(content, run).length;
       run.money += pay;
       return `+₽${pay}`;
+    }
+    case 'coTrust': {
+      const mons = whoOf(content, run, e.who, pickedUid);
+      for (const m of mons) adjustBond(bondOf(run, m.uid), { trust: e.amount });
+      return mons.length ? `${mons.map((m) => nameOf(content, m)).join(' and ')}: trust ${e.amount >= 0 ? '+' : ''}${e.amount}` : '';
     }
   }
 }

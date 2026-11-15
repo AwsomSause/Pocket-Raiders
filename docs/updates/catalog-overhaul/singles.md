@@ -64,3 +64,10 @@ Known limits: week effects last the region rather than a calendar week, the Equi
 - Activity weeks put their stop on every stage: the Mystery Dungeon, the Express Train, ferries, the Pokéathlon, the Bug Contest, campfires where you tell your own Pokémon's story.
 
 Known limits: a few places the doc names (Wicker's Cart, the Sunken City, the Weather Station) belong to other rows and are not built yet, so the week uses the closest stop that exists until they are; loyalty points count stops, not money.
+
+**Batch 14: battle moments (15 moments, 5 after-battle choices).**
+- Trainers say the doc's lines at the big moments: "Again? I see you.", "Not yet. Not yet!", "...How?", "...That was good. That was really good."
+- When your own Pokémon refuses an order, takes the initiative, finds its bravery or hands over to its partner, it is told under its own name, with the reason.
+- After those battles you get one choice about it: apologise to the Pokémon that refused (it trusts you more), thank the one that was right, tell a pair they work well together, thank a kind trainer.
+
+Known limits: the choice appears as a stop beside the next node rather than right after the battle.

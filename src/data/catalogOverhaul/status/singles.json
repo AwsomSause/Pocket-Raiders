@@ -444,7 +444,23 @@
   "photography-week": "2026-11-15"
  },
  "merged": {},
- "rule": {},
+ "rule": {
+  "refusal": "SF161 Battle Moment (2026-11-15): a battle line in dramaEvents.json, with its after-battle choice in moment-refusal",
+  "tacticalRevelation": "SF161 Battle Moment (2026-11-15): a battle line in dramaEvents.json",
+  "comebackCall": "SF161 Battle Moment (2026-11-15): a battle line in dramaEvents.json",
+  "aceReveal": "SF161 Battle Moment (2026-11-15): a battle line in dramaEvents.json",
+  "unplannedCombination": "SF161 Battle Moment (2026-11-15): a battle line in dramaEvents.json, with its after-battle choice in moment-combo",
+  "failedTechnique": "SF161 Battle Moment (2026-11-15): a battle line in dramaEvents.json",
+  "overdriveMisfire": "SF161 Battle Moment (2026-11-15): a battle line in dramaEvents.json",
+  "veteransAdjustment": "SF161 Battle Moment (2026-11-15): a battle line in dramaEvents.json",
+  "desperateSwitch": "SF161 Battle Moment (2026-11-15): a battle line in dramaEvents.json",
+  "mercyMoment": "SF161 Battle Moment (2026-11-15): a battle line in dramaEvents.json, with its after-battle choice in moment-mercy",
+  "breakingPoint": "SF161 Battle Moment (2026-11-15): a battle line in dramaEvents.json",
+  "calmBeforeFinish": "SF161 Battle Moment (2026-11-15): a battle line in dramaEvents.json",
+  "takesInitiative": "SF161 Battle Moment (2026-11-15): a battle line in dramaEvents.json, with its after-battle choice in moment-initiative",
+  "unexpectedRespect": "SF161 Battle Moment (2026-11-15): a battle line in dramaEvents.json",
+  "emotionalTurningPoint": "SF161 Battle Moment (2026-11-15): a battle line in dramaEvents.json, with its after-battle choice in moment-turning"
+ },
  "scrapped": [],
  "extra": {
   "SF135 Pell Junior callback": "berry-tree-pell",
@@ -493,6 +509,11 @@
   "SF158 your berry tree, six nodes after planting": "wk-berry-sprout",
   "SF159 the held-item wind returns": "wk-hurricane-again",
   "SF159 loyalty card full: the Rare gift": "wk-loyalty-gift",
-  "SF159 bankruptcy sale: still open next region": "wk-bankrupt-shop-open"
+  "SF159 bankruptcy sale: still open next region": "wk-bankrupt-shop-open",
+  "SF161 after-battle choice: refusal": "moment-refusal",
+  "SF161 after-battle choice: combo": "moment-combo",
+  "SF161 after-battle choice: mercy": "moment-mercy",
+  "SF161 after-battle choice: initiative": "moment-initiative",
+  "SF161 after-battle choice: turning": "moment-turning"
  }
 }

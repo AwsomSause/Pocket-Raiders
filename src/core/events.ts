@@ -1257,6 +1257,7 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'coFog':
     case 'coEpitaph':
     case 'coCensus':
+    case 'coTrust':
       return singlesEffectWords(e);
     case 'friendshipLine':
       return `${content.species.get(e.species)?.name ?? e.species}: friendship ${e.amount >= 0 ? '+' : ''}${e.amount}`;
@@ -1716,6 +1717,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'coFog':
     case 'coEpitaph':
     case 'coCensus':
+    case 'coTrust':
       return applySinglesEffect(content, run, e, rng, tradeUid);
     case 'cast':
       return recordCast(run, e.id, e.status) ? effectWords(content, e) : '';
