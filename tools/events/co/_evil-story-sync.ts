@@ -125,3 +125,35 @@ for (const story of TEAMS) {
 data.config.counters = COUNTERS;
 writeFileSync(file, JSON.stringify(data, null, 1) + '\n');
 console.log(`evilTeams.json: ${TEAMS.length} teams synced`);
+
+// The Hideouts (SF13 A8, SF131): one chain pseudo-stage per team, drawn like a stage. The Warehouse Door, then one room per
+// column chosen by the player, the boss, the boss's last words, the Holding Pen (SF133) and the Way Out. Each team draws its
+// own infiltration rooms from the SF131 list, so no two Hideouts look the same and every room is used somewhere.
+const ROOMS: Record<string, [string[], string]> = {
+  rocket: [['vt-laser-maze', 'vt-password-lock'], 'vt-locked-chest'],
+  aqua: [['vt-vent-crawl', 'vt-laser-maze'], 'vt-cargo-ship-ransack'],
+  magma: [['vt-vent-crawl', 'vt-password-lock'], 'vt-safehouse-raid'],
+  galactic: [['vt-laser-maze', 'vt-password-lock'], 'vt-prison-break'],
+  plasma: [['vt-vent-crawl', 'vt-password-lock'], 'vt-cargo-ship-ransack'],
+  flare: [['vt-laser-maze', 'vt-vent-crawl'], 'vt-locked-chest'],
+  skull: [['vt-vent-crawl', 'vt-password-lock'], 'vt-safehouse-raid'],
+  aether: [['vt-laser-maze', 'vt-password-lock'], 'vt-prison-break'],
+  yell: [['vt-vent-crawl', 'vt-laser-maze'], 'vt-fake-gym-front'],
+  star: [['vt-password-lock', 'vt-vent-crawl'], 'vt-fake-gym-front'],
+  marauders: [['vt-laser-maze', 'vt-vent-crawl'], 'vt-cargo-ship-ransack'],
+  choir: [['vt-vent-crawl', 'vt-password-lock'], 'vt-prison-break'],
+  ironvein: [['vt-laser-maze', 'vt-password-lock'], 'vt-safehouse-raid'],
+  cartographers: [['vt-vent-crawl', 'vt-laser-maze'], 'vt-cargo-ship-ransack'],
+  wildfire: [['vt-password-lock', 'vt-vent-crawl'], 'vt-safehouse-raid'],
+  gilt: [['vt-laser-maze', 'vt-password-lock'], 'vt-fake-gym-front'],
+};
+const chains = TEAMS.map((t) => {
+  const [middle, last] = ROOMS[t.id]!;
+  return {
+    id: `ps_evil_hideout_${t.id}`, name: `${t.name} Hideout`, entry: `evil-${t.id}-hideout`, themeId: 'ghost-dark', tint: '#161a22', mood: 'dark and cold', team: t.id,
+    layout: [['ps-evil-hideout-gate'], ['ps-evil-hideout-a', 'ps-evil-hideout-b', 'vt-camera-swap'], ['ps-evil-hideout-c', ...middle], ['ps-evil-hideout-d', last], ['evil-{teamId}-hideout-boss'], ['evil-{teamId}-hideout-after'], ['evil-{teamId}-rescue'], ['ps-evil-hideout-e']],
+  };
+});
+const pseudoFile = join(import.meta.dirname, '../../../src/data/catalogOverhaul/pseudo/evil-story.json');
+writeFileSync(pseudoFile, JSON.stringify({ category: 'evil-story', note: 'Evil Team Hideouts (STORY_FAMILIES_13 A8, STORY_FAMILIES_18 SF131 to SF133). Written by tools/events/co/_evil-story-sync.ts.', chains }, null, 1) + '\n');
+console.log(`pseudo/evil-story.json: ${chains.length} Hideouts`);

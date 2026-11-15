@@ -1,0 +1,646 @@
+{
+ "category": "evil-story",
+ "note": "Evil Team Hideouts (STORY_FAMILIES_13 A8, STORY_FAMILIES_18 SF131 to SF133). Written by tools/events/co/_evil-story-sync.ts.",
+ "chains": [
+  {
+   "id": "ps_evil_hideout_rocket",
+   "name": "Team Rocket Hideout",
+   "entry": "evil-rocket-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "rocket",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-laser-maze",
+     "vt-password-lock"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-locked-chest"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_aqua",
+   "name": "Team Aqua Hideout",
+   "entry": "evil-aqua-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "aqua",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-vent-crawl",
+     "vt-laser-maze"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-cargo-ship-ransack"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_magma",
+   "name": "Team Magma Hideout",
+   "entry": "evil-magma-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "magma",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-vent-crawl",
+     "vt-password-lock"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-safehouse-raid"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_galactic",
+   "name": "Team Galactic Hideout",
+   "entry": "evil-galactic-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "galactic",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-laser-maze",
+     "vt-password-lock"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-prison-break"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_plasma",
+   "name": "Team Plasma Hideout",
+   "entry": "evil-plasma-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "plasma",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-vent-crawl",
+     "vt-password-lock"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-cargo-ship-ransack"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_flare",
+   "name": "Team Flare Hideout",
+   "entry": "evil-flare-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "flare",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-laser-maze",
+     "vt-vent-crawl"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-locked-chest"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_skull",
+   "name": "Team Skull Hideout",
+   "entry": "evil-skull-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "skull",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-vent-crawl",
+     "vt-password-lock"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-safehouse-raid"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_aether",
+   "name": "the Aether Foundation Hideout",
+   "entry": "evil-aether-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "aether",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-laser-maze",
+     "vt-password-lock"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-prison-break"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_yell",
+   "name": "Team Yell Hideout",
+   "entry": "evil-yell-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "yell",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-vent-crawl",
+     "vt-laser-maze"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-fake-gym-front"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_star",
+   "name": "Team Star Hideout",
+   "entry": "evil-star-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "star",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-password-lock",
+     "vt-vent-crawl"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-fake-gym-front"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_marauders",
+   "name": "the Mythic Marauders Hideout",
+   "entry": "evil-marauders-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "marauders",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-laser-maze",
+     "vt-vent-crawl"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-cargo-ship-ransack"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_choir",
+   "name": "the Hollow Choir Hideout",
+   "entry": "evil-choir-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "choir",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-vent-crawl",
+     "vt-password-lock"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-prison-break"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_ironvein",
+   "name": "the Ironvein Combine Hideout",
+   "entry": "evil-ironvein-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "ironvein",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-laser-maze",
+     "vt-password-lock"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-safehouse-raid"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_cartographers",
+   "name": "the Pale Cartographers Hideout",
+   "entry": "evil-cartographers-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "cartographers",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-vent-crawl",
+     "vt-laser-maze"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-cargo-ship-ransack"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_wildfire",
+   "name": "the Wildfire Accord Hideout",
+   "entry": "evil-wildfire-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "wildfire",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-password-lock",
+     "vt-vent-crawl"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-safehouse-raid"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_gilt",
+   "name": "the Gilt Circle Hideout",
+   "entry": "evil-gilt-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "gilt",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-laser-maze",
+     "vt-password-lock"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-fake-gym-front"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  }
+ ]
+}
