@@ -232,7 +232,7 @@ const SF136: Json[] = [
     id: 'w4-raft',
     intro: 'A raft tied at the bank; a long, slow current going exactly your way; and the fish are biting so hard the water twitches.',
     choices: [
-      ch('Ride it.', out('You push off and lie back. The banks slide past, your team trails their paws in the water, and for a while nobody has to walk anywhere. The current carries you well down the route.', express(), heal(0.1))),
+      ch('Ride it.', out('You push off and lie back. The banks slide past, your team trails their paws in the water, and for a while nobody has to walk anywhere. The current carries you well down the route.', { kind: 'skipAhead', nodes: 2 }, heal(0.1))),
       ch('Ride and fish.', out('You drift with a line over the side. You do not get as far, but where the raft noses into the bank the water is alive with fish.', express(), stopHere('fish'))),
     ],
   },
@@ -283,7 +283,7 @@ const SF136: Json[] = [
     id: 'taxi-fare',
     intro: '**Driver:** "Flat tyre\'s fixed, back\'s gone, and there\'s a fare waiting. Drive her across the map for me?" He holds out the keys like a man handing over a baby.',
     choices: [
-      ch('Drive (a Pokémon rides on the roof).', out('You drive. The Pokémon you chose rides on the roof with its face in the wind and its eyes shut, and people along the road stop to wave at it. By the time you hand the keys back you are far down the route, and it does not want to get down. It loved every second.', express(), bondUp(1, 'picked')), { pick: {} }),
+      ch('Drive (a Pokémon rides on the roof).', out('You drive. The Pokémon you chose rides on the roof with its face in the wind and its eyes shut, and people along the road stop to wave at it. By the time you hand the keys back you are far down the route, and it does not want to get down. It loved every second.', { kind: 'skipAhead', nodes: 2 }, bondUp(1, 'picked')), { pick: {} }),
       ch('No.', leave('"Fair enough. She\'s got a clutch like a bad temper." He lowers himself back onto the bumper.')),
     ],
   },

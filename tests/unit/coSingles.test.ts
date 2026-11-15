@@ -107,4 +107,31 @@ describe('catalog overhaul: singles', () => {
     expect(here.sides.length).toBe(before + 1);
     expect(here.sides.at(-1)).toMatchObject({ kind: 'service', serviceId: 'tutor', used: false });
   });
+
+  it('skipAhead with nodes lands that many nodes on, and half skips half the stage, never past the gym gate', () => {
+    const start = () => {
+      const run = chooseStarter(content, createRun(content, { runId: 'r', seed: 'co-skip', archetypeId: 'red' }), 0);
+      const here = run.stage!.map.nodes.find((n) => n.column === 1)!;
+      run.stage!.current = here.id;
+      run.stage!.visited = [here.id];
+      return { run, here };
+    };
+    const at = (run: ReturnType<typeof start>['run']) => run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+    const two = start();
+    expect(applyEffect(content, two.run, { kind: 'skipAhead', nodes: 2 }, new Rng(hashSeed('s')))).toBe('skip 2 nodes ahead');
+    expect(at(two.run).column).toBe(two.here.column + 2);
+    expect(two.run.stage!.visited).toContain(two.run.stage!.current);
+    const nodes = two.run.stage!.map.nodes;
+    const gyms = new Set(nodes.filter((n) => n.kind !== 'wild' && n.kind !== 'trainer').map((n) => n.id));
+    const gate = Math.min(...nodes.filter((n) => n.next.some((id) => gyms.has(id))).map((n) => n.column));
+    const half = start();
+    applyEffect(content, half.run, { kind: 'skipAhead', half: true }, new Rng(hashSeed('s')));
+    expect(at(half.run).column).toBe(half.here.column + Math.max(1, Math.floor((gate - half.here.column) / 2)));
+    // Boundary: a huge skip stops at the last nodes before the gym.
+    const far = start();
+    const late = far.run.stage!.map.nodes.find((n) => n.column === gate - 3)!;
+    far.run.stage!.current = late.id;
+    applyEffect(content, far.run, { kind: 'skipAhead', nodes: 12 }, new Rng(hashSeed('s')));
+    expect(at(far.run).column).toBe(gate);
+  });
 });

@@ -12,4 +12,4 @@
 - Wild scenes show who is there before you choose: watch Berries being eaten, play hide-and-seek with a Wynaut, sit down to tea with Fairy-types (say please).
 - New items: Tiny Mushroom, Mareep Wool (₽300), and a child's Toy Pikachu (the next wild Pokémon is too busy staring at it to move first).
 
-Known limits: "confused" and "Charged" for one battle are a damage change, rides skip one stop (not two), the Wooloo rolls on any day, and a few "shown before you choose" previews describe the Pokémon without naming it. Full list: `docs/status/co-singles.md`.
+Known limits: "confused" and "Charged" for one battle are a damage change, the balloon lands two stops ahead (you cannot pick the spot), the Wooloo rolls on any day, and a few "shown before you choose" previews describe the Pokémon without naming it. Full list: `docs/status/co-singles.md`.

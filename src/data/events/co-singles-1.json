@@ -1629,7 +1629,8 @@
       "text": "You push off and lie back. The banks slide past, your team trails their paws in the water, and for a while nobody has to walk anywhere. The current carries you well down the route.",
       "effects": [
        {
-        "kind": "express"
+        "kind": "skipAhead",
+        "nodes": 2
        },
        {
         "kind": "heal",
@@ -1951,7 +1952,8 @@
       "text": "You drive. The Pokémon you chose rides on the roof with its face in the wind and its eyes shut, and people along the road stop to wave at it. By the time you hand the keys back you are far down the route, and it does not want to get down. It loved every second.",
       "effects": [
        {
-        "kind": "express"
+        "kind": "skipAhead",
+        "nodes": 2
        },
        {
         "kind": "friendship",

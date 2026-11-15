@@ -17,6 +17,7 @@ SF158 to SF160 (82 calendar weeks) live in `gameEvents.json` and SF161 (15 battl
 ## Engine pieces added
 - "A Rock- or Steel-type" uses the shared `partyTypes` condition (the `or` field was dropped). Test in `coSingles.test.ts`.
 - Items in `src/data/itemCatalog/singles.json`: `wooloo-wool` (+₽200), `tiny-mushroom` (+₽50, +1 toward Peace), `mareep-wool` (+₽300), `toy-pikachu` (next wild battle, the wild Pokémon loses its first turn, like the Poké Doll).
+- `skipAhead` takes `nodes` (land that many nodes on, "skip two nodes") or `half` ("cuts the stage in half"), never past the nodes leading into the gym. Test in `coSingles.test.ts`.
 - `addStop: 'tutor'` opens a Move Tutor service stop (`services.json` id `tutor`) on the current node. Test in `coSingles.test.ts`.
 - `coAdvice` effect (`src/core/events/coSingles.ts`): `weakness` names the types that hit two or more of the party hard; `habits` names the most-used Pokémon, its favourite move and the least-used one. Reads only, changes nothing. Tests in `coSingles.test.ts`.
 
@@ -41,7 +42,7 @@ Rooms added so a doc outcome can ask its own question: `berry-tree-pell` (callba
 ## Known limits (the doc asks for more than the engine has today)
 | Doc says | Built as | Needs |
 |---|---|---|
-| "Skip two nodes" (raft, taxi), "skip to that node" (balloon) | The engine's ride: the next move lands two columns ahead (skips one) | A skip-N effect (asked of the lead) |
+| "Skip to that node" (balloon) | The next move lands two columns ahead (skips one) | A pick-a-node landing |
 | Species and rarity shown before the player commits | A second room shows it where the species is fixed (Gigantamax) or describes it (grass, grotto); `rare-sighting` and the Alpha do not name the species | A species preview (asked of the lead) |
 | "+1 catch step" (`rare-sighting`, Stay still) | Catch rate ×1.25 for the next wild fight | Catch steps, if the pack defines them elsewhere |
 | "Appears on real-time Tuesdays" (`galar-runaway-wooloo`) | Any day | A weekday condition |

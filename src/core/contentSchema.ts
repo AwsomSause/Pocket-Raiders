@@ -3058,7 +3058,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** A healing spot, shop or fishing spot opens beside this node. */
   z.object({ kind: z.literal('addStop'), /** Catalog Overhaul singles: `tutor` opens a Move Tutor service stop here. */ stop: z.enum(['heal', 'shop', 'fish', 'minigame', 'tutor']) }),
   /** A ferry: jump to a node next to the gym (SS Ticket). */
-  z.object({ kind: z.literal('skipAhead') }),
+  z.object({ kind: z.literal('skipAhead'), /** Catalog Overhaul singles: land this many nodes further along a path instead ("skip two nodes"); never past the nodes leading into the gym. */ nodes: z.number().int().min(1).max(12).optional(), /** With `half`: skip half of the nodes left before the gym ("cuts the stage in half"). */ half: z.literal(true).optional() }),
   /** Ideas W4: a trainer starts tailing you and steps out to challenge you after this many nodes (core/wanderer.ts). */
   z.object({ kind: z.literal('wanderer'), nodes: z.number().int().min(1).max(20) }),
   /** Ideas W4: a travelling companion catches up with you once on each of the next `stages` stages. */

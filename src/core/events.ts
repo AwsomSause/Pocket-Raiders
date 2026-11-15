@@ -1144,7 +1144,7 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'addStop':
       return e.stop === 'heal' ? 'a healing spot opens here' : e.stop === 'shop' ? 'a shop opens here' : e.stop === 'minigame' ? 'a game opens here' : e.stop === 'tutor' ? 'a move tutor opens here' : 'a fishing spot opens here';
     case 'skipAhead':
-      return 'skip ahead to the gym';
+      return e.half ? 'a shortcut past half the stage' : e.nodes ? `skip ${e.nodes} node${e.nodes === 1 ? '' : 's'} ahead` : 'skip ahead to the gym';
     case 'wanderer':
       return 'a trainer starts following you';
     case 'wandererFriend':
@@ -1775,8 +1775,21 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const stage = run.stage!;
       const here = stage.map.nodes.find((n) => n.id === stage.current)!;
       const gyms = new Set(stage.map.nodes.filter((n) => n.kind !== 'wild' && n.kind !== 'trainer').map((n) => n.id));
-      const landings = stage.map.nodes.filter((n) => n.column > here.column && n.next.some((id) => gyms.has(id)));
+      let landings = stage.map.nodes.filter((n) => n.column > here.column && n.next.some((id) => gyms.has(id)));
       if (landings.length === 0) return '';
+      if (e.nodes || e.half) {
+        // Walk the paths: the nodes exactly `steps` moves on, stopping at the last nodes before the gym.
+        const gate = Math.min(...landings.map((n) => n.column));
+        const steps = e.half ? Math.max(1, Math.floor((gate - here.column) / 2)) : e.nodes!;
+        let ring = [here];
+        for (let i = 0; i < steps; i += 1) {
+          const next = stage.map.nodes.filter((n) => !gyms.has(n.id) && ring.some((r) => r.next.includes(n.id)));
+          if (next.length === 0 || ring.some((r) => landings.includes(r))) break;
+          ring = next;
+        }
+        if (ring[0] === here) return '';
+        landings = ring;
+      }
       const landing = rng.pick(landings);
       stage.current = landing.id;
       stage.visited.push(landing.id);
