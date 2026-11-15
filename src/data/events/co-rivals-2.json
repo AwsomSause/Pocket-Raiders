@@ -1,0 +1,1759 @@
+{
+ "catalogOverhaul": "rivals",
+ "override": true,
+ "remove": [
+  "rq-echo-charm",
+  "rq-echo-flowers",
+  "rq-echo-grief",
+  "rq-echo-mentor-apology",
+  "rq-echo-mentor-lesson",
+  "rq-echo-mentor-trained",
+  "rq-echo-notes-read",
+  "rq-mentor",
+  "rq-postmortem",
+  "rq-postmortem-notes",
+  "rq-stone-on-the-hill",
+  "rq-the-young-one"
+ ],
+ "events": [
+  {
+   "id": "rival-memorial",
+   "name": "The Stone on the Hill",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R4.open"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a33",
+    "effect": "fog"
+   },
+   "callback": true,
+   "remembers": [
+    {
+     "id": "grief",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-grief-shared",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nThey told you about it once, by the empty slot on their belt. You remember how their voice went.\nNow you know where it went."
+    },
+    {
+     "id": "knew",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-knows-lost",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nYou knew there was one fewer on their belt. You never asked why.\nNow you know."
+    }
+   ],
+   "intro": "A small stone on a hill above the path. Wilted flowers lean against it, brown at the edges.\nBeside them, on a frayed cord, lies a Poké Ball charm. You know it. It is {rival}'s.\n\nNobody is here.\nCarved into the stone, badly, with a knife: a Pokémon's name. {lost}.\n\nThe letters go deep, then shallow, then deep again. Somebody stopped carving more than once.\nAnd every time, they came back and started again.",
+   "choices": [
+    {
+     "label": "\"Leave fresh flowers.\"",
+     "success": {
+      "text": "You pick what grows on the hill: small white flowers, nothing grand. You lay them by the stone and carry the dead ones away.\n\nSomeone will climb this hill again. They will see the flowers and stand very still.\nOnly one person could have left them. They will know.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-memorial-flowers",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "lost": true
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R4.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Wait for them.\"",
+     "success": {
+      "text": "You sit down with your back to the stone. The sun moves. The wind moves. Nothing else does.\n\nThe afternoon goes long and gold, and then grey.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-memorial-waited",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "lost": true
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R4.open"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r4-dusk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Take the charm to give back.\"",
+     "success": {
+      "text": "You lift the charm. The cord is damp. It has been lying here through rain.\n\nYou wrap it in a cloth and put it where nothing in your bag can scratch it.\nYou will give it back. You do not know yet what you will say.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-memorial-charm",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "lost": true
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R4.open"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  },
+  {
+   "id": "rq-r4-dusk",
+   "name": "The Stone on the Hill: Dusk",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f1d2e",
+    "effect": "fog"
+   },
+   "intro": "At dusk, footsteps on the path. {rival} stops dead when they see you.\nFor a moment they look ready to turn round and go. They do not. They sit down on the other side of the stone.\n\nThey are not looking at you.\n{rival}: \"It wasn't a battle.\"\n{rival}: \"It just... wasn't there one morning.\"\n\n{rival}: \"{say event||bitter-challenger::Say something kind and I'm leaving. ...Don't leave.||champion-chaser::I kept training. I thought if I kept moving it wouldn't catch up. It caught up.||enthusiast::I keep turning round to tell it things. Every time. I'm still doing it.||idealist::I told it we'd see the whole world. It saw some of it. I keep telling myself that's something.||strategist::I've run it back a hundred times. There's no move I missed. Somehow that's worse.||protector::Keeping them safe was the whole job. I was asleep. I was right there, asleep.||prodigy::Everybody says it wasn't my fault. I know it wasn't. Knowing doesn't do anything.||underdog::It was the first one who ever picked me. Out of everybody. It picked me.}\"\n\nA long quiet. Then, so softly the wind nearly takes it, they say the name.\n{lost}.\nIt is the first time you have ever heard them say it.",
+   "choices": [
+    {
+     "label": "Sit with them.",
+     "success": {
+      "text": "You stay until the stars come out. Neither of you says another word.\nWhen they finally stand, they touch the stone once, the way you would touch a shoulder.\n\n{rival}: \"...Thanks for not talking.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "Say the name back.",
+     "success": {
+      "text": "\"{lost},\" you say. Quietly. Just to the stone.\n\n{rival} nods, once, hard, and looks away down the hill.\n{rival}: \"Yeah. That was it. That was its name.\"",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r4-cautious",
+   "name": "The Stone on the Hill: A Careful Stage",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 7,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R4.cautious"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "charm",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-memorial-charm",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nTheir eyes drop to your bag. To the frayed cord hanging out of it.\n{rival}: \"That's mine. You went up there. You went up there and you TOOK it.\"\n\nTheir hands are shaking. Then, all at once, they are not.\n{rival}: \"...You were keeping it safe. Weren't you.\"\nYou give it back. Their fist closes round it and does not open."
+    },
+    {
+     "id": "flowers",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-memorial-flowers",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\n{rival}: \"Somebody left flowers on the hill.\"\nThey do not ask. They look at you, and they already know.\n{rival}: \"...White ones. It liked white ones.\""
+    },
+    {
+     "id": "waited",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-memorial-waited",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nThey nod to you, once. Neither of you mentions the hill. Neither of you has to."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a33",
+    "effect": "none"
+   },
+   "intro": "On a screen outside the Center, the Rival Report. A photo of {rival} in the same chair by the window.\nUnder it, three dates. Three stages running. The same Center, the same chair, a different day.\n\nThen {rival} is in front of you, one Poké Ball in hand. They look tired. They look careful.\n{rival}: \"Battle. Properly. I need to.\"",
+   "choices": [
+    {
+     "label": "Battle them.",
+     "success": {
+      "text": "They send out their team, but not all of it. The smallest one stays clipped to their belt, held back behind everything else.\n\n{rival}: \"{say event||strategist::It's the correct play.||champion-chaser::It sits this one out. Don't ask why. I can win without it.||bitter-challenger::Don't look at it. You don't get to look at it.||enthusiast::It's just watching today! It likes watching! ...It's fine. It's watching.||idealist::Nothing gets hurt today. Not if I can help it. Not one thing.||protector::It stays behind me. Everything stays behind me now.||prodigy::Optimal order. It goes last. It's a sound decision. It's sound.||underdog::It's not ready. I'm not ready. One of us has to be careful.}\"\nIt is not the right play. You both know it is not.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "rq-r4-cautious"
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R4.cautious"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "quest": {
+        "guard": true
+       },
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "\"Not today. Look after yourself.\"",
+     "success": {
+      "text": "{rival}: \"...Yeah. You too.\"\n\nThey go back inside. The chair by the window is free. They take it.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "rq-r4-cautious"
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R4.cautious"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  },
+  {
+   "id": "rq-r4-finale",
+   "name": "The Stone on the Hill: This One's New",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 8,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R4.finale"
+    }
+   ],
+   "priority": 80,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a33",
+    "effect": "sparkle"
+   },
+   "intro": "{rival} is waiting by the path. For once they do not reach for a Poké Ball.\nSomething small is pressed against their leg. The same kind. A young {lost}, all ears and eyes.\n\nIt doesn't know what it's standing in for.\n{rival}: \"This one's new.\"",
+   "choices": [
+    {
+     "label": "\"What's its name?\"",
+     "success": {
+      "text": "",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R4.finale"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r4-name"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It looks strong.\"",
+     "success": {
+      "text": "{rival} almost smiles. It is the first time in a while.\n{rival}: \"It is. It's going to be.\"\n\nThey send it out first. It wobbles on the grass. It looks back at {rival}, once.\nThen it stands up anyway, and faces you.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R4.finale"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "quest": {
+        "young": true
+       },
+       "win": [],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "(Nod.)",
+     "success": {
+      "text": "You nod. They nod back. That is the whole conversation, and it is a good one.\n\nThey send it out first. It wobbles on the grass. It looks back at {rival}, once.\nThen it stands up anyway, and faces you.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R4.finale"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "quest": {
+        "young": true
+       },
+       "win": [],
+       "lose": []
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r4-name",
+   "name": "The Stone on the Hill: A Name",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "remembers": [
+    {
+     "id": "waited",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-memorial-waited",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nThey look at you, then away.\n{rival}: \"I thought I'd ask you. That's stupid. Is that stupid?\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a33",
+    "effect": "sparkle"
+   },
+   "intro": "{rival}: \"...I haven't. Not yet. I keep nearly.\"\nThey look down at it. It looks up at them, waiting, the way little ones do.",
+   "choices": [
+    {
+     "label": "\"Ember.\"",
+     "success": {
+      "text": "{rival}: \"Ember.\"\nThey try it out loud. The little one's ears go straight up.\n{rival}: \"...Yeah. Okay. Ember.\"\n\nThey send it out first. It wobbles on the grass. It looks back at {rival}, once.\nThen it stands up anyway, and faces you.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-r4-name",
+         "value": 1
+        }
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "quest": {
+        "young": true
+       },
+       "win": [],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "\"Pip.\"",
+     "success": {
+      "text": "{rival}: \"Pip.\"\nIt sneezes. {rival} laughs, properly, the first laugh you have heard from them in a long time.\n{rival}: \"Pip, then. It's decided.\"\n\nThey send it out first. It wobbles on the grass. It looks back at {rival}, once.\nThen it stands up anyway, and faces you.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-r4-name",
+         "value": 2
+        }
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "quest": {
+        "young": true
+       },
+       "win": [],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "\"Echo.\"",
+     "success": {
+      "text": "{rival}: \"Echo.\"\nThey are quiet for a moment. You both know why that one fits.\n{rival}: \"...Echo. Yeah.\"\n\nThey send it out first. It wobbles on the grass. It looks back at {rival}, once.\nThen it stands up anyway, and faces you.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-r4-name",
+         "value": 3
+        }
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "quest": {
+        "young": true
+       },
+       "win": [],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "\"It'll tell you.\"",
+     "success": {
+      "text": "{rival}: \"...Yeah.\"\nThey crouch down to its height, as if listening for something.\n{rival}: \"Yeah. It will.\"\n\nThey send it out first. It wobbles on the grass. It looks back at {rival}, once.\nThen it stands up anyway, and faces you.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-r4-name",
+         "value": 4
+        }
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "quest": {
+        "young": true
+       },
+       "win": [],
+       "lose": []
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": []
+  },
+  {
+   "id": "rival-mentor-appears",
+   "name": "Their Mentor Comes Calling",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R5.open"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#22303a",
+    "effect": "rain"
+   },
+   "callback": true,
+   "remembers": [
+    {
+     "id": "resentment",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "feeling": {
+        "who": "main",
+        "key": "resentment",
+        "atLeast": 6
+       }
+      }
+     ],
+     "intro": "A narrow bridge over fast water. A weathered trainer stands in the middle of it and does not step aside.\nThey stand the way {rival} stands: weight on the back foot, one hand near the belt.\n\nMentor: \"You've been unkind to my student.\"\nMentor: \"They don't say so. I taught them to hide it. I can still tell.\""
+    },
+    {
+     "id": "friendship",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "feeling": {
+        "who": "main",
+        "key": "friendship",
+        "atLeast": 6
+       }
+      }
+     ],
+     "intro": "A narrow bridge over fast water. A weathered trainer stands in the middle of it and does not step aside.\nThey stand the way {rival} stands: weight on the back foot, one hand near the belt.\n\nMentor: \"You've been good for my student. I want to see why.\"\nMentor: \"They laugh on the phone now. They never used to laugh on the phone.\""
+    }
+   ],
+   "intro": "A narrow bridge over fast water. A weathered trainer stands in the middle of it and does not step aside.\nThey stand the way {rival} stands: weight on the back foot, one hand near the belt.\n\nMentor: \"I wanted to see who they keep talking about.\"\nMentor: \"Every letter, every call. You. So.\"",
+   "choices": [
+    {
+     "label": "\"Battle me.\"",
+     "success": {
+      "text": "Mentor: \"Good. No speeches.\"\nThey let the bag slide off their shoulder.\n\nMentor: \"They flinch there. You've seen them flinch there. I spent two years on it.\"\nMentor: \"They still do it when it's you.\"",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "pick": {
+         "key": "rival-mentor-ask",
+         "cases": [
+          {
+           "feeling": "resentment",
+           "atLeast": 6,
+           "value": 1
+          },
+          {
+           "feeling": "friendship",
+           "atLeast": 6,
+           "value": 2
+          }
+         ],
+         "otherwise": 3
+        }
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R5.open"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "quest": {
+        "as": "Mentor",
+        "counter": "lead",
+        "full": true
+       },
+       "win": [
+        {
+         "kind": "rivalQuest",
+         "openFirst": [
+          "rq-r5-apology",
+          "rq-r5-train",
+          "rq-r5-lesson"
+         ]
+        }
+       ],
+       "lose": [
+        {
+         "kind": "rivalQuest",
+         "ledger": true,
+         "end": "R5"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r5-lost"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"What do you want?\"",
+     "success": {
+      "text": "Mentor: \"To see it. Not to hear about it. To see it.\"\nThey let the bag slide off their shoulder.\n\nMentor: \"They flinch there. You've seen them flinch there. I spent two years on it.\"\nMentor: \"They still do it when it's you.\"",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "pick": {
+         "key": "rival-mentor-ask",
+         "cases": [
+          {
+           "feeling": "resentment",
+           "atLeast": 6,
+           "value": 1
+          },
+          {
+           "feeling": "friendship",
+           "atLeast": 6,
+           "value": 2
+          }
+         ],
+         "otherwise": 3
+        }
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R5.open"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "quest": {
+        "as": "Mentor",
+        "counter": "lead",
+        "full": true
+       },
+       "win": [
+        {
+         "kind": "rivalQuest",
+         "openFirst": [
+          "rq-r5-apology",
+          "rq-r5-train",
+          "rq-r5-lesson"
+         ]
+        }
+       ],
+       "lose": [
+        {
+         "kind": "rivalQuest",
+         "ledger": true,
+         "end": "R5"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r5-lost"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Ask them yourself.\"",
+     "success": {
+      "text": "Mentor: \"I did. They talked for an hour and told me nothing.\"\nMentor: \"So I'm asking you. The other way.\"\n\nMentor: \"They flinch there. You've seen them flinch there. I spent two years on it.\"\nMentor: \"They still do it when it's you.\"",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "pick": {
+         "key": "rival-mentor-ask",
+         "cases": [
+          {
+           "feeling": "resentment",
+           "atLeast": 6,
+           "value": 1
+          },
+          {
+           "feeling": "friendship",
+           "atLeast": 6,
+           "value": 2
+          }
+         ],
+         "otherwise": 3
+        }
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R5.open"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "quest": {
+        "as": "Mentor",
+        "counter": "lead",
+        "full": true
+       },
+       "win": [
+        {
+         "kind": "rivalQuest",
+         "openFirst": [
+          "rq-r5-apology",
+          "rq-r5-train",
+          "rq-r5-lesson"
+         ]
+        }
+       ],
+       "lose": [
+        {
+         "kind": "rivalQuest",
+         "ledger": true,
+         "end": "R5"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r5-lost"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  },
+  {
+   "id": "rq-r5-apology",
+   "name": "Their Mentor: An Apology",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rival-mentor-ask",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "remembers": [
+    {
+     "id": "letter",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-read-letter",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nMentor: \"One more thing. That letter they read. I wrote it.\"\nMentor: \"Don't tell them. Please. They need to believe somebody out there just believed in them.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#22303a",
+    "effect": "none"
+   },
+   "intro": "Mentor: \"Well fought. Now the part you won't like.\"\nMentor: \"An apology. In person. Not a message. Not through me.\"\n\nMentor: \"Next stage, they'll be where I tell them. It's on your map.\"\nMentor: \"Go or don't. I'll know either way.\"",
+   "choices": [
+    {
+     "label": "\"I'll go.\"",
+     "success": {
+      "text": "Mentor: \"Then I'll stop worrying. A bit.\"\nThey walk off the bridge without looking back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-mentor-apology",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll think about it.\"",
+     "success": {
+      "text": "Mentor: \"Think fast. They're not good at waiting. I never taught them that.\"\nThey walk off the bridge without looking back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-mentor-apology",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1
+  },
+  {
+   "id": "rq-r5-train",
+   "name": "Their Mentor: Train Together",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rival-mentor-ask",
+     "atLeast": 2,
+     "atMost": 2
+    }
+   ],
+   "remembers": [
+    {
+     "id": "letter",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-read-letter",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nMentor: \"One more thing. That letter they read. I wrote it.\"\nMentor: \"Don't tell them. Please. They need to believe somebody out there just believed in them.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#22303a",
+    "effect": "none"
+   },
+   "intro": "Mentor: \"Well fought. So that's why.\"\nMentor: \"Here's my ask. Train with them for a stage. Walk the road together. Spar when you stop.\"\n\nMentor: \"They'll pretend it was their idea. Let them.\"",
+   "choices": [
+    {
+     "label": "\"Deal.\"",
+     "success": {
+      "text": "The mentor nods, and is gone across the bridge before you can ask anything else.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-mentor-trained",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1
+  },
+  {
+   "id": "rq-r5-lesson",
+   "name": "Their Mentor: The Lesson",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "letter",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-read-letter",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nMentor: \"One more thing. That letter they read. I wrote it.\"\nMentor: \"Don't tell them. Please. They need to believe somebody out there just believed in them.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#22303a",
+    "effect": "glint"
+   },
+   "intro": "Mentor: \"Well fought. Then you get what they got.\"\n\nMentor: \"I told them: \"Don't look at the one that's attacking. Look at the one that's waiting.\"\"\nMentor: \"They hated it. You'll hate it.\"",
+   "choices": [
+    {
+     "label": "\"Show me.\"",
+     "success": {
+      "text": "They show you. It takes the rest of the afternoon, and you do hate it.\nFor the rest of this region, in trainer battles, you can see which Pokémon is waiting to come in next.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-mentor-lesson",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "stamp": "rq-r5-lesson",
+        "end": "R5"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1
+  },
+  {
+   "id": "rq-r5-lost",
+   "name": "Their Mentor: In Order",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#22303a",
+    "effect": "none"
+   },
+   "intro": "Mentor: \"I'll tell them exactly how you lost. In order.\"\nMentor: \"They'll enjoy the order.\"\n\nEverything the mentor saw of your team goes to {rival}. They will know it next time.",
+   "choices": [
+    {
+     "label": "\"Fair.\"",
+     "success": {
+      "text": "The mentor shoulders the bag and crosses the bridge. They do not look back. They do not need to.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r5-sorry",
+   "name": "Their Mentor: Say It",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rival-mentor-apology",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R5.apology"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#22303a",
+    "effect": "none"
+   },
+   "intro": "A bench outside the Center, marked on your map in the mentor's handwriting. {rival} is sitting on it.\n\n{rival}: \"They sent you. Of course they did.\"\nA pause.\n{rival}: \"...Say it, then. I'll decide if I heard it.\"",
+   "choices": [
+    {
+     "label": "\"I'm sorry.\"",
+     "success": {
+      "text": "You say it plainly. No reasons after it. Reasons would spoil it.\n\n{rival} looks at the ground for a long time.\n{rival}: \"...Heard it.\"",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "setFeelings": {
+         "resentment": 3
+        }
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R5.apology"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'm sorry. For all of it.\"",
+     "success": {
+      "text": "You say it, and then you keep going, because there is more of it than you thought.\n\n{rival} lets out a breath they seem to have held for a whole region.\n{rival}: \"...Okay. Okay. Heard it.\"",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "setFeelings": {
+         "resentment": 3
+        }
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R5.apology"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "You leave the bench behind. They do not call after you. You did not expect them to.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R5.apology"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r5-walk",
+   "name": "Their Mentor: On the Road Together",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rival-mentor-trained",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R5.train"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#22303a",
+    "effect": "glint"
+   },
+   "intro": "{rival} falls into step beside you at the edge of town, as if it had been their idea all along.\n{rival}: \"My mentor says I'm walking with you this stage. I was going to anyway.\"\n\nAt the first rest stop, they put their bag down and roll their shoulders.\n{rival}: \"Spar? One round. Nothing riding on it.\"",
+   "choices": [
+    {
+     "label": "\"One round.\"",
+     "success": {
+      "text": "A round in the long grass. No crowd, no prize, both of you laughing by the end of it.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R5.train"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "trust": 2
+         },
+         "lead": 0
+        }
+       ],
+       "lose": [
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "trust": 2
+         },
+         "lead": 0
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Just walk with me.\"",
+     "success": {
+      "text": "So you just walk. The road is easier with two. You talk about nothing for miles.\n\n{rival}: \"...This was a good stage.\"\nThey say it like a confession.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R5.train"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rival-coaching",
+   "name": "The Post-Mortem",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rq-lost-at",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R6.open"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2830",
+    "effect": "none"
+   },
+   "callback": true,
+   "remembers": [
+    {
+     "id": "lead",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rq-lost-kind",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "intro": "{rival} drops onto the bench beside you, a notebook already open on their knee.\nThey were watching the fight you lost. Of course they were. They do not say hello.\n\n{rival}: \"{say event||strategist::Your lead was in the wrong slot.||prodigy::Error one: the lead. I'd have known in the lobby.||idealist::You led with the one you trust. That's not the same as the right one.||champion-chaser::You opened with the wrong one. Champions don't open wrong. Fix it.||bitter-challenger::Wrong lead. Obvious. I only say it because watching hurt.||enthusiast::Okay! Tiny thing! Your first pick walked straight into its worst matchup!||protector::You sent the wrong one out first. It took that hit for nothing.||underdog::Um. Your lead? Wrong one, I think. I lose like that a lot. I know the feeling.}\"\n\nThe advice is about the battle you actually lost. You go back over it in your head.\nIt is right."
+    },
+    {
+     "id": "turn",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rq-lost-kind",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "intro": "{rival} drops onto the bench beside you, a notebook already open on their knee.\nThey were watching the fight you lost. Of course they were. They do not say hello.\n\n{rival}: \"{say event||strategist::You set up on turn two. They were already swinging.||prodigy::Error two. Turn two. I counted.||idealist::You hoped they'd wait. People don't.||champion-chaser::Turn two, you stood around. They didn't. That was the whole fight.||bitter-challenger::You wasted turn two. I'd never have given you that turn.||enthusiast::Turn two! You powered up and they just went! You have to go first!||protector::That second turn left your team open. They felt it. I watched them feel it.||underdog::Turn two. You got ready and they didn't wait. I used to do that. It's fixable.}\"\n\nThe advice is about the battle you actually lost. You go back over it in your head.\nIt is right."
+    }
+   ],
+   "intro": "{rival} drops onto the bench beside you, a notebook already open on their knee.\nThey were watching the fight you lost. Of course they were. They do not say hello.\n\n{rival}: \"{say event||strategist::You should have switched at half.||prodigy::Error three: sentiment.||idealist::You stayed because it wanted to. I'd have stayed too. That's why I'm telling you.||champion-chaser::You left it in way past half. Pride's fine. Not in the ring.||bitter-challenger::Kept it in too long. Sentimental. It cost you. Don't let it cost you twice.||enthusiast::You kept it in because you love it! Same! But it needed a rest!||protector::It was hurt and you left it out there. Bring them home sooner. Please.||underdog::It was hurting and you kept going. I know why. I'd do it too. Switch sooner.}\"\n\nThe advice is about the battle you actually lost. You go back over it in your head.\nIt is right.",
+   "choices": [
+    {
+     "label": "\"Thanks.\"",
+     "success": {
+      "text": "They blink, as if nobody has ever thanked them for a notebook before.\n{rival}: \"...Right. Fine. Good.\"\n\nThey tear out the page and hand it over. The next time you face that kind of trainer, the notes show you what it leads with.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-postmortem-took",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-r6-scout",
+         "value": 1
+        }
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R6.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I didn't ask.\"",
+     "success": {
+      "text": "{rival}: \"You never do.\"\nThey close the notebook. They do not leave, though. They sit a while longer, as if they might be asked after all.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R6.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Do yours, then.\"",
+     "success": {
+      "text": "Their pen stops.\n{rival}: \"...What?\"\n\n{rival}: \"Fine. Go on, then. My last loss. The Rival Report has it.\"",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "roll": {
+         "key": "rq-r6-true",
+         "of": 3
+        }
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R6.open"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rival-asks-advice"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  },
+  {
+   "id": "rival-asks-advice",
+   "name": "The Post-Mortem: Do Yours",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 1,
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2830",
+    "effect": "none"
+   },
+   "callback": false,
+   "remembers": [
+    {
+     "id": "turn",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rq-r6-true",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "intro": "They hand you the notebook, open at a page cut from the Rival Report. Their last loss, in four turns, to a trainer from out of town.\nTheir opener was fine. Then, on turn two, they spent a whole turn powering up while the other trainer simply hit them.\n\nThree things you could say about it. Only one of them is true.",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "\"Your lead was wrong.\"",
+       "success": {
+        "text": "They shake their head, but not unkindly.\n{rival}: \"No. But you looked. Most people don't look.\"",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "rival-postmortem-gave",
+          "amount": 1
+         }
+        ]
+       }
+      },
+      {
+       "label": "\"You set up too early.\"",
+       "success": {
+        "text": "They stop writing.\n\n{rival}: \"{say event||prodigy::...That's correct. Nobody's ever— write it down. No. I'll write it down.||strategist::...Correct. I had it as a minor factor. It wasn't minor. Noted.||idealist::...Yes. I knew. I didn't want it to be that. Thank you for saying it.||champion-chaser::...Yeah. Okay. That's it. Don't tell anyone you saw it before me.||bitter-challenger::...Fine. You're right. Enjoy it. I'm only saying it once.||enthusiast::Oh! Oh, that's IT! That's exactly it! You're so good at this!||protector::...Yes. That's what happened. I should have seen it. You did. Thank you.||underdog::...Oh. Yeah. That's it. Nobody ever looks at my battles that closely.}\"",
+        "effects": [
+         {
+          "kind": "rivalChange",
+          "feelings": {
+           "respect": 1
+          },
+          "lead": 0
+         },
+         {
+          "kind": "flag",
+          "key": "rival-postmortem-gave",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "stayed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rq-r6-true",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ],
+     "intro": "They hand you the notebook, open at a page cut from the Rival Report. Their last loss, in four turns, to a trainer from out of town.\nThey kept their hurt lead in long after it should have come out, and it went down without taking anything with it.\n\nThree things you could say about it. Only one of them is true.",
+     "hide": [
+      0,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "\"Your lead was wrong.\"",
+       "success": {
+        "text": "They shake their head, but not unkindly.\n{rival}: \"No. But you looked. Most people don't look.\"",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "rival-postmortem-gave",
+          "amount": 1
+         }
+        ]
+       }
+      },
+      {
+       "label": "\"You stayed in too long.\"",
+       "success": {
+        "text": "They stop writing.\n\n{rival}: \"{say event||prodigy::...That's correct. Nobody's ever— write it down. No. I'll write it down.||strategist::...Correct. I had it as a minor factor. It wasn't minor. Noted.||idealist::...Yes. I knew. I didn't want it to be that. Thank you for saying it.||champion-chaser::...Yeah. Okay. That's it. Don't tell anyone you saw it before me.||bitter-challenger::...Fine. You're right. Enjoy it. I'm only saying it once.||enthusiast::Oh! Oh, that's IT! That's exactly it! You're so good at this!||protector::...Yes. That's what happened. I should have seen it. You did. Thank you.||underdog::...Oh. Yeah. That's it. Nobody ever looks at my battles that closely.}\"",
+        "effects": [
+         {
+          "kind": "rivalChange",
+          "feelings": {
+           "respect": 1
+          },
+          "lead": 0
+         },
+         {
+          "kind": "flag",
+          "key": "rival-postmortem-gave",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "room": true,
+   "intro": "They hand you the notebook, open at a page cut from the Rival Report. Their last loss, in four turns, to a trainer from out of town.\nTheir lead walked straight into a type it should never have faced, and the fight never recovered.\n\nThree things you could say about it. Only one of them is true.",
+   "choices": [
+    {
+     "label": "\"Your lead was wrong.\"",
+     "success": {
+      "text": "They stop writing.\n\n{rival}: \"{say event||prodigy::...That's correct. Nobody's ever— write it down. No. I'll write it down.||strategist::...Correct. I had it as a minor factor. It wasn't minor. Noted.||idealist::...Yes. I knew. I didn't want it to be that. Thank you for saying it.||champion-chaser::...Yeah. Okay. That's it. Don't tell anyone you saw it before me.||bitter-challenger::...Fine. You're right. Enjoy it. I'm only saying it once.||enthusiast::Oh! Oh, that's IT! That's exactly it! You're so good at this!||protector::...Yes. That's what happened. I should have seen it. You did. Thank you.||underdog::...Oh. Yeah. That's it. Nobody ever looks at my battles that closely.}\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-postmortem-gave",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You set up too early.\"",
+     "success": {
+      "text": "They shake their head, but not unkindly.\n{rival}: \"No. But you looked. Most people don't look.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-postmortem-gave",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You stayed in too long.\"",
+     "success": {
+      "text": "They shake their head, but not unkindly.\n{rival}: \"No. But you looked. Most people don't look.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-postmortem-gave",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": []
+  },
+  {
+   "id": "rival-text-support",
+   "name": "A Message From a Friend",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rival-postmortem-took",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "rival-postmortem-gave",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "line": "R6",
+     "active": true,
+     "stale": "rq-r6-text"
+    },
+    {
+     "kind": "rivalQuest",
+     "feeling": {
+      "who": "main",
+      "key": "friendship",
+      "atLeast": 6
+     }
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1d2a33",
+    "effect": "none"
+   },
+   "callback": true,
+   "intro": "Your phone buzzes. One new message, from {rival}.\n{rival}: \"Saw the result. Nobody else could have done that.\"\n\nA minute later, a second one.\n{rival}: \"Not that I was watching. I was watching.\"",
+   "choices": [
+    {
+     "label": "Put the phone away, smiling.",
+     "success": {
+      "text": "You read it twice before you put it away.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "rq-r6-text",
+        "again": [
+         "rival-text-support",
+         "rival-text-taunt"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rival-text-taunt",
+   "name": "A Message From an Adversary",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rival-postmortem-took",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "rival-postmortem-gave",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "line": "R6",
+     "active": true,
+     "stale": "rq-r6-text"
+    },
+    {
+     "kind": "rivalQuest",
+     "feeling": {
+      "who": "main",
+      "key": "rivalry",
+      "atLeast": 6
+     }
+    },
+    {
+     "kind": "rivalQuest",
+     "feeling": {
+      "who": "main",
+      "key": "friendship",
+      "atMost": 5
+     }
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#331d1d",
+    "effect": "none"
+   },
+   "callback": true,
+   "intro": "Your phone buzzes. One new message, from {rival}.\n{rival}: \"One win. Don't get comfortable.\"\n\nA minute later, a second one.\n{rival}: \"I've started a new page of notes. Guess who it's about.\"",
+   "choices": [
+    {
+     "label": "Put the phone away.",
+     "success": {
+      "text": "You put it away. You are smiling anyway, and you are not sure why.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "rq-r6-text",
+        "again": [
+         "rival-text-support",
+         "rival-text-taunt"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r6-finale",
+   "name": "The Post-Mortem: The Folded Page",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R6.finale"
+    }
+   ],
+   "priority": 80,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2830",
+    "effect": "glint"
+   },
+   "intro": "{rival} catches you on the road to the Gym and pushes two sheets of paper into your hands.\n\nOne page: the Gym Leader. Neat. Underlined twice where it matters.\nA second, folded smaller.\n\n{rival}: \"That one's about your team. In case you need to know what I'll do.\"\nThey aren't looking at you.\n{rival}: \"I don't know why I wrote it. I wrote it, and then I couldn't not give it to you.\"",
+   "choices": [
+    {
+     "label": "\"Read it.\"",
+     "success": {
+      "text": "You unfold it. Their next team, in their careful handwriting, in order: {team}.\n\nThey watch you read it. They know you know.\n{rival}: \"...Right. Well. Now it's fair, I suppose.\"",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": -1,
+         "trust": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-notes-read",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R6.finale"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Give it back unread.\"",
+     "success": {
+      "text": "You hold the folded page out to them. Still folded.\n{rival}: \"...Huh.\"\n\nThey look at it for a long moment. Then they strike a match and burn it, right there on the road, and watch until it is gone.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R6.finale"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  }
+ ]
+}

@@ -1,0 +1,2059 @@
+{
+ "catalogOverhaul": "rivals",
+ "override": true,
+ "remove": [
+  "living-gauntlet-rest",
+  "rival-asks-help",
+  "rival-asks-help-repaid",
+  "rival-promise-kept",
+  "rival-promise-make",
+  "rival-rematch",
+  "rq-bitter-rival",
+  "rq-echo-amends",
+  "rq-echo-promise-broken",
+  "rq-echo-promise-kept",
+  "rq-favour-returned",
+  "rq-in-trouble-again",
+  "rq-promise",
+  "rq-promise-kept",
+  "rq-rival-in-trouble",
+  "rq-rival-training",
+  "rq-someone-helped"
+ ],
+ "events": [
+  {
+   "id": "rival-gauntlet-entry",
+   "name": "The Circuit",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R1.open"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#38202a",
+    "effect": "confetti"
+   },
+   "callback": true,
+   "intro": "A banner hangs across the plaza: THE CIRCUIT. Sixteen rungs, from Bronze to the Champion Cup.\nOn the board, beside rung one, a name is already chalked in. It is {rival}'s.\n\nClerk: \"They signed up an hour ago. Said you'd come. Said you'd be slower.\"\nClerk: \"Sixteen rungs. One match per stage at most. The board updates itself.\"\n\nAcross the plaza, {rival} has seen you. They do not come over. They only raise their voice.\n{rival}: \"{say interrupt||champion-chaser::Try to keep up. I'm not waiting at the top.}\"",
+   "choices": [
+    {
+     "label": "\"Sign up.\"",
+     "success": {
+      "text": "The clerk chalks your name under theirs. Rung one. The chalk squeaks on the last letter.\nA small ladder appears at the top of your map: your rung, and {rival}'s.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circuit-entered",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "circuit": "enter"
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R1.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's the prize?\"",
+     "success": {
+      "text": "Clerk: \"The Cup. And your name on the board for good.\"\n\nYou take the chalk yourself. Rung one, right under {rival}.\nA small ladder appears at the top of your map: your rung, and theirs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circuit-entered",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "circuit": "enter"
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R1.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not today.\"",
+     "success": {
+      "text": "The clerk shrugs and caps the chalk.\nClerk: \"Board's open at every plaza. You'd start two rungs behind them, mind.\"\n\n{rival} is already walking to their first match. They climb alone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circuit-late",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "circuit": "open"
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R1.open"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-circuit-late",
+   "name": "The Circuit: A Late Slip",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "circuit-late",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "circuit-entered",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "rivalQuest",
+     "stale": "circuit-at"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#38202a",
+    "effect": "confetti"
+   },
+   "intro": "Another plaza. The same banner. The same board, with {rival}'s name several rungs up it now.\n\nClerk: \"Changed your mind? Late slips start two rungs behind the leader. Those are the rules, and I didn't write them.\"",
+   "choices": [
+    {
+     "label": "\"Sign up.\"",
+     "success": {
+      "text": "Your name goes on the board, two rungs under {rival}'s. It looks small down there.\nA small ladder appears at the top of your map.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circuit-entered",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "circuit": "late"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not today.\"",
+     "success": {
+      "text": "The clerk tucks the slip back into the box. It will be there at the next plaza.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "circuit-at",
+        "again": [
+         "rq-circuit-late"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "ev-rival-rematch",
+   "name": "The Circuit: Your Rung",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "circuit-entered",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "circuit": {
+      "rungAtMost": 8
+     },
+     "stale": "circuit-at"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#38202a",
+    "effect": "confetti"
+   },
+   "callback": true,
+   "minStage": 2,
+   "remembers": [
+    {
+     "id": "ahead",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "circuit": {
+        "gapAtLeast": 3
+       }
+      }
+     ],
+     "intro": "Clerk: \"Rung {rung}. Your opponent's the Kelsey girl; she beat your friend on Tuesday. Don't tell them I called them your friend.\"\n\nA ring of rope in a square. Forty people, a dog, a man selling skewers.\n\nOn the plaza screen, the Rival Report. A photo: {rival} on a hillside at night, alone, drilling.\n{rival}: \"{say pseudo||underdog::Skipping a Gym to train. Don't get comfortable. I can see the back of your head from here.}\""
+    },
+    {
+     "id": "behind",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "circuit": {
+        "gapAtMost": -3
+       }
+      }
+     ],
+     "intro": "Clerk: \"Rung {rung}. Your opponent's the Kelsey girl; she beat your friend on Tuesday. Don't tell them I called them your friend.\"\n\nA ring of rope in a square. Forty people, a dog, a man selling skewers.\n\nA woman in the queue: \"You've the same jacket as... do you know them? The Circuit one? They signed my boy's hat.\"\n\nA newspaper lies on the counter with {rival}'s photo on the front.\nThey do not look as pleased as the headline says."
+    }
+   ],
+   "intro": "Clerk: \"Rung {rung}. Your opponent's the Kelsey girl; she beat your friend on Tuesday. Don't tell them I called them your friend.\"\n\nA ring of rope in a square. Forty people, a dog, a man selling skewers.\n\nThe clerk takes your slip without looking up.\nClerk: \"Bookmakers have you level. I've a week's wages on it. I'm not saying which way.\"",
+   "choices": [
+    {
+     "label": "Step into the ring.",
+     "success": {
+      "text": "The rope drops behind you. Forty people go quiet, and the dog does not.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "circuit-at",
+        "again": [
+         "ev-rival-rematch"
+        ]
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Kelsey",
+       "friendly": true,
+       "quest": {
+        "soft": true
+       },
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "classId": "ace-trainer",
+       "win": [
+        {
+         "kind": "rivalQuest",
+         "circuit": "win"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Not this stage.\"",
+     "success": {
+      "text": "The clerk pencils a line through today. The rung will keep. So will Kelsey.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "circuit-at",
+        "again": [
+         "ev-rival-rematch"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  },
+  {
+   "id": "rival-one-turn-duel",
+   "name": "The Circuit: The Upper Rungs",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "circuit-entered",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "circuit": {
+      "rungAtLeast": 9,
+      "rungAtMost": 15,
+      "rungNot": 14
+     },
+     "stale": "circuit-at"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#38202a",
+    "effect": "confetti"
+   },
+   "callback": true,
+   "remembers": [
+    {
+     "id": "ahead",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "circuit": {
+        "gapAtLeast": 3
+       }
+      }
+     ],
+     "intro": "Clerk: \"Rung {rung}. It's a hall now, not a rope. Your opponent's Old Barrow; he's held this rung for three seasons and he's tired of it.\"\n\nReal seats. A scoreboard. The man selling skewers has a proper stand, and a queue.\n\nOn the hall screen, the Rival Report. A photo: {rival} on a hillside at night, alone, drilling.\n{rival}: \"{say pseudo||underdog::Skipping a Gym to train. Don't get comfortable. I can see the back of your head from here.}\""
+    },
+    {
+     "id": "behind",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "circuit": {
+        "gapAtMost": -3
+       }
+      }
+     ],
+     "intro": "Clerk: \"Rung {rung}. It's a hall now, not a rope. Your opponent's Old Barrow; he's held this rung for three seasons and he's tired of it.\"\n\nReal seats. A scoreboard. The man selling skewers has a proper stand, and a queue.\n\nA woman in the queue: \"You've the same jacket as... do you know them? The Circuit one? They signed my boy's hat.\"\n\nA newspaper lies on the counter with {rival}'s photo on the front.\nThey do not look as pleased as the headline says."
+    }
+   ],
+   "intro": "Clerk: \"Rung {rung}. It's a hall now, not a rope. Your opponent's Old Barrow; he's held this rung for three seasons and he's tired of it.\"\n\nReal seats. A scoreboard. The man selling skewers has a proper stand, and a queue.\n\nThe clerk takes your slip, and this time looks at you.\nClerk: \"Bookmakers have you level. I've a week's wages on it. I'm not saying which way.\"",
+   "choices": [
+    {
+     "label": "Walk out under the lights.",
+     "success": {
+      "text": "The hall hums. Somewhere up in the seats, somebody says your name like they know you.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "circuit-at",
+        "again": [
+         "rival-one-turn-duel"
+        ]
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Old Barrow",
+       "friendly": true,
+       "quest": {
+        "soft": true
+       },
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "classId": "ace-trainer",
+       "win": [
+        {
+         "kind": "rivalQuest",
+         "circuit": "win"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Not this stage.\"",
+     "success": {
+      "text": "The clerk pencils a line through today. The rung will keep.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "circuit-at",
+        "again": [
+         "rival-one-turn-duel"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  },
+  {
+   "id": "rq-circuit-blackout",
+   "name": "The Circuit: The Blackout Semifinal",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "circuit-entered",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "circuit": {
+      "rungAtLeast": 14,
+      "rungAtMost": 14
+     },
+     "stale": "circuit-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#101018",
+    "effect": "flicker"
+   },
+   "intro": "Rung fourteen. The semifinal. The hall is full to the doors.\n\nTurn four. Every light in the hall goes at once.\nSomebody screams, and laughs at themselves.\n\nOpponent, in the dark: \"Do we keep going?\"",
+   "choices": [
+    {
+     "label": "\"Keep going.\"",
+     "success": {
+      "text": "You fight on by the sound of it. Nobody can see where anything lands.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "circuit-at"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Semifinalist",
+       "friendly": true,
+       "quest": {
+        "soft": true
+       },
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "classId": "ace-trainer",
+       "rule": {
+        "accuracyMult": 0.8,
+        "accuracyTurns": 3
+       },
+       "win": [
+        {
+         "kind": "rivalQuest",
+         "circuit": "win"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Wait.\"",
+     "success": {
+      "text": "You wait. The dark is very large.\nFrom high in the stands, one pair of hands. Slow. Steady. Then a second pair, joining. The hall breathes out.\n\nWhen the lights come back, {rival} is sitting down again, looking at the ceiling, as if it was nobody.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "stamp": "circuit-at"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Semifinalist",
+       "friendly": true,
+       "quest": {
+        "soft": true
+       },
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "classId": "ace-trainer",
+       "win": [
+        {
+         "kind": "rivalQuest",
+         "circuit": "win"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Call to the crowd.",
+     "success": {
+      "text": "You call up into the dark. One phone lights. Then forty. Then the whole hall is a field of small cold stars.\nYou finish the match by their light.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "stamp": "circuit-at"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Semifinalist",
+       "friendly": true,
+       "quest": {
+        "soft": true
+       },
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "classId": "ace-trainer",
+       "win": [
+        {
+         "kind": "rivalQuest",
+         "circuit": "win"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-circuit-cup",
+   "name": "The Circuit: The Champion Cup",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "circuit-entered",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "circuit": {
+      "rungAtLeast": 16,
+      "gapAtMost": 2
+     },
+     "lastStage": true
+    }
+   ],
+   "priority": 90,
+   "remembers": [
+    {
+     "id": "late",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "circuit-late",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nAt the door, the clerk stops you with one finger.\nClerk: \"You were the late one. Look at you.\""
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#38202a",
+    "effect": "confetti"
+   },
+   "intro": "Rung sixteen. The board has only two names left on it.\n\nCommentator: \"Two careers. One board. One Cup.\"",
+   "choices": [
+    {
+     "label": "Walk out.",
+     "success": {
+      "text": "The tunnel is short. The noise at the end of it is not.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rq-circuit-final"
+       },
+       {
+        "kind": "rivalQuest",
+        "stamp": "circuit-at"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  },
+  {
+   "id": "rq-circuit-final",
+   "name": "The Circuit: The Final",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#38202a",
+    "effect": "confetti"
+   },
+   "intro": "{rival} is already on the field. Their ace is out first. It is never out first.\n\n{rival}: \"{say champion||champion-chaser::I wanted you at full strength. It doesn't count otherwise. Nothing's counted that wasn't you.||underdog::I used to read your name on that board and feel sick. Now I just want to beat it.}\"",
+   "choices": [
+    {
+     "label": "Begin.",
+     "success": {
+      "text": "The whole hall leans in.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "quest": {
+        "aceFirst": true,
+        "full": true
+       },
+       "win": [
+        {
+         "kind": "relic",
+         "id": "circuit-cup",
+         "name": "The Cup",
+         "effects": [
+          {
+           "kind": "firstAttackDamage",
+           "first": 1.1,
+           "later": 1
+          }
+         ]
+        },
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "respect": 2
+         },
+         "lead": 0
+        },
+        {
+         "kind": "rivalQuest",
+         "end": "R1"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "respect": 1
+         },
+         "lead": 0
+        },
+        {
+         "kind": "rivalQuest",
+         "end": "R1"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-circuit-cup-ahead",
+   "name": "The Circuit: The Champion Cup",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "circuit-entered",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "circuit": {
+      "rungAtLeast": 16,
+      "gapAtLeast": 3
+     },
+     "lastStage": true
+    }
+   ],
+   "priority": 90,
+   "remembers": [
+    {
+     "id": "late",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "circuit-late",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nAt the door, the clerk stops you with one finger.\nClerk: \"You were the late one. Look at you.\""
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#38202a",
+    "effect": "confetti"
+   },
+   "intro": "Rung sixteen. The board has only two names left on it, and neither is {rival}'s.\n\nCommentator: \"Two careers. One board. One Cup.\"\n\nThe final is against a stranger from the road, a good one.\nYou look for {rival} without meaning to. They are in the stands. Alone. Three empty seats on either side.",
+   "choices": [
+    {
+     "label": "Begin.",
+     "success": {
+      "text": "They watch every turn. They do not clap. They do not leave.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "circuit-at"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Road Champion",
+       "friendly": true,
+       "quest": {
+        "soft": true
+       },
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "classId": "ace-trainer",
+       "win": [
+        {
+         "kind": "relic",
+         "id": "circuit-cup",
+         "name": "The Cup",
+         "effects": [
+          {
+           "kind": "firstAttackDamage",
+           "first": 1.1,
+           "later": 1
+          }
+         ]
+        },
+        {
+         "kind": "rivalQuest",
+         "end": "R1"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "rivalQuest",
+         "end": "R1"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  },
+  {
+   "id": "rq-circuit-watch",
+   "name": "The Circuit: The Front Row",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "circuit-entered",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "circuit": {
+      "rivalRungAtLeast": 16,
+      "gapAtMost": -3
+     },
+     "lastStage": true
+    }
+   ],
+   "priority": 90,
+   "scene": {
+    "cast": [],
+    "tint": "#38202a",
+    "effect": "confetti"
+   },
+   "intro": "The Champion Cup. You are not in it. {rival} got there three rungs ahead of you, and the board does not wait.\n\nYour seat is in the front row. It has your name on it, in {rival}'s handwriting.\n\nCommentator: \"Two careers. One board. One Cup.\"\n{rival} walks out. Before turn one, they find your seat. They wave. Just once. Then they turn to the field.",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You watch every turn. You know what each of their Pokémon will do a half-second before it does it.\nYou did not know you knew that.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1,
+         "friendship": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "end": "R1"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "living-rival-rescue",
+   "name": "A Rival in Trouble",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R2.open"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "beartic",
+    "tint": "#2a1d24",
+    "effect": "rattle"
+   },
+   "callback": true,
+   "intro": "You hear it before you see it: a crash, off the road, and a voice you know.\n\n{rival} is on one knee. Two of their Pokémon have fainted. Wild ones are closing in.\n\n{rival}: \"{say interrupt||champion-chaser::Don't just stand there! ...please.||protector::...}\"\nA Beartic rears up behind them.",
+   "choices": [
+    {
+     "label": "Fight beside them.",
+     "success": {
+      "text": "You are off the road before you have decided to be. Their last Pokémon falls in beside yours.\n{rival}: \"{say event||protector::Left one. I've got the... no. I haven't. You take both. I'll keep mine up.}\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        },
+        "lead": 0,
+        "mark": "the-hand-up"
+       },
+       {
+        "kind": "flag",
+        "key": "rival-helped",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R2.open"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Wild Pokémon",
+       "friendly": true,
+       "quest": {
+        "soft": true
+       },
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "lineup": [
+        "beartic",
+        "cubchoo",
+        "cubchoo"
+       ],
+       "ally": "rival",
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r2-after"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Help, then leave before they can thank you.",
+     "success": {
+      "text": "You break the circle from behind, loud and fast, and the wild ones scatter into the trees.\nBy the time {rival} looks up, the road is empty. They will find out later.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1,
+         "admiration": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-helped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-anonymous",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R2.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk past.",
+     "success": {
+      "text": "The main road goes on. So do you.\nBehind you the noise goes on for a long time, and then it stops. They get out alone.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -2
+        },
+        "lead": 0,
+        "mark": "left-standing"
+       },
+       {
+        "kind": "flag",
+        "key": "rival-abandoned",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R2.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait and see.",
+     "success": {
+      "text": "You stay where you are, at the edge of the road, and watch.\nThey manage. Barely. Their last Pokémon is shaking when it is over.\n\n{rival} sees you standing there. They do not say anything. They pick up their bag.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1,
+         "friendship": -1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-watched",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R2.open"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r2-after",
+   "name": "A Rival in Trouble: After",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1d24",
+    "effect": "snow"
+   },
+   "intro": "After. They are sitting in the snow, or the dust. Their Pokémon is asleep against their leg.\n\n{rival}: \"{say lost||champion-chaser::I had it.}\"\nA long pause.\n{rival}: \"{say lost||champion-chaser::I didn't have it.}\"",
+   "choices": [
+    {
+     "label": "Sit down next to them for a minute.",
+     "success": {
+      "text": "Neither of you says anything else. It is the right amount to say.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "living-rival-returns-favor",
+   "name": "The Favour Returned",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rival-helped",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R2.favour",
+     "hpBelow": 0.5
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1d2a24",
+    "effect": "glint"
+   },
+   "callback": true,
+   "stop": "heal",
+   "intro": "The Center. Your party is on the trolley. Somebody is leaning on the wall by the door, arms crossed.\n\n{rival}: \"I don't owe anyone. So don't think this is that.\"\n\nThe room is paid for. On the pillow: their best Berry, and under it, their second-best, in case.",
+   "choices": [
+    {
+     "label": "Take the room.",
+     "success": {
+      "text": "You sleep. Your team sleeps. When you come out in the morning, the wall by the door is empty.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "item",
+        "id": "lum-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R2.favour"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rival-asks-help-grudge",
+   "name": "A Bitter Rival",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rival-abandoned",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R2.bitter"
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1d1d",
+    "effect": "none"
+   },
+   "stop": "heal",
+   "intro": "The same Center. They are leaving as you come in. They stop in the doorway, with their back to you.\n\n{rival}: \"You left me out there. I haven't forgotten. I got out. You should know I got out.\"",
+   "choices": [
+    {
+     "label": "Let them go.",
+     "success": {
+      "text": "The door swings shut behind them. It keeps swinging a little after.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R2.bitter"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r2-anonymous",
+   "name": "Somebody Helped Me",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rival-anonymous",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R2.anon"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1d24",
+    "effect": "none"
+   },
+   "intro": "{rival} falls into step with you for a stretch of road, which they have never done.\n\n{rival}: \"Somebody helped me back there. Didn't stay. If I find out who...\"\nThey look at you a second too long.\n{rival}: \"...I'll have to be polite to them. I'd hate that.\"",
+   "choices": [
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "They peel off at the next fork. You are almost sure they were smiling.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R2.anon"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r2-finale",
+   "name": "A Rival in Trouble: What Is Owed",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R2.finale"
+    }
+   ],
+   "priority": 80,
+   "remembers": [
+    {
+     "id": "helped",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-helped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\n{rival}: \"I owe you one. This is it.\"\nThey leave one Ball on their belt. The one they picked to beat you with."
+    },
+    {
+     "id": "abandoned",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-abandoned",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nThey do not say anything. Their first Ball is already in their hand, and they are looking straight at {lead}."
+    },
+    {
+     "id": "watched",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-watched",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\n{rival}: \"You'd have let me lose.\""
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1d24",
+    "effect": "glint"
+   },
+   "intro": "The end of the region. {rival} is waiting where the road narrows, the way they always are.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The usual. Which with them is never usual.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R2.finale"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "quest": {
+        "counter": "owed"
+       },
+       "win": [
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "respect": 1
+         },
+         "lead": 0
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  },
+  {
+   "id": "ev-rival-emergency",
+   "name": "A Rival in Trouble, Again",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rival-abandoned",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R2.amends"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "beartic",
+    "tint": "#2a1d24",
+    "effect": "rattle"
+   },
+   "callback": true,
+   "minStage": 6,
+   "intro": "The same kind of crash, off the same kind of road.\n\n{rival} is down on both knees this time. All but one of their Pokémon have fainted. There are more wild ones than before.\n\nThey see you. They do not ask.",
+   "choices": [
+    {
+     "label": "Fight beside them.",
+     "success": {
+      "text": "You do not walk past. Their last Pokémon looks at you, and then at them, and then steps in next to yours.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        },
+        "lead": 0,
+        "mark": "the-hand-up"
+       },
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rival-abandoned",
+         "value": 0
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "rival-helped",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R2.amends"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Wild Pokémon",
+       "friendly": true,
+       "quest": {
+        "soft": true
+       },
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "lineup": [
+        "beartic",
+        "cubchoo",
+        "cubchoo"
+       ],
+       "ally": "rival",
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r2-after"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Help, then leave before they can thank you.",
+     "success": {
+      "text": "You scatter the wild ones and keep walking. This time they see your back as you go.\nIt is enough. It is also not nothing.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1,
+         "admiration": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rival-abandoned",
+         "value": 0
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "rival-helped",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R2.amends"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk past.",
+     "success": {
+      "text": "The main road goes on. So do you. Again.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R2.amends"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait and see.",
+     "success": {
+      "text": "They manage. You do not know how. Neither do they.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1,
+         "friendship": -1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R2.amends"
+       }
+      ]
+     }
+    }
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "living-rival-promise",
+   "name": "The Promise Past the Ridge",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R3.open",
+     "mark": "by-a-thread"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#24202a",
+    "effect": "glint"
+   },
+   "callback": true,
+   "intro": "The battle was close. Too close to feel like an ending. Both of you are still breathing hard.\n{rival} points at the next ridge.\n\n{rival}: \"Not here. Not like this. Meet me at the end of the next region. Full teams.\"\n{rival}: \"{say event||enthusiast::Promise? PROMISE? Pinky promise.}\"",
+   "choices": [
+    {
+     "label": "\"Promise.\"",
+     "success": {
+      "text": "A small flag goes on your map, on the last node of the next region. You can see it from here.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-promise-made",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R3.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why wait?\"",
+     "success": {
+      "text": "{rival}: \"Because I want to be ready. So do you.\"\n\nYou promise. A small flag goes on your map, on the last node of the next region.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-promise-made",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R3.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No promises.\"",
+     "success": {
+      "text": "{rival}: \"Fine. I'll be there anyway.\"\n\nThe flag goes on your map all the same. They put it there, not you.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": -1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-promise-open",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R3.open"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "living-rival-montage",
+   "name": "A Rival Training Hard",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R3.train1"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2620",
+    "effect": "glint"
+   },
+   "callback": true,
+   "intro": "First light. A field. The same move, again. {rival}'s lead is breathing hard.\n\n{rival}, to it, not knowing they are heard:\n{rival}: \"Thirty-one. Not for me. For the ridge. Thirty-two.\"",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "They pretend not to notice you. Their next call is a little louder, a little cleaner. Thirty-three.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R3.train1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "They do not stop. They move over. Two leads, side by side, the same move, out of time, and then in time.\n\n{rival}: \"{say event||enthusiast::Forty! You did forty! You weren't even asked!}\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "learn": true
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R3.train1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave quietly.",
+     "success": {
+      "text": "You go back the way you came. The counting goes on behind you.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R3.train1"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "ev-rival-sighted",
+   "name": "A Rival Training Hard: The Second Morning",
+   "group": "Rival questline",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R3.train2"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2620",
+    "effect": "glint"
+   },
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 3,
+   "intro": "First light again. The same field, or one just like it. The same move.\nThey have stopped counting aloud.",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "They pretend not to notice you. They are worse at pretending than last time.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R3.train2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "They move over before you have asked. There is a worn patch in the grass beside them, exactly the size of {lead}.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R3.train2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave quietly.",
+     "success": {
+      "text": "You go. The ridge is closer than it was.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R3.train2"
+       }
+      ]
+     }
+    }
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "living-rival-promise-kept",
+   "name": "The Promise Kept",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R3.finale"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#24202a",
+    "effect": "glint"
+   },
+   "callback": true,
+   "priority": 90,
+   "remembers": [
+    {
+     "id": "second",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-promise-second",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\n{rival}: \"Second time. Same flag. Same rules.\"\nThey have brought two flasks this time. One of them is for you."
+    },
+    {
+     "id": "open",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-promise-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\n{rival}: \"...You came. You didn't have to.\""
+    }
+   ],
+   "intro": "The flag. They are standing next to it. They have been there a while; there is a flask, and it is empty.\n\n{rival}: \"You came. Good.\"\nThey do not say anything else. They throw first.",
+   "choices": [
+    {
+     "label": "Throw.",
+     "success": {
+      "text": "Six on six. Nothing picked to beat you. Only everything they have.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "quest": {
+        "counter": "none",
+        "full": true
+       },
+       "win": [
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "respect": 2
+         },
+         "lead": 0
+        },
+        {
+         "kind": "flag",
+         "key": "rival-promise-kept",
+         "amount": 1
+        },
+        {
+         "kind": "rivalQuest",
+         "handshake": true
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r3-handshake"
+        },
+        {
+         "kind": "rivalQuest",
+         "done": "R3.finale"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "respect": 2
+         },
+         "lead": 0
+        },
+        {
+         "kind": "flag",
+         "key": "rival-promise-kept",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rival-promise-second",
+         "amount": 1
+        },
+        {
+         "kind": "rivalQuest",
+         "again": [
+          "living-rival-promise-kept"
+         ]
+        },
+        {
+         "kind": "rivalQuest",
+         "set": {
+          "key": "rq-r3-start",
+          "value": 0
+         }
+        },
+        {
+         "kind": "rivalQuest",
+         "done": "R3.open"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r3-second"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take the other path. (The flag is on this one.)",
+     "success": {
+      "text": "The flag is on the other path. You know it is. You go the way that is not that way.\n\nBehind you, somebody waits a whole stage.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rival-map-note"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  },
+  {
+   "id": "rq-r3-handshake",
+   "name": "The Promise Kept: The Handshake",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#24202a",
+    "effect": "sparkle"
+   },
+   "intro": "It is over. {rival} crosses the field and puts their hand out. It is not steady. Neither is yours.\n\n{rival}: \"That last move. The one that did it. Tell me its name.\"\nYou tell them.\n{rival}: \"I'm going to learn it. I'm going to be insufferable with it.\"",
+   "choices": [
+    {
+     "label": "Shake.",
+     "success": {
+      "text": "For the rest of the run, both of your aces stand a little taller.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r3-second",
+   "name": "The Promise Kept: Same Rules",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#24202a",
+    "effect": "glint"
+   },
+   "intro": "It is over, and it went their way. There is no gloating in them at all.\n\n{rival}: \"Next region. Same rules.\"\nA second flag goes on your map.",
+   "choices": [
+    {
+     "label": "\"I'll be there.\"",
+     "success": {
+      "text": "They nod. They pick up the empty flask. They are already walking.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rival-map-note",
+   "name": "A Note Left Behind",
+   "group": "Rival questline",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R3.note"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#20202a",
+    "effect": "none"
+   },
+   "rarity": "rare",
+   "callback": true,
+   "intro": "A signpost, a stage later. Something is scratched into the wood with a key, in a hand you know.\n\"Waited. You didn't come.\"",
+   "choices": [
+    {
+     "label": "Read it twice.",
+     "success": {
+      "text": "You run your thumb over the letters. They pressed hard.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -3
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-promise-broken",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R3.note"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  }
+ ]
+}

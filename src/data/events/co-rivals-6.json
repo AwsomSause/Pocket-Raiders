@@ -1,0 +1,813 @@
+{
+ "catalogOverhaul": "rivals",
+ "override": true,
+ "remove": [
+  "rq-echo-kieran-fast",
+  "rq-echo-kieran-talked-down"
+ ],
+ "events": [
+  {
+   "id": "rq-kieran-1",
+   "name": "I Have to Get Stronger",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R16.open"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.kieran"
+    ],
+    "tint": "#1d2430",
+    "effect": "shake"
+   },
+   "intro": "A boy is standing in the middle of the path, as if he has been waiting there all morning. He probably has.\nHis team is lined up behind him. They are strong. They are much too strong for this route, and they look tired in a way Pokémon should not.\n\nKieran: \"You. I've heard about you.\"\nKieran: \"I'll get stronger than you. I have to.\"\n\nKieran: \"Someone beat me who didn't even care. Didn't even look at me.\"\nKieran: \"I'm never losing like that again. Battle me. Properly.\"",
+   "choices": [
+    {
+     "label": "\"Battle properly.\"",
+     "success": {
+      "text": "You do not hold back. He notices. For a second, something in his face eases.\nKieran: \"Good. Don't you dare go easy.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kieran-helped",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R16.open"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Kieran",
+       "friendly": true,
+       "quest": {
+        "soft": true
+       },
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "classId": "ace-trainer",
+       "sprite": "trainer.kieran",
+       "lineup": [
+        "applin",
+        "pawniard",
+        "poltchageist"
+       ],
+       "win": [],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "\"Fine. Let's get it over with.\"",
+     "success": {
+      "text": "Kieran: \"Get it over with?\"\nHis jaw tightens. He sends out his first Pokémon before you have finished talking.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R16.open"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Kieran",
+       "friendly": true,
+       "quest": {
+        "soft": true
+       },
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "classId": "ace-trainer",
+       "sprite": "trainer.kieran",
+       "lineup": [
+        "applin",
+        "pawniard",
+        "poltchageist"
+       ],
+       "win": [],
+       "lose": []
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-kieran-2",
+   "name": "I Have to Get Stronger: The Screen",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 5,
+   "stop": "heal",
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R16.watch"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.kieran"
+    ],
+    "tint": "#1d2430",
+    "effect": "none"
+   },
+   "intro": "A Pokémon Center. Kieran is at the big screen in the corner, watching a battle.\nIt is yours. It is all of yours. He has the whole region queued up, one after another.\n\nKieran: \"I've watched every battle you've had this region.\"\nKieran: \"You do a thing with your hand before you switch. I'm going to work out what it means.\"",
+   "choices": [
+    {
+     "label": "\"What do you actually like about battling?\"",
+     "success": {
+      "text": "He opens his mouth. Nothing is there.\nHe closes it again. He looks at the screen, at you, at his own reflection in the glass.\n\nKieran: \"...That's not a real question.\"\nHe is still thinking about it when you leave. You can see him through the window, not watching the screen any more.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kieran-helped",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R16.watch"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It means I'm about to switch.\"",
+     "success": {
+      "text": "Kieran: \"Obviously. But WHY that one. Why then.\"\nHe turns back to the screen and rewinds it. Again. Again.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R16.watch"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-kieran-3",
+   "name": "I Have to Get Stronger: Again",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R16.again"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.kieran"
+    ],
+    "tint": "#1d2430",
+    "effect": "flicker"
+   },
+   "intro": "His team is out on the grass. None of them are looking at him.\nHe lifts his arm to point at something. One of them flinches.\n\nHe sees it flinch.\nKieran: \"Again. Again!\"\nQuieter, to nobody: Kieran: \"...Why did it do that?\"",
+   "choices": [
+    {
+     "label": "\"Let them rest first.\"",
+     "success": {
+      "text": "He stares at you as if you have said something in another language.\nThen, slowly, he sits down on the grass.\n\nHis Pokémon do not come over. They stay where they are, watching him.\nHe notices that, too. He does not say anything for a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kieran-helped",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R16.again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle me, then.\"",
+     "success": {
+      "text": "Kieran: \"Finally. Someone who gets it.\"\nHis Pokémon go out to fight. Every one of them looks back at him first.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R16.again"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Kieran",
+       "friendly": true,
+       "quest": {
+        "soft": true
+       },
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "classId": "ace-trainer",
+       "sprite": "trainer.kieran",
+       "lineup": [
+        "dipplin",
+        "pawniard",
+        "poltchageist",
+        "duraludon"
+       ],
+       "win": [],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You leave him there, pointing. You hear \"Again!\" for a long way down the path.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R16.again"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-kieran-finale",
+   "name": "I Have to Get Stronger: Don't You Dare",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 7,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R16.finale"
+    }
+   ],
+   "priority": 70,
+   "scene": {
+    "cast": [
+     "trainer.kieran"
+    ],
+    "tint": "#1d2430",
+    "effect": "shake"
+   },
+   "intro": "Kieran is waiting at the end of the stage. He has not slept. You can tell.\nHis ace is out already. It is swaying on its feet. It is ready to collapse, and it is still standing because he told it to.\n\nKieran: \"Last time. For real this time.\"\nKieran: \"Don't you dare go easy.\"",
+   "choices": [
+    {
+     "label": "\"Win fast.\"",
+     "success": {
+      "text": "You end it quickly. It is kinder than dragging it out.\nIt does not feel kind.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Kieran",
+       "friendly": true,
+       "quest": {
+        "soft": true
+       },
+       "size": 4,
+       "types": [],
+       "levelBonus": 2,
+       "classId": "ace-trainer",
+       "sprite": "trainer.kieran",
+       "lineup": [
+        "dipplin",
+        "duraludon",
+        "poltchageist",
+        "bisharp"
+       ],
+       "win": [
+        {
+         "kind": "rivalQuest",
+         "openFirst": [
+          "rq-r16-swears"
+         ]
+        }
+       ],
+       "lose": [
+        {
+         "kind": "rivalQuest",
+         "openFirst": [
+          "rq-r16-wander"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Stall until his Pokémon want to stop.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kieran-helped",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You do not attack. You defend, and wait, and watch his ace.\nIt is not watching you. It is watching him.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Kieran",
+       "friendly": true,
+       "quest": {
+        "soft": true
+       },
+       "size": 4,
+       "types": [],
+       "levelBonus": 2,
+       "classId": "ace-trainer",
+       "sprite": "trainer.kieran",
+       "lineup": [
+        "dipplin",
+        "duraludon",
+        "poltchageist",
+        "bisharp"
+       ],
+       "rule": {
+        "calm": 3
+       },
+       "win": [
+        {
+         "kind": "rivalQuest",
+         "openFirst": [
+          "rq-r16-sat",
+          "rq-r16-swears"
+         ]
+        }
+       ],
+       "lose": [
+        {
+         "kind": "rivalQuest",
+         "openFirst": [
+          "rq-r16-wander"
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r16-sat",
+   "name": "I Have to Get Stronger: Talked Down",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rq-r16-calm",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.kieran"
+    ],
+    "tint": "#1d2430",
+    "effect": "sparkle"
+   },
+   "intro": "It sits. He shouts at it. It looks at him.\nIt does not get up.\n\nKieran: \"...What am I doing?\"\nHe laughs. It is not a good laugh, and then it is.\n\nHe sits down next to it, in the dirt, and puts his forehead against its side.\nKieran: \"Sorry. Sorry. I'm sorry.\"\nOne by one, the rest of his team comes over and sits with him.",
+   "choices": [
+    {
+     "label": "Sit with them for a while.",
+     "success": {
+      "text": "Nobody says anything. Nobody needs to.\nWhen you finally stand up, each of his Pokémon brings you something: a thank-you, in the only way they have.\n\nKieran: \"They like you better than me.\"\nKieran: \"...That's fair. I'll fix it.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "syrupy-apple",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "metal-alloy",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "unremarkable-teacup",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "razor-claw",
+        "count": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R16.finale"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "remembers": []
+  },
+  {
+   "id": "rq-r16-swears",
+   "name": "I Have to Get Stronger: Again, Next Time",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.kieran"
+    ],
+    "tint": "#1d2430",
+    "effect": "shake"
+   },
+   "intro": "His last Pokémon goes down. He does not look at it. He looks at you.\nKieran: \"Next region. I'll be stronger. I swear it.\"\nHe walks away without recalling it. It gets up on its own and limps after him.",
+   "choices": [
+    {
+     "label": "Let him go.",
+     "success": {
+      "text": "You watch until they are both out of sight.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "kieran-swore",
+         "value": 1
+        }
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R16.finale"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r16-wander",
+   "name": "I Have to Get Stronger: Nothing",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.kieran"
+    ],
+    "tint": "#1d2430",
+    "effect": "fog"
+   },
+   "intro": "He wins. He stands there and waits for it to feel like something.\nIt does not. You can see it not feeling like anything.\n\nKieran: \"...Huh.\"\nHe wanders off without a word, not to anywhere in particular.",
+   "choices": [
+    {
+     "label": "Watch him go.",
+     "success": {
+      "text": "He does not look back. His Pokémon do.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "kieran-lost-to",
+         "value": 1
+        }
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R16.finale"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r16-again",
+   "name": "I Have to Get Stronger: Worse",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 8,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kieran-swore",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R16.next"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.kieran"
+    ],
+    "tint": "#1d2430",
+    "effect": "shake"
+   },
+   "intro": "Kieran again. His team is bigger now. Stronger. More tired than before.\nKieran: \"I told you. I swore it.\"\nHe does not say hello.",
+   "choices": [
+    {
+     "label": "Battle him.",
+     "success": {
+      "text": "His Pokémon go out without looking back at him this time. That is worse.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R16.next"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Kieran",
+       "friendly": true,
+       "quest": {
+        "soft": true
+       },
+       "size": 5,
+       "types": [],
+       "levelBonus": 3,
+       "classId": "ace-trainer",
+       "sprite": "trainer.kieran",
+       "lineup": [
+        "hydrapple",
+        "archaludon",
+        "sinistcha",
+        "kingambit",
+        "dragapult"
+       ],
+       "win": [],
+       "lose": []
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r16-better",
+   "name": "I Have to Get Stronger: Better",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 8,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kieran-lost-to",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R16.better"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.kieran"
+    ],
+    "tint": "#1d2430",
+    "effect": "glint"
+   },
+   "intro": "Kieran is sitting on a fence with his team asleep around him in the sun.\nHe raises a hand. He does not get up. He does not have to.\n\nKieran: \"I've been doing it differently.\"\nKieran: \"Slower. They seem to like it.\"",
+   "choices": [
+    {
+     "label": "\"They look happy.\"",
+     "success": {
+      "text": "Kieran: \"Yeah.\"\nHe looks down at them, surprised all over again.\nKieran: \"Yeah, they do.\"",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R16.better"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r18-year",
+   "name": "The Last Battle of the Year",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 2,
+   "stop": "heal",
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "date": "12-31"
+    }
+   ],
+   "priority": 90,
+   "scene": {
+    "cast": [],
+    "tint": "#14182a",
+    "effect": "sparkle"
+   },
+   "intro": "{rival} is on the hill above the rest stop, with a flask and two cups.\nDown in the town, people are setting out fireworks along the river. Nobody has lit one yet.\n\n{rival}: \"One last battle of the year.\"\n{rival}: \"Ends at midnight, whatever the score.\"\n\n{rival}: \"{say event||protector::...I'm glad it's you.}\"",
+   "choices": [
+    {
+     "label": "\"Go.\"",
+     "success": {
+      "text": "Six on six. No counter-picks: you both send out what you would have sent anyway.\nSomewhere below, a clock tower starts its long count to midnight.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 0,
+       "quest": {
+        "counter": "none"
+       },
+       "rule": {
+        "clock": 8
+       },
+       "win": [
+        {
+         "kind": "tempEffect",
+         "label": "Your lead starts the next battle a step faster (+1 Speed).",
+         "effects": [
+          {
+           "kind": "statMultiplier",
+           "stat": "spe",
+           "value": 1.5
+          }
+         ],
+         "battles": 1,
+         "until": "battle"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "tempEffect",
+         "label": "Your lead starts the next battle a step faster (+1 Speed).",
+         "effects": [
+          {
+           "kind": "statMultiplier",
+           "stat": "spe",
+           "value": 1.5
+          }
+         ],
+         "battles": 1,
+         "until": "battle"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Let's just watch the fireworks.\"",
+     "success": {
+      "text": "{rival} looks at you for a moment. Then they pour the second cup and hand it over.\nIt is still warm.\n\nThe first firework goes up over the river. Then all of them.\n{rival}: \"...Happy new year, {called}.\"",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Your lead starts the next battle a step faster (+1 Speed).",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 1.5
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Make it a draw.\"",
+     "success": {
+      "text": "You both send out one Pokémon each, and neither of you gives an order.\nThey stand on the hill, side by side, and look up.\n\nThe fireworks go up over a tie.\n{rival}: \"Best result all year, honestly.\"",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Your lead starts the next battle a step faster (+1 Speed).",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 1.5
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "types": [],
+   "room": false,
+   "remembers": []
+  }
+ ]
+}
