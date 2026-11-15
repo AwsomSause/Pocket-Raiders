@@ -29,7 +29,9 @@ import { sceneForRun } from './routing';
 import { tourneyBracket } from '../core/expansion/tourney';
 import { drawChampionStage, drawTourneyPanel, drawTourneyStrip } from '../ui/tourneyBracket';
 import { artOf, monFile } from '../ui/redux/game';
+import { pageSpeaker, scriptPages, type ScriptPage } from '../ui/redux/script';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { tourneyHome, tourneyPage, tourneyRounds } from '../ui/redux/screens/bracket';
 import { eventView as rxEventView } from '../ui/redux/screens/event';
 
 
@@ -49,6 +51,16 @@ export class EventScene extends Phaser.Scene {
   private phase: 'choose' | 'pick' | 'outcome' = 'choose';
   private busy = false;
   private outcomeStep: 'text' | 'rewards' = 'text';
+  /** New UI: the intro and the outcome text as pages (each waits for the player), and the page on show. */
+  private rxPages: ScriptPage[] = [];
+  private rxAt = 0;
+  private rxOutPages: ScriptPage[] = [];
+  private rxOutAt = 0;
+  /** New UI: a split-second countdown waits here until the last intro page (the choices) is on show. */
+  private rxStartClock: (() => void) | null = null;
+  /** New UI, tournament events: the bracket page on show, or null while the bracket is closed. */
+  private rxBracket: number | null = null;
+  private toggleBracket: (() => void) | null = null;
   private inputReady = false;
   private leaving = false;
   private outcomeBox: Phaser.GameObjects.Container | null = null;
@@ -77,6 +89,13 @@ export class EventScene extends Phaser.Scene {
     this.index = 0;
     this.phase = 'choose';
     this.outcomeStep = 'text';
+    this.rxPages = [];
+    this.rxAt = 0;
+    this.rxOutPages = [];
+    this.rxOutAt = 0;
+    this.rxStartClock = null;
+    this.rxBracket = null;
+    this.toggleBracket = null;
     this.picker = null;
     this.result = null;
     this.leaving = false;
@@ -131,39 +150,65 @@ export class EventScene extends Phaser.Scene {
     this.moneyPill(run.money, this.layout.moneyAt);
     // Beta 0.7 Fighting Tournament: the bracket strip on every tournament event, B for the full bracket, the podium at the end.
     this.bracketPanel = null;
-    if (scene.tourney !== undefined) {
-      const tv = tourneyBracket(content, run, scene.tourney);
+    const tv = scene.tourney !== undefined ? tourneyBracket(content, run, scene.tourney) : null;
+    let champion: string | null = null;
+    if (tv) {
       const toggle = (): void => {
+        // New UI: the bracket is a page of the event's own view (its group pages turn with left and right).
+        if (this.rx) {
+          this.rxBracket = this.rxBracket === null ? tourneyHome(tv) : null;
+          playSfx(this, 'ui.select', 0.4);
+          this.rx.refresh();
+          return;
+        }
         if (this.bracketPanel) { this.bracketPanel.destroy(); this.bracketPanel = null; return; }
         this.bracketPanel = drawTourneyPanel(this, content, tv, toggle);
       };
+      this.toggleBracket = toggle;
       drawTourneyStrip(this, tv, toggle);
       this.input.keyboard?.on('keydown-B', toggle);
       if (scene.tourney === 6) {
         const champ = run.party.find((m) => m.champion) ?? run.party.find((m) => m.speciesId === 'primeape' || m.speciesId === 'mankey');
-        drawChampionStage(this, content, champ?.speciesId ?? 'primeape', Number(run.story.flags['ev:r25-food'] ?? 0) > 0, this.calm);
+        champion = champ?.speciesId ?? 'primeape';
+        drawChampionStage(this, content, champion, Number(run.story.flags['ev:r25-food'] ?? 0) > 0, this.calm);
       }
     }
     this.rx = null;
     this.rxClock = '';
-    if (reduxOn() && eventStyleOf(session.settings.eventStyle) === 'diorama' && scene.tourney === undefined) {
+    if (reduxOn() && eventStyleOf(session.settings.eventStyle) === 'diorama') {
       const pct = (c: ChoiceView): string => (c.chance === null ? '' : `${Math.round(c.chance * 100)}%`);
       const sub = (c: ChoiceView): string => c.locked ?? [c.cost, c.preview ?? c.risk].filter(Boolean).join(' · ');
       const cast = artOf(this, ctx.castIds[0]);
-      const star = ctx.species ? monFile(this, ctx.species.id) : null;
+      // The person speaking stands in the picture when the event's cast has them (matched by name).
+      const castOf = (who: string | null): typeof cast => {
+        const key = who?.toLowerCase().split(/\s+/).filter((w) => w.length > 2).pop();
+        const id = key ? ctx.castIds.find((x) => x.toLowerCase().includes(key)) : undefined;
+        return id ? artOf(this, id) ?? cast : cast;
+      };
+      this.rxPages = scriptPages(view.event.intro);
+      this.rxAt = ctx.introSeen ? this.rxPages.length - 1 : 0;
+      const star = champion ? monFile(this, champion) : ctx.species ? monFile(this, ctx.species.id) : null;
+      const rounds = tv ? tourneyRounds(tv) : null;
       const tag = `${view.event.group} · ${view.event.rarity.charAt(0).toUpperCase()}${view.event.rarity.slice(1)}`;
       this.rx = mountRedux(this, {
         render: (c) => {
           const r = this.result;
           const out = this.phase === 'outcome' && r ? { step: this.outcomeStep, ok: r.success, changes: r.changes, next: r.battle ? 'Battle!' : 'Continue' } : null;
+          // The result can be drawn a moment before the outcome panel opens: page its text here if that has not happened yet.
+          if (out && !this.rxOutPages.length) this.rxOutPages = scriptPages(r!.text);
+          const pages = out ? (out.step === 'rewards' ? [[{ who: null, text: 'Here is what changed.' }]] : this.rxOutPages) : this.rxPages;
+          const at = Math.max(0, Math.min(out ? (out.step === 'rewards' ? 0 : this.rxOutAt) : this.rxAt, pages.length - 1));
+          const speaker = pageSpeaker(pages[at]!);
           return rxEventView(c, {
             name: view.event.name,
             tag,
-            line: out ? (out.step === 'rewards' ? 'Here is what changed.' : r!.text) : view.event.intro,
+            lines: pages[at]!,
+            speaker,
+            page: { at, of: pages.length },
             art: artOf(this, ctx.arena)?.file ?? null,
             tint: scene.tint ?? null,
             fx: this.calm ? null : scene.effect,
-            cast,
+            cast: castOf(speaker),
             mon: star,
             choices: view.choices.map((x) => ({ label: x.label, sub: sub(x), chance: pct(x), locked: x.locked !== null })),
             index: this.index,
@@ -172,10 +217,17 @@ export class EventScene extends Phaser.Scene {
             pick: this.picker ? { labels: this.picker.picks.map((x) => x.label), at: this.picker.at } : null,
             countdown: this.rxClock,
             timer: this.rxClock && view.event.countdown ? this.rxLeft / view.event.countdown : null,
+            standing: view.standing ?? null,
+            rounds,
+            bracket: tv && this.rxBracket !== null ? tourneyPage(tv, (sp) => monFile(this, sp), this.rxBracket, 'Saffron Fighting Tournament') : null,
+            title: champion ? 'CHAMPION' : null,
           });
         },
         acts: {
           pick: (k) => this.confirm(Number(k)),
+          page: () => this.turnPage(1),
+          bracket: () => this.toggleBracket?.(),
+          bracketPage: (k) => { this.rxBracket = Number(k); this.rx?.refresh(); },
           next: () => this.advanceOutcome(),
           trade: (k) => { const uid = this.picker?.picks[Number(k)]?.uid; if (uid) void this.commit(uid); },
         },
@@ -190,7 +242,8 @@ export class EventScene extends Phaser.Scene {
     this.cameras.main.fadeIn(this.calm ? 1 : 300);
     // Split-second choice (ideas W1): a countdown when timed prompts are on; at zero the fallback option is taken.
     const seconds = view.event.countdown;
-    if (seconds && session.settings.skillPrompts) {
+    const startClock = (): void => {
+      if (!seconds || !session.settings.skillPrompts) return;
       let left = seconds;
       this.rxClock = `Decide! ${left}`;
       this.rxLeft = left;
@@ -216,7 +269,26 @@ export class EventScene extends Phaser.Scene {
           }
         },
       });
+    };
+    // New UI: the clock starts when the choices show (the last page of the intro), not while the player is reading.
+    if (this.rx && this.rxAt < this.rxPages.length - 1) this.rxStartClock = startClock;
+    else startClock();
+  }
+
+  /** New UI: next (or previous) page of the intro. The choices, and a countdown if the event has one, come with the last page. */
+  private turnPage(by: 1 | -1): void {
+    if (!this.rx || this.phase !== 'choose' || this.busy) return;
+    const to = this.rxAt + by;
+    // No turning back once a countdown runs: the choices stay up.
+    if (to < 0 || to >= this.rxPages.length || (by < 0 && this.rxClock)) return;
+    this.rxAt = to;
+    playSfx(this, 'ui.select', 0.3);
+    if (to === this.rxPages.length - 1 && this.rxStartClock) {
+      const go = this.rxStartClock;
+      this.rxStartClock = null;
+      go();
     }
+    this.rx.refresh();
   }
 
   /** If the style's text card had to cut the intro, a "Read all" button opens the full text (nothing is ever hidden for good). */
@@ -264,6 +336,14 @@ export class EventScene extends Phaser.Scene {
       this.bracketPanel = null;
       return;
     }
+    if (this.rxBracket !== null) {
+      if (action === 'left' || action === 'up') this.rxBracket = (this.rxBracket + 4) % 5;
+      else if (action === 'right' || action === 'down') this.rxBracket = (this.rxBracket + 1) % 5;
+      else this.rxBracket = null;
+      playSfx(this, 'ui.select', 0.3);
+      this.rx?.refresh();
+      return;
+    }
     if (this.fullLayer) {
       if (action === 'confirm' || action === 'back') this.toggleFull('');
       return;
@@ -276,6 +356,12 @@ export class EventScene extends Phaser.Scene {
       this.handlePick(action);
       return;
     }
+    if (this.rx && this.rxAt < this.rxPages.length - 1) {
+      if (action === 'confirm' || action === 'right' || action === 'down') this.turnPage(1);
+      else if (action === 'back' || action === 'left' || action === 'up') this.turnPage(-1);
+      return;
+    }
+    if (this.rx && action === 'back') return this.turnPage(-1);
     const n = this.cards.length;
     if (action === 'left' || action === 'up') this.focus((this.index - 1 + n) % n);
     else if (action === 'right' || action === 'down') this.focus((this.index + 1) % n);
@@ -294,6 +380,7 @@ export class EventScene extends Phaser.Scene {
 
   private confirm(at?: number): void {
     if (this.phase !== 'choose' || this.busy) return;
+    if (this.rx && this.rxAt < this.rxPages.length - 1) return;
     if (at !== undefined) this.index = at;
     const card = this.cards[this.index];
     if (!card) return;
@@ -386,6 +473,8 @@ export class EventScene extends Phaser.Scene {
     const r = this.result!;
     playSfx(this, r.success ? 'se.level_up' : 'ui.error', 0.5);
     this.outcomeStep = 'text';
+    this.rxOutPages = scriptPages(r.text);
+    this.rxOutAt = 0;
     this.inputReady = false;
     this.rxClock = '';
     this.rx?.refresh();
@@ -414,6 +503,12 @@ export class EventScene extends Phaser.Scene {
   private advanceOutcome(): void {
     if (this.phase !== 'outcome' || !this.inputReady) return;
     const r = this.result!;
+    if (this.rx && this.outcomeStep === 'text' && this.rxOutAt < this.rxOutPages.length - 1) {
+      this.rxOutAt += 1;
+      playSfx(this, 'ui.select', 0.3);
+      this.rx.refresh();
+      return;
+    }
     if (this.outcomeStep === 'text' && r.changes.length) {
       this.outcomeStep = 'rewards';
       this.inputReady = false;
