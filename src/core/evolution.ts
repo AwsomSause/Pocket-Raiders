@@ -3,6 +3,7 @@
 // trades, friendship, ...) is an item used from the Bag. Friendship
 // evolutions also happen on their own once friendship is high enough.
 
+import { quirkEvolution } from './co/quirks';
 import { genderOf } from './gender';
 import type { Content, Evolution } from './contentSchema';
 import { blocksEvolution } from './battle/held';
@@ -53,6 +54,9 @@ function heldReady(content: Content, mon: PokemonInstance, e: Evolution): boolea
  */
 export function evolutionTarget(content: Content, mon: PokemonInstance, regionId?: string, levelOffset = 0, bondReady = false): string | null {
   if (mon.hp <= 0 || mon.care?.holdEvolve) return null;
+  // A quirk may name its own evolution (the Dreamer Poliwhirl becomes a Politoed).
+  const dream = quirkEvolution(mon);
+  if (dream && content.species.has(dream) && !(mon.evoBlock ?? []).includes(dream)) return dream;
   const species = getSpecies(content, mon.speciesId);
   // A devoted bond (Bond Engine) can stand in for the last part of the friendship climb.
   const byFriendship = friendshipReady(content, mon) || bondReady;

@@ -9,7 +9,7 @@ import { createPokemon } from '../../src/core/pokemon';
 import { hashSeed, Rng } from '../../src/core/rng';
 import { chooseNode, chooseStarter, createRun, fish, fishingOffer, resolveDecision, takeTurn, visitSide, type TurnResult } from '../../src/core/run';
 import type { MapNode, RunState } from '../../src/core/state';
-import { content, takeAnyReward } from './helpers';
+import { content, plainNodes, takeAnyReward } from './helpers';
 
 function newRun(seed = 'stop-items'): RunState {
   // Past the gentle opening, whose weaker wild Pokémon would hide what these items change.
@@ -132,7 +132,7 @@ describe('Bridge Mail', () => {
   });
 
   it('S: the next trainer win uses the gym odds for its draft, then the mail is used up', () => {
-    const run = take(newRun('bridge-s'), 'bridgemail-s');
+    const run = plainNodes(take(newRun('bridge-s'), 'bridgemail-s'));
     expect(mapItemSummary(content, run)).toBe('Bridge Mail S ×1');
     const trainer = run.stage!.map.nodes.find((n) => n.kind === 'trainer')!;
     run.stage!.current = run.stage!.map.nodes.find((n) => n.next.includes(trainer.id))!.id;
