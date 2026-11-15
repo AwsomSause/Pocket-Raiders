@@ -1437,8 +1437,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const types = starter ? [getSpecies(content, starter.speciesId).types[0]!] : e.types;
       const speciesId = (e.recall ? oldFoe(run) : null) ?? pickSpecies(content, run, e.species, types, rng, 'reward');
       // No event lifts the party's level cap (Balancing Phase 7).
-      const level = e.level ?? Math.max(1, Math.min(runLevelCap(content, run), eventLevel(content, run, node, rng) + e.levelBonus));
-      const mon = newMon(content, run, e.level ? speciesId : evolvedFormAt(content, speciesId, level, rng), level, 'p');
+      const level = e.level ?? Math.max(1, Math.min(runLevelCap(content, run), Math.round((eventLevel(content, run, node, rng) + e.levelBonus) * (e.levelShare ?? 1))));
+      const mon = newMon(content, run, e.level || e.asIs ? speciesId : evolvedFormAt(content, speciesId, level, rng), level, 'p');
       mon.shiny = rollShiny(content, rng, runAttributeEffects(content, run).shinyChance * e.shinyMultiplier);
       if (mon.shiny) countShiny(run, mon.speciesId);
       // A rescued Shadow Pokémon (hearts roll from a generator of its own so no event roll moves) or a Blissful one.
@@ -1451,6 +1451,11 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (e.ability) mon.fixedAbility = e.ability;
       if (e.look) mon.look = e.look;
       if (e.friendship) mon.friendship = Math.min(255, mon.friendship + e.friendship);
+      if (e.nature) mon.nature = e.nature;
+      if (e.quirk) mon.quirk = e.quirk;
+      if (e.marks?.length) mon.marks = [...e.marks];
+      if (e.ot) mon.ot = e.ot;
+      if (e.quirkNote) mon.quirkNote = e.quirkNote;
       for (const id of e.moves) {
         const mv = content.moves.get(id);
         if (!mv || mon.moves.some((m) => m.id === id)) continue;

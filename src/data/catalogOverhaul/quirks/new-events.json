@@ -1,0 +1,10 @@
+{
+  "quirks": [
+    {
+      "id": "homesick",
+      "name": "Homesick",
+      "line": "It watches the wrong part of the sky every night. It fights like it, until it trusts you.",
+      "hooks": [{ "kind": "stats", "stages": -1, "untilBond": 3 }]
+    }
+  ]
+}
