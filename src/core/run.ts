@@ -12,6 +12,7 @@
 // (Elite Four, then the champion); beating the champion moves the run to the
 // next region, or wins the run after the last one.
 
+import { regionInterest } from './flagPerks';
 import { noteBattle } from './expansion/fieldNotes';
 import { settleSky } from './sky/story';
 import { finishSpectate } from './sky/spectate';
@@ -945,6 +946,10 @@ function enterNextRegion(content: Content, run: RunState): void {
   const orbMoney = regionMoneyFromItems(content, run);
   run.money += orbMoney;
   count(run, 'moneyEarned', orbMoney);
+  // Catalog overhaul SF1.6: Faulk's account pays interest between regions.
+  const interest = regionInterest(run);
+  run.money += interest;
+  count(run, 'moneyEarned', interest);
   enterStage(content, run, 0);
 }
 

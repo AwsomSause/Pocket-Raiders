@@ -1,0 +1,4 @@
+{
+  "note": "Numbers for the families-a questlines (catalog overhaul pack, STORY_FAMILIES_1). Read by src/core/flagPerks.ts.",
+  "faulkAccount": { "flag": "rescue-faulk", "percent": 5, "cap": 1500 }
+}

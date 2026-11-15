@@ -3561,7 +3561,7 @@ export const EventDefSchema = z.object({
   /** Choice memory: at most 3 variants that change what the scene shows when remembered flags hold. */
   remembers: z.array(EventVariantSchema).max(MAX_EVENT_VARIANTS).default([]),
 }).refine((e) => new Set(e.remembers.map((v) => v.id)).size === e.remembers.length, { message: 'remembers variant ids must be unique' })
-  .refine((e) => e.remembers.every((v) => v.hide.every((i) => i < e.choices.length) && e.choices.length - new Set(v.hide).size >= 1 && e.choices.length - new Set(v.hide).size + v.addChoices.length <= 4), { message: 'a remembers variant must leave 1 to 4 choices and only hide base choices' })
+  .refine((e) => e.remembers.every((v) => v.hide.every((i) => i < e.choices.length) && e.choices.length - new Set(v.hide).size + v.addChoices.length >= 1 && e.choices.length - new Set(v.hide).size + v.addChoices.length <= 4), { message: 'a remembers variant must leave 1 to 4 choices and only hide base choices' })
   .refine((e) => e.remembers.every((v) => v.addChoices.every((c) => (c.check === undefined && c.chance === undefined && c.prompt === undefined) || c.failure)), { message: 'an added choice with a check, chance or prompt needs a failure outcome' })
   .refine((e) => e.choices.every((c) => (c.check === undefined && c.chance === undefined && c.prompt === undefined) || c.failure), { message: 'a choice with a check, chance or prompt needs a failure outcome' });
 export type EventDef = z.infer<typeof EventDefSchema>;
