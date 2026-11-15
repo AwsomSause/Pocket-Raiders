@@ -1,6 +1,6 @@
 // Catalog Overhaul Pack, STORY_FAMILIES_13 / 18: the region-by-region Evil Team storyline (core/evil/teams.ts, evil-story co files).
 import { describe, expect, it } from 'vitest';
-import { chooseEvent, conditionMet, eligibleEvents } from '../../src/core/events';
+import { chooseEvent, conditionMet, eligibleEvents, eventView } from '../../src/core/events';
 import { chooseStarter, createRun } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { evilOf, evilStageStart, evilTeam, regionTeamId } from '../../src/core/evil/teams';
@@ -9,7 +9,7 @@ import { activeHolds, impound } from '../../src/core/evil/rescue';
 import { rescueCtxFor } from '../../src/core/evil/rescueGlue';
 import { fillEventText } from '../../src/core/evil/text';
 import { crisisLevel } from '../../src/core/story/crisis';
-import { PSEUDO_CHAINS } from '../../src/core/dungeon/pseudo';
+import { chainRooms, PSEUDO_CHAINS } from '../../src/core/dungeon/pseudo';
 import { content } from './helpers';
 
 function newRun(seed: string): RunState {
@@ -172,6 +172,53 @@ describe('Intel (run flag `intel`)', () => {
     const ctx = rescueCtxFor(run)!;
     expect(ctx.intel).toBe(30);
     expect(ctx.insider).toBe(true);
+  });
+});
+
+describe('Operation scenes, the variety pool (SF130)', () => {
+  const label = (id: string, l: string) => content.events.get(id)!.choices.findIndex((c) => c.label === l);
+  it('opens after The Plan, one scene per region; stopping one counts toward "stop all four"', () => {
+    const run = planned('pool', 'rocket', 0);
+    expect(open(run, 'vt-rocket-disguise-gig')).toBe(true);
+    expect(open(run, 'aqua-dig')).toBe(false); // another team's pool
+    const r = choose(run, 'vt-rocket-disguise-gig', label('vt-rocket-disguise-gig', 'Put it on.')).run;
+    expect(flagOf(r, 'team-rocket-quiet')).toBe(1);
+    expect(open(r, 'rocket-roadblock')).toBe(false); // the pool is closed for this region
+    r.story.flags['ev:team-rocket-op-stopped'] = 2;
+    expect(conditionMet(content, r, { kind: 'evil', stopped: 2 })).toBe(true);
+  });
+
+  it('walking on can cost a Pokémon (to the Holding Pen) or put a region modifier on', () => {
+    const run = planned('steal', 'rocket', 0);
+    while (run.party.length < 4) run.party.push({ ...structuredClone(run.party[0]!), uid: `x-${run.party.length}` });
+    const r = choose(run, 'rocket-ambush', label('rocket-ambush', 'Walk on.'));
+    expect(r.run.party).toHaveLength(3);
+    expect(activeHolds(r.run)).toHaveLength(1);
+    expect(r.changes.join(' ')).toMatch(/Holding Pen/);
+
+    const m = planned('radio', 'rocket', 0);
+    const done = choose(m, 'vt-rocket-radio-hijack', label('vt-rocket-radio-hijack', 'Walk on.')).run;
+    expect(done.perkEffects).toEqual(expect.arrayContaining([{ kind: 'priceMultiplier', group: 'all', value: 1.1 }]));
+    done.regionIndex += 1;
+    evilStageStart(content, done);
+    expect(done.perkEffects ?? []).not.toEqual(expect.arrayContaining([{ kind: 'priceMultiplier', group: 'all', value: 1.1 }]));
+  });
+
+  it('a choice that sends a Pokémon of a type needs one in the party', () => {
+    const run = planned('type', 'rocket', 0);
+    const node = run.stage!.map.nodes[0]!;
+    run.stage!.current = node.id;
+    node.sides.push({ id: 'cut', kind: 'event', used: false, eventId: 'rocket-ambush' });
+    const view = eventView(content, run, 'cut')!;
+    const cut = view.choices[label('rocket-ambush', 'Cut the net.')]!;
+    const hasType = run.party.some((m) => (content.species.get(m.speciesId)?.types ?? []).some((t) => t === 'bug' || t === 'grass'));
+    expect(cut.locked ?? null).toBe(hasType ? null : 'Needs a Bug or Grass-type Pokémon');
+  });
+
+  it('the Plasma Holding Camp is a pseudo-stage of three rooms', () => {
+    const camp = PSEUDO_CHAINS.find((c) => c.id === 'ps_plasma_camp')!;
+    expect(camp.entry).toBe('plasma-substage-gate');
+    expect(chainRooms(content, camp).map((r) => r.event)).toEqual(['plasma-substage-yard', 'plasma-substage-leader']);
   });
 });
 

@@ -1,6 +1,6 @@
 {
  "category": "evil-story",
- "note": "Evil Team Hideouts (STORY_FAMILIES_13 A8, STORY_FAMILIES_18 SF131 to SF133). Written by tools/events/co/_evil-story-sync.ts.",
+ "note": "Evil Team Hideouts (STORY_FAMILIES_13 A8, STORY_FAMILIES_18 SF131 to SF133) and the Plasma Holding Camp (SF130). Written by tools/events/co/_evil-story-sync.ts.",
  "chains": [
   {
    "id": "ps_evil_hideout_rocket",
@@ -641,6 +641,14 @@
      "ps-evil-hideout-e"
     ]
    ]
+  },
+  {
+   "id": "ps_plasma_camp",
+   "name": "The Plasma Holding Camp",
+   "entry": "plasma-substage-gate",
+   "themeId": "ghost-dark",
+   "tint": "#1a2230",
+   "mood": "quiet, crates breathing in the dark"
   }
  ]
 }

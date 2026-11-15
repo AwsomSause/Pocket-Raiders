@@ -3186,6 +3186,11 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
     mark: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
     /** SF133 The Holding Pen: every Pokémon this team took from you this run comes back (its impound holds close). */
     pen: z.boolean().optional(),
+    /** SF130: the region's team takes this many party Pokémon (from the back, never below two) to its Holding Pen. Teams without a holding site take none. */
+    steal: z.number().int().min(1).max(3).optional(),
+    /** SF130: run modifiers that last only while the run is in this region (like an Operation's lasting effect), with the words that say so. */
+    mods: z.array(ArchetypeModifierSchema).min(1).max(3).optional(),
+    modsText: z.string().min(1).optional(),
   }),
   /** Run events G (core/trainingEffects.ts): changes the lead's build: Nature, ability slot, weakest stat, or learns a move (of `type`). */
   z.object({ kind: z.literal('train'), what: z.enum(['natureReroll', 'natureNudge', 'abilitySwap', 'weakestStat', 'learnMove', 'evolutionHint', 'masteryShard', 'nap']), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']).optional(), type: TypeNameSchema.optional() }),

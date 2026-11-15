@@ -159,5 +159,7 @@ const chains = TEAMS.map((t) => {
   };
 });
 const pseudoFile = join(import.meta.dirname, '../../../src/data/catalogOverhaul/pseudo/evil-story.json');
-writeFileSync(pseudoFile, JSON.stringify({ category: 'evil-story', note: 'Evil Team Hideouts (STORY_FAMILIES_13 A8, STORY_FAMILIES_18 SF131 to SF133). Written by tools/events/co/_evil-story-sync.ts.', chains }, null, 1) + '\n');
+// SF130 The Holding Camp (Team Plasma's pool): the gate opens the Yard, the Yard opens the Handler (drawn from the events' own links).
+chains.push({ id: 'ps_plasma_camp', name: 'The Plasma Holding Camp', entry: 'plasma-substage-gate', themeId: 'ghost-dark', tint: '#1a2230', mood: 'quiet, crates breathing in the dark' } as never);
+writeFileSync(pseudoFile, JSON.stringify({ category: 'evil-story', note: 'Evil Team Hideouts (STORY_FAMILIES_13 A8, STORY_FAMILIES_18 SF131 to SF133) and the Plasma Holding Camp (SF130). Written by tools/events/co/_evil-story-sync.ts.', chains }, null, 1) + '\n');
 console.log(`pseudo/evil-story.json: ${chains.length} Hideouts`);

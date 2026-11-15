@@ -142,11 +142,11 @@ function storyline(t: TeamStory): Json[] {
     remembers: [{ id: 'furious', when: [has('lt-furious')], notice: `${lt} hasn't forgiven the alley. They have brought everything they own.`, hide: [0], addChoices: [ch('Battle.', fight(`There is nothing left of the professional calm. They want to win this one personally.`, nemesisFight(3, 5), story({ beat: true, heat: 1 })))] }],
   });
   const grunt = room(id('nemesis-grunt'));
-  const comeWithMe = (why: string) => ch('Come with me.', out(`${why} ${lt} looks at your outstretched hand for a long time. "They'll call me a traitor." "Yes." "...All right." For the rest of this region ${lt} walks with you. When you reach the Hideout, they will fight at your side.`, mark('lieutenant-recruited'), mark('lt-gone'), grunt));
+  const comeWithMe = (why: string) => ch('Come with me.', out(`${why} ${lt} looks at your outstretched hand for a long time. "They'll call me a traitor." "Yes." "...All right." For the rest of this region ${lt} walks with you. When you reach the Hideout, they will fight at your side.`, mark('lieutenant-recruited'), mark('lt-gone'), mark('lt-out'), grunt));
   events.push(ev(id('nemesis-after'), `${lt}, Beaten`, 'Evil Teams', { room: true, cast: [j.ranks.executive.sprite], tint: j.color },
     `${lt} recalls their last Pokémon and stands there with the empty Ball in their hand, not looking at it. ${say(lt, t.lt.last)}`,
     [
-      ch(`You're under arrest.`, out(`You call it in. ${lt} doesn't run. When Officer Jenny's car comes round the corner they hold out their wrists before she asks. With ${lt} gone, one of ${t.name}'s Operations will be guarded by half as many.`, mark('lieutenant-arrested'), mark('lt-gone'), grunt)),
+      ch(`You're under arrest.`, out(`You call it in. ${lt} doesn't run. When Officer Jenny's car comes round the corner they hold out their wrists before she asks. With ${lt} gone, one of ${t.name}'s Operations will be guarded by half as many.`, mark('lieutenant-arrested'), mark('lt-gone'), mark('lt-out'), grunt)),
       comeWithMe(`You hold out your hand.`),
       ch('Go.', out(`"Go," you say. ${lt} nods once, like a person who has been expecting the opposite for years, and walks away down the road without looking back. You have a feeling you'll see them again one day, somewhere quieter.`, mark('lieutenant-free'), mark('lt-gone'), grunt)),
     ].map((c, i) => (i === 1 ? { ...c, requires: [has('lt-asked')] } : c))));

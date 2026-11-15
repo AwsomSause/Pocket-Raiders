@@ -1,0 +1,4712 @@
+{
+ "catalogOverhaul": "evil-story",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "rocket-ambush",
+   "name": "The Ambush",
+   "group": "Evil Teams",
+   "stop": "ambush",
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "net"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "A net drops out of the trees and over your whole team at once. Two Rocket Grunts jump down after it and strike a pose they have obviously practised in a mirror. Both of them: \"Prepare for trouble!\" A pause. The smaller one: \"...We practised the rest. Hang on.\" He gets out a card. Under the net, your lead is looking at you, waiting to be told what to do. If you walk on, they'll take one of your Pokémon to their Holding Pen at the Hideout.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "\"Make it double!\" the bigger one shouts, a beat too late, and they both reach for their Balls.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Rocket Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Cut the net.",
+     "pick": {
+      "types": [
+       "bug",
+       "grass"
+      ]
+     },
+     "success": {
+      "text": "Your Pokémon saws through the cords while the two of them argue over whose line it was. By the time they look up, the net is empty and you are well down the road.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You can't get the net off in time. They drag the last one in the net away while you're still pulling at the knots. \"It's in the Pen!\" the smaller one shouts over his shoulder, like that helps. It's at their Hideout now. You'll have to go and get it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "steal": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rocket-roadblock",
+   "name": "The Roadblock",
+   "group": "Evil Teams",
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "A barrier across the road, painted red and white by someone who ran out of white. A Rocket Grunt sits on an upturned crate beside it with a cash tin. Grunt: \"Team Rocket toll! ₽500 or battle!\" If you walk on, you pay the ₽500, and that's all.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "\"Battle it is,\" he sighs, and closes the tin first, carefully.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Rocket Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask who the toll goes to.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "Grunt: \"...The boss. Mostly. Some of it's lunch.\" You pay, and ask for a receipt. He's so pleased someone asked that he writes one out properly, with the warehouse address it gets paid into. That address is going in your files.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "evil",
+        "mark": "files"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "You count out ₽500 into the tin. He lifts the barrier with a little bow. The money is gone, and somewhere a Rocket boss is slightly richer.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-rocket-cargo-truck",
+   "name": "The Cargo Truck",
+   "group": "Evil Teams",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "A truck with a big red R on the side thunders past. The back door is loose. Crates bounce out one after another and roll down the hill into the long grass, and something in each one cries out when it lands. If you walk on, the crates are collected and taken to their Holding Pen.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "The truck screeches to a stop. Two Grunts jump down to pick up the crates and find you already standing over them.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Rocket Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Open the crates. (a node)",
+     "success": {
+      "text": "You spend an hour finding every crate in the grass. Three frightened Pokémon scatter into the trees. One doesn't. It sits at your feet and looks up, deciding about you.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You keep walking. Behind you, the truck backs up the hill, and two Grunts throw the crates back in. The crying goes with them, to the Pen.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "pen-extra"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-rocket-disguise-gig",
+   "name": "The Disguise",
+   "group": "Evil Teams",
+   "stop": "hideout",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "A spare Rocket uniform hangs on a hook by the warehouse gate, cap and all. The guards going in and out don't look at faces. They look at the big R. If you walk on, nothing changes.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "You knock on the gate instead. The guards look at you, then at each other, then reach for their Balls.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Rocket Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Put it on.",
+     "success": {
+      "text": "It's two sizes too big and smells of someone else's lunch. You pull the cap down. The next guard nods at you and holds the door. When you reach the Hideout, one room will wave you straight through.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "quiet"
+       },
+       {
+        "kind": "evil",
+        "mark": "disguise"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You leave the uniform on its hook. Some things you'd rather not wear.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-rocket-radio-hijack",
+   "name": "The Radio Hijack",
+   "group": "Evil Teams",
+   "rarity": "uncommon",
+   "types": [
+    "electric"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "Every radio in town plays the same jammed buzz. An old man taps his against the table, again and again, as if it will bring back the song he was listening to. A Rocket transmitter hums on a pole above the square. If you walk on, Rocket's broadcast runs and prices in this region go up by a tenth.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "The two Grunts guarding the pole see you looking up at it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Rocket Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Short it out.",
+     "pick": {
+      "types": [
+       "electric"
+      ]
+     },
+     "success": {
+      "text": "Your Pokémon puts one spark into the box and it dies with a pop. A second later every radio in town comes back at once, all playing different songs. The old man laughs out loud. The town knows who did it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You leave the buzz behind you. By the next town the broadcast is everywhere, telling people the prices are going up, and somehow they are.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mods": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 1.1
+         }
+        ],
+        "modsText": "Shop prices are 10% higher while you are in this region"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aqua-dig",
+   "name": "The Dig",
+   "group": "Evil Teams",
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aqua",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "Aqua Grunts are digging a trench up the shore, and the sea is following them in. Grunt: \"There's a cave under here. The sea used to fill it. It will again.\" In the bottom of the trench a Shellder is stranded on the wet sand, clamped shut. If you walk on, the dig reaches the cave, and their Hideout will be half flooded when you get there.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "\"Hey! This is a conservation site!\" They drop the shovels and pick up their Balls.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Aqua Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Fill it back in.",
+     "pick": {
+      "types": [
+       "ground"
+      ]
+     },
+     "success": {
+      "text": "Your Pokémon pushes the sand back into the trench faster than they can dig it out. The Grunts give up and go to complain to someone. The Shellder opens up, looks at you, and decides it is coming with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "shellder"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You leave them to it. By evening the dig reaches the cave and the sea pours in. Their Hideout will be half underwater when you find it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "hideout-flooded"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aqua-flood",
+   "name": "The Flood",
+   "group": "Evil Teams",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aqua",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "Water pours through an opened sluice into a green valley. An Aqua Admin stands on the gate with her arms wide. Admin: \"It's for the Pokémon! More sea, more homes!\" A Diglett family floats past on a log, all of them looking back at the holes where they lived. If you walk on, the valley floods and the Diglett line is gone from this region.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "The Admin sees you coming and whistles. Grunts come up out of the water.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Aqua Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask the Diglett. (a node)",
+     "success": {
+      "text": "You wade out and pull the log in, and set it in front of her. The Diglett look up at her. She looks down at them. She says nothing for a long time. Then she climbs down and closes the sluice herself, and won't look at you while she does it.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "By the time you reach the ridge the valley is a lake. Somewhere under it are a lot of empty holes. You won't see a Diglett in this region again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "region-diglett-gone",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-aqua-leak-patrol",
+   "name": "The Leak Patrol",
+   "group": "Evil Teams",
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aqua",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "A cracked pipe sprays sea water across the path. Two Aqua Grunts stand in the spray arguing about whose fault it is. One: \"You said you tightened it!\" The other: \"You said YOU did!\" If you walk on, the leak floods the path, and the next stop costs you more time.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "They stop arguing, which is something, and turn on you instead.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Aqua Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"It's both of yours.\"",
+     "pick": {
+      "types": [
+       "water"
+      ]
+     },
+     "success": {
+      "text": "They both open their mouths, and close them. Your Pokémon plugs the crack while they're thinking about it. They walk off still arguing, and one of them drops a key without noticing. It has a Hideout tag on it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hideout-key",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You go round. By the time you get back on the path, it's a stream, and the next stretch of road takes twice as long.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "next-node-slow",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-aqua-submarine-dock",
+   "name": "The Submarine Dock",
+   "group": "Evil Teams",
+   "stop": "hideout",
+   "rarity": "rare",
+   "types": [
+    "water"
+   ],
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aqua",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "A hatch stands open in the sea wall, and inside it a submarine sits low in the water, heavy with cargo. Some of the cargo is moving. One guard, bored, throws pebbles off the pier. If you walk on, the submarine leaves, and its cargo goes to their Holding Pen.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "The guard stops throwing pebbles. A second one climbs out of the hatch.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Aqua Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Swim under the pier.",
+     "pick": {
+      "types": [
+       "water"
+      ]
+     },
+     "success": {
+      "text": "Your Pokémon carries you under the pier in the dark water, and you slacken the mooring rope knot by knot. The submarine drifts out on the tide, empty and harmless, with the guard still on the pier. Behind you the cargo is already swimming for the rocks.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The submarine slides out into the bay and under. Whatever was in it is on its way to the Holding Pen.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "pen-extra"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-aqua-tide-turner",
+   "name": "The Tide-Turner",
+   "group": "Evil Teams",
+   "rarity": "rare",
+   "types": [
+    "water",
+    "ground"
+   ],
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "evil",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "A huge brass dial on top of a sea tower controls the tide for the whole bay. Aqua wants it high. Magma wants it low. You can see both teams coming along the beach from opposite ends, running. If you walk on, whichever team is this region's gets the tide, and their Hideout fight will be easier for them.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "You get to the top first. So do two of them.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it where it is.",
+     "pick": {
+      "types": [
+       "steel"
+      ]
+     },
+     "success": {
+      "text": "Your Pokémon bends the wheel round the middle mark until it won't turn any further. The tide stops exactly halfway. Both teams arrive at the top of the tower, out of breath, look at the wheel, and start blaming each other. You leave them to it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "tide-locked"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "From the road you hear the wheel turning, and a cheer. The tide moves. Wherever their Hideout is, it is the way they want it now.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "tide-theirs"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "magma-drill",
+   "name": "The Drill",
+   "group": "Evil Teams",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m"
+    ],
+    "tint": "#c03018",
+    "effect": "shake"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "A drill the size of a house bites into the mountainside, and the ground shakes in time with it. Grunt: \"More land! The world needs more land!\" He laughs. The Pokémon that live on the mountain are leaving it in a long, quiet line. If you walk on, the drill opens a vent, and the sun burns over every road in this region.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "\"Hey, no visitors!\" The Grunts climb down off the rig.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Magma Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Cool the bit.",
+     "pick": {
+      "types": [
+       "water"
+      ]
+     },
+     "success": {
+      "text": "Your Pokémon pours water over the bit until it glows, smokes, and cracks in half with a sound like a bell. The drill whines to a stop. The Grunts stare at it. The line of Pokémon stops, and turns, and slowly starts going home.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Behind you the drill breaks through. Steam roars out of the mountain, and the sky in this region goes hot and white.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "region-sun-vent",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "magma-heist",
+   "name": "The Heist",
+   "group": "Evil Teams",
+   "types": [
+    "fire",
+    "ground"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m"
+    ],
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "Magma Grunts stand around a crate that is smoking gently. Grunt: \"Volcanic core samples. Stand back.\" Something inside the crate knocks, twice. If you walk on, Magma takes the crate to their Hideout.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "\"Samples,\" the Grunt says again, stepping in front of it. His friends step in too.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Magma Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask what's in it.",
+     "success": {
+      "text": "They look at each other. None of them know. Nobody told them. So you open it together. Inside, wrapped in a fireproof blanket, is an egg, hot as an ember and rocking gently. The Grunts go very quiet. \"Take it somewhere it'll be looked after,\" one says. \"Please.\" You know a Day-Care that will.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [
+         "fire"
+        ],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "daycare-egg",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "They lift the crate onto a truck. The knocking goes with it, to their Hideout.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "pen-extra"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-magma-flood-valve",
+   "name": "The Flood Valve",
+   "group": "Evil Teams",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m"
+    ],
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "A big red valve controls the coolant in a Magma lab. Flood it and everything inside drowns. Drain it and the lab burns. Through the window you can see cages, and the Pokémon in them can see you. If you walk on, the lab burns.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "The two Grunts at the valve see you and step away from it, towards you.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Magma Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Get them out first. (a node)",
+     "success": {
+      "text": "You go in. One cage at a time, you carry every Pokémon out into the air, until your arms shake. Then you turn the valve, and it doesn't matter which way any more.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You're three bends down the road when you hear it go. You don't look back. You hear it anyway.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": -1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-magma-quarry-strike",
+   "name": "The Quarry Strike",
+   "group": "Evil Teams",
+   "rarity": "uncommon",
+   "types": [
+    "fire",
+    "rock"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m"
+    ],
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "Magma is strip-mining a hillside. Behind two guards and a rig, rare ore glints in the cut. If you walk on, Magma takes the ore, and the lieutenant at their Hideout will carry something rare.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "The guards see you coming up the cut.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Magma Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Bring the cut down.",
+     "pick": {
+      "types": [
+       "rock"
+      ]
+     },
+     "success": {
+      "text": "Your Pokémon sets its shoulder to the cliff and pushes, carefully. The cut slides in on itself with a long roar. Nobody is under it. The ore is buried for good, and the rig is half buried with it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "They load the ore by the cartload. Somebody at the Hideout is going to have a very nice new held item.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "lt-rare-item"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-magma-seismograph",
+   "name": "The Seismograph",
+   "group": "Evil Teams",
+   "rarity": "uncommon",
+   "types": [
+    "ground",
+    "fire"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m"
+    ],
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "The village quake alarm is blaring. People are grabbing children and Pokémon and running. The ground is perfectly still. A Magma Grunt is leaning on the cable box in the square, whistling. If you walk on, the village empties, Magma loots it, and the village remembers that you didn't help.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "He sees you see him, and stops whistling.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Magma Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Show the village.",
+     "success": {
+      "text": "You walk up and lift his hand off the box. The alarm stops. In the silence, the whole village turns round and looks at him. Somebody laughs. Then everybody does. He goes very red, and leaves.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "By the time the village comes back, the houses are open and empty. They saw you on the road. They saw you keep walking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep-lost",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "galactic-lecture",
+   "name": "The Lecture",
+   "group": "Evil Teams",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "tint": "#4878a8",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "A Galactic speaker stands on a crate in the square. \"A new world, without spirit! Without pain!\" A kid in the crowd puts her hand up. \"Without spirit means without Pokémon.\" Nobody answers her. If you walk on, the crowd nods along, and one more Grunt joins the Hideout.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "\"Hecklers,\" he says, and Grunts come out of the crowd.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Galactic Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask him what he'd lose. (a node)",
+     "success": {
+      "text": "You ask him, in front of everyone. He opens his mouth, and his Bronzor floats up beside him, and he looks at it. For a long time. Then he gets down off the crate and walks away with it, and the crowd lets him go.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The crowd nods along. By the end of the speech, one of them has signed up.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "extra-grunt"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "galactic-survey",
+   "name": "The Survey",
+   "group": "Evil Teams",
+   "scene": {
+    "cast": [
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "tint": "#4878a8",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "A Grunt with a handheld scanner steps into your path. Grunt: \"Mind if I scan your party? Just a survey.\" If you walk on, he scans your team, and the lieutenant at their Hideout will be ready for your lead.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "\"That's a no, then,\" he says, and calls for backup.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Galactic Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Scan yours first.",
+     "success": {
+      "text": "He shrugs and points it at his own Pokémon. The readings are low. Very low. He shakes the scanner, and tries again, and then he goes pale and runs for the Pokémon Center without another word.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "He scans your team and nods, writing it all down. Somewhere, someone is building a team to beat yours.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scanned"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-galactic-orders",
+   "name": "Cyrus's Orders",
+   "group": "Evil Teams",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "tint": "#4878a8",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "A folded note on a park bench, signed with one stern C. It's their next Operation, step by step, in very neat handwriting.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "As you reach for it, two Grunts come back for it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Galactic Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Read it and leave it.",
+     "success": {
+      "text": "You read every line twice and put it back exactly how it was. You know what they'll do and when. They don't know you know.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "orders-read"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "You pocket it. By evening they know it's missing, and the whole plan changes. Whatever you read is out of date now, and they are angry.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-galactic-toll-booth",
+   "name": "The Toll Booth",
+   "group": "Evil Teams",
+   "scene": {
+    "cast": [
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "tint": "#4878a8",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "A booth across the road, freshly painted Galactic silver. Grunt: \"Road tax for a new universe. ₽400.\" If you walk on, you pay the ₽400.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "\"Tax evasion,\" he says sadly, and stands up.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Galactic Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"What's the universe for?\"",
+     "success": {
+      "text": "Grunt: \"...I'll be honest, the money's for the booth.\" He looks at the booth. You look at the booth. He waves you through.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "You pay. He gives you a ticket with a planet on it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-gravity-well",
+   "name": "The Gravity Well",
+   "group": "Evil Teams",
+   "rarity": "rare",
+   "types": [
+    "psychic",
+    "steel"
+   ],
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "tint": "#4878a8",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "files",
+     "when": [
+      {
+       "kind": "evil",
+       "has": "files"
+      }
+     ],
+     "notice": "You know this shape. It's in your files: one piece of the Spear Pillar plan."
+    }
+   ],
+   "intro": "A device on a pole bends the light around it. Pebbles roll uphill towards the road ahead. If you walk on, gravity is heavy on the next stop, and Flying-types there can't dodge Ground moves.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "Two Grunts are adjusting the dials. They don't like being interrupted.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Galactic Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Pull it down.",
+     "pick": {
+      "types": [
+       "psychic",
+       "steel"
+      ]
+     },
+     "success": {
+      "text": "Your Pokémon takes hold of the pole and pulls, and the device comes down with a crunch. The pebbles roll back the right way.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. The road ahead feels heavier with every step.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gravity-next-node",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-meteorite-fakeout",
+   "name": "The Meteorite Fakeout",
+   "group": "Evil Teams",
+   "rarity": "uncommon",
+   "types": [
+    "rock"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "tint": "#4878a8",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "Treasure hunters swarm round a glowing \"meteorite\" in a field. It's painted rock. You can see the brush marks. Two Galactic crooks wait behind a hedge for someone to dig it up.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "You walk round the hedge. The crooks weren't expecting that.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Galactic Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Tell the hunters.",
+     "success": {
+      "text": "You tell them. They look at the rock, then the hedge. The crooks run. The hunters chase them. You are left alone in the field with a painted rock.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "From the road, you watch a hunter dig it up, and the crooks take everything he has. He sits in the field afterwards with his head in his hands. You saw it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "plasma-protest",
+   "name": "The Protest",
+   "group": "Evil Teams",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#3050a0",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "Signs everywhere: FREE YOUR POKÉMON! A girl in a Plasma tunic steps in front of you. \"Do they want to be with you? Did you ask?\" She means it. If you walk on, nothing changes, and the next Plasma crowd will be bigger.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "Her friends close in around her. \"Leave her alone!\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Plasma Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask them, then.",
+     "success": {
+      "text": "She kneels and asks your lead, in a soft voice. \"Do you want to go?\" It looks at her, and then walks round her and sits down on your foot. She stays kneeling for a long time. She doesn't know what to say.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "She shouts after you. A few more people stop to listen to her.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "extra-grunt"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "plasma-liberation",
+   "name": "Liberation",
+   "group": "Evil Teams",
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#3050a0",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "A Plasma Grunt waves a banner. \"Liberate your Pokémon!\" Behind him, on a short lead tied to his belt, a Purrloin sits in the dust. If you walk on, he follows you to the next town, shouting.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "\"You're a prisoner of your own Pokémon!\" he shouts, and lets go of the banner.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Plasma Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"You first.\"",
+     "success": {
+      "text": "He looks down at the lead. At the Purrloin on the end of it. Slowly, he unties it. The Purrloin doesn't go anywhere. It stays with him. He keeps looking at it, and you can see he doesn't understand why.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "He follows you all the way to the next town, shouting. The Purrloin trots behind him on its lead.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-follower",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-banner-burn",
+   "name": "The Banner Burn",
+   "group": "Evil Teams",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#3050a0",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "A huge Plasma banner hangs over the plaza. Pinned to its corner is an ad for one of your rivals. The rival is beside you, whispering. \"A match would do wonders.\" They're watching you to see what you'll say.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "The Grunts on the steps see the two of you looking at their banner.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Plasma Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "No fires.",
+     "pick": {
+      "types": [
+       "flying"
+      ]
+     },
+     "success": {
+      "text": "Your Pokémon unpins the ad and brings the banner down quietly, folded. Your rival lets out a breath. \"Good. I was hoping you'd say that.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        }
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Burn it.",
+     "success": {
+      "text": "It goes up all at once. The town cheers, and the plaza smells of smoke for a week. Your rival watches it burn. \"I wanted you to say no,\" they say quietly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -1
+        }
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-plasma-blank-duel",
+   "name": "The Blank Soldier",
+   "group": "Evil Teams",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#3050a0",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bond",
+     "when": [
+      {
+       "kind": "friendship",
+       "atLeast": 150
+      }
+     ],
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "\"With me.\"",
+       "success": {
+        "text": "Your lead steps up beside you before you've finished saying it, and leans on you. The soldier looks at it for a long time. Then he nods, once, and steps off the road.",
+        "effects": [
+         {
+          "kind": "evil",
+          "mark": "scene"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "intro": "A silent Plasma soldier blocks the road. He speaks once. \"N asks only one thing. Do your Pokémon fight for you, or with you?\"",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "He doesn't wait for your answer.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Plasma Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"With me.\"",
+     "success": {
+      "text": "He looks at your team, and isn't convinced. \"Show me.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Blank Soldier",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"For me.\"",
+     "success": {
+      "text": "Something in him goes hard. \"Then they need freeing.\" He fights harder than he did a moment ago.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Blank Soldier",
+       "size": 3,
+       "levelBonus": 1,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-plasma-rally",
+   "name": "The Rally",
+   "group": "Evil Teams",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#3050a0",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "A speaker on the town hall steps. \"Pokémon deserve freedom!\" The crowd turns round, one face at a time, to look at you and your team. If you walk on, the crowd boos, and Plasma has more recruits in the next town.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "\"There's one,\" the speaker says, pointing, and his helpers come down the steps.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Plasma Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"They do. These ones chose.\"",
+     "success": {
+      "text": "You open every Ball and sit down on the steps, and your team comes and sits with you, in front of everyone. Nobody says anything. The crowd sees.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "They boo you all the way out of the square.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "extra-grunt"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "flare-boutique",
+   "name": "The Boutique",
+   "group": "Evil Teams",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.pr/flare_grunt_m"
+    ],
+    "tint": "#d03028",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "A boutique all in red glass. The doorman looks you up and down. \"Only the beautiful may shop.\" If you walk on, you're turned away, and that's all.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "\"Security,\" he says, without raising his voice.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Flare Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Then I'll shop for my Pokémon.\"",
+     "success": {
+      "text": "He looks at your team. He looks at you. He can't think of a rule against it, and lets you in. The prices are high, and every one of them is on show. Through a door behind the counter you see desks, and a map, and the Flare logo on a filing cabinet. You remember all of it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "files"
+       },
+       {
+        "kind": "addStop",
+        "stop": "shop"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The door closes in your face, very softly.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "flare-fashion",
+   "name": "The Pose",
+   "group": "Evil Teams",
+   "types": [
+    "fire"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/flare_grunt_m"
+    ],
+    "tint": "#d03028",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "Two Grunts in red suits jump out in front of you and strike a pose. They hold it. \"Rate us.\"",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "You don't rate them. They're offended, then furious.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Flare Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Ten. Now move.\"",
+     "success": {
+      "text": "They move, delighted, and you can hear them still talking about it a mile down the road.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Three.\"",
+     "success": {
+      "text": "Silence. Then: \"THREE?\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Flare Grunt",
+       "size": 3,
+       "levelBonus": 1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 700
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-flare-fashion-heist",
+   "name": "The Fashion Heist",
+   "group": "Evil Teams",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.pr/flare_grunt_m"
+    ],
+    "tint": "#d03028",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "Two Flare members dash past and snatch the scarf right off your lead. A third waits at the corner, twirling another scarf, just like it, waving it at you.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "You catch the one at the corner. He drops the act and calls the others back.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Flare Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ignore the decoy.",
+     "pick": {
+      "types": [
+       "electric",
+       "flying"
+      ]
+     },
+     "success": {
+      "text": "You ignore the twirling scarf and send your fastest after the two runners. It catches them at the bridge, and comes trotting back with your lead's scarf in its mouth.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Chase the scarf.",
+     "success": {
+      "text": "The decoy leads you round three streets in a circle. When you get back, the other two are long gone, and so is your lead's scarf. It's at their Hideout now.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "accessory-taken"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-flare-salon-spy",
+   "name": "The Salon Spy",
+   "group": "Evil Teams",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.pr/flare_grunt_m"
+    ],
+    "tint": "#d03028",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "The stylist hums while she works. \"So. Where are you heading next? Who's on your team?\" Her lipstick is shaped like the Flare logo, and she hasn't noticed you noticed.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "You stand up with the cape still on. She sighs and rings a bell, and two Grunts come in from the back.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Flare Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Lie.",
+     "success": {
+      "text": "You tell her a route you aren't taking and a team you don't have. She writes it all down. Flare will be waiting somewhere you'll never be, and the next ambush never comes.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "ambush-skip"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the truth.",
+     "success": {
+      "text": "You tell her. She smiles in the mirror. The next Flare ambush will be ready for you.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 2
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "skull-graffiti",
+   "name": "The Graffiti",
+   "group": "Evil Teams",
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m"
+    ],
+    "tint": "#505058",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "Skull Grunts are spray-painting the front of a Pokémon Center. \"Yo, whatchu lookin' at?\" The nurse is standing in the doorway, too tired to argue. If you walk on, the Center is tagged, and the nurse is too worn out to give you the free heal.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "\"You wanna go? We can go.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Skull Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"It's not bad. Do it on the wall that's yours.\"",
+     "success": {
+      "text": "They stop. Nobody has ever said it was not bad. They look at the wall, then at each other, then pack up and go and paint their own hideout wall instead. Guzma will hear about this.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "guzma-heard"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "By evening the Center is covered in skulls, and the nurse is sitting on the step with her head against the door.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "center-tagged",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "skull-squad",
+   "name": "The Squad",
+   "group": "Evil Teams",
+   "types": [
+    "bug",
+    "poison"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m"
+    ],
+    "tint": "#505058",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "Grunts spraying graffiti on everything in reach. \"Yo, what you lookin' at?\"",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "\"Oh, it's like THAT, yo?\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Skull Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Teach me.\" (a node)",
+     "success": {
+      "text": "They're so surprised they actually do. It takes an hour. You tag a rock with your team's name, badly, and they cheer. When you get to their Hideout, somebody will leave the first door open for you.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "quiet"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "\"Nah, you ain't walkin' past us, yo.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Skull Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-skull-dance-break",
+   "name": "The Dance Break",
+   "group": "Evil Teams",
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m"
+    ],
+    "tint": "#505058",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "A boombox in the middle of the road, and a circle of Skull Grunts round it. \"Dance-off, yo! Win and we bounce!\"",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "You turn the boombox off. Big mistake.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Skull Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Dance.",
+     "pick": {
+      "types": [
+       "fighting",
+       "fairy"
+      ]
+     },
+     "success": {
+      "text": "Your Pokémon steps into the circle and goes for it. The Grunts start out laughing and end up clapping. Fair's fair: they bounce.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "\"You walkin' past the circle? Disrespectful, yo.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Skull Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "yell-blockade",
+   "name": "The Blockade",
+   "group": "Evil Teams",
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#f0d020",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "Team Yell has blocked the road to Marnie's gym. They chant and stamp and won't let anyone through.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "\"No one gets past Team Yell!\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Team Yell Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Marnie would hate this.\"",
+     "success": {
+      "text": "They go quiet. All of them. After a while, one says, \"She would.\" They step aside and let you through, and nobody chants.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "marnie-heard"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You try to walk past. Three of them come at you, one after another.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Yell Grunt",
+       "size": 2,
+       "levelBonus": -1,
+       "chain": 3,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "yell-fans",
+   "name": "The Fans",
+   "group": "Evil Teams",
+   "types": [
+    "dark"
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#f0d020",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "Signs, noise, scarves. The whole road is full of Team Yell, and they're not moving. If you walk on, you'll wait a whole stop for them to leave.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "\"Oi! Back of the queue!\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Team Yell Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Chant with them.",
+     "success": {
+      "text": "You join in. Marnie! Marnie! They love it. By the end of the chant they're making room for you, and one of them pats you on the back.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You sit down by the road and wait. It takes a long time.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-yell-cheer-chorus",
+   "name": "The Cheer Chorus",
+   "group": "Evil Teams",
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#f0d020",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "\"We won't move unless you sing along!\"",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "\"Not singing? Then you're battling!\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Team Yell Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Sing.",
+     "success": {
+      "text": "You sing. Badly. They cheer like you're Marnie herself, and one of them hands you a Team Yell towel. Later, Marnie will say she heard about it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "yell-towel",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "marnie-heard"
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "\"No song, no road!\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Team Yell Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "star-heist",
+   "name": "The Heist",
+   "group": "Evil Teams",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#9030c0",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "Team Star is \"borrowing\" boxes of Poké Balls out of a school storeroom. Their boss, in a helmet, waves a box at you. \"They had loads!\" If you walk on, the school's Balls are gone, and the shops in this region run out of Poké Balls.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "\"Star Barrage!\" they shout, and drop the boxes.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Star Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask the teacher.",
+     "success": {
+      "text": "You find the teacher. The teacher finds the Star kids. And instead of shouting, the teacher offers them an after-school club. Half of them want in before she's finished asking.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "star-club"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "They load the boxes into a cart. By the end of the week there isn't a Poké Ball for sale anywhere in the region.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "region-no-balls",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "star-raid",
+   "name": "The Raid",
+   "group": "Evil Teams",
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "pokemon": "revavroom",
+    "tint": "#9030c0",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "A Starmobile revs outside a Team Star base, its engine growling. The boss sits on top of it.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "\"Wanna roll?\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Star Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask why they started.",
+     "success": {
+      "text": "The boss looks at you for a long time. Then they take off the helmet and tell you. They were bullied, all of them. Team Star was the only place it stopped. The engine goes quiet. So does the base.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": -1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The Starmobile roars and comes after you. It's a Pokémon under all that chrome, and it wants a fight.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "revavroom"
+       ],
+       "name": "Starmobile",
+       "size": 1,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 1000
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-team-neo",
+   "name": "Team Neo",
+   "group": "Evil Teams",
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "Three villains in very new uniforms trip over their own banner. They get up. \"We are... Team Neo! Prepare for... something!\"",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "\"Prepare for battle!\" one remembers. The other two cheer.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Help them up.",
+     "success": {
+      "text": "You help them up and dust them off. They're so touched they have to sit down. After a long talk they decide to be a hiking club instead. Later, on a mountain path, you see three people in very new boots, waving.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "team-neo-hikers",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "\"You can't just ignore us!\" They attack.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "team-neo-cried",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Team Neo",
+       "size": 2,
+       "types": [],
+       "levelBonus": -3,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "team-neo-hikers",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "macro-cosmos-lab",
+   "name": "Macro Cosmos Lab",
+   "group": "Evil Teams",
+   "rarity": "rare",
+   "minStage": 4,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#f0d020",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "A Macro Cosmos lab in a clearing, humming. Cables run from it into the grass, where wild Pokémon lie limp, and the energy runs up the cables into rows of glowing batteries. If you walk on, the batteries power a Dynamax spot, and the wild Pokémon here stay tired for the rest of the region.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "Lab security comes out of the door.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Team Yell Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Pull the plug.",
+     "pick": {
+      "types": [
+       "electric"
+      ]
+     },
+     "success": {
+      "text": "Your Pokémon takes hold of the main cable and turns the current back. The batteries flicker and go dark, and out in the grass, one by one, the wild Pokémon stand up.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The batteries fill. Somewhere ahead, the ground is glowing red. The wild Pokémon don't get up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dynamax-spot",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "region-tired-wild",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-evil-team-raid",
+   "name": "The Raid",
+   "group": "Evil Teams",
+   "rarity": "rare",
+   "tags": [
+    "Evil Team",
+    "Combat",
+    "Survival"
+   ],
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "Alarm bells. {team} is stripping a roadside stall, and loading the owner's Pokémon into crates. A lookout on the roof whistles. If you walk on, the stall is robbed, and you'll see the owner later, shut down for good.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "The lookout whistles again, louder, and they drop the crates.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Get the stall owner out first.",
+     "success": {
+      "text": "You get the owner out of the back and round the corner. Then you go back for the lookout.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Lookout",
+       "size": 2,
+       "levelBonus": -1,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The stall is empty by the time you're out of sight. Later, in another town, you see the owner behind a counter that isn't theirs. They don't look at you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep-lost",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "scene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "plasma-substage-gate",
+   "name": "The Holding Camp",
+   "group": "Evil Teams",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#3050a0",
+    "effect": "fog"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "after": 6,
+     "ends": [
+      "none"
+     ],
+     "lacks": "scene"
+    }
+   ],
+   "intro": "Crates with air holes in a field behind a fence. A tarp that moves when nobody touches it. Plasma Grunts patrol the wire, talking about \"the shipment\" at dawn. If you walk on, the camp ships out at dawn, and everything in those crates goes with it.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "You climb the fence in plain sight. The patrol comes running.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "plasma-substage-yard"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Plasma Grunt",
+       "size": 3,
+       "levelBonus": -1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "mark": "op-stopped"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Wait for the changeover. (a node)",
+     "success": {
+      "text": "You wait in the long grass until the patrols change. For one minute nobody is watching the gate, and you're through it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "plasma-substage-yard"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "At dawn you hear the trucks go. The field is empty when you look back.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "scene"
+       },
+       {
+        "kind": "evil",
+        "mark": "pen-extra"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "plasma-substage-yard",
+   "name": "The Yard",
+   "group": "Evil Teams",
+   "rarity": "rare",
+   "minStage": 3,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3050a0",
+    "effect": "fog"
+   },
+   "intro": "Dozens of crates in rows, with numbers stencilled on. Something breathes in every one of them. The guards haven't seen you yet.",
+   "choices": [
+    {
+     "label": "Open them quietly, one by one.",
+     "pick": {
+      "types": [
+       "psychic"
+      ]
+     },
+     "success": {
+      "text": "Your Pokémon keeps them calm, one mind touching each one in turn, while you open the crates. Every Pokémon goes free without a sound. The guards never turn round.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "evil",
+        "mark": "op-stopped"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "plasma-substage-leader"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Open them all at once.",
+     "success": {
+      "text": "You pull every latch in the row. Chaos. Pokémon everywhere, guards everywhere, shouting. In the middle of it, the door of the office opens, and the handler comes out.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "plasma-substage-leader"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "plasma-substage-leader",
+   "name": "The Handler",
+   "group": "Evil Teams",
+   "rarity": "rare",
+   "minStage": 3,
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.colress"
+    ],
+    "tint": "#3050a0",
+    "effect": "fog"
+   },
+   "intro": "The handler steps out of the office with a Pokémon at heel that is very clearly not theirs. It flinches when they move. \"Those are company property.\"",
+   "choices": [
+    {
+     "label": "Ask the Pokémon.",
+     "success": {
+      "text": "You kneel and hold out your hand. The Pokémon looks at the handler, and then walks across the yard to your side. The handler reaches for another Ball and finds there isn't one. They haven't got a team at all. They run.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "\"Company property,\" the handler says again, and points.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "specialist",
+       "name": "Plasma Handler",
+       "size": 3,
+       "levelBonus": 0,
+       "pseudo": true,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 1200
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "plasma-op-1",
+   "name": "Operation: The Supply Route",
+   "group": "Plasma Operation",
+   "rarity": "rare",
+   "gameEvent": "plasma-operation",
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.ghetsis"
+    ],
+    "tint": "#1a2230",
+    "effect": "fog"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "plasma-op",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "Crates on a long road, and trucks waiting to take them. A foreman with a clipboard ticks them off one by one. The trucks are Plasma's, and so are the Pokémon in the back. You can hear them. If you walk on, the trucks reach the yard, and the next Operation will be harder.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "The guards see you before the foreman does.",
+      "effects": [
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-op",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Plasma Convoy Guard",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "count",
+         "counter": "eventClues",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "plasma-op-1-stopped",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Change the clipboard. (a node)",
+     "success": {
+      "text": "It takes an hour of standing around looking like you belong. Then the foreman puts the clipboard down for his tea, and you change every address on it. The trucks drive off to a Pokémon Center.",
+      "effects": [
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-op",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-op-1-stopped",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The trucks pull out, heavy and slow, towards the yard.",
+      "effects": [
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-op",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "plasma-op-2",
+   "name": "Operation: The Holding Yard",
+   "group": "Plasma Operation",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "plasma-op",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "gameEvent": "plasma-operation",
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.ghetsis"
+    ],
+    "tint": "#1c2430",
+    "effect": "fog"
+   },
+   "intro": "Word has spread about the supply route. Plasma has fallen back to a holding yard: more guards, more crates, more fence. If you walk on, the yard ships out, and their Holding Pen will be full.",
+   "choices": [
+    {
+     "label": "Stop them.",
+     "success": {
+      "text": "The yard erupts.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-op",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Plasma Yard Crew",
+       "size": 3,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "count",
+         "counter": "eventClues",
+         "amount": 2
+        },
+        {
+         "kind": "flag",
+         "key": "plasma-yard-stopped",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Open the back fence.",
+     "pick": {
+      "types": [
+       "dark"
+      ]
+     },
+     "success": {
+      "text": "At night, your Pokémon cuts the wire behind the last row of crates, quietly, strand by strand. By morning the yard is empty and the guards are counting crates that aren't there.",
+      "effects": [
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-op",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-yard-stopped",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The yard ships out that week. The trucks go to the Holding Pen, and it is full.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-op",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-pen-full",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "half",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "plasma-op-1-stopped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Half the crates are empty. The trucks that should have filled them went to a Pokémon Center."
+    }
+   ]
+  },
+  {
+   "id": "plasma-op-3",
+   "name": "Operation: The Commander",
+   "group": "Plasma Operation",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "plasma-op",
+     "atLeast": 2,
+     "atMost": 99
+    }
+   ],
+   "gameEvent": "plasma-operation",
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.ghetsis"
+    ],
+    "tint": "#101820",
+    "effect": "fog"
+   },
+   "intro": "Commander Varga waits at the end of the road, with two Grunts at her back. \"You're the one. I've trained a team just for you.\"",
+   "choices": [
+    {
+     "label": "\"Then show me.\"",
+     "success": {
+      "text": "The Grunts come first. Varga watches how you fight them, and takes notes.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Commander Varga",
+       "classId": "veteran",
+       "size": 5,
+       "types": [],
+       "levelBonus": 5,
+       "win": [
+        {
+         "kind": "count",
+         "counter": "eventClues",
+         "amount": 3
+        },
+        {
+         "kind": "count",
+         "counter": "eventFinalesWon",
+         "amount": 1
+        },
+        {
+         "kind": "count",
+         "counter": "eventBossesWon",
+         "amount": 1
+        },
+        {
+         "kind": "money",
+         "amount": 2500
+        },
+        {
+         "kind": "flag",
+         "key": "plasma-op-done",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "alone",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "plasma-op-1-stopped",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "plasma-yard-stopped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Grunts aren't with her. Nobody is. After the road and the yard, there's nobody left who would stand behind her.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "\"Then show me.\"",
+       "success": {
+        "text": "She's alone, and she knows it, and she fights anyway.",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "name": "Commander Varga",
+         "classId": "veteran",
+         "size": 5,
+         "types": [],
+         "levelBonus": 5,
+         "win": [
+          {
+           "kind": "count",
+           "counter": "eventClues",
+           "amount": 3
+          },
+          {
+           "kind": "count",
+           "counter": "eventFinalesWon",
+           "amount": 1
+          },
+          {
+           "kind": "count",
+           "counter": "eventBossesWon",
+           "amount": 1
+          },
+          {
+           "kind": "money",
+           "amount": 2500
+          },
+          {
+           "kind": "flag",
+           "key": "plasma-op-done",
+           "amount": 1
+          },
+          {
+           "kind": "attribute",
+           "key": "goodEvil",
+           "amount": 2
+          },
+          {
+           "kind": "flag",
+           "key": "kind-total",
+           "amount": 2
+          }
+         ]
+        }
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

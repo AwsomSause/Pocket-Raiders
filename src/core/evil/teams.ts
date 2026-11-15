@@ -15,8 +15,8 @@
 import { beginClimax } from '../arc/climaxExtended';
 import { standingLine } from '../arc/standWithExtended';
 import { impoundFor } from '../raid/storyRaids';
-import { activeHolds, returnedElsewhere } from './rescue';
-import { rescueNode } from './rescueGlue';
+import { activeHolds, impound, RESCUE, returnedElsewhere } from './rescue';
+import { lastQuietNodeOfRegion, rescueNode } from './rescueGlue';
 import type { ArchetypeModifier, Content, EventBattle, EventCondition, EventEffect } from '../contentSchema';
 import { changeCrisis } from '../story/crisis';
 import { hashSeed, Rng } from '../rng';
@@ -174,7 +174,8 @@ export function evilConditionMet(content: Content, run: RunState, c: EvilConditi
   if (c.heat !== undefined && s.heat < c.heat) return false;
   if (c.defector !== undefined && s.defector !== c.defector) return false;
   if (c.ends !== undefined && !c.ends.includes(s.end)) return false;
-  if (c.stopped !== undefined && stoppedCount(s) < c.stopped) return false;
+  // SF130: a variety scene stopped bumps team-<id>-op-stopped too, and SF13's "stop all four" counts those as well.
+  if (c.stopped !== undefined && Math.max(stoppedCount(s), Number(run.story.flags[mem(`team-${s.teamId}-op-stopped`)] ?? 0)) < c.stopped) return false;
   if (c.afterFirst && c.op !== s.planFirst && s.ops.some((o) => o.id === s.planFirst && o.region === run.regionIndex && o.outcome === 'running')) return false;
   if (c.has !== undefined && !marked(run, s.teamId, c.has)) return false;
   if (c.lacks !== undefined && marked(run, s.teamId, c.lacks)) return false;
@@ -261,6 +262,18 @@ export function applyEvilEffect(content: Content, run: RunState, e: EvilEffect):
     let back = 0;
     for (const h of activeHolds(run).filter((x) => x.teamId === team.id)) back += returnedElsewhere(run, h.id, node, 'holding-pen').length;
     if (back > 0) words.push(`${back} of your Pokémon ${back === 1 ? 'is' : 'are'} back with you`);
+  }
+  if (e.steal) {
+    const site = RESCUE.sites.some((x) => x.team === team.id);
+    const hold = site ? impound(run, { teamId: team.id, regionId: run.regionOrder[run.regionIndex] ?? 'region', node: rescueNode(content, run), lastQuietNode: lastQuietNodeOfRegion(content, run), count: e.steal }) : null;
+    const n = hold ? Math.min(e.steal, hold.pokemon.length) : 0;
+    if (n > 0) words.push(`${team.name} took ${n === 1 ? 'one of your Pokémon' : `${n} of your Pokémon`} to their Holding Pen`);
+  }
+  if (e.mods) {
+    // Like an Operation's lasting effect: on the run while it stays in this region (dropRegionMods takes them off).
+    s.mods.push({ region: run.regionIndex, effects: e.mods });
+    run.perkEffects = [...(run.perkEffects ?? []), ...e.mods];
+    if (e.modsText) words.push(e.modsText);
   }
   if (e.defect && !s.defector) {
     s.defector = true;
