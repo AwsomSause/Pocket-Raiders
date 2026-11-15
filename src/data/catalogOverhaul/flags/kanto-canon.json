@@ -5,13 +5,39 @@
   {
    "key": "intel",
    "setBy": [
-    "cs-kanto-cerulean-burglary"
+    "cs-kanto-celadon-gamecorner-back",
+    "cs-kanto-celadon-mansion-study",
+    "cs-kanto-cerulean-burglary",
+    "cs-kanto-fuchsia-snag",
+    "cs-kanto-fuchsia-zoo",
+    "cs-kanto-saffron-silph"
    ]
   },
   {
    "key": "kanto-burglary-solved",
    "setBy": [
     "cs-kanto-cerulean-burglary"
+   ]
+  },
+  {
+   "key": "kanto-coins",
+   "setBy": [
+    "cs-kanto-celadon-gamecorner",
+    "cs-kanto-celadon-gamecorner-floor",
+    "cs-kanto-celadon-gamecorner-prizes",
+    "cs-kanto-celadon-gamecorner-top"
+   ]
+  },
+  {
+   "key": "kanto-coins-broke",
+   "setBy": [
+    "cs-kanto-celadon-gamecorner-floor"
+   ]
+  },
+  {
+   "key": "kanto-coins-played",
+   "setBy": [
+    "cs-kanto-celadon-gamecorner"
    ]
   },
   {
@@ -24,6 +50,29 @@
    "key": "kanto-diglett-waited",
    "setBy": [
     "cs-kanto-viridian-diglett-n2"
+   ]
+  },
+  {
+   "key": "kanto-dojo-psychic",
+   "setBy": [
+    "cs-kanto-saffron-dojo"
+   ]
+  },
+  {
+   "key": "kanto-eevee",
+   "setBy": [
+    "cs-kanto-celadon-eevee",
+    "cs-kanto-celadon-eevee-cousin",
+    "cs-kanto-celadon-eevee-cousin2",
+    "cs-kanto-celadon-eevee-stones"
+   ]
+  },
+  {
+   "key": "kanto-eevee-mikey",
+   "setBy": [
+    "cs-kanto-celadon-eevee",
+    "cs-kanto-celadon-eevee-cousin",
+    "cs-kanto-celadon-eevee-stones"
    ]
   },
   {
@@ -69,6 +118,18 @@
    ]
   },
   {
+   "key": "kanto-mansion-eevee",
+   "setBy": [
+    "cs-kanto-celadon-mansion-back"
+   ]
+  },
+  {
+   "key": "kanto-mansion-key",
+   "setBy": [
+    "cs-kanto-celadon-mansion-back"
+   ]
+  },
+  {
    "key": "kanto-market-ticket",
    "setBy": [
     "cs-kanto-vermilion-market-ticket"
@@ -104,6 +165,20 @@
     "cs-kanto-viridian-parcel-deliver",
     "cs-kanto-viridian-parcel-nest",
     "cs-kanto-viridian-parcel-road"
+   ]
+  },
+  {
+   "key": "kanto-perfume-foiled",
+   "setBy": [
+    "cs-kanto-celadon-perfume",
+    "cs-kanto-celadon-perfume-decide"
+   ]
+  },
+  {
+   "key": "kanto-perfume-lost",
+   "setBy": [
+    "cs-kanto-celadon-perfume",
+    "cs-kanto-celadon-perfume-decide"
    ]
   },
   {
@@ -176,6 +251,42 @@
    ]
   },
   {
+   "key": "kanto-silph-card",
+   "setBy": [
+    "cs-kanto-saffron-silph"
+   ]
+  },
+  {
+   "key": "kanto-silph-lapras",
+   "setBy": [
+    "cs-kanto-saffron-silph-gift"
+   ]
+  },
+  {
+   "key": "kanto-silph-owed",
+   "setBy": [
+    "cs-kanto-saffron-silph-gift"
+   ]
+  },
+  {
+   "key": "kanto-snag-ball",
+   "setBy": [
+    "cs-kanto-fuchsia-snag"
+   ]
+  },
+  {
+   "key": "kanto-snag-lost",
+   "setBy": [
+    "cs-kanto-fuchsia-snag"
+   ]
+  },
+  {
+   "key": "kanto-snag-seen",
+   "setBy": [
+    "cs-kanto-fuchsia-snag"
+   ]
+  },
+  {
    "key": "kanto-sprat-taught",
    "setBy": [
     "cs-kanto-vermilion-fishclub-cast3"
@@ -185,6 +296,25 @@
    "key": "kanto-stew-perfect",
    "setBy": [
     "cs-kanto-pewter-rest-stew"
+   ]
+  },
+  {
+   "key": "kanto-tauros-caught",
+   "setBy": [
+    "cs-kanto-fuchsia-tauros-bait",
+    "cs-kanto-fuchsia-tauros-rock"
+   ]
+  },
+  {
+   "key": "kanto-tauros-dodged",
+   "setBy": [
+    "cs-kanto-fuchsia-tauros"
+   ]
+  },
+  {
+   "key": "kanto-tauros-throws",
+   "setBy": [
+    "cs-kanto-fuchsia-tauros-bait"
    ]
   },
   {
@@ -215,6 +345,20 @@
    ]
   },
   {
+   "key": "kanto-train-ride",
+   "setBy": [
+    "cs-kanto-saffron-train"
+   ]
+  },
+  {
+   "key": "kanto-trio-met",
+   "setBy": [
+    "cs-kanto-celadon-perfume",
+    "cs-kanto-celadon-perfume-decide",
+    "cs-kanto-fuchsia-tauros-rock"
+   ]
+  },
+  {
    "key": "kanto-volunteers-revive",
    "setBy": [
     "cs-kanto-lavender-volunteers-revive"
@@ -228,10 +372,39 @@
    ]
   },
   {
+   "key": "kanto-zoo-fossil",
+   "setBy": [
+    "cs-kanto-fuchsia-zoo-fossil"
+   ]
+  },
+  {
+   "key": "kanto-zoo-normal",
+   "setBy": [
+    "cs-kanto-fuchsia-zoo"
+   ]
+  },
+  {
+   "key": "kanto-zoo-water",
+   "setBy": [
+    "cs-kanto-fuchsia-zoo"
+   ]
+  },
+  {
    "key": "kind-total",
    "setBy": [
+    "cs-kanto-celadon-eevee",
+    "cs-kanto-celadon-eevee-cousin",
+    "cs-kanto-celadon-eevee-stones",
+    "cs-kanto-celadon-rooftop-mother",
     "cs-kanto-cerulean-burglary",
     "cs-kanto-cerulean-burglary-after"
+   ]
+  },
+  {
+   "key": "rep",
+   "setBy": [
+    "cs-kanto-celadon-perfume",
+    "cs-kanto-celadon-perfume-decide"
    ]
   },
   {

@@ -1124,7 +1124,18 @@
    "level": null,
    "length": null,
    "flags": [],
-   "section": "7.2"
+   "section": "KANTO_PLACED_2: Celadon Department Store",
+   "placed": {
+    "stage": [
+     4
+    ],
+    "home": 10,
+    "sits": "plus",
+    "attaches": "plus",
+    "badge": "A shopping bag",
+    "level": null,
+    "often": "Once per run; it can be re-entered until the stage ends"
+   }
   },
   {
    "id": "cs.kanto.celadon.gamecorner",
@@ -1138,10 +1149,28 @@
     "spaces": []
    },
    "uniqueRewardFlag": null,
-   "level": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
    "length": null,
    "flags": [],
-   "section": "7.3"
+   "section": "KANTO_PLACED_2: Game Corner",
+   "placed": {
+    "stage": [
+     4
+    ],
+    "home": 14,
+    "window": [
+     12,
+     16
+    ],
+    "sits": "optional",
+    "attaches": "after",
+    "badge": "A coin",
+    "level": 0,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.celadon.mansion",
@@ -1155,10 +1184,26 @@
     "spaces": []
    },
    "uniqueRewardFlag": null,
-   "level": null,
+   "level": {
+    "mode": "relative",
+    "offset": -2
+   },
    "length": null,
-   "flags": [],
-   "section": "7.4"
+   "flags": [
+    "kanto.mansion.key"
+   ],
+   "section": "KANTO_PLACED_2: Celadon Mansion",
+   "placed": {
+    "stage": [
+     4
+    ],
+    "home": 16,
+    "sits": "town",
+    "attaches": "town",
+    "badge": "A key",
+    "level": -2,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.celadon.eevee",
@@ -1172,12 +1217,31 @@
     "spaces": []
    },
    "uniqueRewardFlag": null,
-   "level": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
    "length": null,
    "flags": [
-    "kanto.eevee"
+    "kanto.eevee",
+    "kanto.eevee.mikey"
    ],
-   "section": "7.5"
+   "section": "KANTO_PLACED_2: Eeveelution Brothers",
+   "placed": {
+    "stage": [
+     4
+    ],
+    "home": 12,
+    "window": [
+     10,
+     14
+    ],
+    "sits": "optional",
+    "attaches": "after",
+    "badge": "Three coloured stones",
+    "level": 0,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.celadon.tea",
@@ -1194,7 +1258,18 @@
    "level": null,
    "length": null,
    "flags": [],
-   "section": "7.6"
+   "section": "KANTO_PLACED_2: Tea House & Gardens",
+   "placed": {
+    "stage": [
+     4
+    ],
+    "home": 18,
+    "sits": "plus",
+    "attaches": "plus",
+    "badge": "A teacup",
+    "level": null,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.celadon.perfume",
@@ -1208,15 +1283,37 @@
     "spaces": []
    },
    "uniqueRewardFlag": null,
-   "level": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
    "length": null,
-   "flags": [],
-   "section": "7.7"
+   "flags": [
+    "kanto.perfume.foiled",
+    "kanto.perfume.lost",
+    "kanto.trio.met"
+   ],
+   "section": "KANTO_PLACED_2: Perfume Heist",
+   "placed": {
+    "stage": [
+     4
+    ],
+    "home": 7,
+    "window": [
+     5,
+     9
+    ],
+    "sits": "optional",
+    "attaches": "after",
+    "badge": "A perfume bottle",
+    "level": 0,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.celadon.rooftop",
    "town": "celadon",
-   "parent": null,
+   "parent": "cs.kanto.celadon.mart",
    "name": "Rooftop Vending",
    "kind": "EV",
    "appears": "roll",
@@ -1228,7 +1325,18 @@
    "level": null,
    "length": null,
    "flags": [],
-   "section": "7.8"
+   "section": "KANTO_PLACED_2: Rooftop Vending",
+   "placed": {
+    "stage": [
+     4
+    ],
+    "home": 10,
+    "sits": "plus",
+    "attaches": "plus",
+    "badge": "None: it's part of the Store",
+    "level": null,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.fuchsia.factory",
@@ -1330,7 +1438,22 @@
    "level": null,
    "length": null,
    "flags": [],
-   "section": "8.6"
+   "section": "KANTO_PLACED_2: Warden's Gold Teeth",
+   "placed": {
+    "stage": [
+     5
+    ],
+    "home": 12,
+    "window": [
+     12,
+     14
+    ],
+    "sits": "optional",
+    "attaches": "after",
+    "badge": "A tooth",
+    "level": null,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.fuchsia.tauros",
@@ -1346,10 +1469,31 @@
     ]
    },
    "uniqueRewardFlag": null,
-   "level": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
    "length": null,
-   "flags": [],
-   "section": "8.7"
+   "flags": [
+    "kanto.tauros.dodged",
+    "kanto.trio.met"
+   ],
+   "section": "KANTO_PLACED_2: Tauros Stampede",
+   "placed": {
+    "stage": [
+     5
+    ],
+    "home": 12,
+    "window": [
+     12,
+     14
+    ],
+    "sits": "optional",
+    "attaches": "after",
+    "badge": "A dust cloud",
+    "level": 0,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.fuchsia.zoo",
@@ -1365,8 +1509,23 @@
    "uniqueRewardFlag": null,
    "level": null,
    "length": null,
-   "flags": [],
-   "section": "8.8"
+   "flags": [
+    "kanto.zoo.water",
+    "kanto.zoo.normal",
+    "kanto.zoo.fossil"
+   ],
+   "section": "KANTO_PLACED_2: Fuchsia Zoo",
+   "placed": {
+    "stage": [
+     5
+    ],
+    "home": 17,
+    "sits": "town",
+    "attaches": "town",
+    "badge": "A paw print",
+    "level": null,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.fuchsia.snag",
@@ -1380,10 +1539,32 @@
     "spaces": []
    },
    "uniqueRewardFlag": null,
-   "level": null,
+   "level": {
+    "mode": "relative",
+    "offset": 1
+   },
    "length": null,
-   "flags": [],
-   "section": "12.2"
+   "flags": [
+    "kanto.snag.seen",
+    "kanto.snag.ball",
+    "kanto.snag.lost"
+   ],
+   "section": "KANTO_PLACED_2: The Snag Test",
+   "placed": {
+    "stage": [
+     5
+    ],
+    "home": 16,
+    "window": [
+     14,
+     18
+    ],
+    "sits": "optional",
+    "attaches": "before",
+    "badge": "A claw",
+    "level": 1,
+    "often": "Once per run (roll, 20%)"
+   }
   },
   {
    "id": "cs.kanto.saffron.labyrinth",
@@ -1461,10 +1642,28 @@
     "spaces": []
    },
    "uniqueRewardFlag": null,
-   "level": null,
+   "level": {
+    "mode": "relative",
+    "offset": 1
+   },
    "length": null,
    "flags": [],
-   "section": "9.5"
+   "section": "KANTO_PLACED_2: Fighting Dojo",
+   "placed": {
+    "stage": [
+     6
+    ],
+    "home": 13,
+    "window": [
+     11,
+     15
+    ],
+    "sits": "optional",
+    "attaches": "instead",
+    "badge": "A black belt",
+    "level": 1,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.saffron.copycat",
@@ -1481,7 +1680,22 @@
    "level": null,
    "length": null,
    "flags": [],
-   "section": "9.6"
+   "section": "KANTO_PLACED_2: Copycat Girl",
+   "placed": {
+    "stage": [
+     6
+    ],
+    "home": 8,
+    "window": [
+     6,
+     10
+    ],
+    "sits": "optional",
+    "attaches": "after",
+    "badge": "A mirror",
+    "level": null,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.saffron.silph",
@@ -1495,10 +1709,32 @@
     "spaces": []
    },
    "uniqueRewardFlag": null,
-   "level": null,
+   "level": {
+    "mode": "relative",
+    "offset": 0
+   },
    "length": null,
-   "flags": [],
-   "section": "9.7"
+   "flags": [
+    "kanto.silph.lapras",
+    "kanto.silph.card",
+    "kanto.silph.owed"
+   ],
+   "section": "KANTO_PLACED_2: Silph Co. Lobby",
+   "placed": {
+    "stage": [
+     6
+    ],
+    "home": 3,
+    "window": [
+     2,
+     5
+    ],
+    "sits": "must",
+    "attaches": "after",
+    "badge": "The Silph \"S\"",
+    "level": 0,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.saffron.train",
@@ -1514,8 +1750,21 @@
    "uniqueRewardFlag": null,
    "level": null,
    "length": null,
-   "flags": [],
-   "section": "9.8"
+   "flags": [
+    "kanto.train.ride"
+   ],
+   "section": "KANTO_PLACED_2: Magnet Train",
+   "placed": {
+    "stage": [
+     6
+    ],
+    "home": 19,
+    "sits": "optional",
+    "attaches": "after",
+    "badge": "A train",
+    "level": null,
+    "often": "Once per run"
+   }
   },
   {
    "id": "cs.kanto.cinnabar.lab",

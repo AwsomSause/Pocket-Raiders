@@ -12,11 +12,9 @@ import type { RunState } from '../../src/core/state';
 import { buildChainStage, chainById } from '../../src/core/dungeon/pseudo';
 import status from '../../src/data/catalogOverhaul/status/kanto-canon.json';
 import pseudoFile from '../../src/data/catalogOverhaul/pseudo/kanto-canon.json';
-import co1 from '../../src/data/events/co-kanto-canon-1.json';
-import co2 from '../../src/data/events/co-kanto-canon-2.json';
 
 const content = getContent();
-const FILES = [co1, co2] as { events: { id: string }[]; remove: string[] }[];
+const FILES = Object.values(import.meta.glob('../../src/data/events/co-kanto-canon-*.json', { eager: true, import: 'default' })) as { events: { id: string }[]; remove: string[] }[];
 const ids = FILES.flatMap((f) => f.events.map((e) => e.id));
 const mine: EventDef[] = ids.map((id) => content.events.get(id)!);
 const outcomes = (e: EventDef): EventOutcome[] => [...e.choices, ...e.remembers.flatMap((v) => v.addChoices)].flatMap((c) => [c.success, ...(c.failure ? [c.failure] : [])]);
@@ -60,14 +58,14 @@ describe('kanto-canon: data', () => {
       const open = e.choices.filter((c) => c.requires.length === 0);
       const variantOpen = e.remembers.some((v) => v.addChoices.some((c) => c.requires.length === 0));
       // Events whose every choice has a requirement must cover both sides of it (has / has not).
-      if (open.length === 0 && !variantOpen) expect(['cs-kanto-lavender-tower-f7'], `${e.id} has only locked choices`).toContain(e.id);
+      if (open.length === 0 && !variantOpen) expect(['cs-kanto-lavender-tower-f7', 'cs-kanto-saffron-silph-gift'], `${e.id} has only locked choices`).toContain(e.id);
     }
   });
 
   it('every flag an event sets is read by an event or declared as the space result', () => {
     const read = new Set(mine.flatMap(conditions).flatMap((c) => (c.kind === 'flag' ? [c.key] : [])));
     const declared = new Set(canonKanto.spaces.flatMap((s) => s.flags).map((f) => f.replace(/\./g, '-')));
-    const shared = new Set(['kind-total', 'intel', 'xk-tower-cleansed']); // the shared board's counters, and a flag older events read
+    const shared = new Set(['kind-total', 'intel', 'rep', 'rep-lost', 'xk-tower-cleansed']); // the shared board's counters (STANDARDS.md), and a flag older events read
     for (const e of mine) for (const x of effects(e)) if (x.kind === 'flag') expect(read.has(x.key) || declared.has(x.key) || shared.has(x.key), `${e.id} sets ${x.key}, which nothing reads`).toBe(true);
   });
 

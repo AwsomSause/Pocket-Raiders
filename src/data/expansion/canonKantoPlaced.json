@@ -18,6 +18,33 @@
   },
   {
    "event": "cs-kanto-cerulean-daycare-back"
+  },
+  {
+   "event": "cs-kanto-celadon-rooftop-guard",
+   "stages": [
+    6
+   ]
+  },
+  {
+   "event": "cs-kanto-celadon-mansion-key",
+   "stages": [
+    5,
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "event": "cs-kanto-fuchsia-tauros-back",
+   "stages": [
+    5
+   ]
+  },
+  {
+   "event": "cs-kanto-saffron-train-arrive",
+   "stages": [
+    7
+   ]
   }
  ],
  "routes": []

@@ -11,7 +11,7 @@ const speciesIds = new Set<string>([...list(read('species.json'), 'species'), ..
 const moveIds = new Set<string>(list(read('moves.json'), 'moves').map((m) => m.id));
 const batchDir = new URL('../../../src/data/itemCatalog/', import.meta.url);
 const batches = readdirSync(batchDir).filter((f) => f.endsWith('.json')).flatMap((f) => JSON.parse(readFileSync(new URL(f, batchDir), 'utf8')) as any[]);
-const itemIds = new Set<string>([...list(read('itemCatalog.json'), 'items'), ...Object.values(read('items.json') as Record<string, any>), ...batches].map((i) => i.id));
+const itemIds = new Set<string>([...list(read('itemCatalog.json'), 'items'), ...Object.values(read('items.json') as Record<string, any>), ...batches, ...list(read('megaStones.json'), 'items')].map((i) => i.id));
 
 export const sp = (id: string): string => { if (!speciesIds.has(id)) throw new Error(`kanto-canon: unknown species ${id}`); return id; };
 export const sps = (...ids: string[]): string[] => ids.map(sp);
@@ -127,7 +127,7 @@ export const afford = (atLeast: number): Json => ({ kind: 'money', atLeast });
 export const join = (species: string[], x: Json = {}): Json => ({ kind: 'join', species: sps(...species), levelBonus: 0, ...x });
 export const teach = (move: string, x: Json = {}): Json => ({ kind: 'teachMove', move: mv(move), ...x });
 export const heal = (share = 1): Json => ({ kind: 'heal', share });
-export const fr = (amount: number, who: 'lead' | 'party' = 'party'): Json => ({ kind: 'friendship', amount, who });
+export const fr = (amount: number, who: 'lead' | 'party' | 'picked' = 'party'): Json => ({ kind: 'friendship', amount, who });
 export const good = (n = 1): Json => ({ kind: 'attribute', key: 'goodEvil', amount: n });
 /** "Kindness +1" (shared board): Good/Evil +1 and the run's Kindness total. */
 export const kind = (): Json[] => [good(1), flag('kind-total')];

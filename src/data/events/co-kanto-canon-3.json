@@ -1,0 +1,5712 @@
+{
+ "catalogOverhaul": "kanto-canon",
+ "override": true,
+ "remove": [
+  "cs-kanto-celadon-eevee-3",
+  "cs-kanto-celadon-eevee-4",
+  "cs-kanto-celadon-eevee-4-p2",
+  "cs-kanto-celadon-gamecorner-p2",
+  "cs-kanto-celadon-mansion-1",
+  "cs-kanto-celadon-mansion-2",
+  "cs-kanto-celadon-mansion-3",
+  "cs-kanto-celadon-mansion-4",
+  "cs-kanto-celadon-mart-f1",
+  "cs-kanto-celadon-mart-f4-p2",
+  "cs-kanto-celadon-mart-f5-p2",
+  "cs-kanto-celadon-mart-f6",
+  "cs-kanto-celadon-mart-f7",
+  "cs-kanto-celadon-mart-p2",
+  "cs-kanto-celadon-mart-p3",
+  "cs-kanto-celadon-mart-tm-a",
+  "cs-kanto-celadon-mart-tm-a-p2",
+  "cs-kanto-celadon-mart-tm-b",
+  "cs-kanto-celadon-mart-tm-b-p2",
+  "cs-kanto-celadon-mart-tm-c",
+  "cs-kanto-celadon-mart-tm-c-p2",
+  "cs-kanto-celadon-mart-tm-d",
+  "cs-kanto-celadon-mart-tm-d-p2",
+  "cs-kanto-celadon-prizes-a",
+  "cs-kanto-celadon-prizes-a-p2",
+  "cs-kanto-celadon-prizes-b",
+  "cs-kanto-celadon-prizes-b-p2",
+  "cs-kanto-fuchsia-tauros-end",
+  "cs-kanto-fuchsia-tauros-r1",
+  "cs-kanto-fuchsia-tauros-r2",
+  "cs-kanto-fuchsia-tauros-r3",
+  "cs-kanto-fuchsia-tauros-r4",
+  "cs-kanto-fuchsia-tauros-r5",
+  "cs-kanto-fuchsia-tauros-r6",
+  "cs-kanto-fuchsia-warden-n1",
+  "cs-kanto-fuchsia-warden-n2",
+  "cs-kanto-fuchsia-warden-n3",
+  "cs-kanto-fuchsia-warden-reward",
+  "cs-kanto-saffron-dojo-three",
+  "cs-kanto-saffron-dojo-two"
+ ],
+ "events": [
+  {
+   "id": "cs-kanto-celadon-mart",
+   "name": "Celadon Department Store",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Six floors of glass, lit from inside like a lantern somebody left on for you. Everything in Celadon seems to lean a little towards it. Inside the doors there's a lift, and in the lift a lift attendant in a pillbox hat, Miss Philippa Stott, who announces every floor as if it's news, to whoever is in the lift, and sometimes to nobody at all.",
+   "choices": [
+    {
+     "label": "Ground floor: the service counter.",
+     "success": {
+      "text": "Miss Philippa Stott: \"Ground floor! Service. Sit down, you look dreadful, it's free.\" There is a bench, and a woman with a clipboard, and a Chansey who takes one look at your party and starts work without being asked. When you stand up again, everyone is whole.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-lift"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Up: the shop floors.",
+     "success": {
+      "text": "The lift doors fold shut with a sound like a polite cough, and the whole box rises.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-shops"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Roof!",
+     "success": {
+      "text": "Miss Philippa Stott: \"Roof! Mind the wind. Mind the Pidgey. Mind the girl, she's thirsty.\" The doors open on sky.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-rooftop"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Four and a half, please.\"",
+     "success": {
+      "text": "Miss Stott's finger stops over the panel. She looks at you properly for the first time. Miss Philippa Stott: \"...Four and a half. You've heard about it, then.\" She presses a button that isn't there, and the lift stops between floors.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-dolls"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.celadon.mart"
+  },
+  {
+   "id": "cs-kanto-celadon-mart-lift",
+   "name": "Celadon Department Store: The Lift",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Miss Stott has her white glove on the panel and her eyes on you. \"Going up? Going down? Going round in circles? It's all the same price.\"",
+   "choices": [
+    {
+     "label": "Up: the shop floors.",
+     "success": {
+      "text": "The lift doors fold shut with a sound like a polite cough, and the whole box rises.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-shops"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Roof!",
+     "success": {
+      "text": "Miss Philippa Stott: \"Roof! Mind the wind. Mind the Pidgey. Mind the girl, she's thirsty.\" The doors open on sky.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-rooftop"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Four and a half, please.\"",
+     "success": {
+      "text": "Miss Stott's finger stops over the panel. She looks at you properly for the first time. Miss Philippa Stott: \"...Four and a half. You've heard about it, then.\" She presses a button that isn't there, and the lift stops between floors.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-dolls"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Out through the revolving door.",
+     "success": {
+      "text": "The revolving door turns you out into the street, and the noise of the store closes behind you like a lid. Miss Stott waves from the lift, already announcing a floor to nobody.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-shops",
+   "name": "Celadon Department Store: Going Up",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "song",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-song-heard",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Miss Stott, between floors: \"Oh, that one. Mine learned it from that one. I've not slept properly since.\""
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "The lift hums upward past the floors, and Miss Stott has a line ready for every one of them.",
+   "choices": [
+    {
+     "label": "Second floor.",
+     "success": {
+      "text": "Miss Philippa Stott: \"Second! Things in bottles.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-f2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Third floor.",
+     "success": {
+      "text": "Miss Philippa Stott: \"Third! Discs. Don't ask me what's on them, I've got a Jigglypuff, it knows one song.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-f3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fourth floor.",
+     "success": {
+      "text": "Miss Philippa Stott: \"Fourth! He'll tell you what you need. He's usually right. It's infuriating.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-f4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fifth floor.",
+     "success": {
+      "text": "Miss Philippa Stott: \"Fifth! Rocks at silly prices.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-f5"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-f2",
+   "name": "Celadon Department Store: Trainer's Market",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Second floor, the Trainer's Market: Poké Balls in pyramids, and medicine for the road in rows of little bottles. Nothing here works in the middle of a battle; the clerk is firm about that.",
+   "choices": [
+    {
+     "label": "Poké Ball ×5 (₽1,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "success": {
+      "text": "Five red-and-white Balls in a paper bag with the store's crest on it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1000
+       },
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Great Ball ×3 (₽1,800)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1800
+      }
+     ],
+     "success": {
+      "text": "Three Great Balls, wrapped like presents, because that is how the store wraps everything.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1800
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Medicine for the road (₽500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "The clerk sees to it there and then: a bottle for each Pokémon, a bandage for the one that limps. Your party leaves the floor steadier than it came in.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "cure"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the lift.",
+     "success": {
+      "text": "Back into the lift. Miss Stott: \"Bottles! Lovely.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-lift"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-f3",
+   "name": "Celadon Department Store: The TM Counter",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Third floor, the TM Counter. Five discs in a glass case, a different five every visit. The clerk has stopped trying to keep them in any order.",
+   "choices": [
+    {
+     "label": "A disc from the top shelf (₽3,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 3000
+      }
+     ],
+     "success": {
+      "text": "The clerk slides a disc out of its sleeve and into yours, and won't say what's on it until you're out of the shop. \"Different every visit,\" he says. \"That's the fun.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -3000
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "tm-fire",
+         "tm-water",
+         "tm-electric",
+         "tm-ice",
+         "tm-grass"
+        ],
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "A disc from the middle shelf (₽3,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 3000
+      }
+     ],
+     "success": {
+      "text": "The clerk slides a disc out of its sleeve and into yours, and won't say what's on it until you're out of the shop. \"Different every visit,\" he says. \"That's the fun.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -3000
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "tm-fighting",
+         "tm-ground",
+         "tm-rock",
+         "tm-flying",
+         "tm-poison"
+        ],
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "A disc from the bottom shelf (₽3,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 3000
+      }
+     ],
+     "success": {
+      "text": "The clerk slides a disc out of its sleeve and into yours, and won't say what's on it until you're out of the shop. \"Different every visit,\" he says. \"That's the fun.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -3000
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "tm-psychic",
+         "tm-ghost",
+         "tm-dark",
+         "tm-dragon",
+         "tm-bug",
+         "tm-steel",
+         "tm-normal"
+        ],
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the lift.",
+     "success": {
+      "text": "Back into the lift.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-lift"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-f4",
+   "name": "Celadon Department Store: The Wise Man",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "fire",
+     "when": [
+      {
+       "kind": "partyType",
+       "type": "fire",
+       "absent": true
+      }
+     ],
+     "intro": "The Wise Man: \"Show me your six. ...Mm. You're strong where you're already strong. Buy the one that covers the gap. I'll point. I won't push.\" He points, without looking, at the Charcoal: nobody in your six burns, and the Gym on this stage grows things. The price on it is the same as on all the others. It's advice, never a trick."
+    },
+    {
+     "id": "flying",
+     "when": [
+      {
+       "kind": "partyType",
+       "type": "flying",
+       "absent": true
+      }
+     ],
+     "intro": "The Wise Man: \"Show me your six. ...Mm. You're strong where you're already strong. Buy the one that covers the gap. I'll point. I won't push.\" He points, without looking, at the Sharp Beak: nobody in your six flies, and the Gym on this stage roots. The price on it is the same as on all the others. It's advice, never a trick."
+    },
+    {
+     "id": "ice",
+     "when": [
+      {
+       "kind": "partyType",
+       "type": "ice",
+       "absent": true
+      }
+     ],
+     "intro": "The Wise Man: \"Show me your six. ...Mm. You're strong where you're already strong. Buy the one that covers the gap. I'll point. I won't push.\" He points, without looking, at the Never-Melt Ice: you have fire and wings, but nothing that freezes. The price on it is the same as on all the others. It's advice, never a trick."
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "The Wise Man: \"Show me your six. ...Mm. You're strong where you're already strong. Buy the one that covers the gap. I'll point. I won't push.\" He points, without looking, at the shelf for this stage's Gym. The price on it is the same as on all the others. It's advice, never a trick.",
+   "choices": [
+    {
+     "label": "Charcoal (₽2,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2000
+      }
+     ],
+     "success": {
+      "text": "A lump of charcoal that is warm in the hand and never cools.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2000
+       },
+       {
+        "kind": "item",
+        "id": "charcoal",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sharp Beak (₽2,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2000
+      }
+     ],
+     "success": {
+      "text": "A beak, polished, pointed, faintly ridiculous and very sharp.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2000
+       },
+       {
+        "kind": "item",
+        "id": "sharp-beak",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Never-Melt Ice (₽2,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2000
+      }
+     ],
+     "success": {
+      "text": "It sweats cold in your palm and doesn't get any smaller.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2000
+       },
+       {
+        "kind": "item",
+        "id": "nevermeltice",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the lift.",
+     "success": {
+      "text": "Back into the lift. The Wise Man doesn't watch you go. He's already looking at the next six.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-lift"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true,
+   "effects": []
+  },
+  {
+   "id": "cs-kanto-celadon-mart-f5",
+   "name": "Celadon Department Store: Evolution Stones",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Fifth floor: one of each Kanto stone on velvet, at one and a half times what they're worth. The clerk calls this \"the Celadon price\" and says it with love.",
+   "choices": [
+    {
+     "label": "Fire Stone (₽3,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 3000
+      }
+     ],
+     "success": {
+      "text": "It glows a little in the shade of your hand.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -3000
+       },
+       {
+        "kind": "item",
+        "id": "fire-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Water Stone (₽3,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 3000
+      }
+     ],
+     "success": {
+      "text": "It has a sound inside it, like a shell.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -3000
+       },
+       {
+        "kind": "item",
+        "id": "water-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thunder Stone (₽3,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 3000
+      }
+     ],
+     "success": {
+      "text": "The hairs on your arm stand up when you pick it up.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -3000
+       },
+       {
+        "kind": "item",
+        "id": "thunder-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The other two stones.",
+     "success": {
+      "text": "The clerk lifts the velvet on the next tray.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-f5b"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-f5b",
+   "name": "Celadon Department Store: Evolution Stones",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "The second tray: the leaf, and the moon.",
+   "choices": [
+    {
+     "label": "Leaf Stone (₽3,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 3000
+      }
+     ],
+     "success": {
+      "text": "It smells of a garden after rain.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -3000
+       },
+       {
+        "kind": "item",
+        "id": "leaf-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Moon Stone (₽3,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 3000
+      }
+     ],
+     "success": {
+      "text": "It is very slightly cold, the way the night is.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -3000
+       },
+       {
+        "kind": "item",
+        "id": "moon-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the lift.",
+     "success": {
+      "text": "Back into the lift. Miss Stott: \"Rocks! Silly prices. I did say.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-lift"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mart-dolls",
+   "name": "Celadon Department Store: The Doll Floor",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Shelves of Poké Dolls to the ceiling, on every wall, in every colour, all of them smiling at the lift. One shop girl, asleep at the till with her cheek on her hand. A Poké Doll lets you leave one wild battle. And then one of the dolls blinks. It's a Clefairy, and it's been here a week.",
+   "choices": [
+    {
+     "label": "A Poké Doll (₽600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "You leave the money under the sleeping girl's hand. The doll is soft and slightly too heavy, the way the good ones are.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -600
+       },
+       {
+        "kind": "item",
+        "id": "poke-doll-escape",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy it.",
+     "success": {
+      "text": "It's ₽0; it was never stock. The Clefairy climbs down off the shelf by itself, takes your finger in one small hand and does not let go of it all the way down in the lift. The shop girl never wakes. Somewhere on a shelf there is now a gap the exact shape of a friend.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "clefairy"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "moment",
+        "text": "Bought a Clefairy for nothing on the Doll Floor of the Celadon store."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it. It looks happy.",
+     "success": {
+      "text": "It does look happy, up there among the others, with a very good view of the lift. It blinks at you once more as the doors close. You think it might have been a thank-you.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the lift.",
+     "success": {
+      "text": "Miss Stott takes you back up into the ordinary floors and pretends the half-floor was never there.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mart-lift"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-rooftop",
+   "name": "Rooftop Vending",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Three vending machines on the roof of the Department Store, humming in the wind, and a small girl looking at them the way people look at mountains. The girl, Tibby: \"I'm not allowed any. I'm only looking.\" Her mother is on the fifth floor. This is known because the girl says so, twice. The machines sell Fresh Water at ₽200, Soda Pop at ₽300 and Lemonade at ₽350, and they mend 30, 50 and 70 HP on the road, never in a battle.",
+   "choices": [
+    {
+     "label": "Buy drinks.",
+     "success": {
+      "text": "The machines take your coins with a sound like a sigh.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-rooftop-machines"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy her one.",
+     "success": {
+      "text": "Tibby looks at you, and at the machines, and back at you, and doesn't dare say which.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-rooftop-herone"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go and find her mother first.",
+     "success": {
+      "text": "Tibby comes with you, holding the hem of your jacket, the whole way down to the fifth floor.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-rooftop-mother"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.celadon.rooftop"
+  },
+  {
+   "id": "cs-kanto-celadon-rooftop-machines",
+   "name": "Rooftop Vending: The Machines",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Three machines. Fresh Water, Soda Pop, Lemonade. Tibby watches every coin go in.",
+   "choices": [
+    {
+     "label": "Fresh Water (₽200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "A cold can for the road. It mends on the road, never in a battle. And a drink kept is worth something to someone, somewhere, later.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "item",
+        "id": "rooftop-fresh-water",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Soda Pop (₽300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "A cold can for the road. It mends on the road, never in a battle. And a drink kept is worth something to someone, somewhere, later.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "item",
+        "id": "rooftop-soda-pop",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lemonade (₽350)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 350
+      }
+     ],
+     "success": {
+      "text": "A cold can for the road. It mends on the road, never in a battle. And a drink kept is worth something to someone, somewhere, later.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -350
+       },
+       {
+        "kind": "item",
+        "id": "rooftop-lemonade",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "That's enough.",
+     "success": {
+      "text": "Tibby watches the cans go into your bag, one by one, and says nothing at all, very loudly.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-rooftop-herone",
+   "name": "Rooftop Vending: Tibby",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Tibby won't choose. She just looks at the machines very hard, so that you can see which one she is trying not to look at.",
+   "choices": [
+    {
+     "label": "Fresh Water (₽200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "You put the Fresh Water in her hands. She holds it the way people hold things they didn't expect to be allowed. Then, very seriously, she gives you her best thing: a TM, which she's been using as a coaster. There's a ring on it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "teachMove",
+        "move": "ice-beam"
+       },
+       {
+        "kind": "moment",
+        "text": "Bought a thirsty girl a drink on the Celadon roof, and got her coaster."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Soda Pop (₽300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "You put the Soda Pop in her hands. She holds it the way people hold things they didn't expect to be allowed. Then, very seriously, she gives you her best thing: a TM, which she's been using as a coaster. There's a ring on it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "teachMove",
+        "move": "rock-slide"
+       },
+       {
+        "kind": "moment",
+        "text": "Bought a thirsty girl a drink on the Celadon roof, and got her coaster."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lemonade (₽350)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 350
+      }
+     ],
+     "success": {
+      "text": "You put the Lemonade in her hands. She holds it the way people hold things they didn't expect to be allowed. Then, very seriously, she gives you her best thing: a TM, which she's been using as a coaster. There's a ring on it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -350
+       },
+       {
+        "kind": "teachMove",
+        "move": "tri-attack"
+       },
+       {
+        "kind": "moment",
+        "text": "Bought a thirsty girl a drink on the Celadon roof, and got her coaster."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn out your empty pockets.",
+     "success": {
+      "text": "Tibby looks at your empty pockets, and at you, and pats your arm. \"It's all right,\" she says. \"I'm only looking too.\"",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-rooftop-mother",
+   "name": "Rooftop Vending: The Fifth Floor",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Her mother is by the stones, holding a Moon Stone up to the light. She sees Tibby and sees you and puts the stone down. \"She's told you she isn't allowed. She told you twice. ...Which one does she want?\"",
+   "choices": [
+    {
+     "label": "Fresh Water.",
+     "success": {
+      "text": "Her mother is on the fifth floor, exactly where she said, twice. She looks at you, and at the girl, and says yes as though she has been waiting all day for someone to ask. Tibby gets her Fresh Water. She drinks it in one go, gasps, and then gives you her best thing: a TM, which she's been using as a coaster. There's a ring on it.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "ice-beam"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Bought a thirsty girl a drink on the Celadon roof, and got her coaster."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Soda Pop.",
+     "success": {
+      "text": "Her mother is on the fifth floor, exactly where she said, twice. She looks at you, and at the girl, and says yes as though she has been waiting all day for someone to ask. Tibby gets her Soda Pop. She drinks it in one go, gasps, and then gives you her best thing: a TM, which she's been using as a coaster. There's a ring on it.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "rock-slide"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Bought a thirsty girl a drink on the Celadon roof, and got her coaster."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lemonade.",
+     "success": {
+      "text": "Her mother is on the fifth floor, exactly where she said, twice. She looks at you, and at the girl, and says yes as though she has been waiting all day for someone to ask. Tibby gets her Lemonade. She drinks it in one go, gasps, and then gives you her best thing: a TM, which she's been using as a coaster. There's a ring on it.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "tri-attack"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Bought a thirsty girl a drink on the Celadon roof, and got her coaster."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-rooftop-guard",
+   "name": "Saffron Gate: The Thirsty Guard",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "kc",
+     "act": "holdsAny",
+     "ids": [
+      "rooftop-fresh-water",
+      "rooftop-soda-pop",
+      "rooftop-lemonade"
+     ]
+    }
+   ],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "The gate into Saffron has a guard box, and the guard box has a guard, and the guard has a very dry mouth. Guard: \"I'm not supposed to leave the box. Eleven hours. Is that— is that lemonade?\"",
+   "choices": [
+    {
+     "label": "Give him the Fresh Water.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "rooftop-fresh-water"
+      }
+     ],
+     "success": {
+      "text": "He drinks it standing up, in his box, without taking his eyes off the gate, and he makes the noise of a man who has been saved. Then he reaches under the counter. \"I was keeping this for a special occasion. This is it.\" A Rare Candy.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "rooftop-fresh-water",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give him the Soda Pop.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "rooftop-soda-pop"
+      }
+     ],
+     "success": {
+      "text": "He drinks it standing up, in his box, without taking his eyes off the gate, and he makes the noise of a man who has been saved. Then he reaches under the counter. \"I was keeping this for a special occasion. This is it.\" A PP Up.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "rooftop-soda-pop",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "pp-up",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give him the Lemonade.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "rooftop-lemonade"
+      }
+     ],
+     "success": {
+      "text": "He drinks it standing up, in his box, without taking his eyes off the gate, and he makes the noise of a man who has been saved. Then he reaches under the counter. \"I was keeping this for a special occasion. This is it.\" A Lucky Egg.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "rooftop-lemonade",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "lucky-egg",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep walking.",
+     "success": {
+      "text": "He watches you go, and the drink go with you, with the dignity of a man who will not beg in uniform.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-gamecorner",
+   "name": "Game Corner",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "won",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-hideout-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The Game Corner reopens under the coin clerk. Every machine has its odds on. The first word of the sign's gone: it just says GAME CORNER now, freshly painted, and Mr. Thrupp is very proud of the lettering.",
+     "hide": [
+      2
+     ]
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Noise and coloured light. A sign: ROCKET GAME CORNER: THE PLAYGROUND FOR GROWN-UPS. Somebody's painted over the first word, badly. The Honest Trade Card is shown at the door: coins cost ₽10 each, and each machine shows its payout odds on its face. A man at the machines, not looking up: \"They pay out. They do. I've seen it. Tuesday.\" Coin clerk, Mr. Barnaby Thrupp: \"Fifty coins minimum. No, I don't know why the poster's got an R on it. It came with the building.\"",
+   "choices": [
+    {
+     "label": "Buy fifty coins (₽500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "Mr. Thrupp counts out fifty coins into a plastic cup, one at a time, as though each one is going somewhere he will miss it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-coins",
+        "amount": 50
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-coins-played",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-gamecorner-floor"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The prize counter.",
+     "success": {
+      "text": "The prize counter glows at the back like an altar.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-gamecorner-prizes"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The machine at the back.",
+     "requires": [
+      {
+       "kind": "evil",
+       "team": "rocket"
+      },
+      {
+       "kind": "storyRaid",
+       "n": 2
+      }
+     ],
+     "success": {
+      "text": "There's one machine at the back with no odds on its face at all, and a man standing in front of it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-gamecorner-back"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You leave the noise behind. Outside, the evening is very quiet, and your ears ring with it.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.celadon.gamecorner"
+  },
+  {
+   "id": "cs-kanto-celadon-gamecorner-floor",
+   "name": "Game Corner: The Machines",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "luck",
+     "when": [
+      {
+       "kind": "item",
+       "id": "lucky-egg"
+      }
+     ],
+     "addChoices": [
+      {
+       "label": "The door machine, lucky: 10 coins, pays 30 (45% on its face)",
+       "requires": [
+        {
+         "kind": "flag",
+         "key": "kanto-coins",
+         "atLeast": 10,
+         "atMost": 99
+        }
+       ],
+       "chance": 0.45,
+       "success": {
+        "text": "The reels spin and stop, one, two, three. It pays: 30 coins rattle into the tray, and the man at the next machine looks at you with naked envy.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "kanto-coins",
+          "amount": 20
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "cs-kanto-celadon-gamecorner-floor"
+         }
+        ]
+       },
+       "failure": {
+        "text": "The reels spin and stop, one, two, three, on nothing in particular. The machine eats the coins with a little electronic laugh.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "kanto-coins",
+          "amount": -10
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "cs-kanto-celadon-gamecorner-floor"
+         }
+        ]
+       }
+      }
+     ],
+     "hide": [
+      0
+     ],
+     "notice": "The Lucky Egg in your bag seems to hum along with the machines. The number on the door machine's face ticks up while you watch."
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Rows of machines, every one with its odds printed on its face. A Lucky Egg or an Amulet Coin in your party raises them, and the raised number is shown too.",
+   "choices": [
+    {
+     "label": "The door machine: 10 coins, pays 30 (35% on its face)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-coins",
+       "atLeast": 10,
+       "atMost": 99
+      }
+     ],
+     "chance": 0.35,
+     "success": {
+      "text": "The reels spin and stop, one, two, three. It pays: 30 coins rattle into the tray, and the man at the next machine looks at you with naked envy.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-coins",
+        "amount": 20
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-gamecorner-floor"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The reels spin and stop, one, two, three, on nothing in particular. The machine eats the coins with a little electronic laugh.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-coins",
+        "amount": -10
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-gamecorner-floor"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The cherry machine: 10 coins, pays 80 (15% on its face)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-coins",
+       "atLeast": 10,
+       "atMost": 99
+      }
+     ],
+     "chance": 0.15,
+     "success": {
+      "text": "The reels spin and stop, one, two, three. It pays: 80 coins rattle into the tray, and the man at the next machine looks at you with naked envy.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-coins",
+        "amount": 70
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-gamecorner-floor"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The reels spin and stop, one, two, three, on nothing in particular. The machine eats the coins with a little electronic laugh.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-coins",
+        "amount": -10
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-gamecorner-floor"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cash in and go to the counter.",
+     "success": {
+      "text": "You scoop the cup up and go.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-gamecorner-prizes"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the clerk for the house tradition.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-coins",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-coins-played",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-coins-broke",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Mr. Thrupp: \"House tradition. You carry it till the Gym. Then you bin it and you're clean.\" He hands over a Bad Luck Charm: a bent coin on a string. Your Luck is one lower for the rest of this stage. Heat's unaffected.",
+      "effects": [
+       {
+        "kind": "stageAttribute",
+        "key": "luck",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-coins-broke",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-gamecorner-prizes",
+   "name": "Game Corner: The Prize Counter",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Five prizes, one from each tier, each with its coin price on a little card. Common: Abra. Uncommon: Scyther. Rare: Porygon. Very rare: Dratini. Jackpot: a TM, or a Shiny Stone.",
+   "choices": [
+    {
+     "label": "Abra (120 coins)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-coins",
+       "atLeast": 120,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The Abra arrives asleep, and teleports into your bag the moment you look away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-coins",
+        "amount": -120
+       },
+       {
+        "kind": "join",
+        "species": [
+         "abra"
+        ],
+        "levelBonus": -2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Scyther (400 coins)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-coins",
+       "atLeast": 400,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The Scyther is handed over by a clerk wearing oven gloves.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-coins",
+        "amount": -400
+       },
+       {
+        "kind": "join",
+        "species": [
+         "scyther"
+        ],
+        "levelBonus": -2
+       }
+      ]
+     }
+    },
+    {
+     "label": "The rare and jackpot shelf.",
+     "success": {
+      "text": "Mr. Thrupp unlocks the top shelf with a key on a long chain.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-gamecorner-top"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the machines.",
+     "success": {
+      "text": "Back into the noise.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-gamecorner-floor"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-gamecorner-top",
+   "name": "Game Corner: The Top Shelf",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Mr. Thrupp: \"These are the ones people lose houses over. Don't lose a house.\"",
+   "choices": [
+    {
+     "label": "Porygon (900 coins)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-coins",
+       "atLeast": 900,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The Porygon is delivered on a floppy disk, and then, after a moment's thought, as itself.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-coins",
+        "amount": -900
+       },
+       {
+        "kind": "join",
+        "species": [
+         "porygon"
+        ],
+        "levelBonus": -2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dratini (1500 coins)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-coins",
+       "atLeast": 1500,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The Dratini is in a fish tank, and it looks at you as if it has been waiting for exactly you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-coins",
+        "amount": -1500
+       },
+       {
+        "kind": "join",
+        "species": [
+         "dratini"
+        ],
+        "levelBonus": -2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Jackpot: a TM or a Shiny Stone (2500 coins)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-coins",
+       "atLeast": 2500,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The jackpot bell rings for you, and everyone in the hall turns round to hate you a little.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-coins",
+        "amount": -2500
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-gamecorner-jackpot"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the counter.",
+     "success": {
+      "text": "Mr. Thrupp locks the top shelf again, slowly, so you can watch.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-gamecorner-prizes"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-gamecorner-jackpot",
+   "name": "Game Corner: The Jackpot",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Three discs in a velvet box, and a stone that throws light all over the ceiling. You can have one.",
+   "choices": [
+    {
+     "label": "TM Thunderbolt.",
+     "success": {
+      "text": "It crackles in its sleeve.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "thunderbolt"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Flamethrower.",
+     "success": {
+      "text": "The sleeve is warm.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "flamethrower"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Ice Beam.",
+     "success": {
+      "text": "There's frost on the sleeve.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "ice-beam"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Shiny Stone.",
+     "success": {
+      "text": "Mr. Thrupp shades his eyes while he hands it over.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "shiny-stone",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-gamecorner-back",
+   "name": "Game Corner: The Back Machine",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "One machine at the back has no odds on its face. It never pays. A Grunt, standing in front of it, sweating: \"It's broken. It's— don't. It's broken.\"",
+   "choices": [
+    {
+     "label": "Pull the lever.",
+     "success": {
+      "text": "You pull it once. Nothing. Twice. Nothing. By the seventh pull the Grunt has gone a colour you've never seen on a person, and behind the poster on the wall something heavy goes clunk and slides. A stairway, going down. The Grunt puts himself in front of it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-gamecorner-stairs"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Why are you guarding a broken machine?",
+     "success": {
+      "text": "He panics and tells the truth in the form of a lie. \"I'm not guarding it! There's nothing under it!\" You both look at the floor under it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-gamecorner-back2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave him with his broken machine. He watches you all the way to the door, and doesn't breathe until you're through it.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-gamecorner-back2",
+   "name": "Game Corner: The Back Machine",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "The Grunt is now standing very firmly on the bit of floor that has nothing under it.",
+   "choices": [
+    {
+     "label": "Pull the lever.",
+     "success": {
+      "text": "Seven pulls. A clunk behind the poster. A stairway going down, and a Grunt in front of it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-gamecorner-stairs"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave. He sags against the machine.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-gamecorner-stairs",
+   "name": "Game Corner: Behind the Poster",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "The door of the Hideout raid, behind the poster. The Grunt: \"I said it was broken. I said.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "He fights like a man who has already decided whose fault this is.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rocket Grunt",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Found the stairway behind the Game Corner poster."
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-celadon-hideout-1"
+        }
+       ],
+       "evil": "grunt",
+       "evilTeam": "rocket"
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mansion",
+   "name": "Celadon Mansion",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "A tall house with a back door nobody's supposed to know about. Everybody knows about it. In the lobby an old woman is pouring tea for a Meowth, a Clefairy and a Nidoran♀, in three good china cups. The landlady, Mrs. Winifred Tansley: \"Sit. They've had theirs. You'll want the top floor; there's something up there needs a person.\"",
+   "choices": [
+    {
+     "label": "The Study, on the second floor.",
+     "success": {
+      "text": "Up a flight of stairs that creaks on every step.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mansion-study"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Rooftop.",
+     "success": {
+      "text": "Up, and up, and out into the wind.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mansion-roof"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Up the back stairs.",
+     "success": {
+      "text": "The back stairs are narrow and dark and smell of somebody else's house.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mansion-back"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thank her for the tea, and go.",
+     "success": {
+      "text": "Mrs. Tansley: \"Come back. They like a new face. So do I, though I'd never tell them.\"",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.celadon.mansion"
+  },
+  {
+   "id": "cs-kanto-celadon-mansion-study",
+   "name": "Celadon Mansion: The Study",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "rocket",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "rocket"
+      }
+     ],
+     "addChoices": [
+      {
+       "label": "Look behind the drawing on the far wall.",
+       "success": {
+        "text": "Behind a drawing of a Snorlax, a floor plan that isn't of this building. Corridors. Lifts. A room marked BOSS in a hand that pressed too hard. You copy it into your notebook.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "intel",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "intel",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "cs-kanto-celadon-mansion-lobby"
+         }
+        ]
+       }
+      }
+     ],
+     "hide": [
+      2
+     ],
+     "notice": "One drawing on the far wall hangs crooked, as if someone moved it in a hurry."
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Desks, drawings pinned to every wall, people who haven't slept. An artist: \"How many've you seen? ...No. Show me. ...I drew that one from a description. I got the ears wrong.\"",
+   "choices": [
+    {
+     "label": "Show them: 100 seen.",
+     "requires": [
+      {
+       "kind": "dex",
+       "set": "seen",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "The artist counts. Then counts again. Then fetches a certificate from a drawer, blows the dust off, and signs it with a flourish that goes right off the edge of the paper. A Diploma, for 100 seen: a permanent small bonus.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "kanto-diploma-3",
+        "name": "Celadon Diploma (100 seen)",
+        "effects": [
+         {
+          "kind": "ordinaryXpMultiplier",
+          "value": 1.06
+         }
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mansion-lobby"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show them: 60 seen.",
+     "requires": [
+      {
+       "kind": "dex",
+       "set": "seen",
+       "atLeast": 60
+      }
+     ],
+     "success": {
+      "text": "The artist counts. Then counts again. Then fetches a certificate from a drawer, blows the dust off, and signs it with a flourish that goes right off the edge of the paper. A Diploma, for 60 seen: a permanent small bonus.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "kanto-diploma-2",
+        "name": "Celadon Diploma (60 seen)",
+        "effects": [
+         {
+          "kind": "ordinaryXpMultiplier",
+          "value": 1.04
+         }
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mansion-lobby"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show them: 30 seen.",
+     "requires": [
+      {
+       "kind": "dex",
+       "set": "seen",
+       "atLeast": 30
+      }
+     ],
+     "success": {
+      "text": "The artist counts. Then counts again. Then fetches a certificate from a drawer, blows the dust off, and signs it with a flourish that goes right off the edge of the paper. A Diploma, for 30 seen: a permanent small bonus.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "kanto-diploma-1",
+        "name": "Celadon Diploma (30 seen)",
+        "effects": [
+         {
+          "kind": "ordinaryXpMultiplier",
+          "value": 1.02
+         }
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mansion-lobby"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back downstairs.",
+     "success": {
+      "text": "You leave them to their ears.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mansion-lobby"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mansion-roof",
+   "name": "Celadon Mansion: The Rooftop",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "A bench and a view of the whole of Celadon. One Pokémon left here a while comes back closer to you. Your lead looks at the bench, and at you.",
+   "choices": [
+    {
+     "label": "Sit with one of them a while.",
+     "pick": {},
+     "success": {
+      "text": "You sit. It sits. Nobody says anything, and Celadon goes on below you, and when you get up again something has been settled between you that you couldn't name.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "picked"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mansion-lobby"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back downstairs.",
+     "success": {
+      "text": "Down again.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mansion-lobby"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mansion-back",
+   "name": "Celadon Mansion: The Back Room",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Up the back stairs, a small room with one window. A Poké Ball on a table, with a note. The note: \"Left with the landlady. Good-natured. Eats anything. Couldn't keep it where I'm going. Please.\"",
+   "choices": [
+    {
+     "label": "Open the Ball.",
+     "success": {
+      "text": "An Eevee comes out yawning, sniffs your boots, and sits on them. Mrs. Tansley, from the doorway: \"There. I said it needed a person.\" She gives you a key on a ribbon. \"The back door. Come up to the roof whenever you like. Nobody'll stop you; nobody ever has.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "eevee"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-mansion-eevee",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-mansion-key",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Took in the Eevee someone left at Celadon Mansion."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it for someone who can keep it.",
+     "success": {
+      "text": "You leave the Ball where it is, and the note on top of it. On the stairs you hear the landlady say, to the empty room, \"Well. Somebody will.\"",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mansion-lobby",
+   "name": "Celadon Mansion: The Lobby",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Mrs. Tansley is pouring a fourth cup, for no one in particular.",
+   "choices": [
+    {
+     "label": "The Study, on the second floor.",
+     "success": {
+      "text": "Up a flight of stairs that creaks on every step.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mansion-study"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Rooftop.",
+     "success": {
+      "text": "Up, and up, and out into the wind.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mansion-roof"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Up the back stairs.",
+     "success": {
+      "text": "The back stairs are narrow and dark and smell of somebody else's house.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-mansion-back"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thank her for the tea, and go.",
+     "success": {
+      "text": "Mrs. Tansley: \"Come back. They like a new face. So do I, though I'd never tell them.\"",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-mansion-key",
+   "name": "Celadon Mansion: The Back Door",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kanto-mansion-key",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "The key on its ribbon still fits. Up the back stairs, out onto the roof, and there's the bench, and the view, and the wind.",
+   "choices": [
+    {
+     "label": "Sit with one of them a while.",
+     "pick": {},
+     "success": {
+      "text": "Nothing has changed up here, and that is the whole point of it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just look at the view.",
+     "success": {
+      "text": "Celadon below, lit up, and every road you have walked since.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-eevee",
+   "name": "Eeveelution Brothers",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "mansion",
+     "when": [
+      {
+       "kind": "partySpecies",
+       "species": "eevee"
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-mansion-eevee",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The brothers see your Eevee. \"Oh, excellent. A second opinion.\" The stone won can be used on it at once, or kept."
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "A garden party. Three brothers in three colours, each holding a stone, all talking at once at a fourth, much smaller boy holding an Eevee. Rainer: \"Water. It's obvious. Look at it, it wants to swim.\" Sparky: \"It wants to go fast. Thunder.\" Pyro: \"You're both wrong, and you're wrong coldly. Fire.\" The small one, Mikey: \"...Can I think about it?\" All three: \"NO.\" They see you. Three stones are held out. Rainer: \"You. Stranger. Settle it. Which is best?\"",
+   "choices": [
+    {
+     "label": "Pick a stone.",
+     "chance": 0.75,
+     "success": {
+      "text": "Three stones, three faces, all leaning in.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-eevee-stones"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Before you can answer, a cousin arrives late, out of breath, carrying a Leaf Stone and an Ice Stone. \"Did I miss it? Don't say I missed it.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-eevee-cousin"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the Eevee.",
+     "success": {
+      "text": "It hides behind Mikey's legs. The brothers look at it. For once, none of them says anything. Then Mikey picks it up, and it stops shaking, and that seems to be the answer.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-eevee",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-eevee-mikey",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask Mikey.",
+     "success": {
+      "text": "Mikey: \"I like it how it is.\" A long pause. Pyro: \"...That's allowed, is it?\" Nobody has ever asked Mikey before. He goes pink to the ears, and holds his Eevee a bit tighter, and looks taller.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-eevee",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-eevee-mikey",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.celadon.eevee"
+  },
+  {
+   "id": "cs-kanto-celadon-eevee-stones",
+   "name": "Eeveelution Brothers: Which Is Best?",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Rainer, Sparky, Pyro. Water, Thunder, Fire. Mikey, at the back, says nothing at all.",
+   "choices": [
+    {
+     "label": "Water.",
+     "chance": 0.5,
+     "success": {
+      "text": "Rainer crows. Sparky goes red to the ears: \"Fine. FINE. Prove it, then. One on one.\" His Jolteon steps out onto the lawn, and the garden party goes very quiet.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Sparky",
+       "size": 1,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "vaporeon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "water-stone",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-eevee",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Settled the Eeveelution Brothers' argument: Water."
+        }
+       ],
+       "team": [
+        "jolteon"
+       ]
+      }
+     },
+     "failure": {
+      "text": "Rainer crows. Pyro goes red to the ears: \"Fine. FINE. Prove it, then. One on one.\" His Flareon steps out onto the lawn, and the garden party goes very quiet.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Pyro",
+       "size": 1,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "vaporeon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "water-stone",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-eevee",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Settled the Eeveelution Brothers' argument: Water."
+        }
+       ],
+       "team": [
+        "flareon"
+       ]
+      }
+     }
+    },
+    {
+     "label": "Thunder.",
+     "chance": 0.5,
+     "success": {
+      "text": "Sparky crows. Rainer goes red to the ears: \"Fine. FINE. Prove it, then. One on one.\" His Vaporeon steps out onto the lawn, and the garden party goes very quiet.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rainer",
+       "size": 1,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "jolteon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "thunder-stone",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-eevee",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Settled the Eeveelution Brothers' argument: Thunder."
+        }
+       ],
+       "team": [
+        "vaporeon"
+       ]
+      }
+     },
+     "failure": {
+      "text": "Sparky crows. Pyro goes red to the ears: \"Fine. FINE. Prove it, then. One on one.\" His Flareon steps out onto the lawn, and the garden party goes very quiet.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Pyro",
+       "size": 1,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "jolteon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "thunder-stone",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-eevee",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Settled the Eeveelution Brothers' argument: Thunder."
+        }
+       ],
+       "team": [
+        "flareon"
+       ]
+      }
+     }
+    },
+    {
+     "label": "Fire.",
+     "chance": 0.5,
+     "success": {
+      "text": "Pyro crows. Rainer goes red to the ears: \"Fine. FINE. Prove it, then. One on one.\" His Vaporeon steps out onto the lawn, and the garden party goes very quiet.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rainer",
+       "size": 1,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "flareon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "fire-stone",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-eevee",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Settled the Eeveelution Brothers' argument: Fire."
+        }
+       ],
+       "team": [
+        "vaporeon"
+       ]
+      }
+     },
+     "failure": {
+      "text": "Pyro crows. Sparky goes red to the ears: \"Fine. FINE. Prove it, then. One on one.\" His Jolteon steps out onto the lawn, and the garden party goes very quiet.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Sparky",
+       "size": 1,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "flareon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "fire-stone",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-eevee",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Settled the Eeveelution Brothers' argument: Fire."
+        }
+       ],
+       "team": [
+        "jolteon"
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask Mikey.",
+     "success": {
+      "text": "Mikey: \"I like it how it is.\" A long pause. Pyro: \"...That's allowed, is it?\" Nobody has ever asked Mikey before. He goes pink to the ears, and holds his Eevee a bit tighter, and looks taller.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-eevee",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-eevee-mikey",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-eevee-cousin",
+   "name": "Eeveelution Brothers: The Fourth Stone",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Now there are five stones, and four people shouting, and one Eevee asleep through all of it.",
+   "choices": [
+    {
+     "label": "Water.",
+     "chance": 0.5,
+     "success": {
+      "text": "Rainer crows. Sparky goes red to the ears: \"Fine. FINE. Prove it, then. One on one.\" His Jolteon steps out onto the lawn, and the garden party goes very quiet.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Sparky",
+       "size": 1,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "vaporeon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "water-stone",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-eevee",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Settled the Eeveelution Brothers' argument: Water."
+        }
+       ],
+       "team": [
+        "jolteon"
+       ]
+      }
+     },
+     "failure": {
+      "text": "Rainer crows. Pyro goes red to the ears: \"Fine. FINE. Prove it, then. One on one.\" His Flareon steps out onto the lawn, and the garden party goes very quiet.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Pyro",
+       "size": 1,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "vaporeon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "water-stone",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-eevee",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Settled the Eeveelution Brothers' argument: Water."
+        }
+       ],
+       "team": [
+        "flareon"
+       ]
+      }
+     }
+    },
+    {
+     "label": "Fire.",
+     "chance": 0.5,
+     "success": {
+      "text": "Pyro crows. Rainer goes red to the ears: \"Fine. FINE. Prove it, then. One on one.\" His Vaporeon steps out onto the lawn, and the garden party goes very quiet.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rainer",
+       "size": 1,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "flareon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "fire-stone",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-eevee",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Settled the Eeveelution Brothers' argument: Fire."
+        }
+       ],
+       "team": [
+        "vaporeon"
+       ]
+      }
+     },
+     "failure": {
+      "text": "Pyro crows. Sparky goes red to the ears: \"Fine. FINE. Prove it, then. One on one.\" His Jolteon steps out onto the lawn, and the garden party goes very quiet.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Sparky",
+       "size": 1,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "flareon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "fire-stone",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-eevee",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Settled the Eeveelution Brothers' argument: Fire."
+        }
+       ],
+       "team": [
+        "jolteon"
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leaf. Or Ice.",
+     "success": {
+      "text": "The cousin beams so hard the brothers stop arguing to stare at him.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-eevee-cousin2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask Mikey.",
+     "success": {
+      "text": "Mikey: \"I like it how it is.\" A long pause. Pyro: \"...That's allowed, is it?\" Nobody has ever asked Mikey before. He goes pink to the ears, and holds his Eevee a bit tighter, and looks taller.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-eevee",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-eevee-mikey",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-eevee-cousin2",
+   "name": "Eeveelution Brothers: The Cousin's Stones",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Leaf, or Ice. The cousin holds both out, one in each hand, like scales.",
+   "choices": [
+    {
+     "label": "Leaf.",
+     "chance": 0.5,
+     "success": {
+      "text": "The cousin crows. Pyro goes red to the ears: \"Fine. FINE. Prove it, then. One on one.\" His Flareon steps out onto the lawn, and the garden party goes very quiet.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Pyro",
+       "size": 1,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "leafeon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "leaf-stone",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-eevee",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Settled the Eeveelution Brothers' argument: Leaf."
+        }
+       ],
+       "team": [
+        "flareon"
+       ]
+      }
+     },
+     "failure": {
+      "text": "The cousin crows. Rainer goes red to the ears: \"Fine. FINE. Prove it, then. One on one.\" His Vaporeon steps out onto the lawn, and the garden party goes very quiet.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rainer",
+       "size": 1,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "leafeon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "leaf-stone",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-eevee",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Settled the Eeveelution Brothers' argument: Leaf."
+        }
+       ],
+       "team": [
+        "vaporeon"
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ice.",
+     "chance": 0.5,
+     "success": {
+      "text": "The cousin crows. Pyro goes red to the ears: \"Fine. FINE. Prove it, then. One on one.\" His Flareon steps out onto the lawn, and the garden party goes very quiet.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Pyro",
+       "size": 1,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "glaceon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "ice-stone",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-eevee",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Settled the Eeveelution Brothers' argument: Ice."
+        }
+       ],
+       "team": [
+        "flareon"
+       ]
+      }
+     },
+     "failure": {
+      "text": "The cousin crows. Sparky goes red to the ears: \"Fine. FINE. Prove it, then. One on one.\" His Jolteon steps out onto the lawn, and the garden party goes very quiet.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Sparky",
+       "size": 1,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "glaceon"
+         ],
+         "levelBonus": 0
+        },
+        {
+         "kind": "item",
+         "id": "ice-stone",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-eevee",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Settled the Eeveelution Brothers' argument: Ice."
+        }
+       ],
+       "team": [
+        "jolteon"
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-tea",
+   "name": "Tea House & Gardens",
+   "group": "Canon Spaces: Kanto",
+   "stop": "merchant",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "vial",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-perfume-foiled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "She pours the tea herself, and there's a vial beside the cup. \"From the gardeners,\" she says. \"The real ones. They asked me to say thank you properly.\""
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "A low house in a garden. Shoes off at the door. Somebody's asleep under a tree, and nobody minds. It's Erika, here as the host, outside her Gym. Erika, waking: \"Oh. I'm so sorry. I was— the Gloom was warm. Will you take tea? It mends more than people think it does.\"",
+   "choices": [
+    {
+     "label": "Take tea.",
+     "success": {
+      "text": "The tea is green and very hot and tastes faintly of the garden. Every move's PP is restored and every status cured, for the whole party. Free, once.",
+      "effects": [
+       {
+        "kind": "restorePp"
+       },
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-tea-talk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rest (₽300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "A room at the back, a futon, the sound of water in the garden all night. Everyone wakes whole.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bow, and leave her to her garden.",
+     "success": {
+      "text": "Erika bows back from the floor, and is asleep again before you've got your shoes on.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.celadon.tea"
+  },
+  {
+   "id": "cs-kanto-celadon-tea-talk",
+   "name": "Tea House & Gardens: Over Tea",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Erika pours a second cup, and waits, in no hurry at all, to see what you'll talk about.",
+   "choices": [
+    {
+     "label": "\"It's a beautiful garden.\"",
+     "success": {
+      "text": "Erika smiles, and doesn't say thank you, because you can see she thinks the garden did it all by itself. You sit a long time.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Doesn't the Gloom smell?\"",
+     "success": {
+      "text": "Erika: \"It does. I thought so too, once. Then one saved my life, and I've never smelled it since. Odd, that.\" The Gloom, asleep in her lap, sighs, and nobody minds.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Do you ever leave?\"",
+     "success": {
+      "text": "Erika: \"The garden needs someone. I don't mind being who.\" She pours you another cup, and you realise you don't mind either, for a while.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-perfume",
+   "name": "Perfume Heist",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "A perfume garden, rows and rows of it, and the air so thick with scent you can lean on it. Three new \"gardener girls\" in headscarves. One's very tall. One has a moustache. One is about two feet high and keeps its hat pulled down. The tall one: \"We're the new girls! We love... leaves!\" The one with the moustache: \"And the smells. The valuable, valuable smells.\" The short one: \"Meow— me, oh my, what a lovely day.\" Head gardener, Miss Rosalind Akers: \"They came this morning. They're very keen. They've watered the gravel twice.\"",
+   "choices": [
+    {
+     "label": "Look around first.",
+     "success": {
+      "text": "You may examine three things before deciding.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-perfume-clues"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You're Team Rocket.\"",
+     "success": {
+      "text": "\"Prepare for trouble—\" \"—and make it—\" The motto is started, and abandoned halfway, because the scarves are caught in each other and in the wheelbarrow and very nearly in the Meowth. \"Just fight them!\" A double battle.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-trio-met",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Jessie and James",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "item",
+         "id": "perfume-vial",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 2
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-perfume-foiled",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Unmasked three very bad gardeners at the Celadon perfume garden."
+        }
+       ],
+       "team": [
+        "ekans",
+        "koffing"
+       ],
+       "format": "doubles"
+      }
+     }
+    },
+    {
+     "label": "\"Nice hats.\" (walk away)",
+     "success": {
+      "text": "\"Thank you!\" says the tall one, much too pleased. They take the perfume. Nothing's lost, not by you. But there will be no vial on Erika's tea tray.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-trio-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-perfume-lost",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Need a hand with that wheelbarrow?\"",
+     "success": {
+      "text": "You push the wheelbarrow, straight to the head gardener. No battle. The trio can't object without admitting it, and stand in a row with their mouths open. Jessie's last line: \"That was low. I respect it.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "perfume-vial",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-trio-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-perfume-foiled",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Wheeled a barrow of stolen perfume straight back to its gardener."
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.celadon.perfume"
+  },
+  {
+   "id": "cs-kanto-celadon-perfume-clues",
+   "name": "Perfume Heist: Looking Around",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "The three new gardeners are being extremely busy about nothing, and keep glancing at you.",
+   "choices": [
+    {
+     "label": "The wheelbarrow.",
+     "success": {
+      "text": "It's full of bottles, under one leaf.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-perfume-clues"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The short one's hat.",
+     "success": {
+      "text": "There's a coin under it. A large gold one. On its forehead.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-perfume-clues"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The watering can.",
+     "success": {
+      "text": "It's got an R on it, in pen, crossed out, with \"G for Gardener\" written over.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-perfume-clues"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Decide.",
+     "success": {
+      "text": "You've seen enough.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-celadon-perfume-decide"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-celadon-perfume-decide",
+   "name": "Perfume Heist: Decide",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3d7a4a"
+   },
+   "intro": "Three gardeners. One wheelbarrow. One leaf on top of a great many bottles.",
+   "choices": [
+    {
+     "label": "\"You're Team Rocket.\"",
+     "success": {
+      "text": "\"Prepare for trouble—\" \"—and make it—\" The motto is started, and abandoned halfway, because the scarves are caught in each other and in the wheelbarrow and very nearly in the Meowth. \"Just fight them!\" A double battle.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-trio-met",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Jessie and James",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "item",
+         "id": "perfume-vial",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 2
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-perfume-foiled",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Unmasked three very bad gardeners at the Celadon perfume garden."
+        }
+       ],
+       "team": [
+        "ekans",
+        "koffing"
+       ],
+       "format": "doubles"
+      }
+     }
+    },
+    {
+     "label": "\"Nice hats.\" (walk away)",
+     "success": {
+      "text": "\"Thank you!\" says the tall one, much too pleased. They take the perfume. Nothing's lost, not by you. But there will be no vial on Erika's tea tray.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-trio-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-perfume-lost",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Need a hand with that wheelbarrow?\"",
+     "success": {
+      "text": "You push the wheelbarrow, straight to the head gardener. No battle. The trio can't object without admitting it, and stand in a row with their mouths open. Jessie's last line: \"That was low. I respect it.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "perfume-vial",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-trio-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-perfume-foiled",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Wheeled a barrow of stolen perfume straight back to its gardener."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-warden",
+   "name": "Warden's Gold Teeth",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3d6b"
+   },
+   "intro": "The Warden's at the gate, talking. Nobody can understand a word. The Warden: \"Hif fuf fuh hoof ee hiff!\" Gate attendant, Mr. Cuthbert Lowe: \"He's lost his teeth. In the Zone. He was shouting at a Kangaskhan and they came out. He'd like them found. I think. It's that or he wants soup.\" There are three areas, and each one has a clue that says whether the teeth are there, without stepping in.",
+   "choices": [
+    {
+     "label": "Look at the Center first.",
+     "chance": 0.4,
+     "success": {
+      "text": "A Psyduck is holding its head harder than usual, staring at something shiny in the pond.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-warden-center"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Psyduck in the Center pond is holding its head exactly the usual amount. Not here.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-warden-elsewhere"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's soup. He definitely wants soup.\"",
+     "success": {
+      "text": "The Warden looks at you with enormous, toothless betrayal.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.fuchsia.warden"
+  },
+  {
+   "id": "cs-kanto-fuchsia-warden-elsewhere",
+   "name": "Warden's Gold Teeth: Area 2 or Area 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3d6b"
+   },
+   "intro": "Two areas left. The Warden follows you, gumming furiously.",
+   "choices": [
+    {
+     "label": "Look over Area 2.",
+     "chance": 0.58,
+     "success": {
+      "text": "A Nidorino that keeps smiling.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-warden-area2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Nidorinos in Area 2 aren't smiling at all. And over in Area 3, a Kangaskhan's young is wearing something gold.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-warden-area3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-warden-center",
+   "name": "Warden's Gold Teeth: The Center",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3d6b"
+   },
+   "intro": "The Psyduck, the pond, and something shiny under the water.",
+   "choices": [
+    {
+     "label": "Wade in.",
+     "success": {
+      "text": "You wade in up to the knee and come out with them. The Psyduck looks relieved to be able to stop staring. The Warden, teeth in: \"Ah! There. I said: 'Thank you, you're a credit.' ...I didn't say soup. Who said soup?\" He gives you TM Strength and a Safari Pass: ten more Safari Balls.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "strength"
+       },
+       {
+        "kind": "item",
+        "id": "safari-ball",
+        "count": 10
+       },
+       {
+        "kind": "moment",
+        "text": "Found the Safari Warden's gold teeth."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-warden-area2",
+   "name": "Warden's Gold Teeth: Area 2",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3d6b"
+   },
+   "intro": "The Nidorino grins at you with a mouthful of gold.",
+   "choices": [
+    {
+     "label": "Hold out your hand.",
+     "success": {
+      "text": "It thinks about it, and spits them into your palm, and goes back to looking like a Nidorino. The Warden, teeth in: \"Ah! There. I said: 'Thank you, you're a credit.' ...I didn't say soup. Who said soup?\" He gives you TM Strength and a Safari Pass: ten more Safari Balls.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "strength"
+       },
+       {
+        "kind": "item",
+        "id": "safari-ball",
+        "count": 10
+       },
+       {
+        "kind": "moment",
+        "text": "Found the Safari Warden's gold teeth."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-warden-area3",
+   "name": "Warden's Gold Teeth: Area 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3d6b"
+   },
+   "intro": "A Kangaskhan's young, wearing them, and very pleased about it. Its mother is right there.",
+   "choices": [
+    {
+     "label": "Trade it something.",
+     "success": {
+      "text": "You offer it a Berry. It weighs the Berry against the teeth, and the Berry wins. The Warden, teeth in: \"Ah! There. I said: 'Thank you, you're a credit.' ...I didn't say soup. Who said soup?\" He gives you TM Strength and a Safari Pass: ten more Safari Balls.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "strength"
+       },
+       {
+        "kind": "item",
+        "id": "safari-ball",
+        "count": 10
+       },
+       {
+        "kind": "moment",
+        "text": "Found the Safari Warden's gold teeth."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the mother.",
+     "success": {
+      "text": "The mother looks at you a long time. Then she reaches into the pouch and takes them away from her baby, and holds them out, and the baby howls, and she doesn't mind at all. The Warden, teeth in: \"Ah! There. I said: 'Thank you, you're a credit.' ...I didn't say soup. Who said soup?\" He gives you TM Strength and a Safari Pass: ten more Safari Balls.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "strength"
+       },
+       {
+        "kind": "item",
+        "id": "safari-ball",
+        "count": 10
+       },
+       {
+        "kind": "moment",
+        "text": "Found the Safari Warden's gold teeth."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait till it's bored.",
+     "success": {
+      "text": "Waiting costs one Safari step, and always works. The young one drops them in the grass and wanders off after a butterfly. The Warden, teeth in: \"Ah! There. I said: 'Thank you, you're a credit.' ...I didn't say soup. Who said soup?\" He gives you TM Strength and a Safari Pass: ten more Safari Balls.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "strength"
+       },
+       {
+        "kind": "item",
+        "id": "safari-ball",
+        "count": 10
+       },
+       {
+        "kind": "moment",
+        "text": "Found the Safari Warden's gold teeth."
+       },
+       {
+        "kind": "loseItem",
+        "id": "safari-ball",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-tauros",
+   "name": "Tauros Stampede",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "trio",
+     "when": [
+      {
+       "kind": "xflag",
+       "flag": "trioFriendly"
+      }
+     ],
+     "notice": "Between two trees, at the far edge of the plain, three people are stringing a net."
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3d6b"
+   },
+   "intro": "The ground hums. The horizon's the wrong colour, and it's getting closer. Tauros. Thirty of them. They aren't angry. They're just going somewhere, and you're standing in it. The odds are shown.",
+   "choices": [
+    {
+     "label": "Dodge (100% safe).",
+     "success": {
+      "text": "The herd parts round you like water round a stone. No catch. A very good view: thirty backs going past at the height of your head, and the smell of dust and grass and hot animal, and then they're gone. One Tauros stops, looks back at you, and catches the herd up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-dodged",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bait (40% per ball, up to six throws).",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "safari-ball"
+      }
+     ],
+     "success": {
+      "text": "You scatter bait. The herd slows to eat.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-bait"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rock (25% per ball, each throw costs one extra ball).",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "safari-ball"
+      }
+     ],
+     "success": {
+      "text": "You throw a rock. The herd stampedes. Faster, and it costs more.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-rock"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.fuchsia.tauros"
+  },
+  {
+   "id": "cs-kanto-fuchsia-tauros-bait",
+   "name": "Tauros Stampede: Bait",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "spent",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-tauros-throws",
+       "atLeast": 6,
+       "atMost": 99
+      }
+     ],
+     "hide": [
+      0
+     ],
+     "notice": "The bait is gone. The herd lifts its heads, all at once, and moves on."
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3d6b"
+   },
+   "intro": "The herd grazes round you. Six throws at most before they move on.",
+   "choices": [
+    {
+     "label": "Throw (40%).",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "safari-ball"
+      }
+     ],
+     "chance": 0.4,
+     "success": {
+      "text": "The Ball shakes once in the dust and holds. A Tauros with Intimidate. It stands among the grazing herd as if it had always meant to come with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "tauros"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-caught",
+        "amount": 1
+       },
+       {
+        "kind": "loseItem",
+        "id": "safari-ball",
+        "count": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-more"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Ball bounces off a broad back. The Tauros doesn't even look up from the grass.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "safari-ball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-throws",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-bait"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them go.",
+     "success": {
+      "text": "You lower the Ball. The herd finishes the bait and goes on its way, unhurried.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-tauros-rock",
+   "name": "Tauros Stampede: Rock",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3d6b"
+   },
+   "intro": "The herd thunders past. Every throw costs two balls.",
+   "choices": [
+    {
+     "label": "Throw (25%).",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "safari-ball",
+       "count": 2
+      }
+     ],
+     "chance": 0.25,
+     "success": {
+      "text": "The Ball shakes once in the dust and holds. A Tauros with Intimidate. It skids to a halt out of the stampede as though it chose to.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "tauros"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-tauros-caught",
+        "amount": 1
+       },
+       {
+        "kind": "loseItem",
+        "id": "safari-ball",
+        "count": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-more"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Two Balls gone in the dust.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "safari-ball",
+        "count": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-rock"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them go.",
+     "success": {
+      "text": "A net's strung between two trees. The herd goes through it, and through the three people holding it, without slowing. No battle. James, from a tree, afterwards: \"I counted thirty. I think I was hit by all of them.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-trio-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-tauros-more",
+   "name": "Tauros Stampede: Another?",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3d6b"
+   },
+   "intro": "The herd is still there. Each one caught past the first becomes a Tauros Charm, and the extra Tauros are sent home to the Safari.",
+   "choices": [
+    {
+     "label": "Another (40%).",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "safari-ball"
+      }
+     ],
+     "chance": 0.4,
+     "success": {
+      "text": "Another one, and a Tauros Charm for it; the Tauros itself is walked home to the Safari by a ranger who doesn't look surprised.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "tauros-charm",
+        "count": 1
+       },
+       {
+        "kind": "loseItem",
+        "id": "safari-ball",
+        "count": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-tauros-more"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It shrugs off the Ball and rejoins the herd.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "safari-ball",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "That's enough.",
+     "success": {
+      "text": "You let the rest of them go. They have somewhere to be.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-tauros-back",
+   "name": "Tauros Stampede: The One That Looked Back",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kanto-tauros-dodged",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "kanto-tauros-caught",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3d6b"
+   },
+   "intro": "It's in the same spot. It has been, by the look of the grass, for some time.",
+   "choices": [
+    {
+     "label": "Hold out one Ball.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "safari-ball"
+      }
+     ],
+     "success": {
+      "text": "It walks up to the Ball and puts its nose on it. 100%.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "tauros"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "loseItem",
+        "id": "safari-ball",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it be.",
+     "success": {
+      "text": "It watches you go, and doesn't follow, and you think it understands.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-zoo",
+   "name": "Fuchsia Zoo",
+   "group": "Canon Spaces: Kanto",
+   "stop": "merchant",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3d6b"
+   },
+   "intro": "Paddocks, not cages: low fences, and signs in a child's handwriting. Zookeeper, Miss Henrietta Bell: \"They're not kept. They're visiting. The Chansey's been visiting six years. The signs are my niece's. She's very accurate.\" The signs: \"LAPRAS. It is shy. Do not sing at it, it will sing back and then you have to stay.\" \"KANGASKHAN. Do not look at the baby. She knows.\"",
+   "choices": [
+    {
+     "label": "Read the Lapras sign.",
+     "success": {
+      "text": "You read every word, and then the small print, which says \"it is still shy\". For the rest of the stage, you know how water-type wild Pokémon fight.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-zoo-water",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-zoo-candy"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the Kangaskhan sign.",
+     "success": {
+      "text": "You read it without looking at the baby. She knows anyway. For the rest of the stage, you know how normal-type wild Pokémon fight.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-zoo-normal",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-zoo-candy"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The empty paddock.",
+     "success": {
+      "text": "Empty, with a sign: \"OMANYTE. It is not here yet. Uncle says somebody has to wake one up.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-fuchsia-zoo-fossil"
+       }
+      ]
+     }
+    },
+    {
+     "label": "One Rare Candy, once (₽10,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 10000
+      }
+     ],
+     "success": {
+      "text": "Miss Bell takes it out of a locked tin: \"From the Chansey. Don't ask.\" A Rare Candy.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -10000
+       },
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.fuchsia.zoo"
+  },
+  {
+   "id": "cs-kanto-fuchsia-zoo-candy",
+   "name": "Fuchsia Zoo: The Shop",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3d6b"
+   },
+   "intro": "The zoo shop, which is a table by the gate with a tin on it.",
+   "choices": [
+    {
+     "label": "One Rare Candy, once (₽10,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 10000
+      }
+     ],
+     "success": {
+      "text": "From the Chansey. Don't ask. A Rare Candy.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -10000
+       },
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thank her and go.",
+     "success": {
+      "text": "\"Come back,\" says Miss Bell. \"They like visitors. They're visitors themselves.\"",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-zoo-fossil",
+   "name": "Fuchsia Zoo: The Fossil Paddock",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3d6b"
+   },
+   "intro": "Empty, with a sign: \"OMANYTE. It is not here yet. Uncle says somebody has to wake one up.\"",
+   "choices": [
+    {
+     "label": "Let your revived fossil visit for a while.",
+     "pick": {},
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-fossil-revived",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "It walks into the paddock as if it owns it. By the time you come back for it, the niece has rewritten the sign: \"IT IS HERE NOW. It is very old. Be polite.\" Bond +2.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-zoo-fossil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the sign as it is.",
+     "success": {
+      "text": "Somebody will wake one up. You hope it's someone kind.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-fuchsia-snag",
+   "name": "The Snag Test",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3d6b"
+   },
+   "intro": "A trainer battle's already going on at this node: a Safari ranger and a stranger in a grey jacket with one heavy sleeve. The stranger throws a Ball at the ranger's Rhyhorn. Not at a wild one. At hers. It closes. Ranger Corisande Brome: \"That's— you can't. That's mine. It's got a name.\" Snag'em operative: \"Field test fourteen. Subject secured. It works on registered ones. Tell Gonzap it works.\"",
+   "choices": [
+    {
+     "label": "\"Give it back.\"",
+     "success": {
+      "text": "You step between them. A two-on-one: the operative and a second, and the snagged Rhyhorn's on their side. It fights badly. It keeps looking at the ranger.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-snag-seen",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Snag'em operatives",
+       "size": 2,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-snag-ball",
+         "amount": 1
+        },
+        {
+         "kind": "item",
+         "id": "snag-ball",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Won back a ranger's Rhyhorn from a Snag'em operative."
+        },
+        {
+         "kind": "moment",
+         "text": "The Rhyhorn ran straight back to its ranger."
+        }
+       ],
+       "team": [
+        "rhyhorn",
+        "sandslash"
+       ],
+       "format": "doubles",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "kanto-snag-lost",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"How does that thing work?\"",
+     "success": {
+      "text": "He explains, proudly, for too long: the sleeve, the frequency, the registration bypass. You let him finish. Then the fight, with you moving first. A two-on-one: the operative and a second, and the snagged Rhyhorn's on their side. It fights badly. It keeps looking at the ranger.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-snag-seen",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Snag'em operatives",
+       "size": 2,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-snag-ball",
+         "amount": 1
+        },
+        {
+         "kind": "item",
+         "id": "snag-ball",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Won back a ranger's Rhyhorn from a Snag'em operative."
+        },
+        {
+         "kind": "moment",
+         "text": "The Rhyhorn ran straight back to its ranger."
+        }
+       ],
+       "team": [
+        "rhyhorn",
+        "sandslash"
+       ],
+       "format": "doubles",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "kanto-snag-lost",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Stay out of it.\"",
+     "success": {
+      "text": "They leave with it. The ranger stands in the empty space where her Rhyhorn was, holding its Ball, which is empty now and will never close again. It's on their roster later, and you can win it back then.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-snag-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.fuchsia.snag"
+  },
+  {
+   "id": "cs-kanto-saffron-silph",
+   "name": "Silph Co. Lobby",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "won",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-silph-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The lobby's open; the fountain's working; the other half of the guards are gone. The President meets you at the door and doesn't let go of your hand for a long time."
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a7a2f"
+   },
+   "intro": "The tallest building in the city. A lobby with a fountain, a front desk, and more security than a lobby needs. Receptionist, Miss Araminta Doyle: \"Welcome to Silph. He's expecting you. He isn't, but he says that about everybody; he likes people to feel expected.\" The President comes down himself, hand out: \"You're the one from the papers! The bridge. The ship. Sit down. I've got something in the basement that wants a better life than a basement.\"",
+   "choices": [
+    {
+     "label": "\"Who tried to buy her?\"",
+     "success": {
+      "text": "The President: \"They left a card. It's blank. Who leaves a blank card?\" He gives it to you. You hold it up to the light; nothing. It's a File.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-silph-card",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-silph-gift"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why so many guards?\"",
+     "success": {
+      "text": "The President: \"I hired half. I don't know who hired the other half.\" He's realised it as he says it. He looks around the lobby at the men by the doors, and they look back.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-silph-gift"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Thank you.\"",
+     "success": {
+      "text": "He shakes your hand with both of his.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-silph-gift"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.saffron.silph"
+  },
+  {
+   "id": "cs-kanto-saffron-silph-gift",
+   "name": "Silph Co. Lobby: The Basement",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a7a2f"
+   },
+   "intro": "The President, looking at the lift and not at the guards: \"Come and see her.\"",
+   "choices": [
+    {
+     "label": "\"Take her somewhere they aren't.\"",
+     "requires": [
+      {
+       "kind": "evil",
+       "heatBelow": 40
+      }
+     ],
+     "success": {
+      "text": "The President, very quietly: \"Somebody tried to buy her last month. Cash. Men in black. I said no, and they smiled, and I haven't slept well since. Take her somewhere they aren't.\" The lift goes down to a basement that smells of the sea. She's in a tank much too small for her, and she turns round in it to look at you, and sings one note.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "lapras"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-silph-lapras",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Silph President gave you the Lapras from his basement."
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Thank you. I'll come back.\"",
+     "requires": [
+      {
+       "kind": "evil",
+       "heat": 40
+      }
+     ],
+     "success": {
+      "text": "He's frightened, and says less. The Lapras isn't offered now. It's given after the takeover's won, with interest: a Master Ball beside it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-silph-owed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-dojo",
+   "name": "Fighting Dojo",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "tournament",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-tournament-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A wooden hall beside a much newer, much shinier Gym. The Karate Master meets you at the door. He was in the crowd at the Tournament. He doesn't make you fight. He hands over the Ball, and asks for a lesson.",
+     "addChoices": [
+      {
+       "label": "Give him a lesson.",
+       "success": {
+        "text": "You show him what you did in the final. He takes notes. A grown man, a master, taking notes, with his tongue between his teeth.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "cs-kanto-saffron-dojo-prize"
+         }
+        ]
+       }
+      }
+     ],
+     "hide": [
+      0,
+      1,
+      2
+     ]
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a7a2f"
+   },
+   "intro": "A wooden hall beside a much newer, much shinier Gym. A sign, repainted many times: THE REAL SAFFRON GYM. Under it, smaller: (formerly). The Karate Master: \"We were the Gym. Then she came, and she didn't lift a hand, and my best four sat down and cried. One on one. My Machamp. Let me remember what winning's like, or let me lose to someone who uses their arms.\"",
+   "choices": [
+    {
+     "label": "\"One on one.\"",
+     "success": {
+      "text": "He bows. His Machamp bows, with all four arms.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Karate Master",
+       "size": 1,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-dojo-prize"
+        }
+       ],
+       "team": [
+        "machamp"
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"What happened with the Gym?\"",
+     "success": {
+      "text": "He tells you, all of it: the girl who never raised her voice, the four black belts who sat down on the mat and wept and could not say why. He has never told it without his hands shaking. They shake now. \"One on one,\" he says at the end. \"Please.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-dojo-fight"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll use a Psychic-type.\"",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "psychic"
+      }
+     ],
+     "success": {
+      "text": "He shuts his eyes. \"...Yes. Fine. Go on. I should practise.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Karate Master",
+       "size": 1,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-dojo-psychic",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-dojo-prize"
+        }
+       ],
+       "team": [
+        "machamp"
+       ],
+       "rule": {
+        "leadType": "psychic"
+       }
+      }
+     }
+    },
+    {
+     "label": "Bow, and leave.",
+     "success": {
+      "text": "You bow at the door. He bows back, from the mat, longer than you did.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.saffron.dojo"
+  },
+  {
+   "id": "cs-kanto-saffron-dojo-fight",
+   "name": "Fighting Dojo: One on One",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a7a2f"
+   },
+   "intro": "The Karate Master on the mat, his Machamp beside him.",
+   "choices": [
+    {
+     "label": "One on one.",
+     "success": {
+      "text": "He bows.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Karate Master",
+       "size": 1,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-dojo-prize"
+        }
+       ],
+       "team": [
+        "machamp"
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-dojo-prize",
+   "name": "Fighting Dojo: The Reward",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "psychic",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-dojo-psychic",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He bows lower than for anything else."
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a7a2f"
+   },
+   "intro": "He bows. If you won with a Psychic-type, he bows lower than for anything else. Two Poké Balls on the mat: a Hitmonlee and a Hitmonchan.",
+   "choices": [
+    {
+     "label": "The Hitmonlee.",
+     "success": {
+      "text": "The Karate Master: \"One kicks. One punches. That one spins; we don't know why. It arrived.\" The Hitmonlee stretches one leg up past its own head, as a greeting.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "hitmonlee"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "moment",
+        "text": "Earned a Hitmonlee at the Fighting Dojo."
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Hitmonchan.",
+     "success": {
+      "text": "The Karate Master: \"One kicks. One punches. That one spins; we don't know why. It arrived.\" The Hitmonchan taps its gloves together, twice, and nods.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "hitmonchan"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "moment",
+        "text": "Earned a Hitmonchan at the Fighting Dojo."
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"And the one that spins?\"",
+     "chance": 0.15,
+     "success": {
+      "text": "A third Ball rolls out from behind the shrine. The Karate Master: \"...Well. It's offered itself, then.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-dojo-top"
+       }
+      ]
+     },
+     "failure": {
+      "text": "He looks round for it. \"It's gone off somewhere. It does that.\" Two Balls on the mat still.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-dojo-prize2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-dojo-prize2",
+   "name": "Fighting Dojo: The Reward",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a7a2f"
+   },
+   "intro": "Two Poké Balls on the mat: a Hitmonlee and a Hitmonchan.",
+   "choices": [
+    {
+     "label": "The Hitmonlee.",
+     "success": {
+      "text": "The Karate Master: \"One kicks. One punches. That one spins; we don't know why. It arrived.\" It stretches.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "hitmonlee"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "moment",
+        "text": "Earned a Hitmonlee at the Fighting Dojo."
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Hitmonchan.",
+     "success": {
+      "text": "The Karate Master: \"One kicks. One punches. That one spins; we don't know why. It arrived.\" It nods.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "hitmonchan"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "moment",
+        "text": "Earned a Hitmonchan at the Fighting Dojo."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-dojo-top",
+   "name": "Fighting Dojo: The Third Ball",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a7a2f"
+   },
+   "intro": "Hitmonlee, Hitmonchan, and the Hitmontop, spinning slowly on its head on the mat, watching you upside down.",
+   "choices": [
+    {
+     "label": "The Hitmonlee.",
+     "success": {
+      "text": "The Karate Master: \"One kicks. One punches. That one spins; we don't know why. It arrived.\" It stretches.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "hitmonlee"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "moment",
+        "text": "Earned a Hitmonlee at the Fighting Dojo."
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Hitmonchan.",
+     "success": {
+      "text": "The Karate Master: \"One kicks. One punches. That one spins; we don't know why. It arrived.\" It nods.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "hitmonchan"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "moment",
+        "text": "Earned a Hitmonchan at the Fighting Dojo."
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Hitmontop.",
+     "success": {
+      "text": "The Karate Master: \"One kicks. One punches. That one spins; we don't know why. It arrived.\" The Hitmontop stops spinning, rights itself, and walks over to you.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "hitmontop"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "moment",
+        "text": "Earned a Hitmontop at the Fighting Dojo."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-copycat",
+   "name": "Copycat Girl",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "ditto",
+     "when": [
+      {
+       "kind": "partySpecies",
+       "species": "ditto"
+      }
+     ],
+     "notice": "Your Ditto comes out of its Ball. She and it face each other. Nobody moves for a very long time."
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a7a2f"
+   },
+   "intro": "A girl on a doorstep. She's standing exactly as you're standing. You stop. She stops. You tilt your head. She tilts hers. Copycat: \"...I'll just have a look, then,\" in your voice, in your rhythm, word for word, the last thing you said aloud. Her mother, from a window: \"She'll stop if you beat her at it. Nobody's beaten her at it.\" Four rounds: you pick a gesture and she copies it a beat later; then she picks, and you have to match. Her picks get faster.",
+   "choices": [
+    {
+     "label": "Play.",
+     "prompt": {
+      "id": "copycat-claps",
+      "needs": "good"
+     },
+     "success": {
+      "text": "All four matched. She laughs, in her own voice, for the first time. TM Mimic. Then the last thing: she does the cry of your lead. It's perfect. Your lead answers her. Copycat, herself: \"I only do the ones I like.\"",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "mimic"
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "moment",
+        "text": "Beat the Copycat Girl at her own game."
+       }
+      ]
+     },
+     "failure": {
+      "text": "Three or fewer. She copies your sigh, exactly. The game can be tried once more.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-copycat-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Copy her copying you.",
+     "success": {
+      "text": "You copy her copying you. She copies you copying her copying you. It goes on for some time. Her mother laughs from the window, and the girl, very nearly, does too.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.saffron.copycat"
+  },
+  {
+   "id": "cs-kanto-saffron-copycat-again",
+   "name": "Copycat Girl: Once More",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a7a2f"
+   },
+   "intro": "She waits, standing exactly as you're standing.",
+   "choices": [
+    {
+     "label": "Once more.",
+     "prompt": {
+      "id": "copycat-claps",
+      "needs": "good"
+     },
+     "success": {
+      "text": "All four matched. She laughs, in her own voice, for the first time. TM Mimic. Then the last thing: she does the cry of your lead. It's perfect. Your lead answers her. Copycat, herself: \"I only do the ones I like.\"",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "mimic"
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "moment",
+        "text": "Beat the Copycat Girl at her own game."
+       }
+      ]
+     },
+     "failure": {
+      "text": "She copies your sigh again. Then she copies you walking away, all the way to the corner.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-train",
+   "name": "Magnet Train",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a7a2f"
+   },
+   "intro": "A station that's nearly finished. One platform. One train, humming. Station master, Mr. Ignatius Tolley: \"Test run. Free. She'll have you at the next stage's first town before you've sat down. You'll miss the road, mind. Some people like the road.\" The Honest Trade Card: Ride, and the start of the next stage is skipped; you start further in, and the spaces you'd have rolled there aren't seen. Must-see spaces, chain beats and rival battles are never skipped. Walk, and nothing changes.",
+   "choices": [
+    {
+     "label": "Ride.",
+     "success": {
+      "text": "It doesn't feel like moving. It feels like the world is being pulled past the window on a string. You are at the next stage before you've sat down, just as he said.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-train-ride",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk.",
+     "success": {
+      "text": "Mr. Tolley: \"Good. I'd have walked.\" He tips the hat he hasn't got yet.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.saffron.train"
+  },
+  {
+   "id": "cs-kanto-saffron-train-arrive",
+   "name": "Magnet Train: The Next Stage",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kanto-train-ride",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a7a2f"
+   },
+   "intro": "The Magnet Train lets you down past the start of the stage, beyond the first town. Behind you, the road you didn't walk.",
+   "choices": [
+    {
+     "label": "Step off.",
+     "success": {
+      "text": "You step off further in than you'd have walked by now.",
+      "effects": [
+       {
+        "kind": "express"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  }
+ ]
+}

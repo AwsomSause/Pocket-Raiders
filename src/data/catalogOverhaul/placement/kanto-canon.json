@@ -14,7 +14,8 @@
   "kantoStages": [
    1
   ],
-  "levelApplied": true
+  "levelApplied": true,
+  "own": true
  },
  "cs-kanto-viridian-route22": {
   "shape": "Single",
@@ -36,7 +37,8 @@
    1,
    8
   ],
-  "levelApplied": true
+  "levelApplied": true,
+  "own": true
  },
  "cs-kanto-viridian-parcel": {
   "shape": "Single",
@@ -53,7 +55,8 @@
   "kantoStages": [
    1
   ],
-  "levelApplied": true
+  "levelApplied": true,
+  "own": true
  },
  "cs-kanto-viridian-school": {
   "shape": "Single",
@@ -71,7 +74,8 @@
    1,
    8
   ],
-  "levelApplied": true
+  "levelApplied": true,
+  "own": true
  },
  "cs-kanto-viridian-diglett": {
   "shape": "Door",
@@ -92,7 +96,8 @@
   "kantoStages": [
    1
   ],
-  "levelApplied": true
+  "levelApplied": true,
+  "own": true
  },
  "cs-kanto-pewter-rest": {
   "shape": "Single",
@@ -113,7 +118,8 @@
   "kantoStages": [
    1
   ],
-  "levelApplied": true
+  "levelApplied": true,
+  "own": true
  },
  "cs-kanto-pewter-museum": {
   "shape": "Single",
@@ -134,7 +140,8 @@
   "kantoStages": [
    1
   ],
-  "levelApplied": true
+  "levelApplied": true,
+  "own": true
  },
  "cs-kanto-pewter-flock": {
   "shape": "Single",
@@ -155,7 +162,8 @@
   "kantoStages": [
    1
   ],
-  "levelApplied": true
+  "levelApplied": true,
+  "own": true
  },
  "cs-kanto-cerulean-burglary": {
   "shape": "Single",
@@ -176,7 +184,8 @@
   "kantoStages": [
    2
   ],
-  "levelApplied": true
+  "levelApplied": true,
+  "own": true
  },
  "cs-kanto-cerulean-daycare": {
   "shape": "Single",
@@ -193,7 +202,8 @@
   "kantoStages": [
    2
   ],
-  "levelApplied": true
+  "levelApplied": true,
+  "own": true
  },
  "cs-kanto-vermilion-fishclub": {
   "shape": "Single",
@@ -214,7 +224,8 @@
   "kantoStages": [
    3
   ],
-  "levelApplied": true
+  "levelApplied": true,
+  "own": true
  },
  "cs-kanto-vermilion-market": {
   "shape": "Single",
@@ -231,7 +242,8 @@
   "kantoStages": [
    3
   ],
-  "levelApplied": true
+  "levelApplied": true,
+  "own": true
  },
  "cs-kanto-lavender-tower": {
   "shape": "Door",
@@ -252,7 +264,8 @@
   "kantoStages": [
    4
   ],
-  "levelApplied": true
+  "levelApplied": true,
+  "own": true
  },
  "cs-kanto-lavender-fuji": {
   "shape": "Single",
@@ -269,7 +282,8 @@
   "kantoStages": [
    4
   ],
-  "levelApplied": true
+  "levelApplied": true,
+  "own": true
  },
  "cs-kanto-lavender-fanclub": {
   "shape": "Single",
@@ -286,7 +300,8 @@
   "kantoStages": [
    4
   ],
-  "levelApplied": true
+  "levelApplied": true,
+  "own": true
  },
  "cs-kanto-lavender-rocktunnel": {
   "shape": "Door",
@@ -307,7 +322,8 @@
   "kantoStages": [
    4
   ],
-  "levelApplied": true
+  "levelApplied": true,
+  "own": true
  },
  "cs-kanto-lavender-powerplant": {
   "shape": "Door",
@@ -328,7 +344,8 @@
   "kantoStages": [
    4
   ],
-  "levelApplied": true
+  "levelApplied": true,
+  "own": true
  },
  "cs-kanto-lavender-volunteers": {
   "shape": "Single",
@@ -345,7 +362,8 @@
   "kantoStages": [
    4
   ],
-  "levelApplied": true
+  "levelApplied": true,
+  "own": true
  },
  "cs-kanto-lavender-prank": {
   "shape": "Single",
@@ -366,6 +384,313 @@
   "kantoStages": [
    4
   ],
-  "levelApplied": true
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-celadon-mart": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 10,
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "A shopping bag"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.celadon.mart",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-celadon-rooftop": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 10,
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "None: it's part of the Store"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.celadon.rooftop",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-celadon-gamecorner": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 14,
+  "window": [
+   12,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "tags": [
+   "A coin"
+  ],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.celadon.gamecorner",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-celadon-mansion": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 16,
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "A key"
+  ],
+  "level": "A-2",
+  "often": "region",
+  "canon": "cs.kanto.celadon.mansion",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-celadon-eevee": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 12,
+  "window": [
+   10,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "tags": [
+   "Three coloured stones"
+  ],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.celadon.eevee",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-celadon-tea": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 18,
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "A teacup"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.celadon.tea",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-celadon-perfume": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 7,
+  "window": [
+   5,
+   9
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "tags": [
+   "A perfume bottle"
+  ],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.celadon.perfume",
+  "kantoStages": [
+   4
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-fuchsia-warden": {
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 12,
+  "window": [
+   12,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "tags": [
+   "A tooth"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.fuchsia.warden",
+  "kantoStages": [
+   5
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-fuchsia-tauros": {
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 12,
+  "window": [
+   12,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "tags": [
+   "A dust cloud"
+  ],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.fuchsia.tauros",
+  "kantoStages": [
+   5
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-fuchsia-zoo": {
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 17,
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "A paw print"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.fuchsia.zoo",
+  "kantoStages": [
+   5
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-fuchsia-snag": {
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 16,
+  "window": [
+   14,
+   18
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "tags": [
+   "A claw"
+  ],
+  "level": "A+1",
+  "often": "region",
+  "canon": "cs.kanto.fuchsia.snag",
+  "kantoStages": [
+   5
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-saffron-silph": {
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 3,
+  "window": [
+   2,
+   5
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [
+   "The Silph \"S\""
+  ],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.saffron.silph",
+  "kantoStages": [
+   6
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-saffron-dojo": {
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 13,
+  "window": [
+   11,
+   15
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "tags": [
+   "A black belt"
+  ],
+  "level": "A+1",
+  "often": "region",
+  "canon": "cs.kanto.saffron.dojo",
+  "kantoStages": [
+   6
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-saffron-copycat": {
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 8,
+  "window": [
+   6,
+   10
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "tags": [
+   "A mirror"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.saffron.copycat",
+  "kantoStages": [
+   6
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-saffron-train": {
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 19,
+  "sits": "optional",
+  "attaches": "after",
+  "tags": [
+   "A train"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.saffron.train",
+  "kantoStages": [
+   6
+  ],
+  "levelApplied": true,
+  "own": true
  }
 }

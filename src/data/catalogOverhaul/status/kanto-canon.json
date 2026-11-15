@@ -23,6 +23,21 @@
   "cs.kanto.lavender.rocktunnel": "cs-kanto-lavender-rocktunnel",
   "cs.kanto.lavender.powerplant": "cs-kanto-lavender-powerplant",
   "cs.kanto.lavender.volunteers": "cs-kanto-lavender-volunteers",
-  "cs.kanto.lavender.prank": "cs-kanto-lavender-prank"
+  "cs.kanto.lavender.prank": "cs-kanto-lavender-prank",
+  "cs.kanto.celadon.mart": "cs-kanto-celadon-mart",
+  "cs.kanto.celadon.rooftop": "cs-kanto-celadon-rooftop",
+  "cs.kanto.celadon.gamecorner": "cs-kanto-celadon-gamecorner",
+  "cs.kanto.celadon.mansion": "cs-kanto-celadon-mansion",
+  "cs.kanto.celadon.eevee": "cs-kanto-celadon-eevee",
+  "cs.kanto.celadon.tea": "cs-kanto-celadon-tea",
+  "cs.kanto.celadon.perfume": "cs-kanto-celadon-perfume",
+  "cs.kanto.fuchsia.warden": "cs-kanto-fuchsia-warden",
+  "cs.kanto.fuchsia.tauros": "cs-kanto-fuchsia-tauros",
+  "cs.kanto.fuchsia.zoo": "cs-kanto-fuchsia-zoo",
+  "cs.kanto.fuchsia.snag": "cs-kanto-fuchsia-snag",
+  "cs.kanto.saffron.silph": "cs-kanto-saffron-silph",
+  "cs.kanto.saffron.dojo": "cs-kanto-saffron-dojo",
+  "cs.kanto.saffron.copycat": "cs-kanto-saffron-copycat",
+  "cs.kanto.saffron.train": "cs-kanto-saffron-train"
  }
 }
