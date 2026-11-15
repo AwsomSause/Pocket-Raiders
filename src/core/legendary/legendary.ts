@@ -37,6 +37,7 @@ export function legendaryProblem(content: Content, run: RunState, def: Expeditio
   // A Legendary is faced once per run, in either its duel or its Raid version.
   if (rec?.completed.some((id) => content.expeditions.expeditions.find((e) => e.id === id)?.legendary?.species === l.species)) return 'already completed this run';
   if (!content.species.has(l.species)) return 'unknown species';
+  if (l.replacedBy) return `its stage is the ${l.replacedBy} encounter now`;
   const t = l.trigger;
   if (run.regionIndex < t.minRegion) return `needs region ${t.minRegion + 1}+`;
   if (t.maxRegion !== null && run.regionIndex > t.maxRegion) return 'region too late';

@@ -297,7 +297,8 @@ describe('landmarks and dungeons', () => {
       for (const ch of [...e.choices, ...e.remembers.flatMap((v) => v.addChoices)]) {
         const lists = [...[ch.success, ch.failure].flatMap((o) => [o?.effects ?? [], o?.battle?.win ?? [], o?.battle?.lose ?? []]), ...(ch.branches ?? []).map((b) => b.effects)];
         for (const ef of lists.flat()) {
-          if (ef.kind === 'addEvent') opened.add(ef.eventId);
+          // An event that opens itself again ("Read it again.", "What's on?") re-shows the same stop; that is not a room.
+          if (ef.kind === 'addEvent' && ef.eventId !== e.id) opened.add(ef.eventId);
           if (ef.kind === 'laterEvent') queued.add(ef.eventId);
           if (ef.kind === 'addEventFrom') ef.ids.forEach((i) => opened.add(i));
           // Catalog Overhaul mentors: a shared scene opens the run's mentor's own `mentor-<id>-<part>` (core/mentors/lessons.ts mentorSceneId).
@@ -312,6 +313,8 @@ describe('landmarks and dungeons', () => {
     // Ideas W4: rooms opened by a traversal obstacle, and stops the code places (wanderer, treasure map, landmarks).
     for (const o of TRAVERSAL.obstacles) for (const ef of o.pass) if (ef.kind === 'addEvent') opened.add(ef.eventId);
     for (const id of [WANDERER_CHALLENGE, WANDERER_VISIT, TREASURE_DIG_EVENT]) opened.add(id);
+    // A game event places its own room on the map (a `placeEvent` modifier, e.g. the Looping Forest).
+    for (const g of content.gameEvents.values()) for (const m of g.modifiers) if (m.kind === 'placeEvent') opened.add(m.eventId);
     for (const e of content.events.values()) if (e.stop === LANDMARK_STOP) opened.add(e.id);
     // Beta 0.7: a pseudo-stage's rooms are the nodes of its own map (core/dungeon/pseudo.ts), entered by walking there.
     for (const r of PSEUDO.records) for (const n of r.nodes) opened.add(`${r.id.replace(/_/g, '-')}-${n.id}`);

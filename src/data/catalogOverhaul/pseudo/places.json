@@ -127,6 +127,60 @@
       "tint": "#2c4860",
       "mood": "singing quartz",
       "start": "opened"
+    },
+    {
+      "id": "ps_legend_equinar",
+      "name": "Equinar: Waking Dream",
+      "entry": "legend-equinar",
+      "themeId": "psychic-fairy",
+      "tint": "#7a3a8a",
+      "mood": "waking dream",
+      "start": "opened"
+    },
+    {
+      "id": "ps_legend_hollow_shepherd",
+      "name": "The Hollow Shepherd: Haunted Hour",
+      "entry": "legend-hollow-shepherd",
+      "themeId": "ice-ghost",
+      "tint": "#3a2a50",
+      "mood": "haunted hour",
+      "start": "opened"
+    },
+    {
+      "id": "ps_legend_brinecrown",
+      "name": "Brinecrown: Rising Tide",
+      "entry": "legend-brinecrown",
+      "themeId": "water-flying",
+      "tint": "#1d4f9c",
+      "mood": "rising tide",
+      "start": "opened"
+    },
+    {
+      "id": "ps_legend_veinheart",
+      "name": "Veinheart: Stone Hall",
+      "entry": "legend-veinheart",
+      "themeId": "rock-steel",
+      "tint": "#7a6a5a",
+      "mood": "stone hall",
+      "start": "opened"
+    },
+    {
+      "id": "ps_legend_lumeria",
+      "name": "Lumeria: Hive Mind",
+      "entry": "legend-lumeria",
+      "themeId": "bug-fairy",
+      "tint": "#5a8a2a",
+      "mood": "hive mind",
+      "start": "opened"
+    },
+    {
+      "id": "ps_legend_verdelis",
+      "name": "Verdelis: Overgrowth",
+      "entry": "legend-verdelis",
+      "themeId": "grass-bug",
+      "tint": "#2f7a2f",
+      "mood": "overgrowth",
+      "start": "opened"
     }
   ]
 }

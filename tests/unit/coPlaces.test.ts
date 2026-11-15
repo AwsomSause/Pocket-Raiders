@@ -307,4 +307,20 @@ describe('catalog overhaul: calendar and challenge weeks (SF97, SF98)', () => {
     expect(run.perkEffects.filter((m) => m.kind === 'captureMultiplier').length).toBeGreaterThanOrEqual(1);
     expect(run.tempEffects.some((t) => t.until === 'region')).toBe(true);
   });
+
+});
+
+describe('catalog overhaul: the original Legendaries\' stages (SF99)', () => {
+  it('three rooms, then the creature; watching from a distance gives the stated gift and ends the stage; the old expedition is never placed', () => {
+    let run = newRun('veinheart');
+    open(run, 'legend-veinheart');
+    run = pick(run, 'Go in.');
+    for (let i = 0; i < 3; i++) run = pick(run, 'Go on.');
+    run = pick(run, 'Watch from a distance.');
+    expect((run.inventory['hard-stone'] ?? 0) + run.party.filter((m) => m.held?.['hard-stone']).length).toBeGreaterThanOrEqual(1);
+    expect(flagOf(run, 'legend-veinheart-met')).toBe(1);
+    const old = content.expeditions.expeditions.find((e) => e.id === 'legend-veinheart')!;
+    expect(old.legendary?.replacedBy).toBe('legend-veinheart');
+    expect(content.events.get('legend-veinheart-final')!.choices[0]!.success.battle?.species).toEqual(['veinheart']);
+  });
 });
