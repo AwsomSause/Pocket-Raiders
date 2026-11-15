@@ -14,6 +14,7 @@ Branch `claude/project-thread-lv5u1c`, PRs go into the shared branch `ui-mockups
   `bringBack purify`) and the six Pacts; unit tests for placesRules; then SF94, SF97-SF100, STORY_FAMILIES_17,
   placement file, flags list (`for` entries: sign-zacian, sign-zamazenta, readings-capped/erupts, evil-ambush, intel...),
   this re-read table, update notes, browser spec, `npm run check`, PR.
+- SF115 League Exhibition (from people, PR #1312): `ps-league-exhibition-gate` is in people's REMOVE (old C3 opened it). If places rebuilds that id, something in places must open it (world.test checks every live room is reachable).
 - Known: `tests/unit/story.test.ts` fingerprint is red from the new events; re-pin at rebase (never by hand-merge).
 
 ## Re-read log
