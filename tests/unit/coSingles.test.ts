@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { applyEffect, conditionMet } from '../../src/core/events';
 import { adviceText, teamWeaknesses } from '../../src/core/events/coSingles';
+import { runEpitaph } from '../../src/core/story/legacy';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { hashSeed, Rng } from '../../src/core/rng';
 import { getContent } from '../../src/data';
@@ -133,5 +134,29 @@ describe('catalog overhaul: singles', () => {
     far.run.stage!.current = late.id;
     applyEffect(content, far.run, { kind: 'skipAhead', nodes: 12 }, new Rng(hashSeed('s')));
     expect(at(far.run).column).toBe(gate);
+  });
+
+  it('the memory fog takes up to two named items and gives them back in order', () => {
+    const run = chooseStarter(content, createRun(content, { runId: 'r', seed: 'co-fog', archetypeId: 'red' }), 0);
+    run.inventory = { potion: 1, 'poke-ball': 2 };
+    const took = applyEffect(content, run, { kind: 'coFog', action: 'take', count: 2 }, new Rng(hashSeed('f')));
+    expect(took).toMatch(/^The fog takes .+, then .+/);
+    const lost = String(run.story.flags['co:fog-items']).split(',');
+    expect(lost).toHaveLength(2);
+    expect(Object.values(run.inventory).reduce((a, b) => a + (b ?? 0), 0)).toBe(1);
+    applyEffect(content, run, { kind: 'coFog', action: 'give', count: 2 }, new Rng(hashSeed('f')));
+    expect(run.inventory).toEqual({ potion: 1, 'poke-ball': 2 });
+    expect(run.story.flags['co:fog-items']).toBeUndefined();
+    // Boundary: empty pockets lose nothing, and giving back with nothing taken is a no-op.
+    run.inventory = {};
+    expect(applyEffect(content, run, { kind: 'coFog', action: 'take', count: 2 }, new Rng(hashSeed('f')))).toMatch(/takes nothing/);
+    expect(applyEffect(content, run, { kind: 'coFog', action: 'give', count: 2 }, new Rng(hashSeed('f')))).toBe('');
+  });
+
+  it('a written line becomes the run epitaph, naming the picked Pokémon', () => {
+    const run = chooseStarter(content, createRun(content, { runId: 'r', seed: 'co-epitaph', archetypeId: 'red' }), 0);
+    const mon = run.party[0]!;
+    applyEffect(content, run, { kind: 'coEpitaph', text: '{picked} walked every step of it with me.' }, new Rng(hashSeed('e')), mon.uid);
+    expect(runEpitaph(content, run)).toBe(`${mon.care?.nickname || content.species.get(mon.speciesId)!.name} walked every step of it with me.`);
   });
 });

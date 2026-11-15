@@ -230,10 +230,12 @@ describe('secret paths', () => {
 
   it('their choices are locked without the ability and work with it', () => {
     const run = atEvent(newRun(), 'secret-levitate-chasm');
-    expect(() => chooseEvent(content, run, 'test-event', 0)).toThrow(/Levitating/);
+    expect(() => chooseEvent(content, run, 'test-event', 0)).toThrow(/Levitate/);
     setLead(run, 'gastly');
-    const after = chooseEvent(content, run, 'test-event', 0).run;
-    expect(after.stage!.scoutedTo).toBeGreaterThan(0);
+    const result = chooseEvent(content, run, 'test-event', 0);
+    // Catalog Overhaul SF143: floating over finds a random Rare item in the chest.
+    expect(result.success).toBe(true);
+    expect(result.changes.join(' ')).toMatch(/Leftovers|Focus Sash|Life Orb|Choice (Band|Specs|Scarf)/);
   });
 });
 

@@ -10,7 +10,8 @@ Content: `tools/events/co/singles-<n>.ts` -> `src/data/events/co-singles-<n>.jso
 | 2 | SF137 Rests, SF139 Comic Encounters | 23 | built, re-read 2026-11-15 |
 | 3 | SF138 Road People and Light Comedy | 26 | built, re-read 2026-11-15 |
 | 4 | SF140 Gentle Wild Scenes, SF141 Wild Scenes and Oddities | 49 | built, re-read 2026-11-15 |
-| later | SF142 to SF161 | 330 | not started (old events still play). SF142/SF143 read and old defs checked. |
+| 5 | SF142 Hidden Paths and Mystery Places, SF143 Ability Secrets | 35 | built, re-read 2026-11-15 |
+| later | SF144 to SF161 | 295 | not started (old events still play) |
 
 SF158 to SF160 (82 calendar weeks) live in `gameEvents.json` and SF161 (15 battle moments) in `dramaEvents.json`, not in the event files; they need their own build path.
 
@@ -18,6 +19,7 @@ SF158 to SF160 (82 calendar weeks) live in `gameEvents.json` and SF161 (15 battl
 - "A Rock- or Steel-type" uses the shared `partyTypes` condition (the `or` field was dropped). Test in `coSingles.test.ts`.
 - Items in `src/data/itemCatalog/singles.json`: `wooloo-wool` (+₽200), `tiny-mushroom` (+₽50, +1 toward Peace), `mareep-wool` (+₽300), `toy-pikachu` (next wild battle, the wild Pokémon loses its first turn, like the Poké Doll).
 - `skipAhead` takes `nodes` (land that many nodes on, "skip two nodes") or `half` ("cuts the stage in half"), never past the nodes leading into the gym. Test in `coSingles.test.ts`.
+- `coFog` effect: `take` loses up to two items (named, kept in order in `co:fog-items`), `give` returns them; `coEpitaph` writes the run's epitaph (`co:epitaph`, read by `runEpitaph` in `story/legacy.ts`). Tests in `coSingles.test.ts`.
 - `addStop: 'tutor'` opens a Move Tutor service stop (`services.json` id `tutor`) on the current node. Test in `coSingles.test.ts`.
 - `coAdvice` effect (`src/core/events/coSingles.ts`): `weakness` names the types that hit two or more of the party hard; `habits` names the most-used Pokémon, its favourite move and the least-used one. Reads only, changes nothing. Tests in `coSingles.test.ts`.
 
@@ -35,7 +37,10 @@ All checked 2026-11-15 against `STORY_FAMILIES_19.md` and `_20.md`.
 | SF140 | the 38 gentle wild scenes, with rooms `r136-rhyhorn-sting`, `wynaut-hide-2`, `wynaut-hide-3` and callbacks `shed-skin-badge-return`, `r160-staryu-returns` |
 | SF141 | the 11 oddities, with room `shiny-glint-close`, `traveler-grotto` (two nodes on) and callback `uncommon-breed-returns` |
 
-SF137 to SF141: every doc button checked by script against the built labels (all match); outcomes checked by hand against the doc row while writing and again after the standards pass.
+| SF142 | hidden-path-keeper (+ room `hidden-path-test`), hidden-path-shortcut, hidden-path-signpost, mirage-island, mr-abandoned-observatory, mr-ancient-arena, mr-clockwork-crypt, mr-dragon-skeleton, mr-echoing-well, mr-graveyard-choir, mr-memory-fog, mr-memory-fog-clears, mr-mind-palace, mr-moss-obelisk, mr-poltergeist-poker, mr-prophecy-wall, mr-vault-key-a/b/c, mr-sealed-vault, mr-spectral-duelist, mr-starfall-seeker, mr-unwritten-library, mr-whispering-door, shrine-maiden, spooky-festival |
+| SF143 | secret-arena-tunnel, secret-damp-cave, secret-flash-fire-door, secret-intimidate-gate, secret-keen-eye-ledge, secret-levitate-chasm, secret-magnet-vein, secret-pickup-burrow, secret-synchronize-whisper |
+
+SF137 to SF143: every doc button checked by script against the built labels (all match); outcomes checked by hand against the doc row while writing and again after the standards pass.
 Buttons match the doc word for word, except `w4-balloon` (the doc says "pick a reachable node", not a button text): "Hop in, and pick where to land."
 Rooms added so a doc outcome can ask its own question: `berry-tree-pell` (callback), `festival-gift-swap`, `shimmering-grass-close`, `hidden-grotto-den`, `gmax-den-*` (5), `w4-graffiti-tag`, `r145-bonsly-railings`.
 
@@ -58,3 +63,12 @@ Rooms added so a doc outcome can ask its own question: `berry-tree-pell` (callba
 | Playstyle mentor "hints at which Ultra Beast is coming" | The habits advice only | An Ultra Beast forecast (legends) |
 | "All Fire-types +1 Bond" (bonfire rests) | The first Pokémon of the type | A by-type Bond selector |
 | `delibird-y` no longer has a triple battle (the doc has none) | Present swap only | Nothing |
+| "Once per save" (`mirage-island`) | Once per run | Nothing: Kice's rule, nothing carries between runs |
+| "The whole region map is shown" (observatory) | Every hidden stop and 12 columns ahead on this stage | A region map view |
+| Mind Palace: "relive a battle from this run, and retry it" | A battle against "A Memory" (a trainer, harder for a loss); a win teaches the lead a move (`train learnMove`) | A replay of a recorded battle |
+| Moss obelisk: "the region's crisis strand (SF1) is named" | The runes describe the region's crisis meter (three wordings by level) | SF1 strand names (families-a) |
+| Ancient arena: "the crowd's favourite move is taught to one Pokémon" | The lead learns Mega Punch after three exhibition bouts | A pick-who-learns step |
+| Starfall seeker: "one lucky node named, its rewards ×1.5" | The next battle's prize money ×1.5 | A marked lucky node |
+| Echoing well: "one future node is named" | The map shows two more columns ahead | A single-node reveal |
+| Spooky festival "a costume" | Text only (your lead dresses as a ghost) | A costume system; SF16 start is flag `hollow-lantern-seen` for families-a |
+| Signs for "the run's legend" (Latias, Dialga, Dragon) | The flag is always set; the legends thread decides if it counts | Nothing |

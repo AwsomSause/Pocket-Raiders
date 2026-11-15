@@ -235,6 +235,46 @@
    "key": "lore-egg-song",
    "setBy": "wedding-guestbook (either Sign choice), as the old event did",
    "readBy": "npcStory lore fragment egg-song"
+  },
+  {
+   "key": "mirage-sailed",
+   "setBy": "mirage-island (either choice)",
+   "readBy": "mirage-island (once per run; the doc says once per save, but nothing carries between runs)"
+  },
+  {
+   "key": "sign-latias",
+   "setBy": "mirage-island",
+   "readBy": "legends thread (Signs, LEGENDS_PIECES.md)"
+  },
+  {
+   "key": "sign-dialga",
+   "setBy": "mr-clockwork-crypt",
+   "readBy": "legends thread (Signs, LEGENDS_PIECES.md)"
+  },
+  {
+   "key": "sign-dragon",
+   "setBy": "mr-dragon-skeleton (a Sign for the run's Dragon Legendary: a group flag)",
+   "readBy": "legends thread (Signs, LEGENDS_PIECES.md)"
+  },
+  {
+   "key": "memory-fog",
+   "setBy": "mr-memory-fog; cleared by mr-memory-fog-clears",
+   "readBy": "mr-memory-fog-clears (a stage later, flagAge 1)"
+  },
+  {
+   "key": "vault-key",
+   "setBy": "mr-vault-key-a/b/c; spent by mr-sealed-vault",
+   "readBy": "mr-sealed-vault (needs 3)"
+  },
+  {
+   "key": "telling-shrine",
+   "setBy": "shrine-maiden (either choice): a Telling, mythical chosen by the legends rules",
+   "readBy": "legends thread (Tellings, LEGENDS_PIECES.md)"
+  },
+  {
+   "key": "hollow-lantern-seen",
+   "setBy": "spooky-festival (Join the parade)",
+   "readBy": "families-a SF16 The Hollow Lantern (can start)"
   }
  ]
 }

@@ -12,4 +12,10 @@
 - Wild scenes show who is there before you choose: watch Berries being eaten, play hide-and-seek with a Wynaut, sit down to tea with Fairy-types (say please).
 - New items: Tiny Mushroom, Mareep Wool (₽300), and a child's Toy Pikachu (the next wild Pokémon is too busy staring at it to move first).
 
+**Batch 5: hidden paths, mystery places and ability secrets (35 events).**
+- Wend the road-keeper tests your eye with three drawings; a gap between boulders cuts the stage in half.
+- The Memory Fog takes up to two named items and gives them back, in order, a stage later. Three keys open a sealed vault.
+- Write one line in the Unwritten Library, about the Pokémon you choose, and it becomes your run's epitaph.
+- A ghost duels you with your own team; a ghost crowd teaches a move after three bouts; Pokémon with the right Ability open tunnels, doors and chasms for a named item each.
+
 Known limits: "confused" and "Charged" for one battle are a damage change, the balloon lands two stops ahead (you cannot pick the spot), the Wooloo rolls on any day, and a few "shown before you choose" previews describe the Pokémon without naming it. Full list: `docs/status/co-singles.md`.

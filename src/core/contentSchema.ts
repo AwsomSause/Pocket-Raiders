@@ -3193,6 +3193,10 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   // Catalog Overhaul, singles (core/events/coSingles.ts).
   /** SF138: advice read from the real party: `weakness` (types that hit two or more hard) or `habits` (most and least used Pokémon, favourite move). Changes nothing. */
   z.object({ kind: z.literal('coAdvice'), topic: z.enum(['weakness', 'habits']) }),
+  /** SF142 The Memory Fog: `take` loses up to `count` items (named, remembered in order); `give` returns them (The Fog Gives It Back). */
+  z.object({ kind: z.literal('coFog'), action: z.enum(['take', 'give']), count: z.number().int().min(1).max(2).default(2) }),
+  /** SF142 The Unwritten Library: this line (`{picked}` = the picked Pokémon's name) is the run's epitaph, shown when the run ends. */
+  z.object({ kind: z.literal('coEpitaph'), text: z.string().min(1).max(160) }),
   /** Clone Core (New Island): your lead's moves are copied onto the other party Pokémon you pick (the lowest-level one when none is picked). */
   z.object({ kind: z.literal('copyMoves') }),
   /** Catalog Overhaul (families-b): the Pokémon a pick choice named goes to the front of the party ("Send out the one it beat"). */
