@@ -16,7 +16,9 @@ Branch `claude/project-thread-uehq47`, draft PR #1314 into `ui-mockups`.
 | gn.08 The Squirtle Squad | done, 12 tests pass (hose Speed −1 now works in wild event fights; Squad can't be caught; recruit kit; Kanto: cs-kanto-cerulean-squad) | yes |
 | gn.09 Bill's Lighthouse | done, 10 tests pass (search hub + 5 nodes; Bill's PC = PC on the road, Recorder = new perk `revealOne`; Kanto: cs-kanto-cerulean-bill, canon flags now copy from any later room) | yes |
 | gn.10 The S.S. Anne | done, 10 tests pass (12 trainer cabins, trades A/B/Delta/secret, 11 optional rooms capped at 4, Dobbs-Leary, captain, rival, gift; Kanto: cs-kanto-vermilion-ssanne) | yes |
-| gn.11–gn.62 | not started | |
+| gn.11 Kaiju Tentacruel | done, 6 tests pass (rescues on a four-turn tide, Ned's hook, pylons, the raid with its four moves and Tentacool calls, free / defeat / float, the lost ending, the sea-battle return; Kanto: cs-kanto-vermilion-kaiju now an event, the canon den is no longer placed) | yes |
+| gn.12 Maiden's Peak | done, 5 tests pass (market hub: Lantern Row, TM Hall of 24 by type on two rotating boards, Swap Alley, Egg Row, stalls and boxes, Dusk Vendors, Madame Roux, Tea House; five sightings, two right turns of three = Blessing; Fairium Z or three Fairy HMs; Tea House hub every later stage; the portrait; Kanto: cs-kanto-vermilion-maiden) | yes |
+| gn.13–gn.62 | not started | |
 | gn.new.01–38 | not started | |
 
 ## Limits (documented)
@@ -28,11 +30,15 @@ Branch `claude/project-thread-uehq47`, draft PR #1314 into `ui-mockups`.
 - gn.08 Squad fights can't be caught (one member joins at the end); the doc's "theft chance 5% lower at Flight North" waits for gn.13 (reads flag `kanto-squad-joined`).
 - gn.07 remembers an abandoned Pokémon by run flag `abandoned-mon`: gn.new.03 (The Ball That Wouldn't Open) and the Trubbish Nobody Wanted must set it.
 
+- gn.11 "Each turn, each party Pokémon can fight or rescue": the tide gives four turns; a Water- or Flying-type in the party rescues in one, otherwise two. Assists, boats and pylon stuns land before the fight, as boss HP already lost (6% per rescue, 9% boats, 6% per pylon stun, 6% more per stun the Machop braces); each pylon is +1 Attack for the boss. "Free it": the party's HP pays for the two turns of panicked swings (more if angered). The stage header "Something in the Harbour" from Step 1 is not shown (no stage-header hook). Out of Kanto there is no harbour market to shut. The Kaiju is no longer catchable (the gift is the Tentacool).
+- gn.12 Swap Alley uses tradeFor (similar strength, wider, anything); the Honest Trade Card and nature pick wait for the markets row's `honestTrade`. Costume Stalls: ribbons are Bond (outfits for the player wait for an outfit system). The hatchery is a trade for a sand-warmed Egg that hatches after the next battle. The Fairy HMs are taught on the spot (no machine case to keep them). "Dusk" is the evening period.
+
 ## Fixes found on the way
 - Door events (gn.03/04/06/07) used stop `dungeon`, so the Landmark Dungeon placer could pick them: now stop `event`.
 - Greenneedle items (Moon Stone Shard, Bottle-Cap Badge, Damian's badge) are gift-only, so they never enter reward drafts (old-seed fingerprint back to green).
 - Event fight rules' stat stages (`stages`/`myStages`/`foeStages`) now also apply to wild event fights.
 - A join that teaches several moves keeps all of them (it used to overwrite the last slot each time).
+- An event raid whose boss is caught now pays its `win` effects (it used to pay nothing).
 - Older tests updated: retired Cerulean canon rooms (bridge, village, squad, rain) dropped from canonCerulean.test.ts; world/eventMemory walk `gn` effects; placed stops sit outside the drawn quota; plain-stage tests use `withoutDoors`; test autoplay plays a chain room when it is the only way on.
 - Placement data: the placer reads `tags` as stage needs, so the doc's category labels now go to `kinds`, `needs` become `tags` ("cave|high" = either; `core/co/placement.ts` tagHolds), and the key event's own beat gives its step and stage. Before this no Greenneedle event was ever placed.
 
@@ -41,4 +47,5 @@ Branch `claude/project-thread-uehq47`, draft PR #1314 into `ui-mockups`.
 - gn.new.09 The Last Stop: when the Dusknoir punches the ticket set flag `last-stop-ticket` = 1 and start node timer `{ kind: 'flag', key: 'ovt-last-stop', amount: 0 }` (pairs with families-b row 3). Any scene that loses a Pokémon for good sets flag `lost-mon`.
 - Tell the legends thread about `eventBattleLost` now using `choiceAt` and the `remembers` walk in `pseudo.ts`; tell the Kanto canon thread about retired ids (`pp-rematch-exceptional`).
 - Samurai Slash power 70 → 60.
+- gn.10 trades: switch to the markets row's `honestTrade` effect (branch claude/project-thread-uvwqv1) once that PR is in ui-mockups.
 - Update fragment `docs/updates/catalog-overhaul/greenneedle.md`, Playwright spec, `npm run check`, mark PR ready.

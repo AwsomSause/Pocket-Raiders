@@ -131,5 +131,137 @@
         }
       ]
     }
+  },
+  {
+    "id": "roux-wild",
+    "name": "Madame Roux's Reading (Wild)",
+    "family": "Key items: gadgets",
+    "description": "One true thing about your next stage: you see its wild Pokémon before you meet them.",
+    "rarity": "rare",
+    "stacksOn": "player",
+    "max": 1,
+    "how": "passive",
+    "icon": "library/pokescanner",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "perk",
+      "lasts": {
+        "for": "nextStage"
+      },
+      "perks": [
+        {
+          "perk": "preview",
+          "what": "wild"
+        }
+      ]
+    }
+  },
+  {
+    "id": "roux-trainers",
+    "name": "Madame Roux's Reading (Trainers)",
+    "family": "Key items: gadgets",
+    "description": "One true thing about your next stage: you see its trainers' Pokémon before you fight them.",
+    "rarity": "rare",
+    "stacksOn": "player",
+    "max": 1,
+    "how": "passive",
+    "icon": "library/pokescanner",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "perk",
+      "lasts": {
+        "for": "nextStage"
+      },
+      "perks": [
+        {
+          "perk": "preview",
+          "what": "trainers"
+        }
+      ]
+    }
+  },
+  {
+    "id": "roux-gym",
+    "name": "Madame Roux's Reading (Gym)",
+    "family": "Key items: gadgets",
+    "description": "One true thing about your next stage: you see the Gym Leader's ace before the Gym.",
+    "rarity": "rare",
+    "stacksOn": "player",
+    "max": 1,
+    "how": "passive",
+    "icon": "library/pokescanner",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "perk",
+      "lasts": {
+        "for": "nextStage"
+      },
+      "perks": [
+        {
+          "perk": "preview",
+          "what": "gymAce"
+        }
+      ]
+    }
+  },
+  {
+    "id": "hm-dazzling-gleam",
+    "name": "HM Dazzling Gleam",
+    "family": "TMs and HMs",
+    "description": "The Lady's gift. Teaches Dazzling Gleam to a Pokémon that can learn it.",
+    "rarity": "epic",
+    "stacksOn": "pokemon",
+    "max": null,
+    "how": "use",
+    "icon": "library/machine-fairy",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "teachMove",
+      "type": "fairy",
+      "mode": "hm",
+      "move": "dazzling-gleam"
+    }
+  },
+  {
+    "id": "hm-play-rough",
+    "name": "HM Play Rough",
+    "family": "TMs and HMs",
+    "description": "The Lady's gift. Teaches Play Rough to a Pokémon that can learn it.",
+    "rarity": "epic",
+    "stacksOn": "pokemon",
+    "max": null,
+    "how": "use",
+    "icon": "library/machine-fairy",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "teachMove",
+      "type": "fairy",
+      "mode": "hm",
+      "move": "play-rough"
+    }
+  },
+  {
+    "id": "hm-moonblast",
+    "name": "HM Moonblast",
+    "family": "TMs and HMs",
+    "description": "The Lady's gift. Teaches Moonblast to a Pokémon that can learn it.",
+    "rarity": "epic",
+    "stacksOn": "pokemon",
+    "max": null,
+    "how": "use",
+    "icon": "library/machine-fairy",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "teachMove",
+      "type": "fairy",
+      "mode": "hm",
+      "move": "moonblast"
+    }
   }
 ]

@@ -73,6 +73,22 @@
      }
     ]
    }
+  },
+  {
+   "id": "tidal-surge",
+   "name": "Tidal Surge",
+   "type": "water",
+   "category": "special",
+   "power": 90,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [],
+   "effects": {
+    "clearHazards": "both"
+   }
   }
  ]
 }

@@ -429,11 +429,12 @@ export function reinforcementDue(content: Content, battle: BattleState): { speci
   const raid = battle.raid;
   const boss = raid?.bossUid ? battle.enemyTeam.find((e) => e.uid === raid.bossUid) : undefined;
   if (!raid || !boss || boss.hp <= 0 || battle.enemyTeam[battle.enemyIndex]?.uid !== boss.uid) return null;
-  const lines = raidDef(content, raid).summons;
+  const def = raidDef(content, raid);
+  const lines = def.calls?.at ?? def.summons;
   const line = lines[raid.summonsUsed];
   if (line === undefined || boss.hp / maxHp(content, boss) > line) return null;
   const type = content.species.get(boss.speciesId)?.types[0];
-  const speciesId = type ? content.raids.badgeScaling.minionByType[type] : undefined;
+  const speciesId = def.calls?.species ?? (type ? content.raids.badgeScaling.minionByType[type] : undefined);
   if (!speciesId || !content.species.has(speciesId)) return null;
   return {
     speciesId,

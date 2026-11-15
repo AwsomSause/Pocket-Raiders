@@ -23061,6 +23061,14 @@
       "flash": null,
       "hitStopMs": 67,
       "telegraph": "normal"
+    },
+    "tidal-surge": {
+      "anim": "surf",
+      "source": "type",
+      "shake": 2,
+      "flash": "#6890f0",
+      "hitStopMs": 70,
+      "telegraph": "normal"
     }
   },
   "commonPack": {

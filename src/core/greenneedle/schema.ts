@@ -28,7 +28,7 @@ export const bindGnEffects = (schema: z.ZodType): void => {
  *  - `stampStage`: the run flag `key` remembers the stage number now (read with the `gn` conditions `laterStage`, `sameStage`, `notThisStage`).
  *  - `partyHas`: the run flag `key` becomes 1 when a party Pokémon is one of `species`, else 0 (a Clefairy or Clefable sees the secret dance).
  */
-export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook'] as const;
+export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry'] as const;
 export const GnEffectSchema = z.object({
   kind: z.literal('gn'),
   op: z.enum(GN_OPS),
@@ -70,10 +70,13 @@ export type GnEffect = z.infer<typeof GnEffectSchema>;
  *  - `lookAtLevel`: a party Pokémon wearing anime look `types[0]` is at least the level stored in flag `key` (the Squad recruit has caught up with its Leader).
  *  - `thisRegion`: the run flag `key` was stamped in the region the player is in now ("later in the region").
  *  - `notRegion`: the run is in none of the regions listed in `types` (a Greenneedle event that Kanto shows through its own canon space).
+ *  - `holdsBerry`: a party Pokémon holds a Berry (gn.12: the Dusk Vendors take payment in Berries; `payBerry` takes one).
+ *  - `cutter`: a conscious party Pokémon knows a slicing move or a claw move (gn.11: cut the net).
+ *  - `moveType`: a conscious party Pokémon knows a damaging move of one of `types` (gn.11's pylons: a Fighting, Rock or Steel move).
  *  - `noMoveType`: no party Pokémon knows a move of any of `types` (the mine's pickaxe is for a party with no Fighting, Steel or Ground move).
  */
-export const GnCondSchema = z.object({ kind: z.literal('gn'), test: z.enum(['regionChanged', 'notThisRegion', 'laterStage', 'sameStage', 'notThisStage', 'noMoveType', 'notRegion', 'thisRegion', 'lookAtLevel']), key: Key.optional(), types: z.array(z.string().min(1)).min(1).max(6).optional() })
-  .refine((c) => (c.test === 'noMoveType' || c.test === 'notRegion' ? !!c.types : c.test === 'lookAtLevel' ? !!c.types && !!c.key : !!c.key), { message: 'noMoveType and notRegion need `types` (move types / region ids), the others need `key`' });
+export const GnCondSchema = z.object({ kind: z.literal('gn'), test: z.enum(['regionChanged', 'notThisRegion', 'laterStage', 'sameStage', 'notThisStage', 'noMoveType', 'moveType', 'cutter', 'holdsBerry', 'notRegion', 'thisRegion', 'lookAtLevel']), key: Key.optional(), types: z.array(z.string().min(1)).min(1).max(6).optional() })
+  .refine((c) => (c.test === 'noMoveType' || c.test === 'moveType' || c.test === 'notRegion' ? !!c.types : c.test === 'lookAtLevel' ? !!c.types && !!c.key : c.test === 'cutter' || c.test === 'holdsBerry' ? true : !!c.key), { message: 'noMoveType and notRegion need `types` (move types / region ids), the others need `key`' });
 export type GnCond = z.infer<typeof GnCondSchema>;
 
 /**

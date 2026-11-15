@@ -135,7 +135,7 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return c.side === 'positive' ? v >= c.atLeast : -v >= c.atLeast;
     }
     case 'item':
-      return (run.inventory[c.id] ?? 0) >= (c.count ?? 1) || (run.passives?.[c.id] ?? 0) > 0;
+      return ((run.inventory[c.id] ?? 0) >= (c.count ?? 1) || (run.passives?.[c.id] ?? 0) > 0) !== (c.absent === true);
     case 'emotion':
       return run.party.some((m) => emotionOf(content, run, m.uid)?.id === c.id);
     case 'memorial':
@@ -378,6 +378,7 @@ export function conditionText(content: Content, c: EventCondition): string {
       return `Needs ${name} ${c.atLeast}`;
     }
     case 'item':
+      if (c.absent) return `Only without ${content.catalog.get(c.id)?.name ?? content.items.get(c.id)?.name ?? c.id}`;
       return `Needs ${c.count && c.count > 1 ? `${c.count} × ` : 'a '}${content.catalog.get(c.id)?.name ?? content.items.get(c.id)?.name ?? c.id}`;
     case 'dex':
       return `Needs ${c.atLeast} species ${c.set} this run`;
@@ -1840,6 +1841,23 @@ function eventLevel(content: Content, run: RunState, node: MapNode, rng: Rng, st
   return enemyLevel(content, getArchetype(content, run.archetypeId), scale, 0, rng).level;
 }
 
+/** gn.11: earlier choices weaken or anger an event raid's boss, once per point of each story flag. Its shields above the HP it starts at are gone. */
+function raidFlagMods(content: Content, run: RunState, mods: Extract<EventBattle, { kind: 'raid' }>['flagMods']): void {
+  const battle = run.battle!;
+  const boss = battle.enemyTeam[0]!;
+  let lost = 0;
+  for (const m of mods) {
+    const n = Number(run.story.flags[`ev:${m.flag}`] ?? 0);
+    if (n <= 0) continue;
+    for (const [stat, by] of Object.entries(m.foeStages)) battle.enemyStages[stat as 'atk'] = Math.max(-6, Math.min(6, (battle.enemyStages[stat as 'atk'] ?? 0) + by * n));
+    lost += m.hpPercent * n;
+  }
+  if (lost <= 0) return;
+  const share = Math.max(0.05, 1 - Math.min(90, lost) / 100);
+  boss.hp = Math.max(1, Math.floor(maxHp(content, boss) * share));
+  if (battle.raid) battle.raid.pendingShields = battle.raid.pendingShields.filter((at) => at < share);
+}
+
 export function startEventBattle(content: Content, run: RunState, node: MapNode, b: EventBattle, rng: Rng, event: EventBattleRef): void {
   // Pidgey's Resolve: the two watched CPU fights set the player's team aside first.
   prepareSpectate(content, run, event.eventId);
@@ -1857,6 +1875,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     const level = Math.min(cap, Math.max(1, base + def.levelBonus));
     startRaidBattle(content, run, def, rng.pick(def.species), level);
     if (b.spikesUnless && Number(run.story.flags[`ev:${b.spikesUnless.flag}`] ?? 0) < b.spikesUnless.atLeast) run.battle!.sideEffects.player.toxicSpikes = 1;
+    raidFlagMods(content, run, b.flagMods);
     run.battle!.event = event;
     return;
   }
@@ -2138,6 +2157,8 @@ export function eventBattleWon(content: Content, run: RunState, event: EventBatt
 export function eventBattleCaught(content: Content, run: RunState, event: EventBattleRef): string[] {
   const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
+  // An event raid whose boss was caught (the raid allows it) ends the story the same way a win does.
+  if (battle?.kind === 'raid') return eventBattleWon(content, run, event);
   if (!battle || battle.kind !== 'wild' || !battle.caught?.length) return [];
   const rng = new Rng(hashSeed(`${run.seed}::event-caught::${stageKey(run)}::${event.sideId}`));
   return battle.caught.map((e) => applyEffect(content, run, e, rng)).filter(Boolean);

@@ -125,6 +125,7 @@ export function catalogTargetProblem(content: Content, run: RunState, entry: Cat
       if (effect.ppMove && !mon.moves.some((m) => m.pp < maxPp(content, m))) return "That Pokémon's PP is already full.";
       return null;
     case 'teachMove':
+      if (effect.move) return teachableMoves(content, mon, effect.type).includes(effect.move) ? null : `That Pokémon can't learn ${content.moves.get(effect.move)?.name ?? 'that move'}.`;
       return teachableMoves(content, mon, effect.type).length > 0 ? null : `That Pokémon can't learn a new${effect.type ? ` ${capitalize(effect.type)}` : ''} move.`;
     case 'held': {
       const copies = mon.held?.[entry.id] ?? 0;
@@ -459,7 +460,7 @@ export function applyCatalog(
       break;
     }
     case 'teachMove': {
-      const choices = teachableMoves(content, target!, effect.type);
+      const choices = teachableMoves(content, target!, effect.type).filter((id) => !effect.move || id === effect.move);
       // TM Case: more moves to pick from.
       const extra = perksOf(activePerks(content, run), 'tmChoices').reduce((sum, p) => sum + p.perk.extra, 0);
       const moveIds = effect.mode === 'hm' ? choices : opts.rng.shuffle(choices).slice(0, TM_CHOICES + extra);

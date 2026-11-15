@@ -405,7 +405,7 @@ const SPREAD_MOVES = new Set([
   'acid', 'powder-snow', 'swift', 'twister', 'air-cutter', 'incinerate', 'clanging-scales', 'core-enforcer', 'burning-jealousy', 'corrosive-gas',
   'dark-void', 'parabolic-charge', 'sandsear-storm', 'wildbolt-storm', 'bleakwind-storm', 'springtide-storm', 'hyper-voice', 'misty-explosion',
   'synchronoise', 'teatime', 'overdrive', 'disarming-voice',
-  'bubble', 'sweet-scent', 'growl', 'leer', 'tail-whip', 'captivate', 'poison-gas',
+  'bubble', 'tidal-surge', 'sweet-scent', 'growl', 'leer', 'tail-whip', 'captivate', 'poison-gas',
 ]);
 export function isSpreadMove(moveId: string): boolean {
   return SPREAD_MOVES.has(moveId);

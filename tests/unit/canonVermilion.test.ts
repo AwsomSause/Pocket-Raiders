@@ -16,10 +16,11 @@ const targets = (id: string) => room(id).choices.flatMap((c) => [c.success, c.fa
 
 describe('Vermilion canon: the event graph', () => {
   it('every target exists and every room opens from a gate', () => {
-    // Retired rooms (the old S.S. Anne voyage, rebuilt as Greenneedle gn.10) stay for saved runs but are never reached.
+    // Retired rooms (the old S.S. Anne voyage and Maiden's Peak, rebuilt as Greenneedle gn.10 and gn.12) stay for saved runs but are never reached.
+    // The Kaiju space is now an event too (gn.11), so it is a gate.
     const ids = [...content.events.values()].filter((e) => e.id.startsWith(P) && !e.disabled).map((e) => e.id);
     for (const id of ids) for (const t of targets(id)) expect(content.events.has(t), `${id} -> ${t}`).toBe(true);
-    const gates = ['flight', 'market', 'fishclub', 'maiden', 'ssanne'].map((g) => P + g);
+    const gates = ['flight', 'market', 'fishclub', 'maiden', 'ssanne', 'kaiju'].map((g) => P + g);
     const reach = new Set<string>(gates);
     for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id)) if (!reach.has(t)) { reach.add(t); again = true; } }
     expect([...reach].filter((id) => id.startsWith(P)).sort()).toEqual(ids.sort());

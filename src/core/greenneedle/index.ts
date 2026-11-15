@@ -68,6 +68,9 @@ export interface GnHost {
 export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage: number): boolean {
   if (c.test === 'lookAtLevel') return run.party.some((m) => m.look === c.types![0] && m.level >= gnFlag(run, c.key!));
   if (c.test === 'notRegion') return !c.types!.includes(run.regionOrder[run.regionIndex] ?? '');
+  if (c.test === 'holdsBerry') return run.party.some((m) => Object.entries(m.held ?? {}).some(([id, n]) => n > 0 && id.endsWith('-berry')));
+  if (c.test === 'cutter') return run.party.some((m) => m.hp > 0 && m.moves.some((s) => { const mv = content.moves.get(s.id); return !!mv && mv.category !== 'status' && (mv.flags.includes('slicing') || s.id.includes('claw')); }));
+  if (c.test === 'moveType') return run.party.some((m) => m.hp > 0 && m.moves.some((s) => { const mv = content.moves.get(s.id); return !!mv && mv.category !== 'status' && c.types!.includes(mv.type); }));
   if (c.test === 'noMoveType') return !run.party.some((m) => m.moves.some((s) => c.types!.includes(content.moves.get(s.id)?.type ?? '')));
   const stamped = gnFlag(run, c.key!);
   if (c.test === 'laterStage') return stamped > 0 && stamped < stage;
@@ -181,6 +184,17 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'itemEach':
       addItem(run.inventory, e.key!, Math.max(1, run.party.length));
       return '';
+    case 'payBerry': {
+      // gn.12: one held Berry is handed over (the first party Pokémon holding one, the first Berry by name).
+      for (const m of run.party) {
+        const id = Object.keys(m.held ?? {}).sort().find((k) => k.endsWith('-berry') && (m.held![k] ?? 0) > 0);
+        if (!id) continue;
+        m.held![id]! -= 1;
+        if (m.held![id] === 0) delete m.held![id];
+        return `Paid a ${content.catalog.get(id)?.name ?? id}`;
+      }
+      return '';
+    }
     case 'partyHas':
       setGnFlag(run, e.key!, run.party.some((m) => e.species!.includes(m.speciesId)) ? 1 : 0);
       return '';

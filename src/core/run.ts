@@ -1663,6 +1663,7 @@ export function startRaidBattle(content: Content, run: RunState, baseDef: RaidDe
   // S401 cards and S402 talk: what you prepared with before going in (a bad id is refused; story raids take none).
   const prep = parseRaidPrep(content, baseDef, opts.prep);
   boss.statBoosts = { ...boss.statBoosts, hp: Math.max(0, (boss.statBoosts?.hp ?? 0) + (approach?.hpDeltaPercent ?? 0) + (opts.returning ? RETURNING_HP_PERCENT : 0) + (prep.card?.hpDeltaPercent ?? 0) + (prep.talk?.hpPercent ?? 0) + (prep.coop ? content.raids.coop.hpPercent : 0)) };
+  if (def.moves) boss.moves = def.moves.filter((id) => content.moves.has(id)).map((id) => ({ id, pp: content.moves.get(id)!.pp }));
   for (const id of def.extraMoves) {
     const mv = content.moves.get(id);
     if (mv && !boss.moves.some((m) => m.id === id)) boss.moves.push({ id, pp: mv.pp });

@@ -1,0 +1,5806 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [
+  "cs-kanto-vermilion-maiden-eggs",
+  "cs-kanto-vermilion-maiden-lantern",
+  "cs-kanto-vermilion-maiden-n1",
+  "cs-kanto-vermilion-maiden-n2",
+  "cs-kanto-vermilion-maiden-n3",
+  "cs-kanto-vermilion-maiden-n4",
+  "cs-kanto-vermilion-maiden-n5",
+  "cs-kanto-vermilion-maiden-square-a",
+  "cs-kanto-vermilion-maiden-square-b",
+  "cs-kanto-vermilion-maiden-swap",
+  "cs-kanto-vermilion-maiden-tea",
+  "cs-kanto-vermilion-maiden-tm1",
+  "cs-kanto-vermilion-maiden-tm2",
+  "cs-kanto-vermilion-maiden-tm3",
+  "cs-kanto-vermilion-maiden-tm4",
+  "cs-kanto-vermilion-maiden-tm5",
+  "cs-kanto-vermilion-maiden-tm6",
+  "cs-kanto-vermilion-maiden-tm7",
+  "cs-kanto-vermilion-maiden-tm8",
+  "cs-kanto-vermilion-maiden-top"
+ ],
+ "events": [
+  {
+   "id": "gn-11-harbour",
+   "name": "Kaiju Tentacruel",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Story",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "types": [
+    "water",
+    "poison"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kaiju-entered",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "kaiju-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "tentacruel",
+    "tint": "#23465a",
+    "effect": "none"
+   },
+   "intro": "*A pier folds in half.*\n\n*Boats slide down it like plates off a table. People run past you, inland. A harbour bell rings and rings, and then stops, because the tower it was in isn't there.*\n\n*Out in the bay, something lifts a crane out of the water, looks at it, and puts it down on a warehouse.*\n\nIt is a Tentacruel. It is the size of a ferry. Nobody Dynamaxed it: it grew, year on year, on what the harbour poured into the bay.\n\n**Harbourmaster, Captain Ffion:** \"It came up at dawn. It's not attacking. It's *looking* for something. It just doesn't care what's in the way.\"\n\n**Ffion:** \"I've boats that'll help. I've trainers stuck on the breakwater. I've a town. Pick what you save first.\"",
+   "choices": [
+    {
+     "label": "Ask Ffion for the boats.",
+     "success": {
+      "text": "Ffion puts two fingers in her mouth and whistles. Three trawlers swing their bows round at once.\n\n\"They'll worry it every time it shields up. That's all they can do. It's enough.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kaiju-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "kaiju-at"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "stranding-helped",
+        "min": 1,
+        "then": [],
+        "text": "**Ffion:** \"You again. Good. You're calm around big ones.\""
+       },
+       {
+        "kind": "flag",
+        "key": "kaiju-boats",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-11-breakwater"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go straight to the breakwater.",
+     "success": {
+      "text": "You run toward the water while everyone else runs away from it.\n\nFfion shouts something after you. The wind takes most of it. The last word is \"careful\".",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kaiju-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "kaiju-at"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "stranding-helped",
+        "min": 1,
+        "then": [],
+        "text": "**Ffion:** \"You again. Good. You're calm around big ones.\""
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-11-breakwater"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-11-breakwater",
+   "name": "The Harbour",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "tentacool",
+    "tint": "#23465a",
+    "effect": "none"
+   },
+   "intro": "Tentacool swarm in the shallows, hundreds of them, pale as jelly. Four people are stranded on what is left of the breakwater.\n\n**Swimmer Bettany** treads water by a broken post, furious. **Old Ned** sits on a rock, still holding his rod. Further along, **a Sailor** and his Machop hold a mooring line, and **a small girl** with a Psyduck is pointing at the reef.\n\nThe tide gives you four turns before the swarm closes. A Water- or Flying-type gets someone off in one. Anyone else takes two.",
+   "choices": [
+    {
+     "label": "Get Swimmer Bettany off the post.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyType",
+         "type": "water"
+        }
+       ],
+       "text": "Your Pokémon reaches her in one go. Bettany climbs out, spits seawater, and says, \"I was doing *lengths*.\" She wants a go at it.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "kaiju-bettany",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-rescued",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-turns",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-11-breakwater"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "partyType",
+         "type": "flying"
+        }
+       ],
+       "text": "Your Pokémon reaches her in one go. Bettany climbs out, spits seawater, and says, \"I was doing *lengths*.\" She wants a go at it.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "kaiju-bettany",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-rescued",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-turns",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-11-breakwater"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It takes two tries through the swarm. Bettany climbs out, spits seawater, and says, \"I was doing *lengths*.\" She wants a go at it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kaiju-bettany",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kaiju-rescued",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kaiju-turns",
+        "amount": 2
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "kaiju-turns",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-11-breakwater"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "kaiju-bettany",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "kaiju-turns",
+       "atLeast": 0,
+       "atMost": 3
+      }
+     ]
+    },
+    {
+     "label": "Reach Old Ned on his rock.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyType",
+         "type": "water"
+        }
+       ],
+       "text": "Ned steps across like he's getting off a bus. \"Took your time.\" He hasn't let go of the rod. He says he can hook one of those out of a fight.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "kaiju-ned",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-rescued",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-turns",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-11-breakwater"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "partyType",
+         "type": "flying"
+        }
+       ],
+       "text": "Ned steps across like he's getting off a bus. \"Took your time.\" He hasn't let go of the rod. He says he can hook one of those out of a fight.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "kaiju-ned",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-rescued",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-turns",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-11-breakwater"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Two slow trips through the stinging water. Ned steps across like he's getting off a bus. \"Took your time.\" He says he can hook one of those out of a fight.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kaiju-ned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kaiju-rescued",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kaiju-turns",
+        "amount": 2
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "kaiju-turns",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-11-breakwater"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "kaiju-ned",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "kaiju-turns",
+       "atLeast": 0,
+       "atMost": 3
+      }
+     ]
+    },
+    {
+     "label": "Go further along the breakwater.",
+     "success": {
+      "text": "You pick your way along the broken stones, toward the Sailor and the girl.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-11-breakwater-2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "kaiju-turns",
+       "atLeast": 0,
+       "atMost": 3
+      }
+     ]
+    },
+    {
+     "label": "Hold the shallows.",
+     "success": {
+      "text": "The tide turns. The swarm closes on the breakwater all at once.\n\nWhoever is still out there will have to hold on. You turn to face the Tentacool.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-11-swarm"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-11-breakwater-2",
+   "name": "The Far End of the Breakwater",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "machop",
+    "tint": "#23465a",
+    "effect": "none"
+   },
+   "intro": "The Sailor has wrapped the mooring line twice round his arm. His Machop holds the other end in its teeth, eyes shut, jaw set. The boat on the line is the last one still floating.\n\nPast him, the small girl sits cross-legged with her Psyduck. She isn't frightened. She is pointing at the reef, and has been, the whole time.",
+   "choices": [
+    {
+     "label": "Help the Sailor and his Machop.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyType",
+         "type": "water"
+        }
+       ],
+       "text": "Your Pokémon takes the line. The Machop lets go for the first time in an hour and sits down hard. The Sailor says it can brace a pylon if you need one dropped.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "kaiju-sailor",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-rescued",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-turns",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-11-breakwater-2"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "partyType",
+         "type": "flying"
+        }
+       ],
+       "text": "Your Pokémon takes the line. The Machop lets go for the first time in an hour and sits down hard. The Sailor says it can brace a pylon if you need one dropped.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "kaiju-sailor",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-rescued",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-turns",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-11-breakwater-2"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Two turns of hauling, side by side with the Machop. It lets go for the first time in an hour. The Sailor says it can brace a pylon if you need one dropped.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kaiju-sailor",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kaiju-rescued",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kaiju-turns",
+        "amount": 2
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "kaiju-turns",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-11-breakwater-2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "kaiju-sailor",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "kaiju-turns",
+       "atLeast": 0,
+       "atMost": 3
+      }
+     ]
+    },
+    {
+     "label": "Carry the girl and her Psyduck back.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyType",
+         "type": "water"
+        }
+       ],
+       "text": "She holds the Psyduck very tightly and keeps her eyes on the reef the whole way. \"It keeps looking at the same place,\" she says. \"There. Look.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "kaiju-girl",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-rescued",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-turns",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-11-breakwater-2"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "partyType",
+         "type": "flying"
+        }
+       ],
+       "text": "She holds the Psyduck very tightly and keeps her eyes on the reef the whole way. \"It keeps looking at the same place,\" she says. \"There. Look.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "kaiju-girl",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-rescued",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-turns",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-11-breakwater-2"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It takes two turns. She holds the Psyduck very tightly and keeps her eyes on the reef. \"It keeps looking at the same place,\" she says. \"There. Look.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kaiju-girl",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kaiju-rescued",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kaiju-turns",
+        "amount": 2
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "kaiju-turns",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-11-breakwater-2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "kaiju-girl",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "kaiju-turns",
+       "atLeast": 0,
+       "atMost": 3
+      }
+     ]
+    },
+    {
+     "label": "Back along the breakwater.",
+     "success": {
+      "text": "You pick your way back to the others.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-11-breakwater"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-11-swarm",
+   "name": "The Swarm",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "tentacool",
+    "tint": "#23465a",
+    "effect": "none"
+   },
+   "intro": "The Tentacool come up the stones in a wave, stinging, glassy, and a long way from calm.",
+   "choices": [
+    {
+     "label": "Fight the swarm.",
+     "success": {
+      "text": "Old Ned casts once, long and lazy. A Tentacool sails out of the swarm on the end of his line. \"One fewer,\" he says. The rest come at you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "tentacool"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-11-seawall"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-11-seawall"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "kaiju-lost",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-11-retreat"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "kaiju-ned",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Fight the swarm.",
+     "success": {
+      "text": "Two of them reach the top of the stones together.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "tentacool"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-11-seawall"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-11-seawall"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "kaiju-lost",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-11-retreat"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "kaiju-ned",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-11-seawall",
+   "name": "The Sea Wall",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "tentacruel",
+    "tint": "#23465a",
+    "effect": "none"
+   },
+   "intro": "It reaches the sea wall. Pylons and cranes stand along it, four of them, leaning in the wind.\n\nIt drags one arm along the wall, feeling for something. It doesn't look at the town at all.\n\n**Ffion:** \"Drop one on it! It'll stop it a breath. It'll also make it angry. Your call.\"",
+   "choices": [
+    {
+     "label": "Drop a pylon on it.",
+     "success": {
+      "text": "Your Pokémon hits the footing. The pylon groans, tips, and comes down across its arms.\n\nIt stops, stunned, for one breath. When it moves again, it moves faster, and it is angry now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kaiju-pylons",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "kaiju-pylons",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kaiju-sailor",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "kaiju-braced",
+          "amount": 1
+         }
+        ],
+        "text": "The Sailor's Machop braces the pylon with its shoulder. The stun holds for two breaths."
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-11-seawall"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "kaiju-pylons",
+       "atLeast": 0,
+       "atMost": 3
+      },
+      {
+       "kind": "gn",
+       "test": "moveType",
+       "types": [
+        "fighting",
+        "rock",
+        "steel"
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Follow it to the reef.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kaiju-pylons",
+         "atLeast": 0,
+         "atMost": 0
+        }
+       ],
+       "text": "You leave the pylons standing. It leaves the wall behind, calm, still looking. You follow it toward the reef.",
+       "effects": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-11-reef"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It leaves the wall behind. You follow it along the shore toward the reef.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-11-reef"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-11-reef",
+   "name": "The Reef",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "tentacool",
+    "tint": "#23465a",
+    "effect": "none"
+   },
+   "intro": "*It stops. It turns its back on the town. It lowers itself over one patch of reef, and it doesn't move from it.*\n\n*It isn't attacking anything now. It's guarding.*\n\nUnder it, caught in a net, is a Tentacool. Small. Hurt. The net's float has a factory stamp on it.",
+   "choices": [
+    {
+     "label": "Cut the net.",
+     "success": {
+      "text": "One of your Pokémon goes for the net. The rest stand between it and the Kaiju, which panics, swinging blind, because something is near its little one.\n\nTwo turns. The cords part. The net falls away.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.15
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kaiju-pylons",
+        "min": 1,
+        "then": [
+         {
+          "kind": "damage",
+          "share": 0.05
+         }
+        ],
+        "text": "It is angry from the pylons. Its swings land harder."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kaiju-pylons",
+        "min": 3,
+        "then": [
+         {
+          "kind": "damage",
+          "share": 0.05
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "kaiju-freed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-kaiju-won",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kaiju-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-11-freed"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "cutter"
+      }
+     ]
+    },
+    {
+     "label": "Break its last shield.",
+     "success": {
+      "text": "You step out onto the reef. It rises to meet you, and the bay rises with it.\n\nThree shield bars glow across its body. Out in the shallows, the Tentacool gather to its call.",
+      "effects": [],
+      "battle": {
+       "kind": "raid",
+       "raidId": "kaiju-tentacruel",
+       "name": "Kaiju Tentacruel",
+       "levelBonus": -1,
+       "flagMods": [
+        {
+         "flag": "kaiju-rescued",
+         "hpPercent": 6
+        },
+        {
+         "flag": "kaiju-boats",
+         "hpPercent": 9
+        },
+        {
+         "flag": "kaiju-pylons",
+         "foeStages": {
+          "atk": 1
+         },
+         "hpPercent": 6
+        },
+        {
+         "flag": "kaiju-braced",
+         "hpPercent": 6
+        }
+       ],
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kaiju-won",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-kaiju-won",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kaiju-done",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-11-sinks"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "kaiju-lost",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-11-retreat"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take the float with the stamp.",
+     "success": {
+      "text": "You wade out and pull the float free of the cords. Under the weed, pressed into the plastic:\n\n*\"PROPERTY OF COASTLINE BALL WORKS\"*\n\nSomebody made this net, and somebody lost it, and somebody's factory is still pouring into the bay.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kaiju-stamp",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-11-reef"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "kaiju-stamp",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-11-freed",
+   "name": "The Small One",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "tentacool",
+    "tint": "#23465a",
+    "effect": "none"
+   },
+   "intro": "*The Kaiju goes still the moment the net falls away. It lifts the small one in two tentacles. It looks at you for a long time.*\n\nThen it sets the small one down in the shallows at your feet, and waits.",
+   "choices": [
+    {
+     "label": "Hold out a hand.",
+     "success": {
+      "text": "The small Tentacool drifts to you. Behind it, the Kaiju lowers itself, slowly, into the bay, watching the whole way down.\n\nIt is the one from the net. It stays.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "kaiju-girl",
+        "min": 1,
+        "then": [],
+        "text": "**The girl with the Psyduck:** \"I said. I said it was looking.\""
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "tentacool"
+        ],
+        "types": [],
+        "levelBonus": -6,
+        "shinyMultiplier": 1,
+        "ability": "huge-power",
+        "moves": [
+         "liquidation"
+        ]
+       },
+       {
+        "kind": "item",
+        "id": "poison-barb",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kaiju-kept",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Kaiju Tentacruel lifted its little one out of the net, looked at you for a long time, and let it go with you.",
+        "importance": 75
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-11-freed"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "kaiju-kept",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Take the float with the stamp.",
+     "success": {
+      "text": "The float is still in the cut net. Under the weed:\n\n*\"PROPERTY OF COASTLINE BALL WORKS\"*\n\nSomebody made this net, and somebody lost it, and somebody's factory is still pouring into the bay.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kaiju-stamp",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-11-freed"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "kaiju-stamp",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave the harbour.",
+     "success": {
+      "text": "Ffion watches the bay close over it. \"Right,\" she says. \"Pier first.\"\n\nLater, they rebuild the pier with a gap in it, for something to swim through.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kaiju-left",
+        "amount": 1
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "kaiju-kept",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-11-sinks",
+   "name": "It Sinks",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "tentacruel",
+    "tint": "#23465a",
+    "effect": "none"
+   },
+   "intro": "The last shield breaks. It sinks, slowly, and drags itself off the reef. It does not go far. It stays in the deep water, watching the net.\n\nThe small one's still caught. Someone wades out with a knife and cuts it free, and it swims, crooked, to the big shape waiting in the dark.",
+   "choices": [
+    {
+     "label": "Take the float with the stamp.",
+     "success": {
+      "text": "The float is still tangled in the cut net. Under the weed:\n\n*\"PROPERTY OF COASTLINE BALL WORKS\"*\n\nSomebody made this net, and somebody lost it, and somebody's factory is still pouring into the bay.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kaiju-stamp",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-11-sinks"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "kaiju-stamp",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave the harbour.",
+     "success": {
+      "text": "Ffion looks at the wreck of her pier for a while. \"It wasn't after us,\" she says. \"I know that. Doesn't help.\"\n\nLater, they rebuild the pier with a gap in it, for something to swim through.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kaiju-left",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-11-retreat",
+   "name": "It Retreats",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "tentacruel",
+    "tint": "#23465a",
+    "effect": "none"
+   },
+   "intro": "It turns from the reef, past the breakwater, out into the bay, and the harbour market slams its shutters for the day.\n\nWhen the water settles, the girl with the Psyduck and Old Ned wade out to the reef together. Ned has a bread knife. They cut the small one free, and the Kaiju takes it, and goes.\n\nYou get nothing. The town is still standing.",
+   "choices": [
+    {
+     "label": "Walk back into town.",
+     "success": {
+      "text": "Ffion claps you on the shoulder as you pass. She doesn't say anything. She doesn't have to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kaiju-left",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kaiju-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-11-return",
+   "name": "Something Rises",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Story",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kaiju-freed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "kaiju-returned",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "kaiju-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "tentacruel",
+    "tint": "#23465a",
+    "effect": "none"
+   },
+   "intro": "A trawler with no name painted on it is dragging a net through the shallows. The net is full of Tentacool.\n\nTwo crewmen see you watching. They don't like being watched. They let their Pokémon out.",
+   "choices": [
+    {
+     "label": "Stand in their way.",
+     "success": {
+      "text": "You step onto the jetty. Behind you, the water bulges.\n\n*A tentacle the size of a mast rises out of the bay and lays itself, gently, beside your Pokémon. It remembers you.*",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "kaiju-returned",
+         "amount": 1
+        }
+       ],
+       "format": "doubles",
+       "name": "Net Crew",
+       "classId": "roughneck",
+       "ally": "tentacruel",
+       "size": 3,
+       "types": [
+        "water",
+        "poison"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kaiju-returned",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "The Kaiju Tentacruel rose out of the sea to fight beside you.",
+         "importance": 70
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "You walk on. Out in the bay, something very large follows the trawler, just under the surface.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-vermilion-kaiju",
+   "name": "Kaiju Tentacruel",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Story",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "types": [
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kaiju-entered",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "kaiju-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "tentacruel",
+    "tint": "#23465a",
+    "effect": "none"
+   },
+   "intro": "*A pier folds in half.*\n\n*Boats slide down it like plates off a table. People run past you, inland. A harbour bell rings and rings, and then stops, because the tower it was in isn't there.*\n\n*Out in the bay, something lifts a crane out of the water, looks at it, and puts it down on a warehouse.*\n\nIt is a Tentacruel. It is the size of a ferry. Nobody Dynamaxed it: it grew, year on year, on what the harbour poured into the bay.\n\n**Harbourmaster, Captain Ffion:** \"It came up at dawn. It's not attacking. It's *looking* for something. It just doesn't care what's in the way.\"\n\n**Ffion:** \"I've boats that'll help. I've trainers stuck on the breakwater. I've a town. Pick what you save first.\"",
+   "choices": [
+    {
+     "label": "Ask Ffion for the boats.",
+     "success": {
+      "text": "Ffion puts two fingers in her mouth and whistles. Three trawlers swing their bows round at once.\n\n\"They'll worry it every time it shields up. That's all they can do. It's enough.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kaiju-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "kaiju-at"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "stranding-helped",
+        "min": 1,
+        "then": [],
+        "text": "**Ffion:** \"You again. Good. You're calm around big ones.\""
+       },
+       {
+        "kind": "flag",
+        "key": "kaiju-boats",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-11-breakwater"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go straight to the breakwater.",
+     "success": {
+      "text": "You run toward the water while everyone else runs away from it.\n\nFfion shouts something after you. The wind takes most of it. The last word is \"careful\".",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kaiju-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "kaiju-at"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "stranding-helped",
+        "min": 1,
+        "then": [],
+        "text": "**Ffion:** \"You again. Good. You're calm around big ones.\""
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-11-breakwater"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.vermilion.kaiju"
+  },
+  {
+   "id": "gn-12-door",
+   "name": "Maiden's Peak",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "fairy",
+    "ghost"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "maiden-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "A cliff town, all stairs and lanterns. It is festival week. The old woman selling tea says it is always festival week.\n\nAbove the market, at the far end of a street, a woman in a veil is walking away. She does not hurry. She does not look back.",
+   "choices": [
+    {
+     "label": "Walk into the market.",
+     "success": {
+      "text": "The crowd takes you in. Somewhere ahead, a lantern turns a corner.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "maiden-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "maiden-region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-12-square"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "You keep to the road. Behind you, festival music, and one lantern, high up, that does not move with the wind.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-square",
+   "name": "Maiden's Peak: The Market",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "Lantern Row and the TM Hall open off the square. Further in: Swap Alley, Egg Row, the stalls, the dusk lanes, the Tea House.\n\nAt the end of Lantern Row, a veil turns a corner.",
+   "choices": [
+    {
+     "label": "Lantern Row.",
+     "success": {
+      "text": "Paper lanterns overhead, shelves of medicine underneath. Everything costs a little more here.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-lantern"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The TM Hall.",
+     "success": {
+      "text": "A long hall of glass cases. The board by the door has changed again.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "maiden-board",
+        "n": 50
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "maiden-board",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-12-tm-1"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "maiden-board",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-12-tm-2"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Further into the market.",
+     "success": {
+      "text": "You push deeper in.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-square-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run after the veil.",
+     "success": {
+      "text": "You leave the stalls behind and run.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "maiden-chase",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "maiden-way-1",
+        "n": 50
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "maiden-way-1",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-12-see-1-a",
+          "gn-12-see-1-b"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-square-2",
+   "name": "Maiden's Peak: Swap Alley and Egg Row",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "Traders in every doorway, warm baskets, painted stalls, a man with a stack of sealed boxes. The lane carries on toward the cliff.",
+   "choices": [
+    {
+     "label": "Swap Alley.",
+     "success": {
+      "text": "Traders call from every doorway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Egg Row.",
+     "success": {
+      "text": "Baskets of warm eggs and a very old man with a very serious face.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-eggs"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Costume Stalls and the Mystery Boxes.",
+     "success": {
+      "text": "Ribbons on spools. Sealed boxes stacked to the awning.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-stalls"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Further in.",
+     "success": {
+      "text": "The lanes get older and narrower.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-square-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-square-3",
+   "name": "Maiden's Peak: The Old Lanes",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gastly",
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The dusk lanes, a fortune teller's curtain, and at the very back of the market, the Tea House.",
+   "choices": [
+    {
+     "label": "The Dusk Vendors.",
+     "success": {
+      "text": "A lane of trays.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-dusk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Fortune Teller.",
+     "success": {
+      "text": "A bead curtain, and the smell of incense.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-roux"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Tea House.",
+     "success": {
+      "text": "An old woman is already pouring.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tea"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the square.",
+     "success": {
+      "text": "You step back into the crowd. Somebody is selling lanterns shaped like Pokémon. Everybody is laughing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-square"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-lantern",
+   "name": "Lantern Row",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "Poké Balls, status cures, out-of-battle supplies. Prices are ten per cent higher than anywhere else; nobody minds.\n\nAt the end of the row, a veil turns a corner.",
+   "choices": [
+    {
+     "label": "Poké Balls ×5 (₽1,100)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1100
+      }
+     ],
+     "success": {
+      "text": "Five Poké Balls, wrapped in festival paper.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1100
+       },
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 5
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-lantern"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Full Heal ×2 and Super Potion ×2 (₽1,540)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1540
+      }
+     ],
+     "success": {
+      "text": "The stallholder adds a lantern-shaped sweet for free.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1540
+       },
+       {
+        "kind": "item",
+        "id": "full-heal",
+        "count": 2
+       },
+       {
+        "kind": "item",
+        "id": "super-potion",
+        "count": 2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-lantern"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the square.",
+     "success": {
+      "text": "You step back into the crowd. Somebody is selling lanterns shaped like Pokémon. Everybody is laughing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-square"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-1",
+   "name": "TM Hall",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "A long hall of glass cases, each with labelled discs. A board at the door lists the twenty-four moves on offer today, grouped by type.\n\n\"Pick the move,\" says the clerk. \"Not the disc. The move.\"",
+   "choices": [
+    {
+     "label": "The Fire case.",
+     "success": {
+      "text": "You lean over the Fire case.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1-fire"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Water case.",
+     "success": {
+      "text": "You lean over the Water case.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1-water"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Grass case.",
+     "success": {
+      "text": "You lean over the Grass case.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1-grass"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Further along the hall.",
+     "success": {
+      "text": "The far wall.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1-b"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-1-b",
+   "name": "TM Hall: The Far Wall",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The far wall of the hall: three more cases, and two more by the back door.",
+   "choices": [
+    {
+     "label": "The Electric case.",
+     "success": {
+      "text": "You lean over the Electric case.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1-electric"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Ice case.",
+     "success": {
+      "text": "You lean over the Ice case.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1-ice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Ground case.",
+     "success": {
+      "text": "You lean over the Ground case.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1-ground"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The last wall.",
+     "success": {
+      "text": "Two more cases, by the back door.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1-c"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-1-c",
+   "name": "TM Hall: The Last Wall",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The last two cases, by the back door.",
+   "choices": [
+    {
+     "label": "The Psychic case.",
+     "success": {
+      "text": "You lean over the Psychic case.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1-psychic"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Fairy case.",
+     "success": {
+      "text": "You lean over the Fairy case.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1-fairy"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the door.",
+     "success": {
+      "text": "You go back to the door.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the square.",
+     "success": {
+      "text": "You step back into the crowd. Somebody is selling lanterns shaped like Pokémon. Everybody is laughing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-square"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-1-fire",
+   "name": "TM Hall: Fire",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The Fire case. Three discs on velvet, a price card under each. The clerk polishes the glass while you look.\n\nThe price goes by power. The clerk says the board changes every visit. The clerk says this every visit.",
+   "choices": [
+    {
+     "label": "TM Flamethrower (₽1,800)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1800
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Flamethrower is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1800
+       },
+       {
+        "kind": "teachMove",
+        "move": "flamethrower",
+        "type": "fire"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Fire Blast (₽2,200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2200
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Fire Blast is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2200
+       },
+       {
+        "kind": "teachMove",
+        "move": "fire-blast",
+        "type": "fire"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Heat Wave (₽1,900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1900
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Heat Wave is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1900
+       },
+       {
+        "kind": "teachMove",
+        "move": "heat-wave",
+        "type": "fire"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the cases.",
+     "success": {
+      "text": "You go back along the cases.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-1-water",
+   "name": "TM Hall: Water",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The Water case. Three discs on velvet, a price card under each. The clerk polishes the glass while you look.\n\nThe price goes by power. The clerk says the board changes every visit. The clerk says this every visit.",
+   "choices": [
+    {
+     "label": "TM Surf (₽1,800)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1800
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Surf is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1800
+       },
+       {
+        "kind": "teachMove",
+        "move": "surf",
+        "type": "water"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Hydro Pump (₽2,200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2200
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Hydro Pump is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2200
+       },
+       {
+        "kind": "teachMove",
+        "move": "hydro-pump",
+        "type": "water"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Scald (₽1,600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1600
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Scald is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1600
+       },
+       {
+        "kind": "teachMove",
+        "move": "scald",
+        "type": "water"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the cases.",
+     "success": {
+      "text": "You go back along the cases.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-1-grass",
+   "name": "TM Hall: Grass",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The Grass case. Three discs on velvet, a price card under each. The clerk polishes the glass while you look.\n\nThe price goes by power. The clerk says the board changes every visit. The clerk says this every visit.",
+   "choices": [
+    {
+     "label": "TM Energy Ball (₽1,800)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1800
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Energy Ball is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1800
+       },
+       {
+        "kind": "teachMove",
+        "move": "energy-ball",
+        "type": "grass"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Giga Drain (₽1,500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1500
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Giga Drain is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1500
+       },
+       {
+        "kind": "teachMove",
+        "move": "giga-drain",
+        "type": "grass"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Leaf Storm (₽2,600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2600
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Leaf Storm is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2600
+       },
+       {
+        "kind": "teachMove",
+        "move": "leaf-storm",
+        "type": "grass"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the cases.",
+     "success": {
+      "text": "You go back along the cases.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-1-electric",
+   "name": "TM Hall: Electric",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The Electric case. Three discs on velvet, a price card under each. The clerk polishes the glass while you look.\n\nThe price goes by power. The clerk says the board changes every visit. The clerk says this every visit.",
+   "choices": [
+    {
+     "label": "TM Thunderbolt (₽1,800)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1800
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Thunderbolt is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1800
+       },
+       {
+        "kind": "teachMove",
+        "move": "thunderbolt",
+        "type": "electric"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Thunder (₽2,200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2200
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Thunder is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2200
+       },
+       {
+        "kind": "teachMove",
+        "move": "thunder",
+        "type": "electric"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Volt Switch (₽1,400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1400
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Volt Switch is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1400
+       },
+       {
+        "kind": "teachMove",
+        "move": "volt-switch",
+        "type": "electric"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the cases.",
+     "success": {
+      "text": "You go back along the cases.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-1-ice",
+   "name": "TM Hall: Ice",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The Ice case. Three discs on velvet, a price card under each. The clerk polishes the glass while you look.\n\nThe price goes by power. The clerk says the board changes every visit. The clerk says this every visit.",
+   "choices": [
+    {
+     "label": "TM Ice Beam (₽1,800)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1800
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Ice Beam is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1800
+       },
+       {
+        "kind": "teachMove",
+        "move": "ice-beam",
+        "type": "ice"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Blizzard (₽2,200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2200
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Blizzard is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2200
+       },
+       {
+        "kind": "teachMove",
+        "move": "blizzard",
+        "type": "ice"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Icicle Crash (₽1,700)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1700
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Icicle Crash is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1700
+       },
+       {
+        "kind": "teachMove",
+        "move": "icicle-crash",
+        "type": "ice"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the cases.",
+     "success": {
+      "text": "You go back along the cases.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-1-ground",
+   "name": "TM Hall: Ground",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The Ground case. Three discs on velvet, a price card under each. The clerk polishes the glass while you look.\n\nThe price goes by power. The clerk says the board changes every visit. The clerk says this every visit.",
+   "choices": [
+    {
+     "label": "TM Earthquake (₽2,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2000
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Earthquake is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2000
+       },
+       {
+        "kind": "teachMove",
+        "move": "earthquake",
+        "type": "ground"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Earth Power (₽1,800)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1800
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Earth Power is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1800
+       },
+       {
+        "kind": "teachMove",
+        "move": "earth-power",
+        "type": "ground"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM High Horsepower (₽1,900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1900
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. High Horsepower is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1900
+       },
+       {
+        "kind": "teachMove",
+        "move": "high-horsepower",
+        "type": "ground"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the cases.",
+     "success": {
+      "text": "You go back along the cases.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-1-psychic",
+   "name": "TM Hall: Psychic",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The Psychic case. Three discs on velvet, a price card under each. The clerk polishes the glass while you look.\n\nThe price goes by power. The clerk says the board changes every visit. The clerk says this every visit.",
+   "choices": [
+    {
+     "label": "TM Psychic (₽1,800)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1800
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Psychic is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1800
+       },
+       {
+        "kind": "teachMove",
+        "move": "psychic",
+        "type": "psychic"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Psyshock (₽1,600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1600
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Psyshock is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1600
+       },
+       {
+        "kind": "teachMove",
+        "move": "psyshock",
+        "type": "psychic"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Zen Headbutt (₽1,600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1600
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Zen Headbutt is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1600
+       },
+       {
+        "kind": "teachMove",
+        "move": "zen-headbutt",
+        "type": "psychic"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the cases.",
+     "success": {
+      "text": "You go back along the cases.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-1-fairy",
+   "name": "TM Hall: Fairy",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The Fairy case. Three discs on velvet, a price card under each. The clerk polishes the glass while you look.\n\nThe price goes by power. The clerk says the board changes every visit. The clerk says this every visit.",
+   "choices": [
+    {
+     "label": "TM Dazzling Gleam (₽1,600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1600
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Dazzling Gleam is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1600
+       },
+       {
+        "kind": "teachMove",
+        "move": "dazzling-gleam",
+        "type": "fairy"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Draining Kiss (₽1,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Draining Kiss is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1000
+       },
+       {
+        "kind": "teachMove",
+        "move": "draining-kiss",
+        "type": "fairy"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Play Rough (₽1,800)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1800
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Play Rough is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1800
+       },
+       {
+        "kind": "teachMove",
+        "move": "play-rough",
+        "type": "fairy"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the cases.",
+     "success": {
+      "text": "You go back along the cases.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-2",
+   "name": "TM Hall",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "A long hall of glass cases, each with labelled discs. A board at the door lists the twenty-four moves on offer today, grouped by type.\n\n\"Pick the move,\" says the clerk. \"Not the disc. The move.\"",
+   "choices": [
+    {
+     "label": "The Fighting case.",
+     "success": {
+      "text": "You lean over the Fighting case.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2-fighting"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Rock case.",
+     "success": {
+      "text": "You lean over the Rock case.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2-rock"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Steel case.",
+     "success": {
+      "text": "You lean over the Steel case.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2-steel"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Further along the hall.",
+     "success": {
+      "text": "The far wall.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2-b"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-2-b",
+   "name": "TM Hall: The Far Wall",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The far wall of the hall: three more cases, and two more by the back door.",
+   "choices": [
+    {
+     "label": "The Dark case.",
+     "success": {
+      "text": "You lean over the Dark case.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2-dark"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Ghost case.",
+     "success": {
+      "text": "You lean over the Ghost case.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2-ghost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Dragon case.",
+     "success": {
+      "text": "You lean over the Dragon case.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2-dragon"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The last wall.",
+     "success": {
+      "text": "Two more cases, by the back door.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2-c"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-2-c",
+   "name": "TM Hall: The Last Wall",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The last two cases, by the back door.",
+   "choices": [
+    {
+     "label": "The Poison case.",
+     "success": {
+      "text": "You lean over the Poison case.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2-poison"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Flying case.",
+     "success": {
+      "text": "You lean over the Flying case.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2-flying"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the door.",
+     "success": {
+      "text": "You go back to the door.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the square.",
+     "success": {
+      "text": "You step back into the crowd. Somebody is selling lanterns shaped like Pokémon. Everybody is laughing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-square"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-2-fighting",
+   "name": "TM Hall: Fighting",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The Fighting case. Three discs on velvet, a price card under each. The clerk polishes the glass while you look.\n\nThe price goes by power. The clerk says the board changes every visit. The clerk says this every visit.",
+   "choices": [
+    {
+     "label": "TM Close Combat (₽2,400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2400
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Close Combat is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2400
+       },
+       {
+        "kind": "teachMove",
+        "move": "close-combat",
+        "type": "fighting"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Aura Sphere (₽1,600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1600
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Aura Sphere is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1600
+       },
+       {
+        "kind": "teachMove",
+        "move": "aura-sphere",
+        "type": "fighting"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Drain Punch (₽1,500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1500
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Drain Punch is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1500
+       },
+       {
+        "kind": "teachMove",
+        "move": "drain-punch",
+        "type": "fighting"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the cases.",
+     "success": {
+      "text": "You go back along the cases.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-2-rock",
+   "name": "TM Hall: Rock",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The Rock case. Three discs on velvet, a price card under each. The clerk polishes the glass while you look.\n\nThe price goes by power. The clerk says the board changes every visit. The clerk says this every visit.",
+   "choices": [
+    {
+     "label": "TM Stone Edge (₽2,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2000
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Stone Edge is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2000
+       },
+       {
+        "kind": "teachMove",
+        "move": "stone-edge",
+        "type": "rock"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Rock Slide (₽1,500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1500
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Rock Slide is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1500
+       },
+       {
+        "kind": "teachMove",
+        "move": "rock-slide",
+        "type": "rock"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Power Gem (₽1,600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1600
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Power Gem is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1600
+       },
+       {
+        "kind": "teachMove",
+        "move": "power-gem",
+        "type": "rock"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the cases.",
+     "success": {
+      "text": "You go back along the cases.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-2-steel",
+   "name": "TM Hall: Steel",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The Steel case. Three discs on velvet, a price card under each. The clerk polishes the glass while you look.\n\nThe price goes by power. The clerk says the board changes every visit. The clerk says this every visit.",
+   "choices": [
+    {
+     "label": "TM Flash Cannon (₽1,600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1600
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Flash Cannon is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1600
+       },
+       {
+        "kind": "teachMove",
+        "move": "flash-cannon",
+        "type": "steel"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Iron Head (₽1,600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1600
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Iron Head is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1600
+       },
+       {
+        "kind": "teachMove",
+        "move": "iron-head",
+        "type": "steel"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Heavy Slam (₽1,600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1600
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Heavy Slam is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1600
+       },
+       {
+        "kind": "teachMove",
+        "move": "heavy-slam",
+        "type": "steel"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the cases.",
+     "success": {
+      "text": "You go back along the cases.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-2-dark",
+   "name": "TM Hall: Dark",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The Dark case. Three discs on velvet, a price card under each. The clerk polishes the glass while you look.\n\nThe price goes by power. The clerk says the board changes every visit. The clerk says this every visit.",
+   "choices": [
+    {
+     "label": "TM Dark Pulse (₽1,600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1600
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Dark Pulse is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1600
+       },
+       {
+        "kind": "teachMove",
+        "move": "dark-pulse",
+        "type": "dark"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Crunch (₽1,600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1600
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Crunch is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1600
+       },
+       {
+        "kind": "teachMove",
+        "move": "crunch",
+        "type": "dark"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Knock Off (₽1,300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1300
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Knock Off is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1300
+       },
+       {
+        "kind": "teachMove",
+        "move": "knock-off",
+        "type": "dark"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the cases.",
+     "success": {
+      "text": "You go back along the cases.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-2-ghost",
+   "name": "TM Hall: Ghost",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The Ghost case. Three discs on velvet, a price card under each. The clerk polishes the glass while you look.\n\nThe price goes by power. The clerk says the board changes every visit. The clerk says this every visit.",
+   "choices": [
+    {
+     "label": "TM Shadow Ball (₽1,600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1600
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Shadow Ball is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1600
+       },
+       {
+        "kind": "teachMove",
+        "move": "shadow-ball",
+        "type": "ghost"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Shadow Claw (₽1,400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1400
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Shadow Claw is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1400
+       },
+       {
+        "kind": "teachMove",
+        "move": "shadow-claw",
+        "type": "ghost"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Hex (₽1,300)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1300
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Hex is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1300
+       },
+       {
+        "kind": "teachMove",
+        "move": "hex",
+        "type": "ghost"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the cases.",
+     "success": {
+      "text": "You go back along the cases.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-2-dragon",
+   "name": "TM Hall: Dragon",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The Dragon case. Three discs on velvet, a price card under each. The clerk polishes the glass while you look.\n\nThe price goes by power. The clerk says the board changes every visit. The clerk says this every visit.",
+   "choices": [
+    {
+     "label": "TM Dragon Pulse (₽1,700)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1700
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Dragon Pulse is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1700
+       },
+       {
+        "kind": "teachMove",
+        "move": "dragon-pulse",
+        "type": "dragon"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Dragon Claw (₽1,600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1600
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Dragon Claw is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1600
+       },
+       {
+        "kind": "teachMove",
+        "move": "dragon-claw",
+        "type": "dragon"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Outrage (₽2,400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2400
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Outrage is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2400
+       },
+       {
+        "kind": "teachMove",
+        "move": "outrage",
+        "type": "dragon"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the cases.",
+     "success": {
+      "text": "You go back along the cases.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-2-poison",
+   "name": "TM Hall: Poison",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The Poison case. Three discs on velvet, a price card under each. The clerk polishes the glass while you look.\n\nThe price goes by power. The clerk says the board changes every visit. The clerk says this every visit.",
+   "choices": [
+    {
+     "label": "TM Sludge Bomb (₽1,800)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1800
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Sludge Bomb is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1800
+       },
+       {
+        "kind": "teachMove",
+        "move": "sludge-bomb",
+        "type": "poison"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Poison Jab (₽1,600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1600
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Poison Jab is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1600
+       },
+       {
+        "kind": "teachMove",
+        "move": "poison-jab",
+        "type": "poison"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Sludge Wave (₽1,900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1900
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Sludge Wave is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1900
+       },
+       {
+        "kind": "teachMove",
+        "move": "sludge-wave",
+        "type": "poison"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the cases.",
+     "success": {
+      "text": "You go back along the cases.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tm-2-flying",
+   "name": "TM Hall: Flying",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The Flying case. Three discs on velvet, a price card under each. The clerk polishes the glass while you look.\n\nThe price goes by power. The clerk says the board changes every visit. The clerk says this every visit.",
+   "choices": [
+    {
+     "label": "TM Air Slash (₽1,500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1500
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Air Slash is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1500
+       },
+       {
+        "kind": "teachMove",
+        "move": "air-slash",
+        "type": "flying"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Brave Bird (₽2,400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2400
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Brave Bird is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2400
+       },
+       {
+        "kind": "teachMove",
+        "move": "brave-bird",
+        "type": "flying"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "TM Hurricane (₽2,200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2200
+      }
+     ],
+     "success": {
+      "text": "The disc hums in the reader. Hurricane is taught on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2200
+       },
+       {
+        "kind": "teachMove",
+        "move": "hurricane",
+        "type": "flying"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the cases.",
+     "success": {
+      "text": "You go back along the cases.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tm-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-swap",
+   "name": "Swap Alley",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The trading district. Three traders hold up cards: what they will take, and roughly what they give. Each card is honest.\n\nAsk anyone who the lady is, and they will tell you. Ask two, and you will get two names.",
+   "choices": [
+    {
+     "label": "The first card: something of similar strength.",
+     "success": {
+      "text": "A handshake, a swap of Poké Balls.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 20
+        }
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The second card: a little further off.",
+     "success": {
+      "text": "The trader grins. \"A little gamble. Not much of one.\"",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 60
+        }
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The third card: anything goes.",
+     "success": {
+      "text": "\"No promises,\" says the third trader, \"except that it's alive and it's yours.\"",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 200
+        }
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the square.",
+     "success": {
+      "text": "You step back into the crowd. Somebody is selling lanterns shaped like Pokémon. Everybody is laughing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-square-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-eggs",
+   "name": "Egg Row",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "togepi",
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "Mystery eggs in straw. A warm-sand hatchery. Egg traders. And the Egg Move Tutor, who teaches one egg move a visit and charges by how rare it is.\n\nAbove the row, on a stone bridge, somebody laughs.",
+   "choices": [
+    {
+     "label": "A mystery Egg (₽1,500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1500
+      }
+     ],
+     "success": {
+      "text": "It is warm in your hands, and it moves once.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1500
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-eggs"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade a Pokémon for a sand-warmed Egg.",
+     "success": {
+      "text": "The hatchery keeper digs an Egg out of the warm sand. \"It's nearly there,\" she says. It hatches after your next battle.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "a Pokémon of yours"
+        }
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 1,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-eggs"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Egg Move Tutor (₽1,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "success": {
+      "text": "The old man whispers a secret to your lead. It looks at you, startled, as if it had always known.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1000
+       },
+       {
+        "kind": "eggMove"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-eggs"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the square.",
+     "success": {
+      "text": "You step back into the crowd. Somebody is selling lanterns shaped like Pokémon. Everybody is laughing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-square-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-stalls",
+   "name": "The Costume Stalls and the Mystery Boxes",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "Outfits on hooks for trainers, ribbons on spools for their Pokémon. Next door, sealed boxes, ₽1,000 each. The odds are printed on every lid, in small, honest letters:\n\n*Ultra Ball 40% · Rare Candy 30% · Nugget 20% · Ability Capsule 9% · Master Ball 1%*",
+   "choices": [
+    {
+     "label": "A festival ribbon for your lead (₽500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "Your lead wears it proudly, and keeps checking it is still there.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "moment",
+        "text": "Wore a festival ribbon from Maiden's Peak.",
+        "importance": 40
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-stalls"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ribbons for the whole team (₽1,500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1500
+      }
+     ],
+     "success": {
+      "text": "A ribbon each. They compare them.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1500
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-stalls"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A sealed Mystery Box (₽1,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "success": {
+      "text": "You shake it. It rattles. You open it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1000
+       },
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "maiden-box",
+        "weights": [
+         40,
+         30,
+         20,
+         9,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "maiden-box",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "item",
+          "id": "ultra-ball",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "maiden-box",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "item",
+          "id": "rare-candy",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "maiden-box",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "item",
+          "id": "nugget",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "maiden-box",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "item",
+          "id": "ability-capsule",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "maiden-box",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "item",
+          "id": "master-ball",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-stalls"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the square.",
+     "success": {
+      "text": "You step back into the crowd. Somebody is selling lanterns shaped like Pokémon. Everybody is laughing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-square-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-dusk",
+   "name": "The Dusk Vendors",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "haunter",
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "Ghost-types with trays. They only open at dusk; before then the trays are empty and the lane is cold.\n\nThey sell Spell Tags, Dusk Stones and Reaper Cloths, and they take payment in Berries. Nobody knows what they do with the Berries.\n\nBehind them, the Ghost-types all turn, at once, to look at the same empty place. On one tray: frost, in the shape of a hand.",
+   "choices": [
+    {
+     "label": "A Spell Tag, for a Berry.",
+     "success": {
+      "text": "A Gastly takes the Berry very carefully, as if it might be hot.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "payBerry"
+       },
+       {
+        "kind": "item",
+        "id": "spell-tag",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-dusk"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "period",
+       "in": [
+        "evening"
+       ]
+      },
+      {
+       "kind": "gn",
+       "test": "holdsBerry"
+      }
+     ]
+    },
+    {
+     "label": "A Dusk Stone, for a Berry.",
+     "success": {
+      "text": "A Haunter drops the stone into your hand. It is cold, and it stays cold.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "payBerry"
+       },
+       {
+        "kind": "item",
+        "id": "dusk-stone",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-dusk"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "period",
+       "in": [
+        "evening"
+       ]
+      },
+      {
+       "kind": "gn",
+       "test": "holdsBerry"
+      }
+     ]
+    },
+    {
+     "label": "A Reaper Cloth, for a Berry.",
+     "success": {
+      "text": "The cloth folds itself before you can.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "payBerry"
+       },
+       {
+        "kind": "item",
+        "id": "reaper-cloth",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-dusk"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "period",
+       "in": [
+        "evening"
+       ]
+      },
+      {
+       "kind": "gn",
+       "test": "holdsBerry"
+      }
+     ]
+    },
+    {
+     "label": "Back to the square.",
+     "success": {
+      "text": "You step back into the crowd. Somebody is selling lanterns shaped like Pokémon. Everybody is laughing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-square-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-roux",
+   "name": "The Fortune Teller",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "**Madame Roux**, in a different shawl. She does not look up from the cards.\n\n\"One true thing about where you're going next. Only one. The rest you can find out like everybody else.\"",
+   "choices": [
+    {
+     "label": "Cross her palm (₽600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "She turns one card, and tells you a true thing. You will remember it on the next stage.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -600
+       },
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "maiden-roux",
+        "weights": [
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "maiden-roux",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "item",
+          "id": "roux-wild",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "maiden-roux",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "item",
+          "id": "roux-trainers",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "maiden-roux",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "item",
+          "id": "roux-gym",
+          "count": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-roux"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the square.",
+     "success": {
+      "text": "You step back into the crowd. Somebody is selling lanterns shaped like Pokémon. Everybody is laughing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-square-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-tea",
+   "name": "The Tea House",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "A full rest. An old woman pours.\n\n**The old woman:** \"My mother saw her. Her mother saw her. She's waiting for a ship. Don't ask me which. I asked my mother, and she changed the subject.\"",
+   "choices": [
+    {
+     "label": "Rest and drink.",
+     "success": {
+      "text": "Your whole team sleeps like logs in the warm. When you wake, the tea is still hot.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tea"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask who the lady is.",
+     "success": {
+      "text": "The old woman thinks about it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "maiden-name",
+        "weights": [
+         1,
+         1,
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "maiden-name",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "\"That's Marguerite. Everyone knows that.\" They say it like it's the weather."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "maiden-name",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "\"Oh, that's Old Ilse. Was. Is. You know.\" They say it like it's the weather."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "maiden-name",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "\"Her name was Sorrel. My grandmother told me.\" They say it like it's the weather."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "maiden-name",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "\"Wenna. Wenna of the ships. Obviously.\" They say it like it's the weather."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "maiden-name",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "\"She's called the Lady. That's her name. The Lady.\" They say it like it's the weather."
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-tea"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the square.",
+     "success": {
+      "text": "You step back into the crowd. Somebody is selling lanterns shaped like Pokémon. Everybody is laughing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-square-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-see-1-a",
+   "name": "Maiden's Peak: The End of Lantern Row",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "*A veil, turning a corner.*\n\nTwo ways she could have gone.\n\nOn the left, a juggler has every face in the street turned his way. On the right, the few people by the wall all have their backs to the lane.",
+   "choices": [
+    {
+     "label": "Left.",
+     "success": {
+      "text": "You go left, with the crowd. Lanterns, faces, nothing. You find your way back round, slower.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "maiden-way-2",
+        "n": 50
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "maiden-way-2",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-12-see-2-a",
+          "gn-12-see-2-b"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Right.",
+     "success": {
+      "text": "You go right, where nobody is looking. There: a petal, pale pink, on the cobbles. She was here a moment ago.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "maiden-right",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "maiden-way-2",
+        "n": 50
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "maiden-way-2",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-12-see-2-a",
+          "gn-12-see-2-b"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-see-1-b",
+   "name": "Maiden's Peak: The End of Lantern Row",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "*A veil, turning a corner.*\n\nTwo ways she could have gone.\n\nOn the right, a juggler has every face in the street turned his way. On the left, the few people by the wall all have their backs to the lane.",
+   "choices": [
+    {
+     "label": "Left.",
+     "success": {
+      "text": "You go left, where nobody is looking. There: a petal, pale pink, on the cobbles. She was here a moment ago.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "maiden-right",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "maiden-way-2",
+        "n": 50
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "maiden-way-2",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-12-see-2-a",
+          "gn-12-see-2-b"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Right.",
+     "success": {
+      "text": "You go right, with the crowd. Lanterns, faces, nothing. You find your way back round, slower.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "maiden-way-2",
+        "n": 50
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "maiden-way-2",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-12-see-2-a",
+          "gn-12-see-2-b"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-see-2-a",
+   "name": "Maiden's Peak: Across Swap Alley",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "*A lantern, held low, moving against the crowd.*\n\nTwo ways she could have gone.\n\nOn the left, a trader is shouting prices, and everyone near him is watching. On the right, two old men play cards with their backs to the passage.",
+   "choices": [
+    {
+     "label": "Left.",
+     "success": {
+      "text": "You go left, with the crowd. Lanterns, faces, nothing. You find your way back round, slower.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "maiden-way-3",
+        "n": 50
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "maiden-way-3",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-12-see-3-a",
+          "gn-12-see-3-b"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Right.",
+     "success": {
+      "text": "You go right, where nobody is looking. There: a ribbon, tied to a railing in a bow. She was here a moment ago.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "maiden-right",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "maiden-way-3",
+        "n": 50
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "maiden-way-3",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-12-see-3-a",
+          "gn-12-see-3-b"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-see-2-b",
+   "name": "Maiden's Peak: Across Swap Alley",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "*A lantern, held low, moving against the crowd.*\n\nTwo ways she could have gone.\n\nOn the right, a trader is shouting prices, and everyone near him is watching. On the left, two old men play cards with their backs to the passage.",
+   "choices": [
+    {
+     "label": "Left.",
+     "success": {
+      "text": "You go left, where nobody is looking. There: a ribbon, tied to a railing in a bow. She was here a moment ago.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "maiden-right",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "maiden-way-3",
+        "n": 50
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "maiden-way-3",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-12-see-3-a",
+          "gn-12-see-3-b"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Right.",
+     "success": {
+      "text": "You go right, with the crowd. Lanterns, faces, nothing. You find your way back round, slower.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "maiden-way-3",
+        "n": 50
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "maiden-way-3",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-12-see-3-a",
+          "gn-12-see-3-b"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-see-3-a",
+   "name": "Maiden's Peak: Above Egg Row",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "*A laugh, on the bridge above you. Nobody is on the bridge.*\n\nTwo ways she could have gone.\n\nOn the left, the egg-sellers are all looking up at the bridge. On the right, a queue faces the hatchery, every back turned to the stair.",
+   "choices": [
+    {
+     "label": "Left.",
+     "success": {
+      "text": "You go left, with the crowd. Lanterns, faces, nothing. You find your way back round, slower.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-12-see-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Right.",
+     "success": {
+      "text": "You go right, where nobody is looking. There: a wet footprint, small, on dry stone. She was here a moment ago.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "maiden-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-12-see-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-see-3-b",
+   "name": "Maiden's Peak: Above Egg Row",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "*A laugh, on the bridge above you. Nobody is on the bridge.*\n\nTwo ways she could have gone.\n\nOn the right, the egg-sellers are all looking up at the bridge. On the left, a queue faces the hatchery, every back turned to the stair.",
+   "choices": [
+    {
+     "label": "Left.",
+     "success": {
+      "text": "You go left, where nobody is looking. There: a wet footprint, small, on dry stone. She was here a moment ago.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "maiden-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-12-see-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Right.",
+     "success": {
+      "text": "You go right, with the crowd. Lanterns, faces, nothing. You find your way back round, slower.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-12-see-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-see-4",
+   "name": "Maiden's Peak: Behind the Dusk Vendors",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "haunter",
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "*The Ghost-types all turn to look at the same empty place.*\n\nYou look where they look. There is nobody. On a tray, frost, in the shape of a hand, melting.",
+   "choices": [
+    {
+     "label": "Keep going.",
+     "success": {
+      "text": "Up toward the cliff stairs.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-12-see-5"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-see-5",
+   "name": "Maiden's Peak: The Cliff Stairs",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "*A reflection in a shop window, walking up.*\n\nYou turn round. The stairs behind you are empty. In the window, she keeps climbing.",
+   "choices": [
+    {
+     "label": "Climb.",
+     "success": {
+      "text": "Nothing is left on the stairs. Just the stairs, and the top of them.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lantern-boat",
+        "min": 1,
+        "then": [],
+        "text": "In the window, just before she is gone, you see what she is carrying: a paper boat."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-12-top"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-top",
+   "name": "Maiden's Peak: The Cliff",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The cliff. The sea. A statue of a woman looking out.\n\n*She's at the edge. Her back's to you. Her hair moves in a wind you can't feel.*\n\n*She turns.*\n\n*She isn't there.*\n\n*On the stone where she stood: something small, and bright.*\n\nThe statue on the cliff has her face.",
+   "choices": [
+    {
+     "label": "Pick it up.",
+     "success": {
+      "text": "A Z-Crystal, humming with a Fairy light. Fairium Z.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "fairium-z",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-maiden-zcrystal",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "maiden-right",
+        "min": 2,
+        "then": [
+         {
+          "kind": "item",
+          "id": "fairy-feather",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-maiden-blessing",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "maiden-blessing",
+          "amount": 1
+         }
+        ],
+        "text": "And because you came the short way, and she turned, and she saw you: a Fairy Feather, light as nothing. Down the hill, the Tea House lanterns light one by one. They will stay lit."
+       },
+       {
+        "kind": "flag",
+        "key": "maiden-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "maiden-top",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "item",
+       "id": "fairium-z",
+       "absent": true
+      }
+     ]
+    },
+    {
+     "label": "Pick them up.",
+     "success": {
+      "text": "You already hold her crystal. She left three Fairy HMs instead: Dazzling Gleam, Play Rough, Moonblast.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "hm-dazzling-gleam",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "hm-play-rough",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "hm-moonblast",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-maiden-hms",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "maiden-right",
+        "min": 2,
+        "then": [
+         {
+          "kind": "item",
+          "id": "fairy-feather",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-maiden-blessing",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "maiden-blessing",
+          "amount": 1
+         }
+        ],
+        "text": "And because you came the short way, and she turned, and she saw you: a Fairy Feather, light as nothing. Down the hill, the Tea House lanterns light one by one. They will stay lit."
+       },
+       {
+        "kind": "flag",
+        "key": "maiden-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "maiden-top",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "item",
+       "id": "fairium-z"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-12-teahouse",
+   "name": "The Tea House",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "callback": true,
+   "types": [
+    "fairy"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "maiden-blessing",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisStage",
+     "key": "maiden-tea-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "A lantern you would know anywhere, hanging over a door that was not here yesterday. Inside, the old woman from Maiden's Peak is pouring.\n\n\"She said you'd be by,\" she says. \"She doesn't usually say.\"",
+   "choices": [
+    {
+     "label": "Rest and drink.",
+     "success": {
+      "text": "A full rest, and tea that is still hot when you wake.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "maiden-tea-at"
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "gn-12-teahouse"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "\"It'll be here,\" she says.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "maiden-tea-at"
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "gn-12-teahouse"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-portrait",
+   "name": "A Portrait",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "callback": true,
+   "types": [
+    "fairy"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "maiden-top",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "maiden-region"
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "maiden-portrait-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "In a shop that sells nothing you need, a portrait hangs behind the counter. A woman at a cliff edge, looking out to sea.\n\nIt is her. She is a little older than she was.",
+   "choices": [
+    {
+     "label": "Look a while.",
+     "success": {
+      "text": "The shopkeeper says it came with the building. You don't ask which building.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "maiden-portrait-at"
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "gn-12-portrait"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-vermilion-maiden",
+   "name": "Maiden's Peak",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "types": [
+    "fairy"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "maiden-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "maiden-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "A cliff town, all stairs and lanterns. It is festival week. The old woman selling tea says it is always festival week.\n\nAbove the market, at the far end of a street, a woman in a veil is walking away. She does not hurry. She does not look back.",
+   "choices": [
+    {
+     "label": "Walk into the market.",
+     "success": {
+      "text": "The crowd takes you in. Somewhere ahead, a lantern turns a corner.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "maiden-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "maiden-region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-12-square"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "You keep to the road. Behind you, festival music, and one lantern, high up, that does not move with the wind.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.vermilion.maiden"
+  }
+ ]
+}

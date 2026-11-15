@@ -1584,7 +1584,7 @@ export const CatalogEffectSchema = z.discriminatedUnion('kind', [
   /** Goes into the Bag (items.json `item`) to be used in battle or from the map. */
   z.object({ kind: z.literal('bagItem'), item: z.string(), count: z.number().int().positive().default(1) }),
   /** Teach a move of one type the Pokémon can learn: TM = pick 1 of 3 random ones, HM = pick any. */
-  z.object({ kind: z.literal('teachMove'), /** Missing: any move the Pokémon can learn (the Network Machine). */ type: TypeNameSchema.optional(), mode: z.enum(['tm', 'hm']) }),
+  z.object({ kind: z.literal('teachMove'), /** Missing: any move the Pokémon can learn (the Network Machine). */ type: TypeNameSchema.optional(), mode: z.enum(['tm', 'hm']), /** Greenneedle gn.12: this one move only (the Lady's Fairy HMs). */ move: z.string().optional() }),
   /** A held item: copies go on the chosen Pokémon (or on every team member for team items like the Plates). */
   z.object({ kind: z.literal('held'), hooks: z.array(HeldHookSchema).min(1) }),
   /** Battle effects carried into the chosen Pokémon's next battles (or every team member's); `cure` also cures that status now. */
@@ -2832,7 +2832,7 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('attribute'), key: AttributeKeySchema, atLeast: z.number().int() }),
   /** A meter leaning one way: Rage (positive ragePeace) / Peace (negative), Good (positive goodEvil) / Evil (negative). */
   z.object({ kind: z.literal('meter'), key: z.enum(['ragePeace', 'goodEvil']), side: z.enum(['positive', 'negative']), atLeast: z.number().int().min(0) }),
-  z.object({ kind: z.literal('item'), id: z.string(), /** Copies needed (default 1). */ count: z.number().int().min(1).optional() }),
+  z.object({ kind: z.literal('item'), id: z.string(), /** Copies needed (default 1). */ count: z.number().int().min(1).optional(), /** Greenneedle gn.12: holds only when the player does NOT have it (the Lady leaves HMs when you already hold her crystal). */ absent: z.boolean().optional() }),
   /** Catalog Overhaul (families-b): the lead (the first Pokémon able to fight) is of this type. */
   z.object({ kind: z.literal('leadType'), type: TypeNameSchema }),
   /** Catalog Overhaul (families-b): the Pokémon the last "pick a Pokémon" choice named (remembered for the run, core/co/pickMemory.ts) is still in the party and is one of these types / is the starter. */
@@ -3374,6 +3374,11 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     pseudo: z.boolean().optional(),
     /** Toxic Spikes lie on your side when the fight opens, unless this story flag (`flag` effect key) reached `atLeast` (the Polluted Factory's valves). */
     spikesUnless: z.object({ flag: z.string().min(1), atLeast: z.number().int().min(1) }).optional(),
+    /**
+     * Greenneedle gn.11: what earlier choices did to the boss, once per point of a story flag (`flag` effect key): its stat stages
+     * (the pylons that anger it) and the share of its HP it has already lost when the fight opens (rescued helpers, the boats, stuns).
+     */
+    flagMods: z.array(z.object({ flag: z.string().min(1), foeStages: z.partialRecord(z.enum(['atk', 'def', 'spa', 'spd', 'spe']), z.number().int().min(-2).max(2)).default({}), hpPercent: z.number().int().min(0).max(20).default(0) })).max(6).default([]),
     win: z.array(EventEffectSchema).default([]),
     lose: z.array(EventEffectSchema).optional(),
   }),

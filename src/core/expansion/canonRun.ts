@@ -54,8 +54,8 @@ function placeCanonSlot(content: Content, run: RunState, slot: string): void {
   if (candidates.length === 0) return;
   const rng = new Rng(hashSeed(`${run.seed}::canon-stops::${slot}`));
   for (const id of menu) {
-    // A raid space (Kaiju Tentacruel) is a raid den beside a node instead of an event stop.
-    const raid = content.raids.raids.find((r) => r.canon === id);
+    // A raid space is a raid den beside a node instead of an event stop, unless an event now plays it (Greenneedle gn.11 plays Kaiju Tentacruel).
+    const raid = canonEventFor(content, id, slot) ? undefined : content.raids.raids.find((r) => r.canon === id);
     if (raid) {
       if (stage.map.nodes.some((n) => n.sides.some((sd) => sd.raidId === raid.id))) continue;
       const free = candidates.filter((n) => !n.sides.some((sd) => sd.kind === 'raid'));
