@@ -1,0 +1,53 @@
+{
+ "an09-rusted-anchor": {
+  "shape": "Stage-Three",
+  "earliest": "A4",
+  "home": 6,
+  "window": [
+   4,
+   8
+  ],
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "level": "A+1",
+  "beats": [
+   "an09-three-islands",
+   "an09-the-storm"
+  ],
+  "note": "Steps 6, 12, 17. The islands fight is A+0, the storm A+1."
+ },
+ "an11-camp-at-the-lake": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": "a + node",
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "water"
+  ]
+ },
+ "aq16-shiny-owl": {
+  "shape": "Companion",
+  "earliest": "A3",
+  "home": 11,
+  "window": [
+   8,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "tags": [
+   "forest"
+  ],
+  "level": "A+1",
+  "beats": [
+   "aq16-owl-watch",
+   "aq16-owl-hat",
+   "aq16-owl-sun",
+   "aq16-owl-lamps"
+  ],
+  "note": "Night. Hunters A+0, the turning point A+1, two stages on at Step 13."
+ }
+}
