@@ -22,6 +22,11 @@ Source: `/mnt/project-files/catalog_overhaul_pack/kanto_canon_spaces/` (`KANTO_P
 | `cs.kanto.cinnabar.lab`, `.mansion`, `.seafoam`, `.newisland`, `.volcano` | `KANTO_PLACED_2.md`, Stage 7 (494–680) | 2026-11-15 |
 | `cs.kanto.indigo.road`, `cs.kanto.route.badge-check`, `cs.kanto.cerulean.cave` | `KANTO_PLACED_2.md`, Stage 8 (681–791) | 2026-11-15 |
 | `cs.kanto.route.*` (charizard, pidgeotto, bulbasaur, haunter, lapras, poster + 7 game moments), Jessie/James beats | `KANTO_PLACED_2.md`, 792–965 | 2026-11-15 |
+| Viridian `.spearow`, `.center`, `.healer`, `.convertible`, `.nightmarket` | `KANTO_PLACED_3.md`, 13–204 | 2026-11-15 |
+| Pewter `.siblings`, `.wheel`, `.afterhours`, `.ladder`, `.seymour`, `.serum` | `KANTO_PLACED_3.md`, 205–409 | 2026-11-15 |
+| Cerulean `.ballet`, `.tech`, `.aj`, `.bike`, `.recruiter`, `.stall`, `.gyarados` | `KANTO_PLACED_3.md`, 410–651 | 2026-11-15 |
+| Vermilion `.capsized`, `.portavista`, `.naptime`, `.dam`, `.photographer`, `.itemfinder` | `KANTO_PLACED_3.md`, 652–881 | 2026-11-15 |
+| Lavender `.namerater`, `.radio`, `.vigil`, `.orphan`, `.offering` | `KANTO_PLACED_3.md`, 882–1042 | 2026-11-15 |
 
 ## Limits (Part 1)
 - Before / instead / after the node's battle and "at a + node" are recorded (placement file `attaches`) but every space is a stop beside its node until the lead's placer lands; then the placement file drives it.
@@ -41,3 +46,14 @@ Source: `/mnt/project-files/catalog_overhaul_pack/kanto_canon_spaces/` (`KANTO_P
 - Fossil Wake's "Bond one step higher" is friendship +50 (two Bond +5 x 5 effects; the kc effect caps at 6 per effect).
 - Seafoam's "the current may carry you back" is a 50% wade per boulder room; New Island's crossing uses the Dodge prompt, Bulbasaur's sway the Echo rhythm prompt.
 - Charizard Feather is a held Fire booster (+5%, up to 3); the doc names the item but not its effect.
+
+## Limits (Part 3, Volume II)
+- Triggers are menu entries once their space needs are met (Spearow Storm: always at Stage 1; After Hours: after the Museum; Serum and Second Offer: after Mt. Moon or the Bridge, only while Team Rocket is awake). "First rainy node" and "at Night" are not checked; the Healer is offered whenever placed.
+- Pokémon Center Siege: no rental Pokémon (your own party fights); the dark's accuracy penalty is not applied. "Heals free for the rest of Kanto" is a relic: healing +10%.
+- Spearow Storm's "1 HP, every stat up, can't faint" fight is a normal fight; the rainbow sighting flag is left for the legends thread.
+- Convertible questions are fixed (no rival memory log); three right shows the stops ahead and adds rival respect.
+- Ten Brothers, Pokémon Tech and the Capsized Liner score with flags inside the space; Porta Vista's takings and the Photographer's photos are recorded flags, and the album pays from what the run already holds.
+- Bike joke: the 2% Electric-move roll is a choice that needs an Electric move; paying the girl back is offered on a revisit.
+- Itemfinder counts caught species (30); the come-back is a Pidgey note three nodes later.
+- Name Rater: no renaming from an event; rating a name gives Bond. The Offering reads this run only (a party Pokémon fainted), never earlier runs (same-run rule); the Region of Doom wall is not linked.
+- Serum custody joins a plain Rhydon (no Veiled tier); Seymour's "any later run" line is dropped (same-run rule).
