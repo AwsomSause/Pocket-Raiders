@@ -33,6 +33,7 @@ import { changeFriendship } from './friendship';
 import { atLeast, promptById, type Grade, type PromptResult } from './interaction/prompt';
 import { applyCatalog, catalogTargetProblem, isFreeReroll } from './catalog';
 import { addItem } from './items';
+import { applyMarket, marketWords, noteSpend } from './market';
 import { evolve } from './evolution';
 import { canBeDoubles, makeDoubles } from './battle/doubles';
 import { canBeTriples, makeTriples } from './battle/triples';
@@ -99,7 +100,7 @@ import { climaxCutOf } from './arc/climaxExtended';
 import { addMercy, changeRep, joinInsideMan, joinProblem, resolveVerdict, standWithClimaxWon, standWithOf, standWithPlayable, verdictsOpen } from './arc/standWithExtended';
 import { checkFlagKeys } from './shadow2/keys';
 import { bondFriendship, bondLevel, bondLevelMet, fitsMatch, whoOf, whoWords } from './co/who';
-import { fitsWant, honestCardFor, honestOffer, honestWant, shapeArrival, type HonestCard } from './co/tradeCard';
+import { fitsWant, honestCardFor, honestOffer, honestWant, shapeArrival, TRADE_HELD_ITEMS, tradeEvolution, type HonestCard } from './co/tradeCard';
 import { oweNodes } from './co/takeNode';
 import { clearNodeHold, setNodeBattle } from './co/attach';
 import { noteSpecial } from './expansion/fieldNotes';
@@ -142,6 +143,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
     }
     case 'item':
       return (run.inventory[c.id] ?? 0) >= (c.count ?? 1) || (run.passives?.[c.id] ?? 0) > 0;
+    case 'holdsAny':
+      return c.ids.reduce((n, id) => n + (run.inventory[id] ?? 0), 0) >= c.count;
     case 'emotion':
       return run.party.some((m) => emotionOf(content, run, m.uid)?.id === c.id);
     case 'memorial':
@@ -371,6 +374,7 @@ function tradePicksOf(content: Content, run: RunState, choice: EventChoice): Tra
     const { types, moveFlag, bond } = choice.pick;
     return run.party.filter((m) => fitsMatch(content, m, { ...(types.length > 0 ? { types } : {}), ...(moveFlag ? { moveFlag } : {}) }) && (bond === undefined || bondLevel(content, m) >= bond)).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
   }
+  if (choice.success.effects.some((f) => f.kind === 'tradeBack')) return tradeBackCandidates(content, run).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}`, gets: tradeEvolution(content, m.speciesId, heldOf(m)) }));
   // Catalog Overhaul: the Honest Trade Card. Each pick carries its full card (both sides, fair value, the trader's warning).
   const honest = choice.success.effects.find((f) => f.kind === 'honestTrade');
   if (honest?.kind === 'honestTrade') {
@@ -399,6 +403,7 @@ function tradeMissing(content: Content, run: RunState, choice: EventChoice): str
   }
   if (choice.pick && tradePicksOf(content, run, choice)?.length === 0) return 'Needs a Pokémon that fits';
   for (const e of choice.success.effects) {
+    if (e.kind === 'tradeBack' && tradeBackCandidates(content, run).length === 0) return 'Needs a Pokémon that evolves by trade';
     if (e.kind === 'honestTrade') {
       const want = honestWant(content, run, e);
       if (!honestOffer(content, run, e)) return 'This trade is not ready';
@@ -427,6 +432,8 @@ export function conditionText(content: Content, c: EventCondition): string {
     }
     case 'item':
       return `Needs ${c.count && c.count > 1 ? `${c.count} × ` : 'a '}${content.catalog.get(c.id)?.name ?? content.items.get(c.id)?.name ?? c.id}`;
+    case 'holdsAny':
+      return `Needs ${c.label}`;
     case 'dex':
       return `Needs ${c.atLeast} species ${c.set} this run`;
     case 'storyRaid':
@@ -1152,6 +1159,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return `swap ${e.want.label}`;
     case 'honestTrade':
       return e.gift ? '' : 'trade a Pokémon';
+    case 'tradeBack':
+      return 'a trade evolution';
     case 'pond':
       return '';
     case 'stashParty':
@@ -1232,6 +1241,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return `${whoWords(e.who)}: ${e.stat === 'best' ? 'best stat' : e.stat === 'all' ? 'every stat' : STAT_WORDS[e.stat]} +${e.percent}%${e.until === 'region' ? ' for the region' : ''}`;
     case 'train':
       return trainEffectText(e);
+    case 'market':
+      return marketWords(e);
     case 'betterDraft':
       return `better next reward${e.extra ? ` (+${e.extra} choice)` : ''}`;
     case 'gymPreview':
@@ -1416,6 +1427,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const amount = Math.max(-run.money, e.amount + bonus);
       run.money += amount;
       if (amount > 0) count(run, 'moneyEarned', amount);
+      if (amount < 0) noteSpend(run, -amount);
       return amount === 0 ? '' : amount > 0 ? `+₽${amount}` : `−₽${-amount}`;
     }
     case 'item':
@@ -1448,6 +1460,20 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     }
     case 'honestTrade':
       return applyHonestTrade(content, run, e, tradeUid);
+    case 'tradeBack': {
+      const fits = tradeBackCandidates(content, run);
+      const mon = fits.find((m) => m.uid === tradeUid) ?? fits[0];
+      const to = mon ? tradeEvolution(content, mon.speciesId, heldOf(mon)) : null;
+      if (!mon || !to) return '';
+      const from = content.species.get(mon.speciesId)?.name ?? mon.speciesId;
+      const held = heldOf(mon);
+      evolve(content, mon, to);
+      // The trade item is used up by the evolution (a Metal Coat, an Up-Grade).
+      if (held && mon.held?.[held] && TRADE_HELD_ITEMS.has(held)) delete mon.held[held];
+      if (mon.held && Object.keys(mon.held).length === 0) delete mon.held;
+      discover(run, to, true);
+      return `${from} came back as ${content.species.get(to)?.name ?? to}!`;
+    }
     case 'tradeFor': {
       const fits = tradeCandidates(content, run, e.want);
       const mon = fits.find((m) => m.uid === tradeUid) ?? fits[0];
@@ -1633,6 +1659,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     }
     case 'train':
       return applyTrainEffect(content, run, e, rng);
+    case 'market':
+      return applyMarket(content, run, e, rng, tradeUid, (x) => applyEffect(content, run, x, rng, tradeUid));
     case 'eggMove': {
       const lead = run.party.find((m) => m.hp > 0);
       if (!lead) return '';
@@ -1815,7 +1843,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'addStop': {
       const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
       const id = `event-stop-${here.sides.length + 1}-${here.id}`;
-      here.sides.push(e.stop === 'tutor' ? { id, kind: 'service', serviceId: 'tutor', used: false } : { id, kind: e.stop, used: false });
+      here.sides.push(e.stop === 'tutor' ? { id, kind: 'service', serviceId: 'tutor', used: false } : { id, kind: e.stop, used: false, ...(e.stop === 'minigame' && e.game ? { minigameId: e.game } : {}) });
       return effectWords(content, e);
     }
     case 'scout':
@@ -2454,4 +2482,10 @@ function applyHonestTrade(content: Content, run: RunState, e: Extract<EventEffec
     run.pending.push({ kind: 'caught', mon: fresh });
   }
   return words;
+}
+
+const heldOf = (m: PokemonInstance): string | undefined => (m.held ? Object.keys(m.held)[0] : undefined);
+/** Party Pokémon that would evolve if traded (TRADES.md 4.3). */
+function tradeBackCandidates(content: Content, run: RunState): RunState['party'] {
+  return run.party.filter((m) => tradeEvolution(content, m.speciesId, heldOf(m)) !== null);
 }

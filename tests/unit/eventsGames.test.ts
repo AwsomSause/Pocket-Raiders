@@ -6,7 +6,8 @@ import games from '../../src/data/eventsGames.json';
 const ids: string[] = games.events.map((e) => e.id);
 const defs = ids.map((id) => content.events.get(id)!);
 const targetsOf = (e: (typeof defs)[number]): string[] =>
-  e.choices.flatMap((c) => [...c.success.effects, ...(c.failure?.effects ?? [])]).flatMap((f) => (f.kind === 'addEvent' || f.kind === 'laterEvent' ? [f.eventId] : []));
+  // A stall that stays open after a question opens itself again (Catalog Overhaul markets): that is not a room.
+  e.choices.flatMap((c) => [...c.success.effects, ...(c.failure?.effects ?? [])]).flatMap((f) => ((f.kind === 'addEvent' || f.kind === 'laterEvent') && f.eventId !== e.id ? [f.eventId] : []));
 
 describe('Run events F: games, puzzles and mini-games', () => {
   it('loads every event into the content map', () => {
@@ -17,7 +18,8 @@ describe('Run events F: games, puzzles and mini-games', () => {
     for (const e of defs) for (const t of targetsOf(e)) expect(content.events.get(t)?.room, `${e.id} -> ${t}`).toBe(true);
   });
   it('every room is reached by some addEvent', () => {
-    const targets = new Set(defs.flatMap(targetsOf));
+    // Openers anywhere in the game count (the Fairground's gate opens the fair games with addEventFrom).
+    const targets = new Set([...content.events.values()].flatMap((e) => [...targetsOf(e), ...e.choices.flatMap((c) => c.success.effects).flatMap((f) => (f.kind === 'addEventFrom' ? f.ids : []))]));
     for (const e of defs) if (e.room) expect(targets.has(e.id), e.id).toBe(true);
   });
   it('prompt choices use known prompts', () => {

@@ -36,6 +36,7 @@ describe('run events K', () => {
   it('resolves every choice of every event (checks, chances and trades included)', () => {
     let resolved = 0;
     for (const e of RK) {
+      // Loop over the live event (a catalog row may have rebuilt it with a different number of choices).
       for (let i = 0; i < content.events.get(e.id)!.choices.length; i++) {
         const run = runAt(e.id, `rk-${e.id}-${i}`);
         const gated = (content.events.get(e.id)!.choices[i]!.requires ?? []).length > 0;

@@ -301,8 +301,13 @@ describe('landmarks and dungeons', () => {
       for (const ch of [...e.choices, ...e.remembers.flatMap((v) => v.addChoices)]) {
         const lists = [...[ch.success, ch.failure].flatMap((o) => [o?.effects ?? [], o?.battle?.win ?? [], o?.battle?.lose ?? []]), ...(ch.branches ?? []).map((b) => b.effects)];
         for (const ef of lists.flat()) {
+          // Catalog Overhaul markets: a stall that stays open after a question opens itself again (not a room: it is drawn on its own
+          // too), and the Game Corner opens its games, which are also drawn on their own (SF91).
+          if (ef.kind === 'addEvent' && (ef.eventId === e.id || e.id === 'game-corner') && !content.events.get(ef.eventId)?.room) continue;
           if (ef.kind === 'addEvent') opened.add(ef.eventId);
           if (ef.kind === 'laterEvent') queued.add(ef.eventId);
+          // Catalog Overhaul markets: a prize row that needs its own scene opens it (core/market.ts prize).
+          if (ef.kind === 'market') for (const row of ef.table ?? []) if (row.event) opened.add(row.event);
           if (ef.kind === 'addEventFrom') ef.ids.forEach((i) => opened.add(i));
           // Rival questlines (core/rivals/questlines.ts): the first scene whose conditions hold, or stops further along the map.
           // These may also open a scheduled beat (not a room), so they only count as a way into a room.

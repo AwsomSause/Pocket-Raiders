@@ -23,8 +23,8 @@ export const TradePoolSchema = z.object({
   /** What the trader says the want is for ("My boat needs a land-legs Pokémon."). */
   wantLine: z.string().min(1),
   traders: z.array(z.object({ name: z.string().min(1), line: z.string().min(1) })).min(1),
-  /** Quirk ids a drawn Pokémon may have. */
-  quirks: z.array(z.string()).min(1),
+  /** Quirk ids a drawn Pokémon may have (none: it arrives with no quirk). */
+  quirks: z.array(z.string()).default([]),
 });
 export type TradePool = z.infer<typeof TradePoolSchema>;
 export const TradePoolFileSchema = z.object({ pools: z.array(TradePoolSchema) });
@@ -118,9 +118,9 @@ export function honestOffer(content: Content, run: RunState, e: HonestTrade): Of
   const offer = rng.pick(pool.offers.filter((o) => o.tier === tier));
   const trader = rng.pick(pool.traders);
   const nature = rng.pick([...NATURE_IDS]);
-  const quirk = rng.pick(pool.quirks);
+  const quirk = pool.quirks.length > 0 ? rng.pick(pool.quirks) : undefined;
   return {
-    gives: { species: offer.species, levelOffset: 0, nature, moves: offer.moves, hidden: offer.hidden, quirk, marks: [], why: trader.line, ot: trader.name, shiny: false, ...(offer.held ? { held: offer.held } : {}) },
+    gives: { species: offer.species, levelOffset: 0, nature, moves: offer.moves, hidden: offer.hidden, ...(quirk ? { quirk } : {}), marks: [], why: trader.line, ot: trader.name, shiny: false, ...(offer.held ? { held: offer.held } : {}) },
     tier,
     trader: trader.name,
     wants: e.wants ?? pool.wants,

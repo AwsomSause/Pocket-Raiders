@@ -2839,6 +2839,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** A meter leaning one way: Rage (positive ragePeace) / Peace (negative), Good (positive goodEvil) / Evil (negative). */
   z.object({ kind: z.literal('meter'), key: z.enum(['ragePeace', 'goodEvil']), side: z.enum(['positive', 'negative']), atLeast: z.number().int().min(0) }),
   z.object({ kind: z.literal('item'), id: z.string(), /** Copies needed (default 1). */ count: z.number().int().min(1).optional() }),
+  /** Catalog Overhaul markets: holds at least `count` items in total from `ids` (any Berry, two charms); `label` names them on the locked button. */
+  z.object({ kind: z.literal('holdsAny'), ids: z.array(z.string()).min(1), count: z.number().int().min(1).default(1), label: z.string().min(1) }),
   /** Catalog Overhaul (families-b): the lead (the first Pokémon able to fight) is of this type. */
   z.object({ kind: z.literal('leadType'), type: TypeNameSchema }),
   /** Catalog Overhaul (families-b): the Pokémon the last "pick a Pokémon" choice named (remembered for the run, core/co/pickMemory.ts) is still in the party and is one of these types / is the starter. */
@@ -3153,6 +3155,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
    * `pool` whose base stat total is within `bst` of the one given up, with a random Nature. The choice stays locked while nothing fits.
    */
   /** Catalog Overhaul: the Honest Trade Card (core/co/tradeCard.ts). The player picks one of their Pokémon that fits `wants` and gets `gives` (or a draw from trade pool `pool`, made from the run's seed, so the card shows exactly what arrives). Sets `trade-<id>`. `askedFirst`: the player heard its story first, so it arrives at Bond 3, not 2.*/
+  /** Catalog Overhaul: the trade-back service (TRADES.md 4.3, T030). The player picks a Pokémon that evolves by trade (a Linking Cord evolver, or one holding its trade item); it is traded over and straight back, evolved. */
+  z.object({ kind: z.literal('tradeBack') }),
   z.object({ kind: z.literal('honestTrade'), id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/), wants: TradeWantSchema.optional(), gives: HonestGivesSchema.optional(), pool: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(), askedFirst: z.boolean().default(false), /** A gift: nothing is taken (Nell's Sneasel). */ gift: z.boolean().default(false) }),
   z.object({ kind: z.literal('tradeFor'), want: TradeWantSchema, table: z.record(z.string(), z.string()).default({}), similar: z.object({ pool: z.array(z.string()).min(1), bst: z.number().int().min(0).max(200) }).optional() }),
   /** Beta 0.6 Vermilion Flight North: the whole party is taken away (kept in run.expansion.canon.stash) until `restoreParty` or a lost fight inside the stage hands it back. */
@@ -3164,7 +3168,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Beta 0.7 Flight North: names the Bug-type (`name`), or marks the moment it says goodbye. Only the name changes state; the return and its ending live in core/instrumentality/flightNorth.ts. */
   z.object({ kind: z.literal('flightNorth'), action: z.enum(['name', 'trust']), name: z.string().max(12).optional() }),
   /** A healing spot, shop or fishing spot opens beside this node. */
-  z.object({ kind: z.literal('addStop'), /** Catalog Overhaul singles: `tutor` opens a Move Tutor service stop here. */ stop: z.enum(['heal', 'shop', 'fish', 'minigame', 'tutor']) }),
+  z.object({ kind: z.literal('addStop'), /** Catalog Overhaul singles: `tutor` opens a Move Tutor service stop here. */ stop: z.enum(['heal', 'shop', 'fish', 'minigame', 'tutor']), /** With `minigame`: the game it opens (data/minigames.json id). */ game: z.string().optional() }),
   /** A ferry: jump to a node next to the gym (SS Ticket). */
   z.object({ kind: z.literal('skipAhead'), /** Catalog Overhaul singles: land this many nodes further along a path instead ("skip two nodes"); never past the nodes leading into the gym. */ nodes: z.number().int().min(1).max(12).optional(), /** With `half`: skip half of the nodes left before the gym ("cuts the stage in half"). */ half: z.literal(true).optional() }),
   /** Ideas W4: a trainer starts tailing you and steps out to challenge you after this many nodes (core/wanderer.ts). */
@@ -3452,6 +3456,38 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('train'), what: z.enum(['natureReroll', 'natureNudge', 'abilitySwap', 'weakestStat', 'learnMove', 'evolutionHint', 'masteryShard', 'nap']), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']).optional(), type: TypeNameSchema.optional() }),
   /** Permanent choices (spec §17): records a decision in the run's choice history (the first answer to an id stands). */
   z.object({ kind: z.literal('choice'), id: z.string().regex(/^[a-z][a-z0-9-]*$/), pick: z.string().min(1), text: z.string().min(1), weight: z.number().int().min(1).max(3).default(1) }),
+  /**
+   * Catalog Overhaul markets (core/market.ts). `comeBack`: the seller `event` can be met again this run. `effort`: +`amount` vitamin stacks in `stat` for the lead
+   * or party (`type`: only that type trains, or with `typeAmount` that type gets `typeAmount` and the rest `amount`). `prize`: `times` draws from a printed-odds
+   * `table`, each costing `stake`. `sell`: the biggest stack of 5+ (`stack`), every curio (`curio`) or a little junk, at `factor` times the fair price.
+   * `pawn` / `redeem`: the most valuable item is held under `key` and bought back at `factor` times what was paid. `rebate`: `factor` of the last event purchase.
+   * `deposit` / `withdraw`: money held under `key`, paid back times `factor`. `feed`: a plate per Pokémon at `amount` each. `mend`: heals `factor` of max HP.
+   * `advise`: says which stone (`only`) would evolve a party Pokémon. `buyPoint` / `cashPoint`: one Frontier (Battle) Point for `amount` money, either way.
+   */
+  z.object({
+    kind: z.literal('market'),
+    action: z.enum(['comeBack', 'effort', 'prize', 'sell', 'pawn', 'redeem', 'rebate', 'deposit', 'withdraw', 'feed', 'mend', 'advise', 'buyPoint', 'cashPoint', 'service', 'forget', 'relearn', 'xp', 'teachOr', 'stash', 'stolen', 'payItem', 'rent', 'returnRent', 'brew']),
+    event: z.string().optional(),
+    key: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
+    stat: z.enum(['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'highest', 'lowest']).optional(),
+    amount: z.number().int().min(0).optional(),
+    who: z.enum(['lead', 'party', 'picked']).default('lead'),
+    /** `returnRent`: the player says the rented item was used up (pays its value). */
+    used: z.boolean().optional(),
+    /** `service`: what is done for the Pokémon; `types`: move types tried in order for `learnMove`; `move`: the move `teachOr` teaches. */
+    what: z.enum(['abilitySwap', 'natureNudge', 'eggMove', 'hyper', 'learnMove']).optional(),
+    types: z.array(TypeNameSchema).min(1).optional(),
+    move: z.string().optional(),
+    type: TypeNameSchema.optional(),
+    typeAmount: z.number().int().min(1).optional(),
+    factor: z.number().positive().optional(),
+    pick: z.enum(['stack', 'curio', 'junk']).optional(),
+    only: z.array(z.string()).min(1).optional(),
+    forfeit: z.boolean().optional(),
+    table: z.array(z.object({ weight: z.number().positive(), label: z.string().min(1), money: z.number().int().optional(), item: z.string().optional(), count: z.number().int().positive().optional(), flag: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(), /** This row also opens that event beside the node (a prize that needs a scene: keep it or give it back, a door with a Pokémon behind it). */ event: z.string().optional() })).min(1).optional(),
+    times: z.number().int().min(1).max(10).optional(),
+    stake: z.number().int().min(0).optional(),
+  }),
 ]);
 export type EventEffect = z.infer<typeof EventEffectSchema>;
 

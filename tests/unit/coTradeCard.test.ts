@@ -16,7 +16,7 @@ const EVENT = {
     { label: 'Trade.', success: out('Done.', [{ kind: 'honestTrade', id: 'test-1', wants: { label: 'any non-Water Pokémon', notTypes: ['water'] }, gives: GIVES }]) },
     { label: 'Pool trade.', success: out('Done.', [{ kind: 'honestTrade', id: 'test-pool', pool: 'mountain-mine' }]) },
     { label: 'Take the gift.', success: out('Thank you.', [{ kind: 'honestTrade', id: 'test-gift', gift: true, askedFirst: true, gives: { species: 'kadabra', nature: 'timid', why: 'It never liked the team.', ot: 'Nell' } }]) },
-    { label: 'Water only.', success: out('Done.', [{ kind: 'honestTrade', id: 'test-water', wants: { label: 'a Water-type', types: ['water'] }, gives: GIVES }]) },
+    { label: 'Trade back.', success: out('Back again.', [{ kind: 'tradeBack' }]) },
   ],
 };
 
@@ -41,7 +41,7 @@ describe('trade data', () => {
     }
   });
   it('a pool with no offers is refused (failure case)', () => {
-    expect(TradePoolFileSchema.safeParse({ pools: [{ id: 'x', name: 'X', where: 'x', offers: [], wants: { label: 'x' }, wantLine: 'x', traders: [{ name: 'a', line: 'b' }], quirks: ['old'] }] }).success).toBe(false);
+    expect(TradePoolFileSchema.safeParse({ pools: [{ id: 'x', name: 'X', where: 'x', offers: [], wants: { label: 'x' }, wantLine: 'x', traders: [{ name: 'a', line: 'b' }], quirks: [] }] }).success).toBe(false);
   });
 });
 
@@ -104,8 +104,9 @@ describe('the Honest Trade Card', () => {
     expect(got && 'mon' in got ? got.mon.friendship : 0).toBe(150);
   });
   it('a want nobody fits locks the choice (failure case)', () => {
-    const view = eventView(content, setup(), 'm');
-    expect(view.choices[3]!.locked).toBe('Needs a Water-type in your party');
+    const run = setup();
+    run.party[0]!.speciesId = 'squirtle';
+    expect(eventView(content, run, 'm').choices[0]!.locked).toBe('Needs any non-Water Pokémon in your party');
   });
   it('a Pokémon that bites strangers cannot be traded again until Bond 4 (boundary)', () => {
     const run = setup();
@@ -120,5 +121,16 @@ describe('the Honest Trade Card', () => {
     run.party[0]!.speciesId = 'charizard';
     run.party[0]!.level = 40;
     expect(eventView(content, run, 'm').choices[0]!.tradePicks![0]!.card!.warn).toBe('worse');
+  });
+  it('the trade-back service evolves a trade evolver and gives it straight back; nobody fits: locked', () => {
+    const run = setup();
+    expect(eventView(content, run, 'm').choices[3]!.locked).toBe('Needs a Pokémon that evolves by trade');
+    run.party[0]!.speciesId = 'onix';
+    run.party[0]!.held = { 'metal-coat': 1 };
+    const pick = eventView(content, run, 'm').choices[3]!.tradePicks![0]!;
+    expect(pick.gets).toBe('steelix');
+    const after = chooseEvent(content, run, 'm', 3, pick.uid).run;
+    expect(after.party[0]!.speciesId).toBe('steelix');
+    expect(after.party[0]!.held).toBeUndefined();
   });
 });

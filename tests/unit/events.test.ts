@@ -12,6 +12,12 @@ import type { RunState } from '../../src/core/state';
 import { CURRENT_VERSIONS, SaveManager } from '../../src/save/saveManager';
 import { MemoryStorageProvider } from '../../src/save/storage';
 import { content } from './helpers';
+import oldEvents from '../../src/data/events.json';
+
+// The old one-way Water-type swap (its catalog id, water-fan-swap, is now the Collector's honest trade): kept as a fixture so
+// the `tradeAway` rules stay covered.
+const OLD_WATER_SWAP = EventDefSchema.parse({ ...(oldEvents as { events: { id: string }[] }).events.find((e) => e.id === 'water-fan-swap')!, id: 'test-water-swap' });
+content.events.set(OLD_WATER_SWAP.id, OLD_WATER_SWAP);
 
 function newRun(seed = 'events'): RunState {
   return chooseStarter(content, createRun(content, { runId: 'r', seed, archetypeId: 'red' }), 0);
@@ -345,17 +351,17 @@ describe('trade events', () => {
   const choiceOf = (run: RunState, id: string) => eventView(content, run, 'test-event').choices[0]!;
 
   it('stay locked, with the requirement in words, until a fitting Pokémon is in the party', () => {
-    const run = atEvent(newRun('trade-lock'), 'water-fan-swap');
+    const run = atEvent(newRun('trade-lock'), 'test-water-swap');
     run.party = [createPokemon(content, 'charmander', 5, 'a'), createPokemon(content, 'bulbasaur', 5, 'b')];
-    expect(choiceOf(run, 'water-fan-swap').locked).toBe('Needs a Water-type in your party');
+    expect(choiceOf(run, 'test-water-swap').locked).toBe('Needs a Water-type in your party');
     expect(() => chooseEvent(content, run, 'test-event', 0)).toThrow(/Water-type/);
-    expect(choiceOf(run, 'water-fan-swap').cost).toBe('trade away a Water-type');
+    expect(choiceOf(run, 'test-water-swap').cost).toBe('trade away a Water-type');
   });
 
   it('take the lowest-level fitting Pokémon and give one back', () => {
-    const run = atEvent(newRun('trade-go'), 'water-fan-swap');
+    const run = atEvent(newRun('trade-go'), 'test-water-swap');
     run.party = [createPokemon(content, 'squirtle', 12, 'a'), createPokemon(content, 'charmander', 5, 'b'), createPokemon(content, 'psyduck', 7, 'c')];
-    expect(choiceOf(run, 'water-fan-swap').locked).toBeNull();
+    expect(choiceOf(run, 'test-water-swap').locked).toBeNull();
     const result = chooseEvent(content, run, 'test-event', 0);
     expect(result.run.party.map((m) => m.speciesId)).toEqual(['squirtle', 'charmander']);
     expect(result.run.pending.some((p) => p.kind === 'caught')).toBe(true);
@@ -363,15 +369,15 @@ describe('trade events', () => {
   });
 
   it('never trade away the last Pokémon', () => {
-    const run = atEvent(newRun('trade-last'), 'water-fan-swap');
+    const run = atEvent(newRun('trade-last'), 'test-water-swap');
     run.party = [createPokemon(content, 'squirtle', 5, 'a')];
-    expect(choiceOf(run, 'water-fan-swap').locked).toBe('Needs 2 Pokémon in your party');
+    expect(choiceOf(run, 'test-water-swap').locked).toBe('Needs 2 Pokémon in your party');
   });
 });
 
 describe('trade picks and species traits', () => {
   it('lets the player pick which fitting Pokémon goes', () => {
-    const run = atEvent(newRun('trade-pick'), 'water-fan-swap');
+    const run = atEvent(newRun('trade-pick'), 'test-water-swap');
     run.party = [createPokemon(content, 'squirtle', 12, 'a'), createPokemon(content, 'psyduck', 7, 'c')];
     const view = eventView(content, run, 'test-event').choices[0]!;
     expect(view.tradePicks!.map((p) => p.uid)).toEqual(['c', 'a']);
