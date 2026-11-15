@@ -761,3 +761,18 @@ export function starterRivalryStages(run: RunState, battle: BattleState): void {
     }
   }
 }
+
+/** R23: the column the rival has reached in the race pseudo-stage (they start one ahead; each room you clear fast costs them one). Null outside the race. */
+export function raceRivalColumn(run: RunState): number | null {
+  const st = run.stage;
+  if (st?.pseudo?.id !== 'ps_rival_race') return null;
+  return Math.max(1, Math.min(st.map.columns, st.visited.length + 2 - flagOf(run, 'rq-r23-beat')));
+}
+
+/** R16 and R18: the meter a questline fight shows in the battle header (Wants to Stop, or the clock to midnight). Null for other fights. */
+export function questBattleMeter(battle: BattleState): { label: string; value: number; max: number } | null {
+  const rule = battle.eventRule;
+  if (rule?.calm) return { label: 'Wants to Stop', value: battle.storyEffects.filter((s) => s === 'calm').length, max: rule.calm };
+  if (rule?.clock) return { label: 'To midnight', value: Math.max(0, rule.clock - battle.turn), max: rule.clock };
+  return null;
+}
