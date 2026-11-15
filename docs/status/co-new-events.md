@@ -2,24 +2,32 @@
 
 Branch `claude/project-thread-d4o6wo` (into `ui-mockups`). Thread: "Build 100 new events and Pokémon moments".
 
-## PAUSED 2026-11-15 12:20 UTC (Kice: only five threads at a time). Where I stopped
-- Pushed: engine batch 1 (takeNode, Bond selectors), batch 2 (`src/core/co/neRules.ts`), quirks (`src/core/co/quirks.ts`, run save **v44**, claimed in STANDARDS.md), cherry-picks of people 09d5391e, families-c e243e9ca, anime d8c1cd0e, families-b 079ac3e0.
-- Part 1 (NE1 to NE25): `tools/events/co/new-events-1.ts` built and passing `catalogOverhaul.test.ts` and `coNewEvents.test.ts`. An independent re-read found about 25 gaps: list in `co-new-events-part1-reread.md` (same folder). **Next: fix those.**
-- Parts 2 to 4: full first drafts saved as `tools/events/co/_wip-new-events-2.ts`, `_wip-new-events-3.ts` (NE61-65 trades not started), `_wip-new-events-4.ts` (underscore = not built). Never built or tested. Notes per part: `co-new-events-part2-wip.md`, `-part3-wip.md`, `-part4-wip.md`. **Next: rename, build, fix, re-read each against its doc.**
-- **Next on resume, first:** rebase onto the lead's foundation `claude/project-thread-0hal24` (PR #1316). The lead changed the friendship effect to `bond: N` (pack points) and DSL `bondUp` now emits `{ kind: 'friendship', bond: N, who }`; drop my duplicates of ce0a5c9a in the rebase.
-- Still to do after that: placement file, status file (`extra`), flags file, item batch, Pokémon Moments to POKEMON_MOMENTS.md, one browser spec, `npm run check`, PR.
+## Where it stands (2026-11-15)
+- **Built:** 95 of the 100 new events (199 scenes with their follow-ups), in `tools/events/co/new-events-1..4.ts`, built to `src/data/events/co-new-events-1..4.json` with `npm run co:build -- new-events-N`.
+- **Waiting:** NE61 to NE65 (the trade events) wait on the markets row's `honestTrade` rule, so it is built once. The coordinator will see them built when markets resumes.
+- **Placement and status:** `src/data/catalogOverhaul/placement/new-events.json` (95 events) and `status/new-events.json` (199 ids under `extra`), written by `node tools/write-new-events-meta.ts`.
+- **New rules added for these scenes:** heal "others", clear-sky stages (no fronts), the "flag is 0" check, tokens `{nextRegion}` `{finalRegion}` `{lowestBond}`, one-on-one fights, a foe that endures to hit N, "a Z-Move was used" flag, Swap Day (`src/core/co/swap.ts`: trade teams with the main rival, everything goes back before a Gym, League fight or new stage), and quirks Protector and Dreamer (plus seven more in `quirks/new-events.json`).
+- **Tests:** `coNewEvents.test.ts`, `coNewEventsRules.test.ts`, `coQuirks.test.ts`, `catalogOverhaul.test.ts`; browser `tests/e2e/coNewEvents.spec.ts` (NE1, NE41, NE100 in the New UI, tokens filled).
+- **Next:** Pokémon Moments to `POKEMON_MOMENTS.md` (separate slice, after this PR).
 
-## Re-read table
-| Part | Doc | Built | Re-read | Result |
+## Re-read table (every part re-read against its doc after building)
+| Part | Doc | Built | Re-read | Notes |
 |---|---|---|---|---|
-| 1 | NEW_EVENTS_1.md NE1-NE25 | 2026-11-15 | 2026-11-15 (independent) | gaps listed, fixing |
-| 2 | NEW_EVENTS_2.md NE26-NE50 | in progress | | |
-| 3 | NEW_EVENTS_3.md NE51-NE75 | in progress | | |
-| 4 | NEW_EVENTS_4.md NE76-NE100 | in progress | | |
+| 1 | NEW_EVENTS_1.md NE1-NE25 | 2026-11-15 | 2026-11-15 | `co-new-events-part1-reread.md` |
+| 2 | NEW_EVENTS_2.md NE26-NE50 | 2026-11-15 | 2026-11-15 | `co-new-events-part2-reread.md` |
+| 3 | NEW_EVENTS_3.md NE51-NE75 | 2026-11-15 (no NE61-65) | 2026-11-15 | `co-new-events-part3-reread.md` |
+| 4 | NEW_EVENTS_4.md NE76-NE100 | 2026-11-15 | 2026-11-15 | `co-new-events-part4-reread.md` |
 
-## Decisions so far (for Kice)
+Each part note lists what was fixed, what still needs engine work, what was left out because it would carry to another run, and missing art.
+
+## Decisions (for Kice)
 - Cosmetic keepsakes from the scripts (feather, drawing, photo...) are run flags plus text, since Keepsakes/Souvenirs stay cut.
-- Pack "Save" flags and anything carried to a later run are not built (same-run memory only).
+- Pack "Save" flags and anything carried to a later run are not built (same-run memory only). NE31 and NE35 were reworked so they no longer need a past run.
 - No old-man / gentleman trainer art exists, so those scenes show no figure (art needed).
 - Delta Roselia in the game is Dark/Fairy; NE7's script describes an Ice/Grass one that makes frost. Kept the game's species; flagged for Kice.
 - NE16's "promise broken" version is its own small scene (`ne16-only-the-note`), because every base choice needs the light.
+- Quirks Burrower and Warm have no rule in the pack, so they are not defined yet.
+- No event ends a run, forces Shadow, or gives an in-battle heal item.
+
+## Flags other threads read
+Legends (LEGENDS_PIECES §6) reads: `zebedee-message`, `bell-oighrig`, `anselmo-believed`, `mega-grounded`, `beast-sent-home`, `guzzlord-found`, `nihilego-touched`, `kartana-honoured`, `stars-answered`, `promise-step-<m>`. Swap Day sets `ev:swap-fainted`. The Z-Move flag is `ev:z-move-used`.
