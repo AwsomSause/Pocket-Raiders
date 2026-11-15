@@ -10,7 +10,9 @@ import { itemCount } from '../core/items';
 import { mapItemSummary } from '../core/mapItems';
 import { bulkTotal, currentShopType, haggleChance, pokenetDeal, shopScreenType, SHOP_TYPE_LABELS, type ShopTypeId } from '../core/shopTypes';
 import { uiMotionLevel } from '../core/presentation/uiMotion';
-import { isBlackMarket, oneOnly, sellPrice, shopBadgesNeeded, shopPrice, shopSaleItem, shopStock } from '../core/run';
+import { isBlackMarket, oneOnly, sellPrice, shopBadgesNeeded, shopDealItem, shopPrice, shopSaleItem, shopStock } from '../core/run';
+import { shopWorthIt, shopWorthItPerk } from '../core/mentorWorld';
+import { runPerks } from '../core/archetypes';
 import { services } from '../game/services';
 import { playSfx, playMusicLazy } from '../ui/audio';
 import { onInputAction } from '../ui/input';
@@ -69,6 +71,9 @@ export class ShopScene extends Phaser.Scene {
       haggle: run.shop?.haggle ?? null,
       mystery: (id) => currentShopType(run) === 'night' && !mart.has(id),
       isBlack: (e) => isBlackMarket(content, run, e),
+      // Tobias's lesson: one cheaper item per shop, and held items worth it for this team.
+      mentorDeal: shopDealItem(content, run),
+      worthIt: shopWorthItPerk(runPerks(content, run)) ? (item) => shopWorthIt(content, run, item) : undefined,
       canSell: Object.keys(run.inventory).some((id) => run.inventory[id]! > 0 && sellPrice(content, run, id) !== null),
       working: mapItemSummary(content, run),
     });

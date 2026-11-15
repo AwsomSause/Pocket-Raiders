@@ -35,7 +35,21 @@ export function enemyIntent(content: Content, battle: BattleState, target: Pokem
   return { moveId: move.id, moveName: move.name, attack, text: attack ? `${name} is lining up ${move.name}!` : `${name} is preparing ${move.name}...` };
 }
 
-const TAUNTS_ATTACK = ['"%m will hit %t right where it hurts!"', '"Ha! %t won\'t like %m one bit!"', '"Get ready, %m is coming for %t!"'];
+/**
+ * Mentor lesson Foe Move Preview: on turn one, the foe's first move (decided at battle start by engine.ts foeMovePreview,
+ * and used as its turn-one choice). Null without the lesson, after turn one, or once the move can't be used.
+ */
+export function foePreviewIntent(content: Content, battle: BattleState): EnemyIntent | null {
+  const id = battle.lesson?.foeMove;
+  if (!id || battle.turn !== 1 || battle.outcome || battle.doubles) return null;
+  const foe = currentEnemy(battle);
+  const move = content.moves.get(id);
+  if (!move || foe.hp <= 0 || !foe.moves.some((m) => m.id === id && m.pp > 0)) return null;
+  const name = content.species.get(foe.speciesId)?.name ?? foe.speciesId;
+  return { moveId: move.id, moveName: move.name, attack: move.category !== 'status', text: `Foe will use ${move.name}! (${name})` };
+}
+
+const TAUNTS_ATTACK =['"%m will hit %t right where it hurts!"', '"Ha! %t won\'t like %m one bit!"', '"Get ready, %m is coming for %t!"'];
 const TAUNTS_SETUP = ['"Give us a moment, we\'re about to %m!"', '"Watch closely. %m, and then it\'s over!"', '"You\'re in for it once we %m!"'];
 
 /**

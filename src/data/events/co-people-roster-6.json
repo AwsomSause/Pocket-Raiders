@@ -1,0 +1,4299 @@
+{
+ "catalogOverhaul": "people",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "npc-meet-swimmer-marina",
+   "name": "Swimmer Marina: Dive In",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-marina-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_swimmer_f"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A cold cove, the water grey-green and so clear you can count the pebbles on the bottom. Your breath smokes. Out past the rocks a swimmer in a thick black suit is treading water beside a Dewgong, both of them looking perfectly at home. She waves with her whole arm and kicks in towards you, cheeks bright red with cold and grinning anyway. Marina: \"Dive in with me!\" The Dewgong barks once, as if to second it.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Marina whoops and slaps the water. The Dewgong slides up onto the shingle beside her, and a Seel bobs up out of nowhere to join it, whiskers dripping.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-marina-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Swimmer Marina's cold-water pair beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "dewgong",
+        "seel"
+       ],
+       "name": "Swimmer Marina",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Swimmer Marina in her freezing cove",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"It's freezing.\"",
+     "success": {
+      "text": "Marina: \"That's the point.\" She ducks under, comes up blowing like a Seel, and laughs at your face. Her lips are a little blue and she is plainly having the best morning of her life. She floats on her back and lets the Dewgong tow her in slow circles.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-marina-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave.\"",
+     "success": {
+      "text": "You leave her to the cold water. Behind you there is a splash and a delighted shriek, and the Dewgong's happy barking follows you a long way up the path.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-swimmer-marina-m2",
+   "name": "Swimmer Marina: The Lapras",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-marina-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-marina-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_swimmer_f"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "The tide is far out, and the sand is ribbed and shining. In the middle of it lies a Lapras, stranded, its great shell tilted and its long neck laid flat on the wet ground. Marina kneels beside it, scooping water over its head with her hands. Marina: \"Tide went out and left it. It's too heavy to push.\" The Lapras makes a low, soft sound, almost a song, and looks at you with very dark eyes.",
+   "choices": [
+    {
+     "label": "\"Push together.\"",
+     "success": {
+      "text": "Your strongest Pokémon set their shoulders against the shell beside Marina and heave, feet sliding in the sand. Inch by inch, then all at once, the Lapras slides into the shallows. It lifts its head, sings one long clear note, and swims off into the deep water.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-marina-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-marina-pushed",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Wait for the tide.\"",
+     "success": {
+      "text": "You stay with it. You and Marina carry water in your hands, your hats, anything, keeping its skin wet for hours while the sea crawls slowly back. When the water finally lifts it, the Lapras floats, breathes, and lives. Marina sits down in the surf, soaked and shaking and laughing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-marina-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-marina-waited",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Call for help.\"",
+     "success": {
+      "text": "You shout until your voice cracks. People come running down from the harbour with ropes and buckets, strangers in rolled-up trousers, and together you all walk the Lapras back into the sea. Marina hugs every one of them, even the ones she has never met.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-marina-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-marina-friends",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "kai-and-finn",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-kai-m1",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "roster-finn-m1",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "\"Call for help.\"",
+       "success": {
+        "text": "You shout, and two familiar voices shout back. Swimmer Kai and Swimmer Finn come pelting down the beach, Finn already pulling his shirt off. The four of you and all your Pokémon walk the Lapras back into the sea, singing to it the whole way. Marina is grinning like you have known each other for years.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "roster-marina-m2",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "flag",
+          "key": "roster-marina-friends",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "kai",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-kai-m1",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "\"Call for help.\"",
+       "success": {
+        "text": "You shout, and someone shouts back: Swimmer Kai, jogging down from the rocks. He takes one look and wades straight in. Between the three of you and your Pokémon, the Lapras slides home into the sea, and Kai and Marina are friends before it has even stopped singing.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "roster-marina-m2",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "flag",
+          "key": "roster-marina-friends",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "finn",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-finn-m1",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "\"Call for help.\"",
+       "success": {
+        "text": "You shout, and Swimmer Finn comes cannonballing off the pier to answer. He pushes, splashes and cheers in equal measure. Between the three of you and your Pokémon, the Lapras slides home into the sea, and Finn asks Marina if she wants to race it.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "roster-marina-m2",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "flag",
+          "key": "roster-marina-friends",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-swimmer-marina-m3",
+   "name": "Swimmer Marina: Ride",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-marina-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-marina-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_swimmer_f"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "The cove again, and the water calm as glass. A long neck rises from the sea, and a Lapras glides in to the rocks, looking up and down the shore until it finds Marina. She wades out and rests her forehead against its cheek. Marina: \"It comes back every week. Wants to give rides.\" The Lapras turns its head and looks at you too, patient, its shell broad enough for two.",
+   "choices": [
+    {
+     "label": "\"Ride.\"",
+     "success": {
+      "text": "You climb onto the smooth, cold shell behind Marina. The Lapras pushes off, singing low, and carries you both across the sea faster than any boat, the spray bright in the air. It sets you down on a far shore, a whole stretch of the road behind you.",
+      "effects": [
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-marina-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-marina-rode",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-swimmer-marina"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Marina: \"Oh, it'll love that.\" The Lapras rears up in the shallows with the Dewgong at its side, both of them shining wet and ready. Marina treads water between them, coaching.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-marina-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-marina-battled",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-swimmer-marina"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The Lapras you saved beat you, gently",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "lapras",
+        "dewgong"
+       ],
+       "name": "Swimmer Marina",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You battled Marina and the Lapras you saved",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Thank it.\"",
+     "success": {
+      "text": "You put your hand on the Lapras's neck and say thank you, for coming back, for trusting people again. It closes its eyes. When it opens its mouth, a cold, clear crystal rolls out into your hands, a piece of ice that does not melt. Marina: \"It only does that for friends.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "nevermeltice",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-marina-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-marina-thanked",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-swimmer-marina"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-tamer-garrett",
+   "name": "Tamer Garrett: They Listen",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-garrett-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_tamer"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A ring of rope pegged out in a trampled field. Inside it stands a broad man with a coiled whip on his belt, and beside him an Ursaring, huge and hunched, its eyes on his hands. Garrett: \"Wild or not, they listen to me.\" He turns to face you, and the Ursaring flinches when he moves, a quick, small jerk that a creature that size should never have to make.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Garrett snaps his fingers. The Arbok rises out of the grass, hood spread, and the Ursaring lumbers into the ring after it, glancing back at him before every step.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-garrett-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Tamer Garrett's pair beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "arbok",
+        "ursaring"
+       ],
+       "name": "Tamer Garrett",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Tamer Garrett and his frightened Ursaring",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Why does it flinch?\"",
+     "success": {
+      "text": "Garrett: \"Because it respects me.\" He says it flatly, like he has said it many times. You look at the Ursaring, at the way it keeps its head low and its ears back, and you do not believe him. Something in your face must say so, because he looks away first.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-garrett-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-garrett-seen",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Put the whip down.\"",
+     "success": {
+      "text": "Garrett: \"No.\" He does not even think about it. His hand goes to the coil on his belt, and the battle starts there, with the Ursaring flinching at the sound of the leather.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-garrett-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Tamer Garrett's pair beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "arbok",
+        "ursaring"
+       ],
+       "name": "Tamer Garrett",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Tamer Garrett and his frightened Ursaring",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-tamer-garrett-m2",
+   "name": "Tamer Garrett: The Bite",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-garrett-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-garrett-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_tamer"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "Garrett sits on a fence post at the edge of the hills, one hand wrapped in a thick, stained bandage. The whip is coiled on the ground at his feet. There is no Ursaring anywhere. Garrett: \"It bit me. After eight years. It ran into the hills.\" He stares up at the slopes, and for the first time he does not look like a man in charge of anything.",
+   "choices": [
+    {
+     "label": "\"Find it with him.\"",
+     "success": {
+      "text": "You climb together until you find it in a stand of pines. The Ursaring sees Garrett and backs away, growling low, and will not come one step closer. He holds out his good hand, and it still will not come. He sees it then, all of it. He lowers his hand and walks back down alone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-garrett-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-garrett-saw",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Find it alone.\"",
+     "success": {
+      "text": "You go up into the hills alone. The Ursaring you find is bigger than you remember, scarred, standing tall at the head of the slope: an Alpha now, the master of its own ground. It roars. If you can calm it, it might come with you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-garrett-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-garrett-lost-it",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "ursaring"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "roster-garrett-calmed",
+         "amount": 1,
+         "stamp": "region"
+        },
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "ursaring"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You calmed Garrett's Ursaring, an Alpha in the hills, and it chose you",
+         "importance": 60
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The Alpha Ursaring drove you back down the hill",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"It was right to run.\"",
+     "success": {
+      "text": "Garrett is on his feet, face red, shouting about eight years and what he gave it. You let him shout. Then he stops, all at once, and sits back down on the post. He picks at the bandage and is quiet for a very long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-garrett-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-garrett-told",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "seen",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-garrett-seen",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Garrett looks at you sideways. Garrett: \"You saw it the first day. I didn't.\""
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-tamer-garrett-m3",
+   "name": "Tamer Garrett: No Whip",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-garrett-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-garrett-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_tamer"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "A meadow, no rope ring this time. Garrett sits cross-legged in the grass with a little Teddiursa tumbling about his knees, and there is no whip on his belt, or anywhere. Garrett: \"Starting over. It's slower. It's better.\" The Teddiursa grabs his thumb with both paws and gnaws it, and he lets it.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Garrett nods, and the Teddiursa trots out with his Arbok, looking back at him for a word. He gives it one, softly. Afterwards he presses a small silver bell into your hand: he does not need it to call anything any more.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-garrett-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-garrett-battled",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "soothe-bell",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-tamer-garrett"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Garrett's Teddiursa beat you, and he did not raise his voice once",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "teddiursa",
+        "arbok"
+       ],
+       "name": "Tamer Garrett",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You battled Garrett and his Teddiursa, with no whip in sight",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Show him how to bond.\"",
+     "success": {
+      "text": "You show him: crouch down, open hand, a treat on the palm, and wait. Garrett copies you, stiff and clumsy. The Teddiursa takes the treat, then climbs into his lap and hugs him round the middle. He goes very still. Later he gives you a Soothe Bell, his voice rough.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-garrett-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-garrett-hugged",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "soothe-bell",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-tamer-garrett"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave him be.\"",
+     "success": {
+      "text": "You leave them to it. When you look back, Garrett is sitting in the grass with the Teddiursa, teaching it nothing at all, just sitting with it in the sun. It is the most patient you have ever seen him, and the Teddiursa has fallen asleep against his boot.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-garrett-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-garrett-left",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-tamer-garrett"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "calmed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-garrett-calmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Garrett sees your Ursaring and goes very still. It does not flinch. Neither does he. He nods to it, once, like an apology.",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "\"Battle.\"",
+       "success": {
+        "text": "Garrett nods, and the Teddiursa trots out with his Arbok, looking back at him for a word. He gives it one, softly. He watches your Ursaring the whole time, and smiles once, without meaning to.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "roster-garrett-done",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "flag",
+          "key": "roster-garrett-battled",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "recruit",
+          "trainer": "npc-tamer-garrett"
+         }
+        ],
+        "battle": {
+         "kind": "trainer",
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "moment",
+           "text": "Garrett's Teddiursa beat you, and he did not raise his voice once",
+           "importance": 60
+          }
+         ],
+         "team": [
+          "teddiursa",
+          "arbok"
+         ],
+         "name": "Tamer Garrett",
+         "size": 2,
+         "types": [],
+         "levelBonus": 0,
+         "win": [
+          {
+           "kind": "moment",
+           "text": "You battled Garrett and his Teddiursa, with no whip in sight",
+           "importance": 60
+          }
+         ]
+        }
+       }
+      },
+      {
+       "label": "\"Show him how to bond.\"",
+       "success": {
+        "text": "You show him: crouch down, open hand, a treat on the palm, and wait. Garrett copies you, stiff and clumsy. The Teddiursa takes the treat, then climbs into his lap and hugs him round the middle. He goes very still, and does not say anything for a long time.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "roster-garrett-done",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "flag",
+          "key": "roster-garrett-hugged",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "recruit",
+          "trainer": "npc-tamer-garrett"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-team-rocket-grunt-boris",
+   "name": "Team Rocket Grunt Boris: Hand Over",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-boris-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_teamrocket_m"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A thug in black steps out from behind a signpost and plants himself in the middle of the road, a red R on his chest. He sounds like he has said this a hundred times today. Boris: \"Hand over your Pokémon!\" A pause. He checks his watch. Boris: \"Or don't. Then we fight. I'm paid either way.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Boris sighs and throws two Poké Balls without looking. A Koffing and a Zubat drift out, as unenthusiastic as he is.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-boris-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Rocket Grunt Boris beat you, and still looked bored",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "koffing",
+        "zubat"
+       ],
+       "name": "Team Rocket Grunt Boris",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Team Rocket Grunt Boris on the open road",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"How much are you paid?\"",
+     "success": {
+      "text": "Boris blinks. Nobody has ever asked him that before. Boris: \"Not enough.\" For a second he looks like an ordinary tired man. Then he throws his Poké Balls, and the battle is on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-boris-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-boris-asked",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Rocket Grunt Boris beat you, and still looked bored",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "koffing",
+        "zubat"
+       ],
+       "name": "Team Rocket Grunt Boris",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Team Rocket Grunt Boris on the open road",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Run.\"",
+     "success": {
+      "text": "You run. Boris watches you go, hands in his pockets, and does not chase. You hear him mutter that he is not paid for running either.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-team-rocket-grunt-boris-m2",
+   "name": "Team Rocket Grunt Boris: Demoted",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-boris-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-boris-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_teamrocket_m"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "A back corridor of a Rocket base, strip lights buzzing. Boris pushes a mop along the floor with a bucket on squeaky wheels. He freezes when he sees you, then goes back to mopping, slower. Boris: \"Lost to you. Now I mop.\" He wrings the mop out hard. Boris: \"Don't tell anyone you saw me.\"",
+   "choices": [
+    {
+     "label": "\"Sneak me in.\"",
+     "success": {
+      "text": "Boris looks up and down the corridor. Then he leans the mop against the wall and draws you a rough map on the wet floor with the handle: which doors stick, which guards nap after lunch. It dries away in a minute. He says he never saw you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-boris-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-boris-inside",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Quit.\"",
+     "success": {
+      "text": "Boris: \"And do what?\" He says it like a joke, but it does not come out like one. He looks at the mop in his hands for a long moment, as if it might answer for him. Then he goes back to the floor.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-boris-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-boris-quit-q",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle again.\"",
+     "success": {
+      "text": "Boris drops the mop with a clatter. Boris: \"Fine. Can't get demoted twice.\" The Koffing and Zubat drift out into the corridor.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-boris-m2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Boris beat you in his mop corridor, and did not look any happier",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "koffing",
+        "zubat"
+       ],
+       "name": "Team Rocket Grunt Boris",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "roster-boris-lost2",
+         "amount": 1,
+         "stamp": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Boris again, in his mop corridor",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-team-rocket-grunt-boris-m3",
+   "name": "Team Rocket Grunt Boris: Choice",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-boris-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-boris-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_teamrocket_m"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "Alarms, shouting, a Rocket base in uproar. In the middle of a loading bay Boris stands with his back to a stack of crates, his Raticate in front of him, facing his own side. Boris: \"They're shipping a nest of eggs. I'm not doing that.\" Behind him, through a gap in the crates, you can see the eggs, dozens of them, packed in straw.",
+   "choices": [
+    {
+     "label": "\"Fight beside him.\"",
+     "success": {
+      "text": "You step in beside Boris. His Raticate glances at your lead and squares up next to it, and the two of you face Team Rocket together.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-boris-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-boris-fought",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-team-rocket-grunt-boris"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "You and Boris lost, but the eggs never left the bay",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "arbok",
+        "golbat"
+       ],
+       "format": "doubles",
+       "name": "Team Rocket",
+       "ally": "raticate",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You fought beside Boris to stop a shipment of stolen eggs",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Arrest him.\"",
+     "success": {
+      "text": "Boris holds out his wrists before you even ask. He goes quietly, and on the walk out he talks: every route, every name, every shipment he ever loaded. It is the first time in years anyone has listened to him this carefully. He hands you a folded plan as evidence.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-boris-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-boris-arrested",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-boris-evidence",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-team-rocket-grunt-boris"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let him go.\"",
+     "success": {
+      "text": "You nod at the back door. Boris looks at you, then at the eggs, and helps you push the crates out into the daylight first. Then he takes off his black cap, leaves it on a crate, and walks out of the region with his Raticate at his heel.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-boris-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-boris-freed",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-team-rocket-grunt-boris"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-boris-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Boris catches your eye across the bay. Boris: \"You asked what they paid. Nobody ever asked.\""
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-team-rocket-grunt-jessa",
+   "name": "Team Rocket Grunt Jessa: Trouble",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-jessa-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_teamrocket_f"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A girl jumps into your path in a Rocket uniform two sizes too big, the sleeves rolled up three times and the cap sliding over one eye. She points at you with great conviction. Jessa: \"Stand still, rookie! This is a robbery! Probably!\" She pushes the cap back up. It slides down again.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Jessa: \"Right! Yes! Battle!\" She fumbles two Poké Balls and gets them open on the second try. An Ekans and a Houndour tumble out, and the Houndour looks back at her, worried.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-jessa-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Rocket Grunt Jessa beat you, and looked amazed about it",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "ekans",
+        "houndour"
+       ],
+       "name": "Team Rocket Grunt Jessa",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Team Rocket Grunt Jessa on her third day",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Are you new?\"",
+     "success": {
+      "text": "Jessa: \"Third day.\" She says it before she can stop herself, then goes pink to the ears. She fiddles with a button on the giant jacket. For a moment she is just a kid in somebody else's clothes, wondering how she got here.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-jessa-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-jessa-new",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Laugh.\"",
+     "success": {
+      "text": "Jessa goes scarlet. Jessa: \"Don't laugh at me!\" She hurls her Poké Balls down hard enough to bounce, and the Ekans and Houndour come out bristling on her behalf.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-jessa-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Rocket Grunt Jessa beat you, and looked amazed about it",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "ekans",
+        "houndour"
+       ],
+       "name": "Team Rocket Grunt Jessa",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Team Rocket Grunt Jessa on her third day",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-team-rocket-grunt-jessa-m2",
+   "name": "Team Rocket Grunt Jessa: Trying to Quit",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-jessa-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-jessa-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_teamrocket_f"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "A small café, steamed-up windows. Jessa sits in the corner in a plain jumper, no uniform, a cup going cold between her hands. She jumps every time the door opens. She waves you over, then checks the window. Jessa: \"I want out. They don't let you out.\" She turns the cup round and round. Jessa: \"My Houndour's theirs. If I leave, they keep it.\"",
+   "choices": [
+    {
+     "label": "\"Get the Houndour back.\"",
+     "success": {
+      "text": "Jessa stares at you. Then she pulls a napkin over and draws, fast: a warehouse by the docks, the kennel row, the gap in the fence. Jessa: \"Tonight. Kennel six.\" Two streets later the warehouse looms up out of the dark.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-jessa-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-team-rocket-grunt-jessa-warehouse"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave without it.\"",
+     "success": {
+      "text": "She nods slowly. She leaves money on the table and walks out without looking back, but at the door her shoulders shake. You see her stop on the corner, hand pressed to her mouth, before she goes. She grieves for it all the way down the street.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-jessa-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-jessa-left",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Stay in, for now.\"",
+     "success": {
+      "text": "Jessa lets out a long breath. Jessa: \"One more region. Then I'm gone.\" She puts the uniform cap back on under the table, where nobody can see, and tugs it down over her eyes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-jessa-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-jessa-stayed",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-team-rocket-grunt-jessa-warehouse",
+   "name": "Team Rocket Grunt Jessa: Kennel Six",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_teamrocket_f"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "The Rocket warehouse at night: stacked crates, a single lamp swinging, a guard's footsteps somewhere above on the gantry. Down the kennel row, behind a wire door marked 6, a Houndour lifts its head and sniffs. Its tail starts, very quietly, to wag.",
+   "choices": [
+    {
+     "label": "\"Creep along the crates.\"",
+     "prompt": {
+      "id": "dodge-tap",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Shadow to shadow, crate to crate, between the guard's footsteps. You slip the kennel latch and the Houndour presses against your legs without a sound. Outside, Jessa drops to her knees and it knocks her flat, licking her face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-jessa-houndour",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "You stole Jessa's Houndour back from a Rocket warehouse",
+        "importance": 60
+       }
+      ]
+     },
+     "failure": {
+      "text": "A crate creaks. A torch beam sweeps the row and you run for it, the Houndour bounding beside you, an alarm wailing behind. Outside, Jessa is crying before you reach her. The Houndour does not care how it got out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-jessa-houndour",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "You stole Jessa's Houndour back from a Rocket warehouse",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Send a Pokémon to cause a distraction.\"",
+     "prompt": {
+      "id": "throw-ring",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Your Pokémon knocks a stack of empty crates down at the far end, and every footstep in the building runs towards the noise. You walk the Houndour out the side door. Jessa holds it so tight it squeaks.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-jessa-houndour",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "You stole Jessa's Houndour back from a Rocket warehouse",
+        "importance": 60
+       }
+      ]
+     },
+     "failure": {
+      "text": "The crash is too early and too loud. You grab the latch and run, the Houndour at your heels and shouting behind. Jessa catches you both at the fence, laughing and sobbing at once.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-jessa-houndour",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "You stole Jessa's Houndour back from a Rocket warehouse",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-team-rocket-grunt-jessa-m3",
+   "name": "Team Rocket Grunt Jessa: Out",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-jessa-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-jessa-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_teamrocket_f"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "A Pokémon Center, warm and bright. Behind the front desk, in a pink apron with a name badge, stands Jessa. Her hair is tied back and she looks like she has slept for once. She spots you and leans over the counter. Jessa: \"Nurse Joy gave me a chance. Don't tell her about the uniform.\"",
+   "choices": [
+    {
+     "label": "\"I won't.\"",
+     "success": {
+      "text": "Jessa lets out a breath she seems to have been holding since the café. She takes your Poké Balls herself and runs them through the machine, and waves away your money. Jessa: \"Here, you're always free. Always.\" The chime sounds, and your whole team comes back bright.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-jessa-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-jessa-heals",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-team-rocket-grunt-jessa"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Jessa grins and ducks under the counter. Nurse Joy sighs and lets her. Out on the practice field a Houndoom stretches and yawns, all horns and smoke.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-jessa-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-jessa-battled",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-team-rocket-grunt-jessa"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Jessa's Houndoom beat you, out on the Center field",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "houndoom"
+       ],
+       "name": "Team Rocket Grunt Jessa",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You battled Jessa, who got out",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Ask about Rocket.\"",
+     "success": {
+      "text": "Jessa's smile slips. She checks that Nurse Joy is busy, then leans close and tells you one thing, very quietly: an admin's weakness, the one thing that admin cannot stand. Jessa: \"Use it. Then never ask me again.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-jessa-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-jessa-secret",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-team-rocket-grunt-jessa"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "stayed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-jessa-stayed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A Rocket base, deep inside. You come round a corner and there is Jessa in the too-big uniform, alone on guard at a door. She does not raise her Poké Balls. She looks exhausted. Jessa: \"Arrest me. Please. It's the only way they let you out.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "\"Arrest her.\"",
+       "success": {
+        "text": "You march her out past the guards with your hand on her shoulder, and nobody stops you. Outside, in the open air, she pulls the cap off and throws it in a hedge. On the walk to the station she tells you one thing: an admin's weakness.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "roster-jessa-done",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "flag",
+          "key": "roster-jessa-secret",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "flag",
+          "key": "roster-jessa-arrested",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "recruit",
+          "trainer": "npc-team-rocket-grunt-jessa"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "houndour",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-jessa-houndour",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Under the desk, curled up on a folded blanket, the Houndour is fast asleep, one paw resting on Jessa's shoe."
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-tuber-dot",
+   "name": "Tuber Dot: Splash Fight",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-dot-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_tuber_f"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A paddling pool on the grass by a lake, the evening light gold on the water. In the middle of it sits a tiny kid in a bright inflatable ring, so small the ring holds her up even sitting down. A Marill bobs beside her. She spots you and her whole face lights up. Dot: \"Splash fight!\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Dot squeals and claps, and the Marill bounces out of the pool and lands in front of you, round and dripping and very serious.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-dot-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Tuber Dot's Marill beat you, and she did a lap of the pool",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "marill"
+       ],
+       "name": "Tuber Dot",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Tuber Dot's Marill by the lake",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Splash back.\"",
+     "success": {
+      "text": "You kneel and send a wave over the side. Dot giggles so hard she tips over in her ring and has to be righted by the Marill. When she has her breath back she digs in the pocket of her swimsuit and gives you a Berry, warm from the sun.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-dot-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Where's your parent?\"",
+     "success": {
+      "text": "Dot points. On a deckchair a few steps away, under a hat, her dad lifts his hand and waves, one eye open. He has clearly been watching the whole time. Dot splashes you anyway, to be fair.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-dot-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-tuber-dot-m2",
+   "name": "Tuber Dot: Swimming Lessons",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-dot-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-dot-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_tuber_f"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "The lake shallows. Dot stands up to her waist with no ring on, arms held stiff out to the sides, the Marill circling her anxiously. Her lip is wobbling. Dot: \"Dad says no ring this year. I'm scared.\"",
+   "choices": [
+    {
+     "label": "\"Swim with her.\"",
+     "success": {
+      "text": "You wade in beside her and hold your hands under her, not quite touching. She kicks, splutters, kicks again, and paddles three whole strokes on her own before she grabs your arm. She comes up shrieking with joy.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-dot-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-dot-swam",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let Marill help.\"",
+     "success": {
+      "text": "The Marill slips under her and floats, round and steady, holding her up like a living ring. Dot lies on top of it with her arms spread and laughs and laughs. The Marill looks enormously pleased with itself.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-dot-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-dot-marill",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Wear it one more year.\"",
+     "success": {
+      "text": "Dot sags with relief and runs to get the ring. She jams it on over her head and paddles straight back out, happy again. On the deckchair her dad shrugs at you and smiles: one more year is fine.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-dot-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-dot-ring",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-tuber-dot-m3",
+   "name": "Tuber Dot: Big Kid",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-dot-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-dot-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_tuber_f"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "The lake again, but Dot is not in the shallows. She is out in the open water, swimming laps, her stroke wobbly but strong, with a big Azumarill swimming alongside. She sees you and stops, treading water. Dot: \"Look! No ring!\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Dot: \"Azumarill, you heard!\" The Azumarill hops out onto the bank, ears up, round as ever and twice as strong. Afterwards her dad hands you an egg wrapped in a towel: their Marill had one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-dot-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-dot-battled",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "egg",
+        "species": [
+         "marill"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-tuber-dot"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Tuber Dot's Azumarill beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "azumarill"
+       ],
+       "name": "Tuber Dot",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You battled Tuber Dot, who swims now",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Race.\"",
+     "success": {
+      "text": "You race her to the buoy and back. Whether you hold back or not, she wins, touching the bank a full arm's length ahead and screaming about it. Her dad hands you an egg wrapped in a towel: their Marill had one, and Dot wants you to have it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-dot-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-dot-raced",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "egg",
+        "species": [
+         "marill"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-tuber-dot"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Clap.\"",
+     "success": {
+      "text": "You clap, and she swims a victory lap. Then she runs up the bank, dripping, and pushes something into your arms: her old ring, faded and a little patched. Dot: \"You keep it. I'm big now.\" Her dad adds an egg wrapped in a towel.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-dot-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-dot-clapped",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "Tuber Dot gave you her old swim ring",
+        "importance": 60
+       },
+       {
+        "kind": "egg",
+        "species": [
+         "marill"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-tuber-dot"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-tuber-pip",
+   "name": "Tuber Pip: Float On",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-pip-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_tuber_m"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A slow green river. A boy drifts past in a rubber tube, head back, mouth open, fast asleep, one hand trailing in the water where a Goldeen nibbles at his fingers. He bumps gently into the bank beside you and wakes with a snort. Pip: \"Float on, battle later.\" He yawns enormously and settles back in.",
+   "choices": [
+    {
+     "label": "\"Battle now.\"",
+     "success": {
+      "text": "Pip groans, but rolls out of his tube into the shallows. The Goldeen leaps, flicking water in his face to wake him properly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-pip-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Tuber Pip's Goldeen beat you, and he went back to sleep",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "goldeen"
+       ],
+       "name": "Tuber Pip",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Tuber Pip's Goldeen",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Float later.\"",
+     "success": {
+      "text": "Pip: \"Mm. Later.\" He pushes off and drifts on downstream. Two bends of the river later, there he is again, caught in the reeds and wide awake this time, waiting for you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-pip-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-tuber-pip-later"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let him sleep.\"",
+     "success": {
+      "text": "You leave him to it. He floats off round the bend, snoring softly, the Goldeen keeping watch beside the tube.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-tuber-pip-later",
+   "name": "Tuber Pip: Battle Later",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_tuber_m"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "The tube is wedged in the reeds and Pip is sitting up in it, hair sticking up on one side, the Goldeen circling. Pip: \"Told you. Later.\" He seems very pleased that later has arrived exactly when he said.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Pip slides into the water and the Goldeen leaps up beside him, horn gleaming.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Tuber Pip's Goldeen beat you, and he went back to sleep",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "goldeen"
+       ],
+       "name": "Tuber Pip",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Tuber Pip's Goldeen",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Still sleepy?\"",
+     "success": {
+      "text": "Pip: \"Always.\" But he slides into the water anyway, and the Goldeen leaps up beside him, horn gleaming.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Tuber Pip's Goldeen beat you, and he went back to sleep",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "goldeen"
+       ],
+       "name": "Tuber Pip",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Tuber Pip's Goldeen",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-tuber-pip-m2",
+   "name": "Tuber Pip: Drifted",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-pip-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-pip-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_tuber_m"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "You hear a thin shout from the water. Far out on the current, past where anyone should be, is a small tube spinning slowly, and in it Pip, clutching the sides. Pip: \"I fell asleep. Where am I?\" The current is carrying him further out by the second.",
+   "choices": [
+    {
+     "label": "\"Tow him in.\"",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Your Water-type dives in and swims out to him, takes the tube's rope in its mouth, and tows him home stroke by steady stroke. Pip clings on, wide-eyed and quiet all the way, and says thank you three times on the bank.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-pip-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-pip-towed",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Call his mum.\"",
+     "success": {
+      "text": "You run for the house up the hill. His mum is out of the door and into a rowing boat before you have finished talking. She rows out furious and hauls him in, scolding the whole way back, then holds him so tight he squeaks.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-pip-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-pip-mum",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Send a Flying-type with a rope.\"",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "Your Flying-type takes the end of a rope and beats out over the water against the wind. Pip catches it on the second try. It works: you haul, and he comes skimming back across the current, laughing now that it is over.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-pip-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-pip-rope",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-tuber-pip-m3",
+   "name": "Tuber Pip: Awake",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-pip-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-pip-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_tuber_m"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "Pip stands on the riverbank in the morning, wide awake, with a Seadra in the shallows at his feet. No tube in sight. He looks older. Pip: \"I don't float anymore. I train.\" The Seadra snorts a jet of water as if to agree. In his hand he turns over a dark, gleaming scale.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Pip: \"Finally, a proper one.\" The Seadra rises out of the river, spines up. Afterwards he hands you the gleaming scale: a Dragon Scale. Pip: \"It shed it. I don't need it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-pip-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-pip-battled",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "dragon-scale",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-tuber-pip"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Pip's Seadra beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "seadra"
+       ],
+       "name": "Tuber Pip",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You battled Pip, awake and training",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Float once more.\"",
+     "success": {
+      "text": "Pip hesitates, then grins and drags the old tube out from behind a bush. You both float for a while in the sun, not talking, your team dozing on the bank. At the end he gives you the gleaming scale: a Dragon Scale.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "flag",
+        "key": "roster-pip-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-pip-floated",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "dragon-scale",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-tuber-pip"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Laugh.\"",
+     "success": {
+      "text": "You laugh, and Pip laughs too, at himself, at the tube, at the whole sleepy summer. The Seadra splashes you both. When you go he presses the gleaming scale into your hand: a Dragon Scale.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-pip-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-pip-laughed",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "dragon-scale",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-tuber-pip"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-tuber-rudy",
+   "name": "Tuber Rudy: Tube Life",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-rudy-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_tuber2_m"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A boy in a tube spins lazily down the river, arms behind his head, a Poliwag riding on his stomach. He catches a branch to stop beside you. Rudy: \"Tube life is the best life.\" He says it like a motto he made up himself, and he is very proud of it.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Rudy lets go of the branch and the Poliwag hops off his stomach onto a rock, its spiral belly swirling.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rudy-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Tuber Rudy's Poliwag beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "poliwag"
+       ],
+       "name": "Tuber Rudy",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Tuber Rudy's Poliwag",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Is it?\"",
+     "success": {
+      "text": "Rudy: \"Better than school.\" He says it fast, and then looks at the water for a bit, spinning slowly. The Poliwag looks up at him. Then he pushes off and floats on, humming.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rudy-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave.\"",
+     "success": {
+      "text": "You leave him spinning on the current. He waves without opening his eyes.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-tuber-rudy-m2",
+   "name": "Tuber Rudy: Skipping",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-rudy-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-rudy-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_tuber2_m"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "A weekday morning, the river quiet. Somewhere a school bell is ringing. Rudy drifts out from under a bridge in his tube, sees you, and sinks down low in it. Rudy: \"Don't tell. They're doing maths.\" The Poliwhirl beside him looks distinctly guilty.",
+   "choices": [
+    {
+     "label": "\"Take him to school.\"",
+     "success": {
+      "text": "You walk him up the hill, his tube under his arm, dripping. He sulks the whole way and drags his feet on the steps. At the door he turns round. Rudy: \"Traitor.\" But he goes in.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rudy-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-rudy-school",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Skip with him.\"",
+     "success": {
+      "text": "You float together under the willows for one glorious hour. Then a shadow falls over you both. His teacher stands on the bridge, arms folded, and catches you both. You get a lecture too. Rudy cannot stop grinning about that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rudy-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-rudy-caught",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Teach him maths with Pokémon.\"",
+     "success": {
+      "text": "You draw the type chart in the mud with a stick, then work out damage together: power, times the type bonus, times two for super effective. Rudy frowns, counts on his fingers, then sits bolt upright. He gets it. He wants another one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rudy-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-rudy-taught",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-tuber-rudy-m3",
+   "name": "Tuber Rudy: Top of the Class",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-rudy-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-rudy-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_tuber2_m"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "Rudy runs to meet you on the riverbank, waving a sheet of stiff paper with a gold seal on it, a Poliwrath stamping along behind him. Rudy: \"First in maths. Because of Pokémon.\" He holds the certificate up beside his face so you can see both at once.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Rudy: \"I've calculated this.\" The Poliwrath cracks its knuckles. Afterwards he gives you a Water Stone, the one that evolved his Poliwhirl. Rudy: \"Seemed right.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-rudy-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-rudy-battled",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "water-stone",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-tuber-rudy"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Rudy's Poliwrath beat you, exactly as he calculated",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "poliwrath"
+       ],
+       "name": "Tuber Rudy",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You battled Rudy, first in maths",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Tube once more.\"",
+     "success": {
+      "text": "Rudy whoops and fetches two tubes. You float down the river together in the sun, certificate tucked safely in a plastic bag on his chest. At the end he gives you a Water Stone, the one that evolved his Poliwhirl.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "flag",
+        "key": "roster-rudy-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-rudy-tubed",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "water-stone",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-tuber-rudy"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Show me.\"",
+     "success": {
+      "text": "Rudy pulls out a notebook full of type charts and sums. He asks about the next boss, works through it with his tongue between his teeth, and taps one line: your best move against them. He gives you a Water Stone, the one that evolved his Poliwhirl.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-rudy-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-rudy-best-move",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "water-stone",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-tuber-rudy"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-tuber-sunny",
+   "name": "Tuber Sunny: Waves",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-sunny-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_tuber2_f"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A sunny beach, the waves small and sparkling. A girl in a yellow ring bobs just past the breakers, waving both arms over her head at you. Sunny: \"Come join the waves!\" A Staryu spins past her on the surf, its gem flashing.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Sunny paddles in and her Shellder and Staryu come tumbling up the sand after her, both glittering wet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-sunny-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Tuber Sunny's beach pair beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "shellder",
+        "staryu"
+       ],
+       "name": "Tuber Sunny",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Tuber Sunny on the beach",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Join.\"",
+     "success": {
+      "text": "You wade in. The water is warm and the waves lift you and set you down, over and over. Sunny shows you how to float on your back and look at the sky. Your Pokémon splash in the shallows. You come out salty and rested.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "flag",
+        "key": "roster-sunny-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave.\"",
+     "success": {
+      "text": "You wave back and walk on along the dunes. She keeps waving until you are out of sight.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-tuber-sunny-m2",
+   "name": "Tuber Sunny: Shells",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-sunny-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-sunny-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_tuber2_f"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "Sunny walks slowly along the tideline with a bucket, stopping every few steps to pick something up and look at it carefully. She shows you one: pink, curled, perfect. Sunny: \"I'm collecting for my gran. She can't walk to the beach anymore.\"",
+   "choices": [
+    {
+     "label": "\"Help collect.\"",
+     "success": {
+      "text": "You walk the tideline together for an hour, both of you bent double, your Pokémon digging and bringing things. Spiral shells, flat ones, a blue one like a fingernail. The bucket fills to the brim. Sunny carries it home with both arms, very carefully.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-sunny-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-sunny-shells",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Bring her to the beach.\"",
+     "success": {
+      "text": "Sunny stares, then runs. You find a wheelchair at the Center, and a Machoke who is happy to push it through the soft sand. Her gran comes down the dunes laughing and holding on to her hat, and sits at the edge of the sea for the first time in years.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-sunny-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-sunny-gran",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Find a rare one.\"",
+     "success": {
+      "text": "Out on the rocks a Shellder sits half-open in a pool. It watches you for a long time, then clacks its shell and leaves something behind: a pearl, small and pink and glowing. Sunny holds it like it might break. Sunny: \"Gran's going to cry.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-sunny-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-sunny-pearl",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-tuber-sunny-m3",
+   "name": "Tuber Sunny: Gran",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-sunny-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-sunny-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_tuber2_f"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "Sunny and her gran sit together on a blanket on the sand, a striped windbreak flapping beside them. Gran wears a big straw hat and an old jacket with a badge pinned to the collar that you almost recognise. She pats the blanket for you to sit. Gran: \"She talks about you. The trainer who helped.\" Sunny goes red and pretends to look at the sea.",
+   "choices": [
+    {
+     "label": "\"Battle Sunny.\"",
+     "success": {
+      "text": "Sunny jumps up, delighted. Her Starmie and Cloyster come out of the surf, both grown up now, like her. Afterwards Gran presses a pearl into your hand from Sunny's bucket.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-sunny-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-sunny-battled",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "pearl",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-tuber-sunny"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Sunny beat you, with Gran cheering",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "starmie",
+        "cloyster"
+       ],
+       "name": "Tuber Sunny",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You battled Sunny on the beach, with Gran watching",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Sit with gran.\"",
+     "success": {
+      "text": "You sit. Gran tells you about the sea when she was young, and Sunny lies with her head in Gran's lap and listens to stories she has heard a hundred times. Your team sleeps in the sun until every one of them is whole again. Gran gives you a pearl when you go.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-sunny-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-sunny-sat",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "pearl",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-tuber-sunny"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle gran.\"",
+     "success": {
+      "text": "Gran laughs and takes off her hat. Gran: \"Oh, I haven't done this in years.\" She whistles, and out of the sea rises an old Lapras, scarred and calm. The badge on her collar: she was a Gym Leader once.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-sunny-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-sunny-gran-battle",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-tuber-sunny"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "item",
+         "id": "pearl",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Sunny's gran, a retired Gym Leader, beat you with her old Lapras",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "lapras"
+       ],
+       "name": "Gran",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "item",
+         "id": "tm-ice",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You battled Sunny's gran, a retired Gym Leader, and her old Lapras",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-twins-nia-and-mia",
+   "name": "Twins Nia and Mia: Two for One",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-twins-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_twins"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "Two identical girls step out under a streetlamp in the evening, same bunches, same dresses, striking the exact same pose with a hand on one hip. Nia: \"Two for the price of one!\" Mia: \"One for the price of two!\" Nia shoots her a sideways look. Nia: \"That's not how it goes.\" Neither of them breaks the pose.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "The twins spin on the spot, perfectly together, and a Pikachu and a Pachirisu leap out side by side, sparking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-twins-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Twins Nia and Mia beat you, two for one",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "pikachu",
+        "pachirisu"
+       ],
+       "format": "doubles",
+       "name": "Twins Nia and Mia",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Twins Nia and Mia in a double battle",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Which is which?\"",
+     "chance": 0.5,
+     "success": {
+      "text": "You point at the left one and say Nia. They squeal: you are right. Then they spin round each other twice, so fast you lose track, and now you have no idea. They are delighted. They do it again just to watch your face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-twins-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You point at the left one and say Nia. They squeal: wrong, that is Mia. Then they spin round each other twice and swap anyway, so you will never know. They are delighted. They do it again just to watch your face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-twins-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave.\"",
+     "success": {
+      "text": "You leave them posing under the lamp. When you look back they are still holding it, perfectly still, in case someone else comes along.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-twins-nia-and-mia-m2",
+   "name": "Twins Nia and Mia: Swapped",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-twins-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-twins-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_twins"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "One twin alone, sitting on a low wall, swinging her feet. Without her sister beside her she looks smaller, and not quite sure what to do with her hands. Twin: \"I'm Mia. Probably. We swapped so long I'm not sure.\" She laughs, but she is waiting for an answer.",
+   "choices": [
+    {
+     "label": "\"You're Mia.\"",
+     "success": {
+      "text": "She smiles, slow and wide, like you gave her something. She says it again quietly to herself, trying it on: Mia. Then she hops down off the wall and walks home with a little bounce in it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-twins-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-twins-named",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ask Nia.\"",
+     "success": {
+      "text": "Her sister comes running round the corner when called, and looks her up and down very seriously. Nia: \"She's Nia.\" Both of them burst out laughing so hard they have to hold each other up, and the question does not seem to matter any more.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-twins-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-twins-laughed",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Does it matter?\"",
+     "success": {
+      "text": "She thinks about it for a long time, swinging her feet. Twin: \"...Not really.\" She looks lighter for saying it. Whoever she is, she is the one who goes home to the same sister.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-twins-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-twins-okay",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-twins-nia-and-mia-m3",
+   "name": "Twins Nia and Mia: Different Hats",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-twins-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-twins-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_twins"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "The twins again, under the same streetlamp, still identical in every way except one: one wears a red hat and one wears a blue hat. Nia touches the red brim. Nia: \"We decided. Red hat's me.\" Mia: \"For now.\" They look at each other and grin. A Plusle sits on the blue hat's shoulder.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "The twins spin, together still, and a Raichu and a Pachirisu leap out side by side, crackling.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-twins-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-twins-battled",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-twins-nia-and-mia"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The twins in different hats beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "raichu",
+        "pachirisu"
+       ],
+       "format": "doubles",
+       "name": "Twins Nia and Mia",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat the twins in their different hats",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Tag with red.\"",
+     "success": {
+      "text": "Nia whoops and jumps to your side. Nia: \"Red team!\" For a while she travels with you, ready to stand beside you in a double battle, while Mia shouts advice from behind.",
+      "effects": [
+       {
+        "kind": "wandererFriend",
+        "stages": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-twins-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-twins-red",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-twins-nia-and-mia"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Tag with blue.\"",
+     "success": {
+      "text": "Mia beams and steps to your side, the Plusle hopping onto your shoulder. Mia: \"Blue team. For now.\" For a while she travels with you, ready to stand beside you in a double battle.",
+      "effects": [
+       {
+        "kind": "wandererFriend",
+        "stages": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-twins-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-twins-blue",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-twins-nia-and-mia"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-young-couple-dan-and-eri",
+   "name": "Young Couple Dan and Eri: Together",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-danieri-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_youngcouple"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A couple stands holding hands under a streetlight in the warm evening, and above them a Volbeat and an Illumise circle the lamp, drawing slow loops of light. Dan: \"Together we can't lose.\" Eri, without letting go of his hand: \"Statistically we can.\" Dan squeezes her hand anyway.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "The Volbeat and Illumise drop from the lamp and hover side by side, tails glowing, in step with each other.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-danieri-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Dan and Eri beat you, together",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "volbeat",
+        "illumise"
+       ],
+       "format": "doubles",
+       "name": "Young Couple Dan and Eri",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Dan and Eri under the streetlight",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Who's right?\"",
+     "success": {
+      "text": "They both turn and look at you, perfectly together, waiting. Dan hopeful, Eri with one eyebrow raised. Whatever you say, they look at each other afterwards and smile like it proved their point.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-danieri-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave.\"",
+     "success": {
+      "text": "You leave them under the lamp. The bugs keep drawing their loops of light, and the two of them do not notice you go.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-young-couple-dan-and-eri-m2",
+   "name": "Young Couple Dan and Eri: The Ring",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-danieri-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-danieri-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_youngcouple"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "Dan alone, pacing under a tree, a small velvet box in his hand that he keeps opening and shutting. He has clearly been here a while. The Volbeat blinks anxiously on his shoulder. Dan: \"I'm asking tonight. If I battle you and win, I'll be brave enough.\"",
+   "choices": [
+    {
+     "label": "\"Let him win.\"",
+     "success": {
+      "text": "You battle, and you hold back just enough. He wins. He punches the air, kisses the box, and runs off towards the lights without a backward look. He is brave now. He thinks he earned it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-danieri-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-danieri-thrown",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle fair.\"",
+     "success": {
+      "text": "Dan nods, swallowing hard. Dan: \"Fair. Yeah. Fair.\" The Volbeat lifts off his shoulder. Whatever happens, he puts the box in his pocket and goes to ask her.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-danieri-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-danieri-fair",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Dan beat you fair, and went to ask her",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "volbeat"
+       ],
+       "name": "Dan",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Dan fair, and he asked her anyway",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"You don't need a win.\"",
+     "success": {
+      "text": "Dan stops pacing. He looks at the box for a long moment. Then he shuts it, puts it in his pocket, takes a breath, and walks off to ask her without battling anyone at all.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-danieri-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-danieri-brave",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-young-couple-dan-and-eri-m3",
+   "name": "Young Couple Dan and Eri: Wedding",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-danieri-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-danieri-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_youngcouple"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "A garden wedding at dusk, chairs in rows on the lawn, the air smelling of cut grass. Up the aisle, a Volbeat and an Illumise light the way, drifting from post to post. Eri, in white, spots you at the gate and waves you in. Eri: \"You're invited. Obviously.\"",
+   "choices": [
+    {
+     "label": "\"Attend.\"",
+     "success": {
+      "text": "You sit near the back. Dan cries before Eri even reaches him, and she rolls her eyes and cries too. There is cake and dancing on the lawn, and your team eats and sleeps and dances until every one of them is rested and happy.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-danieri-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-danieri-attended",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-young-couple-dan-and-eri"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle the couple.\"",
+     "success": {
+      "text": "Eri: \"A wedding double? Statistically, yes.\" Dan is already rolling up his sleeves. The Volbeat and Illumise swing down from the aisle, glowing brighter than ever.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-danieri-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-danieri-battled",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-young-couple-dan-and-eri"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Dan and Eri beat you at their own wedding",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "volbeat",
+        "illumise"
+       ],
+       "format": "doubles",
+       "name": "Young Couple Dan and Eri",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You battled Dan and Eri at their wedding",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Give a gift.\"",
+     "success": {
+      "text": "You find something in your bag and wrap it as well as you can. Eri unwraps it carefully and laughs. In return they press a warm egg into your hands, from the Volbeat and the Illumise. Dan: \"It's from all four of us.\"",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "volbeat",
+         "illumise"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-danieri-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-danieri-gift",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-young-couple-dan-and-eri"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "thrown",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-danieri-thrown",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Eri catches your arm at the gate, smiling. Eri: \"You let him win. That's sweet. Don't do it again.\""
+    }
+   ]
+  }
+ ]
+}

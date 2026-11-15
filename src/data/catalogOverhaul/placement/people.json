@@ -1,0 +1,308 @@
+{
+ "$note": "Catalog Overhaul placement blocks for the people category, from QUESTLINES_PLACED.md, PAST CHAMPIONS AND PAST GYM LEADERS and PAST ALLIES AND FUTURE EVENTS (PA4). Keyed by event id; shape: docs/catalog-overhaul.md. Events not listed keep their old catalog placement.",
+ "red-on-the-mountain": {
+  "shape": "Endgame",
+  "earliest": "The last region",
+  "where": "After the League; a seven-node climb",
+  "level": "A+2"
+ },
+ "blue-taunt": {
+  "shape": "Single",
+  "earliest": "A6",
+  "attaches": "town",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "level": "A+2"
+ },
+ "face-champion-coffee": {
+  "shape": "Single",
+  "earliest": "A5",
+  "attaches": "town",
+  "home": 12,
+  "where": "The town: a café. Else a + node at 12",
+  "level": "A+2"
+ },
+ "pc-dragon-master-last-flight": {
+  "shape": "Companion",
+  "earliest": "A8",
+  "home": 6,
+  "where": "Starts 6; ends 18",
+  "level": "A+1"
+ },
+ "retired-champion-spar": {
+  "shape": "Region",
+  "earliest": "A4",
+  "stages": [
+   2,
+   5,
+   8
+  ],
+  "level": "A+1"
+ },
+ "mr-hall-champions": {
+  "shape": "Door",
+  "earliest": "A17",
+  "home": 14,
+  "window": [
+   12,
+   16
+  ],
+  "sits": "side-branch",
+  "level": "A+2"
+ },
+ "retired-champ-garage": {
+  "shape": "Single",
+  "earliest": "A3",
+  "attaches": "town",
+  "home": 8,
+  "window": [
+   5,
+   11
+  ],
+  "where": "Single: a shop. The town; else 8 · 5–11"
+ },
+ "ovc-champion-in-disguise-s1": {
+  "shape": "Trial",
+  "earliest": "A5",
+  "chain": "pc8",
+  "beat": 1
+ },
+ "ovc-champion-in-disguise-s2": {
+  "shape": "Trial",
+  "earliest": "A5",
+  "chain": "pc8",
+  "beat": 2
+ },
+ "ovc-champion-in-disguise-s3": {
+  "shape": "Trial",
+  "earliest": "A5",
+  "chain": "pc8",
+  "beat": 3,
+  "level": "A+2"
+ },
+ "face-champion-echo": {
+  "shape": "Single",
+  "earliest": "A9",
+  "home": 16,
+  "window": [
+   14,
+   18
+  ],
+  "sits": "side-branch",
+  "tags": [
+   "eerie",
+   "high"
+  ],
+  "level": "A+2"
+ },
+ "ovc-champions-ghost-s1": {
+  "shape": "Trial",
+  "earliest": "A6",
+  "chain": "pc10",
+  "beat": 1,
+  "attaches": "rest",
+  "tags": [
+   "night"
+  ],
+  "level": "A+1"
+ },
+ "ovc-champions-ghost-s2": {
+  "shape": "Trial",
+  "earliest": "A6",
+  "chain": "pc10",
+  "beat": 2,
+  "attaches": "rest",
+  "tags": [
+   "night"
+  ],
+  "level": "A+1"
+ },
+ "ovc-champions-ghost-s3": {
+  "shape": "Trial",
+  "earliest": "A6",
+  "chain": "pc10",
+  "beat": 3,
+  "attaches": "rest",
+  "tags": [
+   "night"
+  ],
+  "level": "A+1"
+ },
+ "face-leader-day-off": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 7,
+  "window": [
+   4,
+   10
+  ],
+  "often": "region",
+  "level": "A+1",
+  "where": "One per region, a different Leader; A+1 if asked"
+ },
+ "mr-ancient-gym-a": {
+  "shape": "Door",
+  "earliest": "A6",
+  "home": 12,
+  "window": [
+   10,
+   14
+  ],
+  "sits": "side-branch",
+  "tags": [
+   "high"
+  ],
+  "level": "A+1"
+ },
+ "mr-ancient-gym-b": {
+  "shape": "Door",
+  "earliest": "A6",
+  "home": 12,
+  "window": [
+   10,
+   14
+  ],
+  "sits": "side-branch",
+  "tags": [
+   "high"
+  ],
+  "level": "A+1"
+ },
+ "mr-ancient-gym-c": {
+  "shape": "Door",
+  "earliest": "A6",
+  "home": 12,
+  "window": [
+   10,
+   14
+  ],
+  "sits": "side-branch",
+  "tags": [
+   "high"
+  ],
+  "level": "A+1"
+ },
+ "r159-wild-gym-leader-pokemon": {
+  "shape": "Companion",
+  "earliest": "A4",
+  "home": 9,
+  "window": [
+   6,
+   12
+  ]
+ },
+ "ovc-two-gym-feud-s1": {
+  "shape": "Trial",
+  "earliest": "A5",
+  "chain": "gl5",
+  "beat": 1,
+  "attaches": "town",
+  "level": "A+1",
+  "where": "At the Town node; else Steps 9, 12, 16"
+ },
+ "ovc-two-gym-feud-s2": {
+  "shape": "Trial",
+  "earliest": "A5",
+  "chain": "gl5",
+  "beat": 2,
+  "attaches": "town",
+  "level": "A+1",
+  "where": "At the Town node; else Steps 9, 12, 16"
+ },
+ "ovc-two-gym-feud-s3": {
+  "shape": "Trial",
+  "earliest": "A5",
+  "chain": "gl5",
+  "beat": 3,
+  "attaches": "town",
+  "level": "A+1",
+  "where": "At the Town node; else Steps 9, 12, 16"
+ },
+ "ovc-the-borrowed-badge-s1": {
+  "shape": "Trial",
+  "earliest": "A3",
+  "chain": "gl6",
+  "beat": 1,
+  "home": 19,
+  "attaches": "after",
+  "where": "Step 19 of each: after the battle, before the Gym"
+ },
+ "ovc-the-borrowed-badge-s2": {
+  "shape": "Trial",
+  "earliest": "A3",
+  "chain": "gl6",
+  "beat": 2,
+  "home": 19,
+  "attaches": "after",
+  "where": "Step 19 of each: after the battle, before the Gym"
+ },
+ "ovc-the-borrowed-badge-s3": {
+  "shape": "Trial",
+  "earliest": "A3",
+  "chain": "gl6",
+  "beat": 3,
+  "home": 19,
+  "attaches": "after",
+  "where": "Step 19 of each: after the battle, before the Gym"
+ },
+ "ovc-stolen-badge-s1": {
+  "shape": "Trial",
+  "earliest": "A6",
+  "chain": "gl7",
+  "beat": 1,
+  "attaches": "town",
+  "level": "A+1"
+ },
+ "ovc-stolen-badge-s2": {
+  "shape": "Trial",
+  "earliest": "A6",
+  "chain": "gl7",
+  "beat": 2,
+  "home": 12,
+  "level": "A+1",
+  "where": "S+1 Step 12; S+2 (Step 16) opens straight from it as a room"
+ },
+ "ovc-rebel-gym-s1": {
+  "shape": "Single",
+  "earliest": "A8",
+  "home": 10,
+  "window": [
+   7,
+   13
+  ],
+  "sits": "optional",
+  "level": "A+1",
+  "where": "Needs Damian's Unofficial Gym (gn.05); optional, and it's not a Gym"
+ },
+ "ovc-the-championship-that-wasnt-s1": {
+  "shape": "Single",
+  "earliest": "A9",
+  "attaches": "town",
+  "home": 12,
+  "window": [
+   12,
+   13
+  ],
+  "level": "A+1",
+  "where": "Single: two nodes; the Town node, else 12 and 13"
+ },
+ "ovc-tower-apprentice-s1": {
+  "shape": "Trial",
+  "earliest": "A6",
+  "chain": "gl10",
+  "beat": 1,
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1",
+  "where": "The tower's a Door of five floors; its floors open as rooms"
+ },
+ "mentor-familiar-face": {
+  "shape": "Companion",
+  "earliest": "A3",
+  "attaches": "rest",
+  "where": "Starts at a + node (PA4)"
+ }
+}

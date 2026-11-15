@@ -83,6 +83,7 @@ import {
   withPartyStrength,
 } from './encounters';
 import { evolutionGift, evolve, evolveFully, type EvolutionResult } from './evolution';
+import { noteDeclinedEvolution, pickShopDeal, shopDealPerk } from './mentorWorld';
 import { changeFriendship } from './friendship';
 import { joinMoments, restMoments } from './moments/runMoments';
 import { followStep } from './followMode';
@@ -103,7 +104,8 @@ import { blackMarketMarkup, fieldResearchMoney, spookyEncounterChance, voiceAsks
 import { growGarden } from './berries';
 import { layEgg, tickEggs } from './eggs';
 import { spendTakenNode } from './co/takeNode';
-import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
+import { attachBlocker, holdNodeBattle, releaseNodeBattle, takeNodeLevelShift } from './co/attach';
+import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, endRegionStatBoosts, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
@@ -122,6 +124,8 @@ import { timeOfDay } from './arenaStyle';
 import { recordAftermath } from './overhaul/aftermath';
 import { assignGrowthPaths, noteMapGrowth } from './overhaul/growth';
 import { tickChainTimers } from './overhaul/chains';
+import { coBattleBegin, coFled, coHealStop, coNodeEnter, coStageStart, coWildKo } from './events/coToolkit';
+import { kantoSweetAir } from './expansion/canonKantoRules';
 import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
 import { endLastResort } from './battle/lastResort';
 import { defaultPrep, startingResources } from './runPrep';
@@ -159,6 +163,8 @@ import {
   priceMultiplierFromItems,
   prizeMoneyFromItems,
   regionMoneyFromItems,
+  startWildMovesRegion,
+  wildMovesItem,
   repelActive,
   spendUse,
   stageKey,
@@ -198,7 +204,7 @@ import { assignBlessing, blessingAfterBattle, blessingPerks, blessingShopFactor,
 import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPurchase, recentCopies } from './priceSwing';
 import { closeNodeMenu, freshNodeMenuState, menuBlocker, nodeMenusAllowed } from './nodeMenu/flow';
 import { BattleStateSchema, currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
-import { itemSlotLimit } from './trainerPerks';
+import { itemSlotLimit, lostBattleXpMultiplier } from './trainerPerks';
 import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
 import { applyTrainerParity, trainerHistoryLine, trainerKey } from './trainerWorld/trainerWorld';
 import { planTrainerGimmicks, returningPlan, trainerKit } from './trainerWorld/behavior';
@@ -731,6 +737,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   expireStageMods(run);
   ultraStageTick(content, run, run.regionIndex * campaign.stagesPerRegion + index + 1, false);
   startStageEffects(run);
+  coStageStart(run);
   clearRecentPurchases(run);
   applyWealthTax(content, run);
   hatchEggs(content, run);
@@ -853,6 +860,7 @@ function enterLeague(content: Content, run: RunState): void {
   addFinaleCanonStops(content, run);
   placeStoryStops(content, run);
   startStageEffects(run);
+  coStageStart(run);
   syncHpPerks(content, runArchetype(content, run).modifiers, run.party);
   if (!gauntlet(run.rules)) healParty(content, run);
   run.battle = null;
@@ -942,11 +950,14 @@ function enterNextRegion(content: Content, run: RunState): void {
   run.regionIndex += 1;
   run.log.charmUsedInRegion = false;
   endRegionTempEffects(run);
+  endRegionStatBoosts(content, [...run.party, ...run.box]);
   shiftPartyLevels(content, run, regionLevelOffset(runArchetype(content, run).modifiers));
   // Pass Orbs turn into money in each new region.
   const orbMoney = regionMoneyFromItems(content, run);
   run.money += orbMoney;
   count(run, 'moneyEarned', orbMoney);
+  // Linden's Notebook works in the region after the one it was given in.
+  startWildMovesRegion(content, run);
   enterStage(content, run, 0);
 }
 
@@ -1017,6 +1028,9 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   // Beta 0.7 Node Event Menus: a required entry must be done first; then the node's menu closes.
   const blocker = menuBlocker(run);
   if (blocker) throw new Error(blocker);
+  // Catalog Overhaul: an event that comes before (or instead of) this node's battle is played before moving on.
+  const waiting = attachBlocker(content, run);
+  if (waiting) throw new Error(waiting);
   closeNodeMenu(content, run);
   // A pseudo-stage plays like a stage, but its nodes play their room event (no route items, roamers or stage extras on its small map).
   if (stage.pseudo) return moveInPseudo(content, run, nodeId);
@@ -1037,6 +1051,7 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   stage.visited.push(nodeId);
   tickChainTimers(run.story.flags);
   stepClock(content, run);
+  coStep(content, run);
   // Bridge Mail adds a stop beside the node the player reaches.
   addBridgeStops(content, run, nodeId);
   // Roaming Legendaries move on as you do.
@@ -1076,7 +1091,7 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   if (notes) onCross(notes);
   // A trainer tailing you steps out after a few nodes (ideas W4, wandering trainer).
   wandererStep(content, run);
-  // Catalog Overhaul questlines: an event queued for "N nodes on" opens beside this node.
+  // Catalog Overhaul questlines: an event queued for "N nodes on" opens beside this node (a node spent on work below moves it one on).
   laterEventStep(content, run);
   // Catalog Overhaul: a choice that cost "(a node)" spends this stop on the work: no battle and no reward, but the level counts.
   const taken = spendTakenNode(content, run, node);
@@ -1090,21 +1105,28 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
     continueAfterDecisions(content, run);
     return run;
   }
+  // Catalog Overhaul: an event placed before (or instead of) the battle plays first; the map opens it at once (core/co/attach.ts).
+  if (holdNodeBattle(content, run, node)) return run;
+  fightNode(content, run, node);
+  return run;
+}
+
+/** The node's own battle. Also started when an event that came before it is done (continueAfterDecisions). */
+function fightNode(content: Content, run: RunState, node: MapNode): void {
   // A Nap Pod (run events G): the party sleeps through the next wild stop: no battle and no reward.
   if (node.kind === 'wild' && (run.itemCounters?.['nap'] ?? 0) > 0) {
     run.itemCounters = { ...run.itemCounters, nap: 0 };
-    return run;
+    return;
   }
   // A Repel keeps a wild Pokémon away: no battle and no reward, but the level counts.
   if (node.kind === 'wild' && repelActive(content, run)) {
     useRepel(content, run);
-    return run;
+    return;
   }
   startEncounter(content, run, node);
   // A weather front over the node sets the battle's weather.
   applyFrontWeather(content, run, node);
   recordBattleStart(content, run);
-  return run;
 }
 
 /** Walks to a node of a pseudo-stage: time passes as on any stage, then the node's room event opens beside it (the map opens it at once). */
@@ -1116,6 +1138,7 @@ function moveInPseudo(content: Content, run: RunState, nodeId: string): RunState
   stage.visited.push(nodeId);
   tickChainTimers(run.story.flags);
   stepClock(content, run);
+  coStep(content, run);
   if (node.roomEvent && !node.sides.some((x) => x.eventId === node.roomEvent)) {
     node.sides.push({ id: `event-room-1-${node.id}`, kind: 'event', used: false, eventId: node.roomEvent });
     if (run.itemCounters) delete run.itemCounters[`event-seen:${node.roomEvent}`];
@@ -1377,8 +1400,8 @@ export interface NodePreview {
   itemId: string | null;
   /** Who shows it, in words: the item's or the trainer's name. */
   source: string;
-  /** Species in battle order, with levels when they are known. */
-  team: { speciesId: string; level: number | null }[];
+  /** Species in battle order, with levels when they are known (and their moves, from Linden's Notebook). */
+  team: { speciesId: string; level: number | null; moves?: string[] }[];
   trainerName: string | null;
 }
 
@@ -1405,7 +1428,9 @@ export function mapPreviews(content: Content, run: RunState): Record<string, Nod
     itemId ? { itemId, source: content.catalog.get(itemId)?.name ?? itemId } : trainerPreviews(archetype, what) ? { itemId: null, source: archetype.name } : null;
   // A time rift (ideas W4) shows the battles ahead for the rest of the stage.
   const rift = (run.itemCounters?.[`rift-preview:${stageKey(run)}`] ?? 0) > 0 ? { itemId: null, source: 'The time rift' } : null;
-  const wildFrom = source('wild', perks('wild')) ?? rift;
+  // Linden's Notebook: wild Pokémon with their moves, in the region it works in.
+  const notebook = wildMovesItem(content, run);
+  const wildFrom = source('wild', perks('wild')) ?? rift ?? (notebook ? { itemId: notebook, source: content.catalog.get(notebook)?.name ?? notebook } : null);
   const trainerFrom = source('trainers', perks('trainers')) ?? rift;
   for (const node of mapChoices(content, run)) {
     const from = node.kind === 'wild' ? wildFrom : node.kind === 'trainer' ? trainerFrom : null;
@@ -1416,7 +1441,8 @@ export function mapPreviews(content: Content, run: RunState): Record<string, Nod
     // preview is the battle the player gets (Beta 4.4: a tick of the clock could change the Pokémon).
     const battle = moveToNode(content, run, node.id, () => undefined).battle;
     if (!battle) continue;
-    out[node.id] = { ...from, team: battle.enemyTeam.map((m) => ({ speciesId: m.speciesId, level: m.level })), trainerName: battle.trainer?.name ?? null };
+    const withMoves = notebook !== null && node.kind === 'wild';
+    out[node.id] = { ...from, team: battle.enemyTeam.map((m) => ({ speciesId: m.speciesId, level: m.level, ...(withMoves ? { moves: m.moves.map((s) => s.id) } : {}) })), trainerName: battle.trainer?.name ?? null };
   }
   const gym = stage.map.nodes.find((n) => n.kind === 'gym');
   const teamItem = perks('gymTeam') ?? perks('gymAce');
@@ -2025,7 +2051,9 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
   const archetype = runArchetype(content, run);
   const theme = getTheme(content, stage.themeId);
   const campaign = getCampaign(content, run.campaignId);
-  const scale = withPartyStrength(content, stage.kind === 'league' ? leagueScale(content, run.regionIndex) : levelScale(content, campaign, run.regionIndex, stage.index, node.column), run.party.map((p) => p.level));
+  // Catalog Overhaul: an event that came first may have made this battle some stages easier or harder (read once).
+  const shift = takeNodeLevelShift(run);
+  const scale = withPartyStrength(content, stage.kind === 'league' ? leagueScale(content, run.regionIndex) : levelScale(content, campaign, run.regionIndex, Math.max(0, stage.index + shift), node.column), run.party.map((p) => p.level));
   // Counts stages from the start of the run (trainer and gym teams grow with it).
   const stageNumber = run.regionIndex * campaign.stagesPerRegion + stage.index;
   const activeIndex = run.party.findIndex((p) => p.hp > 0);
@@ -2616,6 +2644,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
   if (side.kind === 'heal') {
     const before = run.party.map((m) => m.hp);
     healParty(content, run);
+    coHealStop(content, run, before);
     // Kalos step 3 (Members First): the Center gives back only part of each Pokémon's HP.
     const share = trackHealShare(content, run);
     if (share < 1) run.party.forEach((m, i) => { m.hp = Math.min(m.hp, Math.max(before[i] ?? 0, Math.ceil(maxHp(content, m) * share))); });
@@ -2755,7 +2784,20 @@ export function shopPrice(content: Content, run: RunState, entry: Content['shop'
   // Coupons lower the price; a full Point Card makes it free.
   const markup = isBlackMarket(content, run, entry) ? blackMarketMarkup(runPerks(content, run))! : 1;
   const deal = currentShopType(run) === 'pokenet' ? pokenetDeal(content, run, shopStock(content, run), shopSaleItem(content, run)) : null;
-  return Math.round(entry.price * markup * buildPriceFactor(content, run.party, entry.item) * typePriceFactor(content, run, entry.item, deal) * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * tideShopMultiplier(content, run, content.items.get(entry.item)?.category) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story) * dynamicPriceFactor(content, run, entry.item) * trackShopFactor(content, run) * blessingShopFactor(run));
+  return Math.round(entry.price * markup * buildPriceFactor(content, run.party, entry.item) * typePriceFactor(content, run, entry.item, deal) * priceMultiplier(runArchetype(content, run), entry.item, content.items.get(entry.item)?.category === 'ball') * runAttributeEffects(content, run).price * priceMultiplierFromItems(content, run) * minigameDiscount(run) * shopHoursMultiplier(content, run) * tideShopMultiplier(content, run, content.items.get(entry.item)?.category) * (shopSaleItem(content, run) === entry.item ? 1 - content.balance.shopSale.discount : 1) * npcShopFactor(content, run.story) * dynamicPriceFactor(content, run, entry.item) * trackShopFactor(content, run) * blessingShopFactor(run) * shopDealFactor(content, run, entry.item));
+}
+
+/** Tobias's lesson: this shop's one deal item and its price factor, or null without the lesson (core/mentorWorld.ts). */
+export function shopDealItem(content: Content, run: RunState): { item: string; value: number } | null {
+  const value = shopDealPerk(runPerks(content, run));
+  if (value === null) return null;
+  const item = pickShopDeal(run, shopStock(content, run));
+  return item ? { item, value } : null;
+}
+
+function shopDealFactor(content: Content, run: RunState, itemId: string): number {
+  const deal = shopDealItem(content, run);
+  return deal && deal.item === itemId ? deal.value : 1;
 }
 
 /** Base price for an item the shop doesn't list (urge items and other finds), by rarity. */
@@ -3051,6 +3093,8 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   const rng = new Rng(run.rng.battle);
   const ctx = battleContext(content, run, rng, new Rng(run.rng.capture));
   ultraMarkBattle(run);
+  coBattleBegin(content, run);
+  kantoSweetAir(content, run);
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
   run.rng.battle = rng.state;
   noteBattle(content, run);
@@ -3084,6 +3128,15 @@ function doublesAction(ctx: BattleContext, action: PlayerAction): PlayerAction {
   return { kind: 'double', commands };
 }
 
+/** Catalog Overhaul (families-c): one step on the map; a remembered scene may open beside the node reached. */
+function coStep(content: Content, run: RunState): void {
+  const eventId = coNodeEnter(content, run);
+  const stage = run.stage;
+  if (!eventId || !stage || stage.current === null || !content.events.has(eventId)) return;
+  const here = findNode(stage.map, stage.current);
+  here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId });
+}
+
 /** A Poké Doll: slips out of an ordinary wild battle. The item is used up; nothing is earned and the fight does not count as won or lost. */
 function escapeBattle(content: Content, run: RunState, itemId: string, rng: Rng, captureRng: Rng, hyperRng: Rng): TurnResult {
   const battle = run.battle!;
@@ -3091,6 +3144,7 @@ function escapeBattle(content: Content, run: RunState, itemId: string, rng: Rng,
   if (problem) throw new Error(problem);
   consumeItem(run.inventory, itemId);
   revertTransformations(content, battle, run.party, runArchetype(content, run).modifiers);
+  coFled(run);
   for (const mon of run.party) endHeldBattle(mon);
   endSignatureMoves(run.party);
   endLastResort(run);
@@ -3315,6 +3369,10 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, raidFailed: true };
   }
+  // Mentor lesson Lost Battle XP: a loss that doesn't end the run (the branches just below) pays out once.
+  if (battle.outcome === 'lose' && ((battle.event && (isPseudoBattle(content, battle.event) || isFriendlyBattle(content, battle.event) || isApprenticeBattle(content, battle.event))) || battle.event?.eventId === 'plaza:club' || (battle.narrative && getNarrativeDef(battle.narrative.id)) || storyLossApplies(run, battle, content, Boolean(battle.event) && isStoryEventBattle(content, battle.event!)))) {
+    events.push(...lostBattleXpBonus(content, run));
+  }
   if (battle.outcome === 'lose' && battle.event && isPseudoBattle(content, battle.event)) {
     // Stand With Them: a lost climax battle is Second Shot (core/arc/standWithExtended.ts); the run always goes on.
     if (isStandWithBattle(content, battle.event) && standWithOf(run)) standWithClimaxLost(run);
@@ -3463,6 +3521,7 @@ function awardExperience(content: Content, run: RunState, events: BattleEvent[])
   // White Flute: more EXP from wild battles.
   const multiplier = xpMultiplier(runArchetype(content, run)) * content.balance.difficulty.xpScale * (getMode(run.rules.modeId)?.xpScale ?? 1) * (battle.doubles ? 1 : singleBattleXpPerk(runArchetype(content, run).modifiers)) * effects.exp * (battle.autoUsed ? content.balance.difficulty.autoBattleXp : 1) * mutatorXp(run) * (battle.kind === 'wild' ? wildExpMultiplier(content, run) : 1) * (run.expansion?.pacing ? content.balance.stage.pacing.expMultiplier : 1);
   const underdog = underdogXpMultiplier(content, run.party, battle.enemyTeam);
+  const lostXp = lostBattleXpReady(run) ? lostBattleXpMultiplier(archetype.modifiers) : 1;
   const out: RunEvent[] = [];
   for (const e of events) {
     out.push(e);
@@ -3506,6 +3565,11 @@ function awardExperience(content: Content, run: RunState, events: BattleEvent[])
       // Experience a capped Pokémon cannot use is banked and pays out Bag items (ideas S61).
       bankOverflowXp(content, run, amount - (mon.xp - xpBefore));
       out.push({ type: 'xp', uid, amount });
+      // Mentor lesson Lost Battle XP: remember what each Pokémon earned this battle, in case the battle is lost.
+      if (lostXp > 1) {
+        const lesson = (battle.lesson ??= {});
+        lesson.xp = { ...lesson.xp, [uid]: (lesson.xp?.[uid] ?? 0) + amount };
+      }
       if (result.levelsGained > 0) {
         out.push({ type: 'levelUp', uid, level: result.newLevel });
         growthOnLevelUp(content, mon, result.newLevel - result.levelsGained);
@@ -3516,6 +3580,43 @@ function awardExperience(content: Content, run: RunState, events: BattleEvent[])
         out.push({ type: 'wantsMove', uid, moveId });
         run.pending.push({ kind: 'learnMove', uid, moveId });
       }
+    }
+  }
+  return out;
+}
+
+const LOST_BATTLE_XP_USED = 'used:lostBattleXp';
+
+/** The Lost Battle XP lesson is waiting (not yet used up by a survivable loss). */
+function lostBattleXpReady(run: RunState): boolean {
+  return (run.itemCounters?.[LOST_BATTLE_XP_USED] ?? 0) === 0;
+}
+
+/**
+ * Mentor lesson Lost Battle XP: at the first loss that doesn't end the run, each Pokémon gets (value - 1) times the
+ * experience it earned during that battle on top, and the lesson is used up. Draws no random number.
+ */
+function lostBattleXpBonus(content: Content, run: RunState): RunEvent[] {
+  const value = lostBattleXpMultiplier(runArchetype(content, run).modifiers);
+  if (value <= 1 || !lostBattleXpReady(run)) return [];
+  run.itemCounters = { ...run.itemCounters, [LOST_BATTLE_XP_USED]: 1 };
+  const out: RunEvent[] = [];
+  for (const [uid, earned] of Object.entries(run.battle?.lesson?.xp ?? {})) {
+    const mon = run.party.find((p) => p.uid === uid);
+    const amount = Math.floor(earned * (value - 1));
+    if (!mon || amount <= 0) continue;
+    const xpBefore = mon.xp;
+    const result = gainXp(content, mon, amount, runLevelCap(content, run));
+    bankOverflowXp(content, run, amount - (mon.xp - xpBefore));
+    out.push({ type: 'xp', uid, amount });
+    if (result.levelsGained > 0) {
+      out.push({ type: 'levelUp', uid, level: result.newLevel });
+      growthOnLevelUp(content, mon, result.newLevel - result.levelsGained);
+    }
+    for (const moveId of result.learnedMoves) out.push({ type: 'learnedMove', uid, moveId });
+    for (const moveId of result.skippedMoves) {
+      out.push({ type: 'wantsMove', uid, moveId });
+      run.pending.push({ kind: 'learnMove', uid, moveId });
     }
   }
   return out;
@@ -3717,6 +3818,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
 
   const evolutions: BattleEndResult['evolutions'] = [];
   for (const mon of noEvolution(run.rules) ? [] : run.party) {
+    // Fenwick's lesson: held back from an evolution it was ready for, it grows a little stronger instead.
+    noteDeclinedEvolution(content, runPerks(content, run), mon, run.regionOrder[run.regionIndex], evolutionLevelOffset(runArchetype(content, run).modifiers), bondEvolves(content, run, mon));
     for (const evo of evolveFully(content, mon, run.regionOrder[run.regionIndex], evolutionLevelOffset(runArchetype(content, run).modifiers), bondEvolves(content, run, mon))) {
       evolutions.push({ ...evo, uid: mon.uid });
       // Ideas W5 (F171): a diary snippet in the Chronicle; text only, no state change.
@@ -3837,6 +3940,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
       if (run.party.length === 1) count(run, 'bossWinsSolo');
     } else {
       count(run, battle.kind === 'wild' ? 'wildDefeated' : 'trainersDefeated');
+      if (battle.kind === 'wild' && !battle.event) coWildKo(run);
       if (battle.kind === 'trainer' && battle.trainer && !battle.trainer.leaderId && !battle.event && !battle.rival) noteFoe(run, battle.trainer.name, battle.trainer.classId);
     }
   }
@@ -3992,6 +4096,9 @@ export function continueAfterDecisions(content: Content, run: RunState): void {
   } else {
     run.phase = 'map';
     settleChain(run);
+    // Catalog Overhaul: the event that came before this node's battle is done, so the battle starts now.
+    const held = releaseNodeBattle(content, run);
+    if (held) fightNode(content, run, held);
   }
 }
 

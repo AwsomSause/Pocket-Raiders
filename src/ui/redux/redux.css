@@ -92,3 +92,5 @@
 
 @keyframes rx-pop{0%{scale:.2;opacity:0}60%{scale:1.15;opacity:1}100%{scale:1}}
 .rx .rx-pop{animation:rx-pop .45s ease-out both}.rx.calm .rx-pop{animation:none}
+@keyframes rx-more{from{translate:0 0}to{translate:0 3px}}
+.rx .rx-more{animation:rx-more .6s ease-in-out infinite alternate}.rx.calm .rx-more{animation:none}

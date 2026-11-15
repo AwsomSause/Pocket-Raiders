@@ -13,7 +13,7 @@ import { content } from './helpers';
 
 const begin = (seed: string, on = true) => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', ...(on ? { expansion: { kantoCanon: true } } : {}) }), 0);
 const kantoSeeds = (() => { const out: string[] = []; for (let i = 0; out.length < 30 && i < 400; i++) if (begin(`K${i}`, false).regionOrder[0] === 'kanto') out.push(`K${i}`); return out; })();
-const mine = [...content.events.values()].filter((e) => /^cs-kanto-(viridian|indigo|route|cast)-/.test(e.id));
+const mine = [...content.events.values()].filter((e) => !e.disabled && /^cs-kanto-(viridian|indigo|route|cast)-/.test(e.id));
 const stops = (run: ReturnType<typeof begin>, prefix: string) => run.stage!.map.nodes.flatMap((n) => n.sides.filter((s) => s.id.startsWith(prefix)).map((s) => s.eventId!));
 const nexts = (id: string) => content.events.get(id)!.choices.flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])]).flatMap((x) => (x.kind === 'addEvent' ? [x.eventId] : []));
 
@@ -25,10 +25,10 @@ describe('Viridian, Indigo, road and cast events: data', () => {
   });
   it('every road entry names a real event with a stage window', () => {
     for (const r of canonRoutesKanto.routes) expect(content.events.has(r.event), r.event).toBe(true);
-    expect(canonRoutesKanto.routes.filter((r) => r.event.startsWith('cs-kanto-route-')).length).toBe(16);
+    expect(canonRoutesKanto.routes.filter((r) => r.event.startsWith('cs-kanto-route-')).length).toBe(15); // the Badge Check is a fixed Stage 8 stop now (KANTO_PLACED_2)
   });
   it('Cerulean Cave only opens from the top of Victory Road, and the road is seven nodes', () => {
-    const into = mine.filter((e) => nexts(e.id).includes('cs-kanto-indigo-cave')).map((e) => e.id);
+    const into = mine.filter((e) => !e.disabled && nexts(e.id).includes('cs-kanto-cerulean-cave')).map((e) => e.id);
     expect(into).toEqual(['cs-kanto-indigo-road-n7']);
     let at = 'cs-kanto-indigo-road-n1', n = 1;
     while (nexts(at).some((t) => /road-n\d/.test(t))) { at = nexts(at).find((t) => /road-n\d/.test(t))!; n++; }
@@ -68,10 +68,11 @@ describe('Viridian before Stage 1, the Plateau finale and the road events in a r
   it('a Kanto run with canon on starts with the Old Man and Route 22 on the stage 1 map', () => {
     for (const seed of kantoSeeds.slice(0, 10)) {
       const run = begin(seed);
-      const open = stops(run, 'cx-open');
+      // Must-see spaces (the Old Man, Route 22) sit on every node of their step, so every route meets them.
+      const open = [...new Set(stops(run, 'cx-open'))];
       expect(open).toContain('cs-kanto-viridian-oldman');
       expect(open).toContain('cs-kanto-viridian-route22');
-      expect(open.length).toBeLessThanOrEqual(4);
+      expect(open.length).toBeLessThanOrEqual(5); // two Always, two from the Roll, and the Spearow Storm (a Trigger, KANTO_PLACED_3)
       expect(run.expansion!.canon!.menus['interlude-0']!.slice(0, 2)).toEqual(['cs.kanto.viridian.oldman', 'cs.kanto.viridian.route22']);
     }
   });
@@ -102,6 +103,8 @@ describe('Viridian before Stage 1, the Plateau finale and the road events in a r
     addFinaleCanonStops(content, run);
     const first = run.stage!.map.nodes.find((n) => n.column === 1)!;
     expect(first.sides.map((s) => s.eventId)).toEqual(['cs-kanto-indigo-road']);
+    // KANTO_PLACED_4: the Village at the Gate (the finale's Town node) sits on the second fight, after Victory Road.
+    expect(run.stage!.map.nodes.filter((n) => n.column === 2).flatMap((n) => n.sides.map((s) => s.eventId))).toContain('cs-kanto-indigo-village');
     addOpeningCanonStops(content, run); // not a stage: adds nothing
     addRouteCanonStops(content, run);
     expect(stops(run, 'cx-open')).toEqual([]);
@@ -129,7 +132,7 @@ describe('Viridian, Indigo, road and cast events: playing them', () => {
       const before = structuredClone(begin(kantoSeeds[0]!));
       before.seed = `OM${i}`;
       const { run, sideId } = debugForceEvent(content, before, 'cs-kanto-viridian-oldman');
-      const out = chooseEvent(content, run, sideId, 0).run;
+      const out = chooseEvent(content, run, sideId, 1).run; // "Let me try." (80%; else the Coffee Joke)
       if (out.battle) { coffee++; expect(out.battle.kind).toBe('wild'); } else {
         lesson++;
         expect((out.inventory['poke-ball'] ?? 0) - (before.inventory['poke-ball'] ?? 0)).toBe(5);
@@ -144,7 +147,7 @@ describe('Viridian, Indigo, road and cast events: playing them', () => {
     const { run, sideId } = debugForceEvent(content, structuredClone(begin(kantoSeeds[0]!)), 'cs-kanto-viridian-route22');
     const out = chooseEvent(content, run, sideId, 0).run;
     expect(out.battle?.kind).toBe('trainer');
-    expect(out.expansion!.canon!.flags).toContain('kanto.route22.fought');
+    expect(out.expansion!.canon!.flags).toContain('kanto.route22.first');
   });
   it('Route 22 with a registered rival gives the Rival Token mark and starts the fight (it used to throw "Unknown rival mark")', () => {
     // Play on until the run has met a rival and is back on the map.

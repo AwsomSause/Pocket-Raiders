@@ -32,8 +32,17 @@ export const CanonSpaceSchema = z.object({
   length: z.number().int().positive().nullable(),
   /** Run flags the space writes, as listed in its spec. */
   flags: z.array(flag),
-  /** The section number in CANON_SPACES_KANTO.md, for tracing. */
+  /** The section number in CANON_SPACES_KANTO.md, or the KANTO_PLACED heading, for tracing. */
   section: z.string(),
+  /** Catalog overhaul (KANTO_PLACED_*.md): where the space sits on the 20-step map. Missing on spaces the placed docs do not cover. */
+  placed: z.object({
+    stage: z.array(z.number().int().min(1).max(8)), home: z.number().int().min(1).max(20), window: z.tuple([z.number().int(), z.number().int()]).optional(),
+    sits: z.enum(['must', 'optional', 'town', 'plus', 'door', 'hub']), attaches: z.enum(['before', 'instead', 'after', 'town', 'plus']),
+    badge: z.string(), level: z.number().int().min(-2).max(2).nullable(), often: z.string(),
+    /** A different home step at a later Kanto stage (Route 22: Step 3 at Stage 1, Step 18 at Stage 8). Keyed by stage number. */
+    homes: z.record(z.string(), z.number().int().min(1).max(20)).optional(),
+    tags: z.array(z.string()).optional(),
+  }).optional(),
 });
 export type CanonSpace = z.infer<typeof CanonSpaceSchema>;
 
@@ -58,13 +67,15 @@ export const CanonSpacesFileSchema = z.object({
 export type CanonSpacesFile = z.infer<typeof CanonSpacesFileSchema>;
 
 /** Row counts the content gate holds the catalog to. */
-export const CANON_KANTO_COUNTS = { towns: 10, slots: 11, spaces: 71 } as const;
+export const CANON_KANTO_COUNTS = { towns: 11, slots: 11, spaces: 194 } as const;
 
 /** The run's canon state (stored at run.expansion.canon). A menu is rolled once per slot and then kept, so reloading never re-rolls it. */
 export const CanonStateSchema = z.object({
   flags: z.array(flag).default([]),
   completed: z.array(spaceId).default([]),
   menus: z.record(z.string(), z.array(spaceId)).default({}),
+  /** Route 5 Day-Care (catalog overhaul): Pokémon left for a stage (PokemonInstance rows); they come back +3 levels at the next stage. */
+  daycare: z.object({ mons: z.array(z.unknown()), pair: z.boolean() }).optional(),
   /** Saffron: party members waiting while one Pokémon fights alone (PokemonInstance rows; checked where they are used). */
   stash: z.array(z.unknown()).optional(),
   /** Accessibility: a loss in Sabrina's Labyrinth resumes from the last room reached instead of starting over (setting `labyrinthResume`). */
@@ -109,17 +120,21 @@ export function buildTownMenu(file: CanonSpacesFile, input: TownMenuInput): stri
   const menu: CanonSpace[] = [];
   const onMenu = new Set<string>(input.completed);
   const add = (sp: CanonSpace) => { menu.push(sp); onMenu.add(sp.id); };
+  // Viridian has two visits: a space the docs place at Stage 8 only waits for the return, and the return only offers Stage 8 spaces.
+  const at8 = slot.slot === 'stage-8';
+  const fits = (sp: CanonSpace) => !sp.placed || slot.town !== 'viridian' || (at8 ? sp.placed.stage.includes(8) : sp.placed.stage.some((n) => n !== 8));
 
   if (slot.always) for (const id of slot.always) { if (!RETIRED_SPACES.has(id)) add(file.spaces.find((s) => s.id === id)!); }
-  else for (const sp of inTown) if (sp.appears === 'always') add(sp);
-  for (const sp of inTown) if ((sp.appears === 'trigger' || sp.appears === 'locked') && met(sp, input.flags, input.completed) && !owned(sp)) add(sp);
+  else for (const sp of inTown) if (sp.appears === 'always' && fits(sp)) add(sp);
+  for (const sp of inTown) if ((sp.appears === 'trigger' || sp.appears === 'locked') && fits(sp) && !input.completed.has(sp.id) && met(sp, input.flags, input.completed) && !owned(sp)) add(sp);
 
   const rng = new Rng(hashSeed(`${input.seed}::canon.townroll::${input.slot}`));
   const want = slot.stage >= 4 ? file.townRoll.late : file.townRoll.early;
   let drawn = 0;
   while (drawn < want) {
     const psCount = menu.filter((s) => s.kind === 'PS').length;
-    const pool = inTown.filter((sp) => sp.appears === 'roll' && !onMenu.has(sp.id) && !owned(sp) && met(sp, input.flags, onMenu) && !(sp.kind === 'PS' && psCount >= file.townRoll.maxPseudoStages));
+    // The Stage 8 return only rolls what the docs put at Stage 8 (a space placed at Stage 1 only stays there).
+    const pool = inTown.filter((sp) => sp.appears === 'roll' && fits(sp) && !onMenu.has(sp.id) && !owned(sp) && met(sp, input.flags, onMenu) && !(sp.kind === 'PS' && psCount >= file.townRoll.maxPseudoStages));
     if (pool.length === 0) break;
     add(pool[rng.int(0, pool.length - 1)]!);
     drawn++;

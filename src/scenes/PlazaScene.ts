@@ -160,7 +160,8 @@ export class PlazaScene extends Phaser.Scene {
             tab: 0,
             buttons: [...districts.map((d) => ({ label: d.name, small: d.count ? String(d.count) : '', off: d.locked })), { label: 'Leave' }],
             index: this.focus,
-            lineup,
+            // The column layout has less ground to stand on.
+            lineup: c.v(3) === 1 ? lineup.slice(0, 11) : lineup,
             say: this.rxSay,
             note: this.focus < districts.length ? blurbOf(districts[this.focus]!) : 'Back to the stage map.',
             hints: [['←→', 'walk'], ['Enter', 'open'], ['Esc', 'leave']],
