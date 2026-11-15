@@ -167,6 +167,14 @@ export const PokemonInstanceSchema = z.object({
   bondWith: z.string().optional(),
   /** Beta 0.5 M1: moves this Pokémon has mastered (trainer-side move mastery; core/trainerWorld). */
   mastered: z.array(z.string()).optional(),
+  /** Catalog Overhaul (run v44): a quirk id (core/co/quirks.ts), e.g. a homesick Poipole or a traded Pokémon's habit. */
+  quirk: z.string().optional(),
+  /** Catalog Overhaul (run v44): marks it carries from its story ("alpha", "traded"...); shown on its summary. */
+  marks: z.array(z.string()).max(8).optional(),
+  /** Catalog Overhaul (run v44): its original trainer's name when it came from someone else (a trade). */
+  ot: z.string().optional(),
+  /** Catalog Overhaul (run v44): one line about where its quirk came from. */
+  quirkNote: z.string().optional(),
 });
 export type PokemonInstance = z.infer<typeof PokemonInstanceSchema>;
 

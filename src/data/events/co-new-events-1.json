@@ -4701,6 +4701,7 @@
         "types": [],
         "levelBonus": 0,
         "shinyMultiplier": 1,
+        "asIs": true,
         "quirk": "homesick"
        },
        {

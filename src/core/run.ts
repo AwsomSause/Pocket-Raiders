@@ -104,6 +104,7 @@ import { growGarden } from './berries';
 import { layEgg, tickEggs } from './eggs';
 import { spendTakenNode } from './co/takeNode';
 import { partnerOwed, quietWildWeight, spendPartner } from './co/neRules';
+import { quirkBadgeBond } from './co/quirks';
 import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
@@ -3032,6 +3033,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     manualMega: true,
     hyper: hyperRng ? buildHyperContext(content, run, hyperRng) : undefined,
     moments: content.balance.pokemonMoments === false ? undefined : pokemonMomentHooks(content, run),
+    quirkFlags: run.story.flags,
     teamItems: run.passives,
     noBattleItems: noBattleItems(run.rules),
     setStyle: isHardcore(run.rules),
@@ -3788,6 +3790,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (badge) {
     run.badges.push(badge);
     noteGymWin(content, run, badge);
+    // Catalog Overhaul quirks: a Pokémon that loves Gym days grows fonder with each badge.
+    quirkBadgeBond(content, run, (mon, amount) => changeFriendship(content, mon, amount));
     mentorBadgeWon(content, run);
     // Coin Case: interest on the money held; Fashion Case: Charisma per stage cleared.
     const interest = Math.floor((run.money * passivePercent(content, run, 'gymInterest')) / 100);

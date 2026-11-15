@@ -690,7 +690,7 @@ const NE21: Json[] = [
     'Researcher Wicke\'s assistant is holding the box. She hasn\'t opened it.',
   ), [
     ch('Keep it warm until the hole grows (a node, with a Fire-type).', out(P('It rides in your hood, shivering, with your Fire-type walking close beside. By evening its colour has come back, purple first.', 'At midnight the hole is the size of a door. It looks at you, and at the warm one, and goes home.', 'Hyacinth gives you the Beast Ball it never needed.'), takeNode(), flag('beast-sent-home'), bondUp(1, { types: ['fire'] }), item('beast-ball')), { requires: [ptype('fire')] }),
-    ch('Take it with me.', out(P('It comes. It watches the sky every night, the wrong part of the sky, where its home isn\'t.', 'It is homesick, and it will fight like it until it trusts you.'), flag('poipole-taken'), { ...join({ species: ['poipole'] }), quirk: 'homesick' })),
+    ch('Take it with me.', out(P('It comes. It watches the sky every night, the wrong part of the sky, where its home isn\'t.', 'It is homesick, and it will fight like it until it trusts you.'), flag('poipole-taken'), { ...join({ species: ['poipole'] }), asIs: true, quirk: 'homesick' })),
     ch('Hand it to the Foundation.', out('Hyacinth closes the box herself, gently. It is safe, and it will be studied. She gives you a Beast Ball and can\'t quite look at you.', flag('beast-boxed'), item('beast-ball'))),
   ]),
 ];

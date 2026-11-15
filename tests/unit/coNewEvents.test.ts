@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { EventDefSchema, type EventDef } from '../../src/core/contentSchema';
+import { allQuirks } from '../../src/core/co/quirks';
 import { content } from './helpers';
 
 const files = fs.readdirSync('src/data/events').filter((f) => f.startsWith('co-new-events-'));
@@ -48,6 +49,7 @@ describe('new events (catalog overhaul row 17)', () => {
         if (k === 'typeItem') for (const id of Object.values(n.table as Record<string, string>)) if (!itemOk(id)) missing.push(`${e.id}: item ${id}`);
         if ((k === 'wild' || k === 'join') && Array.isArray(n.species)) for (const s of n.species as string[]) if (!content.species.has(s)) missing.push(`${e.id}: species ${s}`);
         if (k === 'teachMove' && !content.moves.has(n.move as string)) missing.push(`${e.id}: move ${String(n.move)}`);
+        if (k === 'join' && typeof n.quirk === 'string' && !allQuirks().has(n.quirk)) missing.push(`${e.id}: quirk ${n.quirk}`);
         if ((k === 'addEvent' || k === 'laterEvent') && !content.events.has((n.eventId ?? n.id) as string)) missing.push(`${e.id}: event ${String(n.eventId ?? n.id)}`);
       });
     }
@@ -55,8 +57,8 @@ describe('new events (catalog overhaul row 17)', () => {
   });
 
   it('the schema keeps every field they use (nothing is silently dropped)', () => {
-    // Fields another thread is still pushing: legends' Alpha fight (`alpha`), this thread's quirks (`quirk`).
-    const PENDING = new Set(['alpha', 'quirk']);
+    // Fields another thread is still pushing: legends' Alpha fight (`alpha`).
+    const PENDING = new Set(['alpha']);
     const dropped: string[] = [];
     const diff = (a: unknown, b: unknown, path: string) => {
       if (Array.isArray(a)) a.forEach((x, i) => diff(x, (b as unknown[] | undefined)?.[i], path));
