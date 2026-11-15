@@ -56,6 +56,10 @@ import { currencyChip, drawLogo } from '../ui/showcase';
 import { legacyRotation, type RotationEntry } from '../core/legacyRuns';
 import { HUB_TOWN, type HubPlace } from '../core/hubTown/schema';
 import { chooseHubPokemon, hubPokemon, hubPokemonChoices, placeById } from '../core/hubTown/world';
+import { pokemonHeightM } from '../core/heights';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { dockView, type DockFigure } from '../ui/redux/screens/hub';
+import { monFile } from '../ui/redux/game';
 import { boughtToday, buyFromMerchant, merchantProblem, merchantStock } from '../core/hubTown/merchant';
 import { cardBackground, localDay } from '../core/town';
 import { HubTownView } from '../ui/hubTown/townView';
@@ -81,7 +85,7 @@ import { sortTrainers, TRAINER_SORT_KEYS, TRAINER_SORT_LABELS } from '../core/tr
 import { hubArrivalNotice, openTools } from './hubTools';
 import { device } from '../game/deviceTools';
 
-type Room = 'run' | 'archive' | 'achievements' | 'bank' | 'attributes' | 'history' | 'quests' | 'mastery' | 'research' | 'codex' | 'wardrobe' | 'card' | 'events' | 'fame' | 'legacy' | 'memories' | 'mentors' | 'tales' | 'tree' | 'prestige' | 'network' | 'museum' | 'books' | 'chains' | 'intel' | 'moves' | 'seeds' | 'nook' | 'merchant' | 'hubmon' | 'hubtown' | 'lobby' | 'options' | 'save' | 'tools' | 'town' | 'back';
+type Room = 'run' | 'archive' | 'achievements' | 'bank' | 'attributes' | 'history' | 'quests' | 'mastery' | 'research' | 'codex' | 'wardrobe' | 'card' | 'events' | 'fame' | 'legacy' | 'memories' | 'mentors' | 'tales' | 'tree' | 'prestige' | 'network' | 'museum' | 'books' | 'chains' | 'intel' | 'moves' | 'seeds' | 'nook' | 'merchant' | 'hubmon' | 'hubtown' | 'lobby' | 'dock' | 'options' | 'save' | 'tools' | 'town' | 'back';
 
 const ALL_ROOMS: { room: Room; label: string; blurb: string }[] = [
   { room: 'run', label: 'Start a run', blurb: 'Choose a trainer and a starter, then set off.' },
@@ -121,6 +125,7 @@ const ALL_ROOMS: { room: Room; label: string; blurb: string }[] = [
   { room: 'hubmon', label: 'Walking Pokémon', blurb: 'Choose the Pokémon you walk Hub Town as. Your party and runs never change.' },
   { room: 'hubtown', label: 'Hub Town', blurb: 'Walk the town as your Pokémon: every room is a building (Settings > Hub style makes it the Hub).' },
   { room: 'lobby', label: 'Arena Lobby', blurb: 'Back to the Arena Lobby menu.' },
+  { room: 'dock', label: 'Hub dock', blurb: 'Back to the Hub dock and its buttons.' },
 ];
 const ROOMS = ALL_ROOMS;
 
@@ -195,7 +200,42 @@ const PAUSE_ROOMS: Room[] = ['options', 'hubmon', 'save', 'tools', 'back'];
 let townVisit = false;
 const lobbyHub = (): boolean => services().session.settings.hubStyle === 'lobby' && !townVisit;
 /** The pause menu's rooms: a visit from the Arena Lobby also offers the way back to it. */
-const pauseRooms = (): Room[] => (services().session.settings.hubStyle === 'lobby' ? ['lobby', ...PAUSE_ROOMS] : PAUSE_ROOMS);
+const pauseRooms = (): Room[] => (services().session.settings.hubStyle === 'lobby' ? ['lobby', ...PAUSE_ROOMS] : reduxOn() ? ['dock', ...PAUSE_ROOMS] : PAUSE_ROOMS);
+
+/**
+ * New UI: the Hub opens as the mock-ups' dock (two tabs of six buttons under a line-up of Pokémon) unless the Hub
+ * style is the Arena Lobby. Its Town page walks Hub Town (`townVisit`) until the pause menu's "Hub dock".
+ */
+const dockHub = (): boolean => reduxOn() && services().session.settings.hubStyle !== 'lobby' && !townVisit;
+interface DockEntry { label: string; rooms: Room[] }
+const DOCK: { tab: string; buttons: DockEntry[] }[] = [
+  {
+    tab: 'Town',
+    buttons: [
+      { label: 'Settings', rooms: PAUSE_ROOMS },
+      { label: 'Trainers', rooms: ['archive', 'quests', 'mentors', 'network', 'card', 'wardrobe'] },
+      { label: 'New Run', rooms: ['run'] },
+      { label: 'Events', rooms: ['events', 'tales', 'chains', 'achievements', 'nook'] },
+      { label: 'Unlocks', rooms: ['bank', 'attributes', 'tree', 'prestige', 'research', 'mastery', 'moves', 'books', 'museum', 'intel'] },
+      { label: 'Town', rooms: ['hubtown', 'town', 'merchant'] },
+    ],
+  },
+  {
+    tab: 'Last run',
+    buttons: [
+      { label: 'Hall of Fame', rooms: ['fame'] },
+      { label: 'Team', rooms: ['legacy'] },
+      { label: 'Run History', rooms: ['history'] },
+      { label: 'Memories', rooms: ['memories'] },
+      { label: 'Moments', rooms: ['codex'] },
+      { label: 'Seeds', rooms: ['seeds'] },
+    ],
+  },
+];
+/** Where the dock's cursor was, so coming back from a room lands on the same button (the middle one at first). */
+const dockSpot = { tab: 0, index: 2 };
+/** The mock-up's own line-up: it fills the ground line while the profile has few Pokémon of its own to show. */
+const DOCK_WELCOME = ['charizard', 'lucario', 'garchomp', 'gengar', 'pikachu', 'gyarados', 'snorlax', 'dragonite', 'eevee', 'tyranitar', 'turtwig', 'mewtwo', 'bulbasaur'];
 
 /** What the keepers say before they open their place (Hub Town spec §5). */
 const KEEPERS: Record<string, { name: string; line: (p: Profile) => string }> = {
@@ -234,6 +274,12 @@ export class HubScene extends Phaser.Scene {
   period: Period = 'afternoon';
   indicators: HubIndicators | null = null;
   private lobbyPokemon: Species[] = [];
+  /** New UI: the dock while the Hub shows it (null in Hub Town and the Arena Lobby). */
+  private dock: ReduxView | null = null;
+  private dockLayout = 0;
+  /** The bubble over the dock's line-up: the arrival notice or a rival's note, for a few seconds. */
+  private dockSay = '';
+  private rivalLine = '';
 
   constructor() {
     super('Hub');
@@ -252,6 +298,8 @@ export class HubScene extends Phaser.Scene {
       preloadPokemon(this, this.lobbyPokemon, { front: true });
       return;
     }
+    // The dock draws on the New UI layer and loads its own pictures.
+    if (dockHub()) return;
     const keeperArt = HUB_TOWN.keepers.map((k) => overworldAssetIds.trainer(k.sprite));
     // Date.now (not new Date()) so tests that pin the clock get the same crowd.
     this.crowdWindow = crowdWindow(new Date(Date.now()));
@@ -308,9 +356,11 @@ export class HubScene extends Phaser.Scene {
         busy: () => Boolean(this.picker || this.section || this.dexInfo),
         onTile: (t) => this.openLobbyTile(t, 0),
       });
-    } else this.buildTown(p, motion, ready);
+    } else if (!dockHub()) this.buildTown(p, motion, ready);
 
+    this.dock = null;
     this.drawHeader(data, ready);
+    if (!this.lobby && dockHub()) this.buildDock(data.notice, ready);
 
     // Reopened for a room (after buying or changing something): open that room's place page again.
     if (data.focus !== undefined) this.reopen(ROOMS[Math.min(data.focus, ROOMS.length - 1)]!.room);
@@ -380,6 +430,7 @@ export class HubScene extends Phaser.Scene {
 
     // Living Rival: a letter or a visit from a rival of a finished run; every Hub visit changes which.
     const rivalNote = hubRivalNote(p.rivalArchive, rotationVisits * 7 + p.stats.runsEnded, { achievements: earned, runsEnded: p.stats.runsEnded, nickname: rivalNickname(p.legacyRuns), expression: rivalMood(p.legacyRuns).expression, ...(headToHead(p.legacyRuns)[0] ? { board: scoreboardLine(headToHead(p.legacyRuns)[0]!) } : {}) });
+    this.rivalLine = rivalNote?.text ?? '';
     if (rivalNote) {
       const note = this.add
         .text(GAME_WIDTH / 2, data.notice ? 160 : 110, rivalNote.text, textStyle(16, rivalNote.tone === 'sharp' ? COLORS.gold : COLORS.textLight, { align: 'center', wordWrap: { width: GAME_WIDTH - 160 }, stroke: '#10203a', strokeThickness: 4 }))
@@ -404,6 +455,17 @@ export class HubScene extends Phaser.Scene {
       const tile = this.lobby.tileFor(room);
       this.lobby.focus(tile.id, false);
       if (tile.rooms.length > 1) this.openLobbyTile(tile, tile.rooms.indexOf(room));
+      return;
+    }
+    if (this.dock) {
+      const tab = DOCK.findIndex((t) => t.buttons.some((b) => b.rooms.includes(room)));
+      if (tab < 0) return;
+      const index = DOCK[tab]!.buttons.findIndex((b) => b.rooms.includes(room));
+      const b = DOCK[tab]!.buttons[index]!;
+      dockSpot.tab = tab;
+      dockSpot.index = index;
+      this.dock.refresh();
+      if (b.rooms.length > 1) this.openSection({ name: b.label, rooms: b.rooms }, b.rooms.indexOf(room));
       return;
     }
     if (pauseRooms().includes(room)) this.openPause(pauseRooms().indexOf(room));
@@ -496,6 +558,121 @@ export class HubScene extends Phaser.Scene {
   }
 
   /** Esc in town: settings, the Pokémon you walk as, save data, tools, and the way back to the title screen. */
+  // ---------- New UI: the dock ----------
+
+  /** Who stands on the dock's ground line: the Pokémon you walk as, your last team, past Aces, your most used, then the mock-up's own. */
+  private dockLineup(): DockFigure[] {
+    const { session } = services();
+    const p = session.profile;
+    const want: { id: string; shiny: boolean }[] = [];
+    const add = (id: string | null | undefined, shiny = false): void => {
+      if (id && want.length < 40 && session.content.species.has(id) && !want.some((x) => x.id === id)) want.push({ id, shiny });
+    };
+    add(hubPokemon(p).speciesId);
+    for (const m of p.legacyRuns[0]?.team ?? []) add(m.speciesId, m.shiny);
+    for (const e of this.entries) add(e.ace?.speciesId, e.ace?.shiny);
+    for (const id of hubPokemonChoices(p)) add(id);
+    for (const id of DOCK_WELCOME) add(id);
+    const out: DockFigure[] = [];
+    for (const w of want) {
+      if (out.length >= 13) break;
+      const file = monFile(this, w.id, 'front', w.shiny);
+      // The mock-up draws each Pokémon at its real height: 62 pixels to the metre, between 0.3 m and 3 m.
+      if (file) out.push({ art: { file, atlas: true }, scale: 1, px: Math.round(Math.max(0.3, Math.min(3, pokemonHeightM(session.content.species.get(w.id)!))) * 62) });
+    }
+    return out;
+  }
+
+  private buildDock(notice: string | undefined, ready: number): void {
+    const { session } = services();
+    const lineup = this.dockLineup();
+    this.dockSay = notice ?? (this.rivalLine || (ready ? `${ready} trainer${ready === 1 ? ' is' : 's are'} ready to claim. Look under Trainers.` : ''));
+    if (this.dockSay) this.time.delayedCall(7000, () => { this.dockSay = ''; this.dock?.refresh(); });
+    dockSpot.tab = Phaser.Math.Clamp(dockSpot.tab, 0, DOCK.length - 1);
+    dockSpot.index = Phaser.Math.Clamp(dockSpot.index, 0, DOCK[dockSpot.tab]!.buttons.length - 1);
+    this.dock = mountRedux(this, {
+      render: (c) => {
+        this.dockLayout = c.v(3);
+        const p = session.profile;
+        const tab = DOCK[dockSpot.tab]!;
+        return dockView(c, {
+          town: 'Hub Town',
+          chips: [`₽ ${p.bankCredits.toLocaleString('en-US')}`, `Rank ${prestigeRank(p)}`],
+          tabs: DOCK.map((t) => t.tab),
+          tab: dockSpot.tab,
+          buttons: tab.buttons.map((x) => ({ label: x.label, small: x.label === 'Trainers' && ready ? String(ready) : '' })),
+          index: dockSpot.index,
+          lineup,
+          say: this.dockSay,
+          // The mock-up's dock has no line about the focused button and only names its keys under the row of buttons.
+          note: '',
+          hints: this.dockLayout === 0 ? [['↓', 'switch tab'], ['Enter', 'open']] : [],
+        });
+      },
+      acts: {
+        pick: (k) => { if (this.dockFree()) { dockSpot.index = Phaser.Math.Clamp(Number(k), 0, DOCK[dockSpot.tab]!.buttons.length - 1); this.dockOpen(); } },
+        tab: (k) => { if (this.dockFree()) this.dockTab(Number(k)); },
+      },
+      overs: { over: (k) => { const i = Number(k); if (this.dockFree() && i !== dockSpot.index && i >= 0 && i < DOCK[dockSpot.tab]!.buttons.length) { dockSpot.index = i; this.dock?.refresh(); } } },
+    });
+  }
+
+  /** The dock only listens while no room, page or info card is open over it. */
+  private dockFree(): boolean {
+    return Boolean(this.dock) && !this.picker && !this.section && !this.dexInfo;
+  }
+
+  private dockTab(tab: number): void {
+    const next = ((tab % DOCK.length) + DOCK.length) % DOCK.length;
+    if (next === dockSpot.tab) return;
+    dockSpot.tab = next;
+    dockSpot.index = Math.min(dockSpot.index, DOCK[next]!.buttons.length - 1);
+    playSfx(this, 'ui.move');
+    this.dock?.refresh();
+  }
+
+  private dockOpen(): void {
+    const b = DOCK[dockSpot.tab]!.buttons[dockSpot.index]!;
+    this.dockSay = '';
+    this.dock?.refresh();
+    playSfx(this, 'ui.select');
+    if (b.rooms.length === 1) this.enter(b.rooms[0]!);
+    else this.openSection({ name: b.label, rooms: b.rooms }, 0);
+  }
+
+  /** Keys on the dock. The buttons sit in a row, a column or a three-wide grid (by theme), and the arrows follow that. */
+  private dockKey(a: InputAction): void {
+    const n = DOCK[dockSpot.tab]!.buttons.length;
+    const move = (by: number): void => {
+      dockSpot.index = (dockSpot.index + by + n) % n;
+      playSfx(this, 'ui.move');
+      this.dock?.refresh();
+    };
+    if (a === 'confirm') return this.dockOpen();
+    if (a === 'back') { this.scene.start('MainMenu'); return; }
+    const v = this.dockLayout;
+    if (v === 1) {
+      if (a === 'up') move(-1);
+      else if (a === 'down') move(1);
+      else if (a === 'left') this.dockTab(dockSpot.tab - 1);
+      else if (a === 'right') this.dockTab(dockSpot.tab + 1);
+    } else if (v === 2) {
+      // Three across: up and down change the line, and step over to the other tab from the first or last line.
+      if (a === 'left') move(-1);
+      else if (a === 'right') move(1);
+      else if (a === 'up') {
+        if (dockSpot.index >= 3) move(-3);
+        else this.dockTab(dockSpot.tab - 1);
+      } else if (a === 'down') {
+        if (dockSpot.index + 3 < n) move(3);
+        else this.dockTab(dockSpot.tab + 1);
+      }
+    } else if (a === 'left') move(-1);
+    else if (a === 'right') move(1);
+    else if (a === 'up') this.dockTab(dockSpot.tab - 1);
+    else if (a === 'down') this.dockTab(dockSpot.tab + 1);
+  }
+
   private openPause(focus = 0): void {
     this.place = { name: 'Menu', rooms: pauseRooms() };
     this.openSection(this.place, focus);
@@ -513,7 +690,7 @@ export class HubScene extends Phaser.Scene {
       const summary = this.roomSummary(room);
       return {
         problem: null,
-        hint: info.blurb,
+        hint: room === 'hubtown' && this.dock ? 'Walk the town as your Pokémon: every room is a building. Esc opens the menu with the way back here.' : info.blurb,
         draw: (scene, box, w, h) => {
           const icon = ROOM_ICON[room];
           if (icon) box.add(itemVisual(scene, icon, 34, h / 2, 1));
@@ -559,6 +736,10 @@ export class HubScene extends Phaser.Scene {
     if (this.lobby) {
       if (a === 'back') this.scene.start('MainMenu');
       else this.lobby.handle(a);
+      return;
+    }
+    if (this.dock) {
+      this.dockKey(a);
       return;
     }
     // Held keys walk on their own (the town reads them every frame); a tap still takes one step or turns.
@@ -819,6 +1000,7 @@ export class HubScene extends Phaser.Scene {
         this.scene.restart({});
         break;
       case 'lobby':
+      case 'dock':
         townVisit = false;
         this.scene.restart({});
         break;

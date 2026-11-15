@@ -109,3 +109,52 @@ export function gridView(c: ReduxCtx, d: GridModel): string {
   const s = Math.floor(scrollStart(n, d.index, 18) / 6) * 6, det = d.detail;
   return head + `<div class="abs col" style="left:24px;top:74px;width:264px;gap:16px">${W(`<div class="row">${pic(det.art, 56)}<b class="acc" style="font-size:20px">${esc(det.title)}</b></div>${det.sub ? `<b style="font-size:14px">${esc(det.sub)}</b>` : ''}<div class="sm" style="line-height:20px;max-height:${det.facts?.length ? 100 : 160}px;overflow:hidden">${esc(det.body ?? '')}</div>${facts(det.facts)}`, 'display:flex;flex-direction:column;gap:8px')}${W(`<div class="row"><span class="grow">${esc(d.foundLabel ?? 'Found')}</span><b>${d.found}</b><span>/ ${d.total}</span></div>${hpb(d.total ? Math.round((d.found / d.total) * 100) : 0, 0, ' gold')}`, 'display:flex;flex-direction:column;gap:8px')}</div><div class="abs" style="left:316px;right:24px;top:72px;display:grid;grid-template-columns:repeat(6,1fr);gap:10px">${Array.from({ length: Math.min(18, n - s) }, (_, q) => { const i = s + q, r = d.cell(i); return `<div class="cell${r.off ? ' off' : ''}${i === d.index ? ' sel' : ''}"${pickAttr(i)}>${pic(r.art, 76, r.sil ? 'sil' : '') || `<span style="font-size:13px;font-weight:700;text-align:center;padding:4px;overflow:hidden">${r.off && !r.label ? '?' : esc(r.label)}</span>`}</div>`; }).join('')}${n < 18 ? '<div class="cell off">?</div>'.repeat(18 - n) : ''}</div>` + dots(n, s, 18, 'left:28px;top:438px') + TX(esc(d.text));
 }
+
+/** A board row (quests, chains, tasks): a title, a line under it, an optional progress bar (0 to 100) and a state tag. */
+export interface BoardRow { title: string; sub: string; tag?: string; pct?: number | null; off?: boolean; art?: Art | null }
+export interface BoardModel {
+  title: string;
+  area: Area;
+  rows: BoardRow[];
+  index: number;
+  /** The text box along the bottom. */
+  text: string;
+  hints?: readonly (readonly [string, string])[];
+}
+
+/** How many rows a board shows at once: six cards in two columns, or five rows in one (the mock-ups' two layouts). */
+export const boardSize = (c: Pick<ReduxCtx, 'v'>): number => (c.v(2) === 1 ? 6 : 5);
+
+/**
+ * A count written as a tag ("2/5", "2 of 5", "40%") as the mock-ups draw it: a progress bar, a state word for the tag
+ * and the count in words for the line under the title. Null when the tag is anything else.
+ */
+export function boardProgress(tag: string): { pct: number; state: 'New' | 'Active' | 'Done'; count: string } | null {
+  const t = tag.trim();
+  const frac = /^(\d+)\s*(?:\/|of)\s*(\d+)$/i.exec(t);
+  const cent = /^(\d+(?:\.\d+)?)\s*%$/.exec(t);
+  if (!frac && !cent) return null;
+  if (frac && Number(frac[2]) === 0) return null;
+  const pct = Math.max(0, Math.min(100, Math.round(frac ? (Number(frac[1]) / Number(frac[2])) * 100 : Number(cent![1]))));
+  const full = frac ? Number(frac[1]) >= Number(frac[2]) : pct >= 100;
+  const none = frac ? Number(frac[1]) === 0 : pct <= 0;
+  return { pct: full ? 100 : pct, state: full ? 'Done' : none ? 'New' : 'Active', count: frac ? `${frac[1]} of ${frac[2]}` : `${pct}%` };
+}
+
+/** The mock-ups' `board` template. A list longer than one screen scrolls with the focused row and says where it is. */
+export function boardView(c: ReduxCtx, d: BoardModel): string {
+  const grid = c.v(2) === 1, size = boardSize(c), n = d.rows.length;
+  const index = Math.max(0, Math.min(n - 1, d.index));
+  // The two-column layout scrolls a whole line (two cards) at a time.
+  const from = grid ? scrollStart(n, index, size) & ~1 : scrollStart(n, index, size);
+  const shown = d.rows.slice(from, from + size);
+  const pct = (r: BoardRow, w: number): string => (r.pct !== null && r.pct !== undefined ? hpb(Math.max(0, Math.min(100, r.pct)), w, ' gold') : '');
+  const tag = (r: BoardRow, lit: boolean): string => (r.tag ? `<span class="tg${lit ? '' : ' no'}">${esc(r.tag)}</span>` : '');
+  const attr = (k: number): string => `${act('pick', from + k)} data-over="over"`;
+  const cls = (r: BoardRow, k: number): string => (from + k === index ? 'sel' : r.off ? 'dim' : '');
+  const empty = n ? '' : '<div class="abs cen" style="left:0;right:0;top:220px;display:flex;font-size:26px;opacity:.6">Nothing here yet</div>';
+  const body = grid
+    ? `<div class="abs" style="left:24px;right:24px;top:70px;display:grid;grid-template-columns:1fr 1fr;gap:18px">${shown.map((r, k) => W(`<div class="row">${pic(r.art ?? null, 30)}<b class="grow" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(r.title)}</b>${tag(r, from + k === index)}</div><div class="sm" style="line-height:19px;max-height:38px;overflow:hidden">${esc(r.sub)}</div>${pct(r, 0)}`, 'display:flex;flex-direction:column;gap:6px;padding:10px 14px;min-width:0', cls(r, k), attr(k))).join('')}</div>`
+    : `<div class="abs col" style="left:24px;right:24px;top:72px;gap:15px">${shown.map((r, k) => W(`${pic(r.art ?? null, 36)}<div class="col grow" style="gap:4px;min-width:0"><b style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(r.title)}</b><span class="sm" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(r.sub)}</span></div>${pct(r, 150)}${tag(r, from + k === index)}`, 'display:flex;align-items:center;gap:14px;padding:9px 16px', cls(r, k), attr(k))).join('')}</div>`;
+  return H(d.title, d.area, d.hints) + body + empty + dots(n, from, size, grid ? 'right:28px;top:438px' : 'right:28px;top:446px') + TX(esc(d.text));
+}
