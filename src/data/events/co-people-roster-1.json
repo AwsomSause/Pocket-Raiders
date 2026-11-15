@@ -1,0 +1,713 @@
+{
+ "catalogOverhaul": "people",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "npc-meet-youngster-joey",
+   "name": "Youngster Joey: Top Percentage",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-joey-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_youngster"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A sunny route. A boy in shorts and a cap jumps out of the long grass with a Rattata held up over his head like a trophy. Joey: \"Hey! You! Look at this Rattata.\" He turns it so you can see every side. Joey: \"It's in the top percentage. I looked it up. Well, I asked my cousin.\" He tugs at his shorts. Joey: \"Like my shorts? They're comfy and easy to wear!\" The Rattata bares its teeth, very proud of both of them. Joey: \"Battle me. You'll see.\"",
+   "choices": [
+    {
+     "label": "\"Let's go.\"",
+     "success": {
+      "text": "Joey whoops and sets the Rattata down. It plants its feet like it has been waiting all morning for exactly this.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-joey-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Joey's top-percentage Rattata beat you",
+         "importance": 60
+        }
+       ],
+       "foeMoves": [
+        "hyper-fang"
+       ],
+       "team": [
+        "rattata"
+       ],
+       "name": "Youngster Joey",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "roster-joey-won1",
+         "amount": 1,
+         "stamp": "region"
+        },
+        {
+         "kind": "item",
+         "id": "potion",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Joey's top-percentage Rattata",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Which percentage?\"",
+     "success": {
+      "text": "Joey: \"The top one!\" He is very sure. He says it again, slower, in case you missed it. Then the Rattata is on the ground and the battle is on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-joey-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Joey's top-percentage Rattata beat you",
+         "importance": 60
+        }
+       ],
+       "foeMoves": [
+        "hyper-fang"
+       ],
+       "team": [
+        "rattata"
+       ],
+       "name": "Youngster Joey",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "roster-joey-won1",
+         "amount": 1,
+         "stamp": "region"
+        },
+        {
+         "kind": "item",
+         "id": "potion",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Joey's top-percentage Rattata",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Maybe later.\"",
+     "success": {
+      "text": "Joey: \"It'll be stronger later! You'll be sorry!\" He is already climbing back into the grass. You have the feeling he will be out here again tomorrow morning, waiting.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "npc-meet-youngster-joey"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-youngster-joey-m2",
+   "name": "Youngster Joey: The Old Rattata",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-joey-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-joey-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_youngster"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "The same boy, a little taller, sitting on a fence. The Rattata is curled on his lap. Its whiskers have gone grey. Joey: \"It's slower now. Vet says that's normal. Rattata don't last that long.\" He strokes its ears with one finger. Joey: \"Everyone says evolve it. I don't want it to stop being it.\" He looks up at you, and his voice goes small. Joey: \"Did you battle it last time? Did it do good?\"",
+   "choices": [
+    {
+     "label": "\"It was the best.\"",
+     "success": {
+      "text": "Joey: \"...Yeah. Top percentage.\" He laughs and cries at once, and wipes his nose on his wrist. The old Rattata opens one eye, looks at you, and thumps its tail against his knee.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-joey-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-joey-kind",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Evolve it.\"",
+     "success": {
+      "text": "Joey: \"But—\" He stops. He thinks about it for a long, long moment, forehead against the Rattata's. Then the light takes it, right there on his lap. The Raticate that sits up is bright-eyed and much perkier, and it licks his whole face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-joey-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-joey-evolved",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let it rest.\"",
+     "success": {
+      "text": "He nods slowly. He reaches into his bag and shows you a younger Rattata, tiny and wriggling, that he caught \"just in case.\" Joey: \"This one can do the battling. That one can watch.\" The old one yawns, as if that suits it fine.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-joey-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-joey-rested",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "lost-m1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-joey-won1",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Joey grins at you through it all. Joey: \"You lost to it! That's how I know it's top percentage.\" He is delighted."
+    },
+    {
+     "id": "won-m1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-joey-won1",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Joey shrugs, not unkindly. Joey: \"You beat it. That's okay. You're really good.\""
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-youngster-joey-m3",
+   "name": "Youngster Joey: The Rattata Club",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-joey-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-joey-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_youngster"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "A little sign is nailed to a tree: RATTATA CLUB, MEMBERS ONLY. Under it sit five kids and five Rattata, and Joey, in charge, with a whistle he clearly found somewhere. Joey: \"I started a club! We train together. Want to judge?\" A basket sits next to him in the shade, lined with an old jumper.",
+   "choices": [
+    {
+     "label": "\"Judge.\"",
+     "success": {
+      "text": "Joey blows the whistle. The five kids scramble into a line, each holding a Rattata as high as their arms will go. You are handed a twig, which is apparently the judge's twig.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-youngster-joey-contest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle the whole club.\"",
+     "success": {
+      "text": "Joey: \"ALL of us? Okay! Club, line up! One at a time, like we practised!\" Five Rattata, in a row. It is harder than it sounds.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-joey-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-joey-battled",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The Rattata Club beat you, one Rattata at a time",
+         "importance": 60
+        }
+       ],
+       "foeMoves": [
+        "hyper-fang"
+       ],
+       "team": [
+        "rattata",
+        "rattata",
+        "rattata",
+        "rattata",
+        "rattata"
+       ],
+       "name": "The Rattata Club",
+       "size": 5,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "rattata"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "teachMove",
+         "move": "hyper-fang",
+         "species": "rattata"
+        },
+        {
+         "kind": "moment",
+         "text": "You beat all five of the Rattata Club",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Give a speech.\"",
+     "success": {
+      "text": "Joey shushes everyone. Five kids and five Rattata go quiet and look up at you. Joey has a pencil ready. Whatever you say next is going on the sign.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-youngster-joey-speech"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "coach",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-joey-evolved",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Raticate sits upright in the basket with a tiny whistle of its own round its neck. It is the club's \"coach,\" and it is very proud."
+    },
+    {
+     "id": "empty-basket",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-joey-rested",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The basket is empty. Joey sees you looking. Joey: \"Last spring.\" He points at the sign. Under RATTATA CLUB, smaller: \"Top Percentage's club.\""
+    },
+    {
+     "id": "sleeping",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-joey-kind",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The old Rattata is asleep in the basket, grey whiskers twitching. Every kid in the club steps round it very carefully."
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-youngster-joey-contest",
+   "name": "Youngster Joey: The Club Contest",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_youngster"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "Three finalists step forward. Dot's Rattata does a perfect Quick Attack round the tree and back. Benji's Rattata misses its jump, lands on its face, and gets up and tries again without being asked. Little Ines whispers something to hers, and it sits completely still for a count of ten, which nobody thought a Rattata could do. Joey: \"Okay, judge. Who wins?\"",
+   "choices": [
+    {
+     "label": "\"Dot. That was fast.\"",
+     "success": {
+      "text": "Dot screams. Her Rattata screams. Joey hangs a bottle-cap medal round its neck with great ceremony. The club votes, loudly, to give their judge a member of their own: a young Rattata in a tiny cap, already showing its fangs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-joey-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-joey-club",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "rattata"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "teachMove",
+        "move": "hyper-fang",
+        "species": "rattata"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Benji. It got back up.\"",
+     "success": {
+      "text": "Benji goes bright red and stares at his shoes, and his Rattata climbs onto his head and stays there. Joey: \"Good pick. That's the club rule. You get back up.\" They send you off with a young Rattata in a tiny cap.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-joey-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-joey-club",
+        "amount": 2,
+        "stamp": "region"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "rattata"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "teachMove",
+        "move": "hyper-fang",
+        "species": "rattata"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ines. It listened.\"",
+     "success": {
+      "text": "Ines does not say anything at all, but she holds the bottle-cap medal in both hands for the rest of the afternoon. Joey nods like a much older man. The club gives you a young Rattata in a tiny cap to remember them by.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-joey-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-joey-club",
+        "amount": 3,
+        "stamp": "region"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "rattata"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "teachMove",
+        "move": "hyper-fang",
+        "species": "rattata"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-youngster-joey-speech",
+   "name": "Youngster Joey: The Sign",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_youngster"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "The club waits. A Rattata sneezes. Joey holds the pencil against the wood under MEMBERS ONLY and looks at you without blinking.",
+   "choices": [
+    {
+     "label": "\"Every one of you is top percentage.\"",
+     "success": {
+      "text": "Joey writes it down with his tongue between his teeth, spelling \"percentage\" three different ways before he gets it. The kids cheer like they have won something. They press a young Rattata in a tiny cap into your arms.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-joey-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-joey-sign",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "rattata"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "teachMove",
+        "move": "hyper-fang",
+        "species": "rattata"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Small is not the same as weak.\"",
+     "success": {
+      "text": "The littlest kid nods so hard her cap falls off. Joey writes it in capitals and underlines it twice. A young Rattata in a tiny cap is voted, unanimously, to go with you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-joey-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-joey-sign",
+        "amount": 2,
+        "stamp": "region"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "rattata"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "teachMove",
+        "move": "hyper-fang",
+        "species": "rattata"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Look after them and they'll look after you.\"",
+     "success": {
+      "text": "Joey stops writing halfway and looks at the basket. Then he finishes the line very neatly. Joey: \"Yeah. They do.\" He hands you a young Rattata in a tiny cap himself.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-joey-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-joey-sign",
+        "amount": 3,
+        "stamp": "region"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "rattata"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "teachMove",
+        "move": "hyper-fang",
+        "species": "rattata"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
