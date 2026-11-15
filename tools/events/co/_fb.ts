@@ -30,3 +30,28 @@ export const VALLEY: { species: string; regions: string[] }[] = [
 ];
 /** Adds branches to a choice built with ch(). */
 export const withBr = (choice: Json, ...branches: Json[]): Json => ({ ...choice, branches });
+
+/** Road chains (core/overhaul/chains.ts): a step's outcome sets `ovc-<step>` and starts the `ovt-<step>` node timer, so the next
+ * step keeps its old window (it comes back a few nodes later; requires come from oldPlacement.json). */
+export const chainGo = (stepId: string): Json[] => [{ kind: 'flag', key: stepId, amount: 1 }, { kind: 'flag', key: stepId.replace(/^ovc-/, 'ovt-'), amount: 0 }];
+const addGo = (stepId: string, c: Json): Json => {
+  const add = (o: Json | undefined) => (o ? { ...(o as object), effects: [...((o as { effects?: Json[] }).effects ?? []), ...chainGo(stepId)] } : o);
+  const choice = c as { success: Json; failure?: Json };
+  return { ...(c as object), success: add(choice.success), ...(choice.failure ? { failure: add(choice.failure) } : {}) };
+};
+export interface Step { intro: string; choices: Json[]; by?: [Json[], string][]; pokemon?: string; fx?: string }
+/** A three-step Miniature Episode on the road chain ids `ovc-<key>-s1..s3`. Steps 1 and 2 always lead on; `by` opens a step
+ * differently for what you did before (first match wins, up to 3); step 3 ends with the afterstory line in the journal. */
+export const episode = (key: string, name: string, o: { types?: string[]; tint?: string }, steps: [Step, Step, Step], after: string): Json[] =>
+  steps.map((s, i) => ({
+    id: `ovc-${key}-s${i + 1}`, name, ...(o.types ? { types: o.types } : {}),
+    scene: { cast: [], ...(s.pokemon ? { pokemon: s.pokemon } : {}), ...(o.tint ? { tint: o.tint } : {}), effect: s.fx ?? 'none' },
+    intro: s.intro,
+    choices: i < 2 ? s.choices.map((c) => addGo(`ovc-${key}-s${i + 1}`, c)) : s.choices.map((c) => addAfter(c, after)),
+    ...(s.by?.length ? { remembers: s.by.slice(0, 3).map(([when, intro], j) => rem(`${key}-${i + 1}-${j}`, when, { intro })) } : {}),
+  }));
+const addAfter = (c: Json, after: string): Json => {
+  const choice = c as { success: Json };
+  const s = choice.success as { effects?: Json[] };
+  return { ...(c as object), success: { ...(s as object), effects: [...(s.effects ?? []), moment(after, 55)] } };
+};
