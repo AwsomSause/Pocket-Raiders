@@ -236,6 +236,55 @@ test('New UI: learning a move asks with the mock-up decision screen and its Yes/
   expect(errors).toEqual([]);
 });
 
+test('New UI: the Hub is the dock (two tabs of six buttons); its Town page walks Hub Town and the menu leads back', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Hub');
+  const dock = view(page, 'Hub').first();
+  const buttons = dock.locator('[data-act="pick"]');
+  const names = async () => (await buttons.allInnerTexts()).map((t) => t.trim());
+  await expect(buttons).toHaveCount(6);
+  expect(await names()).toEqual(['Settings', 'Trainers', 'New Run', 'Events', 'Unlocks', 'Town']);
+  await expect(dock.locator('.tabs .on')).toHaveText('Town');
+  // A click on the other tab swaps the six buttons; a second click on the first tab brings them back.
+  await dock.locator('[data-act="tab"]').nth(1).click();
+  await expect(dock.locator('.tabs .on')).toHaveText('Last run');
+  expect(await names()).toEqual(['Hall of Fame', 'Team', 'Run History', 'Memories', 'Moments', 'Seeds']);
+  await dock.locator('[data-act="tab"]').nth(0).click();
+  await expect(dock.locator('.tabs .on')).toHaveText('Town');
+  // A button with several rooms opens their page as a list on top; Esc closes it again.
+  await buttons.nth(4).click();
+  await expect(view(page, 'Hub')).toHaveCount(2);
+  await expect(view(page, 'Hub').nth(1)).toContainText('Unlocks');
+  await expect(view(page, 'Hub').nth(1)).toContainText('Bank');
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Escape');
+  await expect(view(page, 'Hub')).toHaveCount(1);
+  // Town > Hub Town: the dock goes away and the town is walked on the canvas.
+  await buttons.nth(5).click();
+  await expect(view(page, 'Hub').nth(1)).toContainText('Hub Town');
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Enter');
+  await expect(view(page, 'Hub')).toHaveCount(0);
+  await expect.poll(() => page.evaluate(() => Boolean((window as any).__pkr.game.scene.getScene('Hub').town)), { timeout: 20_000 }).toBe(true);
+  await page.waitForTimeout(600);
+  // Esc opens the menu; its first row is the way back to the dock.
+  await page.keyboard.press('Escape');
+  await expect(view(page, 'Hub').first()).toContainText('Hub dock');
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Enter');
+  await expect(view(page, 'Hub').first().locator('[data-act="pick"]')).toHaveCount(6);
+  await expect.poll(() => page.evaluate(() => Boolean((window as any).__pkr.game.scene.getScene('Hub').town))).toBe(false);
+  // The dock remembers its button (Town); the keys walk back to New Run, which starts a run.
+  await page.waitForTimeout(400);
+  for (let i = 0; i < 3; i++) await page.keyboard.press('ArrowLeft');
+  await expect(view(page, 'Hub').first().locator('.btn.on')).toHaveText('New Run');
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'TrainerSelect');
+  expect(errors).toEqual([]);
+});
+
 test('UI style: Old shows no New layer; the address can ask for either', async ({ page }) => {
   const errors = watch(page);
   // An automated browser gets Old by default (the older specs rely on it).
