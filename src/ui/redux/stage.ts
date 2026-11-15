@@ -32,6 +32,8 @@ export interface ReduxOptions {
   acts?: Record<string, (arg: string) => void>;
   /** Pointer-over handlers by name (`data-over="name"`), for moving the cursor with the mouse. */
   overs?: Record<string, (arg: string) => void>;
+  /** Tooltips: called with the `data-tip` value the pointer rests on, and with null once it is on none. */
+  tip?: (arg: string | null) => void;
   /** No backdrop and clicks fall through to the canvas except on `[data-act]` (a HUD over the Phaser picture). */
   clear?: boolean;
 }
@@ -173,6 +175,16 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     overAt = at;
     pick(e, 'over', o.overs);
   });
+  // Tooltips follow the pointer anywhere on the page, so leaving an element (onto the canvas too) is noticed.
+  let tipAt: string | null = null;
+  const onTip = (e: PointerEvent): void => {
+    const t = e.target instanceof Element ? e.target.closest<HTMLElement>('[data-tip]') : null;
+    const now = t && el.contains(t) ? t.dataset.tip ?? null : null;
+    if (now === tipAt) return;
+    tipAt = now;
+    o.tip?.(now);
+  };
+  if (o.tip) window.addEventListener('pointermove', onTip);
   // A press on the stage must not also reach whatever page element sits under it.
   el.addEventListener('pointerdown', (e) => e.stopPropagation());
 
@@ -183,6 +195,7 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     dead = true;
     views.delete(view);
     gone = { key: scene.scene.key, at: performance.now() };
+    window.removeEventListener('pointermove', onTip);
     el.remove();
     scene.events.off('shutdown', destroy);
     scene.events.off('destroy', destroy);
