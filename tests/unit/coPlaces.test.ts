@@ -2,7 +2,9 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { chooseEvent } from '../../src/core/events';
+import { chooseEvent, conditionMet, tradeCandidates } from '../../src/core/events';
+import { changeFriendship } from '../../src/core/friendship';
+import { bossLeadStagesOf, stopWeightOf } from '../../src/core/co/placesRules';
 import { visibleChoices } from '../../src/core/eventMemory';
 import { PSEUDO_CHAINS, chainRooms } from '../../src/core/dungeon/pseudo';
 import { chooseStarter, createRun } from '../../src/core/run';
@@ -176,5 +178,62 @@ describe('catalog overhaul: Crystal Hollow and the Devon ball (STORY_FAMILIES_15
     expect(at(full)).toBe(1);
     expect(at(Math.floor(full / 2) + 1)).toBe(1);
     expect(at(Math.floor(full / 2))).toBeGreaterThan(20);
+  });
+});
+
+describe('catalog overhaul: standalone choices and the Pacts (SF102)', () => {
+  it('the Bond Ceremony vow: no trading the Pokémon away, and its friendship never falls', () => {
+    let run = newRun('vow');
+    open(run, 'bond-ceremony');
+    run = pick(run, 'Make the vow with a Pokémon.');
+    const mon = run.party[0]!;
+    expect(mon.vowed).toBe(true);
+    const before = mon.friendship;
+    changeFriendship(content, mon, -30);
+    expect(mon.friendship).toBe(before);
+    expect(tradeCandidates(content, run, { species: [], tags: [] } as never).some((m) => m.uid === mon.uid)).toBe(false);
+  });
+
+  it('a Water-type left at the Cursola reef is gone from the party and comes back a region later, stronger', () => {
+    let run = newRun('reef');
+    run.party.push(createPokemon(content, 'squirtle', 10, 'w1'));
+    open(run, 'r161-cursola-reef-grudge');
+    run = pick(run, 'Leave a Water-type here for a region.');
+    expect(run.party.some((m) => m.uid === 'w1')).toBe(false);
+    expect(run.coAway?.[0]?.key).toBe('cursola-reef-guard');
+    expect(conditionMet(content, run, { kind: 'flag', key: 'cursola-reef-guard', atLeast: 1, atMost: 99, regionsAgo: 1 } as never)).toBe(false);
+    run.regionIndex += 1;
+    open(run, 'cursola-reef-healed');
+    run = pick(run, 'Welcome it home.');
+    const back = [...run.party, ...run.box].find((m) => m.uid === 'w1')!;
+    expect(back.level).toBe(13);
+    expect(run.coAway).toEqual([]);
+  });
+
+  it('a Pact is read in full before signing: "Read it again." brings the contract back, and "Sign." takes the stated effects', () => {
+    let run = newRun('pact');
+    open(run, 'rk-pact-booth');
+    run = pick(run, 'Read it again.');
+    expect(here(run).sides.filter((x) => x.eventId === 'rk-pact-booth' && !x.used).length).toBe(1);
+    run = pick(run, 'Sign.');
+    expect(run.perkEffects).toEqual(expect.arrayContaining([{ kind: 'moneyMultiplier', value: 1.5 }, { kind: 'enemyLevelOffset', value: 2 }]));
+  });
+
+  it('the Risk Dial turns Calm to Brisk to Wild to Chaos and back, and signs at the shown point', () => {
+    let run = newRun('dial');
+    open(run, 'rk-risk-dial');
+    for (let i = 0; i < 3; i++) run = pick(run, 'Turn the dial.');
+    expect(flagOf(run, 'rk-dial-point')).toBe(3);
+    run = pick(run, 'Sign.');
+    expect(stopWeightOf(run.perkEffects, 'ambush')).toBe(2);
+    expect(stopWeightOf(run.perkEffects, 'merchant')).toBe(1);
+  });
+
+  it('the Shadow Boon lends the lead strength now and owes -1 to every stat at the next boss battle', () => {
+    let run = newRun('boon');
+    open(run, 'rk-shadow-boon');
+    run = pick(run, 'Sign.');
+    expect(bossLeadStagesOf(run.perkEffects)).toBe(-1);
+    expect(run.tempEffects.some((t) => t.until === 'boss')).toBe(true);
   });
 });
