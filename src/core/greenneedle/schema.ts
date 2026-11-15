@@ -20,8 +20,13 @@ export const bindGnEffects = (schema: z.ZodType): void => {
  *  - `pick`: the run flag `key` becomes 1, 2, 3... by `weights` ("which Fire-type").
  *  - `when`: if the run flag `key` is within `min`..`max`, the `then` effects apply and `text` is shown.
  *  - `route`: opens the room `to.ids[value of key]` (the last one for larger values): the story branches on what was counted.
+ *  - `scene`: opens the event `key` beside the node the player stands on. Unlike `addEvent` it is not a room of the pseudo-stage map: a node can
+ *    hold several scenes (a dance in three prompts, a mine with three swings) and still be one node.
+ *  - `stageMod`: the run flag `key` becomes (stage number counted from the start of the run) modulo `n` (the moon's phase: 1 new, 3 full with n = 4).
+ *  - `stampRegion`: the run flag `key` remembers the region the player is in now (read with the `gn` condition `regionChanged`).
+ *  - `fossil`: a fossil by region (`key`: `local` = 70% this region's and 30% another's, `far` = the rarer half of the table, another region's).
  */
-export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route'] as const;
+export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion'] as const;
 export const GnEffectSchema = z.object({
   kind: z.literal('gn'),
   op: z.enum(GN_OPS),
@@ -38,15 +43,25 @@ export const GnEffectSchema = z.object({
 }).refine((e) => (e.op === 'route' ? !!e.to && !!e.key : true), { message: 'a route needs `key` and `to`' })
   .refine((e) => (e.op === 'when' ? !!e.key && (!!e.then?.length || !!e.text) : true), { message: 'a when needs `key` and `then` or `text`' })
   .refine((e) => (e.op === 'pick' ? !!e.key && !!e.weights : true), { message: 'a pick needs `key` and `weights`' })
-  .refine((e) => (e.op === 'roll' || e.op === 'capFlag' || e.op === 'setFlag' ? !!e.key && e.n !== undefined : true), { message: 'needs `key` and `n`' });
+  .refine((e) => (e.op === 'roll' || e.op === 'capFlag' || e.op === 'setFlag' || e.op === 'stageMod' ? !!e.key && e.n !== undefined : true), { message: 'needs `key` and `n`' })
+  .refine((e) => (e.op === 'scene' || e.op === 'fossil' || e.op === 'stampRegion' ? !!e.key : true), { message: 'needs `key`' });
 export type GnEffect = z.infer<typeof GnEffectSchema>;
+
+/**
+ * A Greenneedle condition (condition `gn`).
+ *  - `regionChanged`: the run flag `key` was stamped (`stampRegion`) in an earlier region than the one the player is in now ("he's back next region").
+ */
+export const GnCondSchema = z.object({ kind: z.literal('gn'), test: z.enum(['regionChanged']), key: Key });
+export type GnCond = z.infer<typeof GnCondSchema>;
 
 /**
  * A Greenneedle fight rule (event rule `gn`), see core/greenneedle/index.ts for what each one does.
  *  - `samurai`: the Samurai's duel (gn.03). His Pinsir will not strike a foe that is not facing it: after a guarding move it waits a turn.
  *    A duelist that trusts you (friendship) moves first on its first move.
+ *  - `tully`: Damian's friend Tully (gn.05). His Pokémon uses Splash, on purpose, twice, before it does anything else.
+ *  - `bex`: Damian's friend Bex (gn.05). She spends the first turn looking for the attack button.
  */
-export const GN_RULES = ['samurai'] as const;
+export const GN_RULES = ['samurai', 'tully', 'bex'] as const;
 export const GnRuleSchema = z.enum(GN_RULES);
 export type GnRule = z.infer<typeof GnRuleSchema>;
 

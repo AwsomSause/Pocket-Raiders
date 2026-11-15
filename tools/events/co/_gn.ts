@@ -72,6 +72,15 @@ export const pick = (key: string, ...weights: number[]): Json => gn('pick', { ke
 export const when = (key: string, range: { min?: number; max?: number }, then: Json[], text?: string): Json => gn('when', { key, ...range, then, ...(text ? { text } : {}) });
 /** Opens the room at index = the flag's value (the last one for larger values). */
 export const route = (key: string, ...ids: string[]): Json => gn('route', { key, to: { kind: 'addEventFrom', ids } });
+/** Opens a scene beside the node the player stands on (not a node of the pseudo-stage map). */
+export const scene = (eventId: string): Json => gn('scene', { key: eventId });
+/** The run flag becomes (stage number from the start of the run) modulo n. */
+export const stageMod = (key: string, n: number): Json => gn('stageMod', { key, n });
+/** A fossil by region: 'local' (70% this region's, 30% another's) or 'far' (another region's: the rarer half). */
+export const fossil = (table: 'local' | 'far'): Json => gn('fossil', { key: table });
+/** Remembers the region the player is in now; `regionChanged(key)` holds once they are in a later one. */
+export const stampRegion = (key: string): Json => gn('stampRegion', { key });
+export const regionChanged = (key: string): Json => ({ kind: 'gn', test: 'regionChanged', key });
 export const leavePseudo = (): Json => ({ kind: 'leavePseudo' });
 export const teach = (move: string, o: Json = {}): Json => ({ kind: 'teachMove', move, ...o });
 export const moment = (text: string, importance = 60): Json => ({ kind: 'moment', text, importance });

@@ -5,7 +5,7 @@
 import type { Content } from '../contentSchema';
 import type { PlayerAction } from '../battle/engine';
 import type { BattleState, PokemonInstance, RunState } from '../state';
-import type { GnEffect } from './schema';
+import type { GnCond, GnEffect } from './schema';
 
 type Cue = { type: 'spectacle'; kind: 'arena'; side: 'player' | 'enemy'; text: string; uid?: string };
 const cue = (side: 'player' | 'enemy', text: string, uid?: string): Cue => ({ type: 'spectacle', kind: 'arena', side, text, ...(uid ? { uid } : {}) });
@@ -54,7 +54,32 @@ export function markDuelist(content: Content, run: RunState, type: string): stri
 export interface GnHost {
   float: () => number;
   apply: (effect: unknown) => string;
+  /** The stage number counted from the start of the run (1 = the first stage). */
+  stage: number;
+  /** The run's current region id. */
+  region: string;
 }
+
+/** A Greenneedle condition. */
+export function gnConditionMet(run: RunState, c: GnCond): boolean {
+  const stamped = gnFlag(run, c.key);
+  return stamped > 0 && stamped < run.regionIndex + 1;
+}
+
+/** Fossils by region (gn.04 Fossil Recovery). A region with none of its own digs up the Kanto three. */
+export const REGION_FOSSILS: Record<string, string[]> = {
+  kanto: ['helix-fossil', 'dome-fossil', 'old-amber'],
+  hoenn: ['root-fossil', 'claw-fossil'],
+  sinnoh: ['skull-fossil', 'armor-fossil'],
+  unova: ['cover-fossil', 'plume-fossil'],
+  kalos: ['jaw-fossil', 'sail-fossil'],
+  galar: ['fossilized-bird', 'fossilized-fish', 'fossilized-drake', 'fossilized-dino'],
+};
+const fossilsOf = (region: string): string[] => REGION_FOSSILS[region] ?? REGION_FOSSILS.kanto!;
+const fossilsElsewhere = (region: string): string[] => {
+  const own = new Set(fossilsOf(region));
+  return [...new Set(Object.values(REGION_FOSSILS).flat())].filter((id) => !own.has(id));
+};
 
 /** One Greenneedle story step. Returns the line the outcome shows (may be empty). */
 export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host: GnHost): string {
@@ -94,6 +119,25 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       const lines = (e.then ?? []).map((x) => host.apply(x)).filter(Boolean);
       return [e.text, ...lines].filter(Boolean).join(' · ');
     }
+    case 'scene': {
+      const here = run.stage?.map.nodes.find((n) => n.id === run.stage!.current);
+      if (!here || !content.events.has(e.key!)) return '';
+      here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId: e.key! });
+      if (run.itemCounters) delete run.itemCounters[`event-seen:${e.key!}`];
+      return '';
+    }
+    case 'stampRegion':
+      setGnFlag(run, e.key!, run.regionIndex + 1);
+      return '';
+    case 'stageMod':
+      setGnFlag(run, e.key!, host.stage % e.n!);
+      return '';
+    case 'fossil': {
+      const far = e.key === 'far' || (e.key === 'local' && host.float() >= 0.7);
+      const table = (far ? fossilsElsewhere(host.region) : fossilsOf(host.region)).filter((id) => content.catalog.has(id) || content.items.has(id));
+      if (table.length === 0) return '';
+      return host.apply({ kind: 'item', id: table[Math.min(table.length - 1, Math.floor(host.float() * table.length))]!, count: 1 });
+    }
     case 'route': {
       const ids = e.to!.ids;
       return host.apply({ kind: 'addEvent', eventId: ids[Math.min(gnFlag(run, e.key!), ids.length - 1)]! });
@@ -116,6 +160,9 @@ export function gnBattleStart(_content: Content, run: RunState): void {
   if (battle.event?.eventId === 'gn-03-oak' && battle.kind === 'wild' && ['weedle', 'kakuna', 'beedrill'].includes(markedMon(run, 'duelist')?.was ?? '')) {
     battle.storyEffects.push(`${FOE_WAITS}The swarm hangs back. They will not strike first at one of their own.`);
   }
+  // Damian's friends (gn.05): Tully uses Splash twice, on purpose; Bex spends a turn finding the attack button.
+  if (battle.eventRule?.gn === 'tully') battle.storyEffects.push(`${FOE_WAITS}Tully's Pokémon uses Splash! On purpose.`, `${FOE_WAITS}Tully's Pokémon uses Splash again! Tully looks very pleased.`);
+  if (battle.eventRule?.gn === 'bex') battle.storyEffects.push(`${FOE_WAITS}Bex is looking for the attack one. "TOP LEFT!" shouts Damian, from the back.`);
   const lead = run.party[battle.activeIndex];
   if (battle.eventRule?.gn === 'samurai' && lead && lead.friendship >= BOND_THREE) battle.storyEffects.push(`kind:${lead.uid}`);
 }

@@ -4,7 +4,7 @@
 
 import { NATURE_IDS } from './natures';
 import { z } from 'zod';
-import { bindGnEffects, GnEffectSchema, GnRuleFields } from './greenneedle/schema';
+import { bindGnEffects, GnCondSchema, GnEffectSchema, GnRuleFields } from './greenneedle/schema';
 import { ANIME_LOOKS } from './animeLooks';
 import { GRADES as PROMPT_GRADES } from './interaction/prompt';
 import { UltraRuleIdSchema } from './ultra/beasts';
@@ -2783,6 +2783,8 @@ export const EVENT_EFFECTS = ['none', 'rattle', 'spin', 'flicker', 'glint', 'sha
 
 /** Something an event or one of its choices needs; a locked choice stays visible with its requirement. */
 export const EventConditionSchema = z.discriminatedUnion('kind', [
+  /** Greenneedle events: a condition of their own (core/greenneedle). */
+  GnCondSchema,
   z.object({ kind: z.literal('money'), atLeast: z.number().int().positive() }),
   z.object({ kind: z.literal('partySize'), atLeast: z.number().int().min(1).max(6) }),
   z.object({ kind: z.literal('attribute'), key: AttributeKeySchema, atLeast: z.number().int() }),

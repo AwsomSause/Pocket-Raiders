@@ -9,7 +9,7 @@
 // one seeded by the stop. No existing stream is touched, so adding events
 // changes no other roll, and choosing again after a reload gives the same result.
 
-import { applyGnEffect, gnBattleStart } from './greenneedle';
+import { applyGnEffect, gnBattleStart, gnConditionMet } from './greenneedle';
 import { modifierEventWeight } from './runModifiers';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
 import { PSEUDO, enterPseudoStage, leavePseudoStage, routeChainEvent } from './dungeon/pseudo';
@@ -114,6 +114,8 @@ export function stageNumber(content: Content, run: RunState): number {
 
 export function conditionMet(content: Content, run: RunState, c: EventCondition): boolean {
   switch (c.kind) {
+    case 'gn':
+      return gnConditionMet(run, c);
     case 'money':
       return run.money >= c.atLeast;
     case 'partySize':
@@ -324,6 +326,8 @@ function tradeMissing(content: Content, run: RunState, choice: EventChoice): str
 /** A requirement in words, for a locked choice. */
 export function conditionText(content: Content, c: EventCondition): string {
   switch (c.kind) {
+    case 'gn':
+      return 'Not yet: come back in a later region';
     case 'money':
       return `Needs ₽${c.atLeast}`;
     case 'partySize':
@@ -1199,7 +1203,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'pond':
       return applyPondEffect(content, run, e);
     case 'gn':
-      return applyGnEffect(content, run, e, { float: () => rng.float(), apply: (x) => applyEffect(content, run, x as EventEffect, rng, tradeUid) });
+      return applyGnEffect(content, run, e, { float: () => rng.float(), apply: (x) => applyEffect(content, run, x as EventEffect, rng, tradeUid), stage: stageNumber(content, run), region: currentRegion(content, run).id });
     case 'stashParty':
       return stashParty(run) ? 'Your Pokémon are taken away' : '';
     case 'restoreParty':
