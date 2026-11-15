@@ -10,10 +10,21 @@
   "story-alpha-sleeper": "2026-11-15",
   "story-alpha-static-choir": "2026-11-15",
   "story-alpha-unwelcome-guest": "2026-11-15",
-  "story-alpha-weeping-lantern": "2026-11-15"
+  "story-alpha-weeping-lantern": "2026-11-15",
+  "delta-clue-nest": "2026-11-15",
+  "delta-clue-scales": "2026-11-15",
+  "delta-clue-song": "2026-11-15",
+  "delta-research-battle": "2026-11-15"
  },
- "merged": {},
- "rule": {},
+ "merged": {
+  "form-clue-fur": "delta-clue-scales",
+  "form-clue-tracks": "delta-clue-nest",
+  "form-clue-sketch": "delta-clue-song",
+  "form-research-battle": "delta-research-battle"
+ },
+ "rule": {
+  "delta-research-week": "Calendar week (gameEvents.json) that raises Delta clue odds; the clues it boosts are the rebuilt delta-clue-* events (co-legends-3.json)"
+ },
  "scrapped": [],
  "extra": {
   "M1": "co-m1-absol",
@@ -21,6 +32,14 @@
   "M3": "co-m3-twins",
   "M4": "co-m4-mirror",
   "M5": "co-m5-tatsugiri",
-  "M6": "co-m6-flower"
+  "M6": "co-m6-flower",
+  "D1": "co-d1-linden",
+  "D2": "co-d2-valley",
+  "D3": "co-d3-hill",
+  "D4": "co-d4-cove",
+  "D5": "co-d5-dump",
+  "D6": "co-d6-marsh",
+  "D7": "co-d7-crossing-1",
+  "D8": "co-d8-cloud"
  }
 }

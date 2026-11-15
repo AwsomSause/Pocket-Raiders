@@ -247,5 +247,203 @@
    "forest"
   ],
   "level": "A+1"
+ },
+ "co-d1-linden": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "Each region Stage 3, the Town node",
+  "attaches": "town"
+ },
+ "co-d1-linden-again": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "Each later region Stage 3, the Town node",
+  "attaches": "town"
+ },
+ "delta-clue-nest": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "After the Delta Journal: any + node"
+ },
+ "delta-clue-scales": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "After the Delta Journal: any + node"
+ },
+ "delta-clue-song": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "After the Delta Journal: any + node"
+ },
+ "delta-research-battle": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "After three clues: a side branch",
+  "sits": "side-branch",
+  "level": "A+1"
+ },
+ "co-d2-valley": {
+  "shape": "Trial",
+  "earliest": "A7",
+  "chain": "d2",
+  "beat": 1,
+  "tags": [
+   "hot",
+   "eerie"
+  ],
+  "level": "A+1"
+ },
+ "co-d2-ember": {
+  "shape": "Trial",
+  "earliest": "A7",
+  "chain": "d2",
+  "beat": 2
+ },
+ "co-d2-out": {
+  "shape": "Trial",
+  "earliest": "A7",
+  "chain": "d2",
+  "beat": 3
+ },
+ "co-d3-hill": {
+  "shape": "Run-Long",
+  "earliest": "A2",
+  "where": "The first + node of a stage"
+ },
+ "co-d3-visit": {
+  "shape": "Run-Long",
+  "earliest": "A2",
+  "where": "The first + node of a stage, once per season"
+ },
+ "co-d3-under": {
+  "shape": "Run-Long",
+  "earliest": "A2",
+  "where": "The first + node of a stage after four seasons",
+  "tags": [
+   "snow"
+  ],
+  "level": "A+1"
+ },
+ "co-d4-cove": {
+  "shape": "Stage-Three",
+  "earliest": "A3",
+  "chain": "d4",
+  "beat": 1,
+  "steps": [
+   6
+  ],
+  "tags": [
+   "water"
+  ]
+ },
+ "co-d4-rest": {
+  "shape": "Stage-Three",
+  "earliest": "A3",
+  "chain": "d4",
+  "beat": 2,
+  "steps": [
+   12
+  ]
+ },
+ "co-d4-last": {
+  "shape": "Stage-Three",
+  "earliest": "A3",
+  "chain": "d4",
+  "beat": 3,
+  "steps": [
+   17
+  ]
+ },
+ "co-d5-dump": {
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 13,
+  "window": [
+   11,
+   15
+  ],
+  "sits": "side-branch",
+  "tags": [
+   "city"
+  ],
+  "level": "A+1"
+ },
+ "co-d6-marsh": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 8,
+  "window": [
+   5,
+   11
+  ],
+  "tags": [
+   "snow",
+   "water"
+  ]
+ },
+ "co-d6-back": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 8,
+  "window": [
+   5,
+   11
+  ],
+  "tags": [
+   "snow",
+   "water"
+  ]
+ },
+ "co-d7-crossing-1": {
+  "shape": "Region",
+  "earliest": "A9",
+  "stages": [
+   3
+  ],
+  "where": "Stage 3, step 10",
+  "level": "A+1"
+ },
+ "co-d7-crossing-2": {
+  "shape": "Region",
+  "earliest": "A9",
+  "stages": [
+   6
+  ],
+  "where": "Stage 6, step 10"
+ },
+ "co-d7-crossing-3": {
+  "shape": "Region",
+  "earliest": "A9",
+  "stages": [
+   8
+  ],
+  "where": "Stage 8, step 10"
+ },
+ "co-d8-cloud": {
+  "shape": "Companion",
+  "earliest": "A3",
+  "home": 9,
+  "window": [
+   6,
+   12
+  ],
+  "tags": [
+   "storm"
+  ]
+ },
+ "co-d8-rest-1": {
+  "shape": "Companion",
+  "earliest": "A3",
+  "attaches": "rest"
+ },
+ "co-d8-rest-2": {
+  "shape": "Companion",
+  "earliest": "A3",
+  "attaches": "rest"
+ },
+ "co-d8-rest-3": {
+  "shape": "Companion",
+  "earliest": "A3",
+  "attaches": "rest"
  }
 }

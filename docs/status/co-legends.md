@@ -42,7 +42,23 @@ Pack questlines, so the status file lists them under `extra` (M1-M6 -> entry eve
 
 The region Anomaly meter is run flag `mega-meter`; `syncLegendFlags` resets it to 0 when the region changes. Tests: `tests/unit/coLegendsMega.test.ts`.
 
+## Delta Anomalies D1-D8 (built 2026-11-15, `tools/events/co/legends-3.ts` -> `co-legends-3.json`, 43 events)
+Catalog ids: `delta-clue-nest/-scales/-song` and `delta-research-battle` rebuilt (D1); `form-clue-*` and `form-research-battle` merged into them; `delta-research-week` is a rule (the calendar week). D1-D8 listed under `extra`.
+
+| Code | Entry | Built | Limits |
+|---|---|---|---|
+| D1 | co-d1-linden (+ linden-again) | Journal, clues need it, 3 clues open the habitat (Catch / Study / Sample), named at 3 studied, Lens at 5, letter if only caught | the Delta Lens is a flag and a Moment: map question marks not built |
+| D2 | co-d2-valley (chain d2, 3 beats) | carry the ember (Fire-type), a recent faint dims it (Revive or let go), Charmander starter never fails, Ho-Oh Sign; carried = Delta Charizard + Delta Charizardite, forced = no stone | "the carrier faints" is read as any party faint in the last 18 fights |
+| D3 | co-d3-hill | awake one by the run's own season, visits in four seasons wake the fifth, gran gives Leftovers, a caught one keeps the fifth asleep | uses the in-run calendar (28-day seasons), not the real date; "bring it back to stand in it" not built |
+| D4 | co-d4-cove (chain d4, 3 beats) | 5 finds by tell over three beats, wrong guesses count, elder needs all 5 and no misses (4 with your own Ditto), pick one of 4 types | 5 finds stand in for 18 |
+| D5 | co-d5-dump | six cage fights, the boss (report / pay 3000 / guards), leave = scattered | released-species cage not built |
+| D6 | co-d6-marsh | vent (Ground-type, doubles vs water/ice), take the Wooper, tend (back a region later), Groudon blessing or Groudon in party opens it | none |
+| D7 | co-d7-crossing-1..3 (stages 3/6/8) | signal by Flying-type, sound move or Flash; three signals bring it down; stay / catch / pod; Lugia Sign | none |
+| D8 | co-d8-cloud (+ rest 1-3) | coax over rests, apple skips one, Pikachu starter lands at once | "no battles between rests" not enforced; "comes down at the Final Reunion" not built |
+
+Tests: `tests/unit/coLegendsDelta.test.ts`.
+
 ## Where I stopped (paused 2026-11-15, Kice: five threads at a time)
-- Resumed 2026-11-15 (merged ui-mockups; shared pieces are in the base now). Alphas and Megas M1-M6 done; next D1-D8.
+- Resumed 2026-11-15 (merged ui-mockups; shared pieces are in the base now). Alphas, Megas M1-M6 and Deltas D1-D8 done; next Z1-Z7.
 - Still to build: M7 (rivals slot), D1-D8, Z1-Z7, L2-L15, MY1-MY22, U1-U9, the 382 RULE ids (ladder Trial/Recognition/Presence), placement/flags/status files, update fragment, PR.
 - Run the full `npm run check` before opening the PR.
