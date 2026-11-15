@@ -33,8 +33,8 @@ export const ExpansionSettingsSchema = z.object({
   stagePacing: z.boolean().default(true),
   /** B9 Evolution Encounters: evolution-themed events and wild pre-evolutions meeting their stone. Risky Evolutions stay off. */
   evolutionEncounters: z.boolean().default(true),
-  /** Beta 0.7 Node Event Menus: every map node becomes a small menu (core/nodeMenu). Off until the P7 sims pass. Read when a run starts. */
-  nodeMenus: z.boolean().default(false),
+  /** Beta 0.7 Node Event Menus: every map node becomes a small menu (core/nodeMenu). On by default since the P7 sims (run length within target). Read when a run starts. */
+  nodeMenus: z.boolean().default(true),
   /** B7 E4 counter-pick: register 6 at the League door, swap 1. */
   leagueCounterPick: z.boolean().default(true),
   /** E2 world-state tracks (the Kanto Rocket Ledger): shops, shut Centers and thinner wild pools follow how the team's operations go. */

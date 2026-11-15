@@ -20,7 +20,7 @@ Beta 0.7 = **Node Event Menus (headline)** plus the rest of INSTRUMENTALITY (mil
 
 Node Event Menus, the plan's seven questions, all on the plan's recommendation:
 1. Release: ships in 0.7 behind its own setting, **on by default** once P7 passes the bot sims; off if the sims miss the run-length target.
-2. Picks: **1 optional pick per node**, 2 on gym-eve, plaza and 5-entry nodes. No free picks.
+2. Picks: **up to 3 optional picks per node** (Kice, 2026-11-14; was 1, 2 on gym-eve, plaza and 5-entry nodes). The "picks left" line is gone. No free picks.
 3. Micro entries: **yes** (short repeatable entries so menus never run dry).
 4. "Rival Takes It": **yes**, for what you skip.
 5. Second required entry: **yes, at most 2 required**, never 2 required battles.

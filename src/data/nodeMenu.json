@@ -1,6 +1,6 @@
 {
   "sizeWeights": { "2": 30, "3": 40, "4": 25, "5": 5 },
-  "picks": { "base": 1, "bonus": 2 },
+  "picks": { "base": 3, "bonus": 3 },
   "maxRequired": 2,
   "micro": [
     {

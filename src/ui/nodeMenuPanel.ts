@@ -49,8 +49,7 @@ export function drawNodeMenu(scene: Phaser.Scene, view: NodeMenuView, label: (v:
   const x0 = (GAME_WIDTH - (cw * n + gap * (n - 1))) / 2;
   const y0 = 130;
   const title = scene.add.text(GAME_WIDTH / 2, 62, 'What to do here?', textStyle(28, '#ffffff', { stroke: '#181818', strokeThickness: 4 })).setOrigin(0.5);
-  const picks = view.picksLeft === 1 ? '1 pick left' : `${view.picksLeft} picks left`;
-  const sub = scene.add.text(GAME_WIDTH / 2, 96, `${header ? `${header.entry.label}: done  ·  ` : ''}${picks}  ·  Esc to close`, textStyle(16, '#f0e0a0')).setOrigin(0.5);
+  const sub = scene.add.text(GAME_WIDTH / 2, 96, `${header ? `${header.entry.label}: done  ·  ` : ''}Esc to close`, textStyle(16, '#f0e0a0')).setOrigin(0.5);
   layer.add([title, sub]);
   let index = Math.max(0, cards.findIndex((v) => !v.done && !v.locked));
   const frames: Phaser.GameObjects.Graphics[] = [];

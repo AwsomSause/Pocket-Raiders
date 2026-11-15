@@ -1081,7 +1081,7 @@ export class MapScene extends Phaser.Scene {
       case 'nodeMenu': {
         const v = services().session.nodeMenu();
         const blocker = menuBlocker(services().session.run!);
-        return blocker ?? `What to do here: ${v ? `${v.picksLeft} pick${v.picksLeft === 1 ? '' : 's'} left` : 'nothing'}. Some stops are always open; the rest lock once your picks are used.`;
+        return blocker ?? `What to do here: ${v ? 'pick up to 3 things' : 'nothing'}. Some stops are always open; the rest lock once your picks are used.`;
       }
       case 'node': {
         const n = option.node;

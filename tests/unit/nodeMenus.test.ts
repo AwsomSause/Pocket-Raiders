@@ -50,8 +50,8 @@ describe('node menus P1: categories', () => {
 });
 
 describe('node menus P3: composer', () => {
-  it('is off by default and in speedrun, boss rush and time attack', () => {
-    expect(EXPANSION_SETTINGS_DEFAULTS.nodeMenus).toBe(false);
+  it('is on by default (P7) and off in speedrun, boss rush and time attack', () => {
+    expect(EXPANSION_SETTINGS_DEFAULTS.nodeMenus).toBe(true);
     expect(nodeMenusAllowed([])).toBe(true);
     for (const id of ['boss-rush', 'speed-clear', 'time-attack']) expect(nodeMenusAllowed([id])).toBe(false);
     const off = createRun(content, { runId: 'r', seed: 'off', archetypeId: 'red', campaignId: 'full' });
