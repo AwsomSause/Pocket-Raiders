@@ -1,7 +1,9 @@
 {
  "catalogOverhaul": "rivals",
  "override": true,
- "remove": [],
+ "remove": [
+  "living-rival-clash-retired"
+ ],
  "events": [
   {
    "id": "rq-r19-champion",

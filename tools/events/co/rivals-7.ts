@@ -217,4 +217,6 @@ const names: Json[] = [
 ];
 
 export const EVENTS: Json[] = [...champion, ...greetings, ...inn, ...drinks, ...race, ...names];
-export const REMOVE: string[] = [];
+export const REMOVE: string[] = [
+  'living-rival-clash-retired', // scrapped: a team from an ended run is cross-run memory (Kice 2026-11-14: memory only within the same run)
+];
