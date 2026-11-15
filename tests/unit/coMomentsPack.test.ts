@@ -333,7 +333,9 @@ describe('pack archetype moments: run end (shared use, layer and Bond order)', (
     const low = order(0);
     expect(low[0]).toContain('failure-not-tolerated');
     const high = order(255);
-    expect(high[0]).toMatch(/pa10-the-starters|pa16-the-mascots/);
+    // PI1 The First One (individual layer) comes before PA10 for a starter with the party's highest Bond; then PA10 or PA16.
+    expect(high[0]).toContain('pi1-the-first-one');
+    if (high.length > 1) expect(high[1]).toMatch(/pa10-the-starters|pa16-the-mascots/);
   });
 });
 

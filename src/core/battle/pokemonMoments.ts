@@ -47,6 +47,20 @@ const STATONE = 'pm-statone:';
 const RUINX = 'pm-ruinx:';
 const NOATTACK = 'pm-noattack:';
 const TYPEGUARD = 'pm-typeguard:';
+// Species and individual moments (PS, PI).
+const EVOAFTER = 'pm-evoafter:';
+const ENTRYBOOST = 'pm-entryboost:';
+const BOTHSKIP = 'pm-bothskip:';
+const COUNTERX = 'pm-counterx:';
+const SLOWFIRST = 'pm-slowfirst:';
+const WRONGFACE = 'pm-wrongface:';
+const ACCALL = 'pm-accall:';
+const SCHOOL = 'pm-school:';
+const CRITS = 'pm-crits:';
+/** Run flags: knockouts per Pokémon this run (PI5) and hits it survived on exactly 1 HP (PI3). */
+export const KOS_FLAG = 'pm-kos:';
+export const ONE_HP_FLAG = 'pm-one-hp:';
+export { EVOAFTER as MOMENT_EVOLVE_AFTER };
 /** PA4: a baby that landed a move this battle (run.ts reads it when the battle ends). */
 export const BRAVE_HIT = 'pm-brave-hit:';
 /** PA4: how many times a baby has been brave this run (a run flag, `pm-brave-count:<uid>`). */
@@ -80,7 +94,8 @@ export function momentDamageMult(ctx: BattleContext, c: Combatant, moveType: str
   const movePrefix = `${MOVEBOOST}${c.mon.uid}:${moveId}:`;
   const moveTag = moveId ? ctx.battle.storyEffects.find((t) => t.startsWith(movePrefix)) : undefined;
   const kindled = ctx.battle.storyEffects.filter((t) => t.startsWith(`${KINDLED}${c.mon.uid}:${moveType}:`)).reduce((n, t) => n * (1 + Number(t.split(':').pop()) / 100), 1);
-  return (tag ? 1 + Number(tag.slice(prefix.length)) / 100 : 1) * (moveTag ? 1 + Number(moveTag.slice(movePrefix.length)) / 100 : 1) * kindled;
+  const slow = ctx.battle.storyEffects.includes(`${SLOWFIRST}${c.mon.uid}`) ? 2 : 1;
+  return (tag ? 1 + Number(tag.slice(prefix.length)) / 100 : 1) * (moveTag ? 1 + Number(moveTag.slice(movePrefix.length)) / 100 : 1) * kindled * slow;
 }
 
 /** Remembered: +10% to every stat but HP for the rest of the battle. 1 when not. */
@@ -130,6 +145,49 @@ export function momentTypeGuard(ctx: Pick<BattleContext, 'battle' | 'content'>, 
   if (!t) return 1;
   const own = ctx.content.species.get(target.mon.speciesId)?.types ?? [];
   return own.some((ty) => BEATS[ty] === moveType) ? 1 - Number(t.split(':').pop()) / 100 : 1;
+}
+
+/** Copy of a Copy (PS3): both sides lose this turn. The line, or null. */
+export function momentSkipTurn(ctx: Pick<BattleContext, 'battle'>, user: Pick<Combatant, 'side'>): string | null {
+  if (!ctx.battle.storyEffects.includes(`${BOTHSKIP}${ctx.battle.turn}`)) return null;
+  return user.side === 'player' ? 'The two Ditto stare at each other. Neither can stop laughing.' : 'The other Ditto is laughing too hard to move.';
+}
+
+/** Just Standing There (PS9): its first Counter or Mirror Coat multiplier. 1 when not. */
+export function momentCounterMult(ctx: Pick<BattleContext, 'battle'>, c: Pick<Combatant, 'side' | 'mon'>): number {
+  if (c.side !== 'player') return 1;
+  const t = ctx.battle.storyEffects.find((x) => x.startsWith(`${COUNTERX}${c.mon.uid}:`));
+  return t ? Number(t.split(':').pop()) : 1;
+}
+
+/** Wrong Face (PS12): its Illusion soaks the first super-effective hit as neutral. Spends the tag; true when it applies. */
+export function momentWrongFace(ctx: Pick<BattleContext, 'battle'>, target: Pick<Combatant, 'side' | 'mon' | 'vol'>): boolean {
+  const tag = `${WRONGFACE}${target.mon.uid}`;
+  if (target.side !== 'player' || !target.vol.illusion || !ctx.battle.storyEffects.includes(tag)) return false;
+  ctx.battle.storyEffects = ctx.battle.storyEffects.filter((t) => t !== tag);
+  return true;
+}
+
+/** Lucky Star (PS15): the accuracy bonus in percent for every move in the battle. */
+export function momentAccAll(ctx: Pick<BattleContext, 'battle'>): number {
+  return ctx.battle.storyEffects.filter((t) => t.startsWith(ACCALL)).reduce((n, t) => Math.max(n, Number(t.slice(ACCALL.length))), 0);
+}
+
+/** The School (PS38): its School Form holds whatever its HP. */
+export function momentSchoolHold(ctx: Pick<BattleContext, 'battle'>, c: Pick<Combatant, 'side' | 'mon'>): boolean {
+  return c.side === 'player' && ctx.battle.storyEffects.includes(`${SCHOOL}${c.mon.uid}`);
+}
+
+/** Critical hits this Pokémon has landed this battle (PS28). */
+function momentCrits(ctx: Pick<BattleContext, 'battle'>, uid: string): number {
+  const t = ctx.battle.storyEffects.find((x) => x.startsWith(`${CRITS}${uid}:`));
+  return t ? Number(t.split(':').pop()) : 0;
+}
+
+/** One HP (PI3): a hit left it on exactly 1 HP; counted for the run. */
+export function noteOneHp(ctx: BattleContext, mon: PokemonInstance): void {
+  const flags = ctx.moments?.flags;
+  if (flags) flags[`${ONE_HP_FLAG}${mon.uid}`] = Number(flags[`${ONE_HP_FLAG}${mon.uid}`] ?? 0) + 1;
 }
 
 /** Out of Time (PA12): its Protosynthesis or Quark Drive is on without sun or terrain. */
@@ -231,8 +289,11 @@ export function noteBraveHit(ctx: Pick<BattleContext, 'battle'>, c: Pick<Combata
 }
 
 /** The boosted hit landed: the waiting boost is spent. */
-export function spendMomentBoost(ctx: BattleContext, c: Combatant, moveType: string): void {
+export function spendMomentBoost(ctx: BattleContext, c: Combatant, moveType: string, moveId = ''): void {
   if (c.side !== 'player') return;
+  // Wait for It (PS13) is one move; Just Standing There (PS9) is one Counter or Mirror Coat.
+  const spent = [`${SLOWFIRST}${c.mon.uid}`, ...(moveId === 'counter' || moveId === 'mirror-coat' ? [`${COUNTERX}${c.mon.uid}`] : [])];
+  ctx.battle.storyEffects = ctx.battle.storyEffects.filter((t) => !spent.some((x) => t === x || t.startsWith(`${x}:`)));
   const prefix = `${NEXTBOOST}${c.mon.uid}:${moveType}:`;
   const at = ctx.battle.storyEffects.findIndex((t) => t.startsWith(prefix));
   if (at >= 0) ctx.battle.storyEffects.splice(at, 1);
@@ -246,6 +307,8 @@ export function momentContactPoison(ctx: BattleContext, c: Combatant): boolean {
 /** Extra priority on a Pokémon's first turn (Sneasel's ambush). */
 export function momentPriority(ctx: BattleContext, c: Combatant): number {
   if (c.side !== 'player') return 0;
+  // Wait for It (PS13): its first move always goes last.
+  if (ctx.battle.storyEffects.includes(`${SLOWFIRST}${c.mon.uid}`)) return -7;
   // Resolute, Takes Advantage: the next move after the moment (set on turn T, it counts from turn T+1, once).
   const next = `${NEXTPRIO}${c.mon.uid}:`;
   for (const tag of ctx.battle.storyEffects) {
@@ -372,6 +435,32 @@ function applyEffect(ctx: BattleContext, c: Combatant, fx: MomentEffect, m: Poke
   if (ruin) add(`${RUINX}${c.mon.uid}:${ruin}`);
   if (fx.noAttackFoe) add(`${NOATTACK}${c.mon.uid}:${fx.noAttackFoe.join(',')}`);
   if (fx.typeGuard) for (const p of scoped()) add(`${TYPEGUARD}${p.uid}:${fx.typeGuard}`);
+  // Species and individual moments (PS, PI).
+  if (fx.evolveAfter) add(`${EVOAFTER}${c.mon.uid}:${fx.evolveAfter.to}:${ctx.battle.turn + (fx.evolveAfter.turns ?? 0)}`);
+  if (fx.entryBoost) add(`${ENTRYBOOST}${fx.entryBoost.species.join(',')}:${fx.entryBoost.stat}:${fx.entryBoost.n}`);
+  if (fx.bothSkip) add(`${BOTHSKIP}${ctx.battle.turn}`);
+  if (fx.counterMult) add(`${COUNTERX}${c.mon.uid}:${fx.counterMult}`);
+  if (fx.slowFirst) add(`${SLOWFIRST}${c.mon.uid}`);
+  if (fx.wrongFace) add(`${WRONGFACE}${c.mon.uid}`);
+  if (fx.accAll) add(`${ACCALL}${fx.accAll}`);
+  if (fx.schoolOnce) add(`${SCHOOL}${c.mon.uid}`);
+  if (fx.spendFlag && ctx.moments) delete ctx.moments.flags[fx.spendFlag.replace('{uid}', c.mon.uid)];
+  if (fx.revealNext && ctx.battle.kind === 'trainer') {
+    const name = (id: string) => content.species.get(id)?.name ?? id;
+    const next = ctx.battle.enemyTeam.find((e, i) => i > ctx.battle.enemyIndex && e.hp > 0);
+    const brave = Number(ctx.moments?.flags[`${BRAVE_COUNT}${c.mon.uid}`] ?? 0) >= 3;
+    const items = brave ? ctx.battle.enemyTeam.filter((e) => e.hp > 0 && e.held && Object.keys(e.held).length > 0).map((e) => `${name(e.speciesId)}: ${Object.keys(e.held!).map((id) => content.items.get(id)?.name ?? content.catalog.get(id)?.name ?? id).join(', ')}`) : [];
+    const text = `${name(c.mon.speciesId)} already knows: ${next ? `${name(next.speciesId)} comes next` : 'there is no one after this one'}.${items.length ? ` It sees what they hold. ${items.join('; ')}.` : ''}`;
+    (ctx.momentQueue ??= []).push({ type: 'raid', tone: 'info', text });
+  }
+  if (fx.randomMove) {
+    const pool = [...content.moves.values()].filter((mv) => mv.power !== null && mv.category !== 'status' && !mv.flags.includes('typeless') && !c.mon.moves.some((x) => x.id === mv.id)).map((mv) => mv.id).sort();
+    const pick = pool.length ? pool[Math.floor(momentUnit(ctx, `${m.id}:glitch`, c.mon.uid, turnKey) * pool.length)]! : null;
+    if (pick) {
+      learnForBattle(ctx, c, pick);
+      (ctx.momentQueue ??= []).push({ type: 'raid', tone: 'info', text: `${content.species.get(c.mon.speciesId)?.name ?? 'It'}'s code rewrites itself. It knows ${content.moves.get(pick)?.name ?? pick} now.` });
+    }
+  }
   if (fx.haunting) add(`${HAUNT}${c.mon.uid}:${ctx.battle.turn + fx.haunting.turns}:${fx.haunting.pct}:${fx.haunting.foeAccDown ?? 0}`);
   return hp;
 }
@@ -502,6 +591,8 @@ function chanceFor(ctx: BattleContext, m: PokemonMoment, mon: PokemonInstance): 
   if (m.chanceBond) chance = Math.min(m.chanceBond.max, chance + Math.max(0, bondLevel(ctx.content, mon) - m.chanceBond.above) * m.chanceBond.perStep);
   if (m.chancePlus && (m.chancePlus.exact ? m.chancePlus.species.includes(mon.speciesId) : momentMatches(ctx.content, { ...m, scope: { lines: m.chancePlus.species } }, mon.speciesId))) chance += m.chancePlus.plus;
   for (const r of remembered(ctx, m, mon)) chance += r.chance ?? 0;
+  // The Named One (PI4): a Pokémon you named gets +5% on whichever revival would bring it back.
+  if (m.trigger === 'runEnd' && mon.care?.nickname) chance += 0.05;
   return Math.min(1, chance);
 }
 
@@ -575,7 +666,7 @@ export function hasStarterTrio(content: BattleContext['content'], party: readonl
 }
 
 /** A moment's extra conditions: enough matching party members, or a weather on the field. */
-function requirementsMet(ctx: BattleContext, m: PokemonMoment, c?: Combatant): boolean {
+function requirementsMet(ctx: BattleContext, m: PokemonMoment, c?: Combatant, ko?: readonly PokemonInstance[]): boolean {
   const r = m.requires;
   if (!r) return true;
   if (r.status && !(c && (r.status.includes('confusion') && c.vol.confusion > 0 || (c.mon.status && (r.status as string[]).includes(c.mon.status.id))))) return false;
@@ -619,6 +710,19 @@ function requirementsMet(ctx: BattleContext, m: PokemonMoment, c?: Combatant): b
     if (!types || !r.foeAceTypes.some((t) => types.includes(t))) return false;
   }
   if (r.partyMatching && ctx.party.filter((p) => p.hp > 0 && momentMatches(ctx.content, m, p.speciesId)).length < r.partyMatching) return false;
+  // Species and individual moments (PS, PI). A Gym Leader's class id, as core/encounters names it (not imported: battle code stays clear of it).
+  if (r.gymLeader && ctx.battle.trainer?.classId !== 'gym-leader') return false;
+  if (r.disguiseBroken && !(c && ctx.battle.extra.brokenFace.includes(c.mon.uid))) return false;
+  if (r.stageAtLeast && !(c && (c.stages[r.stageAtLeast.stat] ?? 0) >= r.stageAtLeast.n)) return false;
+  if (r.moveUses && !(c && (c.mon.moves.find((x) => x.id === r.moveUses!.move)?.uses ?? 0) >= r.moveUses.n)) return false;
+  if (r.critsAtLeast && !(c && momentCrits(ctx, c.mon.uid) >= r.critsAtLeast)) return false;
+  if (r.koSpecies && !(ko ?? []).some((f) => r.koSpecies!.includes(f.speciesId))) return false;
+  if (r.koLegendOrAce && !(ko ?? []).some((f) => (ctx.content.species.get(f.speciesId)?.tags as string[] | undefined)?.includes('legendary') || (ctx.battle.kind === 'trainer' && ctx.battle.enemyTeam.length > 1 && foeAce(ctx).uid === f.uid))) return false;
+  if (r.finalBoss && !ctx.moments?.finalBoss) return false;
+  if (r.mostKos && c) {
+    const kos = (p: PokemonInstance) => Number(ctx.moments?.flags[`${KOS_FLAG}${p.uid}`] ?? 0);
+    if (kos(c.mon) <= 0 || ctx.party.some((p) => p !== c.mon && kos(p) >= kos(c.mon))) return false;
+  }
   if (r.weather && ctx.battle.weather?.id !== r.weather) return false;
   return true;
 }
@@ -691,7 +795,19 @@ export function tryReactiveMoments(ctx: BattleContext, turnEvents: BattleEvent[]
   const hooks = ctx.moments;
   const { battle } = ctx;
   const mon = ctx.party[battle.activeIndex];
-  if (!hooks || !mon || mon.hp <= 0 || battle.outcome) return;
+  if (!hooks || !mon) return;
+  // Tallies, whatever else happens: the foes the Pokémon in front knocked out (for the run, PI5) and its critical hits (this battle, PS28).
+  const koFoes = turnEvents.filter((e) => e.type === 'faint' && e.side === 'enemy').map((e) => battle.enemyTeam.find((f) => f.uid === (e as { uid: string }).uid)).filter((f): f is PokemonInstance => !!f);
+  if (koFoes.length && mon.hp > 0) hooks.flags[`${KOS_FLAG}${mon.uid}`] = Number(hooks.flags[`${KOS_FLAG}${mon.uid}`] ?? 0) + koFoes.length;
+  const crits = turnEvents.filter((e) => e.type === 'damage' && e.side === 'enemy' && e.crit).length;
+  if (crits) {
+    const had = momentCrits(ctx, mon.uid);
+    battle.storyEffects = battle.storyEffects.filter((t) => !t.startsWith(`${CRITS}${mon.uid}:`));
+    battle.storyEffects.push(`${CRITS}${mon.uid}:${had + crits}`);
+  }
+  // A won battle still hears the knockout that won it, for the moments about that foe (PS20, PS44).
+  const wonOnKo = battle.outcome === 'win' && koFoes.length > 0;
+  if (mon.hp <= 0 || (battle.outcome && !wonOnKo)) return;
   const hit = turnEvents.filter((e): e is Extract<BattleEvent, { type: 'damage' }> => e.type === 'damage' && e.side === 'player');
   const fired: Record<string, boolean> = {
     low: true,
@@ -710,8 +826,9 @@ export function tryReactiveMoments(ctx: BattleContext, turnEvents: BattleEvent[]
     for (const m of momentsFor(ctx.content, mon, trigger)) {
       if (played >= MAX_ENTRY_MOMENTS) return;
       if (!m.effect) continue;
+      if (battle.outcome && !(m.requires?.koSpecies || m.requires?.koLegendOrAce)) continue;
       if (trigger === 'low' && !(m.hpBelow && mon.hp * 100 < max * m.hpBelow)) continue;
-      if (!requirementsMet(ctx, m, c)) continue;
+      if (!requirementsMet(ctx, m, c, koFoes)) continue;
       const key = momentKey(m, mon.uid);
       if (m.limit === 'battle' ? battle.storyEffects.includes(key) : hooks.flags[runClaimKey(m)] !== undefined) continue;
       if (m.limit === 'battle') battle.storyEffects.push(key);
@@ -762,9 +879,11 @@ export function tryFaintMoments(ctx: BattleContext, turnEvents: BattleEvent[], e
         if (!spend(m, owner.uid)) continue;
         if (!momentRoll(hooks.seed, m.id, owner.uid, battle.turn, m.chance)) continue;
         // A Small Kindness acts for whoever comes out next, so it plays now instead of waiting for its owner.
-        if (m.effect.rememberedNext || m.effect.guardNext) {
+        if (m.effect.rememberedNext || m.effect.guardNext || m.effect.hauntFallen) {
           if (m.effect.rememberedNext && !battle.storyEffects.includes(REMEMBER_NEXT)) battle.storyEffects.push(REMEMBER_NEXT);
           if (m.effect.guardNext) battle.storyEffects.push(`${GUARD_NEXT}${owner.uid}`);
+          // The Ferryman (PS18): it doesn't let go, and the fallen ally haunts the foe.
+          if (m.effect.hauntFallen) battle.storyEffects.push(`${HAUNT}${fallen.uid}:${battle.turn + m.effect.hauntFallen.turns}:${m.effect.hauntFallen.pct}:0`);
           const oc: Combatant = { side: 'player', mon: owner, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false };
           events.push(eventFor(ctx, oc, m, owner.hp, false));
         } else battle.storyEffects.push(`${PENDING}${m.id}:${owner.uid}`);
@@ -776,6 +895,13 @@ export function tryFaintMoments(ctx: BattleContext, turnEvents: BattleEvent[], e
 /** A survivor whose ally moment was waiting has just been sent out: it plays now. */
 export function applyPendingMoments(ctx: BattleContext, c: Combatant, events: BattleEvent[]): void {
   const name = ctx.content.species.get(c.mon.speciesId)?.name ?? 'It';
+  // The Empty Shell (PS2): the Ninjask it came from is faster each time it comes in.
+  for (const tag of ctx.battle.storyEffects.filter((t) => t.startsWith(ENTRYBOOST))) {
+    const [species, stat, n] = tag.slice(ENTRYBOOST.length).split(':') as [string, keyof typeof c.stages, string];
+    if (c.mon.hp <= 0 || !species.split(',').includes(c.mon.speciesId)) continue;
+    c.stages[stat] = clampStage((c.stages[stat] ?? 0) + Number(n));
+    events.push({ type: 'raid', tone: 'info', text: `${name} comes in faster than ever. For the empty shell.` });
+  }
   // Embers Left: the next Pokémon of the named type sent in is Kindled.
   const types = ctx.content.species.get(c.mon.speciesId)?.types ?? [];
   for (const tag of ctx.battle.storyEffects.filter((t) => t.startsWith(KINDLE_NEXT))) {

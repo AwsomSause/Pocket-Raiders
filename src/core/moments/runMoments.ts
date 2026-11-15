@@ -8,7 +8,7 @@ import { bondFriendship } from '../co/who';
 import { changeFriendship } from '../friendship';
 import { addItem } from '../items';
 import { typeEffectiveness } from '../battle/damage';
-import { gainXp, getSpecies, xpForLevel } from '../pokemon';
+import { gainXp, getSpecies, maxHp, xpForLevel } from '../pokemon';
 import { bossInfo, runLevelCap } from '../regions';
 import { hashSeed, Rng } from '../rng';
 import type { PokemonInstance, RunState } from '../state';
@@ -70,6 +70,11 @@ export function evolveMoments(content: Content, run: RunState, mon: PokemonInsta
     if (!momentRoll(run.seed, m.id, mon.uid, run.encountersCompleted, m.chance)) continue;
     const fx = m.effect;
     if (fx.bond) changeFriendship(content, mon, bondFriendship(content, fx.bond, 'picked'));
+    // One in a Hundred (PS22): it came out as the rare form.
+    if (fx.evolveForm && content.species.has(fx.evolveForm)) {
+      mon.speciesId = fx.evolveForm;
+      mon.hp = Math.min(mon.hp, maxHp(content, mon));
+    }
     if (fx.evAll) {
       const evs = (mon.evs ??= {});
       for (const st of ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const) evs[st] = Math.min(255, (evs[st] ?? 0) + fx.evAll);
@@ -120,6 +125,18 @@ export function restMoments(content: Content, run: RunState): string[] {
         gainXp(content, mon, Math.max(1, Math.floor((gap * fx.xpPct) / 100)), runLevelCap(content, run));
       }
       if (fx.weaknessHint && run.stage) extra = ` ${weaknessLine(content, run)}`;
+      // Species moments (PS10, PS16, PS45).
+      if (fx.setFlag) run.story.flags[fx.setFlag.replace('{uid}', mon.uid)] = 1;
+      if (fx.cureTeam) for (const p of run.party) p.status = null;
+      if (fx.healLowestPct) {
+        const low = run.party.filter((p) => p.hp > 0).sort((a, b) => a.hp / maxHp(content, a) - b.hp / maxHp(content, b))[0];
+        if (low) low.hp = Math.min(maxHp(content, low), low.hp + Math.floor((maxHp(content, low) * fx.healLowestPct) / 100));
+      }
+      if (fx.present) {
+        const gift = fx.present[Math.floor(new Rng(hashSeed(`${run.seed}:pmoment:${m.id}:${mon.uid}:${run.regionIndex}:present`)).float() * fx.present.length)]!;
+        addItem(run.inventory, gift, 1);
+        extra = ` Inside: ${content.items.get(gift)?.name ?? content.catalog.get(gift)?.name ?? gift}.`;
+      }
       // A scene with choices opens as a stop beside this one.
       if (fx.openEvent && here) here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId: fx.openEvent });
       if (fx.legendHint) {

@@ -537,6 +537,86 @@
      }
     }
    ]
+  },
+  {
+   "id": "ps8-just-five-more-minutes",
+   "name": "Just Five More Minutes",
+   "group": "Rests, camp and bond",
+   "room": true,
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "partySpecies",
+     "species": "snorlax"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a24",
+    "effect": "none"
+   },
+   "intro": "Everyone is packed. Everyone is ready. Snorlax is still asleep across the path, one great paw over its face.\n\nYou call its name. It rolls over. The ground shakes a little.\n\nIt is very, very asleep.",
+   "choices": [
+    {
+     "label": "Let it sleep.",
+     "success": {
+      "text": "You sit down with your back against its warm, rising belly and wait.\n\nThe sun moves across the sky. The road ahead will have to manage without you for a while.\n\nWhen it finally opens one eye, it looks at you as if you are the best thing it has ever seen. It is ready now. Really ready.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pm-snorlax-slept",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Poke it.",
+     "success": {
+      "text": "You poke it. Nothing. You poke it harder.\n\nOne huge eye opens and glares at you. It gets up with a groan you feel in your teeth and stomps off down the road ahead of everyone.\n\nIt is up. It is not happy about it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ps27-self-portrait",
+   "name": "Self-Portrait",
+   "group": "Rests, camp and bond",
+   "room": true,
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "partySpecies",
+     "species": "smeargle"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2030",
+    "effect": "none"
+   },
+   "intro": "Smeargle is up before everyone, tail dripping, working on a flat rock by the fire.\n\nIt keeps glancing over at the camp, then back at the rock. It is painting something. It hunches over it when it sees you looking.",
+   "choices": [
+    {
+     "label": "Look at it.",
+     "success": {
+      "text": "You lean over its shoulder. It lets you.\n\nIt is the team. All of them, asleep in a heap by the fire, every one of them painted with great care. There is even a small, lumpy shape that must be Smeargle itself, at the edge, watching over them.\n\nIt looks up at you, waiting. You tell it the truth. It is the best thing you have ever seen.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Let it finish.",
+     "success": {
+      "text": "You leave it to work and go to see to the others.\n\nLater it brings the rock over and sets it down in front of you, very proud.\n\nIt is you. Not quite right, a little lopsided, the hat much too big. But it is you, the way Smeargle sees you. Smiling.",
+      "effects": []
+     }
+    }
+   ]
   }
  ]
 }

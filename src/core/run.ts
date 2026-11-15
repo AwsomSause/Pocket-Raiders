@@ -19,7 +19,7 @@ import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
 import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
-import { BRAVE_COUNT, BRAVE_HIT } from './battle/pokemonMoments';
+import { BRAVE_COUNT, BRAVE_HIT, MOMENT_EVOLVE_AFTER } from './battle/pokemonMoments';
 import { revivalFee } from './battle/revivalStatus';
 import { bondFriendship } from './co/who';
 import { applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, refusesToLeave, returnedBug } from './instrumentality/flightNorth';
@@ -3017,6 +3017,7 @@ function pokemonMomentHooks(content: Content, run: RunState): MomentHooks {
     cinematic: (tier) => momentAllowed(content, run, tier),
     noteCinematic: (tier) => noteMoments(run, tier),
     starterUid: run.log.starterUid,
+    finalBoss: run.battle?.trainer?.classId === CHAMPION_CLASS && isFinalBoss(content, run),
     // Only a wipe with nothing left to catch it ends the run: no checkpoint to return to, no Safety Net, no VS Recorder.
     runWouldEnd: () => {
       const battle = run.battle;
@@ -3826,6 +3827,16 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
       const evo = evolve(content, mon, special);
       evolutions.push({ ...evo, uid: mon.uid });
       for (const moveId of evo.wantsToLearn) run.pending.push({ kind: 'learnMove', uid: mon.uid, moveId });
+    }
+    // Pokémon Moments (PS1 Magikarp, PS20 Bisharp, PS28 Farfetch'd): a moment promised it would evolve when the battle ends, if it is still standing.
+    const owed = battle.storyEffects.find((t) => t.startsWith(`${MOMENT_EVOLVE_AFTER}${mon.uid}:`));
+    if (owed && mon.hp > 0 && !evolutions.some((e) => e.uid === mon.uid)) {
+      const [, , to, at] = owed.split(':') as [string, string, string, string];
+      if (battle.turn >= Number(at) && mon.speciesId !== to && content.species.has(to)) {
+        const evo = evolve(content, mon, to);
+        evolutions.push({ ...evo, uid: mon.uid });
+        for (const moveId of evo.wantsToLearn) run.pending.push({ kind: 'learnMove', uid: mon.uid, moveId });
+      }
     }
   }
   count(run, 'evolutions', evolutions.length);

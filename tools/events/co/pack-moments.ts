@@ -2,8 +2,9 @@
 // PA11 NOT FROM HERE (Ultra Beasts): a rest scene, opened by the rest moment pa11-not-from-here (20%). Sitting with it three times in a run lets it sleep by the fire (+3 Bond), and from then on
 // its Beast Boost fires once at the start of each battle (the moment pa11-sleeps-by-the-fire).
 // PG2 ANY ROAD (Eevee), PG8 OLD QUARRELS (the weather trio), PG18 CHANGE OF CLOTHES (Rotom): rest scenes opened the same way.
+// PS8 JUST FIVE MORE MINUTES (Snorlax) and PS27 SELF-PORTRAIT (Smeargle): species rest scenes, opened the same way.
 // Build: npm run co:build -- pack-moments
-import { bondUp, br, ev, flag, flagIs, hurt, out, type Json } from '../dsl.ts';
+import { bondUp, br, ev, flag, flagIs, hurt, out, takeNode, type Json } from '../dsl.ts';
 import { GROUP, P, ch, moment, not, variant } from './_ne.ts';
 
 export { CATEGORY } from './_ne.ts';
@@ -102,5 +103,38 @@ export const EVENTS: Json[] = [
       br([{ kind: 'stageTypes', types: ['grass'] }], P('The lawnmower coughs into life. Rotom does one very neat lap of the camp.', 'Rotom is Mow Rotom now.'), { kind: 'formChange', from: 'rotom', to: 'rotom-mow' }),
     ] }),
     ch('Out you get.', out(P('You knock on the side. A long, sulky pause. Then Rotom drifts out, crackling under its breath.', 'It sits on your shoulder for the rest of the night, still sulking. It is warm, at least.'))),
+  ]),
+  // PS8 Just Five More Minutes: letting it sleep costs a node; it wakes rested for the next battle (the start moment ps8-just-five-more-minutes-rested).
+  ev('ps8-just-five-more-minutes', 'Just Five More Minutes', GROUP.camp, { room: true, rarity: 'uncommon', tint: '#1f2a24', effect: 'none', requires: [{ kind: 'partySpecies', species: 'snorlax' }] }, P(
+    'Everyone is packed. Everyone is ready. Snorlax is still asleep across the path, one great paw over its face.',
+    'You call its name. It rolls over. The ground shakes a little.',
+    'It is very, very asleep.',
+  ), [
+    ch('Let it sleep.', out(P(
+      'You sit down with your back against its warm, rising belly and wait.',
+      'The sun moves across the sky. The road ahead will have to manage without you for a while.',
+      'When it finally opens one eye, it looks at you as if you are the best thing it has ever seen. It is ready now. Really ready.',
+    ), takeNode(1), flag('pm-snorlax-slept'))),
+    ch('Poke it.', out(P(
+      'You poke it. Nothing. You poke it harder.',
+      'One huge eye opens and glares at you. It gets up with a groan you feel in your teeth and stomps off down the road ahead of everyone.',
+      'It is up. It is not happy about it.',
+    ))),
+  ]),
+  // PS27 Self-Portrait: there is no run album yet, so the painting is told, not kept (limited).
+  ev('ps27-self-portrait', 'Self-Portrait', GROUP.camp, { room: true, rarity: 'uncommon', tint: '#2a2030', effect: 'none', requires: [{ kind: 'partySpecies', species: 'smeargle' }] }, P(
+    'Smeargle is up before everyone, tail dripping, working on a flat rock by the fire.',
+    'It keeps glancing over at the camp, then back at the rock. It is painting something. It hunches over it when it sees you looking.',
+  ), [
+    ch('Look at it.', out(P(
+      'You lean over its shoulder. It lets you.',
+      'It is the team. All of them, asleep in a heap by the fire, every one of them painted with great care. There is even a small, lumpy shape that must be Smeargle itself, at the edge, watching over them.',
+      'It looks up at you, waiting. You tell it the truth. It is the best thing you have ever seen.',
+    ))),
+    ch('Let it finish.', out(P(
+      'You leave it to work and go to see to the others.',
+      'Later it brings the rock over and sets it down in front of you, very proud.',
+      'It is you. Not quite right, a little lopsided, the hat much too big. But it is you, the way Smeargle sees you. Smiling.',
+    ))),
   ]),
 ];

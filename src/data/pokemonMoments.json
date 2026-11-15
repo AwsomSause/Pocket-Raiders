@@ -3251,26 +3251,6 @@
    }
   },
   {
-   "id": "snorlax-rest",
-   "name": "Lazy Afternoon",
-   "scope": {
-    "species": [
-     "snorlax"
-    ]
-   },
-   "trigger": "rest",
-   "chance": 1,
-   "limit": "run",
-   "tier": "minor",
-   "status": "supported",
-   "effectText": "At the next rest node: +8 friendship and a free berry.",
-   "presentation": "Snore | \"Snuggle.\"",
-   "effect": {
-    "friendship": 8,
-    "freeBerry": true
-   }
-  },
-  {
    "id": "pikachu-spark-night",
    "name": "Spark Night",
    "scope": {
@@ -3501,7 +3481,8 @@
    "presentation": "Shout | \"Formation!\"",
    "effect": {
     "firstPriority": 1
-   }
+   },
+   "layer": "species"
   },
   {
    "status": "supported",
@@ -3525,7 +3506,8 @@
     "boost": {
      "atk": 1
     }
-   }
+   },
+   "layer": "species"
   },
   {
    "limit": "battle",
@@ -3548,7 +3530,8 @@
      "type": "psychic",
      "pct": 100
     }
-   }
+   },
+   "layer": "species"
   },
   {
    "limit": "battle",
@@ -3572,7 +3555,8 @@
     "foeStage": {
      "spe": -1
     }
-   }
+   },
+   "layer": "species"
   },
   {
    "limit": "battle",
@@ -3600,7 +3584,8 @@
      "move": "gigaton-hammer",
      "pct": 50
     }
-   }
+   },
+   "layer": "species"
   },
   {
    "id": "pt1-plain-and-stubborn",
@@ -6123,6 +6108,768 @@
    },
    "effectText": "Rotom has got into an appliance it found. (A stop opens: let it stay, or out you get.)",
    "presentation": "A whirr and a clank | Rotom has got into an appliance it found."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps1-the-magikarp-that-could",
+   "name": "The Magikarp That Could",
+   "scope": {
+    "species": [
+     "magikarp"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "evolveAfter": {
+     "to": "gyarados",
+     "turns": 3
+    }
+   },
+   "effectText": "Against a Gym Leader: if it is still standing after three turns, it evolves when the battle ends, whatever its level.",
+   "presentation": "It flops onto the field. The crowd laughs | Magikarp doesn't care.",
+   "requires": {
+    "gymLeader": true
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps2-the-empty-shell",
+   "name": "The Empty Shell",
+   "scope": {
+    "species": [
+     "shedinja"
+    ]
+   },
+   "trigger": "faint",
+   "effect": {
+    "entryBoost": {
+     "species": [
+      "ninjask"
+     ],
+     "stat": "spe",
+     "n": 2
+    }
+   },
+   "effectText": "When it falls, the Ninjask in your party gets Speed +2 each time it comes in, for the rest of the battle.",
+   "presentation": "It doesn't fall. It just stops | There was never anything inside it. Was there?"
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps3-copy-of-a-copy",
+   "name": "Copy of a Copy",
+   "scope": {
+    "species": [
+     "ditto"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "bothSkip": true
+   },
+   "effectText": "Facing another Ditto: both stare, blink, and lose their first turn laughing.",
+   "presentation": "Two Ditto stare. Both blink | Neither of them can stop laughing.",
+   "requires": {
+    "foeSpecies": [
+     "ditto"
+    ]
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps5-aura-sight",
+   "name": "Aura Sight",
+   "scope": {
+    "species": [
+     "lucario"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "revealNext": true
+   },
+   "effectText": "It sees the opponent's next Pokémon before it comes out. Raised from a brave Riolu, it sees their held items too.",
+   "presentation": "Its eyes glow blue. It looks past the opponent's lead | [Name] already knows who comes next.",
+   "requires": {
+    "named": true
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "layer": "species",
+   "chance": 0.15,
+   "id": "ps6-i-will-protect-my-trainer-gardevoir",
+   "name": "I Will Protect My Trainer",
+   "scope": {
+    "species": [
+     "gardevoir"
+    ]
+   },
+   "trigger": "runEnd",
+   "effect": {
+    "reviveHpPct": 50,
+    "guard": 3
+   },
+   "effectText": "Instead of the run ending: Gardevoir stands back up at 50% HP and is Guarded for three turns.",
+   "presentation": "A black hole of a screen. A white figure steps into it | [Name] will protect you."
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "layer": "species",
+   "chance": 0.15,
+   "id": "ps6-i-will-protect-my-trainer-gallade",
+   "name": "I Will Protect My Trainer",
+   "scope": {
+    "species": [
+     "gallade"
+    ]
+   },
+   "trigger": "runEnd",
+   "effect": {
+    "reviveHpPct": 50,
+    "resolute": true
+   },
+   "effectText": "Instead of the run ending: Gallade stands back up at 50% HP, Resolute.",
+   "presentation": "A black hole of a screen. A white figure steps into it | [Name] will protect you."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps8-just-five-more-minutes",
+   "name": "Just Five More Minutes",
+   "scope": {
+    "species": [
+     "snorlax"
+    ]
+   },
+   "trigger": "rest",
+   "effect": {
+    "openEvent": "ps8-just-five-more-minutes"
+   },
+   "effectText": "At rest it won't wake up. Let it sleep (a node lost) and it starts the next battle with +1 to every stat; poke it and it wakes up grumpy.",
+   "presentation": "It won't wake up | Just five more minutes."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps8-just-five-more-minutes-rested",
+   "name": "Just Five More Minutes",
+   "scope": {
+    "species": [
+     "snorlax"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "boost": {
+     "atk": 1,
+     "def": 1,
+     "spa": 1,
+     "spd": 1,
+     "spe": 1
+    },
+    "spendFlag": "pm-snorlax-slept"
+   },
+   "effectText": "It slept in: +1 to every stat for this battle.",
+   "presentation": "It stretches. It yawns. It is very, very rested | [Name] is ready now.",
+   "requires": {
+    "flagAtLeast": {
+     "key": "pm-snorlax-slept",
+     "n": 1
+    }
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "layer": "species",
+   "chance": 0.1,
+   "id": "ps9-just-standing-there",
+   "name": "Just Standing There",
+   "scope": {
+    "species": [
+     "wobbuffet"
+    ]
+   },
+   "trigger": "runEnd",
+   "effect": {
+    "reviveHpPct": 25,
+    "counterMult": 3
+   },
+   "effectText": "Instead of the run ending: it stands back up at 25% HP, and its first Counter or Mirror Coat does triple damage.",
+   "presentation": "Silence. Then Wobbuffet salutes | Wobbuffet!"
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps10-one-hundred-and-eight",
+   "name": "One Hundred and Eight",
+   "scope": {
+    "species": [
+     "spiritomb"
+    ]
+   },
+   "trigger": "rest",
+   "effect": {
+    "setFlag": "pm-keystone:{uid}"
+   },
+   "effectText": "When your Kindness reaches 108: its Odd Keystone cracks. Every stat but HP +10% for the rest of the run.",
+   "presentation": "Each of the 108 spirits says a single word | They all say \"thank you.\"",
+   "requires": {
+    "flagAtLeast": {
+     "key": "kindness",
+     "n": 108
+    }
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps10-one-hundred-and-eight-cracked",
+   "name": "One Hundred and Eight",
+   "scope": {
+    "species": [
+     "spiritomb"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "statPct": {
+     "atk": 10,
+     "def": 10,
+     "spa": 10,
+     "spd": 10,
+     "spe": 10
+    }
+   },
+   "effectText": "Its Odd Keystone is cracked: every stat but HP +10%.",
+   "presentation": "The keystone hums | 108 voices, quiet now.",
+   "requires": {
+    "flagAtLeast": {
+     "key": "pm-keystone:{uid}",
+     "n": 1
+    }
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps11-dont-look",
+   "name": "Don't Look",
+   "scope": {
+    "species": [
+     "mimikyu",
+     "mimikyu-busted"
+    ]
+   },
+   "trigger": "turn",
+   "effect": {
+    "boost": {
+     "atk": 1
+    }
+   },
+   "effectText": "When its Disguise breaks: Attack +1. It's embarrassed.",
+   "presentation": "The rag head falls. Mimikyu fixes it, furious | Don't look.",
+   "requires": {
+    "disguiseBroken": true
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps12-wrong-face",
+   "name": "Wrong Face",
+   "scope": {
+    "species": [
+     "zoroark",
+     "zoroark-hisui"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "wrongFace": true
+   },
+   "effectText": "While its Illusion holds, the first super-effective hit on the \"fake\" does neutral damage. Once per battle.",
+   "presentation": "It enters wearing another team member's face | The opponent pauses."
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "layer": "species",
+   "chance": 0.05,
+   "id": "ps13-wait-for-it",
+   "name": "Wait for It",
+   "scope": {
+    "species": [
+     "slowpoke"
+    ]
+   },
+   "trigger": "runEnd",
+   "effect": {
+    "slowFirst": true
+   },
+   "effectText": "Instead of the run ending: it stands at 1 HP. Its first move always goes last, and does double damage.",
+   "presentation": "The run-end screen starts to show. Then, about four seconds late | Slowpoke realises what happened."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 0.1,
+   "id": "ps15-lucky-star",
+   "name": "Lucky Star",
+   "scope": {
+    "lines": [
+     "togepi"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "accAll": 10
+   },
+   "effectText": "Every move in this battle has +10% accuracy, for both sides.",
+   "presentation": "Little stars in the corner of the screen | Something lucky is about to happen."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "limited",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps16-nurses-orders",
+   "name": "Nurse's Orders",
+   "scope": {
+    "species": [
+     "chansey",
+     "blissey"
+    ]
+   },
+   "trigger": "rest",
+   "effect": {
+    "cureTeam": true,
+    "healLowestPct": 25
+   },
+   "effectText": "At rest it inspects the team: every status is cured, and the lowest-HP Pokémon gets back 25% of its max HP.",
+   "presentation": "It inspects each team member in turn | Nurse's orders."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 0.5,
+   "id": "ps17-your-shadow",
+   "name": "Your Shadow",
+   "scope": {
+    "species": [
+     "gengar"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "foeStage": {
+     "acc": -1
+    }
+   },
+   "effectText": "At night: the opponent's lead starts with Accuracy -1.",
+   "presentation": "The opponent's shadow grins | It isn't their shadow any more.",
+   "requires": {
+    "night": true
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "species",
+   "chance": 0.5,
+   "id": "ps18-the-ferryman",
+   "name": "The Ferryman",
+   "scope": {
+    "species": [
+     "dusknoir"
+    ]
+   },
+   "trigger": "ally",
+   "effect": {
+    "hauntFallen": {
+     "turns": 2,
+     "pct": 50
+    }
+   },
+   "effectText": "When an ally falls: it reaches out and doesn't let go. The fallen ally Haunts the foe for 2 turns, even if it isn't a Ghost.",
+   "presentation": "It reaches out | It doesn't let go.",
+   "allyScope": "any"
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps20-leader-of-the-pack",
+   "name": "Leader of the Pack",
+   "scope": {
+    "species": [
+     "bisharp"
+    ]
+   },
+   "trigger": "ko",
+   "effect": {
+    "evolveAfter": {
+     "to": "kingambit"
+    }
+   },
+   "effectText": "When it defeats an opposing Bisharp: the other kneels, and it evolves into Kingambit after the battle (the canon count is waived once).",
+   "presentation": "The other Bisharp kneels | [Name] leads now.",
+   "requires": {
+    "koSpecies": [
+     "bisharp"
+    ]
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps21-rage-past-death",
+   "name": "Rage Past Death",
+   "scope": {
+    "species": [
+     "primeape"
+    ]
+   },
+   "trigger": "turn",
+   "effect": {
+    "evolveAfter": {
+     "to": "annihilape"
+    }
+   },
+   "effectText": "When Primeape has used Rage Fist 20 times this run, it goes quiet, and it evolves into Annihilape when the battle ends.",
+   "presentation": "The screen goes red. It stops shaking. It goes quiet | [Name] is past rage now.",
+   "requires": {
+    "moveUses": {
+     "move": "rage-fist",
+     "n": 20
+    }
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "major",
+   "status": "supported",
+   "layer": "species",
+   "chance": 0.01,
+   "id": "ps22-one-in-a-hundred",
+   "name": "One in a Hundred",
+   "scope": {
+    "species": [
+     "dudunsparce"
+    ]
+   },
+   "trigger": "evolve",
+   "effect": {
+    "evolveForm": "dudunsparce-three-segment"
+   },
+   "effectText": "One time in a hundred, Dunsparce evolves into the Three-Segment form.",
+   "presentation": "It's longer than usual | One in a hundred."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "limited",
+   "layer": "species",
+   "chance": 0.25,
+   "id": "ps27-self-portrait",
+   "name": "Self-Portrait",
+   "scope": {
+    "species": [
+     "smeargle"
+    ]
+   },
+   "trigger": "rest",
+   "effect": {
+    "openEvent": "ps27-self-portrait"
+   },
+   "effectText": "At rest it is painting. Look at it, or let it finish: the painting is of the team, or of you.",
+   "presentation": "It's painting | Don't peek."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps28-the-leek",
+   "name": "The Leek",
+   "scope": {
+    "species": [
+     "farfetchd-galar"
+    ]
+   },
+   "trigger": "turn",
+   "effect": {
+    "evolveAfter": {
+     "to": "sirfetchd"
+    }
+   },
+   "effectText": "When it lands its third critical hit in one battle, it evolves into Sirfetch'd after the battle.",
+   "presentation": "It stands taller. It looks at the leek | [Name] is ready.",
+   "requires": {
+    "critsAtLeast": 3
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps32-the-speed",
+   "name": "The Speed",
+   "scope": {
+    "species": [
+     "ninjask"
+    ]
+   },
+   "trigger": "turn",
+   "effect": {
+    "boost": {
+     "eva": 1
+    }
+   },
+   "effectText": "When its Speed reaches +6: Evasion +1, once. The only time evasion goes up in this design.",
+   "presentation": "It vanishes. A buzz all over the screen | You can't see [Name] any more.",
+   "requires": {
+    "stageAtLeast": {
+     "stat": "spe",
+     "n": 6
+    }
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 0.2,
+   "id": "ps33-corrupted",
+   "name": "Corrupted",
+   "scope": {
+    "species": [
+     "porygon-z"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "randomMove": true
+   },
+   "effectText": "It learns a random attacking move it doesn't know for this battle, shown before it's used. Adaptability applies.",
+   "presentation": "The battle screen glitches for a second | Instance corrupted."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps38-the-school",
+   "name": "The School",
+   "scope": {
+    "species": [
+     "wishiwashi",
+     "wishiwashi-school"
+    ]
+   },
+   "trigger": "low",
+   "effect": {
+    "schoolOnce": true
+   },
+   "effectText": "Below 25% HP: a hundred little fish answer. It returns to School Form once, at that HP.",
+   "presentation": "Silence. Then a hundred little fish answer | [Name] isn't alone.",
+   "hpBelow": 25
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps40-asleep-the-whole-time",
+   "name": "Asleep the Whole Time",
+   "scope": {
+    "species": [
+     "komala"
+    ]
+   },
+   "trigger": "start",
+   "effect": {
+    "resoluteAll": true
+   },
+   "effectText": "It's asleep, and it was always asleep: nothing wakes it, so nothing flinches or confuses it this battle.",
+   "presentation": "It's asleep | It was always asleep."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "species",
+   "chance": 1,
+   "id": "ps44-just-a-bidoof",
+   "name": "Just a Bidoof",
+   "scope": {
+    "species": [
+     "bidoof"
+    ]
+   },
+   "trigger": "ko",
+   "effect": {
+    "bond": 3
+   },
+   "effectText": "When it defeats a Legendary or a trainer's ace: +3 Bond.",
+   "presentation": "Silence. Then the crowd erupts | Bidoof did it.",
+   "requires": {
+    "koLegendOrAce": true
+   }
+  },
+  {
+   "limit": "region",
+   "tier": "minor",
+   "status": "supported",
+   "layer": "species",
+   "chance": 0.2,
+   "id": "ps45-presents",
+   "name": "Presents",
+   "scope": {
+    "species": [
+     "delibird"
+    ]
+   },
+   "trigger": "rest",
+   "effect": {
+    "present": [
+     "rare-candy",
+     "nugget",
+     "pp-up",
+     "big-mushroom",
+     "pearl",
+     "heart-scale",
+     "star-piece"
+    ]
+   },
+   "effectText": "At rest it opens its sack: one present from Rare Candy, Nugget, PP Up, Big Mushroom, Pearl, Heart Scale or Star Piece.",
+   "presentation": "It opens its sack | Something for you."
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "layer": "individual",
+   "chance": 0.3,
+   "id": "pi1-the-first-one",
+   "name": "The First One",
+   "scope": {
+    "all": true
+   },
+   "trigger": "runEnd",
+   "effect": {
+    "reviveHpPct": 50,
+    "resolute": true
+   },
+   "effectText": "Instead of the run ending: your starter, if it has the highest Bond, stands back up at 50% HP, Resolute. Comes before The Starters.",
+   "presentation": "The first frame of the run, a Poké Ball on a table, cuts in for a second | It was there first.",
+   "requires": {
+    "starter": true,
+    "topBond": true
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "individual",
+   "chance": 1,
+   "id": "pi3-one-hp",
+   "name": "One HP",
+   "scope": {
+    "all": true
+   },
+   "trigger": "lethal",
+   "effect": {
+    "resolute": true
+   },
+   "effectText": "Survived at 1 HP three times this run: the fourth time it survives again, Resolute.",
+   "presentation": "A heartbeat | [Name] is still here.",
+   "requires": {
+    "flagAtLeast": {
+     "key": "pm-one-hp:{uid}",
+     "n": 3
+    }
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "layer": "individual",
+   "chance": 1,
+   "id": "pi5-most-knockouts",
+   "name": "Most Knockouts",
+   "scope": {
+    "all": true
+   },
+   "trigger": "start",
+   "effect": {
+    "boostTop": 1
+   },
+   "effectText": "Against the final opponent: your Pokémon with the most knockouts this run gets +1 to its best stat.",
+   "presentation": "The crowd chants its name | [Name]! [Name]!",
+   "requires": {
+    "finalBoss": true,
+    "mostKos": true
+   }
   }
  ],
  "counterparts": {

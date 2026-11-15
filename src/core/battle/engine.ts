@@ -120,7 +120,7 @@ import { benchSupporter, addBleed, bleedDamage, causesBleed, curseMultiplier, re
 import { sacrificeFor } from './sacrificeRule';
 import { berserkDue, berserkMove, isBerserk } from './berserk';
 import { REVIVAL_NIGHT, revivalActed, revivalBlocked, revivalEndOfTurn, revivalEvasionCap, revivalForcedSlot, revivalFreeze, revivalImmune, revivalNoFlinch, revivalNoHeal, revivalNoSwitch, revivalNoteHp, revivalOnHit, revivalPower, revivalPrimal, revivalStatusImmune, revivalTakeHit, revivalTwice } from './revivalStatus';
-import { momentRefusal, momentRuinExtra, momentStatPcts, momentTypeGuard, noteBraveHit, momentGuardHit, momentParadoxDrive, momentSuperCut, tryAllyLethalMoment, hauntAccuracyCut, momentGroundTypes, momentNoConfuse, momentRooted, momentStatMult, noteContactHit, tryHauntStrikes, momentContactPoison, momentDamageMult, spendMomentBoost, applyPendingMoments, fadeMomentBoosts, tryFaintMoments, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
+import { momentAccAll, momentCounterMult, momentSchoolHold, momentSkipTurn, momentWrongFace, noteOneHp, momentRefusal, momentRuinExtra, momentStatPcts, momentTypeGuard, noteBraveHit, momentGuardHit, momentParadoxDrive, momentSuperCut, tryAllyLethalMoment, hauntAccuracyCut, momentGroundTypes, momentNoConfuse, momentRooted, momentStatMult, noteContactHit, tryHauntStrikes, momentContactPoison, momentDamageMult, spendMomentBoost, applyPendingMoments, fadeMomentBoosts, tryFaintMoments, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
 import type { MomentHooks } from '../moments/pokemonMoments';
 import { quirkAccuracy, quirkDamageMult, quirkEntryStages, quirkGuard, quirkNoCrits, quirkOf, quirkPriority, quirkSurvives } from '../co/quirks';
 import { reapplyBoost } from '../instrumentality/secondChance';
@@ -1081,6 +1081,12 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   if (ctx.moments) {
     tryFaintMoments(ctx, events, events);
     tryReactiveMoments(ctx, events, events);
+    // The School (PS38): the little fish answer at once.
+    const front = ctx.party[battle.activeIndex];
+    if (!battle.outcome && front && front.hp > 0 && front.speciesId === 'wishiwashi') {
+      const fc: Combatant = { side: 'player', mon: front, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false };
+      if (momentSchoolHold(ctx, fc)) syncForms(ctx, fc, events, true);
+    }
   }
   fadeMomentBoosts(ctx, events);
   battle.turn += 1;
@@ -2259,7 +2265,7 @@ function syncForms(ctx: BattleContext, c: Combatant, events: BattleEvent[], endO
     if (c.mon.speciesId !== base && c.mon.speciesId !== alt) continue;
     let useAlt: boolean;
     if (ability === 'zen-mode' || ability === 'shields-down') useAlt = c.mon.hp * 2 <= max;
-    else if (ability === 'schooling') useAlt = c.mon.level >= 20 && c.mon.hp * 4 > max;
+    else if (ability === 'schooling') useAlt = (c.mon.level >= 20 && c.mon.hp * 4 > max) || (!!ctx.moments && momentSchoolHold(ctx, c));
     else if (ability === 'power-construct') useAlt = c.mon.speciesId === alt || c.mon.hp * 2 <= max;
     else if (ability === 'hunger-switch') useAlt = c.vol.hangry;
     else useAlt = true;
@@ -2927,6 +2933,8 @@ function takeHp(
   }
   c.mon.hp -= lost;
   if (c.mon.revivalStatus) revivalNoteHp(ctx, c.mon);
+  // One HP (PI3): a hit that leaves your Pokémon on exactly 1 HP is counted for the run.
+  if (ctx.moments && c.side === 'player' && lost > 0 && c.mon.hp === 1) noteOneHp(ctx, c.mon);
   // Survived the boss's charged (signature) attack: a raid memory; under a Defense cheer it also took the hit for the team.
   if (chargedLanded && lost > 0 && c.mon.hp > 0 && ctx.battle.raid) {
     ctx.battle.raid.survivor ??= c.mon.uid;
@@ -3349,7 +3357,7 @@ function executeMove(
       return;
     }
     // Revival statuses: Transcendent can't use physical moves, a Swarm can't Protect, Absolute Zero rests the turn after it acts.
-    const why = revivalBlocked(ctx, user, move) ?? (ctx.moments ? momentRefusal(ctx, user, target, move.category) : null);
+    const why = revivalBlocked(ctx, user, move) ?? (ctx.moments ? momentRefusal(ctx, user, target, move.category) ?? momentSkipTurn(ctx, user) : null);
     if (why) {
       events.push({ type: 'raid', tone: 'info', text: why });
       events.push({ type: 'blocked', side: user.side, moveId: move.id });
@@ -3975,6 +3983,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     accuracy = hitChance(baseAccuracy, accStage, evaStage) * itemAccuracy * perkAccuracy;
     // Haunting (Pokémon moments): while a spirit haunts the field, the foe's moves are less accurate.
     if (baseAccuracy !== null && user.side === 'enemy' && ctx.moments) accuracy *= 1 - hauntAccuracyCut(ctx) / 100;
+    // Lucky Star (PS15): every move in the battle is a little more accurate, both sides.
+    if (baseAccuracy !== null && ctx.moments) accuracy *= 1 + momentAccAll(ctx) / 100;
     if (baseAccuracy !== null && user.side === 'player') accuracy *= aimAccuracy(content, ctx.battle.skill, move.id);
     if (baseAccuracy !== null) {
       if (user.side === 'player' && user.mon.moves.find((m) => m.id === move.id)?.star) accuracy *= 1.05;
@@ -4053,7 +4063,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   }
   const typedEff = move.flags.includes('typeless') ? 1 : Held.adjustEffectiveness(ctx, target, moveType, rawEff);
   // S7 Against the Odds: a super-effective hit on the partner lands as neutral (boss fight, or protecting an ally in doubles).
-  const effectiveness = targetsEnemy && move.category !== 'status' && revivalImmune(target, moveType, move.flags.includes('contact')) ? 0 : typedEff > 1 && targetsEnemy && move.category !== 'status' && tryFeat(ctx, target, 'against_the_odds') ? 1 : typedEff;
+  const effectiveness = targetsEnemy && move.category !== 'status' && revivalImmune(target, moveType, move.flags.includes('contact')) ? 0 : typedEff > 1 && targetsEnemy && move.category !== 'status' && tryFeat(ctx, target, 'against_the_odds') ? 1 : typedEff > 1 && targetsEnemy && move.category !== 'status' && ctx.moments && momentWrongFace(ctx, target) ? 1 : typedEff;
   // Powder: a Fire move backfires.
   if (user.vol.powdered && moveType === 'fire') {
     user.vol.powdered = false;
@@ -4145,7 +4155,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       damage = target.mon.hp;
     } else if (fx.fixedDamage || fx.halveTarget || fx.endeavor || fx.counter || fx.userFaint === 'finalGambit') {
       if (fx.userFaint === 'finalGambit') damage = Math.max(1, user.mon.hp);
-      else if (fx.counter) damage = Math.max(1, Math.floor((fx.counter === 'physical' ? user.vol.tookPhysical : fx.counter === 'special' ? user.vol.tookSpecial : (user.vol.tookPhysical + user.vol.tookSpecial) * 0.75) * 2));
+      else if (fx.counter) damage = Math.max(1, Math.floor((fx.counter === 'physical' ? user.vol.tookPhysical : fx.counter === 'special' ? user.vol.tookSpecial : (user.vol.tookPhysical + user.vol.tookSpecial) * 0.75) * 2 * (ctx.moments ? momentCounterMult(ctx, user) : 1)));
       else if (fx.endeavor) damage = Math.max(1, target.mon.hp - user.mon.hp);
       else if (fx.halveTarget) damage = Math.max(1, Math.floor(target.mon.hp * (typeof fx.halveTarget === 'number' ? fx.halveTarget : 0.5)));
       else if (fx.fixedDamage === 'level') damage = user.mon.level;
@@ -4694,7 +4704,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     abilityHurt(ctx, target, Math.max(1, Math.floor(dealt * 0.25)), events);
   }
   if (landed > 0 && ctx.moments) {
-    spendMomentBoost(ctx, user, moveType);
+    spendMomentBoost(ctx, user, moveType, move.id);
     noteBraveHit(ctx, user);
     if (contact) noteContactHit(ctx, target);
     revivalOnHit(ctx, user, target, events);

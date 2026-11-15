@@ -151,6 +151,41 @@ export const MomentEffectSchema = z.object({
   typeGuard: z.number().int().min(1).max(50).optional(),
   /** Rest: names the next region's legend (PG5). */
   legendHint: z.boolean().optional(),
+  // Species and individual moments (PS, PI).
+  /** It evolves into `to` when the battle ends, if it is still standing (and, with `turns`, the battle lasted that many turns): PS1, PS20, PS28. */
+  evolveAfter: z.object({ to: z.string(), turns: z.number().int().min(1).max(10).optional() }).optional(),
+  /** Each time a party member of these species comes in for the rest of the battle, it gets +n to the stat (PS2). */
+  entryBoost: z.object({ species: z.array(z.string()).min(1), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']), n: z.number().int().min(1).max(3) }).optional(),
+  /** Both sides lose this turn's move (PS3). */
+  bothSkip: z.boolean().optional(),
+  /** Names the opponent's next Pokémon; raised brave from a baby (PA4 three times), its held items too (PS5). */
+  revealNext: z.boolean().optional(),
+  /** Its first Counter or Mirror Coat does this many times the damage (PS9). */
+  counterMult: z.number().int().min(2).max(4).optional(),
+  /** Its first move goes last and does double damage (PS13). */
+  slowFirst: z.boolean().optional(),
+  /** Its Illusion soaks the first super-effective hit as neutral (PS12). */
+  wrongFace: z.boolean().optional(),
+  /** Every move in the battle gets this much accuracy, both sides (PS15). */
+  accAll: z.number().int().min(1).max(30).optional(),
+  /** Ally moments: the fallen ally haunts the foe (PS18). */
+  hauntFallen: z.object({ turns: z.number().int().min(1).max(5), pct: z.number().int().min(1).max(100) }).optional(),
+  /** It learns a random attacking move it doesn't know, for this battle (PS33). */
+  randomMove: z.boolean().optional(),
+  /** Schooling holds once more, whatever its HP (PS38). */
+  schoolOnce: z.boolean().optional(),
+  /** Uses up a run flag (`{uid}` = this Pokémon) once the moment plays (PS8: the long sleep is spent on one battle). */
+  spendFlag: z.string().optional(),
+  /** Evolution moments: it becomes this form instead (PS22). */
+  evolveForm: z.string().optional(),
+  /** Rest: sets this run flag (`{uid}` = this Pokémon) (PS10). */
+  setFlag: z.string().optional(),
+  /** Rest: every party status is cured (PS16). */
+  cureTeam: z.boolean().optional(),
+  /** Rest: the party member lowest on HP gets back this percent of its max HP (PS16). */
+  healLowestPct: z.number().int().min(1).max(100).optional(),
+  /** Rest: one present from this list, picked by the moment's own roll (PS45). */
+  present: z.array(z.string()).min(1).optional(),
   /** Its Protosynthesis or Quark Drive is on without sun or terrain. */
   paradoxDrive: z.boolean().optional(),
   /** The Little Ones (PA4): if it lands a move this battle, it gains this much Bond afterwards, win or lose. */
@@ -175,6 +210,8 @@ const ScopeSchema = z.object({
   tags: z.array(z.string()).optional(),
   /** A stat-shape role (wall, glass-cannon, support), worked out from base stats (see `roleOf`). */
   role: z.string().optional(),
+  /** Any Pokémon: individual moments (PI), whose requirements pick the one it is about. */
+  all: z.boolean().optional(),
 });
 
 export const PokemonMomentSchema = z.object({
@@ -238,6 +275,24 @@ export const PokemonMomentSchema = z.object({
       named: z.boolean().optional(),
       /** The opponent's ace (its strongest Pokémon) has one of these types. */
       foeAceTypes: z.array(z.string()).optional(),
+      /** A Gym Leader's battle (PS1). */
+      gymLeader: z.boolean().optional(),
+      /** Its Disguise has broken this battle (PS11). */
+      disguiseBroken: z.boolean().optional(),
+      /** The foe it knocked out this turn is one of these species (PS20). */
+      koSpecies: z.array(z.string()).optional(),
+      /** The foe it knocked out this turn was a Legendary, or a trainer's ace (PS44). */
+      koLegendOrAce: z.boolean().optional(),
+      /** It has landed this many critical hits this battle (PS28). */
+      critsAtLeast: z.number().int().min(1).max(10).optional(),
+      /** It has used this move at least `n` times this run (PS21). */
+      moveUses: z.object({ move: z.string(), n: z.number().int().min(1) }).optional(),
+      /** Its own stat stage is at least `n` (PS32). */
+      stageAtLeast: z.object({ stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']), n: z.number().int().min(1).max(6) }).optional(),
+      /** The run's final opponent: the last region's Champion (PI5). */
+      finalBoss: z.boolean().optional(),
+      /** It has the most knockouts in the party this run (PI5). */
+      mostKos: z.boolean().optional(),
     })
     .optional(),
   /** Ally moments: `same` = the fallen Pokémon must match this moment's scope too; `any` = any ally falling counts. */
@@ -351,6 +406,7 @@ export function momentMatches(content: Content, m: PokemonMoment, speciesId: str
   const sp = content.species.get(speciesId);
   if (!sp) return false;
   const s = m.scope;
+  if (s.all) return true;
   if (s.species?.includes(speciesId)) return true;
   if (s.lines && lineIds(content, speciesId).some((id) => s.lines!.includes(id))) return true;
   if (s.types?.some((t) => sp.types.includes(t as never))) return true;
@@ -373,7 +429,7 @@ export function roleOf(sp: Pick<Species, 'baseStats'>): 'wall' | 'glass-cannon' 
 
 /** The supported moments for a trigger that apply to this Pokémon, most specific first (species, line, group, tag, type). */
 export function momentsFor(content: Content, mon: Pick<PokemonInstance, 'speciesId'>, trigger: MomentTrigger): PokemonMoment[] {
-  const specificity = (m: PokemonMoment): number => (m.scope.species ? 0 : m.scope.lines ? 1 : m.scope.groups ? 2 : m.scope.tags ? 3 : 4);
+  const specificity = (m: PokemonMoment): number => (m.scope.all ? -1 : m.scope.species ? 0 : m.scope.lines ? 1 : m.scope.groups ? 2 : m.scope.tags ? 3 : 4);
   return POKEMON_MOMENTS.filter((m) => m.status !== 'disabled' && m.trigger === trigger && momentMatches(content, m, mon.speciesId)).sort((a, b) => specificity(a) - specificity(b));
 }
 
@@ -391,6 +447,8 @@ export interface MomentHooks {
   runWouldEnd: () => boolean;
   /** The run's chosen starter (PA10). */
   starterUid?: string | null;
+  /** This battle is the run's final opponent: the last region's Champion (PI5). */
+  finalBoss?: boolean;
 }
 
 /** One stateless roll: true with probability `chance`. Same inputs, same answer. */
