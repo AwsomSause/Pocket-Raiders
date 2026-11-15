@@ -13,7 +13,7 @@ describe('training events', () => {
   });
   for (const e of ids) {
     it(`${e.id}: every choice resolves`, () => {
-      for (let i = 0; i < e.choices.length; i++) {
+      for (let i = 0; i < content.events.get(e.id)!.choices.length; i++) {
         const run = chooseStarter(content, createRun(content, { runId: 'r', seed: `tr-${e.id}`, archetypeId: 'red' }), 0);
         run.money = 5000;
         const node = run.stage!.map.nodes[0]!;

@@ -75,5 +75,26 @@
     }
    ]
   }
+ },
+ {
+  "id": "bright-powder",
+  "name": "Bright Powder",
+  "family": "Battle held items",
+  "description": "Moves aimed at the holder are 10% less likely to hit",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "brightpowder",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "evasion",
+     "percent": 10
+    }
+   ]
+  }
  }
 ]

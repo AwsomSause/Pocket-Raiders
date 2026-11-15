@@ -24,4 +24,9 @@
 - A smoothie cart, a gift you wrap for a stranger that comes back better, and a ₽1 sale after a terrible skit about the region's Legendary.
 - No event fight ends a run any more: lose one, and your team gets back on its feet where you stood.
 
+**Batch 7: study stops, the evil team's pressure, and puzzles (29 events).**
+- Study halls, a replay theater and a veteran's notebook that show the next Gym's team before you get there; a graduation ceremony for the Pokémon that carried you.
+- Grunts who plant contraband, sabotage your gadgets and send a ransom note; what you do about it is remembered for the rest of the run.
+- A bingo card that fills as you see events, a crossword cave, a fossil puzzle that wakes a fossil Pokémon, three trivia signboards in a row with a TM behind the last hatch.
+
 Known limits: "confused" and "Charged" for one battle are a damage change, the balloon lands two stops ahead (you cannot pick the spot), the Wooloo rolls on any day, and a few "shown before you choose" previews describe the Pokémon without naming it. Full list: `docs/status/co-singles.md`.

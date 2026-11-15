@@ -305,6 +305,41 @@
    "key": "gift-sent",
    "setBy": "gift-wrap-station (the pack's gift.sent)",
    "readBy": "gift-wrap-receiver"
+  },
+  {
+   "key": "evil-key",
+   "setBy": "evil-story thread (SF132, a key from the evil team)",
+   "readBy": "vt-contraband-detector (the arch beeps)"
+  },
+  {
+   "key": "evil-trail-lost",
+   "setBy": "vt-gadget-sabotage (knock it down)",
+   "readBy": "evil-story thread (the team loses your trail)"
+  },
+  {
+   "key": "evil-knows-lead",
+   "setBy": "vt-gadget-sabotage (wave)",
+   "readBy": "evil-story thread (the next ambush knows your lead)"
+  },
+  {
+   "key": "rescued",
+   "setBy": "vt-mind-control-helmet (either way); older rescue events",
+   "readBy": "rescued-callback"
+  },
+  {
+   "key": "final-reunion-rescued",
+   "setBy": "rescued-callback",
+   "readBy": "the Final Reunion (families-a)"
+  },
+  {
+   "key": "bingo-card",
+   "setBy": "rf-bingo-1",
+   "readBy": "rf-bingo-2/3 (opened by laterEvent)"
+  },
+  {
+   "key": "trivia-right",
+   "setBy": "rf-move-trivia-1/2/3 (a right answer)",
+   "readBy": "rf-move-trivia-3 (three right: a TM; spent there)"
   }
  ]
 }

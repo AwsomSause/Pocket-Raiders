@@ -12,7 +12,8 @@ Content: `tools/events/co/singles-<n>.ts` -> `src/data/events/co-singles-<n>.jso
 | 4 | SF140 Gentle Wild Scenes, SF141 Wild Scenes and Oddities | 49 | built, re-read 2026-11-15 |
 | 5 | SF142 Hidden Paths and Mystery Places, SF143 Ability Secrets | 35 | built, re-read 2026-11-15 |
 | 6 | SF144 Challenges, SF145 Shops and Workshops | 39 | built, re-read 2026-11-15 |
-| later | SF146 to SF161 | 256 | not started (old events still play) |
+| 7 | SF146 Study Stops, SF147 Evil-Team Pressure, SF148 Puzzles | 29 | built, re-read 2026-11-15 |
+| later | SF149 to SF161 | 227 | not started (old events still play) |
 
 SF158 to SF160 (82 calendar weeks) live in `gameEvents.json` and SF161 (15 battle moments) in `dramaEvents.json`, not in the event files; they need their own build path.
 
@@ -43,8 +44,11 @@ All checked 2026-11-15 against `STORY_FAMILIES_19.md` and `_20.md`.
 | SF143 | secret-arena-tunnel, secret-damp-cave, secret-flash-fire-door, secret-intimidate-gate, secret-keen-eye-ledge, secret-levitate-chasm, secret-magnet-vein, secret-pickup-burrow, secret-synchronize-whisper |
 | SF144 | boss-rush-mini (+ room `boss-rush-poachers`), camp-counselor-contest, charity-match, collectors-test, double-date-doubles, double-trouble, eco-ranger-test, gym-scout, gym-trainer-ambush, held-item-gauntlet (+ `held-item-gauntlet-last`), hot-dog-duelists, lifeguard-test, marathon, mentors-examination, moot-court-showdown (+ `moot-court-1/2/3`, `moot-court-verdict`), pokeathlon, quiz-master, relay-battle, rookie-hazing (+ `rookie-hazing-joey`), speed-dating-trainers, speed-trial, strength-trial, time-trial-gate, trainers-test, triple-battle, twin-trainers, type-specialist, underdog-union, winstrate-family (+ `winstrate-vicky`) |
 | SF145 | berry-smoothie, capsule-gacha, final-sale-banner (+ `final-sale-shop`), gift-wrap-station, gift-wrap-receiver, key-item-workshop-bike, key-item-workshop-rod, lost-property, street-tailor, rare-candy-cache |
+| SF146 | battle-replay-theater, library, mastery-quiz, study-hall, tactical-chalkboard, veterans-notebook, graduation-ceremony, field-hidden-cave, field-overgrowth |
+| SF147 | vt-contraband-detector, vt-contraband-gate (room), vt-gadget-sabotage, vt-mind-control-helmet, vt-ransom-note, rescued-callback, dz-sky-route |
+| SF148 | rf-bingo-1/2/3 (each opens the next two nodes on), rf-crossword-cave (+ `rf-crossword-room`), rf-fossil-puzzle, rf-gear-box, rf-jigsaw-legend, rf-lantern-riddle, rf-map-sudoku, rf-mirror-beam, rf-mole-hunt, rf-move-trivia-1/2/3 (each opens the next) |
 
-SF137 to SF145: every doc button checked by script against the built labels (all match); outcomes checked by hand against the doc row while writing and again after the standards pass.
+SF137 to SF148: every doc button checked by script against the built labels (all match); outcomes checked by hand against the doc row while writing and again after the standards pass.
 Buttons match the doc word for word, except `w4-balloon` (the doc says "pick a reachable node", not a button text): "Hop in, and pick where to land."
 Rooms added so a doc outcome can ask its own question: `berry-tree-pell` (callback), `festival-gift-swap`, `shimmering-grass-close`, `hidden-grotto-den`, `gmax-den-*` (5), `w4-graffiti-tag`, `r145-bonsly-railings`.
 
@@ -85,3 +89,9 @@ Rooms added so a doc outcome can ask its own question: `berry-tree-pell` (callba
 | Lost property: "an item from the player's past run" | 1 in 5 a dated valuable someone left behind | Nothing: Kice's rule, nothing carries between runs |
 | Capsule gacha "a cosmetic" | A little toy your lead keeps (+1 Bond) | A cosmetics system |
 | Held-item gauntlet / Winstrates / rookie hazing: four or five in a row | Three in a row, then a room for the rest (the engine chains three) | Longer chains |
+| Study stops: "preview the next Gym Leader's team" | The whole team of the region's next Gym, shown in text | A one-Pokémon preview, if Kice wants less |
+| Bingo: "mark the squares you've seen" | A fixed card; rows, columns or the whole card pay by which events you saw this run | A random card |
+| Sky route: "fly over the next part of the stage" | Skip three nodes ahead | Nothing |
+| Evil-team pressure "remembers" | Flags `evil-key`, `evil-trail-lost`, `evil-knows-lead` (same run only), for the evil-story row to read | evil-story reading them |
+| Fossil puzzle reward | The fossil Pokémon joins directly (no revive step) | A fossil reviver stop |
+| Field moves (Cut, Strength, Surf, Rock Climb and more) | Need a living party member who knows the move; Bright Powder is a new held item (10% evasion) | Nothing |
