@@ -48,6 +48,7 @@ export function menuView(c: ReduxCtx, d: MenuModel): string {
 
 export interface SettingsModel {
   title: string;
+  area?: Area;
   tabs: string[];
   tab: number;
   /** `value` empty draws a plain row (Back, an action). */
@@ -62,7 +63,7 @@ export function settingsView(c: ReduxCtx, d: SettingsModel): string {
   const v = c.v(2), n = d.rows.length, s = scrollStart(n, d.index, 7);
   const rows = d.rows.slice(s, s + 7).map((r, q) => `<div class="btn${s + q === d.index ? ' on' : ''}${r.disabled ? ' off' : ''}" style="height:38px"${pickAttr(s + q)}><span class="grow">${esc(r.label)}</span>${r.value ? `<span>◀ ${esc(r.value)} ▶</span>` : ''}</div>`).join('');
   const more = dots(n, s, 7, v === 1 ? 'right:28px;top:398px' : 'right:28px;top:428px');
-  return H(d.title, 'sys', d.hints) + (v === 1
+  return H(d.title, d.area ?? 'sys', d.hints) + (v === 1
     ? `<div class="abs col" style="left:24px;top:72px;width:190px;gap:7px">${d.tabs.map((t, k) => B(esc(t), k === d.tab, 'height:34px;font-size:15px', '', act('tab', k))).join('')}</div><div class="abs col" style="left:240px;right:24px;top:72px;gap:8px">${rows}</div>`
     : `<div class="abs tabs" style="left:24px;top:62px">${d.tabs.map((t, k) => `<span class="${k === d.tab ? 'on' : ''}"${act('tab', k)}>${esc(t)}</span>`).join('')}</div><div class="abs col" style="left:24px;right:24px;top:102px;gap:8px">${rows}</div>`) + more + TX(esc(d.text));
 }

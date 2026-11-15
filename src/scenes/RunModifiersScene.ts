@@ -11,6 +11,8 @@ import { playSfx } from '../ui/audio';
 import { onInputAction } from '../ui/input';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import type { RunPrepData } from './RunPrepScene';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { settingsView } from '../ui/redux/templates';
 
 export interface RunModifiersData {
   /** Everything the Preparation Desk was holding; handed back on leaving. */
@@ -86,9 +88,26 @@ export class RunModifiersScene extends Phaser.Scene {
     });
     this.dragMoved = () => moved > 8;
 
+    const order = (): (string | null)[] => [null, ...usedCategories().map((c) => c.id)];
+    this.view = reduxOn() ? mountRedux(this, {
+      render: (c) => settingsView(c, {
+        title: 'Modifiers', area: 'run', tabs: ['All', ...usedCategories().map((x) => x.label)], tab: order().indexOf(this.category),
+        rows: this.ids.map((id) => {
+          const m = id === DEATH ? null : RUN_RULES.modifiers.find((x) => x.id === id)!;
+          const on = m ? this.rules.modifierIds.includes(id) : this.rules.deathBlock;
+          return { label: m ? m.name : 'Death-Block', value: m?.status === 'planned' ? 'Soon' : on ? 'On' : 'Off', disabled: m?.status === 'planned' };
+        }),
+        index: this.index,
+        text: this.reduxText(),
+        hints: [['↔', 'on / off'], ['Q/E', 'category'], ['Esc', 'desk']],
+      }),
+      acts: { pick: (i) => { this.index = Number(i); this.toggle(this.ids[this.index]!); }, tab: (k) => this.setCategory(order()[Number(k)]!) },
+    }) : null;
     onInputAction(this, (a) => {
       if (a === 'up') this.move(-1);
       else if (a === 'down') this.move(1);
+      // New UI: the row shows ◀ On ▶, so left and right switch it (Q/E change category).
+      else if (this.view && (a === 'left' || a === 'right')) this.toggle(this.ids[this.index]!);
       else if (a === 'left') this.shiftCategory(-1);
       else if (a === 'right') this.shiftCategory(1);
       else if (a === 'confirm') this.toggle(this.ids[this.index]!);
@@ -106,6 +125,17 @@ export class RunModifiersScene extends Phaser.Scene {
   }
 
   private dragMoved: () => boolean = () => false;
+  /** New UI: the mock-ups' Modifiers page (rows with ◀ On ▶) drawn over this scene. */
+  private view: ReduxView | null = null;
+
+  private reduxText(): string {
+    const id = this.ids[this.index]!;
+    const tail = `Rewards ×${rewardMultiplier({ ...this.rules, noRewards: false }).toFixed(2)} with what is on now.`;
+    if (id === DEATH) return `${RUN_RULES.deathBlock.rule} Rewards ×${RUN_RULES.deathBlock.multiplier} while it is on. ${tail}`;
+    const m = RUN_RULES.modifiers.find((x) => x.id === id)!;
+    const swap = replacedBy(this.rules, id);
+    return `${m.blurb} ${m.status === 'planned' ? 'Not available yet.' : m.bonus > 0 ? `Rewards +${Math.round(m.bonus * 100)}%.` : 'No reward bonus.'}${swap.length > 0 ? ` Switches off: ${swap.join(', ')}.` : ''} ${tail}`;
+  }
 
   private drawBack(): void {
     drawGlass(this, 16, 14, 96, 38, { tint: AERO.glassLow, alpha: 0.7, radius: 14 });
@@ -184,6 +214,7 @@ export class RunModifiersScene extends Phaser.Scene {
     else if (top + ROW_H > this.scroll + LIST_H) this.scroll = top + ROW_H - LIST_H;
     this.list.setY(LIST_Y - this.scroll);
     this.detail.setText(this.detailText());
+    this.view?.refresh();
   }
 
   private detailText(): string {
