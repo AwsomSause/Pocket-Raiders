@@ -240,7 +240,15 @@ describe('choosing at an event', () => {
   });
 
   it('a held-item gift goes to a Pokémon that can hold it', () => {
-    const run = atEvent(newRun('gift'), 'deliver-parcel');
+    // An event whose first choice only hands over one held item (the Parcel is a Potion since the Catalog Overhaul).
+    const gift = [...content.events.values()].find((e) => {
+      const c = e.choices[0];
+      if (!c || e.requires.length || c.requires.length || c.chance !== undefined || c.check || c.success.battle || c.branches?.length) return false;
+      const fx = c.success.effects;
+      return fx.length === 1 && fx[0]!.kind === 'item' && content.catalog.get(fx[0]!.id)?.stacksOn === 'pokemon';
+    })!;
+    expect(gift).toBeDefined();
+    const run = atEvent(newRun('gift'), gift.id);
     const result = chooseEvent(content, run, 'test-event', 0);
     expect(result.changes[0]).toMatch(/for |sold for/);
   });

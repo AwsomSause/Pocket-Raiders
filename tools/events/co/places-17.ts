@@ -136,8 +136,8 @@ export const EVENTS: Json[] = [
     ch('Browse.', walk('You wander the aisles. Nothing calls to you today.')),
   ]),
   E('fight-or-flight', 'A huge Pokémon stands guard over something glowing in a hollow, eyes burning with an alpha\'s red light. It has not noticed you yet.', [
-    ch('Calm it.', out('You set your bag down and walk slowly, hands open, humming. It watches. It lowers its head, and lets you take the glowing thing from the hollow.', any('leftovers', 'focus-sash', 'life-orb'), ...kind()), { chance: 0.5, fail: out('It rears up, and you back away slowly. It does not follow. Some guardians are not ready to trust anyone.') }),
-    ch('Battle.', fightW('Its eyes flare red. Alphas fight with everything.', { lv: 4, aura: true, win: [any('leftovers', 'focus-sash', 'life-orb'), rp(3)] })),
+    ch('Calm it.', out('You set your bag down and walk slowly, hands open, humming. It watches. It lowers its head, and lets you take the glowing thing from the hollow.', any('muscle-band', 'metronome', 'silk-scarf'), ...kind()), { chance: 0.5, fail: out('It rears up, and you back away slowly. It does not follow. Some guardians are not ready to trust anyone.') }),
+    ch('Battle.', fightW('Its eyes flare red. Alphas fight with everything.', { lv: 4, aura: true, win: [any('muscle-band', 'metronome', 'expert-belt'), rp(3)] })),
     ch('Leave.', walk('You leave it to its watch. Whatever it guards, it guards for a reason.')),
   ]),
   E('fortune-teller', 'A tent of purple cloth, a candle, three cards face down on a velvet cloth. "The cards know who waits at the Gym," says the woman behind them, not looking up. "Sit."', [
@@ -151,7 +151,7 @@ export const EVENTS: Json[] = [
     ch('Walk on.', walk('You walk on. Its crying follows you a long way.')),
   ]),
   E('mysterious-chest', 'A heavy iron chest at the roadside, half sunk in moss. As you get close it rattles, once, all on its own.', [
-    ch('Open it.', out('Gold, and something better underneath.', any('nugget', 'big-pearl', 'pearl'), any('leftovers', 'focus-sash', 'life-orb'), { kind: 'attribute', key: 'luck', amount: 1 }), { chance: 0.6, fail: fightW('The lid flies open and the chest is not a chest.', { lv: 2, win: [any('nugget', 'big-pearl', 'pearl')] }) }),
+    ch('Open it.', out('Gold, and something better underneath.', any('nugget', 'big-pearl', 'pearl'), any('muscle-band', 'metronome', 'silk-scarf'), { kind: 'attribute', key: 'luck', amount: 1 }), { chance: 0.6, fail: fightW('The lid flies open and the chest is not a chest.', { lv: 2, win: [any('nugget', 'big-pearl', 'pearl')] }) }),
     ch('Leave it.', walk('It rattles again as you walk away, almost disappointed.')),
   ], { name: 'The Rattling Chest' }),
   E('shady-dealer', 'A man in a long coat with his hat pulled down. "Trade me one of yours for something stronger. Look, I\'ll show you the card. What you give, what you get. All honest." He holds up a card with the trade written on it, plain as day.', [
