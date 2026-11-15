@@ -1,7 +1,7 @@
 // New UI event ("?") screen, ported from the mock-ups' `event` template (four layouts by theme) with its
 // outcome panel. EventScene keeps the state, the input and the outcome; this only draws.
 
-import { act, B, bg, esc, foot, hpb, mon, TX, W } from '../kit';
+import { act, B, bg, esc, foot, hpb, mini, mon, TX, W } from '../kit';
 import type { ScriptLine } from '../script';
 import type { ReduxCtx } from '../stage';
 import { figure, type Art } from '../templates';
@@ -27,8 +27,8 @@ export interface EventModel {
   money: number;
   /** Outcome: null while choosing; `changes` shows after the text is read. */
   outcome: { step: 'text' | 'rewards'; ok: boolean; changes: string[]; next: string } | null;
-  /** A trade: which party Pokémon goes. */
-  pick: { labels: string[]; at: number } | null;
+  /** A choice that takes a party Pokémon: which one goes. `card` (swaps): both sides, shown before the player commits; `get` null = not known until the swap. */
+  pick: { labels: string[]; at: number; card?: { give: { name: string; file: string | null }; get: { name: string; file: string | null } | null } | null } | null;
   countdown: string;
   /** Share of the countdown left (0–1), or null when the event has no timer. */
   timer: number | null;
@@ -86,7 +86,9 @@ export function eventView(c: ReduxCtx, d: EventModel): string {
   const lit = (k: number): boolean => (out ? true : k === d.index);
   const fail = out && !out.ok ? '<span class="acc">It didn’t go your way… </span>' : '';
   const line = fail + say(false), lineP = fail + say(true);
-  const picker = d.pick ? '<div class="shade"></div>' + W(`<b style="font-size:19px">Pick a Pokémon</b>${d.pick.labels.map((t, k) => B(esc(t), k === d.pick!.at, 'height:36px;font-size:15px', '', `${act('trade', k)} data-over="tradeOver"`)).join('')}<span class="sm"><kbd>Esc</kbd>back</span>`, 'position:absolute;left:280px;right:280px;top:110px;display:flex;flex-direction:column;gap:8px;padding:16px;z-index:12') : '';
+  const side = (title: string, x: { name: string; file: string | null } | null): string => W(`<span class="sm">${title}</span><div style="height:76px;display:flex;align-items:center;justify-content:center">${x?.file ? mini(x.file, 72) : `<b style="font-size:40px;opacity:.6">${x ? '' : '?'}</b>`}</div><b style="font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%">${esc(x?.name ?? 'Not known yet')}</b>`, 'flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 10px');
+  const card = d.pick?.card ? `<div class="row" style="gap:10px">${side('You give', d.pick.card.give)}<b class="acc" style="font-size:26px">⇄</b>${side('You get', d.pick.card.get)}</div>` : '';
+  const picker = d.pick ? '<div class="shade"></div>' + W(`<b style="font-size:19px">${card ? 'The trade, both sides' : 'Pick a Pokémon'}</b>${card}${d.pick.labels.map((t, k) => B(esc(t), k === d.pick!.at, `height:${card && d.pick!.labels.length > 4 ? 28 : 36}px;font-size:15px`, '', `${act('trade', k)} data-over="tradeOver"`)).join('')}<span class="sm"><kbd>Enter</kbd>${card ? 'trade' : 'choose'} <kbd>Esc</kbd>back</span>`, `position:absolute;left:260px;right:260px;top:${card ? 40 : 110}px;display:flex;flex-direction:column;gap:${card ? 6 : 8}px;padding:16px;z-index:12`) : '';
   const pct = (x: EventChoice): string => (x.chance ? `<small>${esc(x.chance)}</small>` : '');
 
   if (v === 1) {
