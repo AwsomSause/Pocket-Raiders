@@ -54,9 +54,9 @@ export function fitBlock(text: Phaser.GameObjects.Text, maxW: number, maxH: numb
   if (parseInt(String(text.style.fontSize), 10) !== base) text.setFontSize(base);
   text.setWordWrapWidth(maxW, true);
   text.setText(full);
-  // A smaller crisp size first (never below 11), then "..." as the last resort.
+  // A smaller crisp size first (never below 16px), then "..." as the last resort.
   let size = base;
-  while (text.height > maxH && size > 11) {
+  while (text.height > maxH && size > 16) {
     const next = pixelFont(Math.round((size - 8) / 0.75)).size;
     if (next >= size) break;
     size = next;
