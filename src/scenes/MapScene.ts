@@ -119,7 +119,7 @@ import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/
 import { hoverTips, ownAbilityCard } from '../ui/redux/tips';
 import type { BattlePanel } from '../ui/redux/screens/battle';
 import { mapView, type MapLegendRow, type MapModel, type MapNodeView } from '../ui/redux/screens/map';
-import { bookRows, bookView, dossierView, pauseView, reportView, rollView, trackView } from '../ui/redux/screens/popups';
+import { bookRows, bookView, confirmView, dossierView, pauseView, reportView, rollView, trackView } from '../ui/redux/screens/popups';
 import { bracketView as rxBracketView, galarHome, galarPage } from '../ui/redux/screens/bracket';
 import { artOf, monFile, rivalArt } from '../ui/redux/game';
 import { nodeStyle } from '../ui/redux/kit';
@@ -241,8 +241,8 @@ export class MapScene extends Phaser.Scene {
 
   /** New UI: the pop-up that is open over the map (R, T, D, F, B), drawn by the layer instead of the canvas. */
   private rxPop: MapPop | null = null;
-  /** New UI: the pause menu (Esc on the map) and its cursor; `armed` once End run was pressed once. */
-  private rxPause: { index: number; armed: boolean } | null = null;
+  /** New UI: the pause menu (Esc on the map) and its cursor; `ask` is the cursor of the "End this run?" box while it is open. */
+  private rxPause: { index: number; ask: number | null } | null = null;
   /** New UI: a tournament match is being watched (drawn on the canvas, so the layer steps aside). */
   private rxWatching = false;
   /** New UI: when a pop-up last opened or closed. Its key can also be a direction (D is "right"), and that same press must not move anything. */
@@ -276,7 +276,7 @@ export class MapScene extends Phaser.Scene {
 
   private pauseOpen(): void {
     if (!this.rxView || this.rxPause || this.busy || this.picker || this.legend) return;
-    this.rxPause = { index: 0, armed: false };
+    this.rxPause = { index: 0, ask: null };
     this.rxCard = null;
     this.busy = true;
     this.rxView.refresh();
@@ -291,11 +291,18 @@ export class MapScene extends Phaser.Scene {
   private pauseInput(action: InputAction): void {
     const p = this.rxPause;
     if (!p) return;
+    if (p.ask !== null) {
+      // The "End this run?" box: Esc keeps playing, the arrows change sides.
+      if (action === 'back') return this.pauseAsk(0);
+      if (action === 'confirm') return this.pauseAsk(p.ask);
+      p.ask = 1 - p.ask;
+      this.rxView?.refresh();
+      return;
+    }
     if (action === 'back') return this.pauseClose();
     if (action === 'confirm') return this.pausePick(p.index);
     const n = MapScene.PAUSE.length;
     p.index = (p.index + (action === 'up' || action === 'left' ? n - 1 : 1)) % n;
-    p.armed = false;
     this.rxView?.refresh();
   }
 
@@ -303,19 +310,14 @@ export class MapScene extends Phaser.Scene {
   private pausePick(k: number): void {
     const p = this.rxPause;
     if (!p) return;
+    if (p.ask !== null) return;
     const name = MapScene.PAUSE[k];
     if (!name || name === 'Resume') return this.pauseClose();
     if (name === 'End run') {
-      // Only an Adventure run can be given up from the map (core/run.ts endRunEarly); it asks twice, like the map's own button.
-      if (!wipeStatus(services().session.run!)) return;
-      if (!p.armed) {
-        p.index = k;
-        p.armed = true;
-        this.rxView?.refresh();
-        return;
-      }
-      services().session.endRunEarly();
-      this.scene.start('GameOver');
+      // Only an Adventure run can be given up from the map (core/run.ts endRunEarly); the mock-up's box asks first, on "Keep playing".
+      p.index = k;
+      if (wipeStatus(services().session.run!)) p.ask = 0;
+      this.rxView?.refresh();
       return;
     }
     if (name === 'Settings') {
@@ -331,12 +333,26 @@ export class MapScene extends Phaser.Scene {
     });
   }
 
+  /** An answer in the "End this run?" box: 1 ends the run; 0 (or -1, a click beside it) goes back to the pause menu. */
+  private pauseAsk(k: number): void {
+    const p = this.rxPause;
+    if (!p || p.ask === null) return;
+    if (k !== 1) {
+      p.ask = null;
+      this.rxView?.refresh();
+      return;
+    }
+    services().session.endRunEarly();
+    this.scene.start('GameOver');
+  }
+
   private pauseHtml(): string {
     const p = this.rxPause;
     if (!p) return '';
     const can = !!wipeStatus(services().session.run!);
-    const note = MapScene.PAUSE[p.index] !== 'End run' ? '' : !can ? 'Only an Adventure run can be ended here. Use Save to leave this one.' : p.armed ? 'Press End run again to end this Adventure run.' : 'Give up this run. What you earned so far still counts.';
-    return pauseView({ options: MapScene.PAUSE.map((label) => ({ label, off: label === 'End run' && !can })), index: p.index, note });
+    const note = MapScene.PAUSE[p.index] === 'End run' && !can ? 'Only an Adventure run can be ended here. Use Save to leave this one.' : '';
+    if (p.ask === null) return pauseView({ options: MapScene.PAUSE.map((label) => ({ label, off: label === 'End run' && !can })), index: p.index, note });
+    return confirmView({ title: 'End this run?', text: 'Your progress is banked as a defeat. This cannot be undone.', options: ['Keep playing', 'End run'], index: p.ask, act: 'pauseAsk', over: 'pauseAskOver' });
   }
 
   private popClose(): void {
@@ -1207,13 +1223,14 @@ export class MapScene extends Phaser.Scene {
           legend: () => this.toggleLegend(),
           pop: () => this.popClose(),
           pause: (k) => this.pausePick(Number(k)),
+          pauseAsk: (k) => this.pauseAsk(Number(k)),
           popTab: (i) => this.popPick('tab', Number(i)),
           popPick: (i) => this.popPick('pick', Number(i)),
           bracket: () => this.popClose(),
           bracketPage: (i) => { if (this.rxPop?.kind === 'bracket') { this.rxPop.page = Math.max(0, Math.min(4, Number(i) || 0)); this.rxView?.refresh(); } },
           bracketWatch: () => this.watchLast(),
         },
-        overs: { over: (i) => { if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); }, popOver: (i) => this.popPick('pick', Number(i)), pauseOver: (i) => { const p = this.rxPause, k = Number(i); if (p && k >= 0 && k !== p.index) { p.index = k; p.armed = false; this.rxView?.refresh(); } } },
+        overs: { over: (i) => { if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); }, popOver: (i) => this.popPick('pick', Number(i)), pauseOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask === null && k >= 0 && k !== p.index) { p.index = k; this.rxView?.refresh(); } }, pauseAskOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask !== null && (k === 0 || k === 1) && k !== p.ask) { p.ask = k; this.rxView?.refresh(); } } },
         // Resting the pointer on a party Pokémon shows its Ability card (the mock-ups' Pokémon info card).
         tip: hoverTips((key) => { if (this.rxPop) return; this.rxCard = key; this.rxView?.refresh(); }),
       });

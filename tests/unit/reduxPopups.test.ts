@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { bookRows, bookView, dossierView, DOSSIER_ROWS, leadLine, listWindow, pauseView, pyramidFace, reportView, rollView, trackView, type BookModel, type DossierModel, type ReportModel, type RollCard, type RollModel, type TrackModel } from '../../src/ui/redux/screens/popups';
+import { bookRows, bookView, confirmView, dossierView, DOSSIER_ROWS, leadLine, listWindow, pauseView, pyramidFace, reportView, rollView, trackView, type BookModel, type DossierModel, type ReportModel, type RollCard, type RollModel, type TrackModel } from '../../src/ui/redux/screens/popups';
 import type { ReduxCtx } from '../../src/ui/redux/stage';
 
 // The New UI map pop-ups (Dossier, Field Notes, Notebook track page, Rival Report), drawn from the mock-ups' Beta 0.6
@@ -234,12 +234,34 @@ describe('Pause menu', () => {
   });
   it('a closed button is dimmed and the note says why', () => {
     const html = pauseView({ options: six.map((o) => ({ ...o, off: o.label === 'End run' })), index: 5, note: 'Only an Adventure run can be ended here.' });
-    expect(count(html, 'opacity:.5')).toBe(1);
+    expect(count(html, 'filter:brightness(.62)')).toBe(1);
     expect(html).toContain('Only an Adventure run can be ended here.');
-    expect(pauseView({ options: six, index: 5, note: '' })).not.toContain('opacity:.5');
+    expect(pauseView({ options: six, index: 5, note: '' })).not.toContain('filter:brightness');
   });
   it('never injects text as HTML', () => {
     const html = pauseView({ options: [{ label: '<b>x</b>' }], index: 0, note: '<i>n</i>' });
     for (const bit of ['<b>x</b>', '<i>n</i>']) expect(html).not.toContain(bit);
+  });
+});
+
+describe('Confirm dialog', () => {
+  const ask = (index: number): string => confirmView({ title: 'End this run?', text: 'Your progress is banked as a defeat. This cannot be undone.', options: ['Keep playing', 'End run'], index, act: 'pauseAsk', over: 'pauseAskOver' });
+  it('dims the page and shows the question, what it costs and the two answers, the safe one first', () => {
+    const html = ask(0);
+    expect(html).toContain('class="shade hit"');
+    for (const bit of ['End this run?', 'Your progress is banked as a defeat. This cannot be undone.', 'Keep playing', 'End run']) expect(html).toContain(bit);
+    expect(html.indexOf('Keep playing')).toBeLessThan(html.indexOf('>End run<'));
+    expect(count(html, 'data-act="pauseAsk"')).toBe(3);
+    expect(count(html, 'data-over="pauseAskOver"')).toBe(2);
+  });
+  it('the cursor is on one answer', () => {
+    expect(ask(0)).toMatch(/class="btn on"[^>]*>Keep playing/);
+    expect(ask(1)).toMatch(/class="btn on"[^>]*>End run/);
+    expect(count(ask(1), 'btn on')).toBe(1);
+  });
+  it('needs no hover handler, and never injects text as HTML', () => {
+    const html = confirmView({ title: '<b>t</b>', text: '<i>x</i>', options: ['<u>a</u>', 'b'], index: 0, act: 'go' });
+    expect(html).not.toContain('data-over');
+    for (const bit of ['<b>t</b>', '<i>x</i>', '<u>a</u>']) expect(html).not.toContain(bit);
   });
 });
