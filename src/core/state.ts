@@ -146,6 +146,8 @@ export const PokemonInstanceSchema = z.object({
   teraType: TypeNameSchema.optional(),
   /** Catalog Overhaul (SF93 Heart Crystal): its second type is this one for the rest of the run (core/co/typeShift.ts). */
   shiftType: TypeNameSchema.optional(),
+  /** Catalog Overhaul (SF102 Bond Ceremony): it made the vow; it can't be released or traded and its friendship can't fall (core/co/placesRules.ts). */
+  vowed: z.boolean().optional(),
   /** Moves that awakened this run (Signature Move Awakening): they hit harder; gone with the run. */
   awakened: z.array(z.string()).optional(),
   /** In battle only: Dynamaxed, so its HP is doubled (core/battle/transform.ts). */
@@ -1574,6 +1576,8 @@ export const RunStateSchema = z.object({
   reunion: z.object({ mon: PastPokemonSchema, afterEncounters: z.number().int().min(1), done: z.boolean() }).optional(),
   /** Beta 0.6 INSTRUMENTALITY run state (run v43). Absent until a slice that uses it writes it; older runs load untouched. */
   expansion: ExpansionRunSchema.optional(),
+  /** Catalog Overhaul (places, SF102): Pokémon the player left somewhere for a while (a reef guard); they come back through an event (core/co/placesRules.ts). */
+  coAway: z.array(z.object({ key: z.string(), mon: PokemonInstanceSchema, region: z.number().int().min(0) })).optional(),
 });
 export type RunState = z.infer<typeof RunStateSchema>;
 

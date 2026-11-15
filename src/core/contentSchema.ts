@@ -945,6 +945,10 @@ export const ArchetypeModifierSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('spookyEncounters'), chance: z.number().positive().max(1) }),
   /** A game event's own map stops (e.g. the Spooky pack's) appear in this trainer's runs all year. */
   z.object({ kind: z.literal('eventStops'), gameEvent: z.string().min(1) }),
+  /** Catalog Overhaul (places, SF102 Risk Dial): map stops of this kind (`ambush`, `rare`...) are drawn this many times as often. */
+  z.object({ kind: z.literal('stopWeight'), stop: z.string().min(1), value: z.number().positive() }),
+  /** Catalog Overhaul (places, SF102 Shadow Boon): at the start of a boss battle your lead's five stats move this many stages. */
+  z.object({ kind: z.literal('bossLeadStages'), value: z.number().int().min(-2).max(2) }),
 ]);
 export type ArchetypeModifier = z.infer<typeof ArchetypeModifierSchema>;
 export type ArchetypeModifierKind = ArchetypeModifier['kind'];
@@ -3044,6 +3048,11 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Catalog Overhaul: "(a node)" as a cost. The next `nodes` ordinary nodes on the path are spent on the work (no battle, no reward; core/co/takeNode.ts). `back`: "a node back", which costs nothing (battles already won are not refought). */
   /** Catalog Overhaul (SF93): a permanent type shift: the chosen Pokémon's second type becomes `type` (core/co/typeShift.ts). */
   z.object({ kind: z.literal('typeShift'), type: TypeNameSchema, who: CoWhoSchema.default('top') }),
+  /** Catalog Overhaul (places, SF102 Bond Ceremony): the Pokémon makes the vow (core/co/placesRules.ts). */
+  z.object({ kind: z.literal('vow'), who: CoWhoSchema.default('picked') }),
+  /** Catalog Overhaul (places, SF102): a Pokémon (of `type`, the picked one first) stays behind under `key`; `bringBack` returns it `levels` stronger. */
+  z.object({ kind: z.literal('sendAway'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), type: TypeNameSchema.optional(), /** The first Shadow Pokémon in the party goes. */ shadow: z.boolean().optional(), who: CoWhoSchema.default('picked') }),
+  z.object({ kind: z.literal('bringBack'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), levels: z.number().int().min(0).max(10).default(0), friendship: z.number().int().min(0).max(100).default(0), /** It comes back purified (no longer a Shadow Pokémon). */ purify: z.boolean().optional() }),
   z.object({ kind: z.literal('takeNode'), nodes: z.number().int().min(1).max(3).default(1), back: z.boolean().default(false) }),
   z.object({ kind: z.literal('attribute'), key: AttributeKeySchema, amount: z.number().int() }),
   /** Research Points, paid at the end of the run. */

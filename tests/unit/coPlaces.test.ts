@@ -64,6 +64,7 @@ describe('catalog overhaul: places (schema and reach)', () => {
       if (Array.isArray(o)) return o.forEach((x) => walk(x, inCondition));
       const x = o as Record<string, unknown>;
       if (x.kind === 'flag' && typeof x.key === 'string') (('amount' in x) ? set : read).add(x.key);
+      if (x.kind === 'sendAway' && typeof x.key === 'string') set.add(x.key); // sendAway sets its own key (src/core/co/placesRules.ts)
       for (const [k, v] of Object.entries(x)) walk(v, inCondition || k === 'requires' || k === 'when');
     };
     for (const e of content.events.values()) walk(e, false);

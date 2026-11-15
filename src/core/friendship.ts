@@ -12,6 +12,8 @@ import { shadow2Data } from './shadow2/data';
 /** Changes a Pokémon's friendship, kept within 0 and the maximum. Gains are scaled by `gainMultiplier` (Charisma). */
 export function changeFriendship(content: Content, mon: PokemonInstance, amount: number, gainMultiplier = 1): number {
   const { max } = content.balance.friendship;
+  // Catalog Overhaul (SF102 Bond Ceremony): a vowed Pokémon's friendship never falls.
+  if (mon.vowed && amount < 0) return mon.friendship;
   // A Prism Scale makes its holder warm up faster.
   const delta = amount > 0 ? Math.round(amount * gainMultiplier * friendshipMultiplier(content, mon) * (mon.scars?.includes('kept-promise') ? shadow2Data.keptPromiseFriendship : 1)) : amount;
   mon.friendship = Math.max(0, Math.min(max, mon.friendship + delta));

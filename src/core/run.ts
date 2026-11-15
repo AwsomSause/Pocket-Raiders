@@ -4178,6 +4178,7 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
       const old = run.party[choice.partyIndex];
       if (!old) throw new Error('Choose a party member to replace');
       if (old.care?.favourite) throw new Error('A favourite cannot be swapped out. Unmark it in Care first.');
+      if (old.vowed) throw new Error('You made a vow with this Pokémon. It stays.');
       if (shadowTierOf(caught)?.countsAgainstCap && heavyShadowCount(run.party.filter((m) => m.uid !== old.uid)) >= SHADOW_SLOT_CAP) throw new Error(`A party can hold only ${SHADOW_SLOT_CAP} Gripped or Fallen Shadow Pokémon.`);
       const problem = joinProblem(content, run, caught.speciesId, old.uid);
       if (problem) throw new Error(problem);
