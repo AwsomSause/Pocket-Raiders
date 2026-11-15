@@ -1474,7 +1474,7 @@ export const RunStateSchema = z.object({
   /** Encore! Hype carried between battles (reset after a boss battle). */
   hype: z.number().int().min(0).default(0),
   /** Signature effects that run out: they leave `perkEffects` after `battles` more battles (of the `until` kind). */
-  tempEffects: z.array(z.object({ effects: z.array(ArchetypeModifierSchema), battles: z.number().int().min(1), until: z.enum(['battle', 'boss', 'wild']) })).default([]),
+  tempEffects: z.array(z.object({ effects: z.array(ArchetypeModifierSchema), battles: z.number().int().min(1), until: z.enum(['battle', 'boss', 'wild', 'region']) })).default([]),
   signatureApplied: z.record(z.string(), z.array(ArchetypeModifierSchema)).default({}),
   /** Mode, difficulty, modifiers and their reward multiplier (core/rules.ts). */
   rules: RunRulesSchema,
