@@ -140,7 +140,8 @@ export function ownedMegaForms(content: Content, inventory: Record<string, numbe
 
 /** The form this Pokémon takes by itself in battle: its Mega form (the first stone you own) or its Gigantamax form, or null. */
 export function permanentForm(content: Content, inventory: Record<string, number>, mon: PokemonInstance, disabled: readonly TransformKind[] = []): { kind: 'mega' | 'gigantamax'; option: FormOption } | null {
-  const mega = !disabled.includes('mega') && hasKeyItem(content, inventory, 'mega') ? ownedMegaForms(content, inventory, mon)[0] : undefined;
+  // Pidgey's Resolve: a `skyMega` Pokémon Mega Evolves from resolve alone, with no Mega Ring and no stone.
+  const mega = disabled.includes('mega') ? undefined : mon.skyMega ? stoneForms(content, mon.speciesId, false)[0] : hasKeyItem(content, inventory, 'mega') ? ownedMegaForms(content, inventory, mon)[0] : undefined;
   if (mega) return { kind: 'mega', option: mega };
   const gmax = !disabled.includes('dynamax') && hasKeyItem(content, inventory, 'dynamax') ? gmaxFormFor(content, mon.speciesId) : null;
   return gmax ? { kind: 'gigantamax', option: { formId: gmax, itemId: null } } : null;

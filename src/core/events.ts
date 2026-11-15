@@ -58,6 +58,7 @@ import { activePerks, hasPerk, perkItem, perksOf, spendUse, stageKey } from './m
 import { scavengerBonus } from './bank';
 import { addLevels, calcStats, maxHp, maxPp } from './pokemon';
 import { count, countShiny, discover } from './progress';
+import { FLAGS as POND_FLAGS, freshMark, pondMon, recordLesson, setPondFlag } from './episodes/poliPond';
 import { eggStatus, eggTier, layEgg, warmEggs } from './eggs';
 import { makeShadow, rollShadowHeart } from './shadow';
 import { addFlag } from './shadowWorld/world';
@@ -65,7 +66,8 @@ import { grantBlessing, makeBlissful } from './shadowWorld/blissful';
 import { eggMoveOptions, familyId, teachEggMove } from './mastery';
 import { applyTrainEffect, trainEffectText } from './trainingEffects';
 import { noteCanonEvent, restoreStash, stashParty } from './expansion/canonRun';
-import { applyCanonEffect, ghostReturns, nearestBst } from './expansion/canonSaffron';
+import { flightNorthEffect } from './instrumentality/flightNorth';
+import { applyCanonEffect, ghostReturns, labRetryEvent, nearestBst } from './expansion/canonSaffron';
 import { addStageAttribute } from './expansion/stageMods';
 import { raidOffered, resolveStoryRaid } from './raid/storyRaids';
 import { advanceTrack, trackStep } from './expansion/trackRun';
@@ -76,7 +78,8 @@ import { getSpecies } from './pokemon';
 import { currentRegion, getCampaign, levelCap, runLevelCap } from './regions';
 import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } from './encounterDirector';
 import { hashSeed, Rng } from './rng';
-import { continueAfterDecisions, healParty, newMon, startRaidBattle } from './run';
+import { continueAfterDecisions, healParty, newMon, partyCapacity, startRaidBattle } from './run';
+import { applySky, shapeSkyFoe, skyCondition, skyConditionText } from './sky/story';
 import { NATURE_IDS } from './natures';
 
 const bstOf = (sp: { baseStats: Record<string, number> }): number => Object.values(sp.baseStats).reduce((a, b) => a + b, 0);
@@ -225,6 +228,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
     }
     case 'xevents':
       return run.expansion?.density !== undefined;
+    case 'sky':
+      return skyCondition(content, run, c.when);
     case 'standWith': {
       const sw = standWithOf(run);
       if (!c.joined) return !sw && joinProblem(run) === null;
@@ -413,6 +418,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs something you have not done yet';
     case 'track':
       return 'Needs the world to have changed more';
+    case 'sky':
+      return skyConditionText(c.when);
     case 'xevents':
       return 'Only with the Kanto story events on';
     case 'xflag':
@@ -904,10 +911,14 @@ export function effectWords(content: Content, e: EventEffect): string {
       return `trade away ${e.want.label}`;
     case 'tradeFor':
       return `swap ${e.want.label}`;
+    case 'pond':
+      return '';
     case 'stashParty':
       return 'your Pokémon are taken away';
     case 'restoreParty':
       return 'your Pokémon come back';
+    case 'flightNorth':
+      return e.action === 'name' ? 'you give it a name' : 'you trust it';
     case 'heal':
       return e.share >= 1 ? 'full heal' : `heal ${Math.round(e.share * 100)}%`;
     case 'campBond':
@@ -1014,6 +1025,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return '';
     case 'shadowHeart':
       return 'a Shadow Pokémon eases';
+    case 'sky':
+      return '';
     case 'track':
       return e.input === 'raidSuccess' || e.input === 'officerTurned' ? 'the world eases' : 'the world tightens';
     case 'namedShadow':
@@ -1164,10 +1177,14 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       discover(run, gotId, true);
       return `Traded ${given?.name ?? mon.speciesId} for ${got.name}`;
     }
+    case 'pond':
+      return applyPondEffect(content, run, e);
     case 'stashParty':
       return stashParty(run) ? 'Your Pokémon are taken away' : '';
     case 'restoreParty':
       return restoreStash(run) ? 'Your Pokémon come back' : '';
+    case 'flightNorth':
+      return flightNorthEffect(run, e);
     case 'heal': {
       if (e.share >= 1) healParty(content, run);
       else for (const m of run.party) if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * e.share));
@@ -1234,6 +1251,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (e.hiddenAbility && content.species.get(mon.speciesId)?.abilities.hidden) mon.abilitySlot = -1;
       if (e.ability) mon.fixedAbility = e.ability;
       if (e.look) mon.look = e.look;
+      if (e.friendship) mon.friendship = Math.min(255, mon.friendship + e.friendship);
       for (const id of e.moves) {
         const mv = content.moves.get(id);
         if (!mv || mon.moves.some((m) => m.id === id)) continue;
@@ -1253,6 +1271,13 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (e.action === 'ghostReturn') {
         const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
         return ghostReturns(content, run, eventLevel(content, run, node, rng));
+      }
+      if (e.action === 'labRetry') {
+        const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+        const next = labRetryEvent(content, run);
+        here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId: next });
+        if (run.itemCounters) delete run.itemCounters[`event-seen:${next}`];
+        return 'The dark folds back to where you began.';
       }
       return applyCanonEffect(content, run, e, rng);
     }
@@ -1376,6 +1401,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (e.mark) addMark(rec, e.mark);
       return '';
     }
+    case 'sky':
+      return applySky(content, run, e);
     case 'flag':
       run.story.flags[`ev:${e.key}`] = Math.max(0, Number(run.story.flags[`ev:${e.key}`] ?? 0) + e.amount);
       // Shadow II: a story flag may be exactly the key a Shadow in your party or PC has been waiting for.
@@ -1554,7 +1581,8 @@ function eventLevel(content: Content, run: RunState, node: MapNode, rng: Rng): n
 
 export function startEventBattle(content: Content, run: RunState, node: MapNode, b: EventBattle, rng: Rng, event: EventBattleRef): void {
   const lastAlive = b.kind === 'trainer' && b.rule?.reversed ? run.party.map((p) => p.hp > 0).lastIndexOf(true) : -1;
-  const dueler = b.kind === 'trainer' && b.rule?.leadType ? run.party.findIndex((p) => p.hp > 0 && getSpecies(content, p.speciesId).types.includes(b.rule!.leadType!)) : -1;
+  const pondLead = b.kind === 'trainer' && b.rule?.pondDuel ? run.party.findIndex((p) => p.pond && p.hp > 0) : -1;
+  const dueler = pondLead >= 0 ? pondLead : b.kind === 'trainer' && b.rule?.leadType ? run.party.findIndex((p) => p.hp > 0 && getSpecies(content, p.speciesId).types.includes(b.rule!.leadType!)) : -1;
   const activeIndex = dueler >= 0 ? dueler : lastAlive >= 0 ? lastAlive : run.party.findIndex((p) => p.hp > 0);
   const base = (b.kind !== 'raid' ? b.level : undefined) ?? (b.kind === 'trainer' && b.rule?.matchLead ? run.party[activeIndex]!.level + b.levelBonus : eventLevel(content, run, node, rng) + b.levelBonus);
   // Event foes stay under the region's level cap like every ordinary enemy (Balancing Phase 7).
@@ -1644,6 +1672,8 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     run.battle = createBattle('trainer', team, activeIndex, run.party[activeIndex]!.uid, { classId: b.classId ?? 'event', name: evil ? evil.name : rival ? rival.name : fellow ? fellow.name : b.kind === 'trainer' && b.friend ? friendName(run) : b.name, leaderId: null });
     if (b.kind === 'trainer' && b.sprite && run.battle.trainer) run.battle.trainer.spriteBoss = b.sprite;
     if (b.special) assignSpecialTrait(run.battle.extra.traits, team, b.special);
+    // Pidgey's Resolve: the sparring Pidgey (and the rematch Pidgeot) is built from the story's state.
+    if (event.eventId === 'sky.meet' || event.eventId === 'sky.rematch') shapeSkyFoe(content, run, event.eventId);
     assignStoryTraits(run.battle.extra.storyTraits, team, b.special, !!run.expansion?.storyTraits);
     // Beta 0.6: the team's special Pokémon carry its variant line (Specialists one, Executives and Leaders two).
     const variantTeam = b.evil ? (b.evilTeam ?? evilTeam(content, run)?.id) : undefined;
@@ -1835,3 +1865,75 @@ function levelEvolutionNear(content: Content, mon: RunState['party'][number], wi
   return content.species.get(mon.speciesId)?.evolutions.find((x) => x.level !== undefined && !x.region && !x.condition && !x.gender && mon.level >= x.level - within && content.species.has(x.to));
 }
 const nearLevelEvolution = (content: Content, mon: RunState['party'][number], within: number): boolean => levelEvolutionNear(content, mon, within) !== undefined;
+
+/** Poli-Pond (core/episodes/poliPond.ts): one step of the story. No random numbers. */
+function applyPondEffect(content: Content, run: RunState, e: Extract<EventEffect, { kind: 'pond' }>): string {
+  const mon = pondMon(run);
+  switch (e.action) {
+    case 'begin': {
+      if (mon || Number(run.story.flags[`ev:${POND_FLAGS.begun}`] ?? 0) > 0) return '';
+      const levels = run.party.map((m) => m.level);
+      const avg = levels.length > 0 ? Math.round(levels.reduce((a, b) => a + b, 0) / levels.length) : 5;
+      const guest = newMon(content, run, 'poliwag', Math.max(2, Math.min(runLevelCap(content, run), avg - 3)), 'p');
+      guest.pond = freshMark();
+      guest.friendship = e.gentle ? 60 : 40;
+      discover(run, guest.speciesId, true);
+      if (run.party.length < partyCapacity(content, run)) run.party.push(guest);
+      else run.pending.push({ kind: 'caught', mon: guest });
+      setPondFlag(run, POND_FLAGS.begun, 1);
+      // The three lessons (at rests) and the pond visit go on later nodes of this stage, by a fixed hash. Anything unplayed returns next stage as a callback.
+      const stage = run.stage;
+      const here = stage?.map.nodes.find((n) => n.id === stage.current);
+      const later = stage && here ? stage.map.nodes.filter((n) => n.column > here.column && n.column < stage.map.columns) : [];
+      if (stage && later.length > 0) {
+        for (const id of ['pp-lesson-aim', 'pp-pond-visit', 'pp-lesson-footing', 'pp-lesson-stand']) {
+          const node = later[fnv1a(`${run.seed}::pond::${id}::${run.stage!.index}`) % later.length]!;
+          node.sides.push({ id: `event-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId: id });
+        }
+      }
+      if (e.gentle) setPondFlag(run, POND_FLAGS.gentle, 1);
+      return 'A small Poliwag stays close to you.';
+    }
+    case 'lesson':
+      if (e.lesson) recordLesson(run, e.lesson, e.firstTry);
+      return mon ? `${content.species.get(mon.speciesId)?.name ?? 'The Poliwag'} learned a lesson.` : '';
+    case 'guilty':
+      setPondFlag(run, 'pp-guilty', 1);
+      return '';
+    case 'rematchWon':
+      setPondFlag(run, POND_FLAGS.rematchWon, 1);
+      return '';
+    case 'keep':
+      if (mon?.pond) {
+        mon.pond = { ...mon.pond, shy: false, kept: true };
+        mon.fixedAbility = 'kindness';
+        mon.friendship = Math.min(255, mon.friendship + 40);
+      }
+      setPondFlag(run, POND_FLAGS.keep, 1);
+      setPondFlag(run, POND_FLAGS.ending, 1);
+      return 'It learned Kindness.';
+    case 'release':
+    case 'reconcile': {
+      run.party = run.party.filter((m) => !m.pond);
+      run.pending = run.pending.filter((p) => !(p.kind === 'caught' && p.mon.pond));
+      setPondFlag(run, e.action === 'release' ? POND_FLAGS.release : POND_FLAGS.reconcile, 1);
+      setPondFlag(run, POND_FLAGS.armed, 1);
+      setPondFlag(run, POND_FLAGS.ending, 1);
+      return 'It goes back to the pond.';
+    }
+    case 'returnJoin': {
+      if (Number(run.story.flags[`ev:${POND_FLAGS.joined}`] ?? 0) > 0) return '';
+      const levels = run.party.map((m) => m.level);
+      const avg = levels.length > 0 ? Math.round(levels.reduce((a, b) => a + b, 0) / levels.length) : 20;
+      const wrath = newMon(content, run, 'poliwrath', Math.max(1, Math.min(runLevelCap(content, run), avg)), 'p');
+      wrath.pond = { shy: false, aim: true, footing: true, stand: true, kept: true };
+      wrath.fixedAbility = 'kindness';
+      wrath.friendship = 200;
+      discover(run, wrath.speciesId, true);
+      if (run.party.length < partyCapacity(content, run)) run.party.push(wrath);
+      else run.pending.push({ kind: 'caught', mon: wrath });
+      setPondFlag(run, POND_FLAGS.joined, 1);
+      return 'Poliwrath joins you.';
+    }
+  }
+}

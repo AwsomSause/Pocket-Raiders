@@ -35,6 +35,7 @@ import type { UltraRuleId } from '../ultra/beasts';
 import { abilityOf, calcStats, createPokemon, getSpecies, maxHp } from '../pokemon';
 import { rallyStages } from './rally';
 import { storyHype, storyNoCrit, storyOldHabits } from '../expansion/storyTraits';
+import { KINDNESS_USES } from '../episodes/poliPond';
 import { HOUSE_WINS_STAGES, LIGHTS_OUT_ACCURACY, LIGHTS_OUT_TURNS, housePending, isHousePair, takeHousePending, traitDoubleEntry, traitDrill, traitFeedHeal, traitFoodKnocked, traitLightsOut, traitOverhears, traitPayout, traitSeatMessage, traitTakesBerry, GRID_TIE_SHARE, traitBloodScent, traitGridTie, traitLingering, traitOnSchedule, traitSubtraction, traitUndertow, traitUpdraft } from '../expansion/traits';
 import { ACCESSORY_TORN_MESSAGE, SPIRITLESS_MESSAGE, variantBlocksForcedSwitch, variantBlocksMind, variantBlocksStage, variantBlocksStatus, variantEndTurnLoss, variantAccessory, variantAccessoryTorn, variantCheer, variantEndTurnStages, variantGimmickTick, variantGadget, variantIncoming, variantItemMove, variantLosesTurn, variantNeverMisses, variantOnEntry, variantOutgoing, variantPriorityBonus, variantSnagRefuses, variantTagCall } from '../expansion/variantLines';
 import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
@@ -112,6 +113,7 @@ import { allyDue, allyLevel, getTotem } from '../totem/totem';
 import { enemyLastResort } from './lastResort';
 import { friendshipBond, WEALTH_HEAL, WEALTH_POTIONS } from '../trainerWorld/trainerWorld';
 import { specializationBonus, specializationPersonality } from '../trainerWorld/behavior';
+import { falseSlotFor } from '../expansion/labyrinth';
 import { addMomentum, cfgOf as spectacleCfg, duePhases, isBossFight, rallyProblem, rollLastStand, spectacleOf, spectacleRoll as spectacleRollExt, type SpectacleEvent } from './spectacle';
 import { ARENA_IMMUNE, foeStake, aimAccuracy, arenaText, dealOffer, mindReader, shoutDamage, throwCatch, type SkillInput } from './w1Play';
 import { benchSupporter, addBleed, bleedDamage, causesBleed, curseMultiplier, resonanceMultiplier } from './w1Rules';
@@ -794,6 +796,15 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
       if (pick >= 0) action = { kind: 'move', index: pick };
     }
   }
+  // Sabrina's Labyrinth: the false slot shows its own move and does another (the companion marks it every second turn).
+  if (battle.eventRule?.falseSlot && action.kind === 'move' && action.index >= 0) {
+    const me = ctx.party[battle.activeIndex]!;
+    const lie = falseSlotFor(battle.turn, me.uid, me.moves.length, me.moves.map((m) => m.pp > 0));
+    if (lie && lie.slot === action.index && me.moves[lie.to]) {
+      events.push({ type: 'raid', tone: 'phase', text: `The move twists in ${nameOf(ctx, me)}'s mind: ${content.moves.get(me.moves[lie.slot]!.id)?.name ?? 'it'} was never real. It uses ${content.moves.get(me.moves[lie.to]!.id)?.name ?? 'another move'} instead!` });
+      action = { ...action, index: lie.to };
+    }
+  }
   // Ideas W1: this turn's skill grade (a prompt result is an input, like the move itself); a surrender deal; smashing the arena.
   battle.skill = action.kind === 'move' ? action.skill : action.kind === 'item' ? action.throwSkill : undefined;
   if (action.kind === 'deal') return dealTurn(ctx, action.accept, events);
@@ -936,7 +947,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
     actions.forEach((a0, index) => {
       let a = a0;
       if (anyFainted(playerC, enemy) || a.user.mon.hp <= 0) return;
-      if (a.user.side === 'enemy' && (enemyActed || loseFreeTurn(battle, events) || blissfulCalm(ctx, enemy, events))) return;
+      if (a.user.side === 'enemy' && (enemyActed || loseFreeTurn(battle, events) || blissfulCalm(ctx, enemy, events) || foeStands(ctx, enemy, events))) return;
       // Shadow II: a Veiled Pokémon may hesitate; a Gripped or Fallen one may use a move of its own choosing. Decided (and shown) before the turn.
       if (a.user.side === 'player' && a.user.mon.shadow) {
         const plan = shadowTurnPlan(a.user.mon, battle.turn, turnStartState);
@@ -953,7 +964,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
       }
       actWithRage(ctx, a.user, enemy, events, () => executeMove(ctx, a.user, a.target, a.move, a.slot, index === 0, events));
     });
-  } else if (!enemyActed && !loseFreeTurn(battle, events) && !blissfulCalm(ctx, enemy, events)) {
+  } else if (!enemyActed && !loseFreeTurn(battle, events) && !blissfulCalm(ctx, enemy, events) && !foeStands(ctx, enemy, events)) {
     actWithRage(ctx, enemy, enemy, events, () => executeMove(ctx, enemy, playerC, enemyMove, enemyMoveIndex, false, events));
   }
   recordFaints(ctx, playerC, enemy, events);
@@ -1607,6 +1618,14 @@ function ballRuleProblem(ctx: Pick<BattleContext, 'battle'>, rule: Extract<ItemE
 }
 
 /** A Blissful wild Pokémon is calm: it watches you instead of attacking. */
+/** Route 25: with the `foeStands` rule the foe holds its ground for the first turns and does not attack. */
+function foeStands(ctx: BattleContext, enemy: Combatant, events: BattleEvent[]): boolean {
+  const turns = ctx.battle.eventRule?.foeStands;
+  if (!turns || ctx.battle.turn > turns || enemy.mon.hp <= 0) return false;
+  events.push({ type: 'raid', tone: 'info', text: `${getSpecies(ctx.content, enemy.mon.speciesId).name} stands in front of the others, arms wide. It does not attack.` });
+  return true;
+}
+
 function blissfulCalm(ctx: BattleContext, enemy: Combatant, events: BattleEvent[]): boolean {
   const { battle } = ctx;
   if (battle.kind !== 'wild' || battle.raid || !enemy.mon.blissful || enemy.mon.hp <= 0) return false;
@@ -1754,6 +1773,12 @@ function switchIn(ctx: BattleContext, partyIndex: number, events: BattleEvent[])
   const outgoing = ctx.party[battle.activeIndex];
   if (outgoing) leaveField(ctx, outgoing);
   const mon = ctx.party[partyIndex]!;
+  // Poli-Pond (Kindness): when its bearer steps out of the fight alive, whoever steps in gets +1 priority on its first move (twice a battle).
+  battle.storyEffects = battle.storyEffects.filter((e) => !e.startsWith('kind:'));
+  if (outgoing && outgoing.hp > 0 && outgoing.uid !== mon.uid && abilityOf(ctx.content, outgoing) === 'kindness' && battle.storyEffects.filter((e) => e === 'kind-used').length < KINDNESS_USES) {
+    battle.storyEffects.push('kind-used', `kind:${mon.uid}`);
+    events.push({ type: 'raid', tone: 'info', text: `Kindness: ${nameOf(ctx, outgoing)} makes room, and ${nameOf(ctx, mon)} moves first!` });
+  }
   // Pivot: the Pokémon sent in right after a U-turn-style exit gets its edge for its first turn out.
   if (battle.growthMarks?.length) {
     const pivoted = battle.growthMarks.includes('pivoted');
@@ -2322,11 +2347,20 @@ function entryAbility(ctx: BattleContext, c: Combatant, other: Combatant, events
     }
     return;
   }
-  if (ability === 'champions-fury') {
-    // Fighting Tournament champion: a random stat rises by two stages each time it is sent out.
+  if (ability === 'champions-fury' || ability === 'champions-entrance') {
+    // Fighting Tournament champion (Champion's Entrance): on entry one random stat rises by two stages, never the same stat as last time
+    // and never more than +4 in total per battle (so it lifts twice at most).
     const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
+    const marks = (ctx.battle.growthMarks ??= []);
+    const prefix = `ce:${c.mon.uid}:`;
+    const mine = marks.filter((m) => m.startsWith(prefix));
+    if (mine.length >= 2) return;
+    const last = mine[mine.length - 1]?.slice(prefix.length);
+    const pool = stats.filter((st) => st !== last);
+    const pick = pool[ctx.rng.int(0, pool.length - 1)]!;
+    marks.push(`${prefix}${pick}`);
     announce(c, ability, events);
-    applyStageChange(ctx, c, stats[ctx.rng.int(0, stats.length - 1)]!, 2, events);
+    applyStageChange(ctx, c, pick, 2, events);
     return;
   }
   if (ability === 'download' && other.mon.hp > 0) {
@@ -2469,7 +2503,8 @@ function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
   if (ability === 'prankster' && move.category === 'status') return move.priority + 1;
   if (move.category === 'status' && !c.vol.movesUsed.includes(move.id) && Held.hasHook(ctx, c.mon, c.side, 'coolShades')) return move.priority + 1;
   if (ability === 'silent-cloak' && !c.vol.cloakUsed) return move.priority + 1;
-  if (ability === 'champions-fury' && !c.vol.furyUsed && move.category !== 'status') return move.priority + 1;
+  if ((ability === 'champions-fury' || ability === 'champions-entrance') && !c.vol.furyUsed && move.category !== 'status') return move.priority + 1;
+  if (c.side === 'player' && c.vol.movesUsed.length === 0 && ctx.battle.storyEffects.includes(`kind:${c.mon.uid}`)) return move.priority + 1;
   if (ability === 'gale-wings' && move.type === 'flying' && c.mon.hp >= calcStats(ctx.content, c.mon).hp) return move.priority + 1;
   if (ability === 'triage' && (move.effects.heal || move.effects.drain)) return move.priority + 3;
   if (ability === 'mycelium-might' && move.category === 'status') return move.priority - 0.5;
@@ -2612,6 +2647,13 @@ function canAct(ctx: BattleContext, user: Combatant, events: BattleEvent[], move
  * Removes HP, applying the Last Stand Charm if this would knock out the
  * player's last usable Pokémon. Returns the HP actually lost.
  */
+/** Beta 0.7 (X1): a late boss (past balance.lateBoss.fromLevel) hits softer the higher its level, so late gyms stop one-shotting a team that out-levels them. */
+function lateBossDamageScale(ctx: BattleContext, user: Combatant): number {
+  const cfg = ctx.content.balance.lateBoss;
+  if (user.side !== 'enemy' || cfg.damagePerLevel === 0 || user.mon.level <= cfg.fromLevel || ctx.battle.raid || !isBossClass(ctx.battle.trainer?.classId)) return 1;
+  return Math.max(cfg.minDamageScale, 1 - cfg.damagePerLevel * (user.mon.level - cfg.fromLevel));
+}
+
 /**
  * The player's damage bonuses and penalties: the trainer's type passives
  * (more damage from your Pokémon of a type, more super-effective damage taken
@@ -2622,7 +2664,7 @@ function applyTypeModifiers(ctx: BattleContext, user: Combatant, target: Combata
   const mods = ctx.typeModifiers;
   const attrs = ctx.attributes;
   const perks = ctx.perks;
-  const rivalry = rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType, physical) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * fieldPowerMultiplier(ctx.battle.overhaulField, moveType, ctx.content.balance.overhaulField) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target) * (user.side === 'player' ? growthDamageMultiplier(ctx.content.balance.overhaulGrowth, user.mon, moveType, effectiveness, user.mon.hp / Math.max(1, maxHp(ctx.content, user.mon)), getSpecies(ctx.content, user.mon.speciesId).types, { foeTypes: getSpecies(ctx.content, target.mon.speciesId).types, rival: Boolean(ctx.battle.rival || ctx.battle.rivalId), trainerClass: ctx.battle.trainer?.classId ?? null, solo: ctx.party.filter((m) => m.hp > 0).length === 1, accuracy: move.accuracy, sound: move.flags.includes('sound'), foeHpFrac: target.mon.hp / Math.max(1, maxHp(ctx.content, target.mon)), turn: ctx.battle.turn, turnsOut: user.vol.turnsOut, waited: user.vol.waited, unhit: user.vol.unhit, contacted: foeContacted(ctx, target), pivoted: user.vol.turnsOut <= 1 && (ctx.battle.growthMarks ?? []).includes(`pivotIn:${user.mon.uid}`), period: ctx.period, ...growthSituation(ctx, user, target) }) : 1) * (target.side === 'player' ? growthIncomingMultiplier(ctx.content.balance.overhaulGrowth, target.mon, moveType) : 1);
+  const rivalry = lateBossDamageScale(ctx, user) * rivalryMultiplier(ctx, user, target) * raidFieldMultiplier(ctx.content, ctx.battle, user.side, moveType, physical) * raidRoleMultiplier(ctx.content, ctx.battle, user, target) * fieldPowerMultiplier(ctx.battle.overhaulField, moveType, ctx.content.balance.overhaulField) * doublesDamageMultiplier(ctx, user, target, physical, moveType) * shadowDamageMultiplier(user.mon, target.mon) * guardMultiplier(ctx, target) * (user.side === 'player' ? growthDamageMultiplier(ctx.content.balance.overhaulGrowth, user.mon, moveType, effectiveness, user.mon.hp / Math.max(1, maxHp(ctx.content, user.mon)), getSpecies(ctx.content, user.mon.speciesId).types, { foeTypes: getSpecies(ctx.content, target.mon.speciesId).types, rival: Boolean(ctx.battle.rival || ctx.battle.rivalId), trainerClass: ctx.battle.trainer?.classId ?? null, solo: ctx.party.filter((m) => m.hp > 0).length === 1, accuracy: move.accuracy, sound: move.flags.includes('sound'), foeHpFrac: target.mon.hp / Math.max(1, maxHp(ctx.content, target.mon)), turn: ctx.battle.turn, turnsOut: user.vol.turnsOut, waited: user.vol.waited, unhit: user.vol.unhit, contacted: foeContacted(ctx, target), pivoted: user.vol.turnsOut <= 1 && (ctx.battle.growthMarks ?? []).includes(`pivotIn:${user.mon.uid}`), period: ctx.period, ...growthSituation(ctx, user, target) }) : 1) * (target.side === 'player' ? growthIncomingMultiplier(ctx.content.balance.overhaulGrowth, target.mon, moveType) : 1);
   if (!mods && !attrs && !perks && rivalry === 1) return damage;
   let multiplier = rivalry;
   const weather = weatherNow(ctx);
@@ -3280,7 +3322,7 @@ function executeMove(
   else runMove(ctx, user, target, hitMove, movedFirst, events);
   user.vol.lastFailed = events.slice(mark).some((e) => (e.type === 'fail' || e.type === 'miss' || e.type === 'noEffect' || e.type === 'protected') && (e.type === 'noEffect' ? e.side === target.side : e.type === 'protected' ? e.side === target.side : e.side === user.side));
   if (abilityIn(ctx, user) === 'silent-cloak') user.vol.cloakUsed = true;
-  if (abilityIn(ctx, user) === 'champions-fury') user.vol.furyUsed = true;
+  if (abilityIn(ctx, user) === 'champions-fury' || abilityIn(ctx, user) === 'champions-entrance') user.vol.furyUsed = true;
   if (abilityIn(ctx, user) === 'encore-amp' && move.flags.includes('sound') && !user.vol.lastFailed) {
     user.vol.ampCount = user.vol.ampMove === move.id ? Math.min(3, user.vol.ampCount + 1) : 1;
     user.vol.ampMove = move.id;
@@ -3706,7 +3748,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     user.vol.typeShift = move.type;
   }
   const foeAbility = targetsEnemy ? targetAbility(ctx, user, target) : null;
-  const noGuard = userAbility === 'no-guard' || abilityIn(ctx, target) === 'no-guard';
+  const noGuard = userAbility === 'no-guard' || abilityIn(ctx, target) === 'no-guard' || userAbility === 'skys-resolve' || abilityIn(ctx, target) === 'skys-resolve';
   // A hidden target can only be hit by the moves that reach it (Earthquake hits Dig), or with No Guard.
   if (targetsEnemy && target.vol.semi && fx.hitsSemi?.semi !== target.vol.semi && !noGuard) {
     events.push({ type: 'avoided', side: target.side });
@@ -4422,6 +4464,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     else if (fx.flinchChance && movedFirst && roll(fx.flinchChance)) flinch(ctx, user, target);
     else if (!fx.flinchChance && userAbility === 'stench' && movedFirst && rng.chance(0.1)) flinch(ctx, user, target);
     if (fx.confuse && roll(fx.confuse.chance, 'confusion')) tryConfuse(ctx, user, target, events, false);
+    if (fx.haunting && target.vol.haunted === 0 && target.vol.hauntLock === 0) {
+      target.vol.haunted = 1;
+      target.vol.hauntedTurns = target.side === 'enemy' && (isBossClass(ctx.battle.trainer?.classId) || isBossFight(ctx.battle)) ? 2 : 4;
+      events.push({ type: 'selfState', side: target.side, state: 'haunted' });
+    }
   }
   if (target.mon.hp > 0 && fx.bind && target.vol.bound === 0) {
     target.vol.bound = rng.int(4, 5) + growthExtraTurn(ctx, user, 'trapper');
@@ -5113,14 +5160,18 @@ function endTurnMon(ctx: BattleContext, c: Combatant, foe: Combatant, events: Ba
       tryInflictStatus(ctx, foe, c, 'slp', undefined, events, false);
     }
     if (c.vol.haunted > 0 && c.mon.hp > 0) {
-      // Haunted: odd turns lower a random stat, even turns roll confusion; the cycle repeats until it switches out.
+      // Haunted: a fixed four-turn cycle (bosses two): stat falls, 50% confusion, stat falls, 50% confusion, then it ends.
       const turn = c.vol.haunted++;
       if (turn % 2 === 1) {
         const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
         const down = stats.filter((st) => c.stages[st] > -6);
         if (down.length) applyStageChange(ctx, c, down[ctx.rng.int(0, down.length - 1)]!, -1, events);
-      } else tryConfuse(ctx, foe, c, events, false);
-    }
+      } else if (ctx.rng.chance(0.5)) tryConfuse(ctx, foe, c, events, false);
+      if (turn >= c.vol.hauntedTurns) {
+        c.vol.haunted = 0;
+        c.vol.hauntLock = 2;
+      }
+    } else if (c.vol.hauntLock > 0) c.vol.hauntLock -= 1;
     if (c.vol.perish > 0) {
       c.vol.perish -= 1;
       events.push({ type: 'perish', side: c.side, count: c.vol.perish });
@@ -5736,6 +5787,16 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
     events.push({ type: 'selfState', side: user.side, state: 'revived' });
     return;
   }
+  if (fx.northsWind) {
+    const team = user.side === 'player' ? ctx.party : ctx.battle.enemyTeam;
+    const down = team.find((m) => m.hp <= 0);
+    if (!down) return void events.push({ type: 'fail', side: user.side });
+    down.hp = Math.max(1, Math.floor(calcStats(content, down).hp / 2));
+    events.push({ type: 'selfState', side: user.side, state: 'revived' });
+    changeStage(ctx, user, user, 'spa', 1, events);
+    changeStage(ctx, user, user, 'spe', 1, events);
+    return;
+  }
   if (fx.shedTail) {
     const cost = Math.floor(calcStats(content, user.mon).hp / 2);
     const team = user.side === 'player' ? ctx.party : ctx.battle.enemyTeam;
@@ -5862,27 +5923,6 @@ function applyStatusMove(ctx: BattleContext, user: Combatant, target: Combatant,
       }
     }
     events.push(any ? { type: 'selfState', side: user.side, state: 'perishSong' } : { type: 'fail', side: user.side });
-    return;
-  }
-  if (fx.haunting) {
-    // Haunting: four stage-one Ghost spirits each strike once (power 25, through Substitute), then the foe is Haunted.
-    if (user.vol.prevMove === move.id || target.mon.hp <= 0) {
-      events.push({ type: 'fail', side: user.side });
-      return;
-    }
-    const stats = calcStats(ctx.content, user.mon);
-    const foeStats = calcStats(ctx.content, target.mon);
-    const eff = typeEffectiveness(ctx.content.typeChart, 'ghost', getSpecies(ctx.content, target.mon.speciesId).types);
-    const base = Math.floor(((2 * user.mon.level) / 5 + 2) * 25 * (stats.spa / Math.max(1, foeStats.spd)) / 50) + 2;
-    const one = eff === 0 ? 0 : Math.max(1, Math.floor(base * eff));
-    for (let i = 0; i < 4 && target.mon.hp > 0; i++) {
-      const { lost } = takeHp(ctx, target, one);
-      events.push({ type: 'damage', side: target.side, amount: lost, hpAfter: target.mon.hp, effectiveness: eff, crit: false });
-    }
-    if (target.mon.hp > 0 && target.vol.haunted === 0) {
-      target.vol.haunted = 1;
-      events.push({ type: 'selfState', side: target.side, state: 'haunted' });
-    }
     return;
   }
   if (fx.yawn) {
@@ -6356,7 +6396,9 @@ function applyStageChange(ctx: BattleContext, c: Combatant, stat: BoostStat, sta
     }
   }
   const before = c.stages[stat];
-  const after = clampStage(before + stages);
+  let after = clampStage(before + stages);
+  // Beta 0.7 (X1): a late boss cannot stack a stat past balance.lateBoss.maxBoostStage (Dragon Dance twice is fine, four times is not).
+  if (stages > 0 && c.side === 'enemy' && c.mon.level > ctx.content.balance.lateBoss.fromLevel && !ctx.battle.raid && isBossClass(ctx.battle.trainer?.classId)) after = Math.min(after, Math.max(before, ctx.content.balance.lateBoss.maxBoostStage));
   if (after === before) {
     events.push({ type: 'statLimit', side: c.side, stat, up: stages > 0 });
     return false;

@@ -276,7 +276,7 @@ export const MoveSchema = z.object({
       perishSong: z.literal(true).optional(),
       /** Yawn: the target falls asleep at the end of the next turn. */
       yawn: z.literal(true).optional(),
-      /** Haunting (Sabrina's Labyrinth ghost): four spirits strike once each, then the foe is Haunted (a stat drop and confusion in turn). */
+      /** Haunting (Sabrina's Labyrinth ghost): after its damage the target is Haunted (a fixed four-turn cycle). */
       haunting: z.literal(true).optional(),
       /** Magnet Rise: the user floats for five turns. */
       magnetRise: z.literal(true).optional(),
@@ -318,6 +318,8 @@ export const MoveSchema = z.object({
       userFaint: z.enum(['memento', 'healingWish', 'lunarDance', 'finalGambit']).optional(),
       /** Revival Blessing: a fainted party member comes back at half HP. */
       revivalBlessing: z.literal(true).optional(),
+      /** North's Wind (Flight North): revives one fainted team member at half HP, then raises the user's Sp. Atk and Speed by one stage. */
+      northsWind: z.literal(true).optional(),
       /** Shed Tail: pays half HP for a Substitute and switches out, passing it on. */
       shedTail: z.literal(true).optional(),
       /** Changes the user's type: copy the target's (Reflect Type), add Grass or Ghost to the target, resist its last move (Conversion 2), or lose a type after the hit. */
@@ -2073,6 +2075,8 @@ export const BalanceSchema = z.object({
   leaderMoods: z.boolean().default(true),
   /** Rebalance: Gym Leaders, Elite Four, Champions and Rivals get held items, IVs, EVs and training (core/bossGear.ts). */
   bossGear: z.boolean().default(true),
+  /** Beta 0.7 (X1): late bosses (past `fromLevel`) deal `damagePerLevel` less damage per level above it (never below `minDamageScale`) and cannot raise a stat past `maxBoostStage`; the sim bot could not pass region 4 without it. */
+  lateBoss: z.object({ fromLevel: z.number().int().min(0), damagePerLevel: z.number().min(0), minDamageScale: z.number().min(0.1).max(1), maxBoostStage: z.number().int().min(0).max(6) }).default({ fromLevel: 100, damagePerLevel: 0, minDamageScale: 1, maxBoostStage: 6 }),
   /** Beta 0.6: Pokémon-specific moments (core/moments); off = the rules before them (old-seed tests). */
   pokemonMoments: z.boolean().default(true),
   sos: z.object({ enabled: z.boolean() }).default({ enabled: true }),
@@ -2854,6 +2858,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('track'), atLeast: z.number().int().min(0).max(5).default(0), atMost: z.number().int().min(0).max(5).default(5) }),
   /** Beta 0.6 E3: the run has the Kanto saga's story events turned on (run.expansion.density). */
   z.object({ kind: z.literal('xevents') }),
+  /** Beta 0.7 Pidgey's Resolve: where the Rivalry of the Sky stands (core/sky/story.ts skyCondition). */
+  z.object({ kind: z.literal('sky'), when: z.enum(['opening', 'meet', 'alone', 'finale', 'giftBerry', 'giftItem', 'overhead', 'rematch']) }),
   /** Stand With Them: you have joined the run's team (`joined`, the default) or can still join it (`joined: false`); optionally at least this reputation. */
   /** Beta 0.6 E3b: one of the Expanded flags that run events wait on. */
   z.object({ kind: z.literal('xflag'), flag: z.enum(['extendedCut', 'hasShadow', 'keyHinted', 'grandArc', 'liaisonSeen', 'romHeld', 'friendPresent', 'trioFriendly', 'wesMet']) }),
@@ -2975,9 +2981,13 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
    */
   z.object({ kind: z.literal('tradeFor'), want: TradeWantSchema, table: z.record(z.string(), z.string()).default({}), similar: z.object({ pool: z.array(z.string()).min(1), bst: z.number().int().min(0).max(200) }).optional() }),
   /** Beta 0.6 Vermilion Flight North: the whole party is taken away (kept in run.expansion.canon.stash) until `restoreParty` or a lost fight inside the stage hands it back. */
+  /** Poli-Pond (core/episodes/poliPond.ts): one step of the story. `lesson` names the lesson (with `lesson`); `firstTry` is true when it was taught on the first retry. */
+  z.object({ kind: z.literal('pond'), action: z.enum(['begin', 'lesson', 'guilty', 'rematchWon', 'keep', 'release', 'reconcile', 'returnJoin']), lesson: z.enum(['aim', 'footing', 'stand']).optional(), firstTry: z.boolean().default(false), gentle: z.boolean().default(false) }),
   z.object({ kind: z.literal('stashParty') }),
   /** Beta 0.6 Vermilion Flight North: the stashed party returns. Whoever is in the party now (the Bug-type) leaves. Does nothing when nothing is stashed. */
   z.object({ kind: z.literal('restoreParty') }),
+  /** Beta 0.7 Flight North: names the Bug-type (`name`), or marks the moment it says goodbye. Only the name changes state; the return and its ending live in core/instrumentality/flightNorth.ts. */
+  z.object({ kind: z.literal('flightNorth'), action: z.enum(['name', 'trust']), name: z.string().max(12).optional() }),
   /** A healing spot, shop or fishing spot opens beside this node. */
   z.object({ kind: z.literal('addStop'), stop: z.enum(['heal', 'shop', 'fish', 'minigame']) }),
   /** A ferry: jump to a node next to the gym (SS Ticket). */
@@ -3013,7 +3023,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('research'), amount: z.number().int().positive() }),
   z.object({ kind: z.literal('levels'), amount: z.number().int().positive(), who: z.enum(['lead', 'party', 'weakest']).default('lead') }),
   /** A Pokémon joins (or goes to storage when the party is full): a listed species, or one of the types, or the stage's theme. */
-  z.object({ kind: z.literal('join'), species: z.array(z.string()).default([]), types: z.array(TypeNameSchema).default([]), levelBonus: z.number().int().default(0), shinyMultiplier: z.number().min(1).default(1), shadow: z.boolean().default(false), blissful: z.boolean().default(false), hiddenAbility: z.boolean().default(false), /** It joins with this ability instead of its own (Squad Squirtle: Contrary). */ ability: z.string().optional(), /** Anime Forms art (core/animeLooks.ts; the Squad Squirtle). Presentation only. */ look: z.enum(ANIME_LOOKS).optional(), /** Beta 0.6 Vermilion: it joins at exactly this level (Flight North's Caterpie is level 5), not the stage's event level. */ level: z.number().int().min(1).max(100).optional(), /** Beta 0.6 Vermilion: it joins knowing these moves too (the Kaiju Tentacool's Liquidation); a full moveset loses its last move. */ moves: z.array(z.string()).max(4).default([]), /** Beta 0.6 Vermilion: it goes straight into the party with no accept prompt (a companion for a stage; the lone Bug-type of Flight North). */ direct: z.boolean().default(false) }),
+  z.object({ kind: z.literal('join'), species: z.array(z.string()).default([]), types: z.array(TypeNameSchema).default([]), levelBonus: z.number().int().default(0), shinyMultiplier: z.number().min(1).default(1), shadow: z.boolean().default(false), blissful: z.boolean().default(false), hiddenAbility: z.boolean().default(false), /** It joins with this ability instead of its own (Squad Squirtle: Contrary). */ ability: z.string().optional(), /** Anime Forms art (core/animeLooks.ts; the Squad Squirtle). Presentation only. */ look: z.enum(ANIME_LOOKS).optional(), /** Beta 0.6 Vermilion: it joins at exactly this level (Flight North's Caterpie is level 5), not the stage's event level. */ level: z.number().int().min(1).max(100).optional(), /** Beta 0.6 Vermilion: it joins knowing these moves too (the Kaiju Tentacool's Liquidation); a full moveset loses its last move. */ moves: z.array(z.string()).max(4).default([]), /** Beta 0.6 Vermilion: it goes straight into the party with no accept prompt (a companion for a stage; the lone Bug-type of Flight North). */ direct: z.boolean().default(false), /** Beta 0.7 Route 25: it joins fonder of you, with this much extra friendship (the troop's thanks when the food came back). */ friendship: z.number().int().min(1).max(100).optional() }),
   /** A seedling grows in the Berry Garden (core/berries.ts): a held-berry plot, optionally mutated; the garden must have room. */
   z.object({ kind: z.literal('seedling'), berry: z.string().min(1), mutated: z.boolean().default(false) }),
   /** A sanctuary's blessing (shadowWorld.json): a few battles of a small, narrow boost. */
@@ -3070,6 +3080,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Beta 0.6 E2: move the current region's world-state track (once per event id). */
   /** Beta 0.6 E3b: lowers every party Shadow Pokémon's corruption by `amount` (never below 1: the last step stays with its own key). */
   z.object({ kind: z.literal('shadowHeart'), amount: z.number().int().min(-20).max(0) }),
+  /** Beta 0.7 Pidgey's Resolve: one step of the Rivalry of the Sky (core/sky/story.ts applySky). */
+  z.object({ kind: z.literal('sky'), act: z.enum(['duel', 'meetSpar', 'sparWon', 'sparLost', 'giftBerry', 'giftItem', 'finaleGiftBerry', 'finaleGiftItem', 'meetAlone', 'aloneGift', 'finaleWatch', 'cheer', 'joinBird', 'freeBird', 'overhead', 'rematchWon', 'rematchLost', 'passBy']), side: z.enum(['pidgey', 'spearow']).optional(), bird: z.enum(['pidgeot', 'fearow']).optional() }),
   z.object({ kind: z.literal('track'), input: z.enum(['raidFailed', 'raidDeclined', 'climaxScheduled', 'raidSuccess', 'officerTurned']) }),
   /** Grand Arc: gains a Stock step (1 to 5). */
   /** Field Notes: the player has now met this special Pokémon (`sv.*`). */
@@ -3088,9 +3100,9 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   }),
   /**
    * Saffron canon spaces (core/expansion/canonSaffron.ts). `solo` / `unsolo`: the party waits in a stash while one Pokémon of `species` fights alone (Fighting Tournament).
-   * `ghostStart` / `ghostLevel` / `ghostFree` / `ghostEnd` / `ghostReturn`: Sabrina's Labyrinth and the ghost that joins in the next region. `champion`: the Tournament title.
+   * `ghostStart` / `ghostLevel` / `ghostFree` / `ghostEnd` / `ghostReturn` / `labRoom` (level = the next room's number) / `labRetry` (after a loss, opens the first room, or with the accessibility setting the room where you fell): Sabrina's Labyrinth and the ghost that joins in the next region. `champion`: the Tournament title.
    */
-  z.object({ kind: z.literal('canon'), action: z.enum(['solo', 'unsolo', 'ghostStart', 'ghostLevel', 'ghostFree', 'ghostEnd', 'ghostReturn', 'champion', 'flawless']), species: z.array(z.string()).default([]), level: z.number().int().min(1).max(500).optional() }),
+  z.object({ kind: z.literal('canon'), action: z.enum(['solo', 'unsolo', 'ghostStart', 'ghostLevel', 'ghostFree', 'ghostEnd', 'ghostReturn', 'labRoom', 'labRetry', 'champion', 'flawless']), species: z.array(z.string()).default([]), level: z.number().int().min(1).max(500).optional() }),
   /** World-state callback (catalog 75): adds to a named story flag that later events can read. */
   z.object({ kind: z.literal('flag'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), amount: z.number().int().default(1) }),
   /** Clone Core (New Island): your lead's moves are copied onto the other party Pokémon you pick (the lowest-level one when none is picked). */
@@ -3166,6 +3178,8 @@ export type EventEffect = z.infer<typeof EventEffectSchema>;
 export const EventRuleSchema = z.object({
   /** Beta 0.7 U1: an Ultra Beast's rule holds in this fight (home-world fights), for both sides. */
   ultra: UltraRuleIdSchema.optional(),
+  /** Poli-Pond rematch: a one-on-one duel; the story Poliwag leads and cannot be switched out, and the fight is lost if it goes down. */
+  pondDuel: z.boolean().optional(),
   /** A duel: your first conscious Pokémon of this type leads (Samurai face-off). */
   leadType: TypeNameSchema.optional(),
   /** The foe's level equals your lead's level (Samurai face-off). */
@@ -3206,6 +3220,8 @@ export const EventRuleSchema = z.object({
   /** Beta 0.7 Sinnoh (Whiteout): accuracy for both sides is multiplied by this in the fight. */
   accuracyMult: z.number().min(0.5).max(1).optional(),
   noSwitchFirstTurn: z.boolean().optional(),
+  /** Beta 0.7 Route 25: the foe stands guard and does not attack for this many turns (the fifth Mankey, in front of the other four). */
+  foeStands: z.number().int().min(1).max(3).optional(),
   /** Beta 0.7 Alola Crossing, Thin Light: at the end of every third turn a glimpse from the far side of the sky strikes one Pokémon on the field for an eighth of its HP (never a knockout). */
   thinLight: z.boolean().optional(),
   /** Beta 0.7 Alola forced-switch boss: every N turns (2 or more) your active Pokémon is driven out and you choose who replaces it. Does nothing with no healthy Pokémon on the bench. */
@@ -3224,6 +3240,8 @@ export const EventRuleSchema = z.object({
   bstMatch: z.boolean().optional(),
   /** Saffron canon: when your only Pokémon would faint, the ghost calls the other spirits, the foe goes down instead and you win (Sabrina's Labyrinth). */
   ghostRescue: z.boolean().optional(),
+  /** Beta 0.7 Sabrina's Labyrinth: each turn one of your move slots is false (shows one move, does another); every second turn the companion marks it. */
+  falseSlot: z.boolean().optional(),
   surviveTurns: z.number().int().min(1).max(30).optional(),
   suddenDeath: z.boolean().optional(),
   turnLimit: z.number().int().min(1).max(30).optional(),
