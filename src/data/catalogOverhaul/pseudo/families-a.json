@@ -1,0 +1,7 @@
+{
+ "category": "families-a",
+ "note": "Chain pseudo-stages of the families-a questlines (STORY_FAMILIES_2 SF8.3). Rooms are room: true events in src/data/events/co-families-a-*.json linked by addEvent.",
+ "chains": [
+  { "id": "ps_fa_spire", "name": "The Windswept Spire", "entry": "ranger-trust-3", "themeId": "normal-flying", "tint": "#9fb8c8", "mood": "windswept mountain path", "start": "opened" }
+ ]
+}

@@ -13,3 +13,16 @@ export function regionInterest(run: Pick<RunState, 'story' | 'money'>): number {
   if (Number(run.story.flags[`ev:${flag}`] ?? 0) <= 0) return 0;
   return Math.max(0, Math.min(cap, Math.floor((run.money * percent) / 100)));
 }
+
+/**
+ * Oswin's bedroll (SF8.3 A Spare Bedroll): one extra rest per region, anywhere. Each time the run crosses into a new
+ * region the bag is topped back up to one bedroll (a team-wide rest you can use from the Bag). Returns the item ids to add.
+ */
+export function regionGifts(run: Pick<RunState, 'story' | 'inventory'>): string[] {
+  const gifts: string[] = [];
+  for (const g of perks.regionGifts) {
+    if (Number(run.story.flags[`ev:${g.flag}`] ?? 0) <= 0) continue;
+    if (Number(run.inventory[g.item] ?? 0) < 1) gifts.push(g.item);
+  }
+  return gifts;
+}

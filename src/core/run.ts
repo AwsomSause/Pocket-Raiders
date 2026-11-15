@@ -12,7 +12,7 @@
 // (Elite Four, then the champion); beating the champion moves the run to the
 // next region, or wins the run after the last one.
 
-import { regionInterest } from './flagPerks';
+import { regionGifts, regionInterest } from './flagPerks';
 import { noteBattle } from './expansion/fieldNotes';
 import { settleSky } from './sky/story';
 import { finishSpectate } from './sky/spectate';
@@ -955,6 +955,8 @@ function enterNextRegion(content: Content, run: RunState): void {
   const interest = regionInterest(run);
   run.money += interest;
   count(run, 'moneyEarned', interest);
+  // Catalog overhaul SF8.3: Oswin's bedroll is back in the bag for the new region.
+  for (const id of regionGifts(run)) addItem(run.inventory, id, 1);
   enterStage(content, run, 0);
 }
 

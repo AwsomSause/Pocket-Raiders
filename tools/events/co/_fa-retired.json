@@ -1,5 +1,13 @@
 {
- "merged": { "world-disaster-flood": "crisis-report-flood" },
+ "merged": {
+  "world-disaster-flood": "crisis-report-flood",
+  "rk-third-wheel": "companion-meet",
+  "mr-vanished-village": "ghost-town-gate",
+  "sanctuary-found": "wanderer-arrives",
+  "sanctuary-guardian": "blessing-trial",
+  "blissful-encounter": "hurt-wanderer",
+  "blissful-awakening": "legendary-blessing"
+ },
  "rule": {},
  "scrapped": []
 }

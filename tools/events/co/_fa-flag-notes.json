@@ -17,5 +17,21 @@
  "wicker-*": "Wicker's Cart (SF5): what the player learned about her, kept for later merchant scenes.",
  "tam-*": "Old Tam (SF5): what the player learned about him, kept for later merchant scenes.",
  "penpal-*": "The Pen Pal (SF6): every reply (penpal.wrote.<topic>); the rival quotes it back in a later scene (R17, rivals).",
- "blessing-kyogre": "Read-only state flag from legends (LEGENDS_PIECES section 3): Kyogre's blessing is the run's."
+ "blessing-kyogre": "Read-only state flag from legends (LEGENDS_PIECES section 3): Kyogre's blessing is the run's.",
+ "blessing-*": "Read-only state flag from legends (LEGENDS_PIECES section 3): that Legendary's blessing is the run's.",
+ "promise-shaymin": "Read-only state flag from legends (LEGENDS_PIECES section 3): the Shaymin Promise is active.",
+ "sign-*": "Legends API (LEGENDS_PIECES section 2): a Sign; the legends hook turns it into Influence when that Legendary blesses the run.",
+ "az-flute": "Set by legends when AZ's flute is received in M6 (QUESTLINES_ALPHAS_AND_ANOMALIES); asked of legends 2026-11-15.",
+ "mara-reunion": "Mara joins the Final Reunion's last battle opening turn (SF7 Reward): read by the Final Reunion (greenneedle).",
+ "mara-*": "Gatekeeper Mara (SF7): how her story went this run, kept for the Final Reunion (greenneedle) and the run's chronicle.",
+ "ranger-reunion": "Oswin and the Ursaring at the Final Reunion (SF8 Afterstory): read by greenneedle.",
+ "ranger-*": "The Old Ranger (SF8): what the player shared with Oswin, kept for the Final Reunion (greenneedle).",
+ "sanct-*": "The Blissful Sanctuary (SF9): how each beat went, kept for the run's chronicle and the Final Reunion.",
+ "hood-*": "The Hooded Traveller (SF10): each meeting's answer; hood-returned is the 'Come back' promise read by the Final Reunion (greenneedle) and the PC/GL/PA questlines (people).",
+ "habitat-full": "A full rebuild of the Broken Habitat (SF11): legends counts it as a Trial when Zygarde blesses the run.",
+ "habitat-*": "The Broken Habitat (SF11): who did it and how it was stopped, kept for the rival (habitat-rival-*) and the run's chronicle.",
+ "zygarde-cells": "Zygarde Cells found this run (SF11 Zygarde Cell rule): read by legends L11 Life and Destruction (its third legend needs Cells).",
+ "reported-crime": "Shared registry flag (families-c, FAMILIES_C_PIECES section 5).",
+ "vale-freed": "Hollow Vale freed (SF12): read by GL9's old man Harrow (people), who names the flood.",
+ "vale-*": "Hollow Vale (SF12): what the player saw and chose, kept for the run's chronicle."
 }

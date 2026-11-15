@@ -1,4 +1,5 @@
 {
-  "note": "Numbers for the families-a questlines (catalog overhaul pack, STORY_FAMILIES_1). Read by src/core/flagPerks.ts.",
-  "faulkAccount": { "flag": "rescue-faulk", "percent": 5, "cap": 1500 }
+  "note": "Numbers for the families-a questlines (catalog overhaul pack, STORY_FAMILIES_1 and _2). Read by src/core/flagPerks.ts.",
+  "faulkAccount": { "flag": "rescue-faulk", "percent": 5, "cap": 1500 },
+  "regionGifts": [{ "flag": "ranger-bedroll", "item": "oswins-bedroll" }]
 }

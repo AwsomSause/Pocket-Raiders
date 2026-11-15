@@ -152,3 +152,29 @@ describe('families-a status', () => {
     }
   });
 });
+
+describe('families-a chain pseudo-stages', () => {
+  const chains = (JSON.parse(readFileSync(join(root, 'src/data/catalogOverhaul/pseudo/families-a.json'), 'utf8')) as { chains: { id: string; entry: string }[] }).chains;
+  it('every chain walks from its entry through rooms the files hold, and every battle inside is a pseudo-stage battle', async () => {
+    const { chainRooms, chainById } = await import('../../src/core/dungeon/pseudo');
+    for (const c of chains) {
+      const chain = chainById(c.id)!;
+      expect(chain, c.id).toBeDefined();
+      const rooms = chainRooms(content, chain);
+      expect(rooms.length, `${c.id} has rooms`).toBeGreaterThan(1);
+      for (const r of rooms) {
+        const def = mine.find((e) => e.id === r.event);
+        expect(def, `${c.id}: ${r.event} is a families-a room`).toBeDefined();
+        expect(def!.room, `${r.event} is a room`).toBe(true);
+        each(def, (o) => {
+          if (o.kind === 'wild' || o.kind === 'trainer') if ('friendly' in o || 'win' in o) expect(o.pseudo, `${r.event}: battle inside a chain must set pseudo`).toBe(true);
+        });
+      }
+    }
+  });
+  it('the Windswept Spire is three rooms alone and four with Oswin (SF8.3)', async () => {
+    const { chainRooms, chainById } = await import('../../src/core/dungeon/pseudo');
+    const ids = chainRooms(content, chainById('ps_fa_spire')!).map((r) => r.event);
+    for (const id of ['ranger-spire-1', 'ranger-spire-2', 'ranger-spire-rest', 'ranger-spire-top', 'ranger-spire-view']) expect(ids).toContain(id);
+  });
+});

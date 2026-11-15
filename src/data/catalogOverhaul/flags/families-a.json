@@ -194,12 +194,41 @@
    "readBy": [],
    "note": "Tib's story (SF2): read by the Final Reunion, the All-Star Tournament and the Evil Team's last raid (SF2 Afterstory)."
   },
+  "az-flute": {
+   "setBy": [],
+   "readBy": [
+    "mara-last"
+   ],
+   "note": "Set by legends when AZ's flute is received in M6 (QUESTLINES_ALPHAS_AND_ANOMALIES); asked of legends 2026-11-15."
+  },
+  "blessing-ho-oh": {
+   "setBy": [],
+   "readBy": [
+    "ranger-spire-view"
+   ],
+   "note": "Read-only state flag from legends (LEGENDS_PIECES section 3): that Legendary's blessing is the run's."
+  },
   "blessing-kyogre": {
    "setBy": [],
    "readBy": [
-    "crisis-flood-lost"
+    "crisis-flood-lost",
+    "vale-dam"
    ],
    "note": "Read-only state flag from legends (LEGENDS_PIECES section 3): Kyogre's blessing is the run's."
+  },
+  "blessing-moltres": {
+   "setBy": [],
+   "readBy": [
+    "ranger-spire-view"
+   ],
+   "note": "Read-only state flag from legends (LEGENDS_PIECES section 3): that Legendary's blessing is the run's."
+  },
+  "blessing-suicune": {
+   "setBy": [],
+   "readBy": [
+    "vale-dam"
+   ],
+   "note": "Read-only state flag from legends (LEGENDS_PIECES section 3): that Legendary's blessing is the run's."
   },
   "crisis-ally-asked": {
    "setBy": [
@@ -1162,12 +1191,287 @@
    ],
    "note": "Set by Alpha A3, the Baxcalibur kept warm (legends)."
   },
+  "habitat-built": {
+   "setBy": [
+    "habitat-rebuild"
+   ],
+   "readBy": [
+    "habitat-rebuild"
+   ]
+  },
+  "habitat-clear": {
+   "setBy": [
+    "habitat-rebuild"
+   ],
+   "readBy": [
+    "habitat-rebuild"
+   ]
+  },
+  "habitat-culprit-met": {
+   "setBy": [
+    "habitat-disturbed"
+   ],
+   "readBy": [],
+   "note": "The Broken Habitat (SF11): who did it and how it was stopped, kept for the rival (habitat-rival-*) and the run's chronicle."
+  },
+  "habitat-done": {
+   "setBy": [
+    "habitat-rebuild"
+   ],
+   "readBy": [
+    "habitat-rebuild"
+   ]
+  },
+  "habitat-dredge": {
+   "setBy": [
+    "habitat-disturbed"
+   ],
+   "readBy": [],
+   "note": "The Broken Habitat (SF11): who did it and how it was stopped, kept for the rival (habitat-rival-*) and the run's chronicle."
+  },
+  "habitat-fed": {
+   "setBy": [
+    "habitat-nest"
+   ],
+   "readBy": [],
+   "note": "The Broken Habitat (SF11): who did it and how it was stopped, kept for the rival (habitat-rival-*) and the run's chronicle."
+  },
+  "habitat-fought": {
+   "setBy": [
+    "habitat-culprit"
+   ],
+   "readBy": [],
+   "note": "The Broken Habitat (SF11): who did it and how it was stopped, kept for the rival (habitat-rival-*) and the run's chronicle."
+  },
+  "habitat-full": {
+   "setBy": [
+    "habitat-rebuild"
+   ],
+   "readBy": [],
+   "note": "A full rebuild of the Broken Habitat (SF11): legends counts it as a Trial when Zygarde blesses the run."
+  },
+  "habitat-guarded": {
+   "setBy": [
+    "habitat-nest"
+   ],
+   "readBy": [],
+   "note": "The Broken Habitat (SF11): who did it and how it was stopped, kept for the rival (habitat-rival-*) and the run's chronicle."
+  },
+  "habitat-named": {
+   "setBy": [
+    "disturbed-habitat"
+   ],
+   "readBy": [],
+   "note": "The Broken Habitat (SF11): who did it and how it was stopped, kept for the rival (habitat-rival-*) and the run's chronicle."
+  },
+  "habitat-nest-seen": {
+   "setBy": [
+    "habitat-nest"
+   ],
+   "readBy": [
+    "habitat-nest"
+   ]
+  },
+  "habitat-nests": {
+   "setBy": [
+    "disturbed-habitat"
+   ],
+   "readBy": [
+    "habitat-rebuild"
+   ]
+  },
+  "habitat-on": {
+   "setBy": [
+    "disturbed-habitat",
+    "habitat-disturbed"
+   ],
+   "readBy": [
+    "disturbed-habitat",
+    "habitat-disturbed",
+    "habitat-nest"
+   ]
+  },
+  "habitat-paid": {
+   "setBy": [
+    "habitat-culprit"
+   ],
+   "readBy": [],
+   "note": "The Broken Habitat (SF11): who did it and how it was stopped, kept for the rival (habitat-rival-*) and the run's chronicle."
+  },
+  "habitat-renest": {
+   "setBy": [
+    "habitat-rebuild"
+   ],
+   "readBy": [
+    "habitat-rebuild"
+   ]
+  },
+  "habitat-replant": {
+   "setBy": [
+    "habitat-rebuild"
+   ],
+   "readBy": [
+    "habitat-rebuild"
+   ]
+  },
+  "habitat-reported": {
+   "setBy": [
+    "habitat-culprit"
+   ],
+   "readBy": [],
+   "note": "The Broken Habitat (SF11): who did it and how it was stopped, kept for the rival (habitat-rival-*) and the run's chronicle."
+  },
+  "habitat-rival-blamed": {
+   "setBy": [
+    "habitat-culprit"
+   ],
+   "readBy": [],
+   "note": "The Broken Habitat (SF11): who did it and how it was stopped, kept for the rival (habitat-rival-*) and the run's chronicle."
+  },
+  "habitat-rival-eased": {
+   "setBy": [
+    "habitat-culprit"
+   ],
+   "readBy": [],
+   "note": "The Broken Habitat (SF11): who did it and how it was stopped, kept for the rival (habitat-rival-*) and the run's chronicle."
+  },
+  "habitat-rival-help": {
+   "setBy": [
+    "habitat-culprit"
+   ],
+   "readBy": [
+    "habitat-rebuild"
+   ]
+  },
+  "habitat-shown": {
+   "setBy": [
+    "habitat-culprit"
+   ],
+   "readBy": [],
+   "note": "The Broken Habitat (SF11): who did it and how it was stopped, kept for the rival (habitat-rival-*) and the run's chronicle."
+  },
+  "habitat-stopped": {
+   "setBy": [
+    "habitat-culprit"
+   ],
+   "readBy": [
+    "habitat-rebuild"
+   ]
+  },
+  "habitat-wooper": {
+   "setBy": [
+    "habitat-disturbed"
+   ],
+   "readBy": [],
+   "note": "The Broken Habitat (SF11): who did it and how it was stopped, kept for the rival (habitat-rival-*) and the run's chronicle."
+  },
   "honest-returned-wallet": {
    "setBy": [],
    "readBy": [
     "pen-pal-letter"
    ],
    "note": "Set by Lost Wallet / Lost Ring (MEMORY_AND_FORMAT 2.1)."
+  },
+  "hood-asked-what": {
+   "setBy": [
+    "companion-meet"
+   ],
+   "readBy": [],
+   "note": "The Hooded Traveller (SF10): each meeting's answer; hood-returned is the 'Come back' promise read by the Final Reunion (greenneedle) and the PC/GL/PA questlines (people)."
+  },
+  "hood-done": {
+   "setBy": [
+    "companion-three"
+   ],
+   "readBy": [],
+   "note": "The Hooded Traveller (SF10): each meeting's answer; hood-returned is the 'Come back' promise read by the Final Reunion (greenneedle) and the PC/GL/PA questlines (people)."
+  },
+  "hood-doubted": {
+   "setBy": [
+    "companion-two"
+   ],
+   "readBy": [
+    "companion-three"
+   ]
+  },
+  "hood-end": {
+   "setBy": [
+    "companion-three"
+   ],
+   "readBy": [
+    "companion-three"
+   ]
+  },
+  "hood-fork": {
+   "setBy": [
+    "companion-two"
+   ],
+   "readBy": [
+    "companion-three",
+    "companion-two"
+   ]
+  },
+  "hood-hint": {
+   "setBy": [
+    "companion-one"
+   ],
+   "readBy": [],
+   "note": "The Hooded Traveller (SF10): each meeting's answer; hood-returned is the 'Come back' promise read by the Final Reunion (greenneedle) and the PC/GL/PA questlines (people)."
+  },
+  "hood-m1": {
+   "setBy": [
+    "companion-meet"
+   ],
+   "readBy": [
+    "companion-meet",
+    "companion-one"
+   ]
+  },
+  "hood-m2": {
+   "setBy": [
+    "companion-one"
+   ],
+   "readBy": [
+    "companion-one",
+    "companion-two"
+   ]
+  },
+  "hood-m3": {
+   "setBy": [
+    "companion-two"
+   ],
+   "readBy": [
+    "companion-two"
+   ]
+  },
+  "hood-partner": {
+   "setBy": [
+    "companion-three"
+   ],
+   "readBy": [],
+   "note": "The Hooded Traveller (SF10): each meeting's answer; hood-returned is the 'Come back' promise read by the Final Reunion (greenneedle) and the PC/GL/PA questlines (people)."
+  },
+  "hood-pushed": {
+   "setBy": [
+    "companion-one"
+   ],
+   "readBy": [
+    "companion-three"
+   ]
+  },
+  "hood-returned": {
+   "setBy": [
+    "companion-three"
+   ],
+   "readBy": [],
+   "note": "The Hooded Traveller (SF10): each meeting's answer; hood-returned is the 'Come back' promise read by the Final Reunion (greenneedle) and the PC/GL/PA questlines (people)."
+  },
+  "hood-trusted": {
+   "setBy": [
+    "companion-two"
+   ],
+   "readBy": [],
+   "note": "The Hooded Traveller (SF10): each meeting's answer; hood-returned is the 'Come back' promise read by the Final Reunion (greenneedle) and the PC/GL/PA questlines (people)."
   },
   "kind-helped-stranger": {
    "setBy": [
@@ -1190,15 +1494,20 @@
     "crisis-report-flood",
     "crisis-report-industry",
     "crisis-report-outbreak",
+    "disturbed-habitat",
     "elders-last-wish-3",
     "face-aspiring-rival",
     "farmers-field",
     "farmers-field-again",
     "farmers-quest-3",
+    "habitat-culprit",
+    "habitat-disturbed",
+    "hurt-wanderer",
     "lost-at-sea",
     "mudslide-mudbray",
     "mudslide-rescue",
     "peddler-3",
+    "sanctuary-attack",
     "surf-rescue",
     "vt-pyromaniac-sweep",
     "wm-2",
@@ -1230,15 +1539,20 @@
     "crisis-report-flood",
     "crisis-report-industry",
     "crisis-report-outbreak",
+    "disturbed-habitat",
     "elders-last-wish-3",
     "face-aspiring-rival",
     "farmers-field",
     "farmers-field-again",
     "farmers-quest-3",
+    "habitat-culprit",
+    "habitat-disturbed",
+    "hurt-wanderer",
     "lost-at-sea",
     "mudslide-mudbray",
     "mudslide-rescue",
     "peddler-3",
+    "sanctuary-attack",
     "surf-rescue",
     "vt-pyromaniac-sweep",
     "wm-2",
@@ -1255,6 +1569,137 @@
    ],
    "readBy": [],
    "note": "Pack flag kind.walked_past (MEMORY_AND_FORMAT 2.1): read by You Walked Past Us."
+  },
+  "mara-asked": {
+   "setBy": [
+    "mara-gatekeeper"
+   ],
+   "readBy": [
+    "mara-last"
+   ]
+  },
+  "mara-forgiven": {
+   "setBy": [
+    "mara-grudge-after"
+   ],
+   "readBy": [],
+   "note": "Gatekeeper Mara (SF7): how her story went this run, kept for the Final Reunion (greenneedle) and the run's chronicle."
+  },
+  "mara-free": {
+   "setBy": [
+    "mara-last"
+   ],
+   "readBy": [],
+   "note": "Gatekeeper Mara (SF7): how her story went this run, kept for the Final Reunion (greenneedle) and the run's chronicle."
+  },
+  "mara-grudge": {
+   "setBy": [
+    "mara-grudge-after"
+   ],
+   "readBy": [
+    "mara-remembers-kind"
+   ]
+  },
+  "mara-guard": {
+   "setBy": [
+    "mara-last"
+   ],
+   "readBy": [],
+   "note": "Gatekeeper Mara (SF7): how her story went this run, kept for the Final Reunion (greenneedle) and the run's chronicle."
+  },
+  "mara-kind": {
+   "setBy": [
+    "mara-remembers-kind"
+   ],
+   "readBy": [],
+   "note": "Gatekeeper Mara (SF7): how her story went this run, kept for the Final Reunion (greenneedle) and the run's chronicle."
+  },
+  "mara-lost1": {
+   "setBy": [
+    "mara-gatekeeper"
+   ],
+   "readBy": [],
+   "note": "Gatekeeper Mara (SF7): how her story went this run, kept for the Final Reunion (greenneedle) and the run's chronicle."
+  },
+  "mara-m1": {
+   "setBy": [
+    "mara-gatekeeper"
+   ],
+   "readBy": [],
+   "note": "Gatekeeper Mara (SF7): how her story went this run, kept for the Final Reunion (greenneedle) and the run's chronicle."
+  },
+  "mara-m2": {
+   "setBy": [
+    "mara-remembers-grudge"
+   ],
+   "readBy": [
+    "mara-gatekeeper",
+    "mara-remembers-grudge"
+   ]
+  },
+  "mara-m3": {
+   "setBy": [
+    "mara-remembers-kind"
+   ],
+   "readBy": [
+    "mara-gatekeeper",
+    "mara-remembers-grudge",
+    "mara-remembers-kind"
+   ]
+  },
+  "mara-named-it": {
+   "setBy": [
+    "mara-remembers-grudge"
+   ],
+   "readBy": [],
+   "note": "Gatekeeper Mara (SF7): how her story went this run, kept for the Final Reunion (greenneedle) and the run's chronicle."
+  },
+  "mara-relieved": {
+   "setBy": [
+    "mara-last"
+   ],
+   "readBy": [],
+   "note": "Gatekeeper Mara (SF7): how her story went this run, kept for the Final Reunion (greenneedle) and the run's chronicle."
+  },
+  "mara-rested": {
+   "setBy": [
+    "mara-after",
+    "mara-grudge-after"
+   ],
+   "readBy": [
+    "mara-remembers-kind"
+   ]
+  },
+  "mara-reunion": {
+   "setBy": [
+    "mara-last",
+    "mara-stone"
+   ],
+   "readBy": [],
+   "note": "Mara joins the Final Reunion's last battle opening turn (SF7 Reward): read by the Final Reunion (greenneedle)."
+  },
+  "mara-truth": {
+   "setBy": [
+    "mara-stone"
+   ],
+   "readBy": [],
+   "note": "Gatekeeper Mara (SF7): how her story went this run, kept for the Final Reunion (greenneedle) and the run's chronicle."
+  },
+  "mara-walked-on": {
+   "setBy": [
+    "mara-after"
+   ],
+   "readBy": [
+    "mara-gatekeeper",
+    "mara-remembers-grudge"
+   ]
+  },
+  "mara-won1": {
+   "setBy": [
+    "mara-gatekeeper"
+   ],
+   "readBy": [],
+   "note": "Gatekeeper Mara (SF7): how her story went this run, kept for the Final Reunion (greenneedle) and the run's chronicle."
   },
   "penpal-1": {
    "setBy": [
@@ -1402,6 +1847,100 @@
    "readBy": [],
    "note": "The Pen Pal (SF6): every reply (penpal.wrote.<topic>); the rival quotes it back in a later scene (R17, rivals)."
   },
+  "promise-shaymin": {
+   "setBy": [],
+   "readBy": [
+    "sanctuary-attack"
+   ],
+   "note": "Read-only state flag from legends (LEGENDS_PIECES section 3): the Shaymin Promise is active."
+  },
+  "ranger-bear": {
+   "setBy": [
+    "ranger-trust-1"
+   ],
+   "readBy": [
+    "ranger-spire-1",
+    "ranger-spire-top"
+   ]
+  },
+  "ranger-bedroll": {
+   "setBy": [
+    "ranger-trust-3"
+   ],
+   "readBy": [],
+   "note": "The Old Ranger (SF8): what the player shared with Oswin, kept for the Final Reunion (greenneedle)."
+  },
+  "ranger-done": {
+   "setBy": [
+    "ranger-spire-view"
+   ],
+   "readBy": [],
+   "note": "The Old Ranger (SF8): what the player shared with Oswin, kept for the Final Reunion (greenneedle)."
+  },
+  "ranger-ember": {
+   "setBy": [
+    "ranger-trust-2"
+   ],
+   "readBy": [],
+   "note": "The Old Ranger (SF8): what the player shared with Oswin, kept for the Final Reunion (greenneedle)."
+  },
+  "ranger-reunion": {
+   "setBy": [
+    "ranger-spire-view"
+   ],
+   "readBy": [],
+   "note": "Oswin and the Ursaring at the Final Reunion (SF8 Afterstory): read by greenneedle."
+  },
+  "ranger-spire": {
+   "setBy": [
+    "ranger-spire-top"
+   ],
+   "readBy": [],
+   "note": "The Old Ranger (SF8): what the player shared with Oswin, kept for the Final Reunion (greenneedle)."
+  },
+  "ranger-together": {
+   "setBy": [
+    "ranger-trust-3"
+   ],
+   "readBy": [
+    "ranger-spire-1",
+    "ranger-spire-2",
+    "ranger-spire-top"
+   ]
+  },
+  "ranger-v1": {
+   "setBy": [
+    "ranger-trust-1"
+   ],
+   "readBy": [
+    "ranger-trust-1",
+    "ranger-trust-2"
+   ]
+  },
+  "ranger-v2": {
+   "setBy": [
+    "ranger-trust-2"
+   ],
+   "readBy": [
+    "ranger-trust-2",
+    "ranger-trust-3"
+   ]
+  },
+  "ranger-v3": {
+   "setBy": [
+    "ranger-trust-3"
+   ],
+   "readBy": [
+    "ranger-trust-3"
+   ]
+  },
+  "reported-crime": {
+   "setBy": [
+    "habitat-culprit"
+   ],
+   "readBy": [],
+   "note": "Shared registry flag (families-c, FAMILIES_C_PIECES section 5)."
+  },
   "rescue-faulk": {
    "setBy": [
     "lost-at-sea"
@@ -1489,6 +2028,186 @@
    ],
    "note": "Set by Swimmer Finn's third meeting (people, ROAD_ROSTER)."
   },
+  "sanct-carried": {
+   "setBy": [
+    "hurt-wanderer"
+   ],
+   "readBy": [
+    "sanct-moment-1",
+    "wanderer-arrives"
+   ]
+  },
+  "sanct-cold": {
+   "setBy": [
+    "sanct-trial-end"
+   ],
+   "readBy": [
+    "legendary-blessing"
+   ]
+  },
+  "sanct-crates": {
+   "setBy": [
+    "sanct-raid-back",
+    "sanctuary-attack"
+   ],
+   "readBy": [],
+   "note": "The Blissful Sanctuary (SF9): how each beat went, kept for the run's chronicle and the Final Reunion."
+  },
+  "sanct-defended": {
+   "setBy": [
+    "sanct-raid-back",
+    "sanctuary-attack"
+   ],
+   "readBy": [
+    "sanct-trial-end"
+   ]
+  },
+  "sanct-dim": {
+   "setBy": [
+    "sanct-raid-back",
+    "sanctuary-attack"
+   ],
+   "readBy": [],
+   "note": "The Blissful Sanctuary (SF9): how each beat went, kept for the run's chronicle and the Final Reunion."
+  },
+  "sanct-done": {
+   "setBy": [
+    "legendary-blessing"
+   ],
+   "readBy": [],
+   "note": "The Blissful Sanctuary (SF9): how each beat went, kept for the run's chronicle and the Final Reunion."
+  },
+  "sanct-flowers": {
+   "setBy": [
+    "sanctuary-attack"
+   ],
+   "readBy": [],
+   "note": "The Blissful Sanctuary (SF9): how each beat went, kept for the run's chronicle and the Final Reunion."
+  },
+  "sanct-followed": {
+   "setBy": [
+    "hurt-wanderer"
+   ],
+   "readBy": [
+    "sanct-moment-1",
+    "wanderer-arrives"
+   ]
+  },
+  "sanct-fought": {
+   "setBy": [
+    "sanct-raid-back",
+    "sanctuary-attack"
+   ],
+   "readBy": [
+    "sanct-moment-2"
+   ]
+  },
+  "sanct-found": {
+   "setBy": [
+    "wanderer-arrives"
+   ],
+   "readBy": [
+    "sanctuary-attack",
+    "wanderer-arrives"
+   ]
+  },
+  "sanct-healed": {
+   "setBy": [
+    "hurt-wanderer"
+   ],
+   "readBy": [
+    "wanderer-arrives"
+   ]
+  },
+  "sanct-on": {
+   "setBy": [
+    "hurt-wanderer"
+   ],
+   "readBy": [
+    "hurt-wanderer",
+    "wanderer-arrives"
+   ]
+  },
+  "sanct-passed": {
+   "setBy": [
+    "sanct-trial-end"
+   ],
+   "readBy": [],
+   "note": "The Blissful Sanctuary (SF9): how each beat went, kept for the run's chronicle and the Final Reunion."
+  },
+  "sanct-raid": {
+   "setBy": [
+    "sanct-raid-back",
+    "sanctuary-attack"
+   ],
+   "readBy": [
+    "blessing-trial",
+    "sanctuary-attack"
+   ]
+  },
+  "sanct-rescued-lisle": {
+   "setBy": [
+    "sanctuary-attack"
+   ],
+   "readBy": [],
+   "note": "The Blissful Sanctuary (SF9): how each beat went, kept for the run's chronicle and the Final Reunion."
+  },
+  "sanct-restored": {
+   "setBy": [
+    "habitat-restored"
+   ],
+   "readBy": [
+    "habitat-restored"
+   ]
+  },
+  "sanct-trial": {
+   "setBy": [
+    "sanct-trial-end"
+   ],
+   "readBy": [
+    "blessing-trial",
+    "habitat-restored"
+   ]
+  },
+  "sanct-trial-begun": {
+   "setBy": [
+    "blessing-trial"
+   ],
+   "readBy": [
+    "blessing-trial"
+   ]
+  },
+  "sanct-warm": {
+   "setBy": [
+    "sanct-moment-1",
+    "sanct-moment-2",
+    "sanct-moment-3"
+   ],
+   "readBy": [
+    "sanct-trial-end"
+   ]
+  },
+  "sign-ho-oh": {
+   "setBy": [
+    "ranger-spire-view"
+   ],
+   "readBy": [],
+   "note": "Legends API (LEGENDS_PIECES section 2): a Sign; the legends hook turns it into Influence when that Legendary blesses the run."
+  },
+  "sign-moltres": {
+   "setBy": [
+    "ranger-spire-view"
+   ],
+   "readBy": [],
+   "note": "Legends API (LEGENDS_PIECES section 2): a Sign; the legends hook turns it into Influence when that Legendary blesses the run."
+  },
+  "sign-own": {
+   "setBy": [
+    "legendary-blessing"
+   ],
+   "readBy": [],
+   "note": "Legends API (LEGENDS_PIECES section 2): a Sign; the legends hook turns it into Influence when that Legendary blesses the run."
+  },
   "tam-asked-box": {
    "setBy": [
     "wm-3"
@@ -1570,6 +2289,112 @@
     "wm-4"
    ]
   },
+  "vale-again-seen": {
+   "setBy": [
+    "vale-again"
+   ],
+   "readBy": [
+    "vale-again"
+   ]
+  },
+  "vale-done": {
+   "setBy": [
+    "vale-dam"
+   ],
+   "readBy": [
+    "ghost-town-gate",
+    "vale-again"
+   ]
+  },
+  "vale-forgiven": {
+   "setBy": [
+    "vale-dam"
+   ],
+   "readBy": [],
+   "note": "Hollow Vale (SF12): what the player saw and chose, kept for the run's chronicle."
+  },
+  "vale-forgot": {
+   "setBy": [
+    "ghost-town-market"
+   ],
+   "readBy": [],
+   "note": "Hollow Vale (SF12): what the player saw and chose, kept for the run's chronicle."
+  },
+  "vale-freed": {
+   "setBy": [
+    "vale-dam"
+   ],
+   "readBy": [],
+   "note": "Hollow Vale freed (SF12): read by GL9's old man Harrow (people), who names the flood."
+  },
+  "vale-hall": {
+   "setBy": [
+    "ghost-town-hall"
+   ],
+   "readBy": [
+    "ghost-town-gate"
+   ]
+  },
+  "vale-held": {
+   "setBy": [
+    "vale-dam"
+   ],
+   "readBy": [
+    "vale-again"
+   ]
+  },
+  "vale-in": {
+   "setBy": [
+    "ghost-town-gate"
+   ],
+   "readBy": [],
+   "note": "Hollow Vale (SF12): what the player saw and chose, kept for the run's chronicle."
+  },
+  "vale-knows": {
+   "setBy": [
+    "ghost-town-hall"
+   ],
+   "readBy": [],
+   "note": "Hollow Vale (SF12): what the player saw and chose, kept for the run's chronicle."
+  },
+  "vale-left": {
+   "setBy": [
+    "ghost-town-gate"
+   ],
+   "readBy": [
+    "ghost-town-gate"
+   ]
+  },
+  "vale-market": {
+   "setBy": [
+    "ghost-town-market"
+   ],
+   "readBy": [
+    "ghost-town-gate"
+   ]
+  },
+  "vale-sat": {
+   "setBy": [
+    "ghost-town-hall"
+   ],
+   "readBy": [],
+   "note": "Hollow Vale (SF12): what the player saw and chose, kept for the run's chronicle."
+  },
+  "vale-truth": {
+   "setBy": [
+    "ghost-town-hall"
+   ],
+   "readBy": [
+    "vale-dam"
+   ]
+  },
+  "vale-voted": {
+   "setBy": [
+    "ghost-town-hall"
+   ],
+   "readBy": [],
+   "note": "Hollow Vale (SF12): what the player saw and chose, kept for the run's chronicle."
+  },
   "wicker-box-seen": {
    "setBy": [
     "peddler-2"
@@ -1646,6 +2471,13 @@
    ],
    "readBy": [],
    "note": "Wicker's Cart (SF5): what the player learned about her, kept for later merchant scenes."
+  },
+  "zygarde-cells": {
+   "setBy": [
+    "habitat-rebuild"
+   ],
+   "readBy": [],
+   "note": "Zygarde Cells found this run (SF11 Zygarde Cell rule): read by legends L11 Life and Destruction (its third legend needs Cells)."
   }
  }
 }
