@@ -1,0 +1,1054 @@
+{
+ "catalogOverhaul": "places",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "wx-meteorological-station",
+   "name": "Meteorological Station",
+   "group": "Weather & Hazards",
+   "rarity": "uncommon",
+   "types": [
+    "electric"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a2a3a",
+    "effect": "glint"
+   },
+   "intro": "A white hut on a hilltop bristling with dishes and spinning cups, every needle inside it twitching. A woman with wild hair and three pencils behind one ear flings the door open. Nimbus Hart, the operator: \"Come in! Come in! The instruments are going mad and I've only got two hands!\"",
+   "choices": [
+    {
+     "label": "Help read them.",
+     "success": {
+      "text": "You read out numbers while she scribbles. By the end of it she has a map of tomorrow's sky, and she lets you copy it: you know the weather of the road ahead.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 4
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what's wrong.",
+     "success": {
+      "text": "\"Wrong? Nothing's wrong. Everything's wonderful. The sky's trying to tell us something and I've nearly got it.\" She talks for an hour. You understand a third. It is still the best hour of your week.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "weather-vane",
+   "name": "The Weather Vane",
+   "group": "Exploration",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#20283a",
+    "effect": "none"
+   },
+   "intro": "A weather vane on a lonely hill, with three little flags on it instead of a cockerel. An old keeper sits at its foot knitting. Keeper: \"The sky answers the right question. Only one, mind. It's a busy sky.\"",
+   "choices": [
+    {
+     "label": "\"Will it rain?\"",
+     "success": {
+      "text": "The vane spins. The keeper looks up. \"Yes,\" she says. \"It always will, somewhere.\" She goes back to her knitting. It is true, and no use at all, and somehow comforting. An hour later, the first drops come across the hills toward you.",
+      "effects": [
+       {
+        "kind": "front",
+        "weather": "rain",
+        "columns": 3
+       },
+       {
+        "kind": "heal",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Is something coming?\"",
+     "success": {
+      "text": "The vane stops dead, pointing one way, and all three flags stand straight out, though there is no wind. The keeper puts her knitting down. \"Something is,\" she says quietly. \"From there. Something that isn't weather.\" You know which way to watch now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "crisis-hinted",
+        "amount": 1
+       },
+       {
+        "kind": "revealStops"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What do you want?\"",
+     "success": {
+      "text": "The keeper laughs out loud. \"Nobody ever asks it that.\" The vane turns, gently, until it points at you, and stays there. \"I think it wants company,\" she says. You sit with her a while.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "weather-prophet",
+   "name": "The Weather Prophet",
+   "group": "Story and characters",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1e2b3a",
+    "effect": "none"
+   },
+   "intro": "An old traveller under a tree, with a bowl of water in his lap and his eyes on its surface. \"Fifty coins,\" he says, without looking up, \"and I'll tell you what the road will hold. True. I'm never wrong about weather. Only about people.\"",
+   "choices": [
+    {
+     "label": "Pay (50).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
+     "success": {
+      "text": "He drops your coin in the bowl and watches the ripples. \"Sun. Then cloud. Then the wind turns.\" He tells you three stops of weather, and every one of them turns out true.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "scout",
+        "columns": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Fair,\" he says. \"The road will hold it anyway.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "storm-chasers",
+   "name": "Storm Chasers",
+   "group": "Exploration",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1c2a38",
+    "effect": "rattle"
+   },
+   "intro": "A battered pickup at the roadside, its roof covered in aerials and its back full of instruments. Two people in matching rain jackets argue over a map. Ada and Kip, the storm chasers: \"Fronts are our living. There's a big one over Thunderstorm Ridge. Want in?\"",
+   "choices": [
+    {
+     "label": "Ride along. (a node)",
+     "success": {
+      "text": "You ride in the back with the instruments, hair standing on end, while Ada drives like the sky is chasing her. At the ridge the clouds split and lightning walks down the hillside, and for one moment, in the flash, you see something running with it: a great beast made of thunder. Then it is gone. Kip is shouting. Ada is laughing. You are both.",
+      "effects": [
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "flag",
+        "key": "sign-raikou",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You chased a storm to Thunderstorm Ridge and saw something running in the lightning.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Your loss!\" shouts Ada, and the pickup roars off toward the darkest part of the sky.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-forgotten-research-lab",
+   "name": "Forgotten Research Lab",
+   "group": "Landmarks",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Story",
+    "Treasure"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "A rusted gate in the middle of nowhere, and behind it a concrete building, humming. A sign on the gate: RESEARCH ANNEX. The windows are dark, except one, where a light is on.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "The gate is not locked. Nothing here has been locked for years.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "abandoned-lab"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the sign.",
+     "success": {
+      "text": "Under RESEARCH ANNEX, smaller: CLOSED. The date is twelve years ago. And under that, scratched into the paint with a key: \"SORRY.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ev-forgotten-research-lab"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "abandoned-lab",
+   "name": "Abandoned Lab",
+   "group": "Mysteries and story",
+   "stop": "lab",
+   "scene": {
+    "cast": [],
+    "tint": "#102018",
+    "effect": "flicker"
+   },
+   "intro": "The Lab. Everything left in a hurry: broken machines, a coffee mug with a skin of mould, notes scattered across the floor as if somebody threw them.",
+   "choices": [
+    {
+     "label": "Read the notes.",
+     "success": {
+      "text": "You sift through the scattered notes. A project to make Pokémon glow, for night work in the mines: brighter lamps that would never run out. The last pages get shorter and shakier. \"It hurts them. It hurts them. Shutting it down.\" Then nothing. Somewhere deeper in the building, something whimpers.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "lab-notes",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "vt-experiment-gone-wrong"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Search the machines.",
+     "success": {
+      "text": "You pick through the broken machines. Most are scrap. One drawer has something worth taking. Then, from deeper in the building, something whimpers.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "pp-up",
+         "protein",
+         "iron",
+         "calcium",
+         "rare-candy"
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "vt-experiment-gone-wrong"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "site-lab",
+   "name": "An Abandoned Lab",
+   "group": "World Sites",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#20242a",
+    "effect": "glint"
+   },
+   "intro": "A lab nobody has used in years, half swallowed by ivy. Inside, everything left in a hurry: broken machines, scattered notes, a chair on its side.",
+   "choices": [
+    {
+     "label": "Read the notes.",
+     "success": {
+      "text": "You sift through the scattered notes. A project to make Pokémon glow, for night work in the mines: brighter lamps that would never run out. The last pages get shorter and shakier. \"It hurts them. It hurts them. Shutting it down.\" Then nothing. Somewhere deeper in the building, something whimpers.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "lab-notes",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "vt-experiment-gone-wrong"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Search the machines.",
+     "success": {
+      "text": "You pick through the broken machines. Most are scrap. One drawer has something worth taking. Then, from deeper in the building, something whimpers.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "pp-up",
+         "protein",
+         "iron",
+         "calcium",
+         "rare-candy"
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "vt-experiment-gone-wrong"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-experiment-gone-wrong",
+   "name": "Experiment Gone Wrong",
+   "group": "Heists & Hideouts",
+   "stop": "lab",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a20",
+    "effect": "fog"
+   },
+   "intro": "A wild Pokémon stumbles out of the dark, glowing a sick green, twitching every few seconds as if something is shocking it. Behind it, a broken tank is still leaking something bright across the floor.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "You kneel, and talk, and hold out a hand. It is too frightened to come close, but it stops backing away. That is something.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "lab-calmed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It lashes out, glowing brighter.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "magnemite",
+        "voltorb",
+        "grimer"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Turn off the tank.",
+     "success": {
+      "text": "You find the valve and turn it until it squeals. The leak stops. The glow goes out of the Pokémon like a breath going out of it, and it lies down where it stands and falls asleep, perfectly ordinary. When it wakes, it is fine. It looks at you, and follows you out.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "magnemite",
+         "voltorb",
+         "grimer"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "You shut off the leaking tank in the old lab, and the glowing Pokémon was ordinary again.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "auction-popup",
+   "name": "The Auction Pop-up",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A pop-up auction in a market square. A man in a too-good suit, a smug rival trainer, a Grunt in sunglasses who is trying very hard to look like he is not a Grunt. On the table, one sealed crate. The auctioneer bangs her gavel. \"Bids start at two hundred!\"",
+   "choices": [
+    {
+     "label": "Bid. (400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "You bid. The rival bids. You bid again. The rival sniffs and lets it go. The crate is yours: inside, packed in straw, something good.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what's in it.",
+     "success": {
+      "text": "\"Unknown,\" says the auctioneer. \"Honest. I don't open them.\" She hands you a slip: everything the crate could be, every one of them listed. That is more than most auctioneers would do.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "auction-popup"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Outbid the Grunt on purpose. (600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "Every time the Grunt raises his paddle, you raise yours higher, smiling at him. He goes red, then purple, then leaves, empty-handed, muttering into his collar. The crate is yours. So is the look on his face.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -600
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "evil",
+        "heat": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "silent-auction",
+   "name": "The Silent Auction",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A silent auction in a hushed gallery. Slips of paper, a locked glass case, and a card: \"Closest to the hidden value wins. You never pay more than you bid.\"",
+   "choices": [
+    {
+     "label": "Bid low. (200)",
+     "success": {
+      "text": "The value is revealed: far above what you bid. Somebody else wins it by being closer. You keep your money, and the slip, as a souvenir of being cautious.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bid fair. (500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "The value is revealed. Your number is the closest in the room. The case opens for you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bid high. (900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "Your bid is far over the value, and the closest after all; true to the card, you pay only what it was worth. It is yours.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "black-market-auction",
+   "name": "The Black-Market Auction",
+   "group": "Set Pieces",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1c1020",
+    "effect": "none"
+   },
+   "intro": "A cellar under a tavern, lit by candles. A masked auctioneer, five bidders in hoods, and on a velvet cushion an egg that glows faintly from inside, the wrong colour for any egg you know. \"Opening bid, three hundred.\"",
+   "choices": [
+    {
+     "label": "Bid. (900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "You bid until the hoods stop bidding. The egg is warm in your hands and wrong in a way you cannot name. It is yours now, whatever it is.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 2,
+        "unit": "stage"
+       },
+       {
+        "kind": "flag",
+        "key": "delta-egg-bought",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Report the auction.",
+     "success": {
+      "text": "You slip out and find Professor Linden's people. By midnight the cellar is full of officers and empty of hoods. Linden holds the egg up to the light and goes pale. \"A Delta egg. Stolen from my lab. Thank you.\" She will not forget it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delta-egg-returned",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "You reported a black-market auction and returned a stolen Delta egg to Professor Linden.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Steal the egg.",
+     "success": {
+      "text": "You grab the egg and run. The guards are faster than they look.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Auction Guards",
+       "classId": "black-belt",
+       "size": 3,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "egg",
+         "species": [],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "left": 2,
+         "unit": "stage"
+        },
+        {
+         "kind": "flag",
+         "key": "delta-egg-stolen",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "fishing-buddy",
+   "name": "The Fishing Buddy",
+   "group": "NPC Stories",
+   "stop": "fish",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#1e2c3a",
+    "effect": "rain"
+   },
+   "intro": "An old man on a camp stool at the river, hat over his eyes, rod propped on a stick. He has not caught anything all morning and does not seem to mind. Uncle Ned: \"Fish bite when you stop trying. Sit down. The east bend's got the big ones, but don't tell anyone I said.\"",
+   "choices": [
+    {
+     "label": "Fish with him.",
+     "success": {
+      "text": "You sit down and stop trying. The river goes by. Ned tells you about a catfish he has been after for thirty years, Old Whiskers, big as a door. Your line twitches once, and you catch something small and silver, and you let it go, and that was the morning.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.3
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "old-catfish",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Try the east bend.",
+     "success": {
+      "text": "At the east bend the water is deep and dark and very still. Then your line goes tight enough to sing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "gyarados",
+        "lanturn",
+        "seaking",
+        "whiscash"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "old-catfish",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You hooked something big at Uncle Ned's east bend.",
+         "importance": 50
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "fishing-spot-event",
+   "name": "Fishing Spot",
+   "group": "Wild Pokémon scenes",
+   "stop": "fish",
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "effect": "rain"
+   },
+   "intro": "A fishing jetty with a rack of rods for hire and a cheerful girl minding them. \"Borrow a rod? Old, Good, or Super! The board says what bites.\"",
+   "choices": [
+    {
+     "label": "Old.",
+     "success": {
+      "text": "The board: Magikarp, mostly. Magikarp, a lot. You cast the Old Rod.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "magikarp",
+        "goldeen",
+        "poliwag"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Good.",
+     "success": {
+      "text": "The board: Goldeen, Poliwag, Krabby, now and then a Horsea. You cast the Good Rod.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "goldeen",
+        "poliwag",
+        "krabby",
+        "horsea"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Super (needs a badge).",
+     "requires": [
+      {
+       "kind": "badges",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "The board: anything. Anything at all. You cast the Super Rod out into the deep water.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "seaking",
+        "kingler",
+        "seadra",
+        "dratini",
+        "lapras"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "fishing-derby",
+   "name": "Fishing Derby",
+   "group": "Games of chance",
+   "stop": "fish",
+   "rarity": "uncommon",
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#103040",
+    "effect": "rain"
+   },
+   "intro": "A fishing derby on the lake: bunting, a weigh station, a big board of names and weights. The prize, pinned to the board: a Mystic Water and a silver cup. \"Biggest catch wins!\"",
+   "choices": [
+    {
+     "label": "Enter.",
+     "success": {
+      "text": "You take a spot on the bank and cast. Something heavy takes the hook and pulls back.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "seaking",
+        "gyarados",
+        "whiscash",
+        "lapras"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "mystic-water",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You won the fishing derby with the biggest catch.",
+         "importance": 55
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You watch from the bank with a paper cone of chips. A tiny girl wins with a Magikarp nearly as big as she is, and cries, and the whole lake cheers.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.2
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r120-magikarp-splash",
+   "name": "Magikarp Splash Contest",
+   "group": "Wild Scenes",
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#143040",
+    "effect": "rain"
+   },
+   "intro": "A pond full of Magikarp having a splash contest, flopping as high as they can in turn, and a row of children on the bank holding up scorecards. One of them runs over and gives you a card too. \"You judge! You're the grown-up!\"",
+   "choices": [
+    {
+     "label": "Pick the biggest splash.",
+     "success": {
+      "text": "You hold up a ten for the biggest Magikarp, who did a backflip and soaked everyone. The children cheer. The big one does it again, for an encore.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick the smallest, trying hardest.",
+     "success": {
+      "text": "There is one very small Magikarp who never gets more than a foot out of the water, and tries every time as if its life depends on it. You give it a ten. It looks at you. You swear it looks at you. When you leave, it is following along the bank in the shallows, flopping after you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "magikarp"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "magikarp-could",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You gave the smallest Magikarp a ten, and it followed you.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
