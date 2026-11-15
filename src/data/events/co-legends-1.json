@@ -76,7 +76,7 @@
        "pseudo": true,
        "weather": "rain",
        "rule": {
-        "calm": {
+        "calmBar": {
          "need": 8,
          "start": 0,
          "perTurn": 0,
@@ -316,7 +316,7 @@
        "pseudo": true,
        "weather": "rain",
        "rule": {
-        "calm": {
+        "calmBar": {
          "need": 6,
          "start": 0,
          "perTurn": 0,
@@ -444,7 +444,7 @@
        "pseudo": true,
        "weather": "rain",
        "rule": {
-        "calm": {
+        "calmBar": {
          "need": 6,
          "start": 0,
          "perTurn": 2,
@@ -633,7 +633,7 @@
        "pseudo": true,
        "weather": "hail",
        "rule": {
-        "calm": {
+        "calmBar": {
          "need": 8,
          "start": 0,
          "perTurn": 0,
@@ -841,7 +841,7 @@
        "pseudo": true,
        "rule": {
         "noCommands": true,
-        "calm": {
+        "calmBar": {
          "need": 6,
          "start": 0,
          "perTurn": 0,
@@ -1217,7 +1217,7 @@
        "shinyMultiplier": 1,
        "pseudo": true,
        "rule": {
-        "calm": {
+        "calmBar": {
          "need": 6,
          "start": 0,
          "perTurn": 0,
@@ -1440,7 +1440,7 @@
        "shinyMultiplier": 1,
        "pseudo": true,
        "rule": {
-        "calm": {
+        "calmBar": {
          "need": 8,
          "start": 0,
          "perTurn": 0,
@@ -2390,7 +2390,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "story-alpha-static-choir"
+        "eventId": "co-choir-again"
        }
       ]
      }
@@ -2544,6 +2544,80 @@
         }
        ],
        "evil": "specialist"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-choir-again",
+   "name": "The Static Choir: Back at the Substation",
+   "group": "Story: Alphas",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "electivire",
+    "tint": "#3a3a1a",
+    "effect": "none"
+   },
+   "intro": "Back at the substation with the chart. The Electivire is bigger than when you left. Miss Tindall is waiting.",
+   "choices": [
+    {
+     "label": "Cut the feed lines.",
+     "success": {
+      "text": "Three lines, three junction boxes, each on the road ahead of you, each with a guard.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "co-choir-line-1",
+        "nodes": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "co-choir-line-2",
+        "nodes": 2
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "co-choir-line-3",
+        "nodes": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight it.",
+     "success": {
+      "text": "Miss Tindall grabs your sleeve. \"Every turn you fight it, it takes more from the lines. It will get stronger every turn. I'm telling you now.\" You go in anyway.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "electivire"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "foeGrows": "spa"
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "choir-tripped",
+         "amount": 1,
+         "stamp": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "The plant tripped. The town's power is out for the region.",
+         "importance": 60
+        }
+       ],
+       "lose": []
       }
      }
     }

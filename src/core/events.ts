@@ -1969,7 +1969,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     if (b.weather) run.battle.weather = { id: b.weather, turns: 999 };
     if (b.rule) run.battle.eventRule = b.rule;
     if (b.alpha) run.battle.alpha = true;
-    if (b.rule?.calm) run.battle.calm = startCalm(b.rule.calm, Number(run.story.flags['ev:warden-sash'] ?? 0) >= 1);
+    if (b.rule?.calmBar) run.battle.calm = startCalm(b.rule.calmBar, Number(run.story.flags['ev:warden-sash'] ?? 0) >= 1);
     if (b.aura) for (const s of ['atk', 'def', 'spa', 'spd', 'spe'] as const) run.battle.enemyStages[s] = 1;
   } else {
     const boss = b.bossId ? content.bosses.get(b.bossId) : undefined;

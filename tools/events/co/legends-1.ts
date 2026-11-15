@@ -267,6 +267,8 @@ const line = (n: 1 | 2 | 3): Json => {
         ];
   return ev(`co-choir-line-${n}`, `The Static Choir: Line ${n}`, G, { ...R, pokemon: 'electivire', tint: '#3a3a1a', effect: 'none' }, `The ${['first', 'second', 'third'][n - 1]} feed line runs to a junction box, and a guard stands at it.${n < 3 ? ` When it is cut: ${after}` : ''}`, choices);
 };
+const choirCut = ch('Cut the feed lines.', out('Three lines, three junction boxes, each on the road ahead of you, each with a guard.', { kind: 'laterEvent', eventId: 'co-choir-line-1', nodes: 1 }, { kind: 'laterEvent', eventId: 'co-choir-line-2', nodes: 2 }, { kind: 'laterEvent', eventId: 'co-choir-line-3', nodes: 3 }));
+const choirFight = ch('Fight it.', fight('Miss Tindall grabs your sleeve. "Every turn you fight it, it takes more from the lines. It will get stronger every turn. I\'m telling you now." You go in anyway.', alpha({ species: 'electivire', rule: { foeGrows: 'spa' }, win: [flagAt('choir-tripped'), moment('The plant tripped. The town\'s power is out for the region.', 60)] })));
 const choir: Json[] = [
   {
     id: 'story-alpha-static-choir',
@@ -275,14 +277,17 @@ const choir: Json[] = [
     intro:
       'The substation hums too loud. A crackling giant stalks the fence.\n\nThe town behind you is dark at noon: no signs, no trams, a traffic light swinging dead on its wire.\nThe engineer, Miss Tova Tindall, in a rubber apron: "It was a normal Electivire. It\'s been the plant\'s for years. It likes the hum. It sings to it. Then the company came, and ran three new lines into its yard, and now it gets the whole town\'s current, all day."\nMiss Tindall: "It\'s the size of a house. It can\'t stop taking it in. It\'s not angry. Listen."\nUnder the crackle: a note. Held. It\'s trying to sing, and it\'s too loud to hear itself.',
     choices: [
-      ch('Cut the feed lines.', out('Three lines, three junction boxes, each on the road ahead of you, each with a guard.', { kind: 'laterEvent', eventId: 'co-choir-line-1', nodes: 1 }, { kind: 'laterEvent', eventId: 'co-choir-line-2', nodes: 2 }, { kind: 'laterEvent', eventId: 'co-choir-line-3', nodes: 3 })),
-      ch('Fight it.', fight('Miss Tindall grabs your sleeve. "Every turn you fight it, it takes more from the lines. It will get stronger every turn. I\'m telling you now." You go in anyway.', alpha({ species: 'electivire', rule: { foeGrows: 'spa' }, win: [flagAt('choir-tripped'), moment('The plant tripped. The town\'s power is out for the region.', 60)] }))),
-      ch('Find the company.', out('An office over a laundrette. A brass plate with no name on it. Inside: the team\'s lieutenant, and a wall chart with one line going up.\nNo battle here. You leave with the chart. The Electivire is still growing; the other ways are still open.', intel(), flag('choir-company'), room('story-alpha-static-choir'))),
+      choirCut,
+      choirFight,
+      ch('Find the company.', out('An office over a laundrette. A brass plate with no name on it. Inside: the team\'s lieutenant, and a wall chart with one line going up.\nNo battle here. You leave with the chart. The Electivire is still growing; the other ways are still open.', intel(), flag('choir-company'), room('co-choir-again'))),
     ],
   },
   line(1),
   line(2),
   line(3),
+  ev('co-choir-again', 'The Static Choir: Back at the Substation', G, { ...R, pokemon: 'electivire', tint: '#3a3a1a', effect: 'none' },
+    'Back at the substation with the chart. The Electivire is bigger than when you left. Miss Tindall is waiting.',
+    [choirCut, choirFight]),
 ];
 
 // ---------------------------------------------------------------- A10. The Unwelcome Guest (deepened)

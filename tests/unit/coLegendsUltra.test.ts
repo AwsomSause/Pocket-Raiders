@@ -116,6 +116,6 @@ describe('Ultra Beast questlines U1 to U9', () => {
   it('U9 needs the Task Force and Faller rank 2; Guide them home is a calm, not a knockout', () => {
     const sky = content.events.get('co-u9-sky')!;
     expect(sky.requires).toContainEqual(expect.objectContaining({ key: 'faller-rank', atLeast: 2 }));
-    expect(sky.choices[1]!.success.battle).toMatchObject({ pseudo: true, rule: { calm: { need: 4 } } });
+    expect(sky.choices[1]!.success.battle).toMatchObject({ pseudo: true, rule: { calmBar: { need: 4 } } });
   });
 });

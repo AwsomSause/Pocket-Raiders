@@ -142,7 +142,27 @@ Every entry needs the Ultra setting on this run (`ultra-on`, a mirror flag `sync
 
 Tests: `tests/unit/coLegendsUltra.test.ts`.
 
+## The RULE ids (built 2026-11-15, `legends-10.ts`: 7 stops, 155 old events retired)
+265 of the 382 RULE ids are in the status `rule` bucket (all retired: REMOVE, or not map events at all).
+- **Signs** now come from stops in place of the old landmark, shrine, ruin, echo and Legend Trail events: `co-rule-landmark`, `co-rule-shrine`, `co-rule-ruin`, `co-rule-echo` (Influence 3+), plus `co-rule-sky` (Necrozma) and `co-rule-dream` (Cresselia). They need a blessing (`blessed` mirror flag).
+- **Tellings**: `telling-any` (core/legends/signs.ts `tellAny`, stream `mythical-telling-stop`) tells of the half-told Mythical first, else any Mythical that is not disabled. Stops: `co-rule-tale` (rest), `co-rule-ruin`; `co-rule-sky` (Deoxys, Jirachi), `co-rule-dream` (Darkrai). Need Promises on (`promises-on`). The Beta 0.7 per-stage Telling is unchanged (supported Mythicals only).
+- **The Presence**: the blessing Legendary is a focus of the Legendary gate (core/legendary/legendary.ts `presenceFocus`): its chance per region is the ladder's 4% to 65%, so the old Legendary and raid stages (`legend-*`, 101 ids, expeditions) are its Presence encounter. Runs without a blessing roll as before.
+- **Legend weeks** (7 calendar weeks with a Legendary focus): +1 starting Influence for the matching blessing, one Telling for each Mythical in the week (`weekInfluence` at run start).
+- Retired as built elsewhere: the 66 Mythical chain stages (Visit scenes), Red Chain and Sky Pillar (L9, L6 Trials), Static and Tears (Ultra system), Alpha warnings (Alpha questlines).
+- The Static Choir and four Visit scenes that come back to themselves now use a room copy (`-again`), so no drawn event is also a room.
+
+Still pending (117, left live on purpose): Giratina, Darkrai, Koraidon and Rayquaza pseudo stages (31), the Shadow chain (stays, Shadow system), old tickets as keys (17), form items as Communion upgrades (7), PAST ALLIES and the Archive (cross-run: cut by the run-memory rule unless Kice says otherwise), rival scenes and weeks (rivals row), evil-team and league weeks, Z/Mega odds weeks, Renegade bargain, Reputation readout, researcher reactions, two weeks with no Legendary focus (`paradox-tide-week`, `leap-day-special`).
+Tests: `tests/unit/coLegendsRules.test.ts`. Old tests changed for the retired events: crisisTournament (Legend Trail), disabledEventsEnabled (two retired), shadowWorld (ancient-shrine), zTrials (the Z-Ring is given at the first Trial).
+
+## Beta 0.7 systems checked against the notes (2026-11-15)
+| System (notes) | Matches | Gaps left |
+|---|---|---|
+| Legendary Blessings (`LEGENDARY_BLESSINGS.md`) | blessing roll, tiers, Influence never falls, the ladder (Echoes 3, Trial 5, Recognition 7, Presence 9), Communion on catching its Legendary; now also Signs, Sign stops, Presence on the gate, Legend weeks | "Aligned choices" (+1) and "defeats its guardian" (+2) are not counted; the Trial is placed by the questline, not unlocked by Influence 5 |
+| Mythical Promises (`MYTHICAL_PROMISES.md`) | Tellings (3 believe), one Mythical per run, the Promise, forgive-once, the Guest; now Visit scenes and Telling stops for every Mythical not disabled | Wonders and Promise rules only for Zarude (the rest are `limited`); Keepsakes, Storybook, Arceus, Marshadow cut (past runs) |
+| Ultra Beast Incursions (`ULTRA_BEAST_INCURSIONS.md`) | Appetites, Static, Tears, Crossings, Incursions, Beast Balls, Homesickness; now questlines U1-U9 and mirror flags | Faller rank is a run flag only (raised by home worlds); Souvenirs and the Faller's Log cut |
+| Whole-Run Events (`WHOLE_RUN_EVENTS.md`) | not in the game | Guidance of Giratina, the Weather War, the Made One, the Seven Days, the Weapon and the Flower are not built (a slice of their own) |
+
 ## Where I stopped (paused 2026-11-15, Kice: five threads at a time)
-- Resumed 2026-11-15 (merged ui-mockups; shared pieces are in the base now). Alphas, Megas, Deltas, Z, Legendary L2-L15 and Mythical MY1-MY22 and Ultra U1-U9 done; next the RULE ids.
+- Resumed 2026-11-15 (merged ui-mockups; shared pieces are in the base now). Alphas, Megas, Deltas, Z, Legendary L2-L15 and Mythical MY1-MY22, Ultra U1-U9 and the RULE ids done; next the Beta 0.7 check, update fragment, PR ready.
 - Still to build: M7 (rivals slot), the 382 RULE ids (ladder Trial/Recognition/Presence), placement/flags/status files, update fragment, PR.
 - Run the full `npm run check` before opening the PR.

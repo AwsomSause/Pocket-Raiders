@@ -988,7 +988,7 @@
        "shinyMultiplier": 1,
        "pseudo": true,
        "rule": {
-        "calm": {
+        "calmBar": {
          "need": 6,
          "start": 0,
          "perTurn": 0,

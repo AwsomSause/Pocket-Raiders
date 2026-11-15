@@ -5,7 +5,7 @@
 import type { EventRule } from '../contentSchema';
 import type { BattleState } from '../state';
 
-export type CalmRule = NonNullable<EventRule['calm']>;
+export type CalmRule = NonNullable<EventRule['calmBar']>;
 export type CalmState = NonNullable<BattleState['calm']>;
 
 /** Moves that count as a scent an Alpha may like. */

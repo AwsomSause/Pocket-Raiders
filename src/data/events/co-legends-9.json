@@ -2063,7 +2063,7 @@
        "pseudo": true,
        "lose": [],
        "rule": {
-        "calm": {
+        "calmBar": {
          "need": 4,
          "start": 0,
          "perTurn": 1,

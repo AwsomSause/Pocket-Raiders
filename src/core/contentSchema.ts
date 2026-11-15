@@ -3493,7 +3493,7 @@ export const EventRuleSchema = z.object({
    * end of every turn you are still standing (a lit lamp, a warm fire). When the bar is full the fight ends calmed and the battle's `calm`
    * effects pay instead of `win`. No ball works until then.
    */
-  calm: z.object({ need: z.number().int().min(1).max(12), start: z.number().min(0).max(11).default(0), perTurn: z.number().min(0).max(4).default(0), likes: z.array(z.enum(['sound', 'scent'])).max(2).default([]) }).optional(),
+  calmBar: z.object({ need: z.number().int().min(1).max(12), start: z.number().min(0).max(11).default(0), perTurn: z.number().min(0).max(4).default(0), likes: z.array(z.enum(['sound', 'scent'])).max(2).default([]) }).optional(),
   /** Catalog Overhaul (Alphas): the foe gains this many stages of a stat at the end of every turn (the Static Choir drinking the feed lines). The game says so at the start. */
   foeGrows: z.enum(['atk', 'def', 'spa', 'spd', 'spe']).optional(),
   /** Catalog Overhaul (Alphas): you cannot give orders (the Hushed One eats sound): each turn your Pokémon uses a move of its own choosing. */

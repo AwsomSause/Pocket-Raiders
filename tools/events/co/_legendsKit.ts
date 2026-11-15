@@ -35,7 +35,7 @@ export const alpha = (o: {
   shinyMultiplier: 1,
   ...(o.pseudo === false ? {} : { pseudo: true }),
   ...(o.weather ? { weather: o.weather } : {}),
-  ...(o.need || o.rule ? { rule: { ...(o.rule ?? {}), ...(o.need ? { calm: { need: o.need, start: o.start ?? 0, perTurn: o.perTurn ?? 0, likes: o.likes ?? [] } } : {}) } } : {}),
+  ...(o.need || o.rule ? { rule: { ...(o.rule ?? {}), ...(o.need ? { calmBar: { need: o.need, start: o.start ?? 0, perTurn: o.perTurn ?? 0, likes: o.likes ?? [] } } : {}) } } : {}),
   win: o.win ?? [],
   ...(o.need ? { calm: o.calm ?? [] } : {}),
   lose: o.lose ?? [],

@@ -92,7 +92,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "co-my13-camp"
+        "eventId": "co-my13-camp-again"
        }
       ]
      }
@@ -293,7 +293,7 @@
       "effects": [
        {
         "kind": "addEvent",
-        "eventId": "co-my14-cave"
+        "eventId": "co-my14-cave-again"
        }
       ]
      }
@@ -1290,7 +1290,7 @@
       "effects": [
        {
         "kind": "addEvent",
-        "eventId": "co-my18-hall"
+        "eventId": "co-my18-hall-again"
        }
       ]
      }
@@ -1319,7 +1319,7 @@
       "effects": [
        {
         "kind": "addEvent",
-        "eventId": "co-my18-hall"
+        "eventId": "co-my18-hall-again"
        }
       ]
      }
@@ -1336,7 +1336,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "co-my18-hall"
+        "eventId": "co-my18-hall-again"
        }
       ]
      }
@@ -1730,7 +1730,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "co-my20-camp"
+        "eventId": "co-my20-camp-again"
        }
       ]
      }
@@ -2279,12 +2279,508 @@
       "effects": [
        {
         "kind": "addEvent",
-        "eventId": "co-z5-dream"
+        "eventId": "co-z5-dream-again"
        }
       ]
      }
     }
    ]
+  },
+  {
+   "id": "co-my13-camp-again",
+   "name": "The Moonless Camp",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "cresselia",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-cresselia",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The pale shape steps out of the trees. Cresselia, heard, not spoken: \"It is not your enemy. It never was.\"",
+     "addChoices": []
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "darkrai",
+    "tint": "#302040",
+    "effect": "flicker"
+   },
+   "intro": "Camp, at night. Everyone falls asleep at once, you last. The moon is gone from the sky.\n\nYou wake inside a dream of the camp. Your Pokémon are asleep, twitching. One whimpers.\n\nA figure at the edge of the firelight, made of smoke and a white plume: \"They dream of losing you. I did not put it there. I only let them see it. Tell me your nightmare, and I will take theirs.\"\n\nBehind it, something pale flickers in the trees and is gone.",
+   "choices": [
+    {
+     "label": "\"Tell it.\"",
+     "success": {
+      "text": "Which one?",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my13-nightmare"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Stay awake.\"",
+     "success": {
+      "text": "You hold the watch all night. Darkrai stays at the edge of the light until dawn, then speaks once: \"You are stubborn. Good.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "darkrai-watched",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-darkrai-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who was that in the trees?\"",
+     "success": {
+      "text": "Darkrai: \"Someone who would rather I did not exist.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "darkrai-asked-cresselia",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my13-camp-again"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "co-my14-cave-again",
+   "name": "The Fourth Statue",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "swords",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-swords",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "One of the three statues turns its stone head. Keldeo: \"They're watching.\"",
+     "addChoices": []
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "keldeo",
+    "tint": "#4080c0",
+    "effect": "none"
+   },
+   "intro": "Behind a waterfall, a cave with three tall swordsman statues: a Cobalion, a Terrakion and a Virizion, cut in stone. A fourth plinth is empty. Hoofprints lead to it and away.\n\nA small blue Pokémon with a stubby horn backs out of the shadows, holding its ground.\nKeldeo: \"They said I'm not ready. They left me here to think. I've thought. I'm ready. I just need someone to see it. Battle me. Don't go easy.\"",
+   "choices": [
+    {
+     "label": "\"You're ready.\"",
+     "success": {
+      "text": "Keldeo: \"You haven't even seen me.\" It is hurt, and asks again.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my14-cave-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Show me.\"",
+     "success": {
+      "text": "A one-on-one, under the statues.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "keldeo"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "keldeo-shown",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "keldeo-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-my-keldeo-promise"
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "keldeo-shown",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-my-keldeo-promise"
+        }
+       ],
+       "rule": {
+        "noItems": true,
+        "noSwitch": true,
+        "matchLead": true,
+        "suddenDeath": true
+       }
+      }
+     }
+    },
+    {
+     "label": "\"Why did they leave you?\"",
+     "success": {
+      "text": "Keldeo: \"I ran to help someone. Alone. I almost lost.\" Then it lowers its horn.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "keldeo"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "keldeo-shown",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "keldeo-told",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-my-keldeo-promise"
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "keldeo-shown",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "keldeo-told",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-my-keldeo-promise"
+        }
+       ],
+       "rule": {
+        "noItems": true,
+        "noSwitch": true,
+        "matchLead": true,
+        "suddenDeath": true
+       }
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "co-my18-hall-again",
+   "name": "The Heart in the Box",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "read",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "magearna-read",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The middle door glows faintly.",
+     "addChoices": []
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "magearna",
+    "tint": "#c0a060",
+    "effect": "none"
+   },
+   "intro": "A castle hall full of clocks, all stopped. On a pedestal, a heart-shaped box, ticking. Three tiny doors, one gear.\n\nA note in the dust, in a careful hand: SHE WAS MADE 500 YEARS AGO. SHE WAKES FOR SOMEONE WHO KNOWS WHAT SHE IS FOR.",
+   "choices": [
+    {
+     "label": "The left door.",
+     "success": {
+      "text": "A tiny wind-up toy marches out and falls over. The box laughs: a ticking giggle.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my18-hall-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The middle door.",
+     "success": {
+      "text": "The gear turns. Every clock in the hall starts at once. Magearna unfolds from the box.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "magearna-woke",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-magearna-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The right door.",
+     "success": {
+      "text": "A tiny wind-up bird whistles at you. The box giggles, ticking.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my18-hall-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the rest of the note.",
+     "success": {
+      "text": "SHE IS FOR GIVING. SHE WAS A GIFT.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "magearna-read",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my18-hall-again"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "co-my20-camp-again",
+   "name": "The Hinge-Eater",
+   "group": "Story: Mythical",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "meltan",
+    "tint": "#a0a0a0",
+    "effect": "none"
+   },
+   "intro": "The campfire. A clink. A tiny bolt-shaped Pokémon with a nut for a head is gnawing the hinge of your bag. It stops. It looks at you. It keeps gnawing. A second one pokes out of the firewood.\n\nA tinkerer, from the next tent: \"Oh no. Once there's two, there's always more.\"",
+   "choices": [
+    {
+     "label": "\"Feed it.\"",
+     "success": {
+      "text": "You hold out something metal. It eats it, glows, and sits on your boot.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "flag",
+        "key": "meltan-fed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-meltan-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Shoo it.\"",
+     "success": {
+      "text": "It goes. So does the bag hinge. Something falls out of the bag and is lost in the dark.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "flag",
+        "key": "meltan-shooed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the tinkerer.",
+     "success": {
+      "text": "Tinkerer: \"They eat metal. Give them one thing and they'll love you. Give them eight things and... well. You'll see.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "meltan-warned",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my20-camp-again"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "co-z5-dream-again",
+   "name": "The Darkest Dream",
+   "group": "Story: Z Anomalies",
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "cresselia",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-cresselia",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Cresselia stands between you and the shadow. \"Do it\" is not something you can say tonight.",
+     "hide": [
+      1
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "darkrai",
+    "tint": "#200020",
+    "effect": "flicker"
+   },
+   "intro": "Night. Darkrai walks beside you, and its shadow does not match it.\n\nDarkrai, heard, not spoken: \"There is a shape I could take. In it, the dreams I bring would not end. Not for anyone. You have kept faith with me. I ask you, not myself.\"",
+   "choices": [
+    {
+     "label": "\"Don't.\"",
+     "success": {
+      "text": "Darkrai thanks you. Its shadow is its own again. In the last battle of this run, it means to stand beside you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "darkrai-refused-z",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "Darkrai asked you whether to become something worse, and you said no.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Do it.\"",
+     "success": {
+      "text": "The shadow rises. For one battle, Z-Mega Darkrai fights at your side. After it, the whole region sleeps badly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "darkrai-became-z",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "The whole region sleeps badly",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 0.75
+         }
+        ],
+        "until": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [],
+       "format": "doubles",
+       "name": "The Endless Dream",
+       "ally": "darkrai-z-mega",
+       "size": 2,
+       "types": [
+        "dark",
+        "ghost"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "darkrai-z-won",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Why ask me?\"",
+     "success": {
+      "text": "Darkrai: \"Because I would say yes.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-z5-dream-again"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
   }
  ]
 }

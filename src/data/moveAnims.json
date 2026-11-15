@@ -23053,6 +23053,23 @@
       "flash": null,
       "hitStopMs": 68,
       "telegraph": "normal"
+    },
+    "keepers-lamp": {
+      "anim": "oceanic-operetta",
+      "source": "type",
+      "shake": 3,
+      "flash": "#6890f0",
+      "hitStopMs": 105,
+      "telegraph": "strong"
+    },
+    "last-winter": {
+      "anim": "ice-burn",
+      "source": "type",
+      "shake": 3,
+      "flash": "#98d8d8",
+      "hitStopMs": 87,
+      "telegraph": "strong",
+      "chargeAnim": "ice-burn-charging"
     }
   },
   "commonPack": {

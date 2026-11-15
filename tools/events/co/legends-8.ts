@@ -32,7 +32,7 @@ const my13: Json[] = [
     [
       ch('"Tell it."', out('Which one?', room('co-my13-nightmare'))),
       ch('"Stay awake."', out('You hold the watch all night. Darkrai stays at the edge of the light until dawn, then speaks once: "You are stubborn. Good."', flag('darkrai-watched'), toPromise('darkrai'))),
-      ch('"Who was that in the trees?"', out('Darkrai: "Someone who would rather I did not exist."', flag('darkrai-asked-cresselia'), room('co-my13-camp'))),
+      ch('"Who was that in the trees?"', out('Darkrai: "Someone who would rather I did not exist."', flag('darkrai-asked-cresselia'), room('co-my13-camp-again'))),
     ]),
   ev('co-my13-nightmare', 'The Moonless Camp: Your Nightmare', G, { ...R, pokemon: 'darkrai', tint: '#302040', effect: 'flicker' },
     'Darkrai waits. The fire does not crackle.',
@@ -52,7 +52,7 @@ const my14: Json[] = [
   },
     'Behind a waterfall, a cave with three tall swordsman statues: a Cobalion, a Terrakion and a Virizion, cut in stone. A fourth plinth is empty. Hoofprints lead to it and away.\n\nA small blue Pokémon with a stubby horn backs out of the shadows, holding its ground.\nKeldeo: "They said I\'m not ready. They left me here to think. I\'ve thought. I\'m ready. I just need someone to see it. Battle me. Don\'t go easy."',
     [
-      ch('"You\'re ready."', out('Keldeo: "You haven\'t even seen me." It is hurt, and asks again.', room('co-my14-cave'))),
+      ch('"You\'re ready."', out('Keldeo: "You haven\'t even seen me." It is hurt, and asks again.', room('co-my14-cave-again'))),
       ch('"Show me."', fight('A one-on-one, under the statues.', duel('keldeo', [flag('keldeo-shown'), flag('keldeo-beaten'), toPromise('keldeo')], [flag('keldeo-shown'), toPromise('keldeo')]))),
       ch('"Why did they leave you?"', fight('Keldeo: "I ran to help someone. Alone. I almost lost." Then it lowers its horn.', duel('keldeo', [flag('keldeo-shown'), flag('keldeo-told'), toPromise('keldeo')], [flag('keldeo-shown'), flag('keldeo-told'), toPromise('keldeo')]))),
     ]),
@@ -131,10 +131,10 @@ const my18: Json[] = [
   },
     'A castle hall full of clocks, all stopped. On a pedestal, a heart-shaped box, ticking. Three tiny doors, one gear.\n\nA note in the dust, in a careful hand: SHE WAS MADE 500 YEARS AGO. SHE WAKES FOR SOMEONE WHO KNOWS WHAT SHE IS FOR.',
     [
-      ch('The left door.', out('A tiny wind-up toy marches out and falls over. The box laughs: a ticking giggle.', room('co-my18-hall'))),
+      ch('The left door.', out('A tiny wind-up toy marches out and falls over. The box laughs: a ticking giggle.', room('co-my18-hall-again'))),
       ch('The middle door.', out('The gear turns. Every clock in the hall starts at once. Magearna unfolds from the box.', flag('magearna-woke'), toPromise('magearna'))),
-      ch('The right door.', out('A tiny wind-up bird whistles at you. The box giggles, ticking.', room('co-my18-hall'))),
-      ch('Read the rest of the note.', out('SHE IS FOR GIVING. SHE WAS A GIFT.', flag('magearna-read'), room('co-my18-hall'))),
+      ch('The right door.', out('A tiny wind-up bird whistles at you. The box giggles, ticking.', room('co-my18-hall-again'))),
+      ch('Read the rest of the note.', out('SHE IS FOR GIVING. SHE WAS A GIFT.', flag('magearna-read'), room('co-my18-hall-again'))),
     ]),
   promiseRoom('magearna', 'Magearna curtseys. It holds out a bouquet of metal flowers.\nMagearna, in chimes: "Carry this. To someone. You will know who."', 'One of your Pokémon takes the bouquet, carefully. Magearna chimes, and follows.', '#c0a060'),
 ];
@@ -164,7 +164,7 @@ const my20: Json[] = [
     [
       ch('"Feed it."', out('You hold out something metal. It eats it, glows, and sits on your boot.', lose(), flag('meltan-fed'), toPromise('meltan'))),
       ch('"Shoo it."', out('It goes. So does the bag hinge. Something falls out of the bag and is lost in the dark.', lose(), flag('meltan-shooed'))),
-      ch('Ask the tinkerer.', out('Tinkerer: "They eat metal. Give them one thing and they\'ll love you. Give them eight things and... well. You\'ll see."', flag('meltan-warned'), room('co-my20-camp'))),
+      ch('Ask the tinkerer.', out('Tinkerer: "They eat metal. Give them one thing and they\'ll love you. Give them eight things and... well. You\'ll see."', flag('meltan-warned'), room('co-my20-camp-again'))),
     ]),
   ev('co-my20-back', 'The Hinge-Eater: Back', G, { callback: true, rarity: 'rare', requires: [flagIs('meltan-shooed'), not('mythical-visited')], pokemon: 'meltan', tint: '#a0a0a0' },
     'Meltan is back, with three friends, and something of yours it is very proud of having found.',
@@ -218,9 +218,16 @@ const z5: Json[] = [
         trainer('The Endless Dream', { format: 'doubles', size: 2, types: ['dark', 'ghost'], lv: 2, ally: 'darkrai-z-mega', friendly: true, win: [flag('darkrai-z-won')], lose: [] }),
         flag('darkrai-became-z'),
         { kind: 'tempEffect', label: 'The whole region sleeps badly', effects: [{ kind: 'healingMultiplier', value: 0.75 }], until: 'region' })),
-      ch('"Why ask me?"', out('Darkrai: "Because I would say yes."', room('co-z5-dream'))),
+      ch('"Why ask me?"', out('Darkrai: "Because I would say yes."', room('co-z5-dream-again'))),
     ]),
 ];
 
-export const EVENTS: Json[] = [...my13, ...my14, ...my15, ...my16, ...my17, ...my18, ...my19, ...my20, ...my21, ...my22, ...z5];
+/** A drawn entry whose choice comes back to the same scene: the second time it is a room (`<id>-again`), never drawn on its own. */
+const LOOPS = ['co-my13-camp', 'co-my14-cave', 'co-my18-hall', 'co-my20-camp', 'co-z5-dream'];
+const again = (e: Json): Json => {
+  const { requires: _r, callback: _c, types: _t, ...rest } = e;
+  return { ...rest, id: `${String(e.id)}-again`, room: true, rarity: 'rare' };
+};
+const ALL: Json[] = [...my13, ...my14, ...my15, ...my16, ...my17, ...my18, ...my19, ...my20, ...my21, ...my22, ...z5];
+export const EVENTS: Json[] = [...ALL, ...ALL.filter((e) => LOOPS.includes(String(e.id))).map(again)];
 export const REMOVE: string[] = [];

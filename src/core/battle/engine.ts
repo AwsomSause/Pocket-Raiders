@@ -1142,11 +1142,11 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
     const fell = events.filter((e) => e.type === 'faint');
     if (fell.length > 0) battle.outcome = fell.some((e) => e.side === 'enemy') ? 'win' : 'lose';
   }
-  if (rule.calm && battle.calm && !battle.outcome && content && mine && mine.hp > 0) {
+  if (rule.calmBar && battle.calm && !battle.outcome && content && mine && mine.hp > 0) {
     // A sound or scent it likes, then whatever fills the bar by itself (a lit lamp, a warm fire), each turn you are still standing.
     const id = battle.playerVolatile?.lastMove;
-    const liked = likedMove(rule.calm, id, id ? content.moves.get(id)?.flags ?? [] : []) && events.some((e) => e.type === 'move' && e.side === 'player' && e.moveId === id);
-    const lines = [liked ? addCalm(battle.calm, 1, 'It turns its head toward the sound it likes.') : null, rule.calm.perTurn > 0 ? addCalm(battle.calm, rule.calm.perTurn, 'It grows quieter.') : null];
+    const liked = likedMove(rule.calmBar, id, id ? content.moves.get(id)?.flags ?? [] : []) && events.some((e) => e.type === 'move' && e.side === 'player' && e.moveId === id);
+    const lines = [liked ? addCalm(battle.calm, 1, 'It turns its head toward the sound it likes.') : null, rule.calmBar.perTurn > 0 ? addCalm(battle.calm, rule.calmBar.perTurn, 'It grows quieter.') : null];
     for (const text of lines) if (text) events.push({ type: 'raid', tone: 'info', text });
     if (battle.calm.done && currentEnemy(battle).hp > 0) battle.outcome = 'win';
   }

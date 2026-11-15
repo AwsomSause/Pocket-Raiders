@@ -218,7 +218,7 @@ const z7: Json[] = [
     ]),
   ev('co-z7-hunt', 'The Alpha of Alphas: The Hunt', G, { ...R, pokemon: 'alphayena', tint: '#303040' },
     'A wild Pokémon bolts out of the long grass. The Alphayena looks at you: catch it, without harming it.',
-    [ch('Give chase, gently.', fight('Soothing sounds, a sweet scent, a balm: anything but a blow.', { ...wild({ species: ['furret'], win: [room('co-z7-hold')] }), pseudo: true, rule: { calm: { need: 3, start: 0, perTurn: 0, likes: ['sound', 'scent'] } }, calm: [...roundPass('hunt'), room('co-z7-hold')], lose: [room('co-z7-hold')] }))]),
+    [ch('Give chase, gently.', fight('Soothing sounds, a sweet scent, a balm: anything but a blow.', { ...wild({ species: ['furret'], win: [room('co-z7-hold')] }), pseudo: true, rule: { calmBar: { need: 3, start: 0, perTurn: 0, likes: ['sound', 'scent'] } }, calm: [...roundPass('hunt'), room('co-z7-hold')], lose: [room('co-z7-hold')] }))]),
   ev('co-z7-hold', 'The Alpha of Alphas: The Hold', G, {
     ...R, pokemon: 'alphayena', tint: '#303040',
     remembers: [{ id: 'angry', when: [flagIs('noble-beaten')], notice: 'It knows you beat a Noble down instead of calming it. It is angry. Seven turns, not five.', hide: [0], addChoices: [ch('Hold for seven turns.', fight('It comes at you, and it does not stop.', alpha({ species: 'alphayena', rule: { surviveTurns: 7 }, win: [...roundPass('hold'), room('co-z7-howl')], lose: [room('co-z7-howl')] })))] }],

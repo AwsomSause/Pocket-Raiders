@@ -216,7 +216,7 @@ const l5: Json[] = [
 
 // ---------------------------------------------------------------- L6. The Sky and the Sea (Kyogre, Groudon, Rayquaza)
 const titanCalm = (species: 'kyogre' | 'groudon', need: number): Json =>
-  ch(`Calm ${cap(species)}.`, fight(`You stand in the flood and the steam and try to reach ${cap(species)}.`, { ...legend(species, { lv: 4, win: [flag(`${species}-beaten`)] }), rule: { calm: { need, start: 0, perTurn: 0, likes: ['sound'] } }, calm: [gift(species), flag(`${species}-calmed`), flag('weather-calmed'), moment(`You calmed ${cap(species)}.`, 85)] }), { requires: [not(`weather-orb-${species === 'kyogre' ? 'aqua' : 'magma'}`)] });
+  ch(`Calm ${cap(species)}.`, fight(`You stand in the flood and the steam and try to reach ${cap(species)}.`, { ...legend(species, { lv: 4, win: [flag(`${species}-beaten`)] }), rule: { calmBar: { need, start: 0, perTurn: 0, likes: ['sound'] } }, calm: [gift(species), flag(`${species}-calmed`), flag('weather-calmed'), moment(`You calmed ${cap(species)}.`, 85)] }), { requires: [not(`weather-orb-${species === 'kyogre' ? 'aqua' : 'magma'}`)] });
 const base = (team: 'aqua' | 'magma'): Json => {
   const leader = team === 'aqua' ? 'Archie' : 'Maxie';
   const why = team === 'aqua' ? '"The sea made everything. It\'s owed. You\'ve seen what the land does to it."' : '"People are crammed onto the coasts. More land is room to live. Room. It\'s that simple."';

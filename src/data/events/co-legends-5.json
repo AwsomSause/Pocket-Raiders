@@ -3568,7 +3568,7 @@
          "pseudo": true,
          "lose": [],
          "rule": {
-          "calm": {
+          "calmBar": {
            "need": 3,
            "start": 0,
            "perTurn": 0,
@@ -3637,7 +3637,7 @@
          "pseudo": true,
          "lose": [],
          "rule": {
-          "calm": {
+          "calmBar": {
            "need": 3,
            "start": 0,
            "perTurn": 0,
@@ -3717,7 +3717,7 @@
        "pseudo": true,
        "lose": [],
        "rule": {
-        "calm": {
+        "calmBar": {
          "need": 6,
          "start": 0,
          "perTurn": 0,
@@ -3786,7 +3786,7 @@
        "pseudo": true,
        "lose": [],
        "rule": {
-        "calm": {
+        "calmBar": {
          "need": 6,
          "start": 0,
          "perTurn": 0,

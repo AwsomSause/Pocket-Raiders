@@ -7,6 +7,7 @@
 // plain `flag` condition. Pure rules, no Phaser, no RNG. Shared contract: /mnt/project-files/plans/catalog-overhaul/LEGENDS_PIECES.md.
 
 import { getBlessing } from '../blessings';
+import { hashSeed, Rng } from '../rng';
 import { MYTHICALS } from '../instrumentality/promisesData';
 import { BEAST_BY_ID } from '../ultra/beasts';
 import type { RunState } from '../state';
@@ -78,6 +79,7 @@ export function syncLegendFlags(run: Pick<RunState, 'story' | 'expansion' | 'reg
   const legend = blessingLegend(run);
   const state = run.expansion?.blessing;
   if (legend && state) {
+    setFlag(run, 'blessed', 1);
     setFlag(run, `blessing-${legend}`, 1);
     for (const [group, members] of Object.entries(SIGN_GROUPS)) if (members.includes(legend)) setFlag(run, `blessing-${group}`, 1);
     setFlag(run, 'blessing-influence', state.influence);
@@ -86,6 +88,7 @@ export function syncLegendFlags(run: Pick<RunState, 'story' | 'expansion' | 'reg
     setFlag(run, 'blessing-company', company ? 1 : 0);
     setFlag(run, 'blessing-solitary', company ? 0 : 1);
   }
+  if (run.expansion?.promises) setFlag(run, 'promises-on', 1);
   const p = run.expansion?.promise;
   if (p) {
     for (const m of MYTHICALS) {
@@ -147,9 +150,47 @@ export function makeVow(run: RunState, mythical: string): string | null {
   return `${def.title} walks beside you now. ${def.promise}`;
 }
 
+/**
+ * A Telling stop (`telling-any`: a campfire tale, a scribe, a ruin find): one Telling of the Mythical already half-told, else a seeded
+ * pick among every Mythical that is not disabled (each has a Visit scene). Its own stream (`mythical-telling-stop`), keyed by how many
+ * Tellings were heard, so no other roll moves. Nothing once a Mythical has visited this run.
+ */
+export function tellAny(run: RunState): string | null {
+  if (!run.expansion?.promises) return null;
+  const p = run.expansion.promise ?? { tellings: {}, visited: null, guest: null, kept: [], left: [] };
+  if (p.visited || p.guest) return null;
+  const open = MYTHICALS.filter((m) => m.status !== 'disabled' && (p.tellings[m.id] ?? 0) < 3);
+  if (open.length === 0) return null;
+  const started = open.filter((m) => (p.tellings[m.id] ?? 0) > 0);
+  const pool = started.length > 0 ? started : open;
+  const heard = Object.values(p.tellings).reduce((a, b) => a + b, 0);
+  const def = pool[new Rng(hashSeed(`${run.seed}::mythical-telling-stop::${heard}`)).int(0, pool.length - 1)]!;
+  const n = p.tellings[def.id] ?? 0;
+  const believedLine = addTelling(run, def.id, 1);
+  return `A Telling of ${def.title} (${n + 1}/3): "${def.tellings[n]}"${believedLine ? ` ${believedLine}` : ''}`;
+}
+
+/**
+ * Run start, the Legend weeks (calendar game events whose `legendaryFocus` names Legendaries or Mythicals): the blessing's starting
+ * Influence is +1 when its Legendary is in a week's focus, and each Mythical in a focus gets one Telling. Runs without a week are untouched.
+ */
+export function weekInfluence(run: RunState): void {
+  const focus = new Set((run.perkEffects ?? []).flatMap((m) => (m.kind === 'legendaryFocus' ? m.species : [])));
+  if (focus.size === 0) return;
+  const legend = blessingLegend(run);
+  const state = run.expansion?.blessing;
+  if (legend && state && focus.has(legend)) state.influence += 1;
+  for (const m of MYTHICALS) if (focus.has(m.id)) addTelling(run, m.id, 1);
+  syncLegendFlags(run);
+}
+
 /** Called by the `flag` effect for every flag an event sets. Returns journal lines (may be empty). */
 export function legendFlag(run: RunState, key: string, amount: number): string[] {
   if (key.startsWith('sign-')) return addSign(run, key.slice('sign-'.length), amount);
+  if (key === 'telling-any') {
+    const line = amount > 0 ? tellAny(run) : null;
+    return line ? [line] : [];
+  }
   if (key.startsWith('telling-')) {
     const line = addTelling(run, key.slice('telling-'.length), amount);
     return line ? [line] : [];

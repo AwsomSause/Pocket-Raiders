@@ -1517,5 +1517,41 @@
   ],
   "where": "The last region, Stage 7: the header reads Incursion; Steps 5, 10, 15",
   "level": "A+2"
+ },
+ "co-rule-landmark": {
+  "shape": "Pool",
+  "earliest": "A1",
+  "where": "Drawn like any stop: a Sign or Telling source"
+ },
+ "co-rule-shrine": {
+  "shape": "Pool",
+  "earliest": "A1",
+  "where": "Drawn like any stop: a Sign or Telling source"
+ },
+ "co-rule-ruin": {
+  "shape": "Pool",
+  "earliest": "A1",
+  "where": "Drawn like any stop: a Sign or Telling source"
+ },
+ "co-rule-tale": {
+  "shape": "Pool",
+  "earliest": "A1",
+  "where": "Drawn like any stop: a Sign or Telling source",
+  "attaches": "rest"
+ },
+ "co-rule-sky": {
+  "shape": "Pool",
+  "earliest": "A1",
+  "where": "Drawn like any stop: a Sign or Telling source"
+ },
+ "co-rule-dream": {
+  "shape": "Pool",
+  "earliest": "A1",
+  "where": "Drawn like any stop: a Sign or Telling source"
+ },
+ "co-rule-echo": {
+  "shape": "Pool",
+  "earliest": "A1",
+  "where": "Drawn like any stop: a Sign or Telling source"
  }
 }

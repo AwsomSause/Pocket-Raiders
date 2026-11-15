@@ -221,7 +221,7 @@ const u9: Json[] = [
       ch('"Close it."', fight('A battle at the Tear itself.', trainer('The Hole in the Sky', { size: 3, team: ['nihilego', 'pheromosa', 'celesteela'], lv: 3, friendly: true, win: [faller(), flag('sky-closed'), moment('You closed the hole in the sky. The Beasts on this side stayed, scared.', 90)], lose: [flag('sky-held')] }))),
       ch('"Guide them home."', fight('One Beast at a time. You calm the first and the others follow its lead.', {
         ...wild({ species: ['xurkitree'], lv: 3 }), pseudo: true, lose: [],
-        rule: { calm: { need: 4, start: 0, perTurn: 1, likes: ['sound'] } },
+        rule: { calmBar: { need: 4, start: 0, perTurn: 1, likes: ['sound'] } },
         calm: [flag('sky-guided'), moment('You walked the lost Beasts home through the hole in the sky, one at a time.', 90)],
       })),
       ch('"Let them through."', out('They come through, look around, and spread out across the region, lost and harmless and strange.', flag('sky-open'), moment('You let the Beasts through. The region is stranger now.', 85))),

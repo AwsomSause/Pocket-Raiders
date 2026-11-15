@@ -29,7 +29,7 @@ const alphaEvent = EventDefSchema.parse({
           species: ['snorlax'],
           win: [{ kind: 'item', id: 'ultra-ball', count: 1 }],
           calm: [{ kind: 'join', species: ['snorlax'], alpha: true }],
-          rule: { calm: { need: 3, likes: ['sound'] } },
+          rule: { calmBar: { need: 3, likes: ['sound'] } },
         },
       },
     },
