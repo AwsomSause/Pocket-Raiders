@@ -77,7 +77,21 @@ test('an event stop plays its scene, applies a choice once and returns to the ma
   await page.screenshot({ path: 'test-results/events-outcome.png' });
   const used = await page.evaluate(() => (window as any).__pkr.session.run.stage.map.nodes.flatMap((n: any) => n.sides).find((s: any) => s.id === 'e2e-center').used);
   expect(used).toBe(true);
-  await page.keyboard.press('Enter');
+  // The outcome text waits for input and shows no rewards yet; it never leaves by itself.
+  const chips = () => page.evaluate(() => {
+    const sc = (window as any).__pkr.game.scene.getScene('Event');
+    const all: any[] = [];
+    const walk = (list: any[]) => list.forEach((o) => (all.push(o), o.list && walk(o.list)));
+    walk(sc.children.list);
+    return all.filter((o) => o.name === 'event-chip' && o.active).length;
+  });
+  expect(await scene(page)).toBe('Event');
+  expect(await chips()).toBe(0);
+  await page.keyboard.press('Enter'); // dismiss the text; the rewards appear
+  await page.waitForTimeout(2500);
+  expect(await scene(page)).toBe('Event');
+  expect(await chips()).toBeGreaterThan(0);
+  await page.keyboard.press('Enter'); // dismiss the rewards
   await waitForScene(page, 'Map');
 
   // The choice was saved: after a reload the stop is still used.

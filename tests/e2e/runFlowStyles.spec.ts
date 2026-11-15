@@ -66,6 +66,8 @@ test('every map, reward and party look opens cleanly', async ({ page }) => {
   await waitForScene(page, 'Reward');
   await page.waitForTimeout(500);
   await page.evaluate(() => { (window as any).__pkr.game.scene.getScene('Reward').activate(2); }); // Potion: no target needed
+  await page.waitForTimeout(600);
+  await page.keyboard.press('Enter'); // the result waits for an input
   await expect.poll(() => scene(page), { timeout: 10_000 }).not.toBe('Reward');
   expect(errors).toEqual([]);
 });

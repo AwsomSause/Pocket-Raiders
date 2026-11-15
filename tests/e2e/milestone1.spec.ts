@@ -90,6 +90,8 @@ test('menu → trainer → starter → map → battle → reward → map → nex
     await page.keyboard.press('ArrowLeft');
     await page.waitForTimeout(200);
     await page.keyboard.press('Enter');
+    await page.waitForTimeout(600);
+    await page.keyboard.press('Enter'); // the result waits for an input
     await waitForScene(page, 'Reward');
     over = 'Reward';
   }
@@ -105,6 +107,8 @@ test('menu → trainer → starter → map → battle → reward → map → nex
   await page.waitForTimeout(300);
   await page.keyboard.press('ArrowRight');
   await page.keyboard.press('Enter'); // take the second reward
+  await page.waitForTimeout(600);
+  await page.keyboard.press('Enter'); // the result waits for an input
   await enterFromMap(page);
   const next = (await run(page))!;
   expect(next.log.rewardsTaken).toEqual([afterWin.draft![1]]);
