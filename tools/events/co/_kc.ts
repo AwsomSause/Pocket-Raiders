@@ -47,6 +47,8 @@ export interface Placed {
   often: string;
   /** A different home step at a later Kanto stage, keyed by stage number (Route 22 at Stage 8: Step 18). */
   homes?: Record<string, number>;
+  /** Stage tags the doc asks for (forest, water, high, hot, eerie, night): a road space only rolls on a stage that has them all. */
+  tags?: string[];
 }
 export interface SpaceRow {
   id: string; town: string; name: string; kind: Kind; appears: 'always' | 'roll' | 'trigger' | 'locked' | 'route';

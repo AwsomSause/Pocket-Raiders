@@ -10,6 +10,7 @@ import { Rng, hashSeed } from '../../src/core/rng';
 import { chooseStarter, createRun } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { buildChainStage, chainById } from '../../src/core/dungeon/pseudo';
+import { kantoSweetAir, sweetAirHere } from '../../src/core/expansion/canonKantoRules';
 import status from '../../src/data/catalogOverhaul/status/kanto-canon.json';
 import pseudoFile from '../../src/data/catalogOverhaul/pseudo/kanto-canon.json';
 
@@ -192,5 +193,42 @@ describe('kanto-canon: placement', () => {
     expect(nodesForSpace(later, route22, new Rng(hashSeed('kc-r22'))).every((n) => n.column === columnOfStep(later, 18))).toBe(true);
     // A space the placed docs do not cover keeps a single random node.
     expect(nodesForSpace(stage, undefined, new Rng(hashSeed("kc-1")))).toHaveLength(1);
+  });
+});
+
+describe('Sweet Air (KANTO_PLACED_2, Erika\'s perfume)', () => {
+  const at = (seed: string, stageNo: number, themeId: string, canon = true) => {
+    const run = chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', expansion: canon ? { kantoCanon: true } : undefined }), 0);
+    run.regionOrder = ['kanto', ...run.regionOrder.filter((r) => r !== 'kanto')];
+    run.regionIndex = 0;
+    run.stage = { ...run.stage!, index: stageNo - 1, themeId };
+    run.battle = { activeIndex: 0, enemyTeam: [] } as unknown as RunState['battle'];
+    run.party[0]!.status = null;
+    return run;
+  };
+  const forest = [...content.themes.values()].find((t) => t.types.includes('grass'))!.id;
+  const city = [...content.themes.values()].find((t) => !t.types.some((x) => ['grass', 'bug', 'fairy'].includes(x)))!.id;
+  it('holds only in Celadon\'s stage (Kanto Stage 4), on a forest-tagged stage, in a canon run', () => {
+    expect(sweetAirHere(content, at('SA', 4, forest))).toBe(true);
+    expect(sweetAirHere(content, at('SA', 3, forest))).toBe(false);
+    expect(sweetAirHere(content, at('SA', 4, city))).toBe(false);
+    expect(sweetAirHere(content, at('SA', 4, forest, false))).toBe(false);
+  });
+  it('puts the lead to sleep for one turn about 20% of the time, the same way for the same seed, and never a statused lead', () => {
+    let slept = 0;
+    for (let i = 0; i < 400; i++) {
+      const run = at(`SA${i}`, 4, forest);
+      kantoSweetAir(content, run);
+      const again = at(`SA${i}`, 4, forest);
+      kantoSweetAir(content, again);
+      expect(again.party[0]!.status).toEqual(run.party[0]!.status);
+      if (run.party[0]!.status) { slept++; expect(run.party[0]!.status).toEqual({ id: 'slp', turns: 1 }); }
+    }
+    expect(slept / 400).toBeGreaterThan(0.13);
+    expect(slept / 400).toBeLessThan(0.27);
+    const burned = at('SAB', 4, forest);
+    burned.party[0]!.status = { id: 'brn' };
+    kantoSweetAir(content, burned);
+    expect(burned.party[0]!.status).toEqual({ id: 'brn' });
   });
 });

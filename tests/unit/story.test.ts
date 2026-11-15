@@ -119,6 +119,7 @@ describe('story foundation: random streams', () => {
     eventsRB: { events: [] },
     eventsCanonKanto: { events: [] }, eventsCanonVermilion: { events: [] }, eventsCanonFuchsia: { events: [] }, // Kanto canon spaces came later too
     eventsCanonSaffron: { events: [] },
+    coPlacement: [], // Catalog Overhaul placement files place only the rebuilt events above, which old seeds never had
     eventsHelpers: { events: [] },
     eventsMerchants: { events: [] }, // run events A came later too
     // The stage-1 level fix (W13: opening fights at Lv4-6 instead of Lv2-4) came later too; Guard and Brace were removed.

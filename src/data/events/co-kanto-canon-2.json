@@ -787,7 +787,7 @@
         },
         {
          "kind": "addEvent",
-         "eventId": "cs-kanto-lavender-tower-f7"
+         "eventId": "cs-kanto-lavender-tower-f7a"
         }
        ],
        "team": [
@@ -819,7 +819,7 @@
         },
         {
          "kind": "addEvent",
-         "eventId": "cs-kanto-lavender-tower-f7"
+         "eventId": "cs-kanto-lavender-tower-f7a"
         }
        ],
        "team": [
@@ -870,9 +870,96 @@
        },
        {
         "kind": "addEvent",
+        "eventId": "cs-kanto-lavender-tower-f7a"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-lavender-tower-f7a",
+   "name": "Pokémon Tower: The Last Stairs",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "rocket",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "rocket"
+      }
+     ],
+     "intro": "A Grunt at the top window with a notebook, counting graves. He sees you and whistles. Cassidy: \"Scouting a graveyard. This is what we're trusted with.\" Butch: \"It's a good graveyard.\" Cassidy: \"Don't be supportive, Biff.\" Butch: \"Butch.\""
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a66"
+   },
+   "intro": "One flight left. The candles stop here; above, there is only the grey light of the top floor and the sound of the wind across it.",
+   "choices": [
+    {
+     "label": "Go up.",
+     "success": {
+      "text": "You climb the last flight.",
+      "effects": [
+       {
+        "kind": "addEvent",
         "eventId": "cs-kanto-lavender-tower-f7"
        }
       ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "requires": [
+      {
+       "kind": "evil",
+       "team": "rocket"
+      }
+     ],
+     "success": {
+      "text": "Two of them, back to back, as if they practised it. They did; they practise everything except the parts that matter.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Butch and Cassidy",
+       "size": 2,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "intel",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-tower-notebook",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-lavender-tower-f7"
+        }
+       ],
+       "team": [
+        "raticate",
+        "hypno"
+       ],
+       "format": "doubles"
+      }
      }
     }
    ],
@@ -888,7 +975,20 @@
    "types": [],
    "minStage": 1,
    "requires": [],
-   "remembers": [],
+   "remembers": [
+    {
+     "id": "notebook",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-tower-notebook",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You read the Grunts' notebook out to him: which graves have Pokémon worth \"recovering.\" Mr. Fuji: \"...Then I'll sit up here a while longer.\""
+    }
+   ],
    "callback": false,
    "forced": false,
    "scene": {

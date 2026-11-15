@@ -33,6 +33,46 @@
    "themeId": "electric-steel",
    "tint": "#4a3a66",
    "mood": "windows out, lights on"
+  },
+  {
+   "id": "ps_cs_kanto_cinnabar_mansion",
+   "name": "Pokémon Mansion",
+   "entry": "cs-kanto-cinnabar-mansion",
+   "themeId": "fire-poison",
+   "tint": "#8a3a2a",
+   "mood": "a great house with no roof"
+  },
+  {
+   "id": "ps_cs_kanto_cinnabar_seafoam",
+   "name": "Seafoam Islands",
+   "entry": "cs-kanto-cinnabar-seafoam",
+   "themeId": "water-ice",
+   "tint": "#8a3a2a",
+   "mood": "the sea going in at one end and out the other, fast"
+  },
+  {
+   "id": "ps_cs_kanto_cinnabar_newisland",
+   "name": "New Island",
+   "entry": "cs-kanto-cinnabar-newisland",
+   "themeId": "psychic-dark",
+   "tint": "#8a3a2a",
+   "mood": "a thunderstorm that never ends"
+  },
+  {
+   "id": "ps_cs_kanto_indigo_road",
+   "name": "Victory Road",
+   "entry": "cs-kanto-indigo-road",
+   "themeId": "ground-rock",
+   "tint": "#3a3f7a",
+   "mood": "eight lights coming on, one at a time"
+  },
+  {
+   "id": "ps_cs_kanto_cerulean_cave",
+   "name": "Cerulean Cave",
+   "entry": "cs-kanto-cerulean-cave",
+   "themeId": "psychic-dark",
+   "tint": "#2f5f8a",
+   "mood": "still water, and something standing in it"
   }
  ]
 }

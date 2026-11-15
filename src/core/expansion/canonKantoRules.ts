@@ -7,6 +7,10 @@ import type { Content } from '../contentSchema';
 import { addLevels, maxHp } from '../pokemon';
 import { Rng, hashSeed } from '../rng';
 import type { RunState } from '../state';
+import { periodOf, tideOf } from '../clock';
+import { stageTags } from '../co/placement';
+import { currentRegion } from '../regions';
+import { getTheme } from '../themes';
 
 import { type KcCondition, type KcEffect } from './canonKantoSchema';
 export { KcConditionSchema, KcEffectSchema } from './canonKantoSchema';
@@ -179,4 +183,23 @@ function babyOf(content: Content, id: string): string {
   let cur = content.species.get(id);
   for (let i = 0; cur?.evolvesFrom && i < 4; i++) cur = content.species.get(cur.evolvesFrom) ?? cur;
   return cur?.id ?? id;
+}
+
+/** KANTO_PLACED_2, Manga-inspired moments, "Erika's perfume": in Celadon's stage (Kanto Stage 4), at a node tagged `forest`,
+ *  the first turn has a 20% chance to put the lead to sleep for one turn. Shown in the battle header as Sweet Air. */
+const SWEET_AIR = { stage: 4, chance: 0.2, turns: 1 } as const;
+
+export function sweetAirHere(content: Content, run: RunState): boolean {
+  if (!run.expansion?.canon || run.stage?.kind !== 'stage' || run.stage.index + 1 !== SWEET_AIR.stage || currentRegion(content, run).id !== 'kanto') return false;
+  return stageTags(getTheme(content, run.stage.themeId).types, periodOf(run), tideOf(content, run)).has('forest');
+}
+
+/** At the start of a battle under Sweet Air: rolls (seeded by run, stage, node and foe; no shared stream) whether the lead falls asleep. */
+export function kantoSweetAir(content: Content, run: RunState): void {
+  if (!run.battle || !sweetAirHere(content, run)) return;
+  const lead = run.party[run.battle.activeIndex];
+  if (!lead || lead.hp <= 0 || lead.status) return;
+  const foe = run.battle.enemyTeam[0]?.speciesId ?? '';
+  const rng = new Rng(hashSeed(`${run.seed}::kanto-sweet-air::${run.stage!.index}::${run.stage!.current ?? ''}::${run.stage!.visited.length}::${foe}`));
+  if (rng.float() < SWEET_AIR.chance) lead.status = { id: 'slp', turns: SWEET_AIR.turns };
 }

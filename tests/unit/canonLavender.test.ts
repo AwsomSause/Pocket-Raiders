@@ -41,7 +41,8 @@ describe('Lavender canon: the event graph', () => {
     expect(leave.ids.filter((x) => x === `${P}tower-f5`)).toHaveLength(1);
     expect(leave.ids).toHaveLength(4);
     expect(targets(`${P}tower-f5`)).toEqual([`${P}tower-f6`, `${P}tower-f6`]);
-    expect(new Set(targets(`${P}tower-f6`))).toEqual(new Set([`${P}tower-f7`]));
+    expect(new Set(targets(`${P}tower-f6`))).toEqual(new Set([`${P}tower-f7a`]));
+    expect(targets(`${P}tower-f7a`)).toContain(`${P}tower-f7`);
   });
 });
 

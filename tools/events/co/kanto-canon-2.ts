@@ -1,7 +1,7 @@
 // Kanto Canon Spaces, KANTO_PLACED_1.md: Lavender Town (Interlude 3, at the start of Kanto Stage 4).
 // Every scripted line of the doc is kept word for word; the prose around the lines is expanded.
 import type { Json } from '../dsl.ts';
-import { EXTRA, SPACES, retired, battle, buy, c, cash, afford, flag, foe, fr, has, is, item, join, kc, moment, not, o, relic, space, teach, wild } from './_kc.ts';
+import { EXTRA, SPACES, retired, intel, battle, buy, c, cash, afford, flag, foe, fr, has, is, item, join, kc, moment, not, o, relic, space, teach, wild } from './_kc.ts';
 
 export const CATEGORY = 'kanto-canon';
 export const EVENTS: Json[] = [];
@@ -66,7 +66,7 @@ const flash: Json = { kind: 'partyMove', move: 'flash' };
     ], { scene: { pokemon: 'haunter' } });
 
   // Floor 6: the Marowak. It can't be caught. Beating it releases it.
-  const RELEASED = [flag('kanto-tower-marowak'), moment('Released the ghost of the Marowak in Pokémon Tower.'), s.open('f7')];
+  const RELEASED = [flag('kanto-tower-marowak'), moment('Released the ghost of the Marowak in Pokémon Tower.'), s.open('f7a')];
   const marowak = (text: string, calm: boolean) => battle(text, foe('Marowak', { team: ['marowak'], levelBonus: 0, ...(calm ? { rule: { stages: { atk: -1 } } } : {}), win: RELEASED }));
   s.room('f6', 'Pokémon Tower: The Marowak', 'A shape between you and the stairs. A club, raised. Under the skull, nothing. Behind it, a small grave, with a smaller club laid on it. It can\'t be caught. It is not here to be caught. It is here because something small of hers was left in this room, and she has not found a way to stop guarding it.',
     [
@@ -79,13 +79,18 @@ const flash: Json = { kind: 'partyMove', move: 'flash' };
   // Floor 7: the top. Reward: the Silph Scope; a Cubone with Lightning Rod and Bone Rush if the Marowak was released; the Pokémon Tower Scroll.
   const SCROLL = relic('pokemon-tower-scroll', 'Pokémon Tower Scroll', [{ kind: 'statMultiplier', stat: 'atk', type: 'ghost', value: 1.1 }, { kind: 'statMultiplier', stat: 'spa', type: 'ghost', value: 1.1 }]);
   const TOP = [item('silph-scope'), SCROLL, flag('kanto-tower-cleared'), flag('xk-tower-cleansed'), moment('Climbed Pokémon Tower and sat with Mr. Fuji at the top.')];
+  // KANTO_PLACED_2, "Butch and Cassidy at the ordinary Tower": a double battle before Mr. Fuji when the Rocket arc is active.
+  s.room('f7a', 'Pokémon Tower: The Last Stairs', 'One flight left. The candles stop here; above, there is only the grey light of the top floor and the sound of the wind across it.',
+    [c('Go up.', o('You climb the last flight.', s.open('f7'))),
+      c('Battle.', battle('Two of them, back to back, as if they practised it. They did; they practise everything except the parts that matter.', foe('Butch and Cassidy', { team: ['raticate', 'hypno'], size: 2, format: 'doubles', levelBonus: 1, win: [intel(), flag('kanto-tower-notebook'), s.open('f7')] })), { requires: [{ kind: 'evil', team: 'rocket' }] })],
+    { remembers: [{ id: 'rocket', when: [{ kind: 'evil', team: 'rocket' }], intro: 'A Grunt at the top window with a notebook, counting graves. He sees you and whistles. Cassidy: "Scouting a graveyard. This is what we\'re trusted with." Butch: "It\'s a good graveyard." Cassidy: "Don\'t be supportive, Biff." Butch: "Butch."' }] });
   s.room('f7', 'Pokémon Tower: The Top', 'The seventh floor is small, and open to the sky on one side. An old man is sitting on a folding stool beside the last stone, with a blanket over his knees and a lamp at his feet. He looks up without surprise. Mr. Fuji: "I wasn\'t trapped. I was keeping it company. Nobody else would come up." He climbed up to sit with it, and couldn\'t get down.',
     [
       c('Help him down the stairs.', o('It takes a long time, seven floors, one step and then the next, his hand on your arm. On the way down he gives you the Silph Scope from his coat pocket, as if it were a boiled sweet, and a scroll tied with white ribbon: the Pokémon Tower Scroll. At the small grave on the sixth floor he stops. A Cubone is standing there, by itself, holding the smaller club. It knows Bone Rush. It looks at you, and it comes.', ...TOP, join(['cubone'], { ability: 'lightning-rod', moves: ['bone-rush'] })),
         { requires: [is('kanto-tower-marowak'), not('kanto-tower-mother')] }),
       c('Help him down the stairs.', o('It takes a long time, seven floors, one step and then the next, his hand on your arm. On the way down he gives you the Silph Scope from his coat pocket, as if it were a boiled sweet, and a scroll tied with white ribbon: the Pokémon Tower Scroll. At the sixth floor he stops, and looks at the Marowak walking beside you, and nods to it, as one nods to someone who has also been keeping watch.', ...TOP),
         { requires: [is('kanto-tower-mother')] }),
-    ]);
+    ], { remembers: [{ id: 'notebook', when: [is('kanto-tower-notebook')], notice: 'You read the Grunts\' notebook out to him: which graves have Pokémon worth "recovering." Mr. Fuji: "...Then I\'ll sit up here a while longer."' }] });
 }
 
 // ---------- Mr. Fuji's House

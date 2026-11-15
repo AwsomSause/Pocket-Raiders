@@ -5,9 +5,8 @@
   "home": 1,
   "sits": "must-see",
   "attaches": "before",
-  "tags": [
-   "A coffee cup"
-  ],
+  "badge": "A coffee cup",
+  "tags": [],
   "level": "A-2",
   "often": "region",
   "canon": "cs.kanto.viridian.oldman",
@@ -27,9 +26,8 @@
   ],
   "sits": "must-see",
   "attaches": "instead",
-  "tags": [
-   "The rival's face"
-  ],
+  "badge": "The rival's face",
+  "tags": [],
   "level": "A+2",
   "often": "region",
   "canon": "cs.kanto.viridian.route22",
@@ -46,9 +44,8 @@
   "home": 2,
   "sits": "optional",
   "attaches": "town",
-  "tags": [
-   "A parcel"
-  ],
+  "badge": "A parcel",
+  "tags": [],
   "level": "A-1",
   "often": "region",
   "canon": "cs.kanto.viridian.parcel",
@@ -64,9 +61,8 @@
   "home": 2,
   "sits": "optional",
   "attaches": "town",
-  "tags": [
-   "A chalkboard"
-  ],
+  "badge": "A chalkboard",
+  "tags": [],
   "level": null,
   "often": "region",
   "canon": "cs.kanto.viridian.school",
@@ -87,9 +83,8 @@
   ],
   "sits": "side-branch",
   "attaches": "instead",
-  "tags": [
-   "A molehill"
-  ],
+  "badge": "A molehill",
+  "tags": [],
   "level": "A-1",
   "often": "region",
   "canon": "cs.kanto.viridian.diglett",
@@ -109,9 +104,8 @@
   ],
   "sits": "optional",
   "attaches": "rest",
-  "tags": [
-   "A cooking pot"
-  ],
+  "badge": "A cooking pot",
+  "tags": [],
   "level": null,
   "often": "region",
   "canon": "cs.kanto.pewter.rest",
@@ -131,9 +125,8 @@
   ],
   "sits": "optional",
   "attaches": "town",
-  "tags": [
-   "A bone"
-  ],
+  "badge": "A bone",
+  "tags": [],
   "level": null,
   "often": "region",
   "canon": "cs.kanto.pewter.museum",
@@ -153,9 +146,8 @@
   ],
   "sits": "optional",
   "attaches": "before",
-  "tags": [
-   "A feather"
-  ],
+  "badge": "A feather",
+  "tags": [],
   "level": "A-1",
   "often": "region",
   "canon": "cs.kanto.pewter.flock",
@@ -175,9 +167,8 @@
   ],
   "sits": "optional",
   "attaches": "before",
-  "tags": [
-   "A broken wall"
-  ],
+  "badge": "A broken wall",
+  "tags": [],
   "level": "A+0",
   "often": "region",
   "canon": "cs.kanto.cerulean.burglary",
@@ -193,9 +184,8 @@
   "home": 15,
   "sits": "optional",
   "attaches": "town",
-  "tags": [
-   "An egg"
-  ],
+  "badge": "An egg",
+  "tags": [],
   "level": null,
   "often": "region",
   "canon": "cs.kanto.cerulean.daycare",
@@ -215,9 +205,8 @@
   ],
   "sits": "optional",
   "attaches": "after",
-  "tags": [
-   "A hook"
-  ],
+  "badge": "A hook",
+  "tags": [],
   "level": "A-1",
   "often": "region",
   "canon": "cs.kanto.vermilion.fishclub",
@@ -233,9 +222,8 @@
   "home": 4,
   "sits": "optional",
   "attaches": "town",
-  "tags": [
-   "A crate of fish"
-  ],
+  "badge": "A crate of fish",
+  "tags": [],
   "level": null,
   "often": "region",
   "canon": "cs.kanto.vermilion.market",
@@ -255,9 +243,8 @@
   ],
   "sits": "must-see",
   "attaches": "instead",
-  "tags": [
-   "A tower"
-  ],
+  "badge": "A tower",
+  "tags": [],
   "level": "A+0",
   "often": "region",
   "canon": "cs.kanto.lavender.tower",
@@ -273,9 +260,8 @@
   "home": 1,
   "sits": "optional",
   "attaches": "town",
-  "tags": [
-   "A small house"
-  ],
+  "badge": "A small house",
+  "tags": [],
   "level": null,
   "often": "region",
   "canon": "cs.kanto.lavender.fuji",
@@ -291,9 +277,8 @@
   "home": 1,
   "sits": "optional",
   "attaches": "town",
-  "tags": [
-   "A rosette"
-  ],
+  "badge": "A rosette",
+  "tags": [],
   "level": null,
   "often": "region",
   "canon": "cs.kanto.lavender.fanclub",
@@ -313,9 +298,8 @@
   ],
   "sits": "side-branch",
   "attaches": "instead",
-  "tags": [
-   "A black square"
-  ],
+  "badge": "A black square",
+  "tags": [],
   "level": "A+0",
   "often": "region",
   "canon": "cs.kanto.lavender.rocktunnel",
@@ -335,9 +319,8 @@
   ],
   "sits": "side-branch",
   "attaches": "instead",
-  "tags": [
-   "A bolt in a circle"
-  ],
+  "badge": "A bolt in a circle",
+  "tags": [],
   "level": "A+2",
   "often": "region",
   "canon": "cs.kanto.lavender.powerplant",
@@ -353,9 +336,8 @@
   "home": 1,
   "sits": "optional",
   "attaches": "town",
-  "tags": [
-   "A candle"
-  ],
+  "badge": "A candle",
+  "tags": [],
   "level": null,
   "often": "region",
   "canon": "cs.kanto.lavender.volunteers",
@@ -375,9 +357,8 @@
   ],
   "sits": "optional",
   "attaches": "after",
-  "tags": [
-   "A grin"
-  ],
+  "badge": "A grin",
+  "tags": [],
   "level": "A+0",
   "often": "region",
   "canon": "cs.kanto.lavender.prank",
@@ -393,9 +374,8 @@
   "home": 10,
   "sits": "optional",
   "attaches": "rest",
-  "tags": [
-   "A shopping bag"
-  ],
+  "badge": "A shopping bag",
+  "tags": [],
   "level": null,
   "often": "region",
   "canon": "cs.kanto.celadon.mart",
@@ -411,9 +391,8 @@
   "home": 10,
   "sits": "optional",
   "attaches": "rest",
-  "tags": [
-   "None: it's part of the Store"
-  ],
+  "badge": "None: it's part of the Store",
+  "tags": [],
   "level": null,
   "often": "region",
   "canon": "cs.kanto.celadon.rooftop",
@@ -433,9 +412,8 @@
   ],
   "sits": "optional",
   "attaches": "after",
-  "tags": [
-   "A coin"
-  ],
+  "badge": "A coin",
+  "tags": [],
   "level": "A+0",
   "often": "region",
   "canon": "cs.kanto.celadon.gamecorner",
@@ -451,9 +429,8 @@
   "home": 16,
   "sits": "optional",
   "attaches": "town",
-  "tags": [
-   "A key"
-  ],
+  "badge": "A key",
+  "tags": [],
   "level": "A-2",
   "often": "region",
   "canon": "cs.kanto.celadon.mansion",
@@ -473,9 +450,8 @@
   ],
   "sits": "optional",
   "attaches": "after",
-  "tags": [
-   "Three coloured stones"
-  ],
+  "badge": "Three coloured stones",
+  "tags": [],
   "level": "A+0",
   "often": "region",
   "canon": "cs.kanto.celadon.eevee",
@@ -491,9 +467,8 @@
   "home": 18,
   "sits": "optional",
   "attaches": "rest",
-  "tags": [
-   "A teacup"
-  ],
+  "badge": "A teacup",
+  "tags": [],
   "level": null,
   "often": "region",
   "canon": "cs.kanto.celadon.tea",
@@ -513,9 +488,8 @@
   ],
   "sits": "optional",
   "attaches": "after",
-  "tags": [
-   "A perfume bottle"
-  ],
+  "badge": "A perfume bottle",
+  "tags": [],
   "level": "A+0",
   "often": "region",
   "canon": "cs.kanto.celadon.perfume",
@@ -535,9 +509,8 @@
   ],
   "sits": "optional",
   "attaches": "after",
-  "tags": [
-   "A tooth"
-  ],
+  "badge": "A tooth",
+  "tags": [],
   "level": null,
   "often": "region",
   "canon": "cs.kanto.fuchsia.warden",
@@ -557,9 +530,8 @@
   ],
   "sits": "optional",
   "attaches": "after",
-  "tags": [
-   "A dust cloud"
-  ],
+  "badge": "A dust cloud",
+  "tags": [],
   "level": "A+0",
   "often": "region",
   "canon": "cs.kanto.fuchsia.tauros",
@@ -575,9 +547,8 @@
   "home": 17,
   "sits": "optional",
   "attaches": "town",
-  "tags": [
-   "A paw print"
-  ],
+  "badge": "A paw print",
+  "tags": [],
   "level": null,
   "often": "region",
   "canon": "cs.kanto.fuchsia.zoo",
@@ -597,9 +568,8 @@
   ],
   "sits": "optional",
   "attaches": "before",
-  "tags": [
-   "A claw"
-  ],
+  "badge": "A claw",
+  "tags": [],
   "level": "A+1",
   "often": "region",
   "canon": "cs.kanto.fuchsia.snag",
@@ -619,9 +589,8 @@
   ],
   "sits": "must-see",
   "attaches": "after",
-  "tags": [
-   "The Silph \"S\""
-  ],
+  "badge": "The Silph \"S\"",
+  "tags": [],
   "level": "A+0",
   "often": "region",
   "canon": "cs.kanto.saffron.silph",
@@ -641,9 +610,8 @@
   ],
   "sits": "optional",
   "attaches": "instead",
-  "tags": [
-   "A black belt"
-  ],
+  "badge": "A black belt",
+  "tags": [],
   "level": "A+1",
   "often": "region",
   "canon": "cs.kanto.saffron.dojo",
@@ -663,9 +631,8 @@
   ],
   "sits": "optional",
   "attaches": "after",
-  "tags": [
-   "A mirror"
-  ],
+  "badge": "A mirror",
+  "tags": [],
   "level": null,
   "often": "region",
   "canon": "cs.kanto.saffron.copycat",
@@ -681,14 +648,445 @@
   "home": 19,
   "sits": "optional",
   "attaches": "after",
-  "tags": [
-   "A train"
-  ],
+  "badge": "A train",
+  "tags": [],
   "level": null,
   "often": "region",
   "canon": "cs.kanto.saffron.train",
   "kantoStages": [
    6
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-cinnabar-lab": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 10,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "A flask",
+  "tags": [],
+  "level": "A-2",
+  "often": "region",
+  "canon": "cs.kanto.cinnabar.lab",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-cinnabar-mansion": {
+  "shape": "Door",
+  "earliest": "A7",
+  "home": 6,
+  "window": [
+   4,
+   8
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "badge": "A burnt door",
+  "tags": [],
+  "level": "A+1",
+  "often": "region",
+  "canon": "cs.kanto.cinnabar.mansion",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-cinnabar-seafoam": {
+  "shape": "Door",
+  "earliest": "A7",
+  "home": 12,
+  "window": [
+   10,
+   14
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "badge": "A snowflake over a wave",
+  "tags": [],
+  "level": "A+2",
+  "often": "region",
+  "canon": "cs.kanto.cinnabar.seafoam",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-cinnabar-newisland": {
+  "shape": "Door",
+  "earliest": "A7",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "badge": "A sealed letter",
+  "tags": [],
+  "level": "A+2",
+  "often": "region",
+  "canon": "cs.kanto.cinnabar.newisland",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-cinnabar-volcano": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 9,
+  "window": [
+   7,
+   11
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A smoking peak",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.cinnabar.volcano",
+  "kantoStages": [
+   7
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-badge-check": {
+  "shape": "Single",
+  "earliest": "A8",
+  "home": 19,
+  "sits": "must-see",
+  "attaches": "before",
+  "badge": "Eight small circles",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.badge-check",
+  "kantoStages": [
+   8
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-indigo-road": {
+  "shape": "Door",
+  "earliest": "A8",
+  "home": 20,
+  "sits": "side-branch",
+  "attaches": "after",
+  "badge": "Eight lights",
+  "tags": [],
+  "level": "A+2",
+  "often": "region",
+  "canon": "cs.kanto.indigo.road",
+  "kantoStages": [
+   8
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-cerulean-cave": {
+  "shape": "Door",
+  "earliest": "A8",
+  "home": 20,
+  "sits": "side-branch",
+  "attaches": "after",
+  "badge": "A cave over water",
+  "tags": [],
+  "level": "A+2",
+  "often": "region",
+  "canon": "cs.kanto.cerulean.cave",
+  "kantoStages": [
+   8
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-charizard": {
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 16,
+  "window": [
+   14,
+   18
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "badge": "A wing and a flame",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.route.charizard",
+  "kantoStages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-pidgeotto": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 5,
+  "window": [
+   3,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "badge": "A feather, falling",
+  "tags": [],
+  "level": "A+1",
+  "often": "region",
+  "canon": "cs.kanto.route.pidgeotto",
+  "kantoStages": [
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-bulbasaur": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 11,
+  "window": [
+   8,
+   14
+  ],
+  "sits": "side-branch",
+  "attaches": "after",
+  "badge": "A bud",
+  "tags": [
+   "forest",
+   "night"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.bulbasaur",
+  "kantoStages": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-haunter": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 13,
+  "window": [
+   10,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "badge": "A party hat",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.route.haunter",
+  "kantoStages": [
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-lapras": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 9,
+  "window": [
+   6,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A note over a wave",
+  "tags": [
+   "water",
+   "night"
+  ],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.route.lapras",
+  "kantoStages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-poster": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 10,
+  "sits": "optional",
+  "attaches": "rest",
+  "badge": "None",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.poster",
+  "kantoStages": [
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-pidgey-rush": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 4,
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A feather",
+  "tags": [],
+  "level": "A-2",
+  "often": "region",
+  "canon": "cs.kanto.route.pidgey-rush",
+  "kantoStages": [
+   1
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-cut-tree": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 8,
+  "sits": "side-branch",
+  "attaches": "after",
+  "badge": "A small tree",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.cut-tree",
+  "kantoStages": [
+   1,
+   2
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-tough-junior": {
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 9,
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A small fist",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.route.tough-junior",
+  "kantoStages": [
+   1
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-fishing": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A hook",
+  "tags": [
+   "water"
+  ],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.fishing",
+  "kantoStages": [
+   3,
+   4,
+   5
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-stone-seller": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 12,
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A tray",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.stone-seller",
+  "kantoStages": [
+   4,
+   5
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-cycling": {
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 7,
+  "sits": "optional",
+  "attaches": "instead",
+  "badge": "A bicycle",
+  "tags": [],
+  "level": null,
+  "often": "region",
+  "canon": "cs.kanto.route.cycling",
+  "kantoStages": [
+   5
+  ],
+  "levelApplied": true,
+  "own": true
+ },
+ "cs-kanto-route-biker-gang": {
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 15,
+  "sits": "optional",
+  "attaches": "after",
+  "badge": "A patch",
+  "tags": [],
+  "level": "A+0",
+  "often": "region",
+  "canon": "cs.kanto.route.biker-gang",
+  "kantoStages": [
+   5
   ],
   "levelApplied": true,
   "own": true

@@ -15,8 +15,35 @@
    "hooks": [
     {
      "hook": "typePower",
-     "types": ["ghost", "psychic"],
+     "types": [
+      "ghost",
+      "psychic"
+     ],
      "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "charizard-feather",
+  "name": "Charizard Feather",
+  "family": "Type boosters (held)",
+  "description": "A feather from the Charizard of the Kanto road, still warm: Fire moves +5%",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "charcoal",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "fire"
+     ],
+     "percent": 5
     }
    ]
   }

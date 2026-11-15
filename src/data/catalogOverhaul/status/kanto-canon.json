@@ -38,6 +38,27 @@
   "cs.kanto.saffron.silph": "cs-kanto-saffron-silph",
   "cs.kanto.saffron.dojo": "cs-kanto-saffron-dojo",
   "cs.kanto.saffron.copycat": "cs-kanto-saffron-copycat",
-  "cs.kanto.saffron.train": "cs-kanto-saffron-train"
+  "cs.kanto.saffron.train": "cs-kanto-saffron-train",
+  "cs.kanto.cinnabar.lab": "cs-kanto-cinnabar-lab",
+  "cs.kanto.cinnabar.mansion": "cs-kanto-cinnabar-mansion",
+  "cs.kanto.cinnabar.seafoam": "cs-kanto-cinnabar-seafoam",
+  "cs.kanto.cinnabar.newisland": "cs-kanto-cinnabar-newisland",
+  "cs.kanto.cinnabar.volcano": "cs-kanto-cinnabar-volcano",
+  "cs.kanto.route.badge-check": "cs-kanto-route-badge-check",
+  "cs.kanto.indigo.road": "cs-kanto-indigo-road",
+  "cs.kanto.cerulean.cave": "cs-kanto-cerulean-cave",
+  "cs.kanto.route.charizard": "cs-kanto-route-charizard",
+  "cs.kanto.route.pidgeotto": "cs-kanto-route-pidgeotto",
+  "cs.kanto.route.bulbasaur": "cs-kanto-route-bulbasaur",
+  "cs.kanto.route.haunter": "cs-kanto-route-haunter",
+  "cs.kanto.route.lapras": "cs-kanto-route-lapras",
+  "cs.kanto.route.poster": "cs-kanto-route-poster",
+  "cs.kanto.route.pidgey-rush": "cs-kanto-route-pidgey-rush",
+  "cs.kanto.route.cut-tree": "cs-kanto-route-cut-tree",
+  "cs.kanto.route.tough-junior": "cs-kanto-route-tough-junior",
+  "cs.kanto.route.fishing": "cs-kanto-route-fishing",
+  "cs.kanto.route.stone-seller": "cs-kanto-route-stone-seller",
+  "cs.kanto.route.cycling": "cs-kanto-route-cycling",
+  "cs.kanto.route.biker-gang": "cs-kanto-route-biker-gang"
  }
 }

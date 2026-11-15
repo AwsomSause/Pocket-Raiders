@@ -18,9 +18,9 @@ describe('Cerulean canon: the event graph', () => {
   it('every room opens from a gate, and every addEvent / addEventFrom target exists', () => {
     // The Day-Care's collection scene is a follow-up placed at the next stage (core/expansion/canonKantoPlaced.ts), not a room of a gate.
     const ids = [...content.events.values()].filter((e) => e.id.startsWith(P) && !e.disabled && e.id !== `${P}daycare-back`).map((e) => e.id);
-    const targets = (id: string) => room(id).choices.flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])]).flatMap((e) => (e.kind === 'addEvent' ? [e.eventId] : e.kind === 'addEventFrom' ? e.ids : []));
+    const targets = (id: string) => room(id).choices.flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])]).flatMap((e) => (e.kind === 'addEvent' || e.kind === 'laterEvent' ? [e.eventId] : e.kind === 'addEventFrom' ? e.ids : []));
     for (const id of ids) for (const t of targets(id)) expect(content.events.has(t), `${id} -> ${t}`).toBe(true);
-    const reach = new Set<string>([`${P}bridge`, `${P}squad`, `${P}damian`, `${P}burglary`, `${P}rain`, `${P}bill`, `${P}daycare`]);
+    const reach = new Set<string>([`${P}bridge`, `${P}squad`, `${P}damian`, `${P}burglary`, `${P}rain`, `${P}bill`, `${P}daycare`, `${P}cave`]);
     for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id)) if (!reach.has(t)) { reach.add(t); again = true; } }
     expect([...reach].sort()).toEqual(ids.sort());
   });

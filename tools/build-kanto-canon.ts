@@ -26,7 +26,7 @@ for (const s of kc.SPACES) {
   const p = s.placed;
   placement[kc.eid(s.id)] = {
     shape: s.kind === 'PS' ? 'Door' : 'Single', earliest: `A${Math.min(...p.stage)}`, home: p.home, ...(p.window ? { window: p.window } : {}),
-    sits: SITS[p.sits], attaches: ATTACH[p.attaches], tags: [p.badge], level: lvl(p.level), often: 'region',
+    sits: SITS[p.sits], attaches: ATTACH[p.attaches], badge: p.badge, tags: p.tags ?? [], level: lvl(p.level), often: 'region',
     // Kanto only, by Kanto stage; `own`: placed by core/expansion/canonRun.ts (the lead's placer skips it, attach still applies); every battle already carries its own level offset.
     canon: s.id, kantoStages: p.stage, levelApplied: true, own: true,
   };

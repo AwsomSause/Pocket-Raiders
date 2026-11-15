@@ -557,7 +557,7 @@ function coSeen(content: Content, run: RunState, id: string): boolean {
 }
 
 /** A placed event only appears on a stage its placement allows (earliest absolute stage, in-region stage, stage tags). */
-function coFits(content: Content, run: RunState, id: string): boolean {
+export function coFits(content: Content, run: RunState, id: string): boolean {
   const p = content.coPlacement?.get(id);
   if (!p || !run.stage) return true;
   return fitsStage(p, stageNumber(content, run), run.stage.index + 1, stageTags(getTheme(content, run.stage.themeId).types, periodOf(run), tideOf(content, run)));

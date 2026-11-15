@@ -13,7 +13,7 @@ import { content } from './helpers';
 
 const begin = (seed: string, on = true) => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', ...(on ? { expansion: { kantoCanon: true } } : {}) }), 0);
 const kantoSeeds = (() => { const out: string[] = []; for (let i = 0; out.length < 30 && i < 400; i++) if (begin(`K${i}`, false).regionOrder[0] === 'kanto') out.push(`K${i}`); return out; })();
-const mine = [...content.events.values()].filter((e) => /^cs-kanto-(viridian|indigo|route|cast)-/.test(e.id));
+const mine = [...content.events.values()].filter((e) => !e.disabled && /^cs-kanto-(viridian|indigo|route|cast)-/.test(e.id));
 const stops = (run: ReturnType<typeof begin>, prefix: string) => run.stage!.map.nodes.flatMap((n) => n.sides.filter((s) => s.id.startsWith(prefix)).map((s) => s.eventId!));
 const nexts = (id: string) => content.events.get(id)!.choices.flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])]).flatMap((x) => (x.kind === 'addEvent' ? [x.eventId] : []));
 
@@ -25,10 +25,10 @@ describe('Viridian, Indigo, road and cast events: data', () => {
   });
   it('every road entry names a real event with a stage window', () => {
     for (const r of canonRoutesKanto.routes) expect(content.events.has(r.event), r.event).toBe(true);
-    expect(canonRoutesKanto.routes.filter((r) => r.event.startsWith('cs-kanto-route-')).length).toBe(16);
+    expect(canonRoutesKanto.routes.filter((r) => r.event.startsWith('cs-kanto-route-')).length).toBe(15); // the Badge Check is a fixed Stage 8 stop now (KANTO_PLACED_2)
   });
   it('Cerulean Cave only opens from the top of Victory Road, and the road is seven nodes', () => {
-    const into = mine.filter((e) => nexts(e.id).includes('cs-kanto-indigo-cave')).map((e) => e.id);
+    const into = mine.filter((e) => !e.disabled && nexts(e.id).includes('cs-kanto-cerulean-cave')).map((e) => e.id);
     expect(into).toEqual(['cs-kanto-indigo-road-n7']);
     let at = 'cs-kanto-indigo-road-n1', n = 1;
     while (nexts(at).some((t) => /road-n\d/.test(t))) { at = nexts(at).find((t) => /road-n\d/.test(t))!; n++; }

@@ -26,7 +26,8 @@ describe('Saffron canon: the event graph', () => {
   it('every addEvent target exists, and every room is reached from a gate', () => {
     const ids = [...content.events.keys()].filter((id) => id.startsWith(P) && !content.events.get(id)!.disabled).map((id) => id.slice(P.length));
     // train-arrive is the Magnet Train's follow-up, placed at the start of the next stage.
-    const gates = ['r25', 'tournament', 'dojo', 'copycat', 'silph', 'train', 'train-arrive', 'labyrinth', 'return-shuppet', 'return-duskull', 'return-drifloon', 'return-gastly', 'rival-return'];
+    // lament-flash is Sabrina's Lament (KANTO_PLACED_2), a follow-up after the Labyrinth.
+    const gates = ['r25', 'tournament', 'dojo', 'copycat', 'silph', 'train', 'train-arrive', 'lament-flash', 'labyrinth', 'return-shuppet', 'return-duskull', 'return-drifloon', 'return-gastly', 'rival-return'];
     const reach = new Set<string>(gates);
     for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id)) { expect(content.events.has(t), `${id} -> ${t}`).toBe(true); if (!reach.has(t.slice(P.length))) { reach.add(t.slice(P.length)); again = true; } } }
     expect([...reach].sort()).toEqual(ids.sort());

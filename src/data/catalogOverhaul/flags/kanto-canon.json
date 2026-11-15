@@ -8,15 +8,40 @@
     "cs-kanto-celadon-gamecorner-back",
     "cs-kanto-celadon-mansion-study",
     "cs-kanto-cerulean-burglary",
+    "cs-kanto-cinnabar-mansion-n2",
+    "cs-kanto-cinnabar-mansion-n3",
+    "cs-kanto-cinnabar-mansion-n4",
+    "cs-kanto-cinnabar-mansion-n5",
+    "cs-kanto-cinnabar-mansion-n6",
     "cs-kanto-fuchsia-snag",
     "cs-kanto-fuchsia-zoo",
+    "cs-kanto-lavender-tower-f7a",
+    "cs-kanto-saffron-lament-flash",
     "cs-kanto-saffron-silph"
+   ]
+  },
+  {
+   "key": "kanto-badge-shortcut",
+   "setBy": [
+    "cs-kanto-route-badge-check"
    ]
   },
   {
    "key": "kanto-burglary-solved",
    "setBy": [
     "cs-kanto-cerulean-burglary"
+   ]
+  },
+  {
+   "key": "kanto-cave-answer",
+   "setBy": [
+    "cs-kanto-cerulean-cave-leave"
+   ]
+  },
+  {
+   "key": "kanto-cave-first",
+   "setBy": [
+    "cs-kanto-cerulean-cave-n3"
    ]
   },
   {
@@ -112,9 +137,39 @@
    ]
   },
   {
+   "key": "kanto-fossil-revived",
+   "setBy": [
+    "cs-kanto-cinnabar-lab-hisui1",
+    "cs-kanto-cinnabar-lab-hisui2",
+    "cs-kanto-cinnabar-lab-hisui3",
+    "cs-kanto-cinnabar-lab-hisui4",
+    "cs-kanto-cinnabar-lab-hisui5",
+    "cs-kanto-cinnabar-lab-hoenn1",
+    "cs-kanto-cinnabar-lab-hoenn2",
+    "cs-kanto-cinnabar-lab-kalos1",
+    "cs-kanto-cinnabar-lab-kalos2",
+    "cs-kanto-cinnabar-lab-revive"
+   ]
+  },
+  {
    "key": "kanto-fuji-adopted",
    "setBy": [
     "cs-kanto-lavender-fuji"
+   ]
+  },
+  {
+   "key": "kanto-lapras-escort",
+   "setBy": [
+    "cs-kanto-route-lapras"
+   ]
+  },
+  {
+   "key": "kanto-mansion-diary",
+   "setBy": [
+    "cs-kanto-cinnabar-mansion-n2",
+    "cs-kanto-cinnabar-mansion-n3",
+    "cs-kanto-cinnabar-mansion-n4",
+    "cs-kanto-cinnabar-mansion-n5"
    ]
   },
   {
@@ -124,9 +179,21 @@
    ]
   },
   {
+   "key": "kanto-mansion-file",
+   "setBy": [
+    "cs-kanto-cinnabar-mansion-n5"
+   ]
+  },
+  {
    "key": "kanto-mansion-key",
    "setBy": [
     "cs-kanto-celadon-mansion-back"
+   ]
+  },
+  {
+   "key": "kanto-mansion-order",
+   "setBy": [
+    "cs-kanto-cinnabar-mansion-n3"
    ]
   },
   {
@@ -145,6 +212,25 @@
    "key": "kanto-museum-registry",
    "setBy": [
     "cs-kanto-pewter-museum-hall"
+   ]
+  },
+  {
+   "key": "kanto-newisland-dock",
+   "setBy": [
+    "cs-kanto-cinnabar-newisland-n1",
+    "cs-kanto-cinnabar-newisland-n5"
+   ]
+  },
+  {
+   "key": "kanto-newisland-done",
+   "setBy": [
+    "cs-kanto-cinnabar-newisland-after"
+   ]
+  },
+  {
+   "key": "kanto-newisland-stood",
+   "setBy": [
+    "cs-kanto-cinnabar-newisland-after"
    ]
   },
   {
@@ -182,6 +268,18 @@
    ]
   },
   {
+   "key": "kanto-pidgeotto-both",
+   "setBy": [
+    "cs-kanto-route-pidgeotto"
+   ]
+  },
+  {
+   "key": "kanto-pidgeotto-released",
+   "setBy": [
+    "cs-kanto-route-pidgeotto"
+   ]
+  },
+  {
    "key": "kanto-powerplant-cleared",
    "setBy": [
     "cs-kanto-lavender-powerplant-spoils",
@@ -198,6 +296,12 @@
    "key": "kanto-prank-friend",
    "setBy": [
     "cs-kanto-lavender-prank-r3"
+   ]
+  },
+  {
+   "key": "kanto-road-moltres",
+   "setBy": [
+    "cs-kanto-indigo-road-moltres"
    ]
   },
   {
@@ -248,6 +352,12 @@
     "cs-kanto-viridian-school-q7",
     "cs-kanto-viridian-school-q8",
     "cs-kanto-viridian-school-q9"
+   ]
+  },
+  {
+   "key": "kanto-seafoam-articuno",
+   "setBy": [
+    "cs-kanto-cinnabar-seafoam-pillar"
    ]
   },
   {
@@ -318,6 +428,12 @@
    ]
   },
   {
+   "key": "kanto-tournament-poster",
+   "setBy": [
+    "cs-kanto-route-poster"
+   ]
+  },
+  {
    "key": "kanto-tower-cleared",
    "setBy": [
     "cs-kanto-lavender-tower-f7"
@@ -345,6 +461,12 @@
    ]
   },
   {
+   "key": "kanto-tower-notebook",
+   "setBy": [
+    "cs-kanto-lavender-tower-f7a"
+   ]
+  },
+  {
    "key": "kanto-train-ride",
    "setBy": [
     "cs-kanto-saffron-train"
@@ -356,6 +478,12 @@
     "cs-kanto-celadon-perfume",
     "cs-kanto-celadon-perfume-decide",
     "cs-kanto-fuchsia-tauros-rock"
+   ]
+  },
+  {
+   "key": "kanto-volcano-herb",
+   "setBy": [
+    "cs-kanto-cinnabar-volcano-top"
    ]
   },
   {
@@ -397,7 +525,10 @@
     "cs-kanto-celadon-eevee-stones",
     "cs-kanto-celadon-rooftop-mother",
     "cs-kanto-cerulean-burglary",
-    "cs-kanto-cerulean-burglary-after"
+    "cs-kanto-cerulean-burglary-after",
+    "cs-kanto-cinnabar-mansion-n6",
+    "cs-kanto-cinnabar-mansion-n6b",
+    "cs-kanto-cinnabar-volcano-top"
    ]
   },
   {

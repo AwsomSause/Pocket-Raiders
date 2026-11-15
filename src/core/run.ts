@@ -124,6 +124,7 @@ import { recordAftermath } from './overhaul/aftermath';
 import { assignGrowthPaths, noteMapGrowth } from './overhaul/growth';
 import { tickChainTimers } from './overhaul/chains';
 import { coBattleBegin, coFled, coHealStop, coNodeEnter, coStageStart, coWildKo } from './events/coToolkit';
+import { kantoSweetAir } from './expansion/canonKantoRules';
 import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
 import { endLastResort } from './battle/lastResort';
 import { defaultPrep, startingResources } from './runPrep';
@@ -3072,6 +3073,7 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   const ctx = battleContext(content, run, rng, new Rng(run.rng.capture));
   ultraMarkBattle(run);
   coBattleBegin(content, run);
+  kantoSweetAir(content, run);
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
   run.rng.battle = rng.state;
   noteBattle(content, run);

@@ -41,6 +41,7 @@ export const CanonSpaceSchema = z.object({
     badge: z.string(), level: z.number().int().min(-2).max(2).nullable(), often: z.string(),
     /** A different home step at a later Kanto stage (Route 22: Step 3 at Stage 1, Step 18 at Stage 8). Keyed by stage number. */
     homes: z.record(z.string(), z.number().int().min(1).max(20)).optional(),
+    tags: z.array(z.string()).optional(),
   }).optional(),
 });
 export type CanonSpace = z.infer<typeof CanonSpaceSchema>;
@@ -66,7 +67,7 @@ export const CanonSpacesFileSchema = z.object({
 export type CanonSpacesFile = z.infer<typeof CanonSpacesFileSchema>;
 
 /** Row counts the content gate holds the catalog to. */
-export const CANON_KANTO_COUNTS = { towns: 10, slots: 11, spaces: 72 } as const;
+export const CANON_KANTO_COUNTS = { towns: 10, slots: 11, spaces: 80 } as const;
 
 /** The run's canon state (stored at run.expansion.canon). A menu is rolled once per slot and then kept, so reloading never re-rolls it. */
 export const CanonStateSchema = z.object({

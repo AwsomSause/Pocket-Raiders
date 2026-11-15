@@ -5,7 +5,7 @@
 import { z } from 'zod';
 import { canonKanto, canonKantoPlaced, canonRoutesKanto } from '../../data/expansion';
 import type { Content } from '../contentSchema';
-import { conditionMet } from '../events';
+import { coFits, conditionMet } from '../events';
 import { Rng, hashSeed } from '../rng';
 import { currentRegion } from '../regions';
 import type { RunState } from '../state';
@@ -75,7 +75,13 @@ export function addRouteCanonStops(content: Content, run: RunState): void {
     const event = content.events.get(r.event);
     if (!event || event.disabled || roll >= r.chance) continue;
     if (run.itemCounters?.[`event-seen:${event.id}`]) continue;
-    if (!event.requires.every((c) => conditionMet(content, run, c))) continue;
-    if (addStop(run.stage!, event.id, rng, 'cx-route', run.stage!.map.columns - 1)) placed++;
+    if (!event.requires.every((c) => conditionMet(content, run, c)) || !coFits(content, run, event.id)) continue;
+    // Catalog overhaul: a road space with a placed window (KANTO_PLACED_2, _5, _6) sits in it; the others keep a random node.
+    const space = canonKanto.spaces.find((s) => s.id === event.canon);
+    if (space?.placed) {
+      if (run.stage!.map.nodes.some((nd) => nd.sides.some((sd) => sd.eventId === event.id))) continue;
+      for (const node of nodesForSpace(run.stage!, space, rng)) node.sides.push({ id: `cx-route-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId: event.id });
+      placed++;
+    } else if (addStop(run.stage!, event.id, rng, 'cx-route', run.stage!.map.columns - 1)) placed++;
   }
 }

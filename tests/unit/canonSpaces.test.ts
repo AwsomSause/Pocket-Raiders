@@ -8,7 +8,7 @@ const menu = (seed: string, slot: string, flags: string[] = [], completed: strin
 describe('Kanto canon spaces catalog', () => {
   it('is clean and has the documented counts', () => {
     expect(canonSpaceGaps(canonKanto)).toEqual([]);
-    expect(canonKanto.spaces.length).toBe(72); // 71 + Haunter's Prank, scripted in KANTO_PLACED_1 (catalog overhaul)
+    expect(canonKanto.spaces.length).toBe(80); // 71 + Haunter's Prank (KANTO_PLACED_1) + the Route 23 Badge Check and seven game route moments (KANTO_PLACED_2)
   });
   it('keeps the director\'s mandatory spaces always placed', () => {
     for (const id of ['cs.kanto.vermilion.flightnorth', 'cs.kanto.saffron.route25', 'cs.kanto.pewter.forest', 'cs.kanto.pewter.moon', 'cs.kanto.lavender.tower']) expect(byId.get(id)?.appears).toBe('always');
@@ -70,7 +70,9 @@ describe('Town Roll', () => {
   });
   it('opens the Indigo finale with Victory Road, and Cerulean Cave only after it', () => {
     expect(menu('I', 'finale')).toEqual(['cs.kanto.indigo.road']);
-    expect(menu('I', 'finale', [], ['cs.kanto.indigo.road'])).toContain('cs.kanto.cerulean.cave');
+    // KANTO_PLACED_2: Cerulean Cave is locked; only the Victory Road summit opens it (an addEvent, not a menu pick).
+    expect(menu('I', 'finale', [], ['cs.kanto.indigo.road'])).not.toContain('cs.kanto.cerulean.cave');
+    expect(byId.get('cs.kanto.cerulean.cave')?.appears).toBe('locked');
   });
   it('does not touch the run RNG streams (pure: no shared state)', () => {
     const a = menu('Z', 'stage-4');

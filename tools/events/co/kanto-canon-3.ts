@@ -244,7 +244,9 @@ const lose = (id: string, count = 1): Json => ({ kind: 'loseItem', id, count });
   const look = (label: string, text: string, _key: string) => c(label, o(text, s.open('clues')));
   s.entry('Perfume Heist',
     'A perfume garden, rows and rows of it, and the air so thick with scent you can lean on it. Three new "gardener girls" in headscarves. One\'s very tall. One has a moustache. One is about two feet high and keeps its hat pulled down. The tall one: "We\'re the new girls! We love... leaves!" The one with the moustache: "And the smells. The valuable, valuable smells." The short one: "Meow— me, oh my, what a lovely day." Head gardener, Miss Rosalind Akers: "They came this morning. They\'re very keen. They\'ve watered the gravel twice."',
-    [c('Look around first.', o('You may examine three things before deciding.', s.open('clues'))), ...decide]);
+    [c('Look around first.', o('You may examine three things before deciding.', s.open('clues'))), ...decide],
+    // KANTO_PLACED_2, Jessie, James and Meowth: "A running line. Each time they're met, Meowth counts."
+    { remembers: [{ id: 'count', when: [is('kanto-trio-met')], notice: 'The short one, under its hat, is counting on its claws: "That\'s another one, twerp. We\'re keepin\' a list."' }] });
   s.room('clues', 'Perfume Heist: Looking Around', 'The three new gardeners are being extremely busy about nothing, and keep glancing at you.',
     [look('The wheelbarrow.', 'It\'s full of bottles, under one leaf.', 'kanto-perfume-barrow'), look('The short one\'s hat.', 'There\'s a coin under it. A large gold one. On its forehead.', 'kanto-perfume-hat'),
       look('The watering can.', 'It\'s got an R on it, in pen, crossed out, with "G for Gardener" written over.', 'kanto-perfume-can'), c('Decide.', o('You\'ve seen enough.', s.open('decide')))]);
@@ -279,8 +281,8 @@ const lose = (id: string, count = 1): Json => ({ kind: 'loseItem', id, count });
   const s = space(E, { id: 'cs.kanto.fuchsia.tauros', town: 'fuchsia', name: 'Tauros Stampede', kind: 'EV', appears: 'roll', requires: { spaces: ['cs.kanto.fuchsia.safari'] }, flags: ['kanto.tauros.dodged', 'kanto.trio.met'], section: `${DOC}: Tauros Stampede`,
     placed: { stage: [5], home: 12, window: [12, 14], sits: 'optional', attaches: 'after', badge: 'A dust cloud', level: 0, often: 'Once per run' } });
   const balls = [has('safari-ball')];
-  const caught = (more: string) => o(`The Ball shakes once in the dust and holds. A Tauros with Intimidate. ${more}`, join(['tauros']), flag('kanto-tauros-caught'), lose('safari-ball'), s.open('more'));
-  const net = o('A net\'s strung between two trees. The herd goes through it, and through the three people holding it, without slowing. No battle. James, from a tree, afterwards: "I counted thirty. I think I was hit by all of them."', flag('kanto-trio-met'));
+  const caught = (more: string) => o(`The Ball shakes once in the dust and holds. A Tauros with Intimidate. ${more}`, join(['tauros'], { ability: 'intimidate' }), flag('kanto-tauros-caught'), lose('safari-ball'), s.open('more'));
+  const net = o('A net\'s strung between two trees. The herd goes through it, and through the three people holding it, without slowing. No battle. James, from a tree, afterwards: "I counted thirty. I think I was hit by all of them." Meowth, from under the net, counting on its claws: "That\'s another one, twerp. We\'re keepin\' a list."', flag('kanto-trio-met'));
   s.entry('Tauros Stampede',
     'The ground hums. The horizon\'s the wrong colour, and it\'s getting closer. Tauros. Thirty of them. They aren\'t angry. They\'re just going somewhere, and you\'re standing in it. The odds are shown.',
     [
@@ -300,7 +302,7 @@ const lose = (id: string, count = 1): Json => ({ kind: 'loseItem', id, count });
       c('That\'s enough.', o('You let the rest of them go. They have somewhere to be.'))]);
   // Remembers: if the player dodged, the one that looked back is in the same spot, and comes with a single ball.
   s.room('back', 'Tauros Stampede: The One That Looked Back', 'It\'s in the same spot. It has been, by the look of the grass, for some time.',
-    [c('Hold out one Ball.', o('It walks up to the Ball and puts its nose on it. 100%.', join(['tauros']), lose('safari-ball')), { requires: balls }), c('Leave it be.', o('It watches you go, and doesn\'t follow, and you think it understands.'))],
+    [c('Hold out one Ball.', o('It walks up to the Ball and puts its nose on it. 100%.', join(['tauros'], { ability: 'intimidate' }), lose('safari-ball')), { requires: balls }), c('Leave it be.', o('It watches you go, and doesn\'t follow, and you think it understands.'))],
     later({ requires: [is('kanto-tauros-dodged'), not('kanto-tauros-caught')] }));
   followup(s.id('back'), [5]);
 }
