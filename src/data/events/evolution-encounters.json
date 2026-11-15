@@ -136,8 +136,10 @@
   },
   {
    "id": "evo-pidgeys-resolve",
-   "name": "Pidgey's Resolve",
+   "disabled": true,
+   "name": "Pidgey's Resolve (old card, replaced by the sky.* story)",
    "group": "Evolution Encounters",
+   "disabled": true,
    "stop": "event",
    "rarity": "uncommon",
    "minStage": 2,

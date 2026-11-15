@@ -2,7 +2,7 @@
  "events": [
   {
    "id": "cs-kanto-saffron-r25",
-   "name": "Route 25: The Horde",
+   "name": "Route 25: The Angry Mankey",
    "group": "Canon Spaces: Kanto",
    "stop": "event",
    "rarity": "common",
@@ -14,35 +14,97 @@
     "effect": "none",
     "tint": "#6b4a3a"
    },
-   "intro": "A horde of Angry Mankey spills onto the road and will not let you pass. Five of them, one after another.",
+   "intro": "The road is lined with torn sacks and spilled grain. Pale tracks lead into the grass, and from the grass comes a sound you can feel in your teeth: a whole troop of Mankey, screaming. They are not angry at you. They have not eaten properly in a week, and someone has been taking what they stored for the winter. You are only the next stranger on the road, and they have no more patience left.",
    "choices": [
     {
-     "label": "Stand your ground",
+     "label": "Face the troop",
      "success": {
-      "text": "The first three rush you together.",
-      "effects": [],
-      "battle": {
-       "kind": "wild",
-       "species": [
-        "mankey"
-       ],
-       "chain": 3,
-       "levelBonus": 1,
-       "win": [
-        {
-         "kind": "addEvent",
-         "eventId": "cs-kanto-saffron-r25-breath"
-        }
-       ]
-      }
+      "text": "You set your feet. The screaming stops all at once, and that is worse.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-r25-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the torn sacks first",
+     "success": {
+      "text": "The trail bends away from the road, toward a thread of smoke. Someone has been very careless about hiding what they took.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-r25-camp"
+       }
+      ]
      }
     }
    ],
    "canon": "cs.kanto.saffron.route25"
   },
   {
-   "id": "cs-kanto-saffron-r25-breath",
-   "name": "Route 25: A Breather",
+   "id": "cs-kanto-saffron-r25-camp",
+   "name": "Route 25: The Thieves' Camp",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a2a"
+   },
+   "intro": "A rough camp in a hollow: three trainers, a cookfire, and a stack of the troop's food sacks they have stopped bothering to hide. A kid's drawing is pinned to the tent: a Mankey with a crown. They took this winter's food from something that has never once asked anyone for anything.",
+   "choices": [
+    {
+     "label": "Take the food back",
+     "success": {
+      "text": "Nobody wins an argument against a returned sack and a raised fist. The camp breaks and runs, and you lift the heaviest sack onto your shoulder. It is lighter than it should be. They had already eaten a good part of it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Food Thieves",
+       "size": 2,
+       "team": [
+        "meowth",
+        "raticate"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "r25-food",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-r25-1"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it, and face the troop",
+     "success": {
+      "text": "You turn back. The troop is still waiting, and still hungry.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-r25-1"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-r25-1",
+   "name": "Route 25: The First Three",
    "group": "Canon Spaces: Kanto",
    "stop": "delve",
    "rarity": "common",
@@ -54,41 +116,34 @@
     "effect": "none",
     "tint": "#6b4a3a"
    },
-   "intro": "Three down. The last two Mankey are working themselves into a rage behind the rocks.",
+   "intro": "The grass breaks open. Three Mankey come at once, shoulder to shoulder, and their eyes are not rage so much as hunger wearing rage like a coat. There will be no breaks between them. The troop has fought this way for a week.",
    "choices": [
     {
-     "label": "Tend your team first",
+     "label": "Hold the line",
      "success": {
-      "text": "You get a minute to patch everyone up.",
-      "effects": [
-       {
-        "kind": "heal",
-        "share": 0.35
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "cs-kanto-saffron-r25-fourth"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Press on",
-     "success": {
-      "text": "No time to lose.",
-      "effects": [
-       {
-        "kind": "addEvent",
-        "eventId": "cs-kanto-saffron-r25-fourth"
-       }
-      ]
+      "text": "Three bodies hit you at once. You do not get a breath, and you were not going to be offered one.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "mankey"
+       ],
+       "chain": 3,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-r25-4"
+        }
+       ]
+      }
      }
     }
    ],
    "room": true
   },
   {
-   "id": "cs-kanto-saffron-r25-fourth",
+   "id": "cs-kanto-saffron-r25-4",
    "name": "Route 25: The Fourth",
    "group": "Canon Spaces: Kanto",
    "stop": "delve",
@@ -101,12 +156,12 @@
     "effect": "none",
     "tint": "#6b4a3a"
    },
-   "intro": "The fourth Mankey screams and charges.",
+   "intro": "Three are down and breathing hard. No potion, no rest. The fourth Mankey was watching the whole fight, and it has learned something from watching. It does not scream. It simply comes.",
    "choices": [
     {
      "label": "Meet it",
      "success": {
-      "text": "It goes down, and the last one steps out.",
+      "text": "It is smarter than the first three, and angrier, because it understood what you did to its friends.",
       "effects": [],
       "battle": {
        "kind": "wild",
@@ -117,7 +172,7 @@
        "win": [
         {
          "kind": "addEvent",
-         "eventId": "cs-kanto-saffron-r25-wrath"
+         "eventId": "cs-kanto-saffron-r25-5"
         }
        ]
       }
@@ -127,8 +182,8 @@
    "room": true
   },
   {
-   "id": "cs-kanto-saffron-r25-wrath",
-   "name": "Route 25: Mankey's Wrath",
+   "id": "cs-kanto-saffron-r25-5",
+   "name": "Route 25: The Fifth Stands Still",
    "group": "Canon Spaces: Kanto",
    "stop": "delve",
    "rarity": "common",
@@ -140,59 +195,289 @@
     "effect": "none",
     "tint": "#6b4a3a"
    },
-   "intro": "The fifth is no Mankey. A Primeape, wild with rage, uses Rage again and again.",
+   "intro": "The fifth Mankey does not charge. It walks out from the rocks and plants itself in front of the other four, who have crawled back to its feet, scratched and silent. It spreads its arms. It is not here to win. It is here so that nobody else has to be hit again. It looks at you, and for one breath you understand that you are the thing that frightens it.",
    "choices": [
     {
-     "label": "Calm the Primeape down the hard way",
+     "label": "Meet its eyes",
      "success": {
-      "text": "The horde falls quiet. One Mankey steps out of the grass and sets its jaw: it wants to come with you.",
+      "text": "It does not attack first. It waits for you to decide what kind of person you are.",
       "effects": [],
       "battle": {
        "kind": "wild",
        "species": [
-        "primeape"
+        "mankey"
        ],
        "levelBonus": 2,
-       "foeMoves": [
-        "rage"
-       ],
+       "rule": {
+        "foeStands": 1
+       },
        "win": [
         {
-         "kind": "join",
-         "species": [
-          "mankey"
-         ],
-         "types": [],
-         "levelBonus": 0
-        },
-        {
-         "kind": "teachMove",
-         "move": "swords-dance",
-         "species": "mankey",
-         "slot": 2
-        },
-        {
-         "kind": "teachMove",
-         "move": "mach-punch",
-         "species": "mankey",
-         "slot": 3
-        },
-        {
-         "kind": "flag",
-         "key": "kanto-mankey",
-         "amount": 1
-        },
-        {
-         "kind": "canon",
-         "action": "flawless",
-         "species": []
-        },
-        {
          "kind": "addEvent",
-         "eventId": "cs-kanto-saffron-tournament"
+         "eventId": "cs-kanto-saffron-r25-after"
         }
        ]
       }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-r25-after",
+   "name": "Route 25: The Quiet After",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b4a3a"
+   },
+   "intro": "The fifth Mankey lies in the grass, and the other four crowd around it, shaking. Nobody screams now. The whole troop is looking at you and at each other, and it is the kind of quiet in which a person decides who they are.",
+   "choices": [
+    {
+     "label": "Go find the thieves' camp",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "r25-food",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You look back at the troop. They watch you go. It might be the first time in a week that something has walked toward the thieves instead of away.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-r25-camp-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Accept the troop's thanks",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "r25-food",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "The troop saw you come back with the sack. They do not understand every word, but they understand that.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-r25-thanks"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer your hand to the fifth Mankey",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "r25-food",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "It sniffs your hand for a long time. It is deciding whether you are as hungry for a fight as it was.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-r25-claim"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-r25-camp-after",
+   "name": "Route 25: The Thieves' Camp (After)",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#4a3a2a"
+   },
+   "intro": "The camp is exactly where the tracks said. The thieves heard the screaming stop and hoped it meant the troop had gone. They are packing the sacks they have not yet eaten into a cart. They see you, and their faces do the arithmetic.",
+   "choices": [
+    {
+     "label": "Take the food back",
+     "success": {
+      "text": "It is easier than it should be. They were already half-ashamed. You carry the last sack back by hand, and as you walk the road you hear the troop begin to sing, which is not a word anyone has taught them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Food Thieves",
+       "size": 2,
+       "team": [
+        "meowth",
+        "raticate"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "r25-food",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-r25-thanks"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let it go",
+     "success": {
+      "text": "You leave the cart where it stands. The troop will remember that.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-r25-claim"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-r25-thanks",
+   "name": "Route 25: What the Troop Gave Back",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a6a3a"
+   },
+   "intro": "The fifth Mankey rises, and the troop parts around it. It walks to the sack you carried and puts a hand flat on the grain, and then it walks to you. It is not a request. It is the first Mankey that has ever stood between a troop and a stranger and then been fed by the stranger. It will come with you, and the rest of the troop will be waiting in the stands.",
+   "choices": [
+    {
+     "label": "Welcome Mankey into your team",
+     "success": {
+      "text": "It bumps its forehead against your leg, once, hard. The troop watches you go. Not one of them looks angry any more. Mankey will be looking for them in the crowd.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "mankey"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "friendship": 40
+       },
+       {
+        "kind": "teachMove",
+        "move": "swords-dance",
+        "species": "mankey",
+        "slot": 2
+       },
+       {
+        "kind": "teachMove",
+        "move": "mach-punch",
+        "species": "mankey",
+        "slot": 3
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-mankey",
+        "amount": 1
+       },
+       {
+        "kind": "canon",
+        "action": "flawless",
+        "species": []
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-tournament"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-r25-claim",
+   "name": "Route 25: A Mankey Steps Out",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b4a3a"
+   },
+   "intro": "The fifth Mankey steps out of the circle. It does not trust you, but it has seen what you are willing to fight for. The other four lower their eyes. The troop is still hungry, and it is not yours to feed today. It will follow you and ask nothing, which is its own way of saying a great deal.",
+   "choices": [
+    {
+     "label": "Welcome Mankey into your team",
+     "success": {
+      "text": "It walks beside you and never quite looks back. The troop watches until the road bends.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "mankey"
+        ],
+        "types": [],
+        "levelBonus": 0
+       },
+       {
+        "kind": "teachMove",
+        "move": "swords-dance",
+        "species": "mankey",
+        "slot": 2
+       },
+       {
+        "kind": "teachMove",
+        "move": "mach-punch",
+        "species": "mankey",
+        "slot": 3
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-mankey",
+        "amount": 1
+       },
+       {
+        "kind": "canon",
+        "action": "flawless",
+        "species": []
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-tournament"
+       }
+      ]
      }
     }
    ],
@@ -209,10 +494,11 @@
    "requires": [],
    "scene": {
     "cast": [],
+    "tourney": 0,
     "effect": "none",
     "tint": "#7a3b2e"
    },
-   "intro": "A banner over the dojo yard: THE SAFFRON FIGHTING TOURNAMENT. Thirty-two fighters, Fighting types only, one Pokémon each. The organizer eyes your Mankey.",
+   "intro": "A banner stretched across the dojo yard: THE SAFFRON FIGHTING TOURNAMENT. Thirty-two fighters, Fighting types only, one Pokémon each. The organizer, a woman with a clipboard and a bruise on her chin, looks at your Mankey the way a coach looks at a student they have not met yet. \"Only that one steps in,\" she says. \"Everything the rest of you know has to stay at the rail.\"",
    "choices": [
     {
      "label": "Enter with Mankey",
@@ -223,7 +509,7 @@
       }
      ],
      "success": {
-      "text": "The sign-up sheet has thirty-two names. Yours goes at the bottom. Only your fighter steps onto the mat.",
+      "text": "The sign-up sheet has thirty-two names. Yours goes at the bottom, in your own hand. Only your fighter will step onto the mat. Everyone else on your team goes to the rail to watch, and not one of them is happy about it.",
       "effects": [
        {
         "kind": "canon",
@@ -235,7 +521,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "cs-kanto-saffron-t1"
+        "eventId": "cs-kanto-saffron-tc"
        }
       ]
      }
@@ -249,7 +535,7 @@
       }
      ],
      "success": {
-      "text": "The sign-up sheet has thirty-two names. Yours goes at the bottom. Only your fighter steps onto the mat.",
+      "text": "The sign-up sheet has thirty-two names. Yours goes at the bottom, in your own hand. Only your fighter will step onto the mat. Everyone else on your team goes to the rail to watch, and not one of them is happy about it.",
       "effects": [
        {
         "kind": "canon",
@@ -261,7 +547,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "cs-kanto-saffron-t1"
+        "eventId": "cs-kanto-saffron-tc"
        }
       ]
      }
@@ -278,6 +564,65 @@
    "room": true
   },
   {
+   "id": "cs-kanto-saffron-tc",
+   "name": "Tournament: The Crowd",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tourney": 0,
+    "effect": "none",
+    "tint": "#7a3b2e"
+   },
+   "intro": "A bell. The gate opens. A noise comes up out of the stands like a wave breaking, and over the PA, a voice that has been waiting all year to say this: \"Ladies and gentlemen, thirty-two fighters, five rounds, one belt!\" A commentary desk beside the mat has two seats: a retired champion with a broken nose, and a young announcer who has never once stopped talking.",
+   "choices": [
+    {
+     "label": "Look to the stands",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "r25-food",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "Row after row of brown fur. The whole Mankey troop came down from Route 25 and is standing on the benches, stamping their feet. Someone has hung a sack of grain from the rail like a banner. Your Mankey sees them and does not move for a long moment.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-t1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look to the stands",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "r25-food",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You scan the rows for brown fur and find none. No one is there for your Mankey. It stands very straight, and it has stopped looking.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-t1"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
    "id": "cs-kanto-saffron-t1",
    "name": "Tournament: Round of 32",
    "group": "Canon Spaces: Kanto",
@@ -288,23 +633,23 @@
    "requires": [],
    "scene": {
     "cast": [],
+    "tourney": 1,
     "effect": "none",
     "tint": "#7a3b2e"
    },
-   "intro": "Round of 32. One Pokémon each, matched to yours. If yours faints, you are out.",
+   "intro": "Round of 32. A Machop with a twin on the rail: the twin is a coach, bellowing instructions and flinching at every hit. \"That one is somebody's whole family,\" says the young announcer. \"Do not take it personally.\"",
    "choices": [
     {
      "label": "Step into the ring",
      "success": {
-      "text": "Round of 32: a fighter your size.",
+      "text": "Round of 32: Machop steps up, and the crowd rises with it.",
       "effects": [],
       "battle": {
        "kind": "trainer",
-       "name": "Brawler",
+       "name": "Machop",
        "size": 1,
        "species": [
-        "machop",
-        "mankey"
+        "machop"
        ],
        "types": [
         "fighting"
@@ -326,7 +671,7 @@
         },
         {
          "kind": "addEvent",
-         "eventId": "cs-kanto-saffron-t2"
+         "eventId": "cs-kanto-saffron-tm1"
         }
        ],
        "lose": [
@@ -337,6 +682,106 @@
         }
        ]
       }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-tm1",
+   "name": "Tournament: Training Montage 1",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tourney": 2,
+    "effect": "none",
+    "tint": "#7a3b2e"
+   },
+   "intro": "It goes down fighting, and its twin leaps the rail and carries it out in its arms. The crowd applauds that harder than the knockout. The cafeteria-bench montage: you grab a rice ball in one fist and a clipboard in the other. The announcer calls this the quiet part, and says nothing for a moment. Pick what to train: 4 fights are still ahead.",
+   "choices": [
+    {
+     "label": "Power",
+     "success": {
+      "text": "Heavy bag, tyre drags, stones. Your fighter hits harder for the rest of the bracket. You and your fighter climb the dojo steps again and again until the sun hits the hill.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Training: Power",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "value": 1.1
+         }
+        ],
+        "battles": 4,
+        "until": "battle"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-t2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Guard",
+     "success": {
+      "text": "Slow drills, a hundred counters, learning how to take a hit. Your fighter takes the rest of the bracket a little more easily. You and your fighter climb the dojo steps again and again until the sun hits the hill.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Training: Guard",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spd",
+          "value": 1.1
+         }
+        ],
+        "battles": 4,
+        "until": "battle"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-t2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Footwork",
+     "success": {
+      "text": "Ladders, ropes, sidesteps until it stops thinking about its feet. Your fighter moves faster for the rest of the bracket. You and your fighter climb the dojo steps again and again until the sun hits the hill.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Training: Footwork",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 1.15
+         }
+        ],
+        "battles": 4,
+        "until": "battle"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-t2"
+       }
+      ]
      }
     }
    ],
@@ -353,23 +798,23 @@
    "requires": [],
    "scene": {
     "cast": [],
+    "tourney": 2,
     "effect": "none",
     "tint": "#7a3b2e"
    },
-   "intro": "Round of 16. One Pokémon each, matched to yours. If yours faints, you are out.",
+   "intro": "Round of 16. A Hawlucha who spends more time on the ropes than on the mat. It points at people in the crowd, it blows kisses, it waves at the cameras. \"It plays to the crowd,\" says the old champion, \"and it is better than it pretends. Watch its feet.\"",
    "choices": [
     {
      "label": "Step into the ring",
      "success": {
-      "text": "Round of 16: a fighter your size.",
+      "text": "Round of 16: Hawlucha steps up, and the crowd rises with it.",
       "effects": [],
       "battle": {
        "kind": "trainer",
-       "name": "Black Belt",
+       "name": "Hawlucha",
        "size": 1,
        "species": [
-        "meditite",
-        "timburr"
+        "hawlucha"
        ],
        "types": [
         "fighting"
@@ -377,7 +822,8 @@
        "pseudo": true,
        "rule": {
         "matchLead": true,
-        "bstMatch": true
+        "bstMatch": true,
+        "fanClub": true
        },
        "win": [
         {
@@ -391,7 +837,7 @@
         },
         {
          "kind": "addEvent",
-         "eventId": "cs-kanto-saffron-t3"
+         "eventId": "cs-kanto-saffron-tm2"
         }
        ],
        "lose": [
@@ -408,6 +854,106 @@
    "room": true
   },
   {
+   "id": "cs-kanto-saffron-tm2",
+   "name": "Tournament: Training Montage 2",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tourney": 3,
+    "effect": "none",
+    "tint": "#7a3b2e"
+   },
+   "intro": "It bows to the crowd in defeat, then, quietly, bows to you. The pose was a mask for something sharper. A rooftop at dusk. Somewhere below, a radio plays a song your fighter hums without knowing the words. A scrap of paper falls from your pocket: the bracket, with your name circled in your own handwriting. Pick what to train: 3 fights are still ahead.",
+   "choices": [
+    {
+     "label": "Power",
+     "success": {
+      "text": "Heavy bag, tyre drags, stones. Your fighter hits harder for the rest of the bracket. You skip stones on the roof tiles. Your fighter throws punches at the dusk until its knuckles ring.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Training: Power",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "value": 1.1
+         }
+        ],
+        "battles": 3,
+        "until": "battle"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-t3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Guard",
+     "success": {
+      "text": "Slow drills, a hundred counters, learning how to take a hit. Your fighter takes the rest of the bracket a little more easily. You skip stones on the roof tiles. Your fighter throws punches at the dusk until its knuckles ring.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Training: Guard",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spd",
+          "value": 1.1
+         }
+        ],
+        "battles": 3,
+        "until": "battle"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-t3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Footwork",
+     "success": {
+      "text": "Ladders, ropes, sidesteps until it stops thinking about its feet. Your fighter moves faster for the rest of the bracket. You skip stones on the roof tiles. Your fighter throws punches at the dusk until its knuckles ring.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Training: Footwork",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 1.15
+         }
+        ],
+        "battles": 3,
+        "until": "battle"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-t3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
    "id": "cs-kanto-saffron-t3",
    "name": "Tournament: Quarterfinal",
    "group": "Canon Spaces: Kanto",
@@ -418,23 +964,23 @@
    "requires": [],
    "scene": {
     "cast": [],
+    "tourney": 3,
     "effect": "none",
     "tint": "#7a3b2e"
    },
-   "intro": "Quarterfinal. One Pokémon each, matched to yours. If yours faints, you are out.",
+   "intro": "Quarterfinal. A Throh in a belt so worn it is the colour of dust. It bows to the crowd, to the referee, to the officials, and to you. \"The politest fighter in Saffron,\" says the announcer. \"That is not the same as the gentlest.\"",
    "choices": [
     {
      "label": "Step into the ring",
      "success": {
-      "text": "Quarterfinal: a fighter your size.",
+      "text": "Quarterfinal: Throh steps up, and the crowd rises with it.",
       "effects": [],
       "battle": {
        "kind": "trainer",
-       "name": "Kickboxer",
+       "name": "Throh",
        "size": 1,
        "species": [
-        "hitmonlee",
-        "hitmonchan"
+        "throh"
        ],
        "types": [
         "fighting"
@@ -456,7 +1002,7 @@
         },
         {
          "kind": "addEvent",
-         "eventId": "cs-kanto-saffron-t4"
+         "eventId": "cs-kanto-saffron-tm3"
         }
        ],
        "lose": [
@@ -467,6 +1013,106 @@
         }
        ]
       }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-tm3",
+   "name": "Tournament: Training Montage 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tourney": 4,
+    "effect": "none",
+    "tint": "#7a3b2e"
+   },
+   "intro": "It rises, bows once more, and shakes your fighter's hand with both of its own. You do not remember when you last felt that respected by someone you had just beaten. The sun is rising, and your fighter is already up, shadow-boxing the first light. The Throh from the last round is outside the gate, bowing to the sunrise. It does not say anything. It holds the door. Pick what to train: 2 fights are still ahead.",
+   "choices": [
+    {
+     "label": "Power",
+     "success": {
+      "text": "Heavy bag, tyre drags, stones. Your fighter hits harder for the rest of the bracket. Someone left a clean towel on the bench. Nobody will admit to it.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Training: Power",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "value": 1.1
+         }
+        ],
+        "battles": 2,
+        "until": "battle"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-t4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Guard",
+     "success": {
+      "text": "Slow drills, a hundred counters, learning how to take a hit. Your fighter takes the rest of the bracket a little more easily. Someone left a clean towel on the bench. Nobody will admit to it.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Training: Guard",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spd",
+          "value": 1.1
+         }
+        ],
+        "battles": 2,
+        "until": "battle"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-t4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Footwork",
+     "success": {
+      "text": "Ladders, ropes, sidesteps until it stops thinking about its feet. Your fighter moves faster for the rest of the bracket. Someone left a clean towel on the bench. Nobody will admit to it.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Training: Footwork",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 1.15
+         }
+        ],
+        "battles": 2,
+        "until": "battle"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-t4"
+       }
+      ]
      }
     }
    ],
@@ -483,23 +1129,23 @@
    "requires": [],
    "scene": {
     "cast": [],
+    "tourney": 4,
     "effect": "none",
     "tint": "#7a3b2e"
    },
-   "intro": "Semifinal. One Pokémon each, matched to yours. If yours faints, you are out.",
+   "intro": "Semifinal. A Hitmonchan who has not made a sound in four tournaments: no cry, no grunt. Its fists speak. The announcer lowers his voice. \"Nobody has ever heard it say a word. The people who have fought it say they did not need to.\"",
    "choices": [
     {
      "label": "Step into the ring",
      "success": {
-      "text": "Semifinal: a fighter your size.",
+      "text": "Semifinal: Hitmonchan steps up, and the crowd rises with it.",
       "effects": [],
       "battle": {
        "kind": "trainer",
-       "name": "Semifinalist",
+       "name": "Hitmonchan",
        "size": 1,
        "species": [
-        "machoke",
-        "poliwrath"
+        "hitmonchan"
        ],
        "types": [
         "fighting"
@@ -507,7 +1153,8 @@
        "pseudo": true,
        "rule": {
         "matchLead": true,
-        "bstMatch": true
+        "bstMatch": true,
+        "silent": true
        },
        "win": [
         {
@@ -521,7 +1168,7 @@
         },
         {
          "kind": "addEvent",
-         "eventId": "cs-kanto-saffron-t5"
+         "eventId": "cs-kanto-saffron-tm4"
         }
        ],
        "lose": [
@@ -538,7 +1185,119 @@
    "room": true
   },
   {
-   "id": "cs-kanto-saffron-t5",
+   "id": "cs-kanto-saffron-tm4",
+   "name": "Tournament: Training Montage 4",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tourney": 5,
+    "effect": "none",
+    "tint": "#7a3b2e"
+   },
+   "intro": "It does not cry out when it falls. It lifts its eyes to yours, and for the first time in four years the crowd hears it exhale. That is the loudest thing in the building. The night before the final. The stadium is empty, chairs stacked, floor lights on low. Somewhere a faint cheer from the memory of the afternoon. Your fighter walks out alone, stands in the ring, and stares at the other side. Pick what to train: 1 fight is still ahead.",
+   "choices": [
+    {
+     "label": "Power",
+     "success": {
+      "text": "Heavy bag, tyre drags, stones. Your fighter hits harder for the rest of the bracket. There is a single rival now, on the other side of a wall, awake too.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Training: Power",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "value": 1.1
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-saffron-t5a",
+         "cs-kanto-saffron-t5b",
+         "cs-kanto-saffron-t5c"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Guard",
+     "success": {
+      "text": "Slow drills, a hundred counters, learning how to take a hit. Your fighter takes the rest of the bracket a little more easily. There is a single rival now, on the other side of a wall, awake too.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Training: Guard",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spd",
+          "value": 1.1
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-saffron-t5a",
+         "cs-kanto-saffron-t5b",
+         "cs-kanto-saffron-t5c"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Footwork",
+     "success": {
+      "text": "Ladders, ropes, sidesteps until it stops thinking about its feet. Your fighter moves faster for the rest of the bracket. There is a single rival now, on the other side of a wall, awake too.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Training: Footwork",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 1.15
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-saffron-t5a",
+         "cs-kanto-saffron-t5b",
+         "cs-kanto-saffron-t5c"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-t5a",
    "name": "Tournament: The Final",
    "group": "Canon Spaces: Kanto",
    "stop": "delve",
@@ -548,19 +1307,20 @@
    "requires": [],
    "scene": {
     "cast": [],
+    "tourney": 5,
     "effect": "none",
     "tint": "#7a3b2e"
    },
-   "intro": "The final. Across the mat stands the rival Mankey: the same kind as yours, the same level, and it wants the belt as much as you do.",
+   "intro": "The final. Across the mat stands a fighter of your own kind. Its trainer is a tired woman who runs a dojo with a leaking roof. The belt is prize money. If it wins, the dojo stays open and nine children keep their lessons. It looks at your fighter the way you look at your own, and neither of you wants to hurt the other.",
    "choices": [
     {
      "label": "Step into the ring",
      "success": {
-      "text": "The crowd chants for both of you.",
+      "text": "The crowd chants for both of you. In the stands, nobody sits.",
       "effects": [],
       "battle": {
        "kind": "trainer",
-       "name": "Rival Fighter",
+       "name": "The Dojo Rival",
        "size": 1,
        "mirror": true,
        "types": [
@@ -568,7 +1328,8 @@
        ],
        "pseudo": true,
        "rule": {
-        "evolveMid": true
+        "evolveMid": true,
+        "fanClub": true
        },
        "win": [
         {
@@ -585,9 +1346,18 @@
          "amount": 1
         },
         {
+         "kind": "moment",
+         "text": "Won the Saffron Fighting Tournament and the belt: the title, Dynamic Punch and Champion's Entrance.",
+         "importance": 80
+        },
+        {
          "kind": "canon",
          "action": "unsolo",
          "species": []
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-t-win1"
         }
        ],
        "lose": [
@@ -602,6 +1372,203 @@
     }
    ],
    "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-t5b",
+   "name": "Tournament: The Final",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tourney": 5,
+    "effect": "none",
+    "tint": "#7a3b2e"
+   },
+   "intro": "The final. Across the mat stands a fighter of your own kind, and it is crying before the bell. Its trainer is a boy who lost his father, a Black Belt who once fought in this ring. The belt is the only thing he has ever wanted. The announcer finds no joke for it.",
+   "choices": [
+    {
+     "label": "Step into the ring",
+     "success": {
+      "text": "The crowd chants for both of you. In the stands, nobody sits.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Fighter Who Cried",
+       "size": 1,
+       "mirror": true,
+       "types": [
+        "fighting"
+       ],
+       "pseudo": true,
+       "rule": {
+        "evolveMid": true,
+        "fanClub": true
+       },
+       "win": [
+        {
+         "kind": "canon",
+         "action": "champion",
+         "species": [
+          "mankey",
+          "primeape"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-tournament-won",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Won the Saffron Fighting Tournament and the belt: the title, Dynamic Punch and Champion's Entrance.",
+         "importance": 80
+        },
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-t-win1"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-t5c",
+   "name": "Tournament: The Final",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tourney": 5,
+    "effect": "none",
+    "tint": "#7a3b2e"
+   },
+   "intro": "The final. Across the mat stands a fighter of your own kind with a scar through one eyebrow. Its trainer is a stranger from another region who says only: \"I came to lose to someone who deserves it. Do not make me wait.\" The crowd does not know whether to cheer or to hush. Your fighter growls and means it.",
+   "choices": [
+    {
+     "label": "Step into the ring",
+     "success": {
+      "text": "The crowd chants for both of you. In the stands, nobody sits.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Stranger",
+       "size": 1,
+       "mirror": true,
+       "types": [
+        "fighting"
+       ],
+       "pseudo": true,
+       "rule": {
+        "evolveMid": true,
+        "fanClub": true
+       },
+       "win": [
+        {
+         "kind": "canon",
+         "action": "champion",
+         "species": [
+          "mankey",
+          "primeape"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-tournament-won",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Won the Saffron Fighting Tournament and the belt: the title, Dynamic Punch and Champion's Entrance.",
+         "importance": 80
+        },
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-t-win1"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-rival-return",
+   "name": "A Familiar Belt",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#7a3b2e"
+   },
+   "intro": "On the path ahead a fighter of your own kind stands very straight, its arms folded across a belt it made itself: red cloth, knotted, bleached with the sun. It does not look at the stands this time. It looks at you, and bows, once, from the waist.",
+   "choices": [
+    {
+     "label": "Bow back",
+     "success": {
+      "text": "It is still too proud to say thank you. It grins at you, a flash of teeth. The home-made belt is the best thing it owns. It is nothing like the real one, and it has never looked better.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "The Tournament rival returned in a home-made belt, and bowed.",
+        "importance": 60
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You nod and walk on. It watches you go, belt and all.",
+      "effects": []
+     }
+    }
+   ]
   },
   {
    "id": "cs-kanto-saffron-dojo",
@@ -955,12 +1922,12 @@
     "effect": "fog",
     "tint": "#2a1b3d"
    },
-   "intro": "A fortune-teller in a violet shawl stops you outside the Gym: \"Let me read your aura.\" A town guide hurries over, whispering about a special entrance that few ever see.",
+   "intro": "A fortune-teller in a violet shawl stops you outside the Gym, and her hands are cold when she takes yours. \"Let me read your aura.\" A town guide hurries over, whispering about a special entrance that few ever see, one the Gym keeps behind a painted wall. Both of them are smiling a little too long. Somewhere behind the plaster, something that is not wind is breathing out.",
    "choices": [
     {
      "label": "Let her read your aura",
      "success": {
-      "text": "Your Poké Balls rattle, then go quiet. The world tilts.",
+      "text": "Your Poké Balls rattle against your belt, then go quiet, one by one, like children told to hush. The world tilts, and when it settles you are standing in a violet corridor with empty hands.",
       "effects": [
        {
         "kind": "canon",
@@ -977,7 +1944,7 @@
     {
      "label": "Take the guide’s special entrance",
      "success": {
-      "text": "Your Poké Balls rattle, then go quiet. The world tilts.",
+      "text": "Your Poké Balls rattle against your belt, then go quiet, one by one, like children told to hush. The world tilts, and when it settles you are standing in a violet corridor with empty hands.",
       "effects": [
        {
         "kind": "canon",
@@ -1000,536 +1967,6 @@
     }
    ],
    "canon": "cs.kanto.saffron.labyrinth"
-  },
-  {
-   "id": "cs-kanto-saffron-lab-lost",
-   "name": "Labyrinth: The First Fight",
-   "group": "Canon Spaces: Kanto",
-   "stop": "delve",
-   "rarity": "common",
-   "minStage": 1,
-   "types": [],
-   "requires": [],
-   "scene": {
-    "cast": [],
-    "effect": "fog",
-    "tint": "#1b1030"
-   },
-   "intro": "Your Pokémon are scattered across the Labyrinth, locked in shadow lanterns. A hooded shape blocks the corridor. You reach for a Poké Ball and find nothing. The first fight is lost before it begins. A tombstone rises on the dark, a swarm of ghosts flies behind it, and the dark folds into a new scene. A small ghost floats up to you: \"I can help you get your body and your Pokémon back.\"",
-   "choices": [
-    {
-     "label": "Follow the ghost",
-     "success": {
-      "text": "Free every lantern, reach Sabrina, and your body comes home.",
-      "effects": [
-       {
-        "kind": "addEvent",
-        "eventId": "cs-kanto-saffron-lab-n1"
-       }
-      ]
-     }
-    }
-   ],
-   "room": true
-  },
-  {
-   "id": "cs-kanto-saffron-lab-n1",
-   "name": "Labyrinth: The Possessed Trainer",
-   "group": "Canon Spaces: Kanto",
-   "stop": "delve",
-   "rarity": "common",
-   "minStage": 1,
-   "types": [],
-   "requires": [],
-   "scene": {
-    "cast": [],
-    "effect": "fog",
-    "tint": "#1b1030"
-   },
-   "intro": "Lantern 1 of 6: one of your Pokémon is trapped inside. A trainer with empty eyes guards it.",
-   "choices": [
-    {
-     "label": "Challenge the trainer",
-     "success": {
-      "text": "The ghost fights alone.",
-      "effects": [],
-      "battle": {
-       "kind": "trainer",
-       "name": "Possessed Trainer",
-       "size": 2,
-       "types": [
-        "ghost",
-        "psychic"
-       ],
-       "pseudo": true,
-       "rule": {
-        "matchLead": true,
-        "noItems": true
-       },
-       "win": [
-        {
-         "kind": "canon",
-         "action": "ghostFree",
-         "species": []
-        },
-        {
-         "kind": "canon",
-         "action": "ghostLevel",
-         "species": [],
-         "level": 15
-        },
-        {
-         "kind": "addEvent",
-         "eventId": "cs-kanto-saffron-lab-n2"
-        }
-       ],
-       "lose": [
-        {
-         "kind": "addEvent",
-         "eventId": "cs-kanto-saffron-lab-n1"
-        }
-       ]
-      }
-     }
-    }
-   ],
-   "room": true
-  },
-  {
-   "id": "cs-kanto-saffron-lab-n2",
-   "name": "Labyrinth: The Mirror Puzzle",
-   "group": "Canon Spaces: Kanto",
-   "stop": "delve",
-   "rarity": "common",
-   "minStage": 1,
-   "types": [],
-   "requires": [],
-   "scene": {
-    "cast": [],
-    "effect": "fog",
-    "tint": "#1b1030"
-   },
-   "intro": "Lantern 2 of 6: one of your Pokémon is trapped inside. Mirrors line the walls; the real path is the one that reflects true.",
-   "choices": [
-    {
-     "label": "Trace the true path",
-     "prompt": {
-      "id": "tilt-drag",
-      "needs": "ok"
-     },
-     "success": {
-      "text": "The mirrors part. The lantern opens. A campfire burns warm in the next chamber.",
-      "effects": [
-       {
-        "kind": "canon",
-        "action": "ghostFree",
-        "species": []
-       },
-       {
-        "kind": "canon",
-        "action": "ghostLevel",
-        "species": [],
-        "level": 20
-       },
-       {
-        "kind": "addStop",
-        "stop": "heal"
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "cs-kanto-saffron-lab-n3"
-       }
-      ]
-     },
-     "failure": {
-      "text": "The glass shows you a false road and bites back.",
-      "effects": [
-       {
-        "kind": "damage",
-        "share": 0.2,
-        "who": "lead"
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "cs-kanto-saffron-lab-n2"
-       }
-      ]
-     }
-    }
-   ],
-   "room": true
-  },
-  {
-   "id": "cs-kanto-saffron-lab-n3",
-   "name": "Labyrinth: The Memory Game",
-   "group": "Canon Spaces: Kanto",
-   "stop": "delve",
-   "rarity": "common",
-   "minStage": 1,
-   "types": [],
-   "requires": [],
-   "scene": {
-    "cast": [],
-    "effect": "fog",
-    "tint": "#1b1030"
-   },
-   "intro": "Lantern 3 of 6: one of your Pokémon is trapped inside. Lights flash in a pattern. Echo it back.",
-   "choices": [
-    {
-     "label": "Echo the pattern",
-     "prompt": {
-      "id": "echo-rhythm",
-      "needs": "ok"
-     },
-     "success": {
-      "text": "The lights fall in line. The lantern opens.",
-      "effects": [
-       {
-        "kind": "canon",
-        "action": "ghostFree",
-        "species": []
-       },
-       {
-        "kind": "canon",
-        "action": "ghostLevel",
-        "species": [],
-        "level": 25
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "cs-kanto-saffron-lab-n4"
-       }
-      ]
-     },
-     "failure": {
-      "text": "You lose the thread and the dark pushes back.",
-      "effects": [
-       {
-        "kind": "damage",
-        "share": 0.2,
-        "who": "lead"
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "cs-kanto-saffron-lab-n3"
-       }
-      ]
-     }
-    }
-   ],
-   "room": true
-  },
-  {
-   "id": "cs-kanto-saffron-lab-n4",
-   "name": "Labyrinth: Two Doors",
-   "group": "Canon Spaces: Kanto",
-   "stop": "delve",
-   "rarity": "common",
-   "minStage": 1,
-   "types": [],
-   "requires": [],
-   "scene": {
-    "cast": [],
-    "effect": "fog",
-    "tint": "#1b1030"
-   },
-   "intro": "Lantern 4 of 6: one of your Pokémon is trapped inside. Two doors, one lantern. One door is true.",
-   "choices": [
-    {
-     "label": "The left door",
-     "chance": 0.5,
-     "success": {
-      "text": "The true door. The lantern opens, and a campfire waits beyond.",
-      "effects": [
-       {
-        "kind": "canon",
-        "action": "ghostFree",
-        "species": []
-       },
-       {
-        "kind": "canon",
-        "action": "ghostLevel",
-        "species": [],
-        "level": 30
-       },
-       {
-        "kind": "addStop",
-        "stop": "heal"
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "cs-kanto-saffron-lab-n5"
-       }
-      ]
-     },
-     "failure": {
-      "text": "A false door. You stumble back out.",
-      "effects": [
-       {
-        "kind": "damage",
-        "share": 0.2,
-        "who": "lead"
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "cs-kanto-saffron-lab-n4"
-       }
-      ]
-     }
-    },
-    {
-     "label": "The right door",
-     "chance": 0.5,
-     "success": {
-      "text": "The true door. The lantern opens, and a campfire waits beyond.",
-      "effects": [
-       {
-        "kind": "canon",
-        "action": "ghostFree",
-        "species": []
-       },
-       {
-        "kind": "canon",
-        "action": "ghostLevel",
-        "species": [],
-        "level": 30
-       },
-       {
-        "kind": "addStop",
-        "stop": "heal"
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "cs-kanto-saffron-lab-n5"
-       }
-      ]
-     },
-     "failure": {
-      "text": "A false door. You stumble back out.",
-      "effects": [
-       {
-        "kind": "damage",
-        "share": 0.2,
-        "who": "lead"
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "cs-kanto-saffron-lab-n4"
-       }
-      ]
-     }
-    }
-   ],
-   "room": true
-  },
-  {
-   "id": "cs-kanto-saffron-lab-n5",
-   "name": "Labyrinth: The Balance",
-   "group": "Canon Spaces: Kanto",
-   "stop": "delve",
-   "rarity": "common",
-   "minStage": 1,
-   "types": [],
-   "requires": [],
-   "scene": {
-    "cast": [],
-    "effect": "fog",
-    "tint": "#1b1030"
-   },
-   "intro": "Lantern 5 of 6: one of your Pokémon is trapped inside. A scale hangs over the lantern. Hold steady until it levels.",
-   "choices": [
-    {
-     "label": "Hold the scale",
-     "prompt": {
-      "id": "brace-hold",
-      "needs": "ok"
-     },
-     "success": {
-      "text": "The scale settles. The lantern opens.",
-      "effects": [
-       {
-        "kind": "canon",
-        "action": "ghostFree",
-        "species": []
-       },
-       {
-        "kind": "canon",
-        "action": "ghostLevel",
-        "species": [],
-        "level": 37
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "cs-kanto-saffron-lab-n6"
-       }
-      ]
-     },
-     "failure": {
-      "text": "The scale tips and the weights fall.",
-      "effects": [
-       {
-        "kind": "damage",
-        "share": 0.2,
-        "who": "lead"
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "cs-kanto-saffron-lab-n5"
-       }
-      ]
-     }
-    }
-   ],
-   "room": true
-  },
-  {
-   "id": "cs-kanto-saffron-lab-n6",
-   "name": "Labyrinth: The Riddle",
-   "group": "Canon Spaces: Kanto",
-   "stop": "delve",
-   "rarity": "common",
-   "minStage": 1,
-   "types": [],
-   "requires": [],
-   "scene": {
-    "cast": [],
-    "effect": "fog",
-    "tint": "#1b1030"
-   },
-   "intro": "Lantern 6 of 6: one of your Pokémon is trapped inside. A voice from the lantern: \"I walk beside you but leave no steps. Cut me down and I still follow. What am I?\"",
-   "choices": [
-    {
-     "label": "A memory",
-     "success": {
-      "text": "Wrong. The voice sighs.",
-      "effects": [
-       {
-        "kind": "damage",
-        "share": 0.2,
-        "who": "lead"
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "cs-kanto-saffron-lab-n6"
-       }
-      ]
-     }
-    },
-    {
-     "label": "A shadow",
-     "success": {
-      "text": "The lantern flares open. Only Sabrina remains.",
-      "effects": [
-       {
-        "kind": "canon",
-        "action": "ghostFree",
-        "species": []
-       },
-       {
-        "kind": "canon",
-        "action": "ghostLevel",
-        "species": [],
-        "level": 40
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "cs-kanto-saffron-lab-final"
-       }
-      ]
-     }
-    },
-    {
-     "label": "An echo",
-     "success": {
-      "text": "Wrong. The voice sighs.",
-      "effects": [
-       {
-        "kind": "damage",
-        "share": 0.2,
-        "who": "lead"
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "cs-kanto-saffron-lab-n6"
-       }
-      ]
-     }
-    }
-   ],
-   "room": true
-  },
-  {
-   "id": "cs-kanto-saffron-lab-final",
-   "name": "Labyrinth: Sabrina's Alakazam",
-   "group": "Canon Spaces: Kanto",
-   "stop": "delve",
-   "rarity": "common",
-   "minStage": 1,
-   "types": [],
-   "requires": [],
-   "scene": {
-    "cast": [],
-    "effect": "fog",
-    "tint": "#1b1030"
-   },
-   "intro": "Sabrina waits at the heart of the Labyrinth with her Alakazam. \"You are only a ghost,\" she says. \"Go back to sleep.\"",
-   "choices": [
-    {
-     "label": "Face Sabrina",
-     "success": {
-      "text": "The ghost faces her alone.",
-      "effects": [],
-      "battle": {
-       "kind": "trainer",
-       "name": "Sabrina",
-       "size": 1,
-       "team": [
-        "alakazam"
-       ],
-       "types": [
-        "psychic"
-       ],
-       "levelBonus": 1,
-       "pseudo": true,
-       "rule": {
-        "matchLead": true,
-        "noItems": true,
-        "evolveMid": true,
-        "ghostRescue": true
-       },
-       "win": [
-        {
-         "kind": "canon",
-         "action": "ghostEnd",
-         "species": []
-        },
-        {
-         "kind": "flag",
-         "key": "kanto-sabrina-ghost",
-         "amount": 1
-        },
-        {
-         "kind": "flag",
-         "key": "kanto-sabrina-labyrinth-done",
-         "amount": 1
-        },
-        {
-         "kind": "flag",
-         "key": "kanto-sabrina-haunting-owed",
-         "amount": 1
-        }
-       ],
-       "lose": [
-        {
-         "kind": "addEvent",
-         "eventId": "cs-kanto-saffron-lab-n1"
-        }
-       ]
-      }
-     }
-    }
-   ],
-   "room": true
   },
   {
    "id": "cs-kanto-saffron-return-shuppet",
@@ -1686,6 +2123,992 @@
      }
     }
    ]
+  },
+  {
+   "id": "cs-kanto-saffron-lab-lost",
+   "name": "Labyrinth: The First Fight",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fog",
+    "tint": "#1b1030"
+   },
+   "intro": "You are standing in a corridor of violet stone, and you are alone. Your Poké Balls are gone from your belt, every one, and the belt is only a belt. Your Pokémon are scattered through the Labyrinth, each shut in a shadow lantern like a candle behind glass; you can feel them the way you feel a missing tooth. You have no Pokémon. You have nothing. A hooded shape fills the passage ahead, and it is not asking you anything. Something small and pale presses itself against the back of your legs, trembling, and does not come out.",
+   "choices": [
+    {
+     "label": "Stand your ground",
+     "success": {
+      "text": "You square up to the hooded shape with empty hands.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Hooded Shape",
+       "size": 1,
+       "types": [
+        "ghost",
+        "psychic"
+       ],
+       "pseudo": true,
+       "rule": {
+        "noItems": true,
+        "noPokemon": true
+       },
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-lab-ghost"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-lab-ghost"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-lab-ghost",
+   "name": "Labyrinth: The Ghost Offers",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fog",
+    "tint": "#1b1030"
+   },
+   "intro": "You lost, and it was never a fight: you had no Pokémon to send out, and the hooded shape knew it before you did. A tombstone pushes up through the floor with your own name half carved on it. Then the dark above you fills with wings that are not wings: a swarm of Ghost-types, hundreds of them, pours across the whole sky of the room, laughing without sound. When it has passed, the small pale thing that was hiding behind your legs finally floats up to the height of your knee. It will not look straight at you. \"I can help you get your body back,\" it says, \"and your Pokémon. I know the way. Nobody ever asks me to.\"",
+   "choices": [
+    {
+     "label": "Take its hand",
+     "success": {
+      "text": "It is warmer than you expected a ghost to be. \"Walk where I walk,\" it whispers. \"Put your feet where mine are not.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lab-ghost-offered",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask why it would help you",
+     "success": {
+      "text": "It thinks about this for a long time. \"Because you stood there with nothing,\" it says, \"and you did not run.\" Then it takes your sleeve in its small cold grip and leads you on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lab-ghost-offered",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n1"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-lab-n1",
+   "name": "Labyrinth: The Body in the Next Room",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fog",
+    "tint": "#1b1030"
+   },
+   "intro": "Room 1 of 6. Through a doorway you have not entered, you see yourself. Your own body stands in the middle of a room with its back to you, perfectly still, one hand a little raised as if it had been interrupted in the middle of reaching for something. The door will not let you in; each time you lean toward it the frame is a little narrower. The small ghost lifts the same hand you are lifting. You didn't notice at first. When you tilt your head, it tilts its head. It is copying you, shyly and exactly, the way a child copies the one grown-up who was kind to it. In the corner of the room, one lantern glows, and inside it something small is pressed against the glass.",
+   "choices": [
+    {
+     "label": "Call out to your own body",
+     "success": {
+      "text": "Your voice leaves you as a breath of cold mist, and the body in the room does not turn. But the lantern's glow shifts toward you, and the ghost says, very quietly, \"It heard. It just can't answer yet.\" It slips through the wall, comes back with the lantern, and a Pokémon you know steps out of the light and fades in beside you as a pale shape, wagging, delighted, afraid.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 15
+       },
+       {
+        "kind": "canon",
+        "action": "labRoom",
+        "species": [],
+        "level": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lab-called-body",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold still and watch your body",
+     "success": {
+      "text": "You make yourself stand as still as the thing in the room, and the ghost, copying, goes still too, and for a long moment two of you are listening. You see the body's raised hand tremble. It is trying, from very far away, to reach back. The lantern cracks open on its own, as if in answer.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 15
+       },
+       {
+        "kind": "canon",
+        "action": "labRoom",
+        "species": [],
+        "level": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lab-watched-body",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Reach for the door",
+     "success": {
+      "text": "The frame narrows and narrows until your arm is stuck to the elbow in the wall. The ghost pulls on your other arm with all it has. When you come free, you are holding the lantern instead of the door. It was never the door that mattered.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 15
+       },
+       {
+        "kind": "canon",
+        "action": "labRoom",
+        "species": [],
+        "level": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lab-reached-door",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-lab-n2",
+   "name": "Labyrinth: The Ghosts of Your Party",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fog",
+    "tint": "#1b1030"
+   },
+   "intro": "Room 2 of 6. The hallway bends, and at the bend, in the glass of a window that has no outside, you see them: your Pokémon, as ghosts. Pale, half-finished, each one turning its head toward you in the way you taught it to. They are not dead. You can tell, because they are still doing the small habits you know: one scratching its ear, one standing a step in front of the others. The sight hurts anyway, like looking at a photograph of a person who is in the next room. Then the shapes in the glass turn their heads the wrong way, all together, and the hall is full of Possessed shades with your Pokémon's faces held up in front of them like masks. The small ghost has stopped copying you. It has moved one step ahead of you, a little, and does not seem to know it did.",
+   "choices": [
+    {
+     "label": "Fight the shades",
+     "success": {
+      "text": "The ghost fights alone, because it is all you have, and it is smaller than anything it faces.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Wandering Shades",
+       "size": 2,
+       "types": [
+        "ghost",
+        "psychic"
+       ],
+       "pseudo": true,
+       "rule": {
+        "matchLead": true,
+        "noItems": true
+       },
+       "win": [
+        {
+         "kind": "canon",
+         "action": "ghostFree",
+         "species": []
+        },
+        {
+         "kind": "canon",
+         "action": "ghostLevel",
+         "species": [],
+         "level": 20
+        },
+        {
+         "kind": "canon",
+         "action": "labRoom",
+         "species": [],
+         "level": 2
+        },
+        {
+         "kind": "flag",
+         "key": "lab-shades-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-lab-n3"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "labRetry",
+         "species": []
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-lab-n3",
+   "name": "Labyrinth: Doors From Somewhere Else",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fog",
+    "tint": "#1b1030"
+   },
+   "intro": "Room 3 of 6. A corridor of doors, one after another, and none of them belongs in a gym. One is salt-stained and has the sound of the sea behind it: a harbour you walked through two regions ago. One is a train-station door with a bell that is still ringing. One is the oak front door of the first town you ever left, with a cracked doorstep you would know blind. Every door is slightly open. You can smell each place, and it smells exactly as you left it, down to the cooking. The ghost goes to the third door, then stops, looking back at you, and for the first time it asks a question instead of copying: \"Which one do you want to go home through?\"",
+   "choices": [
+    {
+     "label": "The sea-salt door",
+     "success": {
+      "text": "Cold spray touches your face, and gulls cry far off, and a pale light falls across the floor from the tide that is not there. You step through and the hallway comes with you, but you are carrying the smell of salt, and the lantern ahead is brighter for it.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 25
+       },
+       {
+        "kind": "canon",
+        "action": "labRoom",
+        "species": [],
+        "level": 3
+       },
+       {
+        "kind": "flag",
+        "key": "lab-door-sea",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The station door",
+     "success": {
+      "text": "The bell rings once more as you pass. You catch an announcement in a voice you half know, calling a train that has already left, and you stand a moment longer than you should have. The lantern flares as if it had been waiting for a reason to.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 25
+       },
+       {
+        "kind": "canon",
+        "action": "labRoom",
+        "species": [],
+        "level": 3
+       },
+       {
+        "kind": "flag",
+        "key": "lab-door-station",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The door of your first town",
+     "success": {
+      "text": "You do not go through it. You put your palm on the wood and feel, on the other side, someone's palm. The ghost leans against your leg. \"You can come back,\" it says, \"when it is over.\" Then the door closes softly and a lantern drops out of the dark into your hands.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 25
+       },
+       {
+        "kind": "canon",
+        "action": "labRoom",
+        "species": [],
+        "level": 3
+       },
+       {
+        "kind": "flag",
+        "key": "lab-door-home",
+        "amount": 1
+       },
+       {
+        "kind": "addStop",
+        "stop": "heal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n4"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-lab-n4",
+   "name": "Labyrinth: The Villager Who Says One Thing",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fog",
+    "tint": "#1b1030"
+   },
+   "intro": "Room 4 of 6. In the middle of a room full of folded tablecloths and plates laid for no one, a villager stands facing the wall. He says the same sentence, and says it again, in exactly the same voice, as though a needle had stuck in the groove of him: \"You are late for dinner. You are late for dinner. You are late for dinner.\" He is not frightening. That is the worst of it. He turns when you come near, and his eyes are wet and polite, and he says it again, with the small hope of a man hoping this time it will be the right answer. The ghost is no longer copying you at all. It floats forward, past you, and looks at the man the way you would look at someone you recognise.",
+   "choices": [
+    {
+     "label": "Tell him you're sorry for being late",
+     "success": {
+      "text": "\"I'm sorry,\" you say, and mean it, to a man you have never met. His shoulders let go. He says, once, a different sentence: \"Thank you. We kept it warm.\" The lantern on the table beside the plates opens.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 30
+       },
+       {
+        "kind": "canon",
+        "action": "labRoom",
+        "species": [],
+        "level": 4
+       },
+       {
+        "kind": "flag",
+        "key": "lab-villager-sorry",
+        "amount": 1
+       },
+       {
+        "kind": "addStop",
+        "stop": "heal"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say it back to him",
+     "success": {
+      "text": "\"You are late for dinner,\" you say, softly, and his face breaks open, because someone finally said it with him. He sits at the table and begins to eat the nothing on the plate, and for a while it is the happiest thing you have ever seen. The lantern opens.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 30
+       },
+       {
+        "kind": "canon",
+        "action": "labRoom",
+        "species": [],
+        "level": 4
+       },
+       {
+        "kind": "flag",
+        "key": "lab-villager-echo",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask who is waiting",
+     "success": {
+      "text": "He opens his mouth and the sentence does not come. A long breath. Then, in a small, plain voice: \"My daughter. She did not want to come in to dinner without me.\" Your throat closes. The ghost takes the lantern from the table with great tenderness and gives it to you without a word.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 30
+       },
+       {
+        "kind": "canon",
+        "action": "labRoom",
+        "species": [],
+        "level": 4
+       },
+       {
+        "kind": "flag",
+        "key": "lab-villager-daughter",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n5"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-lab-n5",
+   "name": "Labyrinth: The Drawings",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fog",
+    "tint": "#1b1030"
+   },
+   "intro": "Room 5 of 6. The walls here are covered edge to edge in children's drawings, in crayon, in pencil, in what looks like jam. Every one of them is of you and your team. Some are good, with all the right colours. Some are wrong in ways that sit in your chest: a smile where there should not be one, a Pokémon with too many eyes, a tiny stick figure with its mouth drawn as a straight line, labelled in careful letters, MY FRIEND WHO IS LOST. The ghost stops in front of one drawing and does not move. In it, there is a small ghost, and a trainer holding its hand, and the sun is a huge yellow circle with a face. It is the only drawing in the room where everyone is smiling. The ghost goes first, now. It does not look back to see whether you are following.",
+   "choices": [
+    {
+     "label": "Take the drawing of your party",
+     "success": {
+      "text": "You peel it off the wall carefully, as if it could bruise. Every Pokémon on it is drawn at the right height, with the right ears. Someone watched you very closely to draw this. The lantern behind it opens, and the ghost leads you out of the room with the drawing held to your chest.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 35
+       },
+       {
+        "kind": "canon",
+        "action": "labRoom",
+        "species": [],
+        "level": 5
+       },
+       {
+        "kind": "flag",
+        "key": "lab-drawing-party",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the drawing with the ghost in it",
+     "success": {
+      "text": "The ghost sees what you have taken and flushes with a violet glow that is almost a blush. It does not say thank you. It floats ahead of you and does not turn, but it moves slower, so that you can walk beside it.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 35
+       },
+       {
+        "kind": "canon",
+        "action": "labRoom",
+        "species": [],
+        "level": 5
+       },
+       {
+        "kind": "flag",
+        "key": "lab-drawing-ghost",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them all where they are",
+     "success": {
+      "text": "You leave every drawing on its wall, because they are hers, or his, or theirs, and not yours to take. A pencil on the floor rolls toward you. You pick it up and, on an empty bit of wall, you draw one small sun with a face. The lantern behind the wall opens by itself.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 35
+       },
+       {
+        "kind": "canon",
+        "action": "labRoom",
+        "species": [],
+        "level": 5
+       },
+       {
+        "kind": "flag",
+        "key": "lab-drawing-none",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-n6"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-lab-n6",
+   "name": "Labyrinth: The Small Grave",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fog",
+    "tint": "#1b1030"
+   },
+   "intro": "Room 6 of 6. A last small room, and in the middle of it, a grave no larger than a loaf of bread. A stone with a Pokémon's name on it, and it is the name of a Pokémon you have never lost. You stand and read it twice. It is a Pokémon that is still alive, still waiting in a lantern somewhere, still counting on you. Someone here has already decided that you will fail. Flowers have been laid on the grave, and they are fresh. The ghost settles beside the stone. For a while it says nothing at all. Then: \"I used to have a grave like this one. I don't remember whose.\" It has led you all the way here without once looking at the way, and it knows the last door. It looks at you, and for the first time it does not wait for you to go first.",
+   "choices": [
+    {
+     "label": "Read the name aloud",
+     "success": {
+      "text": "You say the name aloud, clearly, and the stone shivers, and the flowers wilt in a single breath. That is not your Pokémon's name any longer: that is only a name, and your Pokémon is somewhere behind the next wall, calling for you. The last lantern opens, and your whole team is here at last, a ring of pale shapes, and the ghost at the front of them.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 40
+       },
+       {
+        "kind": "canon",
+        "action": "labRoom",
+        "species": [],
+        "level": 6
+       },
+       {
+        "kind": "flag",
+        "key": "lab-grave-read",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-final"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Kneel by the grave with the ghost",
+     "success": {
+      "text": "You kneel, and the ghost settles against your side, and the two of you stay like that for a time that has no length. It does not tell you whose grave it is. You do not ask. When you stand, the stone has crumbled to a handful of grey dust, and the lantern behind it is open.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 40
+       },
+       {
+        "kind": "canon",
+        "action": "labRoom",
+        "species": [],
+        "level": 6
+       },
+       {
+        "kind": "flag",
+        "key": "lab-grave-knelt",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-final"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the stone down",
+     "success": {
+      "text": "You tear the small stone out of the floor and throw it against the wall, and it breaks with a sound like a child's cry. The ghost flinches, and then, slowly, it forgives you. Behind the broken stone: the last lantern, and every one of your Pokémon waiting to follow.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostFree",
+        "species": []
+       },
+       {
+        "kind": "canon",
+        "action": "ghostLevel",
+        "species": [],
+        "level": 40
+       },
+       {
+        "kind": "canon",
+        "action": "labRoom",
+        "species": [],
+        "level": 6
+       },
+       {
+        "kind": "flag",
+        "key": "lab-grave-broke",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-final"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-lab-final",
+   "name": "Labyrinth: Sabrina's Alakazam",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fog",
+    "tint": "#1b1030"
+   },
+   "intro": "The last door opens onto a gym that is entirely mirror and violet light, and at the heart of it Sabrina sits with her Alakazam, who is not looking at you, because it does not need to. \"You are only a ghost,\" she says, kindly, the way you speak to a child who will wake up tomorrow and forget. \"Go back to sleep.\" You can feel your body, finally, across the room: a still shape at her feet, breathing slowly, held in place by a hundred small psychic threads. The ghost floats forward and stops between you and her. \"I will stand in front of you,\" it says, and its voice shakes. \"I have never stood in front of anyone before.\" This is a fight you cannot command as you are used to. Every turn, one of your four moves is a lie: it shows one move, and does another. Every second turn the ghost can see true, and will mark the false one for you.",
+   "choices": [
+    {
+     "label": "Face Sabrina",
+     "success": {
+      "text": "The ghost faces her, and you stand behind it, and you do not look away.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Sabrina",
+       "size": 1,
+       "team": [
+        "alakazam"
+       ],
+       "types": [
+        "psychic"
+       ],
+       "levelBonus": 1,
+       "pseudo": true,
+       "rule": {
+        "matchLead": true,
+        "noItems": true,
+        "evolveMid": true,
+        "ghostRescue": true,
+        "falseSlot": true
+       },
+       "win": [
+        {
+         "kind": "canon",
+         "action": "ghostEnd",
+         "species": []
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-sabrina-ghost",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-sabrina-labyrinth-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-sabrina-haunting-owed",
+         "amount": 1
+        }
+       ],
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "labRetry",
+         "species": []
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-t-win1",
+   "name": "Tournament: The Bell",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tourney": 6,
+    "effect": "confetti",
+    "tint": "#7a3b2e"
+   },
+   "intro": "The bell rings, and for one heartbeat the whole building holds its breath. Then the noise comes down like a roof falling in. The young announcer has run out of words, and says so, loudly, three times. The old champion beside him takes off his broken-nosed grin, stands, and starts to clap, slowly, and the stadium catches it.",
+   "choices": [
+    {
+     "label": "Lift your fighter's paw",
+     "success": {
+      "text": "You lift it. The crowd lifts with you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-t-win2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-t-win2",
+   "name": "Tournament: The Belt",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tourney": 6,
+    "effect": "confetti",
+    "tint": "#7a3b2e"
+   },
+   "intro": "The organizer walks out on to the mat with the belt across both her forearms like something asleep. She does not make a speech. She says your fighter's name, and then your name, and then, quieter: \"I watched every round.\" She buckles it around your fighter, who stands very still, trying not to cry, failing. Dynamic Punch is waiting in its paws, and something new in its chest: Champion's Entrance. Nobody will ever walk into a ring the same way again.",
+   "choices": [
+    {
+     "label": "Let it keep the belt",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "r25-food",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "In the stands, the whole Mankey troop is on its feet, hands over their heads, shrieking a name that is not quite your fighter's name and is exactly right. They came down from Route 25 to watch their own go up on the highest step. The sack of grain is still hanging from the rail.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-t-win3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it keep the belt",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "r25-food",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "It looks to the stands for the troop it never fed. There is no brown fur in the rows. It looks at you instead, and its grip on the belt does not loosen. You are the only crowd that matters now, and you are loud.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-t-win3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-t-win3",
+   "name": "Tournament: The Rival Bows",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tourney": 6,
+    "effect": "confetti",
+    "tint": "#7a3b2e"
+   },
+   "intro": "Before the lights go down, the rival walks across the mat. It does not offer a hand. It bows, from the waist, and holds the bow. Then it straightens, takes something from around its own waist, and shows it to your fighter: a strip of red cloth, knotted. \"Next time,\" its trainer says. Your fighter nods once. The belt is heavier than it looks, and it is not heavy enough to hold the sound of the crowd that does not stop for a long time.",
+   "choices": [
+    {
+     "label": "Walk out under the lights",
+     "success": {
+      "text": "You walk out with your fighter beside you, belt on its hips. Your team is waiting at the rail, every one of them. Nobody says anything. Nobody has to.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
   }
  ]
 }

@@ -9,6 +9,7 @@ import { services } from '../game/services';
 import { fitBlock, fitLine } from './fitText';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from './theme';
 import { trainerVisual } from './sprites';
+import { CAST_SPRITES } from '../core/expansion/cast/sprites';
 
 const PAPER = 0xf0d898;
 const TAB = 0xc9b070;
@@ -19,7 +20,8 @@ const STATUS_COLOR: Record<CastStatus, number> = { 'at large': 0xe04848, beaten:
 const hex = (n: number) => `#${n.toString(16).padStart(6, '0')}`;
 
 /** The trainer sprite for a character, when the game has one for their name (first word, e.g. "Giovanni" -> trainer.giovanni). */
-export function castSpriteId(name: string): string | null {
+export function castSpriteId(name: string, castId?: string): string | null {
+  for (const c of (castId && CAST_SPRITES[castId]) || []) if (services().assets.has(c)) return c;
   const id = `trainer.${name.split(/[\s,(]/)[0]!.toLowerCase().replace(/[^a-z]/g, '')}`;
   return services().assets.has(id) ? id : null;
 }
@@ -46,7 +48,7 @@ export function drawDossier(scene: Phaser.Scene, folders: DossierFolder[], onClo
     add(scene.add.rectangle(20, 48, GAME_WIDTH - 40, GAME_HEIGHT - 68, PAPER).setOrigin(0, 0));
     // The case file: photo, name, marks, rank, overheard, note.
     add(scene.add.rectangle(48, 70, 170, 210, 0xffffff).setOrigin(0, 0).setAngle(-2).setStrokeStyle(1, 0xd8ccb0));
-    const sprite = castSpriteId(sel.name);
+    const sprite = castSpriteId(sel.name, sel.id);
     if (sprite) {
       const v = trainerVisual(scene, sprite, sel.name, 133, 262, 2.2) as unknown as Phaser.GameObjects.Sprite;
       v.setOrigin?.(0.5, 1);

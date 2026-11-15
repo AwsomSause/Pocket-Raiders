@@ -1,5 +1,6 @@
 // Individual Pokémon: creating them, their stats, experience and level-ups.
 
+import { animeSprite } from './animeLooks';
 import { careMultiplier } from './care/mods';
 import { effectiveNature, natureMultiplier, rollNature } from './natures';
 import { evsOf, rollIvs, statIvsOf } from './ivs';
@@ -15,7 +16,12 @@ export function getSpecies(content: Content, id: string): Species {
 }
 
 /** The species whose art shows for a Pokémon outside battle: a Silvally holding a Memory looks like its type form. */
-export function lookSpecies(content: Content, mon: Pick<PokemonInstance, 'speciesId' | 'held'>): Species {
+export function lookSpecies(content: Content, mon: Pick<PokemonInstance, 'speciesId' | 'held'> & { look?: string }): Species {
+  const anime = animeSprite(mon.look, mon.speciesId);
+  if (anime) {
+    const base = getSpecies(content, mon.speciesId);
+    return { ...base, assets: { ...base.assets, sprite: anime } };
+  }
   if (mon.speciesId === 'silvally') {
     const memory = Object.keys(mon.held ?? {}).find((id) => id.endsWith('-memory'));
     const form = memory && content.species.get(`silvally-${memory.slice(0, -'-memory'.length)}`);
@@ -196,6 +202,8 @@ export function abilityOf(content: Content, mon: PokemonInstance): string | null
   const species = getSpecies(content, mon.speciesId);
   const { normal, hidden } = species.abilities;
   if (mon.abilityless) return null;
+  // Pidgey's Resolve: the stoneless Mega takes Sky's Resolve whatever its base ability.
+  if (mon.skyMega && species.form?.kind === 'mega') return 'skys-resolve';
   if (mon.fixedAbility) return mon.fixedAbility;
   // A Mega or Primal form has one ability, whatever slot the base form used.
   if ((species.form?.kind === 'mega' || species.form?.kind === 'primal') && normal.length > 0) return normal[0]!;

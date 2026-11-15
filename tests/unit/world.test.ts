@@ -1,3 +1,4 @@
+import { PSEUDO } from '../../src/core/dungeon/pseudo';
 // Exploration (APPROVED.md §5-6): fog of war, weather fronts, roaming Legendaries, camps, secret
 // paths, callbacks, landmark rooms and the stops of the limited-time events.
 
@@ -299,6 +300,12 @@ describe('landmarks and dungeons', () => {
     for (const o of TRAVERSAL.obstacles) for (const ef of o.pass) if (ef.kind === 'addEvent') opened.add(ef.eventId);
     for (const id of [WANDERER_CHALLENGE, WANDERER_VISIT, TREASURE_DIG_EVENT]) opened.add(id);
     for (const e of content.events.values()) if (e.stop === LANDMARK_STOP) opened.add(e.id);
+    // Beta 0.7: a pseudo-stage's rooms are the nodes of its own map (core/dungeon/pseudo.ts), entered by walking there.
+    for (const r of PSEUDO.records) for (const n of r.nodes) opened.add(`${r.id.replace(/_/g, '-')}-${n.id}`);
+    // Beta 0.7 U1: the code places each Ultra Beast Tear (core/ultra/run.ts placeTear).
+    for (const id of content.events.keys()) if (id.startsWith('ultra-tear-')) opened.add(id);
+    // Beta 0.7: Pidgey's Resolve places its join rooms from code (core/sky/story.ts pushRoom).
+    for (const id of content.events.keys()) if (id.startsWith('sky.join.')) opened.add(id);
     for (const id of opened) expect(content.events.get(id)?.room, id).toBe(true);
     for (const e of content.events.values()) if (e.room) expect(opened.has(e.id), e.id).toBe(true);
   });

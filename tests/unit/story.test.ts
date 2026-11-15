@@ -26,7 +26,9 @@ import { MemoryStorageProvider } from '../../src/save/storage';
 import { autoplay, gameplayFingerprint, step } from './autoplay';
 import { content, toBattle } from './helpers';
 
-const STORY_SPECIES = new Set(['tuftin', 'oracowl', 'oracowl-day', 'tempestwing', 'megawattrel', 'equinar', 'hollow-shepherd', 'brinecrown', 'veinheart', 'lumeria', 'verdelis']);
+// The 39 Beta 0.7 Jet-batch Pokémon (Galarian lines, Magmuk, Neocleon, Hoopno) join the wild pools too, so old seeds leave them out.
+const JET_BATCH_3 = ['galarian-grimer', 'galarian-muk', 'magmuk', 'galarian-spearow', 'galarian-fearow', 'galarian-azurill', 'galarian-marill', 'galarian-azumarill', 'galarian-trubbish', 'galarian-garbodor', 'galarian-lotad', 'galarian-lombre', 'galarian-ludicolo', 'neocleon', 'galarian-magnemite', 'galarian-magneton', 'galarian-magnezone', 'galarian-tangela', 'galarian-tangrowth', 'galarian-chikorita', 'galarian-bayleef', 'galarian-meganium', 'galarian-cyndaquil', 'galarian-quilava', 'galarian-typhlosion', 'galarian-totodile', 'galarian-croconaw', 'galarian-feraligatr', 'galarian-larvitar', 'galarian-pupitar', 'galarian-tyranitar', 'galarian-onix', 'galarian-steelix', 'galarian-slugma', 'galarian-magcargo', 'galarian-snivy', 'galarian-servine', 'galarian-serperior', 'hoopno'];
+const STORY_SPECIES = new Set(['tuftin', 'oracowl', 'oracowl-day', 'tempestwing', 'megawattrel', 'equinar', 'hollow-shepherd', 'brinecrown', 'veinheart', 'lumeria', 'verdelis', ...JET_BATCH_3]);
 // The Google Drive pack's items (tools/drive/build-items.py) came later too.
 import DRIVE_ITEMS from '../../tools/drive/items.json';
 import LIBRARY_ITEMS from '../../tools/drive/library-items.json';
@@ -112,7 +114,7 @@ describe('story foundation: random streams', () => {
     })(),
     // The six original Evil Teams are Story Run only (Classic never draws them) and name the story Legends.
     evilTeams: { ...structuredClone(RAW_CONTENT.evilTeams as object), teams: (RAW_CONTENT.evilTeams as { teams: { storyOnly?: boolean }[] }).teams.filter((t) => !t.storyOnly) },
-    eventsExtra: (RAW_CONTENT.eventsExtra as { events?: { group?: string }[] }[]).map((f) => ({ ...f, events: (f.events ?? []).filter((e) => !String(e.group ?? '').startsWith('Story:') && e.group !== 'Plush Workshop' && e.group !== 'Canon Spaces: Kanto') })),
+    eventsExtra: (RAW_CONTENT.eventsExtra as { events?: { group?: string; id?: string }[] }[]).map((f) => ({ ...f, events: (f.events ?? []).filter((e) => !String(e.group ?? '').startsWith('Story:') && e.group !== 'Plush Workshop' && e.group !== 'Canon Spaces: Kanto' && (e as { id?: string }).id !== 'ev-sabrina-labyrinth') })),
     // Run events B (trainer battles) came later too.
     eventsRB: { events: [] },
     eventsCanonKanto: { events: [] }, eventsCanonVermilion: { events: [] }, eventsCanonFuchsia: { events: [] }, // Kanto canon spaces came later too
@@ -127,7 +129,7 @@ describe('story foundation: random streams', () => {
     // The custom regions (left-out plan 1.7) change the region order an old seed draws; the party-strength correction (1.6) came later too.
     regions: (RAW_CONTENT.regions as { custom?: boolean }[]).filter((r) => !r.custom),
     // The Major Update §1 rarity audit changed these items' rarity and stack limit; old seeds use the old values.
-    itemCatalog: catalog.filter((e) => (!eventItem(e) || e.id === 'key-charm' || e.id === 'torch' || e.id === 'dungeon-key') && e.id !== 'adrenaline-orb' && e.id !== 'streak-lens' && e.id !== 'exp-charm' && e.id !== 'airship-pass' && !String(e.id).endsWith('-lure') && !NEW_FOSSILS.test(String(e.id)) && !LATE_ITEMS.has(e.id as string) && (e as { family?: string }).family !== 'Crests (species held)').map((e) => (e.id === 'key-charm' || e.id === 'torch' || e.id === 'dungeon-key' ? { ...e, status: 'pending', effect: undefined, needs: ['events'] } : PRE_AUDIT[e.id as string] ? { ...e, ...PRE_AUDIT[e.id as string] } : e)).map((e) => (!PRE_AUDIT[e.id as string] && (PRE_ITEM_REWORK.catalogRarity as Record<string, string>)[e.id as string] ? { ...e, rarity: (PRE_ITEM_REWORK.catalogRarity as Record<string, string>)[e.id as string] } : e)),
+    itemCatalog: catalog.filter((e) => (!eventItem(e) || e.id === 'key-charm' || e.id === 'torch' || e.id === 'dungeon-key') && e.id !== 'adrenaline-orb' && e.id !== 'streak-lens' && e.id !== 'exp-charm' && e.id !== 'airship-pass' && e.id !== 'hm-fly' && !String(e.id).endsWith('-lure') && !NEW_FOSSILS.test(String(e.id)) && !LATE_ITEMS.has(e.id as string) && (e as { family?: string }).family !== 'Crests (species held)').map((e) => (e.id === 'key-charm' || e.id === 'torch' || e.id === 'dungeon-key' ? { ...e, status: 'pending', effect: undefined, needs: ['events'] } : PRE_AUDIT[e.id as string] ? { ...e, ...PRE_AUDIT[e.id as string] } : e)).map((e) => (!PRE_AUDIT[e.id as string] && (PRE_ITEM_REWORK.catalogRarity as Record<string, string>)[e.id as string] ? { ...e, rarity: (PRE_ITEM_REWORK.catalogRarity as Record<string, string>)[e.id as string] } : e)),
     // The draft deals (bundles, bargains, a risk) join the reward pool, which would change old seeds' drafts.
     rewards: [...(RAW_CONTENT.rewards as { id: string }[]).filter((r) => !r.id.startsWith('deal-') && !LIBRARY_ITEMS.includes(r.id) && !LIBRARY3_ITEMS.some((id) => r.id === `item:${id}`) && r.id !== 'item:key-charm'), ...PRE_ITEM_REWORK.rewards].map((r) => ((r as { effect?: { kind: string } }).effect?.kind === 'vitamin' ? { ...r, rarity: PRE_ITEM_REWORK.vitaminRarity } : r)),
     // The Camp Council (one more rest spot) the Relic Shrine and the world events (milestones, rare sites, callbacks, legendary route, the exploration events, weather fronts, roamers and camps) would shift what an old seed meets, so they are left out too.

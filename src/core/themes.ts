@@ -50,13 +50,15 @@ export function wildEligibleSpecies(content: Content): Species[] {
 
 /** Special forms a region lets roam its routes (regions.json `specialWilds`, e.g. Torren's Delta Pokémon): ids ending in "-<tag>" that are otherwise wild-eligible. Native there. */
 export function regionSpecialWilds(content: Content, regionId: string | undefined): Species[] {
-  const tags = (regionId && content.regions.get(regionId)?.specialWilds) || [];
-  if (tags.length === 0) return [];
+  const region = regionId ? content.regions.get(regionId) : undefined;
+  const tags = region?.specialWilds ?? [];
+  const named = region?.wildSpecies ?? [];
+  if (tags.length === 0 && named.length === 0) return [];
   const byRegion = specialCache.get(content) ?? new Map<string, Species[]>();
   specialCache.set(content, byRegion);
   let list = byRegion.get(regionId!);
   if (!list) {
-    list = [...content.species.values()].filter((s) => tags.some((t) => s.id.endsWith(`-${t}`)) && isWildEligible(content, s, true));
+    list = [...content.species.values()].filter((s) => (tags.some((t) => s.id.endsWith(`-${t}`)) || named.includes(s.id)) && isWildEligible(content, s, true));
     byRegion.set(regionId!, list);
   }
   return list;
@@ -68,6 +70,7 @@ export function isNative(content: Content, s: Species, regionId: string | undefi
   const region = regionId ? content.regions.get(regionId) : undefined;
   if (!region) return false;
   if (s.form?.region) return s.form.region === region.id;
+  if (region.wildSpecies.includes(s.id)) return true;
   if (region.specialWilds.some((t) => s.id.endsWith(`-${t}`))) return true;
   return region.generations.length === 0 || region.generations.includes(s.generation);
 }

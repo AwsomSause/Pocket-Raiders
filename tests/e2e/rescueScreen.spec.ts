@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { passResult } from './helpers/resultGate';
 
 // Rival Rescue (R9): a due plan opens the Rescue screen over the map; the player can pick a plan, answer the beats and
 // the complication, beat the guard(s) of Quiet Extraction, see the result, and land back on a map. No console errors.
@@ -82,7 +83,8 @@ test('the rival rescue plan opens over the map and plays through', async ({ page
         }
         await page.waitForTimeout(250);
       }
-      await expect.poll(rescueUp, { timeout: 30_000 }).toBe(true);
+      // The last decline's result waits for an input before the map reopens the Rescue screen.
+      await expect.poll(async () => (await passResult(page), rescueUp()), { timeout: 30_000 }).toBe(true);
       const after = await plan();
       expect(after.fights).toHaveLength(fights);
       expect(after.wiped).toBe(false);

@@ -1,0 +1,1 @@
+{"textures": [{"image": "galarian-tangrowth.png", "format": "RGBA8888", "size": {"w": 158, "h": 126}, "scale": 1, "frames": [{"filename": "0001.png", "rotated": false, "trimmed": false, "sourceSize": {"w": 158, "h": 126}, "spriteSourceSize": {"x": 0, "y": 0, "w": 158, "h": 126}, "frame": {"x": 0, "y": 0, "w": 158, "h": 126}}]}], "meta": {"app": "tools/jet/make-jet-sprites.py"}}

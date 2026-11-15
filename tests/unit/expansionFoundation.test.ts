@@ -14,7 +14,7 @@ describe('expansion settings (settings v42)', () => {
   it('has the plan defaults and the current versions', () => {
     expect(CURRENT_VERSIONS.settings).toBe(42);
     expect(CURRENT_VERSIONS.run).toBe(43);
-    expect(EXPANSION_SETTINGS_DEFAULTS).toMatchObject({ climaxCut: 'standard', climaxSecondShot: true, healsPerBattle: 10, revivesPerBattle: 6, micInput: false, minigamesDifficulty: 'normal', wholeRunEventsPct: 35, secondChancePct: 5 });
+    expect(EXPANSION_SETTINGS_DEFAULTS).toMatchObject({ climaxCut: 'standard', micInput: false, minigamesDifficulty: 'normal' });
   });
   it('a v41 settings save gains the defaults and keeps its other settings', () => {
     const storage = new MemoryStorageProvider();
@@ -30,7 +30,7 @@ describe('expansion settings (settings v42)', () => {
     expect(out.expansion).toEqual(EXPANSION_SETTINGS_DEFAULTS);
   });
   it('rejects an out-of-range value (failure case)', () => {
-    expect(ExpansionSettingsSchema.safeParse({ wholeRunEventsPct: 400 }).success).toBe(false);
+    expect(ExpansionSettingsSchema.safeParse({ eventsDensity: 'huge' }).success).toBe(false);
     expect(ExpansionSettingsSchema.safeParse({ climaxCut: 'huge' }).success).toBe(false);
   });
   it('a saved setting round-trips', () => {

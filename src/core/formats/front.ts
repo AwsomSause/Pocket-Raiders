@@ -10,7 +10,7 @@
 // Only Kanto's lane (M2 taken) has content so far: the other regions' lanes come with their saga slices as rows of `LANE_TABLE`.
 
 import { launchFormatBattle } from './battle';
-import { markDone } from './store';
+import { markDone, climaxRegion } from './store';
 import type { FormatCard, FormatCtx, WideFormat } from './types';
 
 export interface FrontLane {
@@ -28,9 +28,22 @@ export const LANE_TABLE: { region: string; flag: string; lostValue: string; lane
   { region: 'kanto', flag: 'rocket.x.m2', lostValue: 'taken', lane: { id: 'kanto', leader: 'Giovanni', species: 'mewtwo', apex: 'M2' } },
 ];
 
+/** Alola's Phase 7 (Beta 0.7 E9): when the Mother Beast was not beaten in time, the Ultra Beasts come through. Three lanes, one beast each; same lane rules. */
+export const BEAST_FRONT = {
+  species: ['buzzwole', 'pheromosa', 'xurkitree'],
+  title: 'The Beasts Come Through',
+  intro: ['The sky over the Paradise tears. Things that are lost, frightened and very strong step through into the light.', 'Each of your Pokémon fights the beast in its own lane. When its lane is clear it may help the others.'],
+  held: 'Every lane held. The beasts drift back through the gap, and the sky closes.',
+  lost: 'The lanes broke. You fall back.',
+};
+/** Alola's Front only runs when the Mother Beast was taken (the timer ran out). */
+export const beastFrontOn = (run: FormatCtx['run']): boolean => run.story.flags['alola.x.mother-beast'] === 'taken';
+
 export type FrontResult = 'none' | 'held' | 'lost';
 
 export interface FrontState {
+  /** Set for Alola's beast Front (absent: the Rainbow Door). */
+  region?: string;
   lanes: FrontLane[];
   pending: boolean;
   result: FrontResult | null;
@@ -48,11 +61,20 @@ function lanesFor({ content, run }: FormatCtx, input?: unknown): FrontLane[] {
 export const formatForLanes = (n: number): 'triples' | 'doubles' | undefined => (n >= 3 ? 'triples' : n === 2 ? 'doubles' : undefined);
 
 function setup(ctx: FormatCtx, input?: unknown): FrontState {
+  if (input === undefined && climaxRegion(ctx.run) === 'alola') {
+    const lanes = BEAST_FRONT.species.filter((id) => ctx.content.species.has(id)).map((id) => ({ id, region: 'alola', leader: 'An Ultra Beast', species: id, apex: id }));
+    return { lanes, pending: false, result: lanes.length === 0 ? 'none' : null, region: 'alola' };
+  }
   const lanes = lanesFor(ctx, input);
   return { lanes, pending: false, result: lanes.length === 0 ? 'none' : null };
 }
 
 function describe(s: FrontState): FormatCard {
+  if (s.region === 'alola' && s.result !== 'none') {
+    return s.result
+      ? { title: BEAST_FRONT.title, lines: [s.result === 'held' ? BEAST_FRONT.held : BEAST_FRONT.lost], options: [], over: true }
+      : { title: BEAST_FRONT.title, lines: [...BEAST_FRONT.intro, `${s.lanes.length} lanes, fought at once.`], options: [{ id: 'begin', label: 'Hold the lanes', enabled: true }], over: false };
+  }
   if (s.result === 'none') {
     return {
       title: 'The Rainbow Door',
@@ -86,11 +108,12 @@ function describe(s: FrontState): FormatCard {
 function choose(s: FrontState, id: string, ctx: FormatCtx): FrontState {
   if (s.pending || s.result || id !== 'begin') return s;
   const format = formatForLanes(s.lanes.length);
+  const beast = s.region === 'alola';
   const ok = launchFormatBattle(ctx.content, ctx.run, 'front', {
     key: 'lanes',
-    name: 'Giovanni of Rainbow Rocket',
+    name: beast ? 'Ultra Beast Incursion' : 'Giovanni of Rainbow Rocket',
     classId: 'veteran',
-    sprite: 'giovanni',
+    ...(beast ? {} : { sprite: 'giovanni' }),
     lineup: s.lanes.map((l) => l.species),
     size: s.lanes.length,
     levelBonus: 3,
@@ -103,12 +126,13 @@ function choose(s: FrontState, id: string, ctx: FormatCtx): FrontState {
 function onBattleEnd(s: FrontState, won: boolean, { run }: FormatCtx): FrontState {
   if (!s.pending) return s;
   const result: FrontResult = won ? 'held' : 'lost';
-  run.story.flags['finale.x.front'] = result;
+  run.story.flags[s.region === 'alola' ? 'alola.x.front' : 'finale.x.front'] = result;
   markDone(run, 'front');
   return { ...s, pending: false, result };
 }
 
 export const front: WideFormat<FrontState> = {
+  canStart: (ctx, input) => input !== undefined || climaxRegion(ctx.run) === 'kanto' || (climaxRegion(ctx.run) === 'alola' && beastFrontOn(ctx.run)),
   id: 'front',
   setup,
   describe: (s) => describe(s),

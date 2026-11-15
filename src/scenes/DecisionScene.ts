@@ -93,6 +93,7 @@ export class DecisionScene extends Phaser.Scene {
     this.confirmMenu = null;
     this.confirmLayer = null;
     this.done = false;
+    this.dismiss = null;
     // A beaten raid boss asking to join plays that tier's capture jingle (Raid Battles pack).
     const tier = this.raidTier();
     if (tier) playMusic(this, raidCaptureTrack(tier));
@@ -108,16 +109,22 @@ export class DecisionScene extends Phaser.Scene {
     else if (decision.kind === 'mutator') this.buildMutator(decision.choices);
     else if (decision.kind === 'circuit') this.buildCircuit(decision.title, decision.options);
     else if (decision.kind === 'leagueDoor') this.buildSignature(decision.title, decision.options, 'circuit');
+    else if (decision.kind === 'mythicalVisit') this.buildSignature(decision.title, decision.options, 'circuit');
     else if (decision.kind === 'mentorship') this.buildMentorship(decision.mentorUid, decision.proteUid, decision.path, decision.types);
     else if (decision.kind === 'askLead') this.buildAskLead(decision.uid, decision.reason);
     else if (decision.kind === 'returnProtege') this.buildReturn(decision.mon, decision.mentorUid, decision.reason);
     else this.buildPpUp(decision.uid, decision.itemName, decision.ups);
   }
 
+  private dismiss: (() => void) | null = null;
   private compareStep?: (d: number) => void;
 
   private handleInput(action: InputAction): void {
-    if (this.done || this.hatching) return;
+    if (this.done) {
+      if (this.dismiss && (action === 'confirm' || action === 'back')) this.dismiss();
+      return;
+    }
+    if (this.hatching) return;
     if (!this.confirmMenu && !this.picker && (action === 'left' || action === 'right')) this.compareStep?.(action === 'left' ? -1 : 1);
     if (this.confirmMenu) this.confirmMenu.handle(action);
     else if (this.picker) this.picker.handle(action);
@@ -136,7 +143,19 @@ export class DecisionScene extends Phaser.Scene {
       .text(GAME_WIDTH / 2, GAME_HEIGHT / 2, result.message, textStyle(30, COLORS.textLight, { align: 'center', wordWrap: { width: GAME_WIDTH - 120 } }))
       .setOrigin(0.5)
       .setDepth(151);
-    this.time.delayedCall(1300, () => this.scene.start(sceneForRun(result.run)));
+    // The result stays until the player gives an input (a short beat first so the choosing key does not dismiss it).
+    const hint = this.add.text(GAME_WIDTH - 40, GAME_HEIGHT - 24, 'Enter: continue', textStyle(15, COLORS.textMuted)).setOrigin(1, 1).setDepth(151);
+    let leaving = false;
+    const go = (): void => {
+      if (leaving) return;
+      leaving = true;
+      this.scene.start(sceneForRun(result.run));
+    };
+    this.time.delayedCall(300, () => {
+      this.dismiss = go;
+      this.input.once('pointerdown', go);
+      this.tweens.add({ targets: hint, alpha: 0.4, duration: 600, yoyo: true, repeat: -1 });
+    });
   }
 
   /** A Yes/No box over the screen. */

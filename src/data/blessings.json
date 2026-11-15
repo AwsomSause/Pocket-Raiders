@@ -1,0 +1,245 @@
+{
+  "_note": "Legendary Blessings (Beta 0.7, workstream 5). Hand-written from docs/plans/instrumentality/notes-pack/LEGENDARY_BLESSINGS.md. In-run only: no cross-run memory. status: supported = the whole effect works; limited = part of the effect works (see limits); disabled = not in the pool until its mechanic exists.",
+  "tiers": {
+    "lesser": {
+      "chance": 45,
+      "influence": 2
+    },
+    "greater": {
+      "chance": 30,
+      "influence": 2
+    },
+    "divine": {
+      "chance": 17,
+      "influence": 1
+    },
+    "primordial": {
+      "chance": 6.5,
+      "influence": 1
+    },
+    "origin": {
+      "chance": 1.5,
+      "influence": 0
+    }
+  },
+  "balance": {
+    "lele": {
+      "healPercent": 10,
+      "communionPartyPercent": 5
+    },
+    "fezandipiti": {
+      "discountPercent": 10,
+      "communionDiscountPercent": 20
+    }
+  },
+  "blessings": [
+    {
+      "id": "tapu-lele",
+      "name": "The Guardian of Life",
+      "legendary": "Tapu Lele",
+      "speciesId": "tapu-lele",
+      "tier": "lesser",
+      "item": "item.gen5/heart-scale",
+      "objectText": "a pink shell, dusted with glittering scales",
+      "passage": "It scatters healing as a child scatters petals, and with as much thought for where it lands.",
+      "headline": "THE PETALS FALL WHERE THEY WILL",
+      "summary": "After every battle, your most hurt Pokémon recovers 10% HP.",
+      "effect": {
+        "kind": "healMostHurt"
+      },
+      "status": "supported",
+      "limits": "Communion: the rest of the party also heals 5%. Its Rite (restore the party fully, once) is on the Run menu. The \"heal a town\" half is not built."
+    },
+    {
+      "id": "fezandipiti",
+      "name": "The Fair Wish",
+      "legendary": "Fezandipiti",
+      "speciesId": "fezandipiti",
+      "tier": "lesser",
+      "item": "item.gen5/wishing-piece",
+      "objectText": "a purple chain worn as a necklace",
+      "passage": "It wished to be lovely, and was made lovely, and has not looked at anything else since.",
+      "headline": "THE WORLD IS KINDER TO THE LOVELY",
+      "summary": "Shops charge 10% less.",
+      "effect": {
+        "kind": "shopDiscount"
+      },
+      "status": "limited",
+      "limits": "The extra charming event answer is not built. Communion: shops 20% cheaper. Its Rite (beguile a trainer) is not built."
+    },
+    {
+      "id": "ho-oh",
+      "name": "The Rainbow",
+      "legendary": "Ho-Oh",
+      "speciesId": "ho-oh",
+      "tier": "divine",
+      "item": "item.gen5/rainbow-wing",
+      "objectText": "a golden feather falling through darkness",
+      "passage": "Three perished in the burning tower, and it wept, and they rose and ran. Therefore look up, you who have lost.",
+      "headline": "SACRED ASH",
+      "summary": "Once per region, after a battle, every fainted Pokémon in your party is restored.",
+      "effect": {
+        "kind": "sacredAsh"
+      },
+      "status": "supported",
+      "limits": "Communion: the first fainted Pokémon (in party order) comes back at half HP after a boss battle. Its Rite (bring back a Pokémon lost for good) is not built."
+    },
+    {
+      "id": "dialga",
+      "name": "The Time Keeper",
+      "legendary": "Dialga",
+      "speciesId": "dialga",
+      "tier": "divine",
+      "item": "item.gen5/rainbow-wing",
+      "objectText": "an ancient hourglass, turning by itself",
+      "passage": "And from the beginning, time was set into motion. Yet even the river of eternity may be made to flow backward, for the Keeper remembers what has passed.",
+      "headline": "TIME BENDS TO YOUR WILL",
+      "summary": "Once per stage, take a battle back up to five turns (the Rewind button), and after a whole-team wipe it happens by itself.",
+      "effect": {
+        "kind": "rewinds"
+      },
+      "status": "limited",
+      "limits": "Rewinds follow the Rewinds system (singles only; no button in doubles or triples). Communion: obtaining Dialga unlocks its Rite, going back to the start of the stage (team keeps its levels, moves and species; items and events of the stage are not kept), from the Run menu on the map."
+    },
+    {
+      "id": "palkia",
+      "name": "The Space Traveller",
+      "legendary": "Palkia",
+      "speciesId": "palkia",
+      "tier": "divine",
+      "item": "item.gen5/rainbow-wing",
+      "objectText": "a pearl with a fold in it that the eye cannot follow",
+      "passage": "It set the near beside the far and called it a road. Ask, and the mountain shall stand behind you that stood before.",
+      "headline": "REARRANGE THE ROAD",
+      "summary": "Once per region, swap any two nodes of a stage before entering it.",
+      "effect": {
+        "kind": "none"
+      },
+      "status": "disabled",
+      "limits": "Needs a map-rearranging screen."
+    },
+    {
+      "id": "moltres",
+      "name": "The Spring Fire",
+      "legendary": "Moltres",
+      "speciesId": "moltres",
+      "tier": "lesser",
+      "item": "item.gen5/flame-orb",
+      "objectText": "a feather that glows like an ember",
+      "passage": "Where it passes, winter gives up early, and is not sorry.",
+      "headline": "THE FIRST WARMTH",
+      "summary": "Burns on your Pokémon do half damage.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "burnDamageTakenMultiplier",
+          "value": 0.5
+        }
+      ],
+      "firstBattleOfStage": false,
+      "status": "limited",
+      "limits": "Only the half burn damage works. Burns are not removed after the battle and the first rest of a region does not give Bond."
+    },
+    {
+      "id": "munkidori",
+      "name": "The Clever Wish",
+      "legendary": "Munkidori",
+      "speciesId": "munkidori",
+      "tier": "lesser",
+      "item": "item.gen5/toxic-orb",
+      "objectText": "a purple cord tied round a brow",
+      "passage": "It wished to be clever, and was made clever enough to serve, and no cleverer.",
+      "headline": "CLEVER HANDS",
+      "summary": "Your status moves are 10% more accurate.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "statusMoveAccuracy",
+          "value": 1.1
+        }
+      ],
+      "firstBattleOfStage": false,
+      "status": "limited",
+      "limits": "The puzzle hint is not built."
+    },
+    {
+      "id": "tornadus",
+      "name": "The Cyclone",
+      "legendary": "Tornadus",
+      "speciesId": "tornadus",
+      "tier": "greater",
+      "item": "item.gen5/dragon-scale",
+      "objectText": "a gourd stoppered with cloud",
+      "passage": "It goes about at three hundred miles to the hour, knocking the roofs off, and is astonished every time to find that anyone minded.",
+      "headline": "THE WIND AT YOUR BACK",
+      "summary": "The first battle of each stage begins with a Tailwind on your side for two turns.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "battleStart",
+          "tailwind": true,
+          "turns": 2
+        }
+      ],
+      "firstBattleOfStage": true,
+      "status": "supported",
+      "limits": "Communion and its Rite are not built."
+    },
+    {
+      "id": "zacian",
+      "name": "The Sword",
+      "legendary": "Zacian",
+      "speciesId": "zacian",
+      "tier": "greater",
+      "item": "item.gen5/dawn-stone",
+      "objectText": "a rusted blade",
+      "passage": "It slept in the wood with the rust upon it and was not ashamed; a blade is known by what it was drawn against.",
+      "headline": "THE FIRST STRIKE RINGS TRUE",
+      "summary": "Your first damaging move in each battle gains 20%.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "firstAttackDamage",
+          "first": 1.2,
+          "later": 1
+        }
+      ],
+      "firstBattleOfStage": false,
+      "status": "supported",
+      "limits": "Communion and its Rite are not built."
+    },
+    {
+      "id": "regidrago",
+      "name": "The Unfinished Dragon",
+      "legendary": "Regidrago",
+      "speciesId": "regidrago",
+      "tier": "greater",
+      "item": "item.gen5/dragon-fang",
+      "objectText": "a red crystal shaped like half a jaw",
+      "passage": "The maker had not crystal enough to finish it. It has only the head; and the head remembers the rest.",
+      "headline": "AN UNFINISHED JAW",
+      "summary": "Dragon moves gain 15%.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "damageMultiplier",
+          "type": "dragon",
+          "value": 1.15
+        }
+      ],
+      "firstBattleOfStage": false,
+      "status": "limited",
+      "limits": "The +10% for any move used at full HP is not built. Communion and its Rite are not built."
+    }
+  ]
+}

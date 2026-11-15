@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createBattle, resolveTurn, type BattleContext } from '../../src/core/battle/engine';
 import { chooseEvent, conditionMet } from '../../src/core/events';
-import { abilityOf, createPokemon } from '../../src/core/pokemon';
+import { abilityOf, createPokemon, lookSpecies } from '../../src/core/pokemon';
 import { chooseStarter, createRun, debugForceEvent } from '../../src/core/run';
 import { hashSeed, Rng } from '../../src/core/rng';
 import { conditionMet as met } from '../../src/core/events';
@@ -111,6 +111,22 @@ describe('Squirtle Squad', () => {
     expect(sq.moves.map((m) => m.id)).toEqual(expect.arrayContaining(['swagger', 'hex']));
     expect(out.story.flags['ev:kanto-squad-joined']).toBe(1);
     expect(heldCount(out, 'cool-shades')).toBe(1);
+  });
+  it('the Squad wears its Anime Forms art: lesser Squirtle, leader Wartortle and Blastoise, leader gift', () => {
+    const battle = (id: string) => room(id).choices[0]!.success.battle as { look?: string } | undefined;
+    expect(battle(`${P}squad-n1`)?.look).toBe('squad-lesser');
+    expect(battle(`${P}squad-n2`)?.look).toBe('squad-leader');
+    expect(battle(`${P}squad-n3`)?.look).toBe('squad-leader');
+    const { run, sideId } = debugForceEvent(content, structuredClone(begin('SQR')), `${P}squad-reward`);
+    const out = chooseEvent(content, run, sideId, 0).run;
+    const sq = out.pending.flatMap((p) => (p.kind === 'caught' && p.mon.speciesId === 'squirtle' ? [p.mon] : []))[0]!;
+    expect(sq.look).toBe('squad-leader');
+    expect(lookSpecies(content, sq).assets.sprite).toBe('custom/anime-leader-squirtle-squad');
+    // Presentation only: same species, stats and name; an evolved Squad member keeps the look.
+    expect(lookSpecies(content, sq).baseStats).toEqual(content.species.get('squirtle')!.baseStats);
+    expect(lookSpecies(content, { ...sq, speciesId: 'wartortle' }).assets.sprite).toBe('custom/anime-leader-wartortle');
+    // A look with no art for this species falls back to the normal sprite.
+    expect(lookSpecies(content, { ...sq, speciesId: 'pikachu' }).assets.sprite).toBe(content.species.get('pikachu')!.assets.sprite);
   });
   it('is 65% the pranksters and 35% a standoff', () => {
     const c = room(`${P}squad`).choices[0]!;

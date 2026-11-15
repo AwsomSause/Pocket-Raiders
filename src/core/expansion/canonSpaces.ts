@@ -67,9 +67,13 @@ export const CanonStateSchema = z.object({
   menus: z.record(z.string(), z.array(spaceId)).default({}),
   /** Saffron: party members waiting while one Pokémon fights alone (PokemonInstance rows; checked where they are used). */
   stash: z.array(z.unknown()).optional(),
+  /** Accessibility: a loss in Sabrina's Labyrinth resumes from the last room reached instead of starting over (setting `labyrinthResume`). */
+  labResume: z.boolean().optional(),
   solo: z.object({ keep: z.string(), order: z.array(z.string()), mode: z.enum(['tournament', 'labyrinth']) }).optional(),
   /** Saffron: Sabrina's Labyrinth. `owed`: the ghost returns in the next region; `returned`: it already did. */
-  lab: z.object({ ghost: z.string(), ghostUid: z.string(), regionIndex: z.number().int(), stageIndex: z.number().int(), freed: z.array(z.string()), active: z.boolean(), done: z.boolean(), owed: z.boolean(), returned: z.boolean() }).optional(),
+  lab: z.object({ ghost: z.string(), ghostUid: z.string(), regionIndex: z.number().int(), stageIndex: z.number().int(), room: z.number().int().min(0).optional(), freed: z.array(z.string()), active: z.boolean(), done: z.boolean(), owed: z.boolean(), returned: z.boolean() }).optional(),
+  /** Fighting Tournament afterstory: the rival you beat in the final turns up in the next region in a home-made belt. `returned`: it already did. */
+  rival: z.object({ species: z.string(), regionIndex: z.number().int(), returned: z.boolean() }).optional(),
 });
 export type CanonState = z.infer<typeof CanonStateSchema>;
 
@@ -90,17 +94,23 @@ const met = (sp: CanonSpace, flags: ReadonlySet<string>, have: ReadonlySet<strin
  * Pseudo Stage cap in total, and a space whose requirements are not met, or whose one-time reward is already owned,
  * is never drawn. A space needing another space is drawn only once that one is on the menu or completed.
  */
+/**
+ * Beta 0.7: these Kanto spaces are switched off until their rebuilt versions land (Kice: the shipped cards do not match
+ * the design, and the pseudo stages were never built). Their data and events stay in the catalog; they are only never offered.
+ */
+export const RETIRED_SPACES: ReadonlySet<string> = new Set<string>([]);
+
 export function buildTownMenu(file: CanonSpacesFile, input: TownMenuInput): string[] {
   const slot = file.slots.find((s) => s.slot === input.slot);
   if (!slot) throw new Error(`unknown canon slot ${input.slot}`);
   // Sub-spaces ride inside their parent; routes belong to no town. Only top-level town spaces are on a menu.
-  const inTown = file.spaces.filter((s) => s.town === slot.town && s.parent === null);
+  const inTown = file.spaces.filter((s) => s.town === slot.town && s.parent === null && !RETIRED_SPACES.has(s.id));
   const owned = (sp: CanonSpace) => sp.uniqueRewardFlag !== null && input.flags.has(sp.uniqueRewardFlag);
   const menu: CanonSpace[] = [];
   const onMenu = new Set<string>(input.completed);
   const add = (sp: CanonSpace) => { menu.push(sp); onMenu.add(sp.id); };
 
-  if (slot.always) for (const id of slot.always) add(file.spaces.find((s) => s.id === id)!);
+  if (slot.always) for (const id of slot.always) { if (!RETIRED_SPACES.has(id)) add(file.spaces.find((s) => s.id === id)!); }
   else for (const sp of inTown) if (sp.appears === 'always') add(sp);
   for (const sp of inTown) if ((sp.appears === 'trigger' || sp.appears === 'locked') && met(sp, input.flags, input.completed) && !owned(sp)) add(sp);
 

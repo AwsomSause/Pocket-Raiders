@@ -8,6 +8,7 @@
 // (Visual Bible: "a deliberate escalation from normal stages").
 
 import { climaxTick } from '../core/arc/climaxExtended';
+import { epilogueTick } from '../core/epilogue/director';
 import { nodeHint } from '../core/worldSim/tick';
 import { mapOmens, type Omen, type OmenTier } from '../core/omens';
 import { wealthTaxNotice } from '../core/priceSwing';
@@ -102,6 +103,9 @@ import { rivalReport } from '../core/rivals/report';
 import { trackPage } from '../core/expansion/trackView';
 import { fieldNotesView } from '../core/expansion/fieldNotes';
 import { drawFieldNotes, type FieldNotesPage } from '../ui/fieldNotesPage';
+import { drawNodeMenu, type NodeMenuPanel } from '../ui/nodeMenuPanel';
+import { menuBlocker, menuSideIds, type MenuEntryView } from '../core/nodeMenu/flow';
+import { nodeMenuData } from '../core/nodeMenu/data';
 import { drawTrackPage } from '../ui/trackPage';
 import { drawDossier } from '../ui/dossier';
 import { dossierFolders } from '../core/expansion/cast/dossier';
@@ -125,6 +129,8 @@ const KIND_STYLE: Record<MapNode['kind'], { color: number; glyph: string; label:
   elite: { color: 0x6848b0, glyph: 'E', label: 'Elite Four' },
   champion: { color: 0xd8a020, glyph: 'C', label: 'Champion' },
 };
+/** Pseudo-stage rooms that are not a plain fight show what waits there. */
+const ROOM_GLYPH: Record<string, string> = { mystery: '✦', puzzle: '?', trap: '⚠', cache: '▣', rest: '♥', hidden: '🔒', exit: '⇦', rare: '★', den: '♨', story: '✎' };
 const BOSS_KINDS: readonly MapNode['kind'][] = ['gym', 'elite', 'champion'];
 const HARDER_COLOR = 0x9048c8;
 const SIDE_STYLE: Record<SideStop['kind'], { color: number; glyph: string }> = {
@@ -159,6 +165,7 @@ const serviceReusable = (side: SideStop): boolean => SERVICES.services.find((x) 
 type Option =
   | { kind: 'node'; node: MapNode }
   | { kind: 'side'; side: SideStop }
+  | { kind: 'nodeMenu' }
   | { kind: 'party' }
   | { kind: 'bag' }
   | { kind: 'camp' }
@@ -268,6 +275,12 @@ export class MapScene extends Phaser.Scene {
     }
     // Wide formats (Breather and the rest): a running format shows its plain screen on top of the map.
     if (run.phase === 'map' && climaxTick(session.content, run)) session.saveRunNow();
+    // Beta 0.7: the Citadark finale and the Region of Doom (optional chapters of a won run) play on the same map.
+    if (run.phase === 'map') {
+      const ep = epilogueTick(session.content, run);
+      if (ep === 'over') { session.finishRun(); this.time.delayedCall(0, () => this.scene.start('GameOver')); return; }
+      if (ep !== 'idle') session.saveRunNow();
+    }
     // The director launched a climax battle: the battle screen takes over.
     if (run.phase === 'battle') { this.time.delayedCall(0, () => this.scene.start('Battle')); return; }
     if (pendingFormat(run)) {
@@ -418,7 +431,7 @@ export class MapScene extends Phaser.Scene {
       this.add.text(26, 44, `Elite Four, then ${leader.title}  ·  Healed after every battle`, textStyle(16, hSub));
     } else {
       const blind = blindMap(run.rules);
-      this.add.text(24, 12, `Stage ${stage.index + 1}: ${blind ? '???' : theme.name}`, textStyle(28, hInk));
+      this.add.text(24, 12, stage.pseudo ? `${stage.pseudo.name}` : `Stage ${stage.index + 1}: ${blind ? '???' : theme.name}`, textStyle(28, hInk));
       const stageMod = stageModifier(run);
       if (stageMod) this.add.text(24 + 560, 14, stageMod.name, textStyle(18, hSub));
       let bx = 26;
@@ -426,10 +439,10 @@ export class MapScene extends Phaser.Scene {
         const b = badge(this, bx, 44, type, TYPE_COLORS[type] ?? 0x808080, 14);
         bx += b.width + 6;
       }
-      this.add.text(bx + 8, 44, leader.title, textStyle(16, hSub));
+      this.add.text(bx + 8, 44, stage.pseudo ? `Inside Stage ${stage.index + 1}  ·  not a stage of its own` : leader.title, textStyle(16, hSub));
     }
     this.add
-      .text(GAME_WIDTH - 24, 14, `${region.name}  ·  ${league ? 'Battle' : 'Level'} ${column}/${stage.map.columns}`, textStyle(24, hInk))
+      .text(GAME_WIDTH - 24, 14, `${region.name}  ·  ${league ? 'Battle' : stage.pseudo ? 'Room' : 'Level'} ${column}/${stage.map.columns}`, textStyle(24, hInk))
       .setOrigin(1, 0);
     const hud = this.add
       .text(GAME_WIDTH - 24, 44, `${clockLabel(run)}  ·  ${tideLabel(content, run)}  ·  ₽${run.money}  ·  Badges ${run.badges.length}  ·  Level cap ${cap}${wipeStatus(run) ? `  ·  Wipes ${wipeStatus(run)!.wipes}${wipeStatus(run)!.max ? `/${wipeStatus(run)!.max}` : ''}` : ''}`, textStyle(16, hSub))
@@ -479,7 +492,7 @@ export class MapScene extends Phaser.Scene {
       if (light.alpha > 0) this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, light.tint, light.alpha * 0.8).setOrigin(0).setDepth(-46).setName('map-daylight');
     }
     // Weather forecast: a front ahead, or the one you are in, and fog.
-    const fc = league ? null : forecast(content, run);
+    const fc = league || stage.pseudo ? null : forecast(content, run);
     if (fc) {
       const where = fc.startsIn === 0 ? `now over levels ${fc.front.from}–${fc.front.to}` : `in ${fc.startsIn} level${fc.startsIn === 1 ? '' : 's'} (levels ${fc.front.from}–${fc.front.to})`;
       const band = fc.front.band === 'all' ? '' : fc.front.band === 'high' ? ', top route only' : ', lower routes only';
@@ -652,7 +665,8 @@ export class MapScene extends Phaser.Scene {
       }
       // What waits there: a Poké Ball for wild Pokémon, the boss's portrait, or a letter.
       const boss = this.bossFor(n);
-      if (!fog && n.kind === 'wild' && this.textures.exists('ball.pb')) {
+      const roomGlyph = n.roomKind ? ROOM_GLYPH[n.roomKind] : undefined;
+      if (!fog && n.kind === 'wild' && !roomGlyph && this.textures.exists('ball.pb')) {
         mapLayer.add(this.add.image(x, y - 1, 'ball.pb').setScale(2).setAlpha(alpha));
       } else if (boss) {
         const art = trainerVisual(this, boss.spriteAssetId, boss.name, x, y + r - 4, 1);
@@ -660,7 +674,7 @@ export class MapScene extends Phaser.Scene {
         art.setAlpha(alpha);
         mapLayer.add(art);
       } else {
-        mapLayer.add(this.add.text(x, y, style.glyph, textStyle(26, '#ffffff', { stroke: '#181818', strokeThickness: 4 })).setOrigin(0.5).setAlpha(alpha));
+        mapLayer.add(this.add.text(x, y, roomGlyph ?? style.glyph, textStyle(26, '#ffffff', { stroke: '#181818', strokeThickness: 4 })).setOrigin(0.5).setAlpha(alpha));
       }
       if (n.harder && !fog) mapLayer.add(this.add.text(x + r - 2, y - r + 2, '!', textStyle(22, '#f8f8f8', { stroke: '#5a2890', strokeThickness: 5 })).setOrigin(0.5));
       // Story Run (S4): a Story Stop still to play here.
@@ -671,7 +685,7 @@ export class MapScene extends Phaser.Scene {
       const omen = fog ? null : this.omens[n.id];
       if (omen) mapLayer.add(this.add.text(x - r + 2, y + r - 12, '●', textStyle(20, OMEN_COLOR[omen.tier], { stroke: '#181818', strokeThickness: 4 })).setOrigin(0.5));
       // A weather front over this node: a small badge in the front's colour.
-      const front = fog ? null : frontAt(content, run, n);
+      const front = fog || stage.pseudo ? null : frontAt(content, run, n);
       if (front) {
         const fb = this.add.graphics();
         fb.fillStyle(0x181818, 1);
@@ -728,7 +742,7 @@ export class MapScene extends Phaser.Scene {
       const kindOf = (n: MapNode) => KIND_STYLE[n.kind];
       const rects = drawNextStop(this, {
         motion: this.motion,
-        lines: [`Stage ${stage.index + 1}: ${theme.name}`, clockLabel(run), `₽${run.money} · Badges ${run.badges.length}`, `Level cap ${cap}`, `${leader.title} in ${Math.max(0, stage.map.columns - column)} stops`],
+        lines: [stage.pseudo ? `${stage.pseudo.name} (inside Stage ${stage.index + 1})` : `Stage ${stage.index + 1}: ${theme.name}`, clockLabel(run), `₽${run.money} · Badges ${run.badges.length}`, `Level cap ${cap}`, stage.pseudo ? `${stage.pseudo.name}: ${Math.max(0, stage.map.columns - column)} rooms to go` : `${leader.title} in ${Math.max(0, stage.map.columns - column)} stops`],
         cards: cardNodes.map((n) => ({
           title: kindOf(n).label,
           color: kindOf(n).color,
@@ -780,7 +794,15 @@ export class MapScene extends Phaser.Scene {
 
     const buttons: { option: Option; label: string; color: number }[] = [];
     const currentNode = stage.current ? findNode(stage.map, stage.current) : null;
+    // Beta 0.7 Node Event Menus: the node's stops live in its menu (one button); stops the menu doesn't own keep their own.
+    const menuView = services().session.nodeMenu();
+    const owned = menuView ? menuSideIds(run) : new Set<string>();
+    if (menuView && menuView.entries.some((v) => v.entry.kind !== 'encounter')) {
+      const open = menuView.entries.filter((v) => v.entry.kind !== 'encounter' && !v.done && !v.locked).length;
+      buttons.push({ option: { kind: 'nodeMenu' }, label: open > 0 ? `Here (${open})` : 'Here', color: menuBlocker(run) ? 0xc8443c : 0x2f8fd0 });
+    }
     for (const side of currentNode?.sides ?? []) {
+      if (owned.has(side.id)) continue;
       if (side.kind !== 'shop' && side.used && !(side.kind === 'service' && serviceReusable(side))) continue;
       buttons.push({ option: { kind: 'side', side }, label: side.kind === 'expedition' && legendOf(side.expeditionId) ? 'Legendary' : SIDE_LABEL[side.kind], color: side.kind === 'expedition' && legendOf(side.expeditionId) ? LEGEND_STYLE.color : side.kind === 'event' && !stopIsHidden(content, run, currentNode!, side) ? stopStyle(content.events.get(side.eventId ?? '')?.stop).color : SIDE_STYLE[side.kind].color });
     }
@@ -821,6 +843,10 @@ export class MapScene extends Phaser.Scene {
       }
       if (this.fieldNotes) {
         this.fieldNotes.handle(action);
+        return;
+      }
+      if (this.nodeMenuPanel) {
+        this.nodeMenuPanel.handle(action);
         return;
       }
       if (this.report) {
@@ -886,7 +912,9 @@ export class MapScene extends Phaser.Scene {
       this.showBanner('Welcome back', league ? `${region.name} League` : `Stage ${stage.index + 1}`, `Resumed at ${league ? 'battle' : 'level'} ${Math.max(1, column)} of ${stage.map.columns}  ·  Day ${run.clock.day}  ·  Your run was saved here`);
     } else if (stage.current === null && !data.notice) {
       const regions = run.regionOrder.length;
-      if (league) {
+      if (stage.pseudo) {
+        this.showBanner(`Inside Stage ${stage.index + 1}`, stage.pseudo.name, `${theme.types.map((t) => t.toUpperCase()).join(' / ')}  ·  Clear the rooms to walk back out`);
+      } else if (league) {
         const size = getCampaign(content, run.campaignId).eliteFourSize;
         const tournament = region.id === 'galar' && stage.map.nodes.some((n) => n.sides.length > 0);
         if (tournament) this.showBanner(region.name, 'Champion Tournament', `32 trainers, ${size + 1} wins to the title  ·  Healed after every round  ·  Ball Guy's shop after rounds 2 and 4`);
@@ -897,6 +925,9 @@ export class MapScene extends Phaser.Scene {
         this.showBanner(`Stage ${stage.index + 1}`, blindMap(run.rules) ? '???' : theme.name, `${blindMap(run.rules) ? 'Blind Research' : theme.types.map((t) => t.toUpperCase()).join(' / ')}  ·  ${leader.title}`, run.stagePlan?.lines ?? []);
       }
     }
+    // A pseudo-stage room opens as soon as you reach its node, like a stage fight does.
+    const room = stage.pseudo && stage.current && run.phase === 'map' ? findNode(stage.map, stage.current).sides.find((x) => x.kind === 'event' && !x.used) : undefined;
+    if (room) this.time.delayedCall(450, () => this.scene.start('Event', { sideId: room.id }));
     this.askRegionForm();
   }
 
@@ -1055,6 +1086,11 @@ export class MapScene extends Phaser.Scene {
   private describe(option: Option): string {
     const content = services().session.content;
     switch (option.kind) {
+      case 'nodeMenu': {
+        const v = services().session.nodeMenu();
+        const blocker = menuBlocker(services().session.run!);
+        return blocker ?? `What to do here: ${v ? 'pick up to 3 things' : 'nothing'}. Some stops are always open; the rest lock once your picks are used.`;
+      }
       case 'node': {
         const n = option.node;
         const runNow = services().session.run!;
@@ -1156,7 +1192,15 @@ export class MapScene extends Phaser.Scene {
     if (!option) return;
     const { session } = services();
     switch (option.kind) {
+      case 'nodeMenu':
+        this.toggleNodeMenu();
+        break;
       case 'node': {
+        const blocker = menuBlocker(session.run!);
+        if (blocker) {
+          this.scene.restart({ notice: blocker, focus: i });
+          break;
+        }
         this.busy = true;
         playSfx(this, 'ui.select');
         const repelled = option.node.kind === 'wild' && repelActive(session.content, session.run!);
@@ -1776,6 +1820,56 @@ export class MapScene extends Phaser.Scene {
   private legend: Phaser.GameObjects.Container | null = null;
   private report: Phaser.GameObjects.Container | null = null;
   private fieldNotes: FieldNotesPage | null = null;
+  private nodeMenuPanel: NodeMenuPanel | null = null;
+
+  /** Beta 0.7 Node Event Menus: the menu pop-up. Picking a stop opens it as before; a micro entry plays at once. */
+  private toggleNodeMenu(): void {
+    if (this.nodeMenuPanel) {
+      this.nodeMenuPanel.layer.destroy();
+      this.nodeMenuPanel = null;
+      this.busy = false;
+      return;
+    }
+    if (this.report || this.busy || this.picker || this.legend || this.fieldNotes) return;
+    const { session } = services();
+    const view = session.nodeMenu();
+    const run = session.run;
+    if (!view || !run?.stage?.current) return;
+    const content = session.content;
+    const node = findNode(run.stage.map, run.stage.current);
+    const sideOf = (v: MenuEntryView) => node.sides.find((s) => s.id === v.entry.sideId);
+    const label = (v: MenuEntryView): string => {
+      const side = sideOf(v);
+      if (side && side.kind === 'event' && stopIsHidden(content, run, node, side)) return '???';
+      return v.entry.label;
+    };
+    const blurb = (v: MenuEntryView): string => {
+      if (v.entry.kind === 'micro') return nodeMenuData().micro.find((m) => m.id === v.entry.microId)?.blurb ?? '';
+      const side = sideOf(v);
+      if (side) return this.describe({ kind: 'side', side }).split('\n')[0]!;
+      return String(v.entry.data?.text ?? '');
+    };
+    const pick = (v: MenuEntryView): void => {
+      let res: ReturnType<typeof session.pickMenuEntry>;
+      try {
+        res = session.pickMenuEntry(v.entry.id);
+      } catch (err) {
+        console.warn('Menu pick refused', err);
+        return;
+      }
+      this.toggleNodeMenu();
+      const side = res.sideId ? findNode(res.run.stage!.map, res.run.stage!.current!).sides.find((s) => s.id === res.sideId) : undefined;
+      if (side) {
+        const i = this.options.length;
+        this.options.push({ kind: 'side', side });
+        this.activate(i);
+        return;
+      }
+      this.scene.restart({ notice: res.text ?? undefined, focus: this.index });
+    };
+    this.nodeMenuPanel = drawNodeMenu(this, view, label, blurb, pick, () => this.toggleNodeMenu());
+    this.busy = true;
+  }
   private bracket: Phaser.GameObjects.Container | null = null;
 
   /** Galar's Champion Tournament bracket: the five rounds, who is left, your next opponent. Presentation only (core/galarTournament.ts bracketView). */

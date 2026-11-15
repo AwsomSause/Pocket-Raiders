@@ -2,12 +2,14 @@
 // and the permanent profile. These schemas double as save-file validators,
 // so the game refuses to load a save that doesn't match.
 
+import { UltraRuleIdSchema } from './ultra/beasts';
 import { ExpansionRunSchema, ExpansionSettingsSchema, EXPANSION_SETTINGS_DEFAULTS } from './expansion/schema';
 import { ProfileStorySchema, StorySettingsSchema, STORY_SETTINGS_DEFAULTS } from './story2/schema';
 import { TreasureHuntSchema } from './treasureHunt';
 import { EVENT_STYLE_IDS } from './presentation/eventStyles';
 import { PLAZA_STYLE_IDS } from './presentation/plazaStyles';
 import { NATURE_IDS } from './natures';
+import { ANIME_LOOKS } from './animeLooks';
 import { CareSchema } from './care/mods';
 import { DramaBattleSchema, freshDrama } from './drama/schema';
 import { z } from 'zod';
@@ -21,6 +23,8 @@ import { PartyLifeStateSchema, createPartyLife } from './partyLife/schema';
 import { freshHyperBattle } from './battle/hyper';
 import { SpectacleBattleSchema } from './battle/spectacle';
 import { TraitsSchema, type Traits } from './expansion/traits';
+import { StoryTraitsSchema, type StoryTraits } from './expansion/storyTraits';
+import { PondMarkSchema } from './episodes/poliPond';
 import { TimedStageSchema, VariantsSchema, type TimedStage, type Variants } from './expansion/variantLines';
 import { ArenaSchema, SkillInputSchema } from './battle/w1Play';
 
@@ -96,14 +100,20 @@ export const PokemonInstanceSchema = z.object({
    * Pokémon from saves made before abilities existed get the first one.
    */
   abilitySlot: z.number().int().min(-1).default(0),
+  /** Poli-Pond (Beta 0.7): the Poliwag of the story (or what it grew into) carries its lessons here. Optional, so older saves load as they are. */
+  pond: PondMarkSchema.optional(),
   /** An ability it was given outright (Squirtle Squad's Contrary); it beats the slot. Optional, so older saves load as they are. */
   fixedAbility: z.string().optional(),
+  /** Pidgey's Resolve (Beta 0.7): Mega Evolves with no Mega Stone and takes the ability Sky's Resolve while Mega. Optional, so older saves load as they are. */
+  skyMega: z.literal(true).optional(),
   /** New Island clones have no ability at all. Optional, so older saves load as they are. */
   abilityless: z.boolean().optional(),
   /** Evolutions it can never take (the Tournament champion Primeape never becomes Annihilape). Optional, so older saves load as they are. */
   evoBlock: z.array(z.string()).optional(),
   /** The Fighting Tournament champion belt (a cosmetic form; shown as a tag). Optional. */
   champion: z.literal(true).optional(),
+  /** Anime Forms art (core/animeLooks.ts): Squirtle Squad members and the Tournament champion Primeape. Presentation only. Optional. */
+  look: z.enum(ANIME_LOOKS).optional(),
   /** Its nature (core/natures.ts). Missing in saves from before natures: neutral. */
   nature: z.enum(NATURE_IDS).optional(),
   /** S418 temporary mint: this nature counts instead of `nature` until `battles` more won battles have passed. */
@@ -184,9 +194,11 @@ export const HeldStateSchema = z.object({
   playerAttacks: z.number().int().min(0).default(0),
   /** Berries the player's side ate this battle (Powder Jar, Gooey Mulch). */
   berries: z.number().int().min(0).default(0),
+  /** Kitchen Heat: Pokémon (by uid) that are burned in front of it and can't eat Berries right now. */
+  berryLock: z.record(z.string(), z.boolean()).default({}),
 });
 export type HeldState = z.infer<typeof HeldStateSchema>;
-export const freshHeldState = (): HeldState => ({ used: {}, choice: {}, streak: {}, popped: [], sure: [], first: [], crit: {}, lost: {}, gained: {}, embargo: {}, magicRoom: 0, playerAttacks: 0, berries: 0 });
+export const freshHeldState = (): HeldState => ({ used: {}, choice: {}, streak: {}, popped: [], sure: [], first: [], crit: {}, lost: {}, gained: {}, embargo: {}, magicRoom: 0, playerAttacks: 0, berries: 0, berryLock: {} });
 
 /** Battle-only conditions on the Pokémon in battle; cleared when it switches out. */
 export const VolatileSchema = z.object({
@@ -301,12 +313,20 @@ export const VolatileSchema = z.object({
   dynamoBoost: z.boolean().default(false),
   /** Rune Sigil: the first punch since switching in has landed. */
   sigilUsed: z.boolean().default(false),
+  /** Parcel Guard / Neon Camouflage / Thunderhead: the once-per-switch-in effect has gone off. */
+  parcelUsed: z.boolean().default(false),
+  camoUsed: z.boolean().default(false),
+  thunderheadUsed: z.boolean().default(false),
   /** Silent Cloak: the first move since switching in has been used. */
   cloakUsed: z.boolean().default(false),
   /** Champion's Fury: its first attack since switching in has gone off. */
   furyUsed: z.boolean().default(false),
-  /** Haunted (the Haunting move): 0 = no, else the number of foe turns it has haunted (odd turns lower a random stat, even turns confuse). */
+  /** Haunted (the Haunting move): 0 = no, else the number of foe turns it has haunted (a fixed four-turn cycle: odd turns lower a random stat, even turns 50% confuse). */
   haunted: z.number().int().min(0).default(0),
+  /** Haunted lasts this many foe turns (4; bosses 2). */
+  hauntedTurns: z.number().int().min(0).default(4),
+  /** Turns left in which Haunting cannot be re-applied after it ended (2). */
+  hauntLock: z.number().int().min(0).default(0),
   /** Gem Orbit: gems shattered so far (4 per battle). */
   gems: z.number().int().min(0).default(0),
   /** Nightmare: loses HP while asleep. */
@@ -430,9 +450,14 @@ export const freshVolatile = (): Volatile => ({
   ampCount: 0,
   dynamoBoost: false,
   sigilUsed: false,
+  parcelUsed: false,
+  camoUsed: false,
+  thunderheadUsed: false,
   cloakUsed: false,
   furyUsed: false,
   haunted: 0,
+  hauntedTurns: 4,
+  hauntLock: 0,
   gems: 0,
   nightmare: false,
   cursed: false,
@@ -553,6 +578,7 @@ export const freshExtra = () => ({
   variants: {} as Variants,
   variantTimed: [] as TimedStage[],
   traits: {} as Traits,
+  storyTraits: {} as StoryTraits,
   /** Lights Out: turns of darkness left (accuracy -10% for both sides). */
   darkTurns: 0,
   /** Payout: its holder knocked out a foe this battle, so the prize money is doubled. */
@@ -749,14 +775,18 @@ export const BattleStateSchema = z.object({
   /** Growth paths (core/overhaul/growth.ts): the first battle of a clock day, and once-per-battle marks. Optional, so no save bump. */
   firstOfDay: z.boolean().optional(),
   growthMarks: z.array(z.string()).optional(),
+  /** Beta 0.7 S1 Second Chance: this fight was revived once; every Pokémon sent in gets +1 to all stats (core/instrumentality/secondChance.ts). */
+  secondChance: z.boolean().optional(),
+  /** Beta 0.7 Flight North: this fight is the Bug-type's return (core/instrumentality/flightNorth.ts). */
+  flightNorth: z.boolean().optional(),
   /** Index into run.party of the Pokémon currently fighting. */
   activeIndex: z.number().int().min(0),
   /** The opposing team (one Pokémon for wild battles). */
-  enemyTeam: z.array(PokemonInstanceSchema).min(1).max(6),
+  enemyTeam: z.array(PokemonInstanceSchema).min(1).max(7), // 7 only for listed story bosses (EventBattle `seventh`); the player stays at 6
   /** Which member of enemyTeam is out. */
   enemyIndex: z.number().int().min(0),
   /** The opposing trainer. `leaderId` is set for gym leaders (classId is then "gym-leader"). */
-  trainer: z.object({ classId: z.string(), name: z.string(), leaderId: z.string().nullable().default(null), /** Beta 0.6: drawn as this boss character (formats: Sabrina, Giovanni). */ spriteBoss: z.string().optional() }).nullable(),
+  trainer: z.object({ classId: z.string(), name: z.string(), leaderId: z.string().nullable().default(null), /** Beta 0.6: drawn as this boss character (formats: Sabrina, Giovanni). */ spriteBoss: z.string().optional(), /** Poli-Pond: the "trainer" is drawn as this Pokémon (a species id). */ spritePokemon: z.string().optional() }).nullable(),
   playerStages: StagesSchema,
   enemyStages: StagesSchema,
   playerVolatile: VolatileSchema.default(freshVolatile),
@@ -783,6 +813,8 @@ export const BattleStateSchema = z.object({
     variantTimed: z.array(TimedStageSchema).default([]),
     /** Beta 0.6 signature traits (core/expansion/traits.ts): uid -> trait and counters. */
     traits: TraitsSchema,
+    /** Beta 0.7 team-wide story traits (core/expansion/storyTraits.ts): uid -> trait. Off unless the run's `storyTraits` setting is on. */
+    storyTraits: StoryTraitsSchema,
     darkTurns: z.number().int().min(0).default(0),
     payout: z.boolean().default(false),
     /** Galar big-battle moments already used (evolve-and-survive per Pokémon, the thread, the cheat) and ones pending this hit (galarMoments.ts). */
@@ -897,8 +929,12 @@ export const BattleStateSchema = z.object({
   foresight: z.object({ ended: z.boolean(), revealed: z.string().nullable() }).optional(),
   /** Run events B: special rules of this event fight (no switching, no attacks, turn limits...); see EventRuleSchema. */
   eventRule: EventRuleSchema.optional(),
+  /** Beta 0.7 U1: the Ultra Rules in force for this battle (core/ultra/run.ts markBattle): both sides alike. Absent when the system is off. */
+  ultra: z.array(UltraRuleIdSchema).optional(),
   /** Every move's accuracy is multiplied by this for both sides (Veridian Forest fog). */
   accuracyMult: z.number().min(0.1).max(1).optional(),
+  /** Beta 0.7 Sinnoh (the lakes taken): the player's Pokémon cannot land critical hits. */
+  noPlayerCrit: z.boolean().optional(),
   /** Overhaul slice 17/18: the boss's named strategy id (balance.bossStrategy); read by the AI and the risk label. */
   strategy: z.string().optional(),
   /** A battle an event started: no reward draft after it, and `win` effects if you win (events.json). */
@@ -913,6 +949,8 @@ export const BattleStateSchema = z.object({
   spectacle: SpectacleBattleSchema.optional(),
   /** Auto-Battle (spec §32): the Pokémon chose at least one action this battle by themselves, so its EXP is reduced (core/run.ts awardExperience). Never cleared mid-battle. */
   autoUsed: z.boolean().optional(),
+  /** Pidgey's Resolve (core/sky/spectate.ts): a CPU-versus-CPU fight the player only watches. `cheerAt`: the share of the player-side Pokémon's HP under which the player is asked who to cheer for (once); `cheered` is the answer. Nothing counts: the real party and Bag are put back. */
+  spectate: z.object({ kind: z.enum(['duel', 'finale']), cheerAt: z.number().min(0).max(1).optional(), cheered: z.enum(['pidgeot', 'fearow', 'none']).optional() }).optional(),
   /** The wild Pokémon is an Alpha: oversized, stronger, better prize (ideas W1). */
   alpha: z.boolean().optional(),
   /** A benched Pokémon already cheered this battle (ideas W1). */
@@ -1037,6 +1075,9 @@ export const MapNodeSchema = z.object({
   ace: z.boolean().optional(),
   /** Beta 0.6 B6: this trainer always fights two at a time (region 2 and later). */
   doubles: z.boolean().optional(),
+  /** Pseudo-stage nodes only: the room event (events.json id) that plays when the player reaches this node, and what kind of room it is. */
+  roomEvent: z.string().optional(),
+  roomKind: z.string().optional(),
   /** How the generator made this node, for debugging. */
   note: z.string(),
 });
@@ -1078,6 +1119,8 @@ export const StageStateSchema = z.object({
   obstacles: z.record(z.string(), z.string()).optional(),
   /** Convoy Mode: the escort under your care this stage (null = none). It is delivered at the gym, or lost at 0 health. */
   convoy: z.object({ name: z.string(), hp: z.number().int().min(0), maxHp: z.number().int().min(1) }).nullable().default(null),
+  /** Pseudo-stage (beta 0.7): this stage lives inside one node of the parent stage (`RunState.pseudoParent`). It never counts as a stage or a node. */
+  pseudo: z.object({ id: z.string(), name: z.string(), /** Made from an existing event chain: its events open each other and walk the player along the map. */ chain: z.boolean().optional() }).optional(),
 });
 export type StageState = z.infer<typeof StageStateSchema>;
 
@@ -1116,6 +1159,8 @@ export const PendingDecisionSchema = z.discriminatedUnion('kind', [
   }),
   /** Beta 0.6 B7: the League door. Your party is registered; option 0 keeps it, option N swaps the Pokémon the League answers most for boxed Pokémon `swapIns[N-1]`. */
   z.object({ kind: z.literal('leagueDoor'), title: z.string(), outUid: z.string(), swapIns: z.array(z.string()), options: z.array(z.object({ label: z.string(), description: z.string() })).min(1) }),
+  /** Beta 0.7 M1: a Mythical visits and offers a Promise. Option 0 accepts (it becomes the Guest), option 1 declines (core/instrumentality/promises.ts). */
+  z.object({ kind: z.literal('mythicalVisit'), mythicalId: z.string(), title: z.string(), options: z.array(z.object({ label: z.string(), description: z.string() })).min(2) }),
   /** A PP Up or PP Max: pick which move gets the extra PP. */
   z.object({ kind: z.literal('ppUp'), uid: z.string(), itemName: z.string(), ups: z.number().int().min(1).max(3) }),
   /** A trainer's signature mechanic: pick one of the options (core/signature.ts). */
@@ -1381,6 +1426,8 @@ export const RunStateSchema = z.object({
   eventChain: z.object({ eventId: z.string(), choiceIndex: z.number().int().min(0), sideId: z.string(), success: z.boolean(), step: z.number().int().min(0) }).optional(),
   /** The current stage and its map (null only for saves from before stage maps existed). */
   stage: StageStateSchema.nullable(),
+  /** While a pseudo-stage is being played (`stage.pseudo`), the real stage it sits inside; it comes back when the pseudo-stage ends. */
+  pseudoParent: StageStateSchema.optional(),
   /** Themes and bosses (gym leaders, Elite Four, champions) already used this run (they never repeat, D6). */
   usedThemes: z.array(z.string()),
   usedLeaders: z.array(z.string()),

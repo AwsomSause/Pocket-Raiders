@@ -17,7 +17,7 @@ export type AbilityStatus = 'supported' | 'noEffect' | 'pending';
 export const PINCH: Record<string, TypeName> = { overgrow: 'grass', blaze: 'fire', torrent: 'water', swarm: 'bug' };
 
 /** Weather set when the Pokémon comes in. */
-export const WEATHER_SETTERS: Record<string, Weather> = { drizzle: 'rain', drought: 'sun', 'sand-stream': 'sand', 'snow-warning': 'snow' };
+export const WEATHER_SETTERS: Record<string, Weather> = { drizzle: 'rain', drought: 'sun', 'sand-stream': 'sand', 'snow-warning': 'snow', ashfall: 'sand' };
 
 /** Terrain set when the Pokémon comes in. */
 export const TERRAIN_SETTERS: Record<string, Terrain> = { 'electric-surge': 'electric', 'grassy-surge': 'grassy', 'misty-surge': 'misty', 'psychic-surge': 'psychic' };
@@ -36,6 +36,7 @@ export const WEATHER_DAMAGE_IMMUNE: Record<string, Weather[]> = {
   'sand-rush': ['sand'],
   'sand-force': ['sand'],
   'ice-body': ['hail'],
+  ashfall: ['sand'],
   'snow-cloak': ['hail'],
 };
 
@@ -55,6 +56,7 @@ export const ABSORB: Record<string, { type: TypeName; heal?: number; boost?: { s
   'sap-sipper': { type: 'grass', boost: { stat: 'atk', stages: 1 } },
   'motor-drive': { type: 'electric', boost: { stat: 'spe', stages: 1 } },
   'well-baked-body': { type: 'fire', boost: { stat: 'def', stages: 2 } },
+  'forge-body': { type: 'fire', boost: { stat: 'def', stages: 1 } },
 };
 
 /** Statuses it can't get. */
@@ -101,13 +103,13 @@ export const FLAG_BOOST: Record<string, { flag: 'contact' | 'punch' | 'bite' | '
 };
 
 /** Normal moves become this type and are 1.2× as strong. */
-export const TYPE_CHANGE: Record<string, TypeName> = { pixilate: 'fairy', aerilate: 'flying', refrigerate: 'ice', galvanize: 'electric', dragonize: 'dragon' };
+export const TYPE_CHANGE: Record<string, TypeName> = { pixilate: 'fairy', aerilate: 'flying', refrigerate: 'ice', galvanize: 'electric', dragonize: 'dragon', /** Pidgey's Resolve: Normal moves become Flying and 1.2x (it also never misses and cannot be missed: see engine noGuard). */ 'skys-resolve': 'flying' };
 
 /** A contact move on it may give the attacker this status (30%). */
 export const CONTACT_STATUS: Record<string, StatusId> = { static: 'par', 'flame-body': 'brn', 'poison-point': 'psn' };
 
 /** A contact move on it hurts the attacker by 1/8 of the attacker's max HP. */
-export const CONTACT_HURT = new Set(['rough-skin', 'iron-barbs']);
+export const CONTACT_HURT = new Set(['rough-skin', 'iron-barbs', 'live-wire']);
 
 /** Ignore the target's abilities when attacking. */
 export const MOLD_BREAKERS = new Set(['mold-breaker', 'teravolt', 'turboblaze']);
@@ -148,7 +150,7 @@ export const SPREADS_ON_CONTACT = new Set(['mummy', 'lingering-aroma']);
 export const RUINS: Record<string, 'atk' | 'def' | 'spa' | 'spd'> = { 'tablets-of-ruin': 'atk', 'sword-of-ruin': 'def', 'vessel-of-ruin': 'spa', 'beads-of-ruin': 'spd' };
 
 /** The foe can't switch out (Ghost types are free): Shadow Tag all, Arena Trap grounded, Magnet Pull Steel. */
-export const TRAPPERS = new Set(['shadow-tag', 'arena-trap', 'magnet-pull']);
+export const TRAPPERS = new Set(['shadow-tag', 'arena-trap', 'magnet-pull', 'overgrown-magnet']);
 
 /** After a damaging hit that drops it under half HP, it raises this stat once. */
 export const HALF_HP_BOOST: Record<string, { stat: BoostStat; stages: number }> = { berserk: { stat: 'spa', stages: 1 }, 'anger-shell': { stat: 'atk', stages: 1 } };
@@ -190,8 +192,10 @@ export const ABILITY_FORMS = new Set<string>([
 /** Abilities the battle engine runs. */
 const SUPPORTED = new Set<string>([
   'cute-charm', 'rivalry', 'wise-eye', 'eye-of-the-gale', 'grid-surfer',
-  'dread-jaws', 'storm-talons', 'clinging-dust', 'sovereign-plumage', 'coral-veil', 'eyespot-glare', 'dynamo-down', 'gem-orbit', 'tailwind-rider', 'rune-sigil', 'twin-maw', 'silent-cloak', 'champions-fury',
+  'dread-jaws', 'storm-talons', 'clinging-dust', 'sovereign-plumage', 'coral-veil', 'eyespot-glare', 'dynamo-down', 'gem-orbit', 'tailwind-rider', 'rune-sigil', 'twin-maw', 'silent-cloak', 'champions-fury', 'champions-entrance',
   'thorn-ballad', 'encore-amp', 'adaptive-plating', 'plague-bulwark', 'soul-kindling', 'neon-circuit',
+  // Beta 0.7 batch (Galarian lines).
+  'basalt-shell', 'scavenger', 'parcel-guard', 'landfill', 'kitchen-heat', 'neon-camouflage', 'ripe-bloom', 'thunderhead', 'venom-jaws', 'foam-shell', 'royal-disdain', 'hoop-focus',
   ...Object.keys(PINCH),
   ...Object.keys(WEATHER_SETTERS),
   ...Object.keys(TERRAIN_SETTERS),

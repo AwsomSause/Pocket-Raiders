@@ -103,6 +103,8 @@ export function moveEffectLines(move: Move): string[] {
   for (const s of e?.statChanges ?? []) lines.push(`${s.chance}%: ${s.target === 'self' ? 'its own' : "target's"} ${s.stat} ${s.stages > 0 ? 'rises' : 'falls'} ${Math.abs(s.stages)}.`);
   if (e?.drain) lines.push(`Heals the user for ${Math.round(e.drain * 100)}% of the damage.`);
   if (e?.recoil) lines.push(`The user takes ${Math.round(e.recoil * 100)}% of the damage back.`);
+  if (e?.healSelf) lines.push(`The user restores ${Math.round(e.healSelf * 100)}% of its max HP after the hit.`);
+  if (e?.drowsy) lines.push(`${e.drowsy.chance}% chance to make the target drowsy: it falls asleep at the end of the next turn.`);
   if (e?.recoilMaxHp) lines.push(`The user loses ${Math.round(e.recoilMaxHp * 100)}% of its max HP.`);
   if (e?.fixedDamage) lines.push(e.fixedDamage === 'level' ? "Deals damage equal to the user's level." : e.fixedDamage === 'psywave' ? 'Deals random damage based on level.' : `Deals exactly ${e.fixedDamage} damage.`);
   if (e?.halveTarget) lines.push(`Takes off ${e.halveTarget === true ? 'half' : `${Math.round(e.halveTarget * 100)}%`} of the target's HP.`);

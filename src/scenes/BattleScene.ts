@@ -2,6 +2,7 @@
 // battle engine; this scene only shows the state, collects the player's
 // choice (Fight / Bag / Pokémon) and plays back the events each turn produces.
 
+import { falseSlotFor } from '../core/expansion/labyrinth';
 import { lastResortOffer, useLastResort } from '../core/battle/lastResort';
 import { mentorMoment } from '../core/story/mentorMoments';
 import { mentorScene } from '../ui/battleFx/mentorScene';
@@ -9,6 +10,8 @@ import { riskLine } from '../core/battleRisk';
 import { gimmickContext } from '../core/gimmicks';
 import { aeroMood, autoInterruption, cameraFocus, capFlash, hapticPattern, interactionLog } from '../core/presentation/uiPrefs';
 import { fitBlock, fitLine } from '../ui/fitText';
+import { cheerDue } from '../core/sky/spectate';
+import { FINALE_ASK, chunkLines } from '../core/sky/text';
 import { HazardFloor, bossCinematic, critFreeze, critLetterbox, runScan, tossArc, weaknessesOf } from '../ui/battleFx/skillMoments';
 import { defaultMoveIndex } from '../core/battle/rememberChoice';
 import { aimable, dealOffer, foeStake, type SkillInput } from '../core/battle/w1Play';
@@ -37,7 +40,7 @@ import { commandPlan, shiftOptionProblem, targetChoices } from '../core/battle/f
 /** This screen draws double battles: spot 0 left, 1 right (triple battles get their own layout in Beta 0.6 T2). */
 import { canDynamax, maxMoveOptions, megaOption, ownedZCrystal, permanentForm, stoneForms, teraOption, zMoveFor, zMoveOptions, type TransformRequest } from '../core/battle/transform';
 import { runPerks } from '../core/archetypes';
-import { abilityOf, calcStats, maxHp, getSpecies, maxPp, xpForLevel } from '../core/pokemon';
+import { abilityOf, calcStats, maxHp, getSpecies, lookSpecies, maxPp, xpForLevel } from '../core/pokemon';
 import { heartStage } from '../core/shadow';
 import { shadowPreviewLine } from '../core/shadow2';
 import { formIntro } from '../core/presentation/sceneEffects';
@@ -62,6 +65,7 @@ import { services } from '../game/services';
 import { launcherReady } from '../core/camp';
 import { moveBlockReason } from '../core/battle/moveBlock';
 import { cheerProblem, coopOwner, exposedWeakSpot, puzzlePattern, raidBot, raidDef, raidRole } from '../core/raid/raid';
+import { RETURN_MUSIC } from '../core/instrumentality/flightNorth';
 import { playCry, playMusic, playMusicLazy, playSfx, playSfxLazy, setMusicIntensity, storyOr, playCue } from '../ui/audio';
 import { storyTeamTrack } from '../core/presentation/storyMusic';
 import { isStoryCampaign } from '../core/campaign/circuit';
@@ -80,6 +84,7 @@ import { onInputAction, type InputAction } from '../ui/input';
 import { bagRow, partyRows, Picker } from '../ui/partyPanel';
 import { itemCard, itemFooter } from '../core/itemPreview';
 import { runHealMultiplier } from '../core/run';
+import { rewindTurnsAvailable } from '../core/rewind';
 import { partyPreviews, quickSummaryText } from '../ui/itemScreen';
 import { animationStrength, animationTimeScale, animSettingsFrom } from '../core/accessibility';
 import { transformAnimId } from '../core/presentation/transformAnims';
@@ -151,7 +156,7 @@ import { addStickerRow } from '../ui/battleFx/stickers';
 import { victoryPoseFor } from '../core/presentation/victoryPose';
 import { introRecap } from '../core/presentation/skipRecap';
 import { aceBurst, legendFlash, rivalCatch, rivalEntrance, rivalExit } from '../ui/battleFx/rivalStepIn';
-import { victoryPose, showRecapBanner, bossVictoryCard, burstReveal, exitWipe, hop, introTransition, stamp, titleCard, type Beat, type IntroKind, phaseBanner } from '../ui/battleFx/spectacle';
+import { victoryPose, showRecapBanner, bossVictoryCard, burstReveal, exitWipe, hop, introTransition, stamp, titleCard, type Beat, type IntroKind, phaseBanner, cameoBeat } from '../ui/battleFx/spectacle';
 import { LETTER_MS, storyBar, storyLine, typeSpeech, type StoryBar } from '../ui/dialogue/storyDialogue';
 import { planSpeech, stripSpeechTags, type SpeechVoice } from '../ui/dialogue/speechPacing';
 import { AERO, moveFlagNames, bounceIn, breathe, categoryIcon, drawGlass, effectivenessIcon, effectivenessWord, slideIn, statusIcon, typeLabel, type MotionLevel } from '../ui/aero';
@@ -445,6 +450,8 @@ export class BattleScene extends Phaser.Scene {
     if (teamSong) this.baseTrack = teamSong;
     // Galar's stadium: gym and League fights play the Galar gym song (it builds turn by turn); the Champion plays the finale song.
     if (this.stadium && !teamSong && services().assets.has(GALAR_STADIUM.music.battle)) this.baseTrack = this.role === 'champion' ? GALAR_STADIUM.music.finalMon : GALAR_STADIUM.music.buildUp;
+    // Beta 0.7 Flight North: the Bug-type's return has its own song (the usual song plays until a composed file exists).
+    if (battle.flightNorth) this.baseTrack = RETURN_MUSIC;
     this.playingTrack = this.baseTrack;
     // Extra songs load on demand; the default song plays until they arrive.
     const fallback = battleTrack({ raidTrack: null, trainer: battle.kind === 'trainer', role: this.role, gbSounds: false });
@@ -1162,6 +1169,9 @@ export class BattleScene extends Phaser.Scene {
     // Beta 0.6: a format's named foe (Oracle Sabrina, Giovanni) is drawn as that character, not as the class stand-in.
     const named = trainer.spriteBoss ? content.bosses.get(trainer.spriteBoss) : undefined;
     if (named) return { assetId: named.sprites.default, label: trainer.name };
+    // Poli-Pond: the bully "trainer" is a Pokémon, drawn with its own front sprite.
+    const mon = trainer.spritePokemon ? content.species.get(trainer.spritePokemon) : undefined;
+    if (mon) return { assetId: pokemonAssetIds(mon.assets).front, label: trainer.name };
     const cls = content.trainers.get(trainer.classId);
     // Beta 4.4: a rival is drawn as its own character (Silver, Hop, Nemona...), not always as Blue.
     const character = trainer.classId === 'rival' ? content.bosses.get(trainer.name.toLowerCase()) : undefined;
@@ -1203,7 +1213,7 @@ export class BattleScene extends Phaser.Scene {
     const grow = mon.dynamaxed && species.form?.kind !== 'gigantamax' ? DYNAMAX_SCALE : 1;
     this.markObjs[side].forEach((o) => o.destroy());
     this.markObjs[side] = [];
-    const visual = this.showSpriteBody(side, mon, species, cry, grow);
+    const visual = this.showSpriteBody(side, mon, lookSpecies(services().session.content, mon), cry, grow);
     try {
       const vs = this.run.battle?.extra?.variants?.[mon.uid];
       this.markObjs[side] = addMarks(this, this.field, visual, { shadow: Boolean(mon.shadow), variant: vs?.line ?? null, motion: this.motion });
@@ -2037,6 +2047,57 @@ export class BattleScene extends Phaser.Scene {
     return { kind, grade: result.grade };
   }
 
+  /** Pidgey's Resolve: one step of a watched fight: the cheer question (finale, first time Pidgeot is low), otherwise the next turn by itself. */
+  private async spectateStep(): Promise<void> {
+    const { session } = services();
+    if (cheerDue(session.content, this.run)) {
+      this.showSkyCheerMenu();
+      return;
+    }
+    this.autoRunning = true;
+    this.clearMenus();
+    this.tabs.show(false);
+    await new Promise<void>((done) => this.time.delayedCall(AUTO_PICK_MS, () => done()));
+    this.autoRunning = false;
+    const battle = this.run.battle;
+    if (!battle) return;
+    const forced = forcedMoveIndex(battle, this.run.party);
+    if (forced !== null) await this.act({ kind: 'move', index: forced });
+    else await this.act({ kind: 'move', index: 0 }, true);
+  }
+
+  /** The finale's one question: who to cheer for. Cheering is the only thing the player does in a watched fight. */
+  private showSkyCheerMenu(): void {
+    this.clearMenus();
+    this.tabs.show(false);
+    this.message.setText(chunkLines([FINALE_ASK])[0] ?? '');
+    void this.readAloud([FINALE_ASK]).then(() => {
+      this.commandWindow.setVisible(true);
+      this.message.setText('Who do you cheer for?');
+      this.menu = new Menu(this, {
+        x: COMMAND_X + 24,
+        y: MESSAGE_Y + 26,
+        options: [{ label: 'Cheer for Pidgeot' }, { label: 'Cheer for Fearow' }],
+        columns: 1,
+        itemWidth: 300,
+        itemHeight: 50,
+        fontSize: 24,
+        color: this.btnText,
+        glass: { paint: this.skin?.pill, tints: [0x1f9a52, 0xc8303c], motion: this.motion },
+        onSelect: (i) => {
+          this.clearMenus();
+          const line = services().session.skyCheer(i === 0 ? 'pidgeot' : 'fearow');
+          void this.readAloud([line]).then(() => this.nextPrompt());
+        },
+      });
+    });
+  }
+
+  /** Reads story lines in the message box, cut so each piece fits, one confirm press per piece (nothing disappears by itself). */
+  private async readAloud(lines: readonly string[]): Promise<void> {
+    for (const piece of chunkLines(lines)) await this.say(piece);
+  }
+
   /** The trainer's deal: accept (the fight ends, bigger prize, no EXP) or refuse (no turn used). */
   private showDealMenu(): void {
     const battle = this.run.battle!;
@@ -2126,6 +2187,7 @@ export class BattleScene extends Phaser.Scene {
 
   /** Plays the opening; if any part of the show fails, the Pokémon and boxes still appear and the battle goes on. */
   private async intro(): Promise<void> {
+    await this.flightNorthEntrance();
     if (await this.rivalStepInScene()) return;
     try {
       await this.introShow();
@@ -2134,6 +2196,22 @@ export class BattleScene extends Phaser.Scene {
       await this.recoverIntro().catch((e2) => console.warn('Battle intro recovery failed', e2));
       this.busy = false;
       this.nextPrompt();
+    }
+  }
+
+  /** Beta 0.7 Flight North: the Bug-type's return swoops in (Mega Beedrill or Gigantamax-sized Butterfree) before its fight begins. Presentation only. */
+  private async flightNorthEntrance(): Promise<void> {
+    const assist = this.run.battle?.finaleAssist;
+    if (!this.run.battle?.flightNorth || !assist || assist.id !== 'flight-north' || assist.strikesLeft < 6) return;
+    try {
+      const sp = services().session.content.species.get(assist.speciesId);
+      if (!sp) return;
+      await loadAssets(this, pokemonArtIds([sp], { front: true, back: false, shiny: false, cry: false })).catch(() => undefined);
+      const at = this.spotXY('player');
+      const vis = pokemonVisual(this, sp, 'front', at.x + 90, at.y, PIXEL_SCALE * 1.3, false, {});
+      await this.playBeat(cameoBeat(this, vis, { x: at.x + 90, y: at.y - 40 }, 'return', this.motion));
+    } catch (e) {
+      console.warn('Flight North entrance failed', e);
     }
   }
 
@@ -2672,6 +2750,11 @@ export class BattleScene extends Phaser.Scene {
 
   private nextPrompt(): void {
     this.refreshMusicState();
+    // Pidgey's Resolve: a watched CPU-versus-CPU fight. No menu is ever shown; every turn plays by itself.
+    if (this.run.battle?.spectate) {
+      void this.spectateStep();
+      return;
+    }
     if (!this.camBusy && !this.camPinned) this.restoreCamera(250); // a new turn always starts on the whole arena
     if (this.duo) {
       if (this.autoOn && !autoBattleProblem(this.run)) void this.runAuto();
@@ -3173,6 +3256,10 @@ export class BattleScene extends Phaser.Scene {
     const lastResortOffered = lastResortOffer(content, this.run, this.activeMon());
     const lastResortAt = lastResortOffered ? options.length : -1;
     if (lastResortAt >= 0) options.push({ label: "Mentor ♥" });
+    // Beta 0.7 L3: the Time Keeper's rewind (once per stage, up to 5 turns back).
+    const rewindMax = this.duo ? 0 : rewindTurnsAvailable(content, this.run);
+    const rewindAt = rewindMax > 0 ? options.length : -1;
+    if (rewindAt >= 0) options.push({ label: 'Rewind' });
     // A combined style (Wii channel grid) puts the moves in place of Fight: picking one opens the move menu and uses it.
     const combined = this.skin?.layout.combined && !this.duo ? this.combinedMoves() : [];
     const k = combined.length;
@@ -3210,6 +3297,7 @@ export class BattleScene extends Phaser.Scene {
         } else if (i === smashAt) this.submit({ kind: 'arena' });
         else if (i === shiftAt) this.submit({ kind: 'shift' });
         else if (i === scanAt) void this.scanFoe();
+        else if (i === rewindAt) this.showRewindMenu(rewindMax);
         else if (i === lastResortAt) {
           void this.playLastResort();
         } else if (i >= hotbarAt && i < hotbarAt + hotbar.length) this.submit({ kind: 'item', itemId: hotbar[i - hotbarAt]! });
@@ -3273,6 +3361,30 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** The three raid cheers: Offense, Defense, Healing (each costs one of three cheers and the turn). */
+  /** L3 Rewinds: pick how many turns to go back (the state comes back exactly; the turns then play out afresh). */
+  private showRewindMenu(most: number): void {
+    this.clearMenus();
+    this.message.setText('The hourglass turns... How far back? (Once this stage.)');
+    const options = Array.from({ length: most }, (_, i) => ({ label: `${i + 1} turn${i ? 's' : ''}` }));
+    this.menu = new Menu(this, {
+      x: COMMAND_X + 24,
+      y: MESSAGE_Y + 26,
+      options,
+      columns: options.length > 4 ? 3 : 2,
+      itemWidth: options.length > 4 ? 114 : 170,
+      itemHeight: options.length > 4 ? 36 : 50,
+      fontSize: options.length > 4 ? 20 : 26,
+      color: this.btnText,
+      glass: { paint: this.skin?.pill, tints: options.map(() => 0x2c6ad8), motion: this.motion },
+      onSelect: (i) => {
+        if (!services().session.rewindBattle(i + 1)) return this.showRootMenu();
+        this.clearMenus();
+        void this.say(`Time bends... the battle goes back ${i + 1} turn${i ? 's' : ''}.`).then(() => this.scene.start(sceneForRun(services().session.run!)));
+      },
+      onBack: () => this.showRootMenu(),
+    });
+  }
+
   private showCheerMenu(): void {
     const battle = this.run.battle!;
     const content = services().session.content;
@@ -3332,7 +3444,9 @@ export class BattleScene extends Phaser.Scene {
       ? mon.moves.map((slot, i) => {
           const why = moveBlockReason(content, this.run.battle!, mon, i);
           // Beta 4.4: the Hyper slot's move is starred, a Mega signature move has a diamond.
-          const name = (slot.lent ? '♥ ' : slot.hyper ? '★ ' : slot.megaSig ? '◆ ' : slot.storySig ? '✦ ' : '') + zLabel(i, (slot.storySig ? signatureDisplay(this.run, slot.id) : undefined) ?? content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (why ? ` (${why})` : '');
+          const lie = this.run.battle!.eventRule?.falseSlot ? falseSlotFor(this.run.battle!.turn, mon.uid, mon.moves.length, mon.moves.map((m) => m.pp > 0)) : null;
+          const seenLie = lie?.seen && lie.slot === i ? lie : null;
+          const name = (seenLie ? '⚠ ' : '') + (slot.lent ? '♥ ' : slot.hyper ? '★ ' : slot.megaSig ? '◆ ' : slot.storySig ? '✦ ' : '') + zLabel(i, (slot.storySig ? signatureDisplay(this.run, slot.id) : undefined) ?? content.moves.get(slot.id)!.name) + (wouldRefuse(content, this.run, mon, slot.id) ? ' (may refuse)' : '') + (seenLie ? ` (false: really ${content.moves.get(mon.moves[seenLie.to]!.id)!.name})` : '') + (why ? ` (${why})` : '');
           const disabled = slot.pp <= 0 || why === 'Choice lock' || (zMoves !== null && !zMoves[i]);
           const move = zMoves?.[i] ?? maxMoves?.[i] ?? content.moves.get(slot.id)!;
           // A battle style may label its buttons its own way (PP, power, type).
@@ -3667,6 +3781,12 @@ export class BattleScene extends Phaser.Scene {
     await this.playEvents(result.events, before, trainer, result.cues, result.drama);
     await this.stadium?.afterTurn();
 
+    if (result.spectated) {
+      await this.readAloud(result.spectated.lines);
+      await exitWipe(this, this.motion, this.wipeMask());
+      this.scene.start(sceneForRun(result.run));
+      return;
+    }
     if (result.end) {
       await this.finish(result, trainer, bossWin);
       return;
@@ -3711,8 +3831,31 @@ export class BattleScene extends Phaser.Scene {
       this.scene.start(sceneForRun(result.run));
       return;
     }
+    if (result.flightNorth) {
+      // Beta 0.7 Flight North: the game-over screen cracks, cracks again and shatters; its own music (falls back to the boss track until composed).
+      const shake = 0.012 * services().session.settings.shakeStory * capFlash(services().session.settings.shakeIntensity, services().session.settings.reducedFlash);
+      for (let i = 0; i < 3; i++) {
+        this.cameras.main.shake(260 + i * 160, shake * (i + 1));
+        await this.say(result.flightNorth.lines[i] ?? '');
+      }
+      for (const line of result.flightNorth.lines.slice(3)) await this.say(line);
+      this.scene.start(sceneForRun(result.run));
+      return;
+    }
+    if (result.secondChance) {
+      // Beta 0.7 S1: the six lines, then back into the same fight with the partner beside you (the scene reloads from the saved battle).
+      for (const line of result.secondChance.lines) await this.say(line);
+      await this.say(result.secondChance.silhouette ? 'A silhouette you do not recognise stands beside you.' : `${result.secondChance.partner} stands beside you!`);
+      this.scene.start(sceneForRun(result.run));
+      return;
+    }
     if (this.stadium && (result.wiped || result.defeated)) await this.stadium.interview('post', false);
     if (result.wiped || result.defeated) void this.trainerIn().then((a) => a?.play('defeat'));
+    if (result.rewound) {
+      await this.say(`Your team fell... but the Time Keeper remembers. The battle goes back ${result.rewound} turn${result.rewound > 1 ? 's' : ''}!`);
+      this.scene.start(sceneForRun(result.run));
+      return;
+    }
     if (result.wiped) {
       await this.say(result.run.phase === 'battle' ? 'The VS Recorder rewinds the tape... the battle starts again!' : result.run.rules.modeId === 'adventure' ? 'Your party fainted... you return to the start of the stage, healed.' : 'Death-Block! You return to the start of the stage with your party healed.');
       this.scene.start(sceneForRun(result.run));
@@ -4586,6 +4729,20 @@ export class BattleScene extends Phaser.Scene {
       if (e.type === 'raid' && e.tone === 'phase') this.focusPush('phase');
       if (e.type === 'raid' && e.tone === 'phase') this.arenaLight?.set(++this.arenaPhase, 0xff4fd8);
       if (e.type === 'raid' && e.tone === 'phase') await this.playBeat(phaseBanner(this, e.text, 0xff4fd8, this.motion));
+      // Beta 0.7 Flight North: the shiny rescuer, or the Bug-type's return, swoops onto the field. A failed load only skips the picture.
+      if (e.type === 'raid' && e.cameo) {
+        try {
+          const sp = content.species.get(e.cameo.speciesId);
+          if (sp) {
+            await loadAssets(this, pokemonArtIds([sp], { front: true, back: false, shiny: e.cameo.shiny, cry: false })).catch(() => undefined);
+            const at = this.spotXY('player');
+            const vis = pokemonVisual(this, sp, 'front', at.x + 90, at.y, PIXEL_SCALE * 1.3, e.cameo.shiny, {});
+            await this.playBeat(cameoBeat(this, vis, { x: at.x + 90, y: at.y - 40 }, e.cameo.kind, this.motion));
+          }
+        } catch (err) {
+          console.warn('Cameo failed', err);
+        }
+      }
       // A story moment replaces the event's own line with its own (and a banner when it is a major one).
       const cue = storyCues.find((c) => c.at === index);
       if (cue) {

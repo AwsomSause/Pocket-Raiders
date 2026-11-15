@@ -1,6 +1,7 @@
 // Beta 0.6 workstream 18, Saffron City (CANON_SPACES_KANTO.md section 9): writes src/data/eventsCanonSaffron.json.
 // Route 25, Fighting Tournament, Fighting Dojo, Copycat Girl, Silph Co. Lobby, Magnet Train and Sabrina's Labyrinth, as event rooms.
 // Run: node tools/build-canon-saffron.ts   (the rules these use live in src/core/expansion/canonSaffron.ts)
+// NOTE (Beta 0.7): the Labyrinth rooms in src/data/eventsCanonSaffron.json were later edited by hand; re-running this tool would overwrite them with the older version. Route 25 and the Tournament (9.3, 9.4) are current here.
 
 import { writeFileSync } from 'node:fs';
 
@@ -8,11 +9,11 @@ type Json = Record<string, unknown>;
 const P = 'cs-kanto-saffron-';
 const events: Json[] = [];
 
-interface Opts { canon?: string; room?: boolean; stop?: 'event' | 'delve'; tint?: string; effect?: string; pokemon?: string }
+interface Opts { tourney?: number; canon?: string; room?: boolean; stop?: 'event' | 'delve'; tint?: string; effect?: string; pokemon?: string }
 function ev(id: string, name: string, intro: string, choices: Json[], o: Opts = {}): void {
   events.push({
     id: P + id, name, group: 'Canon Spaces: Kanto', stop: o.stop ?? (o.room ? 'delve' : 'event'), rarity: 'common', minStage: 1, types: [], requires: [],
-    scene: { cast: [], ...(o.pokemon ? { pokemon: o.pokemon } : {}), effect: o.effect ?? 'none', tint: o.tint ?? '#5b3a6e' },
+    scene: { cast: [], ...(o.pokemon ? { pokemon: o.pokemon } : {}), ...(o.tourney !== undefined ? { tourney: o.tourney } : {}), effect: o.effect ?? 'none', tint: o.tint ?? '#5b3a6e' },
     intro, choices, ...(o.canon ? { canon: o.canon } : {}), ...(o.room ? { room: true } : {}),
   });
 }
@@ -21,60 +22,134 @@ const flag = (key: string) => ({ kind: 'flag', key, amount: 1 });
 const canon = (action: string, extra: Json = {}) => ({ kind: 'canon', action, species: [], ...extra });
 const leave = (text = 'You walk on.') => ({ label: 'Walk on', success: { text, effects: [] } });
 
-// ---------- 9.3 Route 25 ----------
-ev('r25', 'Route 25: The Horde', 'A horde of Angry Mankey spills onto the road and will not let you pass. Five of them, one after another.', [
-  { label: 'Stand your ground', success: { text: 'The first three rush you together.', effects: [], battle: { kind: 'wild', species: ['mankey'], chain: 3, levelBonus: 1, win: [add('r25-breath')] } } },
-], { canon: 'cs.kanto.saffron.route25', tint: '#6b4a3a' });
-ev('r25-breath', 'Route 25: A Breather', 'Three down. The last two Mankey are working themselves into a rage behind the rocks.', [
-  { label: 'Tend your team first', success: { text: 'You get a minute to patch everyone up.', effects: [{ kind: 'heal', share: 0.35 }, add('r25-fourth')] } },
-  { label: 'Press on', success: { text: 'No time to lose.', effects: [add('r25-fourth')] } },
-], { room: true, tint: '#6b4a3a' });
-ev('r25-fourth', 'Route 25: The Fourth', 'The fourth Mankey screams and charges.', [
-  { label: 'Meet it', success: { text: 'It goes down, and the last one steps out.', effects: [], battle: { kind: 'wild', species: ['mankey'], levelBonus: 1, win: [add('r25-wrath')] } } },
-], { room: true, tint: '#6b4a3a' });
-ev('r25-wrath', "Route 25: Mankey's Wrath", 'The fifth is no Mankey. A Primeape, wild with rage, uses Rage again and again.', [
-  {
-    label: 'Calm the Primeape down the hard way', success: {
-      text: 'The horde falls quiet. One Mankey steps out of the grass and sets its jaw: it wants to come with you.', effects: [], battle: {
-        kind: 'wild', species: ['primeape'], levelBonus: 2, foeMoves: ['rage'],
-        win: [{ kind: 'join', species: ['mankey'], types: [], levelBonus: 0 }, { kind: 'teachMove', move: 'swords-dance', species: 'mankey', slot: 2 }, { kind: 'teachMove', move: 'mach-punch', species: 'mankey', slot: 3 }, flag('kanto-mankey'), canon('flawless'), add('tournament')],
-      },
-    },
-  },
-], { room: true, tint: '#6b4a3a' });
+// ---------- 9.3 Route 25: The Angry Mankey (Beta 0.7 rebuild of Kice's spec 15) ----------
+// Mandatory check: five Mankey in a row, nobody healed in between; the fifth stands in front of the other four and does not attack first.
+// Optional: the thieves' camp is one node off the path (before or after the fight). Bringing the food back (flag r25-food) changes the ending.
+const FOOD = { kind: 'flag', key: 'r25-food', atLeast: 1 };
+const NOFOOD = { kind: 'flag', key: 'r25-food', atLeast: 0, atMost: 0 };
+const R25 = '#6b4a3a';
+ev('r25', 'Route 25: The Angry Mankey',
+  'The road is lined with torn sacks and spilled grain. Pale tracks lead into the grass, and from the grass comes a sound you can feel in your teeth: a whole troop of Mankey, screaming. They are not angry at you. They have not eaten properly in a week, and someone has been taking what they stored for the winter. You are only the next stranger on the road, and they have no more patience left.',
+  [
+    { label: 'Face the troop', success: { text: 'You set your feet. The screaming stops all at once, and that is worse.', effects: [add('r25-1')] } },
+    { label: 'Follow the torn sacks first', success: { text: 'The trail bends away from the road, toward a thread of smoke. Someone has been very careless about hiding what they took.', effects: [add('r25-camp')] } },
+  ], { canon: 'cs.kanto.saffron.route25', tint: R25 });
+ev('r25-camp', "Route 25: The Thieves' Camp",
+  "A rough camp in a hollow: three trainers, a cookfire, and a stack of the troop's food sacks they have stopped bothering to hide. A kid's drawing is pinned to the tent: a Mankey with a crown. They took this winter's food from something that has never once asked anyone for anything.",
+  [
+    { label: 'Take the food back', success: { text: 'Nobody wins an argument against a returned sack and a raised fist. The camp breaks and runs, and you lift the heaviest sack onto your shoulder. It is lighter than it should be. They had already eaten a good part of it.', effects: [], battle: { kind: 'trainer', name: 'Food Thieves', size: 2, team: ['meowth', 'raticate'], levelBonus: 0, win: [flag('r25-food'), add('r25-1')] } } },
+    { label: 'Leave it, and face the troop', success: { text: 'You turn back. The troop is still waiting, and still hungry.', effects: [add('r25-1')] } },
+  ], { room: true, tint: '#4a3a2a' });
+ev('r25-1', 'Route 25: The First Three',
+  'The grass breaks open. Three Mankey come at once, shoulder to shoulder, and their eyes are not rage so much as hunger wearing rage like a coat. There will be no breaks between them. The troop has fought this way for a week.',
+  [{ label: 'Hold the line', success: { text: 'Three bodies hit you at once. You do not get a breath, and you were not going to be offered one.', effects: [], battle: { kind: 'wild', species: ['mankey'], chain: 3, levelBonus: 1, win: [add('r25-4')] } } }], { room: true, tint: R25 });
+ev('r25-4', 'Route 25: The Fourth',
+  'Three are down and breathing hard. No potion, no rest. The fourth Mankey was watching the whole fight, and it has learned something from watching. It does not scream. It simply comes.',
+  [{ label: 'Meet it', success: { text: 'It is smarter than the first three, and angrier, because it understood what you did to its friends.', effects: [], battle: { kind: 'wild', species: ['mankey'], levelBonus: 1, win: [add('r25-5')] } } }], { room: true, tint: R25 });
+ev('r25-5', 'Route 25: The Fifth Stands Still',
+  'The fifth Mankey does not charge. It walks out from the rocks and plants itself in front of the other four, who have crawled back to its feet, scratched and silent. It spreads its arms. It is not here to win. It is here so that nobody else has to be hit again. It looks at you, and for one breath you understand that you are the thing that frightens it.',
+  [{ label: 'Meet its eyes', success: { text: 'It does not attack first. It waits for you to decide what kind of person you are.', effects: [], battle: { kind: 'wild', species: ['mankey'], levelBonus: 2, rule: { foeStands: 1 }, win: [add('r25-after')] } } }], { room: true, tint: R25 });
+ev('r25-after', 'Route 25: The Quiet After',
+  'The fifth Mankey lies in the grass, and the other four crowd around it, shaking. Nobody screams now. The whole troop is looking at you and at each other, and it is the kind of quiet in which a person decides who they are.',
+  [
+    { label: "Go find the thieves' camp", requires: [NOFOOD], success: { text: 'You look back at the troop. They watch you go. It might be the first time in a week that something has walked toward the thieves instead of away.', effects: [add('r25-camp-after')] } },
+    { label: "Accept the troop's thanks", requires: [FOOD], success: { text: 'The troop saw you come back with the sack. They do not understand every word, but they understand that.', effects: [add('r25-thanks')] } },
+    { label: 'Offer your hand to the fifth Mankey', requires: [NOFOOD], success: { text: 'It sniffs your hand for a long time. It is deciding whether you are as hungry for a fight as it was.', effects: [add('r25-claim')] } },
+  ], { room: true, tint: R25 });
+ev('r25-camp-after', "Route 25: The Thieves' Camp (After)",
+  'The camp is exactly where the tracks said. The thieves heard the screaming stop and hoped it meant the troop had gone. They are packing the sacks they have not yet eaten into a cart. They see you, and their faces do the arithmetic.',
+  [
+    { label: 'Take the food back', success: { text: 'It is easier than it should be. They were already half-ashamed. You carry the last sack back by hand, and as you walk the road you hear the troop begin to sing, which is not a word anyone has taught them.', effects: [], battle: { kind: 'trainer', name: 'Food Thieves', size: 2, team: ['meowth', 'raticate'], levelBonus: 0, win: [flag('r25-food'), add('r25-thanks')] } } },
+    { label: 'Let it go', success: { text: 'You leave the cart where it stands. The troop will remember that.', effects: [add('r25-claim')] } },
+  ], { room: true, tint: '#4a3a2a' });
+const MANKEY_JOIN = [{ kind: 'teachMove', move: 'swords-dance', species: 'mankey', slot: 2 }, { kind: 'teachMove', move: 'mach-punch', species: 'mankey', slot: 3 }, flag('kanto-mankey'), canon('flawless'), add('tournament')];
+ev('r25-thanks', 'Route 25: What the Troop Gave Back',
+  "The fifth Mankey rises, and the troop parts around it. It walks to the sack you carried and puts a hand flat on the grain, and then it walks to you. It is not a request. It is the first Mankey that has ever stood between a troop and a stranger and then been fed by the stranger. It will come with you, and the rest of the troop will be waiting in the stands.",
+  [{ label: 'Welcome Mankey into your team', success: { text: 'It bumps its forehead against your leg, once, hard. The troop watches you go. Not one of them looks angry any more. Mankey will be looking for them in the crowd.', effects: [{ kind: 'join', species: ['mankey'], types: [], levelBonus: 0, friendship: 40 }, ...MANKEY_JOIN] } }], { room: true, tint: '#8a6a3a' });
+ev('r25-claim', 'Route 25: A Mankey Steps Out',
+  'The fifth Mankey steps out of the circle. It does not trust you, but it has seen what you are willing to fight for. The other four lower their eyes. The troop is still hungry, and it is not yours to feed today. It will follow you and ask nothing, which is its own way of saying a great deal.',
+  [{ label: 'Welcome Mankey into your team', success: { text: 'It walks beside you and never quite looks back. The troop watches until the road bends.', effects: [{ kind: 'join', species: ['mankey'], types: [], levelBonus: 0 }, ...MANKEY_JOIN] } }], { room: true, tint: R25 });
 
-// ---------- 9.4 Fighting Tournament ----------
+// ---------- 9.4 The Fighting Tournament (Beta 0.7 rebuild of Kice's spec 16) ----------
+// 32 entrants, five rounds, Fighting types only, one Pokémon each (the Mankey or Primeape, via the Saffron stash). A sports anime in five rounds:
+// commentary, a crowd, a training montage between rounds (Power, Guard or Footwork, a small bonus for the rest of the bracket), and recurring competitors.
+const TS = '#7a3b2e';
 const entry = (species: string) => ({
   label: `Enter with ${species === 'mankey' ? 'Mankey' : 'Primeape'}`, requires: [{ kind: 'partySpecies', species }],
-  success: { text: 'The sign-up sheet has thirty-two names. Yours goes at the bottom. Only your fighter steps onto the mat.', effects: [canon('solo', { species: ['mankey', 'primeape'] }), add('t1')] },
+  success: { text: 'The sign-up sheet has thirty-two names. Yours goes at the bottom, in your own hand. Only your fighter will step onto the mat. Everyone else on your team goes to the rail to watch, and not one of them is happy about it.', effects: [canon('solo', { species: ['mankey', 'primeape'] }), add('tc')] },
 });
-ev('tournament', 'Saffron Fighting Tournament', 'A banner over the dojo yard: THE SAFFRON FIGHTING TOURNAMENT. Thirty-two fighters, Fighting types only, one Pokémon each. The organizer eyes your Mankey.', [
-  entry('mankey'), entry('primeape'), leave('You leave it for the next trainer.'),
-], { canon: 'cs.kanto.saffron.tournament', room: true, tint: '#7a3b2e' });
+ev('tournament', 'Saffron Fighting Tournament',
+  'A banner stretched across the dojo yard: THE SAFFRON FIGHTING TOURNAMENT. Thirty-two fighters, Fighting types only, one Pokémon each. The organizer, a woman with a clipboard and a bruise on her chin, looks at your Mankey the way a coach looks at a student they have not met yet. "Only that one steps in," she says. "Everything the rest of you know has to stay at the rail."',
+  [entry('mankey'), entry('primeape'), leave('You leave it for the next trainer.')], { canon: 'cs.kanto.saffron.tournament', room: true, tint: TS, tourney: 0 });
+ev('tc', 'Tournament: The Crowd',
+  'A bell. The gate opens. A noise comes up out of the stands like a wave breaking, and over the PA, a voice that has been waiting all year to say this: "Ladies and gentlemen, thirty-two fighters, five rounds, one belt!" A commentary desk beside the mat has two seats: a retired champion with a broken nose, and a young announcer who has never once stopped talking.',
+  [
+    { label: 'Look to the stands', requires: [FOOD], success: { text: 'Row after row of brown fur. The whole Mankey troop came down from Route 25 and is standing on the benches, stamping their feet. Someone has hung a sack of grain from the rail like a banner. Your Mankey sees them and does not move for a long moment.', effects: [add('t1')] } },
+    { label: 'Look to the stands', requires: [NOFOOD], success: { text: 'You scan the rows for brown fur and find none. No one is there for your Mankey. It stands very straight, and it has stopped looking.', effects: [add('t1')] } },
+  ], { room: true, tint: TS, tourney: 0 });
 const ROUNDS = [
-  { n: 1, bracket: 'Round of 32', species: ['machop', 'mankey'], prize: 'muscle-band', name: 'Brawler' },
-  { n: 2, bracket: 'Round of 16', species: ['meditite', 'timburr'], prize: 'protein', name: 'Black Belt' },
-  { n: 3, bracket: 'Quarterfinal', species: ['hitmonlee', 'hitmonchan'], prize: 'focus-sash', name: 'Kickboxer' },
-  { n: 4, bracket: 'Semifinal', species: ['machoke', 'poliwrath'], prize: 'black-belt', name: 'Semifinalist' },
+  { n: 1, bracket: 'Round of 32', species: ['machop'], prize: 'muscle-band', name: 'Machop', rule: {}, intro: 'Round of 32. A Machop with a twin on the rail: the twin is a coach, bellowing instructions and flinching at every hit. "That one is somebody\'s whole family," says the young announcer. "Do not take it personally."', win: 'It goes down fighting, and its twin leaps the rail and carries it out in its arms. The crowd applauds that harder than the knockout.' },
+  { n: 2, bracket: 'Round of 16', species: ['hawlucha'], prize: 'protein', name: 'Hawlucha', rule: { fanClub: true }, intro: 'Round of 16. A Hawlucha who spends more time on the ropes than on the mat. It points at people in the crowd, it blows kisses, it waves at the cameras. "It plays to the crowd," says the old champion, "and it is better than it pretends. Watch its feet."', win: 'It bows to the crowd in defeat, then, quietly, bows to you. The pose was a mask for something sharper.' },
+  { n: 3, bracket: 'Quarterfinal', species: ['throh'], prize: 'focus-sash', name: 'Throh', rule: {}, intro: 'Quarterfinal. A Throh in a belt so worn it is the colour of dust. It bows to the crowd, to the referee, to the officials, and to you. "The politest fighter in Saffron," says the announcer. "That is not the same as the gentlest."', win: 'It rises, bows once more, and shakes your fighter\'s hand with both of its own. You do not remember when you last felt that respected by someone you had just beaten.' },
+  { n: 4, bracket: 'Semifinal', species: ['hitmonchan'], prize: 'black-belt', name: 'Hitmonchan', rule: { silent: true }, intro: 'Semifinal. A Hitmonchan who has not made a sound in four tournaments: no cry, no grunt. Its fists speak. The announcer lowers his voice. "Nobody has ever heard it say a word. The people who have fought it say they did not need to."', win: 'It does not cry out when it falls. It lifts its eyes to yours, and for the first time in four years the crowd hears it exhale. That is the loudest thing in the building.' },
+];
+const MONTAGE = [
+  ['The cafeteria-bench montage: you grab a rice ball in one fist and a clipboard in the other. The announcer calls this the quiet part, and says nothing for a moment.', 'You and your fighter climb the dojo steps again and again until the sun hits the hill.'],
+  ['A rooftop at dusk. Somewhere below, a radio plays a song your fighter hums without knowing the words. A scrap of paper falls from your pocket: the bracket, with your name circled in your own handwriting.', 'You skip stones on the roof tiles. Your fighter throws punches at the dusk until its knuckles ring.'],
+  ['The sun is rising, and your fighter is already up, shadow-boxing the first light. The Throh from the last round is outside the gate, bowing to the sunrise. It does not say anything. It holds the door.', 'Someone left a clean towel on the bench. Nobody will admit to it.'],
+  ['The night before the final. The stadium is empty, chairs stacked, floor lights on low. Somewhere a faint cheer from the memory of the afternoon. Your fighter walks out alone, stands in the ring, and stares at the other side.', 'There is a single rival now, on the other side of a wall, awake too.'],
+];
+const PICKS = [
+  { label: 'Power', text: 'Heavy bag, tyre drags, stones. Your fighter hits harder for the rest of the bracket.', fx: [{ kind: 'statMultiplier', stat: 'atk', value: 1.1 }] },
+  { label: 'Guard', text: 'Slow drills, a hundred counters, learning how to take a hit. Your fighter takes the rest of the bracket a little more easily.', fx: [{ kind: 'statMultiplier', stat: 'def', value: 1.1 }, { kind: 'statMultiplier', stat: 'spd', value: 1.1 }] },
+  { label: 'Footwork', text: 'Ladders, ropes, sidesteps until it stops thinking about its feet. Your fighter moves faster for the rest of the bracket.', fx: [{ kind: 'statMultiplier', stat: 'spe', value: 1.15 }] },
 ];
 for (const r of ROUNDS) {
-  ev(`t${r.n}`, `Tournament: ${r.bracket}`, `${r.bracket}. One Pokémon each, matched to yours. If yours faints, you are out.`, [{
+  const left = 5 - r.n;
+  ev(`t${r.n}`, `Tournament: ${r.bracket}`, r.intro, [{
     label: 'Step into the ring', success: {
-      text: `${r.bracket}: a fighter your size.`, effects: [], battle: {
-        kind: 'trainer', name: r.name, size: 1, species: r.species, types: ['fighting'], pseudo: true, rule: { matchLead: true, bstMatch: true },
-        win: [{ kind: 'item', id: r.prize, count: 1 }, { kind: 'heal', share: 0.4 }, add(`t${r.n + 1}`)], lose: [canon('unsolo')],
+      text: `${r.bracket}: ${r.name} steps up, and the crowd rises with it.`, effects: [], battle: {
+        kind: 'trainer', name: r.name, size: 1, species: r.species, types: ['fighting'], pseudo: true, rule: { matchLead: true, bstMatch: true, ...r.rule },
+        win: [{ kind: 'item', id: r.prize, count: 1 }, { kind: 'heal', share: 0.4 }, add(`tm${r.n}`)], lose: [canon('unsolo')],
       },
     },
-  }], { room: true, tint: '#7a3b2e' });
+  }], { room: true, tint: TS, tourney: r.n });
+  const final = r.n === 4;
+  ev(`tm${r.n}`, `Tournament: Training Montage ${r.n}`, `${r.win} ${MONTAGE[r.n - 1]![0]} Pick what to train: ${left} ${left === 1 ? 'fight is' : 'fights are'} still ahead.`,
+    PICKS.map((p, i) => ({ label: p.label, success: { text: `${p.text} ${MONTAGE[r.n - 1]![1]}`, effects: [{ kind: 'tempEffect', label: `Training: ${p.label}`, effects: p.fx, battles: left, until: 'battle' }, final ? { kind: 'addEventFrom', ids: [P + 't5a', P + 't5b', P + 't5c'] } : add(`t${r.n + 1}`)] } })), { room: true, tint: TS, tourney: r.n + 1 });
 }
-ev('t5', 'Tournament: The Final', 'The final. Across the mat stands the rival Mankey: the same kind as yours, the same level, and it wants the belt as much as you do.', [{
-  label: 'Step into the ring', success: {
-    text: 'The crowd chants for both of you.', effects: [], battle: {
-      kind: 'trainer', name: 'Rival Fighter', size: 1, mirror: true, types: ['fighting'], pseudo: true, rule: { evolveMid: true },
-      win: [canon('champion', { species: ['mankey', 'primeape'] }), flag('kanto-tournament-won'), canon('unsolo')], lose: [canon('unsolo')],
+const RIVALS = [
+  { id: 't5a', intro: 'The final. Across the mat stands a fighter of your own kind. Its trainer is a tired woman who runs a dojo with a leaking roof. The belt is prize money. If it wins, the dojo stays open and nine children keep their lessons. It looks at your fighter the way you look at your own, and neither of you wants to hurt the other.', name: 'The Dojo Rival' },
+  { id: 't5b', intro: 'The final. Across the mat stands a fighter of your own kind, and it is crying before the bell. Its trainer is a boy who lost his father, a Black Belt who once fought in this ring. The belt is the only thing he has ever wanted. The announcer finds no joke for it.', name: 'The Fighter Who Cried' },
+  { id: 't5c', intro: 'The final. Across the mat stands a fighter of your own kind with a scar through one eyebrow. Its trainer is a stranger from another region who says only: "I came to lose to someone who deserves it. Do not make me wait." The crowd does not know whether to cheer or to hush. Your fighter growls and means it.', name: 'The Stranger' },
+];
+for (const rv of RIVALS) {
+  ev(rv.id, 'Tournament: The Final', rv.intro, [{
+    label: 'Step into the ring', success: {
+      text: 'The crowd chants for both of you. In the stands, nobody sits.', effects: [], battle: {
+        kind: 'trainer', name: rv.name, size: 1, mirror: true, types: ['fighting'], pseudo: true, rule: { evolveMid: true, fanClub: true },
+        win: [canon('champion', { species: ['mankey', 'primeape'] }), flag('kanto-tournament-won'), { kind: 'moment', text: 'Won the Saffron Fighting Tournament and the belt: the title, Dynamic Punch and Champion\'s Entrance.', importance: 80 }, canon('unsolo'), add('t-win1')], lose: [canon('unsolo')],
+      },
     },
-  },
-}], { room: true, tint: '#7a3b2e' });
+  }], { room: true, tint: TS, tourney: 5 });
+}
+
+// The winning cutscene (spec 16 "the title"): three beats on the champion's podium, each needing an input to move on.
+ev('t-win1', 'Tournament: The Bell', 'The bell rings, and for one heartbeat the whole building holds its breath. Then the noise comes down like a roof falling in. The young announcer has run out of words, and says so, loudly, three times. The old champion beside him takes off his broken-nosed grin, stands, and starts to clap, slowly, and the stadium catches it.',
+  [{ label: 'Lift your fighter\'s paw', success: { text: 'You lift it. The crowd lifts with you.', effects: [add('t-win2')] } }], { room: true, tint: TS, tourney: 6, effect: 'confetti' });
+ev('t-win2', 'Tournament: The Belt',
+  'The organizer walks out on to the mat with the belt across both her forearms like something asleep. She does not make a speech. She says your fighter\'s name, and then your name, and then, quieter: "I watched every round." She buckles it around your fighter, who stands very still, trying not to cry, failing. Dynamic Punch is waiting in its paws, and something new in its chest: Champion\'s Entrance. Nobody will ever walk into a ring the same way again.',
+  [{ label: 'Let it keep the belt', requires: [FOOD], success: { text: 'In the stands, the whole Mankey troop is on its feet, hands over their heads, shrieking a name that is not quite your fighter\'s name and is exactly right. They came down from Route 25 to watch their own go up on the highest step. The sack of grain is still hanging from the rail.', effects: [add('t-win3')] } },
+   { label: 'Let it keep the belt', requires: [NOFOOD], success: { text: 'It looks to the stands for the troop it never fed. There is no brown fur in the rows. It looks at you instead, and its grip on the belt does not loosen. You are the only crowd that matters now, and you are loud.', effects: [add('t-win3')] } }], { room: true, tint: TS, tourney: 6, effect: 'confetti' });
+ev('t-win3', 'Tournament: The Rival Bows',
+  'Before the lights go down, the rival walks across the mat. It does not offer a hand. It bows, from the waist, and holds the bow. Then it straightens, takes something from around its own waist, and shows it to your fighter: a strip of red cloth, knotted. "Next time," its trainer says. Your fighter nods once. The belt is heavier than it looks, and it is not heavy enough to hold the sound of the crowd that does not stop for a long time.',
+  [{ label: 'Walk out under the lights', success: { text: 'You walk out with your fighter beside you, belt on its hips. Your team is waiting at the rail, every one of them. Nobody says anything. Nobody has to.', effects: [] } }], { room: true, tint: TS, tourney: 6, effect: 'confetti' });
+ev('rival-return', 'A Familiar Belt',
+  'On the path ahead a fighter of your own kind stands very straight, its arms folded across a belt it made itself: red cloth, knotted, bleached with the sun. It does not look at the stands this time. It looks at you, and bows, once, from the waist.',
+  [
+    { label: 'Bow back', success: { text: 'It is still too proud to say thank you. It grins at you, a flash of teeth. The home-made belt is the best thing it owns. It is nothing like the real one, and it has never looked better.', effects: [{ kind: 'moment', text: 'The Tournament rival returned in a home-made belt, and bowed.', importance: 60 }, { kind: 'friendship', amount: 10, who: 'party' }] } },
+    leave('You nod and walk on. It watches you go, belt and all.'),
+  ], { tint: TS });
 
 // ---------- 9.5 Fighting Dojo ----------
 ev('dojo', 'Saffron Fighting Dojo', 'The Fighting Dojo next door is open. Its master, arms folded, offers a one-on-one: his Machamp against your whole team.', [

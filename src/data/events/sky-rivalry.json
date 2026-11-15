@@ -1,0 +1,601 @@
+{
+ "events": [
+  {
+   "id": "sky.opening",
+   "name": "Pidgey's Resolve",
+   "group": "Rival episodes",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Story",
+    "Rival",
+    "Pokémon"
+   ],
+   "forced": true,
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "sky",
+     "when": "opening"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pidgey",
+    "tint": "#31404f",
+    "effect": "glint"
+   },
+   "intro": "A branch has fallen across the road and two birds are fighting over it. Not for food. Not for a nest. It is only a branch, and neither of them will say why it matters. A Pidgey, small and brown and stubborn, wings spread wide to look larger than it is. A Spearow, loud and quick and a size too big for the argument, screaming at the sky as if the sky had taken its side. They have not seen you. They are too busy being certain.\n\nYou could walk on. You could. But the little brown one keeps getting knocked down, and keeps getting up, and something in you wants to say a name out loud.",
+   "choices": [
+    {
+     "label": "Back the Pidgey",
+     "success": {
+      "text": "You say it quietly, to no one: come on, little one. The branch shakes. It begins.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "duel",
+        "side": "pidgey"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "spearow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "pseudo": true,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Back the Spearow",
+     "success": {
+      "text": "You say it plainly, because it is the larger bird and the louder, and you have learned to bet on what is loud. The branch shakes. It begins.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "duel",
+        "side": "spearow"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "spearow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "pseudo": true,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky.meet",
+   "name": "The Pidgey on the Road",
+   "group": "Rival episodes",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Story",
+    "Rival",
+    "Pokémon"
+   ],
+   "forced": true,
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "sky",
+     "when": "meet"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pidgey",
+    "tint": "#2a3b52",
+    "effect": "glint"
+   },
+   "intro": "It is waiting for you at the side of the road. It is a little bigger than when you last saw it, a little more stubborn in the beak. It does not chirp a greeting. It stands very straight and looks at you the way you look at a door you are going to walk through someday.\n\nSomewhere above the clouds, a larger shape turns without sound. Pidgey does not look up. That is how you know it knows.",
+   "choices": [
+    {
+     "label": "Spar with it",
+     "success": {
+      "text": "It bows its head, one small, formal dip, and the air between you goes tight. It will learn from whatever you do to it. It will carry the answer next time.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "meetSpar"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Pidgey",
+       "team": [
+        "pidgey"
+       ],
+       "size": 1,
+       "pseudo": true,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "sky",
+         "act": "sparWon"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "sky",
+         "act": "sparLost"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Share a berry with it",
+     "success": {
+      "text": "You crouch and hold out the berry. It does not take it at first. Nobody has ever just given it something.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "giftBerry"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "sky",
+       "when": "giftBerry"
+      }
+     ]
+    },
+    {
+     "label": "Give it something to hold",
+     "success": {
+      "text": "You press the gift into its small claws. It is the first time anyone has believed it could carry something. It will keep it to the end.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "giftItem"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "sky",
+       "when": "giftItem"
+      }
+     ]
+    },
+    {
+     "label": "Nod to it and walk on",
+     "success": {
+      "text": "You do not interrupt it. Some mornings a bird just needs to be seen, and not touched.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "passBy"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky.alone",
+   "name": "Training Alone",
+   "group": "Rival episodes",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Story",
+    "Rival",
+    "Pokémon"
+   ],
+   "forced": true,
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "sky",
+     "when": "alone"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pidgey",
+    "tint": "#27384a",
+    "effect": "glint"
+   },
+   "intro": "You almost walk past it. A small shape at the edge of the road, throwing itself at the wind, falling, getting up, throwing itself at the wind. It is Pidgey. It is alone. It does not notice you, and you realise that this, more than any battle, is what it looks like when someone is really trying: nobody watching, nobody keeping score, and the grass flattened in a ring where it has fallen a hundred times.",
+   "choices": [
+    {
+     "label": "Watch from the grass",
+     "success": {
+      "text": "You sit very still and let it have the morning. You are the only witness to every time it gets up.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "meetAlone"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave a berry where it will find it",
+     "success": {
+      "text": "You set it down in the flat grass where it will land and go. Later, from the road, you see it find it, and look around for who left it, and not find you.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "aloneGift"
+       }
+      ]
+     },
+     "requires": [
+      {
+       "kind": "sky",
+       "when": "giftBerry"
+      }
+     ]
+    },
+    {
+     "label": "Walk on without a sound",
+     "success": {
+      "text": "It is not for you to see. You leave it its privacy, and carry what you saw anyway.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "passBy"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky.finale",
+   "name": "The Cliff in High Wind",
+   "group": "Rival episodes",
+   "stop": "event",
+   "rarity": "epic",
+   "tags": [
+    "Story",
+    "Rival",
+    "Pokémon"
+   ],
+   "forced": true,
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "sky",
+     "when": "finale"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pidgeot",
+    "tint": "#1d2a3d",
+    "effect": "glint"
+   },
+   "intro": "The road ends at a cliff, and the cliff is full of wind. Wild Pokémon have come out along the rocks to watch: Rattata on the ledge, a Machop with its arms crossed, a Zubat that has forgotten to be afraid of the day. They are not here for you. They felt it coming, the way a field feels rain.\n\nOn the high rock, Pidgeot stands with its crest into the gale. It was a Pidgey on a branch once. Across the gap, Fearow lands with its wings half-folded, and says nothing, because it has never needed to. It does not want to hurt anyone. It wants it to stop. It wants the little bird to stop chasing something it cannot beat. It has decided it will say so by winning.\n\nThis is the last of it, before the Elite Four. It is not your fight. But you came all this way.",
+   "choices": [
+    {
+     "label": "Climb to the ridge and watch",
+     "success": {
+      "text": "You climb to the ridge above them, and the wind takes your breath, and you do not look away.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "fearow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "pseudo": true,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Give Pidgey a last berry before it begins",
+     "success": {
+      "text": "You walk out on the rock and hold it up. Pidgeot lowers its great head and takes it, and does not say anything, and does not need to. Then you climb the ridge.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "finaleGiftBerry"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "fearow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "pseudo": true,
+       "win": []
+      }
+     },
+     "requires": [
+      {
+       "kind": "sky",
+       "when": "giftBerry"
+      }
+     ]
+    },
+    {
+     "label": "Give Pidgey something to hold before it begins",
+     "success": {
+      "text": "You press it into its claws and step back. It will carry it into the wind. It will keep it to the end.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "finaleGiftItem"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "fearow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "pseudo": true,
+       "win": []
+      }
+     },
+     "requires": [
+      {
+       "kind": "sky",
+       "when": "giftItem"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "sky.join.pidgeot",
+   "name": "Pidgeot Lands",
+   "group": "Rival episodes",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Story",
+    "Rival",
+    "Pokémon"
+   ],
+   "forced": false,
+   "minStage": 1,
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "pidgeot",
+    "tint": "#243447",
+    "effect": "glint"
+   },
+   "intro": "Pidgeot comes down on the rock beside you, and it is shaking a little, and it looks at you the way it looked at the branch on that first day. It is taller than it ever imagined it would be. It is still the same bird.\n\nIt would like to come with you. It does not ask in words. It lowers its head, and holds what it kept, and waits.",
+   "choices": [
+    {
+     "label": "Welcome it",
+     "success": {
+      "text": "You open your hand. It steps up as if it had always been going to, and the cliff goes quiet, and then loud.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "joinBird",
+        "bird": "pidgeot"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it fly free",
+     "success": {
+      "text": "You say it can go, if it would rather. It looks at you for a long moment and understands that you meant it kindly, and goes.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "freeBird",
+        "bird": "pidgeot"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "sky.join.fearow",
+   "name": "Fearow Lands",
+   "group": "Rival episodes",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Story",
+    "Rival",
+    "Pokémon"
+   ],
+   "forced": false,
+   "minStage": 1,
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "fearow",
+    "tint": "#3a2a27",
+    "effect": "glint"
+   },
+   "intro": "Fearow lands beside you with its crest low. It has never asked anyone for anything, and it is not asking now. It is only standing there, bigger than you, sorry in a way it has no word for, with the wind pulling at its feathers.\n\nIt was never cruel. It only believed it knew what would hurt less. You said its name, and for the first time in a long time it was not sure it was right.",
+   "choices": [
+    {
+     "label": "Welcome it",
+     "success": {
+      "text": "You hold out your hand, and it looks at it as if it had never seen one. Then it steps up.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "joinBird",
+        "bird": "fearow"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go",
+     "success": {
+      "text": "You say it is free to go. It looks at you for the length of one breath. Then it is only a shape in the wind.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "freeBird",
+        "bird": "fearow"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "sky.overhead",
+   "name": "A Bird Overhead",
+   "group": "Rival episodes",
+   "stop": "event",
+   "rarity": "rare",
+   "tags": [
+    "Story",
+    "Rival",
+    "Pokémon"
+   ],
+   "forced": true,
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "sky",
+     "when": "overhead"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pidgeot",
+    "tint": "#25384b",
+    "effect": "glint"
+   },
+   "intro": "At the start of the new region, a shape crosses the top of the sky, high and alone. You know the way it moves. You would know it anywhere. It is still training. It is not training for anyone now. It only drops and climbs, drops and climbs, as if the sky were a thing you could finish.\n\nIt does not look down. It does not need to. But you feel, as it passes, that it knows you are there.",
+   "choices": [
+    {
+     "label": "Watch it until it is gone",
+     "success": {
+      "text": "You stand in the road until the shape is only a thought. Then you go on, and the sky has a place in it now that was not there before.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "overhead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call out to it",
+     "success": {
+      "text": "Your voice is small against that much air. It does not turn. But for one moment the line of its flight bends, almost shyly, toward you.",
+      "effects": [
+       {
+        "kind": "sky",
+        "act": "overhead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky.rematch",
+   "name": "One More Fight",
+   "group": "Rival episodes",
+   "stop": "event",
+   "rarity": "epic",
+   "tags": [
+    "Story",
+    "Rival",
+    "Pokémon"
+   ],
+   "forced": true,
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "xevents"
+    },
+    {
+     "kind": "sky",
+     "when": "rematch"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pidgeot",
+    "tint": "#2a2230",
+    "effect": "glint"
+   },
+   "intro": "Pidgeot is waiting on the road, as if it had been waiting since the cliff. It says nothing. It does not look at you. But it did not leave the road, either, and it is standing in exactly the place where you will have to pass.\n\nIt wants one more fight. It will not call it a rematch. It will not call it anything. It only wants to finish what the wind interrupted, and to find out whether you meant it.",
+   "choices": [
+    {
+     "label": "Fight it",
+     "success": {
+      "text": "You step up. It meets your eye for the first time since the cliff. It has been angry for a long while, and under the anger, you see now, was only a question.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Pidgeot",
+       "team": [
+        "pidgeot"
+       ],
+       "size": 1,
+       "pseudo": true,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "sky",
+         "act": "rematchWon"
+        },
+        {
+         "kind": "item",
+         "id": "rare-candy",
+         "count": 1
+        }
+       ],
+       "lose": [
+        {
+         "kind": "sky",
+         "act": "rematchLost"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1120 @@
+{
+ "events": [
+  {
+   "id": "cs-kanto-vermilion-flight",
+   "name": "Vermilion: Flight North",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "A balloon shaped like a Meowth head drifts over the harbor, its basket creaking in the sea wind. High above it, three voices clear their throats, rehearsing something they have clearly rehearsed before. You pretend not to hear them. Your Pokémon, one by one, go very quiet.",
+   "choices": [
+    {
+     "label": "Keep walking",
+     "chance": 0.5,
+     "failure": {
+      "text": "\"Prepare for trouble!\" \"Make it double!\" \"To protect the world from devastation!\" The net comes down before the motto is finished. You feel every Poké Ball on your belt go light, and the sky goes dark. You wake in a field with no Pokémon, no Poké Balls, and no one to call. The grass is cold. For the first time in a long while, you are completely alone.",
+      "effects": [
+       {
+        "kind": "stashParty"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-flight-stolen",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-flight-n1"
+       }
+      ]
+     },
+     "success": {
+      "text": "Just an advertisement, for once. The balloon drifts out to sea, the three voices fading with it. Your Pokémon let out a breath they did not know they were holding, and you walk on a little closer together than before.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.vermilion.flightnorth"
+  },
+  {
+   "id": "cs-kanto-vermilion-flight-n1",
+   "name": "Flight North: The Bully",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73",
+    "pokemon": "spearow"
+   },
+   "room": true,
+   "intro": "You wake in a field with nothing but the clothes you stand in. Your hands go to your belt and find nothing. The wind comes across the grass, and with it a scream. A Spearow dives at your head, again and again, the way a small mean bird does when it has decided you are the weakest thing in the field. You cover your face. There is nobody to call out to.",
+   "choices": [
+    {
+     "label": "Cover your head",
+     "chance": 0.5,
+     "failure": {
+      "text": "A small, spiked shape drops out of the leaves onto the Spearow's back and the Spearow shrieks, tumbles, and flaps away, beaten by something a tenth its size. The Weedle lands in the grass, wobbles on its feet, and looks up at you, as surprised as you are. Then, very quietly, it hops once. It does not know it is a hero. It only knows you were in trouble.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "weedle"
+        ],
+        "level": 5,
+        "direct": true
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-flight-bug",
+        "amount": 2
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "spearow"
+       ],
+       "level": 4,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "flightNorth",
+         "action": "trust"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-vermilion-flight-w1"
+        }
+       ]
+      }
+     },
+     "success": {
+      "text": "Something small and green drops out of the leaves onto the Spearow's back and bites down. The Spearow shrieks, tumbles, and flaps away, beaten by something a tenth its size. The Caterpie lands in the grass, looks at the sky, looks at you, and seems just as surprised as you are. Then, very quietly, it hops once. It does not know it is a hero. It only knows you were in trouble.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "caterpie"
+        ],
+        "level": 5,
+        "direct": true
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-flight-bug",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "spearow"
+       ],
+       "level": 4,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "flightNorth",
+         "action": "trust"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-vermilion-flight-c1"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-vermilion-flight-c1",
+   "name": "Flight North: A Name",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73",
+    "pokemon": "caterpie"
+   },
+   "room": true,
+   "intro": "The Caterpie is not going anywhere. It follows you three steps, stops, and looks back at the field where its fight happened, then at you, then at the field. It has an idle wiggle all its own, a little shiver that begins at its head and runs to its tail, and a cry thin and bright that you will know anywhere, years from now. Somebody should call it something.",
+   "choices": [
+    {
+     "label": "Pip",
+     "success": {
+      "text": "\"Pip,\" you say, and it tilts its head as if it is trying the word on. It hops, a small proud hop, and settles against your shoe. It has a name now, and it is the first thing in this field that belongs to you.",
+      "effects": [
+       {
+        "kind": "flightNorth",
+        "action": "name",
+        "name": "Pip"
+       },
+       {
+        "kind": "flightNorth",
+        "action": "trust"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-flight-c2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fern",
+     "success": {
+      "text": "\"Fern,\" you say, and it tilts its head as if it is trying the word on. It hops, a small proud hop, and settles against your shoe. It has a name now, and it is the first thing in this field that belongs to you.",
+      "effects": [
+       {
+        "kind": "flightNorth",
+        "action": "name",
+        "name": "Fern"
+       },
+       {
+        "kind": "flightNorth",
+        "action": "trust"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-flight-c2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sprout",
+     "success": {
+      "text": "\"Sprout,\" you say, and it tilts its head as if it is trying the word on. It hops, a small proud hop, and settles against your shoe. It has a name now, and it is the first thing in this field that belongs to you.",
+      "effects": [
+       {
+        "kind": "flightNorth",
+        "action": "name",
+        "name": "Sprout"
+       },
+       {
+        "kind": "flightNorth",
+        "action": "trust"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-flight-c2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing yet",
+     "success": {
+      "text": "You do not name it. You only sit down beside it in the grass, and after a while it leans its whole small weight against your leg. It does not seem to mind having no name. It seems to mind being alone even less. (You can still name it later in Care.)",
+      "effects": [
+       {
+        "kind": "flightNorth",
+        "action": "trust"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-flight-c2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-vermilion-flight-c2",
+   "name": "Flight North: The Tall Grass",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73",
+    "pokemon": "caterpie"
+   },
+   "room": true,
+   "intro": "The Caterpie follows you into the tall grass. Two small wild Pokémon are in the way, and you have no Pokémon at all except this one, which weighs about as much as an apple. It looks at you. It will have to do the fighting, and it knows it. It squares up anyway, trembling, and does the small victory hop it did before. You think it is the bravest thing you have ever seen.",
+   "choices": [
+    {
+     "label": "Fight",
+     "success": {
+      "text": "It squares up to the first one and you shout every encouragement you can think of.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "rattata",
+        "pidgey",
+        "spearow",
+        "nidoran-f",
+        "nidoran-m",
+        "oddish",
+        "bellsprout",
+        "zubat",
+        "geodude"
+       ],
+       "level": 5,
+       "chain": 2,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "levels",
+         "amount": 3,
+         "who": "lead"
+        },
+        {
+         "kind": "flightNorth",
+         "action": "trust"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-vermilion-flight-c3"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-vermilion-flight-c3",
+   "name": "Flight North: Cocoon Night",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73",
+    "pokemon": "caterpie"
+   },
+   "room": true,
+   "intro": "Night falls and it is cold, and there is no fire. The little bug cannot stay awake. It spins a thread against a fallen log, looks at you once, and begins to wrap itself in. It is not afraid of the change. It is afraid you will not be here when it is over. A cocoon is a hard thing to leave unguarded, and you are all it has.",
+   "choices": [
+    {
+     "label": "Keep watch",
+     "success": {
+      "text": "You sit up and keep watch until dawn, one hand resting lightly on the log. An owl calls and you do not sleep. At dawn the cocoon splits and it crawls out changed, wings damp and trembling, and the first thing it sees is you, still there.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "caterpie",
+        "to": "metapod"
+       },
+       {
+        "kind": "levels",
+        "amount": 2,
+        "who": "lead"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flightNorth",
+        "action": "trust"
+       },
+       {
+        "kind": "flightNorth",
+        "action": "trust"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-flight-c4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell it about home",
+     "success": {
+      "text": "You talk quietly to the cocoon the whole night: the harbor, the Pokémon you cannot reach, the way you will be missed. You do not know if it hears. At dawn the cocoon splits and it crawls out changed, wings damp and trembling, and it presses close to you before it will do anything else.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "caterpie",
+        "to": "metapod"
+       },
+       {
+        "kind": "levels",
+        "amount": 2,
+        "who": "lead"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flightNorth",
+        "action": "trust"
+       },
+       {
+        "kind": "flightNorth",
+        "action": "trust"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-flight-c4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-vermilion-flight-c4",
+   "name": "Flight North: The Stream",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73",
+    "pokemon": "metapod"
+   },
+   "room": true,
+   "intro": "A stream cuts the path. The stepping stones are slick and the water is quick. Something wet and angry has claimed the stones, and your small friend, still shaking the night out of its body, plants itself between you and the water. It does not hop this time. It is too busy being brave.",
+   "choices": [
+    {
+     "label": "Fight",
+     "success": {
+      "text": "Your bug braces on the stones, and you braced beside it, close enough to feel it breathe.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "poliwag",
+        "magikarp",
+        "psyduck",
+        "tentacool"
+       ],
+       "level": 10,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "levels",
+         "amount": 3,
+         "who": "lead"
+        },
+        {
+         "kind": "flightNorth",
+         "action": "trust"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-vermilion-flight-c5"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-vermilion-flight-c5",
+   "name": "Flight North: Hatching",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73",
+    "pokemon": "metapod"
+   },
+   "room": true,
+   "intro": "A flock of Pidgey takes off from a dead tree all at once, a gray cloud against the evening. Your bug feels it too, something under its shell turning over. You have watched it grow from the size of your thumb. Something is about to change, and it looks at you as if asking permission.",
+   "choices": [
+    {
+     "label": "Stand together",
+     "success": {
+      "text": "It sheds its shell and spreads two wet, shaking wings: Butterfree! The flock turns on it at once, and it does not look away.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "metapod",
+        "to": "butterfree"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "pidgey"
+       ],
+       "level": 13,
+       "chain": 2,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "levels",
+         "amount": 3,
+         "who": "lead"
+        },
+        {
+         "kind": "flightNorth",
+         "action": "trust"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-vermilion-flight-c6"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-vermilion-flight-c6",
+   "name": "Flight North: The Trio's Camp",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73",
+    "pokemon": "butterfree"
+   },
+   "room": true,
+   "intro": "Smoke rises from a camp in a dry riverbed. Your Pokémon are in a cage beside the fire, every one of them looking toward you, and you can hear them. A cat is guarding the cage, and it looks bored. Your friend sees them too. It goes very still, then very sure.",
+   "choices": [
+    {
+     "label": "Slip in from the shadows",
+     "success": {
+      "text": "You send your bug in low and fast, and you follow it into the firelight.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Meowth",
+       "team": [
+        "meowth"
+       ],
+       "level": 16,
+       "size": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "levels",
+         "amount": 2,
+         "who": "lead"
+        },
+        {
+         "kind": "flightNorth",
+         "action": "trust"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-vermilion-flight-c7"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-vermilion-flight-c7",
+   "name": "Flight North: The Venomoth",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73",
+    "pokemon": "butterfree"
+   },
+   "room": true,
+   "intro": "Jessie and James are on their feet, and the whole riverbed goes quiet. \"Venomoth, go!\" Your bug is the only one between them and the cage, and it is not afraid anymore. It looks back at you once. Whatever happens next, you will remember the shape of its wings.",
+   "choices": [
+    {
+     "label": "Fight!",
+     "success": {
+      "text": "Your bug glows. It will not be left behind. It launches itself at the Venomoth, for you.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "caterpie",
+        "to": "butterfree"
+       },
+       {
+        "kind": "formChange",
+        "from": "metapod",
+        "to": "butterfree"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Jessie & James",
+       "team": [
+        "venomoth"
+       ],
+       "level": 20,
+       "size": 1,
+       "pseudo": true,
+       "rule": {
+        "shinyRescue": true,
+        "evolveMid": true
+       },
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-vermilion-flight-goodbye"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-vermilion-flight-w1",
+   "name": "Flight North: A Name",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73",
+    "pokemon": "weedle"
+   },
+   "room": true,
+   "intro": "The Weedle is not going anywhere. It follows you three steps, stops, and looks back at the field where its fight happened, then at you, then at the field. It has an idle wiggle all its own, a little shiver that begins at its head and runs to its tail, and a cry thin and bright that you will know anywhere, years from now. Somebody should call it something.",
+   "choices": [
+    {
+     "label": "Dart",
+     "success": {
+      "text": "\"Dart,\" you say, and it tilts its head as if it is trying the word on. It hops, a small proud hop, and settles against your shoe. It has a name now, and it is the first thing in this field that belongs to you.",
+      "effects": [
+       {
+        "kind": "flightNorth",
+        "action": "name",
+        "name": "Dart"
+       },
+       {
+        "kind": "flightNorth",
+        "action": "trust"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-flight-w2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sting",
+     "success": {
+      "text": "\"Sting,\" you say, and it tilts its head as if it is trying the word on. It hops, a small proud hop, and settles against your shoe. It has a name now, and it is the first thing in this field that belongs to you.",
+      "effects": [
+       {
+        "kind": "flightNorth",
+        "action": "name",
+        "name": "Sting"
+       },
+       {
+        "kind": "flightNorth",
+        "action": "trust"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-flight-w2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thorn",
+     "success": {
+      "text": "\"Thorn,\" you say, and it tilts its head as if it is trying the word on. It hops, a small proud hop, and settles against your shoe. It has a name now, and it is the first thing in this field that belongs to you.",
+      "effects": [
+       {
+        "kind": "flightNorth",
+        "action": "name",
+        "name": "Thorn"
+       },
+       {
+        "kind": "flightNorth",
+        "action": "trust"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-flight-w2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing yet",
+     "success": {
+      "text": "You do not name it. You only sit down beside it in the grass, and after a while it leans its whole small weight against your leg. It does not seem to mind having no name. It seems to mind being alone even less. (You can still name it later in Care.)",
+      "effects": [
+       {
+        "kind": "flightNorth",
+        "action": "trust"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-flight-w2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-vermilion-flight-w2",
+   "name": "Flight North: The Tall Grass",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73",
+    "pokemon": "weedle"
+   },
+   "room": true,
+   "intro": "The Weedle follows you into the tall grass. Two small wild Pokémon are in the way, and you have no Pokémon at all except this one, which weighs about as much as an apple. It looks at you. It will have to do the fighting, and it knows it. It squares up anyway, trembling, and does the small victory hop it did before. You think it is the bravest thing you have ever seen.",
+   "choices": [
+    {
+     "label": "Fight",
+     "success": {
+      "text": "It squares up to the first one and you shout every encouragement you can think of.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "rattata",
+        "pidgey",
+        "spearow",
+        "nidoran-f",
+        "nidoran-m",
+        "oddish",
+        "bellsprout",
+        "zubat",
+        "geodude"
+       ],
+       "level": 5,
+       "chain": 2,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "levels",
+         "amount": 3,
+         "who": "lead"
+        },
+        {
+         "kind": "flightNorth",
+         "action": "trust"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-vermilion-flight-w3"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-vermilion-flight-w3",
+   "name": "Flight North: Cocoon Night",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73",
+    "pokemon": "weedle"
+   },
+   "room": true,
+   "intro": "Night falls and it is cold, and there is no fire. The little bug cannot stay awake. It spins a thread against a fallen log, looks at you once, and begins to wrap itself in. It is not afraid of the change. It is afraid you will not be here when it is over. A cocoon is a hard thing to leave unguarded, and you are all it has.",
+   "choices": [
+    {
+     "label": "Keep watch",
+     "success": {
+      "text": "You sit up and keep watch until dawn, one hand resting lightly on the log. An owl calls and you do not sleep. At dawn the cocoon splits and it climbs out changed, a stinger on each arm, and the first thing it sees is you, still there.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "weedle",
+        "to": "kakuna"
+       },
+       {
+        "kind": "levels",
+        "amount": 2,
+        "who": "lead"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flightNorth",
+        "action": "trust"
+       },
+       {
+        "kind": "flightNorth",
+        "action": "trust"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-flight-w4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell it about home",
+     "success": {
+      "text": "You talk quietly to the cocoon the whole night: the harbor, the Pokémon you cannot reach, the way you will be missed. You do not know if it hears. At dawn the cocoon splits and it climbs out changed, a stinger on each arm, and it presses close to you before it will do anything else.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "weedle",
+        "to": "kakuna"
+       },
+       {
+        "kind": "levels",
+        "amount": 2,
+        "who": "lead"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flightNorth",
+        "action": "trust"
+       },
+       {
+        "kind": "flightNorth",
+        "action": "trust"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-flight-w4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-vermilion-flight-w4",
+   "name": "Flight North: The Stream",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73",
+    "pokemon": "kakuna"
+   },
+   "room": true,
+   "intro": "A stream cuts the path. The stepping stones are slick and the water is quick. Something wet and angry has claimed the stones, and your small friend, still shaking the night out of its body, plants itself between you and the water. It does not hop this time. It is too busy being brave.",
+   "choices": [
+    {
+     "label": "Fight",
+     "success": {
+      "text": "Your bug braces on the stones, and you braced beside it, close enough to feel it breathe.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "poliwag",
+        "magikarp",
+        "psyduck",
+        "tentacool"
+       ],
+       "level": 10,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "levels",
+         "amount": 3,
+         "who": "lead"
+        },
+        {
+         "kind": "flightNorth",
+         "action": "trust"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-vermilion-flight-w5"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-vermilion-flight-w5",
+   "name": "Flight North: Hatching",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73",
+    "pokemon": "kakuna"
+   },
+   "room": true,
+   "intro": "A flock of Pidgey takes off from a dead tree all at once, a gray cloud against the evening. Your bug feels it too, something under its shell turning over. You have watched it grow from the size of your thumb. Something is about to change, and it looks at you as if asking permission.",
+   "choices": [
+    {
+     "label": "Stand together",
+     "success": {
+      "text": "It sheds its shell and unfolds two hard, humming wings: Beedrill! The flock turns on it at once, and it does not look away.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "kakuna",
+        "to": "beedrill"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "pidgey"
+       ],
+       "level": 13,
+       "chain": 2,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "levels",
+         "amount": 3,
+         "who": "lead"
+        },
+        {
+         "kind": "flightNorth",
+         "action": "trust"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-vermilion-flight-w6"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-vermilion-flight-w6",
+   "name": "Flight North: The Trio's Camp",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73",
+    "pokemon": "beedrill"
+   },
+   "room": true,
+   "intro": "Smoke rises from a camp in a dry riverbed. Your Pokémon are in a cage beside the fire, every one of them looking toward you, and you can hear them. A cat is guarding the cage, and it looks bored. Your friend sees them too. It goes very still, then very sure.",
+   "choices": [
+    {
+     "label": "Slip in from the shadows",
+     "success": {
+      "text": "You send your bug in low and fast, and you follow it into the firelight.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Meowth",
+       "team": [
+        "meowth"
+       ],
+       "level": 16,
+       "size": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "levels",
+         "amount": 2,
+         "who": "lead"
+        },
+        {
+         "kind": "flightNorth",
+         "action": "trust"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-vermilion-flight-w7"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-vermilion-flight-w7",
+   "name": "Flight North: The Venomoth",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73",
+    "pokemon": "beedrill"
+   },
+   "room": true,
+   "intro": "Jessie and James are on their feet, and the whole riverbed goes quiet. \"Venomoth, go!\" Your bug is the only one between them and the cage, and it is not afraid anymore. It looks back at you once. Whatever happens next, you will remember the shape of its wings.",
+   "choices": [
+    {
+     "label": "Fight!",
+     "success": {
+      "text": "Your bug glows. It will not be left behind. It launches itself at the Venomoth, for you.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "weedle",
+        "to": "beedrill"
+       },
+       {
+        "kind": "formChange",
+        "from": "kakuna",
+        "to": "beedrill"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Jessie & James",
+       "team": [
+        "venomoth"
+       ],
+       "level": 20,
+       "size": 1,
+       "pseudo": true,
+       "rule": {
+        "shinyRescue": true,
+        "evolveMid": true
+       },
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-vermilion-flight-goodbye"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-vermilion-flight-goodbye",
+   "name": "Flight North: Goodbye",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "room": true,
+   "intro": "The Venomoth is down and the trio blasts off with a ping, a long thin cry trailing across the sky. A shiny copy of your bug rests on a branch above you and watches, bright as a coin. You open the cage, and your own team spills out around you, every one of them talking at once. Somewhere under the noise, you realise it is time.",
+   "choices": [
+    {
+     "label": "Say goodbye",
+     "success": {
+      "text": "Your bug flutters up beside its shiny twin, then turns back to you. It does the small victory hop one last time, in the air, and you laugh and cry at once. Then the two of them rise together into the north, over the trees, and you wave until your arm aches. When you look again, only the sky is left. It will remember you. You do not know how you know that.",
+      "effects": [
+       {
+        "kind": "restoreParty"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-flight-gratitude",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

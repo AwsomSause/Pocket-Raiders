@@ -27,6 +27,8 @@ export const PromptDefSchema = z.discriminatedUnion('kind', [
   z.object({ ...Base, kind: z.literal('rhythm'), beatsMs: z.array(z.number().int().min(0)).min(2).max(16), windowsMs: WindowsSchema }),
   /** A ring shrinks onto a circle and lands at landMs; press as it lands. */
   z.object({ ...Base, kind: z.literal('timing'), landMs: z.number().int().positive(), windowsMs: WindowsSchema }),
+  /** Shout (Beta 0.7): a loud noise on the microphone, or a button press, within listenMs. Both give the same grade ('good'); a miss when nothing came. */
+  z.object({ ...Base, kind: z.literal('shout'), listenMs: z.number().int().positive() }),
 ]);
 export type PromptDef = z.infer<typeof PromptDefSchema>;
 export type PromptKind = PromptDef['kind'];
@@ -73,6 +75,12 @@ export function judgeTap(def: Extract<PromptDef, { kind: 'tap' }>, pressMs: numb
   if (assist.skip) return skippedResult(assist);
   if (pressMs === null || pressMs > def.expireMs) return one('miss');
   return one(gradeOffset(pressMs, def.windowsMs, assist.widen));
+}
+
+/** Shout: `shouted` is true when the mic heard a shout or the button was pressed in time. The mic never scores better than the button. */
+export function judgeShout(_def: Extract<PromptDef, { kind: 'shout' }>, shouted: boolean, assist: PromptAssist = {}): PromptResult {
+  if (assist.skip) return skippedResult(assist);
+  return one(shouted ? 'good' : 'miss');
 }
 
 /** Hold: `heldMs` is how long the button was down; null = never pressed. */
@@ -138,6 +146,7 @@ export function promptLengthMs(def: PromptDef): number {
     case 'drag': return def.maxMs;
     case 'timing': return def.landMs + Math.round(def.windowsMs.ok * 2);
     case 'rhythm': return Math.max(...def.beatsMs) + Math.round(def.windowsMs.ok * 2);
+    case 'shout': return def.listenMs;
   }
 }
 
@@ -166,6 +175,8 @@ export const PROMPTS: readonly PromptDef[] = [
   { id: 'tilt-drag', kind: 'drag', label: 'Tilt!', hint: 'Drag along the path to the goal.', from: [15, 75], to: [80, 30], windowsPx: W(7, 14, 24), maxMs: 4500 },
   // Beta 0.6 Saffron: the Copycat Girl's game (four claps to copy).
   { id: 'copycat-claps', kind: 'rhythm', label: 'Copy her claps', hint: 'She claps four times. Press on each beat to copy her.', beatsMs: [500, 950, 1500, 1950], windowsMs: W(100, 180, 320) },
+  // Beta 0.7: the first screen that uses the microphone (Sleeping Snorlax).
+  { id: 'snorlax-shout', kind: 'shout', label: 'Wake the Snorlax!', hint: 'Shout, or press the button, to wake it.', listenMs: 5000 },
   { id: 'pull-hold', kind: 'hold', label: 'Pull together', hint: 'Hold, and let go as the ring fills to pull them free.', targetMs: 1100, windowsMs: W(90, 180, 320) },
 ];
 

@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { createBattle, resolveTurn, type BattleContext } from '../../src/core/battle/engine';
-import { chooseEvent, conditionMet, eventBattleLost, eventBattleWon } from '../../src/core/events';
+import { eligibleEvents, chooseEvent, conditionMet, eventBattleLost, eventBattleWon } from '../../src/core/events';
 import { createPokemon, abilityOf } from '../../src/core/pokemon';
-import { chooseStarter, createRun, debugForceEvent } from '../../src/core/run';
+import { chooseStarter, createRun, debugForceEvent, takeTurn } from '../../src/core/run';
 import { hashSeed, Rng } from '../../src/core/rng';
-import { applyCanonEffect, ghostReturnEvent, ghostReturns, leaveCanonStash, nearestBst, restoreStash, ruleEvolution } from '../../src/core/expansion/canonSaffron';
+import { applyCanonEffect, ghostReturnEvent, ghostReturns, labRetryEvent, leaveCanonStash, nearestBst, restoreStash, ruleEvolution } from '../../src/core/expansion/canonSaffron';
+import { falseSlotFor } from '../../src/core/expansion/labyrinth';
+import { tourneyBracket, TOURNEY_ROUNDS } from '../../src/core/expansion/tourney';
 import { evolutionTarget } from '../../src/core/evolution';
 import { RunStateSchema } from '../../src/core/state';
 import { content } from './helpers';
@@ -23,7 +25,7 @@ const targets = (id: string): string[] => room(id).choices.flatMap((c) => [c.suc
 describe('Saffron canon: the event graph', () => {
   it('every addEvent target exists, and every room is reached from a gate', () => {
     const ids = [...content.events.keys()].filter((id) => id.startsWith(P)).map((id) => id.slice(P.length));
-    const gates = ['r25', 'tournament', 'dojo', 'copycat', 'silph', 'train', 'labyrinth', 'return-shuppet', 'return-duskull', 'return-drifloon', 'return-gastly'];
+    const gates = ['r25', 'tournament', 'dojo', 'copycat', 'silph', 'train', 'labyrinth', 'return-shuppet', 'return-duskull', 'return-drifloon', 'return-gastly', 'rival-return'];
     const reach = new Set<string>(gates);
     for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id)) { expect(content.events.has(t), `${id} -> ${t}`).toBe(true); if (!reach.has(t.slice(P.length))) { reach.add(t.slice(P.length)); again = true; } } }
     expect([...reach].sort()).toEqual(ids.sort());
@@ -33,21 +35,33 @@ describe('Saffron canon: the event graph', () => {
   });
 });
 
-describe('Route 25', () => {
-  it('is five Mankey in a row: three, a breather, one, then a raging Primeape that knows Rage', () => {
-    const first = room('r25').choices[0]!.success.battle!;
-    expect(first).toMatchObject({ kind: 'wild', species: ['mankey'], chain: 3 });
-    expect(room('r25-breath').choices.map((c) => c.success.effects.some((e) => e.kind === 'heal'))).toEqual([true, false]);
-    const last = room('r25-wrath').choices[0]!.success.battle!;
-    expect(last).toMatchObject({ kind: 'wild', species: ['primeape'], foeMoves: ['rage'] });
+describe('Route 25: The Angry Mankey', () => {
+  const win = (id: string) => (room(id).choices[0]!.success.battle as { win: object[] }).win;
+  it('is five Mankey in a row with no healing: three, one, then a fifth that stands guard', () => {
+    expect(room('r25').choices[0]!.success.effects).toContainEqual({ kind: 'addEvent', eventId: `${P}r25-1` });
+    expect(room('r25-1').choices[0]!.success.battle).toMatchObject({ kind: 'wild', species: ['mankey'], chain: 3 });
+    expect(room('r25-4').choices[0]!.success.battle).toMatchObject({ kind: 'wild', species: ['mankey'] });
+    expect(room('r25-5').choices[0]!.success.battle).toMatchObject({ kind: 'wild', species: ['mankey'], rule: { foeStands: 1 } });
+    for (const id of ['r25-1', 'r25-4', 'r25-5']) expect(JSON.stringify(room(id))).not.toContain('"heal"');
   });
-  it('the reward is Mankey with Swords Dance and Mach Punch, the kanto.mankey flag and the Tournament', () => {
-    const win = (room('r25-wrath').choices[0]!.success.battle as { win: object[] }).win;
-    expect(win).toContainEqual(expect.objectContaining({ kind: 'join', species: ['mankey'] }));
-    expect(win).toContainEqual(expect.objectContaining({ kind: 'teachMove', move: 'swords-dance', species: 'mankey' }));
-    expect(win).toContainEqual(expect.objectContaining({ kind: 'teachMove', move: 'mach-punch', species: 'mankey' }));
-    expect(win).toContainEqual({ kind: 'flag', key: 'kanto-mankey', amount: 1 });
-    expect(win).toContainEqual({ kind: 'addEvent', eventId: `${P}tournament` });
+  it("the thieves' camp is one node off the path, before or after the fight, and returns the food", () => {
+    expect(room('r25').choices[1]!.success.effects).toContainEqual({ kind: 'addEvent', eventId: `${P}r25-camp` });
+    expect(win('r25-camp')).toContainEqual({ kind: 'flag', key: 'r25-food', amount: 1 });
+    expect(win('r25-camp-after')).toContainEqual({ kind: 'flag', key: 'r25-food', amount: 1 });
+    expect(room('r25-after').choices.some((c) => c.success.effects.some((e) => e.kind === 'addEvent' && e.eventId === `${P}r25-camp-after`))).toBe(true);
+  });
+  it('the reward is Mankey with Swords Dance and Mach Punch; with the food returned it starts fonder (Bond +2) and the troop is in the crowd', () => {
+    for (const id of ['r25-thanks', 'r25-claim']) {
+      const fx = room(id).choices[0]!.success.effects;
+      expect(fx).toContainEqual(expect.objectContaining({ kind: 'join', species: ['mankey'] }));
+      expect(fx).toContainEqual(expect.objectContaining({ kind: 'teachMove', move: 'swords-dance', species: 'mankey' }));
+      expect(fx).toContainEqual(expect.objectContaining({ kind: 'teachMove', move: 'mach-punch', species: 'mankey' }));
+      expect(fx).toContainEqual({ kind: 'flag', key: 'kanto-mankey', amount: 1 });
+      expect(fx).toContainEqual({ kind: 'addEvent', eventId: `${P}tournament` });
+    }
+    expect(room('r25-thanks').choices[0]!.success.effects.find((e) => e.kind === 'join')).toMatchObject({ friendship: 40 });
+    expect(room('r25-claim').choices[0]!.success.effects.find((e) => e.kind === 'join')).not.toHaveProperty('friendship');
+    expect(room('tc').choices.map((c) => c.requires![0])).toEqual([expect.objectContaining({ key: 'r25-food', atLeast: 1 }), expect.objectContaining({ key: 'r25-food', atMost: 0 })]);
   });
   it('a flawless run pays a Black Belt to the Mankey; a fainted Pokémon does not', () => {
     const run = begin('R25');
@@ -58,14 +72,26 @@ describe('Route 25', () => {
     hurt.party[0]!.hp = 0;
     expect(eff(hurt, 'flawless')).toBe('');
   });
-  it('a won event battle applies the flag and syncs it to the canon state when the gate was played', () => {
-    const { run, sideId } = debugForceEvent(content, structuredClone(begin('R25c')), `${P}r25-wrath`);
+  it('the fifth Mankey does not attack on the first turn, then fights', () => {
+    const player = createPokemon(content, 'pikachu', 30, 'p');
+    player.moves = [{ id: 'tackle', pp: 35 }];
+    const enemy = createPokemon(content, 'mankey', 5, 'e');
+    enemy.hp = 9999;
+    const battle = createBattle('wild', [enemy], 0, player.uid, null);
+    battle.eventRule = { foeStands: 1 };
+    const ctx: BattleContext = { content, battle, party: [player], inventory: {}, rng: new Rng(hashSeed('stand')), captureRng: new Rng(hashSeed('stand-c')), catchMultiplier: 1 };
+    const hp = player.hp;
+    const first = resolveTurn(ctx, { kind: 'move', index: 0 });
+    expect(JSON.stringify(first)).toContain('stands in front of the others');
+    expect(player.hp).toBe(hp);
+    resolveTurn(ctx, { kind: 'move', index: 0 });
+    expect(player.hp).toBeLessThan(hp);
+  });
+  it('a won event battle applies the flag when the reward room is played', () => {
+    const { run, sideId } = debugForceEvent(content, structuredClone(begin('R25c')), `${P}r25-claim`);
     const out = chooseEvent(content, run, sideId, 0);
-    expect(out.battle).toBe(true);
-    const won = structuredClone(out.run);
-    eventBattleWon(content, won, { eventId: `${P}r25-wrath`, choiceIndex: 0, sideId, success: true });
-    expect(won.story.flags['ev:kanto-mankey']).toBe(1);
-    expect(won.pending.some((p) => p.kind === 'caught' && p.mon.speciesId === 'mankey' && p.mon.moves.some((m) => m.id === 'mach-punch'))).toBe(true);
+    expect(out.run.story.flags['ev:kanto-mankey']).toBe(1);
+    expect(out.run.pending.some((p) => p.kind === 'caught' && p.mon.speciesId === 'mankey' && p.mon.moves.some((m) => m.id === 'mach-punch'))).toBe(true);
   });
 });
 
@@ -88,8 +114,8 @@ describe('Fighting Tournament', () => {
     leaveCanonStash(run);
     expect(run.party.map((m) => m.speciesId)).toEqual(['pikachu', 'primeape', 'eevee']);
   });
-  it('is five 1-on-1 rounds; prizes match the table; the foe is matched in level and stat total', () => {
-    const rounds = ['t1', 't2', 't3', 't4', 't5'].map((id) => room(id).choices[0]!.success.battle as never as { size: number; species?: string[]; rule: object; win: { kind: string; id?: string }[]; lose: object[]; mirror?: boolean });
+  it('is five 1-on-1 rounds (Machop, Hawlucha, Throh, Hitmonchan, then a rival); prizes match the table; the foe is matched in level and stat total', () => {
+    const rounds = ['t1', 't2', 't3', 't4', 't5a'].map((id) => room(id).choices[0]!.success.battle as never as { size: number; species?: string[]; rule: object; win: { kind: string; id?: string }[]; lose: object[]; mirror?: boolean });
     expect(rounds.every((r) => r.size === 1)).toBe(true);
     expect(rounds.slice(0, 4).map((r) => r.win.find((w) => w.kind === 'item')!.id)).toEqual(['muscle-band', 'protein', 'focus-sash', 'black-belt']);
     expect(rounds.slice(0, 4).every((r) => (r.rule as { matchLead: boolean; bstMatch: boolean }).matchLead && (r.rule as { bstMatch: boolean }).bstMatch)).toBe(true);
@@ -98,6 +124,22 @@ describe('Fighting Tournament', () => {
     for (const r of rounds) expect(r.lose).toContainEqual(expect.objectContaining({ kind: 'canon', action: 'unsolo' }));
     const mankey = createPokemon(content, 'mankey', 20, 'x');
     expect(nearestBst(content, ['machoke', 'poliwrath'], mankey)).toBe('machoke');
+    expect(['t1', 't2', 't3', 't4'].map((id) => (room(id).choices[0]!.success.battle as { species: string[] }).species[0])).toEqual(['machop', 'hawlucha', 'throh', 'hitmonchan']);
+  });
+  it('has a training montage between rounds (Power, Guard or Footwork) and a rival final with its own reason', () => {
+    for (const n of [1, 2, 3, 4]) {
+      const m = room(`tm${n}`);
+      expect(m.choices.map((c) => c.label)).toEqual(['Power', 'Guard', 'Footwork']);
+      for (const c of m.choices) expect(c.success.effects).toContainEqual(expect.objectContaining({ kind: 'tempEffect', battles: 5 - n }));
+    }
+    expect(room('tm4').choices[0]!.success.effects).toContainEqual({ kind: 'addEventFrom', ids: [`${P}t5a`, `${P}t5b`, `${P}t5c`] });
+    expect(new Set(['t5a', 't5b', 't5c'].map((id) => room(id).intro)).size).toBe(3);
+  });
+  it('the title leaves a rival who returns in the next region wearing a home-made belt, once', () => {
+    const run = withParty('T5', ['mankey']);
+    eff(run, 'champion', { species: ['mankey'] });
+    expect(run.expansion!.canon!.rival).toMatchObject({ species: 'mankey', returned: false });
+    expect(room('rival-return')).toBeTruthy();
   });
   it('losing a round gives the party back', () => {
     const run = withParty('T3', ['mankey', 'pikachu']);
@@ -106,15 +148,16 @@ describe('Fighting Tournament', () => {
     expect(lose.join(' ')).toMatch(/gathers/);
     expect(run.party).toHaveLength(2);
   });
-  it('the title gives Champion’s Fury, Dynamic Punch, the belt and no Annihilape, ever', () => {
+  it("the title gives Champion's Entrance, Dynamic Punch, the belt and no Annihilape, ever", () => {
     const run = withParty('T4', ['primeape']);
     run.party[0]!.level = 80;
     expect(evolutionTarget(content, run.party[0]!)).toBe('annihilape');
     eff(run, 'champion', { species: ['mankey', 'primeape'] });
     const champ = run.party[0]!;
-    expect(abilityOf(content, champ)).toBe('champions-fury');
+    expect(abilityOf(content, champ)).toBe('champions-entrance');
     expect(champ.moves.map((m) => m.id)).toContain('dynamic-punch');
     expect(champ.champion).toBe(true);
+    expect(champ.look).toBe('champion');
     expect(evolutionTarget(content, champ)).toBeNull();
   });
 });
@@ -280,30 +323,128 @@ describe("Sabrina's Labyrinth", () => {
 });
 
 describe('Haunting and Haunted', () => {
-  const setup = (seed: string) => {
+  const setup = (seed: string, trainer = false) => {
     const player = createPokemon(content, 'gengar', 50, 'p');
     player.moves = [{ id: 'haunting', pp: 5 }, { id: 'splash', pp: 40 }];
-    const enemy = createPokemon(content, 'blissey', 50, 'e');
+    const enemy = createPokemon(content, 'wailord', 100, 'e');
     enemy.moves = [{ id: 'splash', pp: 40 }];
-    const battle = createBattle('wild', [enemy], 0, player.uid, null);
+    const battle = createBattle(trainer ? 'trainer' : 'wild', [enemy], 0, player.uid, trainer ? { classId: 'gym-leader', name: 'Sabrina', leaderId: null } : null);
     const ctx: BattleContext = { content, battle, party: [player], inventory: {}, rng: new Rng(hashSeed(seed)), captureRng: new Rng(hashSeed(`${seed}c`)), catchMultiplier: 1 };
     return { battle, ctx, enemy, player };
   };
-  it('summons four strikes, then lowers a stat on turn 1 and confuses on turn 2 and so on', () => {
+  it('is an 80-power special Ghost hit that starts the Haunted cycle', () => {
+    const m = content.moves.get('haunting')!;
+    expect([m.type, m.category, m.power]).toEqual(['ghost', 'special', 80]);
     const { battle, ctx, enemy } = setup('hh');
     const ev = resolveTurn(ctx, { kind: 'move', index: 0 });
-    expect(ev.filter((e) => e.type === 'damage' && (e as { side: string }).side === 'enemy')).toHaveLength(4);
-    expect(enemy.hp).toBeLessThan(createPokemon(content, 'blissey', 50, 'z').hp);
-    expect(battle.enemyVolatile.haunted).toBe(2);
-    expect(Object.values(battle.enemyStages).some((n) => n === -1)).toBe(true);
-    resolveTurn(ctx, { kind: 'move', index: 1 });
-    expect(battle.enemyVolatile.haunted).toBe(3);
+    expect(ev.some((e) => e.type === 'damage' && (e as { side: string }).side === 'enemy')).toBe(true);
+    expect(enemy.hp).toBeLessThan(createPokemon(content, 'wailord', 100, 'z').hp);
+    expect(battle.enemyVolatile.hauntedTurns).toBe(4);
   });
-  it('cannot be used twice in a row', () => {
-    const { ctx } = setup('hh2');
+  it('lasts exactly four turns, then ends and cannot be re-applied for two turns', () => {
+    const { battle, ctx } = setup('hh2');
     resolveTurn(ctx, { kind: 'move', index: 0 });
-    const again = resolveTurn(ctx, { kind: 'move', index: 0 });
-    expect(again.some((e) => e.type === 'fail')).toBe(true);
+    expect(battle.enemyVolatile.haunted).toBe(2);
+    resolveTurn(ctx, { kind: 'move', index: 1 });
+    resolveTurn(ctx, { kind: 'move', index: 1 });
+    expect(battle.enemyVolatile.haunted).toBe(4);
+    resolveTurn(ctx, { kind: 'move', index: 1 });
+    expect(battle.enemyVolatile.haunted).toBe(0);
+    expect(battle.enemyVolatile.hauntLock).toBe(2);
+    resolveTurn(ctx, { kind: 'move', index: 0 });
+    expect(battle.enemyVolatile.haunted, `locked, outcome ${battle.outcome} hp ${ctx.battle.enemyTeam[0]!.hp}`).toBe(0);
+    resolveTurn(ctx, { kind: 'move', index: 1 });
+    expect(battle.outcome, 'still running').toBeNull();
+    resolveTurn(ctx, { kind: 'move', index: 0 });
+    expect(battle.enemyVolatile.haunted).toBe(2);
+  });
+  it('a boss is Haunted for two turns only', () => {
+    const { battle, ctx } = setup('hh3', true);
+    resolveTurn(ctx, { kind: 'move', index: 0 });
+    expect(battle.enemyVolatile.hauntedTurns).toBe(2);
+    resolveTurn(ctx, { kind: 'move', index: 1 });
+    expect(battle.enemyVolatile.haunted).toBe(0);
+  });
+});
+
+describe("Sabrina's Labyrinth rebuilt", () => {
+  const ids = ['lab-lost', 'lab-n1', 'lab-n2', 'lab-n3', 'lab-n4', 'lab-n5', 'lab-n6', 'lab-final'];
+  it('has the six rooms and the finale, every one with a way on', () => {
+    for (const id of ids) expect(content.events.has(P + id), id).toBe(true);
+    for (const id of ids.slice(0, -1)) expect(targets(id).length, id).toBeGreaterThan(0);
+  });
+  it('the finale is the false-slot fight with the ghost rescue, and a loss sends you back', () => {
+    const b = room('lab-final').choices[0]!.success.battle as unknown as { rule: Record<string, boolean>; lose: object[] };
+    expect(b.rule).toMatchObject({ falseSlot: true, ghostRescue: true });
+    expect(b.lose).toContainEqual(expect.objectContaining({ action: 'labRetry' }));
+  });
+  it('the false slot is stable, hidden until every second turn, and never points at itself', () => {
+    for (let turn = 1; turn < 30; turn++) {
+      const a = falseSlotFor(turn, 'u1', 4)!;
+      expect(a).toEqual(falseSlotFor(turn, 'u1', 4));
+      expect(a.to).not.toBe(a.slot);
+      expect(a.seen).toBe(turn % 2 === 0);
+    }
+    expect(falseSlotFor(1, 'u1', 1)).toBeNull();
+  });
+  it('a false slot uses another move; a seen one shows nothing different in the engine', () => {
+    const player = createPokemon(content, 'gengar', 50, 'p');
+    player.moves = [{ id: 'shadow-ball', pp: 15 }, { id: 'splash', pp: 40 }];
+    const enemy = createPokemon(content, 'wailord', 100, 'e');
+    enemy.moves = [{ id: 'splash', pp: 40 }];
+    const battle = createBattle('trainer', [enemy], 0, player.uid, { classId: 'gym-leader', name: 'Sabrina', leaderId: null });
+    battle.eventRule = { falseSlot: true } as never;
+    const ctx: BattleContext = { content, battle, party: [player], inventory: {}, rng: new Rng(hashSeed('fs')), captureRng: new Rng(hashSeed('fsc')), catchMultiplier: 1 };
+    const lie = falseSlotFor(battle.turn, player.uid, 2, [true, true])!;
+    const ev = resolveTurn(ctx, { kind: 'move', index: lie.slot });
+    expect(ev.some((e) => e.type === 'raid' && /twists/.test((e as { text: string }).text))).toBe(true);
+    expect(player.moves[lie.to]!.pp).toBeLessThan(player.moves[lie.to]!.id === 'splash' ? 40 : 15);
+  });
+  it('a loss resets the Labyrinth, or resumes at the room reached with the accessibility setting', () => {
+    const run = withParty('LR', ['pikachu', 'eevee']);
+    eff(run, 'ghostStart');
+    eff(run, 'ghostFree');
+    eff(run, 'labRoom', { level: 3 });
+    expect(labRetryEvent(content, run)).toBe(P + 'lab-n1');
+    expect(run.expansion!.canon!.lab!.freed).toEqual([]);
+    eff(run, 'ghostFree');
+    eff(run, 'labRoom', { level: 3 });
+    run.expansion!.canon!.labResume = true;
+    expect(labRetryEvent(content, run)).toBe(P + 'lab-n4');
+    expect(run.expansion!.canon!.lab!.freed).toHaveLength(1);
+  });
+});
+
+describe("Sabrina's Labyrinth: the opening in a normal run", () => {
+  const plain = (seed: string) => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red' }), 0);
+  it('the general opener is a pseudo-stage event any run can draw (no Kanto setting needed)', () => {
+    const ev = content.events.get('ev-sabrina-labyrinth')!;
+    expect(ev.pseudo).toBe(true);
+    expect(ev.canon).toBeFalsy();
+    expect(ev.minStage).toBeLessThanOrEqual(3);
+    const run = plain('LAB-DRAW');
+    run.stage!.index = 3;
+    expect(eligibleEvents(content, run).some((e) => e.id === 'ev-sabrina-labyrinth')).toBe(true);
+  });
+  it('you are sent in with no Pokémon, lose a fight because of it, and the ghost then offers to help', () => {
+    let run = structuredClone(plain('LAB-OPEN'));
+    run.party = [createPokemon(content, 'pikachu', 30, 'a'), createPokemon(content, 'eevee', 30, 'b')];
+    const opener = debugForceEvent(content, structuredClone(run), 'ev-sabrina-labyrinth');
+    const entered = chooseEvent(content, opener.run, opener.sideId, 0);
+    run = structuredClone(entered.run);
+    expect(run.expansion!.canon!.stash).toHaveLength(2);
+    expect(run.party).toHaveLength(1);
+    const first = debugForceEvent(content, run, `${P}lab-lost`);
+    const fight = chooseEvent(content, first.run, first.sideId, 0);
+    expect(fight.battle).toBe(true);
+    expect(fight.run.battle!.eventRule?.noPokemon).toBe(true);
+    const res = takeTurn(content, structuredClone(fight.run), { kind: 'move', index: 0 });
+    expect(res.defeated).toBe(false);
+    expect(res.run.battle).toBeNull();
+    expect(res.run.phase).toBe('map');
+    expect(res.run.expansion!.canon!.lab!.active).toBe(true);
+    const here = res.run.stage!.map.nodes.find((n) => n.id === res.run.stage!.current)!;
+    expect(here.sides.some((sd) => sd.eventId === `${P}lab-ghost`)).toBe(true);
   });
 });
 
@@ -312,5 +453,40 @@ describe('Saved shapes', () => {
     const run = withParty('SV', ['pikachu', 'eevee']);
     eff(run, 'ghostStart');
     expect(RunStateSchema.safeParse(JSON.parse(JSON.stringify(run))).success).toBe(true);
+  });
+});
+
+describe('Fighting Tournament bracket and winning cutscene', () => {
+  const run = () => withParty('TB', ['mankey']);
+  it('every tournament event shows the bracket strip; the win beats show the champion podium', () => {
+    const now = (id: string) => room(id).scene.tourney;
+    expect(['tournament', 'tc'].map(now)).toEqual([0, 0]);
+    expect([1, 2, 3, 4].map((n) => now(`t${n}`))).toEqual([1, 2, 3, 4]);
+    expect([1, 2, 3, 4].map((n) => now(`tm${n}`))).toEqual([2, 3, 4, 5]);
+    expect(['t5a', 't5b', 't5c'].map(now)).toEqual([5, 5, 5]);
+    expect(['t-win1', 't-win2', 't-win3'].map(now)).toEqual([6, 6, 6]);
+  });
+  it('the final leads into the winning cutscene, three beats, after the title is given', () => {
+    const win = (room('t5a').choices[0]!.success.battle as unknown as { win: { kind: string; eventId?: string }[] }).win;
+    expect(win.findIndex((w) => w.kind === 'canon')).toBeLessThan(win.findIndex((w) => w.eventId === `${P}t-win1`));
+    expect(targets('t-win1')).toEqual([`${P}t-win2`]);
+    expect(targets('t-win2')).toEqual([`${P}t-win3`, `${P}t-win3`]);
+  });
+  it('the bracket has 32 entrants, you at the top, the named competitors in order, and the same every time', () => {
+    const a = tourneyBracket(content, run(), 1);
+    const b = tourneyBracket(content, run(), 1);
+    expect(a.entrants).toHaveLength(32);
+    expect(a.entrants[0]).toMatchObject({ you: true, species: 'mankey' });
+    expect(JSON.stringify(a)).toBe(JSON.stringify(b));
+    expect(a.survivors.map((c) => c.length)).toEqual([32, 16, 8, 4, 2, 1]);
+    expect(a.opponents.map((o) => o?.species)).toEqual(['machop', 'hawlucha', 'throh', 'hitmonchan', 'mankey']);
+    expect(a.opponents[4]).toMatchObject({ named: true, name: 'Rival Mankey' });
+    expect(TOURNEY_ROUNDS).toHaveLength(5);
+  });
+  it('rounds already played show who is out; the champion is the one left', () => {
+    const v = tourneyBracket(content, run(), 3);
+    expect(v.entrants.filter((e) => e.outIn > 0 && e.outIn <= 2)).toHaveLength(32 - 8);
+    const done = tourneyBracket(content, run(), 6);
+    expect(done.survivors[5]![0]).toMatchObject({ you: true });
   });
 });

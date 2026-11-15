@@ -1,11 +1,13 @@
 import { expect, test, type Page } from '@playwright/test';
 import { confirmUntil } from './battleInput';
+import { sceneAfterResult } from './helpers/resultGate';
 
 
 // Milestone 2 in a real browser: the Fight / Bag / Pokémon menu, throwing a
 // ball, the caught-Pokémon decision, and choosing who gets a reward.
 
-const scene = (page: Page) => page.evaluate(() => (window as any).__pkr?.activeScene() ?? null);
+// Reward/Decision results wait for an input now; reading the scene presses through one that is up.
+const scene = (page: Page) => sceneAfterResult(page);
 const run = (page: Page) => page.evaluate(() => (window as any).__pkr.session.run);
 
 async function waitForScene(page: Page, key: string, timeout = 20_000) {
@@ -96,6 +98,8 @@ test('throw a ball from the Bag, catch the Pokémon and add it to the party', as
           const root = await atRootMenu();
           if (root === 'caught') return 'left';
           if (root === null) await page.keyboard.press('Enter');
+          // A late Enter can land on the fresh menu and open Fight or the Bag: back out to the root menu.
+          if (root === false) await page.keyboard.press('Escape');
           return root ? 'root' : 'busy';
         },
         { timeout: 40_000, intervals: [300] },
@@ -123,6 +127,8 @@ test('throw a ball from the Bag, catch the Pokémon and add it to the party', as
   await page.screenshot({ path: 'test-results/m2-caught.png' });
 
   await page.keyboard.press('Enter'); // Add to party
+  await page.waitForTimeout(600);
+  await page.keyboard.press('Enter'); // the result waits for an input
   await expect.poll(() => scene(page), { timeout: 40_000 }).toBe('Reward');
   const after = await run(page);
   expect(after.party).toHaveLength(2);
@@ -171,14 +177,20 @@ test('switch Pokémon from the party menu, and give a reward to a chosen Pokémo
     await page.keyboard.press('Enter');
     await page.waitForTimeout(120);
   }
-  while ((await scene(page)) === 'Decision') {
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('Enter'); // "Don't learn"
-    await page.keyboard.press('Enter'); // Yes
-    await page.waitForTimeout(1600);
+  // Move-learning decisions can appear one after another, with a short scene change between them: keep answering
+  // them until the reward screen shows, instead of stopping at the first moment no Decision is on screen.
+  for (let t = Date.now(); (await scene(page)) !== 'Reward' && Date.now() - t < 40_000; ) {
+    if ((await scene(page)) === 'Decision') {
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('Enter'); // "Don't learn"
+      await page.keyboard.press('Enter'); // Yes
+      await page.waitForTimeout(600);
+      await page.keyboard.press('Enter'); // the result waits for an input
+      await page.waitForTimeout(1000);
+    } else await page.waitForTimeout(250);
   }
   await waitForScene(page, 'Reward');
 

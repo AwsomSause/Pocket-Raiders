@@ -35,6 +35,9 @@ async function waitForMenu(page: Page) {
   await page.waitForTimeout(200);
 }
 
+// The offline service worker would serve the animation files itself, past page.route: block it so the aborts below apply.
+test.use({ serviceWorkers: 'block' });
+
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
   await page.evaluate(() => localStorage.clear());
@@ -79,6 +82,8 @@ test('when a pack animation can\'t load, the PokeRogue one plays instead', async
   await page.goto('/?seed=m9-anims');
   await waitForScene(page, 'MainMenu');
   await startBattle(page);
+  // Essentials pack first, PokeRogue as stand-by: Mixed would play a scripted EBDX animation first for many moves.
+  await page.evaluate(() => ((window as any).__pkr.session.settings.moveAnimPack = 'essentials'));
   // A slow runner can miss the 1.5 s load window on the first turn: the quick stand-in plays and the PokeRogue files keep
   // loading "for next time". So try up to three turns; the fallback animation must be playing by then.
   let playing = false;
@@ -93,7 +98,8 @@ test('when a pack animation can\'t load, the PokeRogue one plays instead', async
       .then(() => true, () => false);
   }
   expect(playing).toBe(true);
-  expect(animRequests.some((u) => !u.includes('/battle-anims/ess-'))).toBe(true);
+  // The PokeRogue file is asked for once the pack file has failed (up to the 1.5 s load window later).
+  await expect.poll(() => animRequests.some((u) => !u.includes('/battle-anims/ess-')), { timeout: 10_000 }).toBe(true);
   expect(errors).toEqual([]);
 });
 
