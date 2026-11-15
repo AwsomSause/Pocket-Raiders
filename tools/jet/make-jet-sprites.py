@@ -18,7 +18,14 @@ out = os.path.join(root, 'public', 'assets', 'images')
 MONS = ['vine-riff', 'electric-oncore', 'pyro-spirit', 'neon-moon', 'bastiodoom', 'cataggron', 'cataggron-attack', 'cataggron-defence',
         # Beta 4.4 batch (pokedex-data.zip + Beta 4.4 Added Pokemon.zip)
         'promised-prince', 'benovolant-beak', 'tyrant-king', 'fallen-liege', 'maliceye', 'gemgoyle', 'decidueye-assassian', 'dreadodile',
-        'alolan-trapinch', 'alolan-vibrava', 'alolan-flygon', 'mega-alolan-flygon', 'paldean-golett', 'paldean-golurk', 'alolan-dratini', 'alolan-dragonair', 'alolan-dragonite']
+        'alolan-trapinch', 'alolan-vibrava', 'alolan-flygon', 'mega-alolan-flygon', 'paldean-golett', 'paldean-golurk', 'alolan-dratini', 'alolan-dragonair', 'alolan-dragonite',
+        # Beta 0.7 batch (jet-pokedex-data.zip + Galarian.zip): the Galarian lines, Magmuk, Neocleon and Hoopno
+        'galarian-grimer', 'galarian-muk', 'magmuk', 'galarian-spearow', 'galarian-fearow', 'galarian-azurill', 'galarian-marill', 'galarian-azumarill',
+        'galarian-trubbish', 'galarian-garbodor', 'galarian-lotad', 'galarian-lombre', 'galarian-ludicolo', 'neocleon', 'galarian-magnemite', 'galarian-magneton',
+        'galarian-magnezone', 'galarian-tangela', 'galarian-tangrowth', 'galarian-chikorita', 'galarian-bayleef', 'galarian-meganium', 'galarian-cyndaquil',
+        'galarian-quilava', 'galarian-typhlosion', 'galarian-totodile', 'galarian-croconaw', 'galarian-feraligatr', 'galarian-larvitar', 'galarian-pupitar',
+        'galarian-tyranitar', 'galarian-onix', 'galarian-steelix', 'galarian-slugma', 'galarian-magcargo', 'galarian-snivy', 'galarian-servine', 'galarian-serperior',
+        'hoopno']
 # The source file name differs from the game id for the Mega (the game calls it alolan-flygon-mega like the other Megas).
 OUT_ID = {'mega-alolan-flygon': 'alolan-flygon-mega'}
 
@@ -67,7 +74,11 @@ for key in MONS:
     front = anim_frames(key) or [still]
     bp = os.path.join(src, 'back', f'{key}.png')
     back = [trim(Image.open(bp).convert('RGBA'))] if os.path.exists(bp) else [ImageOps.mirror(still)]
-    for folder, frames in (('', front), ('back', back), ('shiny', front), (os.path.join('back', 'shiny'), back)):
+    # Shiny art is optional: tools/jet/source/shiny/<id>.png and back-shiny/<id>.png (the Galarian.zip art); without it shiny is the normal art.
+    sp, sbp = os.path.join(src, 'shiny', f'{key}.png'), os.path.join(src, 'back-shiny', f'{key}.png')
+    shiny = [trim(Image.open(sp).convert('RGBA'))] if os.path.exists(sp) else front
+    back_shiny = [trim(Image.open(sbp).convert('RGBA'))] if os.path.exists(sbp) else back
+    for folder, frames in (('', front), ('back', back), ('shiny', shiny), (os.path.join('back', 'shiny'), back_shiny)):
         write_atlas(frames, folder, OUT_ID.get(key, key))
 
 viking = trim(Image.open(os.path.join(src, 'viking.png')).convert('RGBA'))

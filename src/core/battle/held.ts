@@ -139,6 +139,12 @@ export function takeItem(ctx: { battle: BattleState }, from: PokemonInstance, it
 export function setEmbargo(battle: BattleState, uid: string, turns: number): void {
   stateOf(battle).embargo[uid] = turns;
 }
+/** Kitchen Heat: sets whether this Pokémon is kept from eating Berries (see refreshBerryLocks in the engine). */
+export function setBerryLock(battle: BattleState, uid: string, locked: boolean): void {
+  const h = stateOf(battle);
+  if (locked) (h.berryLock ??= {})[uid] = true;
+  else if (h.berryLock?.[uid]) delete h.berryLock[uid];
+}
 export function setMagicRoom(battle: BattleState, turns: number): void {
   stateOf(battle).magicRoom = turns;
 }
@@ -155,6 +161,7 @@ export function hooksOf(ctx: Pick<HeldContext, 'content' | 'teamItems'> & { batt
     for (const [itemId, copies] of Object.entries(items ?? {})) {
       const entry = ctx.content.catalog.get(itemId);
       if (entry?.status !== 'supported' || entry.effect?.kind !== 'held' || copies <= 0) continue;
+      if (ctx.battle?.held?.berryLock?.[mon.uid] && entry.family.startsWith('Berries')) continue;
       if (teamOnly !== (entry.stacksOn === 'team')) continue;
       for (const hook of entry.effect.hooks) {
         if ('species' in hook && hook.species && !speciesMatches(ctx.content, mon.speciesId, hook.species)) continue;

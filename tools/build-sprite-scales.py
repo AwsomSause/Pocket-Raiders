@@ -24,6 +24,14 @@ TARGETS = {
     'alolan-trapinch': 42, 'alolan-vibrava': 55, 'alolan-flygon': 70, 'alolan-flygon-mega': 74,
     'paldean-golett': 56, 'paldean-golurk': 88, 'alolan-dratini': 44, 'alolan-dragonair': 70, 'alolan-dragonite': 90,
     # Fully evolved bruisers were bumped up on Kice's request (2026-11-08): Maliceye/Gemgoyle/Dreadodile and the other final forms read as bigger than their base lines.
+    # Beta 0.7 batch (Galarian lines, Magmuk, Neocleon, Hoopno): the base species' height times the square root of the weight ratio (0.8-1.3x), Azurill / Marill / Bayleef set by hand.
+    'galarian-grimer': 46, 'galarian-muk': 86, 'magmuk': 86, 'galarian-spearow': 41, 'galarian-fearow': 72, 'galarian-azurill': 32,
+    'galarian-marill': 40, 'galarian-azumarill': 62, 'galarian-trubbish': 40, 'galarian-garbodor': 85, 'galarian-lotad': 42, 'galarian-lombre': 46,
+    'galarian-ludicolo': 72, 'neocleon': 70, 'galarian-magnemite': 28, 'galarian-magneton': 54, 'galarian-magnezone': 58, 'galarian-tangela': 44,
+    'galarian-tangrowth': 65, 'galarian-chikorita': 45, 'galarian-bayleef': 62, 'galarian-meganium': 84, 'galarian-cyndaquil': 37,
+    'galarian-quilava': 46, 'galarian-typhlosion': 71, 'galarian-totodile': 32, 'galarian-croconaw': 59, 'galarian-feraligatr': 71,
+    'galarian-larvitar': 47, 'galarian-pupitar': 46, 'galarian-tyranitar': 73, 'galarian-onix': 64, 'galarian-steelix': 70, 'galarian-slugma': 37,
+    'galarian-magcargo': 61, 'galarian-snivy': 34, 'galarian-servine': 51, 'galarian-serperior': 71, 'hoopno': 70,
     # Story Pokémon (reference: Noctowl 65, Swellow 59, Kilowattrel 67)
     'oracowl': 68, 'oracowl-day': 68, 'tempestwing': 62, 'megawattrel': 70,
 }

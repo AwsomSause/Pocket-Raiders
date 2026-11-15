@@ -1,0 +1,1 @@
+{"textures": [{"image": "galarian-muk.png", "format": "RGBA8888", "size": {"w": 138, "h": 128}, "scale": 1, "frames": [{"filename": "0001.png", "rotated": false, "trimmed": false, "sourceSize": {"w": 138, "h": 128}, "spriteSourceSize": {"x": 0, "y": 0, "w": 138, "h": 128}, "frame": {"x": 0, "y": 0, "w": 138, "h": 128}}]}], "meta": {"app": "tools/jet/make-jet-sprites.py"}}

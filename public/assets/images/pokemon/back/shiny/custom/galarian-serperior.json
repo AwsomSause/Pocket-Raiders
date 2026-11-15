@@ -1,0 +1,1 @@
+{"textures": [{"image": "galarian-serperior.png", "format": "RGBA8888", "size": {"w": 154, "h": 156}, "scale": 1, "frames": [{"filename": "0001.png", "rotated": false, "trimmed": false, "sourceSize": {"w": 154, "h": 156}, "spriteSourceSize": {"x": 0, "y": 0, "w": 154, "h": 156}, "frame": {"x": 0, "y": 0, "w": 154, "h": 156}}]}], "meta": {"app": "tools/jet/make-jet-sprites.py"}}

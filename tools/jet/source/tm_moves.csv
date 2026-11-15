@@ -449,3 +449,642 @@ alolan_dragonite,Rest,REST,Psychic
 alolan_dragonite,Sleep Talk,SLEEP_TALK,Normal
 alolan_dragonite,Hyper Beam,HYPER_BEAM,Normal
 alolan_dragonite,Tera Blast,TERA_BLAST,Normal
+galarian_grimer,Gunk Shot,GUNK_SHOT,Poison
+galarian_grimer,Sludge Bomb,SLUDGE_BOMB,Poison
+galarian_grimer,Poison Jab,POISON_JAB,Poison
+galarian_grimer,Toxic,TOXIC,Poison
+galarian_grimer,Rock Slide,ROCK_SLIDE,Rock
+galarian_grimer,Rock Tomb,ROCK_TOMB,Rock
+galarian_grimer,Stone Edge,STONE_EDGE,Rock
+galarian_grimer,Stealth Rock,STEALTH_ROCK,Rock
+galarian_grimer,Earthquake,EARTHQUAKE,Ground
+galarian_grimer,Bulldoze,BULLDOZE,Ground
+galarian_grimer,Fling,FLING,Dark
+galarian_grimer,Iron Defense,IRON_DEFENSE,Steel
+galarian_grimer,Body Press,BODY_PRESS,Fighting
+galarian_grimer,Explosion,EXPLOSION,Normal
+galarian_grimer,Protect,PROTECT,Normal
+galarian_grimer,Substitute,SUBSTITUTE,Normal
+galarian_grimer,Rest,REST,Psychic
+galarian_grimer,Tera Blast,TERA_BLAST,Normal
+galarian_muk,Gunk Shot,GUNK_SHOT,Poison
+galarian_muk,Sludge Bomb,SLUDGE_BOMB,Poison
+galarian_muk,Poison Jab,POISON_JAB,Poison
+galarian_muk,Toxic,TOXIC,Poison
+galarian_muk,Rock Slide,ROCK_SLIDE,Rock
+galarian_muk,Rock Tomb,ROCK_TOMB,Rock
+galarian_muk,Stone Edge,STONE_EDGE,Rock
+galarian_muk,Stealth Rock,STEALTH_ROCK,Rock
+galarian_muk,Earthquake,EARTHQUAKE,Ground
+galarian_muk,Bulldoze,BULLDOZE,Ground
+galarian_muk,Fling,FLING,Dark
+galarian_muk,Iron Defense,IRON_DEFENSE,Steel
+galarian_muk,Body Press,BODY_PRESS,Fighting
+galarian_muk,Explosion,EXPLOSION,Normal
+galarian_muk,Protect,PROTECT,Normal
+galarian_muk,Substitute,SUBSTITUTE,Normal
+galarian_muk,Rest,REST,Psychic
+galarian_muk,Tera Blast,TERA_BLAST,Normal
+magmuk,Gunk Shot,GUNK_SHOT,Poison
+magmuk,Sludge Bomb,SLUDGE_BOMB,Poison
+magmuk,Poison Jab,POISON_JAB,Poison
+magmuk,Toxic,TOXIC,Poison
+magmuk,Rock Slide,ROCK_SLIDE,Rock
+magmuk,Rock Tomb,ROCK_TOMB,Rock
+magmuk,Stone Edge,STONE_EDGE,Rock
+magmuk,Stealth Rock,STEALTH_ROCK,Rock
+magmuk,Earthquake,EARTHQUAKE,Ground
+magmuk,Bulldoze,BULLDOZE,Ground
+magmuk,Fling,FLING,Dark
+magmuk,Iron Defense,IRON_DEFENSE,Steel
+magmuk,Body Press,BODY_PRESS,Fighting
+magmuk,Explosion,EXPLOSION,Normal
+magmuk,Protect,PROTECT,Normal
+magmuk,Substitute,SUBSTITUTE,Normal
+magmuk,Rest,REST,Psychic
+magmuk,Tera Blast,TERA_BLAST,Normal
+magmuk,Heat Crash,HEAT_CRASH,Fire
+magmuk,Flare Blitz,FLARE_BLITZ,Fire
+magmuk,Fire Punch,FIRE_PUNCH,Fire
+magmuk,Flamethrower,FLAMETHROWER,Fire
+galarian_spearow,Aerial Ace,AERIAL_ACE,Flying
+galarian_spearow,Brave Bird,BRAVE_BIRD,Flying
+galarian_spearow,Drill Run,DRILL_RUN,Ground
+galarian_spearow,U-turn,U_TURN,Bug
+galarian_spearow,Steel Wing,STEEL_WING,Steel
+galarian_spearow,Knock Off,KNOCK_OFF,Dark
+galarian_spearow,Throat Chop,THROAT_CHOP,Dark
+galarian_spearow,Dark Pulse,DARK_PULSE,Dark
+galarian_spearow,Taunt,TAUNT,Dark
+galarian_spearow,Tailwind,TAILWIND,Flying
+galarian_spearow,Protect,PROTECT,Normal
+galarian_spearow,Substitute,SUBSTITUTE,Normal
+galarian_spearow,Rest,REST,Psychic
+galarian_spearow,Tera Blast,TERA_BLAST,Normal
+galarian_fearow,Aerial Ace,AERIAL_ACE,Flying
+galarian_fearow,Brave Bird,BRAVE_BIRD,Flying
+galarian_fearow,Drill Run,DRILL_RUN,Ground
+galarian_fearow,U-turn,U_TURN,Bug
+galarian_fearow,Steel Wing,STEEL_WING,Steel
+galarian_fearow,Knock Off,KNOCK_OFF,Dark
+galarian_fearow,Throat Chop,THROAT_CHOP,Dark
+galarian_fearow,Dark Pulse,DARK_PULSE,Dark
+galarian_fearow,Taunt,TAUNT,Dark
+galarian_fearow,Tailwind,TAILWIND,Flying
+galarian_fearow,Protect,PROTECT,Normal
+galarian_fearow,Substitute,SUBSTITUTE,Normal
+galarian_fearow,Rest,REST,Psychic
+galarian_fearow,Tera Blast,TERA_BLAST,Normal
+galarian_azurill,Body Slam,BODY_SLAM,Normal
+galarian_azurill,Double-Edge,DOUBLE_EDGE,Normal
+galarian_azurill,Facade,FACADE,Normal
+galarian_azurill,Knock Off,KNOCK_OFF,Dark
+galarian_azurill,Fling,FLING,Dark
+galarian_azurill,Thief,THIEF,Dark
+galarian_azurill,U-turn,U_TURN,Bug
+galarian_azurill,Brick Break,BRICK_BREAK,Fighting
+galarian_azurill,Drain Punch,DRAIN_PUNCH,Fighting
+galarian_azurill,Close Combat,CLOSE_COMBAT,Fighting
+galarian_azurill,Bulk Up,BULK_UP,Fighting
+galarian_azurill,Swords Dance,SWORDS_DANCE,Normal
+galarian_azurill,Protect,PROTECT,Normal
+galarian_azurill,Substitute,SUBSTITUTE,Normal
+galarian_azurill,Rest,REST,Psychic
+galarian_azurill,Tera Blast,TERA_BLAST,Normal
+galarian_marill,Body Slam,BODY_SLAM,Normal
+galarian_marill,Double-Edge,DOUBLE_EDGE,Normal
+galarian_marill,Facade,FACADE,Normal
+galarian_marill,Knock Off,KNOCK_OFF,Dark
+galarian_marill,Fling,FLING,Dark
+galarian_marill,Thief,THIEF,Dark
+galarian_marill,U-turn,U_TURN,Bug
+galarian_marill,Brick Break,BRICK_BREAK,Fighting
+galarian_marill,Drain Punch,DRAIN_PUNCH,Fighting
+galarian_marill,Close Combat,CLOSE_COMBAT,Fighting
+galarian_marill,Bulk Up,BULK_UP,Fighting
+galarian_marill,Swords Dance,SWORDS_DANCE,Normal
+galarian_marill,Protect,PROTECT,Normal
+galarian_marill,Substitute,SUBSTITUTE,Normal
+galarian_marill,Rest,REST,Psychic
+galarian_marill,Tera Blast,TERA_BLAST,Normal
+galarian_azumarill,Body Slam,BODY_SLAM,Normal
+galarian_azumarill,Double-Edge,DOUBLE_EDGE,Normal
+galarian_azumarill,Facade,FACADE,Normal
+galarian_azumarill,Knock Off,KNOCK_OFF,Dark
+galarian_azumarill,Fling,FLING,Dark
+galarian_azumarill,Thief,THIEF,Dark
+galarian_azumarill,U-turn,U_TURN,Bug
+galarian_azumarill,Brick Break,BRICK_BREAK,Fighting
+galarian_azumarill,Drain Punch,DRAIN_PUNCH,Fighting
+galarian_azumarill,Close Combat,CLOSE_COMBAT,Fighting
+galarian_azumarill,Bulk Up,BULK_UP,Fighting
+galarian_azumarill,Swords Dance,SWORDS_DANCE,Normal
+galarian_azumarill,Protect,PROTECT,Normal
+galarian_azumarill,Substitute,SUBSTITUTE,Normal
+galarian_azumarill,Rest,REST,Psychic
+galarian_azumarill,Tera Blast,TERA_BLAST,Normal
+galarian_trubbish,Gunk Shot,GUNK_SHOT,Poison
+galarian_trubbish,Sludge Bomb,SLUDGE_BOMB,Poison
+galarian_trubbish,Poison Jab,POISON_JAB,Poison
+galarian_trubbish,Toxic,TOXIC,Poison
+galarian_trubbish,Toxic Spikes,TOXIC_SPIKES,Poison
+galarian_trubbish,Iron Head,IRON_HEAD,Steel
+galarian_trubbish,Heavy Slam,HEAVY_SLAM,Steel
+galarian_trubbish,Gyro Ball,GYRO_BALL,Steel
+galarian_trubbish,Flash Cannon,FLASH_CANNON,Steel
+galarian_trubbish,Iron Defense,IRON_DEFENSE,Steel
+galarian_trubbish,Body Press,BODY_PRESS,Fighting
+galarian_trubbish,Explosion,EXPLOSION,Normal
+galarian_trubbish,Protect,PROTECT,Normal
+galarian_trubbish,Substitute,SUBSTITUTE,Normal
+galarian_trubbish,Rest,REST,Psychic
+galarian_trubbish,Tera Blast,TERA_BLAST,Normal
+galarian_garbodor,Gunk Shot,GUNK_SHOT,Poison
+galarian_garbodor,Sludge Bomb,SLUDGE_BOMB,Poison
+galarian_garbodor,Poison Jab,POISON_JAB,Poison
+galarian_garbodor,Toxic,TOXIC,Poison
+galarian_garbodor,Toxic Spikes,TOXIC_SPIKES,Poison
+galarian_garbodor,Iron Head,IRON_HEAD,Steel
+galarian_garbodor,Heavy Slam,HEAVY_SLAM,Steel
+galarian_garbodor,Gyro Ball,GYRO_BALL,Steel
+galarian_garbodor,Flash Cannon,FLASH_CANNON,Steel
+galarian_garbodor,Iron Defense,IRON_DEFENSE,Steel
+galarian_garbodor,Body Press,BODY_PRESS,Fighting
+galarian_garbodor,Explosion,EXPLOSION,Normal
+galarian_garbodor,Protect,PROTECT,Normal
+galarian_garbodor,Substitute,SUBSTITUTE,Normal
+galarian_garbodor,Rest,REST,Psychic
+galarian_garbodor,Tera Blast,TERA_BLAST,Normal
+galarian_lotad,Flamethrower,FLAMETHROWER,Fire
+galarian_lotad,Fire Blast,FIRE_BLAST,Fire
+galarian_lotad,Heat Wave,HEAT_WAVE,Fire
+galarian_lotad,Sunny Day,SUNNY_DAY,Fire
+galarian_lotad,Energy Ball,ENERGY_BALL,Grass
+galarian_lotad,Giga Drain,GIGA_DRAIN,Grass
+galarian_lotad,Solar Beam,SOLAR_BEAM,Grass
+galarian_lotad,Grass Knot,GRASS_KNOT,Grass
+galarian_lotad,Leaf Storm,LEAF_STORM,Grass
+galarian_lotad,Focus Blast,FOCUS_BLAST,Fighting
+galarian_lotad,Zen Headbutt,ZEN_HEADBUTT,Psychic
+galarian_lotad,Fake Out,FAKE_OUT,Normal
+galarian_lotad,Knock Off,KNOCK_OFF,Dark
+galarian_lotad,Protect,PROTECT,Normal
+galarian_lotad,Substitute,SUBSTITUTE,Normal
+galarian_lotad,Rest,REST,Psychic
+galarian_lotad,Tera Blast,TERA_BLAST,Normal
+galarian_lombre,Flamethrower,FLAMETHROWER,Fire
+galarian_lombre,Fire Blast,FIRE_BLAST,Fire
+galarian_lombre,Heat Wave,HEAT_WAVE,Fire
+galarian_lombre,Sunny Day,SUNNY_DAY,Fire
+galarian_lombre,Energy Ball,ENERGY_BALL,Grass
+galarian_lombre,Giga Drain,GIGA_DRAIN,Grass
+galarian_lombre,Solar Beam,SOLAR_BEAM,Grass
+galarian_lombre,Grass Knot,GRASS_KNOT,Grass
+galarian_lombre,Leaf Storm,LEAF_STORM,Grass
+galarian_lombre,Focus Blast,FOCUS_BLAST,Fighting
+galarian_lombre,Zen Headbutt,ZEN_HEADBUTT,Psychic
+galarian_lombre,Fake Out,FAKE_OUT,Normal
+galarian_lombre,Knock Off,KNOCK_OFF,Dark
+galarian_lombre,Protect,PROTECT,Normal
+galarian_lombre,Substitute,SUBSTITUTE,Normal
+galarian_lombre,Rest,REST,Psychic
+galarian_lombre,Tera Blast,TERA_BLAST,Normal
+galarian_ludicolo,Flamethrower,FLAMETHROWER,Fire
+galarian_ludicolo,Fire Blast,FIRE_BLAST,Fire
+galarian_ludicolo,Heat Wave,HEAT_WAVE,Fire
+galarian_ludicolo,Sunny Day,SUNNY_DAY,Fire
+galarian_ludicolo,Energy Ball,ENERGY_BALL,Grass
+galarian_ludicolo,Giga Drain,GIGA_DRAIN,Grass
+galarian_ludicolo,Solar Beam,SOLAR_BEAM,Grass
+galarian_ludicolo,Grass Knot,GRASS_KNOT,Grass
+galarian_ludicolo,Leaf Storm,LEAF_STORM,Grass
+galarian_ludicolo,Focus Blast,FOCUS_BLAST,Fighting
+galarian_ludicolo,Zen Headbutt,ZEN_HEADBUTT,Psychic
+galarian_ludicolo,Fake Out,FAKE_OUT,Normal
+galarian_ludicolo,Knock Off,KNOCK_OFF,Dark
+galarian_ludicolo,Protect,PROTECT,Normal
+galarian_ludicolo,Substitute,SUBSTITUTE,Normal
+galarian_ludicolo,Rest,REST,Psychic
+galarian_ludicolo,Tera Blast,TERA_BLAST,Normal
+neocleon,Thunder Punch,THUNDER_PUNCH,Electric
+neocleon,Wild Charge,WILD_CHARGE,Electric
+neocleon,Volt Switch,VOLT_SWITCH,Electric
+neocleon,Thunder Wave,THUNDER_WAVE,Electric
+neocleon,Seed Bomb,SEED_BOMB,Grass
+neocleon,Solar Blade,SOLAR_BLADE,Grass
+neocleon,Trailblaze,TRAILBLAZE,Grass
+neocleon,Knock Off,KNOCK_OFF,Dark
+neocleon,U-turn,U_TURN,Bug
+neocleon,Shadow Claw,SHADOW_CLAW,Ghost
+neocleon,Protect,PROTECT,Normal
+neocleon,Substitute,SUBSTITUTE,Normal
+neocleon,Rest,REST,Psychic
+neocleon,Tera Blast,TERA_BLAST,Normal
+galarian_magnemite,Energy Ball,ENERGY_BALL,Grass
+galarian_magnemite,Giga Drain,GIGA_DRAIN,Grass
+galarian_magnemite,Leaf Storm,LEAF_STORM,Grass
+galarian_magnemite,Solar Beam,SOLAR_BEAM,Grass
+galarian_magnemite,Grass Knot,GRASS_KNOT,Grass
+galarian_magnemite,Flash Cannon,FLASH_CANNON,Steel
+galarian_magnemite,Steel Beam,STEEL_BEAM,Steel
+galarian_magnemite,Iron Defense,IRON_DEFENSE,Steel
+galarian_magnemite,Body Press,BODY_PRESS,Fighting
+galarian_magnemite,Thunder Wave,THUNDER_WAVE,Electric
+galarian_magnemite,Reflect,REFLECT,Psychic
+galarian_magnemite,Light Screen,LIGHT_SCREEN,Psychic
+galarian_magnemite,Protect,PROTECT,Normal
+galarian_magnemite,Substitute,SUBSTITUTE,Normal
+galarian_magnemite,Rest,REST,Psychic
+galarian_magnemite,Tera Blast,TERA_BLAST,Normal
+galarian_magneton,Energy Ball,ENERGY_BALL,Grass
+galarian_magneton,Giga Drain,GIGA_DRAIN,Grass
+galarian_magneton,Leaf Storm,LEAF_STORM,Grass
+galarian_magneton,Solar Beam,SOLAR_BEAM,Grass
+galarian_magneton,Grass Knot,GRASS_KNOT,Grass
+galarian_magneton,Flash Cannon,FLASH_CANNON,Steel
+galarian_magneton,Steel Beam,STEEL_BEAM,Steel
+galarian_magneton,Iron Defense,IRON_DEFENSE,Steel
+galarian_magneton,Body Press,BODY_PRESS,Fighting
+galarian_magneton,Thunder Wave,THUNDER_WAVE,Electric
+galarian_magneton,Reflect,REFLECT,Psychic
+galarian_magneton,Light Screen,LIGHT_SCREEN,Psychic
+galarian_magneton,Protect,PROTECT,Normal
+galarian_magneton,Substitute,SUBSTITUTE,Normal
+galarian_magneton,Rest,REST,Psychic
+galarian_magneton,Tera Blast,TERA_BLAST,Normal
+galarian_magnezone,Energy Ball,ENERGY_BALL,Grass
+galarian_magnezone,Giga Drain,GIGA_DRAIN,Grass
+galarian_magnezone,Leaf Storm,LEAF_STORM,Grass
+galarian_magnezone,Solar Beam,SOLAR_BEAM,Grass
+galarian_magnezone,Grass Knot,GRASS_KNOT,Grass
+galarian_magnezone,Flash Cannon,FLASH_CANNON,Steel
+galarian_magnezone,Steel Beam,STEEL_BEAM,Steel
+galarian_magnezone,Iron Defense,IRON_DEFENSE,Steel
+galarian_magnezone,Body Press,BODY_PRESS,Fighting
+galarian_magnezone,Thunder Wave,THUNDER_WAVE,Electric
+galarian_magnezone,Reflect,REFLECT,Psychic
+galarian_magnezone,Light Screen,LIGHT_SCREEN,Psychic
+galarian_magnezone,Protect,PROTECT,Normal
+galarian_magnezone,Substitute,SUBSTITUTE,Normal
+galarian_magnezone,Rest,REST,Psychic
+galarian_magnezone,Tera Blast,TERA_BLAST,Normal
+galarian_tangela,Thunderbolt,THUNDERBOLT,Electric
+galarian_tangela,Thunder,THUNDER,Electric
+galarian_tangela,Volt Switch,VOLT_SWITCH,Electric
+galarian_tangela,Wild Charge,WILD_CHARGE,Electric
+galarian_tangela,Thunder Wave,THUNDER_WAVE,Electric
+galarian_tangela,Electric Terrain,ELECTRIC_TERRAIN,Electric
+galarian_tangela,Electroweb,ELECTROWEB,Electric
+galarian_tangela,Charge Beam,CHARGE_BEAM,Electric
+galarian_tangela,Knock Off,KNOCK_OFF,Dark
+galarian_tangela,Body Press,BODY_PRESS,Fighting
+galarian_tangela,Iron Defense,IRON_DEFENSE,Steel
+galarian_tangela,Protect,PROTECT,Normal
+galarian_tangela,Substitute,SUBSTITUTE,Normal
+galarian_tangela,Rest,REST,Psychic
+galarian_tangela,Tera Blast,TERA_BLAST,Normal
+galarian_tangrowth,Thunderbolt,THUNDERBOLT,Electric
+galarian_tangrowth,Thunder,THUNDER,Electric
+galarian_tangrowth,Volt Switch,VOLT_SWITCH,Electric
+galarian_tangrowth,Wild Charge,WILD_CHARGE,Electric
+galarian_tangrowth,Thunder Wave,THUNDER_WAVE,Electric
+galarian_tangrowth,Electric Terrain,ELECTRIC_TERRAIN,Electric
+galarian_tangrowth,Electroweb,ELECTROWEB,Electric
+galarian_tangrowth,Charge Beam,CHARGE_BEAM,Electric
+galarian_tangrowth,Knock Off,KNOCK_OFF,Dark
+galarian_tangrowth,Body Press,BODY_PRESS,Fighting
+galarian_tangrowth,Iron Defense,IRON_DEFENSE,Steel
+galarian_tangrowth,Protect,PROTECT,Normal
+galarian_tangrowth,Substitute,SUBSTITUTE,Normal
+galarian_tangrowth,Rest,REST,Psychic
+galarian_tangrowth,Tera Blast,TERA_BLAST,Normal
+galarian_chikorita,Energy Ball,ENERGY_BALL,Grass
+galarian_chikorita,Giga Drain,GIGA_DRAIN,Grass
+galarian_chikorita,Solar Beam,SOLAR_BEAM,Grass
+galarian_chikorita,Leaf Storm,LEAF_STORM,Grass
+galarian_chikorita,Grass Knot,GRASS_KNOT,Grass
+galarian_chikorita,Grassy Terrain,GRASSY_TERRAIN,Grass
+galarian_chikorita,Dragon Pulse,DRAGON_PULSE,Dragon
+galarian_chikorita,Draco Meteor,DRACO_METEOR,Dragon
+galarian_chikorita,Dragon Tail,DRAGON_TAIL,Dragon
+galarian_chikorita,Outrage,OUTRAGE,Dragon
+galarian_chikorita,Earthquake,EARTHQUAKE,Ground
+galarian_chikorita,Body Slam,BODY_SLAM,Normal
+galarian_chikorita,Reflect,REFLECT,Psychic
+galarian_chikorita,Light Screen,LIGHT_SCREEN,Psychic
+galarian_chikorita,Protect,PROTECT,Normal
+galarian_chikorita,Substitute,SUBSTITUTE,Normal
+galarian_chikorita,Rest,REST,Psychic
+galarian_chikorita,Tera Blast,TERA_BLAST,Normal
+galarian_bayleef,Energy Ball,ENERGY_BALL,Grass
+galarian_bayleef,Giga Drain,GIGA_DRAIN,Grass
+galarian_bayleef,Solar Beam,SOLAR_BEAM,Grass
+galarian_bayleef,Leaf Storm,LEAF_STORM,Grass
+galarian_bayleef,Grass Knot,GRASS_KNOT,Grass
+galarian_bayleef,Grassy Terrain,GRASSY_TERRAIN,Grass
+galarian_bayleef,Dragon Pulse,DRAGON_PULSE,Dragon
+galarian_bayleef,Draco Meteor,DRACO_METEOR,Dragon
+galarian_bayleef,Dragon Tail,DRAGON_TAIL,Dragon
+galarian_bayleef,Outrage,OUTRAGE,Dragon
+galarian_bayleef,Earthquake,EARTHQUAKE,Ground
+galarian_bayleef,Body Slam,BODY_SLAM,Normal
+galarian_bayleef,Reflect,REFLECT,Psychic
+galarian_bayleef,Light Screen,LIGHT_SCREEN,Psychic
+galarian_bayleef,Protect,PROTECT,Normal
+galarian_bayleef,Substitute,SUBSTITUTE,Normal
+galarian_bayleef,Rest,REST,Psychic
+galarian_bayleef,Tera Blast,TERA_BLAST,Normal
+galarian_meganium,Energy Ball,ENERGY_BALL,Grass
+galarian_meganium,Giga Drain,GIGA_DRAIN,Grass
+galarian_meganium,Solar Beam,SOLAR_BEAM,Grass
+galarian_meganium,Leaf Storm,LEAF_STORM,Grass
+galarian_meganium,Grass Knot,GRASS_KNOT,Grass
+galarian_meganium,Grassy Terrain,GRASSY_TERRAIN,Grass
+galarian_meganium,Dragon Pulse,DRAGON_PULSE,Dragon
+galarian_meganium,Draco Meteor,DRACO_METEOR,Dragon
+galarian_meganium,Dragon Tail,DRAGON_TAIL,Dragon
+galarian_meganium,Outrage,OUTRAGE,Dragon
+galarian_meganium,Earthquake,EARTHQUAKE,Ground
+galarian_meganium,Body Slam,BODY_SLAM,Normal
+galarian_meganium,Reflect,REFLECT,Psychic
+galarian_meganium,Light Screen,LIGHT_SCREEN,Psychic
+galarian_meganium,Protect,PROTECT,Normal
+galarian_meganium,Substitute,SUBSTITUTE,Normal
+galarian_meganium,Rest,REST,Psychic
+galarian_meganium,Tera Blast,TERA_BLAST,Normal
+galarian_cyndaquil,Thunderbolt,THUNDERBOLT,Electric
+galarian_cyndaquil,Thunder,THUNDER,Electric
+galarian_cyndaquil,Volt Switch,VOLT_SWITCH,Electric
+galarian_cyndaquil,Wild Charge,WILD_CHARGE,Electric
+galarian_cyndaquil,Electric Terrain,ELECTRIC_TERRAIN,Electric
+galarian_cyndaquil,Thunder Wave,THUNDER_WAVE,Electric
+galarian_cyndaquil,Thunder Punch,THUNDER_PUNCH,Electric
+galarian_cyndaquil,Hyper Voice,HYPER_VOICE,Normal
+galarian_cyndaquil,Swift,SWIFT,Normal
+galarian_cyndaquil,Focus Blast,FOCUS_BLAST,Fighting
+galarian_cyndaquil,Body Slam,BODY_SLAM,Normal
+galarian_cyndaquil,Facade,FACADE,Normal
+galarian_cyndaquil,Protect,PROTECT,Normal
+galarian_cyndaquil,Substitute,SUBSTITUTE,Normal
+galarian_cyndaquil,Rest,REST,Psychic
+galarian_cyndaquil,Tera Blast,TERA_BLAST,Normal
+galarian_quilava,Thunderbolt,THUNDERBOLT,Electric
+galarian_quilava,Thunder,THUNDER,Electric
+galarian_quilava,Volt Switch,VOLT_SWITCH,Electric
+galarian_quilava,Wild Charge,WILD_CHARGE,Electric
+galarian_quilava,Electric Terrain,ELECTRIC_TERRAIN,Electric
+galarian_quilava,Thunder Wave,THUNDER_WAVE,Electric
+galarian_quilava,Thunder Punch,THUNDER_PUNCH,Electric
+galarian_quilava,Hyper Voice,HYPER_VOICE,Normal
+galarian_quilava,Swift,SWIFT,Normal
+galarian_quilava,Focus Blast,FOCUS_BLAST,Fighting
+galarian_quilava,Body Slam,BODY_SLAM,Normal
+galarian_quilava,Facade,FACADE,Normal
+galarian_quilava,Protect,PROTECT,Normal
+galarian_quilava,Substitute,SUBSTITUTE,Normal
+galarian_quilava,Rest,REST,Psychic
+galarian_quilava,Tera Blast,TERA_BLAST,Normal
+galarian_typhlosion,Thunderbolt,THUNDERBOLT,Electric
+galarian_typhlosion,Thunder,THUNDER,Electric
+galarian_typhlosion,Volt Switch,VOLT_SWITCH,Electric
+galarian_typhlosion,Wild Charge,WILD_CHARGE,Electric
+galarian_typhlosion,Electric Terrain,ELECTRIC_TERRAIN,Electric
+galarian_typhlosion,Thunder Wave,THUNDER_WAVE,Electric
+galarian_typhlosion,Thunder Punch,THUNDER_PUNCH,Electric
+galarian_typhlosion,Hyper Voice,HYPER_VOICE,Normal
+galarian_typhlosion,Swift,SWIFT,Normal
+galarian_typhlosion,Focus Blast,FOCUS_BLAST,Fighting
+galarian_typhlosion,Body Slam,BODY_SLAM,Normal
+galarian_typhlosion,Facade,FACADE,Normal
+galarian_typhlosion,Protect,PROTECT,Normal
+galarian_typhlosion,Substitute,SUBSTITUTE,Normal
+galarian_typhlosion,Rest,REST,Psychic
+galarian_typhlosion,Tera Blast,TERA_BLAST,Normal
+galarian_totodile,Liquidation,LIQUIDATION,Water
+galarian_totodile,Waterfall,WATERFALL,Water
+galarian_totodile,Surf,SURF,Water
+galarian_totodile,Ice Fang,ICE_FANG,Ice
+galarian_totodile,Crunch,CRUNCH,Dark
+galarian_totodile,Poison Fang,POISON_FANG,Poison
+galarian_totodile,Poison Jab,POISON_JAB,Poison
+galarian_totodile,Gunk Shot,GUNK_SHOT,Poison
+galarian_totodile,Sludge Bomb,SLUDGE_BOMB,Poison
+galarian_totodile,Toxic,TOXIC,Poison
+galarian_totodile,Swords Dance,SWORDS_DANCE,Normal
+galarian_totodile,Dragon Dance,DRAGON_DANCE,Dragon
+galarian_totodile,Earthquake,EARTHQUAKE,Ground
+galarian_totodile,Protect,PROTECT,Normal
+galarian_totodile,Substitute,SUBSTITUTE,Normal
+galarian_totodile,Rest,REST,Psychic
+galarian_totodile,Tera Blast,TERA_BLAST,Normal
+galarian_croconaw,Liquidation,LIQUIDATION,Water
+galarian_croconaw,Waterfall,WATERFALL,Water
+galarian_croconaw,Surf,SURF,Water
+galarian_croconaw,Ice Fang,ICE_FANG,Ice
+galarian_croconaw,Crunch,CRUNCH,Dark
+galarian_croconaw,Poison Fang,POISON_FANG,Poison
+galarian_croconaw,Poison Jab,POISON_JAB,Poison
+galarian_croconaw,Gunk Shot,GUNK_SHOT,Poison
+galarian_croconaw,Sludge Bomb,SLUDGE_BOMB,Poison
+galarian_croconaw,Toxic,TOXIC,Poison
+galarian_croconaw,Swords Dance,SWORDS_DANCE,Normal
+galarian_croconaw,Dragon Dance,DRAGON_DANCE,Dragon
+galarian_croconaw,Earthquake,EARTHQUAKE,Ground
+galarian_croconaw,Protect,PROTECT,Normal
+galarian_croconaw,Substitute,SUBSTITUTE,Normal
+galarian_croconaw,Rest,REST,Psychic
+galarian_croconaw,Tera Blast,TERA_BLAST,Normal
+galarian_feraligatr,Liquidation,LIQUIDATION,Water
+galarian_feraligatr,Waterfall,WATERFALL,Water
+galarian_feraligatr,Surf,SURF,Water
+galarian_feraligatr,Ice Fang,ICE_FANG,Ice
+galarian_feraligatr,Crunch,CRUNCH,Dark
+galarian_feraligatr,Poison Fang,POISON_FANG,Poison
+galarian_feraligatr,Poison Jab,POISON_JAB,Poison
+galarian_feraligatr,Gunk Shot,GUNK_SHOT,Poison
+galarian_feraligatr,Sludge Bomb,SLUDGE_BOMB,Poison
+galarian_feraligatr,Toxic,TOXIC,Poison
+galarian_feraligatr,Swords Dance,SWORDS_DANCE,Normal
+galarian_feraligatr,Dragon Dance,DRAGON_DANCE,Dragon
+galarian_feraligatr,Earthquake,EARTHQUAKE,Ground
+galarian_feraligatr,Protect,PROTECT,Normal
+galarian_feraligatr,Substitute,SUBSTITUTE,Normal
+galarian_feraligatr,Rest,REST,Psychic
+galarian_feraligatr,Tera Blast,TERA_BLAST,Normal
+galarian_larvitar,Flare Blitz,FLARE_BLITZ,Fire
+galarian_larvitar,Fire Fang,FIRE_FANG,Fire
+galarian_larvitar,Fire Punch,FIRE_PUNCH,Fire
+galarian_larvitar,Flamethrower,FLAMETHROWER,Fire
+galarian_larvitar,Fire Blast,FIRE_BLAST,Fire
+galarian_larvitar,Crunch,CRUNCH,Dark
+galarian_larvitar,Knock Off,KNOCK_OFF,Dark
+galarian_larvitar,Dark Pulse,DARK_PULSE,Dark
+galarian_larvitar,Earthquake,EARTHQUAKE,Ground
+galarian_larvitar,Stone Edge,STONE_EDGE,Rock
+galarian_larvitar,Rock Slide,ROCK_SLIDE,Rock
+galarian_larvitar,Stealth Rock,STEALTH_ROCK,Rock
+galarian_larvitar,Dragon Dance,DRAGON_DANCE,Dragon
+galarian_larvitar,Swords Dance,SWORDS_DANCE,Normal
+galarian_larvitar,Sandstorm,SANDSTORM,Rock
+galarian_larvitar,Protect,PROTECT,Normal
+galarian_larvitar,Substitute,SUBSTITUTE,Normal
+galarian_larvitar,Rest,REST,Psychic
+galarian_larvitar,Tera Blast,TERA_BLAST,Normal
+galarian_pupitar,Flare Blitz,FLARE_BLITZ,Fire
+galarian_pupitar,Fire Fang,FIRE_FANG,Fire
+galarian_pupitar,Fire Punch,FIRE_PUNCH,Fire
+galarian_pupitar,Flamethrower,FLAMETHROWER,Fire
+galarian_pupitar,Fire Blast,FIRE_BLAST,Fire
+galarian_pupitar,Crunch,CRUNCH,Dark
+galarian_pupitar,Knock Off,KNOCK_OFF,Dark
+galarian_pupitar,Dark Pulse,DARK_PULSE,Dark
+galarian_pupitar,Earthquake,EARTHQUAKE,Ground
+galarian_pupitar,Stone Edge,STONE_EDGE,Rock
+galarian_pupitar,Rock Slide,ROCK_SLIDE,Rock
+galarian_pupitar,Stealth Rock,STEALTH_ROCK,Rock
+galarian_pupitar,Dragon Dance,DRAGON_DANCE,Dragon
+galarian_pupitar,Swords Dance,SWORDS_DANCE,Normal
+galarian_pupitar,Sandstorm,SANDSTORM,Rock
+galarian_pupitar,Protect,PROTECT,Normal
+galarian_pupitar,Substitute,SUBSTITUTE,Normal
+galarian_pupitar,Rest,REST,Psychic
+galarian_pupitar,Tera Blast,TERA_BLAST,Normal
+galarian_tyranitar,Flare Blitz,FLARE_BLITZ,Fire
+galarian_tyranitar,Fire Fang,FIRE_FANG,Fire
+galarian_tyranitar,Fire Punch,FIRE_PUNCH,Fire
+galarian_tyranitar,Flamethrower,FLAMETHROWER,Fire
+galarian_tyranitar,Fire Blast,FIRE_BLAST,Fire
+galarian_tyranitar,Crunch,CRUNCH,Dark
+galarian_tyranitar,Knock Off,KNOCK_OFF,Dark
+galarian_tyranitar,Dark Pulse,DARK_PULSE,Dark
+galarian_tyranitar,Earthquake,EARTHQUAKE,Ground
+galarian_tyranitar,Stone Edge,STONE_EDGE,Rock
+galarian_tyranitar,Rock Slide,ROCK_SLIDE,Rock
+galarian_tyranitar,Stealth Rock,STEALTH_ROCK,Rock
+galarian_tyranitar,Dragon Dance,DRAGON_DANCE,Dragon
+galarian_tyranitar,Swords Dance,SWORDS_DANCE,Normal
+galarian_tyranitar,Sandstorm,SANDSTORM,Rock
+galarian_tyranitar,Protect,PROTECT,Normal
+galarian_tyranitar,Substitute,SUBSTITUTE,Normal
+galarian_tyranitar,Rest,REST,Psychic
+galarian_tyranitar,Tera Blast,TERA_BLAST,Normal
+galarian_onix,Stealth Rock,STEALTH_ROCK,Rock
+galarian_onix,Stone Edge,STONE_EDGE,Rock
+galarian_onix,Rock Slide,ROCK_SLIDE,Rock
+galarian_onix,Earthquake,EARTHQUAKE,Ground
+galarian_onix,Heavy Slam,HEAVY_SLAM,Steel
+galarian_onix,Iron Head,IRON_HEAD,Steel
+galarian_onix,Body Press,BODY_PRESS,Fighting
+galarian_onix,Heat Crash,HEAT_CRASH,Fire
+galarian_onix,Flare Blitz,FLARE_BLITZ,Fire
+galarian_onix,Fire Fang,FIRE_FANG,Fire
+galarian_onix,Flamethrower,FLAMETHROWER,Fire
+galarian_onix,Iron Defense,IRON_DEFENSE,Steel
+galarian_onix,Dragon Tail,DRAGON_TAIL,Dragon
+galarian_onix,Protect,PROTECT,Normal
+galarian_onix,Substitute,SUBSTITUTE,Normal
+galarian_onix,Rest,REST,Psychic
+galarian_onix,Tera Blast,TERA_BLAST,Normal
+galarian_steelix,Stealth Rock,STEALTH_ROCK,Rock
+galarian_steelix,Stone Edge,STONE_EDGE,Rock
+galarian_steelix,Rock Slide,ROCK_SLIDE,Rock
+galarian_steelix,Earthquake,EARTHQUAKE,Ground
+galarian_steelix,Heavy Slam,HEAVY_SLAM,Steel
+galarian_steelix,Iron Head,IRON_HEAD,Steel
+galarian_steelix,Body Press,BODY_PRESS,Fighting
+galarian_steelix,Heat Crash,HEAT_CRASH,Fire
+galarian_steelix,Flare Blitz,FLARE_BLITZ,Fire
+galarian_steelix,Fire Fang,FIRE_FANG,Fire
+galarian_steelix,Flamethrower,FLAMETHROWER,Fire
+galarian_steelix,Iron Defense,IRON_DEFENSE,Steel
+galarian_steelix,Dragon Tail,DRAGON_TAIL,Dragon
+galarian_steelix,Protect,PROTECT,Normal
+galarian_steelix,Substitute,SUBSTITUTE,Normal
+galarian_steelix,Rest,REST,Psychic
+galarian_steelix,Tera Blast,TERA_BLAST,Normal
+galarian_slugma,Surf,SURF,Water
+galarian_slugma,Hydro Pump,HYDRO_PUMP,Water
+galarian_slugma,Water Pulse,WATER_PULSE,Water
+galarian_slugma,Ice Beam,ICE_BEAM,Ice
+galarian_slugma,Power Gem,POWER_GEM,Rock
+galarian_slugma,Rock Slide,ROCK_SLIDE,Rock
+galarian_slugma,Stealth Rock,STEALTH_ROCK,Rock
+galarian_slugma,Earth Power,EARTH_POWER,Ground
+galarian_slugma,Rain Dance,RAIN_DANCE,Water
+galarian_slugma,Iron Defense,IRON_DEFENSE,Steel
+galarian_slugma,Body Press,BODY_PRESS,Fighting
+galarian_slugma,Protect,PROTECT,Normal
+galarian_slugma,Substitute,SUBSTITUTE,Normal
+galarian_slugma,Rest,REST,Psychic
+galarian_slugma,Tera Blast,TERA_BLAST,Normal
+galarian_magcargo,Surf,SURF,Water
+galarian_magcargo,Hydro Pump,HYDRO_PUMP,Water
+galarian_magcargo,Water Pulse,WATER_PULSE,Water
+galarian_magcargo,Ice Beam,ICE_BEAM,Ice
+galarian_magcargo,Power Gem,POWER_GEM,Rock
+galarian_magcargo,Rock Slide,ROCK_SLIDE,Rock
+galarian_magcargo,Stealth Rock,STEALTH_ROCK,Rock
+galarian_magcargo,Earth Power,EARTH_POWER,Ground
+galarian_magcargo,Rain Dance,RAIN_DANCE,Water
+galarian_magcargo,Iron Defense,IRON_DEFENSE,Steel
+galarian_magcargo,Body Press,BODY_PRESS,Fighting
+galarian_magcargo,Protect,PROTECT,Normal
+galarian_magcargo,Substitute,SUBSTITUTE,Normal
+galarian_magcargo,Rest,REST,Psychic
+galarian_magcargo,Tera Blast,TERA_BLAST,Normal
+galarian_snivy,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+galarian_snivy,Draining Kiss,DRAINING_KISS,Fairy
+galarian_snivy,Misty Terrain,MISTY_TERRAIN,Fairy
+galarian_snivy,Dragon Pulse,DRAGON_PULSE,Dragon
+galarian_snivy,Draco Meteor,DRACO_METEOR,Dragon
+galarian_snivy,Dragon Tail,DRAGON_TAIL,Dragon
+galarian_snivy,Energy Ball,ENERGY_BALL,Grass
+galarian_snivy,Giga Drain,GIGA_DRAIN,Grass
+galarian_snivy,Calm Mind,CALM_MIND,Psychic
+galarian_snivy,Protect,PROTECT,Normal
+galarian_snivy,Substitute,SUBSTITUTE,Normal
+galarian_snivy,Rest,REST,Psychic
+galarian_snivy,Tera Blast,TERA_BLAST,Normal
+galarian_servine,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+galarian_servine,Draining Kiss,DRAINING_KISS,Fairy
+galarian_servine,Misty Terrain,MISTY_TERRAIN,Fairy
+galarian_servine,Dragon Pulse,DRAGON_PULSE,Dragon
+galarian_servine,Draco Meteor,DRACO_METEOR,Dragon
+galarian_servine,Dragon Tail,DRAGON_TAIL,Dragon
+galarian_servine,Energy Ball,ENERGY_BALL,Grass
+galarian_servine,Giga Drain,GIGA_DRAIN,Grass
+galarian_servine,Calm Mind,CALM_MIND,Psychic
+galarian_servine,Protect,PROTECT,Normal
+galarian_servine,Substitute,SUBSTITUTE,Normal
+galarian_servine,Rest,REST,Psychic
+galarian_servine,Tera Blast,TERA_BLAST,Normal
+galarian_serperior,Dazzling Gleam,DAZZLING_GLEAM,Fairy
+galarian_serperior,Draining Kiss,DRAINING_KISS,Fairy
+galarian_serperior,Misty Terrain,MISTY_TERRAIN,Fairy
+galarian_serperior,Dragon Pulse,DRAGON_PULSE,Dragon
+galarian_serperior,Draco Meteor,DRACO_METEOR,Dragon
+galarian_serperior,Dragon Tail,DRAGON_TAIL,Dragon
+galarian_serperior,Energy Ball,ENERGY_BALL,Grass
+galarian_serperior,Giga Drain,GIGA_DRAIN,Grass
+galarian_serperior,Calm Mind,CALM_MIND,Psychic
+galarian_serperior,Protect,PROTECT,Normal
+galarian_serperior,Substitute,SUBSTITUTE,Normal
+galarian_serperior,Rest,REST,Psychic
+galarian_serperior,Tera Blast,TERA_BLAST,Normal
+hoopno,Zen Headbutt,ZEN_HEADBUTT,Psychic
+hoopno,Psychic,PSYCHIC,Psychic
+hoopno,Psyshock,PSYSHOCK,Psychic
+hoopno,Drain Punch,DRAIN_PUNCH,Fighting
+hoopno,Brick Break,BRICK_BREAK,Fighting
+hoopno,Close Combat,CLOSE_COMBAT,Fighting
+hoopno,Bulk Up,BULK_UP,Fighting
+hoopno,Thunder Punch,THUNDER_PUNCH,Electric
+hoopno,Ice Punch,ICE_PUNCH,Ice
+hoopno,Fire Punch,FIRE_PUNCH,Fire
+hoopno,Knock Off,KNOCK_OFF,Dark
+hoopno,Trick Room,TRICK_ROOM,Psychic
+hoopno,Calm Mind,CALM_MIND,Psychic
+hoopno,Protect,PROTECT,Normal
+hoopno,Substitute,SUBSTITUTE,Normal
+hoopno,Rest,REST,Psychic
+hoopno,Tera Blast,TERA_BLAST,Normal

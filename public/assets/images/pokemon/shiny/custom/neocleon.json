@@ -1,0 +1,1 @@
+{"textures": [{"image": "neocleon.png", "format": "RGBA8888", "size": {"w": 156, "h": 144}, "scale": 1, "frames": [{"filename": "0001.png", "rotated": false, "trimmed": false, "sourceSize": {"w": 156, "h": 144}, "spriteSourceSize": {"x": 0, "y": 0, "w": 156, "h": 144}, "frame": {"x": 0, "y": 0, "w": 156, "h": 144}}]}], "meta": {"app": "tools/jet/make-jet-sprites.py"}}
