@@ -8,6 +8,7 @@ const root = join(import.meta.dirname, '../..');
 const dir = join(root, 'tools/events/co');
 const afterstory: { match: string; readBy: string }[] = [
   { match: 'roster-[a-z-]+-(done|m2)', readBy: 'The next meeting (m2), and the All-Star Tournament and Final Reunion (done): ROAD_ROSTER.md, How the Roster runs' },
+  { match: 'rep', readBy: '"Reputation +1" (STANDARDS.md pack words): a run flag until the per-region reputation system reads it' },
 ];
 const external = new Set<string>();
 for (const f of readdirSync(dir).filter((n) => n.startsWith('people-') && n.endsWith('.ts')).sort()) {

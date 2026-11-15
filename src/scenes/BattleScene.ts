@@ -28,7 +28,7 @@ import { genderSign } from '../core/gender';
 import { hasPerk } from '../core/mapItems';
 import Phaser from 'phaser';
 import { wildBehavior } from '../core/wildBehavior';
-import { enemyIntent, trainerTaunt } from '../core/battle/intent';
+import { enemyIntent, foePreviewIntent, trainerTaunt } from '../core/battle/intent';
 import { explainMoment, explanationText, FAMILY_NAMES, unseenKeys } from '../core/story/hyperRules';
 import { bondScoreOf, momentumMax, rallyProblem } from '../core/battle/spectacle';
 import { armFeat, featCharged } from '../core/story2/feats';
@@ -3207,7 +3207,8 @@ export class BattleScene extends Phaser.Scene {
                 ? ' It will Mega Evolve!'
                 : '';
     // Boss intent (#117): bosses, raids and totems telegraph the move they value most.
-    const intent = this.run.battle && !this.run.battle.doubles ? (enemyIntent(content, this.run.battle, this.activeMon(), this.run.party) ?? trainerTaunt(content, this.run.battle, this.activeMon(), this.run.party)) : null;
+    // Mentor lesson Foe Move Preview: on turn one the foe's chosen move is shown instead.
+    const intent = this.run.battle && !this.run.battle.doubles ? (foePreviewIntent(content, this.run.battle) ?? enemyIntent(content, this.run.battle, this.activeMon(), this.run.party) ?? trainerTaunt(content, this.run.battle, this.activeMon(), this.run.party)) : null;
     const battleNow = this.run.battle!;
     const canRally = !this.duo && rallyProblem(content, battleNow) === null;
     if (!canRally) this.rallyChoice = false;

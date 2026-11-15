@@ -16,6 +16,7 @@ const mine: EventDef[] = files.flatMap((f) => json<{ events: { id: string }[] }>
 const mineIds = new Set(mine.map((e) => e.id));
 const others = [...content.events.values()].filter((e) => !mineIds.has(e.id));
 const registry = json<{ external: string[]; afterstory: { match: string; readBy: string }[] }>('src/data/catalogOverhaul/flags/people.json');
+const mentorIds = json<{ mentors: { id: string }[] }>('src/data/mentors.json').mentors.map((m) => m.id);
 const oldPlacement = json<Record<string, { scene?: { cast?: string[] } }>>('src/data/catalogOverhaul/oldPlacement.json');
 
 const outcomes = (c: EventChoice): EventOutcome[] => [c.success, ...(c.failure ? [c.failure] : [])];
@@ -71,15 +72,18 @@ describe('people: built scenes', () => {
 
   it('every room is opened by a scene, and every scene that opens a room names a real one', () => {
     const opened = new Set<string>();
+    const byMentor = new Set<string>();
     const bad: string[] = [];
     for (const e of mine) for (const x of allEffects(e)) {
+      // `mentorScene` opens this run's mentor's own scene (a room, or a mentor's Story or Recruit early): it opens that scene for every mentor that has one.
+      if (x.kind === 'mentorScene') for (const m of mentorIds) if (content.events.has(`mentor-${m}-${x.part}`)) byMentor.add(`mentor-${m}-${x.part}`);
       const ids = x.kind === 'addEvent' || x.kind === 'seeAgain' ? [x.eventId] : x.kind === 'addEventFrom' ? x.ids : [];
       for (const id of ids) {
         if (!content.events.has(id)) bad.push(`${e.id} opens ${id}, which does not exist`);
         if (x.kind !== 'seeAgain') opened.add(id);
       }
     }
-    for (const e of mine) if (e.room && !opened.has(e.id)) bad.push(`${e.id} is a room nothing opens`);
+    for (const e of mine) if (e.room && !opened.has(e.id) && !byMentor.has(e.id)) bad.push(`${e.id} is a room nothing opens`);
     for (const id of opened) if (mineIds.has(id) && !content.events.get(id)!.room) bad.push(`${id} is opened as a room but is not marked room`);
     expect(bad).toEqual([]);
   });

@@ -51,5 +51,60 @@ Row 6 of `/mnt/project-files/plans/catalog-overhaul/PLAN.md`. Docs (in `/mnt/pro
 ## Status
 See the tables below (filled in as files are finished). Checked = the doc section was opened again after the build and compared line by line.
 
+### Where this stopped (2026-11-15, paused when Kice capped running threads at five)
+| Piece | State |
+|---|---|
+| Road Roster RR1-RR51 (`people-roster-1..6`) | Built (all 51). Thread re-read not done yet. |
+| Roster crossovers (`people-roster-crossovers`) | Built (10 scenes). |
+| Mentor engine (lessons, `mentorLesson`/`mentorScene`, `regionsLeft`, battle/map/shop perks, gift items) | Built, unit tests pass (`mentorPerks`, `mentorWorld`). |
+| Shared mentor scenes MS1-MS12 except MS9 (`people-mentors-1`) | Built. |
+| Mentors B1-B12 (`people-mentors-2..4`) | Built. Thread re-read not done yet. |
+| SF8 Day Off frame + B1-B13, B15, B16 (`_wip-people-leaders-1.ts`) | Half written, not built. Rename to `people-leaders-1.ts`, remove `@ts-nocheck`, finish. |
+| GL3 wings, GL4-GL10, B14 (`_wip-people-leaders-2.ts`) | Half written, not built. |
+| PC1-PC10, C4, PA4 (`_wip-people-champions-1.ts`) | Half written, not built. |
+| SF8 C1-C3, C5, C6, D1-D7 (`_wip-people-champions-2.ts`) | Half written, not built. |
+| Still to do | Re-read of every doc; status/placement JSON; update fragment; browser spec; `npm run check`; rebase onto the lead's foundation (PR #1316) and split statBoost into an engine-only commit for the lead. |
+
 ## Needs Kice
 Listed here as they are found: beats that only work across runs.
+
+### Build reports (draft, to be sorted into the final list)
+## roster-6 (RR42-RR51): 32 events (30 meetings + jessa-warehouse, tuber-pip-later)
+New items: none (Never-Melt Ice = nevermeltice; Gran's Lapras TM = tm-ice).
+Needs engine (told in text + flag): RR42 M2 Wait TODO(takeNode); RR44 M2 Sneak one fewer battle in next Rocket stage (roster-boris-inside); RR44 reward one Rocket plan step revealed (roster-boris-evidence); RR45 M3 "I won't" free heals at this Center (roster-jessa-heals; full heal now); RR45 M3 Rocket admin's weakness (roster-jessa-secret); RR48 M3 Show his best move vs next boss (roster-rudy-best-move; gym() for team).
+Cross-run: RR45 M3 free heals "for the save". Cross-doc: none.
+Calls: RR42 M2 Help variants read roster-kai-m1/roster-finn-m1; rewards in one outcome only to that choice; RR43 M2 Alone = friendly wild Alpha Ursaring lv+2, win sets calmed + joins; RR43 M3 Soothe Bell unless calmed; RR44 M3 tag: Boris's Raticate ally vs "Team Rocket" Arbok+Golbat; RR45 warehouse stealth 2 prompts; M3 variant when stayed; RR47 M2 Tow needs Water-type, Rope needs Flying-type; RR49 Gran win tm-ice, lose Pearl; RR50 M1 50% guess; RR51 "You let him win" at M3; each M3 choice sets own ending flag.
+#### roster-5 (RR32-RR41): 37 events (30 + lorna-forest, axel-drummer, axel-setlist, hadrian-sigil, murphy-sea1, murphy-sea2, murphy-island)
+New items: none.
+Needs engine (flags in AFTERSTORY): RR32 M1 her Pokémon act first turn one (roster-lorna-first-turn); RR33 M1 sound moves hit harder both sides (roster-axel-loud); RR33 M3 requested song plays next region (roster-axel-song 1-3); RR36 M2 spy plan step told in text only (roster-orson-spy); RR36 M3 base stats of every wild Pokémon this region (roster-orson-stats); RR36 M3 Remembers Orson in next evil-team battle -> built as his M3 instead (REVIEW); RR38 M3 team's biggest type weakness (roster-miles-weakness); RR39 M2 Galarian Corsola appear (roster-coral-moved); RR32 M1 Lorna names a type from party (no token; could use {lead} tokens later).
+Cross-run: RR39 M2 Plant ("next run the reef is half-back"). Cross-doc: RR34 M2 Prove (sigil from Z2).
+TODO(takeNode): RR40 M2 Lifeguard.
+Calls: reward tied to one choice (Lorna Thanks Dawn Stone, Murphy Write Mystic Water, Coral Count Corsola, Finn Race win Wave Incense); undoc teams Lorna Meowstic+Gardevoir, Axel Toxtricity+Electivire, Amy=Plusle/Ampharos Tim=Minun/Pachirisu; tag fights use ally, tag partner companion(1) on every M3; Hadrian company fight = evil grunt spar; guardian wild Claydol spar; Finn +1 Speed Water-types run relic; Kai +5% HP stat('hp'); Kai Berry x3 = Oran; type requirements Finn Swim/Send Water, Kai Beacon Fire / Swim Water.
+#### roster-4 (RR22-RR31): 37 events (30 + pierre-practice, rex-search, rex-thief, delia-upstream, delia-dumping, hal-poachers, edmund-bridge)
+TEMP: roster-quinn-m1 in EXTERNAL (remove once RR8 Quinn built in roster-2).
+Needs engine: RR24 M1 "no KO above 50% damage" rule (gentle set on any win); RR25 M1/M3 portrait & painting in hub (moments); RR28 M1 next egg hatches a stage sooner (roster-delia-hatch-sooner); RR31 M3 item lost later returns (roster-edmund-lost-returns); RR30 M3 skipAhead not forest-specific.
+Cross-run: RR29 M3 Plant (forest recovers next run). Cross-doc: RR28 M2 Source links D5 (evil dumping).
+Calls: RR22 Pierre Voltorb+Mr. Mime, "Which?" skill prompt; one-choice rewards (Light Clay Join win, Silk Scarf Mother, Rare Candy Donate, Lucky Egg/Miltank Watch or Help); RR23 Come with me companion(1); RR24 M3 Kent's Snubbull invented, Moon Stone choice consumes; RR25 M3 foeMoves Spore+Flamethrower only (cap 2), +1 Bond starter who:'picked'; RR26 rain picnic wild Water-types join picnic not party, dish +5% Atk one battle, free meals = heal stop every M3 choice; RR27 six odd Pokémon list; RR28 M1 Audino joins; RR29 Fight fire needs Water, Ride patrol hiddenItemChance 1 for region; RR30 M3 second small Buneary reward; RR31 Wrong fights lv-1, Prove it shows wild Pokémon ahead 3 battles (check works from event), Advise me gymPreview.
+#### roster-3 (RR12-RR21): 43 events (30 + Ivan M3 callback + 12 side scenes)
+Needs engine: RR13 M3 Plan first move of every boss this region (roster-selene-boss-first-move); RR13 M3 Improvise lead +1 Spe on switch-in this region (roster-selene-switch-speed); RR17 M2 Who evil-team step revealed (roster-baxter-team); RR20 M1 Bow prize +20% (roster-alfred-bow-prize); RR20 M3 Guest finished roster trainer to tea, not gated (roster-alfred-guest); RR21 M3 Story rare nest (roster-anthony-rare-nest); RR21 M2 Dig pick types ground/fighting can be empty.
+Cross-run: none. Cross-doc: RR17 M2 Follow -> A9 Static Choir (story-alpha-static-choir) only flag roster-baxter-cables; RR17 M2 Remembers "If A9 resolved" not built.
+TODO(takeNode): RR16 M1 Swim; RR17 M2 Fix (rest node used).
+Calls: RR12 M1 "Don't need it" also sets m1; RR13 M2 Plan hint=gym(); RR13 M1 Notes Alakazam Psychic+Shadow Ball; RR15 M3 two regions: Ivan callback one region after M2, Mira -m3 one after Ivan sets done + Focus Band; RR18 M1 Gyarados+Lanturn, Fish pull-hold, Sit opens battle side scene; RR19 extra base choices, payback 1100, bet 500/win 1000, thugs roughneck class, Fight 2-battle chain; RR14/RR20 M3 extra base choices for variants; RR16 M2 council veteran class, M3 three openings.
+#### roster-2 (RR2-RR11): 51 events (30 + 20 side scenes + Quinn M2 reported version)
+New items: RR2 M3 moonflower (holder can't sleep) -> Miracle Seed given instead.
+Needs engine: RR2 M1 Sweet Scent+Sleep Powder only on first mon; RR3 M2 "Enter anyway is free" line only; RR4 M3 free deliveries region + one item carried ahead after Race win (roster-ryder-free-deliveries, -carry); RR4 M2 follows two nodes = companion(1) (a stage); RR5 M1 first turn all faster; RR8 M3 free locked chests (roster-quinn-free-locks); RR9 M1 next rest heals 10% more (roster-liam-taught); RR9 M3 rest healing for region (roster-liam-rest-healing); RR10 M1 can't name lost species; RR10 M3 hidden-event reading (roster-hester-reading, -reading-lost); RR11 M1 they target separately.
+Cross-run: RR6 M3 Judge (student not on Roster next run). Cross-doc: RR3 M3 Alpha Gyarados A2 (roster-bianca-gyarados); RR6 M3 Z6 Doran at grading.
+TODO(takeNode): RR2 M2 Move the garden; RR5 M1 Watch with him.
+Calls: RR5 M1 Watch / RR8 M1 Report also set m1; RR8 M2 reported version own event npc-meet-burglar-quinn-m2-reported; RR8 M1 plain Battle win keeps sack (two items, honest-kept-stolen); one-choice rewards (Quinn Lock, Hester Thank Spell Tag, Couple Tag companion(1), Perry Chick Taillow else Sharp Beak, Wade Trade Scyther else Silver Powder); RR11 M2 Leon meeting + Sky side scene, two apologies reconciled; RR3 M1 Bianca Milotic alone; RR6 M2 Train me Low Kick/Mach Punch; RR11 M2 solo fights lv-1; RR2 M2 council battle saves garden win or lose; roster-hester-doll in AFTERSTORY.
+
+#### Mentor engine (battle perks) — agent report
+stabDamageMultiplier (Brook) trainerPerks.ts:102; turnOneKoSpeed engine switchIn; noFlinchTurnOne canAct (boss/rival); foeMissBoost; foeMovePreview (deriveRng 'foeMovePreview', no draws; Old UI text only "Foe will use X!", New UI not wired); lostBattleXp ((v-1) x XP earned that battle; 0 if no foe defeated, still used); Ravi's Bell firstMoveSure (first move aimed at a foe). Simplified: KO speed counts any turn-one enemy faint; doubles: KO speed + preview not wired. battle field `lesson` optional, no save bump.
+#### Mentor engine (map/shop/evolution) — agent report
+Fenwick declinedEvolutionBoost: decline = battle after which a Pokémon ready to evolve was held (Hold evolution); cap 10%; clears on evolving; field evoDeclineBoost optional. Juno hiddenItemSight: lesson hides one item per stage, shown within N steps ahead. Tobias shopWorthIt/shopDeal: shops sell no battle held items, so the mark shows only on evolution/form items. Gifts giftOnly (never in reward draft). Linden's Notebook: on at start of next region, wild-stop moves preview for reachable stops. The 400 Pages (Ysolde): no Legendary Sign system yet, status pending.
+#### Mentors B2-B6
+Needs engine: Fenwick kept (Eevee never evolves), Fenwick choice (Eevee picks own evolution), Celeste recruit by party gap. Cross-run: Dax rival from past run, Dax coach students on Roster later runs, Linden kept habitats for the save. Cross-doc: SF14.5 Grand Festival (Celeste judge/perform/rest), D1 Delta Study (Linden deltas/lab/self, Delta Lens new item TODO), AQ54 Gary (Fenwick Remembers). Judgment: Juno +Crobat; Linden +Reuniclus,Magnezone; Fenwick final 7 (Espeon,Umbreon,Vaporeon,Jolteon,Flareon,Sylveon,Eevee); Dax final = mirror of your team +1 (rival +3); Dax lesson Scraggy+Mankey; Fenwick "I won't evolve it" stat to picked Normal-type; Juno recruit from Absol/Lapras/Dratini/Larvitar/Riolu.
+#### Mentors B7-B12
+Needs engine: Marigold team at max Bond (text only); Tobias team holding six perfect items (text); Ysolde Regi if met none (always Registeel); Sable in the E4 this run (sable-league/sable-joy); Vesper real League battle (vesper-promise/vesper-soft); Tobias "the region's Gym Leader" (text). Cross-doc: A2 lamp relit (ravi-light), blessing-Legendary Sign (ysolde-sign), SF10 Hooded Traveller. Judgment: Marigold +Azumarill,Snorlax,Clefable; lesson egg Togepi/Happiny/Riolu/Azurill/Munchlax 3 stages; Tobias team Ambipom,Kangaskhan,Snorlax,Breloom,Conkeldurr,Ferrothorn; Vesper E4 team Sableye,Mismagius,Honchkrow,Weavile,Chandelure,Spiritomb; Vesper farewell doc line only on win, written line on loss; Ravi Sail = three sea rooms.
+#### Crossovers (me)
+Needs engine: Boris+Jessa "free heals across the region" (heal stops are already free; heal(1) now); Hal+Willa one forest node always safe; Swim Club sea-node skip per region (ferry() once now).
+

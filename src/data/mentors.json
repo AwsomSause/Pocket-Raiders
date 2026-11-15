@@ -240,7 +240,9 @@
     "intro": "Ravi stares at the horizon. \"Twenty years on the coast, and I lost one recruit to a storm I should have seen. I teach so no one else is unprepared.\"",
     "listen": "You stay quiet and let him finish. He nods once.",
     "share": "You tell him about your own near miss. \"Then we both learned it,\" he says."
-   }
+   },
+   "short": "Ravi",
+   "drill": "Finishing"
   },
   {
    "id": "marigold-hatch",
@@ -349,7 +351,9 @@
     "intro": "Marigold turns an Egg in her hands. \"My first hatchling never came out. I kept the shell. I have raised every one since like it was that one.\"",
     "listen": "You hold the Egg for a moment so she can breathe.",
     "share": "You tell her about your first Pokémon. She laughs, and wipes her eye."
-   }
+   },
+   "short": "Marigold",
+   "drill": "Resting"
   },
   {
    "id": "linden-vale",
@@ -451,7 +455,9 @@
     "intro": "Linden closes the notebook. \"The lab wanted results. I wanted answers. They were not the same thing, so I left.\"",
     "listen": "You ask what answer they found. \"That the question was better,\" they say.",
     "share": "You share your own odd observation. Linden writes it down, and credits you."
-   }
+   },
+   "short": "Linden",
+   "drill": "Watching"
   },
   {
    "id": "juno-trailwind",
@@ -556,7 +562,9 @@
     "intro": "Juno traces a route in the dirt. \"I was lost for nine days once. A wild Pokémon walked me out. I have been paying it back ever since.\"",
     "listen": "You let the silence sit. Juno hums an old trail song.",
     "share": "You tell her about your wrong turn. \"Best way to learn a road,\" she says."
-   }
+   },
+   "short": "Juno",
+   "drill": "Finding"
   },
   {
    "id": "celeste-ribbon",
@@ -662,7 +670,9 @@
     "intro": "Celeste lowers her voice. \"I won my third Festival with a shaking hand. Nobody saw. I teach so others know that shaking is allowed.\"",
     "listen": "You say nothing and hand her a glass of water.",
     "share": "You admit you are nervous too. She squeezes your shoulder."
-   }
+   },
+   "short": "Celeste",
+   "drill": "Showing off"
   },
   {
    "id": "sable-oakridge",
@@ -765,7 +775,9 @@
     "intro": "Sable looks at their hands. \"I left the title because I stopped enjoying it. I was afraid that meant I had stopped being good.\"",
     "listen": "You wait. Sable almost smiles.",
     "share": "You say you are afraid of the same thing. \"Good. Remember that,\" Sable says."
-   }
+   },
+   "short": "Sable",
+   "drill": "Staying calm"
   },
   {
    "id": "dax-corvane",
@@ -874,7 +886,9 @@
     "intro": "Dax scuffs his boot. \"I lost to you and I was furious for a week. Then I realised I had never been that interested in anything before.\"",
     "listen": "You do not mention the loss. He looks grateful.",
     "share": "You admit the win was luck. \"Liar,\" he says, grinning."
-   }
+   },
+   "short": "Dax",
+   "drill": "Losing"
   },
   {
    "id": "brook-tidewater",
@@ -985,7 +999,9 @@
     "intro": "Brook watches the tide. \"My mother kept this gym. When the harbour flooded, we saved the Pokémon first. I took her badge, not her name.\"",
     "listen": "You listen to the water with her.",
     "share": "You tell her about your home. \"Then you know what a harbour is,\" she says."
-   }
+   },
+   "short": "Brook",
+   "drill": "One type"
   },
   {
    "id": "vesper-nox",
@@ -1095,7 +1111,9 @@
     "intro": "Vesper adjusts their cloak. \"Every challenger who reaches me is better than I was. I teach because I would like, once, to lose well.\"",
     "listen": "You nod. Vesper turns away, but not before you see the smile.",
     "share": "You say you would like to be the one. \"Then do not telegraph it,\" Vesper says."
-   }
+   },
+   "short": "Vesper",
+   "drill": "The second plan"
   },
   {
    "id": "ysolde-marrow",
@@ -1207,7 +1225,9 @@
     "intro": "Ysolde unrolls a map. \"I saw one once, for three seconds, in a storm. I have written four hundred pages since to be sure I did not dream it.\"",
     "listen": "You look at the map without a word.",
     "share": "You tell her about a strange dream. She reaches for her pen."
-   }
+   },
+   "short": "Ysolde",
+   "drill": "Listening"
   },
   {
    "id": "tobias-satchel",
@@ -1320,7 +1340,9 @@
     "intro": "Tobias pats the satchel. \"My first customer was a girl with no money and a Pokémon with no berries. I gave her both. Worst deal I ever made.\"",
     "listen": "You smile and let him ramble.",
     "share": "You offer to pay for something small. He refuses, and then accepts."
-   }
+   },
+   "short": "Tobias",
+   "drill": "Holding"
   },
   {
    "id": "fenwick-eon",
@@ -1430,7 +1452,9 @@
     "intro": "Fenwick touches the string on the wall. \"My Eevee never evolved. I used to think I failed it. Now I think it just did not need to.\"",
     "listen": "You sit beside him in silence.",
     "share": "You say your own team is still changing. \"Good. Stay curious,\" he says."
-   }
+   },
+   "short": "Fenwick",
+   "drill": "Waiting"
   }
  ]
 }

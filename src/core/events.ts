@@ -41,6 +41,7 @@ import { featuredRival, rivalBeaten, rivalFightTeam, rivalLastResult, rivalPath 
 import { monRivalState } from './rivals/monRivals';
 import { openFeud, settleFeud } from './story/feud';
 import { apprenticeLevelBonus, applyMentorEffect, mentorConditionMet, mentorConditionText, mentorStopEvent } from './mentors';
+import { applyMentorLesson, fillMentorText, mentorSceneId } from './mentors/lessons';
 import { noteEventMorality } from './story/nemesis';
 import { addHuntClue, finishHunt, huntClues, huntDone } from './story/grandEnemy';
 import { gauntletLeft, startGauntlet } from './story/gauntlet';
@@ -159,6 +160,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return c.in.includes(seasonOf(content, run));
     case 'region':
       return c.ids.includes(currentRegion(content, run).id);
+    case 'regionsLeft':
+      return run.regionOrder.length - 1 - run.regionIndex <= c.atMost;
     case 'milestone':
       return milestoneToday(content, run);
     case 'partySpecies':
@@ -379,6 +382,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return `Only in the ${c.in.map((x) => PERIOD_LABEL[x].toLowerCase()).join(' or ')}`;
     case 'season':
       return `Only in ${c.in.join(' or ')}`;
+    case 'regionsLeft':
+      return c.atMost === 0 ? 'Only in the last region' : `Only in the last ${c.atMost + 1} regions`;
     case 'region':
       return `Only in ${c.ids.map((id) => content.regions.get(id)?.name ?? id).join(' or ')}`;
     case 'milestone':
@@ -930,9 +935,9 @@ export function eventView(content: Content, run: RunState, sideId: string): Even
     const missing = unmet ? conditionText(content, unmet) : tradeMissing(content, run, c);
     const chance = choiceChance(content, run, c);
     const preview = insight ? `${outcomeWords(content, c.success)}${c.failure ? ` · if it fails: ${outcomeWords(content, c.failure)}` : ''}` : null;
-    return { label: fillCoText(content, run, c.label), locked: missing, kind: choiceKind(c, chance), tradePicks: tradePicksOf(content, run, c), chance, attribute: c.check ?? null, attributeValue: c.check ? effectiveAttributes(content, run)[c.check] : null, preview, ...choiceRisk(content, c) };
+    return { label: fillMentorText(run, fillCoText(content, run, c.label)), locked: missing, kind: choiceKind(c, chance), tradePicks: tradePicksOf(content, run, c), chance, attribute: c.check ?? null, attributeValue: c.check ? effectiveAttributes(content, run)[c.check] : null, preview, ...choiceRisk(content, c) };
   });
-  return { event: { ...event, intro: fillCoText(content, run, event.intro) }, choices };
+  return { event: { ...event, intro: fillMentorText(run, fillCoText(content, run, event.intro)) }, choices };
 }
 
 export interface EventResult {
@@ -1019,7 +1024,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
     run.afterDecisions = 'map';
     continueAfterDecisions(content, run);
   }
-  return { run, success, text: fillCoText(content, current, outcome.text), changes, battle };
+  return { run, success, text: fillMentorText(current, fillCoText(content, current, outcome.text)), changes, battle };
 }
 
 function useUpKeyItem(run: RunState, id: string): void {
@@ -1114,6 +1119,10 @@ export function effectWords(content: Content, e: EventEffect): string {
       return 'a Pokémon learns a new move';
     case 'copyMoves':
       return "your lead's moves are copied onto another Pokémon";
+    case 'mentorLesson':
+      return e.again ? "your mentor's lesson, once more" : "your mentor's lesson";
+    case 'mentorScene':
+      return 'your mentor has something to show you';
     case 'statBoost':
       return `${whoWords(e.who)}: ${e.stat === 'best' ? 'best stat' : e.stat === 'all' ? 'every stat' : STAT_WORDS[e.stat]} +${e.percent}%${e.until === 'region' ? ' for the region' : ''}`;
     case 'train':
@@ -1409,7 +1418,9 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     }
     case 'join': {
       const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
-      const speciesId = (e.recall ? oldFoe(run) : null) ?? pickSpecies(content, run, e.species, e.types, rng, 'reward');
+      const starter = e.starterType ? (run.party.find((m) => m.uid === run.log.starterUid) ?? run.party[0]) : undefined;
+      const types = starter ? [getSpecies(content, starter.speciesId).types[0]!] : e.types;
+      const speciesId = (e.recall ? oldFoe(run) : null) ?? pickSpecies(content, run, e.species, types, rng, 'reward');
       // No event lifts the party's level cap (Balancing Phase 7).
       const level = e.level ?? Math.max(1, Math.min(runLevelCap(content, run), eventLevel(content, run, node, rng) + e.levelBonus));
       const mon = newMon(content, run, e.level ? speciesId : evolvedFormAt(content, speciesId, level, rng), level, 'p');
@@ -1683,6 +1694,16 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'seeAgain':
       if (run.itemCounters) delete run.itemCounters[`event-seen:${e.eventId}`];
       return '';
+    case 'mentorLesson':
+      return applyMentorLesson(content, run, e.again);
+    case 'mentorScene': {
+      const id = mentorSceneId(content, run, e.part);
+      if (!id) return '';
+      const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+      here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId: id });
+      if (run.itemCounters) delete run.itemCounters[`event-seen:${id}`];
+      return '';
+    }
     case 'addEvent': {
       if (routeChainEvent(content, run, e.eventId)) return effectWords(content, e);
       const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
