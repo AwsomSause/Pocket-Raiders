@@ -1,4 +1,4 @@
-# New UI: important moments as the mock-up cutscene cards
+# #1324 New UI: important moments as the mock-up cutscene cards
 
 **Player gets:**
 - In New, a battle's big moments now play as the mock-up cutscene card: a plate ("Gym Leader", "Rival", "The Betrayal"...), the name in big letters, one spoken line, the picture, and the five-step strip at the bottom (Situation, Anticipation, Moment, Reaction, Transition).
@@ -19,3 +19,4 @@
 - The Hall of Fame card plays after every Champion win (there is no Hall of Fame screen yet).
 - The Mega, Z-Move, Dynamax and Tera scenes themselves are still drawn the old way.
 - Your Trainer's back view is used when it exists (Hilda, Nate and a few others); Red, Blue and Green show their usual picture.
+- A Galar crowd shot (fans, commentators, the private seats) is shown with the Champion hosting the stadium, like the mock-up's stadium card; the game has no crowd pictures for the card.
