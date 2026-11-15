@@ -83,3 +83,9 @@
 @keyframes rx-in{from{opacity:0}}
 .rx .btn.off,.rx .win.off{opacity:.45}
 .rx .stage.noin{animation:none}
+/* ---- stage map (game additions to the mock-ups' .nd) ---- */
+.rx .nd.go{cursor:pointer}
+.rx .nd.foc{box-shadow:0 0 0 3px var(--l),0 0 0 6px #fff,0 5px 0 6px #0005;z-index:3}
+@keyframes rx-walk{from{translate:var(--fx) var(--fy)}to{translate:0 0}}
+@media (prefers-reduced-motion:no-preference){.rx .nd.go{animation:rx-nd 1.1s ease-in-out infinite}}
+@keyframes rx-nd{50%{filter:brightness(1.25)}}
