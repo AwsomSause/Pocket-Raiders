@@ -21,6 +21,22 @@ export const setGnFlag = (run: Pick<RunState, 'story'>, k: string, v: number): v
   run.story.flags[key(k)] = Math.max(0, v);
 };
 
+/** The main-series regions' generations (the region pool of a `cast`). */
+const REGION_GENERATION: Record<string, number> = { kanto: 1, johto: 2, hoenn: 3, sinnoh: 4, unova: 5, kalos: 6, alola: 7, galar: 8, paldea: 9 };
+
+/** The species a story Pokémon was cast as (gn op `cast`), or null before it is cast. */
+export function castOf(run: Pick<RunState, 'story'>, name: string): string | null {
+  const prefix = `${key(`cast-${name}`)}:`;
+  const hit = Object.keys(run.story.flags).find((k) => k.startsWith(prefix) && Number(run.story.flags[k]) > 0);
+  return hit ? hit.slice(prefix.length) : null;
+}
+
+/** An event's species list with each `@name` turned into the story Pokémon it was cast as (dropped while it is not cast yet). */
+export function resolveCast(run: Pick<RunState, 'story'>, species: readonly string[]): string[] {
+  if (!species.some((s) => s.startsWith('@'))) return [...species];
+  return species.flatMap((s) => (s.startsWith('@') ? (castOf(run, s.slice(1)) ? [castOf(run, s.slice(1))!] : []) : [s]));
+}
+
 const nameOf = (content: Content, mon: PokemonInstance): string => content.species.get(mon.speciesId)?.name ?? mon.speciesId;
 
 /** The party Pokémon carrying a mark (`duelist`), and the species it had when it was marked. */
@@ -237,6 +253,29 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       if (last.where === 'party') run.party.splice(last.i, 1);
       else run.box.splice(last.i, 1);
       return `Let go: ${getSpecies(content, last.m.speciesId).name}`;
+    }
+    case 'cast': {
+      // Picked once: a later cast of the same story Pokémon keeps the first pick.
+      if (castOf(run, e.key!)) return '';
+      const gen = REGION_GENERATION[host.region];
+      const local = e.n === 1 ? [...content.species.values()].filter((sp) => !sp.evolvesFrom && sp.evolutions.length > 0 && (gen === undefined || sp.generation === gen) && !sp.tags.includes('legendary') && !sp.tags.includes('mythical') && !e.species!.includes(sp.id)).map((sp) => sp.id).sort() : [];
+      const known = e.species!.filter((id) => content.species.has(id));
+      // The region's own Pokémon count as one more choice, not one each.
+      const slot = Math.floor(host.float() * (known.length + (local.length > 0 ? 1 : 0)));
+      const pick = slot < known.length ? known[slot]! : local[Math.floor(host.float() * local.length)]!;
+      run.story.flags[`${key(`cast-${e.key}`)}:${pick}`] = 1;
+      return '';
+    }
+    case 'castItem': {
+      const sp = castOf(run, e.key!);
+      if (!sp || !content.species.has(sp)) return '';
+      const stone = getSpecies(content, sp).evolutions.find((x) => x.item && (content.items.has(x.item) || content.catalog.has(x.item)))?.item;
+      return host.apply({ kind: 'item', id: stone ?? 'rare-candy', count: 1 });
+    }
+    case 'hpCap': {
+      const lead = run.party.find((m) => m.hp > 0);
+      if (lead) lead.hp = Math.max(1, Math.min(lead.hp, Math.floor((maxHp(content, lead) * e.n!) / 100)));
+      return '';
     }
     case 'addParty':
       setGnFlag(run, e.key!, gnFlag(run, e.key!) + run.party.filter((m) => m.hp > 0).length);

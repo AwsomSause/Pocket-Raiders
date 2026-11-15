@@ -131,5 +131,8 @@ export interface Placement {
   beats?: { beat: string; event?: string; stage: string; home?: number; window?: [number, number] }[];
   /** The map badge: its own (default), "?" or "None" (a surprise). */
   badge?: string;
+  /** A Region story's beat number and the id its beats share (core/co/placement.ts places beats 2 and 3 once earned). */
+  beat?: number;
+  chain?: string;
   note?: string;
 }

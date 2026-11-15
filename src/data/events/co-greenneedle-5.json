@@ -1,0 +1,1201 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-21-road",
+   "name": "The Pokémon That Wouldn't Evolve",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wontevolve-1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "littlecup",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "littlecup-cancelled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Your own small one, the one that cancelled its evolution, steps up beside it. It folds its arms the same way.*"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "A trainer is kneeling in the road, holding out a stone in both hands, the way you would offer something to a shrine.\n\nTheir Pokémon has its back turned. Its arms are folded.\n\n**Linus:** \"It's a *good* stone. I saved for it. You'd be twice as strong. You'd be safe.\"\n\n*It doesn't turn round. Its ears are flat against its head.*\n\n**Linus, to you:** \"Tell it. Please. It won't hear it from me.\"",
+   "choices": [
+    {
+     "label": "Your trainer's right. Take it.",
+     "success": {
+      "text": "It turns, slowly, and looks at you as if it had expected better of you. It still doesn't take the stone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "cast",
+        "key": "wontevolve",
+        "species": [
+         "pikachu",
+         "piplup",
+         "torchic",
+         "eevee",
+         "growlithe"
+        ],
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "wontevolve-side",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "wontevolve-at"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It doesn't want to. Leave it be.",
+     "success": {
+      "text": "Its ears come up. For a moment it just looks at you. Then it points, very deliberately, at your strongest Pokémon.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "cast",
+        "key": "wontevolve",
+        "species": [
+         "pikachu",
+         "piplup",
+         "torchic",
+         "eevee",
+         "growlithe"
+        ],
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "wontevolve-side",
+        "n": 2
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "wontevolve-at"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-21-challenge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "…",
+     "success": {
+      "text": "Linus sighs, and puts the stone back in a pocket. The Pokémon glances back at you, once, as they go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "cast",
+        "key": "wontevolve",
+        "species": [
+         "pikachu",
+         "piplup",
+         "torchic",
+         "eevee",
+         "growlithe"
+        ],
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "wontevolve-side",
+        "n": 3
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "wontevolve-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-challenge",
+   "name": "The Pokémon That Wouldn't Evolve: The Challenge",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "It wants your strongest Pokémon. One on one. Nobody else.\n\nIt isn't angry. It wants to prove a point, and this is the only language it has for it.",
+   "choices": [
+    {
+     "label": "Accept.",
+     "success": {
+      "text": "It fights like something with a great deal to prove. It's faster than it should be.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "solo",
+        "species": []
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "@wontevolve"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "hpCap",
+         "n": 30
+        },
+        {
+         "kind": "flag",
+         "key": "wontevolve-fought",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-21-bow"
+        },
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        }
+       ],
+       "friendly": true,
+       "rule": {
+        "noCatch": true,
+        "foeStages": {
+         "spe": 1
+        }
+       },
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        },
+        {
+         "kind": "flag",
+         "key": "wontevolve-fought",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-21-bow-lost"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-bow",
+   "name": "The Pokémon That Wouldn't Evolve: The Bow",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "It loses. Narrowly. Your Pokémon is breathing hard, down to its last third.\n\n*It gets up. It isn't ashamed. It bows, stiffly, and walks back to Linus.*\n\n**Linus:** \"...See? See, that's what I mean. It nearly—\"\n\nLinus doesn't finish.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Behind you, neither of them says anything. You can feel them not saying it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-bow-lost",
+   "name": "The Pokémon That Wouldn't Evolve: The Bow",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "It wins. It stands over your Pokémon a moment, breathing hard, as if it can't quite believe it either.\n\n*Then it bows, stiffly, and walks back to Linus.*\n\n**Linus:** \"...It nearly— It could have—\" Linus doesn't finish.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Your Pokémon gets back up. It keeps looking back at the small one, with something like respect.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-back",
+   "name": "It Comes Back",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wontevolve-1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wontevolve-2",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "wontevolve-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "eevee",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "eevee-stayed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Your Eevee, the one that never chose, sits down next to it in the road. They look like old friends.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "Something small drops out of a tree onto the road in front of you.\n\n*It's alone. It's got a new scar, and a new way of standing.*\n\n*It shows you a move. Its kind shouldn't be able to make a move look like that.*\n\nIt calls it, in its way, **Proof**: its own type, and harder still against anything fully grown.",
+   "choices": [
+    {
+     "label": "That's incredible.",
+     "success": {
+      "text": "It puffs up to twice its size. Your lead steps forward. They've been watching each other all along.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Does Linus know you're out here?",
+     "success": {
+      "text": "It looks away.\n\nLinus arrives a moment later, out of breath, still holding the stone. Neither of them says anything.\n\nThey leave together. Linus's hand hovers near its head, and doesn't quite touch it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wontevolve-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show me again, on me.",
+     "success": {
+      "text": "It looks at your strongest Pokémon, and grins.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wontevolve-2",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-21-again"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-again",
+   "name": "It Comes Back: Again",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "A second challenge. Same rules. It has been practising.",
+   "choices": [
+    {
+     "label": "Go.",
+     "success": {
+      "text": "It moves first. Then it moves again, before you have finished seeing the first one.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "solo",
+        "species": []
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "@wontevolve"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "wontevolve-fought",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-21-again-held"
+        },
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        }
+       ],
+       "friendly": true,
+       "rule": {
+        "noCatch": true,
+        "foeStages": {
+         "atk": 2,
+         "spe": 2
+        }
+       },
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        },
+        {
+         "kind": "flag",
+         "key": "wontevolve-fought",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-21-again-won"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-again-won",
+   "name": "It Comes Back: Again",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "This time it wins. Narrowly.\n\nIt stands there, staring at its own paws, as surprised as anyone. Then it laughs, a small, astonished sound.",
+   "choices": [
+    {
+     "label": "Clap.",
+     "success": {
+      "text": "It bows to you, properly this time, and runs off up the road to find Linus.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-again-held",
+   "name": "It Comes Back: Again",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "You hold on. Only just. Your Pokémon is the one staring at its paws now.\n\nIt isn't upset. It looks at you as if to say: *next time.*",
+   "choices": [
+    {
+     "label": "Clap.",
+     "success": {
+      "text": "It bows to you, properly this time, and runs off up the road to find Linus.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-stone",
+   "name": "The Stone",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wontevolve-2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wontevolve-3",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "wontevolve-at"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "Linus has it cornered against a wall. The stone is out again. Linus is crying.\n\n**Linus:** \"I can't do this again. I can't watch one go down because it was *small*. I'm sorry. I'm sorry. Hold still.\"\n\n*It isn't running. It's looking at Linus, very steadily.*",
+   "choices": [
+    {
+     "label": "Step in.",
+     "success": {
+      "text": "You step between them. Both of them look at you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "wontevolve-side",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-21-crisis"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "wontevolve-side",
+        "min": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-21-step"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them work it out.",
+     "success": {
+      "text": "You stay where you are. This is theirs.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "wontevolve-side",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-21-crisis"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "wontevolve-side",
+        "min": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-21-wait"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Linus. Who was the other one?",
+     "success": {
+      "text": "**Linus:** \"A Pichu. Years ago. It wouldn't evolve either. I let it choose.\"\n\n\"And then there was a Fearow.\"\n\n*The Pokémon walks forward, and puts its paw on Linus's knee.*\n\nLinus puts the stone away. **Linus:** \"All right. All right. Your way.\"\n\nOne of your own small ones watched every move of Proof today. It has it now.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "wontevolve-end",
+        "n": 2
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-3",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "wontevolve-end-at"
+       },
+       {
+        "kind": "teachMove",
+        "move": "proof",
+        "unevolved": true
+       },
+       {
+        "kind": "moment",
+        "text": "Linus finally said who the other one was, and put the stone away.",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-step",
+   "name": "The Stone: Between Them",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "It steps out from behind you. It isn't hiding. It's choosing where to stand.\n\nLinus's hands are shaking around the stone.",
+   "choices": [
+    {
+     "label": "Stand beside it.",
+     "success": {
+      "text": "It walks to you. It looks back at Linus.\n\nLinus looks at it for a long time. Then Linus nods.\n\n**Linus:** \"Go on, then. Go and be small and brilliant somewhere I don't have to watch.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "@wontevolve"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "unwavering",
+        "moves": [
+         "proof"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "wontevolve-end",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-3",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "wontevolve-end-at"
+       },
+       {
+        "kind": "moment",
+        "text": "It stayed exactly what it was, and walked with you.",
+        "importance": 90
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "wontevolve-fought",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Battle Linus.",
+     "success": {
+      "text": "**Linus:** \"Fine. FINE. If that's what it takes to keep it safe from people like you.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-21-wait"
+        }
+       ],
+       "name": "Linus Castellane",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-21-walks"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "wontevolve-side",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ]
+    },
+    {
+     "label": "Step back.",
+     "success": {
+      "text": "You step aside. It looks at you, then at Linus, and sits down in the road to wait.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-21-wait"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-walks",
+   "name": "The Stone: It Walks",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "Linus's last Pokémon goes down. Linus sits down hard on the road.\n\nIt walks away from Linus without looking back. Not once.\n\nIt stops beside you, and waits, as if it has always been yours.",
+   "choices": [
+    {
+     "label": "Take it with you.",
+     "success": {
+      "text": "Linus doesn't call after it. You don't think Linus can.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "@wontevolve"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "unwavering",
+        "moves": [
+         "proof"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "wontevolve-end",
+        "n": 5
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-3",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "wontevolve-end-at"
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-linus-gone",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "It left its trainer for you, and never looked back.",
+        "importance": 85
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-wait",
+   "name": "The Stone: Its Own Time",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "Nobody does anything for a long time.\n\nThen Linus puts the stone in its paw, and closes its paw around it, and lets go.\n\n**Linus:** \"When you want to. If you want to. Not before.\"",
+   "choices": [
+    {
+     "label": "Leave them to it.",
+     "success": {
+      "text": "You leave them sitting together against the wall, the stone between them.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "wontevolve-end",
+        "n": 3
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-3",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "wontevolve-end-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-crisis",
+   "name": "The Stone: The Crisis",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "Something bursts out of the hedge, wild and frightened, straight at Linus.\n\nLinus throws up both arms. The stone goes flying.",
+   "choices": [
+    {
+     "label": "Get between them.",
+     "success": {
+      "text": "You get between Linus and the wild Pokémon.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-21-crisis-2"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-21-crisis-2"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-21-crisis-2"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-crisis-2",
+   "name": "The Stone: The Crisis",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "Before it's over, a light goes up beside you.\n\nIt has the stone. It took it out of the air itself.\n\nIt's bigger now, standing between Linus and the world. It is not sorry. It doesn't look back at you.\n\n**Linus:** \"Thank you. Thank you. I— thank you.\"",
+   "choices": [
+    {
+     "label": "You're welcome.",
+     "success": {
+      "text": "Linus presses something into your hands and won't hear a word about it.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "wontevolve-end",
+        "n": 4
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-3",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "wontevolve-end-at"
+       },
+       {
+        "kind": "moment",
+        "text": "In the end it evolved, to save Linus. It wasn't sorry.",
+        "importance": 75
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-letter",
+   "name": "A Letter from Linus",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wontevolve-end",
+     "atLeast": 3,
+     "atMost": 3
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "wontevolve-end-at"
+    },
+    {
+     "kind": "flag",
+     "key": "wontevolve-letter",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "A letter catches up with you. Inside is a drawing, done in crayon by someone who is not good at drawing.\n\nIt's bigger in the picture. It's grinning.\n\n**Linus:** \"It said to give you the spare.\"",
+   "choices": [
+    {
+     "label": "Keep the drawing.",
+     "success": {
+      "text": "Folded into the letter is a stone of the same kind.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "castItem",
+        "key": "wontevolve"
+       },
+       {
+        "kind": "flag",
+        "key": "wontevolve-letter",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-21-after",
+   "name": "Linus, Again",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wontevolve-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wontevolve-end",
+     "atLeast": 1,
+     "atMost": 4
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "wontevolve-at"
+    },
+    {
+     "kind": "flag",
+     "key": "wontevolve-after",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#8a8f6a",
+    "effect": "none"
+   },
+   "intro": "A face you know, on a road a long way from the last one. Linus.\n\nThe stone hangs on a string round Linus's neck. Unused.\n\n**Linus:** \"Keeps me honest,\" Linus says, and taps it.",
+   "choices": [
+    {
+     "label": "Say hello.",
+     "success": {
+      "text": "You talk for a while about small things that turned out to be strong.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wontevolve-after",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

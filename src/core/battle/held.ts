@@ -241,15 +241,23 @@ function heal(content: Content, mon: PokemonInstance, amount: number): number {
 
 // ---------- stats, speed, critical hits, accuracy ----------
 
+/** Unwavering's bonus to every stat (Greenneedle gn.21). */
+const UNWAVERING = 1.25;
+
 /** Multiplier on a stat from held items (Choice items, Eviolite, Light Ball, Iron Ball, Everstone...). */
 export function heldStatMultiplier(ctx: Pick<HeldContext, 'content' | 'teamItems' | 'perks'>, mon: PokemonInstance, side: Side, stat: 'atk' | 'def' | 'spa' | 'spd' | 'spe'): number {
   let m = side === 'player' ? statPerk(ctx.perks, stat, getSpecies(ctx.content, mon.speciesId).types, { burned: mon.status?.id === 'brn', threeStageLine: (ctx.perks ?? []).some((p) => p.kind === 'conditionalStatMultiplier' && p.when === 'threeStageLine') && inThreeStageLine(ctx.content, mon.speciesId) }) : 1;
+  const canEvolve = getSpecies(ctx.content, mon.speciesId).evolutions.length > 0;
+  let evolveBonus = 1;
   for (const { hook } of hooks(hooksOf(ctx, mon, side), 'stat')) {
     if (hook.stat !== stat && hook.stat !== 'all') continue;
-    if (hook.canEvolve && getSpecies(ctx.content, mon.speciesId).evolutions.length === 0) continue;
-    m *= side === 'player' ? scaleHeldBonus(ctx.perks, hook.multiplier) : hook.multiplier;
+    if (hook.canEvolve && !canEvolve) continue;
+    const bonus = side === 'player' ? scaleHeldBonus(ctx.perks, hook.multiplier) : hook.multiplier;
+    if (hook.canEvolve) evolveBonus *= bonus;
+    else m *= bonus;
   }
-  return m;
+  // Unwavering (Greenneedle gn.21): every stat +25% while it could still evolve. It doesn't stack with Eviolite: the larger applies.
+  return m * (mon.fixedAbility === 'unwavering' && canEvolve ? Math.max(evolveBonus, UNWAVERING) : evolveBonus);
 }
 
 export function critStageBonus(ctx: HeldContext, holder: Holder): number {
@@ -934,9 +942,9 @@ export function friendshipMultiplier(content: Content, mon: PokemonInstance): nu
   return hooks(hooksOf({ content }, mon, 'enemy'), 'friendship').reduce((m, h) => m * (1 + h.hook.percent / 100), 1);
 }
 
-/** Everstone: the holder doesn't evolve. */
+/** Everstone: the holder doesn't evolve. Unwavering (Greenneedle gn.21) never evolves either. */
 export function blocksEvolution(content: Content, mon: PokemonInstance): boolean {
-  return hooks(hooksOf({ content }, mon, 'enemy'), 'noEvolve').length > 0;
+  return mon.fixedAbility === 'unwavering' || hooks(hooksOf({ content }, mon, 'enemy'), 'noEvolve').length > 0;
 }
 
 /**

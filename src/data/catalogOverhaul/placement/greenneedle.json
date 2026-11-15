@@ -774,5 +774,177 @@
   "tags": [
    "forest"
   ]
+ },
+ "gn-21-road": {
+  "gn": "gn.21",
+  "shape": "Region",
+  "earliest": "A3",
+  "sits": "must-see",
+  "level": "A+0",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.21",
+  "beat": 1,
+  "attaches": "after",
+  "beats": [
+   {
+    "beat": "The disagreement",
+    "event": "gn-21-road",
+    "stage": "S2",
+    "home": 6,
+    "window": [
+     4,
+     9
+    ]
+   },
+   {
+    "beat": "It comes back",
+    "event": "gn-21-back",
+    "stage": "S5",
+    "home": 11,
+    "window": [
+     9,
+     14
+    ]
+   },
+   {
+    "beat": "The stone",
+    "event": "gn-21-stone",
+    "stage": "S8",
+    "home": 17,
+    "window": [
+     15,
+     19
+    ]
+   }
+  ],
+  "note": "Badge: a small stone. Once a run (the doc says once per save; no memory across runs).",
+  "kinds": [
+   "Region-Wide Story",
+   "Companion Story"
+  ],
+  "tags": [],
+  "home": 6,
+  "window": [
+   4,
+   9
+  ],
+  "stages": [
+   2
+  ]
+ },
+ "gn-21-back": {
+  "gn": "gn.21",
+  "shape": "Region",
+  "earliest": "A3",
+  "sits": "must-see",
+  "level": "A+0",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.21",
+  "beat": 2,
+  "attaches": "after",
+  "beats": [
+   {
+    "beat": "The disagreement",
+    "event": "gn-21-road",
+    "stage": "S2",
+    "home": 6,
+    "window": [
+     4,
+     9
+    ]
+   },
+   {
+    "beat": "It comes back",
+    "event": "gn-21-back",
+    "stage": "S5",
+    "home": 11,
+    "window": [
+     9,
+     14
+    ]
+   },
+   {
+    "beat": "The stone",
+    "event": "gn-21-stone",
+    "stage": "S8",
+    "home": 17,
+    "window": [
+     15,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story",
+   "Companion Story"
+  ],
+  "tags": [],
+  "home": 11,
+  "window": [
+   9,
+   14
+  ],
+  "stages": [
+   5
+  ]
+ },
+ "gn-21-stone": {
+  "gn": "gn.21",
+  "shape": "Region",
+  "earliest": "A3",
+  "sits": "must-see",
+  "level": "A+0",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.21",
+  "beat": 3,
+  "attaches": "before",
+  "beats": [
+   {
+    "beat": "The disagreement",
+    "event": "gn-21-road",
+    "stage": "S2",
+    "home": 6,
+    "window": [
+     4,
+     9
+    ]
+   },
+   {
+    "beat": "It comes back",
+    "event": "gn-21-back",
+    "stage": "S5",
+    "home": 11,
+    "window": [
+     9,
+     14
+    ]
+   },
+   {
+    "beat": "The stone",
+    "event": "gn-21-stone",
+    "stage": "S8",
+    "home": 17,
+    "window": [
+     15,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story",
+   "Companion Story"
+  ],
+  "tags": [],
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "stages": [
+   8
+  ]
  }
 }

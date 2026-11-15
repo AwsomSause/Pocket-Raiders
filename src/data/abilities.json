@@ -1585,6 +1585,11 @@
   "description": "When sent out, a random stat rises by two stages (never the same stat twice running, and never more than +4 in total per battle). Its first attack after entering goes first."
  },
  {
+  "id": "unwavering",
+  "name": "Unwavering",
+  "description": "Every stat +25% while this Pokémon could still evolve. It never evolves. It doesn't stack with Eviolite: the larger bonus applies."
+ },
+ {
   "id": "stopgap",
   "name": "Stopgap",
   "description": "When an ally would be hit by a move's extra effect (a status, a flinch, confusion or a stat drop), this Pokémon takes it in its place. Once per battle."

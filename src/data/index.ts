@@ -804,7 +804,8 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
       if (f.kind === 'loseItem' && f.id && !knownItem(f.id)) problems.push(`${where} uses unknown item "${f.id}"`);
       if (f.kind === 'itemFrom') for (const id of f.ids) if (!knownItem(id)) problems.push(`${where} gives unknown item "${id}"`);
       if (f.kind === 'recruit' && !content.archetypes.has(f.trainer)) problems.push(`${where} recruits unknown trainer "${f.trainer}"`);
-      if (f.kind === 'join') for (const id of f.species) if (!content.species.has(id)) problems.push(`${where} offers unknown species "${id}"`);
+      // A `@name` is a Greenneedle story Pokémon, cast during the run (core/greenneedle `cast`).
+      if (f.kind === 'join') for (const id of f.species) if (!id.startsWith('@') && !content.species.has(id)) problems.push(`${where} offers unknown species "${id}"`);
       if (f.kind === 'addEvent' && !content.events.has(f.eventId)) problems.push(`${where} opens unknown event "${f.eventId}"`);
       if (f.kind === 'addEventFrom') for (const id of f.ids) if (!content.events.has(id)) problems.push(`${where} opens unknown event "${id}"`);
     }
@@ -814,7 +815,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
     for (const c of e.choices) {
       for (const o of [c.success, c.failure]) {
         const b = o?.battle;
-        if (b?.kind === 'wild') for (const id of b.species) if (!content.species.has(id)) problems.push(`${where} battles unknown species "${id}"`);
+        if (b?.kind === 'wild') for (const id of b.species) if (!id.startsWith('@') && !content.species.has(id)) problems.push(`${where} battles unknown species "${id}"`);
         if (b?.kind === 'trainer' && b.bossId && !content.bosses.has(b.bossId)) problems.push(`${where} battles unknown boss "${b.bossId}"`);
         if (b?.kind === 'trainer' && b.classId && !content.trainers.has(b.classId)) problems.push(`${where} battles unknown trainer class "${b.classId}"`);
       }

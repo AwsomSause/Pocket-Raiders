@@ -99,7 +99,8 @@ export function leaveCanonStash(run: RunState): void {
 }
 
 function pickKeeper(run: RunState, species: readonly string[]): PokemonInstance | undefined {
-  const pool = run.party.filter((m) => species.includes(m.speciesId));
+  // No species named: the strongest Pokémon (highest level) steps up (Greenneedle gn.21's challenge).
+  const pool = species.length === 0 ? run.party : run.party.filter((m) => species.includes(m.speciesId));
   return [...pool].sort((a, b) => Number(b.hp > 0) - Number(a.hp > 0) || b.level - a.level)[0];
 }
 

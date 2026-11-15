@@ -9,7 +9,7 @@
 // one seeded by the stop. No existing stream is touched, so adding events
 // changes no other roll, and choosing again after a reload gives the same result.
 
-import { applyGnEffect, gnBattleStart, gnConditionMet } from './greenneedle';
+import { applyGnEffect, gnBattleStart, gnConditionMet, resolveCast } from './greenneedle';
 import { applyCoEffect, coConditionMet, coConditionText, coEffectWords, fillCoText, restoreMachine } from './events/coToolkit';
 import { flagAge, lineHolds, lineMember, queueLaterEvent, stampFlagStage } from './events/questline';
 import { modifierEventWeight } from './runModifiers';
@@ -1544,7 +1544,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const move = content.moves.get(e.move);
       // A Pokémon that has just joined waits in `pending` until the player confirms it, so look there first for a species.
       const incoming = e.species ? run.pending.flatMap((p) => (p.kind === 'caught' && p.mon.speciesId === e.species ? [p.mon] : []))[0] : undefined;
-      const learner = (e.species ? incoming ?? run.party.find((m) => m.speciesId === e.species) : e.type ? run.party.find((m) => m.hp > 0 && getSpecies(content, m.speciesId).types.includes(e.type!)) : undefined) ?? run.party.find((m) => m.hp > 0);
+      const learner = (e.species ? incoming ?? run.party.find((m) => m.speciesId === e.species) : e.type ? run.party.find((m) => m.hp > 0 && getSpecies(content, m.speciesId).types.includes(e.type!)) : e.unevolved ? run.party.find((m) => m.hp > 0 && getSpecies(content, m.speciesId).evolutions.length > 0) : undefined) ?? (e.unevolved ? undefined : run.party.find((m) => m.hp > 0));
       if (!move || !learner || learner.moves.some((m) => m.id === e.move)) return '';
       const slot = { id: move.id, pp: move.pp };
       if (learner.moves.length < 4) learner.moves.push(slot);
@@ -1821,7 +1821,8 @@ type EventBattleRef = NonNullable<NonNullable<RunState['battle']>['event']>;
 function pickSpecies(content: Content, run: RunState, species: string[], types: TypeName[], rng: Rng, source: EncounterSource = 'event'): string {
   const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current);
   const gate = node ? curveLevel(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, run.stage!.index, node.column)) : 1;
-  const known = species.filter((id) => content.species.has(id));
+  // Greenneedle: `@name` is a story Pokémon cast earlier in the run (gn op `cast`).
+  const known = resolveCast(run, species).filter((id) => content.species.has(id));
   // Tidal Bell / Clear Bell: their legendary answers whenever it is one of the choices.
   const favored = perksOf(activePerks(content, run), 'favorSpecies').map((p) => p.perk.species).find((id) => known.includes(id));
   const authored = favored ?? (known.length > 0 ? rng.pick(known) : null);

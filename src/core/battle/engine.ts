@@ -4253,6 +4253,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (foeAbility === 'coral-veil' && target.mon.hp >= targetStats.hp) final *= 0.75;
       if (foeAbility === 'gem-orbit' && effectiveness > 1 && target.vol.gems < 4) { target.vol.gems++; final *= 0.5; }
       if (userAbility === 'soul-kindling' && moveType === 'psychic' && target.mon.status?.id === 'brn') final *= 1.3;
+      if (fx.proof && getSpecies(content, target.mon.speciesId).evolutions.length === 0) final *= 1.2;
       const ruleset = crit ? { ...content.ruleset, critMultiplier: Held.critDamage(ctx, user, content.ruleset.critMultiplier) * critDamagePerk(ctx.perks, user.side) } : content.ruleset;
       damage = calcDamage(ruleset, {
         level: user.mon.level,
@@ -5390,6 +5391,7 @@ function specialMoveType(ctx: BattleContext, user: Combatant, move: Move, _weath
   const fx = move.effects;
   if (fx.terrainPulse) return ctx.battle.terrain ? TERRAIN_TYPE[ctx.battle.terrain.id] : 'normal';
   if (fx.teraBlast) return ctx.battle.transform.teraTypes[user.mon.uid] ?? move.type;
+  if (fx.proof) return battleTypes(ctx.content, ctx.battle, user.mon)[0] ?? move.type;
   if (fx.formType) {
     const id = user.mon.speciesId;
     switch (fx.formType) {
