@@ -271,9 +271,8 @@ export function applyQuestEffect(content: Content, run: RunState, e: QuestEffect
   }
   if (e.lost) {
     // R4: the Pokémon the rival lost is one of their team that is not the ace (the same one every time the scene is read).
-    const rival = featuredRival(run);
-    const roster = (rival?.memory?.lastBattle?.team ?? []).filter((id) => content.species.has(id) && familyId(content, id) !== rival?.ace);
-    if (roster.length > 0 && typeof run.story.flags['rq:r4-lost'] !== 'string') run.story.flags['rq:r4-lost'] = familyId(content, roster[fnv1a(`${run.seed}::rq-r4-lost`) % roster.length]!);
+    const lost = lostFamily(content, run);
+    if (lost) run.story.flags['rq:r4-lost'] = lost;
   }
   const target = e.who === 'second' ? recOf(run, secondRival(run)) : recOf(run, mainRival(run));
   if (target) {
@@ -306,6 +305,15 @@ export function applyQuestEffect(content: Content, run: RunState, e: QuestEffect
     }
   }
   return words;
+}
+
+/** R4: the family of the Pokémon the rival lost: fixed once the stone is found, before that the one it will be (a team member that is not their ace). */
+export function lostFamily(content: Content, run: RunState): string | null {
+  const fixed = run.story.flags['rq:r4-lost'];
+  if (typeof fixed === 'string') return fixed;
+  const rival = featuredRival(run);
+  const roster = (rival?.memory?.lastBattle?.team ?? []).filter((id) => content.species.has(id) && familyId(content, id) !== rival?.ace);
+  return roster.length > 0 ? familyId(content, roster[fnv1a(`${run.seed}::rq-r4-lost`) % roster.length]!) : null;
 }
 
 // ---------- text ----------
@@ -347,7 +355,7 @@ export function questText(content: Content, run: RunState, eventId: string, text
     lead: lead ? lead.care?.nickname || (content.species.get(lead.speciesId)?.name ?? 'your lead') : 'your lead',
     young: QUESTS.youngNames[flagOf(run, 'rq-r4-name') - 1] ?? 'the little one',
     rung: RUNG_WORDS[flagOf(run, 'circuit-rung')] ?? 'one',
-    lost: content.species.get(String(run.story.flags['rq:r4-lost'] ?? ''))?.name ?? 'a name you cannot quite read',
+    lost: content.species.get(lostFamily(content, run) ?? '')?.name ?? 'a name you cannot quite read',
   };
   let n = 0;
   return text.replace(/\{say ([a-z0-9]+)((?:\|\|[^{}]*)*)\}/g, (_m, ctx: string, rest: string) => {
@@ -483,6 +491,13 @@ export function planRivalTeam(content: Content, run: RunState, rival: Rival, ros
     if (target && strong.length > 0 && slot >= 0) team[slot] = `type:${strong[fnv1a(`${run.seed}::rq-counter::${rival.id}::${target.speciesId}`) % strong.length]}`;
   }
   if (plan.aceFirst && ace) team = [ace, ...team.filter((id) => id !== ace)];
+  if (plan.guard) {
+    // R4's cautious stage: their weakest Pokémon (lowest base stat total) is kept back behind everything else.
+    const bst = (id: string): number => Object.values(content.species.get(id)?.baseStats ?? {}).reduce((n, v) => n + v, 0);
+    const real = team.filter((id) => !id.startsWith('type:'));
+    const weakest = [...real].sort((x, y) => bst(x) - bst(y) || x.localeCompare(y))[0];
+    if (weakest && real.length > 1) team = [...team.filter((id) => id !== weakest), weakest];
+  }
   const lost = run.story.flags['rq:r4-lost'];
   if (plan.young && typeof lost === 'string' && content.species.has(lost)) team = [lost, ...team.filter((id) => id.startsWith('type:') || familyId(content, id) !== lost)].slice(0, 6);
   return team;

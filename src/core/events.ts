@@ -100,6 +100,7 @@ import { partyLifeBond } from './partyLife';
 import { celebrateToday, milestoneToday, periodOf, PERIOD_LABEL, restUntilMorning, seasonOf } from './clock';
 import { BERRIES } from './berries';
 import { choiceAt, effectiveEvent, visibleChoices } from './eventMemory';
+import { beginRivalBrain } from './rivals/brainSetup';
 import { applyQuestEffect, planRivalTeam, shapeRivalMons, questConditionMet, questText, rivalAllySpecies, rivalStanding, RIVAL_QUEST_GROUP } from './rivals/questlines';
 import { getTheme, typesPool } from './themes';
 import { anyRoaming, endRoamer, healConvoy, startConvoy, partyHasAbility, placeCamp, scoutAhead, CAMP_EVENT_ID } from './world';
@@ -1709,7 +1710,12 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     const strategyKey = evil ? { kind: 'evil' as const, key: evilTeam(content, run)?.id ?? '' } : rival && rivalTeam.length > 0 ? { kind: 'rival' as const, key: rival.style } : null;
     const shaped = strategyKey && team.length > 0 ? shapeInstances(content, strategyIdForGroup(content, strategyKey.kind, strategyKey.key), strategyKey.kind, team, 0) : null;
     if (shaped) team.splice(0, team.length, ...shaped.team);
-    run.battle = createBattle('trainer', team, activeIndex, run.party[activeIndex]!.uid, { classId: b.classId ?? 'event', name: evil ? evil.name : rival ? rival.name : fellow ? fellow.name : b.kind === 'trainer' && b.friend ? friendName(run) : b.name, leaderId: null });
+    run.battle = createBattle('trainer', team, activeIndex, run.party[activeIndex]!.uid, { classId: b.classId ?? 'event', name: evil ? evil.name : rival ? (b.kind === 'trainer' && b.quest?.as) || rival.name : fellow ? fellow.name : b.kind === 'trainer' && b.friend ? friendName(run) : b.name, leaderId: null });
+    // A questline fight against the rival themself is a real rival battle: tier 5 play, and Lead, Marks and feelings move with the result.
+    if (rival && rivalTeam.length > 0 && b.kind === 'trainer' && b.quest && !b.quest.as) {
+      run.battle.rivalId = rival.id;
+      beginRivalBrain(content, run, rival.id);
+    }
     if (b.kind === 'trainer' && b.sprite && run.battle.trainer) run.battle.trainer.spriteBoss = b.sprite;
     if (b.kind === 'trainer' && b.spritePokemon && run.battle.trainer) run.battle.trainer.spritePokemon = b.spritePokemon;
     if (b.special) assignSpecialTrait(run.battle.extra.traits, team, b.special);
