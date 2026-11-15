@@ -122,6 +122,7 @@ import { timeOfDay } from './arenaStyle';
 import { recordAftermath } from './overhaul/aftermath';
 import { assignGrowthPaths, noteMapGrowth } from './overhaul/growth';
 import { tickChainTimers } from './overhaul/chains';
+import { coBattleBegin, coFled, coHealStop, coNodeEnter, coStageStart, coWildKo } from './events/coToolkit';
 import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
 import { endLastResort } from './battle/lastResort';
 import { defaultPrep, startingResources } from './runPrep';
@@ -731,6 +732,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   expireStageMods(run);
   ultraStageTick(content, run, run.regionIndex * campaign.stagesPerRegion + index + 1, false);
   startStageEffects(run);
+  coStageStart(run);
   clearRecentPurchases(run);
   applyWealthTax(content, run);
   hatchEggs(content, run);
@@ -853,6 +855,7 @@ function enterLeague(content: Content, run: RunState): void {
   addFinaleCanonStops(content, run);
   placeStoryStops(content, run);
   startStageEffects(run);
+  coStageStart(run);
   syncHpPerks(content, runArchetype(content, run).modifiers, run.party);
   if (!gauntlet(run.rules)) healParty(content, run);
   run.battle = null;
@@ -1037,6 +1040,7 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   stage.visited.push(nodeId);
   tickChainTimers(run.story.flags);
   stepClock(content, run);
+  coStep(content, run);
   // Bridge Mail adds a stop beside the node the player reaches.
   addBridgeStops(content, run, nodeId);
   // Roaming Legendaries move on as you do.
@@ -1116,6 +1120,7 @@ function moveInPseudo(content: Content, run: RunState, nodeId: string): RunState
   stage.visited.push(nodeId);
   tickChainTimers(run.story.flags);
   stepClock(content, run);
+  coStep(content, run);
   if (node.roomEvent && !node.sides.some((x) => x.eventId === node.roomEvent)) {
     node.sides.push({ id: `event-room-1-${node.id}`, kind: 'event', used: false, eventId: node.roomEvent });
     if (run.itemCounters) delete run.itemCounters[`event-seen:${node.roomEvent}`];
@@ -2616,6 +2621,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
   if (side.kind === 'heal') {
     const before = run.party.map((m) => m.hp);
     healParty(content, run);
+    coHealStop(content, run, before);
     // Kalos step 3 (Members First): the Center gives back only part of each Pokémon's HP.
     const share = trackHealShare(content, run);
     if (share < 1) run.party.forEach((m, i) => { m.hp = Math.min(m.hp, Math.max(before[i] ?? 0, Math.ceil(maxHp(content, m) * share))); });
@@ -3051,6 +3057,7 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   const rng = new Rng(run.rng.battle);
   const ctx = battleContext(content, run, rng, new Rng(run.rng.capture));
   ultraMarkBattle(run);
+  coBattleBegin(content, run);
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
   run.rng.battle = rng.state;
   noteBattle(content, run);
@@ -3084,6 +3091,15 @@ function doublesAction(ctx: BattleContext, action: PlayerAction): PlayerAction {
   return { kind: 'double', commands };
 }
 
+/** Catalog Overhaul (families-c): one step on the map; a remembered scene may open beside the node reached. */
+function coStep(content: Content, run: RunState): void {
+  const eventId = coNodeEnter(content, run);
+  const stage = run.stage;
+  if (!eventId || !stage || stage.current === null || !content.events.has(eventId)) return;
+  const here = findNode(stage.map, stage.current);
+  here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId });
+}
+
 /** A Poké Doll: slips out of an ordinary wild battle. The item is used up; nothing is earned and the fight does not count as won or lost. */
 function escapeBattle(content: Content, run: RunState, itemId: string, rng: Rng, captureRng: Rng, hyperRng: Rng): TurnResult {
   const battle = run.battle!;
@@ -3091,6 +3107,7 @@ function escapeBattle(content: Content, run: RunState, itemId: string, rng: Rng,
   if (problem) throw new Error(problem);
   consumeItem(run.inventory, itemId);
   revertTransformations(content, battle, run.party, runArchetype(content, run).modifiers);
+  coFled(run);
   for (const mon of run.party) endHeldBattle(mon);
   endSignatureMoves(run.party);
   endLastResort(run);
@@ -3837,6 +3854,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
       if (run.party.length === 1) count(run, 'bossWinsSolo');
     } else {
       count(run, battle.kind === 'wild' ? 'wildDefeated' : 'trainersDefeated');
+      if (battle.kind === 'wild' && !battle.event) coWildKo(run);
       if (battle.kind === 'trainer' && battle.trainer && !battle.trainer.leaderId && !battle.event && !battle.rival) noteFoe(run, battle.trainer.name, battle.trainer.classId);
     }
   }
