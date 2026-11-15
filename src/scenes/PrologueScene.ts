@@ -16,7 +16,7 @@ import { eventView } from '../ui/redux/screens/event';
 import { cutBeat, cutView } from '../ui/redux/screens/cut';
 import { beatTag, formView, typeKey, vanceLine } from '../ui/redux/screens/prologue';
 import { pageLines, pageSpeaker } from '../ui/redux/script';
-import type { Art } from '../ui/redux/templates';
+import { playerPortrait, portrait, type Art } from '../ui/redux/templates';
 import type { ProfileStory, StoryData } from '../core/story2/schema';
 import { chooseNextBackstory, chooseNextLine, intakeChoices, quizQuestions, revealPicks, saveQuizResult } from '../core/story2/intake';
 import { enabledBackstories } from '../core/story2/module';
@@ -326,14 +326,9 @@ export class PrologueScene extends Phaser.Scene {
     // The mock-ups draw the story's two big portraits from one frame of their sheets, larger than a Trainer picture:
     // Vance at 0.9 and the player at 0.8 of the page's figure scale (3.4 on a talk page; 5, 4.6 or 5.6 on a cutscene
     // card, by layout). A card stands them a little under its bottom edge: those rows of the frame are left off.
-    const big = (file: string, frame: number, unit: number, scale: number, sunk: number, base: number): Art => {
-      const rows = frame - sunk / (scale * unit);
-      return { file, atlas: false, crop: [0, 0, frame, rows], k: (rows * scale * unit) / base };
-    };
     const [cutScale, cutSunk, cutBase] = ([[5, 38, 344], [4.6, 0, 284], [5.6, 58, 356]] as const)[c.v(3)]!;
-    const meFile = `packs/mc/look_${look}/${look === 'a' ? 'command' : 'throw'}.png`;
-    const me = (cut = false): Art => (cut ? big(meFile, 128, 0.8, cutScale, cutSunk, cutBase) : big(meFile, 128, 0.8, 3.4, 0, 240));
-    const vance = (anim: VanceAnim, cut = false): Art => (cut ? big(`packs/vance/${anim}.png`, VANCE_FRAME, 0.9, cutScale, cutSunk, cutBase) : big(`packs/vance/${anim}.png`, VANCE_FRAME, 0.9, 3.4, 0, 240));
+    const me = (cut = false): Art => (cut ? playerPortrait(look, cutScale, cutSunk, cutBase) : playerPortrait(look));
+    const vance = (anim: VanceAnim, cut = false): Art => (cut ? portrait(`packs/vance/${anim}.png`, VANCE_FRAME, 0.9, cutScale, cutSunk, cutBase) : portrait(`packs/vance/${anim}.png`, VANCE_FRAME, 0.9));
     if (m.cut) {
       const at = Math.min(this.rxAt, m.cut.pages.length - 1), page = m.cut.pages[at]!;
       return cutView(c, { name: page.name, role: 'Prologue', line: page.line, cast: m.cut.who === 'vance' ? vance(m.vance ?? 'confident', true) : me(true), backdrop: m.cut.who === 'vance' ? 'arenas/grass_bg.png' : 'arenas/power_plant_bg.png', beat: m.cut.beat ?? Math.max(0, 4 - (m.cut.pages.length - 1 - at)), skip: m.cut.skip ? ['Esc', 'skip'] : ['Enter', 'next'] });
@@ -362,7 +357,7 @@ export class PrologueScene extends Phaser.Scene {
       speaker: pageSpeaker(page),
       page: { at, of: pages.length },
       art: RX_ROOM, tint: null, fx: null,
-      cast: m.looks ? big(`packs/mc/look_${m.looks[index] ?? 'a'}/portrait.png`, 128, 0.8, 3.4, 0, 240) : m.vance ? vance(m.vance) : pageSpeaker(page)?.startsWith('Prof. Vance') ? vance('confident') : me(),
+      cast: m.looks ? portrait(`packs/mc/look_${m.looks[index] ?? 'a'}/portrait.png`, 128, 0.8) : m.vance ? vance(m.vance) : pageSpeaker(page)?.startsWith('Prof. Vance') ? vance('confident') : me(),
       mon: null,
       choices: m.next ? [{ label: 'Continue', sub: '', chance: '', locked: false }] : m.options.map((o) => ({ label: o.label, sub: '', chance: '', locked: !!o.disabled })),
       index: m.next ? 0 : index,

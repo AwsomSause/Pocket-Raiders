@@ -2,10 +2,9 @@
 // org pyramid), Field Notes (the book), the Notebook's track page and the Rival Report. Pure drawing: MapScene keeps
 // the state and the input, and the words come from the same core views the old pop-ups read.
 
-import { act, esc, facts, H, hpb, mini, tall, TX, W } from '../kit';
+import { act, esc, facts, H, hpb, mini, paper, tall, TX, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 
-const paper = (h: string, st = ''): string => `<div style="background:var(--pa);color:var(--pai);padding:16px 18px;box-shadow:0 0 0 3px var(--l),6px 6px 0 #0005;${st}">${h}</div>`;
 const pips = (n: number, of = 3): string => `<span style="flex:none">${Array.from({ length: of }, (_, k) => `<i style="display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:4px;background:${k < n ? 'var(--acc)' : '#0000'};box-shadow:0 0 0 2px var(--tf)"></i>`).join('')}</span>`;
 const clip = 'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0';
 const back = (name: string): string => `<div class="fill"${act(name)}></div>`;

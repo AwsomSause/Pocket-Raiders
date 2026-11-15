@@ -1287,3 +1287,171 @@ test('New UI: the prologue plays on the mock-up pages: talk pages with Prof. Van
   expect((await session()).name).toBe('Kay');
   expect(errors).toEqual([]);
 });
+
+test('New UI: the Siege map is the mock-up ledger page; keys and clicks move over the districts and a free gate lets you in', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=e4-siege');
+  await toMap(page);
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    const run = pkr.session.run;
+    const d = (id: string, name: string, place: string | null, status: string, heldBy: string, ifLost: string, gate = true) => ({ id, name, place, status, heldBy, ifLost, gate });
+    const districts = [
+      d('north-gate', 'North Gate', 'Route 5', 'held', 'Your rival', "The rival's battle is added to Phase 1 instead of removed"),
+      d('east-gate', 'East Gate', 'Route 8', 'held', 'Officer Jenny', 'Reinforcements arrive one turn sooner in Phase 4'),
+      d('south-gate', 'South Gate', 'Route 6', 'contested', '', 'Major Surge joins Phase 3 as a third duel'),
+      d('west-gate', 'West Gate', 'Route 7', 'lost', '', 'Shinobi Koga poisons the Breather (heal 35% instead of 50%)'),
+      d('center', 'The Center', null, 'contested', 'Oracle Sabrina', 'See Phase 1', false),
+    ];
+    run.expansion = { ...(run.expansion ?? {}), cut: { format: { id: 'siege', state: { region: 'kanto', districts, entered: null, pending: null, tries: 0 } } } };
+    pkr.game.scene.getScene('Map').scene.restart({ focus: 0 });
+  });
+  await waitForScene(page, 'Siege');
+  const siege = view(page, 'Siege');
+  await expect(siege).toContainText('The Long Ledger · Saffron');
+  await expect(siege.locator('[data-act="district"]')).toHaveCount(5);
+  await expect(siege).toContainText('Lost district effects');
+  await expect(siege).toContainText('West Gate: Shinobi Koga poisons the Breather');
+  // The cursor starts on a free gate.
+  await expect(siege.locator('[data-act="enter"]')).toContainText('Enter by North Gate');
+  await expect(siege).toContainText('Your rival');
+  // Keys move it: two to the right is a contested gate (one battle); the middle of the city has no gate.
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('ArrowRight');
+  await expect(siege.locator('[data-act="enter"]')).toContainText('Enter by South Gate');
+  await expect(siege).toContainText('One battle');
+  // Down from above the short last row lands on its last district.
+  await page.keyboard.press('ArrowDown');
+  await expect(siege.locator('[data-act="enter"]')).toContainText('No gate here');
+  await expect(siege).toContainText('Oracle Sabrina');
+  await page.keyboard.press('Enter');
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.expansion.cut.format.state.entered)).toBeNull();
+  // A click moves the cursor; the button goes in. A held gate is free: no battle starts.
+  await siege.locator('[data-act="district"]').nth(1).click();
+  await expect(siege.locator('[data-act="enter"]')).toContainText('Enter by East Gate');
+  await siege.locator('[data-act="enter"]').click();
+  await expect(siege.locator('[data-act="enter"]')).toContainText('Begin Phase 1');
+  await expect(siege).toContainText('You went in by the East Gate');
+  await siege.locator('[data-act="enter"]').click();
+  await waitForScene(page, 'Map');
+  const out = await page.evaluate(() => (window as any).__pkr.session.run.expansion);
+  expect(out.siege.entered).toBe('kanto.east-gate');
+  expect(out.cut.format).toBeUndefined();
+  expect(errors).toEqual([]);
+});
+
+test('New UI: the Rescue screen is the mock-up page: the receipt, the holding clock, the plans with their odds words, then the plan step by step', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=rescue-screen&debug=1');
+  await toMap(page);
+  // The state a raid loss leaves: a registered rival and two Pokémon held, the plan due now.
+  await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    const run = session.run;
+    const base = JSON.parse(JSON.stringify(run.party[0]));
+    const held = [1, 2].map((i) => ({ ...JSON.parse(JSON.stringify(base)), uid: `held-${i}` }));
+    run.expansion = {
+      rival: { blue: { role: 'main', personality: 'champion-chaser', style: 'blitz', arc: 'prodigy-learns-humility', lead: 0, marks: [], feelings: { friendship: 3, respect: 3, trust: 3, rivalry: 3, resentment: 0, admiration: 2 }, pityLosses: 0 } },
+      rescue: {
+        holds: [{ id: 'h1-kanto', teamId: 'rocket', regionId: 'kanto', pokemon: held, impoundNode: -10, waitNodes: 9, lastQuietNode: 50, dueAt: 0, receipt: true, offers: 0, declines: 0, lastDeclineNode: null, lateDue: false, late: false, frozenAt: null, accepted: null, warrantAt: null, heldAtClimax: false }],
+        active: null, returned: [], attitude: 0, balloonUsed: false, memory: [], flags: {}, log: [], lost: [],
+      },
+    };
+    game.scene.getScene('Map').scene.restart();
+  });
+  await waitForScene(page, 'Rescue');
+  const rescue = view(page, 'Rescue');
+  await expect(rescue).toContainText('TEAM ROCKET · IMPOUND RECEIPT');
+  await expect(rescue).toContainText('Holding site: The Celadon basement cells');
+  await expect(rescue).toContainText('Holding clock');
+  // The rival speaks first; the plans wait until every line is read (a click or Enter turns the page).
+  await expect(rescue.locator('.txt .nm')).toHaveText('Blue');
+  await expect(rescue.locator('[data-act="pick"]')).toHaveCount(0);
+  for (let i = 0; i < 6 && (await rescue.locator('[data-act="page"]').count()) > 0; i++) {
+    await rescue.locator('[data-act="page"]').click();
+    await page.waitForTimeout(200);
+  }
+  // Five plans and "wait": each open plan with a roll shows a word, never a number.
+  await expect(rescue.locator('[data-act="pick"]')).toHaveCount(6);
+  await expect(rescue.locator('[data-act="pick"]').first()).toContainText('Quiet Extraction');
+  await expect(rescue.locator('[data-act="pick"]').first().locator('.tg')).toHaveText(/^(Risky|Even|Likely|Safe)$/);
+  await expect(rescue.locator('[data-act="pick"]').last()).toContainText('Wait for a better day');
+  // Moving the cursor makes the text box speak for the choice under it.
+  await page.keyboard.press('ArrowUp');
+  await expect(rescue.locator('.txt')).toContainText('The offer will come back.');
+  await page.keyboard.press('ArrowDown');
+  // Quiet Extraction: the plan's steps take the clock's place and the answers are the buttons.
+  await page.keyboard.press('Enter');
+  await expect(rescue).toContainText('The plan');
+  await expect(rescue).toContainText('Approach');
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.session.run.expansion.rescue.active?.plan ?? null)).toBe('quiet');
+  for (let i = 0; i < 6 && (await rescue.locator('[data-act="page"]').count()) > 0; i++) {
+    await rescue.locator('[data-act="page"]').click();
+    await page.waitForTimeout(200);
+  }
+  await expect(rescue.locator('[data-act="pick"]')).toHaveCount(3);
+  // Esc gives the plan up; the rival is back with the offer at once.
+  await page.keyboard.press('Escape');
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.session.run.expansion.rescue.active)).toBeNull();
+  await expect(rescue).toContainText('Holding clock', { timeout: 15_000 });
+  await page.waitForTimeout(400);
+  for (let i = 0; i < 6 && (await rescue.locator('[data-act="page"]').count()) > 0; i++) {
+    await rescue.locator('[data-act="page"]').click();
+    await page.waitForTimeout(200);
+  }
+  // "Wait for a better day" (the last choice) puts it off and the map comes back.
+  await rescue.locator('[data-act="pick"]').last().click();
+  await waitForScene(page, 'Map');
+  await expect(view(page, 'Rescue')).toHaveCount(0);
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.expansion.rescue.holds[0].declines)).toBe(1);
+  expect(errors).toEqual([]);
+});
+
+test('New UI: the Field Trial opens on the mock-up versus card with the rival, and a click starts the spar', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=field-trial&campaign=orrery-circuit&debug=1');
+  // A save that has played the full prologue.
+  await page.evaluate(() => { const p = (window as any).__pkr.session.profile.story.prologue; p.done = true; p.mode = 'full'; });
+  for (let i = 0; i < 12 && (await scene(page)) !== 'FieldTrial'; i++) {
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(700);
+  }
+  await waitForScene(page, 'FieldTrial');
+  const rival = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('FieldTrial').view.rivalName as string);
+  const card = view(page, 'FieldTrial');
+  // The card may already have timed out on a slow machine; when it is up it names the rival.
+  if (await card.count()) {
+    await expect(card).toContainText(rival);
+    await card.click({ position: { x: 480, y: 270 } }).catch(() => undefined);
+  }
+  await expect(card).toHaveCount(0, { timeout: 5_000 });
+  // The spar plays under it.
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('FieldTrial').children.list.find((o: any) => o.name === 'trial-body')?.text ?? ''), { timeout: 5_000 }).not.toBe('');
+  expect(errors).toEqual([]);
+});
+
+test('New UI: a story scene is the mock-up talk page; its lines turn with a click and it ends on the map', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=story-backstory&campaign=orrery-circuit&debug=1');
+  for (let i = 0; i < 14 && (await scene(page)) !== 'Story'; i++) {
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(700);
+  }
+  await waitForScene(page, 'Story');
+  const story = view(page, 'Story');
+  await expect(story).toBeVisible();
+  await expect(story.locator('.txt')).not.toHaveText('');
+  const first = await story.locator('.txt').innerText();
+  // A click anywhere turns the page while lines wait; the choices (or Continue) come with the last line.
+  let turned = false;
+  for (let i = 0; i < 40 && (await scene(page)) === 'Story'; i++) {
+    if (await story.locator('[data-act="pick"]').count()) await story.locator('[data-act="pick"]').first().click();
+    else if (await story.locator('[data-act="page"]').count()) await story.locator('[data-act="page"]').first().click();
+    else await page.keyboard.press('Enter');
+    await page.waitForTimeout(300);
+    if ((await scene(page)) === 'Story' && (await story.locator('.txt').innerText()) !== first) turned = true;
+  }
+  expect(turned).toBe(true);
+  expect(await scene(page)).not.toBe('Story');
+  expect(errors).toEqual([]);
+});

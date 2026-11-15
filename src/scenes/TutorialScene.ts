@@ -13,7 +13,7 @@ import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { eventView } from '../ui/redux/screens/event';
 import { pageLines, pageSpeaker, type ScriptPage } from '../ui/redux/script';
 import { artOf } from '../ui/redux/game';
-import type { Art } from '../ui/redux/templates';
+import { playerPortrait, type Art } from '../ui/redux/templates';
 
 /** New UI: how a page looks as the mock-ups' talk page: the tag, who speaks (null: the page's title is the plate) and their picture. */
 interface RxFace { tag: string; speaker: string | null; cast: Art | null; lines?: string[] }
@@ -41,8 +41,7 @@ function professorArt(scene: Phaser.Scene, professor: string): Art | null {
 /** New UI: the player's picture beside the log, in the Look the profile chose (Look A before any choice, as the mock-up). */
 function playerArt(): Art {
   const look = services().session.profile.story?.protagonist?.look === 'look_b' ? 'b' : 'a';
-  // One frame of the sheet at the mock-up's scale (128 rows at 3.4 x 0.8, beside a figure 240 tall).
-  return { file: `packs/mc/look_${look}/${look === 'a' ? 'command' : 'throw'}.png`, atlas: false, crop: [0, 0, 128, 128], k: (128 * 3.4 * 0.8) / 240 };
+  return playerPortrait(look);
 }
 
 function leave(scene: Phaser.Scene, h: Handoff): void {

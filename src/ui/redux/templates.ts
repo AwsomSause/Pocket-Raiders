@@ -85,6 +85,17 @@ export function figure(a: Art | null | undefined, size: number): string {
   }
   return dim ? `<i class="im" style="display:block;width:${Math.round((dim[0] * px) / dim[1])}px;height:${px}px;background:url(${rxUrl(a.file)}) 0 0/100% 100%;image-rendering:pixelated"></i>` : '';
 }
+/**
+ * A big story portrait, drawn from one frame of its sheet at the mock-ups' scale: `unit` of the page's figure scale
+ * (3.4 on a talk page beside a figure 240 tall). `sunk`: a cutscene card stands its figure this many pixels under the
+ * card's bottom edge, so those rows of the frame are left off.
+ */
+export function portrait(file: string, frame: number, unit: number, scale = 3.4, sunk = 0, base = 240): Art {
+  const rows = frame - sunk / (scale * unit);
+  return { file, atlas: false, crop: [0, 0, frame, rows], k: (rows * scale * unit) / base };
+}
+/** The player as the mock-ups draw them (0.8 of the figure scale): Look A's or Look B's ready pose. */
+export const playerPortrait = (look: 'a' | 'b', scale = 3.4, sunk = 0, base = 240): Art => portrait(`packs/mc/look_${look}/${look === 'a' ? 'command' : 'throw'}.png`, 128, 0.8, scale, sunk, base);
 export const pic = (a: Art | null | undefined, size: number, cls = ''): string => (a ? (a.atlas ? mini(a.file, size, cls) : icon(a.file, size)) : '');
 
 export interface GridCell { art?: Art | null; label: string; off?: boolean; sil?: boolean }

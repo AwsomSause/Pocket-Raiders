@@ -58,6 +58,8 @@ export const TX = (t: string, name = '', st = ''): string => `<div class="abs tx
 export const W = (h: string, st = '', c = '', attr = ''): string => `<div class="win ${c}" style="${st}"${attr}>${h}</div>`;
 /** A button. `t` is HTML; `sm` is the small note at its right. */
 export const B = (t: string, on: boolean, st = '', sm = '', attr = ''): string => `<div class="btn${on ? ' on' : ''}" style="${st}"${attr}>${t}${sm ? `<small>${sm}</small>` : ''}</div>`;
+/** A sheet of paper (receipts, ledgers, notebook pages). */
+export const paper = (h: string, st = ''): string => `<div style="background:var(--pa);color:var(--pai);padding:16px 18px;box-shadow:0 0 0 3px var(--l),6px 6px 0 #0005;${st}">${h}</div>`;
 export const facts = (f: readonly (readonly [string, string])[] = []): string => f.map(([a, b]) => `<div class="row sm"><span class="grow">${esc(a)}</span><b>${esc(b)}</b></div>`).join('');
 /** `data-act` attribute: a click calls the view's handler `name` with `arg`. */
 export const act = (name: string, arg: string | number = ''): string => ` data-act="${name}" data-arg="${esc(arg)}"`;

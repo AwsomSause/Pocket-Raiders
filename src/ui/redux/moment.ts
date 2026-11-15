@@ -62,6 +62,7 @@ export function playCutMoment(scene: Phaser.Scene, plan: MomentPlan, model: Omit
     const view = mountRedux(scene, {
       render: (c) => cutView(c, { ...model, beat, skip: plan.skippable ? ['Esc', 'skip'] : null }),
       acts: { next: () => { if (plan.skippable) finish(true); } },
+      card: true,
     });
     // The card is redrawn on every beat. A press that starts on one drawing and ends on the next has no button under
     // it any more, so the click lands on the layer itself: it counts as the same "skip" click.

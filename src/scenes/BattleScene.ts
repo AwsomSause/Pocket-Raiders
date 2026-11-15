@@ -2690,7 +2690,7 @@ export class BattleScene extends Phaser.Scene {
       view.destroy();
       finish();
     };
-    const view = mountRedux(this, { render: (c) => versusView(c, model), acts: { next: end } });
+    const view = mountRedux(this, { render: (c) => versusView(c, model), acts: { next: end }, card: true });
     this.time.delayedCall(plain ? 1500 : this.motion === 'off' ? 1500 : 2600, end);
     return { done, skip: end };
   }

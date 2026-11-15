@@ -36,6 +36,8 @@ export interface ReduxOptions {
   tip?: (arg: string | null) => void;
   /** No backdrop and clicks fall through to the canvas except on `[data-act]` (a HUD over the Phaser picture). */
   clear?: boolean;
+  /** A full-screen card (a versus card, a cutscene card): notifications and toasts wait until it leaves. */
+  card?: boolean;
 }
 
 const FONT_FILES: [string, number, string][] = [
@@ -50,6 +52,10 @@ const FONT_FILES: [string, number, string][] = [
 let host: HTMLDivElement | null = null;
 let canvas: HTMLCanvasElement | null = null;
 const views = new Set<{ redraw: () => void }>();
+/** How many full-screen cards are up (see `ReduxOptions.card`). */
+let cards = 0;
+/** A full-screen card is up: the overlay keeps its notifications back. */
+export const reduxCardUp = (): boolean => cards > 0;
 let lastBox = '';
 /** The scene whose view was last removed, and when: the same screen redrawing itself does not fade in again. */
 let gone = { key: '', at: 0 };
@@ -256,6 +262,10 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     if (dead) return;
     dead = true;
     views.delete(view);
+    if (o.card) {
+      cards -= 1;
+      views.forEach((v) => v.redraw());
+    }
     gone = { key: scene.scene.key, at: performance.now() };
     window.removeEventListener('pointermove', onTip);
     el.remove();
@@ -269,7 +279,10 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
   scene.events.on('sleep', hide);
   scene.events.on('wake', show);
   views.add(view);
-  redraw();
+  if (o.card) {
+    cards += 1;
+    views.forEach((v) => v.redraw());
+  } else redraw();
   return {
     el,
     destroy,
