@@ -1,0 +1,2776 @@
+{
+ "catalogOverhaul": "families-c",
+ "override": true,
+ "remove": [
+  "ovc-abandoned-egg-s1"
+ ],
+ "events": [
+  {
+   "id": "secret-market-barter",
+   "name": "The Barter Market",
+   "group": "NPC Stories",
+   "stop": "merchant",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#241f30",
+    "effect": "flicker"
+   },
+   "intro": "A cellar under a bakery, warm with the smell of bread. Nobody down here takes money. A chalk sign over the counter reads THINGS FOR THINGS. A figure in a cloak points one gloved finger at your bag. Nix: \"Show me what you carry. I'll show you what I've got. Every trade shows both sides' worth.\" Nix: \"I don't cheat. And I won't let you cheat yourself.\"",
+   "choices": [
+    {
+     "label": "Offer a trade.",
+     "success": {
+      "text": "Nix pulls the lamp closer and turns the board toward you. Every item has its tier printed beside it: Common, Uncommon, Rare.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "barter-table"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Why won't you cheat me?",
+     "success": {
+      "text": "Nix is quiet for a while. \"I got cheated once. Lost a friend's keepsake for a bag of nothing.\" The gloves tighten. \"Never again. Not for me, not for you. Either way.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "barter-asked",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "secret-market-barter"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You climb back up into the bakery light. Behind you, the lamp goes on burning.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "kept-goods",
+     "when": [
+      {
+       "kind": "keptGoods"
+      }
+     ],
+     "notice": "Nix's eyes go to one corner of your bag and stay there. \"That one's not yours to trade.\" It won't go on the table.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "barter-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Nix nods to you like an old customer.",
+     "hide": [
+      1
+     ],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "barter-keepsake",
+   "name": "The Keepsake",
+   "group": "NPC Stories",
+   "callback": true,
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "barter-asked",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "barter-keepsake-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#241f30",
+    "effect": "flicker"
+   },
+   "intro": "A note is pinned to a post where the road forks, sealed with a chalk mark you know: THINGS FOR THINGS. Nix is waiting under the eaves, holding something small wrapped in cloth. \"I found it. My friend's keepsake. After all these years.\" Nix's voice is rough. \"She lives a road over. I can't face her. Will you take it?\"",
+   "choices": [
+    {
+     "label": "Deliver it (a node).",
+     "success": {
+      "text": "You walk the extra road. An old woman opens the door, sees the cloth, and sits down right there on the step. She holds it to her chest and cries without a sound. \"Tell Nix,\" she says at last. \"Tell Nix I forgave it years ago.\"",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "barter-keepsake-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "barter-delivered",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "barter-free"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "\"It's waited this long,\" Nix says, and tucks it away. \"It can wait for you.\"",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "barter-keepsake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I can't.",
+     "success": {
+      "text": "Nix nods. \"No. It should be me.\" The cloak walks off toward that road, slowly.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "barter-free",
+   "name": "The Barter Board",
+   "group": "NPC Stories",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#241f30",
+    "effect": "flicker"
+   },
+   "intro": "When you come back, Nix has been crying too, and isn't hiding it. \"She said that? She said that.\" A long breath. \"One trade. Any tier. Nothing on your side of the table. Don't argue.\"",
+   "choices": [
+    {
+     "label": "A Common: {stock:common}.",
+     "success": {
+      "text": "\"Modest,\" Nix says, smiling for the first time. \"She'd like you.\"",
+      "effects": [
+       {
+        "kind": "barter",
+        "get": "common",
+        "berry": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "An Uncommon: {stock:uncommon}.",
+     "success": {
+      "text": "Nix wraps it in the same cloth the keepsake came in.",
+      "effects": [
+       {
+        "kind": "barter",
+        "get": "uncommon",
+        "berry": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Rare: {stock:rare}.",
+     "success": {
+      "text": "\"Good,\" Nix says. \"You earned the best thing on the board.\"",
+      "effects": [
+       {
+        "kind": "barter",
+        "get": "rare",
+        "berry": false
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "barter-table",
+   "name": "The Barter Board",
+   "group": "NPC Stories",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#241f30",
+    "effect": "flicker"
+   },
+   "intro": "The board hangs over the table, each item with its tier chalked beside it. Common: {stock:common}. Uncommon: {stock:uncommon}. Rare: {stock:rare}. Nix waits. \"What do you put on the table?\"",
+   "choices": [
+    {
+     "label": "A Common: your {give:common}.",
+     "requires": [
+      {
+       "kind": "barterHas",
+       "tier": "common",
+       "berry": false
+      }
+     ],
+     "success": {
+      "text": "You set it down.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "barter-common"
+       }
+      ]
+     }
+    },
+    {
+     "label": "An Uncommon: your {give:uncommon}.",
+     "requires": [
+      {
+       "kind": "barterHas",
+       "tier": "uncommon",
+       "berry": false
+      }
+     ],
+     "success": {
+      "text": "You set it down.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "barter-uncommon"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Rare: your {give:rare}.",
+     "requires": [
+      {
+       "kind": "barterHas",
+       "tier": "rare",
+       "berry": false
+      }
+     ],
+     "success": {
+      "text": "You set it down, a little reluctantly.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "barter-rare"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nothing, after all.",
+     "success": {
+      "text": "You shake your head. Nix shrugs. \"The board will still be here. So will I.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "barter-common",
+   "name": "The Barter Board",
+   "group": "NPC Stories",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#241f30",
+    "effect": "flicker"
+   },
+   "intro": "Nix lays your {give:common} on the scarred table, under the lamp. \"A Common item. Good. Now, what do you want for it?\"",
+   "choices": [
+    {
+     "label": "Nix's Common: {stock:common}.",
+     "success": {
+      "text": "Nix sets your {give:common} beside the {stock:common} and looks at them both for a long moment. \"Fair. Both sides.\" The cloak nods once, and the trade is done.",
+      "effects": [
+       {
+        "kind": "barter",
+        "give": "common",
+        "get": "common",
+        "berry": false
+       },
+       {
+        "kind": "flag",
+        "key": "barter-traded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nix's Uncommon: {stock:uncommon}.",
+     "success": {
+      "text": "Nix shakes their head slowly. \"That's a Common for an Uncommon. Add a Berry.\" It isn't greed. It's arithmetic, said gently.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "barter-berry-common"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nix's Rare: {stock:rare}.",
+     "success": {
+      "text": "\"That's a Common for a Rare.\" Nix almost laughs. \"No Berry closes a gap that wide. Pick again.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "barter-common"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it back.",
+     "success": {
+      "text": "You slip it back into your bag. Nix doesn't mind. \"Looking is free down here.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "barter-table"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "barter-uncommon",
+   "name": "The Barter Board",
+   "group": "NPC Stories",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#241f30",
+    "effect": "flicker"
+   },
+   "intro": "Nix lays your {give:uncommon} on the scarred table, under the lamp. \"An Uncommon item. Good. Now, what do you want for it?\"",
+   "choices": [
+    {
+     "label": "Nix's Common: {stock:common}.",
+     "success": {
+      "text": "Nix pushes your {give:uncommon} back across the table. \"No. You'd be cheating yourself. That's an Uncommon for a Common.\" A gloved hand taps the board. \"Take this instead.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "barter-fair-uncommon"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nix's Uncommon: {stock:uncommon}.",
+     "success": {
+      "text": "Nix sets your {give:uncommon} beside the {stock:uncommon} and looks at them both for a long moment. \"Fair. Both sides.\" The cloak nods once, and the trade is done.",
+      "effects": [
+       {
+        "kind": "barter",
+        "give": "uncommon",
+        "get": "uncommon",
+        "berry": false
+       },
+       {
+        "kind": "flag",
+        "key": "barter-traded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nix's Rare: {stock:rare}.",
+     "success": {
+      "text": "Nix shakes their head slowly. \"That's an Uncommon for a Rare. Add a Berry.\" It isn't greed. It's arithmetic, said gently.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "barter-berry-uncommon"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it back.",
+     "success": {
+      "text": "You slip it back into your bag. Nix doesn't mind. \"Looking is free down here.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "barter-table"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "barter-rare",
+   "name": "The Barter Board",
+   "group": "NPC Stories",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#241f30",
+    "effect": "flicker"
+   },
+   "intro": "Nix lays your {give:rare} on the scarred table, under the lamp. \"A Rare item. Good. Now, what do you want for it?\"",
+   "choices": [
+    {
+     "label": "Nix's Common: {stock:common}.",
+     "success": {
+      "text": "Nix pushes your {give:rare} back across the table. \"No. You'd be cheating yourself. That's a Rare for a Common.\" A gloved hand taps the board. \"Take this instead.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "barter-fair-rare"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nix's Uncommon: {stock:uncommon}.",
+     "success": {
+      "text": "Nix pushes your {give:rare} back across the table. \"No. You'd be cheating yourself. That's a Rare for an Uncommon.\" A gloved hand taps the board. \"Take this instead.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "barter-fair-rare"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nix's Rare: {stock:rare}.",
+     "success": {
+      "text": "Nix sets your {give:rare} beside the {stock:rare} and looks at them both for a long moment. \"Fair. Both sides.\" The cloak nods once, and the trade is done.",
+      "effects": [
+       {
+        "kind": "barter",
+        "give": "rare",
+        "get": "rare",
+        "berry": false
+       },
+       {
+        "kind": "flag",
+        "key": "barter-traded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it back.",
+     "success": {
+      "text": "You slip it back into your bag. Nix doesn't mind. \"Looking is free down here.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "barter-table"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "barter-berry-common",
+   "name": "The Barter Board",
+   "group": "NPC Stories",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#241f30",
+    "effect": "flicker"
+   },
+   "intro": "\"Your {give:common} and a Berry, for my {stock:uncommon},\" Nix says. \"Then both sides are worth the same, and nobody walks out of here poorer.\"",
+   "choices": [
+    {
+     "label": "Add a Berry.",
+     "requires": [
+      {
+       "kind": "barterHas",
+       "tier": "common",
+       "berry": true
+      }
+     ],
+     "success": {
+      "text": "You put a Berry beside it. Nix weighs them in one palm, then nods. \"Fair.\" The {stock:uncommon} is yours.",
+      "effects": [
+       {
+        "kind": "barter",
+        "give": "common",
+        "get": "uncommon",
+        "berry": true
+       },
+       {
+        "kind": "flag",
+        "key": "barter-traded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep the Berry.",
+     "success": {
+      "text": "\"Then pick something else,\" Nix says, without any edge at all.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "barter-common"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "barter-berry-uncommon",
+   "name": "The Barter Board",
+   "group": "NPC Stories",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#241f30",
+    "effect": "flicker"
+   },
+   "intro": "\"Your {give:uncommon} and a Berry, for my {stock:rare},\" Nix says. \"Then both sides are worth the same, and nobody walks out of here poorer.\"",
+   "choices": [
+    {
+     "label": "Add a Berry.",
+     "requires": [
+      {
+       "kind": "barterHas",
+       "tier": "uncommon",
+       "berry": true
+      }
+     ],
+     "success": {
+      "text": "You put a Berry beside it. Nix weighs them in one palm, then nods. \"Fair.\" The {stock:rare} is yours.",
+      "effects": [
+       {
+        "kind": "barter",
+        "give": "uncommon",
+        "get": "rare",
+        "berry": true
+       },
+       {
+        "kind": "flag",
+        "key": "barter-traded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep the Berry.",
+     "success": {
+      "text": "\"Then pick something else,\" Nix says, without any edge at all.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "barter-uncommon"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "barter-fair-uncommon",
+   "name": "The Barter Board",
+   "group": "NPC Stories",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#241f30",
+    "effect": "flicker"
+   },
+   "intro": "Nix taps the {stock:uncommon} on the board instead. \"That's the fair match for what you're giving. I lost a friend's keepsake for a bag of nothing once. I won't watch anyone else do it.\"",
+   "choices": [
+    {
+     "label": "Take the fair match: {stock:uncommon}.",
+     "success": {
+      "text": "Nix slides it across. \"There. Now we can both sleep.\"",
+      "effects": [
+       {
+        "kind": "barter",
+        "give": "uncommon",
+        "get": "uncommon",
+        "berry": false
+       },
+       {
+        "kind": "flag",
+        "key": "barter-traded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick something else.",
+     "success": {
+      "text": "\"Take your time.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "barter-uncommon"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "barter-fair-rare",
+   "name": "The Barter Board",
+   "group": "NPC Stories",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#241f30",
+    "effect": "flicker"
+   },
+   "intro": "Nix taps the {stock:rare} on the board instead. \"That's the fair match for what you're giving. I lost a friend's keepsake for a bag of nothing once. I won't watch anyone else do it.\"",
+   "choices": [
+    {
+     "label": "Take the fair match: {stock:rare}.",
+     "success": {
+      "text": "Nix slides it across. \"There. Now we can both sleep.\"",
+      "effects": [
+       {
+        "kind": "barter",
+        "give": "rare",
+        "get": "rare",
+        "berry": false
+       },
+       {
+        "kind": "flag",
+        "key": "barter-traded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick something else.",
+     "success": {
+      "text": "\"Take your time.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "barter-rare"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "stranded-trainer",
+   "name": "A Trainer in Trouble",
+   "group": "Lasting Choices",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "boss.npc_youngster"
+    ],
+    "tint": "#2a3a20",
+    "effect": "none"
+   },
+   "intro": "A young trainer kneels on the road beside three fainted Pokémon, shaking one of them gently by the shoulder. His name is Tobin. Tobin: \"I pushed them too hard. I don't have any Potions left.\" His voice cracks. Tobin: \"My Riolu's breathing funny. Please. Please, can you help?\" His bag lies open beside him: ₽300 and a TM, all he has.",
+   "choices": [
+    {
+     "label": "Give them Potions (up to 3 healing items).",
+     "requires": [
+      {
+       "kind": "bagHas",
+       "ids": [
+        "potion",
+        "super-potion",
+        "hyper-potion",
+        "full-restore"
+       ],
+       "count": 1,
+       "label": "a healing item"
+      }
+     ],
+     "success": {
+      "text": "You kneel and work through them one by one. The Riolu opens its eyes last. Tobin thanks you with shaking hands, then can't stop thanking you, then just hugs his Riolu and cries into its fur.",
+      "effects": [
+       {
+        "kind": "spendBag",
+        "ids": [
+         "potion",
+         "super-potion",
+         "hyper-potion",
+         "full-restore"
+        ],
+        "count": 3
+       },
+       {
+        "kind": "flag",
+        "key": "trouble-helped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "saved-trainer",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk them to a Center (a node).",
+     "success": {
+      "text": "You carry the Riolu. Tobin carries the other two. He talks the whole way, about how he'll never push them again, never, not once, until Nurse Joy takes the Riolu from your arms and the doors slide shut.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trouble-helped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trouble-walked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "saved-trainer",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take their stuff.",
+     "success": {
+      "text": "You take the ₽300 and the TM out of his bag while he watches. He doesn't try to stop you. He just stares. Somewhere behind a fence, a kid who follows you around saw it too.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "item",
+        "id": "tm-fighting",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trouble-robbed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "robbed-trainer",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep-lost",
+        "amount": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -2
+       },
+       {
+        "kind": "flag",
+        "key": "apprentice-copy",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "apprentice-copy-robbed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "stranded-trainer-friend",
+   "name": "The Trainer You Helped",
+   "group": "Lasting Choices",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "trouble-helped",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_youngster"
+    ],
+    "tint": "#2a4a30",
+    "effect": "glint"
+   },
+   "intro": "A raider steps out across the road at the worst moment, grinning, Poké Balls already in hand. Then a familiar voice shouts from the ridge. \"Hey! That's the one who saved my team!\" It's Tobin, taller somehow, with a Lucario at his side at full strength. Tobin: \"My turn.\"",
+   "choices": [
+    {
+     "label": "Fight together.",
+     "success": {
+      "text": "Tobin drops in beside you. His Lucario looks at your team, then at you, and nods once. \"Ready when you are,\" Tobin says.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "trouble-tag",
+         "amount": 1
+        }
+       ],
+       "name": "Road Raider",
+       "classId": "roughneck",
+       "ally": "lucario",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "friendship",
+         "amount": 5,
+         "who": "party"
+        },
+        {
+         "kind": "flag",
+         "key": "trouble-tag",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let him take it.",
+     "success": {
+      "text": "Tobin handles the raider alone, calm and careful, calling his Lucario back the moment it's tired. When it's over, the raider runs. Tobin turns around beaming like the sun just came up. \"Did you see? Did you see that?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "trouble-let-him",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thanks, I've got it.",
+     "success": {
+      "text": "Tobin steps back, grinning. \"Okay. Show me how it's done.\" He and his Lucario watch from the ridge and cheer every hit.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [],
+       "name": "Road Raider",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "item",
+         "id": "black-belt",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trouble-watched",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "walked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trouble-walked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Tobin's Lucario looks straight at {lead} and barks its name. It remembers the long walk to the Center, and who carried it.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "stranded-trainer-revenge",
+   "name": "The Trainer You Robbed",
+   "group": "Lasting Choices",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "trouble-robbed",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_youngster"
+    ],
+    "tint": "#3a2020",
+    "effect": "shake"
+   },
+   "intro": "A bridge in the wind. Tobin stands in the middle of it, older, harder, his team trained hard since. Tobin: \"Remember me? I do.\" Tobin: \"I made it to a Center on foot. Carried Riolu the whole way. It's a Lucario now.\" His Lucario steps forward. Tobin: \"It remembers you too.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "\"Good,\" Tobin says, and means it. He's built this team for one fight. For yours.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "trouble-revenge",
+         "amount": 1
+        }
+       ],
+       "name": "Tobin",
+       "classId": "youngster",
+       "size": 3,
+       "types": [],
+       "levelBonus": 4,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "trouble-revenge",
+         "amount": 1
+        }
+       ],
+       "coFoe": {
+        "against": "lead"
+       }
+      }
+     }
+    },
+    {
+     "label": "I'm sorry.",
+     "success": {
+      "text": "Tobin looks at you for a long time. \"...Okay.\" He sends out his Lucario anyway. \"I still need to do this.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "trouble-apology",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "stranded-trainer-handshake"
+        }
+       ],
+       "name": "Tobin",
+       "classId": "youngster",
+       "size": 3,
+       "types": [],
+       "levelBonus": 4,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "trouble-apology",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "stranded-trainer-handshake"
+        }
+       ],
+       "coFoe": {
+        "against": "lead"
+       }
+      }
+     }
+    },
+    {
+     "label": "Give back what I took.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      },
+      {
+       "kind": "item",
+       "id": "tm-fighting"
+      }
+     ],
+     "success": {
+      "text": "You hold out the ₽300 and the TM. Tobin stares at them, then at you. He takes them slowly. No battle. \"That's all I wanted,\" he says quietly. \"I just wanted you to know it mattered.\" He walks off the bridge, and doesn't look back, and doesn't need to.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "loseItem",
+        "id": "tm-fighting"
+       },
+       {
+        "kind": "flag",
+        "key": "trouble-amends",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trouble-robbed",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "rep-lost",
+        "amount": -2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give back what I took, in money.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1300
+      }
+     ],
+     "success": {
+      "text": "The TM is long gone, so you count out its worth on top of the ₽300. Tobin stares at the money, then at you. \"That's all I wanted,\" he says quietly. He walks off the bridge, lighter.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1300
+       },
+       {
+        "kind": "flag",
+        "key": "trouble-amends",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trouble-robbed",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "rep-lost",
+        "amount": -2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "has-tm",
+     "when": [
+      {
+       "kind": "item",
+       "id": "tm-fighting"
+      }
+     ],
+     "hide": [
+      3
+     ],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "stranded-trainer-handshake",
+   "name": "The Trainer You Robbed",
+   "group": "Lasting Choices",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_youngster"
+    ],
+    "tint": "#3a2a20",
+    "effect": "none"
+   },
+   "intro": "After the battle, Tobin walks across the bridge and holds out his hand. His Lucario watches you both. \"We're done now,\" he says. \"I mean it. We're done.\"",
+   "choices": [
+    {
+     "label": "Shake his hand.",
+     "success": {
+      "text": "His grip is hard. He lets go first, and nods, and goes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "trouble-handshake",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "trainers-therapy",
+   "name": "Trainer's Therapy",
+   "group": "Helpers, gifts and kindness",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "boss.npc_cooltrainer_m"
+    ],
+    "effect": "none"
+   },
+   "intro": "A bench by a lake. A trainer in a battered jacket sits alone, six Poké Balls lined up on the bench beside them like they're waiting for a bus. Renny has grey in their hair. Renny: \"I don't know why I keep going.\" Renny: \"Eight badges. Two Leagues. I don't feel anything when I win anymore.\" Renny isn't asking for advice. Just someone to sit there.",
+   "choices": [
+    {
+     "label": "Just listen.",
+     "success": {
+      "text": "You sit. Renny talks for a long time: the first badge, the friend who quit, the night in the rain at the second League, the silence after. You say nothing at all. At the end: \"Thanks. I think I needed to say it out loud.\" Then, very small: \"Is it alright to stop?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "renny-listened",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "renny-question"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Maybe you need a break.",
+     "success": {
+      "text": "Renny turns the word over like a stone. \"Maybe.\" The lake laps at the shore. \"Is it alright to stop?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "renny-listened",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "renny-question"
+       }
+      ]
+     }
+    },
+    {
+     "label": "You should keep going.",
+     "success": {
+      "text": "\"That's what everyone says.\" Renny nods, gathers the six Balls, and keeps going, down the road, the same as before.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "renny-pushed",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "renny-question",
+   "name": "Trainer's Therapy",
+   "group": "Helpers, gifts and kindness",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_cooltrainer_m"
+    ],
+    "tint": "#283848",
+    "effect": "none"
+   },
+   "intro": "Renny looks at the six Balls, then at the water, then at you. \"Is it alright to stop?\"",
+   "choices": [
+    {
+     "label": "Yes.",
+     "success": {
+      "text": "Renny opens each Ball and lets each Pokémon choose. Most of them walk down to the lake and lie in the grass like they've been waiting years to. One, though, comes over to you and sits at your feet and will not leave. Renny laughs and wipes their eyes. \"Will you? It wants to keep going. I don't.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "lapras",
+         "noivern",
+         "arcanine"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 150,
+        "who": "newest"
+       },
+       {
+        "kind": "flag",
+        "key": "renny-stopped",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Only you know.",
+     "success": {
+      "text": "\"...Yeah.\" Renny clips the Balls back on, one by one. \"Yeah. Only me.\" They stay a trainer, for now. You leave them on the bench, looking at the lake.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "renny-postcard",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "renny-postcard",
+   "name": "A Postcard",
+   "group": "Helpers, gifts and kindness",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "renny-postcard",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "renny-postcard-read",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_cooltrainer_m"
+    ],
+    "tint": "#283848",
+    "effect": "none"
+   },
+   "intro": "A postcard is waiting for you at the Pokémon Center counter. On the front, a lake. On the back, in careful handwriting: \"Stopped. Good choice. — R.\" There's a small paw print beside the signature.",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You tuck it into your bag. It feels like more than paper.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "renny-postcard-read",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "renny-still",
+   "name": "The Tired Trainer",
+   "group": "Helpers, gifts and kindness",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "renny-pushed",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "renny-still-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_cooltrainer_m"
+    ],
+    "tint": "#283848",
+    "effect": "none"
+   },
+   "intro": "You pass Renny at a crossroads in a new region, still going. Another badge on the jacket. The same look in the eyes as by the lake, only further away. Renny lifts a hand to you and doesn't smile.",
+   "choices": [
+    {
+     "label": "Wave back.",
+     "success": {
+      "text": "Renny keeps walking. You watch them go until the road bends.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "renny-still-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "valley-dispute",
+   "name": "Rangers and Prospectors",
+   "group": "Lasting Choices",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonranger_m",
+     "boss.npc_engineer"
+    ],
+    "tint": "#304020",
+    "effect": "none"
+   },
+   "intro": "A green valley with survey stakes hammered into it. Pokémon Rangers stand on one side of a rope, a mining crew on the other, and between them a herd of Tauros calves grazes, not knowing anything. Ranger Captain Ivy: \"This valley's the last calving ground for the region's Tauros.\" Foreman Gault: \"And under it's the ore that keeps three towns working. My crew's got kids.\" Both of them turn to you. \"You're a trainer. People listen to trainers. Whose side?\"",
+   "choices": [
+    {
+     "label": "The Rangers.",
+     "success": {
+      "text": "Ivy closes her eyes for a second, relieved. Gault doesn't say anything. He just pulls up the first survey stake and throws it down the hill. The valley is protected.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "valley-rangers",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "valley-trusted",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The miners.",
+     "success": {
+      "text": "Gault claps you on the back. Ivy looks at the calves, and then at you, and walks away without a word. The mine opens.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "valley-miners",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Broker a plan (a node).",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rep",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You walk the valley with both of them for a whole afternoon, until their boots are muddy and their voices are hoarse. In the end they agree: the north slope only, and only after calving season. Both sides grumble. Both sides shake on it. And both of them, later, remember you fondly.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "valley-shared",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "valley-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "valley-miners-dividend",
+   "name": "The Prospector Dividend",
+   "group": "Lasting Choices",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "valley-miners",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "valley-dividend-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_engineer"
+    ],
+    "tint": "#40381a",
+    "effect": "glint"
+   },
+   "intro": "A cart rattles down the road and stops beside you. Foreman Gault leans out, soot on his face, grinning. \"Your share, partner. And our shop's open to friends.\" He holds out a fat envelope.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "\"Spend it on something good,\" Gault says. The mining shop will give you 20% off for the rest of the region.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 1000
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Gault's discount",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "value": 0.8
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "valley-dividend-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it to the Rangers.",
+     "success": {
+      "text": "Gault stares at you. Then he shrugs and hands it over. Weeks later, a stiff note from Ivy finds you: the money funds a new calving ground, three valleys east. \"Thank you,\" it says, and nothing else.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "valley-dividend-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "valley-funded",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the Tauros.",
+     "success": {
+      "text": "Gault's grin goes. \"Moved east. Some didn't make it.\" He doesn't look away from you when he says it. You have to give him that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "valley-dividend-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "valley-asked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "valley-miners-grudge",
+   "name": "The Foreman's Grudge",
+   "group": "Lasting Choices",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "valley-rangers",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "valley-grudge-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_engineer",
+     "boss.npc_hiker"
+    ],
+    "tint": "#40301a",
+    "effect": "none"
+   },
+   "intro": "Gault and his crew block the road, arms folded, the whole sullen line of them. Gault: \"You cost us the valley. My men have been out of work since.\" He spits. \"Now you pay.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "\"Three of us,\" Gault says. \"One after another. Let's see how you like losing.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "valley-grudge-done",
+         "amount": 1
+        }
+       ],
+       "chain": 3,
+       "name": "Miner",
+       "classId": "hiker",
+       "size": 2,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "valley-grudge-done",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Find you work (two nodes).",
+     "success": {
+      "text": "You spend two days on it, asking at every gate and every office, until a road crew on the next ridge takes the whole lot of them on. Gault shakes your hand at the end, hard. \"That's that, then.\" The grudge is over.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "valley-grudge-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "valley-grudge-ended",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pay (₽500).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "You hand over ₽500 for the crew's fund. Gault takes it, embarrassed, and won't meet your eye. \"For the kids,\" he mutters.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "valley-grudge-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "quarry",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "quarry-in",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Gault has heard about the old quarry you went into. \"You know a quarry foreman, don't you?\"",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Find you work at the old quarry (two nodes).",
+       "success": {
+        "text": "You take them to the old quarry, and the ex-foreman there looks Gault up and down and hires the whole crew on the spot. Gault shakes your hand, hard. The grudge is over.",
+        "effects": [
+         {
+          "kind": "takeNode",
+          "nodes": 2
+         },
+         {
+          "kind": "flag",
+          "key": "valley-grudge-done",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "valley-grudge-ended",
+          "amount": 1
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "valley-rangers-grudge",
+   "name": "Angry Rangers",
+   "group": "Lasting Choices",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "valley-miners",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "valley-ivy-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonranger_m"
+    ],
+    "tint": "#203a20",
+    "effect": "none"
+   },
+   "intro": "Ivy stops you on the road. She doesn't raise her voice. She doesn't have to. Ivy: \"You sold out the valley.\" Ivy: \"The wild Pokémon know your face now.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Ivy sends out her team without another word.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "valley-ivy-done",
+         "amount": 1
+        }
+       ],
+       "name": "Ranger Captain Ivy",
+       "classId": "ranger",
+       "size": 3,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "valley-ivy-done",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Help relocate them (two nodes).",
+     "success": {
+      "text": "Two days walking Tauros calves east, through rivers, over ridges, in the rain. Ivy says nothing the whole way. At the end, when the last calf is through the gate of the new ground, she says: \"Thank you.\" Just that.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "valley-ivy-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "valley-relocated",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "I'd do it again.",
+     "success": {
+      "text": "Ivy nods slowly. \"Then they'll remember you.\" For the rest of this region, wild Pokémon here start every battle at +1 Attack.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "valley-ivy-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "valley-wild-angry",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "valley-rangers-rescue",
+   "name": "The Rangers Call for Help",
+   "group": "Lasting Choices",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "valley-trusted",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "valley-rescue-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonranger_f"
+    ],
+    "tint": "#305020",
+    "effect": "sparkle"
+   },
+   "intro": "A Ranger waves you down from a ridge, out of breath. Ivy is at the slide itself, sleeves rolled up, hands bloody from the rocks. Ivy: \"A landslide trapped wild Pokémon, calves mostly. You stood with us. We trust you.\" Below, the herd is stamping, panicked, close to stampeding over the trapped ones.",
+   "choices": [
+    {
+     "label": "Dig.",
+     "pick": {
+      "types": [
+       "ground",
+       "fighting"
+      ]
+     },
+     "success": {
+      "text": "Your Pokémon digs for three hard turns, stone by stone, until a small wet nose pushes through. One by one the calves come out, shaking. Ivy sits down in the mud and laughs.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "valley-rescue-done",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Calm the herd.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You walk into the middle of the herd with your Pokémon, slow and low, until the stamping stops. Nobody is crushed. The Rangers dig the calves out by hand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "valley-rescue-done",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The herd stamps again and again before it settles. Nobody is crushed, but it was close, and your team is shaken.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "flag",
+        "key": "valley-rescue-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Both.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "pick": {
+      "types": [
+       "ground",
+       "fighting"
+      ]
+     },
+     "success": {
+      "text": "One of your Pokémon digs while you hold the herd still, and it works, all of it, at once. Every calf comes out. One of them, the smallest, won't leave your side. Ivy watches it follow you. \"Take care of her,\" she says.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "tauros"
+        ],
+        "types": [],
+        "levelBonus": -3,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "valley-rescue-done",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You try to do both and can't hold the herd. Your Pokémon digs the calves out anyway, just in time, with the herd thundering past.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "flag",
+        "key": "valley-rescue-done",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "abandoned-nest",
+   "name": "An Unattended Nest",
+   "group": "Emergent Stories",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a1c",
+    "effect": "none"
+   },
+   "intro": "A big nest in the branches, left alone, built from feathers the size of your hand. There is one egg in it. It's warm. The parent could be anywhere, hunting, or watching you right now.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "You lift the egg out of the nest. It's heavy, and warm, and when you hold it against you, something inside it moves.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "starly"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 30,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "egg-taken",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "took-egg",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-egg-hunt",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it in the feathers, where it belongs.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Wait for the parent (a node).",
+     "success": {
+      "text": "You sit under the tree for a long time. At dusk a huge Staraptor drops out of the sky, sees you, sees that you haven't touched the egg, and settles down on the nest. Later, while it watches you, the egg cracks, and a damp little Starly blinks up at the world.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "egg-watched",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-abandoned-egg-s2",
+   "name": "The Abandoned Egg",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovt-egg-hunt",
+     "atLeast": 3,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "egg-breeder-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "A worried Breeder hurries up the road toward you, apron still on. Pom: \"Has anyone seen an egg? A big one. I left it in the nest to keep warm.\" Pom: \"Its mother's my Staraptor. She's been screaming since morning.\"",
+   "choices": [
+    {
+     "label": "I have it.",
+     "requires": [
+      {
+       "kind": "hasEgg",
+       "species": "starly"
+      }
+     ],
+     "success": {
+      "text": "Pom's whole body sags with relief. She takes the egg in both hands, presses her cheek to it, and whistles. Far off, a Staraptor answers. The hunt is over.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "egg-breeder-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "egg-returned",
+        "amount": 1
+       },
+       {
+        "kind": "returnEgg",
+        "species": "starly"
+       },
+       {
+        "kind": "flag",
+        "key": "egg-taken",
+        "amount": -99
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Oh.\" Pom nods, and swallows, and goes on looking, calling the egg like it can hear her.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "egg-breeder-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "egg-lied",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "honest-lied",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "I saw a nest.",
+     "success": {
+      "text": "Pom runs to the nest. You hear her from the road when she finds it empty. She cries, alone under the tree, for a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "egg-breeder-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "egg-pom-cried",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "no-egg",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "egg-taken",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "A worried Breeder hurries up the road. Pom: \"Has anyone seen an egg? A big one. I left it in the nest to keep warm. Its mother's my Staraptor.\" You haven't got it.",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "No, sorry.",
+       "success": {
+        "text": "\"Thank you anyway.\" Pom goes on looking.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "egg-breeder-met",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "abandoned-nest-pursuit",
+   "name": "Wings Over the Road",
+   "group": "Emergent Stories",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "egg-taken",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "egg-returned",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-egg-hunt",
+     "atLeast": 6,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "egg-hunt-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#301c1c",
+    "effect": "fog"
+   },
+   "intro": "A shadow crosses the road, then again, lower. The parent has followed you for a whole stage. A huge Staraptor lands in front of you, wings out, feathers raised, furious, its eyes on your bag.",
+   "choices": [
+    {
+     "label": "Give the egg back.",
+     "requires": [
+      {
+       "kind": "hasEgg",
+       "species": "starly"
+      }
+     ],
+     "success": {
+      "text": "You hold it out. The Staraptor takes it in its talons, so gently it barely touches the shell. It looks at you for a long moment. Then it flies with you: for your next battle, it guards you, and strikes first.",
+      "effects": [
+       {
+        "kind": "returnEgg",
+        "species": "starly"
+       },
+       {
+        "kind": "flag",
+        "key": "egg-hunt-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "egg-returned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "egg-taken",
+        "amount": -99
+       },
+       {
+        "kind": "tempEffect",
+        "label": "The Staraptor's guard",
+        "effects": [
+         {
+          "kind": "firstStrike"
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It screams and dives. This is a parent fighting for its child, and it fights like it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "staraptor"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "egg-hunt-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "egg-kept",
+         "amount": 1
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "egg-hunt-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "egg-hunt-again",
+         "amount": 1,
+         "stamp": "region"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Run.",
+     "success": {
+      "text": "You run. Behind you, the wingbeats never quite stop.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "egg-hunt-again",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "abandoned-nest-strikes",
+   "name": "Wings Over the Road",
+   "group": "Emergent Stories",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "egg-hunt-again",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "egg-hunt-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#301c1c",
+    "effect": "fog"
+   },
+   "intro": "It was waiting at the next bend. The Staraptor drops out of the sky without a sound and hits hard.",
+   "choices": [
+    {
+     "label": "Give the egg back.",
+     "requires": [
+      {
+       "kind": "hasEgg",
+       "species": "starly"
+      }
+     ],
+     "success": {
+      "text": "You hold it out, breathing hard. The Staraptor takes it gently, and is gone.",
+      "effects": [
+       {
+        "kind": "returnEgg",
+        "species": "starly"
+       },
+       {
+        "kind": "flag",
+        "key": "egg-hunt-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "egg-returned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "egg-taken",
+        "amount": -99
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "There is no running this time.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "staraptor"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "egg-hunt-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "egg-kept",
+         "amount": 1
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "returnEgg",
+         "species": "starly"
+        },
+        {
+         "kind": "flag",
+         "key": "egg-hunt-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "egg-returned",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "egg-taken",
+         "amount": -99
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-abandoned-egg-s3",
+   "name": "The Abandoned Egg",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovt-egg-hunt",
+     "atLeast": 10,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "egg-end-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The road is quiet. Then the egg in your bag starts to rock.",
+   "choices": [
+    {
+     "label": "Watch it hatch.",
+     "requires": [
+      {
+       "kind": "hasEgg",
+       "species": "starly"
+      }
+     ],
+     "success": {
+      "text": "It hatches into a Starly, damp and furious and small. It shakes itself off and then just looks up at the sky, and keeps looking, like it's listening for someone.",
+      "effects": [
+       {
+        "kind": "returnEgg",
+        "species": "starly",
+        "hatch": true
+       },
+       {
+        "kind": "flag",
+        "key": "egg-end-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "egg-kept",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the Starly.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "egg-returned",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "A tiny Starly hops from her hands onto your arm and grips tight.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "starly"
+        ],
+        "types": [],
+        "levelBonus": -2,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "egg-end-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the Oval Stone.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "egg-returned",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "She presses a smooth, warm stone into your palm. \"It sat under them both.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oval-stone",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "egg-end-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep walking.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "egg-lied",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You keep walking. You can still hear her calling for a long time.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "returned",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "egg-returned",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Pom is waiting for you at a fence by the road, the Staraptor on her shoulder like a cat. Pom: \"Thank you. You don't know what you did.\" She holds out her hands. Pom: \"Here. From the same clutch.\"",
+     "hide": [
+      0,
+      3
+     ],
+     "addChoices": []
+    },
+    {
+     "id": "lied",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "egg-lied",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Far off, you hear someone calling an egg like it can hear her. Pom is still looking.",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": []
+    },
+    {
+     "id": "kept",
+     "when": [
+      {
+       "kind": "hasEgg",
+       "species": "starly"
+      }
+     ],
+     "hide": [
+      1,
+      2,
+      3
+     ],
+     "addChoices": []
+    }
+   ]
+  }
+ ]
+}

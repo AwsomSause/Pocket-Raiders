@@ -1,0 +1,156 @@
+{
+ "category": "families-c",
+ "_note": "Run flags families-c sets that other families (or later systems) read. Same run only. key = the `ev:<key>` run flag.",
+ "flags": [
+  {
+   "key": "saved-trainer",
+   "setBy": "stranded-trainer",
+   "readBy": "registry (Final Reunion, people)"
+  },
+  {
+   "key": "robbed-trainer",
+   "setBy": "stranded-trainer",
+   "readBy": "registry (Final Reunion, people)"
+  },
+  {
+   "key": "trouble-amends",
+   "setBy": "stranded-trainer-revenge",
+   "readBy": "Final Reunion (Tobin)"
+  },
+  {
+   "key": "trouble-tag",
+   "setBy": "stranded-trainer-friend",
+   "readBy": "Final Reunion (Tobin)"
+  },
+  {
+   "key": "trouble-let-him",
+   "setBy": "stranded-trainer-friend",
+   "readBy": "Final Reunion (Tobin)"
+  },
+  {
+   "key": "trouble-watched",
+   "setBy": "stranded-trainer-friend",
+   "readBy": "Final Reunion (Tobin)"
+  },
+  {
+   "key": "trouble-revenge",
+   "setBy": "stranded-trainer-revenge",
+   "readBy": "Final Reunion (Tobin)"
+  },
+  {
+   "key": "trouble-apology",
+   "setBy": "stranded-trainer-revenge",
+   "readBy": "Final Reunion (Tobin)"
+  },
+  {
+   "key": "trouble-handshake",
+   "setBy": "stranded-trainer-handshake",
+   "readBy": "Final Reunion (Tobin)"
+  },
+  {
+   "key": "apprentice-copy",
+   "setBy": "stranded-trainer, wounded-rare, stolen goods",
+   "readBy": "families-a SF2 (Tib)"
+  },
+  {
+   "key": "apprentice-copy-robbed",
+   "setBy": "stranded-trainer",
+   "readBy": "families-a SF2 (Tib)"
+  },
+  {
+   "key": "kind-helped-stranger",
+   "setBy": "helping scenes",
+   "readBy": "registry"
+  },
+  {
+   "key": "barter-traded",
+   "setBy": "Nix's board",
+   "readBy": "markets (Nix as a trader)"
+  },
+  {
+   "key": "barter-delivered",
+   "setBy": "barter-keepsake",
+   "readBy": "Final Reunion (Nix)"
+  },
+  {
+   "key": "renny-stopped",
+   "setBy": "renny-question",
+   "readBy": "Final Reunion (Renny)"
+  },
+  {
+   "key": "valley-funded",
+   "setBy": "valley-miners-dividend",
+   "readBy": "Final Reunion (Ivy)"
+  },
+  {
+   "key": "valley-asked",
+   "setBy": "valley-miners-dividend",
+   "readBy": "Final Reunion (Gault)"
+  },
+  {
+   "key": "valley-grudge-ended",
+   "setBy": "valley-miners-grudge",
+   "readBy": "Final Reunion (Gault)"
+  },
+  {
+   "key": "valley-relocated",
+   "setBy": "valley-rangers-grudge",
+   "readBy": "Final Reunion (Ivy)"
+  },
+  {
+   "key": "took-egg",
+   "setBy": "abandoned-nest",
+   "readBy": "registry"
+  },
+  {
+   "key": "egg-watched",
+   "setBy": "abandoned-nest",
+   "readBy": "Final Reunion (Pom)"
+  },
+  {
+   "key": "egg-kept",
+   "setBy": "the Staraptor fight, the hatch",
+   "readBy": "Final Reunion (Pom)"
+  },
+  {
+   "key": "egg-pom-cried",
+   "setBy": "ovc-abandoned-egg-s2",
+   "readBy": "Final Reunion (Pom)"
+  },
+  {
+   "key": "honest-lied",
+   "setBy": "ovc-abandoned-egg-s2",
+   "readBy": "registry"
+  },
+  {
+   "key": "kind-total",
+   "setBy": "every scene with a pack Kindness +1",
+   "readBy": "the record condition (coToolkit recordOf), shared board"
+  },
+  {
+   "key": "rep",
+   "setBy": "pack Reputation +1",
+   "readBy": "the record condition, valley-dispute (Reputation 3), shared board"
+  },
+  {
+   "key": "rep-lost",
+   "setBy": "pack Reputation -1",
+   "readBy": "the record condition, shared board"
+  },
+  {
+   "key": "renny-listened",
+   "setBy": "trainers-therapy",
+   "readBy": "Final Reunion (Renny)"
+  },
+  {
+   "key": "valley-shared",
+   "setBy": "valley-dispute",
+   "readBy": "Final Reunion (Ivy and Gault)"
+  },
+  {
+   "key": "valley-wild-angry",
+   "setBy": "valley-rangers-grudge",
+   "readBy": "engine: coHelpers.sideBattleBegin (wild +1 Attack this region)"
+  }
+ ]
+}

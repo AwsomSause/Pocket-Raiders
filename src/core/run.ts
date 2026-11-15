@@ -128,7 +128,7 @@ import { timeOfDay } from './arenaStyle';
 import { recordAftermath } from './overhaul/aftermath';
 import { assignGrowthPaths, noteMapGrowth } from './overhaul/growth';
 import { tickChainTimers } from './overhaul/chains';
-import { coBattleBegin, coFled, coHealStop, coNodeEnter, coStageStart, coWildKo } from './events/coToolkit';
+import { coBattleBegin, coBattleEnd, coBattleStarted, coFled, coHealStop, coNodeEnter, coStageStart, coWildKo } from './events/coToolkit';
 import { kantoSweetAir } from './expansion/canonKantoRules';
 import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
 import { endLastResort } from './battle/lastResort';
@@ -3115,6 +3115,7 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   coBattleBegin(content, run);
   kantoSweetAir(content, run);
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
+  events.push(...coBattleStarted(content, run));
   run.rng.battle = rng.state;
   noteBattle(content, run);
   wildBehaviorEffect(content, run, events);
@@ -4016,6 +4017,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (run.log.starterUid && run.party.some((m) => m.uid === run.log.starterUid)) count(run, 'regionsClearedWithStarter');
     if (run.regionIndex + 1 >= run.regionOrder.length && !extendEndless(run)) run.victory = true;
   }
+  coBattleEnd(run, battle);
   run.battle = null;
   delete run.recorder;
   if ((run.itemCounters?.['squirt-exp'] ?? 0) > 0) run.itemCounters = { ...run.itemCounters, 'squirt-exp': 0 };

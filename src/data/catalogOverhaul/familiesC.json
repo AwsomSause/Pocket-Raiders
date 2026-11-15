@@ -1,12 +1,161 @@
 {
-  "_note": "Numbers and tables for the families-c pieces of the Catalog Overhaul Pack (src/core/events/coToolkit.ts). STORY_FAMILIES_9 SF72 (rule battles), STORY_FAMILIES_10 SF74 (the Cursed Idol), QUESTLINES_DEEPENED_1 FE4 (the Time Machine).",
-  "rules": {
-    "multiplier": { "veryBad": 2, "bad": 1.5, "even": 1, "favours": 0.75 },
-    "words": { "2": "This rule is very bad for you: double prize", "1.5": "This rule is bad for you: prize ×1.5", "1": "This rule is even for both sides: prize ×1", "0.75": "This rule favours you: prize ×0.75" }
+ "_note": "Numbers and tables for the families-c pieces of the Catalog Overhaul Pack (src/core/events/coToolkit.ts). STORY_FAMILIES_9 SF72 (rule battles), STORY_FAMILIES_10 SF74 (the Cursed Idol), QUESTLINES_DEEPENED_1 FE4 (the Time Machine). Second batch (coHelpers.ts, battle/coRules.ts): SF55 barter tiers and Nix's stock, SF60 the poncho's fallback gift, SF63 the helped Pokémon's strike, SF72 the Magician's disguises.",
+ "rules": {
+  "multiplier": {
+   "veryBad": 2,
+   "bad": 1.5,
+   "even": 1,
+   "favours": 0.75
   },
-  "idol": { "money": 300, "hpCurse": 3, "restCurse": 5, "faceCurse": 7, "hpShare": 0.1, "restShare": 0.75 },
-  "paradox": {
-    "past": { "phanpy": "great-tusk", "donphan": "great-tusk", "igglybuff": "scream-tail", "jigglypuff": "scream-tail", "wigglytuff": "scream-tail", "foongus": "brute-bonnet", "amoonguss": "brute-bonnet", "misdreavus": "flutter-mane", "mismagius": "flutter-mane", "larvesta": "slither-wing", "volcarona": "slither-wing", "magnemite": "sandy-shocks", "magneton": "sandy-shocks", "magnezone": "sandy-shocks", "bagon": "roaring-moon", "shelgon": "roaring-moon", "salamence": "roaring-moon", "suicune": "walking-wake", "raikou": "raging-bolt", "entei": "gouging-fire" },
-    "future": { "phanpy": "iron-treads", "donphan": "iron-treads", "delibird": "iron-bundle", "makuhita": "iron-hands", "hariyama": "iron-hands", "deino": "iron-jugulis", "zweilous": "iron-jugulis", "hydreigon": "iron-jugulis", "larvesta": "iron-moth", "volcarona": "iron-moth", "larvitar": "iron-thorns", "pupitar": "iron-thorns", "tyranitar": "iron-thorns", "ralts": "iron-valiant", "kirlia": "iron-valiant", "gardevoir": "iron-valiant", "gallade": "iron-valiant", "virizion": "iron-leaves", "cobalion": "iron-crown", "terrakion": "iron-boulder" }
+  "words": {
+   "2": "This rule is very bad for you: double prize",
+   "1.5": "This rule is bad for you: prize ×1.5",
+   "1": "This rule is even for both sides: prize ×1",
+   "0.75": "This rule favours you: prize ×0.75"
   }
+ },
+ "idol": {
+  "money": 300,
+  "hpCurse": 3,
+  "restCurse": 5,
+  "faceCurse": 7,
+  "hpShare": 0.1,
+  "restShare": 0.75
+ },
+ "paradox": {
+  "past": {
+   "phanpy": "great-tusk",
+   "donphan": "great-tusk",
+   "igglybuff": "scream-tail",
+   "jigglypuff": "scream-tail",
+   "wigglytuff": "scream-tail",
+   "foongus": "brute-bonnet",
+   "amoonguss": "brute-bonnet",
+   "misdreavus": "flutter-mane",
+   "mismagius": "flutter-mane",
+   "larvesta": "slither-wing",
+   "volcarona": "slither-wing",
+   "magnemite": "sandy-shocks",
+   "magneton": "sandy-shocks",
+   "magnezone": "sandy-shocks",
+   "bagon": "roaring-moon",
+   "shelgon": "roaring-moon",
+   "salamence": "roaring-moon",
+   "suicune": "walking-wake",
+   "raikou": "raging-bolt",
+   "entei": "gouging-fire"
+  },
+  "future": {
+   "phanpy": "iron-treads",
+   "donphan": "iron-treads",
+   "delibird": "iron-bundle",
+   "makuhita": "iron-hands",
+   "hariyama": "iron-hands",
+   "deino": "iron-jugulis",
+   "zweilous": "iron-jugulis",
+   "hydreigon": "iron-jugulis",
+   "larvesta": "iron-moth",
+   "volcarona": "iron-moth",
+   "larvitar": "iron-thorns",
+   "pupitar": "iron-thorns",
+   "tyranitar": "iron-thorns",
+   "ralts": "iron-valiant",
+   "kirlia": "iron-valiant",
+   "gardevoir": "iron-valiant",
+   "gallade": "iron-valiant",
+   "virizion": "iron-leaves",
+   "cobalion": "iron-crown",
+   "terrakion": "iron-boulder"
+  }
+ },
+ "barter": {
+  "tiers": {
+   "poke-ball": "common",
+   "potion": "common",
+   "ether": "common",
+   "premier-ball": "common",
+   "friend-treat": "common",
+   "great-ball": "uncommon",
+   "super-potion": "uncommon",
+   "full-heal": "uncommon",
+   "revive": "uncommon",
+   "net-ball": "uncommon",
+   "dive-ball": "uncommon",
+   "nest-ball": "uncommon",
+   "repeat-ball": "uncommon",
+   "timer-ball": "uncommon",
+   "quick-ball": "uncommon",
+   "dusk-ball": "uncommon",
+   "heal-ball": "uncommon",
+   "luxury-ball": "uncommon",
+   "ultra-ball": "rare",
+   "hyper-potion": "rare",
+   "full-restore": "rare"
+  },
+  "stock": {
+   "common": [
+    "great-ball",
+    "ether",
+    "nest-ball",
+    "net-ball",
+    "quick-ball",
+    "dusk-ball"
+   ],
+   "uncommon": [
+    "ultra-ball",
+    "fire-stone",
+    "water-stone",
+    "thunder-stone",
+    "leaf-stone",
+    "moon-stone",
+    "silk-scarf",
+    "charcoal",
+    "mystic-water",
+    "miracle-seed",
+    "magnet"
+   ],
+   "rare": [
+    "leftovers",
+    "focus-sash",
+    "life-orb",
+    "oval-stone",
+    "shiny-stone",
+    "dusk-stone",
+    "choice-scarf",
+    "expert-belt"
+   ]
+  }
+ },
+ "strangerGift": [
+  "leftovers",
+  "focus-sash",
+  "rocky-helmet",
+  "expert-belt"
+ ],
+ "helped": {
+  "strike": 0.25,
+  "raiders": [
+   "raider",
+   "ambush"
+  ]
+ },
+ "ruleBattles": {
+  "decoys": [
+   "magikarp",
+   "ditto",
+   "pikachu",
+   "snorlax",
+   "jigglypuff",
+   "psyduck",
+   "slowpoke",
+   "eevee",
+   "zubat",
+   "geodude",
+   "meowth",
+   "sudowoodo",
+   "wobbuffet",
+   "pyukumuku"
+  ],
+  "earlyKoBonus": 1.5
+ }
 }

@@ -17,6 +17,7 @@
 // when switching out (Regenerator).
 
 import { foresightBegin } from './foresight';
+import { coAccuracyExempt, coBlind, coCritBonus, coCritMult, coDamageMult, coEntry, coForcedOrder, coPinchFoe, coSpeedMult, coStartRules, coTurnEnd } from './coRules';
 import { CARE } from '../care/mods';
 import { shadowDamageMultiplier } from '../shadow';
 import { shadowTurnPlan, shadow2Data } from '../shadow2';
@@ -518,6 +519,8 @@ export function chooseEnemyMove(enemy: PokemonInstance, rng: Rng, brain?: EnemyB
   const rc = brain?.battle?.rivalCounter;
   const counter = rc && rc.uid === enemy.uid && brain?.target?.uid === rc.target ? usable.find((x) => x.m.id === rc.moveId) : undefined;
   if (counter) return counter.i;
+  // coRules: Blindfold Bout and the Magician: it cannot read your Pokémon yet, so it picks blind.
+  if (brain?.battle && coBlind(brain.battle)) return rng.pick(usable).i;
   if (brain && brain.ai > 0 && rng.chance(brain.ai)) {
     const scored = usable.map((x) => ({ i: x.i, score: moveValue(brain, enemy, x.m.id) }));
     if (brain.battle?.rivalBrain?.tier === 5 && (brain.side ?? 'enemy') === 'enemy') return tier5Choose(enemy, scored, brain);
@@ -1157,6 +1160,7 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
     }
   }
   if (!battle.outcome && rule.weatherCycle) battle.weather = { id: rule.weatherCycle[(battle.turn - 1) % rule.weatherCycle.length]!, turns: 5 };
+  coTurnEnd(battle, events);
 }
 
 /** Encore!: after a turn, critical hits build Hype, a miss or failed move costs some, and full Hype starts the damage boost. */
@@ -2094,6 +2098,8 @@ function resolveEntries(ctx: BattleContext, events: BattleEvent[]): void {
   const sides = pending.map((side) => (side === 'player' ? { c: player, other: enemy } : { c: enemy, other: player }));
   if (sides.length === 2 && speedOf(ctx, enemy) > speedOf(ctx, player)) sides.reverse();
   for (const { c } of sides) enterExtras(ctx, c, events);
+  // coRules: SF72 entry rules (stages on entry, sleepwalking, the Magician's disguise).
+  for (const { c } of sides) coEntry(ctx.content, battle, c, events);
   for (const { c } of sides) applyHazards(ctx, c, events);
   for (const { c, other } of sides) {
     // Beta 0.6 traits: Seat at the Table sweeps away the foe's boosts; a waiting House Wins bonus lands as the partner comes in.
@@ -2541,6 +2547,7 @@ function speedOf(ctx: BattleContext, c: Combatant): number {
   const quickFeet = ability === 'quick-feet' && c.mon.status !== null;
   let speed = effectiveSpeed(content.ruleset, Math.floor(statsOf(ctx, c).spe * Held.heldStatMultiplier(ctx, c.mon, c.side, 'spe')), c.stages.spe, c.mon.status?.id === 'par' && !quickFeet);
   if (ability && weather && WEATHER_SPEED[ability]?.includes(weather)) speed *= 2;
+  speed *= coSpeedMult(content, ctx.battle, c.mon);
   if (quickFeet) speed = Math.floor(speed * 1.5);
   if (ctx.battle.sideEffects[c.side].tailwind > 0) speed *= 2;
   if (ctx.battle.sideEffects[c.side].swamp > 0) speed = Math.floor(speed / 2);
@@ -2574,6 +2581,9 @@ function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
 }
 
 function decideOrder(ctx: BattleContext, rng: Rng, player: Combatant, pMove: Move, enemy: Combatant, eMove: Move): Side {
+  // coRules: a rule battle's forced order (Slippery Slope, the dance-off and bike race winner) draws no dice.
+  const forced = coForcedOrder(ctx.battle, player.mon, enemy.mon);
+  if (forced) return forced;
   // Trick Room: slower Pokémon move first within a priority.
   const trickSign = (ctx.battle.field.trickRoom > 0 ? -1 : 1) * (Ultra.reversesOrder(ultraRulesOf(ctx.battle)) ? -1 : 1);
   const quickDraw = (c: Combatant, m: Move): number => (abilityIn(ctx, c) === 'quick-draw' && m.category !== 'status' && rng.chance(0.3) ? 0.2 : 0);
@@ -3950,7 +3960,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (foeAbility === 'tangled-feet' && target.vol.confusion > 0) accuracy *= 0.5;
       if (ctx.battle.field.gravity > 0) accuracy *= 5 / 3;
       if (ctx.battle.accuracyMult) accuracy *= ctx.battle.accuracyMult;
-      if (ctx.battle.eventRule?.accuracyMult && (!ctx.battle.eventRule.accuracyTurns || ctx.battle.turn <= ctx.battle.eventRule.accuracyTurns)) accuracy *= ctx.battle.eventRule.accuracyMult;
+      if (ctx.battle.eventRule?.accuracyMult && (!ctx.battle.eventRule.accuracyTurns || ctx.battle.turn <= ctx.battle.eventRule.accuracyTurns)) { if (!coAccuracyExempt(content, ctx.battle, user.mon)) accuracy *= ctx.battle.eventRule.accuracyMult; }
       if (user.side === 'player') accuracy *= quirkAccuracy(user.mon, ctx.period);
       if (target.side === 'player') accuracy /= evasionPerk(ctx.perks, getSpecies(content, target.mon.speciesId).types) * growthEvasionMultiplier(content.balance.overhaulGrowth, target.mon, target.mon.hp / Math.max(1, calcStats(content, target.mon).hp));
       if (foeAbility === 'wonder-skin' && move.category === 'status') accuracy = Math.min(accuracy, 0.5);
@@ -4120,7 +4130,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       const physical = fx.attackFrom === 'best' || fx.autoCategory || (fx.teraBlast && ctx.battle.transform.teraTypes[user.mon.uid]) ? userStats.atk >= userStats.spa : move.category === 'physical';
       const hitsDefense = (physical || fx.targetsDefense) !== (ctx.battle.extra.wonderRoom > 0);
       const userStatus = user.mon.status?.id;
-      crit = rng.chance(scaleCrit(Math.min(1, critChance(content.ruleset, move.critStage + Held.critStageBonus(ctx, user) + (userAbility === 'super-luck' ? 1 : 0) + (user.vol.focusEnergy ? 2 : 0) + (user.vol.momentCrit ?? 0)) * (user.side === 'player' ? critChancePerk(ctx.perks) : 1) + (user.side === 'player' ? critChanceBonusPerk(ctx.perks) : 0) + (user.side === 'enemy' && ctx.battle.eventRule?.beginnersLuck ? 0.2 : 0) + focusCrit(content, user.mon) + (user.side === 'player' ? growthCritBonus(content.balance.overhaulGrowth, user.mon) : 0) + (user.side === 'enemy' && classPassiveOf(content, ctx.battle)?.kind === 'crit' ? classPassiveOf(content, ctx.battle)!.amount : 0)), content.balance.critScaling.softCap, content.balance.critScaling.excessFactor));
+      crit = rng.chance(scaleCrit(Math.min(1, critChance(content.ruleset, move.critStage + Held.critStageBonus(ctx, user) + (userAbility === 'super-luck' ? 1 : 0) + (user.vol.focusEnergy ? 2 : 0) + (user.vol.momentCrit ?? 0)) * (user.side === 'player' ? critChancePerk(ctx.perks) : 1) * coCritMult(ctx.battle) + coCritBonus(ctx.battle) + (user.side === 'player' ? critChanceBonusPerk(ctx.perks) : 0) + (user.side === 'enemy' && ctx.battle.eventRule?.beginnersLuck ? 0.2 : 0) + focusCrit(content, user.mon) + (user.side === 'player' ? growthCritBonus(content.balance.overhaulGrowth, user.mon) : 0) + (user.side === 'enemy' && classPassiveOf(content, ctx.battle)?.kind === 'crit' ? classPassiveOf(content, ctx.battle)!.amount : 0)), content.balance.critScaling.softCap, content.balance.critScaling.excessFactor));
       if (fx.alwaysCrit || user.vol.laserFocus) crit = true;
       if (crit && user.side === 'player' && quirkNoCrits(user.mon)) crit = false;
       if (!crit && Ultra.forcesCrit(ultraRulesOf(ctx.battle), target.mon.hp >= maxHp(content, target.mon))) crit = true;
@@ -4160,6 +4170,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (userAbility === 'dynamo-down' && moveType === 'electric' && user.vol.dynamoBoost) { powerMult *= 1.5; user.vol.dynamoBoost = false; }
       if (userAbility === 'reckless' && fx.recoil) powerMult *= 1.2;
       if (ctx.battle.eventRule?.typeBoost?.type === moveType) powerMult *= 1 + ctx.battle.eventRule.typeBoost.pct / 100;
+      powerMult *= coDamageMult(ctx.battle);
       if (ctx.battle.field.waterSport > 0 && moveType === 'fire') powerMult *= 1 / 3;
       if (ctx.battle.field.mudSport > 0 && moveType === 'electric') powerMult *= 1 / 3;
       if (userAbility && TYPE_BOOST[userAbility] === moveType) powerMult *= 1.5;
@@ -6899,6 +6910,7 @@ function recordFaints(ctx: BattleContext, player: Combatant, enemy: Combatant, e
 function settleFaints(ctx: BattleContext, events: BattleEvent[]): void {
   const { battle } = ctx;
   const enemy = currentEnemy(battle);
+  coPinchFoe(ctx.content, battle, enemy, events);
   // Flight North (Beta 0.6 Vermilion): when the lone Bug-type drops under a quarter of its HP, a shiny copy of it arrives and knocks the foe out, once. No random numbers.
   if (battle.eventRule?.shinyRescue && !battle.storyEffects.includes('shiny-rescue') && enemy.hp > 0) {
     const hero = ctx.party[battle.activeIndex];
@@ -6986,6 +6998,7 @@ export function startBattle(ctx: BattleContext): BattleEvent[] {
   if (ctx.battle.totem) totemAura(ctx, events);
   championsAura(ctx, events);
   eventStartRules(ctx, events);
+  coStartRules(ctx.battle, events);
   ultraBattleStart(ctx);
   overhaulFieldStart(ctx, events);
   trapBeforeBattle(ctx, events);
