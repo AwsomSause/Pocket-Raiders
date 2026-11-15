@@ -46,3 +46,16 @@ test('with the setting off the starter goes straight to the briefing', async ({ 
   await waitForScene(page, 'Briefing');
   expect(await page.evaluate(() => (window as any).__pkr.session.run.expansion?.blessing ?? null)).toBeNull();
 });
+
+test('a fresh profile has Blessings and Ultra Beasts on by default (settings v44)', async ({ page }) => {
+  await page.goto('/');
+  await page.evaluate(() => localStorage.clear());
+  await page.goto('/?seed=e2e-blessing&campaign=dev&debug=1&legends=1');
+  await waitForScene(page, 'MainMenu');
+  const on = await page.evaluate(() => { const e = (window as any).__pkr.session.settings.expansion; return [e.blessingsEnabled, e.ultraBeastsEnabled, e.mythicalsEnabled]; });
+  expect(on).toEqual([true, true, true]);
+  for (const key of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Blessing']) {
+    await page.keyboard.press('Enter');
+    await waitForScene(page, key);
+  }
+});

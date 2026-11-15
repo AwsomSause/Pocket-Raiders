@@ -131,6 +131,8 @@ export const PokemonInstanceSchema = z.object({
   statBoosts: z.partialRecord(StatNameSchema, z.number().int().min(0)).optional(),
   /** Max HP bonus in percent from the trainer's HP perks (core/trainerPerks.ts syncHpPerks keeps it current). */
   perkHp: z.number().int().optional(),
+  /** Catalog Overhaul (Alphas): the Alpha Mark. It keeps its size (drawn larger) and has +10% HP (a wild Alpha in a fight has double HP through `statBoosts`). Optional, so older saves load as they are. */
+  alpha: z.literal(true).optional(),
   /** Hatched from an Egg this run (core/eggs.ts; Elm's perk gives these more experience). */
   hatched: z.boolean().optional(),
   /** The Egg tier it hatched from (data/eggs.json), for the hatch screen. */
@@ -930,6 +932,8 @@ export const BattleStateSchema = z.object({
   foresight: z.object({ ended: z.boolean(), revealed: z.string().nullable() }).optional(),
   /** Run events B: special rules of this event fight (no switching, no attacks, turn limits...); see EventRuleSchema. */
   eventRule: EventRuleSchema.optional(),
+  /** Catalog Overhaul (Alphas): the Calm bar of a calm fight (core/battle/calm.ts). `balm` is what one thrown balm adds (1, or 1.2 with the Warden sash). */
+  calm: z.object({ bar: z.number().min(0), need: z.number().int().min(1), balm: z.number().positive(), done: z.boolean().default(false) }).optional(),
   /** Beta 0.7 U1: the Ultra Rules in force for this battle (core/ultra/run.ts markBattle): both sides alike. Absent when the system is off. */
   ultra: z.array(UltraRuleIdSchema).optional(),
   /** Every move's accuracy is multiplied by this for both sides (Veridian Forest fog). */

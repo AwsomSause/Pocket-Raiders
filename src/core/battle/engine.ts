@@ -126,6 +126,7 @@ import { freshHyperBattle, rollHyper, type EnemyRage, type HyperContext, type Hy
 import { applyTransformations, battleMove, battleTypes, endDynamax, maxMoveExtras, maxMoveTerrain, maxMoveWeather, stabMultiplier, teraPower, tickDynamax, transformProblem, zMoveFor, type TransformEvent, type TransformRequest, type TransformStepEvent } from './transform';
 import { hiddenPowerType } from '../ivs';
 import { fieldIndexes, trioSpots } from './triples';
+import { addCalm, likedMove } from './calm';
 
 export type Side = 'player' | 'enemy';
 
@@ -785,6 +786,12 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
         events.push(say('player', 'lockBreak', `${nameOf(ctx, me)} breaks its Choice lock!`, me.uid));
       } else action = { ...action, index: locked };
     }
+    if (battle.eventRule?.noCommands && action.kind === 'move' && action.index !== -1) {
+      // The Hushed One eats sound: no order is heard, so the Pokémon picks a move of its own (hashed from the battle and turn, no RNG).
+      const mon = ctx.party[battle.activeIndex]!;
+      const usable = mon.moves.map((m, i) => ({ m, i })).filter((x) => x.m.pp > 0);
+      if (usable.length > 0) action = { kind: 'move', index: usable[fnv1a(`${mon.uid}::own-move::${battle.turn}`) % usable.length]!.i };
+    }
     validateAction(ctx, action);
   }
   // Berserk Mode (S385): out of control, it throws its strongest move whatever you chose.
@@ -872,7 +879,8 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   } else if (action.kind === 'item') {
     const snaggedBefore = battle.snagged?.length ?? 0;
     useItemInBattle(ctx, action.itemId, action.targetIndex, events, action.skill);
-    if (battle.outcome === 'caught') {
+    // A catch, or the balm that fills an Alpha's Calm bar, ends the fight at once: the foe does not act again.
+    if (battle.outcome === 'caught' || (battle.outcome === 'win' && battle.calm?.done)) {
       battle.turn += 1;
       return events;
     }
@@ -1125,6 +1133,27 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
   if (rule.suddenDeath) {
     const fell = events.filter((e) => e.type === 'faint');
     if (fell.length > 0) battle.outcome = fell.some((e) => e.side === 'enemy') ? 'win' : 'lose';
+  }
+  if (rule.calm && battle.calm && !battle.outcome && content && mine && mine.hp > 0) {
+    // A sound or scent it likes, then whatever fills the bar by itself (a lit lamp, a warm fire), each turn you are still standing.
+    const id = battle.playerVolatile?.lastMove;
+    const liked = likedMove(rule.calm, id, id ? content.moves.get(id)?.flags ?? [] : []) && events.some((e) => e.type === 'move' && e.side === 'player' && e.moveId === id);
+    const lines = [liked ? addCalm(battle.calm, 1, 'It turns its head toward the sound it likes.') : null, rule.calm.perTurn > 0 ? addCalm(battle.calm, rule.calm.perTurn, 'It grows quieter.') : null];
+    for (const text of lines) if (text) events.push({ type: 'raid', tone: 'info', text });
+    if (battle.calm.done && currentEnemy(battle).hp > 0) battle.outcome = 'win';
+  }
+  if (rule.foeGrows && !battle.outcome && currentEnemy(battle).hp > 0 && battle.enemyStages[rule.foeGrows] < 6) {
+    battle.enemyStages[rule.foeGrows] += 1;
+    events.push({ type: 'raid', tone: 'info', text: 'It drinks from the lines and grows stronger.' });
+  }
+  if (rule.breakingFloor && !battle.outcome && content && mine && mine.hp > 0 && battle.playerVolatile) {
+    // One panel falls each turn; which one is hashed from the battle and turn (no RNG). Flying-types and light Pokémon keep their feet.
+    const sp = content.species.get(mine.speciesId);
+    const steady = !sp || sp.types.includes('flying') || (sp.weight ?? 100) < 20;
+    if (!steady && fnv1a(`${currentEnemy(battle).uid}::dome::${battle.turn}`) % 3 === 0) {
+      battle.playerVolatile.recharge = true;
+      events.push({ type: 'raid', tone: 'info', text: `A panel gives way under ${sp.name}! It loses its footing and its next move.` });
+    }
   }
   if (!battle.outcome && rule.surviveTurns && battle.turn > rule.surviveTurns) battle.outcome = 'win';
   if (!battle.outcome && rule.weatherCycle) battle.weather = { id: rule.weatherCycle[(battle.turn - 1) % rule.weatherCycle.length]!, turns: 5 };
@@ -1554,6 +1583,8 @@ export function itemProblem(ctx: Pick<BattleContext, 'content' | 'battle' | 'par
   if (item.category === 'healing' && (ctx.battle.healsUsed ?? 0) >= ctx.content.balance.itemCaps.healsPerBattle) return `You've already used ${ctx.content.balance.itemCaps.healsPerBattle} healing items this battle.`;
   const noHeal = raidItemProblem(ctx.content, ctx.battle, item.category === 'healing' || item.category === 'revive');
   if (noHeal) return noHeal;
+  if (item.effect.kind === 'balm') return ctx.battle.calm && !ctx.battle.calm.done ? null : 'There is nothing here that needs calming.';
+  if (item.effect.kind === 'catch' && ctx.battle.calm && !ctx.battle.calm.done) return 'An Alpha this wild breaks out of any ball. Calm it first.';
   if (item.effect.kind === 'catch') {
     if (item.effect.style) {
       const foe = (ctx.battle.enemyTeam as BattleState['enemyTeam'] | undefined)?.[ctx.battle.enemyIndex];
@@ -1697,6 +1728,15 @@ function useItemInBattle(ctx: BattleContext, itemId: string, targetIndex: number
       battle.outcome = 'caught';
       battle.ball = itemId;
     }
+    return;
+  }
+  if (item.effect.kind === 'balm') {
+    // A thrown balm (core/battle/calm.ts). The Alpha still takes its turn: you calm it while standing up to it.
+    const calm = battle.calm!;
+    const foe = currentEnemy(battle);
+    const text = addCalm(calm, item.effect.full ? calm.need : calm.balm, `${item.name} lands on ${getSpecies(content, foe.speciesId).name}.`);
+    if (text) events.push({ type: 'raid', tone: 'info', text });
+    if (calm.done) battle.outcome = 'win';
     return;
   }
   if (item.effect.kind === 'itemDrop') {

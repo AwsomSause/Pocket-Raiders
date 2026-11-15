@@ -41,7 +41,7 @@ export const ACTIVE_SLOT_KEY = `${KEY_PREFIX}.slot`;
 export type RecordName = 'profile' | 'run' | 'settings' | 'meta' | 'timeline';
 
 /** Current schema version of each record. Bump when a record's shape changes and add a migration. */
-export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 20, run: 43, settings: 43, meta: 1, timeline: 1 };
+export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 20, run: 43, settings: 44, meta: 1, timeline: 1 };
 
 /** v41: walks a saved run and gives every Pokémon (anything with uid, speciesId, level and vitamins) IVs and empty EVs. */
 function withIvs(node: unknown): unknown {
@@ -476,6 +476,8 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
     41: (data) => ({ ...(data as Json), expansion: { ...EXPANSION_SETTINGS_DEFAULTS } }),
     // v43 (UI mock-ups): the New UI is the default for everyone, in the Raiders look; "Old" in Settings brings the earlier UI back. Every old key is unchanged.
     42: (data) => ({ ...(data as Json), uiStyle: 'new', reduxSkin: 'raiders' }),
+    // v44 (Catalog Overhaul legends, Kice 2026-11-15): Legendary Blessings and Ultra Beast Incursions are on by default, so they switch on once for everyone. Every other key is unchanged.
+    43: (data) => { const d = data as Json & { expansion?: Json }; return { ...d, expansion: { ...(d.expansion ?? {}), blessingsEnabled: true, ultraBeastsEnabled: true } }; },
   },
   meta: {},
   timeline: {},
@@ -873,6 +875,11 @@ export class SaveManager {
     const result = this.read('settings', SettingsSchema);
     if (result.status === 'ok') return result.data;
     return { ...DEFAULT_SETTINGS, battleAnimations: prefersReducedMotion() ? 'reduced' : 'full' };
+  }
+
+  /** True when a readable settings record is saved (false on a fresh profile, where loadSettings gives the defaults). */
+  hasSettings(): boolean {
+    return this.read('settings', SettingsSchema).status === 'ok';
   }
 
   saveSettings(settings: Settings): SaveResult {

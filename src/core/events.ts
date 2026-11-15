@@ -56,7 +56,9 @@ import { assignEvilTraits, assignEvilVariants, assignSpecialTrait, holdsMarnieCa
 import { changeAid, changeCrisis, crisisAid, crisisEventIds, crisisLevel, setTournament, tournamentEventId, tournamentRound } from './story/crisis';
 import { activePerks, hasPerk, perkItem, perksOf, spendUse, stageKey } from './mapItems';
 import { scavengerBonus } from './bank';
-import { addLevels, calcStats, maxHp, maxPp } from './pokemon';
+import { ALPHA_MARK_HP, addLevels, calcStats, maxHp, maxPp } from './pokemon';
+import { startCalm } from './battle/calm';
+import { legendFlag } from './legends/signs';
 import { count, countShiny, discover } from './progress';
 import { FLAGS as POND_FLAGS, freshMark, pondMon, recordLesson, setPondFlag } from './episodes/poliPond';
 import { eggStatus, eggTier, layEgg, warmEggs } from './eggs';
@@ -217,6 +219,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return Number(run.story.flags[`ev:${c.key}`] ?? 0) >= c.atLeast && Number(run.story.flags[`ev:${c.key}`] ?? 0) <= c.atMost;
     case 'partyBlissful':
       return run.party.some((m) => m.blissful);
+    case 'partyAlpha':
+      return c.lead ? !!run.party.find((m) => m.hp > 0)?.alpha : run.party.some((m) => m.alpha);
     case 'partyShadow':
       return run.party.some((m) => m.shadow);
     case 'grandArc': {
@@ -412,6 +416,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs something you did earlier';
     case 'partyBlissful':
       return 'Needs a Blissful Pokémon in your party';
+    case 'partyAlpha':
+      return c.lead ? 'Needs a calmed Alpha leading your party' : 'Needs a calmed Alpha in your party';
     case 'partyShadow':
       return 'Needs a Shadow Pokémon in your party';
     case 'grandArc':
@@ -1244,7 +1250,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const speciesId = pickSpecies(content, run, e.species, e.types, rng, 'reward');
       // No event lifts the party's level cap (Balancing Phase 7).
       const level = e.level ?? Math.max(1, Math.min(runLevelCap(content, run), eventLevel(content, run, node, rng) + e.levelBonus));
-      const mon = newMon(content, run, e.level ? speciesId : evolvedFormAt(content, speciesId, level, rng), level, 'p');
+      const mon = newMon(content, run, e.level || e.alpha ? speciesId : evolvedFormAt(content, speciesId, level, rng), level, 'p');
+      if (e.alpha) mon.alpha = true;
       mon.shiny = rollShiny(content, rng, runAttributeEffects(content, run).shinyChance * e.shinyMultiplier);
       if (mon.shiny) countShiny(run, mon.speciesId);
       // A rescued Shadow Pokémon (hearts roll from a generator of its own so no event roll moves) or a Blissful one.
@@ -1410,6 +1417,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return applySky(content, run, e);
     case 'flag':
       run.story.flags[`ev:${e.key}`] = Math.max(0, Number(run.story.flags[`ev:${e.key}`] ?? 0) + e.amount);
+      // Catalog Overhaul (legends): `sign-<legend>` raises the blessing's Influence, `telling-<mythical>` counts one Telling.
+      for (const line of legendFlag(run, e.key, e.amount)) run.journal.push(line);
       // Shadow II: a story flag may be exactly the key a Shadow in your party or PC has been waiting for.
       for (const line of checkFlagKeys(content, run)) recordChoice(content, run, { id: `shadow-key-${e.key}`, pick: 'yes', text: line, weight: 2 });
       return '';
@@ -1615,9 +1624,15 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
   if (b.kind === 'wild') {
     const speciesId = (b.recall ? oldFoe(run) : null) ?? pickSpecies(content, run, b.species, b.types, rng);
     const level = Math.min(cap, Math.max(1, base));
-    const enemy = newMon(content, run, evolvedFormAt(content, speciesId, level, rng), level, 'e');
+    const enemy = newMon(content, run, b.alpha ? speciesId : evolvedFormAt(content, speciesId, level, rng), level, 'e');
     enemy.shiny = rollShiny(content, rng, runAttributeEffects(content, run).shinyChance * b.shinyMultiplier);
     if (enemy.shiny) countShiny(run, enemy.speciesId);
+    if (b.alpha) {
+      // An Alpha: the Alpha Mark (+10% HP) and double HP while it is wild (the mark's 10 plus 90 more).
+      enemy.alpha = true;
+      enemy.statBoosts = { ...enemy.statBoosts, hp: (enemy.statBoosts?.hp ?? 0) + (100 - ALPHA_MARK_HP) };
+      enemy.hp = maxHp(content, enemy);
+    }
     for (const [i, id] of (b.foeMoves ?? []).entries()) if (content.moves.has(id) && !enemy.moves.some((m) => m.id === id)) enemy.moves[Math.max(0, enemy.moves.length - 1 - i)] = { id, pp: content.moves.get(id)!.pp };
     if (b.look) enemy.look = b.look;
     if (b.shadow) makeShadow(enemy, rollShadowHeart(content, new Rng(hashSeed(`${run.seed}::shadow-foe::${enemy.uid}`))));
@@ -1635,6 +1650,8 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     if (b.special) assignSpecialTrait(run.battle.extra.traits, [enemy, ...others], b.special);
     if (b.weather) run.battle.weather = { id: b.weather, turns: 999 };
     if (b.rule) run.battle.eventRule = b.rule;
+    if (b.alpha) run.battle.alpha = true;
+    if (b.rule?.calm) run.battle.calm = startCalm(b.rule.calm, Number(run.story.flags['ev:warden-sash'] ?? 0) >= 1);
     if (b.aura) for (const s of ['atk', 'def', 'spa', 'spd', 'spe'] as const) run.battle.enemyStages[s] = 1;
   } else {
     const boss = b.bossId ? content.bosses.get(b.bossId) : undefined;
@@ -1831,21 +1848,24 @@ export function startClubBattle(content: Content, run: RunState, b: EventBattle,
 }
 
 /** After an event battle you won: its `win` effects (mutates `run`). Returns the changes in words. */
-export function eventBattleWon(content: Content, run: RunState, event: EventBattleRef, turns = 0): string[] {
+export function eventBattleWon(content: Content, run: RunState, event: EventBattleRef, turns = 0, calmedFight = false): string[] {
   const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
   if (!battle) return [];
   const rng = new Rng(hashSeed(`${run.seed}::event-win::${stageKey(run)}::${event.sideId}`));
   if (battle.kind === 'trainer') evilBattleWon(run, battle);
   const slow = battle.kind === 'trainer' && battle.rule?.turnLimit !== undefined && turns > battle.rule.turnLimit && battle.slowWin;
-  return (slow || battle.win).map((e) => applyEffect(content, run, e, rng)).filter(Boolean);
+  // An Alpha calmed, not beaten (core/battle/calm.ts): its `calm` effects pay instead of `win`, and the run counts one more calmed Alpha.
+  const calmed = battle.kind === 'wild' && calmedFight;
+  if (calmed) run.story.flags['ev:calmed-alpha'] = Number(run.story.flags['ev:calmed-alpha'] ?? 0) + 1;
+  return ((calmed && battle.kind === 'wild' && battle.calm) || slow || battle.win).map((e) => applyEffect(content, run, e, rng)).filter(Boolean);
 }
 
 /** The consolation prize of a lost pseudo-stage fight (`lose` effects of the battle that was lost). */
 export function eventBattleLost(content: Content, run: RunState, event: EventBattleRef): string[] {
   const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
-  if (!battle || (battle.kind !== 'trainer' && battle.kind !== 'raid') || !battle.lose?.length) return [];
+  if (!battle || !battle.lose?.length) return [];
   const rng = new Rng(hashSeed(`${run.seed}::event-lose::${stageKey(run)}::${event.sideId}`));
   return battle.lose.map((e) => applyEffect(content, run, e, rng)).filter(Boolean);
 }
