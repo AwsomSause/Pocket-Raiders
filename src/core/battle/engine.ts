@@ -4191,6 +4191,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (physical && (userAbility === 'hustle' || userAbility === 'gorilla-tactics')) attackMult *= 1.5;
       if (physical && userAbility === 'flower-gift' && weather === 'sun') attackMult *= 1.5;
       if (foeAbility && RUINS[foeAbility] === (physical ? 'atk' : 'spa')) attackMult *= 0.75;
+      // Inherited Strength (Greenneedle gn.22): Attack +1 for each fallen ally, to +2 (as stat stages: 1.5x, then 2x).
+      if (physical && userAbility === 'inherited-strength') attackMult *= (2 + Math.min(2, user.side === 'player' ? ctx.party.filter((m) => m.hp <= 0).length : ctx.battle.enemyTeam.filter((m) => m.hp <= 0).length)) / 2;
       if (userAbility === 'supreme-overlord') {
         const fallen = ctx.party.filter((m) => m.hp <= 0).length;
         attackMult *= 1 + 0.1 * Math.min(5, user.side === 'player' ? fallen : ctx.battle.enemyTeam.filter((m) => m.hp <= 0).length);

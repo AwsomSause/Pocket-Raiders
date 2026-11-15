@@ -181,3 +181,107 @@ describe("gn.21 The Pokémon That Wouldn't Evolve", () => {
     expect(heldStatMultiplier(ctx, raichu, 'enemy', 'atk')).toBeCloseTo(1);
   });
 });
+
+describe('gn.22 The Lonely Cubone', () => {
+  const guest = (run: RunState) => run.party.find((m) => m.gn?.includes('cubone-guest'));
+  const toTree = (seed: string): RunState => {
+    const run = gnRun(seed);
+    open(run, 'gn-22-door');
+    return choose(run, 'gn-22-door', 'Leave something at its feet.').run;
+  };
+  const toStream = (seed: string): RunState => choose(toTree(seed), 'gn-22-tree', 'Help it look.').run;
+
+  it('a door on step 9 (window 7 to 12), forest or eerie, instead of the battle; the badge is its own', () => {
+    expect(content.coPlacement!.get('gn-22-door')).toMatchObject({ shape: 'door', home: 9, window: [7, 12], sits: 'optional', attaches: 'instead', tags: ['forest|eerie'], earliest: 4, badge: 'own' });
+    expect(content.events.get('gn-22-door')!.choices.map((c) => c.label)).toEqual(['Approach it.', 'Leave something at its feet.', 'Walk away.']);
+  });
+
+  it('approach: it runs to the next tree and can be tried once more; a second approach and it is gone', () => {
+    const run = gnRun('t22-approach');
+    open(run, 'gn-22-door');
+    const behind = choose(run, 'gn-22-door', 'Approach it.').run;
+    expect(scene(behind, 'gn-22-behind').labels).toEqual(['Approach it.', 'Leave something at its feet.', 'Walk away.']);
+    expect(flagOf(choose(behind, 'gn-22-behind', 'Approach it.').run, 'cubone-gone')).toBe(1);
+    expect(flagOf(choose(behind, 'gn-22-behind', 'Leave something at its feet.').run, 'cubone-trusted')).toBe(1);
+  });
+
+  it('walk away: it is there again a later stage (once), and walking away again means it is gone', () => {
+    const run = gnRun('t22-walk');
+    open(run, 'gn-22-door');
+    const walked = choose(run, 'gn-22-door', 'Walk away.').run;
+    expect(flagOf(walked, 'cubone-walked')).toBe(1);
+    expect(content.events.get('gn-22-again')!.callback).toBe(true);
+    setFlag(walked, 'cubone-walked-at', 0);
+    open(walked, 'gn-22-again');
+    expect(flagOf(choose(walked, 'gn-22-again', 'Walk away.').run, 'cubone-gone')).toBe(1);
+    expect(flagOf(choose(walked, 'gn-22-again', 'Leave something at its feet.').run, 'cubone-trusted')).toBe(1);
+  });
+
+  it('it walks with you as a guest, a seventh if the party is full, one stage below the event level', () => {
+    const run = toTree('t22-guest');
+    while (run.party.length < 6) run.party.push(createPokemon(content, 'rattata', run.party[0]!.level, `p-${run.party.length}`));
+    const stream = choose(run, 'gn-22-tree', 'Help it look.').run;
+    expect(stream.party.length).toBe(7);
+    expect(guest(stream)?.speciesId).toBe('cubone');
+  });
+
+  it('the stream: two wild fights, then it draws; drawing back settles it', () => {
+    let run = win(choose(toStream('t22-stream'), 'gn-22-stream', 'Wade in.').run);
+    run = win(choose(run, 'gn-22-stream-2', 'Go on.').run);
+    expect(scene(run, 'gn-22-stream-rest').labels).toEqual(['Draw something back.', 'Just watch.', 'Sit closer.']);
+    const drawn = choose(run, 'gn-22-stream-rest', 'Draw something back.').run;
+    expect(flagOf(drawn, 'cubone-settled')).toBe(1);
+    expect(scene(drawn, 'gn-22-hollow').labels).toEqual(['Draw something back.', 'Just watch.', 'Sit closer.']);
+  });
+
+  it('if it faints the stage ends: it runs, the guest leaves; next region it can be found once more and needs two Berries', () => {
+    const run = toStream('t22-faint');
+    guest(run)!.hp = 0;
+    const done = win(choose(run, 'gn-22-stream', 'Wade in.').run);
+    const out = choose(done, 'gn-22-ran', 'Let it go.').run;
+    expect(guest(out)).toBeUndefined();
+    expect(out.party.some((m) => m.speciesId === 'cubone')).toBe(false);
+    expect(flagOf(out, 'cubone-fainted')).toBe(1);
+    setFlag(out, 'cubone-ran-at', out.regionIndex);
+    open(out, 'gn-22-wary');
+    const once = choose(out, 'gn-22-wary', 'Leave something at its feet.').run;
+    expect(flagOf(once, 'cubone-trusted')).toBe(1); // trusted from the first time; the second Berry is what brings it back
+    const twice = choose(once, 'gn-22-wary-2', 'Leave another.').run;
+    expect(flagOf(twice, 'cubone-fainted')).toBe(0);
+    expect(scene(twice, 'gn-22-tree').labels).toEqual(['Help it look.']);
+  });
+
+  it('the birds: two Vullaby in a double battle, aiming at the Cubone, which is on the field; then a Mandibuzz and a Vullaby', () => {
+    const run = toStream('t22-birds');
+    open(run, 'gn-22-hill');
+    const fight1 = choose(run, 'gn-22-hill', 'Stand with it.').run;
+    expect(fight1.battle!.enemyTeam.map((m) => m.speciesId)).toEqual(['vullaby', 'vullaby']);
+    expect(fight1.battle!.eventRule).toMatchObject({ aimMark: 'cubone-guest', leadMark: 'cubone-guest' });
+    expect(fight1.party[fight1.battle!.activeIndex]!.speciesId).toBe('cubone');
+    const wave2 = choose(win(fight1), 'gn-22-wave2', 'Hold the line.').run;
+    expect(wave2.battle!.enemyTeam.map((m) => m.speciesId)).toEqual(['mandibuzz', 'vullaby']);
+  });
+
+  it('the grave: sitting with it is the best ending; it may join with Inherited Strength at Bond 2, or with the Thick Club', () => {
+    const run = toStream('t22-grave');
+    open(run, 'gn-22-grave');
+    const sat = choose(run, 'gn-22-grave', '(Sit down beside it, and say nothing.)').run;
+    expect(scene(sat, 'gn-22-join').labels).toEqual(['Give it the Thick Club.', 'Come with me?', 'Stay here, if you like.']);
+    const joined = choose(sat, 'gn-22-join', 'Come with me?').run;
+    const mon = joined.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []))[0]!;
+    expect(mon).toMatchObject({ speciesId: 'cubone', fixedAbility: 'inherited-strength' });
+    expect(mon.gn).toContain('cubone-friend');
+    expect(mon.friendship).toBeGreaterThanOrEqual(100);
+    expect(guest(joined)).toBeUndefined();
+    sat.inventory['thick-club'] = 1;
+    const club = choose(sat, 'gn-22-join', 'Give it the Thick Club.').run;
+    expect(club.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []))[0]!.held).toEqual({ 'thick-club': 1 });
+    expect(club.inventory['thick-club'] ?? 0).toBe(0);
+    const told = choose(choose(run, 'gn-22-grave', "I don't know.").run, 'gn-22-join', 'Come with me?').run;
+    expect(told.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []))[0]!.friendship).toBeLessThan(mon.friendship);
+  });
+
+  it('Inherited Strength is a supported ability', () => {
+    expect(content.abilities.get('inherited-strength')?.name).toBe('Inherited Strength');
+  });
+});

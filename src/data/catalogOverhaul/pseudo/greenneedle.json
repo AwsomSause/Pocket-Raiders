@@ -109,6 +109,15 @@
    "tint": "#1e5a2a",
    "mood": "humid green",
    "start": "opened"
+  },
+  {
+   "id": "ps_gn_cubone",
+   "name": "The Lonely Cubone",
+   "entry": "gn-22-door",
+   "themeId": "ground-ghost",
+   "tint": "#6f6a5a",
+   "mood": "grey woods",
+   "start": "opened"
   }
  ]
 }

@@ -763,7 +763,10 @@ function enemyChoice(ctx: BattleContext, field: Field, foe: Combatant, events: B
     if (kind !== 'single' && kind !== 'random') return { score: value(players[0]!) };
     // A single target: the one it hurts most.
     const defOf = (p: Combatant) => { const st = calcStats(content, p.mon); return move.category === 'special' ? st.spd : st.def; };
-    const best = battle.eventRule?.sniper ? players.reduce((b, p) => (defOf(p) < defOf(b) ? p : b)) : players.reduce((b, p) => (value(p) > value(b) ? p : b));
+    // Greenneedle gn.22: the foes go for the marked Pokémon while it stands (the birds and the Cubone).
+    const mark = battle.eventRule?.aimMark;
+    const marked = mark ? players.find((p) => p.mon.gn?.includes(mark)) : undefined;
+    const best = marked ?? (battle.eventRule?.sniper ? players.reduce((b, p) => (defOf(p) < defOf(b) ? p : b)) : players.reduce((b, p) => (value(p) > value(b) ? p : b)));
     return { score: value(best), target: { side: 'player', spot: field.spotOf(best)! } };
   };
   const usable = foe.mon.moves.map((m, i) => ({ m, i })).filter((x) => x.m.pp > 0);

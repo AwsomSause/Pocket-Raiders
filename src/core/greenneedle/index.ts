@@ -105,6 +105,9 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'notThisStage') return stamped !== stage;
   if (c.test === 'notThisRegion') return stamped !== run.regionIndex + 1;
   if (c.test === 'thisRegion') return stamped === run.regionIndex + 1;
+  // gn.22: the guest carrying mark `key` is down (fainted, or no longer in the party).
+  if (c.test === 'hasMark') return run.party.some((m) => m.gn?.includes(c.key!));
+  if (c.test === 'markDown') return !run.party.some((m) => m.gn?.includes(c.key!) && m.hp > 0);
   return stamped > 0 && stamped < run.regionIndex + 1;
 }
 
@@ -264,6 +267,17 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       const slot = Math.floor(host.float() * (known.length + (local.length > 0 ? 1 : 0)));
       const pick = slot < known.length ? known[slot]! : local[Math.floor(host.float() * local.length)]!;
       run.story.flags[`${key(`cast-${e.key}`)}:${pick}`] = 1;
+      return '';
+    }
+    case 'markLast': {
+      const last = run.party.filter((m) => e.species!.includes(m.speciesId)).sort((a, b) => b.uid.localeCompare(a.uid, undefined, { numeric: true }))[0];
+      if (last) last.gn = [...(last.gn ?? []).filter((t) => t !== e.key), e.key!];
+      return '';
+    }
+    case 'dropMarked': {
+      const staying = run.party.filter((m) => !m.gn?.includes(e.key!));
+      if (staying.length === 0) return '';
+      run.party = staying;
       return '';
     }
     case 'castItem': {

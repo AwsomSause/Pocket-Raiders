@@ -1196,6 +1196,1830 @@
      }
     }
    ]
+  },
+  {
+   "id": "gn-22-door",
+   "name": "The Lonely Cubone",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "ground",
+    "ghost"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "cubone-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "cubone-gone",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "cubone-walked",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "A Cubone, alone in the woods.\n\nIt's sitting with its back to a tree, holding its club across its knees.\n\nIt's been crying. The skull is wet.",
+   "choices": [
+    {
+     "label": "Approach it.",
+     "success": {
+      "text": "It's gone before you're halfway there. It's behind the next tree now, watching you round the bark.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-22-behind"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave something at its feet.",
+     "success": {
+      "text": "You put a Berry down in front of it, and step back. Then another step.\n\n*It looks.* It looks at the Berry, and at you, for a long time.\n\nIt picks it up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "cubone-at"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cubone-settled",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cubone-fainted",
+        "n": 0
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-tree"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "It watches you go. You can feel it watching all the way to the bend.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-walked",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "cubone-walked-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-behind",
+   "name": "The Lonely Cubone",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "It's behind the next tree. One eye, round the bark. It hasn't run far.",
+   "choices": [
+    {
+     "label": "Approach it.",
+     "success": {
+      "text": "It runs again, and this time it doesn't stop. You hear it crashing through the undergrowth, a long way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-gone",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave something at its feet.",
+     "success": {
+      "text": "You put a Berry down in front of it, and step back. Then another step.\n\n*It looks.* It looks at the Berry, and at you, for a long time.\n\nIt picks it up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "cubone-at"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cubone-settled",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cubone-fainted",
+        "n": 0
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-tree"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "It watches you go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-walked",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "cubone-walked-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-again",
+   "name": "The Lonely Cubone",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "cubone-walked",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "cubone-walked-at"
+    },
+    {
+     "kind": "flag",
+     "key": "cubone-trusted",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "cubone-gone",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "cubone-again",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "It's there again. A different tree, the same Cubone, the same club across its knees.\n\nIt looks up when it hears you. It doesn't run. Not yet.",
+   "choices": [
+    {
+     "label": "Approach it.",
+     "success": {
+      "text": "It runs. This time you know it won't be back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-again",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-gone",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave something at its feet.",
+     "success": {
+      "text": "You put a Berry down in front of it, and step back. Then another step.\n\n*It looks.* It looks at the Berry, and at you, for a long time.\n\nIt picks it up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-again",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "cubone-at"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cubone-settled",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cubone-fainted",
+        "n": 0
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-tree"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "It watches you go. And then, the next time you look back, it isn't there.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-again",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-gone",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-tree",
+   "name": "The Lonely Cubone: The Tree",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "*It draws in the dirt with the end of its club.*\n\n*A large shape, with a skull like its own. A mound. Then a mark like a question.*\n\n*It looks up at you.*\n\nIt's looking for its mother's grave.",
+   "choices": [
+    {
+     "label": "Help it look.",
+     "success": {
+      "text": "It gets up, wipes the skull with the back of its paw, and falls in beside you. Not close. But beside.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "cubone"
+        ],
+        "types": [],
+        "levelBonus": -1,
+        "shinyMultiplier": 1,
+        "direct": true
+       },
+       {
+        "kind": "gn",
+        "op": "markLast",
+        "key": "cubone-guest",
+        "species": [
+         "cubone"
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-stream"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-stream",
+   "name": "The Lonely Cubone: The Stream",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "A stream, loud with spring water. Something wild is drinking.\n\nThe Cubone stays at the back, club up, eyes huge.",
+   "choices": [
+    {
+     "label": "Wade in.",
+     "success": {
+      "text": "Something wild turns on you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "cubone-down",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "markDown",
+           "key": "cubone-guest"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-ran"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-stream-2"
+          }
+         ]
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "cubone-down",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "markDown",
+           "key": "cubone-guest"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-ran"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-stream-2"
+          }
+         ]
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-stream-2",
+   "name": "The Lonely Cubone: The Stream",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "Another one, further up. This time the Cubone doesn't hang back quite so far.",
+   "choices": [
+    {
+     "label": "Go on.",
+     "success": {
+      "text": "It swings. It *hits* something. Afterwards it stares at its own club, as if the club did it alone.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "cubone-down",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "markDown",
+           "key": "cubone-guest"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-ran"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-stream-rest"
+          }
+         ]
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "cubone-down",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "markDown",
+           "key": "cubone-guest"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-ran"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-stream-rest"
+          }
+         ]
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-stream-rest",
+   "name": "The Lonely Cubone: The Stream",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "You rest on the bank. It draws.\n\n*The same large shape. And a small one beside it. Stick figures, holding hands.*",
+   "choices": [
+    {
+     "label": "Draw something back.",
+     "success": {
+      "text": "You draw yourself, badly, and your lead, worse.\n\nIt studies your drawing. Then it adds a small skull-headed figure next to you. Then it rubs it out, embarrassed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-settled",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-hollow"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just watch.",
+     "success": {
+      "text": "You watch it draw. It glances up now and then to check you're still there. You are.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-hollow"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit closer.",
+     "success": {
+      "text": "You shift closer. It goes very still, then carries on drawing, a little nearer to your knee.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-close",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-hollow"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-hollow",
+   "name": "The Lonely Cubone: The Hollow",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "remembers": [
+    {
+     "id": "dog",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "dog-sat",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*In the corner of its drawing, a second small figure, sitting. Waiting for someone. It doesn't explain.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "A fallen tree, hollow and dry inside. Rain starts the moment you're under it.\n\nIt draws by the light coming through the bark.\n\n*The large one, holding something out. A club.*\n\nIt taps the club it's carrying. Twice. Gently.",
+   "choices": [
+    {
+     "label": "Draw something back.",
+     "success": {
+      "text": "You draw yourself, badly, and your lead, worse.\n\nIt studies your drawing. Then it adds a small skull-headed figure next to you. Then it rubs it out, embarrassed.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-settled",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-stones"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just watch.",
+     "success": {
+      "text": "You watch it draw. It glances up now and then to check you're still there. You are.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-stones"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit closer.",
+     "success": {
+      "text": "You shift closer. It goes very still, then carries on drawing, a little nearer to your knee.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-close",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-stones"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-stones",
+   "name": "The Lonely Cubone: The Field of Stones",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "A clearing full of mounds. Any of them could be a grave.\n\nGhost-types drift between them. They don't attack. They watch the Cubone.",
+   "choices": [
+    {
+     "label": "Walk among them.",
+     "success": {
+      "text": "A ghost drifts into your path and stays there, looking. It won't raise a hand to you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "ghost"
+       ],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "cubone-down",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "markDown",
+           "key": "cubone-guest"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-ran"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-stones-rest"
+          }
+         ]
+        }
+       ],
+       "rule": {
+        "foeStands": 3
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "cubone-down",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "markDown",
+           "key": "cubone-guest"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-ran"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-stones-rest"
+          }
+         ]
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Go round.",
+     "success": {
+      "text": "You keep to the edge. The ghosts turn to watch you pass, all of them, at once.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-22-stones-rest"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-stones-rest",
+   "name": "The Lonely Cubone: The Field of Stones",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "It draws on a flat stone, with a chip of chalk.\n\n*The large one, lying down. Lines over it: rain, or something worse. Birds.*\n\nIt stops drawing. It rubs out the birds, hard, until the stone is clean.",
+   "choices": [
+    {
+     "label": "Draw something back.",
+     "success": {
+      "text": "You draw yourself, badly, and your lead, worse.\n\nIt studies your drawing. Then it adds a small skull-headed figure next to you. Then it rubs it out, embarrassed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-settled",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-hill"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just watch.",
+     "success": {
+      "text": "You watch it draw. It glances up now and then to check you're still there. You are.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-hill"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit closer.",
+     "success": {
+      "text": "You shift closer. It goes very still, then carries on drawing, a little nearer to your knee.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-close",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-hill"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-hill",
+   "name": "The Lonely Cubone: The Hill",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mandibuzz",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "*A shadow crosses the hill. Then three.*\n\n*The Cubone's club comes up. It's shaking. It doesn't run.*\n\nKeep it standing. They're coming for it.",
+   "choices": [
+    {
+     "label": "Stand with it.",
+     "success": {
+      "text": "Two Vullaby drop out of the sky. They go for the skull.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "vullaby",
+        "vullaby"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "cubone-down",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "markDown",
+           "key": "cubone-guest"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-ran"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-wave2"
+          }
+         ]
+        }
+       ],
+       "exact": true,
+       "rule": {
+        "leadMark": "cubone-guest",
+        "aimMark": "cubone-guest",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "dropMarked",
+         "key": "cubone-guest"
+        },
+        {
+         "kind": "flag",
+         "key": "cubone-fainted",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "cubone-ran-at"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-wave2",
+   "name": "The Lonely Cubone: The Hill",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mandibuzz",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "A Mandibuzz, and another Vullaby.\n\nThe Mandibuzz is wearing bones. The Cubone sees them. It makes a sound you have never heard a Pokémon make.",
+   "choices": [
+    {
+     "label": "Hold the line.",
+     "success": {
+      "text": "They dive.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "mandibuzz",
+        "vullaby"
+       ],
+       "types": [],
+       "levelBonus": -1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "cubone-down",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "markDown",
+           "key": "cubone-guest"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-ran"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-wave3"
+          }
+         ]
+        }
+       ],
+       "exact": true,
+       "rule": {
+        "leadMark": "cubone-guest",
+        "aimMark": "cubone-guest",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "dropMarked",
+         "key": "cubone-guest"
+        },
+        {
+         "kind": "flag",
+         "key": "cubone-fainted",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "cubone-ran-at"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-wave3",
+   "name": "The Lonely Cubone: The Hill",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mandibuzz",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "A large Mandibuzz lands on the crest of the hill and folds its wings.\n\n*The Cubone steps in front of your lead.*",
+   "choices": [
+    {
+     "label": "Let it.",
+     "success": {
+      "text": "It doesn't look back at you. It raises the club.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "mandibuzz"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-settled",
+         "min": 2,
+         "then": [],
+         "text": "The last hit is the Cubone's. It lands it itself, with everything it has."
+        },
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "cubone-down",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "markDown",
+           "key": "cubone-guest"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-22-ran"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "cubone-down",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "addEvent",
+           "eventId": "gn-22-grave"
+          }
+         ]
+        }
+       ],
+       "exact": true,
+       "rule": {
+        "leadMark": "cubone-guest",
+        "aimMark": "cubone-guest",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "dropMarked",
+         "key": "cubone-guest"
+        },
+        {
+         "kind": "flag",
+         "key": "cubone-fainted",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "cubone-ran-at"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-ran",
+   "name": "The Lonely Cubone",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "The Cubone goes down. When it gets up again, it doesn't look at you.\n\nIt runs, crying, the club dragging in the grass behind it.",
+   "choices": [
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "You can't follow it where it's going. Not today.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "dropMarked",
+        "key": "cubone-guest"
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-fainted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "cubone-ran-at"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-grave",
+   "name": "The Lonely Cubone: The Grave",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "*Behind the hill, one mound, apart from the others. Flat stones have been set round it, by something with hands. Not recently.*\n\n*There's no skull. There's no club. There's no proof.*\n\n*The Cubone looks at you.*",
+   "choices": [
+    {
+     "label": "This is it. This is her.",
+     "success": {
+      "text": "It believes you. It lies down on the mound, and its breathing slows.\n\nIt is comforted. And you know you guessed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-told-yes",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-22-join"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I don't know.",
+     "success": {
+      "text": "It nods, slowly. Then it puts one flat stone on the mound anyway, very carefully, with both paws.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-told-unknown",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-22-join"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Sit down beside it, and say nothing.)",
+     "success": {
+      "text": "It sits too. After a while, it leans against your arm.\n\nAfter a longer while, it puts its club down on the mound. Then it picks it up again, and holds it differently.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-sat",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You sat with the Cubone at the grave, and said nothing, and it was enough.",
+        "importance": 90
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-22-join"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-join",
+   "name": "The Lonely Cubone",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "The rain has stopped. It stands at the bottom of the hill, looking at you, then down the road.",
+   "choices": [
+    {
+     "label": "Give it the Thick Club.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "thick-club"
+      }
+     ],
+     "success": {
+      "text": "First it shows you the club it has been carrying all along. It's too big for it. It always was. It was hers.\n\nThen it takes the new one in its other hand. Both, now.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "thick-club"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "cubone-sat",
+        "min": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "cubone"
+          ],
+          "types": [],
+          "levelBonus": -1,
+          "shinyMultiplier": 1,
+          "ability": "inherited-strength",
+          "friendship": 30,
+          "mark": "cubone-friend",
+          "held": "thick-club"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "cubone-sat",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "cubone"
+          ],
+          "types": [],
+          "levelBonus": -1,
+          "shinyMultiplier": 1,
+          "ability": "inherited-strength",
+          "mark": "cubone-friend",
+          "held": "thick-club"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-joined",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "dropMarked",
+        "key": "cubone-guest"
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come with me?",
+     "success": {
+      "text": "It comes. It walks closer than it did this morning.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "cubone-sat",
+        "min": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "cubone"
+          ],
+          "types": [],
+          "levelBonus": -1,
+          "shinyMultiplier": 1,
+          "ability": "inherited-strength",
+          "friendship": 30,
+          "mark": "cubone-friend"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "cubone-sat",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "cubone"
+          ],
+          "types": [],
+          "levelBonus": -1,
+          "shinyMultiplier": 1,
+          "ability": "inherited-strength",
+          "mark": "cubone-friend"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-joined",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "dropMarked",
+        "key": "cubone-guest"
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay here, if you like.",
+     "success": {
+      "text": "It sits down by the mound. When you look back from the road, it raises its club. Goodbye, or come back.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "dropMarked",
+        "key": "cubone-guest"
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-wary",
+   "name": "The Lonely Cubone",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "cubone-fainted",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "cubone-ran-at"
+    },
+    {
+     "kind": "flag",
+     "key": "cubone-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "cubone-wary",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "A Cubone, alone, under a tree. Your Cubone. It knows you. It shifts away anyway.\n\nIt's more careful now.",
+   "choices": [
+    {
+     "label": "Leave something at its feet.",
+     "success": {
+      "text": "You put a Berry down. It looks at it. It doesn't take it. Not yet.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-22-wary-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "It watches you go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-wary",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-gone",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-wary-2",
+   "name": "The Lonely Cubone",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "The Berry is still there. So is the Cubone. So are you.",
+   "choices": [
+    {
+     "label": "Leave another.",
+     "success": {
+      "text": "You put a second Berry beside the first.\n\nIt looks for a long time. Then it picks up both.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-wary",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "cubone-at"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cubone-settled",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cubone-fainted",
+        "n": 0
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-22-tree"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "It watches you go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cubone-wary",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cubone-gone",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-22-graveyard",
+   "name": "A Graveyard",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "cubone-joined",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "hasMark",
+     "key": "cubone-friend"
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "cubone-at"
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "cubone-graveyard-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#6f6a5a",
+    "effect": "none"
+   },
+   "intro": "A graveyard by the road. Your Cubone stops at the gate, and doesn't move.",
+   "choices": [
+    {
+     "label": "Wait for it.",
+     "success": {
+      "text": "You wait. It walks among the stones a while, touching some of them. Then it comes back. Waiting cost you nothing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "cubone-graveyard-at"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "After a moment, it catches you up.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "cubone-graveyard-at"
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }

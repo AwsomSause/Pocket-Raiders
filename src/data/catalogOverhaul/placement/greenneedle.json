@@ -946,5 +946,33 @@
   "stages": [
    8
   ]
+ },
+ "gn-22-door": {
+  "gn": "gn.22",
+  "shape": "Door",
+  "earliest": "A4",
+  "home": 9,
+  "window": [
+   7,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "A-1; the Mandibuzz A+1",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Lonely Cubone",
+   "elsewhere": "The Lonely Cubone"
+  },
+  "note": "Badge: a bone. A cold open, then five nodes. Once a run (the doc says once per save; no memory across runs).",
+  "kinds": [
+   "Pseudo Stage",
+   "Miniature Episode",
+   "Companion Story"
+  ],
+  "tags": [
+   "forest|eerie"
+  ]
  }
 }

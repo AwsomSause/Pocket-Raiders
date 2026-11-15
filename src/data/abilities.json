@@ -1585,6 +1585,11 @@
   "description": "When sent out, a random stat rises by two stages (never the same stat twice running, and never more than +4 in total per battle). Its first attack after entering goes first."
  },
  {
+  "id": "inherited-strength",
+  "name": "Inherited Strength",
+  "description": "Attack +1 whenever an ally faints, up to +2 in a battle."
+ },
+ {
   "id": "unwavering",
   "name": "Unwavering",
   "description": "Every stat +25% while this Pokémon could still evolve. It never evolves. It doesn't stack with Eviolite: the larger bonus applies."

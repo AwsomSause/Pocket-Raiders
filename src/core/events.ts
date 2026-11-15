@@ -1466,6 +1466,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (e.hiddenAbility && content.species.get(mon.speciesId)?.abilities.hidden) mon.abilitySlot = -1;
       if (e.ability) mon.fixedAbility = e.ability;
       if (e.held) mon.held = { [e.held]: 1 };
+      if (e.mark) mon.gn = [...(mon.gn ?? []), e.mark];
       if (e.look) mon.look = e.look;
       if (e.friendship) mon.friendship = Math.min(255, mon.friendship + e.friendship);
       // A full moveset gives up its last moves, one for each new one; every taught move stays (the Squad recruit's Swagger, Hex and Shades Down).
@@ -1884,9 +1885,10 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     // Greenneedle: a rarer foe, rolled on its own stream so no other roll moves.
     const rareRng = b.rare?.length ? new Rng(hashSeed(`${run.seed}::event-rare::${event.eventId}::${stageKey(run)}::${event.sideId}`)) : null;
     const rare = rareRng ? b.rare!.find((r) => (!r.flag || Number(run.story.flags[`ev:${r.flag}`] ?? 0) > 0) && rareRng.float() < r.chance) : undefined;
-    const speciesId = (b.recall ? oldFoe(run) : null) ?? (rare ? rareRng!.pick(rare.species.filter((x) => content.species.has(x))) : pickSpecies(content, run, b.species, b.types, rng));
+    const first = b.exact ? resolveCast(run, b.species).find((x) => content.species.has(x)) : undefined;
+    const speciesId = first ?? (b.recall ? oldFoe(run) : null) ?? (rare ? rareRng!.pick(rare.species.filter((x) => content.species.has(x))) : pickSpecies(content, run, b.species, b.types, rng));
     const level = Math.min(cap, Math.max(1, base));
-    const enemy = newMon(content, run, evolvedFormAt(content, speciesId, level, rng), level, 'e');
+    const enemy = newMon(content, run, b.exact ? speciesId : evolvedFormAt(content, speciesId, level, rng), level, 'e');
     enemy.shiny = rollShiny(content, rng, runAttributeEffects(content, run).shinyChance * b.shinyMultiplier);
     if (enemy.shiny) countShiny(run, enemy.speciesId);
     for (const [i, id] of (b.foeMoves ?? []).entries()) if (content.moves.has(id) && !enemy.moves.some((m) => m.id === id)) enemy.moves[Math.max(0, enemy.moves.length - 1 - i)] = { id, pp: content.moves.get(id)!.pp };
@@ -1897,8 +1899,9 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     // T4: a doubles / triples wild fight brings one or two more wild Pokémon, rolled by their own generator (old rolls stay the same).
     const extra = b.format === 'triples' ? 2 : b.format === 'doubles' ? 1 : 0;
     const formatRng = new Rng(hashSeed(`${run.seed}::event-format::${event.eventId}::${run.encountersCompleted}`));
-    const others = Array.from({ length: extra }, () => {
-      const mon = newMon(content, run, evolvedFormAt(content, pickSpecies(content, run, b.species, b.types, formatRng), level, formatRng), level, 'e');
+    const others = Array.from({ length: extra }, (_, i) => {
+      const exact = b.exact ? resolveCast(run, b.species)[i + 1] : undefined;
+      const mon = newMon(content, run, exact ?? evolvedFormAt(content, pickSpecies(content, run, b.species, b.types, formatRng), level, formatRng), level, 'e');
       mon.shiny = rollShiny(content, formatRng, runAttributeEffects(content, run).shinyChance * b.shinyMultiplier);
       if (mon.shiny) countShiny(run, mon.speciesId);
       return mon;

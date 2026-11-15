@@ -30,7 +30,7 @@ export const bindGnEffects = (schema: z.ZodType, conditions?: z.ZodType): void =
  *  - `stampStage`: the run flag `key` remembers the stage number now (read with the `gn` conditions `laterStage`, `sameStage`, `notThisStage`).
  *  - `partyHas`: the run flag `key` becomes 1 when a party Pokémon is one of `species`, else 0 (a Clefairy or Clefable sees the secret dance).
  */
-export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry', 'ahead', 'check', 'addParty', 'markParty', 'dropUnmarked', 'minigame', 'releaseLast', 'cast', 'hpCap', 'castItem'] as const;
+export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry', 'ahead', 'check', 'addParty', 'markParty', 'dropUnmarked', 'minigame', 'releaseLast', 'cast', 'hpCap', 'castItem', 'markLast', 'dropMarked'] as const;
 export const GnEffectSchema = z.object({
   kind: z.literal('gn'),
   op: z.enum(GN_OPS),
@@ -67,6 +67,10 @@ export const GnEffectSchema = z.object({
   .refine((e) => (e.op === 'cast' ? !!e.key && !!e.species : true), { message: 'a cast needs `key` and `species`' })
   // castItem: one of the item the story Pokémon `key` evolves with (its stone); a Pokémon that evolves by level gets a Rare Candy.
   .refine((e) => (e.op === 'castItem' ? !!e.key : true), { message: 'a castItem needs `key`' })
+  // gn.22. markLast: the last Pokémon of `species` to join carries mark `key` (a guest for a stage). dropMarked: Pokémon carrying mark `key`
+  // leave (never the last one in the party).
+  .refine((e) => (e.op === 'markLast' ? !!e.key && !!e.species : true), { message: 'a markLast needs `key` and `species`' })
+  .refine((e) => (e.op === 'dropMarked' ? !!e.key : true), { message: 'a dropMarked needs `key`' })
   .refine((e) => (e.op === 'hpCap' ? e.n !== undefined && e.n >= 1 && e.n <= 100 : true), { message: 'an hpCap needs `n` (1 to 100)' })
   .refine((e) => (e.op === 'partyHas' ? !!e.key && !!e.species : true), { message: 'a partyHas needs `key` and `species`' })
   // leadBoost: the lead's next battle opens with stat `type` at `n` stages ("the lead starts its next battle at -1 Speed").
@@ -96,7 +100,7 @@ export type GnEffect = z.infer<typeof GnEffectSchema>;
  *  - `noMoveType`: no party Pokémon knows a move of any of `types` (the mine's pickaxe is for a party with no Fighting, Steel or Ground move).
  *  - `hurtLead`: the first party Pokémon able to fight is at half its HP or less (gn.16: a win from behind).
  */
-export const GnCondSchema = z.object({ kind: z.literal('gn'), test: z.enum(['regionChanged', 'notThisRegion', 'laterStage', 'sameStage', 'notThisStage', 'noMoveType', 'moveType', 'cutter', 'holdsBerry', 'notRegion', 'thisRegion', 'lookAtLevel', 'hurtLead', 'heavy']), key: Key.optional(), types: z.array(z.string().min(1)).min(1).max(6).optional() })
+export const GnCondSchema = z.object({ kind: z.literal('gn'), test: z.enum(['regionChanged', 'notThisRegion', 'laterStage', 'sameStage', 'notThisStage', 'noMoveType', 'moveType', 'cutter', 'holdsBerry', 'notRegion', 'thisRegion', 'lookAtLevel', 'hurtLead', 'heavy', 'markDown', 'hasMark']), key: Key.optional(), types: z.array(z.string().min(1)).min(1).max(6).optional() })
   .refine((c) => (c.test === 'noMoveType' || c.test === 'moveType' || c.test === 'notRegion' ? !!c.types : c.test === 'lookAtLevel' ? !!c.types && !!c.key : c.test === 'cutter' || c.test === 'holdsBerry' || c.test === 'hurtLead' || c.test === 'heavy' ? true : !!c.key), { message: 'noMoveType and notRegion need `types` (move types / region ids), the others need `key`' });
 export type GnCond = z.infer<typeof GnCondSchema>;
 
@@ -120,6 +124,8 @@ export const GnRuleFields = {
   gn: GnRuleSchema.optional(),
   /** Your Pokémon carrying this Greenneedle mark leads (the forest duelist). */
   leadMark: Key.optional(),
+  /** In a double battle the foes aim their single-target moves at your Pokémon carrying this mark (gn.22: the birds go for the Cubone). */
+  aimMark: Key.optional(),
   /** Stat stages your first Pokémon starts with (the Squad's hose: Speed -1). */
   myStages: Stages.optional(),
   /** Stat stages the foe's first Pokémon starts with. */
