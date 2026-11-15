@@ -3,7 +3,7 @@
 // renames every copy, in the bag or held). Growth (`relic-growth-<line>`) comes from acts in the line's element (the beacon, the
 // Greedent's store, the whale song, the reef guard), from fragments fused at the forge, and from leaving the shrine's relics alone.
 // Kice's run-memory rule: the pack's "next run" rewards (the other lines wake, the seeds start at bough) stay inside this run.
-import { $, again, ch, flag, flagIs, heal, item, money, out, ptype, relic, rp, takeNode, type Json } from '../dsl.ts';
+import { $, ch, flag, flagIs, heal, item, money, out, ptype, relic, rp, takeNode, type Json } from '../dsl.ts';
 import { kind, moment, no } from './_delve.ts';
 
 export const CATEGORY = 'places';
@@ -73,7 +73,7 @@ const FORGE: Json = {
         effects: [frag(-3), grow(line, 2)],
       })),
     },
-    ch('Ask about the other lines.', out('"Shut for this run," says Hallam. "Once a seed\'s chosen the other two sleep till the road\'s done. That\'s not my rule; it\'s the tree\'s." He goes back to the anvil.', again('relic-forge'))),
+    ch('Ask about the other lines.', out('"Shut for this run," says Hallam. "Once a seed\'s chosen the other two sleep till the road\'s done. That\'s not my rule; it\'s the tree\'s." He goes back to the anvil.', { kind: 'addEvent', eventId: 'relic-forge' })),
     ch('Leave.', out('You leave Hallam to his fire. The hammering follows you down the road.')),
   ],
 };
@@ -106,7 +106,7 @@ const SHRINE: Json = {
         effects: [grow(line, 1), flag('relic-shrine-done'), ...kind()],
       })),
     },
-    ch('Read the price.', out('Under the carved line, smaller, cut by a different hand: "Whatever you\'ve grown, you lose." Someone has scratched a tally beside it. Most of the marks are old.', again('relic-shrine'))),
+    ch('Read the price.', out('Under the carved line, smaller, cut by a different hand: "Whatever you\'ve grown, you lose." Someone has scratched a tally beside it. Most of the marks are old.', { kind: 'addEvent', eventId: 'relic-shrine' })),
   ],
 };
 

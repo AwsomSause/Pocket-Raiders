@@ -7,7 +7,7 @@ import { changeFriendship } from '../../src/core/friendship';
 import { bossLeadStagesOf, stopWeightOf } from '../../src/core/co/placesRules';
 import { visibleChoices } from '../../src/core/eventMemory';
 import { PSEUDO_CHAINS, chainRooms } from '../../src/core/dungeon/pseudo';
-import { chooseStarter, createRun } from '../../src/core/run';
+import { chooseStarter, createRun, endRegionTempEffects } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { ballBonus, createBattle, type BattleContext } from '../../src/core/battle/engine';
 import { battleTypes } from '../../src/core/battle/transform';
@@ -263,5 +263,48 @@ describe('catalog overhaul: standalone choices and the Pacts (SF102)', () => {
     run = pick(run, 'Fuse three.');
     expect(flagOf(run, 'relic-growth-leaf')).toBe(0);
     expect(flagOf(run, 'relic-growth-ember')).toBe(0);
+  });
+
+});
+
+describe('catalog overhaul: calendar and challenge weeks (SF97, SF98)', () => {
+  const weekRun = (week: string): RunState => {
+    const run = structuredClone(chooseStarter(content, createRun(content, { runId: 'co-week', seed: week, archetypeId: 'red', gameEvents: [`${week}@2026-W46`] }), 0));
+    run.phase = 'map';
+    run.stage!.current = run.stage!.map.nodes.find((n) => n.column === 1)!.id;
+    return run;
+  };
+  it('a challenge week applies nothing until the player signs up; its rule then holds for the region only', () => {
+    let run = weekRun('solo-hero-week');
+    expect(run.rules.modifierIds).not.toContain('solo-run');
+    open(run, 'solo-hero-week');
+    run = pick(run, 'Read the card.');
+    expect(here(run).sides.some((s) => s.eventId === 'solo-hero-week' && !s.used)).toBe(true);
+    run = pick(run, 'Sign up.');
+    expect(run.rules.modifierIds).toContain('solo-run');
+    endRegionTempEffects(run);
+    expect(run.rules.modifierIds).not.toContain('solo-run');
+    run.regionIndex += 1;
+    open(run, 'solo-hero-week-payout');
+    const before = maxHp(content, run.party[0]!);
+    run = pick(run, 'Take the reward.');
+    expect(maxHp(content, run.party[0]!)).toBeGreaterThanOrEqual(before);
+    expect(flagOf(run, 'solo-hero-week-paid')).toBe(1);
+  });
+  it('a rule the player chose for the run is not taken away when a signed challenge ends', () => {
+    let run = weekRun('no-items-week');
+    run.rules.modifierIds = [...run.rules.modifierIds, 'no-battle-items'];
+    open(run, 'no-items-week');
+    run = pick(run, 'Sign up.');
+    endRegionTempEffects(run);
+    expect(run.rules.modifierIds).toContain('no-battle-items');
+  });
+  it('a calendar week\'s crier only exists in runs of that week; "Join in." gives the bonus for the region', () => {
+    expect(content.events.get('catch-carnival')!.gameEvent).toBe('catch-carnival');
+    let run = weekRun('catch-carnival');
+    open(run, 'catch-carnival');
+    run = pick(run, 'Join in.');
+    expect(run.perkEffects.filter((m) => m.kind === 'captureMultiplier').length).toBeGreaterThanOrEqual(1);
+    expect(run.tempEffects.some((t) => t.until === 'region')).toBe(true);
   });
 });

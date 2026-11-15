@@ -367,7 +367,7 @@
       "text": "\"Shut for this run,\" says Hallam. \"Once a seed's chosen the other two sleep till the road's done. That's not my rule; it's the tree's.\" He goes back to the anvil.",
       "effects": [
        {
-        "kind": "seeAgain",
+        "kind": "addEvent",
         "eventId": "relic-forge"
        }
       ]
@@ -697,7 +697,7 @@
       "text": "Under the carved line, smaller, cut by a different hand: \"Whatever you've grown, you lose.\" Someone has scratched a tally beside it. Most of the marks are old.",
       "effects": [
        {
-        "kind": "seeAgain",
+        "kind": "addEvent",
         "eventId": "relic-shrine"
        }
       ]

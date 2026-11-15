@@ -8610,7 +8610,7 @@
   },
   {
    "id": "hardcore-hour",
-   "version": 1,
+   "version": 2,
    "name": "Hardcore Hour",
    "kind": "holiday",
    "description": "Bosses hit harder, and pay triple.",
@@ -8625,7 +8625,7 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Damage you take from gym leaders, Elite Four members and champions is 25% higher; their prize money is tripled.",
+   "ruleText": "Opt in: sign up at the challenge board on your first stage. Bosses deal a quarter more damage. Lasts the region. Reward: Boss prize money ×3.",
    "modifiers": [
     {
      "kind": "bossDamageTakenMultiplier",
@@ -8636,6 +8636,7 @@
      "value": 3
     }
    ],
+   "optIn": true,
    "mapEvents": [],
    "objectives": [
     {
@@ -8686,7 +8687,7 @@
   },
   {
    "id": "solo-hero-week",
-   "version": 1,
+   "version": 2,
    "name": "Solo Hero Week",
    "kind": "holiday",
    "description": "One Pokémon, one road, one hero.",
@@ -8701,43 +8702,14 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Your party holds only one Pokémon (Solo Run rule), with 40% more HP, Attack, Defense, Sp. Atk, Sp. Def and Speed.",
+   "ruleText": "Opt in: sign up at the challenge board on your first stage. Only your lead battles, for the region. Lasts the region. Reward: At the region's end, your lead gains +5% to every stat, for good.",
    "modifiers": [
     {
      "kind": "runRule",
      "id": "solo-run"
-    },
-    {
-     "kind": "statMultiplier",
-     "stat": "hp",
-     "value": 1.4
-    },
-    {
-     "kind": "statMultiplier",
-     "stat": "atk",
-     "value": 1.4
-    },
-    {
-     "kind": "statMultiplier",
-     "stat": "def",
-     "value": 1.4
-    },
-    {
-     "kind": "statMultiplier",
-     "stat": "spa",
-     "value": 1.4
-    },
-    {
-     "kind": "statMultiplier",
-     "stat": "spd",
-     "value": 1.4
-    },
-    {
-     "kind": "statMultiplier",
-     "stat": "spe",
-     "value": 1.4
     }
    ],
+   "optIn": true,
    "mapEvents": [],
    "objectives": [
     {
@@ -8788,7 +8760,7 @@
   },
   {
    "id": "critical-week",
-   "version": 1,
+   "version": 2,
    "name": "Critical Week",
    "kind": "holiday",
    "description": "Everything lands right on the weak spot.",
@@ -8803,13 +8775,18 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Your Pokémon land critical hits twice as often.",
+   "ruleText": "Opt in: sign up at the challenge board on your first stage. Critical hits are twice as likely, for both sides. Lasts the region. Reward: Prize money ×1.5.",
    "modifiers": [
     {
      "kind": "critChanceMultiplier",
      "value": 2
+    },
+    {
+     "kind": "moneyMultiplier",
+     "value": 1.5
     }
    ],
+   "optIn": true,
    "mapEvents": [],
    "objectives": [
     {
@@ -8860,7 +8837,7 @@
   },
   {
    "id": "no-items-week",
-   "version": 1,
+   "version": 2,
    "name": "No Items Week",
    "kind": "holiday",
    "description": "The bag is locked. Only Poké Balls go in battle.",
@@ -8875,17 +8852,14 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Only Poké Balls can be used in battle (Empty Bag rule); after each won battle your Pokémon recover 5% of their max HP.",
+   "ruleText": "Opt in: sign up at the challenge board on your first stage. No items in battle, for the region. Lasts the region. Reward: At the region's end, a Rare held item.",
    "modifiers": [
     {
      "kind": "runRule",
      "id": "no-battle-items"
-    },
-    {
-     "kind": "postBattleHeal",
-     "percent": 5
     }
    ],
+   "optIn": true,
    "mapEvents": [],
    "objectives": [
     {
@@ -8936,7 +8910,7 @@
   },
   {
    "id": "no-healing-week",
-   "version": 1,
+   "version": 2,
    "name": "No Healing Week",
    "kind": "holiday",
    "description": "Healing stops are closed; only the Pokémon Centers can help.",
@@ -8951,17 +8925,14 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Healing stops on the map cannot be used (No Healing Stops rule); prize money is 20% higher.",
+   "ruleText": "Opt in: sign up at the challenge board on your first stage. No revives, for the region: a fainted Pokémon only recovers at a Center. Lasts the region. Reward: At the region's end, +2 Bond for every Pokémon still with you.",
    "modifiers": [
     {
      "kind": "runRule",
-     "id": "no-heal-stops"
-    },
-    {
-     "kind": "moneyMultiplier",
-     "value": 1.2
+     "id": "no-revives"
     }
    ],
+   "optIn": true,
    "mapEvents": [],
    "objectives": [
     {
@@ -9012,7 +8983,7 @@
   },
   {
    "id": "glass-cannon-week",
-   "version": 1,
+   "version": 2,
    "name": "Glass Cannon Week",
    "kind": "holiday",
    "description": "All the power, none of the toughness.",
@@ -9027,24 +8998,22 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Your Pokémon have 30% more Attack and Sp. Atk and 30% less HP.",
+   "ruleText": "Opt in: sign up at the challenge board on your first stage. Every attack deals 30% more damage, both ways. Lasts the region. Reward: Prize money ×1.5.",
    "modifiers": [
     {
-     "kind": "statMultiplier",
-     "stat": "atk",
+     "kind": "damageMultiplier",
      "value": 1.3
     },
     {
-     "kind": "statMultiplier",
-     "stat": "spa",
+     "kind": "damageTakenMultiplier",
      "value": 1.3
     },
     {
-     "kind": "statMultiplier",
-     "stat": "hp",
-     "value": 0.7
+     "kind": "moneyMultiplier",
+     "value": 1.5
     }
    ],
+   "optIn": true,
    "mapEvents": [],
    "objectives": [
     {
@@ -9095,7 +9064,7 @@
   },
   {
    "id": "giant-week",
-   "version": 1,
+   "version": 2,
    "name": "Giant Week",
    "kind": "holiday",
    "description": "Everything is huge and slow.",
@@ -9110,19 +9079,18 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Your Pokémon have 20% more HP and 15% less Speed.",
+   "ruleText": "Opt in: sign up at the challenge board on your first stage. Every foe is bigger: two levels higher. Lasts the region. Reward: Experience ×1.5.",
    "modifiers": [
     {
-     "kind": "statMultiplier",
-     "stat": "hp",
-     "value": 1.2
+     "kind": "enemyLevelOffset",
+     "value": 2
     },
     {
-     "kind": "statMultiplier",
-     "stat": "spe",
-     "value": 0.85
+     "kind": "xpMultiplier",
+     "value": 1.5
     }
    ],
+   "optIn": true,
    "mapEvents": [],
    "objectives": [
     {
@@ -9173,7 +9141,7 @@
   },
   {
    "id": "only-starters-week",
-   "version": 1,
+   "version": 2,
    "name": "Only Starters Week",
    "kind": "holiday",
    "description": "The wild routes are full of starter lines.",
@@ -9188,7 +9156,7 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Starter Pokémon of every region and their evolutions appear ten times as often.",
+   "ruleText": "Opt in: sign up at the challenge board on your first stage. Wild encounters are almost all starter lines, for the region. Lasts the region. Reward: At the region's end, a starter Egg.",
    "modifiers": [
     {
      "kind": "speciesEncounterWeight",
@@ -9224,6 +9192,7 @@
      "value": 10
     }
    ],
+   "optIn": true,
    "mapEvents": [],
    "objectives": [
     {
@@ -9275,7 +9244,7 @@
   },
   {
    "id": "only-fully-evolved-week",
-   "version": 1,
+   "version": 2,
    "name": "Only Fully Evolved Week",
    "kind": "holiday",
    "description": "No half measures: the evolved only, and tougher.",
@@ -9290,7 +9259,7 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Fully evolved Pokémon appear six times as often and unevolved ones a fifth as often; trainers are 1 level higher.",
+   "ruleText": "Opt in: sign up at the challenge board on your first stage. Wild Pokémon are fully evolved and two levels higher. Lasts the region. Reward: Experience ×1.5.",
    "modifiers": [
     {
      "kind": "speciesEncounterWeight",
@@ -9298,15 +9267,15 @@
      "value": 6
     },
     {
-     "kind": "speciesEncounterWeight",
-     "trait": "unevolved",
-     "value": 0.2
+     "kind": "enemyLevelOffset",
+     "value": 2
     },
     {
-     "kind": "enemyLevelOffset",
-     "value": 1
+     "kind": "xpMultiplier",
+     "value": 1.5
     }
    ],
+   "optIn": true,
    "mapEvents": [],
    "objectives": [
     {
@@ -9357,7 +9326,7 @@
   },
   {
    "id": "only-unevolved-week",
-   "version": 1,
+   "version": 2,
    "name": "Only Unevolved Week",
    "kind": "holiday",
    "description": "Little ones everywhere; show what a Pichu can do.",
@@ -9372,7 +9341,7 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Pokémon that can still evolve appear six times as often and fully evolved ones less than a third as often.",
+   "ruleText": "Opt in: sign up at the challenge board on your first stage. Wild Pokémon are mostly unevolved, for the region. Lasts the region. Reward: At the region's end, every Pokémon with you gains a level.",
    "modifiers": [
     {
      "kind": "speciesEncounterWeight",
@@ -9385,6 +9354,7 @@
      "value": 0.3
     }
    ],
+   "optIn": true,
    "mapEvents": [],
    "objectives": [
     {
@@ -9435,7 +9405,7 @@
   },
   {
    "id": "gravity-week",
-   "version": 1,
+   "version": 2,
    "name": "Gravity Week",
    "kind": "holiday",
    "description": "The ground pulls hard: nothing floats today.",
@@ -9450,14 +9420,19 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Gravity is on at the start of every fight (5 turns): Flying-types and levitating Pokémon lose their ground immunity.",
+   "ruleText": "Opt in: sign up at the challenge board on your first stage. Gravity in every battle. Lasts the region. Reward: Prize money ×1.25.",
    "modifiers": [
     {
      "kind": "battleStart",
      "field": "gravity",
      "turns": 5
+    },
+    {
+     "kind": "moneyMultiplier",
+     "value": 1.25
     }
    ],
+   "optIn": true,
    "mapEvents": [],
    "objectives": [
     {
@@ -9509,7 +9484,7 @@
   },
   {
    "id": "trick-room-week",
-   "version": 1,
+   "version": 2,
    "name": "Trick Room Week",
    "kind": "holiday",
    "description": "The slow go first, everywhere.",
@@ -9524,14 +9499,19 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Trick Room is on at the start of every fight (5 turns): slower Pokémon move first.",
+   "ruleText": "Opt in: sign up at the challenge board on your first stage. Trick Room in every battle. Lasts the region. Reward: Prize money ×1.25.",
    "modifiers": [
     {
      "kind": "battleStart",
      "field": "trickRoom",
      "turns": 5
+    },
+    {
+     "kind": "moneyMultiplier",
+     "value": 1.25
     }
    ],
+   "optIn": true,
    "mapEvents": [],
    "objectives": [
     {
@@ -9583,7 +9563,7 @@
   },
   {
    "id": "tailwind-week",
-   "version": 1,
+   "version": 2,
    "name": "Tailwind Week",
    "kind": "holiday",
    "description": "A steady wind at your back.",
@@ -9598,14 +9578,15 @@
     "minRunsFinished": 0
    },
    "mode": "any",
-   "ruleText": "Your side starts every fight with Tailwind (5 turns): double Speed.",
+   "ruleText": "Opt in: sign up at the challenge board on your first stage. Your side has a Tailwind for the first turns of every battle. Lasts the region. Reward: No extra reward: it's a breather.",
    "modifiers": [
     {
      "kind": "battleStart",
      "tailwind": true,
-     "turns": 5
+     "turns": 2
     }
    ],
+   "optIn": true,
    "mapEvents": [],
    "objectives": [
     {

@@ -879,6 +879,11 @@ export function endRegionTempEffects(run: RunState): void {
     for (const effect of temp.effects) {
       const at = run.perkEffects.findIndex((m) => JSON.stringify(m) === JSON.stringify(effect));
       if (at >= 0) run.perkEffects.splice(at, 1);
+      // A challenge's run rule (SF98) ends with its region, unless the player had chosen it for the run.
+      if (effect.kind === 'runRule' && run.story.flags[`rule-temp:${effect.id}`]) {
+        delete run.story.flags[`rule-temp:${effect.id}`];
+        run.rules.modifierIds = run.rules.modifierIds.filter((id) => id !== effect.id);
+      }
     }
   }
   run.tempEffects = kept;

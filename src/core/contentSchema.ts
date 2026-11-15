@@ -3581,6 +3581,8 @@ export const GameEventSchema = z.object({
   /** The themed ruleset, in words, and the trainer modifiers it adds to every run started while it is on. */
   ruleText: z.string().min(1),
   modifiers: z.array(ArchetypeModifierSchema).default([]),
+  /** Catalog Overhaul (SF98): a challenge week. Its modifiers and run rules are not put on the run; the player signs up at its challenge board (a story event) instead. */
+  optIn: z.boolean().default(false),
   /** Map events (events.json) it features: they turn up more often. */
   mapEvents: z.array(z.string()).default([]),
   objectives: z.array(GameEventObjectiveSchema).min(3).max(5),

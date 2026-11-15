@@ -1665,6 +1665,12 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return '';
     case 'tempEffect':
       run.perkEffects = [...(run.perkEffects ?? []), ...e.effects];
+      // A signed challenge's run rule (SF98) holds while the effect does; a rule the player already chose is left alone.
+      for (const m of e.effects) {
+        if (m.kind !== 'runRule' || run.rules.modifierIds.includes(m.id)) continue;
+        run.rules.modifierIds = [...run.rules.modifierIds, m.id];
+        run.story.flags[`rule-temp:${m.id}`] = true;
+      }
       run.tempEffects.push({ effects: e.effects, battles: e.battles, until: e.until });
       return effectWords(content, e);
     case 'relic': {
