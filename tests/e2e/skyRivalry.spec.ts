@@ -48,6 +48,7 @@ test('the Pidgey and Spearow branch fight plays by itself on the battle scene', 
   }
   expect(seen.spectate).toBe(true);
   await expect.poll(() => scene(page), { timeout: 30_000 }).toBe('Map');
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.session.run.phase), { timeout: 15_000 }).toBe('map');
   const after = await page.evaluate(() => ({ party: (window as any).__pkr.session.run.party.map((m: any) => m.speciesId), phase: (window as any).__pkr.session.run.phase, sky: (window as any).__pkr.session.run.expansion?.sky }));
   expect(after.party).toEqual(team);
   expect(after.phase).toBe('map');
