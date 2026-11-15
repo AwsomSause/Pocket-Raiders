@@ -188,7 +188,10 @@
     "attaches": "instead",
     "badge": "The rival's face",
     "level": 2,
-    "often": "Twice per Kanto (Stage 8: Step 18, must-see)"
+    "often": "Twice per Kanto (Stage 8: Step 18, must-see)",
+    "homes": {
+     "8": 18
+    }
    }
   },
   {

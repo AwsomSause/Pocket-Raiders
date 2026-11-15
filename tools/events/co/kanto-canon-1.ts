@@ -42,7 +42,7 @@ const DOC = 'KANTO_PLACED_1';
 // ---------- Route 22: The Rival
 {
   const s = space(E, { id: 'cs.kanto.viridian.route22', town: 'viridian', name: 'Route 22: The Rival', kind: 'MC', appears: 'always', flags: ['kanto.route22.first', 'kanto.route22.final'], section: `${DOC}: Route 22: The Rival`,
-    placed: { stage: [1, 8], home: 3, window: [2, 4], sits: 'must', attaches: 'instead', badge: "The rival's face", level: 2, often: 'Twice per Kanto (Stage 8: Step 18, must-see)' } });
+    placed: { stage: [1, 8], home: 3, window: [2, 4], sits: 'must', attaches: 'instead', badge: "The rival's face", level: 2, often: 'Twice per Kanto (Stage 8: Step 18, must-see)', homes: { '8': 18 } } });
   // The first Rival Rescue Plan entry is written by the rival mark whether the player wins or loses; the mark is the Rival Token.
   const first = (text: string) => battle(text, foe('Rival', { rival: true, size: 2, levelBonus: 2 }), flag('kanto-route22-first'), { kind: 'rivalChange', feelings: { rivalry: 1 }, lead: 0, mark: 'route22-token' });
   s.entry('Route 22: The Rival',

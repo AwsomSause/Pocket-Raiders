@@ -39,6 +39,8 @@ export const CanonSpaceSchema = z.object({
     stage: z.array(z.number().int().min(1).max(8)), home: z.number().int().min(1).max(20), window: z.tuple([z.number().int(), z.number().int()]).optional(),
     sits: z.enum(['must', 'optional', 'town', 'plus', 'door', 'hub']), attaches: z.enum(['before', 'instead', 'after', 'town', 'plus']),
     badge: z.string(), level: z.number().int().min(-2).max(2).nullable(), often: z.string(),
+    /** A different home step at a later Kanto stage (Route 22: Step 3 at Stage 1, Step 18 at Stage 8). Keyed by stage number. */
+    homes: z.record(z.string(), z.number().int().min(1).max(20)).optional(),
   }).optional(),
 });
 export type CanonSpace = z.infer<typeof CanonSpaceSchema>;
@@ -127,7 +129,8 @@ export function buildTownMenu(file: CanonSpacesFile, input: TownMenuInput): stri
   let drawn = 0;
   while (drawn < want) {
     const psCount = menu.filter((s) => s.kind === 'PS').length;
-    const pool = inTown.filter((sp) => sp.appears === 'roll' && !onMenu.has(sp.id) && !owned(sp) && met(sp, input.flags, onMenu) && !(sp.kind === 'PS' && psCount >= file.townRoll.maxPseudoStages));
+    // The Stage 8 return only rolls what the docs put at Stage 8 (a space placed at Stage 1 only stays there).
+    const pool = inTown.filter((sp) => sp.appears === 'roll' && !(slot.slot === 'stage-8' && sp.placed && !sp.placed.stage.includes(8)) && !onMenu.has(sp.id) && !owned(sp) && met(sp, input.flags, onMenu) && !(sp.kind === 'PS' && psCount >= file.townRoll.maxPseudoStages));
     if (pool.length === 0) break;
     add(pool[rng.int(0, pool.length - 1)]!);
     drawn++;

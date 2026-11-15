@@ -1,0 +1,260 @@
+{
+ "category": "kanto-canon",
+ "note": "Story flags (ev:<key>) written by the Kanto Canon Spaces. Same run only. A canon flag kanto.x.y is key kanto-x-y.",
+ "flags": [
+  {
+   "key": "intel",
+   "setBy": [
+    "cs-kanto-cerulean-burglary"
+   ]
+  },
+  {
+   "key": "kanto-burglary-solved",
+   "setBy": [
+    "cs-kanto-cerulean-burglary"
+   ]
+  },
+  {
+   "key": "kanto-daycare-left",
+   "setBy": [
+    "cs-kanto-cerulean-daycare"
+   ]
+  },
+  {
+   "key": "kanto-diglett-waited",
+   "setBy": [
+    "cs-kanto-viridian-diglett-n2"
+   ]
+  },
+  {
+   "key": "kanto-fanclub-listened",
+   "setBy": [
+    "cs-kanto-lavender-fanclub-t4"
+   ]
+  },
+  {
+   "key": "kanto-flock-again",
+   "setBy": [
+    "cs-kanto-pewter-flock-again"
+   ]
+  },
+  {
+   "key": "kanto-flock-fence",
+   "setBy": [
+    "cs-kanto-pewter-flock-fence"
+   ]
+  },
+  {
+   "key": "kanto-flock-left",
+   "setBy": [
+    "cs-kanto-pewter-flock"
+   ]
+  },
+  {
+   "key": "kanto-flock-pidgey",
+   "setBy": [
+    "cs-kanto-pewter-flock"
+   ]
+  },
+  {
+   "key": "kanto-flock-seen",
+   "setBy": [
+    "cs-kanto-pewter-flock"
+   ]
+  },
+  {
+   "key": "kanto-fuji-adopted",
+   "setBy": [
+    "cs-kanto-lavender-fuji"
+   ]
+  },
+  {
+   "key": "kanto-market-ticket",
+   "setBy": [
+    "cs-kanto-vermilion-market-ticket"
+   ]
+  },
+  {
+   "key": "kanto-museum-amber",
+   "setBy": [
+    "cs-kanto-pewter-museum-a3"
+   ]
+  },
+  {
+   "key": "kanto-museum-registry",
+   "setBy": [
+    "cs-kanto-pewter-museum-hall"
+   ]
+  },
+  {
+   "key": "kanto-parcel-found",
+   "setBy": [
+    "cs-kanto-viridian-parcel-nest"
+   ]
+  },
+  {
+   "key": "kanto-parcel-lost",
+   "setBy": [
+    "cs-kanto-viridian-parcel-thief"
+   ]
+  },
+  {
+   "key": "kanto-parcel-upgrade",
+   "setBy": [
+    "cs-kanto-viridian-parcel-deliver",
+    "cs-kanto-viridian-parcel-nest",
+    "cs-kanto-viridian-parcel-road"
+   ]
+  },
+  {
+   "key": "kanto-powerplant-cleared",
+   "setBy": [
+    "cs-kanto-lavender-powerplant-spoils",
+    "cs-kanto-lavender-powerplant-zapdos"
+   ]
+  },
+  {
+   "key": "kanto-powerplant-zapdos",
+   "setBy": [
+    "cs-kanto-lavender-powerplant-zapdos"
+   ]
+  },
+  {
+   "key": "kanto-prank-friend",
+   "setBy": [
+    "cs-kanto-lavender-prank-r3"
+   ]
+  },
+  {
+   "key": "kanto-rocktunnel-cleared",
+   "setBy": [
+    "cs-kanto-lavender-rocktunnel-n5"
+   ]
+  },
+  {
+   "key": "kanto-rocktunnel-onix",
+   "setBy": [
+    "cs-kanto-lavender-rocktunnel-n4"
+   ]
+  },
+  {
+   "key": "kanto-route22-final",
+   "setBy": [
+    "cs-kanto-viridian-route22-ahead"
+   ]
+  },
+  {
+   "key": "kanto-route22-first",
+   "setBy": [
+    "cs-kanto-viridian-route22"
+   ]
+  },
+  {
+   "key": "kanto-school-done",
+   "setBy": [
+    "cs-kanto-viridian-school-q10",
+    "cs-kanto-viridian-school-q11",
+    "cs-kanto-viridian-school-q12",
+    "cs-kanto-viridian-school-q9"
+   ]
+  },
+  {
+   "key": "kanto-school-wrong",
+   "setBy": [
+    "cs-kanto-viridian-school-q1",
+    "cs-kanto-viridian-school-q10",
+    "cs-kanto-viridian-school-q11",
+    "cs-kanto-viridian-school-q12",
+    "cs-kanto-viridian-school-q2",
+    "cs-kanto-viridian-school-q3",
+    "cs-kanto-viridian-school-q4",
+    "cs-kanto-viridian-school-q5",
+    "cs-kanto-viridian-school-q6",
+    "cs-kanto-viridian-school-q7",
+    "cs-kanto-viridian-school-q8",
+    "cs-kanto-viridian-school-q9"
+   ]
+  },
+  {
+   "key": "kanto-sprat-taught",
+   "setBy": [
+    "cs-kanto-vermilion-fishclub-cast3"
+   ]
+  },
+  {
+   "key": "kanto-stew-perfect",
+   "setBy": [
+    "cs-kanto-pewter-rest-stew"
+   ]
+  },
+  {
+   "key": "kanto-tower-cleared",
+   "setBy": [
+    "cs-kanto-lavender-tower-f7"
+   ]
+  },
+  {
+   "key": "kanto-tower-marowak",
+   "setBy": [
+    "cs-kanto-lavender-tower-f6"
+   ]
+  },
+  {
+   "key": "kanto-tower-memorial",
+   "setBy": [
+    "cs-kanto-lavender-tower-f4",
+    "cs-kanto-lavender-tower-f4b",
+    "cs-kanto-lavender-tower-f4c",
+    "cs-kanto-lavender-tower-f4r"
+   ]
+  },
+  {
+   "key": "kanto-tower-mother",
+   "setBy": [
+    "cs-kanto-lavender-tower-f6"
+   ]
+  },
+  {
+   "key": "kanto-volunteers-revive",
+   "setBy": [
+    "cs-kanto-lavender-volunteers-revive"
+   ]
+  },
+  {
+   "key": "kanto-weedle-seed",
+   "setBy": [
+    "cs-kanto-viridian-oldman",
+    "cs-kanto-viridian-oldman-again"
+   ]
+  },
+  {
+   "key": "kind-total",
+   "setBy": [
+    "cs-kanto-cerulean-burglary",
+    "cs-kanto-cerulean-burglary-after"
+   ]
+  },
+  {
+   "key": "xk-tower-cleansed",
+   "setBy": [
+    "cs-kanto-lavender-tower-f7"
+   ]
+  },
+  {
+   "key": "kanto-fossil-fragment",
+   "rule": "kc fossilFragment (core/expansion/canonKantoRules.ts): halves of a fossil held, 0 or 1"
+  },
+  {
+   "key": "kanto-tower-gifts",
+   "rule": "kc partingGift: Parting Gifts the Memorial Wall has answered this run (at most 3)"
+  },
+  {
+   "key": "kc-stat-rolls",
+   "rule": "kc statUp: counter that keeps each random stat roll distinct"
+  },
+  {
+   "key": "kanto-kaiju-lost",
+   "rule": "core/expansion/canonRun.ts failCanonRaid: Kaiju Tentacruel won, the Harbor Market shows its shutters"
+  }
+ ]
+}

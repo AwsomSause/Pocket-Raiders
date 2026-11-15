@@ -45,6 +45,8 @@ export interface Placed {
   level: number | null;
   /** The doc's "How often" line. */
   often: string;
+  /** A different home step at a later Kanto stage, keyed by stage number (Route 22 at Stage 8: Step 18). */
+  homes?: Record<string, number>;
 }
 export interface SpaceRow {
   id: string; town: string; name: string; kind: Kind; appears: 'always' | 'roll' | 'trigger' | 'locked' | 'route';

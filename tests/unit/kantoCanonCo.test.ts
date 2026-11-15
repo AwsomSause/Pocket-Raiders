@@ -9,7 +9,9 @@ import { columnOfStep, nodesForSpace } from '../../src/core/expansion/canonKanto
 import { Rng, hashSeed } from '../../src/core/rng';
 import { chooseStarter, createRun } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
+import { buildChainStage, chainById } from '../../src/core/dungeon/pseudo';
 import status from '../../src/data/catalogOverhaul/status/kanto-canon.json';
+import pseudoFile from '../../src/data/catalogOverhaul/pseudo/kanto-canon.json';
 import co1 from '../../src/data/events/co-kanto-canon-1.json';
 import co2 from '../../src/data/events/co-kanto-canon-2.json';
 
@@ -155,6 +157,22 @@ describe('kanto-canon: rules', () => {
   });
 });
 
+describe('kanto-canon: pseudo-stages', () => {
+  it('every Pseudo Stage space draws as a stage map whose rooms are its own events', () => {
+    expect(pseudoFile.chains.length).toBeGreaterThan(0);
+    const run = freshRun();
+    for (const c of pseudoFile.chains) {
+      const chain = chainById(c.id)!;
+      expect(chain, c.id).toBeTruthy();
+      expect(content.themes.has(chain.themeId), `${c.id} theme ${chain.themeId}`).toBe(true);
+      const stage = buildChainStage(content, chain, run.stage!);
+      expect(stage.map.nodes.length, `${c.id} rooms`).toBeGreaterThan(1);
+      expect(stage.index, 'never adds a stage').toBe(run.stage!.index);
+      for (const n of stage.map.nodes) expect(content.events.get(n.roomEvent!)?.room, `${c.id} ${n.roomEvent}`).toBe(true);
+    }
+  });
+});
+
 describe('kanto-canon: placement', () => {
   it('a must-see space sits on every node of its home step, and the others inside their window', () => {
     const run = freshRun();
@@ -169,6 +187,11 @@ describe('kanto-canon: placement', () => {
       expect(node!.column).toBeGreaterThanOrEqual(columnOfStep(stage, 5));
       expect(node!.column).toBeLessThanOrEqual(columnOfStep(stage, 9));
     }
+    // Route 22 sits on Step 3 at Stage 1 and on Step 18 at the Stage 8 return.
+    const route22 = canonKanto.spaces.find((s) => s.id === 'cs.kanto.viridian.route22')!;
+    expect(nodesForSpace(stage, route22, new Rng(hashSeed('kc-r22'))).every((n) => n.column === columnOfStep(stage, 3))).toBe(true);
+    const later = { ...stage, index: 7 };
+    expect(nodesForSpace(later, route22, new Rng(hashSeed('kc-r22'))).every((n) => n.column === columnOfStep(later, 18))).toBe(true);
     // A space the placed docs do not cover keeps a single random node.
     expect(nodesForSpace(stage, undefined, new Rng(hashSeed("kc-1")))).toHaveLength(1);
   });

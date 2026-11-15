@@ -3,6 +3,7 @@
 //   src/data/expansion/canonKantoPlaced.json            follow-up scenes and road spaces (core/expansion/canonKantoPlaced.ts)
 //   src/data/catalogOverhaul/placement/kanto-canon.json  the shared placement format (STANDARDS.md), keyed by event id
 //   src/data/catalogOverhaul/pseudo/kanto-canon.json     chain pseudo-stages (Door shapes), one per Pseudo Stage space
+//   src/data/catalogOverhaul/flags/kanto-canon.json      every flag the set writes, and the events (or rules) that write it
 //   src/data/catalogOverhaul/status/kanto-canon.json     `extra`: space id -> the event that plays it (kept: `checked` dates)
 // The catalog itself (canonSpacesKanto.json) is `npm run data:canon-spaces`, which reads the same modules.
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -33,7 +34,32 @@ for (const s of kc.SPACES) {
 write('src/data/catalogOverhaul/placement/kanto-canon.json', placement);
 
 const chains = kc.SPACES.filter((s) => s.ps).map((s) => ({ id: `ps_${kc.eid(s.id).replace(/-/g, '_')}`, name: s.ps!.name, entry: kc.eid(s.id), themeId: s.ps!.themeId, tint: kc.TINTS[s.town] ?? kc.TINTS.route, mood: s.ps!.mood }));
-write('src/data/catalogOverhaul/pseudo/kanto-canon.json', chains);
+write('src/data/catalogOverhaul/pseudo/kanto-canon.json', { category: 'kanto-canon', note: 'Kanto Canon Spaces with a Pseudo Stage shape (KANTO_PLACED_*.md).', chains });
+
+// Flags: read from the built event files (run after co:build), plus the ones the `kc` rules and canonRun.ts keep themselves.
+const setBy = new Map<string, Set<string>>();
+const walk = (x: unknown, ev: string): void => {
+  if (Array.isArray(x)) { for (const y of x) walk(y, ev); return; }
+  if (!x || typeof x !== 'object') return;
+  const o = x as Record<string, unknown>;
+  if (o.kind === 'flag' && typeof o.key === 'string' && !('atLeast' in o) && !('atMost' in o)) { if (!setBy.has(o.key)) setBy.set(o.key, new Set()); setBy.get(o.key)!.add(ev); }
+  for (const v of Object.values(o)) walk(v, ev);
+};
+const evDir = join(root, 'src', 'data', 'events');
+for (const f of readdirSync(evDir).filter((x) => /^co-kanto-canon-.*\.json$/.test(x)).sort()) {
+  for (const e of JSON.parse(readFileSync(join(evDir, f), 'utf8')).events as { id: string; choices: unknown[]; remembers?: { addChoices?: unknown[] }[] }[]) walk([e.choices, (e.remembers ?? []).map((r) => r.addChoices ?? [])], e.id);
+}
+const RULE_FLAGS: Record<string, string> = {
+  'kanto-fossil-fragment': 'kc fossilFragment (core/expansion/canonKantoRules.ts): halves of a fossil held, 0 or 1',
+  'kanto-tower-gifts': 'kc partingGift: Parting Gifts the Memorial Wall has answered this run (at most 3)',
+  'kc-stat-rolls': 'kc statUp: counter that keeps each random stat roll distinct',
+  'kanto-kaiju-lost': 'core/expansion/canonRun.ts failCanonRaid: Kaiju Tentacruel won, the Harbor Market shows its shutters',
+};
+write('src/data/catalogOverhaul/flags/kanto-canon.json', {
+  category: 'kanto-canon',
+  note: 'Story flags (ev:<key>) written by the Kanto Canon Spaces. Same run only. A canon flag kanto.x.y is key kanto-x-y.',
+  flags: [...[...setBy].sort(([a], [b]) => a.localeCompare(b)).map(([key, evs]) => ({ key, setBy: [...evs].sort() })), ...Object.entries(RULE_FLAGS).map(([key, rule]) => ({ key, rule }))],
+});
 
 const statusPath = 'src/data/catalogOverhaul/status/kanto-canon.json';
 const prev = existsSync(join(root, statusPath)) ? JSON.parse(readFileSync(join(root, statusPath), 'utf8')) : {};

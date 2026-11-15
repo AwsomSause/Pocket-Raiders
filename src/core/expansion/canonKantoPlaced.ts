@@ -37,9 +37,10 @@ export function nodesForSpace(stage: Stage, space: Pick<CanonSpace, 'placed'> | 
   if (candidates.length === 0) return [];
   const p = space?.placed;
   if (!p) return [rng.pick(candidates)];
-  const from = columnOfStep(stage, p.window?.[0] ?? p.home), to = columnOfStep(stage, p.window?.[1] ?? p.home);
+  const later = stage.kind === 'stage' ? p.homes?.[String(stage.index + 1)] : undefined;
+  const from = columnOfStep(stage, later ?? p.window?.[0] ?? p.home), to = columnOfStep(stage, later ?? p.window?.[1] ?? p.home);
   const columns = [...new Set(candidates.map((n) => n.column))].filter((c) => c >= from && c <= to);
-  const home = columnOfStep(stage, p.home);
+  const home = columnOfStep(stage, later ?? p.home);
   // Must-see spaces stay on their home step; the others slide inside the window.
   const column = p.sits === 'must' || columns.length === 0 ? home : rng.pick(columns);
   const inColumn = candidates.filter((n) => n.column === column);
