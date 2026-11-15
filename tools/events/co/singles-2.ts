@@ -3,6 +3,7 @@
 // Each rest heals the party as the base Rest does, then asks its one small choice; the Bond goes to the Pokémon chosen.
 // Known limits: docs/status/co-singles.md.
 import { $, any, anyType, bondUp, ch, cure, fight, flag, heal, item, join, leave, out, trainer, wild, type Json } from '../dsl.ts';
+import { friendlyAll } from './_singlesKit.ts';
 
 export const CATEGORY = 'singles';
 
@@ -206,5 +207,5 @@ const SF139: Json[] = [
   },
 ];
 
-export const EVENTS: Json[] = [...SF137, ...SF139];
+export const EVENTS: Json[] = friendlyAll([...SF137, ...SF139]);
 export const REMOVE: string[] = [];

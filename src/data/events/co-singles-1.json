@@ -692,7 +692,8 @@
          "text": "Faced a rare sighting.",
          "importance": 30
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     },
@@ -726,7 +727,8 @@
          "text": "A rare Pokémon walked up on its own.",
          "importance": 30
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     }
@@ -788,7 +790,8 @@
        "types": [],
        "levelBonus": 0,
        "shinyMultiplier": 6,
-       "win": []
+       "win": [],
+       "friendly": true
       }
      }
     },
@@ -887,7 +890,8 @@
          "kind": "money",
          "amount": 600
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     },
@@ -941,7 +945,8 @@
          "kind": "money",
          "amount": 600
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     },
@@ -1039,7 +1044,8 @@
          "text": "Faced a Gigantamax Pokémon in the wild.",
          "importance": 70
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     },
@@ -1083,7 +1089,8 @@
          "text": "Faced a Gigantamax Pokémon in the wild.",
          "importance": 70
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     },
@@ -1127,7 +1134,8 @@
          "text": "Faced a Gigantamax Pokémon in the wild.",
          "importance": 70
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     },
@@ -1171,7 +1179,8 @@
          "text": "Faced a Gigantamax Pokémon in the wild.",
          "importance": 70
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     },
@@ -1215,7 +1224,8 @@
          "text": "Faced a Gigantamax Pokémon in the wild.",
          "importance": 70
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     },
@@ -1356,7 +1366,8 @@
        "types": [],
        "levelBonus": 2,
        "shinyMultiplier": 3,
-       "win": []
+       "win": [],
+       "friendly": true
       }
      }
     },
@@ -1787,7 +1798,8 @@
          "text": "Woke an Alpha at the end of the tracks.",
          "importance": 50
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     },
@@ -2104,7 +2116,8 @@
          "kind": "money",
          "amount": 300
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     },
@@ -2341,7 +2354,8 @@
        "types": [],
        "levelBonus": 1,
        "shinyMultiplier": 1,
-       "win": []
+       "win": [],
+       "friendly": true
       }
      }
     },
@@ -2399,7 +2413,8 @@
        "types": [],
        "levelBonus": 0,
        "shinyMultiplier": 1,
-       "win": []
+       "win": [],
+       "friendly": true
       }
      }
     }

@@ -314,7 +314,8 @@
          "text": "Won three bouts for a ghostly crowd; they taught your lead Mega Punch.",
          "importance": 55
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     },
@@ -669,7 +670,8 @@
          "text": "Relived a loss in the Mind Palace, and won it this time.",
          "importance": 55
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     },
@@ -689,7 +691,8 @@
          "kind": "train",
          "what": "learnMove"
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     }
@@ -1098,7 +1101,8 @@
          "text": "Beat a ghost who fought with your own moves.",
          "importance": 50
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     },
@@ -1126,7 +1130,8 @@
          "text": "A ghost showed you yourself in battle.",
          "importance": 50
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     }
@@ -1890,7 +1895,8 @@
        ],
        "levelBonus": 1,
        "shinyMultiplier": 1,
-       "win": []
+       "win": [],
+       "friendly": true
       }
      }
     },

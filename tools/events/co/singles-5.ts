@@ -2,6 +2,7 @@
 // Doc: catalog_overhaul/STORY_FAMILIES_20.md SF142 Hidden Paths and Mystery Places, SF143 Ability Secrets.
 // Known limits: docs/status/co-singles.md.
 import { $, any, ability, bondUp, ch, express, fight, flag, flagIs, heal, item, join, leave, out, reveal, room, scout, takeNode, trainer, wild, type Json } from '../dsl.ts';
+import { friendlyAll } from './_singlesKit.ts';
 
 export const CATEGORY = 'singles';
 
@@ -275,6 +276,6 @@ const SF143: Json[] = [
   ]),
 ];
 
-export const EVENTS: Json[] = [...SF142, ...SF143];
+export const EVENTS: Json[] = friendlyAll([...SF142, ...SF143]);
 export const REMOVE: string[] = [];
 void heal;

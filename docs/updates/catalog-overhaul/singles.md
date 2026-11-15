@@ -18,4 +18,10 @@
 - Write one line in the Unwritten Library, about the Pokémon you choose, and it becomes your run's epitaph.
 - A ghost duels you with your own team; a ghost crowd teaches a move after three bouts; Pokémon with the right Ability open tunnels, doors and chasms for a named item each.
 
+**Batch 6: challenges, shops and workshops (39 events).**
+- The Winstrate family, the relay, the held-item gauntlet, Joey and his top-percentage Rattata, a moot court where every point you win shakes her lead.
+- An Eco Ranger test with no knockouts allowed, a veteran's exam with no items, and a lifeguard test that starts with a real rescue.
+- A smoothie cart, a gift you wrap for a stranger that comes back better, and a ₽1 sale after a terrible skit about the region's Legendary.
+- No event fight ends a run any more: lose one, and your team gets back on its feet where you stood.
+
 Known limits: "confused" and "Charged" for one battle are a damage change, the balloon lands two stops ahead (you cannot pick the spot), the Wooloo rolls on any day, and a few "shown before you choose" previews describe the Pokémon without naming it. Full list: `docs/status/co-singles.md`.

@@ -69,6 +69,15 @@ describe('catalog overhaul: singles', () => {
     }
   });
 
+  it('no event ends a run: every fight an event starts is friendly', () => {
+    for (const e of events) {
+      for (const o of outcomes(e)) {
+        const b = o.battle as Json | undefined;
+        if (b && (b.kind === 'trainer' || b.kind === 'wild')) expect(b.friendly, `${e.id}`).toBe(true);
+      }
+    }
+  });
+
   it('no event forces a Shadow Pokémon on the player', () => {
     for (const e of events) for (const k of kinds(outcomes(e))) {
       if (k.kind === 'join' || k.kind === 'wild') expect(k.shadow === true, `${e.id}`).toBe(false);

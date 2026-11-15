@@ -100,7 +100,8 @@
          "text": "Battled a kid at their birthday party. They lost and laughed.",
          "importance": 35
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     }
@@ -160,7 +161,8 @@
          "text": "The birthday kid came back, trained like you.",
          "importance": 45
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     }
@@ -289,7 +291,8 @@
          "text": "Fought beside Gorm's Machoke.",
          "importance": 40
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     },
@@ -622,7 +625,8 @@
          "text": "Walked six children safely across the route.",
          "importance": 45
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     },
@@ -649,7 +653,8 @@
          "text": "Walked six children safely across the route.",
          "importance": 45
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     }
@@ -686,7 +691,8 @@
          "kind": "money",
          "amount": 500
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     },
@@ -1023,7 +1029,8 @@
          "text": "Lissie came back with the Fire-type team you suggested.",
          "importance": 45
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     }
@@ -1080,7 +1087,8 @@
          "text": "Lissie came back with the Water-type team you suggested.",
          "importance": 45
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     }
@@ -1137,7 +1145,8 @@
          "text": "Lissie came back with the Grass-type team you suggested.",
          "importance": 45
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     }
@@ -1217,7 +1226,8 @@
        "size": 2,
        "types": [],
        "levelBonus": 0,
-       "win": []
+       "win": [],
+       "friendly": true
       }
      }
     },
@@ -1232,7 +1242,8 @@
        "size": 2,
        "types": [],
        "levelBonus": 0,
-       "win": []
+       "win": [],
+       "friendly": true
       }
      }
     }

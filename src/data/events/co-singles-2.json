@@ -930,7 +930,8 @@
          "kind": "money",
          "amount": 400
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     }
@@ -977,7 +978,8 @@
          "kind": "money",
          "amount": 500
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     }
@@ -1239,7 +1241,8 @@
        "rule": {
         "turnLimit": 3
        },
-       "slowWin": []
+       "slowWin": [],
+       "friendly": true
       }
      }
     },
@@ -1306,7 +1309,8 @@
           "focus-sash"
          ]
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     },

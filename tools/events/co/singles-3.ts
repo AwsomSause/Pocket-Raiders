@@ -3,6 +3,7 @@
 // Light comedy, kept short; each event has one choice that changes a later callback (a scene on a later stage).
 // Known limits: docs/status/co-singles.md.
 import { $, any, ch, cure, fight, flag, flagIs, heal, item, leave, out, reveal, room, scout, takeNode, trainer, wild, type Json } from '../dsl.ts';
+import { friendlyAll } from './_singlesKit.ts';
 
 export const CATEGORY = 'singles';
 
@@ -24,7 +25,7 @@ const LISSIE: Record<string, { label: string; types: string[]; team: string[] }>
   grass: { label: 'Grass', types: ['grass'], team: ['oddish', 'bellsprout', 'exeggcute'] },
 };
 
-export const EVENTS: Json[] = [
+export const EVENTS: Json[] = friendlyAll([
   {
     id: 'barkeep-usual',
     intro: '**Barkeep, Fitz**, polishing a glass that was clean an hour ago: "The usual? Or the special. It changes. Nobody knows how. Not even me."',
@@ -236,7 +237,7 @@ export const EVENTS: Json[] = [
       ch('Pick a Pokémon.', out('The one you chose trots off with an apron round its neck. It is back by the next stage, very proud of itself, with ₽500 and a story about a customer who tried to pay in Berries.', $(500)), pick),
     ],
   },
-];
+]);
 
 export const REMOVE: string[] = [];
 void cure;

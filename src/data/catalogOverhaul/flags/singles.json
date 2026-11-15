@@ -275,6 +275,36 @@
    "key": "hollow-lantern-seen",
    "setBy": "spooky-festival (Join the parade)",
    "readBy": "families-a SF16 The Hollow Lantern (can start)"
+  },
+  {
+   "key": "poacher-camp-freed",
+   "setBy": "boss-rush-poachers (win)",
+   "readBy": "places thread (SF129 poacher camp)"
+  },
+  {
+   "key": "ranger-outpost",
+   "setBy": "eco-ranger-test (pass)",
+   "readBy": "the Ranger outpost (people/places); an outpost heal stop opens now"
+  },
+  {
+   "key": "moot-points",
+   "setBy": "moot-court-1/2/3 (a right answer)",
+   "readBy": "moot-court-verdict (spent there)"
+  },
+  {
+   "key": "type-specialist-hired",
+   "setBy": "type-specialist (win)",
+   "readBy": "next Gym (the specialist waves; text only for now)"
+  },
+  {
+   "key": "sign-region",
+   "setBy": "final-sale-banner (the skit about the region's Legendary)",
+   "readBy": "legends thread (Signs, LEGENDS_PIECES.md)"
+  },
+  {
+   "key": "gift-sent",
+   "setBy": "gift-wrap-station (the pack's gift.sent)",
+   "readBy": "gift-wrap-receiver"
   }
  ]
 }

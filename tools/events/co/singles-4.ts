@@ -3,6 +3,7 @@
 // Wild scenes show who is there before the player commits. Gentle wild scenes are rests: watching gives Bond and a small item;
 // joining in gives a stated chance that one Pokémon that liked the player joins. Known limits: docs/status/co-singles.md.
 import { any, anyType, bondUp, ch, cure, express, fight, flag, flagIs, heal, hurtExcept, item, join, leave, out, reveal, room, scout, takeNode, takeNodeBack, trainer, wild, type Json } from '../dsl.ts';
+import { friendlyAll } from './_singlesKit.ts';
 
 export const CATEGORY = 'singles';
 
@@ -447,6 +448,6 @@ const SF141: Json[] = [
   },
 ];
 
-export const EVENTS: Json[] = [...SF140, ...SF141];
+export const EVENTS: Json[] = friendlyAll([...SF140, ...SF141]);
 export const REMOVE: string[] = [];
 void flagIs; void trainer; void scout;

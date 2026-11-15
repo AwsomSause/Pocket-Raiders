@@ -2,6 +2,7 @@
 // Doc: catalog_overhaul/STORY_FAMILIES_19.md, SF135 Map Stops and SF136 Travel and Shortcuts.
 // Each event keeps the doc's exact buttons, outcome and flags; the text is expanded. Known limits: docs/status/co-singles.md.
 import { $, any, anyType, bondUp, ch, good, cure, express, fight, flag, flagIs, heal, hurtLead, item, leave, lv, moveFlag, out, reveal, room, roomFrom, scout, stopHere, takeNode, trainer, wild, type Json } from '../dsl.ts';
+import { friendlyAll } from './_singlesKit.ts';
 
 export const CATEGORY = 'singles';
 
@@ -355,5 +356,5 @@ const SF136: Json[] = [
   ], { scene: { cast: [], pokemon: 'bonsly', effect: 'hearts' } }),
 ];
 
-export const EVENTS: Json[] = [...SF135, ...SF136];
+export const EVENTS: Json[] = friendlyAll([...SF135, ...SF136]);
 export const REMOVE: string[] = [];

@@ -22,7 +22,7 @@ describe('Key Item Workshop (S414)', () => {
     const out = chooseEvent(content, run, 'ws', 0).run;
     expect(out.passives?.['old-rod']).toBeUndefined();
     expect(out.passives?.['good-rod']).toBe(1);
-    expect(out.money).toBe(400);
+    expect(out.money).toBe(500); // Catalog Overhaul SF145: every upgrade is ₽500
   });
   it('is locked without the item or the money', () => {
     const none = atWorkshop();

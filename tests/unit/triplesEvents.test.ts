@@ -56,8 +56,8 @@ describe('Triple Trouble', () => {
     expect(spotCount(battleOf(on, atEvent('tt2', 'triple-battle', 2), 0).battle!)).toBe(2);
     expect(spotCount(battleOf(on, atEvent('tt1', 'triple-battle', 1), 0).battle!)).toBe(1);
   });
-  it('"Just one of them" stays a single battle', () => {
-    expect(spotCount(battleOf(on, atEvent('tt-one', 'triple-battle'), 1).battle!)).toBe(1);
+  it('has the one "Battle." choice the Catalog Overhaul gives it (SF144; the old "Just one of them" is gone)', () => {
+    expect(on.events.get('triple-battle')!.choices.map((c) => c.label)).toEqual(['Battle.']);
   });
   it('is the same every time for the same seed', () => {
     const a = battleOf(on, atEvent('tt-same', 'triple-battle'), 0);
