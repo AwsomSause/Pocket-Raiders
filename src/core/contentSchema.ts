@@ -3625,6 +3625,8 @@ export interface Content {
   raids: RaidFile;
   /** Map events (events.json, core/events.ts). */
   events: Map<string, EventDef>;
+  /** Catalog Overhaul: where a placed event sits on the stage map (core/co/placement.ts), by event id. */
+  coPlacement?: Map<string, import('./co/placement').CoPlacement>;
   /** Totem Pokémon (totems.json, core/totem). */
   totems: TotemFile;
   shadowWorld: ShadowWorldFile;

@@ -101,6 +101,7 @@ import { celebrateToday, milestoneToday, periodOf, PERIOD_LABEL, restUntilMornin
 import { BERRIES } from './berries';
 import { choiceAt, effectiveEvent, visibleChoices } from './eventMemory';
 import { getTheme, typesPool } from './themes';
+import { fitsStage, nodesAhead, planCoStage, positioned, SAME_STAGE, stageTags, type CoEntry } from './co/placement';
 import { anyRoaming, endRoamer, healConvoy, startConvoy, partyHasAbility, placeCamp, scoutAhead, CAMP_EVENT_ID } from './world';
 import { MAX_FOES, MAX_FOES_LISTED } from './bossLimits';
 
@@ -493,6 +494,58 @@ function legendaryCapped(run: RunState, e: EventDef): boolean {
   return inRegion >= LEGENDARY_PER_REGION || inRun >= LEGENDARY_PER_RUN;
 }
 
+// ---------- Catalog Overhaul placement (core/co/placement.ts; data src/data/catalogOverhaul/placement/*.json) ----------
+
+/** Seen already? A placed event marked "once per region" may come back in a later region. */
+function coSeen(content: Content, run: RunState, id: string): boolean {
+  if (!run.itemCounters?.[`event-seen:${id}`]) return false;
+  return !(content.coPlacement?.get(id)?.often === 'region' && run.itemCounters[`co-region:${id}`] !== run.regionIndex + 1);
+}
+
+/** A placed event only appears on a stage its placement allows (earliest absolute stage, in-region stage, stage tags). */
+function coFits(content: Content, run: RunState, id: string): boolean {
+  const p = content.coPlacement?.get(id);
+  if (!p || !run.stage) return true;
+  return fitsStage(p, stageNumber(content, run), run.stage.index + 1, stageTags(getTheme(content, run.stage.themeId).types, periodOf(run)));
+}
+
+/** Is this event put on a chosen step by the placer (so it is never drawn at random)? */
+function coPositioned(content: Content, id: string): boolean {
+  const p = content.coPlacement?.get(id);
+  return !!p && positioned(p);
+}
+
+function coPut(run: RunState, placed: { id: string; nodeIds: string[]; hidden: boolean }[]): void {
+  for (const place of placed) for (const nodeId of place.nodeIds) {
+    const node = run.stage!.map.nodes.find((n) => n.id === nodeId)!;
+    node.sides.push({ id: `event-co-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId: place.id, ...(place.hidden ? { hidden: true } : {}) });
+  }
+}
+
+/**
+ * A story whose beats share one stage (Stage-Three, World Event): the moment a later beat is earned it is placed ahead of the player,
+ * on its own step where that is still ahead, else on the next step that is. Nothing is rolled: the pick is seeded by the event id.
+ */
+function placeEarnedCoBeats(content: Content, run: RunState): void {
+  const stage = run.stage;
+  if (!stage || stage.kind !== 'stage' || stage.pseudo || !stage.current || !content.coPlacement?.size) return;
+  const onMap = new Set(stage.map.nodes.flatMap((n) => n.sides.map((x) => x.eventId)));
+  const due: CoEntry[] = [];
+  for (const [id, p] of content.coPlacement) {
+    if (!SAME_STAGE.has(p.shape) || p.beat < 2 || !positioned(p) || onMap.has(id)) continue;
+    const e = content.events.get(id);
+    if (!e || e.disabled || coSeen(content, run, id) || !coFits(content, run, id) || !e.requires.every((c) => conditionMet(content, run, c))) continue;
+    due.push({ id, p, door: e.pseudo });
+  }
+  if (due.length === 0) return;
+  const here = stage.map.nodes.find((n) => n.id === stage.current)!;
+  const ahead = nodesAhead(stage.map, here.id);
+  // A beat whose step is already behind the player moves to the first step still ahead.
+  const nextStep = Math.min(19, Math.ceil(((here.column + 1) * 20) / stage.map.columns));
+  const moved = due.map((d) => (d.p.window && Math.round((d.p.window[1] * stage.map.columns) / 20) <= here.column ? { ...d, p: { ...d.p, home: nextStep, window: [nextStep, 19] as [number, number] } } : d));
+  coPut(run, planCoStage(stage.map, moved, `${run.seed}::co-beat::${stageKey(run)}`, ahead));
+}
+
 /** Events that can appear on the current stage (key-item events only while the key item is held). */
 export function eligibleEvents(content: Content, run: RunState): EventDef[] {
   const n = stageNumber(content, run);
@@ -514,7 +567,8 @@ export function eligibleEvents(content: Content, run: RunState): EventDef[] {
       (!e.gameEvent || packs.has(e.gameEvent)) &&
       // A mode's own stops (Spooky Mode's clues, boss and finale) only appear in runs of that mode.
       (!e.mode || run.rules.modeId === e.mode) &&
-      !(run.itemCounters?.[`event-seen:${e.id}`]) &&
+      !coSeen(content, run, e.id) &&
+      coFits(content, run, e.id) &&
       !recruitsOwned(run, e) &&
       e.requires.every((c) => conditionMet(content, run, c)),
   );
@@ -570,6 +624,15 @@ export function addEventStops(content: Content, run: RunState): void {
   };
   // A running tournament round and a serious crisis always get their stop (until played), so neither can be missed by luck.
   const open = new Set(eligibleEvents(content, run).map((e) => e.id));
+  // Catalog Overhaul: events with a placement block go on their own step first (must-see on a chokepoint, optional on one node, ...).
+  // One that finds no place waits for a later stage; either way it is never drawn at random below.
+  const coOpen = [...open].filter((id) => coPositioned(content, id));
+  if (coOpen.length > 0) {
+    // A same-stage story's later beats are placed when they are earned (placeEarnedCoBeats), not at the start of the stage.
+    const entries = coOpen.map((id) => ({ id, p: content.coPlacement!.get(id)!, door: content.events.get(id)!.pseudo })).filter((e) => !(SAME_STAGE.has(e.p.shape) && e.p.beat >= 2));
+    coPut(run, planCoStage(stage.map, entries, `${run.seed}::co-place::${stageKey(run)}`));
+    for (const id of coOpen) { taken.add(id); open.delete(id); }
+  }
   // A run milestone (catalog 99) is offered at the middle stage of every region.
   const milestone = (run.stage?.index ?? 0) === 2 ? ['milestone-dawn', 'milestone-crossroads', 'milestone-summit', 'milestone-embers'].find((id) => open.has(id)) : undefined;
   const modeStops = [...open].filter((id) => content.events.get(id)!.modeStop);
@@ -838,7 +901,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   delete runSide.hidden;
   // A roaming Legendary's stop: whatever you do, the chase ends here.
   if (runSide.roamer) endRoamer(run, runSide.roamer);
-  run.itemCounters = { ...run.itemCounters, [`event-seen:${event.id}`]: 1, ...(event.rarity === 'epic' ? { [`epic-seen:${run.regionIndex}`]: (run.itemCounters?.[`epic-seen:${run.regionIndex}`] ?? 0) + 1 } : {}), ...(event.pseudo ? { [`pseudo-seen:${run.regionIndex}`]: (run.itemCounters?.[`pseudo-seen:${run.regionIndex}`] ?? 0) + 1 } : {}) };
+  run.itemCounters = { ...run.itemCounters, [`event-seen:${event.id}`]: 1, ...(content.coPlacement?.get(event.id)?.often === 'region' ? { [`co-region:${event.id}`]: run.regionIndex + 1 } : {}), ...(event.rarity === 'epic' ? { [`epic-seen:${run.regionIndex}`]: (run.itemCounters?.[`epic-seen:${run.regionIndex}`] ?? 0) + 1 } : {}), ...(event.pseudo ? { [`pseudo-seen:${run.regionIndex}`]: (run.itemCounters?.[`pseudo-seen:${run.regionIndex}`] ?? 0) + 1 } : {}) };
   if (event.keyItem) useUpKeyItem(run, event.keyItem);
   keepsakeEvent(run, event);
   const found = noteDungeonEntered(run, event.id);
@@ -874,6 +937,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
     const words = giveItem(content, run, rng.pick(content.balance.events.explorerItems), 1, rng);
     if (words) changes.push(`Explorer Kit: ${words}`);
   }
+  placeEarnedCoBeats(content, run);
   let battle = false;
   if (outcome.battle && run.party.some((p) => p.hp > 0)) {
     startEventBattle(content, run, node, outcome.battle, rng, { eventId: event.id, choiceIndex, sideId, success });
@@ -1598,9 +1662,10 @@ function pickSpecies(content: Content, run: RunState, species: string[], types: 
   return directSpecies(content, { source, level: gate, cap: levelCap(content, run.regionIndex), draw: () => rng.weighted(pool) }).speciesId;
 }
 
-function eventLevel(content: Content, run: RunState, node: MapNode, rng: Rng): number {
+/** `stageOffset`: a placed event's level line (A-2 to A+2): the game's own level for that many stages earlier or later. */
+function eventLevel(content: Content, run: RunState, node: MapNode, rng: Rng, stageOffset = 0): number {
   const stage = run.stage!;
-  const scale = withPartyStrength(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, stage.index, node.column), run.party.map((p) => p.level));
+  const scale = withPartyStrength(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, Math.max(0, stage.index + stageOffset), node.column), run.party.map((p) => p.level));
   return enemyLevel(content, getArchetype(content, run.archetypeId), scale, 0, rng).level;
 }
 
@@ -1611,7 +1676,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
   const pondLead = b.kind === 'trainer' && b.rule?.pondDuel ? run.party.findIndex((p) => p.pond && p.hp > 0) : -1;
   const dueler = pondLead >= 0 ? pondLead : b.kind === 'trainer' && b.rule?.leadType ? run.party.findIndex((p) => p.hp > 0 && getSpecies(content, p.speciesId).types.includes(b.rule!.leadType!)) : -1;
   const activeIndex = dueler >= 0 ? dueler : lastAlive >= 0 ? lastAlive : run.party.findIndex((p) => p.hp > 0);
-  const base = (b.kind !== 'raid' ? b.level : undefined) ?? (b.kind === 'trainer' && b.rule?.matchLead ? run.party[activeIndex]!.level + b.levelBonus : eventLevel(content, run, node, rng) + b.levelBonus);
+  const base = (b.kind !== 'raid' ? b.level : undefined) ?? (b.kind === 'trainer' && b.rule?.matchLead ? run.party[activeIndex]!.level + b.levelBonus : eventLevel(content, run, node, rng, content.coPlacement?.get(event.eventId)?.level ?? 0) + b.levelBonus);
   // Event foes stay under the region's level cap like every ordinary enemy (Balancing Phase 7).
   const cap = levelCap(content, run.regionIndex);
   if (b.kind === 'raid') {
