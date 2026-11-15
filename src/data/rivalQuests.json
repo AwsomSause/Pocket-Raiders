@@ -249,6 +249,75 @@
           "final": true
         }
       }
+    },
+    "R4": {
+      "name": "The Stone on the Hill",
+      "beats": {
+        "open": {
+          "event": "rival-memorial",
+          "minStage": 6,
+          "slot": true
+        },
+        "cautious": {
+          "event": "rq-r4-cautious",
+          "after": "open",
+          "offset": 1,
+          "slot": true
+        },
+        "finale": {
+          "event": "rq-r4-finale",
+          "after": "cautious",
+          "offset": 1,
+          "slot": true,
+          "final": true
+        }
+      }
+    },
+    "R5": {
+      "name": "Their Mentor Comes Calling",
+      "beats": {
+        "open": {
+          "event": "rival-mentor-appears",
+          "minStage": 5,
+          "slot": true
+        },
+        "apology": {
+          "event": "rq-r5-sorry",
+          "after": "open",
+          "offset": 1,
+          "slot": true,
+          "final": true
+        },
+        "train": {
+          "event": "rq-r5-walk",
+          "after": "open",
+          "offset": 1,
+          "slot": true,
+          "final": true
+        }
+      }
+    },
+    "R6": {
+      "name": "The Post-Mortem",
+      "personalities": [
+        "strategist",
+        "prodigy",
+        "idealist"
+      ],
+      "beats": {
+        "open": {
+          "event": "rival-coaching",
+          "minStage": 3,
+          "slot": true
+        },
+        "finale": {
+          "event": "rq-r6-finale",
+          "after": "open",
+          "when": "regionEnd",
+          "slot": true,
+          "final": true
+        }
+      }
     }
   }
 }

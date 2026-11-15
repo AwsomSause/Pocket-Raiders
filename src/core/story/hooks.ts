@@ -6,7 +6,7 @@
 import { spendRivalSpoils } from '../nodeMenu/special';
 import { endRivalBrain } from '../rivals/brainSetup';
 import { recordRivalBattle, registerFromRival } from '../rivals/overhaul';
-import { recordPackMarks, type PackBattleFacts } from '../rivals/questlines';
+import { recordPackMarks, scoutUsed, type PackBattleFacts } from '../rivals/questlines';
 import { grantSignatureMoves } from '../story2/signature';
 import { periodOf } from '../clock';
 import { addGrowth, bumpGrowth, doublesTurnFacts, bumpGrowthOnce, hitCounters, moveCounters, moveRoleCounters, noteGrowthKo, turnCounters, turnFacts } from '../overhaul/growth';
@@ -673,6 +673,8 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
   const totalHp = run.party.reduce((sum, m) => sum + maxHp(content, m), 0);
   const hpLeft = run.party.reduce((sum, m) => sum + m.hp, 0);
   const result = battle.outcome!;
+  // R6: the rival's notes on that class of trainer are used up once you have fought one.
+  scoutUsed(run, battle.trainer?.classId);
   // Night Owl, Sunbather, Dawn Runner: every Pokémon that fought in a won battle counts it.
   if (result === 'win') {
     const period = periodOf(run);

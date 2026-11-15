@@ -237,7 +237,10 @@ const promise: Json[] = [
 
   // Finale: the next region's Stage 8, Step 18, must-see. A+2, six on six, no counter-picks.
   beat('living-rival-promise-kept', 'The Promise Kept', { minStage: 4, requires: [due('R3.finale')], tint: '#24202a', effect: 'glint', priority: 90,
-    remembers: [{ id: 'open', when: [yes('rival-promise-open')], notice: note(page(R('...You came. You didn\'t have to.'))) }] },
+    remembers: [
+      { id: 'second', when: [yes('rival-promise-second')], notice: note(page(R('Second time. Same flag. Same rules.'), 'They have brought two flasks this time. One of them is for you.')) },
+      { id: 'open', when: [yes('rival-promise-open')], notice: note(page(R('...You came. You didn\'t have to.'))) },
+    ] },
     script(
       page('The flag. They are standing next to it. They have been there a while; there is a flask, and it is empty.'),
       page(R('You came. Good.'), 'They do not say anything else. They throw first.'),
@@ -279,5 +282,8 @@ export const REMOVE: string[] = [
   'rival-promise-kept', // -> living-rival-promise-kept
   // Beta 0.6 shortened builds of the same questlines.
   'rq-rival-in-trouble', 'rq-favour-returned', 'rq-someone-helped', 'rq-bitter-rival', 'rq-in-trouble-again',
+  'rq-promise', 'rq-rival-training', 'rq-promise-kept',
+  // Their one-line flag readers: the rebuilt scenes read these flags now.
+  'rq-echo-promise-broken', 'rq-echo-promise-kept', 'rq-echo-amends',
 ];
 void mark; void say;

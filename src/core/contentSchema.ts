@@ -2946,6 +2946,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** Catalog pack rival questlines (core/rivals/questlines.ts): a beat that is due now (`beat`, "R2.open"), a questline the run uses or has running, the main rival's personality or pack arc, whether a second rival exists, or a feeling of the main or second rival in a range. Never true without a registered rival. */
   z.object({
     kind: z.literal('rivalQuest'),
+    /** The stage's rival slot is free and no questline beat wants it (for rival-slot events in other files; pair with the effect's `takeSlot`). */
+    slotFree: z.boolean().optional(),
     beat: z.string().regex(/^R\d+\.[a-z0-9-]+$/).optional(),
     line: z.string().regex(/^R\d+$/).optional(),
     active: z.boolean().optional(),
@@ -3131,6 +3133,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Catalog pack rival questlines (core/rivals/questlines.ts): `done` records a played beat (its stage, the rival slot, the line's start and end); `end` closes a line; `feelings` and `mark` move the main rival, or the second rival with `who: 'second'`. */
   z.object({
     kind: z.literal('rivalQuest'),
+    /** Uses this stage's rival slot (an event from another file that claimed it with the condition's `slotFree`). */
+    takeSlot: z.boolean().optional(),
     done: z.string().regex(/^R\d+\.[a-z0-9-]+$/).optional(),
     end: z.string().regex(/^R\d+$/).optional(),
     who: z.enum(['main', 'second']).default('main'),
@@ -3150,6 +3154,20 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
     learn: z.boolean().optional(),
     /** R3: the handshake: both aces +3% to every stat for the run (balance in rivalQuests.json). */
     handshake: z.boolean().optional(),
+    /** Sets feelings to exact values (R5: going to apologise puts Resentment back to 3). */
+    setFeelings: z.partialRecord(z.enum(['friendship', 'respect', 'trust', 'rivalry', 'resentment', 'admiration']), z.number().int().min(0).max(10)).optional(),
+    /** Sets a flag from the main rival's feelings now: the first case that holds, else `otherwise` (R5: which ask the mentor makes). */
+    pick: z.object({
+      key: z.string().regex(/^[a-z][a-z0-9-]*$/),
+      cases: z.array(z.object({ feeling: z.enum(['friendship', 'respect', 'trust', 'rivalry', 'resentment', 'admiration']), atLeast: z.number().int().min(0).max(10), value: z.number().int().min(0) })).max(4),
+      otherwise: z.number().int().min(0),
+    }).optional(),
+    /** Opens (as a room here) the first of these events whose `requires` all hold (R5: the mentor's ask after the fight). */
+    openFirst: z.array(z.string()).min(1).max(6).optional(),
+    /** R5: everything of yours the mentor saw goes into the main rival's scouting ledger. */
+    ledger: z.boolean().optional(),
+    /** Sets a flag to 1..of, fixed by the run's seed (no gameplay roll; R6: which of three points is the true one). */
+    roll: z.object({ key: z.string().regex(/^[a-z][a-z0-9-]*$/), of: z.number().int().min(2).max(9) }).optional(),
   }),
   /**
    * Saffron canon spaces (core/expansion/canonSaffron.ts). `solo` / `unsolo`: the party waits in a stash while one Pokémon of `species` fights alone (Fighting Tournament).

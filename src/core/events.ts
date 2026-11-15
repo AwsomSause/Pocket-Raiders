@@ -1426,8 +1426,12 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (e.mark) addMark(rec, e.mark);
       return '';
     }
-    case 'rivalQuest':
-      return applyQuestEffect(content, run, e);
+    case 'rivalQuest': {
+      const first = e.openFirst?.find((id) => (content.events.get(id)?.requires ?? []).every((c) => conditionMet(content, run, c)));
+      const words = applyQuestEffect(content, run, e);
+      if (first) applyEffect(content, run, { kind: 'addEvent', eventId: first }, rng);
+      return words;
+    }
     case 'sky':
       return applySky(content, run, e);
     case 'flag':

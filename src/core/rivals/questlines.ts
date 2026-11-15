@@ -7,10 +7,10 @@
 import { z } from 'zod';
 import json from '../../data/rivalQuests.json';
 import type { Content, EventBattle, EventCondition, EventEffect, TypeName } from '../contentSchema';
-import type { PokemonInstance } from '../state';
+import type { BattleState, PokemonInstance } from '../state';
 import { typeEffectiveness } from '../battle/damage';
 import { familyId } from '../mastery';
-import { maxHp } from '../pokemon';
+import { abilityOf, maxHp } from '../pokemon';
 import { getCampaign } from '../regions';
 import type { RunState } from '../state';
 import { fnv1a } from '../story/moments';
@@ -18,6 +18,7 @@ import { stageFronts } from '../world';
 import type { Rival } from '../story/schema';
 import { BANK, BANK_CONTEXTS, type BankContext } from './bank';
 import { featuredRival } from './living';
+import { scout } from './tier5';
 import { addMark, overhaulOf, type FeelingKey, type RivalOverhaulState } from './overhaul';
 
 /** The catalog group of every rival questline event (the event screen shows the rival's standing beside them). */
@@ -207,6 +208,13 @@ type QuestEffect = Extract<EventEffect, { kind: 'rivalQuest' }>;
 
 /** The `rivalQuest` condition. `met` checks another condition of an event (used to see which due beats could really show). */
 export function questConditionMet(content: Content, run: RunState, c: QuestCondition, met: (c: EventCondition) => boolean): boolean {
+  if (c.slotFree) {
+    // A rival-slot event from another file (NE36 to NE40, the anime rival lines): the stage's rival slot is unused and no questline beat wants it.
+    if (flagOf(run, 'rq-slot') === stageNow(content, run)) return false;
+    const holds = (eventId: string): boolean => (content.events.get(eventId)?.requires ?? []).every((r) => r.kind === 'rivalQuest' || met(r));
+    if (slotHolder(content, run, holds) !== null) return false;
+    if (Object.keys(c).filter((k) => k !== 'kind' && k !== 'slotFree').length === 0) return true;
+  }
   const main = mainRival(run);
   const rec = recOf(run, main);
   if (!main || !rec) return false;
@@ -261,6 +269,7 @@ export function applyQuestEffect(content: Content, run: RunState, e: QuestEffect
     if (beat.final) setFlag(run, `rq-${line.toLowerCase()}-end`, now);
   }
   if (e.end) setFlag(run, `rq-${e.end.toLowerCase()}-end`, now);
+  if (e.takeSlot) setFlag(run, 'rq-slot', now);
   if (e.stamp) setFlag(run, e.stamp, now);
   if (e.set) setFlag(run, e.set.key, e.set.value);
   for (const id of e.again ?? []) if (run.itemCounters) delete run.itemCounters[`event-seen:${id}`];
@@ -268,6 +277,17 @@ export function applyQuestEffect(content: Content, run: RunState, e: QuestEffect
   else if (e.circuit) {
     if (flagOf(run, 'circuit-open-at') === 0) setFlag(run, 'circuit-open-at', now);
     if (e.circuit !== 'open') setFlag(run, 'circuit-rung', e.circuit === 'late' ? Math.max(1, circuitRivalRung(content, run) - 2) : 1);
+  }
+  if (e.roll && flagOf(run, e.roll.key) === 0) setFlag(run, e.roll.key, 1 + (fnv1a(`${run.seed}::rq-roll::${e.roll.key}`) % e.roll.of));
+  if (e.pick) {
+    const rec = recOf(run, mainRival(run));
+    const hit = e.pick.cases.find((c) => (rec?.feelings[c.feeling as FeelingKey] ?? 0) >= c.atLeast);
+    setFlag(run, e.pick.key, hit ? hit.value : e.pick.otherwise);
+  }
+  if (e.ledger) {
+    // R5: the mentor tells the rival exactly how you lost: everything of yours the mentor saw goes into their scouting ledger.
+    const rec = recOf(run, mainRival(run));
+    if (rec) scout(rec, { species: run.party.map((m) => m.speciesId), moves: run.party.flatMap((m) => m.moves.map((x) => x.id)), abilities: run.party.map((m) => abilityOf(content, m)).filter((x): x is string => Boolean(x)), turns: 0, switches: 0 });
   }
   if (e.lost) {
     // R4: the Pokémon the rival lost is one of their team that is not the ace (the same one every time the scene is read).
@@ -277,8 +297,10 @@ export function applyQuestEffect(content: Content, run: RunState, e: QuestEffect
   const target = e.who === 'second' ? recOf(run, secondRival(run)) : recOf(run, mainRival(run));
   if (target) {
     for (const [k, d] of Object.entries(e.feelings ?? {})) target.feelings[k as FeelingKey] = Math.min(10, Math.max(0, target.feelings[k as FeelingKey] + (d ?? 0)));
+    for (const [k, v] of Object.entries(e.setFeelings ?? {})) target.feelings[k as FeelingKey] = Math.min(10, Math.max(0, v ?? 0));
     if (e.mark) addMark(target, e.mark);
-  }  if (e.handshake) {
+  }
+  if (e.handshake) {
     // R3: the handshake gives both aces +3% to every stat for the run (yours now; theirs whenever a questline fight builds their team).
     const ace = [...run.party].sort((x, y) => y.level - x.level)[0];
     if (ace && flagOf(run, 'rq-handshake') === 0) {
@@ -356,6 +378,7 @@ export function questText(content: Content, run: RunState, eventId: string, text
     young: QUESTS.youngNames[flagOf(run, 'rq-r4-name') - 1] ?? 'the little one',
     rung: RUNG_WORDS[flagOf(run, 'circuit-rung')] ?? 'one',
     lost: content.species.get(lostFamily(content, run) ?? '')?.name ?? 'a name you cannot quite read',
+    team: (main?.memory?.lastBattle?.team ?? []).map((id) => content.species.get(id)?.name ?? id).join(', ') || 'a list of names, in order',
   };
   let n = 0;
   return text.replace(/\{say ([a-z0-9]+)((?:\|\|[^{}]*)*)\}/g, (_m, ctx: string, rest: string) => {
@@ -366,7 +389,7 @@ export function questText(content: Content, run: RunState, eventId: string, text
     const lines = rec && CONTEXTS.has(ctx) ? (BANK.personalities[rec.personality] as unknown as Record<BankContext, string[]>)[ctx as BankContext] : undefined;
     if (lines?.length) return lines[fnv1a(`${run.seed}::rq-say::${eventId}::${n}`) % lines.length]!;
     return own[0]?.[1] ?? '';
-  }).replace(/\{(rival|rival2|player|called|lead|young|lost|rung)\}/g, (_m, k: string) => simple[k]!);
+  }).replace(/\{(rival|rival2|player|called|lead|young|lost|rung|team)\}/g, (_m, k: string) => simple[k]!);
 }
 
 // ---------- the pack's Marks (RIVAL_SYSTEM_OVERHAUL.md 3.3) ----------
@@ -491,7 +514,7 @@ export function planRivalTeam(content: Content, run: RunState, rival: Rival, ros
     if (target && strong.length > 0 && slot >= 0) team[slot] = `type:${strong[fnv1a(`${run.seed}::rq-counter::${rival.id}::${target.speciesId}`) % strong.length]}`;
   }
   if (plan.aceFirst && ace) team = [ace, ...team.filter((id) => id !== ace)];
-  if (plan.guard) {
+  if (plan.guard || (flagOf(run, 'rq-r4-cautious') > 0 && flagOf(run, 'rq-r4-cautious') === stageNow(content, run))) {
     // R4's cautious stage: their weakest Pokémon (lowest base stat total) is kept back behind everything else.
     const bst = (id: string): number => Object.values(content.species.get(id)?.baseStats ?? {}).reduce((n, v) => n + v, 0);
     const real = team.filter((id) => !id.startsWith('type:'));
@@ -519,4 +542,52 @@ export function openBeatHere(content: Content, run: RunState, ref: string): bool
   if (stage!.map.nodes.some((n) => n.sides.some((x) => x.eventId === beat.event && !x.used))) return false;
   node.sides.push({ id: `event-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId: beat.event });
   return true;
+}
+
+// ---------- R5 and R6: what the player learns ----------
+
+/**
+ * R6: a battle lost to anyone but the rival, which the run survived. Remembers the stage, the trainer's class and what
+ * went wrong (1: a bad lead, the foe's lead hit it super-effectively; 3: one was kept in too long, it stood at low HP for
+ * two turns or more; 2 otherwise: a wasted turn). Pure: it reads the finished battle only.
+ */
+export function notePlayerLoss(content: Content, run: RunState, battle: BattleState, lead: PokemonInstance | undefined): void {
+  if (battle.rivalId || battle.rival || battle.firstRival || battle.spectate) return;
+  setFlag(run, 'rq-lost-at', stageNow(content, run));
+  if (battle.trainer) run.story.flags['rq:lost-class'] = battle.trainer.classId;
+  const foe = content.species.get(battle.enemyTeam[0]?.speciesId ?? '');
+  const mine = content.species.get(lead?.speciesId ?? '');
+  const badLead = Boolean(foe && mine && foe.types.some((t) => typeEffectiveness(content.typeChart, t, mine.types) > 1));
+  const lingered = (battle.hyper?.lowHp?.turns ?? 0) >= 2;
+  setFlag(run, 'rq-lost-kind', lingered ? 3 : badLead ? 1 : 2);
+}
+
+/** R6 "Thanks": the next battle against the class you lost to shows its lead on the map. */
+export function scoutedLead(run: RunState, trainerClass: string | undefined): boolean {
+  return flagOf(run, 'rq-r6-scout') > 0 && Boolean(trainerClass) && run.story.flags['rq:lost-class'] === trainerClass;
+}
+
+/** R6: the scouted battle was fought; the notes are used up. */
+export function scoutUsed(run: RunState, trainerClass: string | undefined): void {
+  if (scoutedLead(run, trainerClass)) setFlag(run, 'rq-r6-scout', 0);
+}
+
+/** R5 "the lesson": for the rest of the region, trainer battles name the enemy Pokémon that comes in next. */
+export function nextSwitchLine(content: Content, run: RunState, battle: BattleState): string | null {
+  const at = flagOf(run, 'rq-r5-lesson');
+  if (at === 0 || !battle.trainer || battle.doubles || battle.outcome) return null;
+  const per = stagesPerRegion(content, run);
+  if (Math.floor((at - 1) / per) !== run.regionIndex) return null;
+  const next = battle.enemyTeam.find((m, i) => i > battle.enemyIndex && m.hp > 0);
+  if (!next) return null;
+  return `Waiting behind it: ${content.species.get(next.speciesId)?.name ?? next.speciesId}.`;
+}
+
+/** R4 Remembers: if you waited at the stone, the rival's Second Chance line is about the Pokémon they lost. */
+export function secondChanceQuestLine(content: Content, run: Pick<RunState, 'story'>, rivalId: string, isMain: boolean): string | null {
+  if (!isMain || flagOf(run, 'rival-memorial-waited') === 0) return null;
+  const lost = run.story.flags['rq:r4-lost'];
+  const name = typeof lost === 'string' ? content.species.get(lost)?.name : undefined;
+  if (!rivalId || !name) return null;
+  return `${name} wasn't there one morning. You are. Get up. I'm not doing that twice.`;
 }

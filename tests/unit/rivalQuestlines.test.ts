@@ -15,6 +15,10 @@ const setup = (withRival = true) => {
   return { run, id };
 };
 const rng = () => new Rng(hashSeed('rq-fx'));
+/** Flags the engine writes for the questlines (core/rivals/questlines.ts): the Circuit board, a remembered loss, a pick or a roll. */
+const ENGINE_SET = ['rq-lost-at', 'rq-lost-kind', 'rival-mentor-ask', 'rq-r6-true'];
+// Shared keys other files read: Reputation (STANDARDS.md), and the promise flags (MEMORY_AND_FORMAT.md: Jirachi's "every promise kept", NE36 to NE40).
+const SHARED_READ = ['rep', 'rep-lost', 'rival-promise-made', 'rival-promise-kept', 'rival-promise-broken'];
 
 describe('rival questlines', () => {
   it('rivalChange moves feelings, lead and marks, all clamped', () => {
@@ -72,25 +76,28 @@ describe('rival questlines batch 2', () => {
     }
   });
   it('every flag a callback needs is set by some rq event', () => {
-    const rq = [...content.events.values()].filter((e) => e.id.startsWith('rq-'));
+    // The rival questline scenes (old rq-* ids and the pack rebuild's group); retired ids are never drawn, so they do not count.
+    const rq = [...content.events.values()].filter((e) => !e.disabled && (e.id.startsWith('rq-') || e.group === 'Rival questline'));
     const setters = new Set<string>();
     const walk = (o: unknown): void => {
       if (Array.isArray(o)) o.forEach(walk);
       else if (o && typeof o === 'object') {
         const r = o as Record<string, unknown>;
         if (r.kind === 'flag' && typeof r.key === 'string' && r.amount !== undefined) setters.add(r.key);
+        // A questline `set` writes a flag too (rq-r4-name, rq-r6-scout).
+        if (r.kind === 'rivalQuest' && r.set && typeof (r.set as { key?: unknown }).key === 'string') setters.add((r.set as { key: string }).key);
         Object.values(r).forEach(walk);
       }
     };
     rq.forEach((e) => walk({ c: e.choices, r: e.remembers }));
     for (const e of rq.filter((x) => x.callback))
-      for (const c of e.requires) if (c.kind === 'flag' && c.atLeast >= 1) expect(setters.has(c.key), `${e.id} needs ${c.key}`).toBe(true);
+      for (const c of e.requires) if (c.kind === 'flag' && c.atLeast >= 1 && !ENGINE_SET.includes(c.key)) expect(setters.has(c.key), `${e.id} needs ${c.key}`).toBe(true);
   });
 });
 
 describe('rival questline flags', () => {
   it('every flag an rq event sets is read by some rq event or echo', () => {
-    const rq = [...content.events.values()].filter((e) => e.id.startsWith('rq-'));
+    const rq = [...content.events.values()].filter((e) => !e.disabled && (e.id.startsWith('rq-') || e.group === 'Rival questline'));
     const set = new Set<string>();
     const read = new Set<string>();
     const walk = (o: unknown, req: boolean): void => {
@@ -103,7 +110,8 @@ describe('rival questline flags', () => {
     };
     rq.forEach((e) => walk(e, false));
     // 'rival-anonymous' style decrements count as reads of the same key.
-    const unread = [...set].filter((k) => !read.has(k));
+    // `rep` is the shared Reputation flag (STANDARDS.md), read by the record condition of other files.
+    const unread = [...set].filter((k) => !read.has(k) && !SHARED_READ.includes(k));
     expect(unread).toEqual([]);
   });
 });

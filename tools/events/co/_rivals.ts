@@ -38,9 +38,9 @@ export const feel2 = (feelings: Record<string, number>): Json => ({ kind: 'rival
 export const set = (key: string, value: number): Json => ({ kind: 'rivalQuest', set: { key, value } });
 
 // ---------- battles ----------
-/** A fight against the rival. A loss never ends the run (`friendly`); `lose` effects apply then. */
+/** A fight against the rival. A loss never ends the run (a story loss: the party is back up, the loss is recorded, `lose` effects apply). */
 export const rival = (o: { lv?: number; size?: number; quest?: Json; format?: 'doubles'; rule?: Json; win?: Json[]; lose?: Json[]; weather?: string } = {}): Json => ({
-  kind: 'trainer', name: 'Rival', rival: true, friendly: true, size: o.size ?? 6, types: [], levelBonus: o.lv ?? 1,
+  kind: 'trainer', name: 'Rival', rival: true, size: o.size ?? 6, types: [], levelBonus: o.lv ?? 1,
   ...(o.quest ? { quest: o.quest } : {}), ...(o.format ? { format: o.format } : {}), ...(o.rule ? { rule: o.rule } : {}), ...(o.weather ? { weather: o.weather } : {}),
   win: o.win ?? [], ...(o.lose ? { lose: o.lose } : {}),
 });

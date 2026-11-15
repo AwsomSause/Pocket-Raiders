@@ -9,9 +9,15 @@
   "rival-promise-make",
   "rival-rematch",
   "rq-bitter-rival",
+  "rq-echo-amends",
+  "rq-echo-promise-broken",
+  "rq-echo-promise-kept",
   "rq-favour-returned",
   "rq-in-trouble-again",
+  "rq-promise",
+  "rq-promise-kept",
   "rq-rival-in-trouble",
+  "rq-rival-training",
   "rq-someone-helped"
  ],
  "events": [
@@ -650,7 +656,6 @@
        "kind": "trainer",
        "name": "Rival",
        "rival": true,
-       "friendly": true,
        "size": 6,
        "types": [],
        "levelBonus": 2,
@@ -1302,7 +1307,6 @@
        "kind": "trainer",
        "name": "Rival",
        "rival": true,
-       "friendly": true,
        "size": 6,
        "types": [],
        "levelBonus": 2,
@@ -1773,6 +1777,18 @@
    "priority": 90,
    "remembers": [
     {
+     "id": "second",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-promise-second",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\n{rival}: \"Second time. Same flag. Same rules.\"\nThey have brought two flasks this time. One of them is for you."
+    },
+    {
      "id": "open",
      "when": [
       {
@@ -1796,7 +1812,6 @@
        "kind": "trainer",
        "name": "Rival",
        "rival": true,
-       "friendly": true,
        "size": 6,
        "types": [],
        "levelBonus": 2,
