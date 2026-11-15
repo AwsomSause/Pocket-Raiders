@@ -2,5 +2,283 @@
  "catalogOverhaul": "anime",
  "override": true,
  "remove": [],
- "events": []
+ "events": [
+  {
+   "id": "aq39-nut-who-ate-everything",
+   "name": "The Nut Who Ate Everything",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "normal",
+    "electric",
+    "steel"
+   ],
+   "remembers": [
+    {
+     "id": "bike",
+     "when": [
+      {
+       "kind": "item",
+       "id": "bicycle"
+      }
+     ],
+     "intro": "A small sound, like somebody enjoying a boiled sweet. Your bicycle is leaning on a wall where you left it for one minute. It has no bell. Something is finishing the bell, and then it starts on the handlebars. It is the size of a fist: a blob of silver with a hex nut for a head and one eye looking out through the hole. It sees you. It waves, a small polite wave. It keeps eating.",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Let it.",
+       "success": {
+        "text": "You sit down on the kerb. It eats the bike. All of it. The handlebars, the chain, both wheels, spoke by spoke, the little reflector last, like a mint after dinner. It takes an hour, and you watch the whole hour, and it is oddly restful: the clink, the pause, the clink. When it is done it is rounder, and it pats itself, and it looks at you as if you had cooked. Then it follows you. The bike is gone. A shop with a Bike Voucher could build you another.",
+        "effects": [
+         {
+          "kind": "loseItem",
+          "id": "bicycle"
+         },
+         {
+          "kind": "flag",
+          "key": "aq39-let-it",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "aq39-it-follows"
+         }
+        ]
+       }
+      },
+      {
+       "label": "Feed it something else.",
+       "success": {
+        "text": "There is a scrap pile behind the Pokémon Center, and you carry it there under one arm. It does not struggle; it is still chewing. A kettle. A hinge. A bent spoon. It looks at the pile the way a child looks at a birthday, and then it is in heaven, up to its eye in a kettle. Your bicycle stands by the wall, one handlebar shorter, no bell. Nobody touches it again. When you leave, it follows you.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "aq39-fed",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "aq39-it-follows"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "meltan",
+    "tint": "#2a2e36",
+    "effect": "glint"
+   },
+   "intro": "A small sound, like somebody enjoying a boiled sweet. Your bag is on the ground where you set it down for one minute. It has no buckles. Something is finishing the last one, and then it starts on the zip. It is the size of a fist: a blob of silver with a hex nut for a head and one eye looking out through the hole. It sees you. It waves, a small polite wave. It keeps eating.",
+   "choices": [
+    {
+     "label": "Let it.",
+     "success": {
+      "text": "You sit down beside the bag. It eats every buckle, the zip, the little metal feet on the bottom, and the ring your keys hang from. It takes an hour, and you watch the whole hour, and it is oddly restful: the clink, the pause, the clink. When it is done it is rounder, and your bag will not close. Something falls out of it on the next hill, and you do not notice until it is far behind. The Meltan follows you.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "flag",
+        "key": "aq39-let-it",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq39-it-follows"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Feed it something else.",
+     "success": {
+      "text": "There is a scrap pile behind the Pokémon Center, and you carry it there under one arm. It does not struggle; it is still chewing. A kettle. A hinge. A bent spoon. It looks at the pile the way a child looks at a birthday, and then it is in heaven, up to its eye in a kettle. Your bag keeps what is left of its zip. When you leave, it follows you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq39-fed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq39-it-follows"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Chase it.",
+     "success": {
+      "text": "It runs. It is quick, for a nut, and it leaves a trail of eaten things behind it like crumbs. A gate latch. A drain cover, so you have to jump the drain. A row of somebody's medals, pinned to a coat on a line, gone, the ribbons left fluttering. You follow the trail down the bank and into a culvert under the road, and there you stop.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "meltan-colony",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq39-colony"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq39-colony",
+   "name": "The Colony",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "meltan",
+    "tint": "#22262c",
+    "effect": "glint"
+   },
+   "intro": "In the culvert, forty Meltan sit in a ring round an old tram wheel, the way people sit round a campfire. Some are chewing. One is asleep with a bolt in its mouth. They all look up at once. Forty eyes, forty hex nuts, turning toward you with a sound like a drawer of cutlery. Nobody runs. Then one of them, very solemn, waddles out of the ring and holds out a washer to you, in both hands, as a gift.",
+   "choices": [
+    {
+     "label": "Take the washer.",
+     "success": {
+      "text": "You take it. It is warm from being held, and it has been polished, round and round, by somebody with time. The one who gave it goes pink with pride, if silver can go pink. The ring shuffles to make room, and for a while you sit by the tram wheel with forty small metal Pokémon who think you are a guest.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "colony-washer",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq39-washer",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq39-it-follows"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Has anybody got a spare bell?",
+     "success": {
+      "text": "A discussion. Forty heads lean in; there is a great deal of clinking. At last a very small one is pushed forward from the back. It has a bell. It has not eaten it. It has been saving it, a long time, maybe for something exactly like this. It holds the bell for one more second. Then it gives it up, with dignity, and goes back to its place without looking round. The bell rings, small and clear, when you put it in your pocket.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "soothe-bell",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq39-bell",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq39-it-follows"
+       }
+      ]
+     }
+    },
+    {
+     "label": "You can't eat the *town.*",
+     "success": {
+      "text": "Forty Meltan look at each other. You can see them thinking about the town: the railings, the lamp posts, the clock tower, all that lovely iron. It is a long think. Then, slowly, two of them carry the drain cover back up the bank and set it down. Half of it. It is a start. From now on, the ring agrees with much clinking, only what nobody wants. The one with the medals hands them back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq39-town-spared",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq39-it-follows"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq39-it-follows",
+   "name": "It Follows",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "guest-jealous",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "guest-meltan",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Your Mythical guest, the Meltan who has been riding with you, sees the new one and goes very still. It is jealous. It walks over and sits on the new one. For a moment they merge slightly, two nuts, one blob. Then they come apart with a small pop. They look at each other. It is settled."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "meltan",
+    "tint": "#2a2e36",
+    "effect": "none"
+   },
+   "intro": "You walk on. Behind you, every few steps, a small clink. You stop; it stops. You turn round, and there is the Meltan in the road, one eye in its nut, pretending to be a bolt somebody dropped. It is not a good pretence. It is a little rounder than when you met it, and it is very plainly following you.",
+   "choices": [
+    {
+     "label": "Let it come along.",
+     "success": {
+      "text": "You crouch and hold out your hand. It climbs on, heavy as a fistful of coins, and settles in the crook of your arm. It looks up at you. It looks at the buckle on your belt, thoughtfully. Then it decides you are worth more whole, and goes to sleep.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "meltan"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "meltan-followed",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Meltan ate something of yours, and then followed you home.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send it home.",
+     "success": {
+      "text": "You point back down the road. It looks where you are pointing for a long time. Then it goes, clinking, and at the corner it turns and waves the same small polite wave. You will miss the sound, a little.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
 }

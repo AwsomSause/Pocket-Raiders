@@ -2,5 +2,2073 @@
  "catalogOverhaul": "anime",
  "override": true,
  "remove": [],
- "events": []
+ "events": [
+  {
+   "id": "aq01-wouldnt-go-in-its-ball",
+   "name": "The One That Wouldn't Go in Its Ball",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [],
+   "remembers": [
+    {
+     "id": "two-pikachu",
+     "when": [
+      {
+       "kind": "starter",
+       "species": "pikachu"
+      }
+     ],
+     "notice": "Your own Pikachu climbs down from your shoulder. The two of them look at each other across the lab floor, cheeks crackling, and something in the wild one goes very still.",
+     "addChoices": [
+      {
+       "label": "Let the two Pikachu meet.",
+       "success": {
+        "text": "Your Pikachu walks over as if it owns the lab. They touch noses. A small spark jumps between them, the way two people shake hands. The lab Pikachu's fur goes flat for the first time all week. It recognises something in your partner: a Pikachu that chose its person. It looks at you again, longer this time.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "aq01-lab",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq01-pika-calmed",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "aq01-spearow"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_m"
+    ],
+    "pokemon": "pikachu",
+    "tint": "#2a2c3a",
+    "effect": "flicker"
+   },
+   "intro": "A professor's lab, early morning. Papers on every surface, and one empty corner nobody goes near. In it sits a Pikachu with its ears flat and its cheeks fizzing. A red and white Ball lies open beside it, and it will not look at the Ball. \"This one's been here a week,\" the professor sighs. \"It won't go in. It bit my assistant.\" He rubs his own thumb, which is also bandaged. \"Someone's coming to pick a starter today. A boy. He overslept.\" The Pikachu looks at you. Then at the Ball. Then away, hard, at the wall.",
+   "choices": [
+    {
+     "label": "Leave the Ball on the table.",
+     "success": {
+      "text": "You set the Ball down on the table, out of its reach, and step back. Nothing happens for a long minute. Then the Pikachu creeps over, sniffs the Ball all round, and sits on it. Firmly. Like a lid. The professor laughs so hard he has to hold the desk. \"Well! That's the closest it's been to one all week.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq01-lab",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq-pika-ball",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq01-spearow"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick it up.",
+     "success": {
+      "text": "You reach for it. It does not bite. It does something worse. A Thundershock runs up your arm and makes your hair stand on end, and for a second you can taste copper. The professor laughs until he cries. \"That's a yes, by the way. That's how it says hello to people it likes. It bit the last one.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq01-lab",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq-pika-shocked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq01-spearow"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit on the floor next to it.",
+     "success": {
+      "text": "You sit down on the cold floor, not too close, and look at the same bit of wall it is looking at. You do not reach out. You do not say anything clever. After a minute it shuffles sideways, a little at a time, until its tail is against your knee. It keeps looking at the wall. So do you. The professor tiptoes out to make tea.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq01-lab",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq-pika-floor",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq01-spearow"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq01-spearow",
+   "name": "The Spearow at the Window",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "floor",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-pika-floor",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Pikachu is pressed against your legs. It sat beside you on the floor. It has already decided which side of you is safe.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Stand in front of it.",
+       "success": {
+        "text": "You step between it and the glass. The window bursts and the flock hits you all at once, beaks and wings and noise, and you keep your arms out and do not move. Behind you, something small climbs your back, stands on your shoulder, and lets go. It is the biggest Thunderbolt the lab has ever seen. Every light in the building pops. The Spearow scatter, smoking. In the dark, the Pikachu sits down on your shoulder and stays there. It will not be in a Ball. It will be beside you, every step, for as long as you walk.",
+        "effects": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "pikachu"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 40
+         },
+         {
+          "kind": "flag",
+          "key": "aq01-pika-joined",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq01-pika-stood",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq01-pika-walks",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "The Pikachu that would not go in its Ball chose you, and walked beside you instead.",
+          "importance": 70
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "shocked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-pika-shocked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Your arm still tingles from its hello. It glances at your hand, then at the window, then back at your hand."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_m"
+    ],
+    "pokemon": "spearow",
+    "tint": "#3a2a22",
+    "effect": "shake"
+   },
+   "intro": "A crack at the window. Outside, a boy you do not know is running away, and a Spearow is shaking off the rock he threw at it. It screams. The whole hedge answers. Twenty Spearow come up out of the green at once, furious, and they are not looking for the boy. They are looking for anything small and yellow. The professor goes white. \"Not again.\" The Pikachu stands up, every hair on end, and the lab smells of thunder.",
+   "choices": [
+    {
+     "label": "Stand in front of it.",
+     "success": {
+      "text": "You step between it and the glass. The window bursts and the flock hits you all at once, beaks and wings, and you keep your arms out. Behind you, the Pikachu climbs your back and lets go. It is the biggest Thunderbolt the lab has ever seen. Every bulb in the building pops. The Spearow scatter, smoking. In the dark, a small warm weight settles on your shoulder. It has chosen.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "pikachu"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 30
+       },
+       {
+        "kind": "flag",
+        "key": "aq01-pika-joined",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq01-pika-stood",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Pikachu that would not go in its Ball chose you at the lab window.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Get it inside.",
+     "success": {
+      "text": "You scoop it up and run for the back room. It wriggles like a fish, bites your sleeve, and is gone through your arms and out of the broken window, alone, into all twenty of them. It wins. It is badly hurt doing it. When you carry it in afterwards it lets you, this time, and it watches your face the whole way, as if it is trying to work out why you came back for it.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "pikachu"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq01-pika-joined",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq01-pika-hurt",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Pikachu fought the whole Spearow flock alone, and then let you carry it home.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it fight.",
+     "success": {
+      "text": "You step aside. It goes out of the window like a thrown stone, and for a long minute the hedge is all sparks and screaming. It wins. Barely. It comes back singed, one ear bent, and it stops on the sill and looks at you as if to ask why you did not help. Then it comes in anyway, and sits by your boot, and that is an answer of a kind.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "pikachu"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 15
+       },
+       {
+        "kind": "flag",
+        "key": "aq01-pika-joined",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq01-pika-asked-why",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Pikachu beat the Spearow flock alone, and asked you a question with one look.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq01-pika-center",
+   "name": "Not Even for the Nurse",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq01-pika-joined",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "pikachu",
+     "bond": 1
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq01-pika-joined",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "sat-on-ball",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-pika-ball",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It looks at the tray of Balls the way it once looked at the one on the lab table, as if it might have to sit on all of them."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/nursery_aide"
+    ],
+    "pokemon": "pikachu",
+    "tint": "#3a2a30",
+    "effect": "none"
+   },
+   "intro": "A Pokémon Center, and a tired nurse with a tray of Balls for the healing machine. \"Its Ball, please.\" The Pikachu climbs to the top of your head and sits there with its arms folded. The nurse waits. The Pikachu waits. A queue forms. Somebody in the queue starts to laugh.",
+   "choices": [
+    {
+     "label": "Carry it to the machine yourself.",
+     "success": {
+      "text": "You lift it off your head and carry it, in your arms, to the machine. You hold it on the warm plate while the lights run round, and it lets them, because you are holding it. The nurse writes something on a form. \"First time I've healed one by hand,\" she says. \"Won't be the last, will it?\"",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "pikachu",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq01-pika-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the nurse to treat it on the counter.",
+     "success": {
+      "text": "She looks at you, then at the Pikachu, then gets out the old kit from under the counter: the one from before the machines. She treats it with a cloth and a spray and a lot of patience. It sits very still and very proud. When she is done it pats her hand with one paw, the way you would tip someone.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "pikachu",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq01-pika-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq01-pika-rain",
+   "name": "Under the Jacket",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq01-pika-center"
+    },
+    {
+     "kind": "partyLine",
+     "species": "pikachu",
+     "bond": 2
+    }
+   ],
+   "remembers": [
+    {
+     "id": "walks",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq01-pika-walks",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It has not been inside a Ball since the lab window. It is not going to start for a little rain."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pikachu",
+    "tint": "#1e2a36",
+    "effect": "rain"
+   },
+   "intro": "Rain, sudden and cold, on an open road. A Pikachu hates being wet. Its fur goes spiky and then flat, and its cheeks spit tiny sparks that fizzle out. Its Ball is right there on your belt. It looks at the Ball. It looks at you. Its teeth are chattering.",
+   "choices": [
+    {
+     "label": "Open your jacket.",
+     "success": {
+      "text": "You unzip your jacket and it is inside before you finish, a small wet furnace against your chest. It sneezes. It shocks you, just a little, by accident, and goes rigid as if waiting to be put down. You zip the jacket up to its chin instead. You walk the whole road like that. It falls asleep halfway.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "pikachu",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq01-pika-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run for the trees together.",
+     "success": {
+      "text": "You run. It runs beside you, ears flat, and for a minute you are both soaked and both racing and it is, somehow, a game. You reach the trees at the same time. It shakes itself all over you on purpose. Then it sits on your foot to keep its own feet dry, and leans on your leg, and does not move until the rain stops.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "pikachu",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq01-pika-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq01-pika-ball",
+   "name": "The Ball in the Grass",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq01-pika-rain"
+    },
+    {
+     "kind": "partyLine",
+     "species": "pikachu",
+     "bond": 3
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pikachu",
+    "tint": "#2a3a24",
+    "effect": "glint"
+   },
+   "intro": "Its Ball falls off your belt on a steep path and rolls into the long grass. You do not notice. The Pikachu does. When you look back, it is standing in the path with the Ball in both arms, holding it out to you like something it found and thought you might want. It has never touched that Ball before.",
+   "choices": [
+    {
+     "label": "Let it keep the Ball.",
+     "success": {
+      "text": "\"You hang on to it.\" It looks at the Ball, then at you, and then carries it the rest of the way, like a lunchbox. That night it sleeps curled round it. It still will not go inside. That was never what the Ball was for, it turns out. It was for being given back.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "pikachu",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq01-pika-scene-3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq01-pika-keeps-ball",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put the Ball away for good.",
+     "success": {
+      "text": "You take the Ball and put it at the very bottom of your bag, under everything, where nobody could ever find it in a hurry. The Pikachu watches you do it. Then it climbs onto your shoulder, puts both paws on your head, and stays there for the whole of the next road, like a hat that has made up its mind.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "pikachu",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq01-pika-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ash-training",
+   "name": "Ash's Training",
+   "group": "Pokémon-anime questlines",
+   "scene": {
+    "cast": [
+     "boss.ash"
+    ],
+    "pokemon": "bulbasaur",
+    "tint": "#2a3a2a",
+    "effect": "sparkle"
+   },
+   "callback": true,
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq01-pika-joined",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq01-pika-joined",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "pikachu",
+     "bond": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "walks",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq01-pika-walks",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He sees the Pikachu riding on your shoulder, no Ball anywhere, and his whole face lights up. \"No Ball? That's the coolest thing I've ever seen.\""
+    },
+    {
+     "id": "shocked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-pika-shocked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He holds out a hand to the Pikachu. You open your mouth to warn him. Too late. He stands there smoking, grinning. \"Ha! It likes me!\""
+    },
+    {
+     "id": "asked-why",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq01-pika-asked-why",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Pikachu is watching you, not him. Since the Spearow, it watches to see whether you will step in. Today, you can show it."
+    }
+   ],
+   "intro": "Someone is running up the road behind you, shouting. A boy about your age, one shoe untied, a pyjama top showing under his jacket, a Bulbasaur trotting after him. \"Wait! Wait up!\" He stops, hands on his knees. \"I overslept. Then I got lost. The professor said the Pikachu went with you, so he gave me this one.\" He beams at the Bulbasaur. \"Honestly? We're great.\" He is Ash. He looks at your Pikachu with pure delight. \"Hey! Wanna battle? My partner's all fired up!\"",
+   "choices": [
+    {
+     "label": "Battle him.",
+     "success": {
+      "text": "\"Yes!\" He flips his cap round. The Bulbasaur plants its feet. Your Pikachu is down off your shoulder before you call it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "bulbasaur",
+        "caterpie"
+       ],
+       "name": "Ash",
+       "classId": "rival",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "friendshipLine",
+         "species": "pikachu",
+         "amount": 10
+        },
+        {
+         "kind": "flag",
+         "key": "aq01-ash-trained",
+         "amount": 1,
+         "stamp": "region"
+        },
+        {
+         "kind": "flag",
+         "key": "reunion-guest-ash",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq01-ash-goodbye"
+        }
+       ],
+       "friendly": true,
+       "sprite": "ash",
+       "lose": [
+        {
+         "kind": "friendshipLine",
+         "species": "pikachu",
+         "amount": 5
+        },
+        {
+         "kind": "flag",
+         "key": "aq01-ash-trained",
+         "amount": 1,
+         "stamp": "region"
+        },
+        {
+         "kind": "flag",
+         "key": "aq01-ash-won",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "reunion-guest-ash",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq01-ash-goodbye"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Train together.",
+     "success": {
+      "text": "You train until the sun goes orange. He is terrible at plans and wonderful at not giving up. Your Pikachu and his Bulbasaur go at each other again and again, and every time one of them falls down, the other waits for it to get up. By the end your Pikachu has learned to dodge a vine it could not dodge at noon. Ash is lying flat on the grass, laughing at the sky.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "pikachu",
+        "amount": 5
+       },
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": {
+         "species": [
+          "pikachu",
+          "raichu"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "aq01-ash-trained",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "aq01-ash-trained-together",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-ash",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq01-ash-goodbye"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask if he minds about the Pikachu.",
+     "success": {
+      "text": "He thinks about it properly, which you did not expect. \"I did, for about a minute.\" He scratches the Bulbasaur under its bulb. \"But it picked you. You can't make something pick you. And this one picked me.\" The Bulbasaur leans on his leg. \"So I think it all worked out.\" Then he trains with you anyway, until the light goes.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "pikachu",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq01-ash-trained",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "aq01-ash-fine",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-ash",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq01-ash-goodbye"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq01-ash-goodbye",
+   "name": "See You at the End",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.ash"
+    ],
+    "pokemon": "pikachu",
+    "tint": "#3a3420",
+    "effect": "sparkle"
+   },
+   "intro": "Evening. Ash ties his shoe at last. His Bulbasaur is asleep against his bag. Your Pikachu is on your shoulder, cheeks still faintly glowing from the day. \"We're going the other way,\" Ash says. \"But we'll catch up. Everybody does, at the end.\"",
+   "choices": [
+    {
+     "label": "\"See you at the end.\"",
+     "success": {
+      "text": "He holds out his fist. Your Pikachu, without being asked, bumps it with one tiny paw, and lets off the smallest spark in the world. Ash laughs all the way down the road. You can still hear him at the bend. The Pikachu watches him go and then turns, settles, and faces the way you are walking.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Ash arrived late, got a Bulbasaur, was fine about it, and trained with you until dark.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq01-shoulder-1",
+   "name": "On Someone's Shoulder",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq01-ash-trained",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_m"
+    ],
+    "pokemon": "pikachu",
+    "tint": "#2a3a2a",
+    "effect": "none"
+   },
+   "intro": "A new region, a new road. A small boy comes the other way with a Pikachu riding on his shoulder, no Ball on his belt at all. He stops and stares at you. \"Are you the one? Everybody says somebody walks with their Pikachu outside the Ball. So I tried it. It works.\"",
+   "choices": [
+    {
+     "label": "\"It works.\"",
+     "success": {
+      "text": "He grins and goes on his way, the Pikachu holding onto his ear for balance. You did not know anyone had been watching. Somewhere back down the road, a lab has a broken window and a story about it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq01-shoulder-1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq01-shoulder-2",
+   "name": "On Someone's Shoulder",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq01-shoulder-1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "pikachu",
+    "tint": "#1e2a36",
+    "effect": "none"
+   },
+   "intro": "Another region. An old man fishing off a pier, and on his shoulder, wearing a tiny knitted hat against the wind, a Pikachu. Its Ball is hanging on a hook on the pier post, being used to hold his bait. \"Never would go in,\" he says, without looking round. \"Somebody told me that was allowed now.\"",
+   "choices": [
+    {
+     "label": "\"It is.\"",
+     "success": {
+      "text": "He nods, as if that settles a long argument. The Pikachu in the knitted hat looks at you and lifts one paw. You lift yours. It is a small, silly, solemn thing, and it makes the whole day better.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq01-shoulder-2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq01-shoulder-3",
+   "name": "On Someone's Shoulder",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq01-shoulder-2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_f"
+    ],
+    "pokemon": "pikachu",
+    "tint": "#3a3420",
+    "effect": "sparkle"
+   },
+   "intro": "Far from where it started. A trainer walks out of a Gym, beaten and laughing, a Pikachu on her shoulder and its Ball nowhere to be seen. Two children run behind her with their own Pikachu on their own shoulders. It is a parade. It started at one lab window, and nobody here knows that but you.",
+   "choices": [
+    {
+     "label": "Watch the parade go by.",
+     "success": {
+      "text": "You stand at the side of the road and let it pass: three Pikachu on three shoulders, sparking at each other, cheering. You do not tell anyone how it began. You do not need to. It is enough to know.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq01-shoulder-3",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "In every region after the lab, someone walked with a Pikachu on their shoulder.",
+        "importance": 50
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq02-butterfree-migration",
+   "name": "The Butterfree Migration",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "water"
+   ],
+   "remembers": [
+    {
+     "id": "flight-north",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "cs-kanto-vermilion-flight-goodbye"
+      },
+      {
+       "kind": "partyTypes",
+       "types": [
+        "bug"
+       ]
+      }
+     ],
+     "notice": "Your own Bug-type comes and sits beside you on the sand. It watches the flock with you, very still. It knows what it is to be the one who flies north, and the one who stays."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_m"
+    ],
+    "pokemon": "butterfree",
+    "tint": "#4a2a3a",
+    "effect": "float"
+   },
+   "intro": "A beach at sunset, the sea gone the colour of peaches. Above it, a thousand Butterfree, so many that their shadow moves across the sand like weather. They are all flying out over the water. One is not. It sits on the sand beside a boy, wings folded, looking up. \"It's their season,\" the boy says. \"They all fly over the sea. Every year.\" He swallows. \"It's never left me. Not once.\" The Butterfree looks up. \"I don't want it to go. But it keeps looking up.\"",
+   "choices": [
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "The boy breathes in like someone about to jump into cold water. \"Go on, then.\" The Butterfree lifts off the sand. It does not go straight up. It circles him once, twice, three times, so close its wings brush his hair. Then it rises into the flock and is one of a thousand, and he cannot tell which one, and he keeps waving anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq02-flew",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "aq02-let-go",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq02-pink-butterfree"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask it.",
+     "success": {
+      "text": "The boy holds out his arm. \"Do you want to go?\" The Butterfree climbs onto his shoulder instead and stays there for a long moment, pressed against his ear, as if telling him something only he can hear. Then it lets go and flies. He does not cry until it is gone. Then he does, and that is all right.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq02-flew",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "aq02-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq02-pink-butterfree"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It's your choice.",
+     "success": {
+      "text": "He looks at you as if you have handed him something too heavy. Then he gathers the Butterfree up in both arms and holds on. It lets him. It stays. Over the next hour it stops looking up, a little at a time, and its wings are not quite as bright as they were. He does not see that yet. You do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq02-kept",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq02-pink-butterfree"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq02-pink-butterfree",
+   "name": "The Pink One",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "kept",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq02-kept",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On the boy's arm, his Butterfree goes rigid, watching the pink one. Its wings open and close, open and close, as if it has forgotten it is not up there."
+    },
+    {
+     "id": "flew",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq02-flew",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The boy grabs your sleeve. \"That's mine! Beside the pink one! It's trying to help!\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "pokemon": "butterfree",
+    "tint": "#4a2a3a",
+    "effect": "net"
+   },
+   "intro": "Something is wrong in the flock. Near the front flies a Butterfree that is pink, not white, and behind it, low over the water, comes a hot-air balloon with a net hanging under it like a mouth. Two men lean out of the basket. \"The pink one! Get the pink one, it's worth ten of the rest!\" The net swings. The flock breaks apart around it, screaming in that soft, dry way Butterfree scream.",
+   "choices": [
+    {
+     "label": "Stop the balloon.",
+     "success": {
+      "text": "You run down the beach to where the basket skims the sand and shout loud enough to make them look. They do. They drop a ladder and come down swinging.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Balloon Poachers",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [
+        "flying",
+        "normal"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq02-balloon-stopped",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq02-sunset"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq02-balloon-stopped",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq02-balloon-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq02-sunset"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let the flock deal with it.",
+     "success": {
+      "text": "You hold the boy back. The flock turns, all thousand at once, and comes down on the balloon like a white storm. Sleep Powder. Gust. More Gust. The poachers sag asleep in the basket and the balloon is blown out to sea, net and all, and nobody will see them again for days. But it costs the flock. Butterfree drop to the sand on every side, wings torn, too tired to fly on tonight. The pink one is among them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq02-flock-dealt",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq02-sunset"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq02-sunset",
+   "name": "After the Flock",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "kept",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq02-kept",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "His Butterfree is on his shoulder. It is looking up again. He sees it this time. He does not say anything, but he puts his hand on its back, very gently, the way you would hold a door."
+    },
+    {
+     "id": "flock-dealt",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq02-flock-dealt",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "All along the beach, tired Butterfree rest on the sand. The boy goes from one to the next with a water bottle, and you go with him, until they can fly."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_m"
+    ],
+    "pokemon": "butterfree",
+    "tint": "#3a2a40",
+    "effect": "sparkle"
+   },
+   "intro": "The sun goes down. The last of the flock is a pale smudge on the horizon, then nothing. The boy sits on the sand and hugs his knees. \"Thanks for staying.\" He digs in his pocket and holds out a little paper twist. Inside is a soft, silver dust that shines without any light on it. \"It left this on my pillow every morning. I've got jars of it. You have some.\"",
+   "choices": [
+    {
+     "label": "Sit with him until dark.",
+     "success": {
+      "text": "You sit with him until the stars come out. He tells you its whole life: the Caterpie in the cabbage patch, the cocoon that took a week, the morning it first flew and landed on his face. When you go, he shakes your hand like a grown-up. \"Come and see us. At the end of everything. We'll be there.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "silver-powder",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq02-kid-friend",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-butterfree-kid",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "On a beach at sunset, a thousand Butterfree flew over the sea, and a boy you met there became your friend.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq02-caterpie",
+   "name": "A New Cocoon",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq02-kid-friend",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "aq02-flew",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "remembers": [
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq02-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"I asked this one too,\" he says. \"Whether it wanted to come with me. It climbed in my hat. That's a yes, right?\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_m"
+    ],
+    "pokemon": "caterpie",
+    "tint": "#2a3a24",
+    "effect": "sparkle"
+   },
+   "intro": "A new region, and a voice you know. \"Hey! HEY! It's you!\" The boy from the beach comes running, with a Caterpie clinging to the front of his shirt. \"I caught one. A new one. I didn't want to, at first.\" He stops. The Caterpie on his shirt has begun to glow, a soft white light, right there on the road. \"Oh. Oh no. Oh, it's happening. Stay. Please stay.\"",
+   "choices": [
+    {
+     "label": "Stay and watch it evolve.",
+     "success": {
+      "text": "You stay. The light grows, and the Caterpie hardens into a Metapod in the boy's two cupped hands, green and still and warm. He laughs and cries at the same time. \"It'll fly away one day too,\" he says. \"That's all right. That's what they're for. You let them.\" He has grown up a little since the beach. So, you think, have you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq02-caterpie-evolved",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cheer it on.",
+     "success": {
+      "text": "You cheer, loudly, like it is a race. The boy joins in. Passers-by stop and stare, and then they cheer too, a whole road full of strangers cheering a Caterpie. It becomes a Metapod to applause. The boy holds it up like a trophy. \"One day,\" he says, \"I'm going to let this one go too. And I'm going to be happy about it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq02-caterpie-evolved",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq03-flock-leaders-promise",
+   "name": "The Flock Leader's Promise",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "remembers": [
+    {
+     "id": "kanto-pidgeotto",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-pidgeotto-ally",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The scarred Pidgeot turns its head and looks straight at you. You know that look. You let a Pidgeotto go, once, on a road not far from here. It has grown. It remembers you."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ranger_f"
+    ],
+    "pokemon": "pidgeot",
+    "tint": "#141c2a",
+    "effect": "fog"
+   },
+   "intro": "A forest at night, and every branch is full of Pidgey, wide awake, packed wing to wing. Nobody sleeps here any more. Every night a Fearow flock comes through and takes what it can. On the highest branch sits a Pidgeot, scarred across the chest, feathers ragged, eyes open. A ranger lowers her torch. \"That's the flock's leader,\" she says. \"It won't leave again. It's wearing itself out.\" The Pidgeot speaks, and somehow you understand it. \"I left once. I promised I'd come back. I came back too late for some of them.\"",
+   "choices": [
+    {
+     "label": "Help it defend the forest.",
+     "success": {
+      "text": "The Pidgeot looks at you for a long moment, then dips its head: once. It is not a thank-you. It is a place in the line. The first raid comes an hour after dark: Spearow in front, Fearow behind, all screaming.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "spearow",
+        "fearow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq03-defend",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq03-night-1",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "aq03-night-two",
+         "nodes": 5
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq03-defend",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq03-night-1",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq03-raid-1-lost",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "aq03-night-two",
+         "nodes": 5
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take it with you.",
+     "success": {
+      "text": "You hold out your arm to it. The Pidgeot does not even look at the arm. It turns back to the dark beyond the trees. \"No,\" it says, in the way it says things. \"Not again. Never again.\" The ranger shakes her head at you, kindly. \"It won't. Not while they need it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq03-asked-to-come",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq03-refused"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Train the Pidgey.",
+     "success": {
+      "text": "\"It can't guard them forever,\" you tell the ranger. \"They have to guard themselves.\" The Pidgeot hears. It does not stop you. You pick three Pidgey: the boldest, the fastest, and the smallest, who insisted. All night you throw pine cones at them and they learn to dodge. By the end of it the smallest one dodges a cone and catches it. The Pidgeot watches from the top of the tree, and for the first time it closes its eyes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq03-train",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq03-night-1",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq03-pidgey-night-two",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq03-refused",
+   "name": "It Will Not Leave",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/ranger_f"
+    ],
+    "pokemon": "pidgeot",
+    "tint": "#141c2a",
+    "effect": "fog"
+   },
+   "intro": "The Pidgeot stays on its branch, facing the dark. Below it, a hundred small Pidgey huddle and watch you to see what you will do now. The ranger hands you a spare torch. \"It said no to you. It didn't say no to help.\"",
+   "choices": [
+    {
+     "label": "Help it defend the forest.",
+     "success": {
+      "text": "You take up the torch. The Pidgeot sees it, and moves along its branch to make room. The first raid comes an hour after dark: Spearow in front, Fearow behind, all screaming.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "spearow",
+        "fearow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq03-defend",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq03-night-1",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "aq03-night-two",
+         "nodes": 5
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq03-defend",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq03-night-1",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq03-raid-1-lost",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "aq03-night-two",
+         "nodes": 5
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Train the Pidgey.",
+     "success": {
+      "text": "If it will not leave them, they will have to be strong enough that it could. You roll up your sleeves. You pick three Pidgey: the boldest, the fastest, and the smallest, who insisted. All night you throw pine cones at them and they learn to dodge. By the end of it the smallest one dodges a cone and catches it. The Pidgeot watches from the top of the tree, and for the first time it closes its eyes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq03-train",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq03-night-1",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq03-pidgey-night-two",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You leave the forest the way you came. Behind you, all night, there is screaming in the trees, and one big bird that does not sleep.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq03-night-two",
+   "name": "The Second Night",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq03-defend",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ranger_f"
+    ],
+    "pokemon": "fearow",
+    "tint": "#141c2a",
+    "effect": "fog"
+   },
+   "intro": "The second night. The Fearow have counted their losses and come back with more. You hear them before you see them: wings like canvas tearing, coming in low over the treetops. The Pidgeot drops off its perch to meet them. It is slower than last night. Its left wing is not quite right.",
+   "choices": [
+    {
+     "label": "Hold the line with it.",
+     "success": {
+      "text": "You step out beside it, and the raid breaks around the two of you like water round a stone.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "fearow",
+        "spearow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq03-night-2",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "aq03-night-three",
+         "nodes": 5
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq03-night-2",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq03-raid-2-lost",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "aq03-night-three",
+         "nodes": 5
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq03-night-three",
+   "name": "The Third Night",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq03-defend",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "pidgeys-resolve",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "sky.opening"
+      }
+     ],
+     "notice": "You know this Fearow. It was a Spearow once, on a road, fighting a Pidgey over a branch for no reason either of them would say. It sees you, and it knows you too."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ranger_f"
+    ],
+    "pokemon": "fearow",
+    "tint": "#101420",
+    "effect": "shake"
+   },
+   "intro": "The third night, and no stars. The Fearow leader comes alone this time, which is worse. It is huge, and old, and it lands on the Pidgeot's own branch, and the branch bends. The two birds look at each other. They have done this before, many times, over many years. The Pidgeot is shaking. It does not move back.",
+   "choices": [
+    {
+     "label": "Drive off the Fearow leader.",
+     "success": {
+      "text": "You step out under the branch and whistle. The Fearow leader looks down at you, then drops off the branch and comes.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Fearow Leader",
+       "size": 1,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq03-fearow-driven",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq03-dawn"
+        }
+       ],
+       "lineup": [
+        "fearow"
+       ],
+       "spritePokemon": "fearow",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq03-fearow-driven",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq03-fearow-fight-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq03-dawn"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq03-pidgey-night-two",
+   "name": "The Second Night",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq03-train",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ranger_f"
+    ],
+    "pokemon": "pidgey",
+    "tint": "#141c2a",
+    "effect": "fog"
+   },
+   "intro": "The second night. Your three Pidgey are waiting on the low branch, in a row, chests out, as if they have been there since dawn. They probably have. Then the sound comes: wings like canvas tearing, low over the treetops. The Fearow have counted their losses and come back to test the forest.",
+   "choices": [
+    {
+     "label": "Drill the three Pidgey.",
+     "prompt": {
+      "id": "dodge-tap",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "The raid comes, smaller tonight: testing. The three Pidgey go up to meet it before you can say anything. The boldest takes a Spearow head-on. The fastest leads two in circles until they crash into each other. The smallest hides, then comes out of nowhere with a Gust that knocks one clean off a branch. The raiders go. The Pidgeot has not left its perch. It did not need to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq03-night-2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq03-pidgey-drilled",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq03-pidgey-night-three",
+        "nodes": 5
+       }
+      ]
+     },
+     "failure": {
+      "text": "The raid comes, smaller tonight: testing. The three Pidgey go up too soon and too far apart, and the Pidgeot has to come down off its perch to pull them out of it. Nobody is taken. They are shaken, and so are you. \"Tomorrow,\" the ranger says. \"They'll get it tomorrow.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq03-night-2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq03-pidgey-shaky",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq03-pidgey-night-three",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq03-pidgey-night-three",
+   "name": "The Third Night",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq03-train",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "pidgeys-resolve",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "sky.opening"
+      }
+     ],
+     "notice": "You know this Fearow. It was a Spearow once, on a road, fighting a Pidgey over a branch for no reason either of them would say. It sees you, and it knows you too."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ranger_f"
+    ],
+    "pokemon": "fearow",
+    "tint": "#101420",
+    "effect": "shake"
+   },
+   "intro": "The third night, and no stars. The Fearow leader comes alone, huge and old, and lands on the Pidgeot's own branch. The branch bends. But the three Pidgey are in the air before it has folded its wings, and the whole flock is behind them: a hundred small birds, not hiding. The Pidgeot watches from below. It does not move. It does not have to.",
+   "choices": [
+    {
+     "label": "Fight it with the flock behind you.",
+     "success": {
+      "text": "A hundred Pidgey scream at once. The Fearow leader has never heard that sound from this forest.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The flock at your back",
+        "effects": [
+         {
+          "kind": "damageTakenMultiplier",
+          "value": 0.85
+         }
+        ],
+        "battles": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Fearow Leader",
+       "size": 1,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq03-fearow-driven",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq03-asks"
+        }
+       ],
+       "lineup": [
+        "fearow"
+       ],
+       "spritePokemon": "fearow",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq03-fearow-driven",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq03-fearow-fight-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq03-asks"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq03-dawn",
+   "name": "Dawn in the Trees",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "lost-fight",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq03-fearow-fight-lost",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You went down under the Fearow's wings. It was the Pidgeot that came down off its branch, scarred and slow, and finished it: the last time it will ever have to."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ranger_f"
+    ],
+    "pokemon": "pidgeot",
+    "tint": "#3a3420",
+    "effect": "sparkle"
+   },
+   "intro": "Dawn comes up grey, then gold. The Fearow leader is a dot going away over the hills, and it does not look back. All through the forest, the Pidgey are falling asleep where they sit, in heaps, for the first time in a long time. The Pidgeot lands on the branch over your head. It looks very tired, and very old, and very glad.",
+   "choices": [
+    {
+     "label": "Say goodbye.",
+     "success": {
+      "text": "It bows its whole body to you, the way the flock bows to it. \"I kept it,\" it says. \"This time I kept it.\" The ranger sees you to the edge of the trees. When you look back, the Pidgeot is asleep on its branch, at last, with its head under its wing.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "aq03-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "Three nights in a forest of Pidgey, and an old Pidgeot kept its promise.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq03-asks",
+   "name": "The Leader Asks",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "shaky",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq03-pidgey-shaky",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The smallest Pidgey has a torn feather from the second night. It does not care. It is standing on the Pidgeot's head."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ranger_f"
+    ],
+    "pokemon": "pidgeot",
+    "tint": "#3a3420",
+    "effect": "sparkle"
+   },
+   "intro": "Dawn. The Fearow leader is gone over the hills. Your three Pidgey sit on the low branch, puffed up, too proud to sleep. The Pidgeot lands in front of you. For the first time it is not facing the dark. It is facing you. \"They don't need me,\" it says. It does not sound sad. It sounds like someone setting down something heavy. \"I would like to see what is past the trees. With you, if you'll have me.\"",
+   "choices": [
+    {
+     "label": "Take it with you.",
+     "success": {
+      "text": "It climbs onto your arm. It is heavy, and its claws are careful. The three Pidgey take the top branch, all of them at once, and the whole flock settles round them. The Pidgeot looks back only once. Then it turns its face to the road.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "pidgeot"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "flag",
+        "key": "aq03-pidgeot-joined",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq03-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "The flock learned to guard itself, and its old leader came with you.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell it to rest here.",
+     "success": {
+      "text": "\"You've flown enough.\" It thinks about that for a long moment, and then it lets out a long breath and folds its wings. It does not go back to the high branch. It sleeps in the middle of the flock, warm, surrounded. Your three Pidgey take the watch.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "aq03-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "aq03-pidgeot-rests",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Three nights in a forest of Pidgey, and an old Pidgeot finally slept.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq03-visit",
+   "name": "A Visitor From the Forest",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq03-done",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "remembers": [
+    {
+     "id": "joined",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq03-pidgeot-joined",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "This is not your Pidgeot. It is one of the three: the smallest, the one that insisted, grown huge. It lands in front of its old leader and bows."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pidgeot",
+    "tint": "#2a3a4a",
+    "effect": "float"
+   },
+   "intro": "A shadow crosses the road, comes round again, and lands. A Pidgeot, big and glossy, with no scars at all. It has flown a long way. It walks up to you as if it has every right to, and taps your bag with its beak, the way you would knock on a door.",
+   "choices": [
+    {
+     "label": "Let it rest a while.",
+     "success": {
+      "text": "It stays an afternoon. It eats from your hand. It tells you, in its way, that the forest is loud now, and full, and nobody is afraid at night. Then it goes, the way they all go, straight up and then away, toward home.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "aq03-visited",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Pidgeot flew a whole region to tell you the forest was safe.",
+        "importance": 50
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
 }

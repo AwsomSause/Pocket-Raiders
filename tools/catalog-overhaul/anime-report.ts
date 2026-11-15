@@ -11,7 +11,7 @@ import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 type Json = Record<string, unknown>;
-interface Mod { QUESTLINES?: Record<string, string>; PLACEMENT?: Record<string, Json>; LIMITS?: Record<string, string[]>; CHECKED?: Record<string, string>; NOT_A_BUTTON?: Record<string, Record<string, string>> }
+interface Mod { QUESTLINES?: Record<string, string>; PLACEMENT?: Record<string, Json>; LIMITS?: Record<string, string[]>; CHECKED?: Record<string, string>; NOT_A_BUTTON?: Record<string, Record<string, string>>; MERGED?: Record<string, string> }
 const root = join(import.meta.dirname, '../..');
 const coDir = join(root, 'tools/events/co');
 const only = process.env.ANIME_ONLY;
@@ -25,6 +25,8 @@ const placement: Record<string, Json> = {};
 const limits: Record<string, string[]> = {};
 const checked: Record<string, string> = {};
 const notButtons: Record<string, Record<string, string>> = {};
+/** Questlines the docs settle as another thread's (QUESTLINES_PLACED.md "Overlaps, settled"): questline -> what is used instead. */
+const merged: Record<string, string> = {};
 const moduleOf: Record<string, string> = {};
 const events: (Json & { id: string })[] = [];
 for (const name of names) {
@@ -38,6 +40,7 @@ for (const name of names) {
   Object.assign(limits, mod.LIMITS ?? {});
   Object.assign(checked, mod.CHECKED ?? {});
   Object.assign(notButtons, mod.NOT_A_BUTTON ?? {});
+  Object.assign(merged, mod.MERGED ?? {});
   events.push(...(JSON.parse(readFileSync(join(root, `src/data/events/co-${name}.json`), 'utf8')) as { events: (Json & { id: string })[] }).events);
 }
 const ids = new Set(events.map((e) => e.id));
@@ -104,7 +107,7 @@ const lines: string[] = [
   '',
   '| Questline | Title | Doc | Module | Events | Re-read against the doc |',
   '|---|---|---|---|---|---|',
-  ...all.map((q) => `| ${q} | ${fixture.questlines[q]!.title} | ${docOf(q)} | ${moduleOf[q] ?? '-'} | ${questlines[q] ? count(q) : 0} | ${checked[q] ?? (questlines[q] ? 'built, not yet re-read' : 'pending')} |`),
+  ...all.map((q) => `| ${q} | ${fixture.questlines[q]!.title} | ${docOf(q)} | ${moduleOf[q] ?? '-'} | ${questlines[q] ? count(q) : 0} | ${merged[q] ? `not built here: merged into ${merged[q]}` : checked[q] ?? (questlines[q] ? 'built, not yet re-read' : 'pending')} |`),
   '',
   '## Known limits (what the doc asks for that the game cannot do yet)',
   '',

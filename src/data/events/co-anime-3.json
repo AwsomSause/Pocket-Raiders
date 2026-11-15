@@ -2,5 +2,2135 @@
  "catalogOverhaul": "anime",
  "override": true,
  "remove": [],
- "events": []
+ "events": [
+  {
+   "id": "an19-body-swap",
+   "name": "The Body Swap",
+   "group": "Anime-inspired questlines",
+   "rarity": "rare",
+   "minStage": 5,
+   "types": [
+    "ghost",
+    "dark"
+   ],
+   "remembers": [
+    {
+     "id": "deoxys-telling",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "telling-deoxys",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know that comet. You heard its Telling: the thing that rides inside it, and how it rearranges whatever it passes. The swap is not a curse. It is a visitor, and visitors can be asked to leave.",
+     "addChoices": [
+      {
+       "label": "End it on purpose.",
+       "success": {
+        "text": "You stand outside at the hour the comet rises and say, out loud, that it can stop now. The sky does a small, polite thing. Your team is back by noon, all of them, blinking. The stranger writes: \"It stopped. You did that?\" You did. You still know their name, and their handwriting, and the way their Gothita knits its brows. And the Hatenna that crossed over this morning will not let go of your sleeve.",
+        "effects": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "hatenna"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 10
+         },
+         {
+          "kind": "flag",
+          "key": "an19-swap-ended",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "reunion-guest-swap-stranger",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "You ended the comet's swap on purpose, and kept the stranger's name.",
+          "importance": 65
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "jirachi-telling",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "telling-jirachi",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know that comet. You heard its Telling: the small wishing star that wakes once in a thousand years and grants things a little too literally. Somebody wished to know what another life was like. A wish can be wished back.",
+     "addChoices": [
+      {
+       "label": "End it on purpose.",
+       "success": {
+        "text": "You wish it back, carefully, in the plainest words you have. The sky does a small, polite thing. Your team is back by noon, all of them, blinking. The stranger writes: \"It stopped. You did that?\" You did. You still know their name, and their handwriting, and the way their Gothita knits its brows. And the Hatenna that crossed over this morning will not let go of your sleeve.",
+        "effects": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "hatenna"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 10
+         },
+         {
+          "kind": "flag",
+          "key": "an19-swap-ended",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "reunion-guest-swap-stranger",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "You ended the comet's swap on purpose, and kept the stranger's name.",
+          "importance": 65
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/backpacker_f"
+    ],
+    "pokemon": "gothita",
+    "tint": "#241a33",
+    "effect": "float"
+   },
+   "intro": "You wake before the sun, and the morning is the wrong shape. The Pokémon curled against your side is not {lead}. It is a Gothita in a hand-knitted scarf, and it is staring at you as if you are the strange one. Your team is gone from the camp. Your phone buzzes: a photo of all of them in a heap on somebody else's bed, across a town you have never seen, while a small pink Hatenna goes from one to the next, patting faces, trying very politely to wake them. A message. \"Why is your Pokémon in my bed?\" Another. \"It's been every third morning. Since the comet.\" A third. \"I left you notes on your hand. Read them.\" You turn your hand over. There is writing on it, in someone else's careful pen: Don't panic. Feed her at seven. She likes the crusts.",
+   "choices": [
+    {
+     "label": "Meet them.",
+     "success": {
+      "text": "You type: where are you? The answer takes a long time. Their town is one region ahead of yours, further than you have walked. They send a photo of a crater on the edge of it, rimmed in tall grass, glowing orange. \"Dusk is when it thins. If we're both there at dusk, we might get a minute. Maybe only one.\" You both type \"deal\" at the same moment. By noon the Gothita blinks out of your arms and {lead} is back, smelling of somebody else's soap.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "swap-met",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an19-second-morning-met",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Write back.",
+     "success": {
+      "text": "You borrow a pen and write under their notes, small, so it fits: Hello. Mine like the crusts too. Sorry about the bed. Three mornings on there will be an answer, and three after that another: one useful thing each, the way strangers swap tips on a long road. By noon the Gothita blinks out of your arms and {lead} is back. It sniffs your hand for a long time, reading.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "swap-notes",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an19-second-morning-notes",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for it to stop.",
+     "success": {
+      "text": "You do nothing, and it stops. One more morning with the Gothita, quieter, then never again. The notes on your hand wash off in the rain. A week later you find yourself writing a name in the margin of your map, and you cannot remember whose it is, or why your chest hurts a little when you look at it.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Somebody's name was on your hand once. You cannot work out why it matters.",
+        "importance": 40
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an19-second-morning-met",
+   "name": "Plans for Dusk",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "swap-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/backpacker_f"
+    ],
+    "pokemon": "gothita",
+    "tint": "#241a33",
+    "effect": "float"
+   },
+   "intro": "The third morning again. The Gothita is back, and this time it climbs straight into your lap as if it has been waiting. On your hand, in the careful pen: The crater is on the old road out of town. Bring a light. I will wear something yellow so you know me. Then, smaller, crossed out and written again: I am a bit scared you will be disappointed.",
+   "choices": [
+    {
+     "label": "Draw them a map.",
+     "success": {
+      "text": "You draw your side of the road on your own wrist, every bend you can remember, and an arrow that says I will come this way. Your handwriting looks so clumsy next to theirs. By noon the swap ends. A text arrives: \"Your map is terrible. I love it.\" The crater is a region away. It will keep.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an19-crater-planned",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an19-swap-back",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what they look like.",
+     "success": {
+      "text": "\"Tall-ish. Hair that does not do what I ask. I laugh too loud.\" A pause, and then: \"You?\" You tell them the truth, including the bits you would usually skip. By noon the swap ends. The last message says: \"Good. Now I will know you.\" The crater is a region away. It will keep.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an19-crater-planned",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "an19-asked-face",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an19-swap-back",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an19-second-morning-notes",
+   "name": "Notes on Your Hand",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "swap-notes",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/backpacker_f"
+    ],
+    "pokemon": "gothita",
+    "tint": "#241a33",
+    "effect": "float"
+   },
+   "intro": "The third morning again. The Gothita is back, and it hugs your arm before you are properly awake. Your hand is crowded with writing: Your team snores. All of them. In harmony. Your Gym leader here is easy if you know who they open with, so here it is. Under that, a little drawing of the Gothita, with a heart. There is still room on your other hand.",
+   "choices": [
+    {
+     "label": "Write a tip back.",
+     "success": {
+      "text": "You write the best thing you know about the road ahead of them: where the berries grow, which bridge is rotten. Then you read their tip properly. It is a good one. It is the exact team the Gym leader keeps, written out in order, with a note about which one bites. By noon the swap ends, and you are smiling at your own hand.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "flag",
+        "key": "an19-tip-traded",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an19-swap-back-notes",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Write something kind instead.",
+     "success": {
+      "text": "You run out of useful things and write the true one: Thank you for looking after them. Nobody has ever left me notes before. Their tip is still there when the swap ends, the Gym leader's whole team, in order. Three mornings later there is a reply squeezed under your knuckles: Nobody ever wrote back before.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "flag",
+        "key": "an19-kind-note",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an19-swap-back-notes",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an19-swap-back",
+   "name": "The Swap Back",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "swap-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/backpacker_f"
+    ],
+    "pokemon": "hatenna",
+    "tint": "#2e1f3d",
+    "effect": "sparkle"
+   },
+   "intro": "The comet is low tonight, low enough to see it moving. This is the last swap morning: you can feel it the way you feel the end of a fever. But this time it is not the Gothita in your arms. It is the Hatenna, the little pink one that kept trying to wake your team. It crossed over with them, on purpose it seems, and it is holding on to your scarf with both hands. Your phone buzzes. \"Is she with you? She has sat by your Pokémon every morning. I think she likes your side better.\" Then: \"Still the crater? Still dusk?\"",
+   "choices": [
+    {
+     "label": "Let it stay.",
+     "success": {
+      "text": "It does not let go. When the swap ends at noon and your team blinks back into the camp, the Hatenna is still in your arms, small and warm and very sure. Your phone buzzes. \"I think it chose you. It always did like the snoring.\" Then: \"Look after it. I will know if you don't. I have your hand, sometimes.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "hatenna"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "an19-hatenna-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Every third morning you lived beside a stranger's life. Their Hatenna stayed.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send it home with the comet.",
+     "success": {
+      "text": "You hold it until the last minute and then you set it down where the swap will take it. It looks back at you once. At noon your team is home, and a message arrives: \"She came back holding your scarf. Thank you. See you at the crater.\" The comet goes, and the mornings are only mornings again.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an19-hatenna-home",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an19-swap-back-notes",
+   "name": "The Last Note",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "swap-notes",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/backpacker_f"
+    ],
+    "pokemon": "hatenna",
+    "tint": "#2e1f3d",
+    "effect": "sparkle"
+   },
+   "intro": "The comet is low tonight, low enough to see it moving. This is the last swap morning: you can feel it the way you feel the end of a fever. But this time it is not the Gothita in your arms. It is the Hatenna, the little pink one that kept trying to wake your team. It crossed over with them, on purpose it seems, and it is holding on to your scarf with both hands. One last note runs up the inside of your wrist: The comet goes tonight. This is the last one. Tip: the road ahead forks three times, and here is what waits down each. I will miss your handwriting. It is terrible.",
+   "choices": [
+    {
+     "label": "Let it stay.",
+     "success": {
+      "text": "It does not let go. When the swap ends at noon and your team blinks back into the camp, the Hatenna is still in your arms, small and warm and very sure. Your phone buzzes. \"I think it chose you. It always did like the snoring.\" Then: \"Look after it. I will know if you don't. I have your hand, sometimes.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "hatenna"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "flag",
+        "key": "an19-hatenna-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-swap-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Every third morning you lived beside a stranger's life. Their Hatenna stayed.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send it home with the comet.",
+     "success": {
+      "text": "You hold it until the last minute and then you set it down where the swap will take it. It looks back at you once. At noon your team is home, and a message arrives: \"She came back holding your scarf. Thank you.\" It is the last message. The tip is still on your wrist, and you do not wash it off for days.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an19-hatenna-home",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-swap-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Every third morning you lived beside a stranger's life. You sent their Hatenna home.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an19-crater-at-dusk",
+   "name": "A Crater at Dusk",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "swap-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "an19-crater-planned",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/backpacker_f"
+    ],
+    "pokemon": "hatenna",
+    "tint": "#4a2a1a",
+    "effect": "sparkle"
+   },
+   "intro": "The old road. The crater, exactly like the photo, only bigger and more orange, because the sun is going down into it. You are early. You walk the rim twice. Then, on the far side, something yellow, running. The air goes thin and strange as dusk thickens: this is where the swap wears through, and you can feel it pulling at the edges of you. A minute. Maybe only one. The yellow figure is waving both arms.",
+   "choices": [
+    {
+     "label": "Say your name.",
+     "success": {
+      "text": "You shout it across the crater, the whole thing, and it comes back to you from the far side in their voice, shouted just as loud, as if they are checking they have it right. Then they shout theirs. You say it under your breath three times so it sticks. The light goes. The minute is over. You are both still waving when you can no longer see each other.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an19-crater-names",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-swap-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "At a crater at dusk you finally saw the stranger whose mornings you shared. You know their name.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run to them.",
+     "success": {
+      "text": "You run along the rim and they run along the rim, and you get close enough to see that their hair really does not do what they ask. Close enough to touch hands, almost. Their hand has your handwriting on it. Yours has theirs. Then the dusk closes like a door and there is only grass and the sound of someone laughing too loud, far off, happy.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an19-crater-ran",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-swap-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "At a crater at dusk you ran to meet a stranger whose mornings you shared, and nearly touched hands.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an20-quiet-psychic",
+   "name": "The Quiet Psychic",
+   "group": "Anime-inspired questlines",
+   "rarity": "uncommon",
+   "minStage": 4,
+   "types": [
+    "normal",
+    "electric",
+    "steel"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_m"
+    ],
+    "pokemon": "gothita",
+    "tint": "#1e2638",
+    "effect": "float"
+   },
+   "intro": "A small cafe, warm and steamy, and very quiet, because every spoon in it is floating. They hang over the tables at about eye height, turning slowly, catching the light. The other customers are pretending not to notice. In the corner a boy in a school uniform has both hands pressed flat on the table and his eyes shut. \"Sorry,\" he says, to nobody, to everybody. \"That happens when I'm nervous.\" He opens one eye and finds you looking. \"I'm trying to join the running club. I want to be good at something normal.\" His Gothita sighs, climbs onto the table, and floats the spoons back to their saucers, one by one, with a tiny clink each time.",
+   "choices": [
+    {
+     "label": "Run with him.",
+     "success": {
+      "text": "You race him to the end of the street and back. He runs like someone who has read about running in a book: elbows everywhere, very determined. He loses by a long way. He bends over with his hands on his knees, gasping, and when he looks up he is grinning so hard it must hurt. \"I lost! I lost properly! Nothing floated!\" The Gothita applauds with two small hands. \"The tryout is soon. Will you come?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an20-ran",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an20-tryout",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show me what you can do.",
+     "success": {
+      "text": "He looks at you for a long moment. Then he lifts one finger, and every cup in the cafe rises an inch and settles again, without spilling a drop. It is beautiful. It is also the moment the door bangs open.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an20-showed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an20-if-i-get-angry"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Normal is overrated.",
+     "success": {
+      "text": "He laughs, sudden and loud, and three spoons leap into the air and fall back down. \"Says you.\" He wipes his eyes. \"You get to be normal and you're bored of it. I'd like to be bored of it.\" The Gothita pats his hand. \"The tryout is soon. You could come and be overrated in the stands.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an20-overrated",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an20-tryout",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an20-if-i-get-angry",
+   "name": "If I Get Angry",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_m",
+     "trainer.roughneck"
+    ],
+    "pokemon": "gothita",
+    "tint": "#1e1a30",
+    "effect": "rattle"
+   },
+   "intro": "Two grunts of the team that has been trouble all region, in matching jackets, too big for the doorway. \"Heard there was a kid in here doing tricks,\" one says. \"The boss pays for tricks.\" The boy has gone white. The cups on every table start to tremble, and then the tables, and then the windows. \"Please go,\" he whispers. \"I don't know what I'll do if I get angry. I've never let myself find out.\" His Gothita has both hands on his arm, holding on.",
+   "choices": [
+    {
+     "label": "Fight them for him.",
+     "success": {
+      "text": "You step between the grunts and the boy. Behind you, the trembling slows. He is watching you instead of them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Grunts in the Doorway",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [
+        "dark",
+        "poison"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "an20-grunts-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "an20-tryout",
+         "nodes": 5
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "an20-grunts-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "an20-gothita-showed-them",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "an20-tryout",
+         "nodes": 5
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Help him breathe.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You sit down across from him and breathe in for four, out for four, and make him copy you. In. Out. The grunts laugh. The windows stop rattling. Then the Gothita, very calmly, floats both grunts out of the door by their collars and sets them down in the road. Nobody got angry. The boy stares at his hands. \"I didn't do that.\" \"No,\" you say. \"You did the other thing. The harder one.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an20-kept-calm",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an20-tryout",
+        "nodes": 5
+       }
+      ]
+     },
+     "failure": {
+      "text": "You try to get him breathing, but he is already too far in. Every spoon in the cafe flies at the door at once. They do not hit anyone; they hang there, an inch from the grunts' faces, quivering. The grunts run. The boy puts his head in his arms. \"That's what I'm scared of. That's exactly it.\" His Gothita strokes his hair until he stops shaking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an20-lost-temper",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an20-tryout",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an20-tryout",
+   "name": "The Running Club",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "galactic-list",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "galactic"
+      }
+     ],
+     "notice": "At the back of the stands sits a man in a grey-and-silver coat with a clipboard. He is not watching the runners. He is watching the boy, and the hurdles that wobble when the boy is nervous. He writes something down and underlines it twice."
+    },
+    {
+     "id": "plasma-list",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "plasma"
+      }
+     ],
+     "notice": "At the back of the stands sits a man in a long robe with a clipboard. He is not watching the runners. He is watching the boy, and the hurdles that wobble when the boy is nervous. He writes something down and underlines it twice."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_m"
+    ],
+    "pokemon": "gothita",
+    "tint": "#1e2c38",
+    "effect": "none"
+   },
+   "intro": "The school track, chalk lines and a whistle. The running club tryout. The boy is in borrowed shorts, much too big. He keeps looking at the hurdles as if they might float off without him. \"If they float, I'm out,\" he says. \"If I'm last, that's fine. Last is a normal thing to be.\" His Gothita is in the stands with its hands over its eyes, peeking.",
+   "choices": [
+    {
+     "label": "Cheer from the stands.",
+     "success": {
+      "text": "You shout his name every time he gets near a hurdle. He knocks over the first one, clears the second, and walks round the third out of politeness. He finishes dead last, by a mile, and every hurdle on the track stays exactly where it was. He walks back to you with his arms up like a champion. \"Last! Did you see? Nothing moved!\" The coach writes his name on the list anyway: for trying harder than anyone.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an20-tryout-cheered",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an20-his-mother",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run beside him.",
+     "prompt": {
+      "id": "hurdle-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You run in the next lane, matching him stride for stride, and count the hurdles out loud so he has something to think about besides being afraid. One. Two. Three. You both clear every one. He finishes second to last, and the boy behind him is a very small first-year who tripped over his own lace, but it still counts. He cannot stop laughing.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an20-tryout-ran",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an20-his-mother",
+        "nodes": 5
+       }
+      ]
+     },
+     "failure": {
+      "text": "You lose the count on the second hurdle and go down in a heap, and he stops to help you up, and you both finish last together, limping and laughing. Nothing floated. Not even when you fell. The coach writes his name on the list: for stopping.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an20-tryout-ran",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an20-his-mother",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an20-his-mother",
+   "name": "His Mother's Gothitelle",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "galactic-recruiter",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "galactic"
+      }
+     ],
+     "notice": "There is a knock. On the step stands the man with the clipboard, in grey and silver, and two grunts behind him. \"We take gifted children seriously,\" he says. \"He is next on our list.\" The boy's cups begin to tremble. You are standing in the doorway before you have decided to.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Stop the recruiter.",
+       "success": {
+        "text": "The boy is behind you. His breathing is steady. In, four. Out, four.",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "name": "Commander Saturn",
+         "classId": "psychic",
+         "size": 3,
+         "types": [
+          "poison",
+          "dark"
+         ],
+         "levelBonus": 1,
+         "win": [
+          {
+           "kind": "flag",
+           "key": "an20-recruiter-stopped",
+           "amount": 1
+          },
+          {
+           "kind": "egg",
+           "species": [
+            "gothita"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "left": 3,
+           "unit": "battle"
+          },
+          {
+           "kind": "moment",
+           "text": "A team came to take a gifted boy, and you stood in the door.",
+           "importance": 65
+          }
+         ],
+         "friendly": true,
+         "sprite": "saturn",
+         "lose": [
+          {
+           "kind": "flag",
+           "key": "an20-recruiter-stopped",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "an20-boy-held-calm",
+           "amount": 1
+          },
+          {
+           "kind": "egg",
+           "species": [
+            "gothita"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "left": 3,
+           "unit": "battle"
+          },
+          {
+           "kind": "moment",
+           "text": "A team came to take a gifted boy. He stayed calm, and they left.",
+           "importance": 65
+          }
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "plasma-recruiter",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "plasma"
+      }
+     ],
+     "notice": "There is a knock. On the step stands the man with the clipboard, in a long robe, and two grunts behind him. \"Such power should be set free,\" he says. \"He is next on our list.\" The boy's cups begin to tremble. You are standing in the doorway before you have decided to.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Stop the recruiter.",
+       "success": {
+        "text": "The boy is behind you. His breathing is steady. In, four. Out, four.",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "name": "Zinzolin",
+         "classId": "psychic",
+         "size": 3,
+         "types": [
+          "ice",
+          "dark"
+         ],
+         "levelBonus": 1,
+         "win": [
+          {
+           "kind": "flag",
+           "key": "an20-recruiter-stopped",
+           "amount": 1
+          },
+          {
+           "kind": "egg",
+           "species": [
+            "gothita"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "left": 3,
+           "unit": "battle"
+          },
+          {
+           "kind": "moment",
+           "text": "A team came to take a gifted boy, and you stood in the door.",
+           "importance": 65
+          }
+         ],
+         "friendly": true,
+         "sprite": "zinzolin",
+         "lose": [
+          {
+           "kind": "flag",
+           "key": "an20-recruiter-stopped",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "an20-boy-held-calm",
+           "amount": 1
+          },
+          {
+           "kind": "egg",
+           "species": [
+            "gothita"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "left": 3,
+           "unit": "battle"
+          },
+          {
+           "kind": "moment",
+           "text": "A team came to take a gifted boy. He stayed calm, and they left.",
+           "importance": 65
+          }
+         ]
+        }
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_m",
+     "trainer.pr/psychic_f"
+    ],
+    "pokemon": "gothitelle",
+    "tint": "#28203a",
+    "effect": "sparkle"
+   },
+   "intro": "The boy's house is small and very tidy, with a kettle that boils without being switched on. His mother meets you at the door. Behind her stands a Gothitelle, tall and calm, with something cradled in its arms: an egg, faintly starry. \"He told me about you,\" his mother says. \"He has never brought anyone home.\" Her Gothitelle steps forward and holds the egg out to you, the way you would hand someone a cup of tea. \"She wants you to have it. She decided before we did.\"",
+   "choices": [
+    {
+     "label": "Take the egg.",
+     "success": {
+      "text": "It is warm, and it hums a little against your chest. The boy is grinning at the floor. \"It'll be nervous too. When it hatches. Things might float.\" He shrugs. \"That's normal.\" His mother laughs so suddenly that every spoon in the kitchen jumps, and nobody minds at all.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "gothita"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "an20-egg-taken",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A boy who wanted to be normal finished last, and was delighted. His mother's Gothitelle gave you an egg.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say it should stay with him.",
+     "success": {
+      "text": "\"He'll need someone who understands,\" you say. The Gothitelle tilts its head, and then sets the egg in the boy's arms instead. He holds it as if it might float away. \"I'll teach it to run,\" he says. \"Badly. Like me.\" He walks you to the gate and waves until you turn the corner.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an20-egg-with-him",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an21-bounty-crew",
+   "name": "The Bounty Crew",
+   "group": "Anime-inspired questlines",
+   "rarity": "rare",
+   "minStage": 6,
+   "types": [
+    "water"
+   ],
+   "remembers": [
+    {
+     "id": "smuggling-ring",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "smuggling-ring-done",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The captain squints at you, and his face changes. \"Wait. You're the one who broke the Smuggling Ring. Del, it's them!\" The woman at the rail looks up. \"Then you know him already,\" she says. \"The man on the poster ran that ring. He got out the back while you were opening cages.\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman",
+     "trainer.pr/scuba_diver_f"
+    ],
+    "pokemon": "yamper",
+    "tint": "#1c2630",
+    "effect": "float"
+   },
+   "intro": "A boat at the end of the jetty that should have sunk years ago. The paint is mostly rust, the rust is mostly hope. On deck: a big man in a battered captain's hat, a woman sharpening a knife at the rail with a Barraskewda circling below her, an old man asleep under a newspaper with a Cramorant asleep on top of him, and a Yamper with one ear up, guarding a pot with nothing in it. \"We hunt bounties,\" says the captain, Rufus Kettleby. \"We're bad at it.\" He unrolls a poster. \"This one's worth a fortune. A trainer who sells stolen Pokémon.\" He taps the face. \"Help us catch him and we split it.\"",
+   "choices": [
+    {
+     "label": "In.",
+     "success": {
+      "text": "\"IN!\" Kettleby throws his hat in the air and it lands in the sea. The Yamper goes in after it. The old man wakes up and says, \"Is it dinner?\" It is not dinner. Del watches you over her knife and says nothing at all. \"Three ports on,\" the captain says, dripping, holding his hat. \"That's where he sells. We'll be waiting.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an21-in",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an21-the-chase",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Who is he?",
+     "success": {
+      "text": "Nobody answers. The captain looks at his boots. The old man pretends to be asleep again. Then the woman at the rail puts down her knife. \"Corwin Arkwright,\" Del says. \"He sells stolen Pokémon to people who don't ask. He used to carry me on his shoulders.\" She picks the knife up again. \"He's my brother. I'd rather it was us that caught him than anyone else.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an21-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an21-his-sister"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Fair,\" says the captain, cheerfully, as if nobody has ever said yes. \"More for us. Which is nothing, currently.\" The Yamper sees you off down the jetty, very seriously, and then trots back to guard the empty pot.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an21-said-no",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an21-his-sister",
+   "name": "His Sister",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/scuba_diver_f"
+    ],
+    "pokemon": "barraskewda",
+    "tint": "#1c2630",
+    "effect": "float"
+   },
+   "intro": "Del does not look at you while she talks. \"Our dad fished. Corwin took over the boat when he died, and then he sold the boat, and then he sold other things.\" Below her, the Barraskewda turns a slow circle. \"If someone else catches him, they won't be careful. I will be.\" The captain clears his throat. \"The offer stands. Same split. Five ways, dog included.\"",
+   "choices": [
+    {
+     "label": "In.",
+     "success": {
+      "text": "Del nods, once, the way people nod when they have been carrying something alone and somebody finally takes the other end. \"Three ports on,\" the captain says. \"That's where he sells. We'll be waiting.\" The old man wakes up and asks if it is dinner. It is not.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an21-in",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an21-for-del",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an21-the-chase",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Fair,\" the captain says, quieter this time. Del goes back to her knife. As you leave you hear her say, to the Barraskewda or to nobody, \"Then it's us.\" The Yamper sees you down the jetty.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an21-said-no",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an21-the-chase",
+   "name": "The Chase",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an21-in",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman",
+     "trainer.pr/rich_m"
+    ],
+    "pokemon": "barraskewda",
+    "tint": "#1c2630",
+    "effect": "rain"
+   },
+   "intro": "The third port, at dusk, in the rain. Corwin Arkwright is exactly where the poster said: on the end of a pier, selling a crate of frightened Pokémon to a man with a thick wallet. Kettleby charges up the pier shouting \"BOUNTY HUNTERS!\", which is the one thing you agreed not to do. Corwin is in a speedboat before the captain finishes the word. The engine coughs, roars, and he is away across the harbour.",
+   "choices": [
+    {
+     "label": "Cut him off.",
+     "success": {
+      "text": "You and Del race the long way round the harbour wall while the Barraskewda shoots through the water like a thrown spear. You get close enough to see his face: he looks like Del, older, tired. Then he cuts the engine, drifts into the fog under the old pier and is gone. He escaped. The crate is still on the pier, and it is open now. Every Pokémon in it is free.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an21-crate-freed",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an21-dinner",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow quietly.",
+     "success": {
+      "text": "You leave the captain shouting and follow the wake in a rowing boat, quietly, the old man rowing with surprising strength. You see where the speedboat ties up: a dock with a red lamp. Then the captain's voice carries across the water, still shouting, and the red lamp goes out. He escaped. But you know where he sleeps now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an21-red-lamp",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an21-dinner",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an21-dinner",
+   "name": "The Argument About Dinner",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.fisherman",
+     "trainer.pr/scuba_diver_f"
+    ],
+    "pokemon": "cramorant",
+    "tint": "#2a1e18",
+    "effect": "none"
+   },
+   "intro": "Back on the boat, nobody is talking about Corwin. Everybody is talking about dinner. There is one onion, a tin of something with no label, and the old man's Cramorant, which has a fish in its throat it will not give up. The captain wants to sell the tin. The old man wants to open it. The Yamper wants the fish. Del sits at the rail and does not want anything. \"We eat or we chase,\" the captain says. \"We can't afford both.\"",
+   "choices": [
+    {
+     "label": "Cook for everyone.",
+     "success": {
+      "text": "You open the tin (beans), chop the onion, and coax the fish out of the Cramorant with a pat on the back. It is not a good dinner. Everybody has two helpings. The Yamper falls asleep in the pot. Halfway through, Del says, \"He used to cook for me. Badly. Like this.\" And she laughs, and then she cries a bit, and the captain passes her the last of the beans without a word.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an21-cooked",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an21-the-catch",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit with Del instead.",
+     "success": {
+      "text": "You leave them arguing and sit at the rail. Del does not look at you. \"When we catch him,\" she says, \"I want to be the one who tells him.\" Behind you, the captain wins the argument by eating the tin cold. The Cramorant keeps its fish. Nobody gets much dinner, and nobody minds.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an21-sat-with-del",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an21-the-catch",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an21-the-catch",
+   "name": "The Catch",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_m",
+     "trainer.pr/scuba_diver_f"
+    ],
+    "pokemon": "barraskewda",
+    "tint": "#1c2630",
+    "effect": "rain"
+   },
+   "intro": "The dock with the red lamp, before dawn. Corwin Arkwright is loading his last crate. He turns, sees the crew, sees Del, and goes very still. \"Delly,\" he says. \"You got old.\" \"You got worse,\" she says. He looks past her, at you. \"Who's this? The muscle?\" His hand goes to his belt, where his Poké Balls are. \"I'm not going quietly, Delly. I don't know how.\"",
+   "choices": [
+    {
+     "label": "Fight him.",
+     "success": {
+      "text": "Del stands at your shoulder. The captain, for once, is silent.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Corwin Arkwright",
+       "classId": "veteran",
+       "size": 3,
+       "types": [
+        "water",
+        "dark"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "an21-caught",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "an21-payday",
+         "nodes": 3
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "an21-caught",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "an21-caught-by-fish",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "an21-payday",
+         "nodes": 3
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let Del talk to him.",
+     "success": {
+      "text": "You step back. Del walks up to her brother and stands in front of him for a long time. She says something too quiet for anyone else. He sits down on his last crate. He gives her his Poké Balls, one by one, the stolen ones. Then he holds out his wrists. The captain, who was ready to shout, takes off his hat instead.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an21-caught",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an21-del-talked",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an21-payday",
+        "nodes": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an21-payday",
+   "name": "Payday",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.fisherman",
+     "trainer.pr/scuba_diver_f"
+    ],
+    "pokemon": "arrokuda",
+    "tint": "#2a2618",
+    "effect": "sparkle"
+   },
+   "intro": "The bounty office pays out in a paper bag. Kettleby counts it on the deck, twice, out loud. \"Six thousand. Five ways: me, Del, the old man, the dog, you. Twelve hundred each. That's honest.\" The dog's share goes straight into a new pot. Del has not touched hers. The Barraskewda in the water below her has had a baby since you last looked: a small Arrokuda, all teeth and nerves, darting round your boots. \"It likes you,\" says Del. \"Take it. He'd have sold it.\"",
+   "choices": [
+    {
+     "label": "Take your cut.",
+     "success": {
+      "text": "Twelve hundred, honest, in a paper bag that smells of fish. The little Arrokuda jumps into your arms as if it has been practising. \"Same time next bounty?\" the captain says. \"We'll be bad at it again.\" Del walks you to the end of the jetty. \"Thank you for being careful with him,\" she says, and goes back aboard.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 1200
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "arrokuda"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "an21-paid",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You rode with a broke bounty crew and helped a woman bring her brother in, carefully.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give your cut to Del.",
+     "success": {
+      "text": "You put your twelve hundred on top of hers. \"For his lawyer,\" you say. \"Or for you.\" She stares at the money, and then at you, and then she has to look at the sea for a while. The little Arrokuda jumps into your arms anyway. \"Still broke,\" the captain announces happily. \"Still a crew.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "arrokuda"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an21-gave-cut",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You rode with a broke bounty crew, and gave your share of the bounty to the hunter whose brother it was.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an21-by-accident",
+   "name": "Caught by Accident",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an21-said-no",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "an21-said-no",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "yamper",
+    "tint": "#1c2630",
+    "effect": "confetti"
+   },
+   "intro": "A rusty boat comes past the harbour wall, very slowly, with a speedboat tied to its back. On the speedboat sits a man in handcuffs, looking furious. On the rusty boat, Captain Kettleby is waving his hat at you with both arms. \"WE GOT HIM! Total accident! He ran out of fuel and drifted into us while we were fishing!\" The Yamper barks. The old man is asleep. Del, at the rail, raises one hand to you, calmly, the way you raise a hand at the end of something.",
+   "choices": [
+    {
+     "label": "Wave back.",
+     "success": {
+      "text": "\"Six thousand!\" the captain bellows. \"We're rich! For a week!\" The boat goes past, and as it does the Yamper drops something over the side onto the jetty at your feet: a small Arrokuda in a bucket of water, all teeth and nerves. \"SPARE ONE!\" the captain shouts. \"DON'T ASK!\" You did not help. You get no cut. You get a fish with opinions.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "arrokuda"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an21-accident-seen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The boat goes past, shouting. You do not need to hear the end of it to know how it goes. They will be broke again by Tuesday.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "an22-forest-god",
+   "name": "The Forest God",
+   "group": "Anime-inspired questlines",
+   "rarity": "rare",
+   "minStage": 8,
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "remembers": [
+    {
+     "id": "zygarde-cells",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "zygarde-cells-found",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Deep in the trees, a green light flickers, then another: the same small lights you gathered across this run, the Cells. The forest groans again, and this time it sounds like a name. Yours. The girl turns and stares at you. \"It knows you,\" she says. \"It never knows anyone.\"",
+     "addChoices": [
+      {
+       "label": "Let the forest speak for itself.",
+       "success": {
+        "text": "You walk into the trees and the green lights come with you, and the foreman, swearing, comes too. The forest shows him: every dead trunk lights up green, one by one, the whole way to the hill. He stands there with his hat in his hands. \"That's enough wood for three winters,\" he says. \"And not one living tree.\" The girl looks at you as if you have done magic. You have only been kind to some small green lights.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "forest-deal",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "an22-easy-deal",
+          "amount": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 3,
+          "who": "party"
+         },
+         {
+          "kind": "laterEvent",
+          "eventId": "an22-dead-wood",
+          "nodes": 5
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m",
+     "trainer.pr/ranger_f"
+    ],
+    "pokemon": "trevenant",
+    "tint": "#13221a",
+    "effect": "fog"
+   },
+   "intro": "The edge of an old forest, and a line of stumps where the trees used to stop. Loggers are packing up for the night. In the morning, they say, every stump they cut has grown a face: a small, sad, wooden face, with a single leaf on top. Some of the faces have started to cry. The foreman wipes his hands on his trousers. \"It's just a forest. We need the wood.\" From the trees comes a groan so deep you feel it in your teeth: the whole forest, making one sound. Then a girl steps out of the dark between the trunks, barefoot, with a Phantump on her shoulder. \"Leave,\" she says, \"or I'll make you.\"",
+   "choices": [
+    {
+     "label": "Stop the logging.",
+     "success": {
+      "text": "You stand between the saws and the trees. The girl, behind you, says nothing. The forest is very quiet, listening.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Logging Crew",
+       "classId": "worker",
+       "size": 3,
+       "types": [
+        "fighting",
+        "steel"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "forest-saved",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "an22-cold-town",
+         "nodes": 5
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "forest-saved",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "an22-forest-finished-it",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "an22-cold-town",
+         "nodes": 5
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Talk to the foreman.",
+     "success": {
+      "text": "He is not a cruel man. He is a tired one. \"Town's got no coal this year. Kids need heat.\" He looks at the stumps with their little faces and has to look away. \"Dead wood burns as well as live. I'd cut only dead, if someone could show me which. I can't tell. It all looks alive to me now.\" He sticks out his hand. \"Come back when the crew's ready. Show us.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "forest-deal",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an22-dead-wood",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Talk to the girl.",
+     "success": {
+      "text": "She looks at you for a long time, the way a wild thing does before it decides whether to run. The Phantump on her shoulder makes a small, creaking sound. \"Fine,\" she says. \"You can meet it. If it wants to meet you.\" She turns into the trees. \"It's a long walk. Don't talk too much.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "forest-god",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an22-the-god",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an22-cold-town",
+   "name": "No Wood for Winter",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "forest-saved",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1a2230",
+    "effect": "snow"
+   },
+   "intro": "The town below the forest. The first frost has come. The woodpiles behind the houses are empty, and smoke rises from only a few chimneys, thin and grudging. The foreman is at his door with a child on his hip, both of them in coats indoors. He sees you and does not look angry. That is worse. \"You saved the trees,\" he says. \"Good. Who's saving us?\" Behind him, the child's breath shows in the air.",
+   "choices": [
+    {
+     "label": "Cut the dead wood with them.",
+     "success": {
+      "text": "You go back up with the crew and you show them, trunk by trunk, which trees are already dead: the hollow ones, the lightning-struck, the ones with no sap. It is slow, cold work. The forest watches. It does not groan. By dark there is a cart of dry wood going down the hill, and that night more chimneys smoke. The foreman shakes your hand without a word.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an22-dead-wood-cut",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an22-the-border",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep the forest whole.",
+     "success": {
+      "text": "You do not offer anything. It is the forest or the town, and you chose. You walk through the cold streets and nobody shouts at you, which is somehow the hard part. A girl at a window has drawn a tree in the frost on the glass. It has a face. That night you lie awake listening to the wind in a forest that will stand for another hundred years.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an22-forest-whole",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an22-the-border",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an22-dead-wood",
+   "name": "Which Wood Is Dead",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "forest-deal",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m",
+     "trainer.pr/ranger_f"
+    ],
+    "pokemon": "phantump",
+    "tint": "#13221a",
+    "effect": "fog"
+   },
+   "intro": "The crew is ready, saws on shoulders, standing at the edge of the trees like men at the door of a church. The foreman hands you a pot of white paint. \"Mark the dead ones. We'll cut nothing else.\" Somewhere in the forest the girl is watching, you are sure of it. A Phantump peers at you from behind a trunk. Every tree looks alive in this light. Every tree looks like it has a face.",
+   "choices": [
+    {
+     "label": "Let a Pokémon find the dead wood.",
+     "pick": {},
+     "success": {
+      "text": "Your Pokémon goes ahead of you, sniffing, listening, laying a paw or a leaf against each trunk. Where it stops and sits, you paint a white ring. It never stops at a living tree. By evening the crew has felled only the dead, and the forest has not groaned once. The foreman gives your Pokémon an apple. The girl, somewhere above you, laughs out loud.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "an22-marked-well",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an22-the-border",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Mark them yourself.",
+     "prompt": {
+      "id": "aim-drag",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You walk the forest with the paint pot and look properly: at bark, at leaves, at the sap that still runs and the trunks that ring hollow when you knock. You get them right, every one. By dark the crew has felled only the dead. The foreman looks at the stumps. Not one of them has a face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an22-marked-well",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an22-the-border",
+        "nodes": 5
+       }
+      ]
+     },
+     "failure": {
+      "text": "You get almost all of them right. Almost. In the morning one stump at the edge of the clearing has grown a small, sad face, with one leaf on top, and it is looking straight at you. The foreman swears softly. The forest groans, once, long. You did your best. It was not quite enough, and everybody knows it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an22-one-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an22-the-border",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an22-the-god",
+   "name": "The Forest God",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "forest-god",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ranger_f"
+    ],
+    "pokemon": "trevenant",
+    "tint": "#0e1a12",
+    "effect": "fog"
+   },
+   "intro": "The middle of the forest, where the light comes down green. The girl stops. \"Here.\" At first you think it is a hill. Then the hill opens its eye: a single red eye, the size of a doorway. It is a Trevenant, but older and bigger than any Trevenant should be, with whole trees growing out of its back and a stream running between its roots. The girl kneels. \"This is who raised me,\" she says. \"It doesn't like people. It's deciding about you.\"",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "You sit down in the moss and say nothing. For a long time, nothing happens. Then the forest god groans, and the girl translates, slowly, as if the words are heavy. \"It says the town may have the dead. It says the living are its children. It says one tree planted for every tree cut, and a line nobody crosses.\" She looks at you. \"It wants you to carry that to them. It thinks they'll listen to you.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an22-god-terms",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an22-the-border",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask it to spare the town.",
+     "success": {
+      "text": "\"They're cold,\" you say. \"They're not cruel. They're cold.\" The red eye looks at you for so long that your legs go numb. Then a branch the size of a bridge lowers itself, slowly, and sets down a heap of dry, dead wood at your feet. Then another. The girl's mouth is open. \"It's never given anything,\" she whispers. \"Not to them.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an22-god-gave",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an22-the-border",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an22-the-border",
+   "name": "The Border",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "saved",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forest-saved",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The loggers remember the fight. The forest remembers that you stood in front of it. Neither side has forgotten the cold."
+    },
+    {
+     "id": "deal",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forest-deal",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The stumps along the line are all dead wood, cut clean. The foreman has painted a white ring on a stone, the same white you used."
+    },
+    {
+     "id": "god",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "forest-god",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Behind the girl, half hidden in the trees, a hill with a single red eye is watching."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m",
+     "trainer.pr/ranger_f"
+    ],
+    "pokemon": "phantump",
+    "tint": "#1a2a1a",
+    "effect": "sparkle"
+   },
+   "intro": "A cold bright morning at the edge of the forest. The foreman is there with his crew, and the girl with her Phantump, and they are not shouting at each other. They are carrying stones. They have been arguing all week about where the line goes, and they have asked you to settle it, because you are the only one both sides have talked to. A row of stones runs half way across the field and stops. \"Here, or there?\" the foreman says. \"Wherever you put it,\" says the girl, \"we keep it. Both sides.\"",
+   "choices": [
+    {
+     "label": "Draw it at the old stumps.",
+     "success": {
+      "text": "You set the last stone at the line of old stumps, where the trees used to stop before anyone was cold. The foreman nods slowly. The girl nods slowly. They shake hands, which neither expected. One of the little faced stumps creaks, wriggles, and climbs out of the ground: a Phantump, all leaf and worry. It walks straight past the girl and holds on to your leg. \"It wants to see the world,\" she says. \"Trees never get to.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "phantump"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "an22-border-stumps",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You drew the border between a town and a forest god, and both sides kept it.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give the forest the hill.",
+     "success": {
+      "text": "You carry the stones up to the hill and set the line above the town, so the forest keeps its old ground and the town keeps its fields. It costs the crew a long walk for wood. The foreman grumbles and agrees. The girl looks at you as if she might cry. A Phantump climbs out of a stump at your feet and wraps itself round your ankle. \"That one's yours,\" she says. \"It chose. Look after it.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "phantump"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an22-border-hill",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You drew the border between a town and a forest god, and gave the forest its hill.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
 }

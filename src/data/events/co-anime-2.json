@@ -2,5 +2,1075 @@
  "catalogOverhaul": "anime",
  "override": true,
  "remove": [],
- "events": []
+ "events": [
+  {
+   "id": "an10-formation",
+   "name": "Formation",
+   "group": "Anime-inspired questlines",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "types": [
+    "fighting"
+   ],
+   "remembers": [
+    {
+     "id": "little-league",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "little-league"
+      }
+     ],
+     "notice": "The coach is barely taller than the Falinks. You know her: one of the Little League kids you coached, in a tracksuit three sizes too big. \"Coach! Their real coach is sick, so I'm coach today.\" She stands very straight. She has grown up a lot since that school yard, all at once."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_f"
+    ],
+    "pokemon": "falinks",
+    "tint": "#3a2a1a",
+    "effect": "shake"
+   },
+   "intro": "A dusty practice ground behind the town's battle hall. Six Falinks stand in a line, nose to tail, helmets shining. The one at the front is bellowing, and there is no mistaking what it means: \"Formation! FORMATION!\" The smallest one, at the very back, trips over its own feet and takes two others down with it. The coach picks them up one at a time, gently, the way you set skittles back up. \"They lost every match this year. Every single one.\" She nods at the little one, who is pretending to look at a cloud. \"He can jump higher than any of them. He's afraid of being in front.\"",
+   "choices": [
+    {
+     "label": "Train them.",
+     "success": {
+      "text": "The coach blinks, then hands you her whistle as if it were heavy. \"Three drills. I never had the heart to run them.\" The leader stamps. The little one at the back stamps a beat late, and looks at his feet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an10-trained",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an10-drill-call"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put the little one in front.",
+     "success": {
+      "text": "Every Falinks turns its head at once. The leader makes a sound like a kettle. The little one tries to hide behind the others, but there are only five of them and he is the sixth. You walk him to the front of the line, one small step at a time. He is shaking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an10-little-front",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an10-little-one-front"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch a match.",
+     "success": {
+      "text": "\"Stay for the evening match, then. You'll see.\" The coach does not say what you will see. She says it like someone who has stopped expecting anyone to look.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an10-watched",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an10-the-match"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an10-drill-call",
+   "name": "Drill One: The Call",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_f"
+    ],
+    "pokemon": "falinks",
+    "tint": "#3a2a1a",
+    "effect": "shake"
+   },
+   "intro": "The first drill is the oldest one. You call, they answer. One voice, one stamp, six helmets turning together like a door swinging shut. The leader is ready before you open your mouth. The little one at the back is watching your lips, very hard, trying to be on time.",
+   "choices": [
+    {
+     "label": "Call the beat.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You call. They answer. You call faster; they answer faster. On the tenth call the little one lands it exactly with the others, and for one beat there is only one sound on the whole ground. He looks up, astonished, as if he had heard himself for the first time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an10-drill-call-clean",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an10-drill-switch"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It comes back ragged: five stamps and a sixth, late, every time. But it comes back. The leader glares down the line. You put a hand on the little one's helmet. \"Late is still there,\" you tell him. \"We go again tomorrow.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "an10-drill-switch"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an10-drill-switch",
+   "name": "Drill Two: Change the Leader",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_f"
+    ],
+    "pokemon": "falinks",
+    "tint": "#3a2a1a",
+    "effect": "shake"
+   },
+   "intro": "The second drill is the one they hate. On your clap the front Falinks peels off to the back, and the next one steps up and leads. The leader does not like going to the back. Nobody has asked the little one whether he likes coming forward, because nobody has ever got that far down the line.",
+   "choices": [
+    {
+     "label": "Clap the changes.",
+     "prompt": {
+      "id": "copycat-claps",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Clap: the leader goes to the back, grumbling. Clap: the second leads. Clap, clap, clap. Then it is the little one's turn at the front, and he freezes, and the whole line bumps into him. But he is in front for one whole clap before he scurries back. The coach writes something in her notebook and underlines it twice.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an10-drill-switch-clean",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an10-drill-bout"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The changes come out in a heap: two leaders at once, then none. The leader ends up at the front again by habit, and looks relieved about it. But every Falinks has been at the front once now, even if only by accident. That is more than this season managed.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "an10-drill-bout"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an10-drill-bout",
+   "name": "Drill Three: The Bout",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_f"
+    ],
+    "pokemon": "falinks",
+    "tint": "#3a2a1a",
+    "effect": "shake"
+   },
+   "intro": "The last drill is a practice bout. The squad lines up across the ground from your team, helmets down, and for the first time today the leader is not shouting. He is listening for the little one's stamp at the back. \"Go easy,\" the coach says. Then, after a moment: \"No. Don't.\"",
+   "choices": [
+    {
+     "label": "Spar with the whole line.",
+     "success": {
+      "text": "Six helmets come at you in a wedge, and the wedge holds.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Falinks Squad",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "an10-bout-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "an10-formation-improved"
+        }
+       ],
+       "lineup": [
+        "falinks"
+       ],
+       "spritePokemon": "falinks",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "an10-bout-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "an10-formation-improved"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let them spar each other.",
+     "success": {
+      "text": "You split the line in two, three and three, and let them go at it. It is chaos, then less chaos. By the end the two halves are calling the changes to each other across the ground, and nobody is falling over.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an10-formation-improved"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an10-formation-improved",
+   "name": "A Better Line",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_f"
+    ],
+    "pokemon": "falinks",
+    "tint": "#3a2a1a",
+    "effect": "sparkle"
+   },
+   "intro": "The sun goes down over the practice ground. The squad stands in a line that is straight for the first time all year. The second Falinks, the one who changed places quickest in every drill, keeps looking at the road past the town. The coach sees it too. \"That one learned the most. It wants to see how other teams line up.\" She pauses. \"Take it, if it wants. We'll manage with five. We'll manage better than we did with six.\"",
+   "choices": [
+    {
+     "label": "Take Number Two along.",
+     "success": {
+      "text": "Number Two marches over and falls in behind your feet as if you were the front of a line. The coach hands you her whistle for good. \"Blow it before a fight. Whoever goes out first, the rest of them will be right behind.\" Behind you five Falinks stamp once, all together, to say goodbye.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "falinks"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "relic",
+        "id": "formation-whistle",
+        "name": "The Formation Whistle",
+        "effects": [
+         {
+          "kind": "battleStart",
+          "tailwind": true,
+          "turns": 2
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "an10-falinks-joined",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You drilled a losing Falinks squad until their line held.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the squad whole.",
+     "success": {
+      "text": "\"Six is a team,\" you say. Number Two looks at the road a long time, then back at the line, and steps into its place. The coach presses a black belt into your hands, frayed at one end. \"It was mine. I stopped wearing it the year we started losing.\" The squad stamps you out of town.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "black-belt",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an10-squad-whole",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an10-little-one-front",
+   "name": "He Spikes It",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_f"
+    ],
+    "pokemon": "falinks",
+    "tint": "#3a2a1a",
+    "effect": "confetti"
+   },
+   "intro": "The coach throws a practice ball high over the line. It is too high for the leader. It is too high for any of them. The little one at the front looks up, and something in him forgets to be afraid. He jumps. He jumps higher than the hall roof, it seems, higher than the cloud he was pretending to watch, and he spikes the ball into the dirt so hard it bounces back over the fence. He lands. The other five stare. The old leader stares longest of all.",
+   "choices": [
+    {
+     "label": "Take the old leader along.",
+     "success": {
+      "text": "The squad re-forms with the little one in front. The old leader stands at the back, alone, not sure where to look. The coach sighs. \"He has led so long he never learned to follow. Take him on the road. Teach him the back of a line is not the end of it.\" He falls in behind you, stiffly, and by the edge of town he is stamping in time with your steps. The coach gives you her whistle.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "falinks"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 5
+       },
+       {
+        "kind": "relic",
+        "id": "formation-whistle",
+        "name": "The Formation Whistle",
+        "effects": [
+         {
+          "kind": "battleStart",
+          "tailwind": true,
+          "turns": 2
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "an10-falinks-joined",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an10-old-leader",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The little Falinks jumped higher than the hall roof, and led.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them to find it.",
+     "success": {
+      "text": "You step back. The old leader walks slowly to the back of the line, and stands there. Then he stamps, once, a beat early, for the little one. The little one stamps back. The coach is crying a bit and pretending she isn't. She unties the frayed black belt from her waist and presses it into your hands. \"I stopped wearing it the year we started losing. I think I can stop now for a better reason.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "black-belt",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an10-squad-whole",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an10-the-match",
+   "name": "Nobody Saw",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_f"
+    ],
+    "pokemon": "falinks",
+    "tint": "#2a2030",
+    "effect": "shake"
+   },
+   "intro": "They lose. Of course they lose: the other team is bigger and quicker, and the leader shouts every move before he makes it. In the last second, with the match already gone, a hit comes in at the leader's blind side. The little one at the back leaps over all five of his squad, takes it on his helmet, and drops back into line before he lands. The buzzer goes. The crowd is looking at the scoreboard. The coach is looking at her shoes. You are the only one who saw.",
+   "choices": [
+    {
+     "label": "Tell the little one.",
+     "success": {
+      "text": "You find him behind the hall, alone, helmet dented. \"I saw,\" you say. \"Over all five of them. I saw it.\" He stares at you. Then he stands up very straight, and when you walk to the road he walks with you, a small helmet at your heel. The coach watches him go and hands you her whistle. \"He was always going to need someone who saw.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "falinks"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 15
+       },
+       {
+        "kind": "relic",
+        "id": "formation-whistle",
+        "name": "The Formation Whistle",
+        "effects": [
+         {
+          "kind": "battleStart",
+          "tailwind": true,
+          "turns": 2
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "an10-falinks-joined",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an10-seen-it",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You were the only one who saw the little Falinks leap over his whole squad.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the coach.",
+     "success": {
+      "text": "She listens with her whole face. \"Over all five?\" She goes straight to the little one and kneels in the dust in front of him, and moves him to the front of the line for tomorrow. He looks at you over her shoulder, and stamps once. She presses her old black belt into your hands. \"For having eyes.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "black-belt",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an10-squad-whole",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an10-seen-it",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an12-paper-city",
+   "name": "The Paper City",
+   "group": "Anime-inspired questlines",
+   "rarity": "rare",
+   "minStage": 5,
+   "types": [
+    "normal",
+    "electric",
+    "steel"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "flittle",
+    "tint": "#2e2c26",
+    "effect": "float"
+   },
+   "intro": "Past the last streetlight the road turns white. A whole city stands there, folded out of paper: houses with creased roofs, a clock tower with a paper bell, bridges that flex when the wind walks over them. Flittle bob between the chimneys like dropped petals. Low grey clouds are rolling in from the hills. A paper figure in a mayor's sash, its corners gone soft from years of handling, bows to you. \"It rains tonight. Every year we lose a street.\" It looks down at its own folded hands. \"The folder who made us is gone. We don't know how to make more of ourselves.\"",
+   "choices": [
+    {
+     "label": "I'll fold.",
+     "success": {
+      "text": "The mayor unfolds a little, which is how paper gasps. \"You know how?\" You don't, really. It leads you to the oldest street, where the houses lean on each other like tired people, and gives you a stack of clean sheets. \"Lamp Street first. It's always the first to go.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-folding",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-fold-lamp-street"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find the folder.",
+     "success": {
+      "text": "\"She went out along the paper road, years ago, and the road stopped where she stopped.\" The mayor points to a white path running off into real green hills. \"It's two days for us. Paper walks slowly.\" It folds its hands again. \"Please hurry. The clouds don't.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-seeking",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-paper-road"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep the rain off.",
+     "success": {
+      "text": "\"Nobody has ever tried that.\" The mayor turns its flat face up to the clouds, which are very low now, and very full. \"We just fold ourselves small and hope it's someone else's street.\" It leads you up the clock tower, to the roof, where the first drops are already darkening the paper.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-sky",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-the-rain"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not tonight.",
+     "success": {
+      "text": "The mayor bows again, very low, the way you bow to someone you will not see again. Behind you, as you go, the first drops fall, and somewhere in the white city a street begins, softly, to fold in on itself.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "an12-fold-lamp-street",
+   "name": "Lamp Street",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "flittle",
+    "tint": "#2e2c26",
+    "effect": "float"
+   },
+   "intro": "Lamp Street is six houses and a lamp post, all soft at the corners. A Flittle family lives in the third house; they watch you through a paper window as you kneel on the cobbles with your first clean sheet. The mayor stands behind you and says nothing, the way you stand behind someone learning to ride.",
+   "choices": [
+    {
+     "label": "Fold the houses square.",
+     "prompt": {
+      "id": "tilt-drag",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Valley fold, mountain fold, crease it with your thumbnail. Your first house is a little lopsided; your sixth is good. The lamp post goes up last, and when you set it in place the paper bulb glows, faintly, from somewhere inside. The Flittle family come out and touch the new walls with their little feet. \"One,\" the mayor whispers.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-street-strong",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-fold-bridge-street"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your corners will not meet. The houses come out leaning, all six of them, like a row of people trying to hear something. But they stand, and they are dry inside, and the Flittle family move back in without a word of complaint. \"One,\" the mayor says anyway.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "an12-fold-bridge-street"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an12-fold-bridge-street",
+   "name": "Bridge Street",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "flittle",
+    "tint": "#2e2c26",
+    "effect": "float"
+   },
+   "intro": "Bridge Street is not a street so much as a bridge that people live on, a paper arch over a paper stream. It has to bend in the wind without tearing. The first rain is spotting the clouds' edges. The mayor holds the end of your sheet so the wind cannot take it.",
+   "choices": [
+    {
+     "label": "Fold the arch.",
+     "prompt": {
+      "id": "aim-drag",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You find the trick halfway: the bridge must be folded loose, not tight, so it can breathe. When you are done it sways in the wind and does not tear. A Flittle lands on the rail and rides it up and down, delighted, like a child on a swing. \"Two,\" says the mayor, and its voice has a crease in it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-street-strong",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-fold-market-street"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You fold it too tight, and it creaks when the wind goes over. But it holds. It will need a hand next year. \"Two,\" says the mayor, and pats the rail as if it were a nervous animal.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "an12-fold-market-street"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an12-fold-market-street",
+   "name": "Market Street",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "flittle",
+    "tint": "#2e2c26",
+    "effect": "rain"
+   },
+   "intro": "The rain begins as you reach the market. Stalls of paper fruit, a paper fishmonger, awnings already starting to sag. Paper people are folding themselves small in doorways, the way the mayor said. Your sheets are going soft in your hands. One street left, and the sky is falling on it one drop at a time.",
+   "choices": [
+    {
+     "label": "Fold fast.",
+     "prompt": {
+      "id": "balloon-drag",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You fold the awnings double, the way the bridge taught you, so the water runs off. Stall after stall. Your fingers are numb and full of paper cuts. When you look up, the whole market is dry under its new roofs, and the paper people are coming out of the doorways one by one to look at it. \"Three,\" the mayor says. \"Three streets. In one night.\" It sits down on the kerb, as if its folds had given out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-street-strong",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-the-key"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Two stalls go soft before you can reach them. You save the rest, and the fishmonger, and the awning over the old couple who sell paper bread. The mayor kneels by the two lost stalls and smooths their wet paper flat, carefully, to keep. \"Three streets,\" it says. \"Three. We have never kept three.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "an12-the-key"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an12-paper-road",
+   "name": "The Paper Road",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "rellor",
+    "tint": "#2e2c26",
+    "effect": "none"
+   },
+   "intro": "The paper road runs out of the city and into real hills, white against the green, and gets thinner as it goes. Halfway along you meet a Rellor rolling a ball of old paper scraps uphill, the way a Rellor rolls everything. The scraps are folded: tiny cranes, a tiny house, half a tiny bridge. It is the kind of thing somebody does with their hands when they cannot stop.",
+   "choices": [
+    {
+     "label": "Follow the Rellor.",
+     "success": {
+      "text": "It does not mind being followed. It rolls its paper ball past the end of the paper road, through a gate, up to a cottage with a wet garden and a lit window. It leaves the ball on the step, like a cat with a mouse, and waits.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-road-walked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-the-folder"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an12-the-folder",
+   "name": "The Folder",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "paper-crane",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "paper-crane-done",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On the mantel is a photograph of a child sitting in a forest of paper trees, with paper cuts on every finger. \"My grandchild,\" she says. \"Folds for something sharp that lives in the woods. Got it from me, the folding.\" She looks at you. \"You've met. I can tell. You hold your hands the same careful way.\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/expert_pokemon_breeder"
+    ],
+    "pokemon": "rellor",
+    "tint": "#2e2c26",
+    "effect": "none"
+   },
+   "intro": "An old woman opens the door before you knock. Every surface of her cottage is covered in half-finished things: a crane with one wing, a house with no roof, a whole street that stops in the middle. Her hands are knotted and swollen at the knuckles, and she holds them close to her chest as if they were cold. \"They sent someone. Good.\" She smiles, and it costs her. \"I made them, you know. Every one. Then my hands stopped, and I could not bear to go back and watch them come apart.\"",
+   "choices": [
+    {
+     "label": "Learn from her.",
+     "success": {
+      "text": "She cannot fold, but she can still see a fold before it is made. She sits you at her table and talks you through it, one crease at a time: \"Mountain. No, the other mountain. Thumbnail. There.\" By midnight you have folded a house that would make the mayor weep. \"Go,\" she says. \"Go back and give them my hands.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-taught",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-fold-with-her"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask her to come back with you.",
+     "success": {
+      "text": "She is quiet a long time. Then she puts on her coat, very slowly, one sleeve and then the other, and you walk back down the paper road together at paper speed. The Rellor rolls its ball beside her the whole way. When the city sees who is coming, every Flittle in it rises at once.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-taught",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an12-folder-came",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-fold-with-her"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an12-fold-with-her",
+   "name": "Her Hands, Your Hands",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/expert_pokemon_breeder"
+    ],
+    "pokemon": "flittle",
+    "tint": "#2e2c26",
+    "effect": "rain"
+   },
+   "intro": "The rain is starting over the paper city. You kneel on the cobbles of Lamp Street with a stack of clean sheets, and in your head, or beside you, a dry old voice says: \"Mountain. Valley. Loose for the bridge, so it can breathe. Double for the awnings, so the water runs off.\" Three streets, one night. Your hands know more than they did this morning.",
+   "choices": [
+    {
+     "label": "Fold the three streets.",
+     "prompt": {
+      "id": "tilt-drag",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Lamp Street, square and true. Bridge Street, loose enough to sway. Market Street, double-roofed against the rain. You fold until your fingers bleed a little and then you fold some more. When you stand up, the whole city is dry, and three of its streets are new. The paper people stand in the rain and do not fold themselves small.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-street-strong",
+        "amount": 3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-the-key"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Not every fold comes out the way she said it. Lamp Street leans, and one stall in the market goes soft before you reach it. But Bridge Street sways and holds, and the rest of the market stays dry, and in the end the city is standing. \"Good enough,\" says the dry old voice. \"Better than mine, at the end.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an12-street-strong",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an12-the-key"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an12-the-key",
+   "name": "The Key to the City",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "folder-came",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an12-folder-came",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The old woman sits on a bench in the square with a blanket on her knees, and every paper person in the city comes to stand near her for a moment before going home. The mayor kneels at her feet. She puts one knotted hand on its paper head and leaves it there."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "flittle",
+    "tint": "#2e2c26",
+    "effect": "sparkle"
+   },
+   "intro": "Morning. The rain has gone over the hills. The paper city is wet at the edges and whole in the middle, and the mayor comes to you with something folded very small in its hands. It unfolds it, and unfolds it, and unfolds it, and it is a key, cut from a single sheet with no seams at all. \"It doesn't open anything,\" it says. \"It means you can come in. That's what keys are.\" A Flittle floats down onto your shoulder, carrying its own little paper house like a snail.",
+   "choices": [
+    {
+     "label": "Take the Flittle and the key.",
+     "success": {
+      "text": "The Flittle settles its paper house on your pack and climbs in. It will fold itself a new one, the mayor says, wherever you stop. \"Come back before it rains,\" the mayor says. \"Or come back when it does. Either way.\" The whole city waves you down the white road, flat hands lifting in the wind.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "flittle"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "item",
+        "id": "paper-city-key",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an12-key",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You rebuilt the Paper City's streets before the rain, and it gave you its key.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the Flittle its house.",
+     "success": {
+      "text": "\"It has a street now,\" you say. \"Let it live on it.\" The Flittle bobs, and floats back to its house, and rings its paper doorbell twice for you. The mayor presses the key into your palm and closes your fingers round it, carefully, the way you would fold something you wanted to keep.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "paper-city-key",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an12-key",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an12-the-rain",
+   "name": "Rain Dance in Reverse",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "flittle",
+    "tint": "#2e2c26",
+    "effect": "rain"
+   },
+   "intro": "From the clock tower roof the whole paper city lies under you, and the clouds lie on top of it. The first drops are already making grey coins on the paper tiles. Down in the streets, the paper people are folding themselves small in doorways. \"Every year,\" the mayor says beside you, \"we stand up here and choose which street to cry for.\" The bell above you is going soft.",
+   "choices": [
+    {
+     "label": "Call the sun.",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "sunny-day"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon looks up and calls the sun, the way other Pokémon call rain, but backwards: and the clouds, astonished, open. A hot white hole tears through them right over the city. The rain falls all around, on the hills, on the paper road, and not one drop on the city. It lasts until the clouds give up and go. \"One more year,\" the mayor whispers. \"We have one more year, and nobody had to choose.\" A Flittle lands on your hand. In its feet is a key, folded from a single sheet.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "flittle"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "item",
+        "id": "paper-city-key",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an12-sun-held",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an12-key",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You held the rain off the Paper City with a borrowed sun.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Save the clock tower.",
+     "success": {
+      "text": "Without a sun to call, you do the only thing you can: you hold your coat over the bell, and your team stands round the tower with their backs to the rain. The tower stays dry. Lamp Street does not. In the morning the mayor smooths the wet paper of six little houses flat, to keep. A Flittle whose house was on Lamp Street floats up to you and sits on your hat, and will not leave. The mayor gives you the key, folded from one sheet. \"It means you can come in,\" it says. \"Come back. Bring a sun.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "flittle"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 5
+       },
+       {
+        "kind": "item",
+        "id": "paper-city-key",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an12-street-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an12-key",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
 }

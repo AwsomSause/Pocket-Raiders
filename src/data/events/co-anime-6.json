@@ -2,5 +2,205 @@
  "catalogOverhaul": "anime",
  "override": true,
  "remove": [],
- "events": []
+ "events": [
+  {
+   "id": "aq09-muk-that-hugs",
+   "name": "The Muk That Hugs",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "types": [],
+   "remembers": [
+    {
+     "id": "max-bond",
+     "when": [
+      {
+       "kind": "bondLevel",
+       "atLeast": 5,
+       "who": "any"
+      }
+     ],
+     "notice": "The Muk looks along your line of Pokémon and stops at {most}. Something passes between them. {most} has been loved for a long time, and it knows what a hug is worth.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let it hug you.",
+       "success": {
+        "text": "It goes straight past you. It stops in front of {most}, opens its arms, and waits. {most} looks back at you once. Then it steps in and lets itself be held, smell and all, for a long, long moment, and it does not flinch. Nobody faints. When they part, the Muk is shining, and it follows {most} down the road like a little brother who has finally been let into the game.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "amount": 5,
+          "who": "top"
+         },
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "muk"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 20
+         },
+         {
+          "kind": "flag",
+          "key": "aq-muk-hugged",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "factory",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-factory-cleared",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know that smell. It is the factory you shut down: the green fog, the grimy pipes. When you tell the nurse, she takes the peg off her nose. \"It came from there? Then it never had a chance.\" She sits down on the step beside it, close enough to touch."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/nursery_aide"
+    ],
+    "pokemon": "muk",
+    "tint": "#2a2238",
+    "effect": "none"
+   },
+   "intro": "A Pokémon Center, and a sign taped to its door in big red letters: NO MUK. A Muk is sitting outside it, on the step, in a small puddle of itself. It is very still, the way someone sits when they have been told to wait and nobody has come back. The nurse comes out with a peg on her nose. \"It hugs everyone. It means well. Three people fainted.\" She looks at it, and her voice goes soft. \"Its trainer left it here. She couldn't get a job, smelling like that.\" The Muk sees you. Its whole body lifts. It opens its arms.",
+   "choices": [
+    {
+     "label": "Let it hug you.",
+     "success": {
+      "text": "You step in. It is warm, and wet, and it smells like a drain that has given up, and it holds on as if you might be the last person in the world. Your eyes stream. Your head swims. {lead} rushes in to pull you free and gets hugged too, and comes out green and wobbling. The Muk is overjoyed. It will not leave your side. When you walk on, it slides along behind you, humming to itself.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "poison",
+        "who": "lead"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "muk"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "flag",
+        "key": "aq-muk-hugged",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bathe it first.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "water"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Water-type gives it everything: a spray, a soak, a long rinse in the Center's fountain. The fountain turns brown. The Muk comes out gleaming and smelling exactly the same. It looks at the Water-type that worked so hard for it, and before anybody can stop it, it hugs that one instead. Your Water-type, to its great credit, hugs it back. The Muk follows you both down the road, delighted to be clean, which it is not.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "water"
+         ]
+        }
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "muk"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find it someone.",
+     "success": {
+      "text": "You ask at every door for two whole nodes of road. People are kind about it, from a distance. They close their windows kindly. Then, at the far end of town, a manhole cover lifts, and a man in waders climbs out and asks what all the fuss is about.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq09-sewage-worker"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq09-sewage-worker",
+   "name": "Somebody Who Can't Smell",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "muk",
+    "tint": "#2a2238",
+    "effect": "none"
+   },
+   "intro": "He is Mr. Osgood Prall, and he has worked the sewers for thirty years. \"Lost my sense of smell the first week. Best thing that ever happened to me.\" He looks past you at the Muk, and his face goes very quiet. \"Is that one... does it hug?\" He swallows. \"Nobody's hugged me since my mum.\"",
+   "choices": [
+    {
+     "label": "Introduce them.",
+     "success": {
+      "text": "The Muk does not need introducing. It goes to him like water going downhill and wraps him up, all of him, and he stands in the middle of the street with his eyes shut, holding on. When he can speak again, he presses something into your hand: a lump of Black Sludge, wrapped in a clean handkerchief. \"For your Poison-types. And thank you. You don't know what you've done.\" You think you might. When you pass the Center on your way out, the NO MUK sign has gone.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "black-sludge",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq-muk-homed",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
 }

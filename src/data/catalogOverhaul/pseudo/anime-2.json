@@ -1,5 +1,7 @@
 {
  "category": "anime",
  "note": "Door chains of tools/events/co/anime-2.ts (entry = the questline first event; rooms linked with addEvent).",
- "chains": []
+ "chains": [
+  { "id": "ps_an12_paper_city", "name": "The Paper City", "entry": "an12-paper-city", "themeId": "normal-psychic", "tint": "#2e2c26", "mood": "folded hush", "start": "opened" }
+ ]
 }

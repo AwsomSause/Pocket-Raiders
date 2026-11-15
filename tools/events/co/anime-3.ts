@@ -1,13 +1,239 @@
 // Anime questlines, module 3: AN19-AN27. Follows tools/events/co/anime-0.ts (the worked examples) and _animeKit.ts.
+//   AN19 The Body Swap            (Stage-Three)   AN20 The Quiet Psychic     (Stage-Three)   AN21 The Bounty Crew (Stage-Three)
+//   AN22 The Forest God           (Stage-Three)   AN23 The Descent           (Door)          AN24 The Sword of the Insect (Stage-Three)
+//   AN25 The Fake Family          (Stage-Three)   AN26 The Stand             (Single)        AN27 The Magical Bakery (Single)
+// Script: QUESTLINES_ANIME_INSPIRED.md lines 470-697. Placement: QUESTLINES_PLACED.md lines 247-255.
 // Build: npm run co:build -- anime-3
-import type { Json } from '../dsl.ts';
-import type { Place } from './_animeKit.ts';
+import { $, bondIs, ch, egg, ev, fight, flag, flagAgo, flagAt, flagIs, fr, gym, heal, hurt, item, leave, out, relic, room, scout, type Json } from '../dsl.ts';
+import { AN, age, beast, bondLine, duel, gain, later, moment, monDuel, notYet, seen, stageOf, tagTypes, temp, type Place } from './_animeKit.ts';
 
 export { CATEGORY } from './_animeKit.ts';
 
-export const QUESTLINES: Record<string, string> = {};
-export const PLACEMENT: Record<string, Place> = {};
+export const QUESTLINES: Record<string, string> = {
+  AN19: 'an19-body-swap',
+  AN20: 'an20-quiet-psychic',
+  AN21: 'an21-bounty-crew',
+  AN22: 'an22-forest-god',
+};
+
+export const PLACEMENT: Record<string, Place> = {
+  'an19-body-swap': { shape: 'Stage-Three', earliest: 'A5', home: 6, window: [4, 8], sits: 'optional', tags: ['eerie'], beats: ['an19-second-morning-met', 'an19-second-morning-notes', 'an19-swap-back', 'an19-swap-back-notes', 'an19-crater-at-dusk'], note: 'Steps 6 (the swap), 12 and 17 (the swap back). Steps 12 and 17 are one of two rooms each, by the first choice. "Meet them" adds the crater meeting one region on, at Dusk.' },
+  'an20-quiet-psychic': { shape: 'Stage-Three', earliest: 'A4', home: 'town', sits: 'optional', attaches: 'town', tags: ['city'], beats: ['an20-tryout', 'an20-his-mother'], note: 'The town (a cafe); then Steps 12 and 17. "Show me" opens the evil-team scene in the same node.' },
+  'an21-bounty-crew': { shape: 'Stage-Three', earliest: 'A6', home: 6, window: [4, 8], sits: 'optional', tags: ['water'], beats: ['an21-the-chase', 'an21-dinner', 'an21-the-catch', 'an21-payday', 'an21-by-accident'], note: 'Steps 6, 12 (three nodes of chase: 12, 13, 14) and 17 (payday). "No" instead gives one scene a stage later.' },
+  'an22-forest-god': { shape: 'Stage-Three', earliest: 'A8', home: 6, window: [4, 8], sits: 'optional', tags: ['forest'], beats: ['an22-cold-town', 'an22-dead-wood', 'an22-the-god', 'an22-the-border'], note: 'A heavy decision. Steps 6, 12 (one of three rooms, by the first choice) and 17 (the border).' },
+};
+
+/** Doc choices that are not buttons (questline -> label -> reason). */
 export const NOT_A_BUTTON: Record<string, Record<string, string>> = {};
-export const LIMITS: Record<string, string[]> = {};
-export const EVENTS: Json[] = [];
+
+export const LIMITS: Record<string, string[]> = {
+  AN19: [
+    'The swap is told in the scene only: your team is not taken out of the party on a swap morning.',
+    'Notes path, "the two share one tip per stage": the swap lasts the one stage of its three beats, so the notes give two tips (the Gym leader\'s team at Step 12, three columns scouted at Step 17).',
+    'Remembers "Deoxys or Jirachi\'s Telling was heard" reads flags telling-deoxys and telling-jirachi, which the legends thread sets.',
+    'Afterstory: the stranger is a Final Reunion guest (flag reunion-guest-swap-stranger); their "Have we met?" line belongs to the reunion thread.',
+  ],
+  AN20: [
+    'Remembers "the lieutenant is recruiting psychic children (a Galactic or Plasma run)" reads the run\'s evil team (Galactic or Plasma); the recruiter is that team\'s commander (Saturn or Zinzolin) at the last beat.',
+    'The grunts in "Show me" are drawn as generic roughnecks, not in the run\'s team uniform.',
+    'Afterstory "he finishes last in the town marathon in a later run" is not built (nothing crosses runs).',
+  ],
+  AN21: [
+    'Remembers "the player did The Pokémon Smuggling Ring" reads flag smuggling-ring-done, which the greenneedle thread (gn.51) must set when the ring is broken.',
+    'Afterstory "the crew\'s boat is at a dock in later runs" is not built (nothing crosses runs).',
+  ],
+  AN22: [
+    'Remembers "Zygarde\'s Cells were found" reads flag zygarde-cells-found, which the legends thread must set when the Cells are found.',
+    'Afterstory "the town and forest have a border in later runs" is not built (nothing crosses runs); the border is drawn at Step 17 of this run.',
+  ],
+};
+
+/** Questlines re-read line by line against the doc after their tests passed. */
+export const CHECKED: Record<string, string> = {
+  AN19: '2026-11-15',
+  AN20: '2026-11-15',
+};
+
+const EERIE = tagTypes('eerie');
+const CITY = tagTypes('city');
+const SEA = tagTypes('water');
+const WOOD = tagTypes('forest');
+/** The run's evil team is this one (core/evil). */
+const team = (id: string): Json => ({ kind: 'evil', team: id });
+
+const SWAP_BACK = 'The comet is low tonight, low enough to see it moving. This is the last swap morning: you can feel it the way you feel the end of a fever. But this time it is not the Gothita in your arms. It is the Hatenna, the little pink one that kept trying to wake your team. It crossed over with them, on purpose it seems, and it is holding on to your scarf with both hands.';
+const SWAP_STAYS = 'It does not let go. When the swap ends at noon and your team blinks back into the camp, the Hatenna is still in your arms, small and warm and very sure. Your phone buzzes. "I think it chose you. It always did like the snoring." Then: "Look after it. I will know if you don\'t. I have your hand, sometimes."';
+
+export const EVENTS: Json[] = [
+  // ---------------- AN19. The Body Swap ----------------
+  ev('an19-body-swap', 'The Body Swap', AN, { rarity: 'rare', minStage: stageOf('A5'), types: EERIE, cast: ['trainer.pr/backpacker_f'], pokemon: 'gothita', tint: '#241a33', effect: 'float',
+    remembers: [
+      { id: 'deoxys-telling', when: [flagIs('telling-deoxys')], notice: 'You know that comet. You heard its Telling: the thing that rides inside it, and how it rearranges whatever it passes. The swap is not a curse. It is a visitor, and visitors can be asked to leave.',
+        addChoices: [ch('End it on purpose.', out('You stand outside at the hour the comet rises and say, out loud, that it can stop now. The sky does a small, polite thing. Your team is back by noon, all of them, blinking. The stranger writes: "It stopped. You did that?" You did. You still know their name, and their handwriting, and the way their Gothita knits its brows. And the Hatenna that crossed over this morning will not let go of your sleeve.', gain('hatenna', { bond: 10 }), flag('an19-swap-ended'), flag('reunion-guest-swap-stranger'), moment('You ended the comet\'s swap on purpose, and kept the stranger\'s name.', 65)))] },
+      { id: 'jirachi-telling', when: [flagIs('telling-jirachi')], notice: 'You know that comet. You heard its Telling: the small wishing star that wakes once in a thousand years and grants things a little too literally. Somebody wished to know what another life was like. A wish can be wished back.',
+        addChoices: [ch('End it on purpose.', out('You wish it back, carefully, in the plainest words you have. The sky does a small, polite thing. Your team is back by noon, all of them, blinking. The stranger writes: "It stopped. You did that?" You did. You still know their name, and their handwriting, and the way their Gothita knits its brows. And the Hatenna that crossed over this morning will not let go of your sleeve.', gain('hatenna', { bond: 10 }), flag('an19-swap-ended'), flag('reunion-guest-swap-stranger'), moment('You ended the comet\'s swap on purpose, and kept the stranger\'s name.', 65)))] },
+    ] },
+    'You wake before the sun, and the morning is the wrong shape. The Pokémon curled against your side is not {lead}. It is a Gothita in a hand-knitted scarf, and it is staring at you as if you are the strange one. Your team is gone from the camp. Your phone buzzes: a photo of all of them in a heap on somebody else\'s bed, across a town you have never seen, while a small pink Hatenna goes from one to the next, patting faces, trying very politely to wake them. A message. "Why is your Pokémon in my bed?" Another. "It\'s been every third morning. Since the comet." A third. "I left you notes on your hand. Read them." You turn your hand over. There is writing on it, in someone else\'s careful pen: Don\'t panic. Feed her at seven. She likes the crusts.',
+    [
+      ch('Meet them.', out('You type: where are you? The answer takes a long time. Their town is one region ahead of yours, further than you have walked. They send a photo of a crater on the edge of it, rimmed in tall grass, glowing orange. "Dusk is when it thins. If we\'re both there at dusk, we might get a minute. Maybe only one." You both type "deal" at the same moment. By noon the Gothita blinks out of your arms and {lead} is back, smelling of somebody else\'s soap.', flag('swap-met'), later('an19-second-morning-met', 5))),
+      ch('Write back.', out('You borrow a pen and write under their notes, small, so it fits: Hello. Mine like the crusts too. Sorry about the bed. Three mornings on there will be an answer, and three after that another: one useful thing each, the way strangers swap tips on a long road. By noon the Gothita blinks out of your arms and {lead} is back. It sniffs your hand for a long time, reading.', flag('swap-notes'), later('an19-second-morning-notes', 5))),
+      ch('Wait for it to stop.', out('You do nothing, and it stops. One more morning with the Gothita, quieter, then never again. The notes on your hand wash off in the rain. A week later you find yourself writing a name in the margin of your map, and you cannot remember whose it is, or why your chest hurts a little when you look at it.', moment('Somebody\'s name was on your hand once. You cannot work out why it matters.', 40))),
+    ]),
+  ev('an19-second-morning-met', 'Plans for Dusk', AN, { room: true, requires: [flagIs('swap-met')], cast: ['trainer.pr/backpacker_f'], pokemon: 'gothita', tint: '#241a33', effect: 'float' },
+    'The third morning again. The Gothita is back, and this time it climbs straight into your lap as if it has been waiting. On your hand, in the careful pen: The crater is on the old road out of town. Bring a light. I will wear something yellow so you know me. Then, smaller, crossed out and written again: I am a bit scared you will be disappointed.',
+    [
+      ch('Draw them a map.', out('You draw your side of the road on your own wrist, every bend you can remember, and an arrow that says I will come this way. Your handwriting looks so clumsy next to theirs. By noon the swap ends. A text arrives: "Your map is terrible. I love it." The crater is a region away. It will keep.', flagAt('an19-crater-planned'), fr(2), later('an19-swap-back', 5))),
+      ch('Ask what they look like.', out('"Tall-ish. Hair that does not do what I ask. I laugh too loud." A pause, and then: "You?" You tell them the truth, including the bits you would usually skip. By noon the swap ends. The last message says: "Good. Now I will know you." The crater is a region away. It will keep.', flagAt('an19-crater-planned'), flag('an19-asked-face'), fr(2), later('an19-swap-back', 5))),
+    ]),
+  ev('an19-second-morning-notes', 'Notes on Your Hand', AN, { room: true, requires: [flagIs('swap-notes')], cast: ['trainer.pr/backpacker_f'], pokemon: 'gothita', tint: '#241a33', effect: 'float' },
+    'The third morning again. The Gothita is back, and it hugs your arm before you are properly awake. Your hand is crowded with writing: Your team snores. All of them. In harmony. Your Gym leader here is easy if you know who they open with, so here it is. Under that, a little drawing of the Gothita, with a heart. There is still room on your other hand.',
+    [
+      ch('Write a tip back.', out('You write the best thing you know about the road ahead of them: where the berries grow, which bridge is rotten. Then you read their tip properly. It is a good one. It is the exact team the Gym leader keeps, written out in order, with a note about which one bites. By noon the swap ends, and you are smiling at your own hand.', gym(), flag('an19-tip-traded'), later('an19-swap-back-notes', 5))),
+      ch('Write something kind instead.', out('You run out of useful things and write the true one: Thank you for looking after them. Nobody has ever left me notes before. Their tip is still there when the swap ends, the Gym leader\'s whole team, in order. Three mornings later there is a reply squeezed under your knuckles: Nobody ever wrote back before.', gym(), flag('an19-kind-note'), fr(3), later('an19-swap-back-notes', 5))),
+    ]),
+  ev('an19-swap-back', 'The Swap Back', AN, { room: true, requires: [flagIs('swap-met')], cast: ['trainer.pr/backpacker_f'], pokemon: 'hatenna', tint: '#2e1f3d', effect: 'sparkle' },
+    `${SWAP_BACK} Your phone buzzes. "Is she with you? She has sat by your Pokémon every morning. I think she likes your side better." Then: "Still the crater? Still dusk?"`,
+    [
+      ch('Let it stay.', out(SWAP_STAYS, gain('hatenna', { bond: 10 }), flag('an19-hatenna-stayed'), moment('Every third morning you lived beside a stranger\'s life. Their Hatenna stayed.', 65))),
+      ch('Send it home with the comet.', out('You hold it until the last minute and then you set it down where the swap will take it. It looks back at you once. At noon your team is home, and a message arrives: "She came back holding your scarf. Thank you. See you at the crater." The comet goes, and the mornings are only mornings again.', fr(3), flag('an19-hatenna-home'))),
+    ]),
+  ev('an19-swap-back-notes', 'The Last Note', AN, { room: true, requires: [flagIs('swap-notes')], cast: ['trainer.pr/backpacker_f'], pokemon: 'hatenna', tint: '#2e1f3d', effect: 'sparkle' },
+    `${SWAP_BACK} One last note runs up the inside of your wrist: The comet goes tonight. This is the last one. Tip: the road ahead forks three times, and here is what waits down each. I will miss your handwriting. It is terrible.`,
+    [
+      ch('Let it stay.', out(SWAP_STAYS, gain('hatenna', { bond: 10 }), scout(3), flag('an19-hatenna-stayed'), flag('reunion-guest-swap-stranger'), moment('Every third morning you lived beside a stranger\'s life. Their Hatenna stayed.', 65))),
+      ch('Send it home with the comet.', out('You hold it until the last minute and then you set it down where the swap will take it. It looks back at you once. At noon your team is home, and a message arrives: "She came back holding your scarf. Thank you." It is the last message. The tip is still on your wrist, and you do not wash it off for days.', scout(3), fr(3), flag('an19-hatenna-home'), flag('reunion-guest-swap-stranger'), moment('Every third morning you lived beside a stranger\'s life. You sent their Hatenna home.', 60))),
+    ]),
+  ev('an19-crater-at-dusk', 'A Crater at Dusk', AN, { callback: true, requires: [flagIs('swap-met'), flagAgo('an19-crater-planned', 1)], cast: ['trainer.pr/backpacker_f'], pokemon: 'hatenna', tint: '#4a2a1a', effect: 'sparkle' },
+    'The old road. The crater, exactly like the photo, only bigger and more orange, because the sun is going down into it. You are early. You walk the rim twice. Then, on the far side, something yellow, running. The air goes thin and strange as dusk thickens: this is where the swap wears through, and you can feel it pulling at the edges of you. A minute. Maybe only one. The yellow figure is waving both arms.',
+    [
+      ch('Say your name.', out('You shout it across the crater, the whole thing, and it comes back to you from the far side in their voice, shouted just as loud, as if they are checking they have it right. Then they shout theirs. You say it under your breath three times so it sticks. The light goes. The minute is over. You are both still waving when you can no longer see each other.', fr(3), flag('an19-crater-names'), flag('reunion-guest-swap-stranger'), moment('At a crater at dusk you finally saw the stranger whose mornings you shared. You know their name.', 70))),
+      ch('Run to them.', out('You run along the rim and they run along the rim, and you get close enough to see that their hair really does not do what they ask. Close enough to touch hands, almost. Their hand has your handwriting on it. Yours has theirs. Then the dusk closes like a door and there is only grass and the sound of someone laughing too loud, far off, happy.', fr(3), flag('an19-crater-ran'), flag('reunion-guest-swap-stranger'), moment('At a crater at dusk you ran to meet a stranger whose mornings you shared, and nearly touched hands.', 70))),
+    ]),
+  // ---------------- AN20. The Quiet Psychic ----------------
+  ev('an20-quiet-psychic', 'The Quiet Psychic', AN, { rarity: 'uncommon', minStage: stageOf('A4'), types: CITY, cast: ['trainer.pr/school_kid_m'], pokemon: 'gothita', tint: '#1e2638', effect: 'float' },
+    'A small cafe, warm and steamy, and very quiet, because every spoon in it is floating. They hang over the tables at about eye height, turning slowly, catching the light. The other customers are pretending not to notice. In the corner a boy in a school uniform has both hands pressed flat on the table and his eyes shut. "Sorry," he says, to nobody, to everybody. "That happens when I\'m nervous." He opens one eye and finds you looking. "I\'m trying to join the running club. I want to be good at something normal." His Gothita sighs, climbs onto the table, and floats the spoons back to their saucers, one by one, with a tiny clink each time.',
+    [
+      ch('Run with him.', out('You race him to the end of the street and back. He runs like someone who has read about running in a book: elbows everywhere, very determined. He loses by a long way. He bends over with his hands on his knees, gasping, and when he looks up he is grinning so hard it must hurt. "I lost! I lost properly! Nothing floated!" The Gothita applauds with two small hands. "The tryout is soon. Will you come?"', flag('an20-ran'), fr(2), later('an20-tryout', 5))),
+      ch('Show me what you can do.', out('He looks at you for a long moment. Then he lifts one finger, and every cup in the cafe rises an inch and settles again, without spilling a drop. It is beautiful. It is also the moment the door bangs open.', flag('an20-showed'), room('an20-if-i-get-angry'))),
+      ch('Normal is overrated.', out('He laughs, sudden and loud, and three spoons leap into the air and fall back down. "Says you." He wipes his eyes. "You get to be normal and you\'re bored of it. I\'d like to be bored of it." The Gothita pats his hand. "The tryout is soon. You could come and be overrated in the stands."', flag('an20-overrated'), later('an20-tryout', 5))),
+    ]),
+  ev('an20-if-i-get-angry', 'If I Get Angry', AN, { room: true, cast: ['trainer.pr/school_kid_m', 'trainer.roughneck'], pokemon: 'gothita', tint: '#1e1a30', effect: 'rattle' },
+    'Two grunts of the team that has been trouble all region, in matching jackets, too big for the doorway. "Heard there was a kid in here doing tricks," one says. "The boss pays for tricks." The boy has gone white. The cups on every table start to tremble, and then the tables, and then the windows. "Please go," he whispers. "I don\'t know what I\'ll do if I get angry. I\'ve never let myself find out." His Gothita has both hands on his arm, holding on.',
+    [
+      ch('Fight them for him.', fight('You step between the grunts and the boy. Behind you, the trembling slows. He is watching you instead of them.', duel('Grunts in the Doorway', { cls: 'roughneck', size: 2, types: ['dark', 'poison'], win: [flag('an20-grunts-beaten'), later('an20-tryout', 5)] }, { lose: [flag('an20-grunts-beaten'), flag('an20-gothita-showed-them'), later('an20-tryout', 5)] }))),
+      ch('Help him breathe.', out('You sit down across from him and breathe in for four, out for four, and make him copy you. In. Out. The grunts laugh. The windows stop rattling. Then the Gothita, very calmly, floats both grunts out of the door by their collars and sets them down in the road. Nobody got angry. The boy stares at his hands. "I didn\'t do that." "No," you say. "You did the other thing. The harder one."', flag('an20-kept-calm'), fr(3), later('an20-tryout', 5)),
+        { prompt: { id: 'brace-hold', needs: 'ok' }, fail: out('You try to get him breathing, but he is already too far in. Every spoon in the cafe flies at the door at once. They do not hit anyone; they hang there, an inch from the grunts\' faces, quivering. The grunts run. The boy puts his head in his arms. "That\'s what I\'m scared of. That\'s exactly it." His Gothita strokes his hair until he stops shaking.', flag('an20-lost-temper'), later('an20-tryout', 5)) }),
+    ]),
+  ev('an20-tryout', 'The Running Club', AN, { room: true, cast: ['trainer.pr/school_kid_m'], pokemon: 'gothita', tint: '#1e2c38', effect: 'none',
+    remembers: [
+      { id: 'galactic-list', when: [team('galactic')], notice: 'At the back of the stands sits a man in a grey-and-silver coat with a clipboard. He is not watching the runners. He is watching the boy, and the hurdles that wobble when the boy is nervous. He writes something down and underlines it twice.' },
+      { id: 'plasma-list', when: [team('plasma')], notice: 'At the back of the stands sits a man in a long robe with a clipboard. He is not watching the runners. He is watching the boy, and the hurdles that wobble when the boy is nervous. He writes something down and underlines it twice.' },
+    ] },
+    'The school track, chalk lines and a whistle. The running club tryout. The boy is in borrowed shorts, much too big. He keeps looking at the hurdles as if they might float off without him. "If they float, I\'m out," he says. "If I\'m last, that\'s fine. Last is a normal thing to be." His Gothita is in the stands with its hands over its eyes, peeking.',
+    [
+      ch('Cheer from the stands.', out('You shout his name every time he gets near a hurdle. He knocks over the first one, clears the second, and walks round the third out of politeness. He finishes dead last, by a mile, and every hurdle on the track stays exactly where it was. He walks back to you with his arms up like a champion. "Last! Did you see? Nothing moved!" The coach writes his name on the list anyway: for trying harder than anyone.', fr(3), flag('an20-tryout-cheered'), later('an20-his-mother', 5))),
+      ch('Run beside him.', out('You run in the next lane, matching him stride for stride, and count the hurdles out loud so he has something to think about besides being afraid. One. Two. Three. You both clear every one. He finishes second to last, and the boy behind him is a very small first-year who tripped over his own lace, but it still counts. He cannot stop laughing.', fr(3), flag('an20-tryout-ran'), later('an20-his-mother', 5)),
+        { prompt: { id: 'hurdle-rhythm', needs: 'ok' }, fail: out('You lose the count on the second hurdle and go down in a heap, and he stops to help you up, and you both finish last together, limping and laughing. Nothing floated. Not even when you fell. The coach writes his name on the list: for stopping.', fr(3), flag('an20-tryout-ran'), later('an20-his-mother', 5)) }),
+    ]),
+  ev('an20-his-mother', 'His Mother\'s Gothitelle', AN, { room: true, cast: ['trainer.pr/school_kid_m', 'trainer.pr/psychic_f'], pokemon: 'gothitelle', tint: '#28203a', effect: 'sparkle',
+    remembers: [
+      { id: 'galactic-recruiter', when: [team('galactic')], notice: 'There is a knock. On the step stands the man with the clipboard, in grey and silver, and two grunts behind him. "We take gifted children seriously," he says. "He is next on our list." The boy\'s cups begin to tremble. You are standing in the doorway before you have decided to.',
+        hide: [0], addChoices: [ch('Stop the recruiter.', fight('The boy is behind you. His breathing is steady. In, four. Out, four.', duel('Commander Saturn', { cls: 'psychic', size: 3, types: ['poison', 'dark'], lv: 1, win: [flag('an20-recruiter-stopped'), egg({ species: ['gothita'] }), moment('A team came to take a gifted boy, and you stood in the door.', 65)] }, { sprite: 'saturn', lose: [flag('an20-recruiter-stopped'), flag('an20-boy-held-calm'), egg({ species: ['gothita'] }), moment('A team came to take a gifted boy. He stayed calm, and they left.', 65)] }))),
+        ] },
+      { id: 'plasma-recruiter', when: [team('plasma')], notice: 'There is a knock. On the step stands the man with the clipboard, in a long robe, and two grunts behind him. "Such power should be set free," he says. "He is next on our list." The boy\'s cups begin to tremble. You are standing in the doorway before you have decided to.',
+        hide: [0], addChoices: [ch('Stop the recruiter.', fight('The boy is behind you. His breathing is steady. In, four. Out, four.', duel('Zinzolin', { cls: 'psychic', size: 3, types: ['ice', 'dark'], lv: 1, win: [flag('an20-recruiter-stopped'), egg({ species: ['gothita'] }), moment('A team came to take a gifted boy, and you stood in the door.', 65)] }, { sprite: 'zinzolin', lose: [flag('an20-recruiter-stopped'), flag('an20-boy-held-calm'), egg({ species: ['gothita'] }), moment('A team came to take a gifted boy. He stayed calm, and they left.', 65)] }))),
+        ] },
+    ] },
+    'The boy\'s house is small and very tidy, with a kettle that boils without being switched on. His mother meets you at the door. Behind her stands a Gothitelle, tall and calm, with something cradled in its arms: an egg, faintly starry. "He told me about you," his mother says. "He has never brought anyone home." Her Gothitelle steps forward and holds the egg out to you, the way you would hand someone a cup of tea. "She wants you to have it. She decided before we did."',
+    [
+      ch('Take the egg.', out('It is warm, and it hums a little against your chest. The boy is grinning at the floor. "It\'ll be nervous too. When it hatches. Things might float." He shrugs. "That\'s normal." His mother laughs so suddenly that every spoon in the kitchen jumps, and nobody minds at all.', egg({ species: ['gothita'] }), flag('an20-egg-taken'), moment('A boy who wanted to be normal finished last, and was delighted. His mother\'s Gothitelle gave you an egg.', 60))),
+      ch('Say it should stay with him.', out('"He\'ll need someone who understands," you say. The Gothitelle tilts its head, and then sets the egg in the boy\'s arms instead. He holds it as if it might float away. "I\'ll teach it to run," he says. "Badly. Like me." He walks you to the gate and waves until you turn the corner.', fr(5), flag('an20-egg-with-him'))),
+    ]),
+  // ---------------- AN21. The Bounty Crew ----------------
+  ev('an21-bounty-crew', 'The Bounty Crew', AN, { rarity: 'rare', minStage: stageOf('A6'), types: SEA, cast: ['trainer.fisherman', 'trainer.pr/scuba_diver_f'], pokemon: 'yamper', tint: '#1c2630', effect: 'float',
+    remembers: [{ id: 'smuggling-ring', when: [flagIs('smuggling-ring-done')], notice: 'The captain squints at you, and his face changes. "Wait. You\'re the one who broke the Smuggling Ring. Del, it\'s them!" The woman at the rail looks up. "Then you know him already," she says. "The man on the poster ran that ring. He got out the back while you were opening cages."' }] },
+    'A boat at the end of the jetty that should have sunk years ago. The paint is mostly rust, the rust is mostly hope. On deck: a big man in a battered captain\'s hat, a woman sharpening a knife at the rail with a Barraskewda circling below her, an old man asleep under a newspaper with a Cramorant asleep on top of him, and a Yamper with one ear up, guarding a pot with nothing in it. "We hunt bounties," says the captain, Rufus Kettleby. "We\'re bad at it." He unrolls a poster. "This one\'s worth a fortune. A trainer who sells stolen Pokémon." He taps the face. "Help us catch him and we split it."',
+    [
+      ch('In.', out('"IN!" Kettleby throws his hat in the air and it lands in the sea. The Yamper goes in after it. The old man wakes up and says, "Is it dinner?" It is not dinner. Del watches you over her knife and says nothing at all. "Three ports on," the captain says, dripping, holding his hat. "That\'s where he sells. We\'ll be waiting."', flag('an21-in'), fr(2), later('an21-the-chase', 5))),
+      ch('Who is he?', out('Nobody answers. The captain looks at his boots. The old man pretends to be asleep again. Then the woman at the rail puts down her knife. "Corwin Arkwright," Del says. "He sells stolen Pokémon to people who don\'t ask. He used to carry me on his shoulders." She picks the knife up again. "He\'s my brother. I\'d rather it was us that caught him than anyone else."', flag('an21-asked'), room('an21-his-sister'))),
+      ch('No.', out('"Fair," says the captain, cheerfully, as if nobody has ever said yes. "More for us. Which is nothing, currently." The Yamper sees you off down the jetty, very seriously, and then trots back to guard the empty pot.', flag('an21-said-no'))),
+    ]),
+  ev('an21-his-sister', 'His Sister', AN, { room: true, cast: ['trainer.pr/scuba_diver_f'], pokemon: 'barraskewda', tint: '#1c2630', effect: 'float' },
+    'Del does not look at you while she talks. "Our dad fished. Corwin took over the boat when he died, and then he sold the boat, and then he sold other things." Below her, the Barraskewda turns a slow circle. "If someone else catches him, they won\'t be careful. I will be." The captain clears his throat. "The offer stands. Same split. Five ways, dog included."',
+    [
+      ch('In.', out('Del nods, once, the way people nod when they have been carrying something alone and somebody finally takes the other end. "Three ports on," the captain says. "That\'s where he sells. We\'ll be waiting." The old man wakes up and asks if it is dinner. It is not.', flag('an21-in'), flag('an21-for-del'), fr(2), later('an21-the-chase', 5))),
+      ch('No.', out('"Fair," the captain says, quieter this time. Del goes back to her knife. As you leave you hear her say, to the Barraskewda or to nobody, "Then it\'s us." The Yamper sees you down the jetty.', flag('an21-said-no'))),
+    ]),
+  ev('an21-the-chase', 'The Chase', AN, { room: true, requires: [flagIs('an21-in')], cast: ['trainer.fisherman', 'trainer.pr/rich_m'], pokemon: 'barraskewda', tint: '#1c2630', effect: 'rain' },
+    'The third port, at dusk, in the rain. Corwin Arkwright is exactly where the poster said: on the end of a pier, selling a crate of frightened Pokémon to a man with a thick wallet. Kettleby charges up the pier shouting "BOUNTY HUNTERS!", which is the one thing you agreed not to do. Corwin is in a speedboat before the captain finishes the word. The engine coughs, roars, and he is away across the harbour.',
+    [
+      ch('Cut him off.', out('You and Del race the long way round the harbour wall while the Barraskewda shoots through the water like a thrown spear. You get close enough to see his face: he looks like Del, older, tired. Then he cuts the engine, drifts into the fog under the old pier and is gone. He escaped. The crate is still on the pier, and it is open now. Every Pokémon in it is free.', flag('an21-crate-freed'), fr(3), later('an21-dinner', 1))),
+      ch('Follow quietly.', out('You leave the captain shouting and follow the wake in a rowing boat, quietly, the old man rowing with surprising strength. You see where the speedboat ties up: a dock with a red lamp. Then the captain\'s voice carries across the water, still shouting, and the red lamp goes out. He escaped. But you know where he sleeps now.', flag('an21-red-lamp'), later('an21-dinner', 1))),
+    ]),
+  ev('an21-dinner', 'The Argument About Dinner', AN, { room: true, cast: ['trainer.fisherman', 'trainer.pr/scuba_diver_f'], pokemon: 'cramorant', tint: '#2a1e18', effect: 'none' },
+    'Back on the boat, nobody is talking about Corwin. Everybody is talking about dinner. There is one onion, a tin of something with no label, and the old man\'s Cramorant, which has a fish in its throat it will not give up. The captain wants to sell the tin. The old man wants to open it. The Yamper wants the fish. Del sits at the rail and does not want anything. "We eat or we chase," the captain says. "We can\'t afford both."',
+    [
+      ch('Cook for everyone.', out('You open the tin (beans), chop the onion, and coax the fish out of the Cramorant with a pat on the back. It is not a good dinner. Everybody has two helpings. The Yamper falls asleep in the pot. Halfway through, Del says, "He used to cook for me. Badly. Like this." And she laughs, and then she cries a bit, and the captain passes her the last of the beans without a word.', heal(0.5), fr(3), flag('an21-cooked'), later('an21-the-catch', 1))),
+      ch('Sit with Del instead.', out('You leave them arguing and sit at the rail. Del does not look at you. "When we catch him," she says, "I want to be the one who tells him." Behind you, the captain wins the argument by eating the tin cold. The Cramorant keeps its fish. Nobody gets much dinner, and nobody minds.', fr(2), flag('an21-sat-with-del'), later('an21-the-catch', 1))),
+    ]),
+  ev('an21-the-catch', 'The Catch', AN, { room: true, cast: ['trainer.pr/rich_m', 'trainer.pr/scuba_diver_f'], pokemon: 'barraskewda', tint: '#1c2630', effect: 'rain' },
+    'The dock with the red lamp, before dawn. Corwin Arkwright is loading his last crate. He turns, sees the crew, sees Del, and goes very still. "Delly," he says. "You got old." "You got worse," she says. He looks past her, at you. "Who\'s this? The muscle?" His hand goes to his belt, where his Poké Balls are. "I\'m not going quietly, Delly. I don\'t know how."',
+    [
+      ch('Fight him.', fight('Del stands at your shoulder. The captain, for once, is silent.', duel('Corwin Arkwright', { cls: 'veteran', size: 3, types: ['water', 'dark'], win: [flag('an21-caught'), later('an21-payday', 3)] }, { lose: [flag('an21-caught'), flag('an21-caught-by-fish'), later('an21-payday', 3)] }))),
+      ch('Let Del talk to him.', out('You step back. Del walks up to her brother and stands in front of him for a long time. She says something too quiet for anyone else. He sits down on his last crate. He gives her his Poké Balls, one by one, the stolen ones. Then he holds out his wrists. The captain, who was ready to shout, takes off his hat instead.', flag('an21-caught'), flag('an21-del-talked'), fr(3), later('an21-payday', 3))),
+    ]),
+  ev('an21-payday', 'Payday', AN, { room: true, cast: ['trainer.fisherman', 'trainer.pr/scuba_diver_f'], pokemon: 'arrokuda', tint: '#2a2618', effect: 'sparkle' },
+    'The bounty office pays out in a paper bag. Kettleby counts it on the deck, twice, out loud. "Six thousand. Five ways: me, Del, the old man, the dog, you. Twelve hundred each. That\'s honest." The dog\'s share goes straight into a new pot. Del has not touched hers. The Barraskewda in the water below her has had a baby since you last looked: a small Arrokuda, all teeth and nerves, darting round your boots. "It likes you," says Del. "Take it. He\'d have sold it."',
+    [
+      ch('Take your cut.', out('Twelve hundred, honest, in a paper bag that smells of fish. The little Arrokuda jumps into your arms as if it has been practising. "Same time next bounty?" the captain says. "We\'ll be bad at it again." Del walks you to the end of the jetty. "Thank you for being careful with him," she says, and goes back aboard.', $(1200), gain('arrokuda', { bond: 10 }), flag('an21-paid'), moment('You rode with a broke bounty crew and helped a woman bring her brother in, carefully.', 65))),
+      ch('Give your cut to Del.', out('You put your twelve hundred on top of hers. "For his lawyer," you say. "Or for you." She stares at the money, and then at you, and then she has to look at the sea for a while. The little Arrokuda jumps into your arms anyway. "Still broke," the captain announces happily. "Still a crew."', gain('arrokuda', { bond: 20 }), fr(5), flag('an21-gave-cut'), moment('You rode with a broke bounty crew, and gave your share of the bounty to the hunter whose brother it was.', 70))),
+    ]),
+  ev('an21-by-accident', 'Caught by Accident', AN, { callback: true, requires: [flagIs('an21-said-no'), age('an21-said-no', 1)], types: SEA, cast: ['trainer.fisherman'], pokemon: 'yamper', tint: '#1c2630', effect: 'confetti' },
+    'A rusty boat comes past the harbour wall, very slowly, with a speedboat tied to its back. On the speedboat sits a man in handcuffs, looking furious. On the rusty boat, Captain Kettleby is waving his hat at you with both arms. "WE GOT HIM! Total accident! He ran out of fuel and drifted into us while we were fishing!" The Yamper barks. The old man is asleep. Del, at the rail, raises one hand to you, calmly, the way you raise a hand at the end of something.',
+    [
+      ch('Wave back.', out('"Six thousand!" the captain bellows. "We\'re rich! For a week!" The boat goes past, and as it does the Yamper drops something over the side onto the jetty at your feet: a small Arrokuda in a bucket of water, all teeth and nerves. "SPARE ONE!" the captain shouts. "DON\'T ASK!" You did not help. You get no cut. You get a fish with opinions.', gain('arrokuda'), flag('an21-accident-seen'))),
+      ch('Walk on.', leave('The boat goes past, shouting. You do not need to hear the end of it to know how it goes. They will be broke again by Tuesday.')),
+    ]),
+  // ---------------- AN22. The Forest God ----------------
+  ev('an22-forest-god', 'The Forest God', AN, { rarity: 'rare', minStage: stageOf('A8'), types: WOOD, cast: ['trainer.worker_m', 'trainer.pr/ranger_f'], pokemon: 'trevenant', tint: '#13221a', effect: 'fog',
+    remembers: [{ id: 'zygarde-cells', when: [flagIs('zygarde-cells-found')], notice: 'Deep in the trees, a green light flickers, then another: the same small lights you gathered across this run, the Cells. The forest groans again, and this time it sounds like a name. Yours. The girl turns and stares at you. "It knows you," she says. "It never knows anyone."',
+      addChoices: [ch('Let the forest speak for itself.', out('You walk into the trees and the green lights come with you, and the foreman, swearing, comes too. The forest shows him: every dead trunk lights up green, one by one, the whole way to the hill. He stands there with his hat in his hands. "That\'s enough wood for three winters," he says. "And not one living tree." The girl looks at you as if you have done magic. You have only been kind to some small green lights.', flag('forest-deal'), flag('an22-easy-deal'), fr(3), later('an22-dead-wood', 5)))] }] },
+    'The edge of an old forest, and a line of stumps where the trees used to stop. Loggers are packing up for the night. In the morning, they say, every stump they cut has grown a face: a small, sad, wooden face, with a single leaf on top. Some of the faces have started to cry. The foreman wipes his hands on his trousers. "It\'s just a forest. We need the wood." From the trees comes a groan so deep you feel it in your teeth: the whole forest, making one sound. Then a girl steps out of the dark between the trunks, barefoot, with a Phantump on her shoulder. "Leave," she says, "or I\'ll make you."',
+    [
+      ch('Stop the logging.', fight('You stand between the saws and the trees. The girl, behind you, says nothing. The forest is very quiet, listening.', duel('The Logging Crew', { cls: 'worker', size: 3, types: ['fighting', 'steel'], win: [flag('forest-saved'), later('an22-cold-town', 5)] }, { lose: [flag('forest-saved'), flag('an22-forest-finished-it'), later('an22-cold-town', 5)] }))),
+      ch('Talk to the foreman.', out('He is not a cruel man. He is a tired one. "Town\'s got no coal this year. Kids need heat." He looks at the stumps with their little faces and has to look away. "Dead wood burns as well as live. I\'d cut only dead, if someone could show me which. I can\'t tell. It all looks alive to me now." He sticks out his hand. "Come back when the crew\'s ready. Show us."', flag('forest-deal'), later('an22-dead-wood', 5))),
+      ch('Talk to the girl.', out('She looks at you for a long time, the way a wild thing does before it decides whether to run. The Phantump on her shoulder makes a small, creaking sound. "Fine," she says. "You can meet it. If it wants to meet you." She turns into the trees. "It\'s a long walk. Don\'t talk too much."', flag('forest-god'), later('an22-the-god', 5))),
+    ]),
+  ev('an22-cold-town', 'No Wood for Winter', AN, { room: true, requires: [flagIs('forest-saved')], cast: ['trainer.worker_m'], tint: '#1a2230', effect: 'snow' },
+    'The town below the forest. The first frost has come. The woodpiles behind the houses are empty, and smoke rises from only a few chimneys, thin and grudging. The foreman is at his door with a child on his hip, both of them in coats indoors. He sees you and does not look angry. That is worse. "You saved the trees," he says. "Good. Who\'s saving us?" Behind him, the child\'s breath shows in the air.',
+    [
+      ch('Cut the dead wood with them.', out('You go back up with the crew and you show them, trunk by trunk, which trees are already dead: the hollow ones, the lightning-struck, the ones with no sap. It is slow, cold work. The forest watches. It does not groan. By dark there is a cart of dry wood going down the hill, and that night more chimneys smoke. The foreman shakes your hand without a word.', flag('an22-dead-wood-cut'), fr(2), later('an22-the-border', 5))),
+      ch('Keep the forest whole.', out('You do not offer anything. It is the forest or the town, and you chose. You walk through the cold streets and nobody shouts at you, which is somehow the hard part. A girl at a window has drawn a tree in the frost on the glass. It has a face. That night you lie awake listening to the wind in a forest that will stand for another hundred years.', flag('an22-forest-whole'), later('an22-the-border', 5))),
+    ]),
+  ev('an22-dead-wood', 'Which Wood Is Dead', AN, { room: true, requires: [flagIs('forest-deal')], cast: ['trainer.worker_m', 'trainer.pr/ranger_f'], pokemon: 'phantump', tint: '#13221a', effect: 'fog' },
+    'The crew is ready, saws on shoulders, standing at the edge of the trees like men at the door of a church. The foreman hands you a pot of white paint. "Mark the dead ones. We\'ll cut nothing else." Somewhere in the forest the girl is watching, you are sure of it. A Phantump peers at you from behind a trunk. Every tree looks alive in this light. Every tree looks like it has a face.',
+    [
+      ch('Let a Pokémon find the dead wood.', out('Your Pokémon goes ahead of you, sniffing, listening, laying a paw or a leaf against each trunk. Where it stops and sits, you paint a white ring. It never stops at a living tree. By evening the crew has felled only the dead, and the forest has not groaned once. The foreman gives your Pokémon an apple. The girl, somewhere above you, laughs out loud.', fr(5, 'picked'), flag('an22-marked-well'), later('an22-the-border', 5)), { pick: {} }),
+      ch('Mark them yourself.', out('You walk the forest with the paint pot and look properly: at bark, at leaves, at the sap that still runs and the trunks that ring hollow when you knock. You get them right, every one. By dark the crew has felled only the dead. The foreman looks at the stumps. Not one of them has a face.', flag('an22-marked-well'), later('an22-the-border', 5)),
+        { prompt: { id: 'aim-drag', needs: 'good' }, fail: out('You get almost all of them right. Almost. In the morning one stump at the edge of the clearing has grown a small, sad face, with one leaf on top, and it is looking straight at you. The foreman swears softly. The forest groans, once, long. You did your best. It was not quite enough, and everybody knows it.', flag('an22-one-wrong'), later('an22-the-border', 5)) }),
+    ]),
+  ev('an22-the-god', 'The Forest God', AN, { room: true, requires: [flagIs('forest-god')], cast: ['trainer.pr/ranger_f'], pokemon: 'trevenant', tint: '#0e1a12', effect: 'fog' },
+    'The middle of the forest, where the light comes down green. The girl stops. "Here." At first you think it is a hill. Then the hill opens its eye: a single red eye, the size of a doorway. It is a Trevenant, but older and bigger than any Trevenant should be, with whole trees growing out of its back and a stream running between its roots. The girl kneels. "This is who raised me," she says. "It doesn\'t like people. It\'s deciding about you."',
+    [
+      ch('Listen.', out('You sit down in the moss and say nothing. For a long time, nothing happens. Then the forest god groans, and the girl translates, slowly, as if the words are heavy. "It says the town may have the dead. It says the living are its children. It says one tree planted for every tree cut, and a line nobody crosses." She looks at you. "It wants you to carry that to them. It thinks they\'ll listen to you."', flag('an22-god-terms'), fr(3), later('an22-the-border', 5))),
+      ch('Ask it to spare the town.', out('"They\'re cold," you say. "They\'re not cruel. They\'re cold." The red eye looks at you for so long that your legs go numb. Then a branch the size of a bridge lowers itself, slowly, and sets down a heap of dry, dead wood at your feet. Then another. The girl\'s mouth is open. "It\'s never given anything," she whispers. "Not to them."', flag('an22-god-gave'), fr(3), later('an22-the-border', 5))),
+    ]),
+  ev('an22-the-border', 'The Border', AN, { room: true, cast: ['trainer.worker_m', 'trainer.pr/ranger_f'], pokemon: 'phantump', tint: '#1a2a1a', effect: 'sparkle',
+    remembers: [
+      { id: 'saved', when: [flagIs('forest-saved')], notice: 'The loggers remember the fight. The forest remembers that you stood in front of it. Neither side has forgotten the cold.' },
+      { id: 'deal', when: [flagIs('forest-deal')], notice: 'The stumps along the line are all dead wood, cut clean. The foreman has painted a white ring on a stone, the same white you used.' },
+      { id: 'god', when: [flagIs('forest-god')], notice: 'Behind the girl, half hidden in the trees, a hill with a single red eye is watching.' },
+    ] },
+    'A cold bright morning at the edge of the forest. The foreman is there with his crew, and the girl with her Phantump, and they are not shouting at each other. They are carrying stones. They have been arguing all week about where the line goes, and they have asked you to settle it, because you are the only one both sides have talked to. A row of stones runs half way across the field and stops. "Here, or there?" the foreman says. "Wherever you put it," says the girl, "we keep it. Both sides."',
+    [
+      ch('Draw it at the old stumps.', out('You set the last stone at the line of old stumps, where the trees used to stop before anyone was cold. The foreman nods slowly. The girl nods slowly. They shake hands, which neither expected. One of the little faced stumps creaks, wriggles, and climbs out of the ground: a Phantump, all leaf and worry. It walks straight past the girl and holds on to your leg. "It wants to see the world," she says. "Trees never get to."', gain('phantump', { bond: 10 }), flag('an22-border-stumps'), moment('You drew the border between a town and a forest god, and both sides kept it.', 70))),
+      ch('Give the forest the hill.', out('You carry the stones up to the hill and set the line above the town, so the forest keeps its old ground and the town keeps its fields. It costs the crew a long walk for wood. The foreman grumbles and agrees. The girl looks at you as if she might cry. A Phantump climbs out of a stump at your feet and wraps itself round your ankle. "That one\'s yours," she says. "It chose. Look after it."', gain('phantump', { bond: 10 }), fr(2), flag('an22-border-hill'), moment('You drew the border between a town and a forest god, and gave the forest its hill.', 70))),
+    ]),
+];
+
 export const REMOVE: string[] = [];

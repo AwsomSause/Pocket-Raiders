@@ -2,5 +2,1214 @@
  "catalogOverhaul": "anime",
  "override": true,
  "remove": [],
- "events": []
+ "events": [
+  {
+   "id": "aq31-bond-phenomenon",
+   "name": "The Bond Phenomenon",
+   "group": "Pokémon-anime questlines",
+   "rarity": "rare",
+   "minStage": 6,
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_m"
+    ],
+    "pokemon": "froakie",
+    "tint": "#142a3a",
+    "effect": "float"
+   },
+   "intro": "Evening on a jetty. You have just won a battle, and your Pokémon are shaking the water off their backs. Up in a dead tree over the water sits a Froakie, its frothy bubbles heaped round its neck like a scarf. It watched the whole fight without blinking. A young trainer on the jetty follows your eyes and sighs. \"That one? It chose me last spring. It left in the autumn.\" He turns an empty Poké Ball over in his hands. \"It just wasn't happy with me. It wanted something I couldn't give it, and I never found out what.\" He is the fourth trainer it has left, he says. It is looking for somebody, he thinks: somebody who matches it. The Froakie has not looked away from you once.",
+   "choices": [
+    {
+     "label": "Ask it to come.",
+     "success": {
+      "text": "You walk to the foot of the tree and ask it plainly, the way you would ask a person. The Froakie looks at you for a long time. Then it drops into the water, comes up at your feet, and walks beside you. Not ahead, not behind: beside. It is not a yes. It is a \"show me.\" The trainer on the jetty laughs, a little sadly. \"It did that with me too. Good luck.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "froakie"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq-greninja-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq31-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "You call up to the tree. The Froakie is down before you finish: it has been waiting for exactly this. It lands on the jetty in a crouch, foam bristling, and for the first time all evening it looks happy.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Froakie",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq31-battled",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq31-after-the-bout"
+        }
+       ],
+       "lineup": [
+        "froakie"
+       ],
+       "spritePokemon": "froakie",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq31-battled",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq31-bout-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq31-after-the-bout"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ignore it.",
+     "success": {
+      "text": "You pick up your bag and walk on. You do not look back at the tree. Behind you there is a small wet plop, and then, all afternoon, very quietly, the sound of something keeping pace with you in the reeds.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq-greninja-followed",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq31-froakie-follows",
+        "nodes": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq31-after-the-bout",
+   "name": "Closer Than Anyone",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "won-by-a-hair",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq31-bout-lost",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It won, by a hair. It knows exactly how thin the hair was. It does not look like a winner. It looks like somebody who has finally been pushed as far as it can go, and liked it."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "froakie",
+    "tint": "#142a3a",
+    "effect": "float"
+   },
+   "intro": "The Froakie sits in the shallows, breathing hard, its foam half gone. It was close. Closer than it has been with anyone, by the look on its face. It looks at your Pokémon one by one, and then at you, as if checking a sum it has been working on for a very long time.",
+   "choices": [
+    {
+     "label": "Hold out your hand.",
+     "success": {
+      "text": "It looks at the hand. Then it slaps it, hard, a wet webbed high five that stings for an hour. It climbs up your arm and sits on your shoulder, dripping down your collar. The trainer on the jetty shakes his head, smiling. \"Four of us, and it just wanted a fight it could lose.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "froakie"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq31-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it decide.",
+     "success": {
+      "text": "You sit down on the jetty and wait. It takes its time. It walks round you twice. Then it sits down next to you, close enough that its foam wets your sleeve, and looks out at the water the same way you are looking. That is the decision.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "froakie"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq31-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq31-froakie-follows",
+   "name": "Something in the Reeds",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "froakie",
+    "tint": "#142a3a",
+    "effect": "float"
+   },
+   "intro": "Two nodes on, you stop to make camp. There is a Froakie sitting on your bag. It is damp. It has clearly been there a while. It has the air of somebody who has been ignored before, many times, and has decided that this time it will not take the hint.",
+   "choices": [
+    {
+     "label": "Let it come.",
+     "success": {
+      "text": "You move the bag. It moves with the bag. By the fire it sits exactly as far from you as you are from the flames, and in the morning it is a little closer. You ignored it, and it chose you anyway. You get the feeling that was the point.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "froakie"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq31-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send it back to its tree.",
+     "success": {
+      "text": "You point back the way you came. It looks where you point, and then at you, and does not move for a long time. In the morning the bag is dry and the Froakie is gone. You think you hear it once, in the reeds, and then not again.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq31-froakie-test",
+   "name": "The Test",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq-greninja-asked",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq-greninja-asked",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "froakie",
+     "bond": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "froakie",
+    "tint": "#142a3a",
+    "effect": "none"
+   },
+   "intro": "For a whole stage the Froakie has watched you. How you call a fight. How you treat the one who loses it for you. Who eats first at camp, and who gets the dry spot when it rains. Tonight it sits across the fire with its arms folded and its foam puffed up, and you understand that the test is over. It is about to tell you how you did.",
+   "choices": [
+    {
+     "label": "Wait for its answer.",
+     "success": {
+      "text": "It gets up. It walks round the fire, slowly, the long way. Then it sits down again: on your side of the fire, against your knee. It does not do anything else. It does not need to. Four trainers asked it to come. You are the first one it has stayed for.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "froakie",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq31-test-passed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask how you did.",
+     "success": {
+      "text": "It looks at you as if that were a very silly question. Then, very seriously, it holds up one webbed hand and wobbles it: so-so. Then it comes round the fire and goes to sleep on your foot, which is the opposite of so-so, and stays there all night.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "froakie",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq31-test-passed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq31-as-one",
+   "name": "As One",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq31-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "froakie",
+     "bond": 5
+    },
+    {
+     "kind": "partySpecies",
+     "species": "greninja"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tested",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-greninja-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It sat across a fire from you once and weighed you up. You passed, then. You can feel it weighing you now, and you are passing again."
+    },
+    {
+     "id": "followed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-greninja-followed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You walked past it once, and it followed you anyway. You can feel, right now, exactly how glad it is that it did."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_f"
+    ],
+    "pokemon": "greninja-ash",
+    "tint": "#1a2440",
+    "effect": "float"
+   },
+   "intro": "A hard fight finds you on the road: an Ace Trainer who has heard about your Greninja and wants to see it for herself. Your Greninja steps out. Then something happens that has never happened before. Water rises off the ground and wraps round it like a cloak. The pattern on its face changes. A great spinning star of water builds on its back. And you can feel the wind on its face. You can see what it sees, the foe and the field and your own self standing behind it. You blink, and it blinks.",
+   "choices": [
+    {
+     "label": "Fight as one.",
+     "success": {
+      "text": "Every move you think of, it is already making. Every hit it takes, you flinch. The Ace Trainer takes one step back.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The Bond Phenomenon",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "type": "water",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spa",
+          "type": "water",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "type": "water",
+          "value": 1.1
+         }
+        ],
+        "battles": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "The Bond Phenomenon: guard",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "type": "water",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spd",
+          "type": "water",
+          "value": 1.1
+         }
+        ],
+        "battles": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Ace Trainer Odalys",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "water",
+        "psychic",
+        "dark"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq31-bond-formed",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Your Greninja changed in the middle of a fight, and for a while you saw with its eyes.",
+         "importance": 75
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq31-bond-formed",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Your Greninja changed in the middle of a fight, and for a while you saw with its eyes.",
+         "importance": 75
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Hold on to the feeling.",
+     "success": {
+      "text": "You stop thinking about the fight and think about it instead. The water star on its back spins faster. The Ace Trainer says, quietly, \"I came to see that.\"",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The Bond Phenomenon",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "type": "water",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spa",
+          "type": "water",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "type": "water",
+          "value": 1.1
+         }
+        ],
+        "battles": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "The Bond Phenomenon: guard",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "type": "water",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spd",
+          "type": "water",
+          "value": 1.1
+         }
+        ],
+        "battles": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Ace Trainer Odalys",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "water",
+        "psychic",
+        "dark"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq31-bond-formed",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Your Greninja changed in the middle of a fight, and for a while you saw with its eyes.",
+         "importance": 75
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq31-bond-formed",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Your Greninja changed in the middle of a fight, and for a while you saw with its eyes.",
+         "importance": 75
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq31-the-roots",
+   "name": "The Roots",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 10,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq31-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq31-met",
+     "atLeast": 4,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "froakie",
+     "bond": 0
+    }
+   ],
+   "types": [
+    "water"
+   ],
+   "remembers": [
+    {
+     "id": "as-one",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq31-bond-formed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It has worn your shape once, in a fight, and you have worn its. It knows you will understand without being told."
+    },
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-greninja-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You asked it to come, once, on a jetty. It came. Now it is the one who would have to ask, and it will not."
+    },
+    {
+     "id": "followed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-greninja-followed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You walked past it once and it followed you anyway. It has never needed permission. It is waiting for yours now."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "greninja",
+    "tint": "#16281a",
+    "effect": "shake"
+   },
+   "intro": "News comes up the road with the travellers. In a region not far off, roots are breaking through the ground: roots as thick as houses, choking the rivers, cracking the towns in half. Something old and green is waking under the earth and nobody knows how to calm it. They say there is a glow down in the cracks, like a single cell, watching. That night your partner stands at the edge of camp, facing the way the roots are. It has heard. It looks at you. It does not ask.",
+   "choices": [
+    {
+     "label": "Go.",
+     "success": {
+      "text": "You say it before it has to. It stands very still. Then it crosses the camp and presses its forehead to yours, once, hard, the way it slapped your hand on the first day. When it goes, it goes fast: a ripple across the dark water, and then nothing. You stand there a long time. Somewhere north, a region is about to get a great deal of help.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "It goes to fight the roots",
+         "species": [
+          "froakie",
+          "frogadier",
+          "greninja"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "aq31-went",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-greninja",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your Greninja went to save a region from the roots. It did not ask. You told it to go.",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay with me.",
+     "success": {
+      "text": "It looks north for a long, long moment. Then it sits down beside you, with its back to the roots. In the morning it is still there. It never mentions it again. Sometimes, late at night, you catch it facing that way, very still, and when it sees you watching it turns round and comes back to the fire.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "froakie",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq31-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The roots were calling, and your Greninja stayed with you.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq32-bird-learned-fire",
+   "name": "The Bird That Learned Fire",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "fire",
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "fletchling",
+    "tint": "#3a1a10",
+    "effect": "fire"
+   },
+   "intro": "A vent in the hillside, breathing heat. A small Fletchling goes into the shimmer over it, flat out. It comes out the other side smoking, tumbles, lands badly, and shakes itself. Then it walks back to the start. It comes out singed every time, and it tries again. Up the slope, on a ledge in the heat where nothing its size should be, an old Talonflame sleeps on a nest of warm stones. And you understand: the little bird is not trying to get through the heat. It is trying to get up there.",
+   "choices": [
+    {
+     "label": "Stop it.",
+     "success": {
+      "text": "You catch it mid-run, in both hands, and it is furious. It is so small. It pecks your thumb, hard, and then sits in your palm glaring at you, the tips of its feathers still smoking. It comes with you because you are holding it. It will not forgive you for a long time. At every camp, it sits facing the volcano.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "fletchling"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "fletchling",
+        "amount": -30
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-stopped",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help it.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "fire"
+       ]
+      }
+     ],
+     "pick": {
+      "types": [
+       "fire"
+      ]
+     },
+     "success": {
+      "text": "Your Fire-type sits down beside the vent and does not show the bird the fire. It shows it the breathing. In on the cool. Out on the hot. The Fletchling watches the way only a very small bird can watch. First try: smoke. Second try: less smoke. Third try, it goes into the shimmer breathing the way it was shown, and comes out the other side lit, every feather edged with flame, bigger than it went in and astonished at itself: a Fletchinder. It lands on your Fire-type's head and stays there.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "fletchinder"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-helped",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help it: fan it with your coat.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire",
+       "absent": true
+      }
+     ],
+     "success": {
+      "text": "You have no fire to lend it, so you take off your coat and fan it as it goes in. It does nothing useful at all. It may make things worse. The Fletchling comes out singed, as always, and lands on your coat, and looks up at you, and you can see it has decided you are on its side. It does not get through today. It comes with you, to try again somewhere hotter.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "fletchling"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 15
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-fanned",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You sit down on a warm rock and count. It goes in eleven more times. Eleven times it comes out smoking. Somewhere around the ninth you stop breathing. On the twelfth it does not come out smoking. It comes out lit, every feather edged with fire, bigger than it went in: a Fletchinder. It lands beside you, on fire, and looks at you as if you had doubted it. You had not. It does not believe you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "fletchinder"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 15
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-watched",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq32-lights-the-fire",
+   "name": "It Lights the Tent",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq32-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "fletchling",
+     "bond": 1
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq32-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "facing-the-volcano",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq32-stopped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Every camp since you caught it, it has sat facing the volcano. Tonight, for the first time, it has turned round to face the fire instead."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "fletchling",
+    "tint": "#3a1a10",
+    "effect": "fire"
+   },
+   "intro": "Camp. You are still fumbling with the kindling when the bird sorts it out for you: one hot breath, and the campfire is lit. It looks extremely pleased with itself. Then, before anyone can stop it, it lights the tent.",
+   "choices": [
+    {
+     "label": "Put the tent out.",
+     "success": {
+      "text": "You beat it out with a pan. The bird watches the whole thing with great interest, as if this were another kind of fire it could learn. There is a hole in the tent now, roughly its size. It sleeps by the hole all night, keeping the draught out, which you decide is an apology.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "fletchling",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Laugh.",
+     "success": {
+      "text": "You laugh until your ribs hurt. The bird does not understand what is funny, but it understands that you are not angry, and that seems to be new to it. The tent smells of smoke for the rest of the run. You never once mind.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "fletchling",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq32-no-brakes",
+   "name": "No Brakes",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq32-lights-the-fire"
+    },
+    {
+     "kind": "partyLine",
+     "species": "fletchling",
+     "bond": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "fletchling",
+    "tint": "#3a2410",
+    "effect": "none"
+   },
+   "intro": "It has started practising speed. Every rest, it goes up, and comes down faster than the time before: flat out, a streak of orange along the road, the air cracking behind it. It has not practised stopping. Today it stops against the back of your head.",
+   "choices": [
+    {
+     "label": "Catch it next time.",
+     "success": {
+      "text": "You stand in the road with your arms out. It comes down like a thrown stone and hits you square in the chest instead of the head, which is progress. You both sit in the dust. It looks very proud. You have a bird-shaped bruise for a week.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "fletchling",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Teach it to brake.",
+     "success": {
+      "text": "You show it, with your arms, how a bird spreads its tail. It watches. It goes up. It comes down. At the very last moment it spreads its tail and lands, wobbling, on your outstretched wrist. Then it looks back at its own tail as if it had never seen it before.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "fletchling",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq32-in-the-rain",
+   "name": "Steam",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq32-no-brakes"
+    },
+    {
+     "kind": "partyLine",
+     "species": "fletchling",
+     "bond": 3
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "fletchling",
+    "tint": "#1c2430",
+    "effect": "rain"
+   },
+   "intro": "Rain, all day. The bird hates it. It steams where the drops hit it, and it sulks, feathers clamped tight: a small, damp, hissing grudge on your shoulder. Then {lead} finds a big leaf by the road and, without being asked, holds it up over the bird, and walks like that, very carefully, mile after mile.",
+   "choices": [
+    {
+     "label": "Let {lead} hold the leaf.",
+     "success": {
+      "text": "You leave them to it. {lead} holds the leaf. The bird stops hissing. By evening it has moved from your shoulder to {lead}'s head, under the leaf, dry and smug, and the two of them come into camp together as if they had planned the whole thing.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "fletchling",
+        "amount": 5
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold your coat over them both.",
+     "success": {
+      "text": "You take off your coat and hold it over both of them, and all three of you walk the rest of the day in a little dry tent of your own. You are soaked through. The bird stops steaming and starts, very quietly, to sing.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "fletchling",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq32-the-ledge",
+   "name": "The Ledge",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq32-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq32-met",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "fletchling",
+     "bond": 0
+    }
+   ],
+   "types": [
+    "fire",
+    "ground"
+   ],
+   "remembers": [
+    {
+     "id": "held-back",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq32-stopped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You held it back from this mountain once, in both hands. It sat facing it at every camp. You do not hold it now. It looks back at you once, to check that you will not."
+    },
+    {
+     "id": "breathing",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq32-helped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "At the foot of the slope your Fire-type breathes with it, one last time, the way it taught it: in on the cool, out on the hot."
+    },
+    {
+     "id": "counting",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq32-watched",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You catch yourself counting again, out of habit. You do not get past one."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "talonflame",
+    "tint": "#3a1a10",
+    "effect": "fire"
+   },
+   "intro": "The volcano again, or one just like it. The vent. The ledge. And the old Talonflame is awake. Your bird goes up. Straight up, through the heat, through the shimmer that used to throw it down. It does not smoke now; it belongs in it. It lands on the ledge. The old one looks it over for a long time. It is a parent. It left it at the bottom on purpose. They all do. Most never come up. They touch beaks. Then the old one looks down at you, a long way below, and dips its head.",
+   "choices": [
+    {
+     "label": "Wait at the bottom.",
+     "success": {
+      "text": "It could stay. You both know it could. It stands on the ledge with its parent for one more breath, and then it drops: straight down, wings folded, fire streaming off it. Halfway down it opens them and it is bigger, it is a Talonflame, and it lands beside you hard enough to scorch the stones. Up on the ledge the old one is still watching. It does not look disappointed. It looks like a parent.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "fletchling",
+        "to": "talonflame"
+       },
+       {
+        "kind": "formChange",
+        "from": "fletchinder",
+        "to": "talonflame"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "fletchling",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-turned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-talonflame",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your bird flew up the volcano to the parent who left it there, and came back down to you a Talonflame.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call up to it.",
+     "success": {
+      "text": "You call to it once. Not to bring it down: just so it knows where you are. It hears. It looks at its parent, and its parent looks at you, and then it drops: straight down, wings folded, fire streaming off it. Halfway down it opens them and it is bigger, a Talonflame, and it pulls up a hand above your head and lands as gently as a leaf. It learned to brake.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "fletchling",
+        "to": "talonflame"
+       },
+       {
+        "kind": "formChange",
+        "from": "fletchinder",
+        "to": "talonflame"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "fletchling",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-turned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-talonflame",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your bird flew up the volcano to the parent who left it there, and came back down to you a Talonflame.",
+        "importance": 75
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
 }

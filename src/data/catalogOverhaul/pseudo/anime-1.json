@@ -1,5 +1,7 @@
 {
  "category": "anime",
  "note": "Door chains of tools/events/co/anime-1.ts (entry = the questline first event; rooms linked with addEvent).",
- "chains": []
+ "chains": [
+  { "id": "ps_an01_bathhouse", "name": "The Bathhouse at the Edge of Night", "entry": "an01-bathhouse", "themeId": "water-ghost", "tint": "#1e2238", "mood": "warm uncanny", "start": "opened" }
+ ]
 }

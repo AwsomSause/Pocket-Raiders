@@ -2,5 +2,803 @@
  "catalogOverhaul": "anime",
  "override": true,
  "remove": [],
- "events": []
+ "events": [
+  {
+   "id": "aq24-gible-couldnt-aim",
+   "name": "The Gible Who Couldn't Aim",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 4,
+   "types": [
+    "rock",
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gible",
+    "tint": "#2a2418",
+    "effect": "shake"
+   },
+   "intro": "A rock by the mouth of a cave, with a target chalked on it in careful rings. Twenty paces off, a Gible is straining so hard it shakes. Its whole body glows. Something goes up, very high and very bright. It comes down on a tree. Then on another tree. Then on a signpost, which was minding its own business. The last one comes down on you. When the dust settles, the Gible has seen. It is mortified. It is biting its own head, which is how it thinks.",
+   "choices": [
+    {
+     "label": "Teach it to aim.",
+     "success": {
+      "text": "You dust yourself off and crouch beside it. It stops biting its head. It looks at the target, then at you, the way a student looks at a teacher who has just been hit by a meteor and is somehow still smiling. \"Right,\" you say. \"Let's work out what's going wrong.\" It sits up very straight.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq24-teaching",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq24-lesson-one"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Duck.",
+     "success": {
+      "text": "The next one goes up and you are flat on the ground before it comes down. It lands on the signpost again. The Gible looks at you lying there with your arms over your head, and something in its face shuts like a door. It thought you were getting on. It turns its back and practises as if you are not there. But when you walk on, a small blue shape walks on too, a long way behind, sulking at every step.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq24-ducked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq24-gible-follows",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq24-the-pond",
+        "nodes": 5
+       },
+       {
+        "kind": "moment",
+        "text": "Things Gible Has Hit: a tree. Another tree. A signpost. You.",
+        "importance": 30
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it practise on you.",
+     "success": {
+      "text": "You go and stand beside the target. \"Go on, then.\" It hesitates. Then it glows, and the meteor goes up, and comes down squarely on you. So does the next. So does every one after that, all afternoon. It never once hits the target. It hits you every single time. By evening you are very sore, and the Gible is leaning against your leg, glowing faintly with something that is not a meteor at all.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq24-practised",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq24-gible-follows",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq24-the-pond",
+        "nodes": 5
+       },
+       {
+        "kind": "moment",
+        "text": "Things Gible Has Hit: a tree. Another tree. A signpost. You. You. You. You, all afternoon.",
+        "importance": 30
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq24-lesson-one",
+   "name": "Lesson One",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq24-teaching",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gible",
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "The Gible plants itself in front of the target again and waits for your verdict. It has clearly been told it is doing it wrong before, by rocks and trees and signposts. You watch one more go up and come down on a bush. You think you can see the problem. Honestly, you can see three. Which one do you tell it?",
+   "choices": [
+    {
+     "label": "You're shutting your eyes.",
+     "success": {
+      "text": "It tries again with its eyes wide open. It watches the thing leave its own mouth and climb, glowing, into the sky, and it is so astonished that it sits straight down. The meteor comes down exactly on the sitting-down place, a heartbeat after it scrambles out. It looks at the crater. It looks at you. That is closer than it has ever come to anything it meant. When you walk on, it walks on beside you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq24-lesson-eyes",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq24-gible-follows",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq24-the-pond",
+        "nodes": 5
+       },
+       {
+        "kind": "moment",
+        "text": "Things Gible Has Hit: a tree. Another tree. A signpost. You.",
+        "importance": 30
+       }
+      ]
+     }
+    },
+    {
+     "label": "You're aiming with your mouth.",
+     "success": {
+      "text": "It tries aiming with its whole body instead: feet planted, tail pointing, chin down. The meteor goes sideways, then up, then into a bush. But it went sideways on purpose, and the Gible knows it. It spins round to you with its mouth open, as if a door somewhere has come unlocked. When you walk on, it walks on beside you, still pointing its tail at things.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq24-lesson-mouth",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq24-gible-follows",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq24-the-pond",
+        "nodes": 5
+       },
+       {
+        "kind": "moment",
+        "text": "Things Gible Has Hit: a tree. Another tree. A signpost. You.",
+        "importance": 30
+       }
+      ]
+     }
+    },
+    {
+     "label": "You're trying too hard.",
+     "success": {
+      "text": "It stops. It breathes. It lets the glow come up slowly instead of squeezing it out. The meteor rises lazily, wanders, and lands on the far edge of the target rock. Not the target. The rock. The Gible stares at it for a long time. Then it bites its own head, gently, the way it does when it is thinking something new. When you walk on, it walks on beside you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq24-lesson-easy",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq24-gible-follows",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq24-the-pond",
+        "nodes": 5
+       },
+       {
+        "kind": "moment",
+        "text": "Things Gible Has Hit: a tree. Another tree. A signpost. You.",
+        "importance": 30
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq24-the-pond",
+   "name": "The Pond",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq24-gible-follows",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "ducked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq24-ducked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It practises from the far side of the pond, as far from you as the water allows. It still checks, every single time, that you are watching."
+    },
+    {
+     "id": "practised",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq24-practised",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Before it starts, it waddles over and inspects your arm, where the bruises have gone yellow. It pats one. Then it goes back to its mark."
+    },
+    {
+     "id": "taught",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq24-teaching",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It glances at you before it fires, the way a student glances at the teacher. Lesson two, the glance says. Go on."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "piplup",
+    "tint": "#1c2a2a",
+    "effect": "shake"
+   },
+   "intro": "A pond, still and green, with a flat rock in the middle and a target chalked on the rock. The Gible got here before you. It has been practising alone. There are a great many craters, in a neat ring all the way round the pond, and not one in it. It sets its feet. It glows. The meteor goes up, wobbles, and comes down on a Piplup sunning itself on the bank. The Piplup is not hurt. The Piplup has had enough. It stands up, dripping, flippers on its hips, and glares.",
+   "choices": [
+    {
+     "label": "Aim away from it.",
+     "success": {
+      "text": "\"Aim away from the target,\" you tell it, and you point at the Piplup. The Piplup opens its beak to object. The Gible narrows its eyes at the Piplup, glows, and lets go. The meteor sails clean over the Piplup's head and lands dead in the centre of the target. Nobody speaks. The Piplup slowly lowers its flippers. The Gible looks at the target. It looks at the Piplup. It has worked something out, and you can tell from its face that it is exactly the wrong thing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq24-lesson-two",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq24-the-road",
+        "nodes": 5
+       },
+       {
+        "kind": "moment",
+        "text": "Things Gible Has Hit: a Piplup, nearly. The target, by accident.",
+        "importance": 30
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq24-the-road",
+   "name": "Lesson Three",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq24-lesson-two",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "practised",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq24-practised",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It glances back at you once. It has hit you more times than anyone alive. It trusts you to know where it will land."
+    },
+    {
+     "id": "ducked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq24-ducked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It does not look back at you. It is still a little offended. But it stepped in front of your lead all the same."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gible",
+    "tint": "#2a2418",
+    "effect": "shake"
+   },
+   "intro": "A real one, this time. A wild Pokémon, big and cross, is planted in the middle of the road and will not let anyone by. Before your lead can move, the Gible steps out in front of it. Its whole body starts to glow. This is lesson three, and you both know it. Its meteor goes anywhere except where it is aimed: pointed straight at the foe it lands one time in four, pointed at the ground beside it, three times in four. It is waiting for you to tell it where.",
+   "choices": [
+    {
+     "label": "Aim at the foe. (One in four)",
+     "chance": 0.25,
+     "success": {
+      "text": "You point straight at it. The Gible lets go. Against every habit it has, the meteor goes where you pointed and comes down square on the big Pokémon. The dust clears. The Gible still has its mouth open. It turns round, very slowly, to see if you saw. You saw. Now finish it together.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq24-meteor-landed",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "The Gible's meteor landed",
+        "effects": [
+         {
+          "kind": "damageMultiplier",
+          "value": 1.3
+         }
+        ],
+        "battles": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "ursaring",
+        "rhydon",
+        "steelix"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "gible"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "moves": [
+          "draco-meteor"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "aq24-gible-joined",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq24-road-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq24-saw-it"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "gible"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "moves": [
+          "draco-meteor"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "aq24-gible-joined",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq24-road-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq24-saw-it"
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "You point straight at it. The meteor goes up, wavers, and buries itself in the hill behind the road, a long way from anything. The big Pokémon looks at the crater, then at the Gible, and charges. Your lead shoulders back in front of it. Lesson three is not over yet.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "ursaring",
+        "rhydon",
+        "steelix"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "gible"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "moves": [
+          "draco-meteor"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "aq24-gible-joined",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq24-road-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq24-saw-it"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "gible"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "moves": [
+          "draco-meteor"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "aq24-gible-joined",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq24-road-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq24-saw-it"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Aim beside it. (Three in four)",
+     "chance": 0.75,
+     "success": {
+      "text": "You point at the empty ground just left of it. The Gible frowns: that is not where the enemy is. It glows anyway. The meteor goes up, wobbles, misses the empty ground completely, and lands right on the big Pokémon. The dust clears. The Gible still has its mouth open. It turns round, very slowly, to see if you saw. You saw. Now finish it together.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq24-meteor-landed",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "The Gible's meteor landed",
+        "effects": [
+         {
+          "kind": "damageMultiplier",
+          "value": 1.3
+         }
+        ],
+        "battles": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "ursaring",
+        "rhydon",
+        "steelix"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "gible"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "moves": [
+          "draco-meteor"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "aq24-gible-joined",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq24-road-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq24-saw-it"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "gible"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "moves": [
+          "draco-meteor"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "aq24-gible-joined",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq24-road-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq24-saw-it"
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "You point at the empty ground beside it. For once the Gible hits exactly what it was aiming at: the empty ground. It is so pleased that it does not see the charge coming. Your lead shoulders back in front of it. Lesson three is not over yet.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "ursaring",
+        "rhydon",
+        "steelix"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "gible"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "moves": [
+          "draco-meteor"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "aq24-gible-joined",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq24-road-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq24-saw-it"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "gible"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "moves": [
+          "draco-meteor"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "aq24-gible-joined",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq24-road-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq24-saw-it"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq24-saw-it",
+   "name": "Did You See?",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq24-gible-joined",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "practised",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq24-practised",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It climbs your leg, the one it bruised all afternoon at the first target, and sits on your foot so you cannot go anywhere without it.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Tell it you saw.",
+       "success": {
+        "text": "\"I saw,\" you say. \"Every one of them, all afternoon, and this one too.\" It shuts its eyes and leans its whole small weight on your shin. It has hit you more often than it has hit anything. It plans to go on standing next to you anyway.",
+        "effects": [
+         {
+          "kind": "friendshipLine",
+          "species": "gible",
+          "amount": 30
+         },
+         {
+          "kind": "moment",
+          "text": "Things Gible Has Hit: a tree, a signpost, a Piplup (nearly), you (often), and once, in a real fight, the thing it was aiming beside.",
+          "importance": 60
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "ducked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq24-ducked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It keeps a careful step away from you. It has not forgotten the ducking. But it is still looking at you, waiting.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Tell it you saw.",
+       "success": {
+        "text": "\"I saw,\" you say. \"I won't duck again.\" It thinks about that for a long, dignified moment. Then it closes the step between you, and sits down on your foot, as if it had been going to anyway.",
+        "effects": [
+         {
+          "kind": "moment",
+          "text": "Things Gible Has Hit: a tree, a signpost, a Piplup (nearly), you (often), and once, in a real fight, the thing it was aiming beside.",
+          "importance": 60
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gible",
+    "tint": "#2a2418",
+    "effect": "sparkle"
+   },
+   "intro": "The dust settles on the road. The big Pokémon has gone, one way or another, and the Gible is standing where it stood, mouth still open, glowing faintly at the edges. It turns round, very slowly, to see if you saw. It has three lessons behind it now, a ring of craters round a pond somewhere, and a list of things it has hit that is getting long.",
+   "choices": [
+    {
+     "label": "Tell it you saw.",
+     "success": {
+      "text": "\"I saw,\" you say. \"Lesson three. Top marks.\" It bites its own head, gently, which is how it thinks, and what it is thinking is clearly very good. Then it trots to your side and stays there, a little closer than it needs to.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "gible",
+        "amount": 10
+       },
+       {
+        "kind": "moment",
+        "text": "Things Gible Has Hit: a tree, a signpost, a Piplup (nearly), you (often), and once, in a real fight, the thing it was aiming beside.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pretend you missed it.",
+     "success": {
+      "text": "\"Sorry, what happened? I was looking at a cloud.\" Its mouth falls open even further. It points at the crater. It points at itself. It stamps. Then it sees your face, and understands, and bites your boot, not hard, which is how it laughs. It does not leave your side for the rest of the day, in case you miss the next one.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "gible",
+        "amount": 5
+       },
+       {
+        "kind": "moment",
+        "text": "Things Gible Has Hit: a tree, a signpost, a Piplup (nearly), you (often), and once, in a real fight, the thing it was aiming beside.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
 }

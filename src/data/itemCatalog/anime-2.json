@@ -1,1 +1,40 @@
-[]
+[
+ {
+  "id": "paper-city-key",
+  "name": "The Paper City's Key",
+  "family": "Questline rewards (anime)",
+  "description": "Folded from one sheet by the paper mayor. The holder is light as paper: evasion +10%",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "secret-key",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "evasion",
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "queens-mushroom-stew",
+  "name": "The Queen's Mushroom Stew",
+  "family": "Questline rewards (anime)",
+  "description": "The adventurers' recipe, cooked at camp. Heals the whole team by half and restores all PP (one use, from the map)",
+  "rarity": "rare",
+  "stacksOn": "team",
+  "max": null,
+  "how": "use",
+  "icon": "mixed-mushrooms",
+  "status": "supported",
+  "effect": {
+   "kind": "teamCare",
+   "heal": 0.5,
+   "pp": -1
+  }
+ }
+]

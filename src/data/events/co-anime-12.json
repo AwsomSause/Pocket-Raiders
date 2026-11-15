@@ -2,5 +2,694 @@
  "catalogOverhaul": "anime",
  "override": true,
  "remove": [],
- "events": []
+ "events": [
+  {
+   "id": "aq54-eevee-chose-night",
+   "name": "The Eevee Who Chose Night",
+   "group": "Pokémon-anime questlines",
+   "rarity": "rare",
+   "minStage": 2,
+   "types": [],
+   "remembers": [
+    {
+     "id": "couldnt-choose",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "evo-eevee-couldnt-choose"
+      }
+     ],
+     "notice": "You mention the stream, and the three stones, and your Eevee that could not pick. Gary drops his pencil. \"You were THERE for that? Every detail. Now. Forget the road; you already saw my answer.\"",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Tell him every detail.",
+       "success": {
+        "text": "You tell him all of it: the three stones, the circling, the way your Eevee kept looking back at you instead of at them. Gary does not write until you stop. Then he writes for a long time. \"It wasn't choosing a stone,\" he says quietly. \"It was checking on you.\" He lays your story beside three years of his notes, and his whole face changes.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "aq54-research",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq54-research-skipped",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq54-gary-met",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "aq54-the-finding"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "rival-eevee",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-has-eeveelution",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Then he looks past you, down the road. \"That trainer who keeps turning up behind you. That's an Eeveelution with them, isn't it? I have to meet it.\" He is gone for twenty minutes and comes back with a page of notes, grinning."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_m"
+    ],
+    "pokemon": "umbreon",
+    "tint": "#1c1a30",
+    "effect": "glint"
+   },
+   "intro": "A research tent at the edge of the road, with dusk coming down. Notebooks are everywhere: stacked on crates, pinned under stones, one balanced on a sleeping Pokémon. A young researcher sits outside with an Umbreon, and as the light fades, the rings on its body glow one by one. \"Don't step on the notes. Some of those are three years old.\" He scratches the Umbreon behind one ear. \"I wanted a Vaporeon. Had the Water Stone ready in my pocket. It waited for a night and chose this instead.\" The Umbreon leans into his hand. \"It was right. I wasn't. So now I study why they choose.\" He looks at you properly. \"Want to help? Or are you here to battle me? You've got that look.\"",
+   "choices": [
+    {
+     "label": "Battle him.",
+     "success": {
+      "text": "Gary closes the notebook on his knee, carefully, and stands up. The Umbreon walks out ahead of him without being asked, rings burning bright in the dusk. \"Six on six. I want the whole picture of you.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "umbreon",
+        "blastoise",
+        "arcanine",
+        "scizor",
+        "electivire",
+        "nidoqueen"
+       ],
+       "name": "Researcher Gary",
+       "classId": "rival",
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq54-battled",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq54-won",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq54-gary-met",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq54-gary-notes"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq54-battled",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq54-gary-met",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq54-gary-notes"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Help the research.",
+     "success": {
+      "text": "\"Really?\" He is already pulling a spare notebook from a crate and a pencil from behind his ear. \"Three wild Eevee live along this road. Watch one at dawn, one at noon, one at dusk. Write down what each one does, and who it does it next to.\" He presses the notebook into your hands. \"Everything. Even the boring parts. Especially the boring parts.\" The Umbreon walks you to the edge of the lamplight and sits down there, as if to say: from here, you go on your own.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq54-research",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq54-gary-met",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq54-eevee-dawn",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell him about your Eevee.",
+     "requires": [
+      {
+       "kind": "partyLine",
+       "species": "eevee",
+       "bond": 0
+      }
+     ],
+     "success": {
+      "text": "You tell him: where you met it, what it did on the first night, the way it looks at you before a hard fight. Gary does not open a notebook. He does not even reach for his pencil. He listens with his chin on his fist, and once he laughs out loud. When you finish, he is quiet. Then he grabs three notebooks at once and writes everything, fast, the pencil squeaking. \"Sorry. That was too good to keep in my head.\" He tears out one page for you: a drawing of your Eevee, and not a bad one. \"I'll send you something from the lab. Give me a few days.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq54-told",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq54-gary-met",
+        "amount": 1
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "eevee",
+        "amount": 5
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq54-lab-eevee",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq54-gary-notes",
+   "name": "Notes on Your Team",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "won",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq54-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He glances up, grinning, and it slips out. \"Smell ya...\" He stops. Shakes his head at himself. \"No. I grew out of that. Good battle. Really good.\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_m"
+    ],
+    "pokemon": "umbreon",
+    "tint": "#1c1a30",
+    "effect": "none"
+   },
+   "intro": "Win or lose, Gary is sitting down again before the dust settles, a notebook on his knee, writing fast. He looks at each of your Pokémon in turn, the way a doctor reads a chart. \"Hold still. You too. Especially you.\" The Umbreon lies down by your feet and watches the pencil go. He fills four pages, and then a fifth.",
+   "choices": [
+    {
+     "label": "Read the notes.",
+     "success": {
+      "text": "He tears the pages out and hands them over. Your team is all there, one Pokémon to a paragraph, written the way he sees them. It is kinder than you expected, and sharper. Beside your lead he has written: \"Fights for the trainer, not the win. Rare.\" At the bottom: \"I'll send you something from the lab. Watch the road.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq54-notes",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq54-lab-eevee",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq54-eevee-dawn",
+   "name": "Dawn: The Jetty",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq54-research",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "eevee",
+    "tint": "#2a2c3c",
+    "effect": "fog"
+   },
+   "intro": "Dawn, grey and cold. The first Eevee lives under a fishing jetty. Every morning an old fisherman comes down alone, his hands stiff with cold, to sort his lines. Today the Eevee is not hunting and it is not playing. It is lying across the old man's boots, keeping his feet warm while he works. He does not look surprised. It has done this before, every cold morning, for as long as he has been coming here alone.",
+   "choices": [
+    {
+     "label": "Write down what it did.",
+     "success": {
+      "text": "You write it all: the cold, the old man's hands, the Eevee draped over his boots like a scarf. He never thanks it out loud. When the first fish comes up, though, he cuts the best piece and sets it down without a word. The Eevee eats it slowly, still lying on his feet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq54-watch-dawn",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq54-eevee-noon",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq54-eevee-noon",
+   "name": "Noon: The Market",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq54-watch-dawn",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "eevee",
+    "tint": "#3a3424",
+    "effect": "none"
+   },
+   "intro": "Noon, loud and bright. The second Eevee lives behind a fruit stall in a market square. A small girl sits on an upturned crate, crying the quiet way children cry when they have been crying a long time. Her big brother left on his journey this morning. The Eevee comes out from under the stall with a ribbon in its mouth and drops it in her lap. Then a bottle cap. Then a flower, slightly chewed.",
+   "choices": [
+    {
+     "label": "Write down what it did.",
+     "success": {
+      "text": "Seven presents in all. On the seventh, a single shiny button, the girl laughs, and then she cannot stop. The Eevee sits in her lap as if that had been the plan all along. You write it down, and then you write, underneath and underlined: \"It did not stop until she laughed.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq54-watch-noon",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq54-eevee-dusk",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq54-eevee-dusk",
+   "name": "Dusk: The Watchman",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq54-watch-noon",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "eevee",
+    "tint": "#1c1a30",
+    "effect": "none"
+   },
+   "intro": "Dusk again, the light going. The third Eevee lives at the edge of a small town, where a night watchman starts his rounds. His lantern keeps guttering out. He is old, and he does not like the dark, and he does not say so. The Eevee walks beside him into it. It does not play or wander. It keeps to the dark side of the road, sitting up straight whenever he stops, watching the shadows so that he does not have to.",
+   "choices": [
+    {
+     "label": "Write down what it did.",
+     "success": {
+      "text": "You follow them as far as the last house. Each time the lantern goes out, the Eevee stays exactly where it is, and the watchman finds it by touch and keeps walking. You write it down, close the notebook, and walk back to Gary in the dark. It does not feel as dark as it did.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq54-watch-dusk",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq54-the-finding",
+        "nodes": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq54-the-finding",
+   "name": "The Research Finding",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "skipped",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq54-research-skipped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Gary lays your story beside three years of notes, the stream, the three stones, the Eevee that kept looking back at you, and reads it all twice by lamplight. Then he sits back. \"They pick what the person next to them needs. Not what they want. Needs.\" He taps the page where your Eevee looked back. \"That's not a paper. That's a guess. But it's a good one.\" The Umbreon lies down across his boots. He does not seem to notice that it has."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_m"
+    ],
+    "pokemon": "umbreon",
+    "tint": "#1c1a30",
+    "effect": "sparkle"
+   },
+   "intro": "Gary lays your three pages beside his own on a crate and reads them twice, moving the lamp closer. The fisherman. The girl. The watchman. Then he sits back. \"They pick what the person next to them needs. Not what they want. Needs.\" He taps the page with the watchman on it, and then, without looking, the Umbreon beside him. \"That's not a paper. That's a guess. But it's a good one.\" The Umbreon lies down across his boots. He does not seem to notice that it has.",
+   "choices": [
+    {
+     "label": "Publish it.",
+     "success": {
+      "text": "\"Then it goes out with your name next to mine.\" He writes them at the top of the first page, his and yours, and a title he crosses out three times before he likes it. \"Every trainer with an Eevee should read this. They'll look at it differently after.\" He shakes your hand like a colleague, firmly, and a little too long. \"The lab will send you something for your trouble. Watch the road.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq54-published",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your name went into Gary Oak's paper on why an Eevee chooses.",
+        "importance": 60
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq54-lab-eevee",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it a guess.",
+     "success": {
+      "text": "Gary looks at the pages for a long time. Then he folds them once and puts them inside his coat, not in a crate. \"Yeah. Some things shouldn't be proven.\" He whistles, and an Eevee comes out of the tent, small and very curious. \"She's from my lab. I was saving her for the paper.\" He sets her down in front of you. \"Don't pick for her. Just stand next to her, and need something.\" His Umbreon walks you both out to the road, rings glowing, and turns back only at the last lamp.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "eevee"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "flag",
+        "key": "aq54-kept-guess",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq54-eevee-given",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq54-eevee-chooses",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq54-lab-eevee",
+   "name": "From Gary's Lab",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "published",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq54-published",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Folded under the note is a printed copy of the paper. On the first page, next to his name, is yours."
+    },
+    {
+     "id": "told",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq54-told",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On the back of the note: \"Your Eevee story is pinned over my desk. It's the only page I don't move.\""
+    },
+    {
+     "id": "notes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq54-notes",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On the back of the note, in smaller writing: \"Read your team notes again. I was right about your lead.\""
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "eevee",
+    "tint": "#2a2c3c",
+    "effect": "sparkle"
+   },
+   "intro": "Gary's Umbreon is waiting at the side of the road, its rings faint in the daylight, a basket set down at its feet. In the basket is an Eevee, wide awake, and a note in hurried handwriting: \"From the lab. She picked you out of everyone I described. Look after her. G.\" The Eevee climbs out of the basket on her own and sits down beside you, the way the ones on the road sat beside their people.",
+   "choices": [
+    {
+     "label": "Take her with you.",
+     "success": {
+      "text": "She walks under your feet for the first mile, then beside them. The Umbreon watches until you are out of sight, then turns for home, rings brightening as the evening comes on. Somewhere behind you, a researcher is writing down what she does next.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "eevee"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq54-eevee-given",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Gary Oak sent you an Eevee from his lab. She chose you.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send her back with the Umbreon.",
+     "success": {
+      "text": "You crouch and tell her that Gary needs her more, and she seems to understand: she climbs back into the basket. The Umbreon dips its head, takes the handle in its teeth, and carries her home. You hope the next note says she is fine. You suspect it will.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq54-eevee-chooses",
+   "name": "What the Team Needs",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "eevee",
+    "tint": "#1c1a30",
+    "effect": "glint"
+   },
+   "intro": "Night, at camp. Gary's Eevee will not settle. She walks along your sleeping team one by one, sniffing each, and stops at the gaps between them, the places where nobody is. She is not choosing for herself. She is looking at what you are missing. Then she comes and sits down next to you, and waits.",
+   "choices": [
+    {
+     "label": "It needs water.",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "eevee"
+      },
+      {
+       "kind": "partyType",
+       "type": "water",
+       "absent": true
+      }
+     ],
+     "success": {
+      "text": "She goes down to the stream and does not come back for a long time. When she does, she is sleek and blue and finned, and she lies down beside the team in the space nobody was filling. You think of Gary, and the Water Stone in his pocket that he never used.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "eevee",
+        "to": "vaporeon"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "eevee",
+        "amount": 5
+       },
+       {
+        "kind": "moment",
+        "text": "Gary's Eevee chose what your team needed. It became a Vaporeon.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "It needs fire.",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "eevee"
+      },
+      {
+       "kind": "partyType",
+       "type": "fire",
+       "absent": true
+      }
+     ],
+     "success": {
+      "text": "She sits by the embers of the campfire until they flare up around her, and when the sparks settle she is wrapped in a thick ruff of flame-coloured fur. The camp is warm all night for the first time in weeks.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "eevee",
+        "to": "flareon"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "eevee",
+        "amount": 5
+       },
+       {
+        "kind": "moment",
+        "text": "Gary's Eevee chose what your team needed. It became a Flareon.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "It needs lightning.",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "eevee"
+      },
+      {
+       "kind": "partyType",
+       "type": "electric",
+       "absent": true
+      }
+     ],
+     "success": {
+      "text": "A storm passes over in the night, and she runs out into it. You find her at dawn, spiky and crackling and very pleased with herself, standing guard over the team.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "eevee",
+        "to": "jolteon"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "eevee",
+        "amount": 5
+       },
+       {
+        "kind": "moment",
+        "text": "Gary's Eevee chose what your team needed. It became a Jolteon.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it choose for itself.",
+     "success": {
+      "text": "She looks at the team, then at the dark beyond the fire, and she goes and sits facing it, upright, the way the Eevee at the watchman's side did. By the time the moon is high, there are rings on her coat, glowing. Just like his.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "eevee",
+        "to": "umbreon"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "eevee",
+        "amount": 5
+       },
+       {
+        "kind": "moment",
+        "text": "Gary's Eevee watched the dark for your team. It became an Umbreon.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
 }
