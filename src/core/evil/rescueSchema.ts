@@ -40,6 +40,8 @@ export const RescueDataSchema = z.object({
   gruntPools: z.record(z.string(), z.array(z.string()).min(2)),
   tuning: z.object({
     waitMin: z.number().int(), waitSpan: z.number().int(), secondOfferGap: z.number().int(),
+    /** Catalog Overhaul: the Intel scale (0 to 100) per point of the run flag `intel`. */
+    intelPerPoint: z.number().int().min(1).default(10),
     pMin: z.number(), pMax: z.number(), partialBand: z.number(),
     base: z.object({ quiet: z.number(), loud: z.number(), inside: z.number() }),
     preferredBonus: z.number(), beatStep: z.number(), raidStep: z.number(), latePenalty: z.number(), exchangePenalty: z.number(), insiderGoodBonus: z.number(),

@@ -4,6 +4,7 @@
 // Pure and deterministic: its own seeded stream (`second-chance`), so no other roll moves. Off when the run started with 0%.
 
 import type { Content } from '../contentSchema';
+import { secondChanceQuestLine } from '../rivals/questlines';
 import { maxHp } from '../pokemon';
 import { hashSeed, Rng } from '../rng';
 import type { BattleState, RunState, Stages } from '../state';
@@ -47,7 +48,7 @@ export function secondChanceCompanion(content: Content, run: Pick<RunState, 'sto
   const top = Math.max(...run.party.map((m) => m.level), 5);
   if (!rival) return { id: null, name: 'A silhouette', speciesId: null, level: Math.max(5, top - SECOND_CHANCE.levelGap), line: '', silhouette: true };
   const species = (rival.memory?.lastBattle?.team ?? []).find((id) => content.species.has(id)) ?? null;
-  const line = RIVAL_LINES[rival.archetype] ?? RIVAL_LINES.default!;
+  const line = secondChanceQuestLine(content, run, rival.id, roleOf(rival.id) === 0) ?? RIVAL_LINES[rival.archetype] ?? RIVAL_LINES.default!;
   return { id: rival.id, name: rival.name, speciesId: species, level: Math.max(5, top - SECOND_CHANCE.levelGap), line, silhouette: false };
 }
 
