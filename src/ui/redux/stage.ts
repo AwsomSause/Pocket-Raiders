@@ -122,6 +122,9 @@ function ensureHost(game: Phaser.Game): HTMLDivElement {
 }
 
 /** Draws a scene's New UI view over the canvas until the scene shuts down. Call only when `reduxOn()`. */
+/** Where the pointer was at the last hover any view took (shared, so a view opening under a resting pointer does not count either). */
+let overAt = '';
+
 export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
   const root = ensureHost(scene.game);
   const el = document.createElement('div');
@@ -162,7 +165,14 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     if (fn) fn(t.dataset.arg ?? '');
   };
   el.addEventListener('click', (e) => pick(e, 'act', o.acts));
-  el.addEventListener('pointerover', (e) => pick(e, 'over', o.overs));
+  el.addEventListener('pointerover', (e) => {
+    // A redraw puts a new element under a pointer that is resting; only a pointer that moved is a hover, or the
+    // cursor would snap back to the mouse on every key press.
+    const at = `${e.clientX},${e.clientY}`;
+    if (at === overAt) return;
+    overAt = at;
+    pick(e, 'over', o.overs);
+  });
   // A press on the stage must not also reach whatever page element sits under it.
   el.addEventListener('pointerdown', (e) => e.stopPropagation());
 

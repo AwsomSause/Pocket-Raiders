@@ -14,7 +14,7 @@ interface Status { category: string; built?: Record<string, string>; merged?: Re
 const statuses = readdirSync(join(dir, 'status')).filter((f) => f.endsWith('.json')).map((f) => ({ file: f, ...json<Status>(join(dir, 'status', f)) }));
 const eventsDir = join(__dirname, '../../src/data/events');
 const coFiles = readdirSync(eventsDir).filter((f) => f.startsWith('co-')).map((f) => ({ file: f, ...json<{ catalogOverhaul?: string; override?: boolean; remove?: string[]; events?: { id: string }[] }>(join(eventsDir, f)) }));
-const CATEGORIES = ['lead', 'singles', 'families-a', 'families-b', 'families-c', 'places', 'people', 'markets', 'evil-story', 'evil-hoenn-sinnoh-unova', 'evil-kalos-alola-galar-paldea', 'evil-mode', 'rivals', 'legends', 'anime', 'greenneedle', 'kanto-canon', 'new-events'];
+const CATEGORIES = ['lead', 'singles', 'families-a', 'families-b', 'families-c', 'places', 'people', 'markets', 'evil-story', 'evil-hoenn-sinnoh-unova', 'evil-kalos-alola-galar-paldea', 'rivals', 'legends', 'anime', 'greenneedle', 'kanto-canon', 'new-events'];
 
 describe('catalog overhaul: ledger', () => {
   it('lists all 2,821 catalog ids once, each with an owner', () => {

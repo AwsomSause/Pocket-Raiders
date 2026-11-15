@@ -13,7 +13,7 @@
 import { stopArtFor } from '../ui/stopArt';
 import Phaser from 'phaser';
 import { clockLabel, periodOf, PERIOD_LOOK, seasonOf, specialDateToday } from '../core/clock';
-import { eventView, type ChoiceView, type EventResult } from '../core/events';
+import { eventView, type ChoiceView, type EventResult, type TradePick } from '../core/events';
 import { promptById, type Grade } from '../core/interaction/prompt';
 import { runInteractionPrompt } from '../ui/interactionPrompt';
 import { arenaFor, getTheme } from '../core/themes';
@@ -65,7 +65,7 @@ export class EventScene extends Phaser.Scene {
   private leaving = false;
   private outcomeBox: Phaser.GameObjects.Container | null = null;
   private outcomeHint: Phaser.GameObjects.Text | null = null;
-  private picker: { box: Phaser.GameObjects.Container; rows: Phaser.GameObjects.Text[]; picks: { uid: string; label: string }[]; at: number } | null = null;
+  private picker: { box: Phaser.GameObjects.Container; rows: Phaser.GameObjects.Text[]; picks: TradePick[]; at: number } | null = null;
   private result: EventResult | null = null;
   private calm = false;
   private moneyText: Phaser.GameObjects.Text | null = null;
@@ -189,6 +189,13 @@ export class EventScene extends Phaser.Scene {
       this.rxAt = ctx.introSeen ? this.rxPages.length - 1 : 0;
       const star = champion ? monFile(this, champion) : ctx.species ? monFile(this, ctx.species.id) : null;
       const rounds = tv ? tourneyRounds(tv) : null;
+      // A swap shows both sides before the player commits: the Pokémon that goes, and the one that comes back when the trade says so.
+      const tradeCard = (p: TradePick | undefined): { give: { name: string; file: string | null }; get: { name: string; file: string | null } | null } | null => {
+        if (!p || p.gets === undefined) return null;
+        const mine = run.party.find((m) => m.uid === p.uid);
+        const got = p.gets ? content.species.get(p.gets) : undefined;
+        return { give: { name: p.label, file: mine ? monFile(this, mine.speciesId, 'front', mine.shiny) : null }, get: got ? { name: got.name, file: monFile(this, got.id) } : null };
+      };
       const tag = `${view.event.group} · ${view.event.rarity.charAt(0).toUpperCase()}${view.event.rarity.slice(1)}`;
       this.rx = mountRedux(this, {
         render: (c) => {
@@ -214,7 +221,7 @@ export class EventScene extends Phaser.Scene {
             index: this.index,
             money: (r?.run ?? run).money,
             outcome: out,
-            pick: this.picker ? { labels: this.picker.picks.map((x) => x.label), at: this.picker.at } : null,
+            pick: this.picker ? { labels: this.picker.picks.map((x) => x.label), at: this.picker.at, card: tradeCard(this.picker.picks[this.picker.at]) } : null,
             countdown: this.rxClock,
             timer: this.rxClock && view.event.countdown ? this.rxLeft / view.event.countdown : null,
             standing: view.standing ?? null,
@@ -391,12 +398,13 @@ export class EventScene extends Phaser.Scene {
     }
     // A trade with more than one fitting Pokémon: the player picks which one goes.
     const picks = card.view.tradePicks;
-    if (picks && picks.length > 1) this.openPicker(picks);
+    // New UI: a swap always shows its card (both sides) first, even when only one Pokémon fits.
+    if (picks && (picks.length > 1 || (this.rx && picks.length === 1 && picks[0]!.gets !== undefined))) this.openPicker(picks);
     else this.commit(picks?.[0]?.uid);
   }
 
   /** The party Pokémon the partner would take, as a list over the option column. */
-  private openPicker(picks: { uid: string; label: string }[]): void {
+  private openPicker(picks: TradePick[]): void {
     this.phase = 'pick';
     playSfx(this, 'ui.select', 0.5);
     const w = PICK_W;
