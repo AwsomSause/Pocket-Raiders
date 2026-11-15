@@ -65,7 +65,7 @@ export function rosterKit(key: string, baseId: string, who: string) {
   const old = oldOf(baseId);
   const trainer = baseId.replace(/^npc-meet-/, 'npc-');
   const finish = (choices: Json[]): Json[] => withRecruit(choices, `roster-${key}-done`, trainer);
-  const finishAll = (s: Scene): Pick<Json, 'choices' | 'remembers'> => ({
+  const finishAll = (s: Scene): { choices: Json[]; remembers?: Json[] } => ({
     choices: finish(s.choices),
     ...(s.remembers ? { remembers: s.remembers.map((v) => (v.addChoices ? { ...v, addChoices: finish(v.addChoices as Json[]) } : v)) } : {}),
   });
