@@ -24,6 +24,19 @@
   { "key": "kind-total", "for": "Kindness total (STANDARDS.md)", "setBy": "Kindness +1 outcomes" },
   { "key": "kind-helped-stranger", "for": "Kindness Ledger (MEMORY_AND_FORMAT 2.1)", "setBy": "dg-marsh-boardwalk-e" },
   { "key": "rep", "for": "Reputation (families-c)", "setBy": "Reputation +N outcomes" },
-  { "key": "rep-lost", "for": "Reputation (families-c)", "setBy": "Reputation -N outcomes" }
+  { "key": "rep-lost", "for": "Reputation (families-c)", "setBy": "Reputation -N outcomes" },
+  {"key": "sunken-bell", "from": "SF41.1 The Sunken City (the ovc-sunken-bell chain: the bell is taken)", "readBy": "ps-lost-island-c"},
+  {"key": "sign-groudon", "for": "legends (Legendary Signs)", "setBy": "ps-lost-island-c"},
+  {"key": "sign-zacian", "for": "legends (Legendary Signs)", "setBy": "galar-swordbert-shieldbert-truth"},
+  {"key": "sign-zamazenta", "for": "legends (Legendary Signs)", "setBy": "galar-swordbert-shieldbert-truth"},
+  {"key": "evil-ambush", "for": "evil teams (an ambush is owed)", "setBy": "w4-beacon-fire"},
+  {"key": "intel", "for": "shared standard (Intel)", "setBy": "vt-* scenes"},
+  {"key": "legend-clue", "for": "legends (a clue to a Legendary)", "setBy": "clue-strange-move"},
+  {"key": "kind-walked-past", "for": "people (You Walked Past Us)", "setBy": "greedent-famine"},
+  {"key": "ending-hopeful", "for": "the run's ending (mr-final-page)", "setBy": "mr-final-page"},
+  {"key": "ending-honest", "for": "the run's ending (mr-final-page)", "setBy": "mr-final-page"},
+  {"key": "ending-strange", "for": "the run's ending (mr-final-page)", "setBy": "mr-final-page"},
+  {"key": "frontier-symbol", "for": "SF13.6 the Frontier rung", "setBy": "ps-battle-frontier-e"},
+  {"key": "heated-total", "from": "core/drama/events.ts noteHeatedMoment (SF100 heated moments, also the per-region and per-run caps)", "readBy": "lastSecondResolve, newMove, overdriveBreakthrough, midBattleEvolution"}
  ]
 }

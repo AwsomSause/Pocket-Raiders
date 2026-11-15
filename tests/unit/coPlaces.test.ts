@@ -341,4 +341,34 @@ describe('catalog overhaul: heated moments (SF100)', () => {
     run.regionIndex = 4;
     expect(noteHeatedMoment(run, 'midBattleEvolution')).toBe(false);
   });
+
+});
+
+describe('catalog overhaul: Safari Land and the Frontier (SF113, SF114)', () => {
+  it('the warden takes the fee, the gate starts a 30-step pseudo-stage, and bait spends steps and brings the better throw', () => {
+    let run = newRun('safari');
+    run.money = 1000;
+    open(run, 'safari-zone');
+    run = pick(run, 'Enter (500).');
+    expect(run.money).toBe(500);
+    run = pick(run, 'Enter Safari Zone');
+    expect(run.stage!.pseudo?.id).toBe('ps_safari_zone');
+    expect(flagOf(run, 'safari-steps')).toBe(30);
+    run.stage!.current = run.stage!.map.nodes.find((n) => n.column === 1)!.id;
+    open(run, 'ps-safari-zone-a');
+    run = pick(run, 'Throw bait. (5 steps)');
+    expect(flagOf(run, 'safari-steps')).toBe(25);
+    const labels = visibleChoices(content, run, content.events.get('ps-safari-zone-a')!).map((c) => c.choice.label);
+    expect(labels).toContain('Throw a Ball at the feeding herd.');
+    expect(labels).not.toContain('Throw a Ball.');
+  });
+  it('every Frontier round keeps its gate rule and a second run through the bracket fights a level higher', () => {
+    const gate = content.events.get('ps-battle-frontier-gate')!;
+    expect(gate.choices.map((c) => c.label)).toEqual(['Enter Battle Frontier', 'Leave']);
+    const run = newRun('frontier');
+    run.story.flags['ev:frontier-again'] = 1;
+    const vis = visibleChoices(content, run, content.events.get('ps-battle-frontier-a')!);
+    const lv = (vis[0]!.choice.success.battle as { levelBonus: number }).levelBonus;
+    expect(lv).toBe((content.events.get('ps-battle-frontier-a')!.choices[0]!.success.battle as { levelBonus: number }).levelBonus + 1);
+  });
 });
