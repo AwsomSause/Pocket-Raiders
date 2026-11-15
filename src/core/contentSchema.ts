@@ -2795,6 +2795,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** A meter leaning one way: Rage (positive ragePeace) / Peace (negative), Good (positive goodEvil) / Evil (negative). */
   z.object({ kind: z.literal('meter'), key: z.enum(['ragePeace', 'goodEvil']), side: z.enum(['positive', 'negative']), atLeast: z.number().int().min(0) }),
   z.object({ kind: z.literal('item'), id: z.string(), /** Copies needed (default 1). */ count: z.number().int().min(1).optional() }),
+  /** Catalog Overhaul markets: holds at least `count` items in total from `ids` (any Berry, two charms); `label` names them on the locked button. */
+  z.object({ kind: z.literal('holdsAny'), ids: z.array(z.string()).min(1), count: z.number().int().min(1).default(1), label: z.string().min(1) }),
   z.object({ kind: z.literal('partyType'), type: TypeNameSchema, /** True: holds only when NO Pokémon of this type is in the party. */ absent: z.boolean().optional() }),
   /** Ideas W4: the run calendar's season (core/clock.ts seasonOf) is one of these. */
   z.object({ kind: z.literal('season'), in: z.array(z.enum(['Spring', 'Summer', 'Autumn', 'Winter'])).min(1) }),
@@ -3207,12 +3209,14 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
    */
   z.object({
     kind: z.literal('market'),
-    action: z.enum(['comeBack', 'effort', 'prize', 'sell', 'pawn', 'redeem', 'rebate', 'deposit', 'withdraw', 'feed', 'mend', 'advise', 'buyPoint', 'cashPoint', 'service', 'forget', 'relearn', 'xp', 'teachOr', 'stash', 'stolen']),
+    action: z.enum(['comeBack', 'effort', 'prize', 'sell', 'pawn', 'redeem', 'rebate', 'deposit', 'withdraw', 'feed', 'mend', 'advise', 'buyPoint', 'cashPoint', 'service', 'forget', 'relearn', 'xp', 'teachOr', 'stash', 'stolen', 'payItem', 'rent', 'returnRent', 'brew']),
     event: z.string().optional(),
     key: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
     stat: z.enum(['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'highest', 'lowest']).optional(),
     amount: z.number().int().min(0).optional(),
     who: z.enum(['lead', 'party', 'picked']).default('lead'),
+    /** `returnRent`: the player says the rented item was used up (pays its value). */
+    used: z.boolean().optional(),
     /** `service`: what is done for the Pokémon; `types`: move types tried in order for `learnMove`; `move`: the move `teachOr` teaches. */
     what: z.enum(['abilitySwap', 'natureNudge', 'eggMove', 'hyper', 'learnMove']).optional(),
     types: z.array(TypeNameSchema).min(1).optional(),

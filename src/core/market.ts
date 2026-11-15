@@ -204,6 +204,79 @@ function stolen(content: Content, run: RunState, e: MarketEffect): string {
   return `Your ${nameOf(content, best.id)} is gone`;
 }
 
+/** Hands over `amount` items (default 1) from `only`, in list order; `holdsAny` on the choice makes sure they are there. */
+function payItem(content: Content, run: RunState, e: MarketEffect): string {
+  let left = e.amount ?? 1;
+  const given: string[] = [];
+  for (const id of e.only ?? []) {
+    while (left > 0 && (run.inventory[id] ?? 0) > 0) {
+      take(run, id, 1);
+      given.push(nameOf(content, id));
+      left--;
+    }
+  }
+  return given.length > 0 ? `Gave ${given.join(' and ')}` : '';
+}
+
+const rentPrefix = (key: string) => `market:rent:${key}:`;
+/** The item out on rent under `key`, if any. */
+export function rented(run: RunState, key: string): string | null {
+  const hit = Object.keys(run.itemCounters ?? {}).find((k) => k.startsWith(rentPrefix(key)));
+  return hit ? hit.slice(rentPrefix(key).length) : null;
+}
+
+/** A held item from `only` (one seeded draw) goes out on rent under `key`. */
+function rent(content: Content, run: RunState, e: MarketEffect, rng: Rng): string {
+  const key = e.key ?? 'rental';
+  const pool = e.only ?? [];
+  if (pool.length === 0 || rented(run, key)) return '';
+  const id = rng.pick([...pool]);
+  addItem(run.inventory, id, 1);
+  counters(run)[`${rentPrefix(key)}${id}`] = 1;
+  setFlag(run, `rent-${key}`, 1);
+  return `Rented: ${nameOf(content, id)}`;
+}
+
+/** The rental goes back: the item itself if you still hold it and say so, else its fair value (never more than you have). */
+function returnRent(content: Content, run: RunState, e: MarketEffect): string {
+  const key = e.key ?? 'rental';
+  const id = rented(run, key);
+  if (!id) return '';
+  delete counters(run)[`${rentPrefix(key)}${id}`];
+  setFlag(run, `rent-${key}`, 0);
+  if (!e.used && (run.inventory[id] ?? 0) > 0) {
+    take(run, id, 1);
+    return `Returned ${nameOf(content, id)}`;
+  }
+  const value = Math.min(run.money, itemValue(content, id));
+  run.money -= value;
+  return `Paid ₽${value} for the ${nameOf(content, id)}`;
+}
+
+/** The Apothecary's test potion, the odds printed on the bottle: a quarter each, a stat's effort up, one down, a nap (half HP back), nothing. */
+function brew(content: Content, run: RunState, e: MarketEffect, rng: Rng, uid?: string): string {
+  const m = targets(run, e, uid)[0];
+  if (!m) return '';
+  const roll = rng.int(0, 3);
+  const stat = STATS[rng.int(0, STATS.length - 1)]!;
+  const cap = content.balance.vitaminMaxStacks;
+  if (roll === 0) {
+    const before = m.vitamins[stat] ?? 0;
+    m.vitamins[stat] = Math.min(cap, before + 1);
+    return before >= cap ? `${STAT_NAMES[stat]} up, but ${monName(content, m)} is already at its limit` : `${monName(content, m)}: ${STAT_NAMES[stat]} effort +1`;
+  }
+  if (roll === 1) {
+    const before = m.vitamins[stat] ?? 0;
+    m.vitamins[stat] = Math.max(0, before - 1);
+    return before === 0 ? `${STAT_NAMES[stat]} down, but there was nothing to lose` : `${monName(content, m)}: ${STAT_NAMES[stat]} effort −1`;
+  }
+  if (roll === 2) {
+    m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) / 2));
+    return `${monName(content, m)} naps and wakes with half its HP back`;
+  }
+  return 'Nothing happens at all';
+}
+
 function redeem(content: Content, run: RunState, e: MarketEffect): string {
   const key = e.key ?? 'pawn';
   const held = pawned(run, key);
@@ -281,6 +354,10 @@ function advise(content: Content, run: RunState, e: MarketEffect, uid?: string):
     const sp = content.species.get(m.speciesId);
     if (!sp) continue;
     const name = monName(content, m);
+    if (e.key === 'best') {
+      const best = sellable(content, run)[0];
+      return best ? `Your stake would be your ${nameOf(content, best.id)}` : 'You have nothing to stake';
+    }
     if (e.key === 'abilities') {
       const names = sp.abilities.normal.map((id) => content.abilities.get(id)?.name ?? id);
       lines.push(names.length < 2 ? `${name} has only ${names[0] ?? 'one ability'}: nothing to swap` : `${name}: ${names.join(' or ')}`);
@@ -405,6 +482,14 @@ export function applyMarket(content: Content, run: RunState, e: MarketEffect, rn
       return pawn(content, run, e);
     case 'stash':
       return stash(run, e);
+    case 'payItem':
+      return payItem(content, run, e);
+    case 'rent':
+      return rent(content, run, e, rng);
+    case 'returnRent':
+      return returnRent(content, run, e);
+    case 'brew':
+      return brew(content, run, e, rng, uid);
     case 'stolen':
       return stolen(content, run, e);
     case 'redeem':
@@ -462,6 +547,14 @@ export function marketWords(e: MarketEffect): string {
       return 'pawn your most valuable item';
     case 'stash':
       return '';
+    case 'payItem':
+      return `give ${(e.amount ?? 1) > 1 ? `${e.amount} items` : 'an item'}`;
+    case 'rent':
+      return 'a rented held item';
+    case 'returnRent':
+      return e.used ? 'pay for the rented item' : 'return the rented item';
+    case 'brew':
+      return 'a test potion (printed odds)';
     case 'stolen':
       return 'your most valuable item is taken';
     case 'redeem':

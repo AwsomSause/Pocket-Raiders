@@ -129,6 +129,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
     }
     case 'item':
       return (run.inventory[c.id] ?? 0) >= (c.count ?? 1) || (run.passives?.[c.id] ?? 0) > 0;
+    case 'holdsAny':
+      return c.ids.reduce((n, id) => n + (run.inventory[id] ?? 0), 0) >= c.count;
     case 'emotion':
       return run.party.some((m) => emotionOf(content, run, m.uid)?.id === c.id);
     case 'memorial':
@@ -357,6 +359,8 @@ export function conditionText(content: Content, c: EventCondition): string {
     }
     case 'item':
       return `Needs ${c.count && c.count > 1 ? `${c.count} × ` : 'a '}${content.catalog.get(c.id)?.name ?? content.items.get(c.id)?.name ?? c.id}`;
+    case 'holdsAny':
+      return `Needs ${c.label}`;
     case 'dex':
       return `Needs ${c.atLeast} species ${c.set} this run`;
     case 'storyRaid':
