@@ -30,6 +30,9 @@ Kice's ask (2026-11-14): rebuild every event, the Evil Team documents, the rival
 `built`: catalog id, rebuilt in a co file and re-read against the doc (value: the date checked). `merged`: old id to the live event that now holds it. `rule`: old id to the system that covers it. `extra`: things from your docs that are not catalog ids (Greenneedle `gn.*`, new events `NE*`, canon spaces), each pointing at the event id that plays it.
 `npm run co:status` prints the count per category. Gate: `tests/unit/catalogOverhaul.test.ts`.
 
+## Gotcha
+After adding a new `co-*.json` file, tests may still see the old event list. Run `rm -rf node_modules/.vitest-cache node_modules/.vite` once and re-run.
+
 ## Patterns
 - Remember something: `flag('key')` adds 1 to a run flag; `flagIs('key')` or `{ kind: 'flag', key, atLeast, atMost }` reads it. Pack flag `kind.helped_stranger` is key `kind-helped-stranger`.
 - Count visits ("a perk on the third visit"): add `flag('market-<seller>-visits')` to every visit's outcomes and give the event a `remembers` variant with `when: [{ kind: 'flag', key: 'market-<seller>-visits', atLeast: 2 }]`.
