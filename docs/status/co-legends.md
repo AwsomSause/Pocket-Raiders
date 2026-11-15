@@ -58,7 +58,21 @@ Catalog ids: `delta-clue-nest/-scales/-song` and `delta-research-battle` rebuilt
 
 Tests: `tests/unit/coLegendsDelta.test.ts`.
 
+## Z Anomalies (built 2026-11-15, `tools/events/co/legends-4.ts` -> `co-legends-4.json`, 59 events)
+Catalog ids rebuilt: the 18 `island-trial-*` (Z1), `z-sigil-ruin`, `z-sigil-pool`, `z-form-trial` (Z2); `z-move-trial` is a rule (the calendar week). Z3, Z4, Z6, Z7 under `extra`. Z5 (Darkrai) waits for the Mythicals.
+
+| Code | Entry | Built | Limits |
+|---|---|---|---|
+| Z1 | island-trial-<type> | the first Trial gives the Z-Ring; Start = Totem (Alpha-sized) fight; Ask = the Totem's reason, then a calm fight (crystal + the item it guarded); Grand Trial after three (Kahuna Olivia), no battle if all three calmed; crystal of the starter's type; Swarm Totem lets you in at 3 calmed Alphas | puzzle stage is one line of text; captains for Electric (Calder) and Psychic (Lune) chosen by me since the pack names 14 originals for 15 slots; "remembers a past run" cut (same-run rule) |
+| Z2 | z-sigil-ruin | pairs: ruin, then pool a stage later, then the Z-form test (catch it to keep it); keep the sigils = `sigils-held`; Oriel's rubbing on the third pair | "re-shape one of yours" is the sigils spent in Z3/Z4/Z6 for a Z-Mega stone; no general re-shape |
+| Z3 | co-z3-cave | spring / Fire-type / stay (Never-Melt Ice); Fire starter = Z-Haunter at once; sigils = Gengarite Z | none |
+| Z4 | co-z4-night-1 (3 nights) | follow / grab / leave, the grave, Straight Spoon (held, Psychic +10%), three bent spoons; sigils = Alakazite Z | none |
+| Z6 | co-z6-dojo | three friendly spars across the region, Doran or the sigils (Snorlaxite Z), Munchlax; leaving = an Alpha Snorlax a region later | Road Roster remembers not built |
+| Z7 | co-z7-hill | needs 3 calmed Alphas at night; Hunt (calm a fleeing Furret), Hold (survive 5 turns, 7 if a Noble was beaten), Howl (a sound move); bow at 6 calmed; fed Poochyena skips the hunt; 3 rounds = Poochyena with **Pack Call** (new ability, engine) | "next region's Alphas calm/hostile" is a flag only (`alphayena-bowed`/`-prey`) |
+
+Tests: `tests/unit/coLegendsZ.test.ts` (incl. Pack Call). Old-seed fingerprints: legends items added to `LATE_ITEMS` in story.test.ts (no re-pin).
+
 ## Where I stopped (paused 2026-11-15, Kice: five threads at a time)
-- Resumed 2026-11-15 (merged ui-mockups; shared pieces are in the base now). Alphas, Megas M1-M6 and Deltas D1-D8 done; next Z1-Z7.
+- Resumed 2026-11-15 (merged ui-mockups; shared pieces are in the base now). Alphas, Megas, Deltas and Z (not Z5) done; next L2-L15, MY1-MY22 (+Z5), U1-U9.
 - Still to build: M7 (rivals slot), D1-D8, Z1-Z7, L2-L15, MY1-MY22, U1-U9, the 382 RULE ids (ladder Trial/Recognition/Presence), placement/flags/status files, update fragment, PR.
 - Run the full `npm run check` before opening the PR.

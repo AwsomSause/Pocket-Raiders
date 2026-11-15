@@ -583,6 +583,7 @@ export const freshExtra = () => ({
   ionDeluge: false,
   wonderRoom: 0,
   brokenFace: [] as string[],
+  packCall: null as 'player' | 'enemy' | null,
   variants: {} as Variants,
   variantTimed: [] as TimedStage[],
   traits: {} as Traits,
@@ -828,6 +829,8 @@ export const BattleStateSchema = z.object({
     /** Galar big-battle moments already used (evolve-and-survive per Pokémon, the thread, the cheat) and ones pending this hit (galarMoments.ts). */
     galar: z.array(z.string()).default([]),
     delta: z.boolean().default(false),
+    /** Pack Call (catalog overhaul legends, Z7): the side whose next ally to switch in on turn 1 gains +1 Attack. */
+    packCall: z.enum(['player', 'enemy']).nullable().default(null),
     mimic: z.record(z.string(), z.object({ kind: z.enum(['mimic', 'transform']), slot: z.number().int(), moves: z.array(z.object({ id: z.string(), pp: z.number().int() })) })).default({}),
     fairyLock: z.number().int().default(-9),
     passSub: z.object({ player: z.number().int().default(0), enemy: z.number().int().default(0) }).default({ player: 0, enemy: 0 }),

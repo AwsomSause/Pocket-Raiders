@@ -2275,8 +2275,20 @@ function syncForms(ctx: BattleContext, c: Combatant, events: BattleEvent[], endO
 
 function entryAbility(ctx: BattleContext, c: Combatant, other: Combatant, events: BattleEvent[]): void {
   const ability = abilityIn(ctx, c);
+  // Pack Call (catalog overhaul legends, Z7): the first ally to switch in on turn 1 after a Pack Call Pokémon gains +1 Attack.
+  if (ctx.battle.extra.packCall === c.side && ability !== 'pack-call') {
+    ctx.battle.extra.packCall = null;
+    if (ctx.battle.turn <= 1) applyStageChange(ctx, c, 'atk', 1, events);
+  }
   if (!ability) return;
   syncForms(ctx, c, events, false);
+  if (ability === 'pack-call') {
+    if (ctx.battle.turn <= 1) {
+      announce(c, ability, events);
+      ctx.battle.extra.packCall = c.side;
+    }
+    return;
+  }
   if (ability === 'hush') {
     // Hush (catalog overhaul, the Hushed One): the air goes silent. Sound moves fail for three turns on both sides (the Throat Chop block).
     announce(c, ability, events);

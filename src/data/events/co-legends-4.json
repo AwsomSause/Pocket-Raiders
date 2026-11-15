@@ -1,0 +1,7108 @@
+{
+ "catalogOverhaul": "legends",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "island-trial-normal",
+   "name": "Island Trial: Normal",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "types": [
+    "normal"
+   ],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "requires": [],
+   "remembers": [
+    {
+     "id": "first",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trials-met",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "A hollow tree on a beach. Captain Yuri leans against it. You look down: there is a Z-Ring on your wrist. There was not a moment ago.\n\nCaptain Yuri: \"You carry a Z-Ring. So you're doing the Trials.\"\nCaptain Yuri: \"Three this run. Pass all three and the Kahuna will see you.\"\nCaptain Yuri: \"Each of our Totems has a reason it's big. Find out why, and you'll know how to win.\""
+    }
+   ],
+   "intro": "Captain Yuri waits at a grassy shrine.\n\nCaptain Yuri: \"Here's the puzzle. Then the Totem. You can quit anytime. No shame.\"",
+   "choices": [
+    {
+     "label": "Start the Trial.",
+     "success": {
+      "text": "The puzzle is short and strange, and at the end of it the Totem Gumshoos rises, huge and glowing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-normal-started",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "gumshoos"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "normalium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-normal",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Ask about the Totem.",
+     "success": {
+      "text": "Captain Yuri: \"It is big because it is hungry. Somebody fed it once, for a whole summer, and then left. It has been waiting for them at the shrine ever since.\"\n\nKnowing it, you might not have to fight it at all.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-normal-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z1-calm-normal"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come back later.",
+     "success": {
+      "text": "Captain Yuri: \"It'll be here till the region ends.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-fighting",
+   "name": "Island Trial: Fighting",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "types": [
+    "fighting"
+   ],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "requires": [],
+   "remembers": [
+    {
+     "id": "first",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trials-met",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "A hollow tree on a beach. Captain Gaku leans against it. You look down: there is a Z-Ring on your wrist. There was not a moment ago.\n\nCaptain Gaku: \"You carry a Z-Ring. So you're doing the Trials.\"\nCaptain Gaku: \"Three this run. Pass all three and the Kahuna will see you.\"\nCaptain Gaku: \"Each of our Totems has a reason it's big. Find out why, and you'll know how to win.\""
+    }
+   ],
+   "intro": "Captain Gaku waits at a dojo of stone.\n\nCaptain Gaku: \"Here's the puzzle. Then the Totem. You can quit anytime. No shame.\"",
+   "choices": [
+    {
+     "label": "Start the Trial.",
+     "success": {
+      "text": "The puzzle is short and strange, and at the end of it the Totem Hariyama rises, huge and glowing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-fighting-started",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "hariyama"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "fightinium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-fighting",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Ask about the Totem.",
+     "success": {
+      "text": "Captain Gaku: \"It is big because its trainer told it to guard the dojo, and then the dojo closed. It has been guarding nothing for ten years.\"\n\nKnowing it, you might not have to fight it at all.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-fighting-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z1-calm-fighting"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come back later.",
+     "success": {
+      "text": "Captain Gaku: \"It'll be here till the region ends.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-flying",
+   "name": "Island Trial: Flying",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "types": [
+    "flying"
+   ],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "requires": [],
+   "remembers": [
+    {
+     "id": "first",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trials-met",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "A hollow tree on a beach. Captain Sora leans against it. You look down: there is a Z-Ring on your wrist. There was not a moment ago.\n\nCaptain Sora: \"You carry a Z-Ring. So you're doing the Trials.\"\nCaptain Sora: \"Three this run. Pass all three and the Kahuna will see you.\"\nCaptain Sora: \"Each of our Totems has a reason it's big. Find out why, and you'll know how to win.\""
+    }
+   ],
+   "intro": "Captain Sora waits at a cliff above the clouds.\n\nCaptain Sora: \"Here's the puzzle. Then the Totem. You can quit anytime. No shame.\"",
+   "choices": [
+    {
+     "label": "Start the Trial.",
+     "success": {
+      "text": "The puzzle is short and strange, and at the end of it the Totem Toucannon rises, huge and glowing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-flying-started",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "toucannon"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "flyinium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-flying",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Ask about the Totem.",
+     "success": {
+      "text": "Captain Sora: \"It is big because its nest fell. It grew to be big enough to catch the next one.\"\n\nKnowing it, you might not have to fight it at all.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-flying-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z1-calm-flying"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come back later.",
+     "success": {
+      "text": "Captain Sora: \"It'll be here till the region ends.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-poison",
+   "name": "Island Trial: Poison",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "types": [
+    "poison"
+   ],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "requires": [],
+   "remembers": [
+    {
+     "id": "first",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trials-met",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "A hollow tree on a beach. Captain Mire leans against it. You look down: there is a Z-Ring on your wrist. There was not a moment ago.\n\nCaptain Mire: \"You carry a Z-Ring. So you're doing the Trials.\"\nCaptain Mire: \"Three this run. Pass all three and the Kahuna will see you.\"\nCaptain Mire: \"Each of our Totems has a reason it's big. Find out why, and you'll know how to win.\""
+    }
+   ],
+   "intro": "Captain Mire waits at a swamp of green mist.\n\nCaptain Mire: \"Here's the puzzle. Then the Totem. You can quit anytime. No shame.\"",
+   "choices": [
+    {
+     "label": "Start the Trial.",
+     "success": {
+      "text": "The puzzle is short and strange, and at the end of it the Totem Salazzle rises, huge and glowing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-poison-started",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "salazzle"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "poisonium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-poison",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Ask about the Totem.",
+     "success": {
+      "text": "Captain Mire: \"It is big because the swamp was drained once, and it was the only one left to fill it back with its own mist.\"\n\nKnowing it, you might not have to fight it at all.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-poison-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z1-calm-poison"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come back later.",
+     "success": {
+      "text": "Captain Mire: \"It'll be here till the region ends.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-ground",
+   "name": "Island Trial: Ground",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "types": [
+    "ground"
+   ],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "requires": [],
+   "remembers": [
+    {
+     "id": "first",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trials-met",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "A hollow tree on a beach. Captain Dune leans against it. You look down: there is a Z-Ring on your wrist. There was not a moment ago.\n\nCaptain Dune: \"You carry a Z-Ring. So you're doing the Trials.\"\nCaptain Dune: \"Three this run. Pass all three and the Kahuna will see you.\"\nCaptain Dune: \"Each of our Totems has a reason it's big. Find out why, and you'll know how to win.\""
+    }
+   ],
+   "intro": "Captain Dune waits at a canyon of red dust.\n\nCaptain Dune: \"Here's the puzzle. Then the Totem. You can quit anytime. No shame.\"",
+   "choices": [
+    {
+     "label": "Start the Trial.",
+     "success": {
+      "text": "The puzzle is short and strange, and at the end of it the Totem Mudsdale rises, huge and glowing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-ground-started",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "mudsdale"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "groundium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-ground",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Ask about the Totem.",
+     "success": {
+      "text": "Captain Dune: \"It is big because it carried every stone out of a rockslide that buried its herd. It is still carrying them, in its head.\"\n\nKnowing it, you might not have to fight it at all.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-ground-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z1-calm-ground"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come back later.",
+     "success": {
+      "text": "Captain Dune: \"It'll be here till the region ends.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-rock",
+   "name": "Island Trial: Rock",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "types": [
+    "rock"
+   ],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "requires": [],
+   "remembers": [
+    {
+     "id": "first",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trials-met",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "A hollow tree on a beach. Captain Flint leans against it. You look down: there is a Z-Ring on your wrist. There was not a moment ago.\n\nCaptain Flint: \"You carry a Z-Ring. So you're doing the Trials.\"\nCaptain Flint: \"Three this run. Pass all three and the Kahuna will see you.\"\nCaptain Flint: \"Each of our Totems has a reason it's big. Find out why, and you'll know how to win.\""
+    }
+   ],
+   "intro": "Captain Flint waits at a quarry of glittering stone, where Kahuna Olivia sits on a boulder watching.\n\nCaptain Flint: \"Here's the puzzle. Then the Totem. You can quit anytime. No shame.\"",
+   "choices": [
+    {
+     "label": "Start the Trial.",
+     "success": {
+      "text": "The puzzle is short and strange, and at the end of it the Totem Lycanroc rises, huge and glowing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-rock-started",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "lycanroc"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "rockium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-rock",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Ask about the Totem.",
+     "success": {
+      "text": "Captain Flint: \"It is big because the quarry blasts at sunrise, every day, and it howls back at them, every day, and it has never once lost.\"\n\nKnowing it, you might not have to fight it at all.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-rock-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z1-calm-rock"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come back later.",
+     "success": {
+      "text": "Captain Flint: \"It'll be here till the region ends.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-bug",
+   "name": "Island Trial: Bug",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "types": [
+    "bug"
+   ],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "requires": [],
+   "remembers": [
+    {
+     "id": "first",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trials-met",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "A hollow tree on a beach. Captain Fern leans against it. You look down: there is a Z-Ring on your wrist. There was not a moment ago.\n\nCaptain Fern: \"You carry a Z-Ring. So you're doing the Trials.\"\nCaptain Fern: \"Three this run. Pass all three and the Kahuna will see you.\"\nCaptain Fern: \"Each of our Totems has a reason it's big. Find out why, and you'll know how to win.\""
+    },
+    {
+     "id": "alphas-know",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "calmed-alpha",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Swarm Totem lifts its head and smells the Alphas on you. It lowers its jaws and lets you in.",
+     "addChoices": [
+      {
+       "label": "Walk into the hive.",
+       "success": {
+        "text": "It does not fight. It shows you the robbed hive, and the empty cells, and then it gives you the crystal it was guarding.",
+        "effects": [
+         {
+          "kind": "item",
+          "id": "buginium-z",
+          "count": 1
+         },
+         {
+          "kind": "item",
+          "id": "silver-powder",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "trials-passed",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "trials-calmed",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "trial-bug",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "trials-met",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "intro": "Captain Fern waits at a hollow tree alive with hum.\n\nCaptain Fern: \"Here's the puzzle. Then the Totem. You can quit anytime. No shame.\"",
+   "choices": [
+    {
+     "label": "Start the Trial.",
+     "success": {
+      "text": "The puzzle is short and strange, and at the end of it the Totem Vikavolt rises, huge and glowing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-bug-started",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "vikavolt"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "buginium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-bug",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Ask about the Totem.",
+     "success": {
+      "text": "Captain Fern: \"The Swarm Totem is an Alpha Vikavolt guarding a hive that was robbed. It thinks you came back for the rest.\"\n\nKnowing it, you might not have to fight it at all.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-bug-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z1-calm-bug"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come back later.",
+     "success": {
+      "text": "Captain Fern: \"It'll be here till the region ends.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-ghost",
+   "name": "Island Trial: Ghost",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "types": [
+    "ghost"
+   ],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "requires": [],
+   "remembers": [
+    {
+     "id": "first",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trials-met",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "A hollow tree on a beach. Captain Hollow leans against it. You look down: there is a Z-Ring on your wrist. There was not a moment ago.\n\nCaptain Hollow: \"You carry a Z-Ring. So you're doing the Trials.\"\nCaptain Hollow: \"Three this run. Pass all three and the Kahuna will see you.\"\nCaptain Hollow: \"Each of our Totems has a reason it's big. Find out why, and you'll know how to win.\""
+    }
+   ],
+   "intro": "Captain Hollow waits at a lantern-lit graveyard.\n\nCaptain Hollow: \"Here's the puzzle. Then the Totem. You can quit anytime. No shame.\"",
+   "choices": [
+    {
+     "label": "Start the Trial.",
+     "success": {
+      "text": "The puzzle is short and strange, and at the end of it the Totem Mimikyu rises, huge and glowing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-ghost-started",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "mimikyu"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "ghostium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-ghost",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Ask about the Totem.",
+     "success": {
+      "text": "Captain Hollow: \"It is big because it wanted to be loved, and it made its costume bigger and bigger so somebody would notice.\"\n\nKnowing it, you might not have to fight it at all.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-ghost-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z1-calm-ghost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come back later.",
+     "success": {
+      "text": "Captain Hollow: \"It'll be here till the region ends.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-steel",
+   "name": "Island Trial: Steel",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "types": [
+    "steel"
+   ],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "requires": [],
+   "remembers": [
+    {
+     "id": "first",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trials-met",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "A hollow tree on a beach. Captain Anvil leans against it. You look down: there is a Z-Ring on your wrist. There was not a moment ago.\n\nCaptain Anvil: \"You carry a Z-Ring. So you're doing the Trials.\"\nCaptain Anvil: \"Three this run. Pass all three and the Kahuna will see you.\"\nCaptain Anvil: \"Each of our Totems has a reason it's big. Find out why, and you'll know how to win.\""
+    }
+   ],
+   "intro": "Captain Anvil waits at a forge under the hill.\n\nCaptain Anvil: \"Here's the puzzle. Then the Totem. You can quit anytime. No shame.\"",
+   "choices": [
+    {
+     "label": "Start the Trial.",
+     "success": {
+      "text": "The puzzle is short and strange, and at the end of it the Totem Bronzong rises, huge and glowing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-steel-started",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "bronzong"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "steelium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-steel",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Ask about the Totem.",
+     "success": {
+      "text": "Captain Anvil: \"It is big because it was a bell, once, in a town that is gone, and it is still trying to ring loud enough for someone to hear.\"\n\nKnowing it, you might not have to fight it at all.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-steel-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z1-calm-steel"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come back later.",
+     "success": {
+      "text": "Captain Anvil: \"It'll be here till the region ends.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-fire",
+   "name": "Island Trial: Fire",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "types": [
+    "fire"
+   ],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "requires": [],
+   "remembers": [
+    {
+     "id": "first",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trials-met",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "A hollow tree on a beach. Captain Kiawe leans against it. You look down: there is a Z-Ring on your wrist. There was not a moment ago.\n\nCaptain Kiawe: \"You carry a Z-Ring. So you're doing the Trials.\"\nCaptain Kiawe: \"Three this run. Pass all three and the Kahuna will see you.\"\nCaptain Kiawe: \"Each of our Totems has a reason it's big. Find out why, and you'll know how to win.\""
+    }
+   ],
+   "intro": "Captain Kiawe waits at a caldera of embers.\n\nCaptain Kiawe: \"Here's the puzzle. Then the Totem. You can quit anytime. No shame.\"",
+   "choices": [
+    {
+     "label": "Start the Trial.",
+     "success": {
+      "text": "The puzzle is short and strange, and at the end of it the Totem Marowak rises, huge and glowing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-fire-started",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "marowak-alola"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "firium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-fire",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Ask about the Totem.",
+     "success": {
+      "text": "Captain Kiawe: \"It is big because it dances the fire dance for its mother, every night, the way she taught it. The flames have only got bigger.\"\n\nKnowing it, you might not have to fight it at all.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-fire-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z1-calm-fire"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come back later.",
+     "success": {
+      "text": "Captain Kiawe: \"It'll be here till the region ends.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-water",
+   "name": "Island Trial: Water",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "types": [
+    "water"
+   ],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "requires": [],
+   "remembers": [
+    {
+     "id": "first",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trials-met",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "A hollow tree on a beach. Captain Lana leans against it. You look down: there is a Z-Ring on your wrist. There was not a moment ago.\n\nCaptain Lana: \"You carry a Z-Ring. So you're doing the Trials.\"\nCaptain Lana: \"Three this run. Pass all three and the Kahuna will see you.\"\nCaptain Lana: \"Each of our Totems has a reason it's big. Find out why, and you'll know how to win.\""
+    }
+   ],
+   "intro": "Captain Lana waits at a lagoon of clear tide.\n\nCaptain Lana: \"Here's the puzzle. Then the Totem. You can quit anytime. No shame.\"",
+   "choices": [
+    {
+     "label": "Start the Trial.",
+     "success": {
+      "text": "The puzzle is short and strange, and at the end of it the Totem Araquanid rises, huge and glowing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-water-started",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "araquanid"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "waterium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-water",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Ask about the Totem.",
+     "success": {
+      "text": "Captain Lana: \"It is big because the lagoon is its bubble. Every fish here lives inside it. It will not let anything pop it.\"\n\nKnowing it, you might not have to fight it at all.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-water-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z1-calm-water"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come back later.",
+     "success": {
+      "text": "Captain Lana: \"It'll be here till the region ends.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-grass",
+   "name": "Island Trial: Grass",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "types": [
+    "grass"
+   ],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "requires": [],
+   "remembers": [
+    {
+     "id": "first",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trials-met",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "A hollow tree on a beach. Captain Mallow leans against it. You look down: there is a Z-Ring on your wrist. There was not a moment ago.\n\nCaptain Mallow: \"You carry a Z-Ring. So you're doing the Trials.\"\nCaptain Mallow: \"Three this run. Pass all three and the Kahuna will see you.\"\nCaptain Mallow: \"Each of our Totems has a reason it's big. Find out why, and you'll know how to win.\""
+    }
+   ],
+   "intro": "Captain Mallow waits at a jungle clearing.\n\nCaptain Mallow: \"Here's the puzzle. Then the Totem. You can quit anytime. No shame.\"",
+   "choices": [
+    {
+     "label": "Start the Trial.",
+     "success": {
+      "text": "The puzzle is short and strange, and at the end of it the Totem Lurantis rises, huge and glowing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-grass-started",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "lurantis"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "grassium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-grass",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Ask about the Totem.",
+     "success": {
+      "text": "Captain Mallow: \"It is big because it is pretending to be a flower so the hungry ones eat it instead of the real flowers. It has been pretending a long time.\"\n\nKnowing it, you might not have to fight it at all.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-grass-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z1-calm-grass"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come back later.",
+     "success": {
+      "text": "Captain Mallow: \"It'll be here till the region ends.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-electric",
+   "name": "Island Trial: Electric",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "types": [
+    "electric"
+   ],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "requires": [],
+   "remembers": [
+    {
+     "id": "first",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trials-met",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "A hollow tree on a beach. Captain Calder leans against it. You look down: there is a Z-Ring on your wrist. There was not a moment ago.\n\nCaptain Calder: \"You carry a Z-Ring. So you're doing the Trials.\"\nCaptain Calder: \"Three this run. Pass all three and the Kahuna will see you.\"\nCaptain Calder: \"Each of our Totems has a reason it's big. Find out why, and you'll know how to win.\""
+    }
+   ],
+   "intro": "Captain Calder waits at a power plant humming with sparks.\n\nCaptain Calder: \"Here's the puzzle. Then the Totem. You can quit anytime. No shame.\"",
+   "choices": [
+    {
+     "label": "Start the Trial.",
+     "success": {
+      "text": "The puzzle is short and strange, and at the end of it the Totem Togedemaru rises, huge and glowing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-electric-started",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "togedemaru"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "electrium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-electric",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Ask about the Totem.",
+     "success": {
+      "text": "Captain Calder: \"It is big because it has been soaking up the plant's spare current to keep the lights on in the village below. Nobody asked it to.\"\n\nKnowing it, you might not have to fight it at all.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-electric-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z1-calm-electric"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come back later.",
+     "success": {
+      "text": "Captain Calder: \"It'll be here till the region ends.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-psychic",
+   "name": "Island Trial: Psychic",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "types": [
+    "psychic"
+   ],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "requires": [],
+   "remembers": [
+    {
+     "id": "first",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trials-met",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "A hollow tree on a beach. Captain Lune leans against it. You look down: there is a Z-Ring on your wrist. There was not a moment ago.\n\nCaptain Lune: \"You carry a Z-Ring. So you're doing the Trials.\"\nCaptain Lune: \"Three this run. Pass all three and the Kahuna will see you.\"\nCaptain Lune: \"Each of our Totems has a reason it's big. Find out why, and you'll know how to win.\""
+    }
+   ],
+   "intro": "Captain Lune waits at a moonlit observatory.\n\nCaptain Lune: \"Here's the puzzle. Then the Totem. You can quit anytime. No shame.\"",
+   "choices": [
+    {
+     "label": "Start the Trial.",
+     "success": {
+      "text": "The puzzle is short and strange, and at the end of it the Totem Gothitelle rises, huge and glowing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-psychic-started",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "gothitelle"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "psychium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-psychic",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Ask about the Totem.",
+     "success": {
+      "text": "Captain Lune: \"It is big because it reads the stars for the old astronomer who can't see them any more, and the stars are a heavy thing to carry.\"\n\nKnowing it, you might not have to fight it at all.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-psychic-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z1-calm-psychic"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come back later.",
+     "success": {
+      "text": "Captain Lune: \"It'll be here till the region ends.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-ice",
+   "name": "Island Trial: Ice",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "types": [
+    "ice"
+   ],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "requires": [],
+   "remembers": [
+    {
+     "id": "first",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trials-met",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "A hollow tree on a beach. Captain Frost leans against it. You look down: there is a Z-Ring on your wrist. There was not a moment ago.\n\nCaptain Frost: \"You carry a Z-Ring. So you're doing the Trials.\"\nCaptain Frost: \"Three this run. Pass all three and the Kahuna will see you.\"\nCaptain Frost: \"Each of our Totems has a reason it's big. Find out why, and you'll know how to win.\""
+    }
+   ],
+   "intro": "Captain Frost waits at a glacier cave.\n\nCaptain Frost: \"Here's the puzzle. Then the Totem. You can quit anytime. No shame.\"",
+   "choices": [
+    {
+     "label": "Start the Trial.",
+     "success": {
+      "text": "The puzzle is short and strange, and at the end of it the Totem Crabominable rises, huge and glowing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-ice-started",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "crabominable"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "icium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-ice",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Ask about the Totem.",
+     "success": {
+      "text": "Captain Frost: \"It is big because it climbed the mountain to punch the snow, and the snow did not stop, so it did not stop either.\"\n\nKnowing it, you might not have to fight it at all.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-ice-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z1-calm-ice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come back later.",
+     "success": {
+      "text": "Captain Frost: \"It'll be here till the region ends.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-dragon",
+   "name": "Island Trial: Dragon",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "types": [
+    "dragon"
+   ],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "requires": [],
+   "remembers": [
+    {
+     "id": "first",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trials-met",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "A hollow tree on a beach. Captain Drake leans against it. You look down: there is a Z-Ring on your wrist. There was not a moment ago.\n\nCaptain Drake: \"You carry a Z-Ring. So you're doing the Trials.\"\nCaptain Drake: \"Three this run. Pass all three and the Kahuna will see you.\"\nCaptain Drake: \"Each of our Totems has a reason it's big. Find out why, and you'll know how to win.\""
+    }
+   ],
+   "intro": "Captain Drake waits at a ridge where wings once nested.\n\nCaptain Drake: \"Here's the puzzle. Then the Totem. You can quit anytime. No shame.\"",
+   "choices": [
+    {
+     "label": "Start the Trial.",
+     "success": {
+      "text": "The puzzle is short and strange, and at the end of it the Totem Kommo-o rises, huge and glowing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-dragon-started",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "kommo-o"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "dragonium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-dragon",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Ask about the Totem.",
+     "success": {
+      "text": "Captain Drake: \"It is big because it is the last of the ridge. It rings its scales every evening and waits for an answer.\"\n\nKnowing it, you might not have to fight it at all.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-dragon-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z1-calm-dragon"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come back later.",
+     "success": {
+      "text": "Captain Drake: \"It'll be here till the region ends.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-dark",
+   "name": "Island Trial: Dark",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "types": [
+    "dark"
+   ],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "requires": [],
+   "remembers": [
+    {
+     "id": "first",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trials-met",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "A hollow tree on a beach. Captain Nyx leans against it. You look down: there is a Z-Ring on your wrist. There was not a moment ago.\n\nCaptain Nyx: \"You carry a Z-Ring. So you're doing the Trials.\"\nCaptain Nyx: \"Three this run. Pass all three and the Kahuna will see you.\"\nCaptain Nyx: \"Each of our Totems has a reason it's big. Find out why, and you'll know how to win.\""
+    }
+   ],
+   "intro": "Captain Nyx waits at a ruin that never sees the sun.\n\nCaptain Nyx: \"Here's the puzzle. Then the Totem. You can quit anytime. No shame.\"",
+   "choices": [
+    {
+     "label": "Start the Trial.",
+     "success": {
+      "text": "The puzzle is short and strange, and at the end of it the Totem Mightyena rises, huge and glowing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-dark-started",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "mightyena"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "darkinium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-dark",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Ask about the Totem.",
+     "success": {
+      "text": "Captain Nyx: \"It is big because it is the pack. All of them. It ate their share of the dark when the others left.\"\n\nKnowing it, you might not have to fight it at all.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-dark-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z1-calm-dark"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come back later.",
+     "success": {
+      "text": "Captain Nyx: \"It'll be here till the region ends.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-trial-fairy",
+   "name": "Island Trial: Fairy",
+   "group": "Z-Trials",
+   "rarity": "rare",
+   "types": [
+    "fairy"
+   ],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a4a",
+    "effect": "none"
+   },
+   "requires": [],
+   "remembers": [
+    {
+     "id": "first",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trials-met",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "A hollow tree on a beach. Captain Sola leans against it. You look down: there is a Z-Ring on your wrist. There was not a moment ago.\n\nCaptain Sola: \"You carry a Z-Ring. So you're doing the Trials.\"\nCaptain Sola: \"Three this run. Pass all three and the Kahuna will see you.\"\nCaptain Sola: \"Each of our Totems has a reason it's big. Find out why, and you'll know how to win.\""
+    }
+   ],
+   "intro": "Captain Sola waits at a meadow of soft light.\n\nCaptain Sola: \"Here's the puzzle. Then the Totem. You can quit anytime. No shame.\"",
+   "choices": [
+    {
+     "label": "Start the Trial.",
+     "success": {
+      "text": "The puzzle is short and strange, and at the end of it the Totem Ribombee rises, huge and glowing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-fairy-started",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "ribombee"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "fairium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-fairy",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Ask about the Totem.",
+     "success": {
+      "text": "Captain Sola: \"It is big because it makes pollen puffs for every child who comes to the meadow, and more children come every year.\"\n\nKnowing it, you might not have to fight it at all.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "z-ring",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trials-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trial-fairy-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z1-calm-fairy"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come back later.",
+     "success": {
+      "text": "Captain Sola: \"It'll be here till the region ends.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-calm-normal",
+   "name": "Island Trial: Normal: The Totem",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a5a",
+    "effect": "none"
+   },
+   "intro": "You know why it is big now. The Totem watches you come, and does not move first.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "You go slowly. Soothing sounds, sweet scents, a balm if you have one. The Captain holds their breath.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "gumshoos"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 5,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "sound",
+          "scent"
+         ]
+        }
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "normalium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-normal",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "calm": [
+        {
+         "kind": "item",
+         "id": "normalium-z",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "silk-scarf",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-normal",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Fight it anyway.",
+     "success": {
+      "text": "It rises, huge and glowing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "gumshoos"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "normalium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-normal",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-calm-fighting",
+   "name": "Island Trial: Fighting: The Totem",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a5a",
+    "effect": "none"
+   },
+   "intro": "You know why it is big now. The Totem watches you come, and does not move first.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "You go slowly. Soothing sounds, sweet scents, a balm if you have one. The Captain holds their breath.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "hariyama"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 5,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "sound",
+          "scent"
+         ]
+        }
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "fightinium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-fighting",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "calm": [
+        {
+         "kind": "item",
+         "id": "fightinium-z",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "black-belt",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-fighting",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Fight it anyway.",
+     "success": {
+      "text": "It rises, huge and glowing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "hariyama"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "fightinium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-fighting",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-calm-flying",
+   "name": "Island Trial: Flying: The Totem",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a5a",
+    "effect": "none"
+   },
+   "intro": "You know why it is big now. The Totem watches you come, and does not move first.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "You go slowly. Soothing sounds, sweet scents, a balm if you have one. The Captain holds their breath.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "toucannon"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 5,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "sound",
+          "scent"
+         ]
+        }
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "flyinium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-flying",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "calm": [
+        {
+         "kind": "item",
+         "id": "flyinium-z",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "sharp-beak",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-flying",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Fight it anyway.",
+     "success": {
+      "text": "It rises, huge and glowing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "toucannon"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "flyinium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-flying",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-calm-poison",
+   "name": "Island Trial: Poison: The Totem",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a5a",
+    "effect": "none"
+   },
+   "intro": "You know why it is big now. The Totem watches you come, and does not move first.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "You go slowly. Soothing sounds, sweet scents, a balm if you have one. The Captain holds their breath.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "salazzle"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 5,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "sound",
+          "scent"
+         ]
+        }
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "poisonium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-poison",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "calm": [
+        {
+         "kind": "item",
+         "id": "poisonium-z",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "poison-barb",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-poison",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Fight it anyway.",
+     "success": {
+      "text": "It rises, huge and glowing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "salazzle"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "poisonium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-poison",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-calm-ground",
+   "name": "Island Trial: Ground: The Totem",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a5a",
+    "effect": "none"
+   },
+   "intro": "You know why it is big now. The Totem watches you come, and does not move first.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "You go slowly. Soothing sounds, sweet scents, a balm if you have one. The Captain holds their breath.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "mudsdale"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 5,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "sound",
+          "scent"
+         ]
+        }
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "groundium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-ground",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "calm": [
+        {
+         "kind": "item",
+         "id": "groundium-z",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "soft-sand",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-ground",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Fight it anyway.",
+     "success": {
+      "text": "It rises, huge and glowing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "mudsdale"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "groundium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-ground",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-calm-rock",
+   "name": "Island Trial: Rock: The Totem",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a5a",
+    "effect": "none"
+   },
+   "intro": "You know why it is big now. The Totem watches you come, and does not move first.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "You go slowly. Soothing sounds, sweet scents, a balm if you have one. The Captain holds their breath.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "lycanroc"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 5,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "sound",
+          "scent"
+         ]
+        }
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "rockium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-rock",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "calm": [
+        {
+         "kind": "item",
+         "id": "rockium-z",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "hard-stone",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-rock",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Fight it anyway.",
+     "success": {
+      "text": "It rises, huge and glowing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "lycanroc"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "rockium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-rock",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-calm-bug",
+   "name": "Island Trial: Bug: The Totem",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a5a",
+    "effect": "none"
+   },
+   "intro": "You know why it is big now. The Totem watches you come, and does not move first.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "You go slowly. Soothing sounds, sweet scents, a balm if you have one. The Captain holds their breath.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "vikavolt"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 5,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "sound",
+          "scent"
+         ]
+        }
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "buginium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-bug",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "calm": [
+        {
+         "kind": "item",
+         "id": "buginium-z",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "silver-powder",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-bug",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Fight it anyway.",
+     "success": {
+      "text": "It rises, huge and glowing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "vikavolt"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "buginium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-bug",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-calm-ghost",
+   "name": "Island Trial: Ghost: The Totem",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a5a",
+    "effect": "none"
+   },
+   "intro": "You know why it is big now. The Totem watches you come, and does not move first.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "You go slowly. Soothing sounds, sweet scents, a balm if you have one. The Captain holds their breath.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "mimikyu"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 5,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "sound",
+          "scent"
+         ]
+        }
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "ghostium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-ghost",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "calm": [
+        {
+         "kind": "item",
+         "id": "ghostium-z",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "spell-tag",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-ghost",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Fight it anyway.",
+     "success": {
+      "text": "It rises, huge and glowing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "mimikyu"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "ghostium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-ghost",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-calm-steel",
+   "name": "Island Trial: Steel: The Totem",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a5a",
+    "effect": "none"
+   },
+   "intro": "You know why it is big now. The Totem watches you come, and does not move first.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "You go slowly. Soothing sounds, sweet scents, a balm if you have one. The Captain holds their breath.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "bronzong"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 5,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "sound",
+          "scent"
+         ]
+        }
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "steelium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-steel",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "calm": [
+        {
+         "kind": "item",
+         "id": "steelium-z",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "metal-coat",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-steel",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Fight it anyway.",
+     "success": {
+      "text": "It rises, huge and glowing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "bronzong"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "steelium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-steel",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-calm-fire",
+   "name": "Island Trial: Fire: The Totem",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a5a",
+    "effect": "none"
+   },
+   "intro": "You know why it is big now. The Totem watches you come, and does not move first.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "You go slowly. Soothing sounds, sweet scents, a balm if you have one. The Captain holds their breath.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "marowak-alola"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 5,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "sound",
+          "scent"
+         ]
+        }
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "firium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-fire",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "calm": [
+        {
+         "kind": "item",
+         "id": "firium-z",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "charcoal",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-fire",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Fight it anyway.",
+     "success": {
+      "text": "It rises, huge and glowing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "marowak-alola"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "firium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-fire",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-calm-water",
+   "name": "Island Trial: Water: The Totem",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a5a",
+    "effect": "none"
+   },
+   "intro": "You know why it is big now. The Totem watches you come, and does not move first.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "You go slowly. Soothing sounds, sweet scents, a balm if you have one. The Captain holds their breath.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "araquanid"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 5,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "sound",
+          "scent"
+         ]
+        }
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "waterium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-water",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "calm": [
+        {
+         "kind": "item",
+         "id": "waterium-z",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "mystic-water",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-water",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Fight it anyway.",
+     "success": {
+      "text": "It rises, huge and glowing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "araquanid"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "waterium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-water",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-calm-grass",
+   "name": "Island Trial: Grass: The Totem",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a5a",
+    "effect": "none"
+   },
+   "intro": "You know why it is big now. The Totem watches you come, and does not move first.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "You go slowly. Soothing sounds, sweet scents, a balm if you have one. The Captain holds their breath.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "lurantis"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 5,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "sound",
+          "scent"
+         ]
+        }
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "grassium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-grass",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "calm": [
+        {
+         "kind": "item",
+         "id": "grassium-z",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "miracle-seed",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-grass",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Fight it anyway.",
+     "success": {
+      "text": "It rises, huge and glowing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "lurantis"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "grassium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-grass",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-calm-electric",
+   "name": "Island Trial: Electric: The Totem",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a5a",
+    "effect": "none"
+   },
+   "intro": "You know why it is big now. The Totem watches you come, and does not move first.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "You go slowly. Soothing sounds, sweet scents, a balm if you have one. The Captain holds their breath.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "togedemaru"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 5,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "sound",
+          "scent"
+         ]
+        }
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "electrium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-electric",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "calm": [
+        {
+         "kind": "item",
+         "id": "electrium-z",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "magnet",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-electric",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Fight it anyway.",
+     "success": {
+      "text": "It rises, huge and glowing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "togedemaru"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "electrium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-electric",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-calm-psychic",
+   "name": "Island Trial: Psychic: The Totem",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a5a",
+    "effect": "none"
+   },
+   "intro": "You know why it is big now. The Totem watches you come, and does not move first.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "You go slowly. Soothing sounds, sweet scents, a balm if you have one. The Captain holds their breath.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "gothitelle"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 5,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "sound",
+          "scent"
+         ]
+        }
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "psychium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-psychic",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "calm": [
+        {
+         "kind": "item",
+         "id": "psychium-z",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "twistedspoon",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-psychic",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Fight it anyway.",
+     "success": {
+      "text": "It rises, huge and glowing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "gothitelle"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "psychium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-psychic",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-calm-ice",
+   "name": "Island Trial: Ice: The Totem",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a5a",
+    "effect": "none"
+   },
+   "intro": "You know why it is big now. The Totem watches you come, and does not move first.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "You go slowly. Soothing sounds, sweet scents, a balm if you have one. The Captain holds their breath.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "crabominable"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 5,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "sound",
+          "scent"
+         ]
+        }
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "icium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-ice",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "calm": [
+        {
+         "kind": "item",
+         "id": "icium-z",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "nevermeltice",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-ice",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Fight it anyway.",
+     "success": {
+      "text": "It rises, huge and glowing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "crabominable"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "icium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-ice",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-calm-dragon",
+   "name": "Island Trial: Dragon: The Totem",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a5a",
+    "effect": "none"
+   },
+   "intro": "You know why it is big now. The Totem watches you come, and does not move first.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "You go slowly. Soothing sounds, sweet scents, a balm if you have one. The Captain holds their breath.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "kommo-o"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 5,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "sound",
+          "scent"
+         ]
+        }
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "dragonium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-dragon",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "calm": [
+        {
+         "kind": "item",
+         "id": "dragonium-z",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "dragon-fang",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-dragon",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Fight it anyway.",
+     "success": {
+      "text": "It rises, huge and glowing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "kommo-o"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "dragonium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-dragon",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-calm-dark",
+   "name": "Island Trial: Dark: The Totem",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a5a",
+    "effect": "none"
+   },
+   "intro": "You know why it is big now. The Totem watches you come, and does not move first.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "You go slowly. Soothing sounds, sweet scents, a balm if you have one. The Captain holds their breath.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "mightyena"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 5,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "sound",
+          "scent"
+         ]
+        }
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "darkinium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-dark",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "calm": [
+        {
+         "kind": "item",
+         "id": "darkinium-z",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "blackglasses",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-dark",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Fight it anyway.",
+     "success": {
+      "text": "It rises, huge and glowing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "mightyena"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "darkinium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-dark",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-calm-fairy",
+   "name": "Island Trial: Fairy: The Totem",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a5a",
+    "effect": "none"
+   },
+   "intro": "You know why it is big now. The Totem watches you come, and does not move first.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "You go slowly. Soothing sounds, sweet scents, a balm if you have one. The Captain holds their breath.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "ribombee"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 5,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "sound",
+          "scent"
+         ]
+        }
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "fairium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-fairy",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "calm": [
+        {
+         "kind": "item",
+         "id": "fairium-z",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "fairy-feather",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-fairy",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Fight it anyway.",
+     "success": {
+      "text": "It rises, huge and glowing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "ribombee"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "item",
+         "id": "fairium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trials-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "trial-fairy",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 6
+        }
+       ],
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-grand",
+   "name": "The Grand Trial",
+   "group": "Z-Trials",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "trials-passed",
+     "atLeast": 3,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "grand-trial",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "all-calmed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trials-calmed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "Kahuna Olivia, on the steps of the shrine, arms folded: \"Three. All three calmed. You already passed.\"\nShe holds out a crystal the colour of your oldest friend.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Take the crystal.",
+       "success": {
+        "text": "She does not battle. She only nods, once, the way Captains bow.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "co-z1-crystal"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#5a4a3a",
+    "effect": "none"
+   },
+   "intro": "Kahuna Olivia, on the steps of the shrine: \"Three. Good. Now me.\"",
+   "choices": [
+    {
+     "label": "Face the Kahuna.",
+     "success": {
+      "text": "Olivia: \"Don't hold back. I won't.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Kahuna Olivia",
+       "size": 4,
+       "types": [
+        "rock"
+       ],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-z1-crystal"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Not yet.",
+     "success": {
+      "text": "Olivia: \"I'll be here.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-crystal",
+   "name": "The Grand Trial: The Crystal",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#7a6a4a",
+    "effect": "none"
+   },
+   "intro": "Olivia, brushing dust off her sleeve: \"That's the Grand Trial. You did it properly.\"\nShe holds out a crystal the colour of your oldest friend.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "starter",
+         "type": "grass"
+        }
+       ],
+       "text": "A Grass Z-Crystal, for your oldest friend.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "grassium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "grand-trial",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You passed the Grand Trial of the Island Chain.",
+         "importance": 85
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "starter",
+         "type": "fire"
+        }
+       ],
+       "text": "A Fire Z-Crystal, for your oldest friend.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "firium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "grand-trial",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You passed the Grand Trial of the Island Chain.",
+         "importance": 85
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "starter",
+         "type": "water"
+        }
+       ],
+       "text": "A Water Z-Crystal, for your oldest friend.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "waterium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "grand-trial",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You passed the Grand Trial of the Island Chain.",
+         "importance": 85
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "starter",
+         "type": "electric"
+        }
+       ],
+       "text": "A Electric Z-Crystal, for your oldest friend.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "electrium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "grand-trial",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You passed the Grand Trial of the Island Chain.",
+         "importance": 85
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "starter",
+         "type": "normal"
+        }
+       ],
+       "text": "A Normal Z-Crystal, for your oldest friend.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "normalium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "grand-trial",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You passed the Grand Trial of the Island Chain.",
+         "importance": 85
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "starter",
+         "type": "psychic"
+        }
+       ],
+       "text": "A Psychic Z-Crystal, for your oldest friend.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "psychium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "grand-trial",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You passed the Grand Trial of the Island Chain.",
+         "importance": 85
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "starter",
+         "type": "fighting"
+        }
+       ],
+       "text": "A Fighting Z-Crystal, for your oldest friend.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "fightinium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "grand-trial",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You passed the Grand Trial of the Island Chain.",
+         "importance": 85
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "starter",
+         "type": "dragon"
+        }
+       ],
+       "text": "A Dragon Z-Crystal, for your oldest friend.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "dragonium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "grand-trial",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You passed the Grand Trial of the Island Chain.",
+         "importance": 85
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It flickers between colours.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-z1-crystal-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-crystal-2",
+   "name": "The Grand Trial: The Crystal",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#7a6a4a",
+    "effect": "none"
+   },
+   "intro": "She turns the crystal in the light until it settles on your oldest friend's colour.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "starter",
+         "type": "bug"
+        }
+       ],
+       "text": "A Bug Z-Crystal, for your oldest friend.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "buginium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "grand-trial",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You passed the Grand Trial of the Island Chain.",
+         "importance": 85
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "starter",
+         "type": "flying"
+        }
+       ],
+       "text": "A Flying Z-Crystal, for your oldest friend.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "flyinium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "grand-trial",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You passed the Grand Trial of the Island Chain.",
+         "importance": 85
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "starter",
+         "type": "poison"
+        }
+       ],
+       "text": "A Poison Z-Crystal, for your oldest friend.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "poisonium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "grand-trial",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You passed the Grand Trial of the Island Chain.",
+         "importance": 85
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "starter",
+         "type": "ground"
+        }
+       ],
+       "text": "A Ground Z-Crystal, for your oldest friend.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "groundium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "grand-trial",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You passed the Grand Trial of the Island Chain.",
+         "importance": 85
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "starter",
+         "type": "rock"
+        }
+       ],
+       "text": "A Rock Z-Crystal, for your oldest friend.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "rockium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "grand-trial",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You passed the Grand Trial of the Island Chain.",
+         "importance": 85
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "starter",
+         "type": "ghost"
+        }
+       ],
+       "text": "A Ghost Z-Crystal, for your oldest friend.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "ghostium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "grand-trial",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You passed the Grand Trial of the Island Chain.",
+         "importance": 85
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "starter",
+         "type": "steel"
+        }
+       ],
+       "text": "A Steel Z-Crystal, for your oldest friend.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "steelium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "grand-trial",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You passed the Grand Trial of the Island Chain.",
+         "importance": 85
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "starter",
+         "type": "ice"
+        }
+       ],
+       "text": "A Ice Z-Crystal, for your oldest friend.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "icium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "grand-trial",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You passed the Grand Trial of the Island Chain.",
+         "importance": 85
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It flickers between colours.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-z1-crystal-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z1-crystal-3",
+   "name": "The Grand Trial: The Crystal",
+   "group": "Z-Trials",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#7a6a4a",
+    "effect": "none"
+   },
+   "intro": "She turns the crystal in the light until it settles on your oldest friend's colour.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "starter",
+         "type": "dark"
+        }
+       ],
+       "text": "A Dark Z-Crystal, for your oldest friend.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "darkinium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "grand-trial",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You passed the Grand Trial of the Island Chain.",
+         "importance": 85
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "starter",
+         "type": "fairy"
+        }
+       ],
+       "text": "A Fairy Z-Crystal, for your oldest friend.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "fairium-z",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "grand-trial",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You passed the Grand Trial of the Island Chain.",
+         "importance": 85
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "A plain Z-Crystal, warm from her hand.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "normalium-z",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "grand-trial",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You passed the Grand Trial of the Island Chain.",
+        "importance": 85
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "z-sigil-ruin",
+   "name": "A Sigil in the Stone",
+   "group": "Story: Z Anomalies",
+   "rarity": "rare",
+   "minStage": 1,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#4a3a6a",
+    "effect": "glint"
+   },
+   "remembers": [
+    {
+     "id": "rubbing",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "oriel-told",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "sigil-pairs",
+       "atLeast": 2,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "sigil-rubbing",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Oriel is here again. She hands you a sheet of paper: a sigil rubbing, both halves. \"One free pair. I traced it in the first ruin. Don't tell anyone.\"",
+     "addChoices": [
+      {
+       "label": "Take the rubbing.",
+       "success": {
+        "text": "A pair of sigils on paper, still faintly warm. Kept for when you need them.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sigil-rubbing",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "sigils-held",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Oriel gave you a sigil rubbing.",
+          "importance": 70
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "intro": "A ruined wall. A carved sigil glows. It matches nothing in the guidebook.\n\nScholar Oriel, copying it: \"There's another one. There's always another one. They come in pairs.\"\nOriel: \"One's here. The other is somewhere water's touched it.\"\nOriel: \"When both are lit, something steps out. It's not a Mega. It's older.\"",
+   "choices": [
+    {
+     "label": "Find the other sigil.",
+     "success": {
+      "text": "You copy the sigil into your journal. The next stage, you will look for water.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sigil-lit",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Tell me more.\"",
+     "success": {
+      "text": "Oriel: \"A Z-form is a Pokémon with its second shape showing. You can earn one, or you can make one of yours.\" She writes her name in your journal, next to the sigil.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sigil-lit",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "oriel-told",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "The sigil stays lit behind you, for as long as you are in this region.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "z-sigil-pool",
+   "name": "The Sigil Pool",
+   "group": "Story: Z Anomalies",
+   "rarity": "rare",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "sigil-lit",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a5a7a",
+    "effect": "rain"
+   },
+   "callback": true,
+   "intro": "The water in a rock pool is humming. A second sigil lies on the bottom. When you lean over it, the first one, a whole stage behind you, answers.",
+   "choices": [
+    {
+     "label": "Reach in and light it.",
+     "success": {
+      "text": "Both sigils burn together. Something in the glow takes a shape.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sigil-lit",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "sigil-pairs",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "z-form-trial"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "The humming follows you a little way, then stops.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "z-form-trial",
+   "name": "The Z-Form Trial",
+   "group": "Story: Z Anomalies",
+   "rarity": "rare",
+   "minStage": 1,
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#6a4a8a",
+    "effect": "sparkle"
+   },
+   "room": true,
+   "intro": "Both sigils burn together. A Z-form steps out of the glow to test you: a Pokémon you know, with its second shape showing.",
+   "choices": [
+    {
+     "label": "Accept the test.",
+     "success": {
+      "text": "It is not angry. It wants to see what you are.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "onix-z",
+        "tangela-z",
+        "voltorb-z",
+        "diglett-z",
+        "piplup-z",
+        "noctowl-z",
+        "sudowoodo-z",
+        "skarmory-z",
+        "linoone-z",
+        "granbull-z"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "sigil-passed",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-z2-after"
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Bow and step back.",
+     "success": {
+      "text": "It looks at you a while, then fades back into the stone.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z2-after",
+   "name": "The Sigils: After",
+   "group": "Story: Z Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#6a4a8a",
+    "effect": "none"
+   },
+   "intro": "The test is over. The glow is going out of the sigils. Whatever you did not catch is already walking back into the stone.",
+   "choices": [
+    {
+     "label": "Keep the sigils.",
+     "success": {
+      "text": "You trace both halves into your journal before the glow goes. A pair, kept. Something that is yours can be re-shaped with them, one day.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sigils-held",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them fade.",
+     "success": {
+      "text": "They fade. The wall is just a wall.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z3-cave",
+   "name": "The Cold Ghost",
+   "group": "Story: Z Anomalies",
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "starter-fire",
+     "when": [
+      {
+       "kind": "starter",
+       "type": "fire"
+      }
+     ],
+     "notice": "Your starter's flame leans toward it, the way you lean toward a friend across a room.",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Introduce it to your starter.",
+       "branches": [
+        {
+         "when": [
+          {
+           "kind": "flag",
+           "key": "sigils-held",
+           "atLeast": 1,
+           "atMost": 99
+          }
+         ],
+         "text": "They sit together. They become friends at once. When it sees your sigils it reaches for them, and the frost on it turns to something brighter.",
+         "effects": [
+          {
+           "kind": "flag",
+           "key": "coldghost-friend",
+           "amount": 1
+          },
+          {
+           "kind": "join",
+           "species": [
+            "haunter-z"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1
+          },
+          {
+           "kind": "friendship",
+           "amount": 2,
+           "who": "starter"
+          },
+          {
+           "kind": "flag",
+           "key": "sigils-held",
+           "amount": -1
+          },
+          {
+           "kind": "item",
+           "id": "gengarite-z",
+           "count": 1
+          }
+         ]
+        }
+       ],
+       "success": {
+        "text": "They sit together. Your starter's flame does not melt it; it only warms it a little. They become friends at once, and it comes with you, already changing.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "coldghost-friend",
+          "amount": 1
+         },
+         {
+          "kind": "join",
+          "species": [
+           "haunter-z"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 2,
+          "who": "starter"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "gastly-z",
+    "tint": "#a0c0e0",
+    "effect": "snow"
+   },
+   "intro": "The deepest, coldest cave. Frost on the walls makes a face, and the face moves. It is a Gastly made of frost, not gas.\n\nIt drifts close. Your breath freezes. It touches your sleeve. The sleeve frosts. It pulls back, sad.\nMiner, at the cave mouth, later: \"That's the one froze in the collapse. Came back. Brought the cold with it.\"\nMiner: \"It wants to be warm. It can't be.\"",
+   "choices": [
+    {
+     "label": "Take it to the hot spring.",
+     "success": {
+      "text": "Two nodes to the spring. It sits in the steam and does not melt. It is a little less sad. It stays with you.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "coldghost-spring",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "gastly-z"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Introduce it to a Fire-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "sigils-held",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The two sit together. They become friends. It sees your sigils and drifts to them on its own, and you keep the stone that comes out of the frost.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "coldghost-friend",
+         "amount": 1
+        },
+        {
+         "kind": "join",
+         "species": [
+          "gastly-z"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sigils-held",
+         "amount": -1
+        },
+        {
+         "kind": "item",
+         "id": "gengarite-z",
+         "count": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "The two sit together, a little apart, then closer. They become friends.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "coldghost-friend",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "gastly-z"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it stay in the cold.",
+     "success": {
+      "text": "It is happiest here. It stays. Before you go it leaves something on your bag: a shard of ice that does not melt.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "coldghost-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "nevermeltice",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z4-night-1",
+   "name": "The Spoon That Bent the Wrong Way",
+   "group": "Story: Z Anomalies",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "partyType",
+     "type": "psychic"
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "abra-z",
+    "tint": "#504070",
+    "effect": "none"
+   },
+   "intro": "Night at camp. A pop of air. An Abra, transparent at the edges, picks up your spoon. It vanishes.",
+   "choices": [
+    {
+     "label": "Go back to sleep.",
+     "success": {
+      "text": "You wake with one spoon fewer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "spoon-night",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z4-night-2",
+   "name": "The Spoon That Bent the Wrong Way: Second Night",
+   "group": "Story: Z Anomalies",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "spoon-night",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "abra-z",
+    "tint": "#504070",
+    "effect": "none"
+   },
+   "intro": "Second night: the same pop of air, the same transparent Abra, the same spoon.",
+   "choices": [
+    {
+     "label": "Stay awake next time.",
+     "success": {
+      "text": "You put your last spoon out, on purpose.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "spoon-night",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z4-night-3",
+   "name": "The Spoon That Bent the Wrong Way: Third Night",
+   "group": "Story: Z Anomalies",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "spoon-night",
+     "atLeast": 2,
+     "atMost": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "abra-z",
+    "tint": "#403060",
+    "effect": "none"
+   },
+   "intro": "Third night: you are awake. It stares back at you, holding the spoon. Your Psychic-type sits up, looks at it, and nods toward the trees.",
+   "choices": [
+    {
+     "label": "Follow it.",
+     "success": {
+      "text": "Into the woods, a long way, the Abra blinking in and out ahead of you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "spoon-night",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "spoon-followed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z4-grave"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Grab the spoon.",
+     "success": {
+      "text": "It fades a little, holding on, and lets go. It does not come back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "spoon-night",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "spoon-grabbed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it the spoon.",
+     "success": {
+      "text": "It takes it. The next night it brings one back, bent. And the night after. Three bent spoons, lined up by your bag. The fourth night, it waits for you at the trees.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "spoon-night",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "spoon-left",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z4-grave"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z4-grave",
+   "name": "The Spoon That Bent the Wrong Way: The Grave",
+   "group": "Story: Z Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "bent-three",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "spoon-left",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You still have the three bent spoons it brought you.",
+     "addChoices": [
+      {
+       "label": "Lay the three bent spoons on the pile.",
+       "branches": [
+        {
+         "when": [
+          {
+           "kind": "flag",
+           "key": "sigils-held",
+           "atLeast": 1,
+           "atMost": 99
+          }
+         ],
+         "text": "You lay them down. It laughs, and evolves, and takes the straight spoon. When it sees your sigils, it holds them too, and something older in it wakes.",
+         "effects": [
+          {
+           "kind": "flag",
+           "key": "spoon-straight",
+           "amount": 1
+          },
+          {
+           "kind": "join",
+           "species": [
+            "kadabra-z"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1
+          },
+          {
+           "kind": "item",
+           "id": "straight-spoon",
+           "count": 1
+          },
+          {
+           "kind": "flag",
+           "key": "sigils-held",
+           "amount": -1
+          },
+          {
+           "kind": "item",
+           "id": "alakazite-z",
+           "count": 1
+          }
+         ]
+        }
+       ],
+       "success": {
+        "text": "You lay them down with the others. It looks at them, and at you, and then it laughs, for the first time. It evolves, and it takes one spoon, straight now, to carry forever.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "spoon-straight",
+          "amount": 1
+         },
+         {
+          "kind": "join",
+          "species": [
+           "kadabra-z"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "item",
+          "id": "straight-spoon",
+          "count": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "abra-z",
+    "tint": "#605080",
+    "effect": "none"
+   },
+   "intro": "A grave in the woods, with a pile of bent spoons on it, and a magician's hat rotted flat.\nA wooden marker: \"THE GREAT PELLO. HE BENT THEM BACK.\"\nThe Abra lays the spoon on the pile and looks at you.",
+   "choices": [
+    {
+     "label": "Leave the spoons.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "sigils-held",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You leave them. It evolves, and comes with you. When it sees your sigils, it holds them, and something older in it wakes.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "spoon-kept",
+         "amount": 1
+        },
+        {
+         "kind": "join",
+         "species": [
+          "kadabra-z"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sigils-held",
+         "amount": -1
+        },
+        {
+         "kind": "item",
+         "id": "alakazite-z",
+         "count": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You leave them. It looks at the pile a long time. Then it evolves, and comes with you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "spoon-kept",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "kadabra-z"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take them back.",
+     "success": {
+      "text": "You gather the spoons. It fades, for good. The hat is just a hat.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "spoon-taken",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bend one straight.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "psychic"
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "sigils-held",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "It laughs, for the first time, and evolves, and takes the straight spoon. When it sees your sigils, it holds them too.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "spoon-straight",
+         "amount": 1
+        },
+        {
+         "kind": "join",
+         "species": [
+          "kadabra-z"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "item",
+         "id": "straight-spoon",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sigils-held",
+         "amount": -1
+        },
+        {
+         "kind": "item",
+         "id": "alakazite-z",
+         "count": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Psychic-type takes a spoon and bends it straight. The Abra laughs, for the first time. It evolves, and it carries the straight spoon forever.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "spoon-straight",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "kadabra-z"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "item",
+        "id": "straight-spoon",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z6-dojo",
+   "name": "The Snorlax That Learned to Fight",
+   "group": "Story: Z Anomalies",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "pokemon": "snorlax",
+    "tint": "#806040",
+    "effect": "none"
+   },
+   "intro": "A dojo in the hills. A Snorlax, awake, doing push-ups. The floor shakes with each one.\n\nBlack Belt Doran, sitting by the wall: \"Don't look at me. I told it it couldn't.\"\nDoran: \"I said, a Snorlax will never be a fighter. That was a year ago. It hasn't slept since.\"\nThe Snorlax stops. It looks at you and points at the mat.",
+   "choices": [
+    {
+     "label": "Spar with it.",
+     "success": {
+      "text": "It is slow, and it is strong, and it is trying so hard.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "snorlax-sparred",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "snorlax-spar",
+         "amount": 1
+        }
+       ],
+       "sprite": "black_belt_m",
+       "team": [
+        "snorlax"
+       ],
+       "name": "Doran's Snorlax",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "snorlax-spar",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Tell Doran to apologise.",
+     "success": {
+      "text": "Doran: \"It doesn't want sorry. It wants to win.\" He waves at the mat. \"Go on, then.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "snorlax-sparred",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "snorlax-spar",
+         "amount": 1
+        }
+       ],
+       "sprite": "black_belt_m",
+       "team": [
+        "snorlax"
+       ],
+       "name": "Doran's Snorlax",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "snorlax-spar",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "It keeps training. You hear the floor shake all the way down the hill.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "snorlax-left",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z6-spar-2",
+   "name": "The Snorlax That Learned to Fight: Second Spar",
+   "group": "Story: Z Anomalies",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "snorlax-spar",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "pokemon": "snorlax",
+    "tint": "#806040",
+    "effect": "none"
+   },
+   "intro": "Doran's Snorlax has walked all the way down to the road to find you. It points at the grass. Here will do.",
+   "choices": [
+    {
+     "label": "Spar again.",
+     "success": {
+      "text": "It is faster than last time.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "snorlax-spar",
+         "amount": 1
+        }
+       ],
+       "sprite": "black_belt_m",
+       "team": [
+        "snorlax"
+       ],
+       "name": "Doran's Snorlax",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "snorlax-spar",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z6-spar-3",
+   "name": "The Snorlax That Learned to Fight: Third Spar",
+   "group": "Story: Z Anomalies",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "snorlax-spar",
+     "atLeast": 2,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "pokemon": "snorlax",
+    "tint": "#a06040",
+    "effect": "none"
+   },
+   "intro": "The third time. Doran has come too. He sits on a rock and does not say anything. The Snorlax bows to you, properly, the way he must have taught it.",
+   "choices": [
+    {
+     "label": "Bow back and begin.",
+     "success": {
+      "text": "It does not hold back.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-z6-after"
+        }
+       ],
+       "sprite": "black_belt_m",
+       "team": [
+        "snorlax"
+       ],
+       "name": "Doran's Snorlax",
+       "size": 1,
+       "types": [],
+       "levelBonus": 5,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "snorlax-beat-it",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-z6-after"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z6-after",
+   "name": "The Snorlax That Learned to Fight: After",
+   "group": "Story: Z Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "pokemon": "snorlax",
+    "tint": "#c08050",
+    "effect": "none"
+   },
+   "intro": "The Snorlax stands over your Pokémon, panting. It looks at Doran.",
+   "choices": [
+    {
+     "label": "\"Doran, say something.\"",
+     "success": {
+      "text": "Doran, very quietly: \"...You can.\" It lies down where it stands and sleeps, for the first time in a year. Doran gives you a Munchlax from the dojo's litter. \"It'll want to fight. Let it.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "munchlax"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "doran-friend",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Black Belt Doran told his Snorlax it could. It slept for the first time in a year.",
+        "importance": 85
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it the sigils.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "sigils-held",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The sigils light in your hands. It becomes something new in Doran's arms, and he cries. When it is done he gives you a Munchlax from the litter, and the stone it left behind.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sigils-held",
+        "amount": -1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "munchlax"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "item",
+        "id": "snorlaxite-z",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "doran-friend",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Doran's Snorlax took its second shape in his arms.",
+        "importance": 90
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z6-alpha",
+   "name": "The Snorlax That Learned to Fight: Still Training",
+   "group": "Story: Z Anomalies",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "snorlax-left",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#604020",
+    "effect": "none"
+   },
+   "intro": "A region on, a huge Snorlax in the road, doing push-ups. It is an Alpha now. It is very, very tired. It points at the grass.",
+   "choices": [
+    {
+     "label": "Spar with it.",
+     "success": {
+      "text": "It fights like it has not slept in a year, because it hasn't.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "snorlax"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 3,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "sound"
+         ]
+        }
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "snorlax-beat-it",
+         "amount": 1
+        }
+       ],
+       "calm": [
+        {
+         "kind": "flag",
+         "key": "snorlax-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "heal",
+         "share": 0.5
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You step round it. It does not stop.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z7-hill",
+   "name": "The Alpha of Alphas",
+   "group": "Story: Z Anomalies",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "calmed-alpha",
+     "atLeast": 3,
+     "atMost": 99
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bow",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "calmed-alpha",
+       "atLeast": 6,
+       "atMost": 99
+      }
+     ],
+     "notice": "It looks at you a long time. Then it lowers its head, as if it had already decided.",
+     "addChoices": [
+      {
+       "label": "Accept the bow.",
+       "success": {
+        "text": "It bows. Every Alpha you calmed howls once more, far away. It does not leave you a pup, this time.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "alphayena-bowed",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "fed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "fed-poochyena",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It sniffs the air. It knows you fed one of its own once. The test will start at the second round."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "alphayena",
+    "tint": "#303040",
+    "effect": "none"
+   },
+   "intro": "Night. From every direction, every Alpha you calmed this run howls once, at the same time.\nOn the hill ahead, a huge hyena shape, black and grey, with a mane like a storm.\n\nIne, if you met her, at your side: \"That's the one they answer to.\"\nIne: \"It's noticed you calming them. It wants to know if you meant it.\"",
+   "choices": [
+    {
+     "label": "Accept its test.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "fed-poochyena",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "It knows you. It skips the hunt. The second round is the hold.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "alphayena-test",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "alphayena-round",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "alphayena-hunt",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-z7-hold"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It turns and lopes into the dark. The first round is the hunt.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alphayena-test",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z7-hunt"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back away.",
+     "success": {
+      "text": "It watches you go. Then it leaves too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alphayena-left",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw it a balm.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "calming-balm"
+      }
+     ],
+     "success": {
+      "text": "It eats it, and watches you. Then the test.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "calming-balm"
+       },
+       {
+        "kind": "flag",
+        "key": "alphayena-test",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z7-hunt"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z7-hunt",
+   "name": "The Alpha of Alphas: The Hunt",
+   "group": "Story: Z Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "alphayena",
+    "tint": "#303040",
+    "effect": "none"
+   },
+   "intro": "A wild Pokémon bolts out of the long grass. The Alphayena looks at you: catch it, without harming it.",
+   "choices": [
+    {
+     "label": "Give chase, gently.",
+     "success": {
+      "text": "Soothing sounds, a sweet scent, a balm: anything but a blow.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "furret"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-z7-hold"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 3,
+         "start": 0,
+         "perTurn": 0,
+         "likes": [
+          "sound",
+          "scent"
+         ]
+        }
+       },
+       "calm": [
+        {
+         "kind": "flag",
+         "key": "alphayena-round",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "alphayena-hunt",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-z7-hold"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-z7-hold"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z7-hold",
+   "name": "The Alpha of Alphas: The Hold",
+   "group": "Story: Z Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "angry",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "noble-beaten",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It knows you beat a Noble down instead of calming it. It is angry. Seven turns, not five.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Hold for seven turns.",
+       "success": {
+        "text": "It comes at you, and it does not stop.",
+        "effects": [],
+        "battle": {
+         "kind": "wild",
+         "alpha": true,
+         "species": [
+          "alphayena"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "pseudo": true,
+         "rule": {
+          "surviveTurns": 7
+         },
+         "win": [
+          {
+           "kind": "flag",
+           "key": "alphayena-round",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "alphayena-hold",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "co-z7-howl"
+          }
+         ],
+         "lose": [
+          {
+           "kind": "addEvent",
+           "eventId": "co-z7-howl"
+          }
+         ]
+        }
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "alphayena",
+    "tint": "#303040",
+    "effect": "none"
+   },
+   "intro": "The Alphayena itself steps forward. Survive five turns against it.",
+   "choices": [
+    {
+     "label": "Hold for five turns.",
+     "success": {
+      "text": "It comes at you, and it does not stop.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "alphayena"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "surviveTurns": 5
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "alphayena-round",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "alphayena-hold",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-z7-howl"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-z7-howl"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z7-howl",
+   "name": "The Alpha of Alphas: The Howl",
+   "group": "Story: Z Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "alphayena",
+    "tint": "#404060",
+    "effect": "none"
+   },
+   "intro": "The last round. It lifts its head and howls, and waits for your team to answer.",
+   "choices": [
+    {
+     "label": "Howl together.",
+     "requires": [
+      {
+       "kind": "partyMoveFlag",
+       "flag": "sound"
+      }
+     ],
+     "success": {
+      "text": "Every one of your Pokémon that knows a sound move lifts its head and answers, together.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alphayena-round",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alphayena-howl",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-z7-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay silent.",
+     "success": {
+      "text": "Your team is quiet. It waits, then lowers its head.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-z7-end"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-z7-end",
+   "name": "The Alpha of Alphas: The Verdict",
+   "group": "Story: Z Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "alphayena",
+    "tint": "#404060",
+    "effect": "none"
+   },
+   "intro": "The Alphayena stands over you on the hill. The Alphas have gone quiet.",
+   "choices": [
+    {
+     "label": "Wait for its answer.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "alphayena-round",
+         "atLeast": 3,
+         "atMost": 99
+        }
+       ],
+       "text": "It bows. A Poochyena pup trots out of the dark and sits at your feet. It is yours, from its own pack.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "alphayena-bowed",
+         "amount": 1
+        },
+        {
+         "kind": "join",
+         "species": [
+          "poochyena"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "ability": "pack-call"
+        },
+        {
+         "kind": "moment",
+         "text": "The Alpha of Alphas bowed to you and gave you a pup from its pack.",
+         "importance": 90
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "alphayena-round",
+         "atLeast": 2,
+         "atMost": 99
+        }
+       ],
+       "text": "It looks at you a long time, then leaves, respectful.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "alphayena-respect",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It marks you, one long look, as prey. Then it is gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alphayena-prey",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

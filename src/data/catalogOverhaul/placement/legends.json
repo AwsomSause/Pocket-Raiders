@@ -445,5 +445,270 @@
   "shape": "Companion",
   "earliest": "A3",
   "attaches": "rest"
+ },
+ "island-trial-normal": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1"
+ },
+ "island-trial-fighting": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1"
+ },
+ "island-trial-flying": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1"
+ },
+ "island-trial-poison": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1"
+ },
+ "island-trial-ground": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1"
+ },
+ "island-trial-rock": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1"
+ },
+ "island-trial-bug": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1"
+ },
+ "island-trial-ghost": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1"
+ },
+ "island-trial-steel": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1"
+ },
+ "island-trial-fire": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1"
+ },
+ "island-trial-water": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1"
+ },
+ "island-trial-grass": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1"
+ },
+ "island-trial-electric": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1"
+ },
+ "island-trial-psychic": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1"
+ },
+ "island-trial-ice": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1"
+ },
+ "island-trial-dragon": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1"
+ },
+ "island-trial-dark": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1"
+ },
+ "island-trial-fairy": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1"
+ },
+ "co-z1-grand": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "After three Trials: the next region Stage 4, step 13",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+2"
+ },
+ "z-sigil-ruin": {
+  "shape": "Run-Long",
+  "earliest": "A6",
+  "where": "Any + node",
+  "tags": [
+   "ruin"
+  ]
+ },
+ "z-sigil-pool": {
+  "shape": "Run-Long",
+  "earliest": "A6",
+  "where": "The next stage after a lit sigil, any + node",
+  "tags": [
+   "water"
+  ]
+ },
+ "co-z3-cave": {
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 14,
+  "window": [
+   12,
+   16
+  ],
+  "sits": "side-branch",
+  "tags": [
+   "cave",
+   "snow"
+  ],
+  "level": "A+1"
+ },
+ "co-z4-night-1": {
+  "shape": "Stage-Three",
+  "earliest": "A6",
+  "chain": "z4",
+  "beat": 1,
+  "where": "A + node at Night; needs a Psychic-type",
+  "tags": [
+   "night"
+  ]
+ },
+ "co-z4-night-2": {
+  "shape": "Stage-Three",
+  "earliest": "A6",
+  "chain": "z4",
+  "beat": 2,
+  "steps": [
+   12
+  ],
+  "tags": [
+   "night"
+  ]
+ },
+ "co-z4-night-3": {
+  "shape": "Stage-Three",
+  "earliest": "A6",
+  "chain": "z4",
+  "beat": 3,
+  "steps": [
+   17
+  ],
+  "tags": [
+   "night"
+  ]
+ },
+ "co-z6-dojo": {
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 12,
+  "window": [
+   9,
+   15
+  ],
+  "tags": [
+   "city"
+  ]
+ },
+ "co-z6-spar-2": {
+  "shape": "Region",
+  "earliest": "A6",
+  "where": "Three spars across the region: a later stage of the same region"
+ },
+ "co-z6-spar-3": {
+  "shape": "Region",
+  "earliest": "A6",
+  "where": "Three spars across the region: a later stage of the same region",
+  "level": "A+1"
+ },
+ "co-z6-alpha": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 12,
+  "window": [
+   9,
+   15
+  ],
+  "where": "A region after leaving the dojo",
+  "level": "A+2"
+ },
+ "co-z7-hill": {
+  "shape": "Single",
+  "earliest": "A14",
+  "home": 16,
+  "window": [
+   14,
+   18
+  ],
+  "sits": "side-branch",
+  "tags": [
+   "night"
+  ],
+  "level": "A+2"
  }
 }

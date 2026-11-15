@@ -14,7 +14,28 @@
   "delta-clue-nest": "2026-11-15",
   "delta-clue-scales": "2026-11-15",
   "delta-clue-song": "2026-11-15",
-  "delta-research-battle": "2026-11-15"
+  "delta-research-battle": "2026-11-15",
+  "island-trial-normal": "2026-11-15",
+  "island-trial-fighting": "2026-11-15",
+  "island-trial-flying": "2026-11-15",
+  "island-trial-poison": "2026-11-15",
+  "island-trial-ground": "2026-11-15",
+  "island-trial-rock": "2026-11-15",
+  "island-trial-bug": "2026-11-15",
+  "island-trial-ghost": "2026-11-15",
+  "island-trial-steel": "2026-11-15",
+  "island-trial-fire": "2026-11-15",
+  "island-trial-water": "2026-11-15",
+  "island-trial-grass": "2026-11-15",
+  "island-trial-electric": "2026-11-15",
+  "island-trial-psychic": "2026-11-15",
+  "island-trial-ice": "2026-11-15",
+  "island-trial-dragon": "2026-11-15",
+  "island-trial-dark": "2026-11-15",
+  "island-trial-fairy": "2026-11-15",
+  "z-sigil-ruin": "2026-11-15",
+  "z-sigil-pool": "2026-11-15",
+  "z-form-trial": "2026-11-15"
  },
  "merged": {
   "form-clue-fur": "delta-clue-scales",
@@ -23,7 +44,8 @@
   "form-research-battle": "delta-research-battle"
  },
  "rule": {
-  "delta-research-week": "Calendar week (gameEvents.json) that raises Delta clue odds; the clues it boosts are the rebuilt delta-clue-* events (co-legends-3.json)"
+  "delta-research-week": "Calendar week (gameEvents.json) that raises Delta clue odds; the clues it boosts are the rebuilt delta-clue-* events (co-legends-3.json)",
+  "z-move-trial": "Calendar week (gameEvents.json) that raises Z and Mega Anomaly odds; the Trials it boosts are the rebuilt island-trial-* events (co-legends-4.json)"
  },
  "scrapped": [],
  "extra": {
@@ -40,6 +62,10 @@
   "D5": "co-d5-dump",
   "D6": "co-d6-marsh",
   "D7": "co-d7-crossing-1",
-  "D8": "co-d8-cloud"
+  "D8": "co-d8-cloud",
+  "Z3": "co-z3-cave",
+  "Z4": "co-z4-night-1",
+  "Z6": "co-z6-dojo",
+  "Z7": "co-z7-hill"
  }
 }
