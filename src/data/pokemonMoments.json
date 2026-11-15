@@ -518,6 +518,23 @@
    "leafeon",
    "glaceon",
    "sylveon"
+  ],
+  "pa20-canines": [
+   "lycanroc",
+   "lycanroc-midnight",
+   "lycanroc-dusk",
+   "houndoom",
+   "mightyena",
+   "arcanine",
+   "arcanine-hisui",
+   "manectric",
+   "boltund",
+   "mabosstiff",
+   "houndstone",
+   "stoutland",
+   "thievul",
+   "zoroark-hisui",
+   "lucario"
   ]
  },
  "moments": [
@@ -4272,6 +4289,1035 @@
    },
    "effectText": "Its promise is kept: once per region it comes back from the night with something (Mew a Leftovers, Jirachi a Star Piece, Celebi a Revive).",
    "presentation": "It's gone when you wake. Then back, with something | It went somewhere you can't follow. It came back."
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa17-the-grave-refuses",
+   "name": "The Grave Refuses",
+   "scope": {
+    "species": [
+     "spiritomb",
+     "duskull",
+     "dusclops",
+     "dusknoir",
+     "yamask",
+     "cofagrigus",
+     "yamask-galar",
+     "runerigus",
+     "greavard",
+     "houndstone",
+     "gastly",
+     "haunter",
+     "gengar",
+     "drifloon",
+     "drifblim",
+     "phantump",
+     "trevenant",
+     "sinistea",
+     "polteageist",
+     "poltchageist",
+     "sinistcha",
+     "marowak-alola",
+     "annihilape"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "dusknoir",
+     "spiritomb",
+     "houndstone"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "revenant"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, max HP x1.5, moves x1.75, immune to status conditions. Cost: loses 1/10 of its max HP each turn and can't be healed by anything. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "A funeral bell far away, whispers; an old, dry voice | \"Another one comes to the gate.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"Another one comes to the gate.\"",
+     "\"I know this one. It has someone waiting.\"",
+     "\"The gate is closed.\"",
+     "\"Go back. Finish it.\""
+    ],
+    "after": "revenant",
+    "sound": "pa17_bell",
+    "voice": "pa17_voice",
+    "theme": "pa17_theme",
+    "veil": "#000000",
+    "glow": "#9aa8c8",
+    "textColor": "#c8d0e0",
+    "rise": "The battlefield returns, colder and grey. [Name] stands up slowly, as if it's being pulled up by strings."
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa18-the-old-blood",
+   "name": "The Old Blood",
+   "scope": {
+    "species": [
+     "dragonite",
+     "salamence",
+     "garchomp",
+     "hydreigon",
+     "goodra",
+     "kommo-o",
+     "dragapult",
+     "baxcalibur",
+     "haxorus",
+     "druddigon",
+     "noivern",
+     "flygon",
+     "kingdra",
+     "dragalge",
+     "altaria",
+     "archaludon",
+     "roaring-moon"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "dragonite",
+     "salamence",
+     "garchomp"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "wrathborn"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, max HP x1.25, Attack and Sp. Atk x1.75, can't flinch. Cost: it uses its highest-damage move every turn. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "Two heartbeats, one huge; old letters burn onto the black as a deep cave voice reads them | \"Before your kind walked, we flew.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"Before your kind walked, we flew.\"",
+     "\"Before your names, we had ours.\"",
+     "\"We do not end on a road.\"",
+     "\"We end when we choose.\""
+    ],
+    "after": "wrathborn",
+    "sound": "pa18_heart",
+    "voice": "pa18_voice",
+    "theme": "pa18_theme",
+    "veil": "#000000",
+    "glow": "#ff3020",
+    "textColor": "#ffb070",
+    "rise": "A roar shakes the screen. [Name] rises in red light."
+   },
+   "remembers": [
+    {
+     "flag": "pm:pa6-the-slow-road@{uid}",
+     "line": [
+      3,
+      "\"And I do not choose this.\""
+     ]
+    }
+   ]
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa19-nature-reclaims",
+   "name": "Nature Reclaims",
+   "scope": {
+    "species": [
+     "trevenant",
+     "decidueye",
+     "rillaboom",
+     "sceptile",
+     "venusaur",
+     "meganium",
+     "torterra",
+     "leavanny",
+     "tsareena",
+     "abomasnow",
+     "tangrowth",
+     "shiftry",
+     "ludicolo",
+     "whimsicott",
+     "breloom",
+     "arboliva",
+     "brute-bonnet"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "trevenant",
+     "torterra",
+     "tangrowth"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "overgrown"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, Defence and Sp. Def x2, restores 1/8 HP each turn. Cost: Speed x0.5 and it can't switch out. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "Roots crack through the black, slowed birdsong; many voices at once, like wind through leaves | \"You walked through us. You did not cut us down.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"You walked through us. You did not cut us down.\"",
+     "\"The forest remembers who passed through gently.\"",
+     "\"This one is ours as well.\"",
+     "\"Grow.\""
+    ],
+    "after": "overgrown",
+    "sound": "pa19_roots",
+    "voice": "pa19_voice",
+    "theme": "pa19_theme",
+    "veil": "#000000",
+    "glow": "#5ad06a",
+    "textColor": "#c8f0b8",
+    "rise": "Vines lift [Name] back up. Moss covers its wounds."
+   },
+   "remembers": [
+    {
+     "flag": "berrytree-left",
+     "chance": 0.05
+    }
+   ]
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa20-the-pack-doesnt-leave-its-own",
+   "name": "The Pack Doesn't Leave Its Own",
+   "scope": {
+    "groups": [
+     "pa20-canines"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "arcanine",
+     "lycanroc",
+     "mightyena"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "alphas-howl"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, Speed x2, Attack x1.5, the foe's Attack drops each turn. Cost: it takes 1.25x damage. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "Silence, then howls getting closer; no voice, the lines appear one per howl | A pack does not leave its own.",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "A pack does not leave its own.",
+     "Not in the cold.",
+     "Not in the dark.",
+     "Not ever."
+    ],
+    "after": "alphas-howl",
+    "sound": "pa20_howl",
+    "theme": "pa20_theme",
+    "veil": "#000000",
+    "glow": "#ffd040",
+    "textColor": "#f0e0c0",
+    "rise": "[Name] gets up in the dark, eyes bright."
+   },
+   "remembers": [
+    {
+     "groupCount": {
+      "group": "pa20-canines",
+      "n": 2
+     },
+     "add": "The whole pack howls. Another pair of eyes opens in the dark first.",
+     "boost": {
+      "spe": 1
+     }
+    }
+   ]
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa21-the-contract",
+   "name": "The Contract",
+   "scope": {
+    "species": [
+     "banette",
+     "gengar",
+     "hypno",
+     "grimmsnarl",
+     "honchkrow",
+     "sableye",
+     "mismagius",
+     "cofagrigus",
+     "gholdengo",
+     "hatterene"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "banette",
+     "gengar",
+     "gholdengo"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "collected"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, every stat x1.75. Cost: the Collector takes 10% of this battle's prize money. Nothing else. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "A pen scratching on paper; a smooth, polite salesman's voice | \"Ah. There you are.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"Ah. There you are.\"",
+     "\"Do you remember our agreement? You fed me. You kept me. You didn't trade me away.\"",
+     "\"Terms: one more fight.\"",
+     "\"Fee: a small one. I'll collect it later.\""
+    ],
+    "after": "collected",
+    "sound": "pa21_pen",
+    "voice": "pa21_voice",
+    "theme": "pa21_theme",
+    "veil": "#000000",
+    "glow": "#b050ff",
+    "textColor": "#e0c8ff",
+    "rise": "A signature flares in purple fire across the screen. [Name] stands up, grinning."
+   },
+   "remembers": [
+    {
+     "flag": "honest-shop",
+     "add": "\"You're a fair dealer. I'll take 5%.\"",
+     "feePct": 5
+    }
+   ]
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa22-critical-mass",
+   "name": "Critical Mass",
+   "scope": {
+    "species": [
+     "electrode",
+     "electrode-hisui",
+     "magcargo",
+     "camerupt",
+     "torkoal",
+     "coalossal",
+     "magmortar",
+     "volcarona",
+     "iron-moth",
+     "scovillain",
+     "armarouge",
+     "toxtricity",
+     "toxtricity-low-key"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "electrode",
+     "coalossal",
+     "iron-moth"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "critical-mass"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, every stat x2.5. Cost: a countdown from 5; at 0 it uses Explosion. If that downs the last foe you win, if not the run ends. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "A rising whine like a generator; a flat, automatic alarm voice | \"Core temperature: critical.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"Core temperature: critical.\"",
+     "\"Containment: failed.\"",
+     "\"Evacuate.\"",
+     "\"...Correction. Do not evacuate. Fight.\""
+    ],
+    "after": "critical-mass",
+    "sound": "pa22_whine",
+    "voice": "pa22_voice",
+    "theme": "pa22_theme",
+    "veil": "#000000",
+    "glow": "#ffffff",
+    "textColor": "#ffe080",
+    "rise": "White light. [Name] is back, glowing too brightly to look at. The countdown starts: 5."
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa23-ascension",
+   "name": "Ascension",
+   "scope": {
+    "species": [
+     "alakazam",
+     "reuniclus",
+     "gothitelle",
+     "beheeyem",
+     "espeon",
+     "hatterene",
+     "indeedee",
+     "indeedee-female",
+     "bronzong",
+     "orbeetle",
+     "oranguru",
+     "gardevoir",
+     "farigiraf"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "alakazam",
+     "reuniclus",
+     "beheeyem"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "transcendent"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, Sp. Atk and Sp. Def x2, immune to Ground moves and contact moves. Cost: it can't use physical moves. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "The screen fades to white, a long high tone; a soft, clear voice inside the head | \"My body stopped.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"My body stopped.\"",
+     "\"I didn't.\"",
+     "\"I let go of the body. I didn't let go of you.\"",
+     "\"Watch.\""
+    ],
+    "after": "transcendent",
+    "sound": "pa23_tone",
+    "voice": "pa23_voice",
+    "theme": "pa23_theme",
+    "veil": "#f4f4ff",
+    "glow": "#a0c8ff",
+    "textColor": "#303050",
+    "rise": "[Name] floats up from where it fell, outlined in light, with its eyes closed."
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa24-the-oath",
+   "name": "The Oath",
+   "scope": {
+    "species": [
+     "kingambit",
+     "bisharp",
+     "aegislash",
+     "aegislash-blade",
+     "escavalier",
+     "sirfetchd",
+     "samurott",
+     "samurott-hisui",
+     "kleavor",
+     "ceruledge",
+     "gallade",
+     "lucario"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "kingambit",
+     "aegislash",
+     "sirfetchd"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "oathbound"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, Attack x2, can't fall below 1 HP for 3 turns. Cost: at the end of the third turn, if the battle isn't won, it faints. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "Steel sliding from a sheath; its own voice, low and steady | \"I swore to stand in front of you.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"I swore to stand in front of you.\"",
+     "\"I'm not standing.\"",
+     "\"Then I swore wrong.\"",
+     "\"Again. I swear it again.\""
+    ],
+    "after": "oathbound",
+    "sound": "pa24_steel",
+    "voice": "pa24_voice",
+    "theme": "pa24_theme",
+    "veil": "#000000",
+    "glow": "#e0e8ff",
+    "textColor": "#e8eef8",
+    "rise": "[Name] rises on one knee, then two feet, and raises its blade toward the opponent."
+   },
+   "remembers": [
+    {
+     "flag": "mem-glove-spared",
+     "add": "It remembers the glove on the ground. It stands like it did then.",
+     "resolute": true
+    },
+    {
+     "species": [
+      "sirfetchd"
+     ],
+     "add": "The leek is bent. It doesn't care."
+    }
+   ]
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa25-hive-mind",
+   "name": "Hive Mind",
+   "scope": {
+    "species": [
+     "vespiquen",
+     "beedrill",
+     "ribombee",
+     "durant",
+     "galvantula",
+     "falinks",
+     "dugtrio",
+     "dugtrio-alola",
+     "wishiwashi",
+     "maushold",
+     "maushold-family-of-three",
+     "ariados"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "vespiquen",
+     "durant",
+     "maushold"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "swarm"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, three bodies, each hit removes one whatever the damage; its moves hit twice at 60%. Cost: it can't Protect, and when the last body falls it faints. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "Buzzing from everywhere; hundreds of tiny voices, slightly out of sync | \"ONE FELL.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"ONE FELL.\"",
+     "\"ONE IS NOT US.\"",
+     "\"WE ARE MANY.\"",
+     "\"WE ARE STILL HERE.\""
+    ],
+    "after": "swarm",
+    "sound": "pa25_buzz",
+    "voice": "pa25_voice",
+    "theme": "pa25_theme",
+    "veil": "#000000",
+    "glow": "#ffd020",
+    "textColor": "#fff0a0",
+    "rise": "[Name] reforms out of a cloud of smaller copies of itself. Three outlines."
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa26-the-deep",
+   "name": "The Deep",
+   "scope": {
+    "species": [
+     "dhelmise",
+     "lanturn",
+     "relicanth",
+     "gyarados",
+     "wailord",
+     "dondozo",
+     "kingdra",
+     "sharpedo",
+     "huntail",
+     "gorebyss",
+     "toxapex",
+     "cursola",
+     "basculegion",
+     "basculegion-female"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "dhelmise",
+     "relicanth",
+     "dondozo"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "crushing-depth"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, Defence x2, Water moves x1.5, an attacker that hits it loses 1 Speed. Cost: Speed x0.5. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "Deep blue, then black; sonar and slow whale song; a calm dive-computer voice | \"Depth: two hundred metres. Light: fading.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"Depth: two hundred metres. Light: fading.\"",
+     "\"Depth: one thousand metres. Light: none.\"",
+     "\"Depth: the bottom.\"",
+     "\"Ascending.\""
+    ],
+    "after": "crushing-depth",
+    "sound": "pa26_sonar",
+    "voice": "pa26_voice",
+    "theme": "pa26_theme",
+    "veil": "#020818",
+    "glow": "#40a0ff",
+    "textColor": "#a0d8ff",
+    "rise": "Bubbles rise. [Name] comes up from below the battlefield with the water."
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa27-thrown-away",
+   "name": "Thrown Away",
+   "scope": {
+    "species": [
+     "banette",
+     "garbodor",
+     "muk",
+     "muk-alola",
+     "polteageist",
+     "mimikyu",
+     "sandygast",
+     "palossand",
+     "dhelmise",
+     "trubbish",
+     "grimer",
+     "grimer-alola",
+     "klefki"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "banette",
+     "garbodor",
+     "polteageist"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "spiteful"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, max HP x1.5, an attacker that hits it loses 1 from its highest stat. Cost: its own moves x0.75. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "A music box winds down and stops; a cracked, quiet toy voice | \"Somebody threw me out once.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"Somebody threw me out once.\"",
+     "\"I waited by the bins for a long time.\"",
+     "\"Then you came.\"",
+     "\"Nobody throws you out. Not while I'm here.\""
+    ],
+    "after": "spiteful",
+    "sound": "pa27_musicbox",
+    "voice": "pa27_voice",
+    "theme": "pa27_theme",
+    "veil": "#000000",
+    "glow": "#c080ff",
+    "textColor": "#e8d0f0",
+    "rise": "The music box starts again, wound by something unseen. [Name] stands, patched and stitched."
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa28-primal-awakening",
+   "name": "Primal Awakening",
+   "scope": {
+    "species": [
+     "great-tusk",
+     "scream-tail",
+     "brute-bonnet",
+     "flutter-mane",
+     "slither-wing",
+     "sandy-shocks",
+     "roaring-moon",
+     "walking-wake",
+     "gouging-fire",
+     "raging-bolt"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "great-tusk",
+     "roaring-moon",
+     "gouging-fire"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "primal"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, Protosynthesis doubled, on its two best stats, sun or not; max HP x1.25. Cost: it can't switch and loses 1/16 HP each turn. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "A cave painting draws itself across the black; a growl the subtitles translate | [Before the cities.]",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "[Before the cities.]",
+     "[Before the names.]",
+     "[We survived.]",
+     "[We survive.]"
+    ],
+    "after": "primal",
+    "sound": "pa28_paint",
+    "voice": "pa28_voice",
+    "theme": "pa28_theme",
+    "veil": "#000000",
+    "glow": "#ff8030",
+    "textColor": "#f0d0a0",
+    "rise": "A roar. [Name] rises, the ground around it cracked like old earth."
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa29-supernova",
+   "name": "Supernova",
+   "scope": {
+    "species": [
+     "solrock",
+     "volcarona",
+     "charizard",
+     "sunflora",
+     "heliolisk",
+     "arcanine",
+     "delphox",
+     "cinderace",
+     "skeledirge",
+     "ninetales",
+     "rapidash",
+     "talonflame"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "volcarona",
+     "solrock",
+     "charizard"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "supernova"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, sun for 5 turns, Fire moves x2, every Pokémon on the field loses 1/16 HP a turn. Cost: it loses the 1/16 too. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "A heavy, low hum getting brighter; a calm, enormous readout voice | \"Fuel: spent.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"Fuel: spent.\"",
+     "\"Light: going out.\"",
+     "\"Final phase.\"",
+     "\"Brighter than ever.\""
+    ],
+    "after": "supernova",
+    "sound": "pa29_hum",
+    "voice": "pa29_voice",
+    "theme": "pa29_theme",
+    "veil": "#000000",
+    "glow": "#ffc030",
+    "textColor": "#fff0c0",
+    "rise": "The screen goes white-hot, then the battlefield returns under a gold sky. [Name] is burning."
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa30-absolute-zero",
+   "name": "Absolute Zero",
+   "scope": {
+    "species": [
+     "froslass",
+     "glalie",
+     "avalugg",
+     "frosmoth",
+     "cetitan",
+     "baxcalibur",
+     "cryogonal",
+     "walrein",
+     "mamoswine",
+     "weavile",
+     "ninetales-alola",
+     "arctozolt",
+     "arctovish",
+     "iron-bundle"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "froslass",
+     "cryogonal",
+     "avalugg"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "absolute-zero"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, Ice moves have a 30% freeze chance, Defence x2, hail for 5 turns. Cost: after its first move it can act only every other turn. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "Ice cracking, then wind, frost creeping over the black; a whisper like breath on a window | \"Cold.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"Cold.\"",
+     "\"Colder.\"",
+     "\"Nothing moves now.\"",
+     "\"Except me.\""
+    ],
+    "after": "absolute-zero",
+    "sound": "pa30_wind",
+    "voice": "pa30_voice",
+    "theme": "pa30_theme",
+    "veil": "#000000",
+    "glow": "#c0f0ff",
+    "textColor": "#e0f8ff",
+    "rise": "Snow begins to fall on the battlefield. [Name] rises out of a block of ice."
+   }
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa31-eclipse",
+   "name": "Eclipse",
+   "scope": {
+    "species": [
+     "umbreon",
+     "lunatone",
+     "clefable",
+     "mismagius",
+     "honchkrow",
+     "noctowl",
+     "crobat",
+     "absol",
+     "gengar",
+     "sableye",
+     "lycanroc-midnight"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "chanceBond": {
+    "above": 3,
+    "perStep": 0.05,
+    "max": 0.3
+   },
+   "chancePlus": {
+    "species": [
+     "umbreon",
+     "lunatone",
+     "clefable"
+    ],
+    "plus": 0.1,
+    "exact": true
+   },
+   "layer": "archetype",
+   "effect": {
+    "revivalStatus": "eclipsed"
+   },
+   "effectText": "Instead of the run-end screen: it comes back at full HP, night for the battle, Dark and Ghost moves x1.75, evasion +1 (no higher). Cost: accuracy -1. The status ends with the battle. One revival per run, shared with every last stand.",
+   "presentation": "The moon in the black, a shadow sliding across it; a lullaby sung very slowly | \"The sun went down on you.\"",
+   "scene": {
+    "fadeMs": 900,
+    "staticMs": 1800,
+    "lines": [
+     "\"The sun went down on you.\"",
+     "\"That's all right.\"",
+     "\"I'm better in the dark.\"",
+     "\"Close your eyes. I'll do the rest.\""
+    ],
+    "after": "eclipsed",
+    "sound": "pa31_eclipse",
+    "voice": "pa31_voice",
+    "theme": "pa31_theme",
+    "veil": "#000000",
+    "glow": "#ffe060",
+    "textColor": "#d8d8f8",
+    "rise": "The battlefield returns at night. [Name]'s rings, eyes and markings glow."
+   }
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "id": "pa11-not-from-here",
+   "name": "Not From Here",
+   "scope": {
+    "groups": [
+     "ultra-beasts"
+    ]
+   },
+   "trigger": "rest",
+   "chance": 0.2,
+   "layer": "archetype",
+   "requires": {
+    "flagBelow": {
+     "key": "pa11-sleeps",
+     "n": 1
+    }
+   },
+   "effect": {
+    "openEvent": "pa11-not-from-here"
+   },
+   "effectText": "It is looking at a place that isn't here. (A stop opens: sit with it, or leave it be.)",
+   "presentation": "It looks up at the sky | [Name] is looking at a place that isn't here."
   }
  ],
  "counterparts": {
@@ -4336,5 +5382,181 @@
   "iron-crown": [
    "cobalion"
   ]
+ },
+ "revivalStatuses": {
+  "revenant": {
+   "name": "Revenant",
+   "chip": "Revenant: max HP x1.5, moves x1.75, immune to status conditions. Cost: loses 1/10 of its max HP each turn and can't be healed by anything.",
+   "stats": {
+    "hp": 1.5
+   },
+   "movePower": 1.75,
+   "statusImmune": true,
+   "turnHpPct": -10,
+   "noHeal": true
+  },
+  "wrathborn": {
+   "name": "Wrathborn",
+   "chip": "Wrathborn: max HP x1.25, Attack and Sp. Atk x1.75, can't flinch. Cost: it uses its highest-damage move every turn.",
+   "stats": {
+    "hp": 1.25,
+    "atk": 1.75,
+    "spa": 1.75
+   },
+   "noFlinch": true,
+   "forceBest": true
+  },
+  "overgrown": {
+   "name": "Overgrown",
+   "chip": "Overgrown: Defence and Sp. Def x2, restores 1/8 HP each turn. Cost: Speed x0.5 and it can't switch out.",
+   "stats": {
+    "def": 2,
+    "spd": 2,
+    "spe": 0.5
+   },
+   "turnHpPct": 12.5,
+   "noSwitch": true
+  },
+  "alphas-howl": {
+   "name": "Alpha's Howl",
+   "chip": "Alpha's Howl: Speed x2, Attack x1.5, the foe's Attack drops each turn. Cost: it takes 1.25x damage.",
+   "stats": {
+    "spe": 2,
+    "atk": 1.5
+   },
+   "foeStage": {
+    "stat": "atk",
+    "n": -1
+   },
+   "taken": 1.25
+  },
+  "collected": {
+   "name": "Collected",
+   "chip": "Collected: every stat x1.75. Cost: the Collector takes 10% of this battle's prize money. Nothing else.",
+   "stats": {
+    "atk": 1.75,
+    "def": 1.75,
+    "spa": 1.75,
+    "spd": 1.75,
+    "spe": 1.75
+   },
+   "feePct": 10
+  },
+  "critical-mass": {
+   "name": "Critical Mass",
+   "chip": "Critical Mass: every stat x2.5. Cost: a countdown from 5; at 0 it uses Explosion. If that downs the last foe you win, if not the run ends.",
+   "stats": {
+    "atk": 2.5,
+    "def": 2.5,
+    "spa": 2.5,
+    "spd": 2.5,
+    "spe": 2.5
+   },
+   "countdown": {
+    "turns": 5,
+    "move": "explosion"
+   }
+  },
+  "transcendent": {
+   "name": "Transcendent",
+   "chip": "Transcendent: Sp. Atk and Sp. Def x2, immune to Ground moves and contact moves. Cost: it can't use physical moves.",
+   "stats": {
+    "spa": 2,
+    "spd": 2
+   },
+   "immuneTypes": [
+    "ground"
+   ],
+   "immuneContact": true,
+   "noPhysical": true
+  },
+  "oathbound": {
+   "name": "Oathbound",
+   "chip": "Oathbound: Attack x2, can't fall below 1 HP for 3 turns. Cost: at the end of the third turn, if the battle isn't won, it faints.",
+   "stats": {
+    "atk": 2
+   },
+   "oathTurns": 3
+  },
+  "swarm": {
+   "name": "Swarm",
+   "chip": "Swarm: three bodies, each hit removes one whatever the damage; its moves hit twice at 60%. Cost: it can't Protect, and when the last body falls it faints.",
+   "bodies": 3,
+   "twicePct": 60,
+   "noProtect": true
+  },
+  "crushing-depth": {
+   "name": "Crushing Depth",
+   "chip": "Crushing Depth: Defence x2, Water moves x1.5, an attacker that hits it loses 1 Speed. Cost: Speed x0.5.",
+   "stats": {
+    "def": 2,
+    "spe": 0.5
+   },
+   "typePower": {
+    "water": 1.5
+   },
+   "onHit": "spe"
+  },
+  "spiteful": {
+   "name": "Spiteful",
+   "chip": "Spiteful: max HP x1.5, an attacker that hits it loses 1 from its highest stat. Cost: its own moves x0.75.",
+   "stats": {
+    "hp": 1.5
+   },
+   "onHit": "highest",
+   "movePower": 0.75
+  },
+  "primal": {
+   "name": "Primal",
+   "chip": "Primal: Protosynthesis doubled, on its two best stats, sun or not; max HP x1.25. Cost: it can't switch and loses 1/16 HP each turn.",
+   "stats": {
+    "hp": 1.25
+   },
+   "primal": {
+    "mult": 2,
+    "stats": 2
+   },
+   "noSwitch": true,
+   "turnHpPct": -6.25
+  },
+  "supernova": {
+   "name": "Supernova",
+   "chip": "Supernova: sun for 5 turns, Fire moves x2, every Pokémon on the field loses 1/16 HP a turn. Cost: it loses the 1/16 too.",
+   "weather": {
+    "id": "sun",
+    "turns": 5
+   },
+   "typePower": {
+    "fire": 2
+   },
+   "fieldChipPct": 6.25
+  },
+  "absolute-zero": {
+   "name": "Absolute Zero",
+   "chip": "Absolute Zero: Ice moves have a 30% freeze chance, Defence x2, hail for 5 turns. Cost: after its first move it can act only every other turn.",
+   "stats": {
+    "def": 2
+   },
+   "freezePct": 30,
+   "weather": {
+    "id": "hail",
+    "turns": 5
+   },
+   "everyOther": true
+  },
+  "eclipsed": {
+   "name": "Eclipsed",
+   "chip": "Eclipsed: night for the battle, Dark and Ghost moves x1.75, evasion +1 (no higher). Cost: accuracy -1.",
+   "night": true,
+   "typePower": {
+    "dark": 1.75,
+    "ghost": 1.75
+   },
+   "stages": {
+    "eva": 1,
+    "acc": -1
+   },
+   "evasionCap": 1
+  }
  }
 }

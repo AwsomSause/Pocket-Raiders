@@ -20,6 +20,7 @@ import { rescueFightEnded } from './evil/rescueFights';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
 import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
 import { BRAVE_COUNT, BRAVE_HIT } from './battle/pokemonMoments';
+import { revivalFee } from './battle/revivalStatus';
 import { bondFriendship } from './co/who';
 import { applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, refusesToLeave, returnedBug } from './instrumentality/flightNorth';
 import { applySecondChance, secondChanceOpen, secondChanceRolls } from './instrumentality/secondChance';
@@ -3671,6 +3672,12 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (battle.extra?.payout) moneyGained *= 2; // Jackpot's Payout (Kanto): its holder knocked out a foe this battle
   if (battle.alpha) moneyGained = Math.floor(moneyGained * content.balance.w1.luck.alphaMoney);
   if (battle.deal) moneyGained = Math.floor(moneyGained * content.balance.w1.play.deal.money);
+  // Collected (PA21 The Contract): the Collector takes its fee from this battle's prize money, as it said it would.
+  const collectorFee = Math.floor((moneyGained * revivalFee(battle)) / 100);
+  if (collectorFee > 0) {
+    moneyGained -= collectorFee;
+    run.story.flags['pm-collector-paid'] = Number(run.story.flags['pm-collector-paid'] ?? 0) + collectorFee;
+  }
   run.money += moneyGained;
   count(run, 'moneyEarned', moneyGained);
   // Powder Jar and Gooey Mulch: every Berry your side ate this battle.

@@ -7,7 +7,7 @@
    "id": "pa11-not-from-here",
    "name": "Not From Here",
    "group": "Ultra Beasts",
-   "stop": "rest",
+   "room": true,
    "rarity": "uncommon",
    "requires": [
     {

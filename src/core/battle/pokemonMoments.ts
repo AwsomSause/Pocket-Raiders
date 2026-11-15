@@ -6,9 +6,10 @@ import { calcStats, maxPp } from '../pokemon';
 import { Rng, hashSeed } from '../rng';
 import { currentEnemy, freshStages, freshVolatile, type PokemonInstance } from '../state';
 import { calcDamage, clampStage, isStatusImmune, typeEffectiveness } from './damage';
-import { MOMENT_COUNTERPARTS, MOMENT_GROUPS, momentKey, momentMatches, momentRoll, momentsFor, pokemonMoment, runClaimKey, type MomentEffect, type MomentTrigger, type PokemonMoment } from '../moments/pokemonMoments';
+import { POKEMON_MOMENTS, MOMENT_COUNTERPARTS, MOMENT_GROUPS, momentKey, momentMatches, momentRoll, momentsFor, pokemonMoment, runClaimKey, type MomentEffect, type MomentTrigger, type PokemonMoment } from '../moments/pokemonMoments';
 import { bondLevel } from '../co/who';
 import type { BattleContext, BattleEvent, Combatant } from './engine';
+import { startRevivalStatus } from './revivalStatus';
 
 export type PMomentEvent = Extract<BattleEvent, { type: 'pmoment' }>;
 
@@ -336,7 +337,7 @@ export function tryHauntStrikes(ctx: BattleContext, events: BattleEvent[]): void
       const physical = mv.category === 'physical';
       const dmg = calcDamage(content.ruleset, {
         level: spirit.level, power: Math.max(1, Math.floor((mv.power * Number(pct)) / 100)), attack: physical ? stats.atk : stats.spa, defense: physical ? foeStats.def : foeStats.spd,
-        attackStage: 0, defenseStage: 0, stab: own.includes(mv.type), effectiveness: typeEffectiveness(content.typeChart, mv.type, foeTypes), crit: false, randomFactor: 1, burned: false, physical, weather: 1, final: 1,
+        attackStage: 0, defenseStage: 0, stab: own.includes(mv.type), effectiveness: typeEffectiveness(content.typeChart, mv.type, foeTypes), crit: false, randomFactor: 100, burned: false, physical, weather: 1, final: 1,
       });
       best = Math.max(best, dmg);
     }
@@ -405,11 +406,36 @@ export function tryLethalMoment(ctx: BattleContext, c: Combatant): number | null
 
 const LAYERS = ['individual', 'species', 'group', 'archetype', 'type'] as const;
 
+/** A run-end scene's remembered variants that hold for this Pokémon: a run flag (`{uid}` = it), its species, or enough of a group in the party. */
+function remembered(ctx: BattleContext, m: PokemonMoment, mon: PokemonInstance): NonNullable<PokemonMoment['remembers']> {
+  return (m.remembers ?? []).filter((r) =>
+    (!r.flag || Number(ctx.moments?.flags[r.flag.replace('{uid}', mon.uid)] ?? 0) > 0) &&
+    (!r.species || r.species.includes(mon.speciesId)) &&
+    (!r.groupCount || ctx.party.filter((p) => MOMENT_GROUPS[r.groupCount!.group]?.includes(p.speciesId)).length >= r.groupCount.n));
+}
+
+/** A last-stand revival (PA1's shape: Overcharged, or a revival status). */
+const isLastStand = (m: PokemonMoment): boolean => Boolean(m.effect?.overcharged || m.effect?.revivalStatus);
+
+/** The scene's lines for this Pokémon: remembered lines swapped in or added, `[Name]` filled. */
+export function revivalLines(ctx: BattleContext, m: PokemonMoment, mon: PokemonInstance): string[] {
+  if (!m.scene) return [];
+  const lines = [...m.scene.lines];
+  for (const r of remembered(ctx, m, mon)) {
+    if (r.line) lines[r.line[0]] = r.line[1];
+    if (r.add) lines.push(r.add);
+  }
+  if (m.scene.rise) lines.push(m.scene.rise);
+  const name = mon.care?.nickname || ctx.content.species.get(mon.speciesId)?.name || mon.speciesId;
+  return lines.map((l) => l.replace(/\[Name\]/g, name));
+}
+
 /** A moment's chance for this Pokémon: Bond steps and named species can raise it (never money). */
 function chanceFor(ctx: BattleContext, m: PokemonMoment, mon: PokemonInstance): number {
   let chance = m.chance;
   if (m.chanceBond) chance = Math.min(m.chanceBond.max, chance + Math.max(0, bondLevel(ctx.content, mon) - m.chanceBond.above) * m.chanceBond.perStep);
-  if (m.chancePlus && momentMatches(ctx.content, { ...m, scope: { lines: m.chancePlus.species } }, mon.speciesId)) chance += m.chancePlus.plus;
+  if (m.chancePlus && (m.chancePlus.exact ? m.chancePlus.species.includes(mon.speciesId) : momentMatches(ctx.content, { ...m, scope: { lines: m.chancePlus.species } }, mon.speciesId))) chance += m.chancePlus.plus;
+  for (const r of remembered(ctx, m, mon)) chance += r.chance ?? 0;
   return Math.min(1, chance);
 }
 
@@ -430,6 +456,13 @@ export function tryRunEndMoment(ctx: BattleContext, events: BattleEvent[]): bool
       candidates.push({ m, mon, order: LAYERS.indexOf(m.layer ?? 'archetype') * 1000 - bondLevel(ctx.content, mon) * 10 + at / 10 });
     }
   });
+  // A Pokémon in more than one last-stand archetype uses the one with the higher chance; on a tie, the one listed first (pack Part 2B).
+  const listed = (m: PokemonMoment) => POKEMON_MOMENTS.indexOf(m);
+  for (const c of [...candidates]) {
+    if (!isLastStand(c.m)) continue;
+    const rival = candidates.find((o) => o !== c && o.mon === c.mon && isLastStand(o.m) && (chanceFor(ctx, o.m, o.mon) > chanceFor(ctx, c.m, c.mon) || (chanceFor(ctx, o.m, o.mon) === chanceFor(ctx, c.m, c.mon) && listed(o.m) < listed(c.m))));
+    if (rival) candidates.splice(candidates.indexOf(c), 1);
+  }
   if (candidates.length === 0) return false;
   candidates.sort((a, b) => a.order - b.order);
   hooks.flags[RUN_END_CLAIM] = 1;
@@ -452,9 +485,20 @@ export function tryRunEndMoment(ctx: BattleContext, events: BattleEvent[]): bool
   ctx.battle.outcome = null;
   // Its other effects (Resolute, doubled Speed) start now.
   const c: Combatant = { side: 'player', mon, stages: ctx.battle.playerStages, vol: ctx.battle.playerVolatile, flinched: false, protected: false };
-  const { reviveHpMult: _m, overcharged: _o, reviveHpPct: _p, healPct: _h, ...rest } = fx;
+  const { reviveHpMult: _m, overcharged: _o, reviveHpPct: _p, healPct: _h, revivalStatus, ...rest } = fx;
   applyEffect(ctx, c, rest, m, ctx.battle.turn);
-  events.push({ type: 'pmoment', side: 'player', uid: mon.uid, speciesId: mon.speciesId, id: m.id, name: m.name, tier: m.tier, hpAfter: mon.hp, cinematic: cinematicNow(ctx, 'landmark', true), scene: Boolean(m.scene), trigger: 'runEnd' });
+  const memories = remembered(ctx, m, mon);
+  const lines = m.scene ? revivalLines(ctx, m, mon) : undefined;
+  events.push({ type: 'pmoment', side: 'player', uid: mon.uid, speciesId: mon.speciesId, id: m.id, name: m.name, tier: m.tier, hpAfter: mon.hp, cinematic: cinematicNow(ctx, 'landmark', true), scene: Boolean(m.scene), trigger: 'runEnd', ...(lines ? { lines } : {}) });
+  // PA17 to PA31: the revival status starts (full HP, its rules, and the honest line of what it costs).
+  if (revivalStatus) {
+    const fee = memories.reduce<number | undefined>((f, r) => (r.feePct !== undefined ? Math.min(f ?? 100, r.feePct) : f), undefined);
+    startRevivalStatus(ctx, c, revivalStatus, events, fee);
+    for (const r of memories) {
+      if (r.resolute) applyEffect(ctx, c, { resolute: true, foeStatusChance: 0, foeConfuseChance: 0 }, m, ctx.battle.turn);
+      for (const [stat, n] of Object.entries(r.boost ?? {})) c.stages[stat as keyof typeof c.stages] = clampStage((c.stages[stat as keyof typeof c.stages] ?? 0) + n);
+    }
+  }
   return true;
 }
 

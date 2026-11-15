@@ -119,6 +119,7 @@ import { ARENA_IMMUNE, foeStake, aimAccuracy, arenaText, dealOffer, mindReader, 
 import { benchSupporter, addBleed, bleedDamage, causesBleed, curseMultiplier, resonanceMultiplier } from './w1Rules';
 import { sacrificeFor } from './sacrificeRule';
 import { berserkDue, berserkMove, isBerserk } from './berserk';
+import { REVIVAL_NIGHT, revivalActed, revivalBlocked, revivalEndOfTurn, revivalEvasionCap, revivalForcedSlot, revivalFreeze, revivalImmune, revivalNoFlinch, revivalNoHeal, revivalNoSwitch, revivalNoteHp, revivalOnHit, revivalPower, revivalPrimal, revivalStatusImmune, revivalTakeHit, revivalTwice } from './revivalStatus';
 import { noteBraveHit, momentGuardHit, momentParadoxDrive, momentSuperCut, tryAllyLethalMoment, hauntAccuracyCut, momentGroundTypes, momentNoConfuse, momentRooted, momentStatMult, noteContactHit, tryHauntStrikes, momentContactPoison, momentDamageMult, spendMomentBoost, applyPendingMoments, fadeMomentBoosts, tryFaintMoments, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
 import type { MomentHooks } from '../moments/pokemonMoments';
 import { quirkAccuracy, quirkDamageMult, quirkEntryStages, quirkGuard, quirkNoCrits, quirkOf, quirkPriority, quirkSurvives } from '../co/quirks';
@@ -148,7 +149,7 @@ export type BattleEvent =
   /** Became confused; `confusion` is the "is confused!" check at the start of its move; `confusionEnd` snapped out. */
   | { type: 'confused'; side: Side }
   /** A Pokémon moment (core/moments): `cinematic` false means it is told as a plain line; `scene` is the full-screen run-end revive. */
-  | { type: 'pmoment'; side: Side; uid: string; speciesId: string; id: string; name: string; tier: 'minor' | 'major' | 'landmark'; hpAfter: number; cinematic: boolean; scene: boolean; trigger: 'runEnd' | 'lethal' | 'faint' | 'start' | 'enter' | 'ally' | 'low' | 'ko' | 'super' | 'crit' | 'weather' | 'status' | 'rest' | 'catch' | 'turn' | 'allyLethal' | 'evolve' }
+  | { type: 'pmoment'; side: Side; uid: string; speciesId: string; id: string; name: string; tier: 'minor' | 'major' | 'landmark'; hpAfter: number; cinematic: boolean; scene: boolean; /** Run-end scenes: the lines as this run tells them (remembered variants, the name filled in). */ lines?: string[]; trigger: 'runEnd' | 'lethal' | 'faint' | 'start' | 'enter' | 'ally' | 'low' | 'ko' | 'super' | 'crit' | 'weather' | 'status' | 'rest' | 'catch' | 'turn' | 'allyLethal' | 'evolve' }
   | { type: 'confusion'; side: Side }
   | { type: 'confusionEnd'; side: Side }
   | { type: 'confusionHit'; side: Side; amount: number; hpAfter: number }
@@ -698,6 +699,8 @@ export function switchProblem(ctx: Pick<BattleContext, 'battle' | 'party'> & Par
   if (!ctx.battle.needsSwitch && ctx.battle.extra?.fairyLock === ctx.battle.turn) return "Fairy Lock keeps your Pokémon from switching out!";
   if (!ctx.battle.needsSwitch && !shedShell && ctx.battle.playerVolatile?.trapped) return "Your Pokémon can't be switched out!";
   if (!ctx.battle.needsSwitch && active && ctx.battle.storyEffects && momentRooted(ctx, active.uid)) return "It won't give ground. It can't be switched out!";
+  // Revival statuses (Overgrown, Primal): it can't switch out.
+  if (!ctx.battle.needsSwitch && active && active.hp > 0 && revivalNoSwitch(active)) return "It has taken root in this fight. It can't be switched out!";
   if (!ctx.battle.needsSwitch && !shedShell && active && 'content' in ctx && ctx.content) {
     const foeMon = currentEnemy(ctx.battle);
     const trapper = foeMon.hp > 0 ? (ctx.battle.enemyVolatile.abilityOverride ?? abilityOf(ctx.content, foeMon)) : null;
@@ -816,6 +819,16 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
     if (lie && lie.slot === action.index && me.moves[lie.to]) {
       events.push({ type: 'raid', tone: 'phase', text: `The move twists in ${nameOf(ctx, me)}'s mind: ${content.moves.get(me.moves[lie.slot]!.id)?.name ?? 'it'} was never real. It uses ${content.moves.get(me.moves[lie.to]!.id)?.name ?? 'another move'} instead!` });
       action = { ...action, index: lie.to };
+    }
+  }
+  // Revival statuses: Eclipsed keeps the battle at night; Wrathborn throws its highest-damage move whatever you chose.
+  if (battle.storyEffects?.includes(REVIVAL_NIGHT)) ctx.period = 'night';
+  if (action.kind === 'move' && action.index >= 0) {
+    const me = ctx.party[battle.activeIndex]!;
+    const forced = revivalForcedSlot(ctx, me);
+    if (forced !== null && forced !== action.index) {
+      events.push({ type: 'raid', tone: 'warn', text: `${nameOf(ctx, me)} is Wrathborn. It won't hold back: ${content.moves.get(me.moves[forced]!.id)?.name ?? 'its strongest move'}!` });
+      action = { ...action, index: forced };
     }
   }
   // Ideas W1: this turn's skill grade (a prompt result is an input, like the move itself); a surrender deal; smashing the arena.
@@ -1060,6 +1073,8 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   const enemyBefore = battle.enemyIndex;
   // Haunting (Pokémon moments): a fallen Pokémon's spirit strikes before the faints are settled.
   if (ctx.moments && !battle.outcome) tryHauntStrikes(ctx, events);
+  // Revival statuses (PA17 to PA31): HP paid or restored, the field burning, the countdown and the oath, before faints are settled.
+  if (!battle.outcome) revivalEndOfTurn(ctx, playerC, enemy, events);
   settleFaints(ctx, events);
   // A trainer's next Pokémon saw its ally fall.
   if (!battle.outcome && battle.enemyIndex !== enemyBefore) warnRage(ctx, currentEnemy(battle), events);
@@ -2524,6 +2539,14 @@ function statsOf(ctx: BattleContext, c: Combatant): ReturnType<typeof calcStats>
   const remembered = momentStatMult(ctx, c);
   const stats = remembered === 1 ? raw : { ...raw, atk: Math.floor(raw.atk * remembered), def: Math.floor(raw.def * remembered), spa: Math.floor(raw.spa * remembered), spd: Math.floor(raw.spd * remembered), spe: Math.floor(raw.spe * remembered) };
   const ability = abilityIn(ctx, c);
+  // Primal (PA28): Protosynthesis on, sun or not, the bonus doubled, on its two best stats.
+  const primal = revivalPrimal(c);
+  if (primal) {
+    const order = (['atk', 'def', 'spa', 'spd', 'spe'] as const).slice().sort((a, b) => stats[b] - stats[a]).slice(0, primal.stats);
+    const out = { ...stats };
+    for (const st of order) out[st] = Math.floor(stats[st] * (1 + ((st === 'spe' ? 0.5 : 0.3) * primal.mult)));
+    return out;
+  }
   const boosted = (ability === 'protosynthesis' && weatherNow(ctx) === 'sun') || (ability === 'quark-drive' && ctx.battle.terrain?.id === 'electric') || ((ability === 'protosynthesis' || ability === 'quark-drive') && momentParadoxDrive(ctx, c));
   if (!boosted) return stats;
   const best = (['atk', 'def', 'spa', 'spd', 'spe'] as const).reduce((a, b) => (stats[b] > stats[a] ? b : a));
@@ -2809,6 +2832,8 @@ function takeHp(
     const hero = ctx.party[ctx.battle.activeIndex]?.uid;
     if (hero) ctx.battle.raid.damageBy[hero] = (ctx.battle.raid.damageBy[hero] ?? 0) + lost;
   }
+  // Revival statuses (PA24 Oathbound, PA25 Swarm): an oath holds at 1 HP; a swarm loses a body per hit instead of HP.
+  if (c.side === 'player' && c.mon.revivalStatus && lost > 0) lost = revivalTakeHit(ctx, c, lost, hit !== null);
   let lastStand: string | null = null;
   let stand = false;
   if (c.vol.bide && lost > 0) c.vol.bide.damage += lost;
@@ -2899,6 +2924,7 @@ function takeHp(
     }
   }
   c.mon.hp -= lost;
+  if (c.mon.revivalStatus) revivalNoteHp(ctx, c.mon);
   // Survived the boss's charged (signature) attack: a raid memory; under a Defense cheer it also took the hit for the team.
   if (chargedLanded && lost > 0 && c.mon.hp > 0 && ctx.battle.raid) {
     ctx.battle.raid.survivor ??= c.mon.uid;
@@ -3320,6 +3346,14 @@ function executeMove(
       events.push({ type: 'blocked', side: user.side, moveId: move.id });
       return;
     }
+    // Revival statuses: Transcendent can't use physical moves, a Swarm can't Protect, Absolute Zero rests the turn after it acts.
+    const why = revivalBlocked(ctx, user, move);
+    if (why) {
+      events.push({ type: 'raid', tone: 'info', text: why });
+      events.push({ type: 'blocked', side: user.side, moveId: move.id });
+      return;
+    }
+    revivalActed(ctx, user);
   }
 
   // The second turn of a two-turn move and more Thrash use no PP; Pressure makes a move use 2.
@@ -4017,7 +4051,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   }
   const typedEff = move.flags.includes('typeless') ? 1 : Held.adjustEffectiveness(ctx, target, moveType, rawEff);
   // S7 Against the Odds: a super-effective hit on the partner lands as neutral (boss fight, or protecting an ally in doubles).
-  const effectiveness = typedEff > 1 && targetsEnemy && move.category !== 'status' && tryFeat(ctx, target, 'against_the_odds') ? 1 : typedEff;
+  const effectiveness = targetsEnemy && move.category !== 'status' && revivalImmune(target, moveType, move.flags.includes('contact')) ? 0 : typedEff > 1 && targetsEnemy && move.category !== 'status' && tryFeat(ctx, target, 'against_the_odds') ? 1 : typedEff;
   // Powder: a Fire move backfires.
   if (user.vol.powdered && moveType === 'fire') {
     user.vol.powdered = false;
@@ -4092,7 +4126,9 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   const sheerForce = userAbility === 'sheer-force' && hasExtra;
   const parental = userAbility === 'parental-bond' && !fx.hits && !fx.ohko && !fx.fixedDamage && !fx.counter && !fx.halveTarget && !fx.endeavor && !fx.userFaint;
   const beaters = fx.beatUp ? (user.side === 'player' ? ctx.party : ctx.battle.enemyTeam).filter((m) => m.hp > 0 && !m.status) : [];
-  const hits = fx.beatUp ? Math.max(1, beaters.length) : fx.hits ? (userAbility === 'skill-link' ? fx.hits[1] : Held.loadedDiceHits(ctx, user, multiHitCount(fx.hits, rng), fx.hits[1])) : parental ? 2 : 1;
+  // Swarm (PA25): every damaging move hits twice, each at a share of its power.
+  const twice = revivalTwice(user, move);
+  const hits = twice ? 2 : fx.beatUp ? Math.max(1, beaters.length) : fx.hits ? (userAbility === 'skill-link' ? fx.hits[1] : Held.loadedDiceHits(ctx, user, multiHitCount(fx.hits, rng), fx.hits[1])) : parental ? 2 : 1;
   let dealt = 0;
   let landed = 0;
   let anyCrit = false;
@@ -4246,6 +4282,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (fx.superEffectiveBoost && effectiveness > 1) final *= 4 / 3;
       // Pack moments (PA5 Older Than the Map): the first super-effective hit it takes is cut.
       if (ctx.moments && target.side === 'player') final *= momentSuperCut(ctx, target, effectiveness);
+      // Revival statuses: move power (Revenant, Spiteful), type power (Supernova, Eclipsed, Crushing Depth), damage taken (Alpha's Howl), Swarm's split hits.
+      final *= revivalPower(user, target, moveType) * (twice ? twice / 100 : 1);
       if (user.mon.awakened?.includes(move.id)) final *= content.story.awakening.boost;
       if (user.mon.mastered?.includes(move.id)) final *= 1 + content.balance.trainerWorld.masteryPower;
       if (user.side === 'player' && ctx.battle.comboUid === user.mon.uid) final *= content.balance.w1.play.combo.bonus;
@@ -4569,7 +4607,10 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       const id = fx.randomStatus.ids[rng.int(0, fx.randomStatus.ids.length - 1)]!;
       tryInflictStatus(ctx, user, target, id, move, events, false);
     }
-    if (fx.status && roll(fx.status.chance, fx.status.id)) tryInflictStatus(ctx, user, target, fx.status.id, move, events, false);
+    // Absolute Zero (PA30): an Ice move always has at least a 30% freeze chance.
+    const freeze = revivalFreeze(user, moveType);
+    const secondary = freeze > 0 ? { id: 'frz' as const, chance: Math.max(freeze, fx.status?.id === 'frz' ? fx.status.chance : 0) } : fx.status;
+    if (secondary && roll(secondary.chance, secondary.id)) tryInflictStatus(ctx, user, target, secondary.id, move, events, false);
     if (fx.flinchFirstUse && user.vol.firstUseNow && movedFirst) flinch(ctx, user, target);
     else if (fx.flinchChance && movedFirst && roll(fx.flinchChance)) flinch(ctx, user, target);
     else if (!fx.flinchChance && userAbility === 'stench' && movedFirst && rng.chance(0.1)) flinch(ctx, user, target);
@@ -4649,6 +4690,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     spendMomentBoost(ctx, user, moveType);
     noteBraveHit(ctx, user);
     if (contact) noteContactHit(ctx, target);
+    revivalOnHit(ctx, user, target, events);
     // Toxic Blood: a contact hit on the Pokémon poisons the attacker.
     if (contact && user.mon.hp > 0 && momentContactPoison(ctx, target) && !user.mon.status && canGetStatus(ctx, target, user, 'psn')) tryInflictStatus(ctx, target, user, 'psn', undefined, events, false);
   }
@@ -4682,7 +4724,7 @@ function elementalReaction(ctx: BattleContext, user: Combatant, target: Combatan
 
 /** Makes the target flinch, unless Inner Focus stops it or it is Dynamaxed. */
 function flinch(ctx: BattleContext, user: Combatant, target: Combatant): void {
-  if (targetAbility(ctx, user, target) !== 'inner-focus' && !target.mon.dynamaxed && !momentNoFlinch(ctx, target)) target.flinched = true;
+  if (targetAbility(ctx, user, target) !== 'inner-focus' && !target.mon.dynamaxed && !momentNoFlinch(ctx, target) && !revivalNoFlinch(target)) target.flinched = true;
 }
 
 /**
@@ -5431,7 +5473,7 @@ function refreshBerryLocks(ctx: BattleContext): void {
 function healMon(ctx: BattleContext, c: Combatant, fraction: number, events: BattleEvent[]): boolean {
   const max = calcStats(ctx.content, c.mon).hp;
   const gain = Math.min(max - c.mon.hp, Math.max(1, Math.floor(max * fraction)));
-  if (gain <= 0 || c.mon.hp <= 0 || c.vol.healBlock > 0 || (c.side === 'enemy' && enemyHealingBlocked(ctx.perks))) {
+  if (gain <= 0 || c.mon.hp <= 0 || c.vol.healBlock > 0 || revivalNoHeal(c) || (c.side === 'enemy' && enemyHealingBlocked(ctx.perks))) {
     events.push({ type: 'fail', side: c.side });
     return false;
   }
@@ -6388,6 +6430,7 @@ function tryConfuse(ctx: BattleContext, source: Combatant, target: Combatant, ev
 /** Whether `target` can get this status from `source` (types, abilities such as Limber, Leaf Guard in sun). */
 function canGetStatus(ctx: BattleContext, source: Combatant, target: Combatant, status: StatusId, move?: Move): boolean {
   if (target.mon.status || target.mon.hp <= 0) return false;
+  if (revivalStatusImmune(target)) return false;
   if (variantBlocksStatus(ctx.battle.extra.variants, target.mon.uid)) return false;
   if (status === 'slp' && (source.vol.uproar > 0 || target.vol.uproar > 0 || (source === target ? false : false))) return false;
   const corrosive = status === 'psn' && abilityIn(ctx, source) === 'corrosion' && source !== target;
@@ -6435,6 +6478,11 @@ function tryInflictStatus(
   announceFailure: boolean,
 ): boolean {
   const { content, rng } = ctx;
+  // Revenant (PA17): immune to status conditions.
+  if (revivalStatusImmune(target)) {
+    if (announceFailure) events.push({ type: 'fail', side: source.side });
+    return false;
+  }
   // S7 Resonance Pulse (Aether): a foe's status on the partner is cancelled and the partner heals a little (a tenth).
   if (source.side === 'enemy' && target.side === 'player' && target.mon.hp > 0 && tryFeat(ctx, target, 'resonance_pulse')) {
     const max = calcStats(content, target.mon).hp;
@@ -6508,6 +6556,15 @@ function changeStage(ctx: BattleContext, user: Combatant, recipient: Combatant, 
  * change and Contrary reverses it.
  */
 function applyStageChange(ctx: BattleContext, c: Combatant, stat: BoostStat, stages: number, events: BattleEvent[], source?: Combatant): boolean {
+  // Eclipsed (PA31): its evasion is capped (+1).
+  const evasionCap = stat === 'eva' && stages > 0 ? revivalEvasionCap(c) : null;
+  if (evasionCap !== null && c.stages.eva + stages > evasionCap) {
+    if (c.stages.eva >= evasionCap) {
+      events.push({ type: 'statLimit', side: c.side, stat, up: true });
+      return false;
+    }
+    stages = evasionCap - c.stages.eva;
+  }
   if (variantBlocksStage(ctx.battle.extra.variants, c.mon.uid, stages, Boolean(source && source.side !== c.side))) {
     events.push({ type: 'raid', tone: 'info', text: SPIRITLESS_MESSAGE });
     return false;

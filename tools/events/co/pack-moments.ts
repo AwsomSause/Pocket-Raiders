@@ -1,5 +1,5 @@
 // Pokémon Moments that play as a scene with choices (POKEMON_MOMENTS.md). The rest of the moments live in src/data/pokemonMoments.json.
-// PA11 NOT FROM HERE (Ultra Beasts): a rest scene. Sitting with it three times in a run lets it sleep by the fire (+3 Bond), and from then on
+// PA11 NOT FROM HERE (Ultra Beasts): a rest scene, opened by the rest moment pa11-not-from-here (20%). Sitting with it three times in a run lets it sleep by the fire (+3 Bond), and from then on
 // its Beast Boost fires once at the start of each battle (the moment pa11-sleeps-by-the-fire).
 // Build: npm run co:build -- pack-moments
 import { bondUp, ev, flag, flagIs, out, type Json } from '../dsl.ts';
@@ -26,7 +26,8 @@ const leaveIt = ch('Leave it be.', out(P(
 export const EVENTS: Json[] = [
   {
     ...ev('pa11-not-from-here', 'Not From Here', GROUP.ultra, {
-      stop: 'rest', rarity: 'uncommon', tint: '#141a2e', effect: 'none',
+      // Never drawn on its own: the rest moment pa11-not-from-here (20% at a healing stop) opens it beside the stop.
+      room: true, rarity: 'uncommon', tint: '#141a2e', effect: 'none',
       requires: [{ kind: 'partyGroup', group: 'ultra-beasts' }, not('pa11-sleeps')],
     }, P(
       'The fire is low and the team is asleep. All but one.',

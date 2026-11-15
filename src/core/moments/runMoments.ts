@@ -12,7 +12,7 @@ import { gainXp, getSpecies, xpForLevel } from '../pokemon';
 import { bossInfo, runLevelCap } from '../regions';
 import { hashSeed, Rng } from '../rng';
 import type { PokemonInstance, RunState } from '../state';
-import { momentRoll, momentsFor, runClaimKey, type PokemonMoment } from './pokemonMoments';
+import { momentMatches, momentRoll, momentsFor, runClaimKey, type PokemonMoment } from './pokemonMoments';
 
 const BERRIES = ['oran-berry', 'sitrus-berry'];
 const TALENT_STATS = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
@@ -37,6 +37,9 @@ function restRequirements(content: Content, run: RunState, m: PokemonMoment, mon
   const r = m.requires;
   if (!r) return true;
   if (r.promiseKept && !((run.story.histories[mon.uid]?.hyper['promise-kept'] ?? 0) > 0)) return false;
+  if (r.flagBelow && !(Number(run.story.flags[r.flagBelow.key.replace('{uid}', mon.uid)] ?? 0) < r.flagBelow.n)) return false;
+  if (r.flagAtLeast && !(Number(run.story.flags[r.flagAtLeast.key.replace('{uid}', mon.uid)] ?? 0) >= r.flagAtLeast.n)) return false;
+  if (r.partyMatching && run.party.filter((p) => p.hp > 0 && momentMatches(content, m, p.speciesId)).length < r.partyMatching) return false;
   if (r.finalForm && getSpecies(content, mon.speciesId).evolutions.length > 0) return false;
   if (r.fromCocoon) {
     const at = run.story.flags[`${COCOON}${mon.uid}`];
@@ -111,6 +114,11 @@ export function restMoments(content: Content, run: RunState): string[] {
         gainXp(content, mon, Math.max(1, Math.floor((gap * fx.xpPct) / 100)), runLevelCap(content, run));
       }
       if (fx.weaknessHint && run.stage) extra = ` ${weaknessLine(content, run)}`;
+      // A scene with choices opens as a stop beside this one.
+      if (fx.openEvent && run.stage && content.events.has(fx.openEvent)) {
+        const here = run.stage.map.nodes.find((n) => n.id === run.stage!.current);
+        if (here && !here.sides.some((x) => x.kind === 'event' && x.eventId === fx.openEvent && !x.used)) here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId: fx.openEvent });
+      }
       lines.push(`${nameOf(content, mon)}: ${m.name}. ${m.effectText}${extra}`);
       break;
     }

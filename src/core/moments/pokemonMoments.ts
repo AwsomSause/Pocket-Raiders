@@ -93,6 +93,10 @@ export const MomentEffectSchema = z.object({
   /** Run-end revive: HP multiplier on max HP, and the Overcharged state. */
   reviveHpMult: z.number().min(1).max(3).optional(),
   overcharged: z.boolean().optional(),
+  /** Rest moments: a scene with choices opens as a stop beside this one (an event built as a room, e.g. PA11 Not From Here). */
+  openEvent: z.string().optional(),
+  /** Run-end revive into one of the last-stand statuses (PA17 to PA31, the `revivalStatuses` table): full HP, the status until the battle ends. */
+  revivalStatus: z.string().optional(),
   // Catalog Overhaul (POKEMON_MOMENTS.md, the pack's statuses and effects).
   /** Rest moments: Bond points gained (pack Bond, converted like the event effect). */
   bond: z.number().int().min(1).max(5).optional(),
@@ -212,7 +216,7 @@ export const PokemonMomentSchema = z.object({
   /** The chance grows by `perStep` for each Bond level above `above`, up to `max` (PA1). */
   chanceBond: z.object({ above: z.number().int().min(0).max(5), perStep: z.number().min(0).max(1), max: z.number().min(0).max(1) }).optional(),
   /** These evolution lines (by root or member) get `plus` on top. */
-  chancePlus: z.object({ species: z.array(z.string()), plus: z.number().min(0).max(1) }).optional(),
+  chancePlus: z.object({ species: z.array(z.string()), plus: z.number().min(0).max(1), /** Only these species, not their whole lines (the revivals' signature species). */ exact: z.boolean().optional() }).optional(),
   /** Run-end order (pack §0.3): individual, species, group, archetype, type. Lower goes first. */
   layer: z.enum(['individual', 'species', 'group', 'archetype', 'type']).optional(),
   /** `region`: once per region (rest moments). */
@@ -223,15 +227,70 @@ export const PokemonMomentSchema = z.object({
   presentation: z.string(),
   effect: MomentEffectSchema.optional(),
   /** A full-screen scene: black fade, static, then these lines one by one. */
-  scene: z.object({ fadeMs: z.number().int(), staticMs: z.number().int(), lines: z.array(z.string()).min(1), clips: z.array(z.string()).optional(), after: z.string() }).optional(),
+  scene: z.object({
+    fadeMs: z.number().int(), staticMs: z.number().int(), lines: z.array(z.string()).min(1), clips: z.array(z.string()).optional(), after: z.string(),
+    /** Last-stand scenes (PA17 to PA31): the sound in the dark, the one voice clip under all the lines, the theme, and the colours. */
+    sound: z.string().optional(), voice: z.string().optional(), theme: z.string().optional(),
+    veil: z.string().regex(/^#[0-9a-f]{6}$/).optional(), glow: z.string().regex(/^#[0-9a-f]{6}$/).optional(), textColor: z.string().regex(/^#[0-9a-f]{6}$/).optional(),
+    /** The last beat (step 3 of the pack's scene), shown after the voice. */
+    rise: z.string().optional(),
+  }).optional(),
+  /** Remembered variants of a run-end scene: a run flag (`{uid}` = this Pokémon), species, or party count of a group changes a line, the chance, or adds an effect. */
+  remembers: z.array(z.object({
+    flag: z.string().optional(), species: z.array(z.string()).optional(), groupCount: z.object({ group: z.string(), n: z.number().int().min(1) }).optional(),
+    line: z.tuple([z.number().int().min(0), z.string()]).optional(), add: z.string().optional(), chance: z.number().min(0).max(1).optional(),
+    resolute: z.boolean().optional(), boost: z.record(z.string(), z.number().int()).optional(), feePct: z.number().int().min(0).max(100).optional(), allyDef: z.number().int().optional(),
+  })).optional(),
 });
 export type PokemonMoment = z.infer<typeof PokemonMomentSchema>;
 
-const FileSchema = z.object({ status: z.string(), note: z.string(), groups: z.record(z.string(), z.array(z.string())), counterparts: z.record(z.string(), z.array(z.string())).default({}), moments: z.array(PokemonMomentSchema) });
+/**
+ * The last-stand statuses (POKEMON_MOMENTS.md Part 2B): what each one pays and what it costs. Every number is data. The battle rules are in
+ * core/battle/revivalStatus.ts; stat multipliers apply in calcStats so max HP changes too.
+ */
+const RevivalStatusSchema = z.object({
+  name: z.string(),
+  /** The honest line shown when it starts: the payoff and the cost. */
+  chip: z.string(),
+  stats: z.partialRecord(z.enum(['hp', 'atk', 'def', 'spa', 'spd', 'spe']), z.number().min(0.1).max(5)).default({}),
+  movePower: z.number().min(0.1).max(5).optional(),
+  typePower: z.record(z.string(), z.number().min(0.1).max(5)).optional(),
+  taken: z.number().min(0.1).max(5).optional(),
+  statusImmune: z.boolean().optional(), noHeal: z.boolean().optional(), noFlinch: z.boolean().optional(), noSwitch: z.boolean().optional(),
+  noProtect: z.boolean().optional(), noPhysical: z.boolean().optional(), forceBest: z.boolean().optional(), everyOther: z.boolean().optional(),
+  /** Percent of max HP at the end of each turn: negative loses, positive restores. */
+  turnHpPct: z.number().min(-50).max(50).optional(),
+  /** The foe in front loses this stage each turn. */
+  foeStage: z.object({ stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']), n: z.number().int() }).optional(),
+  /** An attacker that hits it loses a stage: Speed, or its highest stat. */
+  onHit: z.enum(['spe', 'highest']).optional(),
+  countdown: z.object({ turns: z.number().int().min(1), move: z.string() }).optional(),
+  /** It can't fall below 1 HP for this many turns; at the end of the last one, if the battle isn't won, it faints. */
+  oathTurns: z.number().int().min(1).optional(),
+  /** Bodies: each hit removes one whatever the damage; at none it faints. Its moves hit twice at `twicePct` power. */
+  bodies: z.number().int().min(2).optional(), twicePct: z.number().int().min(1).max(100).optional(),
+  /** Protosynthesis on without sun: the bonus times this, on this many of its best stats. */
+  primal: z.object({ mult: z.number().min(1), stats: z.number().int().min(1).max(5) }).optional(),
+  weather: z.object({ id: z.enum(['rain', 'sun', 'sand', 'snow', 'hail']), turns: z.number().int().min(1) }).optional(),
+  /** Every Pokémon on the field (itself too) loses this percent of max HP each turn. */
+  fieldChipPct: z.number().min(0).max(50).optional(),
+  freezePct: z.number().int().min(0).max(100).optional(),
+  immuneTypes: z.array(z.string()).optional(), immuneContact: z.boolean().optional(),
+  night: z.boolean().optional(),
+  stages: z.partialRecord(z.enum(['atk', 'def', 'spa', 'spd', 'spe', 'acc', 'eva']), z.number().int()).optional(),
+  evasionCap: z.number().int().optional(),
+  /** Percent of this battle's prize money the Collector takes (stated before the battle resumes). */
+  feePct: z.number().int().min(0).max(100).optional(),
+});
+export type RevivalStatus = z.infer<typeof RevivalStatusSchema>;
+
+const FileSchema = z.object({ status: z.string(), note: z.string(), groups: z.record(z.string(), z.array(z.string())), counterparts: z.record(z.string(), z.array(z.string())).default({}), revivalStatuses: z.record(z.string(), RevivalStatusSchema).default({}), moments: z.array(PokemonMomentSchema) });
 const file = FileSchema.parse(raw);
 
 export const MOMENT_GROUPS: Readonly<Record<string, readonly string[]>> = file.groups;
 /** PA12: a Paradox Pokémon and the modern species it mirrors. */
+/** PA17 to PA31: the last-stand statuses by id. */
+export const REVIVAL_STATUSES: Readonly<Record<string, RevivalStatus>> = file.revivalStatuses;
 export const MOMENT_COUNTERPARTS: Readonly<Record<string, readonly string[]>> = file.counterparts;
 export const POKEMON_MOMENTS: readonly PokemonMoment[] = file.moments;
 const BY_ID = new Map(POKEMON_MOMENTS.map((m) => [m.id, m]));

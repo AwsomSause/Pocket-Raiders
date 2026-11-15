@@ -475,12 +475,31 @@ describe('pack archetype moments: milestones, camp and gifts (batch 2b)', () => 
     run.party = [mon('pikachu', 30, 'k', ['tackle'])];
     expect(conditionMet(content, run, c)).toBe(false);
     const ev = content.events.get('pa11-not-from-here')!;
-    expect(ev.stop).toBe('rest');
+    expect(ev.room).toBe(true); // never drawn on its own: the rest moment opens it
     expect(ev.requires.some((r) => r.kind === 'partyGroup')).toBe(true);
     const asleep = withFlags('pa11-b', [mon('buzzwole', 50, 'b', ['splash'])], [mon('caterpie', 5, 'c', ['string-shot'])], { 'pa11-sleeps': 1 });
     expect(played(move(asleep.ctx), 'pa11-sleeps-by-the-fire')).toBe(true);
     const awake = withFlags('pa11-a', [mon('buzzwole', 50, 'b', ['splash'])], [mon('caterpie', 5, 'c', ['string-shot'])], {});
     expect(played(move(awake.ctx), 'pa11-sleeps-by-the-fire')).toBe(false);
+  });
+
+  it('PA11 at a healing stop: the rest moment opens the scene beside the stop, until it sleeps by the fire', () => {
+    let opened = 0;
+    for (let i = 0; i < 40; i++) {
+      let run = createRun(content, { runId: `pa11r-${i}`, seed: `pa11r-${i}`, archetypeId: 'red' });
+      run = chooseStarter(content, run, 0);
+      run.party = [mon('buzzwole', 50, 'b', ['tackle'])];
+      const here = run.stage!.map.nodes[1]!;
+      run.stage!.current = here.id;
+      const lines = restMoments(content, run);
+      const side = here.sides.some((x) => x.kind === 'event' && x.eventId === 'pa11-not-from-here');
+      expect(side).toBe(lines.some((l) => l.includes('Not From Here')));
+      if (side) opened += 1;
+      run.story.flags['pa11-sleeps'] = 1;
+      expect(restMoments(content, run).some((l) => l.includes('Not From Here'))).toBe(false);
+    }
+    expect(opened).toBeGreaterThan(2);
+    expect(opened).toBeLessThan(20);
   });
 
   it('PA14 The Promised Ones: a kept promise brings its item once per region; no promise, nothing', () => {

@@ -53,6 +53,7 @@ import type { BattleState, PokemonInstance } from '../state';
 import { grantMegaMove, endMegaMoves } from './megaMove';
 import { gimmickLevel, stoneKey, type GimmickContext } from '../gimmicks';
 import { variantGimmickDue } from '../expansion/variantLines';
+import { endRevivalStatus } from './revivalStatus';
 
 type Side = 'player' | 'enemy';
 export type FormChangeKind = 'mega' | 'primal' | 'gigantamax' | 'tera' | 'ability';
@@ -649,6 +650,8 @@ export function revertTransformations(content: Content, battle: BattleState, par
       delete mon.overcharged;
       if (mon.hp > 0) mon.hp = Math.max(1, Math.min(calcStats(content, mon).hp, Math.round((mon.hp * calcStats(content, mon).hp) / before)));
     }
+    // A revival status (PA17 to PA31) ends the same way.
+    endRevivalStatus({ content }, mon);
     endDynamax(content, battle, 'player', mon);
   }
   for (const mon of battle.enemyTeam) endDynamax(content, battle, 'enemy', mon);
