@@ -158,7 +158,10 @@ export function runInteractionPrompt(scene: Phaser.Scene, def: PromptDef, opts: 
         const head = shown
           ? `<b style="font-size:26px;color:${GRADE_COLOR[shown.grade] ?? '#fff'};text-shadow:2px 2px 0 #0008">${shown.skipped ? 'Skipped' : shown.grade.toUpperCase()}</b>`
           : `<b class="acc${motion === 'full' ? ' pulse' : ''}" style="font-size:24px">${esc(def.label)}</b>`;
-        const hintLine = `<div class="sm">${esc(def.hint)} <span style="opacity:.7">(Esc skips)</span></div>`;
+        // The data's hints describe the old ring; the bar gets the mock-up's words, keeping any extra context after a colon.
+        const extra = /:\s*(.+)$/.exec(def.hint)?.[1] ?? '';
+        const words = def.kind === 'timing' ? `Press Enter when the bar is in the gold zone.${extra ? ` ${extra.charAt(0).toUpperCase()}${extra.slice(1)}` : ''}` : def.kind === 'hold' ? 'Hold Enter, then let go when the bar is in the gold zone.' : def.hint;
+        const hintLine = `<div class="sm">${esc(words)} <span style="opacity:.7">(Esc skips)</span></div>`;
         const frame = (body: string, st = `left:${left}px;width:${BOX.w}px;top:${cy - 80}px`): string => '<div class="fill hit"></div>' + W(head + body + hintLine, `position:absolute;${st};display:flex;flex-direction:column;gap:10px;padding:16px 18px;text-align:center;z-index:2;pointer-events:none`);
         switch (def.kind) {
           case 'tap':
@@ -183,8 +186,10 @@ export function runInteractionPrompt(scene: Phaser.Scene, def: PromptDef, opts: 
             // The drag field sits exactly where the pointer maths expects it (the same box the canvas drew).
             const at = (v: readonly [number, number], st: string): string => `<u style="position:absolute;left:${v[0]}%;top:${v[1]}%;${st}"></u>`;
             const lineTo = dragging && dragEnd ? `<svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="${def.from[0]}" y1="${def.from[1]}" x2="${dragEnd[0]}" y2="${dragEnd[1]}" stroke="#9fe8ff" stroke-width="1.2"/></svg>` : '';
-            const field = `<div class="abs win" style="left:${left}px;top:${top}px;width:${BOX.w}px;height:${BOX.h}px;padding:0;z-index:2;pointer-events:none">${lineTo}${at(def.from, 'width:20px;height:20px;margin:-10px;border-radius:50%;background:#fff')}${at(def.to, 'width:44px;height:44px;margin:-22px;border-radius:50%;box-shadow:0 0 0 3px var(--acc),inset 0 0 0 12px #0000,inset 0 0 0 15px var(--acc)')}${dragging && dragEnd ? at(dragEnd, 'width:16px;height:16px;margin:-8px;border-radius:50%;background:#9fe8ff') : ''}</div>`;
-            return '<div class="fill hit"></div>' + field + `<div class="abs" style="left:${left}px;width:${BOX.w}px;top:${top - 40}px;text-align:center;z-index:2;pointer-events:none">${head}</div><div class="abs" style="left:${left - 60}px;width:${BOX.w + 120}px;top:${top + BOX.h + 10}px;text-align:center;z-index:2;color:#fff;text-shadow:1px 1px 0 #000;pointer-events:none">${hintLine}</div>`;
+            const field = `<div class="abs" style="left:${left}px;top:${top}px;width:${BOX.w}px;height:${BOX.h}px;background:var(--p2);border-radius:6px;z-index:3;pointer-events:none">${lineTo}${at(def.from, 'width:20px;height:20px;margin:-10px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #0006')}${at(def.to, 'width:44px;height:44px;margin:-22px;border-radius:50%;box-shadow:0 0 0 3px var(--acc),inset 0 0 0 12px #0000,inset 0 0 0 15px var(--acc)')}${dragging && dragEnd ? at(dragEnd, 'width:16px;height:16px;margin:-8px;border-radius:50%;background:#9fe8ff') : ''}</div>`;
+            // One window holds the title, the field and the hint; the field keeps the canvas box's place for the pointer maths.
+            const shell = W(`${head}<span style="flex:1"></span>${hintLine}`, `position:absolute;left:${left - 18}px;top:${top - 52}px;width:${BOX.w + 36}px;height:${BOX.h + 112}px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;padding:12px 16px;text-align:center;z-index:2;pointer-events:none`);
+            return '<div class="fill hit"></div>' + shell + field;
           }
         }
       };
