@@ -14,8 +14,9 @@ describe('W7 pseudo stage records', () => {
     expect(PSEUDO.records).toHaveLength(10);
     expect(validateAllPseudo()).toEqual([]);
     expect(PSEUDO.records.filter((r) => r.countsAsStage).map((r) => r.id)).toEqual([]);
-    // Nine are opened by events (pseudo-openers.json adds Safari, Dreamscape, Evil Hideout, Celestial Expanse); Distortion World is opened by Dimensional Collision, so none is disabled.
-    expect(PSEUDO.records.filter((r) => r.status === 'disabled').map((r) => r.id).sort()).toEqual([]);
+    // Eight are opened by events (pseudo-openers.json adds Safari, Dreamscape, Celestial Expanse); Distortion World is opened by Dimensional Collision.
+    // The Evil Hideout is off: Catalog Overhaul SF13 gives every team its own Hideout as a chain pseudo-stage (ps_evil_hideout_<team>), and its opener ev-hidden-hideout is retired.
+    expect(PSEUDO.records.filter((r) => r.status === 'disabled').map((r) => r.id).sort()).toEqual(['ps_evil_hideout']);
     expect(PSEUDO.records.filter((r) => r.status !== 'disabled').every((r) => r.status === 'limited')).toBe(true);
   });
   it('rejects a record that breaks the rules', () => {
@@ -156,7 +157,7 @@ describe('Beta 0.7 pseudo stages are real, drawn stages inside one node', () => 
 
 describe('Beta 0.7 the Kanto event lines are pseudo stages', () => {
   it('Flight North, the Labyrinth, Route 25 and the Tournament each draw a map from their own events, keeping every room', () => {
-    expect(PSEUDO.chains.map((c) => c.id)).toEqual(['ps_flight_north', 'ps_sabrinas_labyrinth', 'ps_route_25', 'ps_fighting_tournament']);
+    expect(PSEUDO.chains.map((c) => c.id)).toEqual(['ps_flight_north', 'ps_sabrinas_labyrinth', 'ps_route_25', 'ps_fighting_tournament', 'ps_rival_race']);
     const run = newRun('ps-chain');
     for (const c of PSEUDO.chains) {
       expect(content.events.has(c.entry), c.id).toBe(true);

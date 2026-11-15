@@ -41,7 +41,7 @@ export const ACTIVE_SLOT_KEY = `${KEY_PREFIX}.slot`;
 export type RecordName = 'profile' | 'run' | 'settings' | 'meta' | 'timeline';
 
 /** Current schema version of each record. Bump when a record's shape changes and add a migration. */
-export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 20, run: 43, settings: 44, meta: 1, timeline: 1 };
+export const CURRENT_VERSIONS: Record<RecordName, number> = { profile: 20, run: 44, settings: 44, meta: 1, timeline: 1 };
 
 /** v41: walks a saved run and gives every Pokémon (anything with uid, speciesId, level and vitamins) IVs and empty EVs. */
 function withIvs(node: unknown): unknown {
@@ -387,6 +387,8 @@ export const MIGRATIONS: Record<RecordName, Record<number, Migration>> = {
     },
     // v43 (Beta 0.6 INSTRUMENTALITY F2): the optional run.expansion block. Old runs simply have none, so nothing changes.
     42: (data) => data,
+    // v44 (Catalog Overhaul, new events): optional quirk, marks, ot and quirkNote on Pokémon. Old Pokémon have none, so nothing changes.
+    43: (data) => data,
   },
   settings: {
     // v2 (Milestone 9): battle animation settings.

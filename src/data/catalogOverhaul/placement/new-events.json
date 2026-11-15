@@ -1,0 +1,1327 @@
+{
+ "$note": "Catalog Overhaul placement for the 100 new events (NEW_EVENTS_PLACED.md), keyed by event id. Written by tools/write-new-events-meta.ts.",
+ "camp-nightmare-watch": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "night"
+  ],
+  "note": "The first + node after a hard loss or a frightening event; Night. Goes before NE81 when both are owed."
+ },
+ "camp-one-who-wont-eat": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "The first + node after a team member faints or leaves. If NE84 is owed too, NE84 goes first."
+ },
+ "camp-photograph-nobody-posed": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A20",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "A + node in the last third of a run. The photo is of the actual party asleep at that node, in their real order."
+ },
+ "camp-the-argument": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Any + node with two Pokémon of opposed types or natures in the party."
+ },
+ "camp-the-bath": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A1",
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "water"
+  ],
+  "note": "A + node on a water stage."
+ },
+ "ne01-alpha-who-lost-its-voice": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": 11,
+  "window": [
+   8,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "tags": [
+   "forest",
+   "high"
+  ],
+  "level": "A+2",
+  "note": "The two nodes before it play no wild-battle music and the header reads Hush."
+ },
+ "ne02-two-alphas-one-river": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A4",
+  "home": 12,
+  "window": [
+   10,
+   15
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "tags": [
+   "water"
+  ],
+  "level": "A+1, then A+2",
+  "note": "Must-see when drawn: the river crosses every path. While the channel is dug, both Alphas watch from the background of that node."
+ },
+ "ne03-alpha-that-follows": {
+  "shape": "Region",
+  "often": "run",
+  "earliest": "A3",
+  "home": "Beats at steps 6, 12 and 18 of three stages of one region",
+  "sits": "optional",
+  "attaches": "after",
+  "note": "Beat 1 has no badge (the lead looks back). Beat 2 is at a + node near step 12. Beat 3 is at step 18 of the third stage; she never blocks: on a path that misses it, the gate is the + node after the Gym."
+ },
+ "ne04-crowned-calf": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 9,
+  "window": [
+   7,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "A+1",
+  "note": "Normal, Ground or Grass stages. While she is taught, the chosen Pokémon is out of the party for that node and comes back with one more Bond."
+ },
+ "ne05-alpha-of-the-empty-nest": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 14,
+  "window": [
+   11,
+   17
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "tags": [
+   "high"
+  ],
+  "level": "A+2",
+  "note": "A side branch: the nodes \"Sit\" takes are the branch's own, so the slow choice costs the least here."
+ },
+ "ne06-mega-stone-that-refused": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A4",
+  "home": 16,
+  "window": [
+   14,
+   18
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "\"Find the friend\" is a node back: the kid with the Flaaffy is one step back, and nothing is refought."
+ },
+ "ne07-delta-in-the-greenhouse": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": 7,
+  "window": [
+   5,
+   10
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "forest",
+   "city"
+  ],
+  "level": "A+0"
+ },
+ "ne08-z-crystal-for-someone-else": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A5",
+  "home": 13,
+  "window": [
+   10,
+   16
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "tags": [
+   "water",
+   "eerie"
+  ],
+  "level": "A+1",
+  "note": "On a side branch so it can be left: with no Pokémon at Bond 4 the node stays lit for the stage and can be reached once more from the next + node."
+ },
+ "ne09-mega-that-wont-come-down": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A5",
+  "home": 15,
+  "window": [
+   12,
+   17
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "tags": [
+   "storm"
+  ],
+  "level": "A+2",
+  "note": "The header reads Storm for three steps round it. Waiting it out ends the storm for the rest of the stage."
+ },
+ "ne10-delta-dittos-question": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 8,
+  "window": [
+   4,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "A+0",
+  "note": "It follows the Ditto's first meeting by at least five nodes."
+ },
+ "ne11-bell-ringers-last-morning": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 2,
+  "window": [
+   1,
+   4
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "high",
+   "eerie"
+  ],
+  "note": "A dawn event: the header must read Morning, so it sits in the first four steps. If she is carried, the bell is heard at every node for the rest of the stage, quieter each time."
+ },
+ "ne12-footprint-pond": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   7,
+   13
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "tags": [
+   "hot"
+  ],
+  "level": "A+0"
+ },
+ "ne13-child-who-draws-it": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A1",
+  "home": 5,
+  "window": [
+   3,
+   9
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "The detail he drew is in the background of a later node of the same stage, exactly as drawn."
+ },
+ "ne14-two-priests-one-shrine": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A4",
+  "home": 14,
+  "window": [
+   11,
+   16
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "tags": [
+   "eerie",
+   "forest",
+   "high"
+  ],
+  "note": "\"Ask the shrine\" takes the next node of the branch: a night's vigil, with a priest at each end of the step."
+ },
+ "ne15-legends-old-trainer": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A6",
+  "home": 17,
+  "window": [
+   15,
+   18
+  ],
+  "sits": "optional",
+  "attaches": "town"
+ },
+ "ne16-wish-already-granted": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 12,
+  "window": [
+   9,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "night"
+  ]
+ },
+ "ne17-time-travellers-garden": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": 9,
+  "window": [
+   6,
+   13
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "tags": [
+   "forest"
+  ],
+  "note": "The branch has two nodes, Young and Old, and the player can only walk one; the other is seen across the hedge."
+ },
+ "ne18-smallest-guest": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A1",
+  "home": "Any + node",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "No badge: the extra bowl is an option at the rest, once, with no explanation."
+ },
+ "ne19-nightmare-cure": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A4",
+  "home": 16,
+  "window": [
+   13,
+   18
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "night",
+   "eerie"
+  ],
+  "level": "A+1",
+  "note": "The Lunar Feather is on the next node, on a windowsill, where somebody has left it for exactly this."
+ },
+ "ne20-bouquet-road": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": 7,
+  "window": [
+   5,
+   11
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "tags": [
+   "forest",
+   "hot"
+  ],
+  "note": "Flowers come up behind the player on the map itself: that stretch of path turns green and stays green for the stage."
+ },
+ "ne21-beast-that-came-through-small": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A5",
+  "home": 10,
+  "window": [
+   6,
+   15
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "note": "The Beast rides in the player's hood, the Fire-type walks beside, and the tear is over that node at midnight."
+ },
+ "ne22-town-that-likes-its-beast": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A6",
+  "home": 13,
+  "window": [
+   10,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "town"
+ },
+ "ne23-paper-samurais-duel": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A7",
+  "home": 15,
+  "window": [
+   12,
+   18
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "tags": [
+   "forest",
+   "high"
+  ],
+  "level": "A+2, one on one"
+ },
+ "ne24-what-the-guzzlord-left": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A8",
+  "home": 6,
+  "window": [
+   4,
+   9
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "level": "A+1",
+  "note": "The stage's map is drawn with a bite out of it: two steps of bare ground. Rebuilding begins to fill it in. Tracking adds a battle on a side branch, with its tail end only."
+ },
+ "ne25-beast-in-the-mirror": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A6",
+  "home": 12,
+  "window": [
+   9,
+   15
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "tags": [
+   "water"
+  ]
+ },
+ "ne26-champion-who-teaches-swimming": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A4",
+  "home": 8,
+  "window": [
+   5,
+   11
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "water"
+  ],
+  "level": "A+2 if asked, three on three",
+  "note": "At the Town node; else step 8."
+ },
+ "ne27-leader-who-failed-her-own-test": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "level": "A+1",
+  "note": "At the Town node; else step 17. She leads this stage's own Gym, met on its steps before Step 20. A Pokémon lent to her is her ace at Step 20 and is handed back straight after."
+ },
+ "ne28-trophy-nobody-claimed": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A9",
+  "home": 4,
+  "window": [
+   2,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "At the Town node; else step 4. Once per save, built once per run."
+ },
+ "ne29-two-leaders-wedding": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A5",
+  "home": 10,
+  "window": [
+   9,
+   11
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "level": "A+1 if they battle for it",
+  "note": "Must-see when drawn: it is across the road, between two Gym towns."
+ },
+ "ne30-champions-mother": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": 6,
+  "window": [
+   3,
+   9
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "At the Town node; else step 6. The letter is delivered at any later meeting with that Champion; with none in the run, it is posted from the last stage's Town node."
+ },
+ "ne31-ally-who-kept-your-seat": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": 14,
+  "window": [
+   10,
+   18
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Needs one finished run. The inn's + node has a lit window from three steps away."
+ },
+ "ne32-borrowed-pokemons-thank-you": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 9,
+  "window": [
+   4,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after"
+ },
+ "ne33-ones-who-formed-a-club": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A12",
+  "home": 5,
+  "window": [
+   3,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "At the Town node; else step 5. A late-run event: each member is somebody this run actually helped."
+ },
+ "ne34-apprentices-first-student": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A4",
+  "home": 11,
+  "window": [
+   7,
+   15
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "note": "Needs SF2 (the Apprentice) met this run."
+ },
+ "ne35-rescue-you-dont-remember": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 13,
+  "window": [
+   6,
+   17
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "note": "Once per save, built once per run. Only with an earlier run on this save."
+ },
+ "ne41-museum-of-you": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A25",
+  "home": 9,
+  "window": [
+   6,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "At the Town node; else step 9. Once per save, built once per run."
+ },
+ "ne42-your-pokemon-old": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A4",
+  "home": 13,
+  "window": [
+   9,
+   17
+  ],
+  "sits": "optional",
+  "attaches": "rest"
+ },
+ "ne43-kid-from-the-next-run": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A6",
+  "home": 3,
+  "window": [
+   1,
+   5
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "note": "At the very start of a stage: the kid stands where the player once stood. Once per save, built once per run."
+ },
+ "ne44-gym-that-isnt-built-yet": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 19,
+  "window": [
+   18,
+   19
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "A+0, practice",
+  "note": "On the Gym's own approach, in an empty lot beside it: the next Gym, not yet built, beside the one that is."
+ },
+ "ne45-message-in-your-own-handwriting": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   7,
+   14
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "level": "A+1 on the left road",
+  "note": "At a fork: the last node before the paths split. The right road and the left road are the two real paths."
+ },
+ "ne46-night-clinic-for-spirits": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 12,
+  "window": [
+   9,
+   15
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "tags": [
+   "forest",
+   "eerie",
+   "night"
+  ],
+  "note": "\"Give back\" takes the branch's next node, the whole night. The clinic's lamp is seen from the main path."
+ },
+ "ne47-smallest-delivery-service": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": 4,
+  "window": [
+   2,
+   7
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "At the Town node; else step 4. The delivery ends at a node four steps on: \"Fly with it\" follows the parcel across four steps as a shadow over the path."
+ },
+ "ne48-inn-that-feeds-you-what-you-miss": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 16,
+  "window": [
+   12,
+   18
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "night"
+  ],
+  "note": "The inn only exists at night. In daylight its + node is an ordinary rest, with an empty lot where the inn was."
+ },
+ "ne49-giants-garden": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A5",
+  "home": 14,
+  "window": [
+   11,
+   17
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "tags": [
+   "high"
+  ]
+ },
+ "ne50-class-with-one-seat-left": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A4",
+  "home": 8,
+  "window": [
+   5,
+   11
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "tags": [
+   "high",
+   "forest"
+  ],
+  "level": "A+1, a lesson, not a fight"
+ },
+ "ne51-one-who-cried-smoke": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 7,
+  "window": [
+   5,
+   10
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "tags": [
+   "cave"
+  ],
+  "level": "A+0",
+  "note": "Steel or Rock stages."
+ },
+ "ne52-dancing-crocodile": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": 6,
+  "window": [
+   4,
+   9
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "tags": [
+   "water"
+  ],
+  "level": "A+0"
+ },
+ "ne53-one-who-got-too-slow": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A4",
+  "home": "The first + node after the evolution",
+  "sits": "optional",
+  "attaches": "rest",
+  "level": "A+0, sparring",
+  "note": "A Trigger: placed when a party Pokémon evolves into something slower (that trigger is not built yet; the player points at the Pokémon)."
+ },
+ "ne54-bird-who-wouldnt-fall": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 13,
+  "window": [
+   10,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "tags": [
+   "storm",
+   "high"
+  ],
+  "level": "A+1"
+ },
+ "ne55-fire-that-wouldnt-light": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A1",
+  "home": 5,
+  "window": [
+   3,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "A-1",
+  "note": "Seen again at Step 15 of the same stage: lit, or still trying."
+ },
+ "ne56-grunts-mum": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": 5,
+  "window": [
+   3,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "level": "A+0 if the tin is taken to him",
+  "note": "The town; else Step 5. Needs team step 1 or more. \"Take the tin\": the next team scene on the path gains a small tin badge."
+ },
+ "ne57-teams-recruitment-fair": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 9,
+  "window": [
+   6,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "level": "A+0",
+  "note": "The town; else Step 9. Needs team step 2 or more."
+ },
+ "ne58-bosss-day-in-court": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A8",
+  "home": "The town of the stage after the Hideout",
+  "sits": "must-see",
+  "attaches": "town",
+  "note": "Must-see when drawn. Needs the Hideout won."
+ },
+ "ne59-stolen-pokemon-wont-come-home": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A4",
+  "home": "The + node after any Holding Pen",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Needs a Holding Pen cleared (until pens exist: one of the team's operations stopped)."
+ },
+ "ne60-two-teams-one-target": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A6",
+  "home": 14,
+  "window": [
+   11,
+   16
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "level": "A+1, twice",
+  "note": "Must-see when drawn. Needs two teams in the region (the run's team awake; the second crew is a roaming one). \"Lock both doors\": the node stays visible for the rest of the stage, with shouting."
+ },
+ "ne66-town-with-one-clock": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": 6,
+  "window": [
+   4,
+   9
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "The town; else Step 6. While the clock is stopped the header shows no time; when it runs again it is wrong by an hour, and nobody minds."
+ },
+ "ne67-ferrymans-last-crossing": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 12,
+  "window": [
+   9,
+   15
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "tags": [
+   "water"
+  ],
+  "note": "Must-see when drawn: it is the river. The bridge and the ferry are two real paths across the same step; crossing with him shows the hidden node on the far bank."
+ },
+ "ne68-letter-for-a-house-thats-gone": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": 7,
+  "window": [
+   4,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "after"
+ },
+ "ne69-boy-who-sells-directions": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A1",
+  "home": "A fork, 5 to 12",
+  "window": [
+   5,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "note": "At a real fork, and what he sells is true: for ₽10 he names the better path; for ₽50 the map also marks its Berry tree and its rest spot."
+ },
+ "ne70-widows-scarecrow": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": 10,
+  "window": [
+   7,
+   14
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "tags": [
+   "forest"
+  ],
+  "note": "Normal or Grass stages."
+ },
+ "ne71-funeral-in-the-tall-grass": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": 9,
+  "window": [
+   5,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "tags": [
+   "forest"
+  ],
+  "note": "Before the battle; the wild battle does not happen. Normal or Grass stages. The node has no badge at all: the only hidden one of the hundred."
+ },
+ "ne72-teacher-in-the-stream": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A1",
+  "home": 5,
+  "window": [
+   3,
+   9
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "tags": [
+   "water"
+  ]
+ },
+ "ne73-border-dispute": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": 8,
+  "window": [
+   5,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "tags": [
+   "forest"
+  ],
+  "level": "A+0 if the Berry is eaten"
+ },
+ "ne74-night-stars-fell-into-lake": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 15,
+  "window": [
+   12,
+   18
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "tags": [
+   "water",
+   "night"
+  ]
+ },
+ "ne75-bully-of-the-watering-hole": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 11,
+  "window": [
+   8,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "tags": [
+   "hot"
+  ],
+  "level": "A+1",
+  "note": "Savanna or dry stages."
+ },
+ "ne76-bridge-that-sings": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 12,
+  "window": [
+   9,
+   15
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "tags": [
+   "high",
+   "cave"
+  ],
+  "note": "Must-see when drawn: it is the only bridge."
+ },
+ "ne77-fog-that-asks": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A4",
+  "home": 13,
+  "window": [
+   10,
+   16
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "tags": [
+   "eerie"
+  ],
+  "note": "It covers three steps. Inside the fog the map does not show the next nodes; a true name clears it at once."
+ },
+ "ne78-orchard-after-fire": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 8,
+  "window": [
+   5,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "tags": [
+   "hot",
+   "forest"
+  ],
+  "note": "Plant new trees takes the next node."
+ },
+ "ne79-lighthouse-two-keepers": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A4",
+  "home": 17,
+  "window": [
+   14,
+   18
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "tags": [
+   "water",
+   "tide"
+  ]
+ },
+ "ne80-snow-that-wont-stop": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A5",
+  "home": 10,
+  "window": [
+   10,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "tags": [
+   "snow",
+   "high"
+  ],
+  "note": "Three steps of weather (10 to 12), header Whiteout. Climbing takes 11 and 12 on a side path; finding the trainer is Step 9."
+ },
+ "ne86-town-where-everyone-lies": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 16,
+  "window": [
+   14,
+   18
+  ],
+  "sits": "must-see",
+  "attaches": "town",
+  "note": "The town; else Step 16. The Gym key is in it, so it cannot fail: Wait for Wednesday always works and takes Step 19. The header shows the day."
+ },
+ "ne87-painting-missing-person": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 9,
+  "window": [
+   6,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "city",
+   "eerie"
+  ],
+  "note": "The town; else Step 9. The three clues are spread across the stage."
+ },
+ "ne88-well-with-two-bottoms": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": 7,
+  "window": [
+   4,
+   10
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "level": "A+0",
+  "note": "The town; else Step 7. A+0 for the battle if a Pokémon is sent down."
+ },
+ "ne89-thief-who-returns-things": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": "town",
+  "sits": "optional",
+  "attaches": "town",
+  "level": "A+0",
+  "note": "The town; then one node on. Follow it takes the next node: its den, everything it has ever borrowed, sorted by owner."
+ },
+ "ne90-door-in-the-tree": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A1",
+  "home": 11,
+  "window": [
+   7,
+   15
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "tags": [
+   "forest"
+  ]
+ },
+ "ne91-shop-with-no-shopkeeper": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A1",
+  "home": 8,
+  "window": [
+   4,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "note": "If the player takes without paying, the next three shop nodes carry a small raised-price mark."
+ },
+ "ne92-tutor-who-forgot-the-move": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A4",
+  "home": 12,
+  "window": [
+   9,
+   15
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "tags": [
+   "city"
+  ],
+  "note": "City stages and Fighting stages."
+ },
+ "ne93-honest-fortune-machine": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": 5,
+  "window": [
+   3,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "The town; else Step 5. Ask about the road: Step 20's node then shows the Gym ace and item when hovered."
+ },
+ "ne94-auction-of-useless-things": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   7,
+   13
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "note": "The town; else Step 10."
+ },
+ "ne95-pokemon-barber": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": 14,
+  "window": [
+   11,
+   17
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "The town; else Step 14."
+ },
+ "ne96-festival-of-first-catches": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A4",
+  "home": 10,
+  "sits": "optional",
+  "attaches": "town",
+  "note": "The Town node of Stage 4 or 5 of any region; until towns exist, Step 10. The header reads Festival for the whole stage."
+ },
+ "ne97-day-the-run-is-half-over": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A40",
+  "sits": "must-see",
+  "attaches": "rest",
+  "note": "The exact midpoint of the run: the + node nearest Step 10 of the middle stage. No badge. Here: the last stage of the fifth region of a full run (absolute Stage 40 of 80)."
+ },
+ "ne98-regions-thank-you": {
+  "shape": "Single",
+  "often": "region",
+  "earliest": "A8",
+  "sits": "must-see",
+  "attaches": "after",
+  "note": "After Step 20 of a region's eighth stage, before the next region's first. Once per region. The gifts depend on the region's Kindness count."
+ },
+ "ne99-longest-night": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A1",
+  "sits": "must-see",
+  "attaches": "rest",
+  "note": "The run's final + node; or, in the real winter solstice week, the first + node of any stage."
+ },
+ "ne100-road-home": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A1",
+  "sits": "must-see",
+  "attaches": "after",
+  "note": "After the final battle, win or lose. Not on the map: it is the map, walked backwards. Every node where somebody was helped has them standing on it."
+ },
+ "rq-asks-you-to-lose": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A6",
+  "home": 17,
+  "window": [
+   16,
+   18
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "level": "A+2",
+  "note": "Trust 3 or more. Only drawn in a stage that has a Circuit or League round: one node to think on before the match at 18 or 19."
+ },
+ "rq-empty-slot": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A5",
+  "home": 10,
+  "window": [
+   8,
+   13
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "level": "A+0, five on five, if the player asks",
+  "note": "At the rival's camp. If the path misses this + node, the cracked Ball is seen on the rival's belt at the next meeting, and nothing is said."
+ },
+ "rq-help-wanted": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": 6,
+  "window": [
+   3,
+   9
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "At the Town node; else step 6."
+ },
+ "rq-letter": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A6",
+  "home": 15,
+  "window": [
+   11,
+   18
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "night"
+  ],
+  "note": "Night camp; Trust 4 or more."
+ },
+ "rq-swap-day": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A4",
+  "home": 9,
+  "window": [
+   7,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "level": "The swapped teams, A+0",
+  "note": "The swap lasts from its node to Step 19. The Gym is not fought swapped: the teams are handed back at Step 19, with a short scene."
+ }
+}
