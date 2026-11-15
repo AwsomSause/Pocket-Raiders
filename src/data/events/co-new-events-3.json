@@ -2283,6 +2283,1137 @@
    ]
   },
   {
+   "id": "ne61-the-trade-across-a-fence",
+   "name": "The Trade Across a Fence",
+   "group": "Trades",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne61-the-trade-across-a-fence-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "vulpix",
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "Two children are kneeling on opposite sides of a tall border fence, red in the face.\nThey are trying to push a Poké Ball through a gap that is far too small for it.\n\nTeodoro: \"My Sandshrew for her Vulpix. We agreed. The fence didn't.\"\nIngeborg: \"Could you walk them round? It's four miles. My mum won't let me go that far.\"\n\nThey look at you as if you are the answer to everything.\nBoth of them are holding their Poké Balls very carefully, the way you do with something you have promised away.",
+   "choices": [
+    {
+     "label": "Walk them round (a node).",
+     "success": {
+      "text": "You take a Poké Ball from each of them and set off along the fence. Four miles, there and back, and the fence never ends.\n\nWhen you hand the Balls over, both of them cheer so loudly that a Pidgey falls off the fence.\nThey swap addresses through the gap and promise to write every week.\n\nTeodoro presses a Fire Stone into your hand. Ingeborg pushes an Ice Stone through the gap after it. \"From both of us,\" they say together.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fence-trade",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "fire-stone",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "ice-stone",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne61-the-trade-across-a-fence-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade with one of them myself.",
+     "success": {
+      "text": "You crouch down by the fence. Maybe you could make one of them a better offer, and save the long walk for someone.\n\nThey look at each other through the wire. \"We still want ours done,\" says Ingeborg. \"But you can ask.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ne61-a-better-offer"
+       },
+       {
+        "kind": "flag",
+        "key": "ne61-the-trade-across-a-fence-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lift one over (a Flying-type).",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "flying"
+       ]
+      }
+     ],
+     "pick": {
+      "types": [
+       "flying"
+      ]
+     },
+     "success": {
+      "text": "Your Flying-type takes one Ball in its claws, then comes back for the other. Up, over, down, as gentle as anything.\n\nBoth children burst into applause. A few grown-ups watching from a garden join in. Your Pokémon lands looking enormously pleased with itself.\n\nTeodoro gives you a Fire Stone. Ingeborg pushes an Ice Stone through the gap. \"One from each of us. That was the best thing I've ever seen.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "fence-trade",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "fire-stone",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "ice-stone",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne61-the-trade-across-a-fence-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne61-a-better-offer",
+   "name": "A Better Offer",
+   "group": "Trades",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "Teodoro holds up his Sandshrew. It is curled into a tight ball, peeking out at you. \"It digs. Everywhere. Mum's garden is all holes.\"\n\nIngeborg holds up her Vulpix. It is warm even through the Poké Ball. \"She's always warm. It's nice in winter.\"\n\nWhichever you take, the other one still waits for their swap. They make you promise to tell the other one where it went.",
+   "choices": [
+    {
+     "label": "Trade with Teodoro for his Sandshrew.",
+     "success": {
+      "text": "Teodoro looks at your Pokémon for a long time, then nods, very seriously, and hands his Sandshrew over the fence the long way: up, and over, and into your arms.\nIt immediately tries to dig into your coat.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "ne61-sandshrew",
+        "gives": {
+         "species": "sandshrew",
+         "nature": "jolly",
+         "quirk": "burrower",
+         "why": "It digs. Everywhere. It needs somewhere bigger than a garden.",
+         "ot": "Teodoro",
+         "marks": [
+          "traded across a border fence"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "fence-traded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade with Ingeborg for her Vulpix.",
+     "success": {
+      "text": "Ingeborg hugs her Vulpix, once, hard, then lifts it over the fence to you. It is as warm as a cup of tea.\nIt settles into your arms as if it has always been there.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "ne61-vulpix",
+        "gives": {
+         "species": "vulpix",
+         "nature": "timid",
+         "quirk": "warm",
+         "why": "She's always warm. She should see the world, not just my garden.",
+         "ot": "Ingeborg",
+         "marks": [
+          "traded across a border fence"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "fence-traded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave their trade be.",
+     "success": {
+      "text": "You tell them it was their trade first, and it should stay theirs. They both look very relieved.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne61-a-letter-with-a-drawing",
+   "name": "A Letter With a Drawing",
+   "group": "Trades",
+   "rarity": "common",
+   "minStage": 4,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "anyFlag",
+     "keys": [
+      "fence-trade",
+      "fence-traded"
+     ]
+    },
+    {
+     "kind": "flagAge",
+     "key": "ne61-the-trade-across-a-fence-done",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne61-a-letter-with-a-drawing-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A letter finds you at a rest stop, addressed in two different handwritings, one large and one very neat.\n\nTeodoro's Sandshrew has evolved. Ingeborg's Vulpix keeps his whole house warm now. They still write every week, through the fence.\n\nFolded inside is a drawing: two children, a very long fence, and a small figure that must be you, walking along it with a Poké Ball in each hand.",
+   "choices": [
+    {
+     "label": "Keep the drawing.",
+     "success": {
+      "text": "You fold it carefully and put it somewhere safe. It is not a good drawing. It is the best one you have.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne61-a-letter-with-a-drawing-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne62-the-grandmothers-collection",
+   "name": "The Grandmother's Collection",
+   "group": "Trades",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne62-the-grandmothers-collection-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2c2420",
+    "effect": "none"
+   },
+   "intro": "A small parlour, warm and dim. Thirty Poké Balls sit on thirty lace doilies on every surface: the mantel, the piano, the windowsill.\nEach has a paper label in careful, looping handwriting.\n\nGrandmother Eulalia: \"My late husband's. All of them. I can't walk them all any more, dear. My knees.\"\nEulalia: \"They should go to people who'll go places. One each. And you must tell me where you'll take it.\"",
+   "choices": [
+    {
+     "label": "Pick one.",
+     "success": {
+      "text": "She takes you round the room, one Ball at a time, telling you each name. She stops at three of them and waits.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ne62-three-on-the-mantel"
+       },
+       {
+        "kind": "flag",
+        "key": "ne62-the-grandmothers-collection-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take none; walk them for her today (a node).",
+     "success": {
+      "text": "You offer to walk them. All of them. She looks at you as if you have offered her the moon.\n\nThirty Pokémon on thirty leads, in a small village, all at once. It is chaos. A Doduo goes through a hedge. A Lickitung licks the postman.\nNobody, at any point, is in charge.\n\nWhen you bring them home at dusk, every one of them is tired and happy, and so is she.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "ne62-the-grandmothers-collection-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about him.",
+     "success": {
+      "text": "\"Ask about him?\" She sits down, slowly, and smiles at the nearest Ball. \"Nobody asks.\"\n\n\"He named every one of them after a railway station. Paddington. Waverley. Euston. He liked trains.\nHe liked the idea that you could get on one and go anywhere at all.\"\n\n\"He never went anywhere. Not once. That's why they should.\" She looks at you. \"Would you like to pick one, dear?\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ne62-three-on-the-mantel"
+       },
+       {
+        "kind": "flag",
+        "key": "ne62-the-grandmothers-collection-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne62-three-on-the-mantel",
+   "name": "Three on the Mantel",
+   "group": "Trades",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2c2420",
+    "effect": "none"
+   },
+   "intro": "Three Balls on the mantel, side by side, their labels turned to face you: Paddington, Waverley, Euston.\n\n\"These three liked him best,\" says Eulalia. \"They know their moves the old way. He taught them himself, out of a book older than me.\"",
+   "choices": [
+    {
+     "label": "Take Paddington (Doduo).",
+     "success": {
+      "text": "Eulalia lifts the Ball off its doily and holds it a moment. \"He named it after a station.\" She puts it in your hands. \"Now. Where will you take it?\"\n\nYou tell her: {nextRegion}. She writes it down on the label, under the name, in her careful hand. \"Good. He always wanted to go there.\"",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "ne62-doduo",
+        "gift": true,
+        "gives": {
+         "species": "doduo",
+         "nature": "jolly",
+         "moves": [
+          "peck",
+          "fury-attack",
+          "growl",
+          "pursuit"
+         ],
+         "why": "He named it after a station. It ran the platform every morning to meet his train.",
+         "ot": "Eulalia",
+         "marks": [
+          "named after a railway station",
+          "promised to {nextRegion}"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "eulalia-promise",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take Waverley (Lickitung).",
+     "success": {
+      "text": "Eulalia lifts the Ball off its doily and holds it a moment. \"Waverley.\" She puts it in your hands. \"Now. Where will you take it?\"\n\nYou tell her: {nextRegion}. She writes it down on the label, under the name, in her careful hand. \"Good. He always wanted to go there.\"",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "ne62-lickitung",
+        "gift": true,
+        "gives": {
+         "species": "lickitung",
+         "nature": "docile",
+         "moves": [
+          "lick",
+          "stomp",
+          "supersonic",
+          "wrap"
+         ],
+         "why": "Waverley. He liked trains. It liked him. It still waits by the door at six.",
+         "ot": "Eulalia",
+         "marks": [
+          "named after a railway station",
+          "promised to {nextRegion}"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "eulalia-promise",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take Euston (Clefairy).",
+     "success": {
+      "text": "Eulalia lifts the Ball off its doily and holds it a moment. \"Euston.\" She puts it in your hands. \"Now. Where will you take it?\"\n\nYou tell her: {nextRegion}. She writes it down on the label, under the name, in her careful hand. \"Good. He always wanted to go there.\"",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "ne62-clefairy",
+        "gift": true,
+        "gives": {
+         "species": "clefairy",
+         "nature": "gentle",
+         "moves": [
+          "pound",
+          "sing",
+          "double-slap",
+          "minimize"
+         ],
+         "why": "Euston. It sang him to sleep for forty years. It needs someone new to sing to.",
+         "ot": "Eulalia",
+         "marks": [
+          "named after a railway station",
+          "promised to {nextRegion}"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "eulalia-promise",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I can't take one from you.",
+     "success": {
+      "text": "She pats your hand. \"That's why you could have.\" She puts the kettle on instead, and you stay for tea.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne62-a-card-for-eulalia",
+   "name": "A Card for Eulalia",
+   "group": "Trades",
+   "rarity": "common",
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "eulalia-promise",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ne62-a-card-for-eulalia-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2c2420",
+    "effect": "none"
+   },
+   "intro": "You are here. {nextRegion} was a name on a paper label, in looping handwriting, and now it is the ground under your feet.\n\nThere is a little shop by the station selling postcards of the trains.",
+   "choices": [
+    {
+     "label": "Send Eulalia a card.",
+     "success": {
+      "text": "You buy the one with the biggest train on it and write on the back: \"We made it.\" You let your Pokémon put its footprint in the corner.\n\nWeeks later a parcel catches up with you: a knitted scarf in railway colours, far too long, with a note. \"He would have been so pleased. So am I.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": {
+         "species": [
+          "doduo",
+          "dodrio",
+          "lickitung",
+          "lickilicky",
+          "clefairy",
+          "clefable"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "eulalia-card",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne62-a-card-for-eulalia-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep the promise quietly.",
+     "success": {
+      "text": "You don't send anything. But you look at the trains for a long time, and your Pokémon looks with you.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": {
+         "species": [
+          "doduo",
+          "dodrio",
+          "lickitung",
+          "lickilicky",
+          "clefairy",
+          "clefable"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "ne62-a-card-for-eulalia-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne63-the-trade-that-goes-wrong-honestly",
+   "name": "The Trade That Goes Wrong Honestly",
+   "group": "Trades",
+   "rarity": "uncommon",
+   "tags": [
+    "Shop",
+    "Relationship"
+   ],
+   "stop": "event",
+   "types": [
+    "normal",
+    "steel",
+    "electric",
+    "poison"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "normal",
+      "steel",
+      "electric",
+      "poison"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne63-the-trade-that-goes-wrong-honestly-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "houndour",
+    "tint": "#24201c",
+    "effect": "none"
+   },
+   "intro": "At the edge of the market a man in a wide-brimmed hat is trying to hand a Poké Ball back to a trader.\nThe trader, very politely, will not take it.\n\nFlorentyn: \"It doesn't like me. Three days. It sits facing the wall. It won't even eat if I'm in the room.\"\nIvo Ternary: \"The Trade-Back is for seven days, sir. It's been three. Give it four more.\"\n\nIvo glances at you, and then, quietly: \"Or someone it does like could take it.\"",
+   "choices": [
+    {
+     "label": "Offer a trade for it.",
+     "success": {
+      "text": "Ivo sets the Honest Card on his table: your Pokémon on one side, the Houndour on the other, and the fair value of each, plain for anyone to read.\n\nFlorentyn looks at it for a long time. \"It isn't a bad Pokémon,\" he says. \"I think it was just let down before.\"\nHe hands it over, and lifts his hat to it, sadly.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "ne63-houndour",
+        "wants": {
+         "label": "A Pokémon of similar value",
+         "minTier": 2
+        },
+        "gives": {
+         "species": "houndour",
+         "nature": "sassy",
+         "quirk": "slow-to-trust",
+         "why": "It faces the wall. It was let down before, and it is waiting to see if you will too.",
+         "ot": "Florentyn",
+         "marks": [
+          "traded back once"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "ne63-the-trade-that-goes-wrong-honestly-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help Florentyn with it (a node).",
+     "success": {
+      "text": "You spend the afternoon with them both, in a quiet yard behind the market. Houndour sits facing the wall, the whole time.\n\nThen you notice: it flinches every time Florentyn turns his head. Not at him. At the hat. Its last owner, Ivo tells you, wore one just like it.\n\nFlorentyn takes the hat off. Houndour turns round, slowly, and looks at him properly for the first time. Then it walks over and puts its head on his knee.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "florentyn-hat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne63-the-trade-that-goes-wrong-honestly-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let Ivo handle it.",
+     "success": {
+      "text": "You leave them to it. Ivo keeps his word: on day seven, Houndour is traded back, and Ivo finds it someone who doesn't wear hats. You hear about it later.\nIt is doing well.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne63-the-trade-that-goes-wrong-honestly-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne63-the-houndour-in-the-hat",
+   "name": "The Houndour in the Hat",
+   "group": "Trades",
+   "rarity": "common",
+   "minStage": 4,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "florentyn-hat",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "florentyn-hat",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne63-the-houndour-in-the-hat-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#24201c",
+    "effect": "none"
+   },
+   "intro": "On a busy street you see them again: Florentyn, bareheaded, walking with a spring in his step, and beside him a Houndour trotting proudly along.\n\nThe Houndour is wearing the hat. It is far too big for it. Nobody has the heart to tell it.",
+   "choices": [
+    {
+     "label": "Wave.",
+     "success": {
+      "text": "Florentyn waves back with his whole arm. The Houndour does not wave. But it does stop, and look at you, and wag once.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne63-the-houndour-in-the-hat-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne64-the-blind-trade-booth",
+   "name": "The Blind Trade Booth",
+   "group": "Trades",
+   "rarity": "uncommon",
+   "tags": [
+    "Shop",
+    "Mystery"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne64-the-blind-trade-booth-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c2e",
+    "effect": "none"
+   },
+   "intro": "A booth with a heavy velvet curtain and a hand-painted sign: BLIND SWAP. YOU DON'T SEE. THEY DON'T SEE. ODDS ON THE BOARD.\n\nQuintessa: \"The board's the law, love. You put one in, you get one out, from the pool on the board.\"\nQuintessa: \"And before you say yes, you see what's coming. Nature, quirk, the lot. I'm blind, not crooked.\"",
+   "choices": [
+    {
+     "label": "Put one in.",
+     "success": {
+      "text": "You pass a Poké Ball through the curtain. Somewhere behind it, a hand takes it, and another hand pushes a different Ball back out.\n\nQuintessa lays the Honest Card on the counter first: what went in, what is coming out, its nature, its quirk, and the fair value of both. \"Last chance, love.\"",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "ne64-blind-swap",
+        "pool": "city-market"
+       },
+       {
+        "kind": "flag",
+        "key": "blind-swap",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne64-the-blind-trade-booth-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the board.",
+     "success": {
+      "text": "The board is chalked in a careful hand. Common, the most likely. Uncommon, less so. Rare, now and then. Very rare, almost never, but not never.\n\nEvery name in the pool is written there, with its chance next to it. Nothing is hidden. Nothing is rubbed out.\n\nQuintessa watches you read all of it. \"Most people don't,\" she says. \"They should.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ne64-the-booth-again"
+       },
+       {
+        "kind": "flag",
+        "key": "ne64-the-blind-trade-booth-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask who else is in the booth.",
+     "success": {
+      "text": "\"Today? A farmer, a sailor,\" Quintessa says, and then, with a little smile, \"and a young trainer who looked a lot like you. Same look in the eye.\"\n\nYour rival. Somewhere behind that curtain is one of your rival's own Pokémon. If it comes out, it will know you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-blind-swap",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ne64-the-booth-again"
+       },
+       {
+        "kind": "flag",
+        "key": "ne64-the-blind-trade-booth-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne64-the-booth-again",
+   "name": "The Booth, Again",
+   "group": "Trades",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c2e",
+    "effect": "none"
+   },
+   "intro": "The curtain stirs. Quintessa taps the counter. \"Well, love? In or out?\"",
+   "choices": [
+    {
+     "label": "Put one in.",
+     "success": {
+      "text": "You pass a Poké Ball through the curtain. Quintessa lays the Honest Card on the counter before anything else. \"Look at it properly. Then decide.\"",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "ne64-blind-swap",
+        "pool": "city-market"
+       },
+       {
+        "kind": "flag",
+        "key": "blind-swap",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You thank her and walk on. Behind you, the curtain sways, and somebody else steps up to try their luck.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne64-doing-well",
+   "name": "Doing Well",
+   "group": "Trades",
+   "rarity": "common",
+   "minStage": 5,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "blind-swap",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "blind-swap",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne64-doing-well-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c2e",
+    "effect": "none"
+   },
+   "intro": "At a crossroads you pass a farmer with a cart, and riding on top of the hay, looking very at home, is the Pokémon you put through the curtain.\n\nIt sees you. It doesn't jump down. But it watches you all the way past, and it looks well. It looks happy.",
+   "choices": [
+    {
+     "label": "Let it be.",
+     "success": {
+      "text": "You raise a hand. The farmer, puzzled, raises one back. The Pokémon settles down in the hay again, exactly where it belongs now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne64-doing-well-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne65-the-last-trade-of-a-retiring-trader",
+   "name": "The Last Trade of a Retiring Trader",
+   "group": "Trades",
+   "rarity": "rare",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 8,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne65-the-last-trade-of-a-retiring-trader-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "farfetchd",
+    "tint": "#2a2218",
+    "effect": "none"
+   },
+   "intro": "A trader's cart stands at the roadside with everything marked down to almost nothing, and a hand-painted sign nailed to the side: FORTY YEARS. LAST DAY.\n\nTrader Balthasar: \"I've one left I never could trade. Forty years. Nobody wanted it.\"\nBalthasar: \"I'm not selling it. I'm placing it. There's a difference.\"\n\nOn the cart's seat, holding the reins in its wings as if it is the one driving, sits a very old Farfetch'd.\nIt looks at you over its leek like a magistrate.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "Balthasar sets the Honest Card on the seat: nothing on your side at all. On his, the old Farfetch'd, every year of it written down.\n\n\"It's slow,\" he says. \"It's clever. It's been on every road in this region twice.\"\nThe Farfetch'd gets down off the cart, looks back once, and walks over to stand beside you.\n\nBalthasar watches it go. He doesn't say anything else. He doesn't have to.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "ne65-farfetchd",
+        "gift": true,
+        "gives": {
+         "species": "farfetchd",
+         "nature": "brave",
+         "quirk": "old-hand",
+         "why": "It's slow. It's clever. Nobody wanted it, and it was the best of the lot.",
+         "ot": "Balthasar",
+         "marks": [
+          "forty years on the road"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "balthasar-placed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne65-the-last-trade-of-a-retiring-trader-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask why nobody wanted it.",
+     "success": {
+      "text": "Balthasar looks at the Farfetch'd. The Farfetch'd looks at Balthasar.\n\n\"It bit a duke,\" he says. \"In nineteen-something. Word gets round.\"\n\nThe Farfetch'd does not look sorry in the least.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ne65-the-cart-seat"
+       },
+       {
+        "kind": "flag",
+        "key": "ne65-the-last-trade-of-a-retiring-trader-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer to take the cart, too.",
+     "success": {
+      "text": "He laughs. He laughs for a long time, leaning on the cart, wiping his eyes.\n\nThen he reaches up and unhooks the little brass bell from the front of it, and puts it in your hand.\n\"Forty years that rang every time I got a good deal. Let it ring for you now.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "balthasar-bell",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ne65-the-cart-seat"
+       },
+       {
+        "kind": "flag",
+        "key": "ne65-the-last-trade-of-a-retiring-trader-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne65-the-cart-seat",
+   "name": "The Cart Seat",
+   "group": "Trades",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2218",
+    "effect": "none"
+   },
+   "intro": "The old Farfetch'd is still on the cart seat, still holding the reins. Balthasar waits.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "Balthasar sets the Honest Card on the seat, nothing on your side of it.\nThe Farfetch'd climbs down, slow and careful, and comes to stand beside you as if it always meant to.",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "ne65-farfetchd",
+        "gift": true,
+        "gives": {
+         "species": "farfetchd",
+         "nature": "brave",
+         "quirk": "old-hand",
+         "why": "It's slow. It's clever. Nobody wanted it, and it was the best of the lot.",
+         "ot": "Balthasar",
+         "marks": [
+          "forty years on the road"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "balthasar-placed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it with him.",
+     "success": {
+      "text": "\"No,\" says Balthasar, when you say it should stay with him. \"But thank you.\" He climbs up beside it, and they drive off together, slowly, into the last day.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne65-balthasar-at-the-inn",
+   "name": "Balthasar at the Inn",
+   "group": "Trades",
+   "rarity": "common",
+   "minStage": 10,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "anyFlag",
+     "keys": [
+      "balthasar-placed",
+      "balthasar-bell"
+     ]
+    },
+    {
+     "kind": "flagAge",
+     "key": "ne65-the-last-trade-of-a-retiring-trader-done",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne65-balthasar-at-the-inn-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2218",
+    "effect": "none"
+   },
+   "intro": "In the corner of an inn, at a table by the fire, sits Balthasar. He has a cup of tea in front of him and nobody to trade with.\n\nHe is giving advice to a young trader at the next table, who did not ask for it, about the price of Pecha Berries in a dry year.\nHe is enjoying himself enormously.",
+   "choices": [
+    {
+     "label": "Sit with him.",
+     "success": {
+      "text": "He sees you and lights up. You hear about the duke. You hear about all forty years.\nYou leave much later than you meant to, and it is worth every minute.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne65-balthasar-at-the-inn-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
    "id": "ne66-town-with-one-clock",
    "name": "The Town With One Clock",
    "group": "Road people and town stories",

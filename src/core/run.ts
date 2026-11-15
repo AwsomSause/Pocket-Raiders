@@ -19,6 +19,9 @@ import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
 import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
+import { BRAVE_COUNT, BRAVE_HIT, MOMENT_EVOLVE_AFTER } from './battle/pokemonMoments';
+import { revivalFee } from './battle/revivalStatus';
+import { bondFriendship } from './co/who';
 import { applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, refusesToLeave, returnedBug } from './instrumentality/flightNorth';
 import { applySecondChance, secondChanceOpen, secondChanceRolls } from './instrumentality/secondChance';
 import { hearTelling, noteEvent as notePromiseEvent, resolveVisit, rollVisit, wonderAfterBattle } from './instrumentality/promises';
@@ -3035,6 +3038,8 @@ function pokemonMomentHooks(content: Content, run: RunState): MomentHooks {
     flags: run.story.flags,
     cinematic: (tier) => momentAllowed(content, run, tier),
     noteCinematic: (tier) => noteMoments(run, tier),
+    starterUid: run.log.starterUid,
+    finalBoss: run.battle?.trainer?.classId === CHAMPION_CLASS && isFinalBoss(content, run),
     // Only a wipe with nothing left to catch it ends the run: no checkpoint to return to, no Safety Net, no VS Recorder.
     runWouldEnd: () => {
       const battle = run.battle;
@@ -3688,6 +3693,14 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (share > 0) for (const m of run.party) if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * share));
   }
   noteSwapFaint(run);
+  // Pack Pokémon Moments (PA4 The Little Ones): a scared baby that landed a move gains Bond, win or lose, and counts it.
+  for (const tag of battle.storyEffects.filter((t) => t.startsWith(BRAVE_HIT))) {
+    const [uid, bond] = tag.slice(BRAVE_HIT.length).split(':') as [string, string];
+    const baby = run.party.find((m) => m.uid === uid);
+    if (!baby) continue;
+    changeFriendship(content, baby, bondFriendship(content, Number(bond), 'picked'));
+    run.story.flags[`${BRAVE_COUNT}${uid}`] = Number(run.story.flags[`${BRAVE_COUNT}${uid}`] ?? 0) + 1;
+  }
   // Catalog Overhaul (new events): the run's first Z-Move is remembered (NE8's old man in the crowd waits for it).
   if (battle.transform?.used.player.includes('zmove') && !run.story.flags['ev:z-move-used']) run.story.flags['ev:z-move-used'] = 1;
   // Nuzlocke: the fallen are lost for good.
@@ -3730,6 +3743,12 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (battle.extra?.payout) moneyGained *= 2; // Jackpot's Payout (Kanto): its holder knocked out a foe this battle
   if (battle.alpha) moneyGained = Math.floor(moneyGained * content.balance.w1.luck.alphaMoney);
   if (battle.deal) moneyGained = Math.floor(moneyGained * content.balance.w1.play.deal.money);
+  // Collected (PA21 The Contract): the Collector takes its fee from this battle's prize money, as it said it would.
+  const collectorFee = Math.floor((moneyGained * revivalFee(battle)) / 100);
+  if (collectorFee > 0) {
+    moneyGained -= collectorFee;
+    run.story.flags['pm-collector-paid'] = Number(run.story.flags['pm-collector-paid'] ?? 0) + collectorFee;
+  }
   run.money += moneyGained;
   count(run, 'moneyEarned', moneyGained);
   // Powder Jar and Gooey Mulch: every Berry your side ate this battle.
@@ -3880,6 +3899,16 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
       const evo = evolve(content, mon, special);
       evolutions.push({ ...evo, uid: mon.uid });
       for (const moveId of evo.wantsToLearn) run.pending.push({ kind: 'learnMove', uid: mon.uid, moveId });
+    }
+    // Pokémon Moments (PS1 Magikarp, PS20 Bisharp, PS28 Farfetch'd): a moment promised it would evolve when the battle ends, if it is still standing.
+    const owed = battle.storyEffects.find((t) => t.startsWith(`${MOMENT_EVOLVE_AFTER}${mon.uid}:`));
+    if (owed && mon.hp > 0 && !evolutions.some((e) => e.uid === mon.uid)) {
+      const [, , to, at] = owed.split(':') as [string, string, string, string];
+      if (battle.turn >= Number(at) && mon.speciesId !== to && content.species.has(to)) {
+        const evo = evolve(content, mon, to);
+        evolutions.push({ ...evo, uid: mon.uid });
+        for (const moveId of evo.wantsToLearn) run.pending.push({ kind: 'learnMove', uid: mon.uid, moveId });
+      }
     }
   }
   count(run, 'evolutions', evolutions.length);

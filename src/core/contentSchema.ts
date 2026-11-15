@@ -2197,7 +2197,15 @@ export const BalanceSchema = z.object({
   /** Beta 0.7 L3 Rewinds (core/rewind.ts): how far back a battle rewind may go, and how many rewinds a stage allows. */
   rewind: z.object({ maxTurnsBack: z.number().int().min(1), usesPerStage: z.number().int().min(0) }).default({ maxTurnsBack: 5, usesPerStage: 1 }),
   /** Catalog Overhaul Pack words: "+1 Bond" on one Pokémon is `bondFriendship` friendship (`bondFriendshipParty` each for the whole party); Bond level N is friendship N x `bondLevelStep`. */
-  co: z.object({ bondFriendship: z.number().int().min(1), bondFriendshipParty: z.number().int().min(1), bondLevelStep: z.number().int().min(1), /** new events: weight of a wild species while its type is quiet (an Alpha left, the river emptied). */ quietWildWeight: z.number().min(0).max(1).default(0.1) }).default({ bondFriendship: 5, bondFriendshipParty: 3, bondLevelStep: 50, quietWildWeight: 0.1 }),
+  co: z.object({ bondFriendship: z.number().int().min(1), bondFriendshipParty: z.number().int().min(1), bondLevelStep: z.number().int().min(1),
+    /** new events: weight of a wild species while its type is quiet (an Alpha left, the river emptied). */
+    quietWildWeight: z.number().min(0).max(1).default(0.1),
+    /** Honest Trade Card (core/co/tradeCard.ts): catch rates at or above these are Common / Uncommon / Rare (below: Very Rare). */
+    tradeTierCatchRate: z.array(z.number().int().min(0)).length(3).default([150, 75, 30]),
+    /** Pool draw weights by tier, Common to Very Rare (TRADES.md Part 2: 50/30/15/5). */
+    tradeTierWeights: z.array(z.number().min(0)).length(4).default([50, 30, 15, 5]),
+    /** The trader explains why when you get at least this much more fair value. */
+    tradeMuchBetter: z.number().int().min(1).default(2) }).default({ bondFriendship: 5, bondFriendshipParty: 3, bondLevelStep: 50, quietWildWeight: 0.1, tradeTierCatchRate: [150, 75, 30], tradeTierWeights: [50, 30, 15, 5], tradeMuchBetter: 2 }),
   badgePower: z.object({ damagePerBadge: z.number().min(0).default(0.03), weaknessCutPerBadge: z.number().min(0).default(0.03), maxStacks: z.number().int().min(1).default(4) }).default({ damagePerBadge: 0.03, weaknessCutPerBadge: 0.03, maxStacks: 4 }),
   /** Item rework (Kice, 2026-11-07): charm odds in the draft, and how much of each Luck gain a run keeps. */
   itemRework: z
@@ -2910,6 +2918,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('monRival'), state: z.enum(['open', 'carried', 'sacrificed', 'any']) }),
   /** Event Director: a party member with a species tag (legendary, mythical, delta, zform...). */
   z.object({ kind: z.literal('partyTag'), tag: z.enum(SPECIES_TAGS) }),
+  /** Pokémon Moments (PA11): a party member from one of the moment groups in pokemonMoments.json (ultra-beasts, starters...). */
+  z.object({ kind: z.literal('partyGroup'), group: z.string().min(1), atLeast: z.number().int().min(1).max(6).default(1) }),
   /** The Pokémon you started with (still in the party) has this type, species or species tag: starter-tagged events. */
   z.object({ kind: z.literal('starter'), type: TypeNameSchema.optional(), species: z.string().optional(), tag: z.enum(SPECIES_TAGS).optional() }).refine((c) => c.type !== undefined || c.species !== undefined || c.tag !== undefined, { message: 'a starter condition needs a type, species or tag' }),
   /** Mentors (spec section 15): you train under a mentor, optionally this one / this category, with enough trust or loyalty, having learned a lesson, or at a mission state. */
@@ -3082,8 +3092,48 @@ export const TradeWantSchema = z.object({
   eggGroup: z.string().optional(),
   /** PokeAPI body colour ("red", "yellow"...). */
   color: z.string().optional(),
+  /** Catalog Overhaul trades: any one of these types ("a Fire- or Electric-type"). */
+  types: z.array(TypeNameSchema).max(6).optional(),
+  /** Catalog Overhaul trades: none of these types ("any non-Water Pokémon"). */
+  notTypes: z.array(TypeNameSchema).max(6).optional(),
+  /** Catalog Overhaul trades: one of these natures ("a calm Pokémon"). */
+  natures: z.array(z.enum(NATURE_IDS)).max(25).optional(),
+  /** Catalog Overhaul trades: at least this Bond level (core/co/who.ts). */
+  bond: z.number().int().min(1).max(5).optional(),
+  /** Catalog Overhaul trades: knows a move with this flag ("a Pokémon with a sound move"). */
+  moveFlag: z.enum(['sound', 'wind', 'punch', 'bite', 'pulse', 'bullet', 'slicing', 'powder']).optional(),
+  /** Catalog Overhaul trades: only shiny Pokémon. */
+  shiny: z.boolean().optional(),
+  /** Catalog Overhaul trades: at least this fair-value tier (1 Common .. 4 Very Rare; core/co/tradeCard.ts). */
+  minTier: z.number().int().min(1).max(4).optional(),
+  /** Catalog Overhaul trades: a regional or Delta form (true) or a plain one (false). */
+  regional: z.boolean().optional(),
 });
 export type TradeWant = z.infer<typeof TradeWantSchema>;
+
+/** Catalog Overhaul, the Honest Trade Card (TRADES.md 1.1): what the trader hands over. Everything here is shown on the card before the player agrees. */
+export const HonestGivesSchema = z.object({
+  species: z.string().min(1),
+  /** Its level is the level of the Pokémon you give plus this (never above the run's level cap). */
+  levelOffset: z.number().int().min(-20).max(20).default(0),
+  nature: z.enum(NATURE_IDS),
+  /** Its four moves; left out: the moves its species knows at that level. A move named here it could not learn is still taught (an egg move: Wish). */
+  moves: z.array(z.string().min(1)).max(4).default([]),
+  /** It has its species' hidden ability. */
+  hidden: z.boolean().default(false),
+  /** A quirk id (core/co/quirks.ts; trade quirks in src/data/catalogOverhaul/quirks/markets.json). */
+  quirk: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
+  /** History marks shown on the card ("hatched on a ferry"). */
+  marks: z.array(z.string().min(1)).max(8).default([]),
+  /** Why the trader is trading it, in their words. */
+  why: z.string().min(1),
+  /** Its original trainer (the trader's name). */
+  ot: z.string().min(1),
+  /** It arrives holding this item. */
+  held: z.string().optional(),
+  shiny: z.boolean().default(false),
+});
+export type HonestGives = z.infer<typeof HonestGivesSchema>;
 
 /** One thing an outcome does. `share` is a fraction of max HP. */
 export const EventEffectSchema = z.discriminatedUnion('kind', [
@@ -3102,6 +3152,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
    * keeping its held items and +1 friendship. `table` gives the partner by species (the S.S. Anne regional trade); `similar` picks any species of
    * `pool` whose base stat total is within `bst` of the one given up, with a random Nature. The choice stays locked while nothing fits.
    */
+  /** Catalog Overhaul: the Honest Trade Card (core/co/tradeCard.ts). The player picks one of their Pokémon that fits `wants` and gets `gives` (or a draw from trade pool `pool`, made from the run's seed, so the card shows exactly what arrives). Sets `trade-<id>`. `askedFirst`: the player heard its story first, so it arrives at Bond 3, not 2.*/
+  z.object({ kind: z.literal('honestTrade'), id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/), wants: TradeWantSchema.optional(), gives: HonestGivesSchema.optional(), pool: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(), askedFirst: z.boolean().default(false), /** A gift: nothing is taken (Nell's Sneasel). */ gift: z.boolean().default(false) }),
   z.object({ kind: z.literal('tradeFor'), want: TradeWantSchema, table: z.record(z.string(), z.string()).default({}), similar: z.object({ pool: z.array(z.string()).min(1), bst: z.number().int().min(0).max(200) }).optional() }),
   /** Beta 0.6 Vermilion Flight North: the whole party is taken away (kept in run.expansion.canon.stash) until `restoreParty` or a lost fight inside the stage hands it back. */
   /** Poli-Pond (core/episodes/poliPond.ts): one step of the story. `lesson` names the lesson (with `lesson`); `firstTry` is true when it was taught on the first retry. */

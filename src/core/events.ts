@@ -40,6 +40,7 @@ import { championTeam, retiredTeam } from './story/championDefense';
 import { oldFoe } from './story/promises';
 import { featuredRival, rivalBeaten, rivalFightTeam, rivalLastResult, rivalPath } from './rivals/living';
 import { monRivalState } from './rivals/monRivals';
+import { MOMENT_GROUPS } from './moments/pokemonMoments';
 import { openFeud, settleFeud } from './story/feud';
 import { apprenticeLevelBonus, applyMentorEffect, getMentor, mentorConditionMet, mentorConditionText, mentorStopEvent } from './mentors';
 import { applyMentorLesson, fillMentorText, mentorSceneId } from './mentors/lessons';
@@ -98,6 +99,7 @@ import { climaxCutOf } from './arc/climaxExtended';
 import { addMercy, changeRep, joinInsideMan, joinProblem, resolveVerdict, standWithClimaxWon, standWithOf, standWithPlayable, verdictsOpen } from './arc/standWithExtended';
 import { checkFlagKeys } from './shadow2/keys';
 import { bondFriendship, bondLevel, bondLevelMet, fitsMatch, whoOf, whoWords } from './co/who';
+import { fitsWant, honestCardFor, honestOffer, honestWant, shapeArrival, type HonestCard } from './co/tradeCard';
 import { oweNodes } from './co/takeNode';
 import { clearNodeHold, setNodeBattle } from './co/attach';
 import { noteSpecial } from './expansion/fieldNotes';
@@ -326,6 +328,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return legacyEggWaiting(run);
     case 'partyTag':
       return run.party.some((m) => content.species.get(m.speciesId)?.tags.includes(c.tag));
+    case 'partyGroup':
+      return run.party.filter((m) => MOMENT_GROUPS[c.group]?.includes(m.speciesId) ?? false).length >= c.atLeast;
     case 'photos':
       return (run.camp?.photos.length ?? 0) >= c.atLeast;
     case 'bond':
@@ -351,7 +355,8 @@ export function tradeCandidates(content: Content, run: RunState, want: TradeWant
         (!want.generation || sp.generation === want.generation) &&
         (!want.minLevel || m.level >= want.minLevel) &&
         (!want.eggGroup || sp.eggGroups.includes(want.eggGroup)) &&
-        (!want.color || sp.color === want.color)
+        (!want.color || sp.color === want.color) &&
+        fitsWant(content, m, want)
       );
     })
     .sort((a, b) => a.level - b.level);
@@ -365,6 +370,17 @@ function tradePicksOf(content: Content, run: RunState, choice: EventChoice): Tra
   if (!e && choice.pick) {
     const { types, moveFlag, bond } = choice.pick;
     return run.party.filter((m) => fitsMatch(content, m, { ...(types.length > 0 ? { types } : {}), ...(moveFlag ? { moveFlag } : {}) }) && (bond === undefined || bondLevel(content, m) >= bond)).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
+  }
+  // Catalog Overhaul: the Honest Trade Card. Each pick carries its full card (both sides, fair value, the trader's warning).
+  const honest = choice.success.effects.find((f) => f.kind === 'honestTrade');
+  if (honest?.kind === 'honestTrade') {
+    const want = honestWant(content, run, honest);
+    if (!want) return null;
+    const cap = runLevelCap(content, run);
+    return tradeCandidates(content, run, want).map((m) => {
+      const card = honestCardFor(content, run, honest, m, cap);
+      return { uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}`, gets: card?.theirs.species ?? null, ...(card ? { card } : {}) };
+    });
   }
   if (!e || (e.kind !== 'tradeAway' && e.kind !== 'tradeFor')) return null;
   // A swap from a fixed table says what comes back before the player commits (the Honest Trade Card). A "similar strength" swap is rolled, so it stays unknown.
@@ -383,6 +399,12 @@ function tradeMissing(content: Content, run: RunState, choice: EventChoice): str
   }
   if (choice.pick && tradePicksOf(content, run, choice)?.length === 0) return 'Needs a Pokémon that fits';
   for (const e of choice.success.effects) {
+    if (e.kind === 'honestTrade') {
+      const want = honestWant(content, run, e);
+      if (!honestOffer(content, run, e)) return 'This trade is not ready';
+      if (want && tradeCandidates(content, run, want).length === 0) return `Needs ${want.label} in your party`;
+      continue;
+    }
     if (e.kind !== 'tradeAway' && e.kind !== 'tradeFor') continue;
     if (e.kind === 'tradeAway' && run.party.length < 2) return 'Needs 2 Pokémon in your party';
     if (tradeCandidates(content, run, e.want).length === 0) return `Needs ${e.want.label} in your party`;
@@ -493,6 +515,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return `Needs a rival you have fought ${c.atLeast} time${c.atLeast === 1 ? '' : 's'}`;
     case 'partyTag':
       return `Needs a ${c.tag} Pokémon in your party`;
+    case 'partyGroup':
+      return c.atLeast > 1 ? `Needs ${c.atLeast} of the ${c.group.replace(/-/g, ' ')} in your party` : `Needs one of the ${c.group.replace(/-/g, ' ')} in your party`;
     case 'starter':
       return 'Needs a particular starter';
     case 'photos':
@@ -868,7 +892,22 @@ export function stopIsHidden(content: Content, run: RunState, node: MapNode, sid
 // ---------- the scene and its choices ----------
 
 /** A party Pokémon a choice can take. `gets` (swaps only): the species that comes back, or null when it is not known until the swap happens. */
-export interface TradePick { uid: string; label: string; gets?: string | null }
+export interface TradePick { uid: string; label: string; gets?: string | null; /** Catalog Overhaul: the Honest Trade Card for this pick (core/co/tradeCard.ts). */ card?: HonestCard }
+
+/**
+ * Catalog Overhaul: the Honest Trade Card for an event (the first choice with an `honestTrade`), before a Pokémon is picked:
+ * the trader's side at your strongest Pokémon's level (a gift: the level it arrives at). Per-Pokémon cards are on each
+ * choice's `tradePicks[].card`. Null when the event has no honest trade.
+ */
+export function tradeCard(content: Content, run: RunState, sideId: string): HonestCard | null {
+  const { side } = findSide(run, sideId);
+  const base = side.eventId ? content.events.get(side.eventId) : undefined;
+  for (const c of base ? effectiveEvent(content, run, base).choices : []) {
+    const e = c.success.effects.find((f) => f.kind === 'honestTrade');
+    if (e?.kind === 'honestTrade') return honestCardFor(content, run, e, null, runLevelCap(content, run));
+  }
+  return null;
+}
 
 export interface ChoiceView {
   label: string;
@@ -966,7 +1005,7 @@ export function choiceRisk(content: Content, choice: EventChoice): { cost: strin
 /** The choice's kind: a sure battle, a trade, a roll, a sure cost, or nothing at stake. */
 export function choiceKind(choice: EventChoice, chance: number | null): ChoiceKind {
   if (choice.success.battle && chance === null && !choice.prompt) return 'battle';
-  if (choice.success.effects.some((e) => e.kind === 'tradeAway')) return 'trade';
+  if (choice.success.effects.some((e) => e.kind === 'tradeAway' || (e.kind === 'honestTrade' && !e.gift))) return 'trade';
   if (chance !== null || choice.prompt || choice.check !== undefined || choice.chance !== undefined) return 'chance';
   if (choice.success.effects.some((e) => harmful(e))) return 'cost';
   return 'safe';
@@ -1111,6 +1150,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return `trade away ${e.want.label}`;
     case 'tradeFor':
       return `swap ${e.want.label}`;
+    case 'honestTrade':
+      return e.gift ? '' : 'trade a Pokémon';
     case 'pond':
       return '';
     case 'stashParty':
@@ -1405,6 +1446,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       run.party.splice(run.party.indexOf(mon), 1);
       return `Traded away ${content.species.get(mon.speciesId)?.name ?? mon.speciesId}`;
     }
+    case 'honestTrade':
+      return applyHonestTrade(content, run, e, tradeUid);
     case 'tradeFor': {
       const fits = tradeCandidates(content, run, e.want);
       const mon = fits.find((m) => m.uid === tradeUid) ?? fits[0];
@@ -2378,4 +2421,37 @@ function applyPondEffect(content: Content, run: RunState, e: Extract<EventEffect
       return 'Poliwrath joins you.';
     }
   }
+}
+
+/** Catalog Overhaul: an honest trade happens (core/co/tradeCard.ts). The arriving Pokémon is exactly the one its card showed. */
+function applyHonestTrade(content: Content, run: RunState, e: Extract<EventEffect, { kind: 'honestTrade' }>, tradeUid?: string): string {
+  const cap = runLevelCap(content, run);
+  const offer = honestOffer(content, run, e);
+  if (!offer) return '';
+  const want = honestWant(content, run, e);
+  const fits = want ? tradeCandidates(content, run, want) : [];
+  const mon = want ? (fits.find((m) => m.uid === tradeUid) ?? fits[0]) : undefined;
+  if (want && !mon) return '';
+  const card = honestCardFor(content, run, e, mon ?? null, cap)!;
+  const fresh = newMon(content, run, card.theirs.species, card.theirs.level, 'p');
+  shapeArrival(content, card.theirs, fresh, offer.gives, e.askedFirst);
+  const name = (id: string) => content.species.get(id)?.name ?? id;
+  let words = mon ? `Traded ${name(mon.speciesId)} for ${card.theirs.name}` : `${card.theirs.name} joins you`;
+  // A trade evolution happens as it arrives (Kadabra, Machoke; Onix holding a Metal Coat).
+  if (card.theirs.evolvesTo) {
+    evolve(content, fresh, card.theirs.evolvesTo);
+    if (card.theirs.held && card.theirs.held !== 'linking-cord' && fresh.held?.[card.theirs.held]) delete fresh.held;
+    words += `. It evolved into ${name(card.theirs.evolvesTo)}!`;
+  }
+  discover(run, fresh.speciesId, true);
+  const flags = run.story.flags;
+  flags[`ev:trade-${e.id}`] = 1;
+  flags['ev:trades-made'] = Number(flags['ev:trades-made'] ?? 0) + 1;
+  if (mon) {
+    if (bondLevel(content, mon) >= 4) flags['ev:traded-bond4'] = 1;
+    run.party.splice(run.party.indexOf(mon), 1, fresh);
+  } else {
+    run.pending.push({ kind: 'caught', mon: fresh });
+  }
+  return words;
 }

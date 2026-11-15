@@ -1,5 +1,6 @@
 import { MENTORS } from '../../src/core/mentors';
 import { PSEUDO, PSEUDO_CHAINS } from '../../src/core/dungeon/pseudo';
+import { POKEMON_MOMENTS } from '../../src/core/moments/pokemonMoments';
 import { canonKantoPlaced } from '../../src/data/expansion';
 // Exploration (APPROVED.md §5-6): fog of war, weather fronts, roaming Legendaries, camps, secret
 // paths, callbacks, landmark rooms and the stops of the limited-time events.
@@ -303,8 +304,6 @@ describe('landmarks and dungeons', () => {
           if (ef.kind === 'addEvent') opened.add(ef.eventId);
           if (ef.kind === 'laterEvent') queued.add(ef.eventId);
           if (ef.kind === 'addEventFrom') ef.ids.forEach((i) => opened.add(i));
-          // A later beat (queueLaterEvent): the room opens a set number of nodes further on.
-          if (ef.kind === 'laterEvent') opened.add(ef.eventId);
           // Rival questlines (core/rivals/questlines.ts): the first scene whose conditions hold, or stops further along the map.
           // These may also open a scheduled beat (not a room), so they only count as a way into a room.
           if (ef.kind === 'rivalQuest') {
@@ -341,6 +340,8 @@ describe('landmarks and dungeons', () => {
     for (const id of content.events.keys()) if (id.startsWith('ultra-tear-')) opened.add(id);
     // Beta 0.7: Pidgey's Resolve places its join rooms from code (core/sky/story.ts pushRoom).
     for (const id of content.events.keys()) if (id.startsWith('sky.join.')) opened.add(id);
+    // Row 17: a rest moment opens its camp scene beside the stop (core/moments/runMoments.ts openEvent).
+    for (const m of POKEMON_MOMENTS) if (m.effect?.openEvent) opened.add(m.effect.openEvent);
     for (const id of opened) expect(content.events.get(id)?.room, id).toBe(true);
     // A retired room (Catalog Overhaul REMOVE: kept for saved runs, never drawn) need not be reachable.
     for (const e of content.events.values()) if (e.room && !e.disabled) expect(opened.has(e.id) || viaMentor.has(e.id) || queued.has(e.id) || questOpened.has(e.id), e.id).toBe(true);

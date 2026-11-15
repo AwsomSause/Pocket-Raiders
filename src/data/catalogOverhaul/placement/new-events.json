@@ -839,6 +839,74 @@
   "level": "A+1, twice",
   "note": "Must-see when drawn. Needs two teams in the region (the run's team awake; the second crew is a roaming one). \"Lock both doors\": the node stays visible for the rest of the stage, with shouting."
  },
+ "ne61-the-trade-across-a-fence": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": 19,
+  "window": [
+   17,
+   19
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "note": "A border town: the seam between two stages, or Step 1 of the next. \"Walk them round (a node)\" takes the next node."
+ },
+ "ne62-the-grandmothers-collection": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A2",
+  "home": 8,
+  "window": [
+   5,
+   11
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "The town; else Step 8. The gift asks only for a promise: the next region's name."
+ },
+ "ne63-the-trade-that-goes-wrong-honestly": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 11,
+  "window": [
+   8,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "city"
+  ],
+  "note": "The town; else Step 11. Ivo Ternary is the honest trader from TRADES.md."
+ },
+ "ne64-the-blind-trade-booth": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A3",
+  "home": 13,
+  "window": [
+   10,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "note": "The town, on a festival stage; else Step 13. On a festival stage it joins the draw (NE96)."
+ },
+ "ne65-the-last-trade-of-a-retiring-trader": {
+  "shape": "Single",
+  "often": "run",
+  "earliest": "A8",
+  "home": 16,
+  "window": [
+   13,
+   18
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "note": "The pack says once per save; the same-run memory rule makes it once per run. The bell is told, not kept: there is no shop-bell key item yet."
+ },
  "ne66-town-with-one-clock": {
   "shape": "Single",
   "often": "run",

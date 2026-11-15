@@ -7,6 +7,7 @@ import { evsOf, rollIvs, statIvsOf } from './ivs';
 import type { Content, GrowthRate, Species, StatBlock, StatName } from './contentSchema';
 import { STAT_NAMES } from './contentSchema';
 import { Rng, hashSeed } from './rng';
+import { REVIVAL_STATUSES } from './moments/pokemonMoments';
 import type { MoveSlot, PokemonInstance } from './state';
 
 export function getSpecies(content: Content, id: string): Species {
@@ -65,6 +66,9 @@ export function calcStats(content: Content, mon: PokemonInstance): StatBlock {
   if (mon.overcharged) {
     for (const stat of STAT_NAMES) stats[stat] = Math.floor(stats[stat] * (stat === 'hp' ? 1.5 : 2));
   }
+  // A last stand (pack Part 2B): its stat multipliers, max HP included, until the battle ends.
+  const stand = mon.revivalStatus ? REVIVAL_STATUSES[mon.revivalStatus] : undefined;
+  if (stand) for (const stat of STAT_NAMES) stats[stat] = Math.floor(stats[stat] * (stand.stats[stat] ?? 1));
   return stats;
 }
 

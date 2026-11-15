@@ -152,6 +152,8 @@ export const PokemonInstanceSchema = z.object({
   dynamaxed: z.literal(true).optional(),
   /** In battle only: Overcharged (Failure Will (NOT) Be Tolerated, core/battle/pokemonMoments.ts): all stats doubled, HP x1.5, moves on a one-turn cooldown. */
   overcharged: z.literal(true).optional(),
+  /** In battle only: a revival status (PA17 to PA31: Revenant, Wrathborn... core/battle/revivalStatus.ts), by id in pokemonMoments.json `revivalStatuses`. Ends with the battle. */
+  revivalStatus: z.string().optional(),
   /** Shadow Pokémon (catalog #76-77, core/shadow.ts): the Heart Gauge, 100 (sealed) down to 0 (purified). */
   shadow: z.object({
     heart: z.number().int().min(1).max(100),

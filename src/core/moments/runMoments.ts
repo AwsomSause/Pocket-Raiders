@@ -4,26 +4,84 @@
 
 import { displayName } from '../care';
 import { TYPE_NAMES, type Content } from '../contentSchema';
+import { bondFriendship } from '../co/who';
 import { changeFriendship } from '../friendship';
 import { addItem } from '../items';
 import { typeEffectiveness } from '../battle/damage';
-import { gainXp, getSpecies, xpForLevel } from '../pokemon';
+import { gainXp, getSpecies, maxHp, xpForLevel } from '../pokemon';
 import { bossInfo, runLevelCap } from '../regions';
 import { hashSeed, Rng } from '../rng';
 import type { PokemonInstance, RunState } from '../state';
-import { momentRoll, momentsFor, runClaimKey, type PokemonMoment } from './pokemonMoments';
+import { REGION_LEGENDS, momentMatches, momentRoll, momentsFor, runClaimKey, type PokemonMoment } from './pokemonMoments';
 
 const BERRIES = ['oran-berry', 'sitrus-berry'];
 const TALENT_STATS = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
 
 const nameOf = (content: Content, mon: PokemonInstance): string => displayName(content, mon);
 
+/** A region-limited moment's claim for this Pokémon (Mythicals bring a gift once per region). */
+const regionKey = (run: RunState, m: PokemonMoment, mon: PokemonInstance): string => `${runClaimKey(m)}@${mon.uid}:r${run.regionIndex}`;
+
 /** One moment's roll at this point in the run: the run seed, the moment, the Pokémon and how many fights are behind it. */
 function plays(run: RunState, m: PokemonMoment, mon: PokemonInstance): boolean {
   if (m.limit === 'run' && run.story.flags[runClaimKey(m)] !== undefined) return false;
+  if (m.limit === 'region' && run.story.flags[regionKey(run, m, mon)] !== undefined) return false;
   if (!momentRoll(run.seed, m.id, mon.uid, run.encountersCompleted, m.chance)) return false;
   if (m.limit === 'run') run.story.flags[runClaimKey(m)] = 1;
+  if (m.limit === 'region') run.story.flags[regionKey(run, m, mon)] = 1;
   return true;
+}
+
+/** A rest or evolution moment's extra conditions. */
+function restRequirements(content: Content, run: RunState, m: PokemonMoment, mon: PokemonInstance, from?: string): boolean {
+  const r = m.requires;
+  if (!r) return true;
+  if (r.promiseKept && !((run.story.histories[mon.uid]?.hyper['promise-kept'] ?? 0) > 0)) return false;
+  if (r.flagBelow && !(Number(run.story.flags[r.flagBelow.key.replace('{uid}', mon.uid)] ?? 0) < r.flagBelow.n)) return false;
+  if (r.flagAtLeast && !(Number(run.story.flags[r.flagAtLeast.key.replace('{uid}', mon.uid)] ?? 0) >= r.flagAtLeast.n)) return false;
+  if (r.partyMatching && run.party.filter((p) => p.hp > 0 && momentMatches(content, m, p.speciesId)).length < r.partyMatching) return false;
+  if (r.finalForm && getSpecies(content, mon.speciesId).evolutions.length > 0) return false;
+  if (r.fromCocoon) {
+    const at = run.story.flags[`${COCOON}${mon.uid}`];
+    if (!from || !COCOONS.includes(from) || typeof at !== 'number' || stageAt(run) < at + 1) return false;
+  }
+  return true;
+}
+
+/** Cocoon species (PA9): the stage a Pokémon became one is stamped so its emergence can tell how long it waited. */
+const COCOONS = ['metapod', 'kakuna', 'silcoon', 'cascoon', 'spewpa'];
+const COCOON = 'pm-cocoon:';
+const stageAt = (run: RunState): number => run.regionIndex * 100 + (run.stage?.index ?? 0);
+export function noteCocoon(run: RunState, mon: PokemonInstance): void {
+  if (COCOONS.includes(mon.speciesId) && run.story.flags[`${COCOON}${mon.uid}`] === undefined) run.story.flags[`${COCOON}${mon.uid}`] = stageAt(run);
+}
+
+/** A Pokémon has just evolved (from `from`): its evolution moments get one roll. Returns the lines to show. */
+export function evolveMoments(content: Content, run: RunState, mon: PokemonInstance, from: string): string[] {
+  if (content.balance.pokemonMoments === false) return [];
+  noteCocoon(run, mon);
+  const lines: string[] = [];
+  for (const m of momentsFor(content, mon, 'evolve')) {
+    if (!m.effect || !restRequirements(content, run, m, mon, from)) continue;
+    // Once per Pokémon: the claim carries its uid.
+    const key = `${runClaimKey(m)}@${mon.uid}`;
+    if (run.story.flags[key] !== undefined) continue;
+    run.story.flags[key] = 1;
+    if (!momentRoll(run.seed, m.id, mon.uid, run.encountersCompleted, m.chance)) continue;
+    const fx = m.effect;
+    if (fx.bond) changeFriendship(content, mon, bondFriendship(content, fx.bond, 'picked'));
+    // One in a Hundred (PS22): it came out as the rare form.
+    if (fx.evolveForm && content.species.has(fx.evolveForm)) {
+      mon.speciesId = fx.evolveForm;
+      mon.hp = Math.min(mon.hp, maxHp(content, mon));
+    }
+    if (fx.evAll) {
+      const evs = (mon.evs ??= {});
+      for (const st of ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const) evs[st] = Math.min(255, (evs[st] ?? 0) + fx.evAll);
+    }
+    lines.push(`${nameOf(content, mon)}: ${m.name}. ${m.effectText}`);
+  }
+  return lines;
 }
 
 /** Ghost Story: the types that hit this stage's leader hardest, told as a tale. */
@@ -40,12 +98,23 @@ export function restMoments(content: Content, run: RunState): string[] {
   const lines: string[] = [];
   for (const mon of [...run.party]) {
     for (const m of momentsFor(content, mon, 'rest')) {
-      if (!m.effect) continue;
+      if (!m.effect || !restRequirements(content, run, m, mon)) continue;
+      // A gift that this species has none of does nothing, so it is neither played nor claimed.
+      if (m.effect.giveItem && !m.effect.giveItem[mon.speciesId]) continue;
       // Dream Walk does nothing for a Pokémon already at the level cap, so it is neither played nor claimed.
       if (m.effect.xpPct && mon.xp >= xpForLevel(getSpecies(content, mon.speciesId).growthRate, Math.min(content.balance.difficulty.maxLevel, runLevelCap(content, run)), content.balance.difficulty.highLevelXp)) continue;
+      // A scene already open beside this stop, or the legend already named this region (PG5), is not played again.
+      const here = run.stage?.map.nodes.find((n) => n.id === run.stage!.current);
+      if (m.effect.openEvent && (!here || !content.events.has(m.effect.openEvent) || here.sides.some((x) => x.kind === 'event' && x.eventId === m.effect!.openEvent && !x.used))) continue;
+      const nextRegion = run.regionOrder[run.regionIndex + 1];
+      const legends = nextRegion ? REGION_LEGENDS[nextRegion] ?? [] : [];
+      if (m.effect.legendHint && (legends.length === 0 || run.story.flags[`pm-legend-hint:r${run.regionIndex}`] !== undefined)) continue;
       if (!plays(run, m, mon)) continue;
       const fx = m.effect;
       if (fx.friendship) changeFriendship(content, mon, fx.friendship);
+      if (fx.bond) changeFriendship(content, mon, bondFriendship(content, fx.bond, 'picked'));
+      if (fx.cure) mon.status = null;
+      if (fx.giveItem?.[mon.speciesId]) addItem(run.inventory, fx.giveItem[mon.speciesId]!, 1);
       if (fx.teamFriendship) for (const p of run.party) changeFriendship(content, p, fx.teamFriendship);
       if (fx.freeBerry) addItem(run.inventory, BERRIES[Math.floor(new Rng(hashSeed(`${run.seed}:pmoment:${m.id}:${mon.uid}:berry`)).float() * BERRIES.length)]!, 1);
       let extra = '';
@@ -56,6 +125,25 @@ export function restMoments(content: Content, run: RunState): string[] {
         gainXp(content, mon, Math.max(1, Math.floor((gap * fx.xpPct) / 100)), runLevelCap(content, run));
       }
       if (fx.weaknessHint && run.stage) extra = ` ${weaknessLine(content, run)}`;
+      // Species moments (PS10, PS16, PS45).
+      if (fx.setFlag) run.story.flags[fx.setFlag.replace('{uid}', mon.uid)] = 1;
+      if (fx.cureTeam) for (const p of run.party) p.status = null;
+      if (fx.healLowestPct) {
+        const low = run.party.filter((p) => p.hp > 0).sort((a, b) => a.hp / maxHp(content, a) - b.hp / maxHp(content, b))[0];
+        if (low) low.hp = Math.min(maxHp(content, low), low.hp + Math.floor((maxHp(content, low) * fx.healLowestPct) / 100));
+      }
+      if (fx.present) {
+        const gift = fx.present[Math.floor(new Rng(hashSeed(`${run.seed}:pmoment:${m.id}:${mon.uid}:${run.regionIndex}:present`)).float() * fx.present.length)]!;
+        addItem(run.inventory, gift, 1);
+        extra = ` Inside: ${content.items.get(gift)?.name ?? content.catalog.get(gift)?.name ?? gift}.`;
+      }
+      // A scene with choices opens as a stop beside this one.
+      if (fx.openEvent && here) here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId: fx.openEvent });
+      if (fx.legendHint) {
+        run.story.flags[`pm-legend-hint:r${run.regionIndex}`] = 1;
+        const names = legends.map((id) => content.species.get(id)?.name ?? id);
+        extra = ` In the dream, the next region's legend has a name: ${names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}` : names[0]}.`;
+      }
       lines.push(`${nameOf(content, mon)}: ${m.name}. ${m.effectText}${extra}`);
       break;
     }
