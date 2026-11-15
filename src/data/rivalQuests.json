@@ -545,6 +545,43 @@
           "final": true
         }
       }
+    },
+    "R16": {
+      "name": "I Have to Get Stronger",
+      "beats": {
+        "open": {
+          "event": "rq-kieran-1",
+          "minStage": 4
+        },
+        "watch": {
+          "event": "rq-kieran-2",
+          "after": "open",
+          "offset": 1
+        },
+        "again": {
+          "event": "rq-kieran-3",
+          "after": "watch",
+          "offset": 1
+        },
+        "finale": {
+          "event": "rq-kieran-finale",
+          "after": "again",
+          "offset": 1,
+          "final": true
+        },
+        "next": {
+          "event": "rq-r16-again",
+          "after": "finale",
+          "when": "nextRegion",
+          "late": true
+        },
+        "better": {
+          "event": "rq-r16-better",
+          "after": "finale",
+          "when": "nextRegion",
+          "late": true
+        }
+      }
     }
   }
 }

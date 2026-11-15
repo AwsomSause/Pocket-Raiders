@@ -2953,6 +2953,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
     sameRegion: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
     /** R10: the last stage before the League (the last stage of the run's last region). */
     leagueEve: z.boolean().optional(),
+    /** R18: today's real-world date (month-day, from the host) is this one. */
+    date: z.string().regex(/^\d\d-\d\d$/).optional(),
     /** R12: the run's mentor has taught at least this many lessons. */
     mentorLessons: z.number().int().min(0).optional(),
     /** The stage's rival slot is free and no questline beat wants it (for rival-slot events in other files; pair with the effect's `takeSlot`). */
@@ -3300,6 +3302,10 @@ export const EventRuleSchema = z.object({
   sky: z.boolean().optional(),
   /** A no-KO contest: damage leaves the foe at 1 HP and you win after using this many different moves (Contest Judge's Challenge). */
   contest: z.number().int().min(2).max(6).optional(),
+  /** R16 Wants to Stop: each turn the foe takes no damage, its meter fills one; at this many, the foe's Pokémon sits down and you win. */
+  calm: z.number().int().min(2).max(10).optional(),
+  /** R18 the midnight clock: after this many turns the fight ends; whoever has more Pokémon standing (then more HP, as a share) wins. */
+  clock: z.number().int().min(2).max(30).optional(),
   /** Every stat change is inverted for both sides (The Contrarian). */
   contrary: z.boolean().optional(),
   /** After each turn the two active Pokémon swap status conditions (Cursed Hat). */
@@ -3466,7 +3472,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     quest: z.object({ counter: z.enum(['none', 'lead', 'seen', 'owed']).optional(), aceFirst: z.boolean().optional(), young: z.boolean().optional(), full: z.boolean().optional(), guard: z.boolean().optional(), as: z.string().optional(), /** R7: Borrowed Team rules, each side commands the other's ace (use with aceFirst). */ borrow: z.boolean().optional(),
       /** R11: `second` fights the second rival; `pair` fields both rivals' teams together (a double battle against you). */ second: z.boolean().optional(), pair: z.boolean().optional(),
       /** R12 The Final Lesson: the run's mentor fights with their types and name (pair with ally "fellow"). */ mentor: z.boolean().optional(),
-      /** R11: the feud watched: your team waits, the main rival's team fights the second rival's while you cheer (core/rivals/questlines.ts). */ watch: z.boolean().optional() }).optional(),
+      /** R11: the feud watched: your team waits, the main rival's team fights the second rival's while you cheer (core/rivals/questlines.ts). */ watch: z.boolean().optional(),
+      /** Questline fights with someone who is not the rival (the Stranger, Kieran): a loss is a story loss, never the end of the run. */ soft: z.boolean().optional() }).optional(),
     /** With `ally`: "rival" lends the rival's ace as your partner for the fight (a tag battle beside them); "fellow" a Pokémon of your fellow apprentice's types. */
     /** Run events B: `win` effects used instead of `win` when the fight took longer than `rule.turnLimit` turns. */
     slowWin: z.array(EventEffectSchema).optional(),

@@ -23,7 +23,7 @@ import { applySecondChance, secondChanceOpen, secondChanceRolls } from './instru
 import { hearTelling, noteEvent as notePromiseEvent, resolveVisit, rollVisit, wonderAfterBattle } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
-import { endBorrow, endFeudWatch, feudWatching, mainRival, notePlayerLoss, scoutedLead, secondRival } from './rivals/questlines';
+import { endBorrow, endFeudWatch, noteCalm, feudWatching, mainRival, notePlayerLoss, scoutedLead, secondRival } from './rivals/questlines';
 import { recordStoryLoss, storyLossApplies } from './story2/loss';
 import { biomeWildWeight } from './biomes';
 import { pickEggFamily } from './eggPools';
@@ -3168,6 +3168,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   events.push(...ruleEvolution(content, run));
   // Poli-Pond: shyness ends after the first battle, the rematch is a duel, and the pond's return (Release or Reconcile) strikes.
   events.push(...(pondAfterTurn(content, run) as typeof events));
+  noteCalm(run);
   // A rival's battle style may do something now (berserker rage, revenge, last stand).
   const trick = styleTrick(content, run);
   if (trick) events.push(trick);

@@ -1127,6 +1127,27 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
     if (fell.length > 0) battle.outcome = fell.some((e) => e.side === 'enemy') ? 'win' : 'lose';
   }
   if (!battle.outcome && rule.surviveTurns && battle.turn > rule.surviveTurns) battle.outcome = 'win';
+  if (!battle.outcome && rule.calm && !events.some((e) => e.type === 'damage' && e.side === 'enemy')) {
+    // R16 Wants to Stop: a turn the foe is not hurt fills its meter; full, it sits down (`calm:done` tells the scene how it ended).
+    battle.storyEffects.push('calm');
+    const n = battle.storyEffects.filter((s) => s === 'calm').length;
+    events.push({ type: 'raid', tone: 'info', text: n >= rule.calm ? 'It sits down. It looks at its trainer. It does not get up.' : `Wants to Stop: ${n} of ${rule.calm}.` });
+    if (n >= rule.calm) {
+      battle.storyEffects.push('calm:done');
+      battle.outcome = 'win';
+    }
+  }
+  if (!battle.outcome && rule.clock && party && content) {
+    // R18 the midnight clock: whoever is ahead when it runs out wins (Pokémon standing, then HP share).
+    const left = rule.clock - battle.turn;
+    if (left > 0) events.push({ type: 'raid', tone: 'info', text: left === 2 ? 'Eleven fifty-eight. Both of you glance at the sky.' : left === 1 ? 'One minute to midnight.' : `${left} minutes to midnight.` });
+    else {
+      const side = (team: PokemonInstance[]) => [team.filter((m) => m.hp > 0).length, team.reduce((a, m) => a + Math.max(0, m.hp) / maxHp(content, m), 0)] as const;
+      const [mine, theirs] = [side(party), side(battle.enemyTeam)];
+      events.push({ type: 'raid', tone: 'info', text: 'Midnight. Both of you stop and look up as the first firework goes up.' });
+      battle.outcome = mine[0] > theirs[0] || (mine[0] === theirs[0] && mine[1] >= theirs[1]) ? 'win' : 'lose';
+    }
+  }
   if (!battle.outcome && rule.weatherCycle) battle.weather = { id: rule.weatherCycle[(battle.turn - 1) % rule.weatherCycle.length]!, turns: 5 };
 }
 

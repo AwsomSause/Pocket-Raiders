@@ -241,6 +241,7 @@ export function questConditionMet(content: Content, run: RunState, c: QuestCondi
     const at = flagOf(run, c.sameRegion);
     if (at === 0 || Math.floor((at - 1) / stagesPerRegion(content, run)) !== run.regionIndex) return false;
   }
+  if (c.date !== undefined && run.calendar?.today !== c.date) return false;
   if (c.leagueEve !== undefined && (run.regionIndex >= run.regionOrder.length - 1 && (run.stage?.index ?? 0) + 1 >= stagesPerRegion(content, run)) !== c.leagueEve) return false;
   if (c.mentorLessons !== undefined && (run.mentor?.lessons.length ?? -1) < c.mentorLessons) return false;
   const main = mainRival(run);
@@ -741,3 +742,8 @@ export function endFeudWatch(run: RunState, outcome: 'win' | 'lose'): number {
 
 /** True while a feud is being watched (the battle's spectate belongs to R11, not to Pidgey's Resolve). */
 export const feudWatching = (run: RunState): boolean => typeof run.story.flags['rq:r11-stash'] === 'string';
+
+/** R16 Wants to Stop: the foe's Pokémon sat down (the `calm` rule), so the finale's win reads as Talked Down. */
+export function noteCalm(run: RunState): void {
+  if (run.battle?.storyEffects.includes('calm:done')) setFlag(run, 'rq-r16-calm', 1);
+}

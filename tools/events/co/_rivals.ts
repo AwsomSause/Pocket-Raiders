@@ -45,8 +45,8 @@ export const rival = (o: { lv?: number; size?: number; quest?: Json; format?: 'd
   win: o.win ?? [], ...(o.lose ? { lose: o.lose } : {}),
 });
 /** A friendly fight against a named trainer. */
-export const foe = (name: string, o: { lv?: number; size?: number; cls?: string; types?: string[]; lineup?: string[]; sprite?: string; format?: 'doubles'; rule?: Json; ally?: string; mirror?: boolean; win?: Json[]; lose?: Json[] } = {}): Json => ({
-  kind: 'trainer', name, friendly: true, size: o.size ?? 3, types: o.types ?? [], levelBonus: o.lv ?? 0,
+export const foe = (name: string, o: { lv?: number; size?: number; cls?: string; types?: string[]; lineup?: string[]; sprite?: string; format?: 'doubles'; rule?: Json; ally?: string; mirror?: boolean; quest?: Json; win?: Json[]; lose?: Json[] } = {}): Json => ({
+  kind: 'trainer', name, friendly: true, quest: { soft: true, ...((o.quest as object) ?? {}) }, size: o.size ?? 3, types: o.types ?? [], levelBonus: o.lv ?? 0,
   ...(o.cls ? { classId: o.cls } : {}), ...(o.lineup ? { lineup: o.lineup } : {}), ...(o.sprite ? { sprite: o.sprite } : {}), ...(o.format ? { format: o.format } : {}),
   ...(o.rule ? { rule: o.rule } : {}), ...(o.ally ? { ally: o.ally } : {}), ...(o.mirror ? { mirror: true } : {}),
   win: o.win ?? [], ...(o.lose ? { lose: o.lose } : {}),
