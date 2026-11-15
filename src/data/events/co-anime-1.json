@@ -202,7 +202,7 @@
       {
        "label": "Pick up where you left off.",
        "success": {
-        "text": "It leans into the brush like an old dog. The mud comes away in sheets. Under it: a bicycle, a fridge door, and, wound round and round with fishing line in the very middle, a small Feebas that has been holding its breath for a long time. You cut the line. It slips away into the guest, which is clear water now, clear to the stones. The guest stands, shakes itself, and leaves on the tiles one pellet of clean grey silt. Then it is gone, and somewhere below you hear water running fast and clean.",
+        "text": "It leans into the brush like an old dog. The mud comes away in sheets. Under it: a bicycle, a fridge, and, wound round and round with fishing line in the very middle, a small Feebas that has been holding its breath for a long time. You cut the line. It slips away into the guest, which is clear water now, clear to the stones. The guest stands, shakes itself, and leaves on the tiles one pellet of clean grey silt. Then it is gone, and somewhere below you hear water running fast and clean.",
         "effects": [
          {
           "kind": "item",
@@ -246,7 +246,7 @@
       {
        "label": "Pick up where you left off.",
        "success": {
-        "text": "It leans into the brush like an old dog. The mud comes away in sheets. Under it: a bicycle, a fridge door, and, wound round and round with fishing line in the very middle, a small Feebas that has been holding its breath for a long time. You cut the line. It slips away into the guest, which is clear water now, clear to the stones. The guest stands, shakes itself, and leaves on the tiles one pellet of clean grey silt. Then it is gone, and somewhere below you hear water running fast and clean.",
+        "text": "It leans into the brush like an old dog. The mud comes away in sheets. Under it: a bicycle, a fridge, and, wound round and round with fishing line in the very middle, a small Feebas that has been holding its breath for a long time. You cut the line. It slips away into the guest, which is clear water now, clear to the stones. The guest stands, shakes itself, and leaves on the tiles one pellet of clean grey silt. Then it is gone, and somewhere below you hear water running fast and clean.",
         "effects": [
          {
           "kind": "item",
@@ -288,7 +288,7 @@
       "needs": "ok"
      },
      "success": {
-      "text": "You put your back into it, and it gives. Under the mud: a bicycle. You haul it out. A fridge door. A trolley wheel. And in the very middle, wound round and round with fishing line, a small Feebas that has been holding its breath for a very long time. You cut the line. It slips away into the guest, which is clear water now, clear to the stones. The guest stands, shakes itself, and leaves on the tiles one pellet of clean grey silt. Then it is gone, and somewhere far below you hear water running fast and clean.",
+      "text": "You put your back into it, and it gives. Under the mud: a bicycle. You haul it out. A fridge. A trolley wheel. And in the very middle, wound round and round with fishing line, a small Feebas that has been holding its breath for a very long time. You cut the line. It slips away into the guest, which is clear water now, clear to the stones. The guest stands, shakes itself, and leaves on the tiles one pellet of clean grey silt. Then it is gone, and somewhere far below you hear water running fast and clean.",
       "effects": [
        {
         "kind": "item",
@@ -307,7 +307,7 @@
       ]
      },
      "failure": {
-      "text": "The mud fights back. It gets in your hair, your ears, your lead Pokémon's fur. It takes all night that you have, and some you do not. But a bicycle comes out, and a fridge door, and at last, tangled in fishing line, a small Feebas, which you cut free. The guest stands up clear to the stones and leaves you one pellet of clean grey silt. You and your lead are wrung out.",
+      "text": "The mud fights back. It gets in your hair, your ears, your lead Pokémon's fur. It takes all night that you have, and some you do not. But a bicycle comes out, and a fridge, and at last, tangled in fishing line, a small Feebas, which you cut free. The guest stands up clear to the stones and leaves you one pellet of clean grey silt. You and your lead are wrung out.",
       "effects": [
        {
         "kind": "item",
@@ -343,7 +343,7 @@
       }
      ],
      "success": {
-      "text": "Your Water-type climbs into the tub as if it owned it and starts to churn. The river guest goes very still, then leans in: it has not felt clean water against it for years. The mud lifts in clouds. Out comes a bicycle, a fridge door, and a small Feebas wound in fishing line, which you cut free. The guest stands, clear as glass, and leaves one pellet of clean grey silt on the tiles. Your Water-type does not want to get out.",
+      "text": "Your Water-type climbs into the tub as if it owned it and starts to churn. The river guest goes very still, then leans in: it has not felt clean water against it for years. The mud lifts in clouds. Out comes a bicycle, a fridge, and a small Feebas wound in fishing line, which you cut free. The guest stands, clear as glass, and leaves one pellet of clean grey silt on the tiles. Your Water-type does not want to get out.",
       "effects": [
        {
         "kind": "item",
@@ -1067,6 +1067,1470 @@
         "kind": "moment",
         "text": "You walked into a dark wood beside the spore doctor, and came out with a Morelull that glows when something is wrong.",
         "importance": 65
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an03-book-of-names",
+   "name": "The Book of Names",
+   "group": "Anime-inspired questlines",
+   "rarity": "rare",
+   "minStage": 3,
+   "types": [
+    "ghost",
+    "dark"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "shuppet",
+    "tint": "#1a1a2a",
+    "effect": "flicker"
+   },
+   "intro": "Night, a house at the end of a lane, and a man in a damp coat waiting on the step with a key. \"You're the one in the will.\" You have never heard of her. He has never heard of you. The will is very clear. Inside, under a dust sheet, stands a grandmother's writing desk, and in its drawer lies a book bound in grey cloth: a hundred and eight names, each in a different hand, and some of the hands are not hands at all. Something scratches at the window. A Shuppet hangs outside the glass, tapping it with its little horn. Words come up on the pane in frost, like a subtitle: GIVE ME MY NAME BACK. SHE TOOK IT IN A GAME. I LOST. The book grows warm in your lap. It glows on one page.",
+   "choices": [
+    {
+     "label": "Give it back.",
+     "success": {
+      "text": "You find the page: one name in a scratchy, eager hand, with a little drawing of a horn under it. You tear it out along the stitching, open the window, and blow on it. The page comes apart into ash that sparkles, and the Shuppet breathes it in. It grows a shade brighter. It loops the room twice, fast, the way a dog runs when it is let off the lead. Then it presses its face to your cheek, cold as a window. THANK YOU, says the frost on the glass, in big wobbly letters. Then it is gone. The book is lighter by one page. A hundred and seven to go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "names-returned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an03-book",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "You tore a page out of a dead stranger's book and gave a Shuppet back its name.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You close the book. The glow goes out. Outside, the Shuppet goes very still. Then slowly, as if pulled on a string, it comes through the glass and settles at your shoulder. It has to. The book says so. It will not look at you. When you walk, it follows exactly one step behind, the way a prisoner walks.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "shuppet"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "shuppet",
+        "amount": -30
+       },
+       {
+        "kind": "flag",
+        "key": "names-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an03-shuppet-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an03-book",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask who she was.",
+     "success": {
+      "text": "The frost on the window clears and writes again, slower: SHE WAS LONELY. SHE BEAT EVERYONE. THEN SHE HAD NO ONE LEFT TO PLAY WITH. The Shuppet stops tapping. For a moment it only looks at the desk, the way you look at a chair someone used to sit in.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an03-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an03-book-again"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an03-book-again",
+   "name": "The Book of Names",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "shuppet",
+    "tint": "#1a1a2a",
+    "effect": "flicker"
+   },
+   "intro": "The house is very quiet. The book is still warm in your hands and still glowing on one page, and the Shuppet is still at the glass. It has stopped scratching. It is waiting to see what kind of person inherits a book like this one.",
+   "choices": [
+    {
+     "label": "Give it back.",
+     "success": {
+      "text": "You tear the page out along the stitching and blow it through the open window. The Shuppet breathes in the sparkling ash and grows a shade brighter. It loops the room twice, fast, then presses its cold face to your cheek. \"She wasn't bad,\" the frost writes, very small. \"Just alone.\" Then it is gone, and the book is lighter by one page.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "names-returned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an03-book",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "You tore a page out of a dead stranger's book and gave a Shuppet back its name.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You close the book. Slowly, as if pulled on a string, the Shuppet comes through the glass and settles at your shoulder. It has to. It will not look at you. When you walk, it follows exactly one step behind.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "shuppet"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "shuppet",
+        "amount": -30
+       },
+       {
+        "kind": "flag",
+        "key": "names-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an03-shuppet-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an03-book",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an03-second-name",
+   "name": "The One Who Hid Too Well",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an03-book",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "an03-book",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "types": [
+    "ghost",
+    "dark"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "duskull",
+    "tint": "#1a1a2a",
+    "effect": "fog"
+   },
+   "intro": "A new region, a camp at night. You wake because the book is warm against your back through the bag. Sitting on your bedroll, very small, is a Duskull, holding up one bony finger as if it is counting to a hundred. Frost writes on the inside of your lantern: SHE FOUND ME EVERY TIME. NOBODY ELSE EVER FOUND ME. I BET HER MY NAME SHE COULDN'T FIND THAT. The Duskull stops counting. It has been hiding for sixty years, and it is tired. The book glows on one page.",
+   "choices": [
+    {
+     "label": "Give it back.",
+     "success": {
+      "text": "You tear out the page and blow on it. The Duskull breathes the ash in, and its one red eye goes bright. It darts behind your bag, then behind a tree, then behind you, and you find it every time, and every time it shakes with something that is clearly laughing. Then it is gone into the dark, still hiding, happily, from nobody in particular.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "names-returned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an03-page-2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You close the book. The Duskull goes still, and then it trails after you, because it has to. It hides behind your heel in every fight. For a while it even fights for you, hard and joyless, the way you work for a boss you do not like.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "names-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an03-page-2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "A spirit bound by the book",
+        "effects": [
+         {
+          "kind": "damageMultiplier",
+          "value": 1.1
+         }
+        ],
+        "battles": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give back both pages.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "an03-shuppet-kept",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "an03-shuppet-freed",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "partyLine",
+       "species": "shuppet",
+       "bond": 0
+      }
+     ],
+     "success": {
+      "text": "You find the Duskull's page, and then you find the Shuppet's, and you tear them out together. The Shuppet at your shoulder goes stiff. You blow. Two clouds of sparkling ash. The Duskull is gone at once. The Shuppet breathes its name in and turns to you, and for the first time it looks you in the face. It could go anywhere now. It stays. It moves round from behind you to beside you, and it stays there.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "names-returned",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "names-kept",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "an03-shuppet-freed",
+        "amount": 1
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "shuppet",
+        "amount": 60
+       },
+       {
+        "kind": "flag",
+        "key": "an03-page-2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an03-third-name",
+   "name": "The Riddle She Never Answered",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an03-page-2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "an03-page-2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "types": [
+    "ghost",
+    "dark"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "misdreavus",
+    "tint": "#22162a",
+    "effect": "flicker"
+   },
+   "intro": "Another region, another night, and singing outside your tent: a Misdreavus, circling the lantern. Frost writes on the canvas: SHE ASKED ME ONE RIDDLE I COULD NOT ANSWER. I HAVE BEEN THINKING ABOUT IT FOR SIXTY YEARS. WHAT CAN YOU ONLY KEEP BY GIVING IT AWAY? It sounds tired. It sounds like it would very much like to stop thinking about it now. The book glows on one page.",
+   "choices": [
+    {
+     "label": "Give it back.",
+     "success": {
+      "text": "You tear out the page and hold it up, and before you blow you say, \"This.\" The Misdreavus goes quiet. It looks at the page, and at you, and its whole body rings like a glass somebody has tapped. That was the answer. A name is only yours while someone else will say it back. You blow. It breathes in its name and sings all the way to the trees, a new song.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "names-returned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an03-page-3",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You close the book. The singing stops in the middle of a note. The Misdreavus drifts down and follows you, silent, and for a while it fights for you, because it has to. It never finds out the answer to the riddle. You never tell it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "names-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an03-page-3",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "A spirit bound by the book",
+        "effects": [
+         {
+          "kind": "damageMultiplier",
+          "value": 1.1
+         }
+        ],
+        "battles": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give back both pages.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "an03-shuppet-kept",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "an03-shuppet-freed",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "partyLine",
+       "species": "shuppet",
+       "bond": 0
+      }
+     ],
+     "success": {
+      "text": "You tear out the Misdreavus's page and the Shuppet's together. \"This,\" you say to the Misdreavus, and it understands, and rings like a tapped glass. You blow. The Misdreavus sings off into the trees. The Shuppet breathes its own name in and turns and looks at you properly, for the first time. It could go anywhere. It moves round from behind you to beside you, and it stays.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "names-returned",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "names-kept",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "an03-shuppet-freed",
+        "amount": 1
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "shuppet",
+        "amount": 60
+       },
+       {
+        "kind": "flag",
+        "key": "an03-page-3",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an03-fourth-name",
+   "name": "The Doll She Won at Cards",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an03-page-3",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "an03-page-3",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "types": [
+    "ghost",
+    "dark"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "banette",
+    "tint": "#1e1a22",
+    "effect": "none"
+   },
+   "intro": "Another region. At night someone is dealing cards on your bedroll, very badly, with stitched hands. A Banette. It lays down a hand and waits for you to play. Frost writes on the back of every card: SHE WON ME AT CARDS. I WAS SOMEONE'S DOLL ONCE. THEN I WAS HERS. THEN SHE WAS GONE AND I WAS NOBODY'S. The zip on its mouth is shut tight. The book glows on one page.",
+   "choices": [
+    {
+     "label": "Give it back.",
+     "success": {
+      "text": "You play one hand with it first, and lose, and it unzips its mouth very slightly, which on a Banette is a grin. Then you tear out the page and blow on it. It breathes its name in and holds its own stitched hands together, the way somebody once held them. It deals you one last card, face down, and is gone. The card is blank. You keep it anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "names-returned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an03-page-4",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You close the book. It gathers its cards with great care and follows you, because it has to, and it fights for you for a while with its mouth zipped tight. It still deals a hand every night. It never asks you to play again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "names-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an03-page-4",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "A spirit bound by the book",
+        "effects": [
+         {
+          "kind": "damageMultiplier",
+          "value": 1.1
+         }
+        ],
+        "battles": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give back both pages.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "an03-shuppet-kept",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "an03-shuppet-freed",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "partyLine",
+       "species": "shuppet",
+       "bond": 0
+      }
+     ],
+     "success": {
+      "text": "You tear out the Banette's page and the Shuppet's together. You blow. The Banette breathes its name in and holds its own hands. The Shuppet breathes its name in and, for the first time, looks straight at you. It could go anywhere. It comes round from behind you to beside you, and it stays.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "names-returned",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "names-kept",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "an03-shuppet-freed",
+        "amount": 1
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "shuppet",
+        "amount": 60
+       },
+       {
+        "kind": "flag",
+        "key": "an03-page-4",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an03-everyone",
+   "name": "Everyone She Beat",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "an03-fourth-name"
+    },
+    {
+     "kind": "flag",
+     "key": "names-returned",
+     "atLeast": 3,
+     "atMost": 99
+    }
+   ],
+   "types": [
+    "ghost",
+    "dark"
+   ],
+   "remembers": [
+    {
+     "id": "kept-some",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "names-kept",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Some of the faces are dimmer than the others. They are the ones whose pages you kept. They came anyway."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "spiritomb",
+    "tint": "#16141e",
+    "effect": "flicker"
+   },
+   "intro": "Night. The book opens by itself, past all the torn stitching, to the very last page. It is blank. The lantern dims. One by one they come out of the dark: the Shuppet, the Duskull, the Misdreavus, the Banette, and behind them more, dozens, faces you have never seen, everyone she ever played and beat. They draw together, closer and closer, until they are one thing: a ring of faces in a cracked old stone. A Spiritomb. Frost writes on every surface at once: SHE BEAT US ALL. THEN THERE WAS NOBODY LEFT TO PLAY. WE CAME BACK TO TELL HER IT WAS ALL RIGHT. WE ARE TOO LATE. YOU WILL DO.",
+   "choices": [
+    {
+     "label": "Play one last game.",
+     "success": {
+      "text": "You sit down across from the stone. Every face in it leans in. It has waited a long time for somebody to play.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Everyone She Beat",
+       "size": 1,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "spiritomb"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "friendship": 20
+        },
+        {
+         "kind": "flag",
+         "key": "an03-everyone-came",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Everyone the old woman ever beat came back as one Spiritomb, played you one last game, and came with you.",
+         "importance": 75
+        }
+       ],
+       "lineup": [
+        "spiritomb"
+       ],
+       "spritePokemon": "spiritomb",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "spiritomb"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "friendship": 30
+        },
+        {
+         "kind": "flag",
+         "key": "an03-everyone-came",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "an03-they-won",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Everyone the old woman ever beat came back as one Spiritomb, won one last game at last, and came with you.",
+         "importance": 75
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Write her name on the last page.",
+     "success": {
+      "text": "You know it from the will. You write it on the blank page, in your own hand, carefully. The faces in the stone go quiet, and then, one by one, they smile. It was the only name nobody ever won from her. Now it is in the book with theirs. The Spiritomb settles at your feet like an old dog by a fire, and when you walk on, it comes.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "spiritomb"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 40
+       },
+       {
+        "kind": "flag",
+        "key": "an03-everyone-came",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an03-her-name",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You wrote a lonely old woman's name in her own book, beside everyone she ever beat, and they came with you as one.",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them rest together.",
+     "success": {
+      "text": "You close the book and set it on the stone. The faces look at it, and at you, and they understand. The Spiritomb sinks slowly into the ground under the trees, book and all, the way a stone settles in a riverbed. In the morning there is a small cairn there, and a feeling in your whole team of having been thanked.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an03-laid-to-rest",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Everyone the old woman ever beat came back as one Spiritomb, and you let them rest together.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an04-witchs-courier",
+   "name": "The Witch's Courier",
+   "group": "Anime-inspired questlines",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "normal",
+    "electric",
+    "steel"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "wattrel",
+    "tint": "#24202e",
+    "effect": "shake"
+   },
+   "intro": "Something comes down out of the sky at the wrong angle and goes straight into a hedge. Parcels burst out of it in every direction. A Wattrel lands on the hedge top and squawks at the hole, very loudly, as if this has happened before. Out of the hole climbs a girl in a black dress, with leaves in her hair and a broom in two pieces. \"I just started. I'm not very good at landing.\" She picks up a parcel, then another. Her hands are shaking. \"I've lost my flying. It just stopped. I don't know why.\" She looks at the scattered parcels, then at you. \"Can you help me deliver these? On foot? I'll pay you in cake.\"",
+   "choices": [
+    {
+     "label": "Help.",
+     "success": {
+      "text": "Her whole face changes. She stuffs the parcels into your arms and hers, three of them with addresses in careful round writing. \"This one's the lighthouse. This one's the boy on Mill Street. This one's a lady who only moved here last week.\" The Wattrel lands on her head and stays there, like a hat that disapproves. \"One at a time. Along your way. Thank you. Thank you.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an04-met",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an04-delivery-1",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Why did it stop?",
+     "success": {
+      "text": "She sits down on the kerb with the broken broom across her knees. \"Because I started wondering whether I should be doing this at all.\" She says it very quietly, as if it might hear. \"You can't fly and wonder that at the same time. It turns out.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an04-asked-why",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an04-courier-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Your Wattrel can fly them.",
+     "success": {
+      "text": "The Wattrel looks at you as if you have said something rude. \"It can't,\" she says. \"It only flies with me. When I stopped, it stopped too.\" The Wattrel hops down onto her shoulder and stays very close against her neck, and does not fly anywhere at all.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an04-asked-wattrel",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an04-courier-again"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an04-courier-again",
+   "name": "The Witch's Courier",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "wattrel",
+    "tint": "#24202e",
+    "effect": "none"
+   },
+   "intro": "The girl is still sitting on the kerb, with the broken broom across her knees and the Wattrel tucked against her neck. The parcels are stacked beside her in a careful, hopeful pile. \"So. Will you help? It's three. They're not heavy. The cake is very good.\"",
+   "choices": [
+    {
+     "label": "Help.",
+     "success": {
+      "text": "\"Really?\" She is on her feet at once. She stuffs the parcels into your arms: the lighthouse, the boy on Mill Street, the lady who only moved here last week. \"One at a time. Along your way. Thank you.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an04-met",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an04-delivery-1",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "She nods as if she expected it, and gathers the parcels up herself. As you go you look back once. She is walking, very carefully, with the broom under her arm and the Wattrel on her head, toward the first address.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "an04-delivery-1",
+   "name": "The Lighthouse",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an04-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_m"
+    ],
+    "tint": "#1e2a36",
+    "effect": "none"
+   },
+   "intro": "The first parcel goes to the lighthouse. The keeper opens the door before you knock: he has watched you come the whole way along the sea wall. He is lonely the way people are when everyone they love is far away and doing well. The parcel is soft. Inside is a jumper his daughter knitted, a little too big, with a note that says she is sorry she can't come this year either.",
+   "choices": [
+    {
+     "label": "Stay for a cup of tea.",
+     "success": {
+      "text": "He makes tea in two cups that have not both been used for a long time. He tells you about his daughter, who is clever and far away. He puts the jumper on over his other jumper and does not take it off. When you leave he is reading the note again, smiling, and he waves from the top of the light.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an04-deliveries",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an04-delivery-2",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hand it over and go.",
+     "success": {
+      "text": "He takes it with both hands. \"From my girl,\" he says, to you, to the sea, to nobody. You leave him holding it against his chest at the top of the steps.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an04-deliveries",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an04-delivery-2",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an04-delivery-2",
+   "name": "Mill Street",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an04-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a2a1e",
+    "effect": "none"
+   },
+   "intro": "The second parcel goes to a boy on Mill Street. He is lonely the way children are when their best friend has moved away and the street has gone quiet. The parcel rattles. Inside is a board game for two players, and a card from the friend that says: YOU HAVE TO FIND SOMEONE TO PLAY WITH. THOSE ARE THE RULES.",
+   "choices": [
+    {
+     "label": "Play one game with him.",
+     "success": {
+      "text": "You lose. He wins with enormous dignity and explains every rule twice. By the end, two other kids from the street are watching over the fence. He sets the board up again for them before you have left the gate.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an04-deliveries",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an04-delivery-3",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hand it over and go.",
+     "success": {
+      "text": "He reads the card three times. Then he looks up and down the empty street, takes a deep breath, and goes and knocks on the door next to his own. You do not stay to see who opens it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an04-deliveries",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an04-delivery-3",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an04-delivery-3",
+   "name": "The New Lady",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an04-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/parasol_lady"
+    ],
+    "tint": "#2a1e26",
+    "effect": "none"
+   },
+   "intro": "The last parcel goes to a flat above a shop, to a woman who moved to the town last week. She is lonely the way people are in a crowd: everyone is busy, everyone is kind, and nobody knows her name. The parcel is from her own mother, from home. It is a jar of the jam she grew up on, wrapped in a tea towel that smells of the house.",
+   "choices": [
+    {
+     "label": "Ask her name.",
+     "success": {
+      "text": "She tells you. She says it twice, as if she had nearly forgotten what it sounded like out loud. She opens the jam right there on the stairs and you both eat some off one spoon. On your way out, the shopkeeper downstairs asks who she is, and you tell him. You hear him say it to her as you go: good morning, and her name.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an04-deliveries",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an04-all-delivered",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "straw-cake",
+        "count": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an04-cake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hand it over and go.",
+     "success": {
+      "text": "She holds the jar to her face and breathes in through the tea towel, and her eyes fill. \"It smells like the kitchen,\" she says. You leave her on the stairs with it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an04-deliveries",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an04-all-delivered",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "straw-cake",
+        "count": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an04-cake"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an04-cake",
+   "name": "Paid in Cake",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "wattrel",
+    "tint": "#24202e",
+    "effect": "sparkle"
+   },
+   "intro": "The girl is waiting where you left her, sitting on the kerb with a cake box on her knees. \"Did they like them? Were they all right?\" You tell her about the lighthouse, and Mill Street, and the lady above the shop. She listens to every word with her chin on the box. \"Everyone's lonely in a different way,\" she says. \"I never noticed. I was always too high up.\" She hands you the cake. It is very good.",
+   "choices": [
+    {
+     "label": "\"You noticed today.\"",
+     "success": {
+      "text": "She thinks about that for a long time. Then she picks up the mended broom and holds it, not to fly, only to hold it. \"See you round, courier,\" she says, and the Wattrel squawks, once, like a full stop.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an04-noticed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an04-the-tower",
+   "name": "The Clock Tower",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an04-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "an04-met",
+     "atLeast": 3,
+     "atMost": 99
+    }
+   ],
+   "types": [
+    "normal",
+    "electric",
+    "steel"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "wattrel",
+    "tint": "#24202e",
+    "effect": "none"
+   },
+   "intro": "Three stages on, in another town, there is a little shop with a hand-painted sign: DELIVERIES, ON FOOT. The girl is behind the counter. The broom leans in the corner, mended. \"It still doesn't fly. I try every morning. I get about an inch.\" She points out of the window at the clock tower, where a boy in overalls is hanging off the clock face with a spanner. \"That's Tobin. He fixes the clock. He says I'm the best courier in town because I actually knock.\" The Wattrel is asleep in the parcel tray.",
+   "choices": [
+    {
+     "label": "Hold the broom steady for her.",
+     "prompt": {
+      "id": "tilt-drag",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Out in the yard you hold the end of the broom while she sits on it. It wobbles. It rises an inch, then two, then a whole hand. She laughs out loud, and then she stops laughing to look down, and it drops. But it rose.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an04-beat-2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an04-rose",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It wobbles, and you wobble, and the two of you go into the shop's own hedge together, which she says is a sign. She is laughing anyway. \"Every morning,\" she says, picking leaves out of your hair. \"Every morning, an inch.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an04-beat-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell her she doesn't have to fly.",
+     "success": {
+      "text": "She goes very still. Then she puts her face in her hands and her shoulders shake, and when she looks up she is smiling. \"Nobody's said that. Everyone says I'll get it back.\" She wipes her eyes on the cuff of her dress. \"I might not. That's all right. I like knocking on doors.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an04-beat-2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an04-told-ok",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Eat cake with her and Tobin.",
+     "success": {
+      "text": "Tobin climbs down for it. He eats like somebody who works on top of a tower, which is to say fast and without sitting down. He talks about gears. She watches him talk, and the way she watches him is something she has not noticed yet. You notice. You do not say.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an04-beat-2",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an04-the-storm",
+   "name": "She Has to Fly",
+   "group": "Anime-inspired questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an04-beat-2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "an04-beat-2",
+     "atLeast": 3,
+     "atMost": 99
+    }
+   ],
+   "types": [
+    "normal",
+    "electric",
+    "steel"
+   ],
+   "remembers": [
+    {
+     "id": "all-three",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "an04-deliveries",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "notice": "She looks past you at the street. The lighthouse keeper is there in his too-big jumper. The boy from Mill Street is there with half the street behind him. The lady from above the shop is there, holding her umbrella over strangers. They all came to watch her. They are all looking up.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Say nothing.",
+       "success": {
+        "text": "You say nothing. She does not need you to. She grabs the street sweeper's broom off its hook, because hers is at the shop, and she kicks off, and she flies. Not well. Fast and crooked and furious, into the rain, and she catches Tobin by the overalls halfway down and brings him round in a long wobbling curve to land in the middle of the street, in front of everyone. Nobody cheers at first. Then everybody does. The Wattrel flies circles round her head. She is crying. She flew because she wanted to.",
+        "effects": [
+         {
+          "kind": "egg",
+          "species": [
+           "wattrel"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "left": 3,
+          "unit": "battle"
+         },
+         {
+          "kind": "item",
+          "id": "straw-cake",
+          "count": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 3,
+          "who": "party"
+         },
+         {
+          "kind": "flag",
+          "key": "an04-flew-alone",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "In a storm, the courier who had lost her flying took a borrowed broom and flew on her own, and caught her friend.",
+          "importance": 80
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "wattrel",
+    "tint": "#24202e",
+    "effect": "rain"
+   },
+   "intro": "Three stages on, a storm hits the town while you are passing through it. The wind is a wall. Up on the clock tower, Tobin is trying to tie down the hands of the clock, and then he is not on the clock tower any more. He is hanging off the edge of it by one arm. The girl is in the street below with her broom. She looks up at him, and at the broom, and at you. Her face is white. The Wattrel is screaming. She has to fly.",
+   "choices": [
+    {
+     "label": "You can do it.",
+     "success": {
+      "text": "She grits her teeth and kicks off. She flies crooked and terrified, because you told her she could. She catches Tobin by the sleeve as he lets go, and they crash together into the baker's awning, both alive. Later, wrapped in a blanket, she says: \"I flew because you said so. I'll need my own reason. But thank you.\" She gives you an egg from the Wattrel's nest, and cake.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "wattrel"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "item",
+        "id": "straw-cake",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "an04-cheered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use my Flying-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "flying"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Flying-type is up before the girl can move. It takes Tobin by the overalls as his fingers slip and brings him down hard and safe into the street. She runs to him. She does not fly. Later, she thanks you with an egg from the Wattrel's nest and a whole cake, and asks, very quietly, whether you think it will ever come back.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "wattrel"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "item",
+        "id": "straw-cake",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": {
+         "types": [
+          "flying"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "an04-flyer-caught",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You say nothing. She waits for somebody to tell her she can. Nobody does. She kicks off anyway, and the broom drops like a stone after three metres. The Wattrel goes for Tobin's collar and your lead goes for her, and all of them land in the fountain, soaked and alive. She sits in the water and laughs until she cries. \"Not yet,\" she says. \"Not yet.\" She gives you an egg from the Wattrel's nest, and cake.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "wattrel"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "item",
+        "id": "straw-cake",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an04-silent",
+        "amount": 1
        }
       ]
      }
