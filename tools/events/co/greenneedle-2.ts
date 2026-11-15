@@ -3,8 +3,9 @@
 // In Kanto the canon space at Cerulean ("Nugget Bridge", cs-kanto-cerulean-bridge) opens the same story; everywhere else the placer puts
 // gn-06-bridge on step 10. The old canon sub-scenes are retired (CANON_SPACES_KANTO_MOVED_TO_GREENNEEDLE.md: "The Greenneedle version is the only version").
 // Build: npm run co:build -- greenneedle-2
+import customSpecies from '../../../src/data/customSpecies.json' with { type: 'json' };
 import { ch, fight, flag, heal, item, join, leave, out, room, trainer, wild, type Json } from '../dsl.ts';
-import { bond, chIf, eitherWay, gev, gn, inside, intel, is, leavePseudo, moment, not, partyHas, pick, regionChanged, rm, roll, say, scene, setTo, stampRegion, stampStage, when, type Placement } from './_gn.ts';
+import { bond, chIf, kindness, eitherWay, gev, gn, inside, intel, is, leavePseudo, moment, not, partyHas, pick, regionChanged, rm, roll, say, scene, setTo, stampRegion, stampStage, when, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
 
@@ -850,7 +851,197 @@ const gn09: Json[] = [
 // ---- Kanto: the canon space on the cape north of Cerulean (cs.kanto.cerulean.bill) ----
 const KANTO_BILL: Json = { ...gev('cs-kanto-cerulean-bill', "Bill's Lighthouse", cape({ stop: 'event', rarity: 'common', types: ['water'], requires: [not('bill-done')] }), BILL_DOOR_TEXT, BILL_DOOR_CHOICES), canon: 'cs.kanto.cerulean.bill' };
 
-export const EVENTS: Json[] = [...gn06, ...starterEpisodes, KANTO_BRIDGE, ...gn07, KANTO_RAIN, ...gn08, KANTO_SQUAD, ...gn09, KANTO_BILL];
+// =====================================================================================================================
+// gn.10  THE S.S. ANNE  (Pseudo Stage: three decks of four nodes, then the captain and the rival; Door step 5, optional; needs water; A5)
+// =====================================================================================================================
+const SHIP_TINT = '#2f5d73';
+const ship = (o: Json = {}): Json => ({ tint: SHIP_TINT, tags: ['Dungeon', 'Story', 'Trainer'], effect: 'none', ...o });
+const DECKS = ['Lower', 'Main', 'Upper'] as const;
+/** Who you fight at each node (Sailor Dobbs-Leary takes the last node of every deck). */
+const DECK_TRAINERS: { name: string; cls?: string; types: string[]; line: string }[] = [
+  { name: 'Sailor', types: ['water', 'fighting'], line: 'A sailor coiling rope looks up and grins. "Passenger! Fancy a scrap before supper?"' },
+  { name: 'Cook', types: ['normal', 'fire'], line: 'A cook in a stained apron blocks the corridor with a soup ladle. "Nobody gets past the galley without a battle. House rule."' },
+  { name: 'Stowaway', types: ['poison', 'dark'], line: 'Someone climbs out of a lifeboat cover, blinking. "You didn\'t see me. Unless you want to battle about it."' },
+  { name: 'Worker', cls: 'worker', types: ['steel', 'electric'], line: 'In the engine room, a worker wipes her hands. "Down here we settle things the old way."' },
+  { name: 'Gentleman', types: ['normal', 'fairy'], line: 'A gentleman in a dinner jacket bows. "A friendly match, before the soup?"' },
+  { name: 'Lass', cls: 'lass', types: ['normal', 'grass'], line: 'A lass on the stairs points at you. "You! You look like you battle. Battle me."' },
+  { name: 'Fisher', cls: 'fisherman', types: ['water'], line: 'A fisher leaning over the rail reels in nothing at all. "Nothing biting. You\'ll do instead."' },
+  { name: 'Waiter', types: ['normal', 'psychic'], line: 'A waiter balances a tray on one hand and a Poké Ball in the other. "Your table is ready. After this."' },
+  { name: 'Collector', types: ['steel', 'ground'], line: 'A collector in a velvet coat sizes up your team, one by one. "Interesting. Let\'s see them work."' },
+  { name: 'Ace Trainer', cls: 'ace-trainer', types: ['dragon', 'water'], line: 'An Ace Trainer at the top of the stairs. "I heard you\'ve been winning below decks. That stops here."' },
+  { name: 'Veteran', cls: 'veteran', types: ['fighting', 'steel'], line: 'In the captain\'s corridor, a veteran stands guard. "The captain is resting. You\'ll have to get past me."' },
+  { name: 'Officer', types: ['water', 'flying'], line: 'The first officer straightens his cap. "Last cabin before the bridge. Let\'s do this properly."' },
+];
+const DOBBS = [
+  { lv: -1, size: 2, types: ['water'], line: '**Sailor Dobbs-Leary:** "Dobbs-Leary, able seaman! Fancy a battle? Course you do."', after: '**Dobbs-Leary:** "Ha! Lost. Right. See you upstairs."' },
+  { lv: 0, size: 3, types: ['water', 'grass'], line: '**Dobbs-Leary:** "I\'ve been thinking about that Water move of yours."', after: '**Dobbs-Leary:** "Still not enough. Still! Upstairs, then."' },
+  { lv: 1, size: 3, types: ['water', 'dragon'], line: '**Dobbs-Leary:** "Third time. I\'ve a new friend. Meet the new friend."', after: '**Dobbs-Leary:** "Three times. Fair\'s fair." He presses something warm into your hand. "My lucky coin. Hasn\'t been lucky for me."' },
+];
+const REGION_TABLE: Record<string, string> = {
+  pikachu: 'raichu-alola', raichu: 'raichu-alola', rattata: 'rattata-alola', raticate: 'raticate-alola', sandshrew: 'sandshrew-alola', sandslash: 'sandslash-alola',
+  vulpix: 'vulpix-alola', ninetales: 'ninetales-alola', diglett: 'diglett-alola', dugtrio: 'dugtrio-alola', meowth: 'meowth-alola', persian: 'persian-alola',
+  geodude: 'geodude-alola', graveler: 'graveler-alola', golem: 'golem-alola', grimer: 'grimer-alola', muk: 'muk-alola', exeggcute: 'exeggutor-alola', exeggutor: 'exeggutor-alola',
+  cubone: 'marowak-alola', marowak: 'marowak-alola', ponyta: 'ponyta-galar', rapidash: 'rapidash-galar', slowpoke: 'slowpoke-galar', slowbro: 'slowbro-galar',
+  farfetchd: 'farfetchd-galar', koffing: 'weezing-galar', weezing: 'weezing-galar', 'mr-mime': 'mr-mime-galar', growlithe: 'growlithe-hisui', arcanine: 'arcanine-hisui',
+  voltorb: 'voltorb-hisui', electrode: 'electrode-hisui', qwilfish: 'qwilfish-hisui',
+};
+const REGIONALS = [...new Set(Object.values(REGION_TABLE))];
+/** Delta forms (customSpecies.json): any Pokémon with one can be traded for it, once per ship. */
+const DELTA_TABLE: Record<string, string> = Object.fromEntries((customSpecies as { id: string }[]).map((x) => x.id).filter((id) => id.endsWith('-delta')).map((id) => [id.slice(0, -'-delta'.length), id]));
+const SSANNE_ASHORE: Json[] = [flag('ssanne-ashore'), leavePseudo()];
+const deckRoom = (k: number): string => (k <= 12 ? `gn-10-deck-${k}` : 'gn-10-captain');
+/** Optional rooms offered after a node's battle (up to four per voyage). */
+const ROOM_AFTER: Record<number, Json[]> = {
+  1: [scene('gn-10-galley')], 2: [scene('gn-10-engine')], 3: [roll('ssanne-stow-roll', 20), when('ssanne-stow-roll', { min: 1 }, [scene('gn-10-stowaways')])],
+  5: [scene('gn-10-seasick')], 6: [scene('gn-10-dining')], 7: [scene('gn-10-games')], 8: [scene('gn-10-contest')],
+  9: [scene('gn-10-collector')], 10: [roll('ssanne-cup-roll', 15), when('ssanne-cup-roll', { min: 1 }, [scene('gn-10-cup')])], 11: [roll('ssanne-duel-roll', 30), when('ssanne-duel-roll', { min: 1 }, [scene('gn-10-duel')])],
+};
+const RESET_TRADES: Json[] = [setTo('ssanne-took-a', 0), setTo('ssanne-took-b', 0), setTo('ssanne-took-c', 0)];
+const deckNode = (k: number): Json[] => {
+  const deck = DECKS[Math.floor((k - 1) / 4)]!;
+  const dobbs = k % 4 === 0 ? DOBBS[k / 4 - 1]! : null;
+  const t = DECK_TRAINERS[k - 1]!;
+  const here = deckRoom(k);
+  const won = (extra: Json[]): Json[] => [setTo('ssanne-at', k), ...RESET_TRADES, ...extra, ...(ROOM_AFTER[k] ?? []), scene(here)];
+  const battle = dobbs
+    ? trainer('Sailor Dobbs-Leary', { size: dobbs.size, types: dobbs.types, lv: dobbs.lv, win: won([flag('ssanne-dobbs'), ...(k === 12 ? [when('ssanne-dobbs', { min: 3 }, [item('amulet-coin')], DOBBS[2]!.after)] : [])]), lose: SSANNE_ASHORE, friendly: true })
+    : trainer(t.name, { ...(t.cls ? { cls: t.cls } : {}), size: 2, types: t.types, lv: 1, win: won([]), lose: SSANNE_ASHORE, friendly: true });
+  const trades = `gn-10-trades-${k}`;
+  const tradeB = `gn-10-tradeb-${k}`;
+  const AT = is('ssanne-at', k, k);
+  return [
+    rm(here, `S.S. Anne: ${deck} Deck, Cabin ${k}`, ship(), say(
+      k === 1 ? '**Boarding. Purser, Mr. Ashworth:** "Ticket. Thank you. Trainers aft, traders everywhere, the captain\'s unwell and would rather you didn\'t knock."' : `The ${deck.toLowerCase()} deck. The ship rolls, gently, under your feet.`,
+      dobbs ? dobbs.line : t.line,
+    ), [
+      chIf([is('ssanne-at', k - 1, k - 1)], 'Battle.', fight(dobbs && k < 12 ? `${dobbs.after}` : 'Battle on the open deck.', battle)),
+      chIf([AT], 'Trade with the passengers.', out('Two passengers are waiting with Poké Balls in their hands.', scene(trades))),
+      chIf([AT], k === 12 ? 'Go to the captain\'s cabin.' : 'Move on.', out(k === 12 ? 'A steward finds you. "The captain is asking for you. He\'s, ah. Not well."' : 'You walk on along the deck.', ...RESET_TRADES, room(deckRoom(k + 1)))),
+    ]),
+    rm(trades, `S.S. Anne: Trades, Cabin ${k}`, ship(), say('Two trade offers. Each passenger shows you their card, honestly: what they give, and what they want.'), [
+      chIf([not('ssanne-took-a')], 'Trade A: any Pokémon for one of similar strength.', out('A passenger trades with you: same level, much the same strength, from this region.', { kind: 'tradeFor', want: { label: 'a Pokémon of yours' }, similar: { region: true, bst: 40 } }, flag('ssanne-took-a'), scene(trades))),
+      chIf([not('ssanne-took-b')], 'Trade B: the region trade.', out('The second passenger opens a case of Poké Balls.', scene(tradeB))),
+      chIf([is('ssanne-secret'), not('ssanne-took-c')], 'The secret trade.', out('Behind the kitchen, someone takes your Pokémon, and hands back something stranger than the last one.', { kind: 'tradeFor', want: { label: 'a Pokémon of yours' }, similar: { region: true, bst: 200 } }, flag('ssanne-took-c'), scene(trades))),
+      ch('Back.', out('You leave the passengers to it.', scene(here))),
+    ]),
+    rm(tradeB, `S.S. Anne: The Region Trade, Cabin ${k}`, ship(), say('**Passenger:** "Anything with a regional cousin? I trade like for like: same level, and it keeps what it is holding."'), [
+      ch('Trade for its regional form.', out('"Oh, a lovely one! I have just the thing."', { kind: 'tradeFor', want: { label: 'a Pokémon with a regional form', species: Object.keys(REGION_TABLE) }, table: REGION_TABLE }, flag('ssanne-took-b'), scene(trades))),
+      ch('None of those: any Pokémon for a regional one.', out('"Never mind. Anything will do. Here, take this one."', { kind: 'tradeFor', want: { label: 'a Pokémon of yours' }, similar: { pool: REGIONALS, bst: 200 } }, flag('ssanne-took-b'), scene(trades))),
+      chIf([not('ssanne-delta-done')], 'Trade for its Delta form.', out('A passenger in dark glasses looks at your Pokémon a long moment. "I know what that one could be." Same level. Something different looks back at you.', { kind: 'tradeFor', want: { label: 'a Pokémon with a Delta form', species: Object.keys(DELTA_TABLE) }, table: DELTA_TABLE }, flag('ssanne-took-b'), flag('ssanne-delta-done'), scene(trades))),
+      ch('Back.', out('"Another time."', scene(trades))),
+    ]),
+  ];
+};
+/** An optional room: entering it counts toward the voyage's four. */
+const ROOMS_LEFT = is('ssanne-rooms', 0, 3);
+const enter = (label: string, success: Json, extra: Json[] = []): Json => chIf([ROOMS_LEFT, ...extra], label, { ...success, effects: [flag('ssanne-rooms'), ...(success.effects as Json[])] });
+const pass = (text = 'You walk past. There will be other rooms.'): Json => ch('Walk past.', leave(text));
+const MEALS: [string, Json][] = [
+  ['Spicy Curry', { kind: 'damageMultiplier', value: 1.1 }], ['Citrus Salad', { kind: 'statMultiplier', stat: 'spe', value: 1.1 }], ['Hearty Stew', { kind: 'damageTakenMultiplier', value: 0.9 }],
+  ['Grilled Fish', { kind: 'critChanceBonus', value: 0.1 }], ['Sweet Dumplings', { kind: 'xpMultiplier', value: 1.25 }],
+];
+const gn10: Json[] = [
+  gev('gn-10-dock', 'The S.S. Anne', ship({ stop: 'event', rarity: 'rare', types: ['water'], requires: [notRegion('kanto'), not('ssanne-done')] }), say(
+    'A great white liner at the harbour wall, flags up, the gangway down. The S.S. Anne, in port for one night.',
+    'A guard at the foot of the gangway checks every ticket twice. Nobody gets on without one.',
+  ), [
+    chIf([is('kanto-ssanne-ticket')], 'Hand over the Ticket and board.', out('"Welcome aboard!" The gangway creaks under your feet.', flag('ssanne-done'), room('gn-10-deck-1'))),
+    chIf([not('kanto-ssanne-ticket'), { kind: 'money', atLeast: 2000 }], 'Buy a spare Ticket at the harbour market (₽2,000), and board.', out('A stallholder sells you a spare ticket for ₽2,000, with a wink. The guard checks it twice, and lets you on.', { kind: 'money', amount: -2000 }, item('ss-ticket'), flag('kanto-ssanne-ticket'), flag('ssanne-done'), room('gn-10-deck-1'))),
+    ch('Not today.', leave('You step back from the gangway. The ship sails at dawn without you.')),
+  ]),
+  ...Array.from({ length: 12 }, (_, i) => deckNode(i + 1)).flat(),
+  // ---- the optional rooms ----
+  rm('gn-10-galley', 'The Galley', ship({ effect: 'none' }), say('**Chef, Madame Brioche:** "Sit. You\'re thin."'), [
+    enter('Sit down and eat.', out('She feeds your whole team, and you. A full meal: everyone is fully healed, and something on the plate stays with you.', { kind: 'heal', share: 1 }, pick('ssanne-meal', 1, 1, 1, 1, 1), ...MEALS.map(([name, fx], i) => when('ssanne-meal', { min: i + 1, max: i + 1 }, [{ kind: 'tempEffect', label: name, effects: [fx], battles: 1, until: 'battle' }], `${name}: for your next battle.`)))),
+    enter('Ask what is behind the kitchen.', out('She looks at you for a long moment, then jerks her head at a door behind the stoves. "Traders. The odd kind. Don\'t tell the purser." For the rest of the voyage, there is a third trade at every cabin.', flag('ssanne-secret'))),
+    pass(),
+  ]),
+  rm('gn-10-engine', 'The Engine Room', ship(), say(
+    'Below the waterline, in the heat and the noise, a team is loading crates that aren\'t on the manifest.',
+    'One of the crates is breathing.',
+  ), [
+    enter('Open one.', fight('A caged Pokémon looks up at you. Two Grunts look up from the crates at the same moment.', trainer('Grunts', { format: 'doubles', size: 2, types: ['poison', 'dark'], lv: 1, win: [flag('freed-caged'), flag('ssanne-engine-opened'), { kind: 'evil', heat: 1 }, intel(1)], lose: SSANNE_ASHORE, friendly: true }))),
+    enter('Report it to the purser.', out('Mr. Ashworth listens, goes pale, and sends two officers down. By the time they get there the crates are gone, and so is the team.', flag('ssanne-engine-reported'))),
+    ch('Walk away.', leave('You walk away. The crate goes on breathing behind you.')),
+  ]),
+  rm('gn-10-stowaways', 'The Stowaways', ship(), say(
+    'A barrel in the corner is humming "Prepare for trouble". The lid pops off: Jessie, James and a very flustered Meowth.',
+    '**Meowth:** "We are NOT stowaways. We are, uh. Barrel inspectors."',
+  ), [
+    enter('Battle the trio.', fight('"Prepare for trouble!" "Make it double!" The barrel rolls away mid-motto.', trainer('Jessie & James', { format: 'doubles', size: 2, lv: 1, win: [flag('ssanne-trio-seen'), flag('kanto-ssanne-stowaways'), intel(1)], lose: SSANNE_ASHORE, friendly: true }))),
+    pass('You put the lid back on. The barrel says "thank you" in three voices.'),
+  ]),
+  rm('gn-10-seasick', 'The Seasick One', ship(), say('A passenger\'s Pokémon, green about the gills, alone on a bench. Its trainer is nowhere to be seen.'), [
+    enter('Take it up for air.', out('You carry it up on deck. The wind does it good. When its trainer finds you, they shake your hand for a long time.', kindness(1), flag('ssanne-seasick'))),
+    enter('Sit with it.', out('You sit with it until the worst passes. It leans on you. When its trainer finds you, they don\'t say anything; they just nod.', kindness(1), flag('ssanne-seasick'))),
+    pass(),
+  ]),
+  rm('gn-10-dining', 'The Dining Room', ship(), say('Pokémon eat at the tables in the dining room, napkins tucked in. Your team gets a table of its own.'), [
+    { ...enter('Sit one of them at the head of the table.', out('It sits at the head of the table, very straight, and is served first. It will not stop looking at you.', { kind: 'friendship', bond: 1, who: 'picked' })), pick: {} },
+    pass(),
+  ]),
+  rm('gn-10-games', 'The Game Room', ship(), say('Cards, under green lamps. The odds are printed on the felt, honestly: the house wins four hands in ten.'), [
+    { ...enter('Play a hand: ₽500 on the table, 60% to win ₽1,000.', out('You win the hand. The dealer slides the chips across without a word.', { kind: 'money', amount: 1000 }), [{ kind: 'money', atLeast: 500 }]), chance: 0.6, failure: { text: 'You lose the hand. The odds were on the felt.', effects: [flag('ssanne-rooms'), { kind: 'money', amount: -500 }] } },
+    pass('You watch a few hands, and keep your money.'),
+  ]),
+  rm('gn-10-contest', 'The Beauty Contest', ship({ effect: 'sparkle' }), say('A beauty contest in the ballroom. One entrant each. The judges look at condition, and at how much the Pokémon trusts its trainer.'), [
+    { ...enter('Enter your lead.', out('A polite round of applause, and second place. The judges liked it, but they could tell it was nervous.', { kind: 'money', amount: 300 })), branches: [{ when: [{ kind: 'bondLevel', atLeast: 3, who: 'lead' }], text: 'It walks out like it owns the ballroom, and looks back at you once, at the end. First place. The judges stand up.', effects: [flag('ssanne-rooms'), { kind: 'money', amount: 1500 }, bond(1)] }] },
+    pass(),
+  ]),
+  rm('gn-10-collector', 'The Collector', ship(), say(
+    'A man with a monocle and a velvet coat stops you on the stairs. He points at one of your team.',
+    '**Mr. Cornelius Quayle:** "That one. Name your price."',
+  ), [
+    enter('No.', out('"Two thousand, then."', scene('gn-10-collector-2'))),
+    enter('Yes.', out('"Fifteen hundred. A pleasure." He takes it away with both hands, as if it might break.', { kind: 'tradeAway', want: { label: 'the Pokémon he points at' } }, { kind: 'money', amount: 1500 }, flag('ssanne-collector-sold'))),
+  ]),
+  rm('gn-10-collector-2', 'The Collector', ship(), say('**Quayle:** "Three thousand. I am being very reasonable."'), [
+    ch('No.', out('"Five, then. Final offer. Probably."', scene('gn-10-collector-3'))),
+    ch('Yes.', out('"Three thousand. A pleasure."', { kind: 'tradeAway', want: { label: 'the Pokémon he points at' } }, { kind: 'money', amount: 3000 }, flag('ssanne-collector-sold'))),
+  ]),
+  rm('gn-10-collector-3', 'The Collector', ship(), say('**Quayle:** "Five thousand. You will not see an offer like it again on this sea."'), [
+    ch('No.', out('He sighs, very deeply, and gives you his card. *Cornelius Quayle. Collector. Always buying.* "You\'ll hear from me."', flag('ssanne-collector-refused'))),
+    ch('Yes.', out('"Five thousand. A pleasure, finally."', { kind: 'tradeAway', want: { label: 'the Pokémon he points at' } }, { kind: 'money', amount: 5000 }, flag('ssanne-collector-sold'))),
+  ]),
+  rm('gn-10-cup', 'The Deck Cup', ship(), say('The sun deck has been cleared for a tournament: three rounds, one winner, and a Rare Candy on a velvet cushion.'), [
+    enter('Enter the cup.', fight('Three rounds, back to back.', trainer('Cup Challenger', { size: 2, lv: 2, chain: 3, chainHeal: 0.2, win: [item('rare-candy')], lose: SSANNE_ASHORE, friendly: true }))),
+    pass('You watch from the rail.'),
+  ]),
+  rm('gn-10-duel', 'The Passenger Duel', ship(), say('A passenger in a white suit flips a coin onto the table. "Two against two. The stake is a Premium Ball. Interested?"'), [
+    enter('Accept.', fight('Two against two, on the card table.', trainer('Rich Passenger', { format: 'doubles', size: 2, types: ['normal', 'psychic'], lv: 1, win: [item('premier-ball')], lose: SSANNE_ASHORE, friendly: true }))),
+    pass('You decline. The coin goes back in the waistcoat pocket.'),
+  ]),
+  // ---- the captain and the rival ----
+  rm('gn-10-captain', "The Captain's Cabin", ship(), say(
+    'A cabin. A man the colour of old paper, lying very still in a bunk.',
+    '**Captain Winslow:** "Thirty years at sea. Still. Every voyage. Don\'t tell the crew."',
+  ), [
+    ch('Rub his back.', out('You rub his back. After a while he breathes out, long and slow, and sits up.', room('gn-10-rival'))),
+    ch("Fetch the galley's ginger.", out('Madame Brioche hands over the ginger without a word. The captain chews it, makes a face, and sits up.', room('gn-10-rival'))),
+    ch('Let a Pokémon sing to him.', out('One of your team sings, quietly. The captain closes his eyes. When it finishes, he sits up.', room('gn-10-rival'))),
+  ]),
+  rm('gn-10-rival', 'The Top Deck', ship({
+    remembers: [{ id: 'engine', when: [is('ssanne-engine-opened')], notice: '**Rival:** "And I saw you go down to the engine room. What was in those crates?"' }],
+  }), say(
+    'On the top deck, in the wind, someone you know is leaning on the rail.',
+    '**Rival:** "Of course you\'re on this boat."',
+  ), [ch('Battle.', fight('A full battle on the top deck, the sea all round.', trainer('Rival', { rival: true, size: 4, lv: 1, win: [scene('gn-10-gift')], lose: SSANNE_ASHORE, friendly: true })))]),
+  rm('gn-10-gift', "The Captain's Gift", ship({ effect: 'sparkle' }), say(
+    'The captain is on his feet at the top of the gangway when the ship comes in. He presses two things into your hands.',
+    '**Captain Winslow:** "The Network Machine. And my compass. It has never once pointed north."',
+  ), [ch('Take them, and go ashore.', out('You go down the gangway with the Network Machine and the Captain\'s Compass. Behind you the S.S. Anne sounds its horn.', item('network-machine'), item('captains-compass'), flag('kanto-ssanne-done'), flag('kanto-ssanne-machine'), stampRegion('ssanne-region'), moment('You sailed on the S.S. Anne, and the captain gave you his compass.', 70), leavePseudo()))]),
+  // ---- afterstory: passengers from the voyage across the region; the Collector's still asking ----
+  gev('gn-10-passengers', 'A Familiar Face', ship({ stop: 'event', rarity: 'uncommon', callback: true, requires: [is('kanto-ssanne-done'), not('ssanne-after'), regionChanged('ssanne-region')],
+    remembers: [{ id: 'collector', when: [is('ssanne-collector-refused')], notice: 'Across the street, a velvet coat and a monocle. Mr. Quayle raises his hat to you, and then, unmistakably, looks at the same Pokémon as before.' }],
+  }), say(
+    'A face you know from the ship: the seasick passenger, or someone from the dining room. They wave. "The S.S. Anne! You were on her too!"',
+  ), [ch('Wave back.', out('You talk about the voyage for a while, the way people do.', flag('ssanne-after')))]),
+];
+
+// ---- Kanto: the canon space at Vermilion harbour (cs.kanto.vermilion.ssanne) ----
+const KANTO_SSANNE: Json = { ...gev('cs-kanto-vermilion-ssanne', 'The S.S. Anne', ship({ stop: 'event', rarity: 'common', types: ['water'], requires: [not('ssanne-done')] }), (gn10[0] as { intro: string }).intro, (gn10[0] as { choices: Json[] }).choices), canon: 'cs.kanto.vermilion.ssanne' };
+
+export const EVENTS: Json[] = [...gn06, ...starterEpisodes, KANTO_BRIDGE, ...gn07, KANTO_RAIN, ...gn08, KANTO_SQUAD, ...gn09, KANTO_BILL, ...gn10, KANTO_SSANNE];
 
 /** The old Kanto canon builds of this story (moved to Greenneedle): kept for saved runs, never shown again. */
 export const REMOVE: string[] = [
@@ -862,6 +1053,7 @@ export const REMOVE: string[] = [
   'cs-kanto-cerulean-hv-t1', 'cs-kanto-cerulean-hv-t2', 'cs-kanto-cerulean-hv-t3', 'cs-kanto-cerulean-hv-t4', 'cs-kanto-cerulean-hv-t5',
   'cs-kanto-cerulean-hv-t6', 'cs-kanto-cerulean-hv-t7', 'cs-kanto-cerulean-hv-t8', 'cs-kanto-cerulean-hv-t9', 'cs-kanto-cerulean-hv-exit',
   ...['n1', 'n2', 'n3', 'n4', 'n5', 'final', 'house'].map((n) => `cs-kanto-cerulean-bill-${n}`),
+  ...[...Array.from({ length: 12 }, (_, i) => [`n${i + 1}`, `t${i + 1}`]).flat(), 'galley', 'meal1', 'meal2', 'meal3', 'meal4', 'meal5', 'stow', 'duel', 'cup', 'captain', 'rival', 'reward'].map((n) => `cs-kanto-vermilion-ssanne-${n}`),
 ];
 
 export const PLACEMENT: Record<string, Placement> = {
@@ -884,9 +1076,15 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'A-1', often: 'run', dressing: { kanto: "Bill's Lighthouse", kantoStage: 'The cape north of Cerulean (the canon space)', elsewhere: "Bill's Lighthouse" },
     note: 'Better at night: the search is always played at night. Kanto shows it through cs-kanto-cerulean-bill.',
   },
+  'gn-10-dock': {
+    gn: 'gn.10', shape: 'Door', earliest: 'A5', home: 5, window: [3, 8], sits: 'optional', tags: ['Pseudo Stage', 'Hub Destination'], needs: ['water'],
+    level: 'A+1', often: 'run', dressing: { kanto: 'The S.S. Anne', kantoStage: 'Vermilion harbour (the canon space)', elsewhere: 'The S.S. Anne' },
+    note: "Needs Bill's Ticket (gn.09) or a spare from the harbour market for 2,000. Kanto shows it through cs-kanto-vermilion-ssanne.",
+  },
 };
 
 export const CHAINS: Json[] = [
+  { id: 'ps_gn_ssanne', name: 'The S.S. Anne', entry: 'gn-10-dock', themeId: 'normal-water', tint: SHIP_TINT, mood: 'sea air', start: 'opened' },
   { id: 'ps_gn_lighthouse', name: "Bill's Lighthouse", entry: 'gn-09-door', themeId: 'water-dragon', tint: BILL_TINT, mood: 'night sea', start: 'opened' },
   { id: 'ps_gn_rain', name: "Cold Night's Rain", entry: 'gn-07-door', themeId: 'water-ghost', tint: RAIN_TINT, mood: 'rain', start: 'opened' },
   { id: 'ps_gn_gorge', name: 'The Gorge and the Hidden Village', entry: 'gn-06-bridge', themeId: 'water-grass', tint: GORGE_TINT, mood: 'woodsmoke', start: 'opened' },

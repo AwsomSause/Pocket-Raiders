@@ -619,6 +619,15 @@ function ruleStages(battle: NonNullable<RunState['battle']>, rule: { stages?: Pa
   for (const [stat, n] of Object.entries(rule.foeStages ?? {})) battle.enemyStages[stat as 'atk'] = n!;
 }
 
+/** The main-series regions' generations: a region trade's ordinary pool (Greenneedle gn.10). */
+const REGION_GENERATION: Record<string, number> = { kanto: 1, johto: 2, hoenn: 3, sinnoh: 4, unova: 5, kalos: 6, alola: 7, galar: 8, paldea: 9 };
+
+/** Ordinary (not Legendary or Mythical) species of the region the run is in; a region of the game's own uses every generation. */
+function regionTradePool(content: Content, run: RunState): string[] {
+  const gen = REGION_GENERATION[run.regionOrder[run.regionIndex] ?? ''];
+  return [...content.species.values()].filter((sp) => (gen === undefined || sp.generation === gen) && !sp.tags.includes('legendary') && !sp.tags.includes('mythical')).map((sp) => sp.id);
+}
+
 /** Events that can appear on the current stage (key-item events only while the key item is held). */
 export function eligibleEvents(content: Content, run: RunState): EventDef[] {
   const n = stageNumber(content, run);
@@ -1358,7 +1367,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const given = content.species.get(mon.speciesId);
       // A swap rolls from its own seeded generator, so no event roll moves.
       const swap = new Rng(hashSeed(`${run.seed}::trade-for::${mon.uid}:${run.encountersCompleted}`));
-      const near = e.similar && given ? e.similar.pool.filter((id) => { const sp = content.species.get(id); return sp && id !== mon.speciesId && Math.abs(bstOf(sp) - bstOf(given)) <= e.similar!.bst; }) : [];
+      const near = e.similar && given ? (e.similar.region ? regionTradePool(content, run) : e.similar.pool).filter((id) => { const sp = content.species.get(id); return sp && id !== mon.speciesId && Math.abs(bstOf(sp) - bstOf(given)) <= e.similar!.bst; }) : [];
       const gotId = e.table[mon.speciesId] ?? (near.length > 0 ? swap.pick(near) : undefined);
       const got = gotId ? content.species.get(gotId) : undefined;
       if (!gotId || !got) return '';

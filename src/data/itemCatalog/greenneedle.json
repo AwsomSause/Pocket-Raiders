@@ -106,5 +106,30 @@
         }
       ]
     }
+  },
+  {
+    "id": "captains-compass",
+    "name": "Captain's Compass",
+    "family": "Key items: gadgets",
+    "description": "Captain Winslow's compass. It has never once pointed north. For your next stage, you see the wild Pokémon ahead before you meet them.",
+    "rarity": "epic",
+    "stacksOn": "player",
+    "max": 1,
+    "how": "passive",
+    "icon": "library/pokescanner",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "perk",
+      "lasts": {
+        "for": "nextStage"
+      },
+      "perks": [
+        {
+          "perk": "preview",
+          "what": "wild"
+        }
+      ]
+    }
   }
 ]

@@ -366,5 +366,31 @@
   "tags": [
    "water"
   ]
+ },
+ "gn-10-dock": {
+  "gn": "gn.10",
+  "shape": "Door",
+  "earliest": "A5",
+  "home": 5,
+  "window": [
+   3,
+   8
+  ],
+  "sits": "optional",
+  "level": "A+1",
+  "often": "run",
+  "dressing": {
+   "kanto": "The S.S. Anne",
+   "kantoStage": "Vermilion harbour (the canon space)",
+   "elsewhere": "The S.S. Anne"
+  },
+  "note": "Needs Bill's Ticket (gn.09) or a spare from the harbour market for 2,000. Kanto shows it through cs-kanto-vermilion-ssanne.",
+  "kinds": [
+   "Pseudo Stage",
+   "Hub Destination"
+  ],
+  "tags": [
+   "water"
+  ]
  }
 }

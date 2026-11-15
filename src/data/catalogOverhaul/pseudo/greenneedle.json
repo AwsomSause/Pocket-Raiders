@@ -21,6 +21,15 @@
    "start": "opened"
   },
   {
+   "id": "ps_gn_ssanne",
+   "name": "The S.S. Anne",
+   "entry": "gn-10-dock",
+   "themeId": "normal-water",
+   "tint": "#2f5d73",
+   "mood": "sea air",
+   "start": "opened"
+  },
+  {
    "id": "ps_gn_lighthouse",
    "name": "Bill's Lighthouse",
    "entry": "gn-09-door",

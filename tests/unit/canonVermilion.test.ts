@@ -16,12 +16,13 @@ const targets = (id: string) => room(id).choices.flatMap((c) => [c.success, c.fa
 
 describe('Vermilion canon: the event graph', () => {
   it('every target exists and every room opens from a gate', () => {
-    const ids = [...content.events.keys()].filter((id) => id.startsWith(P));
+    // Retired rooms (the old S.S. Anne voyage, rebuilt as Greenneedle gn.10) stay for saved runs but are never reached.
+    const ids = [...content.events.values()].filter((e) => e.id.startsWith(P) && !e.disabled).map((e) => e.id);
     for (const id of ids) for (const t of targets(id)) expect(content.events.has(t), `${id} -> ${t}`).toBe(true);
     const gates = ['flight', 'market', 'fishclub', 'maiden', 'ssanne'].map((g) => P + g);
     const reach = new Set<string>(gates);
     for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id)) if (!reach.has(t)) { reach.add(t); again = true; } }
-    expect([...reach].sort()).toEqual(ids.sort());
+    expect([...reach].filter((id) => id.startsWith(P)).sort()).toEqual(ids.sort());
   });
   it('the gates carry the catalog ids, and the raid is the Kaiju space', () => {
     expect(room(`${P}flight`).canon).toBe('cs.kanto.vermilion.flightnorth');
@@ -109,14 +110,11 @@ describe('Flight North', () => {
   });
 });
 
+// The S.S. Anne was rebuilt as Greenneedle gn.10 (tests/unit/greenneedle2.test.ts); its Kanto gate opens the new voyage.
 describe('S.S. Anne', () => {
-  it('is 12 nodes on three decks, every one a trainer battle followed by trade offers', () => {
-    for (let k = 1; k <= 12; k++) {
-      const n = room(`${P}ssanne-n${k}`);
-      expect(n.choices[0]!.success.battle!.kind).toBe('trainer');
-      expect(room(`${P}ssanne-t${k}`).choices.filter((c) => c.success.effects.some((e) => e.kind === 'tradeFor'))).toHaveLength(3);
-    }
-    expect(room(`${P}ssanne-n12`).choices[0]!.success.battle!.win).toContainEqual({ kind: 'addEvent', eventId: `${P}ssanne-t12` });
+  it('the gate opens the Greenneedle voyage: 12 cabins, every one a trainer battle, then the trades', () => {
+    expect(room(`${P}ssanne`).choices[0]!.success.effects).toContainEqual({ kind: 'addEvent', eventId: 'gn-10-deck-1' });
+    for (let k = 1; k <= 12; k++) expect(room(`gn-10-deck-${k}`).choices[0]!.success.battle!.kind).toBe('trainer');
   });
   it('the region trade swaps Pikachu for Alolan Raichu at the same level, keeping its item', () => {
     const run = begin('SS');
@@ -124,8 +122,8 @@ describe('S.S. Anne', () => {
     pika.held = { 'mystic-water': 1 };
     pika.friendship = 70;
     run.party = [run.party[0]!, pika];
-    const f = debugForceEvent(content, run, `${P}ssanne-t1`);
-    const out = chooseEvent(content, f.run, f.sideId, 1, 'tp').run;
+    const f = debugForceEvent(content, run, 'gn-10-tradeb-1');
+    const out = chooseEvent(content, f.run, f.sideId, 0, 'tp').run;
     const got = out.party[1]!;
     expect(got.speciesId).toBe('raichu-alola');
     expect(got.level).toBe(17);
@@ -133,20 +131,22 @@ describe('S.S. Anne', () => {
     expect(got.friendship).toBe(71);
     expect(out.party).toHaveLength(2);
   });
-  it('trade A stays within 40 base stats and picks a Nature; it is locked for a party with nothing to give', () => {
+  it('trade A stays within 40 base stats, from the region the run is in, and picks a Nature', () => {
     const run = begin('SS2');
     const giving = run.party[0]!;
-    const f = debugForceEvent(content, run, `${P}ssanne-t2`);
+    const f = debugForceEvent(content, run, 'gn-10-trades-1');
     const out = chooseEvent(content, f.run, f.sideId, 0, giving.uid).run;
     const bst = (id: string) => Object.values(content.species.get(id)!.baseStats).reduce((a, b) => a + b, 0);
     expect(out.party[0]!.level).toBe(giving.level);
     expect(Math.abs(bst(out.party[0]!.speciesId) - bst(giving.speciesId))).toBeLessThanOrEqual(40);
+    const gen = ['kanto', 'johto', 'hoenn', 'sinnoh', 'unova', 'kalos', 'alola', 'galar', 'paldea'].indexOf(run.regionOrder[run.regionIndex]!) + 1;
+    if (gen > 0) expect(content.species.get(out.party[0]!.speciesId)!.generation).toBe(gen);
     expect(out.party[0]!.nature).toBeDefined();
   });
-  it('the Captain, the rival and the Network Machine close the ship; the machine teaches any move', () => {
-    expect(room(`${P}ssanne-reward`).choices[0]!.success.effects).toContainEqual({ kind: 'item', id: 'network-machine', count: 1 });
+  it('the captain, the rival and the Network Machine close the ship; the machine teaches any move', () => {
+    expect(room('gn-10-gift').choices[0]!.success.effects).toContainEqual({ kind: 'item', id: 'network-machine', count: 1 });
     expect(content.catalog.get('network-machine')!.effect).toEqual({ kind: 'teachMove', mode: 'hm' });
-    expect(room(`${P}ssanne-rival`).choices[0]!.success.battle).toMatchObject({ kind: 'trainer', rival: true });
+    expect(room('gn-10-rival').choices[0]!.success.battle).toMatchObject({ kind: 'trainer', rival: true });
   });
 });
 

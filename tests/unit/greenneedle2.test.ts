@@ -7,7 +7,7 @@ import { conditionMet, stopIsHidden } from '../../src/core/events';
 import { runPerks } from '../../src/core/archetypes';
 import { boxCapacity } from '../../src/core/trainerPerks';
 import { createBattle, itemProblem, resolveTurn, type BattleEvent } from '../../src/core/battle/engine';
-import { createPokemon } from '../../src/core/pokemon';
+import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { Rng, hashSeed } from '../../src/core/rng';
 import { choose, flagOf, gnRun, lose, open, openSide, scene, setFlag, win } from './helpers/gnPlay';
 
@@ -611,5 +611,139 @@ describe("gn.09 Bill's Lighthouse", () => {
     expect(content.events.get('cs-kanto-cerulean-bill')!.choices.map((c) => c.label)).toEqual(['Look for the lighthouse.', 'Not tonight.']);
     expect(content.events.get('cs-kanto-cerulean-bill-house')!.disabled).toBe(true);
     expect(content.events.get('gn-09-door')!.requires).toContainEqual({ kind: 'gn', test: 'notRegion', types: ['kanto'] });
+  });
+});
+
+describe('gn.10 The S.S. Anne', () => {
+  const board = (seed: string): RunState => {
+    const run = gnRun(seed);
+    setFlag(run, 'kanto-ssanne-ticket');
+    open(run, 'gn-10-dock');
+    return choose(run, 'gn-10-dock', 'Hand over the Ticket and board.').run;
+  };
+  /** Fights node k and moves on (taking no trade). */
+  const sail = (run: RunState, k: number): RunState => {
+    const fought = win(choose(run, `gn-10-deck-${k}`, 'Battle.').run);
+    return choose(fought, `gn-10-deck-${k}`, k === 12 ? "Go to the captain's cabin." : 'Move on.').run;
+  };
+  const has = (run: RunState, id: string) => (run.inventory[id] ?? 0) + (run.passives?.[id] ?? 0) + run.party.reduce((n, m) => n + (m.held?.[id] ?? 0), 0);
+
+  it('a door at step 5 (window 3 to 8), optional, needs water, from A5; three decks of four, then the captain and the rival', () => {
+    expect(content.coPlacement!.get('gn-10-dock')).toMatchObject({ home: 5, window: [3, 8], sits: 'optional', often: 'run', earliest: 5 });
+    const chain = PSEUDO_CHAINS.find((c) => c.id === 'ps_gn_ssanne')!;
+    expect(chainRooms(content, chain).map((r) => r.event)).toEqual([...Array.from({ length: 12 }, (_, i) => `gn-10-deck-${i + 1}`), 'gn-10-captain', 'gn-10-rival']);
+    expect(chainRooms(content, chain).slice(0, 12).every((r) => r.battle === 'trainer')).toBe(true);
+  });
+
+  it("the Ticket from Bill boards; without it the guard turns you away, unless you buy a spare for 2,000", () => {
+    const run = gnRun('gn10-door');
+    run.money = 100;
+    open(run, 'gn-10-dock');
+    expect(scene(run, 'gn-10-dock').labels).toEqual(['Not today.']);
+    run.money = 2500;
+    const bought = choose(run, 'gn-10-dock', 'Buy a spare Ticket at the harbour market (₽2,000), and board.').run;
+    expect(bought.money).toBe(500);
+    expect(bought.stage!.pseudo?.id).toBe('ps_gn_ssanne');
+    expect(board('gn10-board').stage!.pseudo?.id).toBe('ps_gn_ssanne');
+  });
+
+  it('every node is a trainer battle, then two trades: one ordinary and one region trade; then move on', () => {
+    let run = board('gn10-trade');
+    expect(scene(run, 'gn-10-deck-1').labels).toEqual(['Battle.']);
+    run = win(choose(run, 'gn-10-deck-1', 'Battle.').run);
+    expect(scene(run, 'gn-10-deck-1').labels).toEqual(['Trade with the passengers.', 'Move on.']);
+    run = choose(run, 'gn-10-deck-1', 'Trade with the passengers.').run;
+    expect(scene(run, 'gn-10-trades-1').labels).toEqual(['Trade A: any Pokémon for one of similar strength.', 'Trade B: the region trade.', 'Back.']);
+    const before = run.party[0]!.speciesId;
+    run = choose(run, 'gn-10-trades-1', 'Trade A: any Pokémon for one of similar strength.').run;
+    expect(run.party[0]!.speciesId).not.toBe(before);
+    run = choose(run, 'gn-10-trades-1', 'Trade B: the region trade.').run;
+    expect(scene(run, 'gn-10-tradeb-1').labels).toEqual(['Trade for its regional form.', 'None of those: any Pokémon for a regional one.', 'Trade for its Delta form.', 'Back.']);
+    run = choose(run, 'gn-10-tradeb-1', 'None of those: any Pokémon for a regional one.').run;
+    expect(scene(run, 'gn-10-trades-1').labels).toEqual(['Back.']);
+    run = choose(choose(run, 'gn-10-trades-1', 'Back.').run, 'gn-10-deck-1', 'Move on.').run;
+    expect(run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!.roomEvent).toBe('gn-10-deck-2');
+  });
+
+  it('the region trade gives the regional form at the same level, keeps the held item, and Bond +1', () => {
+    let run = win(choose(board('gn10-region'), 'gn-10-deck-1', 'Battle.').run);
+    const mon = run.party[0]!;
+    run.party[0] = { ...createPokemon(content, 'vulpix', mon.level, 'v'), held: { 'oran-berry': 1 } };
+    const friend = run.party[0]!.friendship;
+    run = choose(choose(run, 'gn-10-deck-1', 'Trade with the passengers.').run, 'gn-10-trades-1', 'Trade B: the region trade.').run;
+    run = choose(run, 'gn-10-tradeb-1', 'Trade for its regional form.').run;
+    const got = run.party.find((m) => m.speciesId === 'vulpix-alola')!;
+    expect(got.level).toBe(mon.level);
+    expect(got.held).toEqual({ 'oran-berry': 1 });
+    expect(got.friendship).toBeGreaterThan(friend);
+  });
+
+  it('Sailor Dobbs-Leary fights the last node of each deck, a little better each time; three wins pay his lucky coin', () => {
+    const team = (k: number) => (content.events.get(`gn-10-deck-${k}`)!.choices[0]!.success.battle as { name: string; levelBonus: number; size: number });
+    expect([4, 8, 12].map((k) => team(k).name)).toEqual(['Sailor Dobbs-Leary', 'Sailor Dobbs-Leary', 'Sailor Dobbs-Leary']);
+    expect([4, 8, 12].map((k) => team(k).levelBonus)).toEqual([-1, 0, 1]);
+    let run = board('gn10-dobbs');
+    for (let k = 1; k <= 11; k++) run = sail(run, k);
+    expect(flagOf(run, 'ssanne-dobbs')).toBe(2);
+    run = win(choose(run, 'gn-10-deck-12', 'Battle.').run);
+    expect(flagOf(run, 'ssanne-dobbs')).toBe(3);
+    expect(has(run, 'amulet-coin')).toBe(1);
+  });
+
+  it('optional rooms: up to four a voyage; the galley heals and feeds, and shows the secret trade room', () => {
+    let run = win(choose(board('gn10-galley'), 'gn-10-deck-1', 'Battle.').run);
+    run.party[0]!.hp = 1;
+    const fed = choose(run, 'gn-10-galley', 'Sit down and eat.');
+    expect(fed.run.party[0]!.hp).toBe(maxHp(content, fed.run.party[0]!));
+    expect(flagOf(fed.run, 'ssanne-rooms')).toBe(1);
+    const secret = choose(run, 'gn-10-galley', 'Ask what is behind the kitchen.').run;
+    expect(scene(secret, 'gn-10-trades-1').labels).toContain('The secret trade.');
+    setFlag(run, 'ssanne-rooms', 4);
+    expect(scene(run, 'gn-10-galley').labels).toEqual(['Walk past.']);
+  });
+
+  it('the Collector raises his offer twice; refusing three times gets his card, and saying yes sells the Pokémon', () => {
+    let run = board('gn10-col');
+    for (let k = 1; k <= 8; k++) run = sail(run, k);
+    run = win(choose(run, 'gn-10-deck-9', 'Battle.').run);
+    let r = choose(run, 'gn-10-collector', 'No.').run;
+    r = choose(r, 'gn-10-collector-2', 'No.').run;
+    r = choose(r, 'gn-10-collector-3', 'No.').run;
+    expect(flagOf(r, 'ssanne-collector-refused')).toBe(1);
+    const size = run.party.length;
+    run.party.push(createPokemon(content, 'rattata', 10, 'x'));
+    const money = run.money;
+    const sold = choose(run, 'gn-10-collector', 'Yes.').run;
+    expect(sold.party.length).toBe(size);
+    expect(sold.money).toBe(money + 1500);
+  });
+
+  it('blacking out aboard puts you ashore, with nothing else lost', () => {
+    const run = board('gn10-ashore');
+    const lost = lose(choose(run, 'gn-10-deck-1', 'Battle.').run);
+    expect(lost.phase).not.toBe('over');
+    expect(lost.stage!.pseudo).toBeFalsy();
+    expect(flagOf(lost, 'ssanne-ashore')).toBe(1);
+  });
+
+  it('the captain: any of the three helps; then the rival; then the Network Machine and the Captain\'s Compass', () => {
+    let run = board('gn10-end');
+    for (let k = 1; k <= 12; k++) run = sail(run, k);
+    expect(scene(run, 'gn-10-captain').labels).toEqual(['Rub his back.', "Fetch the galley's ginger.", 'Let a Pokémon sing to him.']);
+    run = choose(run, 'gn-10-captain', "Fetch the galley's ginger.").run;
+    run = win(choose(run, 'gn-10-rival', 'Battle.').run);
+    const gift = choose(run, 'gn-10-gift', 'Take them, and go ashore.');
+    expect(gift.changes.join(' ')).toContain('Network Machine');
+    run = win(gift.run);
+    // The compass works for the next stage (a map effect waiting for it).
+    expect(run.mapEffects?.some((e) => e.itemId === 'captains-compass' && e.stage === 'next')).toBe(true);
+    expect(flagOf(run, 'kanto-ssanne-done')).toBe(1);
+    expect(run.stage!.pseudo).toBeFalsy();
+  });
+
+  it('Kanto: Vermilion harbour is its canon space; the old voyage rooms are retired', () => {
+    expect(content.events.get('cs-kanto-vermilion-ssanne')!.canon).toBe('cs.kanto.vermilion.ssanne');
+    expect(content.events.get('cs-kanto-vermilion-ssanne-n1')!.disabled).toBe(true);
+    expect(content.events.get('cs-kanto-vermilion-ssanne-reward')!.disabled).toBe(true);
   });
 });
