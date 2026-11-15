@@ -2788,7 +2788,7 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** A meter leaning one way: Rage (positive ragePeace) / Peace (negative), Good (positive goodEvil) / Evil (negative). */
   z.object({ kind: z.literal('meter'), key: z.enum(['ragePeace', 'goodEvil']), side: z.enum(['positive', 'negative']), atLeast: z.number().int().min(0) }),
   z.object({ kind: z.literal('item'), id: z.string(), /** Copies needed (default 1). */ count: z.number().int().min(1).optional() }),
-  z.object({ kind: z.literal('partyType'), type: TypeNameSchema, /** True: holds only when NO Pokémon of this type is in the party. */ absent: z.boolean().optional() }),
+  z.object({ kind: z.literal('partyType'), type: TypeNameSchema, /** Catalog Overhaul: any of these types counts too ("a Rock- or Steel-type"). */ or: z.array(TypeNameSchema).max(3).optional(), /** True: holds only when NO Pokémon of this type is in the party. */ absent: z.boolean().optional() }),
   /** Ideas W4: the run calendar's season (core/clock.ts seasonOf) is one of these. */
   z.object({ kind: z.literal('season'), in: z.array(z.enum(['Spring', 'Summer', 'Autumn', 'Winter'])).min(1) }),
   /** Ideas W4 landmarks: the run is in one of these regions (regions.json ids). */
