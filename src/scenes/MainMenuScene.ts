@@ -18,6 +18,9 @@ import { screenStyleOf } from '../core/presentation/screenStyles';
 import { dressScreen } from '../ui/screenDress';
 import { TITLE_LAYOUTS } from '../ui/titleLayouts';
 import { slotCard } from '../core/presentation/slotLines';
+import { mountRedux, reduxOn } from '../ui/redux/stage';
+import { titleView } from '../ui/redux/screens/title';
+import { VERSION_LABEL } from '../ui/updateSplashGate';
 
 export class MainMenuScene extends Phaser.Scene {
   private menu!: Menu;
@@ -167,6 +170,18 @@ export class MainMenuScene extends Phaser.Scene {
     if (notes.length > 0) {
       this.add
         .text(48, 482, notes.join('\n'), textStyle(16, COLORS.bad, { wordWrap: { width: 560 } }));
+    }
+
+    // New UI: the mock-up's Title screen, drawn over this scene; the menu above stays the controller.
+    if (reduxOn()) {
+      this.pressWait = false;
+      this.menu.container.setVisible(true);
+      const view = mountRedux(this, {
+        render: (c) => titleView(c, { options: options.map((o) => o.option), index: this.menu.index, version: VERSION_LABEL, art: 'ui/splash-beta-0.5.png', notes }),
+        acts: { pick: (i) => { this.menu.focus(Number(i), false); this.menu.confirm(); } },
+        overs: { over: (i) => { if (!options[Number(i)]?.option.disabled) this.menu.focus(Number(i), false); } },
+      });
+      this.menu.onFocus = () => view.refresh();
     }
 
     const s = session.profile.stats;
