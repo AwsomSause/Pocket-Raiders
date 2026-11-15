@@ -252,6 +252,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       const value = Number(run.story.flags[`ev:${c.key}`] ?? 0);
       if (value < c.atLeast || value > c.atMost) return false;
       if (c.regionsAgo === undefined && c.regionsAgoMost === undefined) return true;
+      // Never set and allowed to be unset (`atLeast: 0`): no stamp to wait on (new events: NE8's crystal stays for the region it was first left in).
+      if (value === 0 && c.atLeast === 0) return true;
       // A stamped flag (`stamp: 'region'`) remembers the region it was first set in: the scene waits `regionsAgo` regions, or ends after `regionsAgoMost`.
       const at = Number(run.story.flags[`ev:${c.key}-at`] ?? 0);
       const ago = run.regionIndex + 1 - at;
@@ -1080,7 +1082,7 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'flightNorth':
       return e.action === 'name' ? 'you give it a name' : 'you trust it';
     case 'heal':
-      return e.share >= 1 ? 'full heal' : `heal ${Math.round(e.share * 100)}%`;
+      return `${e.share >= 1 ? 'full heal' : `heal ${Math.round(e.share * 100)}%`}${e.who === 'others' ? ' (not the lead)' : ''}`;
     case 'campBond':
       return e.settle ? 'the party grows closer and lets old grudges go' : 'the party grows closer';
     case 'rest':
@@ -1177,6 +1179,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return 'you walk back out';
     case 'front':
       return `a ${e.weather} front is coming`;
+    case 'clearSky':
+      return 'the sky stays clear for the rest of this stage';
     case 'convoy':
       return `you escort ${e.name} to the gym`;
     case 'convoyHeal':
@@ -1378,6 +1382,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return flightNorthEffect(run, e);
     case 'heal': {
       if (e.who === 'picked') for (const m of whoOf(content, run, 'picked', pickedUid)) { if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * e.share)); }
+      else if (e.who === 'others') for (const m of run.party.slice(1)) { if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * e.share)); }
       else if (e.share >= 1) healParty(content, run);
       else for (const m of run.party) if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * e.share));
       return effectWords(content, e);
@@ -1747,6 +1752,9 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (run.itemCounters) delete run.itemCounters[`event-seen:${eventId}`];
       return effectWords(content, e);
     }
+    case 'clearSky':
+      if (run.stage?.kind === 'stage') run.stage.clearSky = true;
+      return effectWords(content, e);
     case 'front': {
       const stage = run.stage!;
       const from = Math.min(stage.map.columns - 1, (stage.map.nodes.find((n) => n.id === stage.current)?.column ?? 0) + 2);

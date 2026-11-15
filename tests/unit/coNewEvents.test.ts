@@ -16,6 +16,8 @@ const FOREIGN = new Set([
   'spring-flood-dug', 'flood-sandbagged', 'little-league-look-after', 'took-egg', 'egg-returned', 'bought-stolen', 'rocket-radio-shorted',
   'macro-plug-pulled', 'delta-ditto-met', 'elder-ditto-met', 'lighthouse-lit', 'crossing-lamp-lit', 'team-op-stopped-magma-drill',
   'glove-duel-accepted', 'listened-first', 'sign-broken',
+  // Set by the engine: the run's first Z-Move (run.ts finishBattle).
+  'z-move-used',
 ]);
 const foreign = (key: string) => FOREIGN.has(key) || /^(blessing|sign|telling|promise|promise-broken|promise-kept|guest)-/.test(key);
 
@@ -95,6 +97,9 @@ describe('new events (catalog overhaul row 17)', () => {
       if (!done || done.kind !== 'flag') continue;
       const outcomes = [...e.choices, ...e.remembers.flatMap((v) => v.addChoices)].flatMap((c) => [c.success, c.failure].filter(Boolean));
       for (const o of outcomes) expect(o!.effects.some((x) => x.kind === 'flag' && x.key === done.key), `${e.id}: an outcome does not set ${done.key}`).toBe(true);
+      // A branch replaces its outcome's effects, so it must set the done flag as well.
+      const branches = [...e.choices, ...e.remembers.flatMap((v) => v.addChoices)].flatMap((c) => c.branches ?? []);
+      for (const b of branches) expect(b.effects.some((x) => x.kind === 'flag' && x.key === done.key), `${e.id}: a branch does not set ${done.key}`).toBe(true);
     }
   });
 

@@ -646,7 +646,8 @@
        {
         "kind": "flag",
         "key": "sienna-met",
-        "amount": 1
+        "amount": 1,
+        "stamp": "region"
        },
        {
         "kind": "flag",
@@ -669,7 +670,8 @@
        {
         "kind": "flag",
         "key": "sienna-met",
-        "amount": 1
+        "amount": 1,
+        "stamp": "region"
        },
        {
         "kind": "flag",
@@ -692,7 +694,8 @@
        {
         "kind": "flag",
         "key": "sienna-met",
-        "amount": 1
+        "amount": 1,
+        "stamp": "region"
        },
        {
         "kind": "flag",
@@ -717,7 +720,8 @@
      "kind": "flag",
      "key": "sienna-met",
      "atLeast": 1,
-     "atMost": 99
+     "atMost": 99,
+     "regionsAgoMost": 0
     },
     {
      "kind": "flag",
@@ -742,7 +746,8 @@
        {
         "kind": "flag",
         "key": "sienna-stood",
-        "amount": 1
+        "amount": 1,
+        "stamp": "region"
        },
        {
         "kind": "flag",
@@ -760,7 +765,8 @@
        {
         "kind": "flag",
         "key": "sienna-stood",
-        "amount": 1
+        "amount": 1,
+        "stamp": "region"
        },
        {
         "kind": "flag",
@@ -778,7 +784,8 @@
        {
         "kind": "flag",
         "key": "sienna-stood",
-        "amount": 1
+        "amount": 1,
+        "stamp": "region"
        },
        {
         "kind": "flag",
@@ -802,7 +809,8 @@
      "kind": "flag",
      "key": "sienna-stood",
      "atLeast": 1,
-     "atMost": 99
+     "atMost": 99,
+     "regionsAgoMost": 0
     },
     {
      "kind": "runPlace",
@@ -841,7 +849,8 @@
         ],
         "types": [],
         "levelBonus": 5,
-        "shinyMultiplier": 1
+        "shinyMultiplier": 1,
+        "alpha": true
        },
        {
         "kind": "flag",
@@ -1185,11 +1194,6 @@
      "success": {
       "text": "You walk the length of the herd. Not one bull moves until she does.\nAt the far end you look back, and she is already leading them to water, in a straight line.",
       "effects": [
-       {
-        "kind": "friendship",
-        "bond": 1,
-        "who": "party"
-       },
        {
         "kind": "flag",
         "key": "ne04-the-herd-makes-way-done",
@@ -1687,19 +1691,13 @@
        "kind": "trainer",
        "team": [
         "flaaffy",
-        "ampharos"
+        "ampharos-mega"
        ],
        "name": "Rosamund",
        "size": 2,
        "types": [],
        "levelBonus": 0,
-       "win": [
-        {
-         "kind": "flag",
-         "key": "rep",
-         "amount": 1
-        }
-       ]
+       "win": []
       }
      }
     },
@@ -1887,11 +1885,6 @@
            "kind": "item",
            "id": "nevermeltice",
            "count": 1
-          },
-          {
-           "kind": "flag",
-           "key": "rep",
-           "amount": 1
           }
          ]
         }
@@ -2030,6 +2023,13 @@
      "atMost": 0
     },
     {
+     "kind": "flag",
+     "key": "z-crystal-left",
+     "atLeast": 0,
+     "atMost": 99,
+     "regionsAgoMost": 0
+    },
+    {
      "kind": "stageTypes",
      "types": [
       "water",
@@ -2096,14 +2096,28 @@
      "label": "Pick it up myself.",
      "success": {
       "text": "It burns.\nNo harm done: just a red hand, a dropped crystal that rolls back to exactly where it was, and Kalani laughing so hard he has to hold the pedestal.",
-      "effects": []
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "z-crystal-left",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
      }
     },
     {
      "label": "Ask who it's for.",
      "success": {
       "text": "Kalani: \"A Pokémon that would do the dance even if no one was watching.\"\n\nHe says it like something he has been made to learn by heart. Then, grudgingly: one that trusts its trainer nearly all the way.\nBond 4, the old people call it.",
-      "effects": []
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "z-crystal-left",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
      }
     }
    ],
@@ -2125,8 +2139,15 @@
       {
        "label": "Let my Pokémon go to it.",
        "success": {
-        "text": "Your Pokémon walks up to the pedestal, sniffs the crystal, sneezes, and backs away. The light inside doesn't change.\n\nKalani: \"Told you. It'll keep. Come back when one of them means it.\"\n\nThe crystal stays where it is. It will be here for a while yet.",
-        "effects": []
+        "text": "Your Pokémon walks up to the pedestal, sniffs the crystal, sneezes, and backs away. The light inside doesn't change.\n\nKalani: \"Told you. It'll keep. Come back when one of them means it.\"\n\nThe crystal stays where it is. It will be here for the rest of the region, and you can come back.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "z-crystal-left",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ]
        }
       }
      ]
@@ -2138,12 +2159,18 @@
    "name": "An Old Man in the Crowd",
    "group": "Mega, Delta and Z anomalies",
    "rarity": "common",
-   "minStage": 6,
+   "minStage": 2,
    "callback": true,
    "requires": [
     {
      "kind": "flag",
      "key": "z-chosen",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "z-move-used",
      "atLeast": 1,
      "atMost": 99
     },
@@ -2166,11 +2193,6 @@
      "success": {
       "text": "By the time the dust settles he is gone. Kalani is standing where he stood, pretending he wasn't impressed.",
       "effects": [
-       {
-        "kind": "friendship",
-        "bond": 1,
-        "who": "top"
-       },
        {
         "kind": "flag",
         "key": "ne08-the-kahuna-nods-done",
@@ -2271,6 +2293,9 @@
         "amount": 1
        },
        {
+        "kind": "clearSky"
+       },
+       {
         "kind": "item",
         "id": "manectite",
         "count": 1
@@ -2300,11 +2325,6 @@
       "text": "It doesn't want to fight. It can't do anything else.",
       "effects": [
        {
-        "kind": "front",
-        "weather": "rain",
-        "columns": 1
-       },
-       {
         "kind": "flag",
         "key": "ne09-mega-that-wont-come-down-done",
         "amount": 1
@@ -2329,7 +2349,8 @@
          "id": "manectite",
          "count": 1
         }
-       ]
+       ],
+       "weather": "rain"
       }
      }
     }
@@ -2566,11 +2587,6 @@
       "text": "He nods as if that is a perfectly ordinary thing to hear, and goes back to his net. Your lead looks behind you, just to be sure.",
       "effects": [
        {
-        "kind": "friendship",
-        "bond": 1,
-        "who": "lead"
-       },
-       {
         "kind": "flag",
         "key": "ne10-two-of-you-done",
         "amount": 1
@@ -2681,6 +2697,11 @@
          "kind": "item",
          "id": "tidal-bell",
          "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ne11-bell-ringers-last-morning-done",
+         "amount": 1
         }
        ]
       }
@@ -2738,6 +2759,11 @@
          "kind": "item",
          "id": "tidal-bell",
          "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ne11-bell-ringers-last-morning-done",
+         "amount": 1
         }
        ]
       }
@@ -2906,6 +2932,11 @@
         {
          "kind": "flag",
          "key": "pond-kept",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ne12-footprint-pond-done",
          "amount": 1
         }
        ]
@@ -3076,11 +3107,6 @@
       "effects": [
        {
         "kind": "flag",
-        "key": "sign-own",
-        "amount": 1
-       },
-       {
-        "kind": "flag",
         "key": "ne12-the-second-footprint-done",
         "amount": 1
        }
@@ -3103,10 +3129,11 @@
    "minStage": 1,
    "requires": [
     {
-     "kind": "flag",
-     "key": "blessing-influence",
-     "atLeast": 0,
-     "atMost": 99
+     "kind": "anyFlag",
+     "keys": [
+      "blessing-company",
+      "blessing-solitary"
+     ]
     },
     {
      "kind": "flag",
@@ -3206,62 +3233,6 @@
    ]
   },
   {
-   "id": "ne13-you-saw-it",
-   "name": "The Face of Someone Who Saw It",
-   "group": "Legendary Signs",
-   "rarity": "common",
-   "minStage": 2,
-   "callback": true,
-   "requires": [
-    {
-     "kind": "flag",
-     "key": "anselmo-believed",
-     "atLeast": 1,
-     "atMost": 99
-    },
-    {
-     "kind": "flag",
-     "key": "blessing-influence",
-     "atLeast": 3,
-     "atMost": 99
-    },
-    {
-     "kind": "flag",
-     "key": "ne13-you-saw-it-done",
-     "atLeast": 0,
-     "atMost": 0
-    }
-   ],
-   "scene": {
-    "cast": [
-     "trainer.youngster_m"
-    ],
-    "tint": "#2c2a34",
-    "effect": "none"
-   },
-   "intro": "There is a chalk drawing on the ground here, a long way from any square. The same hand. The same detail no book shows. He was here.\n\nUnder it, in careful letters: \"You saw it. You've got the face of someone who saw it.\"",
-   "choices": [
-    {
-     "label": "Add to the drawing with his chalk.",
-     "success": {
-      "text": "You draw what you can. It isn't as good as his. You leave the chalk beside it for whoever sees it next.",
-      "effects": [
-       {
-        "kind": "flag",
-        "key": "sign-own",
-        "amount": 1
-       },
-       {
-        "kind": "flag",
-        "key": "ne13-you-saw-it-done",
-        "amount": 1
-       }
-      ]
-     }
-    }
-   ]
-  },
-  {
    "id": "ne14-two-priests-one-shrine",
    "name": "Two Priests, One Shrine",
    "group": "Legendary Signs",
@@ -3284,10 +3255,11 @@
    "minStage": 4,
    "requires": [
     {
-     "kind": "flag",
-     "key": "blessing-influence",
-     "atLeast": 0,
-     "atMost": 99
+     "kind": "anyFlag",
+     "keys": [
+      "blessing-company",
+      "blessing-solitary"
+     ]
     },
     {
      "kind": "stageTypes",
@@ -3342,6 +3314,11 @@
          "kind": "flag",
          "key": "sign-own",
          "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ne14-two-priests-one-shrine-done",
+         "amount": 1
         }
        ]
       }
@@ -3384,6 +3361,11 @@
         {
          "kind": "flag",
          "key": "sign-own",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ne14-two-priests-one-shrine-done",
          "amount": 1
         }
        ]
@@ -3515,10 +3497,11 @@
    "minStage": 6,
    "requires": [
     {
-     "kind": "flag",
-     "key": "blessing-influence",
-     "atLeast": 0,
-     "atMost": 99
+     "kind": "anyFlag",
+     "keys": [
+      "blessing-company",
+      "blessing-solitary"
+     ]
     },
     {
      "kind": "flag",
@@ -3541,11 +3524,6 @@
       "effects": [
        {
         "kind": "flag",
-        "key": "sign-own",
-        "amount": 1
-       },
-       {
-        "kind": "flag",
         "key": "zebedee-message",
         "amount": 1
        },
@@ -3562,11 +3540,6 @@
      "success": {
       "text": "He laughs. Then he doesn't. He looks at the marked slat, and at his own two hands.\n\nZebedee: \"...When?\"\n\nHe is already working out which coat.",
       "effects": [
-       {
-        "kind": "flag",
-        "key": "sign-own",
-        "amount": 1
-       },
        {
         "kind": "flag",
         "key": "zebedee-travels",
@@ -3819,10 +3792,6 @@
       "text": "She points the telescope at something for you, and pours the second cup.",
       "effects": [
        {
-        "kind": "heal",
-        "share": 0.25
-       },
-       {
         "kind": "flag",
         "key": "ne16-the-next-hill-done",
         "amount": 1
@@ -3892,19 +3861,12 @@
     {
      "label": "Help the old one weed.",
      "success": {
-      "text": "You weed beside her all morning, across the hedge from her own young back. She doesn't hurry. She has done this row before.\n\nShe tells you one thing about the country ahead, plainly, the way you'd tell someone what the weather did last year.",
+      "text": "You weed beside her all morning, across the hedge from her own young back. She doesn't hurry. She has done this row before.\n\nShe tells you one thing about the country ahead, plainly, the way you'd tell someone what the weather did last year.\nFidelma: \"After this comes {nextRegion}. Go gently there. I didn't, the first time.\"",
       "effects": [
        {
         "kind": "flag",
         "key": "telling-celebi",
         "amount": 1
-       },
-       {
-        "kind": "scout",
-        "columns": 6
-       },
-       {
-        "kind": "gymPreview"
        },
        {
         "kind": "flag",
@@ -3963,11 +3925,6 @@
         "kind": "flag",
         "key": "garden-planted-oran",
         "amount": 1
-       },
-       {
-        "kind": "flag",
-        "key": "telling-celebi",
-        "amount": 1
        }
       ]
      }
@@ -3986,11 +3943,6 @@
         "kind": "flag",
         "key": "garden-planted-sitrus",
         "amount": 1
-       },
-       {
-        "kind": "flag",
-        "key": "telling-celebi",
-        "amount": 1
        }
       ]
      }
@@ -4008,11 +3960,6 @@
        {
         "kind": "flag",
         "key": "garden-planted-lum",
-        "amount": 1
-       },
-       {
-        "kind": "flag",
-        "key": "telling-celebi",
         "amount": 1
        }
       ]
@@ -4070,6 +4017,11 @@
          "kind": "item",
          "id": "sitrus-berry",
          "count": 4
+        },
+        {
+         "kind": "flag",
+         "key": "ne17-the-tree-by-the-road-done",
+         "amount": 1
         }
        ]
       },
@@ -4088,6 +4040,11 @@
          "kind": "item",
          "id": "lum-berry",
          "count": 4
+        },
+        {
+         "kind": "flag",
+         "key": "ne17-the-tree-by-the-road-done",
+         "amount": 1
         }
        ]
       }
@@ -4240,11 +4197,6 @@
       "text": "Somewhere just out of sight, something small is pleased with you.",
       "effects": [
        {
-        "kind": "friendship",
-        "bond": 1,
-        "who": "party"
-       },
-       {
         "kind": "flag",
         "key": "ne18-the-extra-bowl-done",
         "amount": 1
@@ -4361,11 +4313,6 @@
       "text": "It doesn't fight back much.",
       "effects": [
        {
-        "kind": "front",
-        "weather": "rain",
-        "columns": 1
-       },
-       {
         "kind": "flag",
         "key": "ne19-nightmare-cure-done",
         "amount": 1
@@ -4385,7 +4332,8 @@
          "key": "darkrai-driven",
          "amount": 1
         }
-       ]
+       ],
+       "weather": "rain"
       }
      }
     }
@@ -4468,12 +4416,8 @@
       "effects": [
        {
         "kind": "heal",
-        "share": 1
-       },
-       {
-        "kind": "damage",
-        "share": 0.3,
-        "who": "lead"
+        "share": 1,
+        "who": "others"
        },
        {
         "kind": "flag",
@@ -4661,15 +4605,6 @@
         "amount": 1
        },
        {
-        "kind": "friendship",
-        "bond": 1,
-        "who": {
-         "types": [
-          "fire"
-         ]
-        }
-       },
-       {
         "kind": "item",
         "id": "beast-ball",
         "count": 1
@@ -4770,7 +4705,7 @@
     {
      "label": "Tell the town the truth.",
      "success": {
-      "text": "You say it from the bandstand. The town is angry at you, and then at Lindqvist, and then, as the afternoon goes on, quiet.\n\nNobody thanks you today. They will work out what to do. It will take them a while to forgive the one who made them.",
+      "text": "You say it from the bandstand. The town is angry at you, and then at Lindqvist, and then, as the afternoon goes on, quiet.\n\nNobody thanks you today. They will work out what to do. It will take them a while to forgive the one who made them.\n\nOn your way out, Lindqvist presses a Beast Ball into your hand without a word.\nA small girl runs after you with a twist of festival sweets, and runs straight back.",
       "effects": [
        {
         "kind": "flag",
@@ -4782,6 +4717,16 @@
         "key": "beast-agnes-truth",
         "amount": 1,
         "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "beast-ball",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "sweet-heart",
+        "count": 2
        },
        {
         "kind": "flag",
@@ -4808,11 +4753,6 @@
        {
         "kind": "item",
         "id": "beast-ball",
-        "count": 1
-       },
-       {
-        "kind": "item",
-        "id": "rare-candy",
         "count": 1
        },
        {
@@ -4904,10 +4844,6 @@
         "kind": "flag",
         "key": "rep",
         "amount": 2
-       },
-       {
-        "kind": "heal",
-        "share": 0.25
        },
        {
         "kind": "flag",
@@ -5002,7 +4938,8 @@
         }
        ],
        "rule": {
-        "noSwitch": true
+        "noSwitch": true,
+        "oneOnOne": true
        },
        "lose": [
         {
@@ -5045,6 +4982,11 @@
       "effects": [
        {
         "kind": "flag",
+        "key": "kartana-dishonoured",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
         "key": "ne23-paper-samurais-duel-done",
         "amount": 1
        }
@@ -5057,13 +4999,9 @@
        "types": [],
        "levelBonus": 2,
        "shinyMultiplier": 1,
-       "win": [
-        {
-         "kind": "flag",
-         "key": "kartana-dishonoured",
-         "amount": 1
-        }
-       ]
+       "win": [],
+       "friendly": true,
+       "lose": []
       }
      }
     }
@@ -5118,15 +5056,6 @@
      "success": {
       "text": "Your team sleeps the rest of the night between the two halves of the tree, as safe as it has ever been.",
       "effects": [
-       {
-        "kind": "heal",
-        "share": 0.5
-       },
-       {
-        "kind": "friendship",
-        "bond": 1,
-        "who": "party"
-       },
        {
         "kind": "flag",
         "key": "ne23-the-falling-tree-done",
@@ -5234,7 +5163,9 @@
        "types": [],
        "levelBonus": 1,
        "shinyMultiplier": 1,
-       "win": []
+       "win": [],
+       "friendly": true,
+       "lose": []
       }
      }
     },
@@ -5287,11 +5218,10 @@
    "callback": true,
    "requires": [
     {
-     "kind": "anyFlag",
-     "keys": [
-      "guzzlord-rebuilt",
-      "guzzlord-found"
-     ]
+     "kind": "flag",
+     "key": "odette-drawing",
+     "atLeast": 1,
+     "atMost": 99
     },
     {
      "kind": "runPlace",
@@ -5318,16 +5248,6 @@
      "success": {
       "text": "She already knows. She waves until you are out of sight.",
       "effects": [
-       {
-        "kind": "attribute",
-        "key": "goodEvil",
-        "amount": 1
-       },
-       {
-        "kind": "flag",
-        "key": "kind-total",
-        "amount": 1
-       },
        {
         "kind": "flag",
         "key": "ne24-the-dog-door-done",

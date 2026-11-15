@@ -71,7 +71,8 @@ export const GROUP = {
 export const MAX_LINE_WORDS = 30;
 const words = (t: string) => t.split(/\s+/).filter(Boolean).length;
 function fitLine(line: string): string {
-  if (words(line) <= MAX_LINE_WORDS) return line;
+  // A rival's `{say ...}` line is filled in later from the rival's own lines: leave it whole.
+  if (words(line) <= MAX_LINE_WORDS || line.includes('{say')) return line;
   const sentences = line.match(/[^.!?]+(?:[.!?]+["')]*|$)\s*/g)?.map((x) => x.trim()).filter(Boolean) ?? [line];
   const out: string[] = [];
   for (const s of sentences) {
@@ -96,6 +97,8 @@ type Outcome = { text: string; effects: Json[]; battle?: Json };
 const outcomesOf = (choices: Json[]): Outcome[] => choices.flatMap((c) => [c.success, c.failure].filter(Boolean) as Outcome[]);
 const stamp = (choices: Json[], done: Json): void => {
   for (const o of outcomesOf(choices)) o.effects.push(done);
+  // A branch replaces the outcome's effects when its conditions hold, so it needs the done flag too.
+  for (const c of choices) for (const b of (c.branches as { effects: Json[] }[] | undefined) ?? []) b.effects.push(done);
 };
 
 const fitted = (e: Json): Json => {

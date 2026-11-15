@@ -3037,7 +3037,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('express') }),
   /** Ideas W4 time rift: the map shows the battle waiting at each next node for the rest of the stage. */
   z.object({ kind: z.literal('riftPreview') }),
-  z.object({ kind: z.literal('heal'), share: z.number().min(0).max(1), /** 'picked': only the Pokémon a pick choice named. */ who: z.enum(['party', 'picked']).default('party') }),
+  z.object({ kind: z.literal('heal'), share: z.number().min(0).max(1), /** 'picked': only the Pokémon a pick choice named. 'others': everyone but the lead (a bad night for the lead). */ who: z.enum(['party', 'picked', 'others']).default('party') }),
   /** Camp: time together. Every pair of party Pokémon gains chemistry and loses tension; optionally old grudges are let go. */
   z.object({ kind: z.literal('campBond'), chemistry: z.number().int().min(0).max(30), calm: z.number().int().min(0).max(30), settle: z.boolean().default(false) }),
   /** The run clock: sleep until the next morning (a new day begins). */
@@ -3216,6 +3216,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('addEventFrom'), ids: z.array(z.string().min(1)).min(1) }),
   /** Exploration: a front of this weather rolls in over the columns ahead (it hits the routes it covers). */
   z.object({ kind: z.literal('front'), weather: WeatherSchema, columns: z.number().int().min(1).max(8).default(3) }),
+  /** Catalog Overhaul (new events, NE9): the weather clears for the rest of this stage (no fronts). */
+  z.object({ kind: z.literal('clearSky') }),
   /** Convoy Mode: take an escort (a named person or group with this much health) to the gym. */
   z.object({ kind: z.literal('convoy'), name: z.string().min(1), hp: z.number().int().min(1).max(9).default(4) }),
   /** Convoy Mode: the escort recovers this much health. */
@@ -3258,6 +3260,8 @@ export const EventRuleSchema = z.object({
   /** The foe's level equals your lead's level (Samurai face-off). */
   matchLead: z.boolean().optional(),
   noSwitch: z.boolean().optional(),
+  /** Catalog Overhaul new events (NE23, the Paper Samurai): one on one. The fight ends, lost, when your active Pokémon goes down (pair it with `noSwitch`). */
+  oneOnOne: z.boolean().optional(),
   noAttacks: z.boolean().optional(),
   /** No bag items in this fight (Mentor's Examination). */
   noItems: z.boolean().optional(),

@@ -1,7 +1,7 @@
 // The 100 new events, Part 1 (NE1 to NE25): Alphas, anomalies, Legendary Signs, Mythical Tellings, Ultra Beasts.
 // Script: catalog_overhaul/NEW_EVENTS_1.md. Placement: NEW_EVENTS_PLACED.md, categories 1 to 5.
 // Build: npm run co:build -- new-events-1
-import { $, anyType, flagAgo, flagAt, bondIs, bondUp, fight, flag, flagIs, item, join, money, out, ptype, room, takeNode, takeNodeBack, trainer, wild, type Json } from '../dsl.ts';
+import { $, anyType, flagAgo, flagAt, flagThisRegion, bondIs, bondUp, fight, flag, flagIs, item, join, money, out, ptype, room, takeNode, takeNodeBack, trainer, wild, type Json } from '../dsl.ts';
 import { GROUP, L, P, after, anyFlag, calmed, ch, has, kind, lose, ne, not, place, promiseStep, rep, repLost, sign, step, teach, telling, temp, variant } from './_ne.ts';
 
 export { CATEGORY } from './_ne.ts';
@@ -120,21 +120,21 @@ const NE3: Json[] = [
     'Something large has been on the ridge behind you for two stages. It never comes closer. It never leaves. Your lead keeps looking back.',
     'An Alpha Arcanine, scarred, grey at the muzzle. When you look straight at it, it lies down and studies the grass, as if it hadn\'t been following at all.',
   ), [
-    ch('Leave food at the edge of camp.', out('You set a bowl down where the firelight ends and walk away from it. In the morning the bowl is empty, and it has been licked clean, and it has been carried ten paces closer to your bedroll.', flag('sienna-met'), flag('sienna-fed'))),
-    ch('Shout at it to go.', out('You shout. It gets up, walks to the far side of the ridge, and lies down again where you can only see its ears. It doesn\'t go.', flag('sienna-met'), flag('sienna-shouted'))),
-    ch('Ignore it.', out('You walk on. So does it, a ridge behind, at exactly your pace.', flag('sienna-met'))),
+    ch('Leave food at the edge of camp.', out('You set a bowl down where the firelight ends and walk away from it. In the morning the bowl is empty, and it has been licked clean, and it has been carried ten paces closer to your bedroll.', flagAt('sienna-met'), flag('sienna-fed'))),
+    ch('Shout at it to go.', out('You shout. It gets up, walks to the far side of the ridge, and lies down again where you can only see its ears. It doesn\'t go.', flagAt('sienna-met'), flag('sienna-shouted'))),
+    ch('Ignore it.', out('You walk on. So does it, a ridge behind, at exactly your pace.', flagAt('sienna-met'))),
   ]),
-  after(3, 'ne03-she-stands-between', 'The Arcanine in the Dark', GROUP.alpha, [flagIs('sienna-met')], { minStage: 4, stop: 'rest', pokemon: 'arcanine', tint: '#141018' },
+  after(3, 'ne03-she-stands-between', 'The Arcanine in the Dark', GROUP.alpha, [flagThisRegion('sienna-met')], { minStage: 4, stop: 'rest', pokemon: 'arcanine', tint: '#141018' },
     P(
       'Night. A pack of wild Houndoom has your camp cornered: a ring of low eyes, closing. Your team bunches up round the fire.',
       'The old Arcanine walks out of the dark and stands between. It doesn\'t fight. It doesn\'t growl. It just stands there, grey and scarred and very large.',
       'One by one, the Houndoom leave.',
     ), [
-      ch('Thank it.', out('You say it out loud. One ear turns your way. It stays until the fire burns down, facing outward, and it is gone before you wake.', flag('sienna-stood'))),
-      ch('Offer a Poké Ball.', out('You hold a Ball out on your open hand. It looks at the Ball, and then at you, the way you\'d look at someone who has mistaken you for somebody else. It stays until dawn all the same.', flag('sienna-stood'))),
-      ch('Ask it why.', out('It can\'t tell you. It looks down the road ahead, toward the region\'s gate, for a long time. Then it lies down with its back to your fire, keeping watch.', flag('sienna-stood'))),
+      ch('Thank it.', out('You say it out loud. One ear turns your way. It stays until the fire burns down, facing outward, and it is gone before you wake.', flagAt('sienna-stood'))),
+      ch('Offer a Poké Ball.', out('You hold a Ball out on your open hand. It looks at the Ball, and then at you, the way you\'d look at someone who has mistaken you for somebody else. It stays until dawn all the same.', flagAt('sienna-stood'))),
+      ch('Ask it why.', out('It can\'t tell you. It looks down the road ahead, toward the region\'s gate, for a long time. Then it lies down with its back to your fire, keeping watch.', flagAt('sienna-stood'))),
     ]),
-  after(3, 'ne03-sienna-at-the-gate', 'Sienna at the Gate', GROUP.alpha, [flagIs('sienna-stood'), place({ regionEnd: true })], { minStage: 5, pokemon: 'arcanine', tint: '#2a2216' },
+  after(3, 'ne03-sienna-at-the-gate', 'Sienna at the Gate', GROUP.alpha, [flagThisRegion('sienna-stood'), place({ regionEnd: true })], { minStage: 5, pokemon: 'arcanine', tint: '#2a2216' },
     P(
       'She is lying at the region\'s gate when you reach it, chin on her paws, watching the road beyond.',
       L('Bartholomew: "That\'s Sienna. She walked a trainer to this gate, forty years back. He never came out the other side."', 'Bartholomew: "She walks everyone who reminds her of him. Then she goes back and waits."'),
@@ -143,7 +143,7 @@ const NE3: Json[] = [
       ch('Come with me, Sienna.', out(P(
         'She looks at the gate for a long time. Forty years of looking. Then she gets up, stiffly, and comes to stand at your side.',
         'She won\'t go in a Ball. She has never been in one. She walks.',
-      ), flag('sienna-joined'), join({ species: ['arcanine'], lv: 5 }))),
+      ), flag('sienna-joined'), { ...join({ species: ['arcanine'], lv: 5 }), alpha: true })),
       ch('Wait here. I\'ll come back through.', out('She lies back down at the gate, and this time she is facing the way you are going. Bartholomew takes his hat off.', flag('sienna-waits'))),
       ch('He isn\'t coming, Sienna. Go home.', out('She howls, once. It goes on a long time. Then she goes, slowly, the way she came, and she doesn\'t look back at the gate. Not once.', calmed())),
     ], [
@@ -184,7 +184,7 @@ const NE4: Json[] = [
   ]),
   after(4, 'ne04-the-herd-makes-way', 'The Herd Makes Way', GROUP.alpha, [flagIs('calf-taught'), place({ lastRegion: true })], { minStage: 6, pokemon: 'miltank', tint: '#2a2a14' },
     P('The road is blocked from hedge to hedge: Tauros, a hundred of them, and at the front a full-grown Alpha Miltank with red eyes.', 'She looks at you. She looks at the road behind you, and the road ahead. She looks first. Then she steps aside, and the whole herd makes way.'), [
-      ch('Walk through.', out('You walk the length of the herd. Not one bull moves until she does. At the far end you look back, and she is already leading them to water, in a straight line.', bondUp(1, 'party'))),
+      ch('Walk through.', out('You walk the length of the herd. Not one bull moves until she does. At the far end you look back, and she is already leading them to water, in a straight line.')),
     ]),
 ];
 
@@ -271,7 +271,7 @@ const NE6: Json[] = [
   ]),
   after(6, 'ne06-rosamund-in-the-circuit', 'Rosamund, Reunited', GROUP.anomaly, [flagIs('mega-reunited')], { minStage: 6, cast: ['trainer.lacey'], pokemon: 'ampharos', tint: '#2a2430' },
     P('A trainer waves at you across the road so hard she nearly drops her bag. Rosamund. She is on the Circuit now.', 'Beside her walk an Ampharos and a Flaaffy, shoulder to shoulder, and the Stone on the collar is already humming.'), [
-      ch('Battle her.', fight('"Watch this," she says. "It does it every time now."', trainer('Rosamund', { team: ['flaaffy', 'ampharos'], size: 2, win: [rep()] }))),
+      ch('Battle her.', fight('"Watch this," she says. "It does it every time now."', trainer('Rosamund', { team: ['flaaffy', 'ampharos-mega'], size: 2 }))),
       ch('Wave back and walk on.', out('The Ampharos lights its tail for you, twice, like a lighthouse saying hello.')),
     ]),
 ];
@@ -302,7 +302,7 @@ const NE7: Json[] = [
   ], [
     variant('black-market-researcher', [flagIs('bought-stolen')], {
       notice: 'The researcher is at the gate again. You know that coat: it\'s the black market\'s. Philippa takes your sleeve and asks, very quietly, if you would see her off.',
-      addChoices: [ch('See the researcher off.', fight('"I only want to learn so much," she says, and reaches for a Ball.', trainer('Researcher', { cls: 'scientist', size: 2, win: [flagAt('delta-greenhouse'), item('nevermeltice'), rep()] })))],
+      addChoices: [ch('See the researcher off.', fight('"I only want to learn so much," she says, and reaches for a Ball.', trainer('Researcher', { cls: 'scientist', size: 2, win: [flagAt('delta-greenhouse'), item('nevermeltice')] })))],
     }),
     variant('kind-to-it', [flagIs('kind-total', 3)], {
       hide: [2],
@@ -321,7 +321,7 @@ const NE7: Json[] = [
 const NE8: Json[] = [
   ne(8, 'z-crystal-for-someone-else', 'A Z-Crystal for Someone Else', GROUP.anomaly, {
     place: { earliest: 'A5', home: 13, window: [10, 16], sits: 'side-branch', attaches: 'instead', tags: ['water', 'eerie'], level: 'A+1', note: 'On a side branch so it can be left: with no Pokémon at Bond 4 the node stays lit for the stage and can be reached once more from the next + node.' },
-    repeat: true, requires: [not('z-chosen')],
+    repeat: true, requires: [not('z-chosen'), { kind: 'flag', key: 'z-crystal-left', atLeast: 0, atMost: 99, regionsAgoMost: 0 }],
     tags: ['Pokémon', 'Mystery'], rarity: 'rare', cast: ['trainer.youngster_m'], tint: '#102a34', effect: 'glint',
   },
   P(
@@ -334,21 +334,21 @@ const NE8: Json[] = [
       'The crystal goes cool. The light in it settles, like something that has stopped waiting. Kalani sits up straight for the first time today.',
       'Kalani: "...Huh. Granddad\'s going to want to hear about this."',
     ), flag('z-chosen'), { kind: 'typeItem', who: 'top', table: Z_BY_TYPE }), { requires: [bondIs(4)] }),
-    ch('Pick it up myself.', out('It burns. No harm done: just a red hand, a dropped crystal that rolls back to exactly where it was, and Kalani laughing so hard he has to hold the pedestal.')),
-    ch('Ask who it\'s for.', out(P('Kalani: "A Pokémon that would do the dance even if no one was watching."', 'He says it like something he has been made to learn by heart. Then, grudgingly: one that trusts its trainer nearly all the way. Bond 4, the old people call it.'))),
+    ch('Pick it up myself.', out('It burns. No harm done: just a red hand, a dropped crystal that rolls back to exactly where it was, and Kalani laughing so hard he has to hold the pedestal.', flagAt('z-crystal-left'))),
+    ch('Ask who it\'s for.', out(P('Kalani: "A Pokémon that would do the dance even if no one was watching."', 'He says it like something he has been made to learn by heart. Then, grudgingly: one that trusts its trainer nearly all the way. Bond 4, the old people call it.'), flagAt('z-crystal-left'))),
   ], [
     variant('not-yet', [bondIs(4, 'any', true)], {
       hide: [0],
       addChoices: [ch('Let my Pokémon go to it.', out(P(
         'Your Pokémon walks up to the pedestal, sniffs the crystal, sneezes, and backs away. The light inside doesn\'t change.',
         'Kalani: "Told you. It\'ll keep. Come back when one of them means it."',
-        'The crystal stays where it is. It will be here for a while yet.',
-      )))],
+        'The crystal stays where it is. It will be here for the rest of the region, and you can come back.',
+      ), flagAt('z-crystal-left')))],
     }),
   ]),
-  after(8, 'ne08-the-kahuna-nods', 'An Old Man in the Crowd', GROUP.anomaly, [flagIs('z-chosen')], { minStage: 6, tint: '#102a34' },
+  after(8, 'ne08-the-kahuna-nods', 'An Old Man in the Crowd', GROUP.anomaly, [flagIs('z-chosen'), flagIs('z-move-used')], { minStage: 2, tint: '#102a34' },
     P('The first time your Pokémon\'s Z-Power lights the field, you see him: an old man at the back of the crowd, in a flowered shirt, with Kalani\'s chin.', 'He isn\'t watching the move. He is watching your Pokémon\'s face while it does the dance. He nods, once, slowly.'), [
-      ch('Nod back.', out('By the time the dust settles he is gone. Kalani is standing where he stood, pretending he wasn\'t impressed.', bondUp(1, 'top'))),
+      ch('Nod back.', out('By the time the dust settles he is gone. Kalani is standing where he stood, pretending he wasn\'t impressed.')),
     ]),
 ];
 
@@ -369,8 +369,8 @@ const NE9: Json[] = [
     ch('Wait out the storm with it (two nodes).', out(P(
       'You sit on the hill in the rain where it can see you, and you stay. It is a long storm. Twice you think it has gone out.',
       'It survives, barely. When the clouds break it comes down off the hill after you, limping, half the size it was. In the scorched grass where it stood lies a Manectite.',
-    ), takeNode(2), flag('storm-waited'), item('manectite'), { ...join({ species: ['manectric'] }), levelShare: 0.5 })),
-    ch('Battle it down.', fight('It doesn\'t want to fight. It can\'t do anything else.', wild({ species: ['manectric-mega'], lv: 2, win: [flag('mega-battled-down'), item('manectite')] }), { kind: 'front', weather: 'rain', columns: 1 })),
+    ), takeNode(2), flag('storm-waited'), { kind: 'clearSky' }, item('manectite'), { ...join({ species: ['manectric'] }), levelShare: 0.5 })),
+    ch('Battle it down.', fight('It doesn\'t want to fight. It can\'t do anything else.', { ...wild({ species: ['manectric-mega'], lv: 2, win: [flag('mega-battled-down'), item('manectite')] }), weather: 'rain' })),
   ], [
     variant('good-with-current', [anyFlag('rocket-radio-shorted', 'macro-plug-pulled')], {
       notice: 'Storm chaser Ada: "You\'re good with current. I heard."',
@@ -412,7 +412,7 @@ const NE10: Json[] = [
   ]),
   after(10, 'ne10-two-of-you', 'Weren\'t There Two of You?', GROUP.anomaly, [flagIs('ditto-twin')], { minStage: 4, cast: ['trainer.fisherman'], tint: '#2a1c34' },
     P('A man mending a net looks up as you pass, looks past you, and frowns.', 'Fisherman: "Weren\'t there two of you?"'), [
-      ch('"Only for a while."', out('He nods as if that is a perfectly ordinary thing to hear, and goes back to his net. Your lead looks behind you, just to be sure.', bondUp(1, 'lead'))),
+      ch('"Only for a while."', out('He nods as if that is a perfectly ordinary thing to hear, and goes back to his net. Your lead looks behind you, just to be sure.')),
     ]),
 ];
 
@@ -486,14 +486,14 @@ const NE12: Json[] = [
   ]),
   after(12, 'ne12-the-second-footprint', 'The Second Footprint', GROUP.legend, [flagIs('pond-kept'), { kind: 'weather', in: ['rain'] }], { minStage: 4, tint: '#1c2c34', effect: 'rain' },
     P('Heavy rain, the first in months. Word comes down the road behind you, farm to farm, faster than the water.', 'The foot-shaped pond has overflowed. And the overflow has filled a second hollow nobody knew was there: another footprint, a stride further on, pointing the same way.'), [
-      ch('Look the way it was walking.', out('It was walking the way you are going. The whole team is quiet for a while.', sign())),
+      ch('Look the way it was walking.', out('It was walking the way you are going. The whole team is quiet for a while.')),
     ]),
 ];
 
 const NE13: Json[] = [
   ne(13, 'child-who-draws-it', 'The Child Who Draws It', GROUP.legend, {
     place: { earliest: 'A1', home: 5, window: [3, 9], sits: 'optional', attaches: 'town', note: 'The detail he drew is in the background of a later node of the same stage, exactly as drawn.' },
-    requires: [flagIs('blessing-influence', 0)],
+    requires: [anyFlag('blessing-company', 'blessing-solitary')],
     tags: ['Legendary', 'Story'], cast: ['trainer.youngster_m', 'trainer.aroma_lady'], tint: '#2c2a34',
   },
   P(
@@ -507,16 +507,12 @@ const NE13: Json[] = [
   ], [
     variant('facing-away', [flagIs('sign-broken')], { notice: 'In the drawing, it is facing away. Anselmo doesn\'t know why he drew it like that. He says that is how it stood at the window last night.' }),
   ]),
-  after(13, 'ne13-you-saw-it', 'The Face of Someone Who Saw It', GROUP.legend, [flagIs('anselmo-believed'), flagIs('blessing-influence', 3)], { minStage: 2, cast: ['trainer.youngster_m'], tint: '#2c2a34' },
-    P('There is a chalk drawing on the ground here, a long way from any square. The same hand. The same detail no book shows. He was here.', 'Under it, in careful letters: "You saw it. You\'ve got the face of someone who saw it."'), [
-      ch('Add to the drawing with his chalk.', out('You draw what you can. It isn\'t as good as his. You leave the chalk beside it for whoever sees it next.', sign())),
-    ]),
 ];
 
 const NE14: Json[] = [
   ne(14, 'two-priests-one-shrine', 'Two Priests, One Shrine', GROUP.legend, {
     place: { earliest: 'A4', home: 14, window: [11, 16], sits: 'side-branch', attaches: 'instead', tags: ['eerie', 'forest', 'high'], note: '"Ask the shrine" takes the next node of the branch: a night\'s vigil, with a priest at each end of the step.' },
-    requires: [flagIs('blessing-influence', 0)],
+    requires: [anyFlag('blessing-company', 'blessing-solitary')],
     tags: ['Legendary', 'Story'], rarity: 'rare', cast: ['trainer.psychic_m', 'trainer.hex_maniac'], tint: '#241c2c',
   },
   P(
@@ -544,7 +540,7 @@ const NE14: Json[] = [
 const NE15: Json[] = [
   ne(15, 'legends-old-trainer', 'The Legend\'s Old Trainer', GROUP.legend, {
     place: { earliest: 'A6', home: 17, window: [15, 18], sits: 'optional', attaches: 'town' },
-    requires: [flagIs('blessing-influence', 0)],
+    requires: [anyFlag('blessing-company', 'blessing-solitary')],
     tags: ['Legendary', 'Story'], rarity: 'rare', tint: '#2c2a24',
   },
   P(
@@ -552,8 +548,8 @@ const NE15: Json[] = [
     L('Zebedee: "It sat here with me. Once. Seventy years ago. I never caught it. I never tried."', 'Zebedee: "People ask why not. You don\'t catch a sunrise."'),
     'Zebedee: "If you see it, tell it the bench is still here."',
   ), [
-    ch('I\'ll tell it.', out('He nods. That is all. He goes back to the birds, and his hand is steadier than it was.', sign(), flag('zebedee-message'))),
-    ch('Come and tell it yourself.', out(P('He laughs. Then he doesn\'t. He looks at the marked slat, and at his own two hands.', 'Zebedee: "...When?"', 'He is already working out which coat.'), sign(), flag('zebedee-travels'))),
+    ch('I\'ll tell it.', out('He nods. That is all. He goes back to the birds, and his hand is steadier than it was.', flag('zebedee-message'))),
+    ch('Come and tell it yourself.', out(P('He laughs. Then he doesn\'t. He looks at the marked slat, and at his own two hands.', 'Zebedee: "...When?"', 'He is already working out which coat.'), flag('zebedee-travels'))),
     ch('Why did it sit with you?', out(P('Zebedee: "I was crying. It didn\'t ask why."', 'He has had seventy years to find a better answer. He never needed one.'), sign())),
   ]),
 ];
@@ -584,7 +580,7 @@ const NE16: Json[] = [
     ]),
   after(16, 'ne16-the-next-hill', 'The Woman on the Next Hill', GROUP.myth, [flagAgo('jirachi-seen')], { minStage: 5, stop: 'rest', tint: '#141834' },
     P('A region later, on another hill, there is a telescope you know. She is awake this time, with a flask and a second cup.', 'She doesn\'t know your face. She waves anyway, the way people wave who have somewhere to go at night.'), [
-      ch('Wave back.', out('She points the telescope at something for you, and pours the second cup.', { kind: 'heal', share: 0.25 })),
+      ch('Wave back.', out('She points the telescope at something for you, and pours the second cup.')),
     ]),
 ];
 
@@ -599,14 +595,14 @@ const NE17: Json[] = [
     'They have the same hands. Something green flickers between the rows.',
   ), [
     ch('Help the young one plant.', room('ne17-choose-a-seed')),
-    ch('Help the old one weed.', out(P('You weed beside her all morning, across the hedge from her own young back. She doesn\'t hurry. She has done this row before.', 'She tells you one thing about the country ahead, plainly, the way you\'d tell someone what the weather did last year.'), telling('celebi'), { kind: 'scout', columns: 6 }, { kind: 'gymPreview' })),
+    ch('Help the old one weed.', out(P('You weed beside her all morning, across the hedge from her own young back. She doesn\'t hurry. She has done this row before.', L('She tells you one thing about the country ahead, plainly, the way you\'d tell someone what the weather did last year.', 'Fidelma: "After this comes {nextRegion}. Go gently there. I didn\'t, the first time."')), telling('celebi'))),
     ch('Ask what grows in the last row.', out(P('Both of them answer, the young one a little before the old one.', 'Fidelma: "Whatever you plant now."'), telling('celebi'))),
   ].map((c, i) => (i === 0 ? { ...c, success: { text: 'She hands you a trowel and a tray of seed packets, each one labelled in a handwriting that gets shakier as you go down the row.', effects: [room('ne17-choose-a-seed')] } } : c))),
   step(17, 'ne17-choose-a-seed', 'A Seed You Choose', GROUP.myth, { cast: ['trainer.aroma_lady'], tint: '#14301c' },
     P('Fidelma: "One seed. Your choice. It\'ll matter."', 'Across the hedge, the old one stops weeding to see which packet you pick. She already knows. She watches anyway.'), [
-      ch('Plant an Oran Berry.', out('You press it into the last row and water it in. Something green flickers past your shoulder, and the soil is warm.', flag('garden-planted'), flag('garden-planted-oran'), telling('celebi'))),
-      ch('Plant a Sitrus Berry.', out('You press it into the last row and water it in. Something green flickers past your shoulder, and the soil is warm.', flag('garden-planted'), flag('garden-planted-sitrus'), telling('celebi'))),
-      ch('Plant a Lum Berry.', out('You press it into the last row and water it in. Something green flickers past your shoulder, and the soil is warm.', flag('garden-planted'), flag('garden-planted-lum'), telling('celebi'))),
+      ch('Plant an Oran Berry.', out('You press it into the last row and water it in. Something green flickers past your shoulder, and the soil is warm.', flag('garden-planted'), flag('garden-planted-oran'))),
+      ch('Plant a Sitrus Berry.', out('You press it into the last row and water it in. Something green flickers past your shoulder, and the soil is warm.', flag('garden-planted'), flag('garden-planted-sitrus'))),
+      ch('Plant a Lum Berry.', out('You press it into the last row and water it in. Something green flickers past your shoulder, and the soil is warm.', flag('garden-planted'), flag('garden-planted-lum'))),
     ]),
   after(17, 'ne17-the-tree-by-the-road', 'A Tree With a Carved F', GROUP.myth, [flagIs('garden-planted'), place({ lastRegion: true })], { minStage: 6, tint: '#14301c' },
     P('A full-grown Berry tree stands by the road in the last region, heavy with fruit. It is older than the road.', 'You know the Berry. You planted one, a long way back and not very long ago. There is a letter carved in the bark at the height of a gardener\'s hand: F.'), [
@@ -630,7 +626,7 @@ const NE18: Json[] = [
   ]),
   after(18, 'ne18-the-extra-bowl', 'The Extra Bowl', GROUP.myth, [flagIs('mew-fed')], { minStage: 2, stop: 'rest', pokemon: 'mew', tint: '#2c1c2c', effect: 'sparkle' },
     P('You have got into the habit of putting out one bowl more than you have mouths.', 'This morning the extra bowl is empty again, and licked, and turned upside down like a hat.'), [
-      ch('Fill it again.', out('Somewhere just out of sight, something small is pleased with you.', bondUp(1, 'party'))),
+      ch('Fill it again.', out('Somewhere just out of sight, something small is pleased with you.')),
     ]),
 ];
 
@@ -646,7 +642,7 @@ const NE19: Json[] = [
   ), [
     ch('Talk to it.', room('ne19-on-the-roof')),
     ch('Fetch a Lunar Feather (a node).', out(P('It is on a windowsill down the road, weighted with a stone, as if somebody had left it for exactly this. You carry it back through the rain.', 'They wake, all at once, in the middle of their sentences. The shape on the roof leaves, quickly, without looking back. The doctor shakes your hand for a long time.'), takeNode(), rep(), item('lunar-wing'))),
-    ch('Battle it.', fight('It doesn\'t fight back much.', wild({ species: ['darkrai'], lv: 1, win: [flag('darkrai-driven')] }), { kind: 'front', weather: 'rain', columns: 1 })),
+    ch('Battle it.', fight('It doesn\'t fight back much.', { ...wild({ species: ['darkrai'], lv: 1, win: [flag('darkrai-driven')] }), weather: 'rain' })),
   ].map((c, i) => (i === 0 ? { ...c, success: { text: P('You climb out of a top window onto the tiles. It doesn\'t run. It can\'t help it: wherever it goes, they sleep, and dream badly.', 'It came to the inn because it was raining.'), effects: [telling('darkrai'), flag('darkrai-heard'), room('ne19-on-the-roof')] } } : c))),
   step(19, 'ne19-on-the-roof', 'On the Roof', GROUP.myth, { pokemon: 'darkrai', tint: '#101020', effect: 'rain' },
     P('The rain comes down on both of you. Under the tiles, forty people breathe slowly.', 'It looks at the road, and at the sky, and at you. It will go if you say so. It always goes.'), [
@@ -655,7 +651,7 @@ const NE19: Json[] = [
     ]),
   after(19, 'ne19-the-bad-dream', 'A Bad Dream', GROUP.myth, [flagIs('darkrai-driven')], { minStage: 5, stop: 'rest', tint: '#101020' },
     P('You sleep badly. So does your lead: it twitches and whimpers at the foot of your bedroll, chasing or chased.', 'You know whose dream this is. You drove it off a roof in the rain.'), [
-      ch('Sit up with your lead until it passes.', out('Morning comes eventually. The rest of the team is rested. Your lead is not: it got nothing from this night but your hand on its back.', { kind: 'heal', share: 1 }, { kind: 'damage', share: 0.3, who: 'lead' })),
+      ch('Sit up with your lead until it passes.', out('Morning comes eventually. The rest of the team is rested. Your lead is not: it got nothing from this night but your hand on its back.', { kind: 'heal', share: 1, who: 'others' })),
     ]),
 ];
 
@@ -689,7 +685,7 @@ const NE21: Json[] = [
     L('Hyacinth: "It\'s a juvenile. The hole\'s too small to go back."', 'Hyacinth: "The Foundation wants it boxed. I don\'t."'),
     'Researcher Wicke\'s assistant is holding the box. She hasn\'t opened it.',
   ), [
-    ch('Keep it warm until the hole grows (a node, with a Fire-type).', out(P('It rides in your hood, shivering, with your Fire-type walking close beside. By evening its colour has come back, purple first.', 'At midnight the hole is the size of a door. It looks at you, and at the warm one, and goes home.', 'Hyacinth gives you the Beast Ball it never needed.'), takeNode(), flag('beast-sent-home'), bondUp(1, { types: ['fire'] }), item('beast-ball')), { requires: [ptype('fire')] }),
+    ch('Keep it warm until the hole grows (a node, with a Fire-type).', out(P('It rides in your hood, shivering, with your Fire-type walking close beside. By evening its colour has come back, purple first.', 'At midnight the hole is the size of a door. It looks at you, and at the warm one, and goes home.', 'Hyacinth gives you the Beast Ball it never needed.'), takeNode(), flag('beast-sent-home'), item('beast-ball')), { requires: [ptype('fire')] }),
     ch('Take it with me.', out(P('It comes. It watches the sky every night, the wrong part of the sky, where its home isn\'t.', 'It is homesick, and it will fight like it until it trusts you.'), flag('poipole-taken'), { ...join({ species: ['poipole'] }), asIs: true, quirk: 'homesick' })),
     ch('Hand it to the Foundation.', out('Hyacinth closes the box herself, gently. It is safe, and it will be studied. She gives you a Beast Ball and can\'t quite look at you.', flag('beast-boxed'), item('beast-ball'))),
   ]),
@@ -705,13 +701,13 @@ const NE22: Json[] = [
     'Mayor Drusilla: "It scares off storms. Tourists love it. We named it Agnes."',
     L('A man in a grey Foundation coat waits until she has gone to say his piece.', 'Mr. Lindqvist: "It\'s rooting. In a year, that field is dead for a century."'),
   ), [
-    ch('Tell the town the truth.', out(P('You say it from the bandstand. The town is angry at you, and then at Lindqvist, and then, as the afternoon goes on, quiet.', 'Nobody thanks you today. They will work out what to do. It will take them a while to forgive the one who made them.'), repLost(), flagAt('beast-agnes-truth'))),
-    ch('Find a place it can root safely (a node).', out(P('An old quarry, two fields over: bare rock, nothing to kill. The town walks Agnes there in a parade, with the band, and the children riding.', 'The baker: "We\'ll visit. It likes the Tuesday bread."', 'They press a Beast Ball on you that someone won at the coconut shy, and a bag of festival sweets.'), takeNode(), flag('beast-agnes-moved'), item('beast-ball'), item('rare-candy'), item('sweet-heart', 2))),
+    ch('Tell the town the truth.', out(P('You say it from the bandstand. The town is angry at you, and then at Lindqvist, and then, as the afternoon goes on, quiet.', 'Nobody thanks you today. They will work out what to do. It will take them a while to forgive the one who made them.', 'On your way out, Lindqvist presses a Beast Ball into your hand without a word. A small girl runs after you with a twist of festival sweets, and runs straight back.'), repLost(), flagAt('beast-agnes-truth'), item('beast-ball'), item('sweet-heart', 2))),
+    ch('Find a place it can root safely (a node).', out(P('An old quarry, two fields over: bare rock, nothing to kill. The town walks Agnes there in a parade, with the band, and the children riding.', 'The baker: "We\'ll visit. It likes the Tuesday bread."', 'They press a Beast Ball on you that someone won at the coconut shy, and a bag of festival sweets.'), takeNode(), flag('beast-agnes-moved'), item('beast-ball'), item('sweet-heart', 2))),
     ch('Leave them be.', out('The festival goes on. The children climb. The grass round Agnes\'s feet is a little yellower than the grass further out. Someone hands you a Beast Ball from the prize stall, and sweets.', flag('beast-agnes-stays'), item('beast-ball'), item('sweet-heart', 2))),
   ]),
   after(22, 'ne22-the-town-thinks-again', 'The Town Thinks Again', GROUP.ultra, [flagIs('beast-agnes-truth'), flagAgo('beast-agnes-truth')], { minStage: 7, cast: ['trainer.aroma_lady'], tint: '#1c2c24' },
     P('A letter with a mayor\'s seal has followed you into the next region.', '"We moved her to the quarry. It took the whole town and a week. You were right, and we were rude about it. Agnes sends nothing, being a Beast, but the bakery sends this."'), [
-      ch('Open the parcel.', out('Tuesday bread, a little stale, and worth it. Word of what you did has got here ahead of you.', rep(2), { kind: 'heal', share: 0.25 })),
+      ch('Open the parcel.', out('Tuesday bread, a little stale, and worth it. Word of what you did has got here ahead of you.', rep(2))),
     ]),
 ];
 
@@ -726,15 +722,15 @@ const NE23: Json[] = [
     'Kenshiro Vale: "One on one. No switching. It\'s asking nicely."',
     'The passing swordsman keeps his own hands well away from his own sword.',
   ), [
-    ch('Accept.', fight('Your lead steps onto the bridge alone. The Kartana bows again, lower.', { ...wild({ species: ['kartana'], lv: 2, win: [flag('kartana-honoured'), item('razor-claw'), item('beast-ball')] }), rule: { noSwitch: true }, lose: [flag('kartana-honoured'), item('razor-claw'), item('beast-ball')], friendly: true })),
+    ch('Accept.', fight('Your lead steps onto the bridge alone. The Kartana bows again, lower.', { ...wild({ species: ['kartana'], lv: 2, win: [flag('kartana-honoured'), item('razor-claw'), item('beast-ball')] }), rule: { noSwitch: true, oneOnOne: true }, lose: [flag('kartana-honoured'), item('razor-claw'), item('beast-ball')], friendly: true })),
     ch('Bow, and decline.', out('You bow. It considers you, bows back, and steps off the rail to let you cross. The grass on the far bank is the same height too.')),
-    ch('Send out everyone.', fight('It looks at your whole team lining up. If paper can be disgusted, it is.', wild({ species: ['kartana'], lv: 2, win: [flag('kartana-dishonoured')] }))),
+    ch('Send out everyone.', fight('It looks at your whole team lining up. If paper can be disgusted, it is.', { ...wild({ species: ['kartana'], lv: 2, win: [] }), friendly: true, lose: [] }, flag('kartana-dishonoured'))),
   ], [
     variant('glove-duel', [flagIs('glove-duel-accepted')], { notice: 'Before anything else, it draws a line across the bridge with one arm: the same line somebody once drew for you with a glove.' }),
   ]),
   after(23, 'ne23-the-falling-tree', 'The Falling Tree', GROUP.ultra, [flagIs('kartana-honoured')], { minStage: 8, stop: 'rest', pokemon: 'kartana', tint: '#1c2a1c' },
     P('In the night a dead tree comes down over your camp, the whole length of it, with a crack like the sky breaking.', 'It lands in two halves, one on either side of the fire. The cut is perfectly clean. On the far stump, a small folded shape bows, and is gone.'), [
-      ch('Bow to the dark.', out('Your team sleeps the rest of the night between the two halves of the tree, as safe as it has ever been.', { kind: 'heal', share: 0.5 }, bondUp(1, 'party'))),
+      ch('Bow to the dark.', out('Your team sleeps the rest of the night between the two halves of the tree, as safe as it has ever been.')),
     ]),
 ];
 
@@ -749,12 +745,12 @@ const NE24: Json[] = [
     'The daughter says it to you, not to her father. She has stopped saying it to him.',
   ), [
     ch('Help them rebuild (a node).', out(P('A wall, then a roof. Your team carries beams. Emeric works without a word and doesn\'t stop until the door hangs straight.', 'Odette gives you her drawing of it: huge, and round, and crying. She has drawn the tears very carefully.'), takeNode(), ...kind(2), flag('guzzlord-rebuilt'), flag('odette-drawing'))),
-    ch('Track it.', fight(P('The trail is easy: it is a trench. It ends in a quarry, where something enormous is eating rock, as far from people as it could get.', 'You only catch the tail end of it, and the tail end notices you.'), wild({ species: ['guzzlord'], lv: 1, win: [] }), flag('guzzlord-found'), flag('odette-drawing'))),
+    ch('Track it.', fight(P('The trail is easy: it is a trench. It ends in a quarry, where something enormous is eating rock, as far from people as it could get.', 'You only catch the tail end of it, and the tail end notices you.'), { ...wild({ species: ['guzzlord'], lv: 1, win: [] }), friendly: true, lose: [] }, flag('guzzlord-found'), flag('odette-drawing'))),
     ch('Give them money (₽500).', out('They take it, embarrassed. Emeric counts it twice so he will know exactly what he owes you. Odette gives you her drawing of it, crying, because you didn\'t laugh.', $(-500), ...kind(1), flag('odette-drawing')), { requires: [money(500)] }),
   ]),
-  after(24, 'ne24-the-dog-door', 'A Very Large Dog Door', GROUP.ultra, [anyFlag('guzzlord-rebuilt', 'guzzlord-found'), place({ regionEnd: true })], { minStage: 9, cast: ['trainer.fairy_tale_girl'], tint: '#2c2420' },
+  after(24, 'ne24-the-dog-door', 'A Very Large Dog Door', GROUP.ultra, [flagIs('odette-drawing'), place({ regionEnd: true })], { minStage: 9, cast: ['trainer.fairy_tale_girl'], tint: '#2c2420' },
     P('The house on the edge of the bite is finished: new walls, new roof, the old sofa on the porch.', 'In the back wall there is a dog door. It is twice the height of the front door. Odette painted "IN CASE" over it herself.'), [
-      ch('Tell her it\'s a good door.', out('She already knows. She waves until you are out of sight.', ...kind(1))),
+      ch('Tell her it\'s a good door.', out('She already knows. She waves until you are out of sight.')),
     ]),
 ];
 
