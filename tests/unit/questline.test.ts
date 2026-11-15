@@ -5,14 +5,14 @@ import { EventConditionSchema, EventDefSchema, EventEffectSchema } from '../../s
 import { applyEffect, conditionMet, stageNumber } from '../../src/core/events';
 import { BOND_STEP, bondLevel, flagAge, laterEventLeft, laterEventStep, lineHolds, lineMember, lineOf, queueLaterEvent } from '../../src/core/events/questline';
 import { createPokemon } from '../../src/core/pokemon';
-import { Rng } from '../../src/core/rng';
+import { hashSeed, Rng } from '../../src/core/rng';
 import { chooseStarter, createRun } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
 
 const cond = (c: unknown) => EventConditionSchema.parse(c);
 const effect = (e: unknown) => EventEffectSchema.parse(e);
-const rng = () => new Rng(1);
+const rng = () => new Rng(hashSeed('questline'));
 
 function setup(): RunState {
   const run = chooseStarter(content, createRun(content, { runId: 'r', seed: 'questline', archetypeId: 'red' }), 0);
@@ -22,7 +22,7 @@ function setup(): RunState {
   return run;
 }
 function add(run: RunState, species: string, friendship: number): void {
-  const mon = createPokemon(content, species, 10, new Rng(7), 'q');
+  const mon = createPokemon(content, species, 10, `q-${species}-${run.party.length}`);
   mon.friendship = friendship;
   run.party.push(mon);
 }
