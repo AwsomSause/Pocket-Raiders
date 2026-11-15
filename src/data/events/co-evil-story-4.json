@@ -3308,11 +3308,16 @@
     {
      "label": "\"Marnie would hate this.\"",
      "success": {
-      "text": "They go quiet. All of them. After a while, one says, \"She would.\" They step aside and let you through, and nobody chants.",
+      "text": "They go quiet. All of them. After a while, one says, \"She would.\" They step aside and let you through, and nobody chants. Later, a League Card turns up in your bag with a short note in Marnie's hand: \"Thanks.\"",
       "effects": [
        {
         "kind": "evil",
         "mark": "marnie-heard"
+       },
+       {
+        "kind": "flag",
+        "key": "marnies-league-card",
+        "amount": 1
        },
        {
         "kind": "evil",
@@ -4203,7 +4208,7 @@
     {
      "label": "Open them all at once.",
      "success": {
-      "text": "You pull every latch in the row. Chaos. Pokémon everywhere, guards everywhere, shouting. In the middle of it, the door of the office opens, and the handler comes out.",
+      "text": "You pull every latch in the row. Chaos. Pokémon everywhere, guards everywhere, shouting, and three of them come at you at once. In the middle of it, the door of the office opens, and the handler comes out.",
       "effects": [
        {
         "kind": "attribute",
@@ -4219,7 +4224,18 @@
         "kind": "addEvent",
         "eventId": "plasma-substage-leader"
        }
-      ]
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Plasma Yard Guards",
+       "size": 3,
+       "levelBonus": -1,
+       "format": "triples",
+       "chain": 1,
+       "pseudo": true,
+       "win": []
+      }
      }
     }
    ]

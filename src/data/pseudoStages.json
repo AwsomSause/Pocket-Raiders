@@ -311,7 +311,7 @@
       },
       "exit": "win the executive or expose",
       "countsAsStage": false,
-      "status": "limited",
+      "status": "disabled",
       "trainerClass": "veteran",
       "intro": "Cold air, hum of machines, and a lot of guards.",
       "boss": {

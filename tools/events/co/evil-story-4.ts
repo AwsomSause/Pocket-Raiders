@@ -194,7 +194,8 @@ const camp: Json[] = [
     `Dozens of crates in rows, with numbers stencilled on. Something breathes in every one of them. The guards haven't seen you yet.`,
     [
       ch('Open them quietly, one by one.', out(`Your Pokémon keeps them calm, one mind touching each one in turn, while you open the crates. Every Pokémon goes free without a sound. The guards never turn round.`, ...kind(2), mark('op-stopped'), room('plasma-substage-leader')), pick('psychic')),
-      ch('Open them all at once.', out(`You pull every latch in the row. Chaos. Pokémon everywhere, guards everywhere, shouting. In the middle of it, the door of the office opens, and the handler comes out.`, ...kind(1), room('plasma-substage-leader'))),
+      ch('Open them all at once.', fight(`You pull every latch in the row. Chaos. Pokémon everywhere, guards everywhere, shouting, and three of them come at you at once. In the middle of it, the door of the office opens, and the handler comes out.`,
+        { kind: 'trainer', evil: 'grunt', name: 'Plasma Yard Guards', size: 3, levelBonus: -1, format: 'triples', chain: 1, pseudo: true, win: [] }, ...kind(1), room('plasma-substage-leader'))),
     ]),
   ev('plasma-substage-leader', 'The Handler', 'Evil Teams', { room: true, cast: [teamJson('plasma').ranks.specialist.sprite], tint: teamJson('plasma').color, effect: 'fog' },
     `The handler steps out of the office with a Pokémon at heel that is very clearly not theirs. It flinches when they move. "Those are company property."`,
@@ -276,7 +277,7 @@ const YELL: Scene[] = [
   { id: 'yell-blockade', name: 'The Blockade', team: 'yell',
     intro: `Team Yell has blocked the road to Marnie's gym. They chant and stamp and won't let anyone through.`,
     stop: `"No one gets past Team Yell!"`,
-    way: ch('"Marnie would hate this."', out(`They go quiet. All of them. After a while, one says, "She would." They step aside and let you through, and nobody chants.`, mark('marnie-heard'))),
+    way: ch('"Marnie would hate this."', out(`They go quiet. All of them. After a while, one says, "She would." They step aside and let you through, and nobody chants. Later, a League Card turns up in your bag with a short note in Marnie's hand: "Thanks."`, mark('marnie-heard'), flag('marnies-league-card'))),
     walk: ch('Walk on.', fight(`You try to walk past. Three of them come at you, one after another.`, foe('grunt', 'Yell Grunt', 2, { chain: 3, win: [$(600)] }))) },
   { id: 'yell-fans', name: 'The Fans', team: 'yell',
     intro: `Signs, noise, scarves. The whole road is full of Team Yell, and they're not moving. If you walk on, you'll wait a whole stop for them to leave.`,

@@ -99,10 +99,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-rocket-plan-first-pokemon-heist",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-pokemon-heist"
       }
      ],
      "notice": "With Executive Archer under arrest, half the guards never turned up.",
@@ -250,10 +248,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-rocket-plan-first-black-market",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-black-market"
       }
      ],
      "notice": "With Executive Archer under arrest, half the guards never turned up.",
@@ -396,10 +392,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-rocket-plan-first-radio-tower",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-radio-tower"
       }
      ],
      "notice": "With Executive Archer under arrest, half the guards never turned up.",
@@ -532,10 +526,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-rocket-plan-first-evolution-signal",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-evolution-signal"
       }
      ],
      "notice": "With Executive Archer under arrest, half the guards never turned up.",
@@ -684,10 +676,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-aqua-plan-first-coastal-dig",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-coastal-dig"
       }
      ],
      "notice": "With Admin Shelly under arrest, half the guards never turned up.",
@@ -852,10 +842,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-aqua-plan-first-submarine-theft",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-submarine-theft"
       }
      ],
      "notice": "With Admin Shelly under arrest, half the guards never turned up.",
@@ -994,10 +982,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-aqua-plan-first-deep-sea-study",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-deep-sea-study"
       }
      ],
      "notice": "With Admin Shelly under arrest, half the guards never turned up.",
@@ -1150,10 +1136,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-aqua-plan-first-harbor-control",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-harbor-control"
       }
      ],
      "notice": "With Admin Shelly under arrest, half the guards never turned up.",
@@ -1302,10 +1286,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-magma-plan-first-volcano-drill",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-volcano-drill"
       }
      ],
      "notice": "With Admin Tabitha under arrest, half the guards never turned up.",
@@ -1457,10 +1439,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-magma-plan-first-meteorite-heist",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-meteorite-heist"
       }
      ],
      "notice": "With Admin Tabitha under arrest, half the guards never turned up.",
@@ -1599,10 +1579,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-magma-plan-first-magma-survey",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-magma-survey"
       }
      ],
      "notice": "With Admin Tabitha under arrest, half the guards never turned up.",
@@ -1746,10 +1724,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-magma-plan-first-hot-spring-closure",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-hot-spring-closure"
       }
      ],
      "notice": "With Admin Tabitha under arrest, half the guards never turned up.",
@@ -1898,10 +1874,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-galactic-plan-first-lake-raid",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-lake-raid"
       }
      ],
      "notice": "With Commander Mars under arrest, half the guards never turned up.",
@@ -2040,10 +2014,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-galactic-plan-first-energy-plant",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-energy-plant"
       }
      ],
      "notice": "With Commander Mars under arrest, half the guards never turned up.",
@@ -2213,10 +2185,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-galactic-plan-first-spirit-lab",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-spirit-lab"
       }
      ],
      "notice": "With Commander Mars under arrest, half the guards never turned up.",
@@ -2349,10 +2319,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-galactic-plan-first-veilstone-warehouse",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-veilstone-warehouse"
       }
      ],
      "notice": "With Commander Mars under arrest, half the guards never turned up.",
@@ -2494,10 +2462,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-plasma-plan-first-liberation-rally",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-liberation-rally"
       }
      ],
      "notice": "With Sage Zinzolin under arrest, half the guards never turned up.",
@@ -2721,10 +2687,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-plasma-plan-first-pokemon-confiscation",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-pokemon-confiscation"
       }
      ],
      "notice": "With Sage Zinzolin under arrest, half the guards never turned up.",
@@ -2863,10 +2827,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-plasma-plan-first-frigate-build",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-frigate-build"
       }
      ],
      "notice": "With Sage Zinzolin under arrest, half the guards never turned up.",
@@ -3007,10 +2969,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-plasma-plan-first-genesect-project",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-genesect-project"
       }
      ],
      "notice": "With Sage Zinzolin under arrest, half the guards never turned up.",
@@ -3159,10 +3119,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-flare-plan-first-power-plant",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-power-plant"
       }
      ],
      "notice": "With Admin Celosia under arrest, half the guards never turned up.",
@@ -3512,10 +3470,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-flare-plan-first-ultimate-weapon",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-ultimate-weapon"
       }
      ],
      "notice": "With Admin Celosia under arrest, half the guards never turned up.",
@@ -3648,10 +3604,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-flare-plan-first-flare-tickets",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-flare-tickets"
       }
      ],
      "notice": "With Admin Celosia under arrest, half the guards never turned up.",
@@ -3794,10 +3748,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-skull-plan-first-pokemon-snatch",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-pokemon-snatch"
       }
      ],
      "notice": "With Admin Plumeria under arrest, half the guards never turned up.",
@@ -3962,10 +3914,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-skull-plan-first-trial-crash",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-trial-crash"
       }
      ],
      "notice": "With Admin Plumeria under arrest, half the guards never turned up.",
@@ -4153,10 +4103,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-skull-plan-first-town-takeover",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-town-takeover"
       }
      ],
      "notice": "With Admin Plumeria under arrest, half the guards never turned up.",
@@ -4289,10 +4237,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-skull-plan-first-skull-recruit",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-skull-recruit"
       }
      ],
      "notice": "With Admin Plumeria under arrest, half the guards never turned up.",
@@ -4446,10 +4392,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-aether-plan-first-preservation-lab",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-preservation-lab"
       }
      ],
      "notice": "With Branch Chief Faba under arrest, half the guards never turned up.",
@@ -4604,10 +4548,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-aether-plan-first-beast-research",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-beast-research"
       }
      ],
      "notice": "With Branch Chief Faba under arrest, half the guards never turned up.",
@@ -4750,10 +4692,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-aether-plan-first-type-null-project",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-type-null-project"
       }
      ],
      "notice": "With Branch Chief Faba under arrest, half the guards never turned up.",
@@ -4923,10 +4863,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-aether-plan-first-sanctuary-closure",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-sanctuary-closure"
       }
      ],
      "notice": "With Branch Chief Faba under arrest, half the guards never turned up.",
@@ -5069,10 +5007,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-yell-plan-first-stadium-block",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-stadium-block"
       }
      ],
      "notice": "With Piers under arrest, half the guards never turned up.",
@@ -5211,10 +5147,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-yell-plan-first-route-chant",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-route-chant"
       }
      ],
      "notice": "With Piers under arrest, half the guards never turned up.",
@@ -5347,10 +5281,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-yell-plan-first-ticket-scalp",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-ticket-scalp"
       }
      ],
      "notice": "With Piers under arrest, half the guards never turned up.",
@@ -5488,10 +5420,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-yell-plan-first-fan-recruit",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-fan-recruit"
       }
      ],
      "notice": "With Piers under arrest, half the guards never turned up.",
@@ -5644,10 +5574,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-star-plan-first-base-blockade",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-base-blockade"
       }
      ],
      "notice": "With Boss Giacomo under arrest, half the guards never turned up.",
@@ -5780,10 +5708,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-star-plan-first-class-crash",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-class-crash"
       }
      ],
      "notice": "With Boss Giacomo under arrest, half the guards never turned up.",
@@ -5916,10 +5842,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-star-plan-first-star-recruit",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-star-recruit"
       }
      ],
      "notice": "With Boss Giacomo under arrest, half the guards never turned up.",
@@ -6057,10 +5981,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-star-plan-first-ruins-claim",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-ruins-claim"
       }
      ],
      "notice": "With Boss Giacomo under arrest, half the guards never turned up.",
@@ -6203,10 +6125,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-marauders-plan-first-lineage-raids",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-lineage-raids"
       }
      ],
      "notice": "With Marek Voss under arrest, half the guards never turned up.",
@@ -6347,10 +6267,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-marauders-plan-first-choir-sermons",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-choir-sermons"
       }
      ],
      "notice": "With Marek Voss under arrest, half the guards never turned up.",
@@ -6488,10 +6406,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-marauders-plan-first-ferry-runs",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-ferry-runs"
       }
      ],
      "notice": "With Marek Voss under arrest, half the guards never turned up.",
@@ -6630,10 +6546,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-marauders-plan-first-engine-works",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-engine-works"
       }
      ],
      "notice": "With Marek Voss under arrest, half the guards never turned up.",
@@ -6801,10 +6715,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-choir-plan-first-tolling-bells",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-tolling-bells"
       }
      ],
      "notice": "With Brother Cull under arrest, half the guards never turned up.",
@@ -6943,10 +6855,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-choir-plan-first-counting-stones",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-counting-stones"
       }
      ],
      "notice": "With Brother Cull under arrest, half the guards never turned up.",
@@ -7079,10 +6989,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-choir-plan-first-quiet-recruits",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-quiet-recruits"
       }
      ],
      "notice": "With Brother Cull under arrest, half the guards never turned up.",
@@ -7223,10 +7131,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-choir-plan-first-shepherd-rites",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-shepherd-rites"
       }
      ],
      "notice": "With Brother Cull under arrest, half the guards never turned up.",
@@ -7375,10 +7281,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-ironvein-plan-first-veinheart-drill",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-veinheart-drill"
       }
      ],
      "notice": "With Site Manager Brook Ealing under arrest, half the guards never turned up.",
@@ -7519,10 +7423,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-ironvein-plan-first-power-buyout",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-power-buyout"
       }
      ],
      "notice": "With Site Manager Brook Ealing under arrest, half the guards never turned up.",
@@ -7655,10 +7557,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-ironvein-plan-first-greenwall-cutting",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-greenwall-cutting"
       }
      ],
      "notice": "With Site Manager Brook Ealing under arrest, half the guards never turned up.",
@@ -7796,10 +7696,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-ironvein-plan-first-seam-survey",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-seam-survey"
       }
      ],
      "notice": "With Site Manager Brook Ealing under arrest, half the guards never turned up.",
@@ -7950,10 +7848,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-cartographers-plan-first-relic-dig",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-relic-dig"
       }
      ],
      "notice": "With Corwin Tace under arrest, half the guards never turned up.",
@@ -8118,10 +8014,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-cartographers-plan-first-map-theft",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-map-theft"
       }
      ],
      "notice": "With Corwin Tace under arrest, half the guards never turned up.",
@@ -8262,10 +8156,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-cartographers-plan-first-deep-charting",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-deep-charting"
       }
      ],
      "notice": "With Corwin Tace under arrest, half the guards never turned up.",
@@ -8421,10 +8313,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-cartographers-plan-first-local-guides",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-local-guides"
       }
      ],
      "notice": "With Corwin Tace under arrest, half the guards never turned up.",
@@ -8576,10 +8466,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-wildfire-plan-first-pylon-strike",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-pylon-strike"
       }
      ],
      "notice": "With Pilar Okafor under arrest, half the guards never turned up.",
@@ -8718,10 +8606,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-wildfire-plan-first-pipeline-sabotage",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-pipeline-sabotage"
       }
      ],
      "notice": "With Pilar Okafor under arrest, half the guards never turned up.",
@@ -8854,10 +8740,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-wildfire-plan-first-wild-release",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-wild-release"
       }
      ],
      "notice": "With Pilar Okafor under arrest, half the guards never turned up.",
@@ -8990,10 +8874,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-wildfire-plan-first-manifesto-drive",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-manifesto-drive"
       }
      ],
      "notice": "With Pilar Okafor under arrest, half the guards never turned up.",
@@ -9144,10 +9026,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-gilt-plan-first-match-fixing",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-match-fixing"
       }
      ],
      "notice": "With Piers Dunne under arrest, half the guards never turned up.",
@@ -9299,10 +9179,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-gilt-plan-first-betting-ring",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-betting-ring"
       }
      ],
      "notice": "With Piers Dunne under arrest, half the guards never turned up.",
@@ -9466,10 +9344,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-gilt-plan-first-referee-bribes",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-referee-bribes"
       }
      ],
      "notice": "With Piers Dunne under arrest, half the guards never turned up.",
@@ -9622,10 +9498,8 @@
        "has": "lieutenant-arrested"
       },
       {
-       "kind": "flag",
-       "key": "team-gilt-plan-first-laurel-donations",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "evil",
+       "has": "plan-first-laurel-donations"
       }
      ],
      "notice": "With Piers Dunne under arrest, half the guards never turned up.",

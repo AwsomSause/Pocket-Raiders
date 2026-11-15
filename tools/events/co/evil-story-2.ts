@@ -66,7 +66,7 @@ function operation(t: TeamStory, op: TeamOp, index: number): Json[] {
     remembers.push({ id: 'bribed', when: [flagIs('flare-bribed')], notice: say('Celosia', `You took one. You're no different.`), hide: [0], addChoices: [ch('Give the stone back, then return them all.', fight(`You hold out the stone they paid you with. Celosia looks at it for a long moment before she reaches for her Ball.`, celosia(shut), lose()))] });
   } else {
     // A7: the lieutenant under arrest halves the guards on the Operation you marked first.
-    remembers.push({ id: 'halved', when: [has('lieutenant-arrested'), flagIs(`team-${t.id}-plan-first-${op.id}`)], notice: `With ${t.lt.name} under arrest, half the guards never turned up.`, hide: [0], addChoices: [forceChoice({ half: true, text: `One ${j.ranks.grunt.name} and ${op.lead}. That's all that's left of the guard.` })] });
+    remembers.push({ id: 'halved', when: [has('lieutenant-arrested'), has(`plan-first-${op.id}`)], notice: `With ${t.lt.name} under arrest, half the guards never turned up.`, hide: [0], addChoices: [forceChoice({ half: true, text: `One ${j.ranks.grunt.name} and ${op.lead}. That's all that's left of the guard.` })] });
     if (trap) remembers.push({ id: 'warned', when: [{ kind: 'evil', defector: true }], notice: `Just as you were warned: an Admin is waiting here, out of sight behind the others.` });
   }
 
