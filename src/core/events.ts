@@ -347,7 +347,6 @@ function tradePicksOf(content: Content, run: RunState, choice: EventChoice): Tra
 
 /** Why a choice's trade cannot happen yet, in words (null when it can or the choice has no trade). */
 function tradeMissing(content: Content, run: RunState, choice: EventChoice): string | null {
-  if (choice.pick && tradePicksOf(content, run, choice)?.length === 0) return 'Needs a Pokémon that fits';
   if (choice.success.effects.some((e) => e.kind === 'copyMoves') && run.party.length < 2) return 'Needs 2 Pokémon in your party';
   // Catalog Overhaul: a "send a Water-type" choice needs one of those types in the party to pick.
   const types = choice.pick?.types ?? [];
@@ -355,6 +354,7 @@ function tradeMissing(content: Content, run: RunState, choice: EventChoice): str
     const names = types.map((t) => t[0]!.toUpperCase() + t.slice(1));
     return `Needs a ${names.length > 1 ? `${names.slice(0, -1).join(', ')} or ${names.at(-1)}` : names[0]}-type Pokémon`;
   }
+  if (choice.pick && tradePicksOf(content, run, choice)?.length === 0) return 'Needs a Pokémon that fits';
   for (const e of choice.success.effects) {
     if (e.kind !== 'tradeAway' && e.kind !== 'tradeFor') continue;
     if (e.kind === 'tradeAway' && run.party.length < 2) return 'Needs 2 Pokémon in your party';
