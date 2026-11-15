@@ -321,6 +321,6 @@ describe('catalog overhaul: the original Legendaries\' stages (SF99)', () => {
     expect(flagOf(run, 'legend-veinheart-met')).toBe(1);
     const old = content.expeditions.expeditions.find((e) => e.id === 'legend-veinheart')!;
     expect(old.legendary?.replacedBy).toBe('legend-veinheart');
-    expect(content.events.get('legend-veinheart-final')!.choices[0]!.success.battle?.species).toEqual(['veinheart']);
+    expect((content.events.get('legend-veinheart-final')!.choices[0]!.success.battle as { species?: string[] } | undefined)?.species).toEqual(['veinheart']);
   });
 });
