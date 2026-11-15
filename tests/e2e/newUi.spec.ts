@@ -723,6 +723,107 @@ test('New UI: resting the pointer on a move or a data box shows the mock-up tool
   expect(errors).toEqual([]);
 });
 
+test('New UI: notifications, an achievement toast and the interaction log show over the screen as in the mock-ups', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  const over = view(page, 'overlay');
+  await expect(over).toBeHidden();
+  // Three notices: the newest on top and bright; "Head: line" splits into its head.
+  await page.evaluate(() => { const p = (window as any).__pkr; p.notify('Bond: Lucario trusts you more.'); p.notify('Saved the game'); p.notify('Egg: Your egg hatches in 2 stops.'); });
+  const notices = over.locator('[data-act="notice"]');
+  await expect(notices).toHaveCount(3);
+  await expect(notices.first()).toContainText('Egg');
+  await expect(notices.first().locator('b.acc')).toHaveText('Egg');
+  await expect(notices.nth(1)).toContainText('Notice');
+  await expect(notices.nth(1)).toContainText('Saved the game');
+  // The title screen under it still takes its own clicks and keys.
+  await expect(view(page, 'MainMenu')).toBeVisible();
+  // A tap sends one away.
+  await notices.nth(1).click();
+  await expect(notices).toHaveCount(2);
+  await expect(over).not.toContainText('Saved the game');
+  // The log (L) lists what happened, newest first; a click or L closes it.
+  await page.keyboard.press('l');
+  const log = over.locator('[data-act="log"]');
+  await expect(log).toBeVisible();
+  await expect(log).toContainText('Interaction log');
+  await expect(log).toContainText('Egg: Your egg hatches in 2 stops.');
+  await expect(log).toContainText('just now');
+  await log.click();
+  await expect(log).toHaveCount(0);
+  await page.keyboard.press('l');
+  await expect(log).toBeVisible();
+  await page.keyboard.press('l');
+  await expect(log).toHaveCount(0);
+  // An achievement toast: its kicker and name; a tap opens what it was for and holds it, a second tap closes it.
+  const first = await page.evaluate(() => { const p = (window as any).__pkr; const a = [...p.session.content.achievements.values()][0]; p.achievementToast(1); return { name: a.name as string, description: a.description as string }; });
+  const toast = over.locator('[data-act="toast"]');
+  await expect(toast).toHaveCount(1);
+  await expect(toast).toContainText(/achievement/i);
+  await expect(toast.locator('b.acc')).toHaveText(first.name);
+  await expect(toast).not.toContainText(first.description);
+  await toast.click();
+  await expect(toast).toContainText(first.description);
+  // Held open, it outlasts its own timer.
+  await page.waitForTimeout(4500);
+  await expect(toast).toHaveCount(1);
+  await toast.click();
+  await expect(toast).toHaveCount(0);
+  // The notices have run out by themselves by now, and the layer is gone with them.
+  await expect(notices).toHaveCount(0, { timeout: 8000 });
+  await expect(over).toBeHidden();
+  // The keyboard still drives the screen under it (the pointer may have moved the cursor, so any way on counts).
+  await page.keyboard.press('Enter');
+  await expect.poll(() => scene(page), { timeout: 20_000 }).not.toBe('MainMenu');
+  expect(errors).toEqual([]);
+});
+
+test('New UI on a phone: held upright, the layer turns with the game and fills the screen; the pad stays on top', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+  const page = await context.newPage();
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await expect(page.locator('body')).toHaveClass(/rot-portrait/);
+  const boxes = () => page.evaluate(() => {
+    const c = document.querySelector('canvas')!.getBoundingClientRect();
+    const s = document.querySelector('#rx .stage[data-scene="MainMenu"]')!.getBoundingClientRect();
+    const pad = document.getElementById('touch-pad')!;
+    return { c: [c.left, c.top, c.width, c.height].map(Math.round), s: [s.left, s.top, s.width, s.height].map(Math.round), padZ: Number(getComputedStyle(pad).zIndex), rxZ: Number(getComputedStyle(document.getElementById('rx')!).zIndex), w: innerWidth, h: innerHeight };
+  });
+  // The layer follows the canvas (a 250 ms tick), turned a quarter turn like it.
+  await expect.poll(async () => { const b = await boxes(); return b.c.every((v, i) => Math.abs(v - b.s[i]!) <= 2); }, { timeout: 5000 }).toBe(true);
+  const b = await boxes();
+  // The turned game stands tall and is centred across the screen, not cut off at an edge.
+  expect(b.c[3]!).toBeGreaterThan(b.c[2]!);
+  expect(b.c[0]!).toBeGreaterThanOrEqual(-1);
+  expect(b.c[0]! + b.c[2]!).toBeLessThanOrEqual(b.w + 1);
+  expect(Math.abs(b.c[0]! - (b.w - (b.c[0]! + b.c[2]!)))).toBeLessThanOrEqual(2);
+  expect(b.padZ).toBeGreaterThan(b.rxZ);
+  // A tap on a turned button still lands: New Run leads on.
+  await view(page, 'MainMenu').locator('[data-act]', { hasText: 'New Run' }).first().tap();
+  await expect.poll(() => scene(page), { timeout: 20_000 }).not.toBe('MainMenu');
+  expect(errors).toEqual([]);
+  await context.close();
+});
+
+test('New UI on a phone held sideways: the on-screen pad lies over the screens and its buttons still press', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 844, height: 390 }, hasTouch: true, isMobile: true });
+  const page = await context.newPage();
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await expect(page.locator('body')).toHaveClass(/touch-pad-side/);
+  await expect(page.locator('body')).toHaveClass(/rx-on/);
+  const ok = page.locator('#touch-pad .acts button').first();
+  await expect(ok).toBeVisible();
+  // The mock-up's round translucent buttons.
+  expect(await ok.evaluate((el) => getComputedStyle(el).borderRadius)).toBe('50%');
+  // The pad is above the layer: its confirm button answers the title screen.
+  await ok.tap();
+  await expect.poll(() => scene(page), { timeout: 20_000 }).not.toBe('MainMenu');
+  expect(errors).toEqual([]);
+  await context.close();
+});
+
 test('UI style: Old shows no New layer; the address can ask for either', async ({ page }) => {
   const errors = watch(page);
   // An automated browser gets Old by default (the older specs rely on it).

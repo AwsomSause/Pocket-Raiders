@@ -58,6 +58,23 @@ export function installTouchControls(): void {
     body.touch-pad-side.pad-idle #touch-pad{opacity:.45}
     #touch-fs{position:fixed;top:calc(6px + env(safe-area-inset-top));right:calc(6px + env(safe-area-inset-right));width:44px;height:44px;display:none;z-index:6;border:0;border-radius:12px;background:rgba(20,16,30,.6);color:#fff;font:600 20px system-ui,sans-serif;opacity:.7;touch-action:none;-webkit-tap-highlight-color:transparent}
     #rotate-hint{position:fixed;top:calc(6px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:none;background:rgba(20,16,30,.9);color:#fff;font:14px system-ui,sans-serif;padding:6px 12px;border-radius:12px;z-index:5;max-width:80vw;text-align:center}
+    body.rx-on #touch-pad,body.rx-on #touch-toggle,body.rx-on #touch-fs{z-index:45}
+    body.rx-on #touch-pad{--pd:clamp(104px,calc(150px*var(--rxs,1)),150px);--pb:clamp(56px,calc(74px*var(--rxs,1)),74px)}
+    body.rx-on.touch-pad-bottom #touch-pad{--pd:104px;--pb:64px}
+    body.rx-on #touch-pad .dpad{position:relative;width:var(--pd);height:var(--pd);gap:0;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);border-radius:50%;background:#fff3;box-shadow:inset 0 0 0 3px #fff8}
+    body.rx-on #touch-pad .dpad::after{content:'';grid-area:2 / 2;border-radius:50%;background:#fff8;pointer-events:none}
+    body.rx-on #touch-pad .dpad button{min-width:0;min-height:0;padding:0;background:none;box-shadow:none;border-radius:0;opacity:1;color:#fffc;font-size:14px}
+    body.rx-on #touch-pad .dpad button:nth-child(1){grid-area:1 / 2!important}
+    body.rx-on #touch-pad .dpad button:nth-child(2){grid-area:2 / 1!important}
+    body.rx-on #touch-pad .dpad button:nth-child(3){grid-area:3 / 2!important}
+    body.rx-on #touch-pad .dpad button:nth-child(4){grid-area:2 / 3!important}
+    body.rx-on #touch-pad .acts{display:flex;flex-direction:row-reverse;align-items:center;gap:14px}
+    body.rx-on #touch-pad .acts button{width:var(--pb);height:var(--pb);min-width:0;min-height:0;padding:0;border-radius:50%;background:#fff3;box-shadow:inset 0 0 0 3px #fff8;opacity:1;color:#fff;font-size:0}
+    body.rx-on #touch-pad .acts button::after{font:700 28px system-ui,sans-serif}
+    body.rx-on #touch-pad .acts button:nth-child(1)::after{content:'A'}
+    body.rx-on #touch-pad .acts button:nth-child(2)::after{content:'B'}
+    body.rx-on #touch-pad .acts button.hub-only{width:calc(var(--pb)*.72);height:calc(var(--pb)*.72)}
+    body.rx-on #touch-pad .acts button.hub-only::after{content:'Map';font-size:13px}
     body.touch-pad-bottom #game{align-items:flex-start!important;height:calc(100vh - 120px - env(safe-area-inset-bottom));height:calc(100dvh - 120px - env(safe-area-inset-bottom))}`;
   document.head.appendChild(style);
   const pad = document.createElement('div');
