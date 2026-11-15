@@ -32,7 +32,7 @@ export function ev(id: string, name: string, group: string, o: EventOpts, intro:
 }
 
 /** A choice. `fail` is required with a check or chance. */
-export function ch(label: string, success: Json, o: { requires?: Json[]; check?: string; chance?: number; prompt?: { id: string; needs: 'ok' | 'good' | 'perfect' }; fail?: Json; pick?: { types?: string[] } } = {}): Json {
+export function ch(label: string, success: Json, o: { requires?: Json[]; check?: string; chance?: number; prompt?: { id: string; needs: 'ok' | 'good' | 'perfect' }; fail?: Json; pick?: { types?: string[]; moveFlag?: string; bond?: number } } = {}): Json {
   return { label, ...(o.requires ? { requires: o.requires } : {}), ...(o.check ? { check: o.check } : {}), ...(o.chance !== undefined ? { chance: o.chance } : {}), ...(o.prompt ? { prompt: o.prompt } : {}), ...(o.pick ? { pick: o.pick } : {}), success, ...(o.fail ? { failure: o.fail } : {}) };
 }
 
@@ -56,14 +56,26 @@ export const hurtExcept = (share: number, ...except: string[]): Json => ({ kind:
 export const statusLead = (s: 'poison' | 'burn' | 'paralysis' | 'sleep'): Json => ({ kind: 'status', status: s, who: 'lead' });
 export const cure = (): Json => ({ kind: 'cure' });
 export const status = (s: 'poison' | 'burn' | 'paralysis' | 'sleep'): Json => ({ kind: 'status', status: s });
-export const fr = (amount: number, who: 'lead' | 'party' | 'picked' = 'party'): Json => ({ kind: 'friendship', amount, who });
+/** Catalog Overhaul: which Pokémon an effect lands on (core/co/who.ts). An object is the first able Pokémon that fits. */
+export type Who = 'lead' | 'party' | 'picked' | 'starter' | 'top' | 'firstCatch' | 'newest' | { types?: string[]; moveFlag?: string; species?: string[] };
+export const fr = (amount: number, who: Who = 'party'): Json => ({ kind: 'friendship', amount, who });
+/** The pack's "+N Bond": +5 friendship per point on one Pokémon, +3 each for the whole party (balance.co). */
+export const bondUp = (points = 1, who: Who = 'lead'): Json => fr(points * (who === 'party' ? 3 : 5), who);
+/** "(a node)" as a cost: the next `nodes` ordinary nodes are spent on the work (no battle, no reward). */
+export const takeNode = (nodes = 1): Json => ({ kind: 'takeNode', nodes });
+/** "(a node back)": a step back along the road; nothing is refought, so it costs nothing. */
+export const takeNodeBack = (): Json => ({ kind: 'takeNode', back: true });
+/** A Bond-level condition: someone (or `who`) has Bond `atLeast` (1 to 5). `absent`: nobody has. */
+export const bondIs = (atLeast: number, who: Who | 'any' = 'any', absent = false): Json => ({ kind: 'bondLevel', atLeast, who, ...(absent ? { absent: true } : {}) });
+/** A party Pokémon of any of these types ("a Ground- or Water-type"). */
+export const anyType = (...types: string[]): Json => ({ kind: 'partyTypes', types });
 export const attr = (key: string, amount: number): Json => ({ kind: 'attribute', key, amount });
 export const good = (n: number): Json => attr('goodEvil', n);
 export const evil = (n: number): Json => attr('goodEvil', -n);
 export const rage = (n: number): Json => attr('ragePeace', n);
 export const peace = (n: number): Json => attr('ragePeace', -n);
 export const rp = (amount: number): Json => ({ kind: 'research', amount });
-export const lv = (amount: number, who: 'lead' | 'party' = 'lead'): Json => ({ kind: 'levels', amount, who });
+export const lv = (amount: number, who: Who | 'weakest' = 'lead'): Json => ({ kind: 'levels', amount, who });
 export const join = (o: { species?: string[]; types?: string[]; lv?: number; shiny?: number; shadow?: boolean } = {}): Json => ({
   kind: 'join',
   shadow: o.shadow ?? false,
