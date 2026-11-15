@@ -2,7 +2,7 @@
 // Script: catalog_overhaul/NEW_EVENTS_3.md. Placement: NEW_EVENTS_PLACED.md, categories 11 to 15.
 // The trades (NE61 to NE65) need the markets thread's Honest Trade Card: they wait, fully written, in _ne-trades.ts.
 // Build: npm run co:build -- new-events-3
-import { $, anyType, bondIs, bondUp, fight, flag, flagAgo, flagAt, flagIs, heal, item, join, money, out, ptype, room, scout, stopHere, takeNode, trainer, wild, reveal, type Json } from '../dsl.ts';
+import { $, anyType, bondIs, bondUp, fight, flag, flagAgo, flagAt, flagIs, heal, item, br, join, money, out, ptype, room, scout, stopHere, takeNode, trainer, wild, reveal, type Json } from '../dsl.ts';
 import { GROUP, L, P, after, anyFlag, ch, has, kind, kindFull, lose, ne, not, place, rep, step, teach, telling, variant } from './_ne.ts';
 
 export { CATEGORY } from './_ne.ts';
@@ -12,7 +12,7 @@ export const REMOVE: string[] = [];
  * Lines that read a flag another thread sets (evil-story's Files, the honesty flag, SF150's interview, a starving Poochyena, Old Haddon).
  * The category test only allows flags listed in its FOREIGN set; once those keys are listed there, set this to true and the lines play.
  */
-const FOREIGN_READY = false;
+const FOREIGN_READY = true;
 const foreign = <T>(...x: T[]): T[] => (FOREIGN_READY ? x : []);
 
 /** A Pokémon that joins with a quirk (this thread's quirks; see the Part 3 report for each rule). */
@@ -61,7 +61,7 @@ const NE51: Json[] = [
     ch('Drive the Steel-types off.', fight(
       'You put yourself between the Torkoal and the valley, and send your team at the three of them.',
       { ...wild({ species: ['skarmory'], win: [item('charcoal')] }), friendly: true, lose: [item('charcoal')] },
-    ), { branches: [] }),
+    )),
     ch('Give it a tissue.', out(P(
       'You crouch down and hold out a tissue. The Torkoal stares at it. Then it takes it, very carefully, in its mouth, and blows its nose.',
       'A jet of flame roars out across the valley, white-hot and as long as a house. The Skarmory flares backwards. The Magneton\'s hum goes up an octave.',
@@ -77,7 +77,7 @@ const NE51: Json[] = [
       ch('Walk out into the smoke.', out(P(
         'You walk out with it billowing round you like a cape. Somebody in the top rows starts clapping. Somebody else joins in.',
         'By the time you reach the middle, the whole crowd knows that something out there cried eleven times and came back a twelfth.',
-      ), { kind: 'friendshipLine', species: 'torkoal', amount: 5 })),
+      ))),
     ]),
 ];
 
@@ -115,12 +115,11 @@ const NE52: Json[] = [
     ), [
       ch('Fight beside them.', fight(
         'The Totodile dances through the whole battle: between attacks, while dodging, once in the middle of a Water Gun. It does not miss a single step.',
-        trainer('Road pair', { size: 2, friendly: true, win: [bondUp(1, 'lead'), $(400)], lose: [] }),
+        // The tag battle: Ravenna's Totodile fights beside your lead as the ally.
+        { ...trainer('Road pair', { size: 2, friendly: true, win: [bondUp(1, 'lead'), $(400)], lose: [] }), ally: 'totodile' },
       )),
     ]),
-  // The tag battle above: the Totodile fights beside your lead as the ally.
 ];
-(NE52[1]!.choices as Json[])[0]!.success = { ...((NE52[1]!.choices as Json[])[0]!.success as Json), battle: { ...(((NE52[1]!.choices as Json[])[0]!.success as Json).battle as Json), ally: 'totodile' } };
 
 const NE53: Json[] = [
   ne(53, 'one-who-got-too-slow', 'The One Who Got Too Slow', GROUP.ash, {
@@ -172,7 +171,7 @@ const NE54: Json[] = [
     ), flag('taillow-fed'), ...kind(1))),
     ch('Battle it.', fight(
       'It turns on you the moment you step forward, as if it has been waiting all day for someone its own size. It won\'t fall. Not easily.',
-      { ...wild({ species: ['taillow'], lv: 1, win: [flag('taillow-respects')] }), weather: 'rain', friendly: true, lose: [flag('taillow-respects')] },
+      { ...wild({ species: ['taillow'], lv: 1, win: [flag('taillow-respects')] }), weather: 'rain', friendly: true, lose: [flag('taillow-respects')], rule: { foeEndures: 3 } },
     )),
     ch('Catch it before it hurts itself.', out(P(
       'You throw before it can dive again. The Ball shakes, and bursts open. It is out, and furious. You throw again. It breaks out a second time.',
@@ -193,7 +192,7 @@ const NE54: Json[] = [
       'The storm finds you on open ground. The flash comes first, white, and in it you see your Swellow already moving.',
       'It goes up, into the light, between the sky and your lead. The thunder comes after. When you can see again, it is on the ground, smoking, and getting up.',
     ), [
-      ch('Hold it until it stops shaking.', out('It shakes for a long time. Your lead stands over the two of you until the storm moves on. Neither of them will look away from the other all evening.', bondUp(2, 'lead'), { kind: 'friendshipLine', species: 'taillow', amount: 10 })),
+      ch('Hold it until it stops shaking.', out('It shakes for a long time. Your lead stands over the two of you until the storm moves on. Neither of them will look away from the other all evening.')),
     ]),
 ];
 
@@ -224,10 +223,15 @@ const NE55: Json[] = [
   ]),
   step(55, 'ne55-step-fifteen', 'Lysander, Further On', GROUP.ash, { cast: ['trainer.firebreather'], pokemon: 'cyndaquil', tint: '#2a1c14' },
     'Further down the same road, a boy waves both arms at you from beside a campfire. It is Lysander, with the Cyndaquil on his shoulder.', [
-      ch('Go and see.', out('He has been waiting to tell someone.'), {
-        branches: [
-          { kind: 'ignored' },
-        ].filter(() => false),
+      // Two versions, by what the player chose at Step 5.
+      ch('Go and see.', out(P(
+        'Lysander: "Look. Look!" The Cyndaquil\'s back is alight, steady as a lamp. It lights his fire with one breath, then lights it again, because it can.',
+        'He can\'t stop grinning. Neither can the Cyndaquil.',
+      ), flagAt('cyndaquil-lit-seen')), {
+        branches: [br([flagIs('cyndaquil-trying')], P(
+          'Lysander: "It did it! Once! It was mostly smoke. But there was a bit of fire in the smoke."',
+          'The Cyndaquil puffs proudly. There is a little black scorch on the end of one stick, and Lysander has wrapped it in a handkerchief to keep.',
+        ), bondUp(1, 'party'))],
       }),
     ]),
   after(55, 'ne55-typhlosion-in-the-circuit', 'Lysander\'s Typhlosion', GROUP.ash, [flagIs('cyndaquil-lit'), flagAgo('cyndaquil-lit-seen')], { minStage: 4, cast: ['trainer.firebreather'], pokemon: 'typhlosion', tint: '#2a1c14', effect: 'fire' },
@@ -239,22 +243,6 @@ const NE55: Json[] = [
       ch('Just watch him win.', out('You stay in the crowd. He wins. When he looks for you afterwards, you raise a hand, and he raises a fist with fire round it.', bondUp(1, 'party'))),
     ]),
 ];
-// The Step 15 scene has two versions, by what the player chose at Step 5.
-{
-  const s15 = NE55[1]!;
-  const go = (s15.choices as Json[])[0]!;
-  go.success = out(P(
-    'Lysander: "Look. Look!" The Cyndaquil\'s back is alight, steady as a lamp. It lights his fire with one breath, then lights it again, because it can.',
-    'He can\'t stop grinning. Neither can the Cyndaquil.',
-  ), flagAt('cyndaquil-lit-seen'));
-  delete go.branches;
-  (go as Json).branches = [
-    { when: [flagIs('cyndaquil-trying')], text: P(
-      'Lysander: "It did it! Once! It was mostly smoke. But there was a bit of fire in the smoke."',
-      'The Cyndaquil puffs proudly. There is a little black scorch on the end of one stick, and Lysander has wrapped it in a handkerchief to keep.',
-    ), effects: [bondUp(1, 'party')] },
-  ];
-}
 
 // =====================================================================================================================
 // CATEGORY 12. EVIL TEAMS
@@ -301,7 +289,7 @@ const NE56: Json[] = [
       'A new bakery on the corner. In the window, a young man in a floury apron is setting out trays of Berry biscuits.',
       'He has the hat on, the team hat, turned backwards and covered in flour. He sees you through the glass and goes red to the ears.',
     ), [
-      ch('Go in and buy a biscuit.', out('He won\'t take your money. He puts two in the bag instead of one. "Mum\'s recipe," he says, and doesn\'t say anything else, and doesn\'t need to.', item('sitrus-berry'), heal(0.25))),
+      ch('Go in and buy a biscuit.', out('He won\'t take your money. He puts two in the bag instead of one. "Mum\'s recipe," he says, and doesn\'t say anything else, and doesn\'t need to.')),
     ]),
 ];
 
@@ -339,7 +327,7 @@ const NE57: Json[] = [
       'A Ranger trainee in a uniform that is too new is clearing a fallen branch off the road. She looks up, and goes pink.',
       'Trainee: "You won\'t remember me. I was in a queue. I had a pen in my hand. You read something out."',
     ), [
-      ch('"I remember."', out('She doesn\'t believe you, and it doesn\'t matter. She salutes, badly, and lets your party past first.', rep(1))),
+      ch('"I remember."', out('She doesn\'t believe you, and it doesn\'t matter. She salutes, badly, and lets your party past first.')),
     ]),
 ];
 // Every outcome of the fair marks the region, for the trainee a region later.
@@ -373,7 +361,7 @@ const NE58: Json[] = [
       ),
     }),
     ch('Speak for the Grunts who left.', out(P(
-      'You tell the court about the ones who walked away: the Grunt with the tin, the ones who opened doors for you, the ones who were sixteen and wanted a hat.',
+      'You tell the court about the ones who walked away. The Grunt with the tin. The ones who opened doors for you. The ones who were sixteen and wanted a hat.',
       'The court goes easy on them. The boss watches you the whole time, and at the end his face has something in it like respect.',
     ), flag('team-grunts-spared'), flag('team-boss-free'), ...kind(1), rep(2))),
   ], foreign(
@@ -463,7 +451,7 @@ const NE60: Json[] = [
       ch('Listen.', out(P(
         '"At approximately eleven, two criminal organisations entered the building to steal the same object. This was inefficient of them."',
         'The whole café is laughing by the end. You catch yourself in the report, as "a passing trainer, unhurried."',
-      ), heal(0.25))),
+      ))),
     ]),
 ];
 
@@ -568,7 +556,7 @@ const NE68: Json[] = [
   ]),
   after(68, 'ne68-forty-two-elm', 'Forty-Two Elm', GROUP.road, [flagIs('letter-delivered')], { minStage: 3, stop: 'rest', tint: '#24261c' },
     'You stop at an inn you know. The sign over the door has been taken down and repainted. In new gold letters it reads: "Forty-Two Elm."', [
-      ch('Go in.', out('The granddaughter is behind the bar. She points at a frame on the wall: the letter, under glass. She pours you a drink and won\'t take your money, again.', heal(1))),
+      ch('Go in.', out('The granddaughter is behind the bar. She points at a frame on the wall: the letter, under glass. She pours you a drink and won\'t take your money, again.')),
     ]),
 ];
 
@@ -603,7 +591,7 @@ const NE69: Json[] = [
     ]),
   after(69, 'ne69-free-directions', 'Free Directions', GROUP.road, [flagIs('ferdinand-ball'), age('ferdinand-ball', 1, 2)], { minStage: 2, cast: ['trainer.youngster_m'], pokemon: 'pidgey', tint: '#2c2a1c' },
     P('On the next route there is a boy at a fork with a Pidgey on his head. His sign has been painted over.', 'It says: "DIRECTIONS. FREE."'), [
-      ch('Ask the way.', out('Ferdinand: "Left. And there\'s a Berry tree at the bend." The Pidgey points with its whole wing, in case you missed it.', scout(3), item('oran-berry'))),
+      ch('Ask the way.', out('Ferdinand: "Left. And there\'s a Berry tree at the bend." The Pidgey points with its whole wing, in case you missed it.', scout(3))),
     ]),
 ];
 
@@ -704,7 +692,7 @@ const NE72: Json[] = [
     ]),
   after(72, 'ne72-on-the-bank', 'On the Bank', GROUP.wild, [flagIs('dreamer-joined'), { kind: 'partySpecies', species: 'politoed' }], { minStage: 3, pokemon: 'poliwrath', tint: '#10283a' },
     'Your Politoed hops ahead onto a riverbank and stops. On the far side, waist-deep, stands a Poliwrath with a row of Poliwag in front of it.', [
-      ch('Wait while they look at each other.', out('The Poliwrath looks at the Politoed for a long time. Then it turns back to its class. Your Politoed sings the whole way to the next town.', { kind: 'friendshipLine', species: 'poliwag', amount: 10 })),
+      ch('Wait while they look at each other.', out('The Poliwrath looks at the Politoed for a long time. Then it turns back to its class. Your Politoed sings the whole way to the next town.')),
     ]),
 ];
 
@@ -776,7 +764,7 @@ const NE74: Json[] = [
   ]),
   after(74, 'ne74-the-first-blink', 'The First Blink', GROUP.wild, [flagIs('stars-answered'), { kind: 'period', in: ['night'] }], { minStage: 4, stop: 'rest', tint: '#0c1430', effect: 'sparkle' },
     'A clear night. Far off, on a lake you can barely see, one light blinks. Once, twice, once. It blinks first.', [
-      ch('Blink back.', out('You blink your torch at it. Once, twice, once. The far light answers, and goes out, satisfied. You sleep better than you have in weeks.', heal(1))),
+      ch('Blink back.', out('You blink your torch at it. Once, twice, once. The far light answers, and goes out, satisfied. You sleep better than you have in weeks.')),
     ]),
 ];
 
@@ -800,7 +788,7 @@ const NE75: Json[] = [
       'You walk into the shade slowly, hands open. It growls the whole way. It doesn\'t get up. You kneel down by the leg.',
       'A thorn, long as your finger, driven deep into the pad. You are the first thing in days that it has let close enough to see. You pull it out in one go.',
       'It is ashamed afterwards. It won\'t look at you. And then it gets up, and limps along, and moves over. The Skiddo comes down to drink.',
-    ), flag('pangoro-thorn'), ...kind(1), room(PANGORO))),
+    ), flagAt('pangoro-thorn'), ...kind(1), room(PANGORO))),
     ch('Bring water to the others (a node).', out(P(
       'You and your Water-type spend the length of a road carrying water out into the sun, to the ones waiting. Skiddo, a pair of Phanpy, things too small to name.',
       'The Pangoro watches the whole time. Gradually, a little at a time, it shifts along the trunk, until there is shade for two, then four.',
@@ -811,11 +799,10 @@ const NE75: Json[] = [
       ch('Ask it to come with you.', out('It considers your team: the small ones especially. Then it gets up and stands at the back of them, like a wall. It has decided who it guards.', joinQ('pangoro', 'protector'))),
       ch('Leave it to guard the water.', out('You leave it there, on watch. As you go, the Skiddo settles down in the shade right beside it, and it lets it.')),
     ]),
-  after(75, 'ne75-bamboo-shade', 'Shade for Everyone', GROUP.wild, [flagIs('pangoro-thorn'), flagAgo('pangoro-thorn-at')], { minStage: 5, pokemon: 'pangoro', tint: '#1c2c18' },
+  after(75, 'ne75-bamboo-shade', 'Shade for Everyone', GROUP.wild, [flagIs('pangoro-thorn'), flagAgo('pangoro-thorn')], { minStage: 5, pokemon: 'pangoro', tint: '#1c2c18' },
     'You pass the watering hole again. It doesn\'t look the same. A stand of young bamboo has grown up all the way round it, and there is shade for everyone.', [
-      ch('Drink with them.', out('Skiddo, Phanpy, a Pangoro or two. Nobody growls. Somebody has planted bamboo, and you can guess who.', heal(0.5))),
+      ch('Drink with them.', out('Skiddo, Phanpy, a Pangoro or two. Nobody growls. Somebody has planted bamboo, and you can guess who.')),
     ]),
 ];
-for (const c of NE75[0]!.choices as Json[]) ((c.success as Json).effects as Json[]).push(flagAt('pangoro-thorn-at'));
 
 export const EVENTS: Json[] = [...NE51, ...NE52, ...NE53, ...NE54, ...NE55, ...NE56, ...NE57, ...NE58, ...NE59, ...NE60, ...NE66, ...NE67, ...NE68, ...NE69, ...NE70, ...NE71, ...NE72, ...NE73, ...NE74, ...NE75];

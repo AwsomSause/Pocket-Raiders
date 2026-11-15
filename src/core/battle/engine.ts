@@ -121,7 +121,7 @@ import { sacrificeFor } from './sacrificeRule';
 import { berserkDue, berserkMove, isBerserk } from './berserk';
 import { momentContactPoison, momentDamageMult, spendMomentBoost, applyPendingMoments, fadeMomentBoosts, tryFaintMoments, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
 import type { MomentHooks } from '../moments/pokemonMoments';
-import { quirkAccuracy, quirkDamageMult, quirkEntryStages, quirkNoCrits, quirkOf, quirkPriority, quirkSurvives } from '../co/quirks';
+import { quirkAccuracy, quirkDamageMult, quirkEntryStages, quirkGuard, quirkNoCrits, quirkOf, quirkPriority, quirkSurvives } from '../co/quirks';
 import { reapplyBoost } from '../instrumentality/secondChance';
 import { freshHyperBattle, rollHyper, type EnemyRage, type HyperContext, type HyperEligibility } from './hyper';
 import { applyTransformations, battleMove, battleTypes, endDynamax, maxMoveExtras, maxMoveTerrain, maxMoveWeather, stabMultiplier, teraPower, tickDynamax, transformProblem, zMoveFor, type TransformEvent, type TransformRequest, type TransformStepEvent } from './transform';
@@ -2828,11 +2828,28 @@ function takeHp(
   // Catalog Overhaul quirks: a Pokémon that has weathered this type before hangs on at 1 HP (once per battle).
   const quirkType = hit !== null ? ctx.quirkHitType : undefined;
   if (hit !== null) ctx.quirkHitType = undefined;
+  // Event rule foeEndures (NE54): the foe hangs on at 1 HP until your Nth hit, whatever the damage.
+  if (hit !== null && c.side === 'enemy' && lost > 0 && ctx.battle.eventRule?.foeEndures) {
+    const n = ctx.battle.storyEffects.filter((t) => t === 'foe-endure-hit').length + 1;
+    ctx.battle.storyEffects.push('foe-endure-hit');
+    if (n < ctx.battle.eventRule.foeEndures && lost >= c.mon.hp) {
+      lost = c.mon.hp - 1;
+      c.mon.hp = 1;
+      return { lost, lastStand: null, hyper: null, knockedDown: false, stand: false };
+    }
+  }
   if (hit !== null && c.side === 'player' && lost > 0 && lost >= c.mon.hp && c.mon.hp > 1 && quirkSurvives(c.mon, quirkType, ctx.battle.storyEffects)) {
     lost = c.mon.hp - 1;
     c.mon.hp = 1;
     (ctx.momentQueue ??= []).push({ type: 'raid', tone: 'info', text: `${getSpecies(ctx.content, c.mon.speciesId).name} has been through worse. It hangs on!` });
     return { lost, lastStand: null, hyper: null, knockedDown: false, stand: false };
+  }
+  // Quirk Protector: a teammate takes the hit instead (once per battle), and drops no lower than 1 HP doing it.
+  const guard = hit !== null && c.side === 'player' && lost > 0 && lost >= c.mon.hp ? quirkGuard(ctx.party, c.mon, ctx.battle.storyEffects) : null;
+  if (guard) {
+    guard.hp = Math.max(1, guard.hp - lost);
+    (ctx.momentQueue ??= []).push({ type: 'raid', tone: 'info', text: `${getSpecies(ctx.content, guard.speciesId).name} throws itself in the way and takes the hit!` });
+    return { lost: 0, lastStand: null, hyper: null, knockedDown: false, stand: false };
   }
   // Beta 0.6 Pokémon moments: a species, line, type or group may hang on (core/moments). A Hyper moment this turn comes first.
   if (hit !== null && c.side === 'player' && lost > 0 && lost >= c.mon.hp) {

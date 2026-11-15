@@ -150,3 +150,23 @@ describe('Swap Day (NE39): trading teams with the rival', () => {
     expect(run.party.map((m) => m.uid)).toEqual(mine);
   });
 });
+
+describe('foeEndures (NE54: the Taillow that would not fall)', () => {
+  it('the foe holds at 1 HP through two hits and falls to the third', () => {
+    const run = beginBattle(content, toBattle(freshRun())).run;
+    const b = run.battle!;
+    b.eventRule = { ...(b.eventRule ?? {}), foeEndures: 3 } as typeof b.eventRule;
+    b.enemyTeam = [b.enemyTeam[0]!];
+    const lead = run.party[b.activeIndex]!;
+    lead.level = 100;
+    lead.moves = [{ id: 'tackle', pp: 35 }];
+    lead.hp = maxHp(content, lead);
+    b.enemyTeam[0]!.hp = 1;
+    let r = takeTurn(content, run, { kind: 'move', index: 0 }).run;
+    expect(r.battle?.enemyTeam[0]!.hp).toBe(1);
+    r = takeTurn(content, r, { kind: 'move', index: 0 }).run;
+    expect(r.battle?.enemyTeam[0]!.hp).toBe(1);
+    const third = takeTurn(content, r, { kind: 'move', index: 0 });
+    expect(third.end !== null || (third.run.battle?.enemyTeam[0]!.hp ?? 0) === 0).toBe(true);
+  });
+});

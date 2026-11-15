@@ -3348,6 +3348,8 @@ export const EventRuleSchema = z.object({
   noSwitch: z.boolean().optional(),
   /** Catalog Overhaul new events (NE23, the Paper Samurai): one on one. The fight ends, lost, when your active Pokémon goes down (pair it with `noSwitch`). */
   oneOnOne: z.boolean().optional(),
+  /** Catalog Overhaul new events (NE54, the Taillow that wouldn't fall): the foe can't be knocked out before your hit number N, whatever the damage. */
+  foeEndures: z.number().int().min(2).max(5).optional(),
   noAttacks: z.boolean().optional(),
   /** No bag items in this fight (Mentor's Examination). */
   noItems: z.boolean().optional(),

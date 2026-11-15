@@ -18,6 +18,8 @@ const FOREIGN = new Set([
   'glove-duel-accepted', 'listened-first', 'sign-broken',
   // Set by the engine: the run's first Z-Move, a swapped rival Pokémon fainting (run.ts finishBattle).
   'z-move-used', 'swap-fainted',
+  // Read by Part 3 from the evil-team, markets and people threads (a variant stays hidden while nobody sets them).
+  'intel', 'honest-lied', 'journalist-interview', 'fed-poochyena', 'haddon-ferried',
 ]);
 const foreign = (key: string) => FOREIGN.has(key) || /^(blessing|sign|telling|promise|promise-broken|promise-kept|guest)-/.test(key);
 

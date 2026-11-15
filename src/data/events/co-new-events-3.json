@@ -1,0 +1,4489 @@
+{
+ "catalogOverhaul": "new-events",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "ne51-one-who-cried-smoke",
+   "name": "The One Who Cried Smoke",
+   "group": "Pokémon-anime stories",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [
+    "rock",
+    "ground",
+    "dark"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "steel",
+      "rock"
+     ]
+    },
+    {
+     "kind": "stageTypes",
+     "types": [
+      "rock",
+      "ground",
+      "dark"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne51-one-who-cried-smoke-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "torkoal",
+    "tint": "#2a2420",
+    "effect": "fog"
+   },
+   "intro": "A Torkoal is backed against a cliff by three Steel-types. It isn't fighting. It's crying, and every sob puts out a cloud of white smoke.\n\nA Skarmory circles overhead, wings ringing like knives on a whetstone. A Magneton hums. A Lairon scrapes the ground and waits.\n\nThe cliff behind the Torkoal is covered in scorch marks. There are eleven of them, and the old ones are paler, worn down by weather. Somebody has been counting.\n\nHiker Caspian: \"It keeps coming back. They keep beating it.\"\nHiker Caspian: \"It cries, it sleeps, it comes back. Eleven times this year. I've stopped being able to watch.\"",
+   "choices": [
+    {
+     "label": "Stand with it.",
+     "success": {
+      "text": "You walk across the valley floor and stop beside the Torkoal. It looks up at you through the smoke, astonished.\n\nYour lead steps up on its other side. For the first time in eleven tries, the Torkoal is not alone. It stops crying long enough to plant its feet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne51-one-who-cried-smoke-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "item",
+         "id": "charcoal",
+         "count": 1
+        }
+       ],
+       "team": [
+        "skarmory",
+        "magneton",
+        "lairon"
+       ],
+       "name": "The Steel-types of the valley",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "torkoal-stood",
+         "amount": 1
+        },
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "torkoal"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "quirk": "smoke-crier",
+         "ability": "white-smoke"
+        }
+       ],
+       "ally": "torkoal",
+       "spritePokemon": "skarmory"
+      }
+     }
+    },
+    {
+     "label": "Drive the Steel-types off.",
+     "success": {
+      "text": "You put yourself between the Torkoal and the valley, and send your team at the three of them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne51-one-who-cried-smoke-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "skarmory"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "charcoal",
+         "count": 1
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "item",
+         "id": "charcoal",
+         "count": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Give it a tissue.",
+     "success": {
+      "text": "You crouch down and hold out a tissue. The Torkoal stares at it. Then it takes it, very carefully, in its mouth, and blows its nose.\n\nA jet of flame roars out across the valley, white-hot and as long as a house. The Skarmory flares backwards. The Magneton's hum goes up an octave.\n\nEveryone is impressed: Caspian, your team, and the Skarmory most of all. The Torkoal, very pleased with itself, hands back what is left of the tissue. It is ash.\n\nCaspian presses a lump of Charcoal into your hand. \"Off the cliff. It's been making them all year.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "charcoal",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne51-one-who-cried-smoke-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne51-smoke-from-the-stands",
+   "name": "Smoke Over the Stands",
+   "group": "Pokémon-anime stories",
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "partyLine",
+     "species": "torkoal",
+     "bond": 0
+    },
+    {
+     "kind": "flag",
+     "key": "torkoal-stood",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "runPlace",
+     "lastRegion": true,
+     "regionEnd": true
+    },
+    {
+     "kind": "flag",
+     "key": "ne51-smoke-from-the-stands-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "torkoal",
+    "tint": "#2a2420",
+    "effect": "fog"
+   },
+   "intro": "You are still in the tunnel under the stands, waiting for your name, when the crowd starts murmuring.\n\nA column of white smoke is rising out of your bag, straight up through the open roof, where everyone in the stadium can see it. The Torkoal is crying already.\nIt knows what today is.",
+   "choices": [
+    {
+     "label": "Walk out into the smoke.",
+     "success": {
+      "text": "You walk out with it billowing round you like a cape. Somebody in the top rows starts clapping. Somebody else joins in.\n\nBy the time you reach the middle, the whole crowd knows that something out there cried eleven times and came back a twelfth.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne51-smoke-from-the-stands-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne52-dancing-crocodile",
+   "name": "The Dancing Crocodile",
+   "group": "Pokémon-anime stories",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [
+    "water"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "water"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne52-dancing-crocodile-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "totodile",
+    "tint": "#10283a",
+    "effect": "sparkle"
+   },
+   "intro": "A Totodile is dancing on a rock in the middle of a lake. It stamps, it spins, it claps its little jaws in time to nothing at all.\n\nTwo trainers on opposite shores threw a Ball at the same moment. Both Balls are floating, bobbing gently, one on each side of the rock.\n\nRavenna, on the far shore: \"Mine hit first.\"\nNeither Ball has a mark on it. The Totodile dances between them, absolutely thrilled to be wanted twice.\n\nRavenna: \"Battle for it? Or ask it?\"",
+   "choices": [
+    {
+     "label": "Battle for it.",
+     "success": {
+      "text": "Ravenna grins and wades in to her knees. \"One on one. Winner keeps the dancer.\"\nOn its rock, the Totodile starts a new dance, faster, as if it were the referee.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne52-dancing-crocodile-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "ravenna-has-totodile",
+         "amount": 1
+        }
+       ],
+       "name": "Ravenna",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "totodile-won",
+         "amount": 1
+        },
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "totodile"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "quirk": "victory-dancer"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask it.",
+     "requires": [
+      {
+       "kind": "bondLevel",
+       "atLeast": 3,
+       "who": "lead"
+      }
+     ],
+     "success": {
+      "text": "You call across the water. The Totodile stops, one foot in the air, and looks at you. Then it dances a step and waits, head on one side.\n\nIt dances to whoever dances back. Your lead looks at you, looks at the rock, and then, because it loves you, it dances.\n\nIt is terrible. It is the best thing the Totodile has ever seen. It dives off the rock and swims straight for you, and comes up still dancing.\n\nRavenna laughs until she has to sit down in the shallows. \"Fair. That's fair. I couldn't have done that.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "totodile-danced",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "totodile"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "quirk": "victory-dancer"
+       },
+       {
+        "kind": "flag",
+        "key": "ne52-dancing-crocodile-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let her have it.",
+     "success": {
+      "text": "You fish your own Ball out of the water and wave her on.\nRavenna stares at you for a moment as if you have done something she will need to think about later.\n\nThe Totodile hops into her Ball. Just before it goes, it turns to you and waves with both arms.\n\nRavenna: \"I won't forget that. Find me on the road some time. I'll owe you one.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ravenna-has-totodile",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne52-dancing-crocodile-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne52-the-tag-battle",
+   "name": "Ravenna and the Dancer",
+   "group": "Pokémon-anime stories",
+   "rarity": "common",
+   "minStage": 4,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ravenna-has-totodile",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne52-the-tag-battle-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "totodile",
+    "tint": "#10283a",
+    "effect": "sparkle"
+   },
+   "intro": "Two trainers block the road ahead, spoiling for a double battle. Before you can answer them, someone splashes up beside you.\n\nRavenna: \"Told you I'd owe you one. Mind if we share?\"\nHer Totodile is already dancing on your side of the line.",
+   "choices": [
+    {
+     "label": "Fight beside them.",
+     "success": {
+      "text": "The Totodile dances through the whole battle: between attacks, while dodging, once in the middle of a Water Gun. It does not miss a single step.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne52-the-tag-battle-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [],
+       "name": "Road pair",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "lead"
+        },
+        {
+         "kind": "money",
+         "amount": 400
+        }
+       ],
+       "ally": "totodile"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne53-one-who-got-too-slow",
+   "name": "The One Who Got Too Slow",
+   "group": "Pokémon-anime stories",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "rest",
+   "types": [],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne53-one-who-got-too-slow-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#20242c",
+    "effect": "none"
+   },
+   "intro": "The one of yours that evolved most recently tries the dodge it has always done, the one that has saved it a hundred times.\nIt doesn't get out of the way.\n\nIt tries again in the next battle. It's hit again. Now, by the fire, it sits looking at its own feet, as if they have let it down.\n\nA veteran by the next fire, Hargrove: \"Had a Torterra like that. It kept trying to be a Grotle. You know what fixed it?\"\nHargrove: \"It stopped dodging. It started standing.\"",
+   "choices": [
+    {
+     "label": "Teach it to take the hit (a node).",
+     "pick": {},
+     "success": {
+      "text": "Hargrove gets up, groaning, and his old Torterra gets up with him. For the length of a road, the two of them spar with yours.\n\nNo dodging. Your Pokémon plants its new, heavy feet and takes the blows, and stays up, and stays up. Near the end it stops flinching.\n\nHargrove: \"There. It's got a new shape. Now it needs a move to match.\"",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slow-accepted",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "picked"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ne53-a-move-for-its-shape"
+       },
+       {
+        "kind": "flag",
+        "key": "ne53-one-who-got-too-slow-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep training its speed.",
+     "pick": {},
+     "success": {
+      "text": "You run it up and down the road until you are both out of breath. It is a little quicker, by the end. Only a little.\n\nIt is still unhappy. It keeps looking back at where its old self would have been.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "carbos",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne53-one-who-got-too-slow-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell it it's fine as it is.",
+     "pick": {},
+     "success": {
+      "text": "You sit down beside it and tell it so. It looks at you, and you can see it doesn't believe you yet.\n\nBut it leans against your shoulder, heavy and warm, and leaves it there.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "ne53-one-who-got-too-slow-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne53-a-move-for-its-shape",
+   "name": "A Move for Its Shape",
+   "group": "Pokémon-anime stories",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#20242c",
+    "effect": "none"
+   },
+   "intro": "Hargrove: \"Three I'd teach a heavy one. Pick.\"\n\nYour Pokémon looks up at you. Point at it again, and choose.",
+   "choices": [
+    {
+     "label": "Rock Climb.",
+     "pick": {},
+     "success": {
+      "text": "It goes up the rock face behind the camp in four great steps, slowly, and never once slips.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "rock-climb",
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Body Press.",
+     "pick": {},
+     "success": {
+      "text": "It learns to throw its whole new weight at a problem. Hargrove's Torterra rocks back a step and looks impressed.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "body-press",
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Iron Defense.",
+     "pick": {},
+     "success": {
+      "text": "It learns to set itself like a wall. Hargrove raps on it with his knuckles. \"There. Let them hit that.\"",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "iron-defense",
+        "who": "picked"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne54-bird-who-wouldnt-fall",
+   "name": "The Bird Who Wouldn't Fall",
+   "group": "Pokémon-anime stories",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "stop": "event",
+   "types": [
+    "electric",
+    "flying",
+    "rock",
+    "dragon"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "electric",
+      "flying",
+      "rock",
+      "dragon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne54-bird-who-wouldnt-fall-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "pokemon": "taillow",
+    "tint": "#1c2430",
+    "effect": "rain"
+   },
+   "intro": "Rain is coming down in sheets. In the middle of an orchard, a Taillow half the size of the others is fighting an Electric-type.\n\nIt has been shocked four times. You can see it in the way its feathers stand up. It's still up. It's still diving.\n\nBehind it, a whole ragged flock has been raiding the trees. They are thin. You can see their ribs through the wet feathers. They are starving.\n\nOrchard keeper Brae: \"I don't mind the fruit. I mind that one.\"\nBrae: \"It'll kill itself before it backs down. It doesn't know how to back down.\"",
+   "choices": [
+    {
+     "label": "Feed the flock.",
+     "success": {
+      "text": "You and Brae drag a crate of windfalls out under the trees. The Electric-type loses interest and wanders off. The flock comes down like rain.\n\nThey eat and eat. The small one eats last, after every other bird has had its fill, and the whole time it eats, it is watching you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "taillow-fed",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne54-bird-who-wouldnt-fall-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It turns on you the moment you step forward, as if it has been waiting all day for someone its own size. It won't fall. Not easily.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne54-bird-who-wouldnt-fall-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "taillow"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "taillow-respects",
+         "amount": 1
+        }
+       ],
+       "weather": "rain",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "taillow-respects",
+         "amount": 1
+        }
+       ],
+       "rule": {
+        "foeEndures": 3
+       }
+      }
+     }
+    },
+    {
+     "label": "Catch it before it hurts itself.",
+     "success": {
+      "text": "You throw before it can dive again. The Ball shakes, and bursts open. It is out, and furious. You throw again. It breaks out a second time.\n\nThe third time, the Ball rocks once, twice, three times, and goes still. Brae lets out a breath she seems to have been holding all season.\n\nBrae: \"Good. Somebody needed to make it stop.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "taillow-joined",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "taillow"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "quirk": "wont-fall",
+        "ability": "guts"
+       },
+       {
+        "kind": "flag",
+        "key": "ne54-bird-who-wouldnt-fall-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "fed-before",
+     "when": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "border-peace",
+        "funeral-berry",
+        "fed-poochyena"
+       ]
+      }
+     ],
+     "notice": "The small Taillow lands on a branch just above you and looks at you sideways for a long time. It seems to know what you are: someone who feeds things.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand.",
+       "success": {
+        "text": "It drops onto your wrist. It is so light. Its feet are shaking with cold and with all those shocks, and it doesn't fly off.\n\nIt comes without a battle. Brae watches it go into the Ball and wipes the rain off her face, or something that isn't rain.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "taillow-joined",
+          "amount": 1
+         },
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "taillow"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "quirk": "wont-fall",
+          "ability": "guts"
+         },
+         {
+          "kind": "flag",
+          "key": "ne54-bird-who-wouldnt-fall-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ne54-the-lightning",
+   "name": "The Lightning Bolt",
+   "group": "Pokémon-anime stories",
+   "rarity": "common",
+   "minStage": 5,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "partySpecies",
+     "species": "swellow"
+    },
+    {
+     "kind": "flag",
+     "key": "taillow-joined",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne54-the-lightning-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "swellow",
+    "tint": "#1c2430",
+    "effect": "rain"
+   },
+   "intro": "The storm finds you on open ground. The flash comes first, white, and in it you see your Swellow already moving.\n\nIt goes up, into the light, between the sky and your lead. The thunder comes after. When you can see again, it is on the ground, smoking, and getting up.",
+   "choices": [
+    {
+     "label": "Hold it until it stops shaking.",
+     "success": {
+      "text": "It shakes for a long time. Your lead stands over the two of you until the storm moves on. Neither of them will look away from the other all evening.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne54-the-lightning-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne55-fire-that-wouldnt-light",
+   "name": "The Fire That Wouldn't Light",
+   "group": "Pokémon-anime stories",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne55-fire-that-wouldnt-light-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.firebreather"
+    ],
+    "pokemon": "cyndaquil",
+    "tint": "#2a1c14",
+    "effect": "none"
+   },
+   "intro": "A Cyndaquil stands in front of a cold campfire, straining with its whole body. Its back smokes a little. Nothing catches.\n\nSomeone has left it a neat pile of sticks. Beside it, a young trainer is packing up his camp very slowly, like somebody who has given up waiting.\n\nThe trainer, Lysander: \"It only lights when it's angry. And I don't want to make it angry.\"\nLysander: \"I've run out of ideas. I've run out of everything.\"",
+   "choices": [
+    {
+     "label": "Take over its training.",
+     "success": {
+      "text": "Lysander looks at you for a long moment. Then he holds the Ball out, relieved and sad at the same time. He asks for nothing at all.\n\nLysander: \"It deserves someone who knows what they're doing. Its flames are out when it starts a fight. Be patient with it.\"\n\nThe Cyndaquil looks back at him once, and then up at you, and its back gives off one small puff of hopeful smoke.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cyndaquil-taken",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "cyndaquil"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "quirk": "slow-kindling"
+       },
+       {
+        "kind": "flag",
+        "key": "ne55-fire-that-wouldnt-light-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show it my Fire-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ],
+     "pick": {
+      "types": [
+       "fire"
+      ]
+     },
+     "success": {
+      "text": "Your Fire-type sits down beside the sticks and lights the fire slowly, one breath at a time, so the Cyndaquil can see every step.\n\nThe Cyndaquil watches. It copies the breath. Its back catches: a small blue flame, then a real one, roaring up out of its fur.\n\nLysander makes a noise like a laugh and a sob together. He presses a Charcoal into your hand. He won't let go of his Cyndaquil all afternoon.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cyndaquil-lit",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "item",
+        "id": "charcoal",
+        "count": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "ne55-step-fifteen",
+        "nodes": 10
+       },
+       {
+        "kind": "flag",
+        "key": "ne55-fire-that-wouldnt-light-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell him to keep trying.",
+     "success": {
+      "text": "You tell him it isn't about anger. You tell him to keep going. He sits back down on his pack, slowly, and looks at the sticks again.\n\nLysander: \"All right. One more day.\" He gives you a Charcoal from his bag. \"I won't need it if it lights. I'll need it less if it doesn't.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cyndaquil-trying",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "charcoal",
+        "count": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "ne55-step-fifteen",
+        "nodes": 10
+       },
+       {
+        "kind": "flag",
+        "key": "ne55-fire-that-wouldnt-light-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne55-step-fifteen",
+   "name": "Lysander, Further On",
+   "group": "Pokémon-anime stories",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.firebreather"
+    ],
+    "pokemon": "cyndaquil",
+    "tint": "#2a1c14",
+    "effect": "none"
+   },
+   "intro": "Further down the same road, a boy waves both arms at you from beside a campfire. It is Lysander, with the Cyndaquil on his shoulder.",
+   "choices": [
+    {
+     "label": "Go and see.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "cyndaquil-trying",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Lysander: \"It did it! Once! It was mostly smoke. But there was a bit of fire in the smoke.\"\n\nThe Cyndaquil puffs proudly. There is a little black scorch on the end of one stick, and Lysander has wrapped it in a handkerchief to keep.",
+       "effects": [
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "party"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Lysander: \"Look. Look!\" The Cyndaquil's back is alight, steady as a lamp. It lights his fire with one breath, then lights it again, because it can.\n\nHe can't stop grinning. Neither can the Cyndaquil.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cyndaquil-lit-seen",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne55-typhlosion-in-the-circuit",
+   "name": "Lysander's Typhlosion",
+   "group": "Pokémon-anime stories",
+   "rarity": "common",
+   "minStage": 4,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "cyndaquil-lit",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "cyndaquil-lit-seen",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ne55-typhlosion-in-the-circuit-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.firebreather"
+    ],
+    "pokemon": "typhlosion",
+    "tint": "#2a1c14",
+    "effect": "fire"
+   },
+   "intro": "A crowd has gathered round a Circuit battle at the edge of town. In the middle of it, a Typhlosion stands in a ring of its own fire.\n\nIts trainer looks up and sees you, and his whole face changes. It is Lysander, a region older. The Typhlosion's collar blazes higher.",
+   "choices": [
+    {
+     "label": "Ask for a battle.",
+     "success": {
+      "text": "Lysander: \"Its first real fire was because of you. Let's show you what it does now.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne55-typhlosion-in-the-circuit-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "party"
+        }
+       ],
+       "team": [
+        "typhlosion"
+       ],
+       "name": "Lysander",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "party"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Just watch him win.",
+     "success": {
+      "text": "You stay in the crowd. He wins. When he looks for you afterwards, you raise a hand, and he raises a fist with fire round it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "ne55-typhlosion-in-the-circuit-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne56-grunts-mum",
+   "name": "The Grunt's Mum",
+   "group": "Tricksters, villains and teams",
+   "rarity": "uncommon",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ne56-grunts-mum-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2028",
+    "effect": "none"
+   },
+   "intro": "A woman is handing out flyers in the square. On each one is a photo of a young man in a team uniform, grinning, his hat on crooked.\n\nThe flyer says: \"HAVE YOU SEEN MY SON? HE'S NOT IN TROUBLE.\" The last four words are underlined twice.\n\nMrs. Castellanos: \"He said it was a job with a hat. He doesn't write. He always wrote.\"\nMrs. Castellanos: \"I baked. I didn't know what else to do. I baked.\"\n\nShe is holding a tin against her chest. You know the face in the photo. You have battled him.",
+   "choices": [
+    {
+     "label": "\"I've seen him. He's all right.\"",
+     "success": {
+      "text": "She sits down on the edge of the fountain, all at once, like a puppet with its strings cut. She doesn't cry. She just breathes for a while.\n\nMrs. Castellanos: \"All right. All right is all I wanted.\" She opens the tin and makes you take a biscuit. It is a Berry biscuit, still a little warm.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "grunt-mum-met",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne56-grunts-mum-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the tin to him.",
+     "success": {
+      "text": "She presses the tin into your hands and holds on to it a moment longer than she needs to.\n\nMrs. Castellanos: \"Tell him I'm not angry. Tell him there are more where these came from.\" She gives you a biscuit from the top, for the road.\nIt tastes of Berries.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "team-grunt-tin",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "grunt-mum-met",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne56-grunts-mum-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell her what the job is.",
+     "success": {
+      "text": "You tell her. All of it: the stolen Pokémon, the uniforms, the cages. She doesn't interrupt once.\n\nShe goes very quiet. Then she folds the rest of her flyers, neatly, and puts them in her bag. She gives you a biscuit, very politely.\n\nMrs. Castellanos: \"Thank you. Now. Where is this Hideout?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "team-mum-coming",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "grunt-mum-met",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne56-grunts-mum-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne56-your-mum-sent-these",
+   "name": "Your Mum Sent These",
+   "group": "Tricksters, villains and teams",
+   "rarity": "common",
+   "minStage": 3,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "team-grunt-tin",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "evil",
+     "after": 2
+    },
+    {
+     "kind": "flag",
+     "key": "ne56-your-mum-sent-these-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2028",
+    "effect": "none"
+   },
+   "intro": "A Grunt steps out across the path, Ball already in his hand. It is him: the face from the flyer, under the crooked hat.\n\nGrunt: \"You again. Right. Let's get this over wi...\" Then he sees what you are holding out.",
+   "choices": [
+    {
+     "label": "\"Your mum sent these.\"",
+     "success": {
+      "text": "He takes the tin in both hands. He opens it and looks inside, and his face folds up like a child's.\n\nHe can't battle. He sits down in the road and cries into the biscuits, and you sit with him until he can breathe.\nWhen you go, he is still holding the tin.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "team-grunt-home",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne56-your-mum-sent-these-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne56-the-bakery",
+   "name": "The Bakery in the Next Region",
+   "group": "Tricksters, villains and teams",
+   "rarity": "common",
+   "minStage": 4,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "grunt-mum-met",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ne56-the-bakery-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2c2418",
+    "effect": "none"
+   },
+   "intro": "A new bakery on the corner. In the window, a young man in a floury apron is setting out trays of Berry biscuits.\n\nHe has the hat on, the team hat, turned backwards and covered in flour. He sees you through the glass and goes red to the ears.",
+   "choices": [
+    {
+     "label": "Go in and buy a biscuit.",
+     "success": {
+      "text": "He won't take your money. He puts two in the bag instead of one. \"Mum's recipe,\" he says, and doesn't say anything else, and doesn't need to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne56-the-bakery-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne57-teams-recruitment-fair",
+   "name": "The Team's Recruitment Fair",
+   "group": "Tricksters, villains and teams",
+   "rarity": "uncommon",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [
+    "normal",
+    "steel",
+    "electric",
+    "poison"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 2
+    },
+    {
+     "kind": "stageTypes",
+     "types": [
+      "normal",
+      "steel",
+      "electric",
+      "poison"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne57-teams-recruitment-fair-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#2c2a1c",
+    "effect": "confetti"
+   },
+   "intro": "A cheerful stall in the market square, hung with balloons. The banner reads \"CAREERS IN LOGISTICS. FREE HAT.\" A queue of teenagers stretches round the corner.\n\nRecruiter, smiling with every tooth: \"Travel. Purpose. A family. Sign here, here and here.\"\n\nYou pick up a contract from the pile. The first two pages are all smiles and pictures. The third page is in very small print.",
+   "choices": [
+    {
+     "label": "Read page three aloud.",
+     "success": {
+      "text": "You clear your throat and read it out, loud enough for the back of the queue. \"'The undersigned gives up their Pokémon to the organisation.'\"\n\nThere is a silence. A girl at the front looks down at the Eevee in her arms. Then the queue leaves, all of it, quickly and without a word.\n\nThe Recruiter is still smiling. It is a very different smile. Someone from the queue presses one of the free hats into your hand on the way past.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "team-op-stopped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fair-read",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "free-hat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne57-teams-recruitment-fair-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fair-seen",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sign up, to get inside.",
+     "success": {
+      "text": "You sign: here, here and here. The Recruiter shakes your hand warmly and gives you a uniform that almost fits, and the free hat.\n\nFor the length of a road you are one of them. You learn the passwords, the shift times, which door is never locked. You learn which room nobody guards.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "team-uniform",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "free-hat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne57-teams-recruitment-fair-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fair-seen",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Knock the stall over.",
+     "success": {
+      "text": "The balloons go up. The table goes over. Contracts go everywhere. Two Recruiters drop the smiles and reach for their Balls.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne57-teams-recruitment-fair-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fair-seen",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Recruiters",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "fair-knocked",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "free-hat",
+         "amount": 1
+        }
+       ],
+       "evil": "grunt"
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "the-interview",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "journalist-interview",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Someone in the queue nudges her friend and points at you. \"That's the one from the paper.\" The whole queue turns round to listen before you have said a word."
+    }
+   ]
+  },
+  {
+   "id": "ne57-the-ranger-trainee",
+   "name": "The Ranger Trainee",
+   "group": "Tricksters, villains and teams",
+   "rarity": "common",
+   "minStage": 5,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "anyFlag",
+     "keys": [
+      "fair-read",
+      "fair-knocked"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "fair-seen",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ne57-the-ranger-trainee-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#1c2c20",
+    "effect": "none"
+   },
+   "intro": "A Ranger trainee in a uniform that is too new is clearing a fallen branch off the road. She looks up, and goes pink.\n\nTrainee: \"You won't remember me. I was in a queue. I had a pen in my hand. You read something out.\"",
+   "choices": [
+    {
+     "label": "\"I remember.\"",
+     "success": {
+      "text": "She doesn't believe you, and it doesn't matter. She salutes, badly, and lets your party past first.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne57-the-ranger-trainee-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne58-bosss-day-in-court",
+   "name": "The Boss's Day in Court",
+   "group": "Tricksters, villains and teams",
+   "rarity": "rare",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 8,
+   "requires": [
+    {
+     "kind": "evil",
+     "ends": [
+      "defeated",
+      "exposed"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne58-bosss-day-in-court-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "A courtroom, wood-panelled and much too warm. The team's boss sits at the front in a very good suit, hands folded, looking rested.\n\nThe gallery is packed. Nearly everyone has a Pokémon on their lap: some of them were in the cages under the Hideout, and their people are holding them very tight.\n\nJudge: \"The court calls a witness.\"\nThe boss turns, finds you, and smiles pleasantly. \"Be accurate. That's all I ask.\"",
+   "choices": [
+    {
+     "label": "Tell all of it.",
+     "success": {
+      "text": "You tell it all, from the first whisper to the last door. Some of it you saw. Some of it you were told by people too frightened to come.\n\nThe lawyers object. The hearsay is struck out, line by line. But the rest sticks, and there is a great deal of the rest.\n\nJudge: \"Guilty.\" The gallery doesn't cheer. A Growlithe on someone's lap barks once, and its owner lets it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "team-convicted",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "ne58-bosss-day-in-court-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell only what I saw.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "intel",
+         "atLeast": 0,
+         "atMost": 2
+        }
+       ],
+       "text": "You tell only what you saw. It is short, and exact, and it is not quite enough: there is too little in the Files to hold it up.\n\nJudge: \"Not proven.\" The boss stands, buttons his jacket, and nods to you on his way out.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "team-boss-free",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 2
+        },
+        {
+         "kind": "flag",
+         "key": "ne58-bosss-day-in-court-done",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You tell only what you saw with your own eyes. It is short. It is exact. You don't look at the boss once.\n\nIt is enough. The Files back up every word. Judge: \"Guilty.\" The boss inclines his head to you, as if you have both played well.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "team-convicted",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "ne58-bosss-day-in-court-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Speak for the Grunts who left.",
+     "success": {
+      "text": "You tell the court about the ones who walked away. The Grunt with the tin. The ones who opened doors for you.\nThe ones who were sixteen and wanted a hat.\n\nThe court goes easy on them. The boss watches you the whole time, and at the end his face has something in it like respect.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "team-grunts-spared",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "team-boss-free",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "ne58-bosss-day-in-court-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "the-lie",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "honest-lied",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The boss's lawyer stands before you can begin. \"The witness has lied before, on this very road. The court will remember it.\" Your word counts for less now.\nThe Files will need one more entry.",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Tell only what I saw.",
+       "branches": [
+        {
+         "when": [
+          {
+           "kind": "flag",
+           "key": "intel",
+           "atLeast": 0,
+           "atMost": 3
+          }
+         ],
+         "text": "You tell only what you saw. It is not enough, not from you, not now. Judge: \"Not proven.\" The boss leaves by the front door.",
+         "effects": [
+          {
+           "kind": "flag",
+           "key": "team-boss-free",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "rep",
+           "amount": 2
+          },
+          {
+           "kind": "flag",
+           "key": "ne58-bosss-day-in-court-done",
+           "amount": 1
+          }
+         ]
+        }
+       ],
+       "success": {
+        "text": "You tell only what you saw. It is short, and exact, and the lawyer picks at every word.\n\nThe Files hold. Just. Judge: \"Guilty.\" The boss looks at you as if he will remember that you nearly cost him nothing.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "team-convicted",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "rep",
+          "amount": 2
+         },
+         {
+          "kind": "flag",
+          "key": "ne58-bosss-day-in-court-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ne59-stolen-pokemon-wont-come-home",
+   "name": "The Stolen Pokémon That Won't Come Home",
+   "group": "Tricksters, villains and teams",
+   "rarity": "uncommon",
+   "tags": [
+    "Evil Team",
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "rest",
+   "types": [],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "evil",
+     "stopped": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ne59-stolen-pokemon-wont-come-home-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "growlithe",
+    "tint": "#2a1c18",
+    "effect": "none"
+   },
+   "intro": "A girl is kneeling by the fire with her arms held out.\nIn front of her, a Growlithe that was stolen from her, and freed today, is hiding behind your legs.\n\nThe girl, Posy-Rae: \"Pepper? It's me. Pepper, it's me.\"\nThe Growlithe shakes. It was in the pen a long time. It has learned that hands reaching for it mean the bad kind of Ball.",
+   "choices": [
+    {
+     "label": "Give it time. Sit down, all of us (a node).",
+     "success": {
+      "text": "You sit down. Posy-Rae sits down. Your whole team sits down. She talks about nothing: what she had for breakfast, a dream about a boat, the rain.\n\nIt takes the length of a road. Bit by bit, the Growlithe creeps over on its belly, nose first, until its nose touches her knee. She keeps talking.\nHer voice only wobbles once.\n\nWhen it finally climbs into her lap, she gives you the Fire Stone she was saving for it. \"It doesn't need to change. It just needed to come back.\"",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pepper-home",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "fire-stone",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne59-stolen-pokemon-wont-come-home-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry it to her.",
+     "success": {
+      "text": "You pick it up. It lets you. It is all bones and fur and it is rigid in your arms.\n\nYou put it in hers. It is stiff, stiff, and then, all at once, it is not. It pushes its whole face into her neck.\nShe gives you her Fire Stone without looking away from it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pepper-home",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "fire-stone",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne59-stolen-pokemon-wont-come-home-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it stay with me a while.",
+     "success": {
+      "text": "Posy-Rae: \"Will you bring it home? When it's ready?\" You promise. She ties her own ribbon round its neck and lets you go.\n\nThe Growlithe walks out of the camp pressed against your boot. It will travel with you for a stage, and decide for itself.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pepper-guest",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "growlithe"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "direct": true
+       },
+       {
+        "kind": "flag",
+        "key": "ne59-stolen-pokemon-wont-come-home-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne59-pepper-leads-the-way",
+   "name": "Pepper Leads the Way",
+   "group": "Tricksters, villains and teams",
+   "rarity": "common",
+   "minStage": 5,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pepper-guest",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "pepper-guest",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne59-pepper-leads-the-way-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "growlithe",
+    "tint": "#2a1c18",
+    "effect": "none"
+   },
+   "intro": "In the morning the Growlithe with the ribbon is already up, waiting at the edge of the camp, tail going.\n\nIt has decided. It sets off without you, looks back, and waits.\nYou follow it for a long time, down roads you didn't plan to take, until a small house with a blue door.",
+   "choices": [
+    {
+     "label": "Knock on the blue door.",
+     "requires": [
+      {
+       "kind": "partyLine",
+       "species": "growlithe",
+       "bond": 0
+      }
+     ],
+     "success": {
+      "text": "Posy-Rae opens it. The Growlithe goes past her like a shot, into the house, round the kitchen twice, and back into her arms.\n\nShe is crying too hard to speak. She puts the Fire Stone she was saving into your hand, and closes your fingers over it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pepper-home",
+        "amount": 1
+       },
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "Pepper goes home",
+         "species": [
+          "growlithe"
+         ]
+        }
+       },
+       {
+        "kind": "item",
+        "id": "fire-stone",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne59-pepper-leads-the-way-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell her how it got lost.",
+     "requires": [
+      {
+       "kind": "partyLine",
+       "species": "growlithe",
+       "bond": 0,
+       "absent": true
+      }
+     ],
+     "success": {
+      "text": "Pepper is not with you any more, and you tell Posy-Rae the truth about that. She listens to all of it.\nThen she thanks you for bringing her the truth, at least.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pepper-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne59-pepper-leads-the-way-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne60-two-teams-one-target",
+   "name": "Two Teams, One Target",
+   "group": "Tricksters, villains and teams",
+   "rarity": "rare",
+   "tags": [
+    "Evil Team",
+    "Combat"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 2
+    },
+    {
+     "kind": "flag",
+     "key": "ne60-two-teams-one-target-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#24202c",
+    "effect": "none"
+   },
+   "intro": "Two sets of Grunts in two different uniforms are robbing the same museum.\nThey came in from different doors, quietly, and have just met in the middle, beside the glass case.\n\nGrunt A: \"We were here first.\"\nGrunt B: \"We have a schedule.\"\nGrunt A: \"We have a better schedule.\"\n\nThe curator is under a desk, watching it all like a tennis match. Both crews have just noticed you in the doorway.",
+   "choices": [
+    {
+     "label": "Battle both.",
+     "success": {
+      "text": "They both turn on you at once. The first crew is nearer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne60-two-teams-one-target-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Grunt",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "ne60-the-second-crew"
+        }
+       ],
+       "evil": "grunt"
+      }
+     }
+    },
+    {
+     "label": "Make them fight each other.",
+     "success": {
+      "text": "You tell Grunt A one true thing his rivals did to his team last month. You tell Grunt B one true thing the other lot did to theirs.\nBoth are in the Files.\n\nThere is a long, dangerous pause. Then they are at each other: Balls, fists, a very old vase. The relic is completely forgotten.\n\nYou and the curator carry the glass case out of the side door together. Neither crew notices. She shakes your hand, then gives you something from the museum's own stores.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "teams-feud",
+        "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "ne60-two-teams-one-target-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lock both doors.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "steel",
+        "psychic"
+       ]
+      }
+     ],
+     "pick": {
+      "types": [
+       "steel",
+       "psychic"
+      ]
+     },
+     "success": {
+      "text": "Your Pokémon drags both heavy doors shut and seals them. The two crews are locked in a room with each other and nothing to steal.\n\nFor the rest of the day you can hear them shouting from three roads away. The police are very, very pleased.\n\nThe curator comes out from under the desk, dusts herself down, and gives you something from the museum's own stores.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 2
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "ne60-two-teams-one-target-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne60-the-second-crew",
+   "name": "The Second Crew",
+   "group": "Tricksters, villains and teams",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#24202c",
+    "effect": "none"
+   },
+   "intro": "The first crew runs for its door. The second crew is still standing by the glass case, and it has watched everything you did.",
+   "choices": [
+    {
+     "label": "Battle them too.",
+     "success": {
+      "text": "They come at you in a line.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Straggler",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "team-op-stopped",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "remnants-op-stopped",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "museum-saved",
+         "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "choice-band",
+          "choice-specs",
+          "choice-scarf",
+          "life-orb",
+          "eviolite",
+          "rocky-helmet"
+         ]
+        }
+       ],
+       "evil": "grunt",
+       "evilTeam": "rocket-remnants"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne60-the-curators-report",
+   "name": "The Curator's Report",
+   "group": "Tricksters, villains and teams",
+   "rarity": "common",
+   "minStage": 7,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "anyFlag",
+     "keys": [
+      "museum-saved",
+      "teams-feud",
+      "ne60-two-teams-one-target-done"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne60-the-curators-report-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#24202c",
+    "effect": "none"
+   },
+   "intro": "A radio is playing in a café. The newsreader is reading out a museum report, word for word. It is extremely dry.",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "\"At approximately eleven, two criminal organisations entered the building to steal the same object. This was inefficient of them.\"\n\nThe whole café is laughing by the end. You catch yourself in the report, as \"a passing trainer, unhurried.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne60-the-curators-report-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne66-town-with-one-clock",
+   "name": "The Town With One Clock",
+   "group": "Road people and town stories",
+   "rarity": "uncommon",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne66-town-with-one-clock-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "klink",
+    "tint": "#2c2818",
+    "effect": "none"
+   },
+   "intro": "Everyone in the square is standing still, looking up at the town clock. It has stopped. They are arguing about what time it is.\n\nBaker: \"It's dawn. I've baked.\"\nLamplighter: \"It's dusk. I've lit.\"\nA child: \"It's lunch. I'm hungry.\"\n\nClock-keeper Ottokar, on a ladder against the clock face: \"A Klink's gone from the works. Walked out. I think it was bored.\"",
+   "choices": [
+    {
+     "label": "Find the Klink.",
+     "success": {
+      "text": "You find it at the fair at the bottom of the hill, riding the carousel, round and round, with an expression of total peace.\n\nIt will come back, you explain to Ottokar, if it gets Sundays off. He stands at the bottom of the ladder for a long time. Then he agrees.\n\nThe clock starts with a clank. The whole town checks it. Ottokar gives you a bed for the night, and a pocket watch set to the right time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "clock-klink",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pocket-watch",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne66-town-with-one-clock-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "clock-klink-seen",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lend a Pokémon to the works (a node).",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "steel",
+        "electric"
+       ]
+      }
+     ],
+     "pick": {
+      "types": [
+       "steel",
+       "electric"
+      ]
+     },
+     "success": {
+      "text": "Your Pokémon climbs into the works behind the clock face and takes hold of the big gear. It turns. The hands move. The square cheers.\n\nFor a whole day the town runs on its mood. When it is cheerful the hours fly. When it gets bored the afternoon lasts forever. Nobody minds.\n\nOttokar gives you a bed for the night and a pocket watch, and your Pokémon comes out of the works oily and proud.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "pocket-watch",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne66-town-with-one-clock-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "clock-klink-seen",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell them the time.",
+     "success": {
+      "text": "You look at the sun and tell them, quite reasonably, what time it is.\n\nNobody believes a stranger. The baker goes back to his ovens and the lamplighter goes back to his lamps. The clock stays stopped.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne66-town-with-one-clock-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "clock-klink-seen",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne66-closed-sundays",
+   "name": "Closed Sundays",
+   "group": "Road people and town stories",
+   "rarity": "common",
+   "minStage": 4,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "clock-klink",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "clock-klink-seen",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ne66-closed-sundays-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "klink",
+    "tint": "#2c2818",
+    "effect": "none"
+   },
+   "intro": "You pass back through a town you remember. The clock is running. Under it, a small sign has been screwed to the wall.\n\n\"CLOSED SUNDAYS. THE KLINK IS AT THE FAIR.\"",
+   "choices": [
+    {
+     "label": "Check your pocket watch against it.",
+     "success": {
+      "text": "They match, to the second, except that both are an hour out. Nobody here minds at all.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne66-closed-sundays-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne67-ferrymans-last-crossing",
+   "name": "The Ferryman's Last Crossing",
+   "group": "Road people and town stories",
+   "rarity": "uncommon",
+   "tags": [
+    "Story",
+    "Exploration"
+   ],
+   "stop": "event",
+   "types": [
+    "water"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "water"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne67-ferrymans-last-crossing-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#10283a",
+    "effect": "none"
+   },
+   "intro": "A new bridge is being opened today. There are ribbons, and a band, and a mayor with very large scissors.\n\nFifty metres downstream, a ferryman sits in his boat with nobody in it. He is watching the ribbons, and his face is very still.\n\nFerryman Lorcan: \"Forty years. I know every stone in this river. Tomorrow nobody needs that.\"\nLorcan: \"One more across? No charge.\"",
+   "choices": [
+    {
+     "label": "Cross with him.",
+     "success": {
+      "text": "You step down into the boat.\nHe pushes off, and as he rows, he tells you the river: where it floods in spring, which stones move, where the current lies about itself.\n\nHalfway over he stops rowing and points down. Far below, in a deep green pool, something long and blue is curled up asleep. \"Dratini. Every winter. Nobody knows but me.\nAnd you.\"\n\nOn the far bank there is a path you would never have seen from the bridge. In the shallows by the landing, a scale glints.\nHe tells you to keep it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ferry-last",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "item",
+        "id": "dragon-scale",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne67-ferrymans-last-crossing-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cross by the bridge.",
+     "success": {
+      "text": "You walk over the new bridge with the crowd. The mayor shakes your hand, hard, for the photographer, and says you are the future.\n\nFrom the middle of the bridge you can see the ferry, still tied up, and the ferryman, still sitting in it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne67-ferrymans-last-crossing-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what he'll do.",
+     "success": {
+      "text": "He thinks about it for a long time, as if nobody has asked.\n\nLorcan: \"Teach kids the river, maybe. If anyone asks.\" He looks at the bridge. \"Nobody will ask.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ne67-the-crossing"
+       },
+       {
+        "kind": "flag",
+        "key": "ne67-ferrymans-last-crossing-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "haddons-manners",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "haddon-ferried",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Lorcan watches you step into the boat: weight low, hand on the side, sitting where you are put. \"You've a ferryman's manners. Someone taught you.\""
+    }
+   ]
+  },
+  {
+   "id": "ne67-the-crossing",
+   "name": "The Crossing",
+   "group": "Road people and town stories",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#10283a",
+    "effect": "none"
+   },
+   "intro": "The band starts up on the bridge. Lorcan picks up his oars, and puts them down again, and waits to see which way you go.",
+   "choices": [
+    {
+     "label": "Cross with him.",
+     "success": {
+      "text": "You step down into the boat. As he rows, he tells you the river: where it floods, which stones move. Halfway over he points down at a deep pool. \"Dratini.\nEvery winter.\"\n\nOn the far bank there is a path you would never have seen from the bridge. In the shallows by the landing, a scale glints.\nHe tells you to keep it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ferry-last",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "item",
+        "id": "dragon-scale",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cross by the bridge.",
+     "success": {
+      "text": "You walk over the bridge with the crowd. The mayor shakes your hand for the photographer. The ferry stays tied up below.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne68-letter-for-a-house-thats-gone",
+   "name": "The Letter for a House That's Gone",
+   "group": "Road people and town stories",
+   "rarity": "uncommon",
+   "tags": [
+    "Story",
+    "Mystery"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne68-letter-for-a-house-thats-gone-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "hoothoot",
+    "tint": "#24261c",
+    "effect": "none"
+   },
+   "intro": "A postman is standing in the middle of a field, holding a letter, looking at a chimney. There is no house round it. There hasn't been for a long time.\n\nPostman Mr. Abara: \"Forty-two Elm. There's an elm. There's a chimney.\"\nMr. Abara: \"It's marked urgent. Thirty years ago. It fell behind a sorting frame.\"\n\nMr. Abara: \"I can't open it. Rules. Thirty years and I've never broken one. I don't know what to do.\"",
+   "choices": [
+    {
+     "label": "Open it for him.",
+     "success": {
+      "text": "He hands it to you and turns his back, so that he hasn't technically seen. You open it. It is one line, in a hand that shakes.\n\n\"I forgive you. Come home.\"\n\nNobody knows who to. Nobody knows from whom. Mr. Abara stands in the field for a long time.\nThen he gives you his spare whistle, because he doesn't know what else to do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "letter-opened",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "abara-whistle",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne68-letter-for-a-house-thats-gone-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help find the family (a node).",
+     "success": {
+      "text": "You ask in every house down the lane. An old man remembers the fire. A woman remembers the name. A boy remembers where they went.\n\nThe granddaughter runs the inn in the next village. She reads the letter twice, standing at the bar, and then sits down on the floor behind it.\n\nWhen she can talk, she gives you both a room for the night and won't hear a word about paying. Mr. Abara writes \"DELIVERED\" in his book with enormous care.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "letter-delivered",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne68-letter-for-a-house-thats-gone-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it at the chimney.",
+     "success": {
+      "text": "You prop the letter in the hearth, out of the rain. Mr. Abara nods slowly. It is, at least, the address.\n\nA Hoothoot drops out of the chimney, looks at the letter, and takes it back up inside, where it lives. Mr.\nAbara gives you his spare whistle and goes off whistling on his own.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "letter-hoothoot",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "abara-whistle",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne68-letter-for-a-house-thats-gone-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne68-forty-two-elm",
+   "name": "Forty-Two Elm",
+   "group": "Road people and town stories",
+   "rarity": "common",
+   "minStage": 3,
+   "stop": "rest",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "letter-delivered",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne68-forty-two-elm-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#24261c",
+    "effect": "none"
+   },
+   "intro": "You stop at an inn you know. The sign over the door has been taken down and repainted. In new gold letters it reads: \"Forty-Two Elm.\"",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "The granddaughter is behind the bar. She points at a frame on the wall: the letter, under glass. She pours you a drink and won't take your money, again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne68-forty-two-elm-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne69-boy-who-sells-directions",
+   "name": "The Boy Who Sells Directions",
+   "group": "Road people and town stories",
+   "rarity": "uncommon",
+   "tags": [
+    "Story",
+    "Exploration"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne69-boy-who-sells-directions-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2c2a1c",
+    "effect": "none"
+   },
+   "intro": "A boy sits on a milestone at a crossroads, swinging his legs, beside a hand-drawn sign: \"DIRECTIONS ₽10. GOOD DIRECTIONS ₽50.\"\n\nThe boy, Ferdinand: \"The ₽10 ones are true. The ₽50 ones are true and nice.\"\n\nHis shoes are held together with string. He has drawn a very careful map on the back of the sign, with little trees on it.",
+   "choices": [
+    {
+     "label": "₽10.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 10
+      }
+     ],
+     "success": {
+      "text": "He takes the coin and bites it, like he's seen someone do.\n\nFerdinand: \"Left.\" He points left. It is the right way.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -10
+       },
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "flag",
+        "key": "ne69-boy-who-sells-directions-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "₽50.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
+     "success": {
+      "text": "Ferdinand: \"Left, and there's a Berry tree at the bend, and the dog at the farm's friendly, and it gets pretty at the top.\"\n\nAll of it is true. The tree is there, heavy with Berries. The dog is friendly.\nAnd at the top of the hill there is a spot so pretty that you stop, and sit, and rest.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "addStop",
+        "stop": "heal"
+       },
+       {
+        "kind": "flag",
+        "key": "ne69-boy-who-sells-directions-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Why are you out here?",
+     "success": {
+      "text": "He looks at his shoes.\n\nFerdinand: \"Saving for a Poké Ball. There's a Pidgey at the farm that likes me. I'm ₽40 short. I've been ₽40 short for a month.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ne69-forty-short"
+       },
+       {
+        "kind": "flag",
+        "key": "ne69-boy-who-sells-directions-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne69-forty-short",
+   "name": "Forty Short",
+   "group": "Road people and town stories",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2c2a1c",
+    "effect": "none"
+   },
+   "intro": "Ferdinand is pretending very hard that he didn't just tell you that.",
+   "choices": [
+    {
+     "label": "Give him a Ball.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "poke-ball"
+      }
+     ],
+     "success": {
+      "text": "You put a Poké Ball in his hands. He holds it like it might break.\n\nFerdinand: \"I'll pay you back. In directions. Forever.\" He is already running toward the farm.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "poke-ball"
+       },
+       {
+        "kind": "flag",
+        "key": "ferdinand-ball",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give him ₽40.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 40
+      }
+     ],
+     "success": {
+      "text": "He counts it three times. Then he runs, all the way down the road to the shop and back, with the Ball held over his head like a trophy.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -40
+       },
+       {
+        "kind": "flag",
+        "key": "ferdinand-ball",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy more directions.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
+     "success": {
+      "text": "He sells you the ₽50 ones, very seriously. There is a Berry tree at the bend. The dog is friendly. It gets pretty at the top.\n\nYou stop at the top, and sit, and rest. When you look back down, he is counting the money again.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "addStop",
+        "stop": "heal"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne69-free-directions",
+   "name": "Free Directions",
+   "group": "Road people and town stories",
+   "rarity": "common",
+   "minStage": 2,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ferdinand-ball",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "ferdinand-ball",
+     "atLeast": 1,
+     "atMost": 2
+    },
+    {
+     "kind": "flag",
+     "key": "ne69-free-directions-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "pidgey",
+    "tint": "#2c2a1c",
+    "effect": "none"
+   },
+   "intro": "On the next route there is a boy at a fork with a Pidgey on his head. His sign has been painted over.\n\nIt says: \"DIRECTIONS. FREE.\"",
+   "choices": [
+    {
+     "label": "Ask the way.",
+     "success": {
+      "text": "Ferdinand: \"Left. And there's a Berry tree at the bend.\" The Pidgey points with its whole wing, in case you missed it.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "flag",
+        "key": "ne69-free-directions-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne70-widows-scarecrow",
+   "name": "The Widow's Scarecrow",
+   "group": "Road people and town stories",
+   "rarity": "uncommon",
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "normal",
+      "grass"
+     ]
+    },
+    {
+     "kind": "stageTypes",
+     "types": [
+      "grass",
+      "bug"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne70-widows-scarecrow-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "pokemon": "murkrow",
+    "tint": "#24261c",
+    "effect": "none"
+   },
+   "intro": "A scarecrow stands in a field of corn, wearing a good suit. The suit is a little too big for it. A woman is straightening its tie.\n\nFarmer Griselda: \"His. His good suit. He'd have hated it out here.\"\nGriselda: \"The crows liked him too, so it doesn't work.\"\n\nA Murkrow is sitting on the scarecrow's shoulder, very comfortably, as if it owns the place.",
+   "choices": [
+    {
+     "label": "Help with the crows.",
+     "success": {
+      "text": "Your Pokémon charges into the corn. The crows go up in a great black sheet and away over the hedge.\n\nAll but one. The Murkrow won't go. It moves along the scarecrow's arm, out of reach, and settles again. Griselda doesn't try to shift it.\n\nGriselda: \"It was his. It used to sit on his shoulder just like that. While he worked.\" She fills a sack with corn for you anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "scarecrow-murkrow",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "pecha-berry",
+        "count": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ne70-plant-enough"
+       },
+       {
+        "kind": "flag",
+        "key": "ne70-widows-scarecrow-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about him.",
+     "success": {
+      "text": "She tells you. Fifty years in this field. Bad knees. A laugh you could hear from the road.\n\nGriselda: \"He talked to that bird more than he talked to me. I talk to it now.\" The Murkrow cocks its head at her.\nShe fills a sack with corn for you.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "pecha-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne70-widows-scarecrow-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave her to it.",
+     "success": {
+      "text": "You lift a hand and walk on. She waves, and goes back to the tie, and the Murkrow watches you to the end of the field.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne70-widows-scarecrow-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne70-plant-enough",
+   "name": "Plant Enough for Both",
+   "group": "Road people and town stories",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "pokemon": "murkrow",
+    "tint": "#24261c",
+    "effect": "none"
+   },
+   "intro": "The Murkrow is still there, on his shoulder, in his good suit. Griselda is looking at it the way you look at an old photograph.",
+   "choices": [
+    {
+     "label": "\"It can stay. Plant enough for both.\"",
+     "success": {
+      "text": "She looks at you. Then she laughs: a real one, surprised out of her, the first in a long time, you can tell.\n\nGriselda: \"He said that. Every spring. Word for word.\" She is still laughing, and wiping her eyes, when you leave.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "scarecrow-both",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "scarecrow-harvest",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them be.",
+     "success": {
+      "text": "You leave the two of them in the field: the woman and the bird, and the suit between them.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne70-two-scarecrows",
+   "name": "Two Scarecrows",
+   "group": "Road people and town stories",
+   "rarity": "common",
+   "minStage": 5,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "scarecrow-both",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "scarecrow-harvest",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ne70-two-scarecrows-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "murkrow",
+    "tint": "#24261c",
+    "effect": "none"
+   },
+   "intro": "It is harvest time in a field you remember. There are two scarecrows now: one in a good suit, one in a flowered dress. The crows sit on both.",
+   "choices": [
+    {
+     "label": "Wave to the farmhouse.",
+     "success": {
+      "text": "Someone waves back from the porch. On the porch rail sits a Murkrow, eating corn from a bowl.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne70-two-scarecrows-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne71-funeral-in-the-tall-grass",
+   "name": "The Funeral in the Tall Grass",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "normal",
+      "grass"
+     ]
+    },
+    {
+     "kind": "stageTypes",
+     "types": [
+      "grass",
+      "bug"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne71-funeral-in-the-tall-grass-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "raticate",
+    "tint": "#1c2418",
+    "effect": "none"
+   },
+   "intro": "You expected a wild battle. Instead, a ring of wild Pokémon of a dozen different kinds is standing round something small in the grass. Predators and prey, side by side.\nNone of them moves.\n\nIt is an old Raticate, grey round the muzzle, very still. A Fearow, of all things, has brought a flower, and laid it down with its terrible beak.\n\nThey notice you. Nobody runs.",
+   "choices": [
+    {
+     "label": "Take off my hat and wait (a node).",
+     "success": {
+      "text": "You take off your hat and stand at the edge of the ring. Your team stands with you. Nobody says anything, because nobody there can.\n\nIt takes a long time. One by one, they go back into the grass. The Fearow goes last but one, and nods to you as it passes.\n\nThe very last is a young Rattata. It sits beside the old one for a while. Then it looks at you, a long look, and goes.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wild-funeral",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne71-funeral-in-the-tall-grass-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave a Berry.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "You step into the ring and leave a Berry by the flower. The Fearow watches you do it. Then it nods to you, once, slow and grave.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "flag",
+        "key": "funeral-berry",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne71-funeral-in-the-tall-grass-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back away.",
+     "success": {
+      "text": "You back away, quietly, the way you would leave a room where somebody is sleeping. They watch you go, every one of them, until the grass closes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne71-funeral-in-the-tall-grass-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "You send your lead in. The ring breaks. The Fearow turns on you with a scream that has nothing in it but grief.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne71-funeral-in-the-tall-grass-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "fearow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "quietWild",
+         "span": "stage",
+         "types": [
+          "normal",
+          "flying",
+          "grass",
+          "bug"
+         ]
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "quietWild",
+         "span": "stage",
+         "types": [
+          "normal",
+          "flying",
+          "grass",
+          "bug"
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne71-the-young-rattata",
+   "name": "The Young Rattata",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 3,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wild-funeral",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne71-the-young-rattata-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "rattata",
+    "tint": "#1c2418",
+    "effect": "none"
+   },
+   "intro": "A young Rattata is sitting in the middle of the road, as if it has been waiting. You know it.\nIt looked at you once, for a long time, over something small in the grass.",
+   "choices": [
+    {
+     "label": "Crouch down and hold out a hand.",
+     "success": {
+      "text": "It sniffs your fingers, and then your boots, and then the whole of your team. Then it climbs into your bag as if it has decided something.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "rattata"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne71-the-young-rattata-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go its own way.",
+     "success": {
+      "text": "It watches you pass, and then goes off into the grass, upright and certain, the way the old one must have walked.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne71-the-young-rattata-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne72-teacher-in-the-stream",
+   "name": "The Teacher in the Stream",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon"
+   ],
+   "stop": "event",
+   "types": [
+    "water"
+   ],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "water"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne72-teacher-in-the-stream-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "poliwrath",
+    "tint": "#10283a",
+    "effect": "none"
+   },
+   "intro": "A Poliwrath stands waist-deep in a clear stream. In front of it, in a row, float seven Poliwag.\n\nIt does a stroke, slow and perfect. They copy it, badly, all splash and spin. It does the stroke again. They copy it again, a little less badly.\n\nOne Poliwag keeps drifting off downstream. The Poliwrath wades over and fetches it back, without a trace of impatience. You count. It does this nine times.",
+   "choices": [
+    {
+     "label": "Watch the lesson.",
+     "success": {
+      "text": "You sit on the bank with your boots off and watch the whole lesson to the end. It is the most restful thing you have seen in days.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne72-teacher-in-the-stream-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let my Water-type join the class.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "pick": {
+      "types": [
+       "water"
+      ]
+     },
+     "success": {
+      "text": "Your Water-type slides into the stream at the end of the row. The Poliwrath looks it up and down, and then teaches it exactly as patiently as the others.\n\nBy the end, your Pokémon has learned something. You can see it in how it moves.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ne72-what-it-learned"
+       },
+       {
+        "kind": "flag",
+        "key": "ne72-teacher-in-the-stream-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help the one that drifts.",
+     "success": {
+      "text": "You wade in and catch the drifter. It isn't drifting. It is watching fish, and birds, and the way the light moves on the water.\nIt wants to be something else.\n\nWhen you climb out of the stream, it climbs out after you. The Poliwrath watches, and does not fetch it back this time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dreamer-joined",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "poliwag"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "quirk": "dreamer"
+       },
+       {
+        "kind": "flag",
+        "key": "ne72-teacher-in-the-stream-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne72-what-it-learned",
+   "name": "What It Learned",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "poliwrath",
+    "tint": "#10283a",
+    "effect": "none"
+   },
+   "intro": "Which lesson stuck? Point at your Water-type again.",
+   "choices": [
+    {
+     "label": "Waterfall.",
+     "pick": {
+      "types": [
+       "water"
+      ]
+     },
+     "success": {
+      "text": "It learned to swim up, against the whole weight of the stream.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "waterfall",
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Aqua Jet.",
+     "pick": {
+      "types": [
+       "water"
+      ]
+     },
+     "success": {
+      "text": "It learned to go from still to gone in one kick.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "aqua-jet",
+        "who": "picked"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne72-on-the-bank",
+   "name": "On the Bank",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 3,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "dreamer-joined",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partySpecies",
+     "species": "politoed"
+    },
+    {
+     "kind": "flag",
+     "key": "ne72-on-the-bank-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "poliwrath",
+    "tint": "#10283a",
+    "effect": "none"
+   },
+   "intro": "Your Politoed hops ahead onto a riverbank and stops. On the far side, waist-deep, stands a Poliwrath with a row of Poliwag in front of it.",
+   "choices": [
+    {
+     "label": "Wait while they look at each other.",
+     "success": {
+      "text": "The Poliwrath looks at the Politoed for a long time. Then it turns back to its class. Your Politoed sings the whole way to the next town.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne72-on-the-bank-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne73-border-dispute",
+   "name": "The Border Dispute",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Mystery"
+   ],
+   "stop": "event",
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "grass",
+      "bug"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne73-border-dispute-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "sentret",
+    "tint": "#1c2c18",
+    "effect": "none"
+   },
+   "intro": "A line of Sentret stands on one side of a fallen log. A line of Zigzagoon stands on the other.\nOn the log, exactly in the middle, sits a single Oran Berry.\n\nYou step out of the trees. Both sides start chattering at you at once, pointing at the Berry, at each other, at the sky.\n\nEach side clearly thinks you have been sent to judge.",
+   "choices": [
+    {
+     "label": "Split the Berry.",
+     "success": {
+      "text": "You cut it exactly in half with great ceremony and give one half to each side.\n\nBoth sides are dissatisfied, loudly and equally. And so the peace holds.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne73-border-dispute-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give them each one of mine.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry",
+       "count": 2
+      }
+     ],
+     "success": {
+      "text": "You take two Oran Berries from your bag and set one on each side of the log.\n\nThere is a long, suspicious silence. Then peace. The original Berry stays on the log, untouched, a monument. A Sentret and a Zigzagoon stay behind to see you off.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry",
+        "count": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "border-peace",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ne73-the-envoy"
+       },
+       {
+        "kind": "flag",
+        "key": "ne73-border-dispute-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Eat it.",
+     "success": {
+      "text": "You pick up the Berry and eat it. Both sides go silent. Then, for the first time in history, Sentret and Zigzagoon are united, against you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne73-border-dispute-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "sentret",
+        "zigzagoon"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "border-united",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ne73-the-envoy"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "border-united",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ne73-the-envoy"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne73-the-envoy",
+   "name": "The Envoy",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "zigzagoon",
+    "tint": "#1c2c18",
+    "effect": "none"
+   },
+   "intro": "Two small figures are still standing by the log: a Sentret and a Zigzagoon, side by side, chests out. Envoys. Each would like to go with you.",
+   "choices": [
+    {
+     "label": "Take the Sentret envoy.",
+     "success": {
+      "text": "The Sentret stands up very tall and marches over. The Zigzagoon zigzags off to report.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "sentret"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the Zigzagoon envoy.",
+     "success": {
+      "text": "The Zigzagoon runs to you in a perfect zigzag. The Sentret stands up very tall and salutes.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "zigzagoon"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send them both home.",
+     "success": {
+      "text": "You thank them both, very formally. They bow, very formally, and go back to their own sides of the log.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne73-the-mixed-patrol",
+   "name": "The Mixed Patrol",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 4,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "border-united",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne73-the-mixed-patrol-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "sentret",
+    "tint": "#1c2c18",
+    "effect": "none"
+   },
+   "intro": "A patrol trots across the road ahead of you: two Sentret, two Zigzagoon, in step. They stop, look at you, and give you a long, hard look.",
+   "choices": [
+    {
+     "label": "Salute the patrol.",
+     "success": {
+      "text": "They salute back, all four of them, and march on into the trees. One of them is carrying an Oran Berry.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne73-the-mixed-patrol-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne74-night-stars-fell-into-lake",
+   "name": "The Night the Stars Fell Into the Lake",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "tags": [
+    "Pokémon",
+    "Legendary"
+   ],
+   "stop": "event",
+   "types": [
+    "water"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "water"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne74-night-stars-fell-into-lake-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "starmie",
+    "tint": "#0c1430",
+    "effect": "sparkle"
+   },
+   "intro": "The lake is full of light. Hundreds of Staryu and Starmie are rising to the surface at once, their cores blinking, red and gold and white.\n\nOverhead, a meteor shower is passing. They are answering it. Each streak in the sky gets a blink in the water.\n\nA night fisher, Eudora: \"Once a decade. They think it's their relations.\" She hasn't touched her rod. \"I've seen it three times. I've cried three times.\"",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You sit down on the shore with your whole team and watch until the last star has gone.\n\nNobody says anything. Nobody needs to. When the lake goes dark, your Pokémon are all leaning on you, and on each other.\n\nEudora fishes a Star Piece out of the shallows and gives it to you without a word.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "item",
+        "id": "star-piece",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne74-night-stars-fell-into-lake-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Blink a torch at them.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "telling-deoxys",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You blink your torch at the lake: once, twice, once. Then the whole lake blinks back, and for a minute you are part of it.\n\nSomething small and sleepy, far above, wakes up and hears you. Eudora gives you a Star Piece. \"They'll remember you now.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "stars-answered",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "telling-jirachi",
+         "amount": 1
+        },
+        {
+         "kind": "item",
+         "id": "star-piece",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ne74-night-stars-fell-into-lake-done",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You blink your torch at the lake: once, twice, once. For a moment nothing happens.\n\nThen the whole lake blinks back. Once, twice, once. For a minute you are part of it: the sky, the water, and you, between them, answering.\n\nSomething high above, far past the meteors, takes notice of that. Eudora gives you a Star Piece. \"They'll remember you now.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stars-answered",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "telling-deoxys",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "star-piece",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne74-night-stars-fell-into-lake-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wade in.",
+     "success": {
+      "text": "You wade in up to your knees. The lights swirl round your legs, warm, humming.\n\nWhen you wade out again, one Staryu has attached itself firmly to your bag, and it will not let go.\nEudora laughs and gives you a Star Piece for it to look at.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "staryu"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "item",
+        "id": "star-piece",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne74-night-stars-fell-into-lake-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne74-the-first-blink",
+   "name": "The First Blink",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 4,
+   "stop": "rest",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "stars-answered",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne74-the-first-blink-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#0c1430",
+    "effect": "sparkle"
+   },
+   "intro": "A clear night. Far off, on a lake you can barely see, one light blinks. Once, twice, once. It blinks first.",
+   "choices": [
+    {
+     "label": "Blink back.",
+     "success": {
+      "text": "You blink your torch at it. Once, twice, once. The far light answers, and goes out, satisfied. You sleep better than you have in weeks.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne74-the-first-blink-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne75-bully-of-the-watering-hole",
+   "name": "The Bully of the Watering Hole",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "stop": "event",
+   "types": [
+    "fire",
+    "ground"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "fire",
+      "ground"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne75-bully-of-the-watering-hole-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pangoro",
+    "tint": "#2c2414",
+    "effect": "shake"
+   },
+   "intro": "There is one water hole for miles, and one tree beside it. A Pangoro sits in the only shade, by the only water. Everything else waits in the sun.\n\nA Skiddo creeps forward, tongue out, desperate. The Pangoro growls. The Skiddo goes back.\n\nThe Pangoro has a leaf in its mouth, and it is chewing it hard. When it shifts its weight, it does it carefully. It has a limp it is hiding.",
+   "choices": [
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It comes out of the shade at you like a landslide. It fights hard, and badly, favouring the leg.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pangoro-fought",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne75-bully-of-the-watering-hole-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "pangoro"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "pangoro-beaten",
+         "amount": 1
+        }
+       ],
+       "friendly": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Look at its leg.",
+     "success": {
+      "text": "You walk into the shade slowly, hands open. It growls the whole way. It doesn't get up. You kneel down by the leg.\n\nA thorn, long as your finger, driven deep into the pad. You are the first thing in days that it has let close enough to see.\nYou pull it out in one go.\n\nIt is ashamed afterwards. It won't look at you. And then it gets up, and limps along, and moves over. The Skiddo comes down to drink.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pangoro-thorn",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ne75-it-moves-over"
+       },
+       {
+        "kind": "flag",
+        "key": "ne75-bully-of-the-watering-hole-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bring water to the others (a node).",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "pick": {
+      "types": [
+       "water"
+      ]
+     },
+     "success": {
+      "text": "You and your Water-type spend the length of a road carrying water out into the sun, to the ones waiting. Skiddo, a pair of Phanpy, things too small to name.\n\nThe Pangoro watches the whole time. Gradually, a little at a time, it shifts along the trunk, until there is shade for two, then four.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ne75-it-moves-over"
+       },
+       {
+        "kind": "flag",
+        "key": "ne75-bully-of-the-watering-hole-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne75-it-moves-over",
+   "name": "It Moves Over",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "pangoro",
+    "tint": "#2c2414",
+    "effect": "none"
+   },
+   "intro": "The Pangoro is sitting at the edge of the shade now, between the water and the open savanna, where something hungry would have to get past it.\nIt looks at you.",
+   "choices": [
+    {
+     "label": "Ask it to come with you.",
+     "success": {
+      "text": "It considers your team: the small ones especially. Then it gets up and stands at the back of them, like a wall. It has decided who it guards.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "pangoro"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "quirk": "protector"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it to guard the water.",
+     "success": {
+      "text": "You leave it there, on watch. As you go, the Skiddo settles down in the shade right beside it, and it lets it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne75-bamboo-shade",
+   "name": "Shade for Everyone",
+   "group": "Wild Scenes",
+   "rarity": "common",
+   "minStage": 5,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pangoro-thorn",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "pangoro-thorn",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ne75-bamboo-shade-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "pangoro",
+    "tint": "#1c2c18",
+    "effect": "none"
+   },
+   "intro": "You pass the watering hole again. It doesn't look the same. A stand of young bamboo has grown up all the way round it, and there is shade for everyone.",
+   "choices": [
+    {
+     "label": "Drink with them.",
+     "success": {
+      "text": "Skiddo, Phanpy, a Pangoro or two. Nobody growls. Somebody has planted bamboo, and you can guess who.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne75-bamboo-shade-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
