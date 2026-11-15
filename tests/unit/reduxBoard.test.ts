@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { ReduxCtx } from '../../src/ui/redux/stage';
-import { boardSize, boardView, type BoardModel, type BoardRow } from '../../src/ui/redux/templates';
+import { boardProgress, boardSize, boardView, type BoardModel, type BoardRow } from '../../src/ui/redux/templates';
 
 // The mock-ups' board (quests, chains, tasks): rows with a progress bar and a state tag, in two layouts.
 
@@ -38,7 +38,7 @@ describe('New UI board (quest list)', () => {
       it('survives an empty list and a focus that is out of range', () => {
         const none = boardView(ctx(layout), model({ rows: [], index: 4 }));
         expect(count(none, 'data-act="pick"')).toBe(0);
-        expect(none).toContain('Nothing here yet.');
+        expect(none).toContain('Nothing here yet');
         const far = boardView(ctx(layout), model({ rows: rows(3), index: 99 }));
         expect(count(far, 'data-act="pick"')).toBe(3);
         expect(count(boardView(ctx(layout), model({ rows: rows(3), index: -5 })), 'data-act="pick"')).toBe(3);
@@ -55,4 +55,25 @@ describe('New UI board (quest list)', () => {
       });
     });
   }
+});
+
+describe('New UI board progress from a count tag', () => {
+  it('reads a fraction or a percentage as a bar, a state and a count in words', () => {
+    expect(boardProgress('0/5')).toEqual({ pct: 0, state: 'New', count: '0 of 5' });
+    expect(boardProgress('2/5')).toEqual({ pct: 40, state: 'Active', count: '2 of 5' });
+    expect(boardProgress('5 of 5')).toEqual({ pct: 100, state: 'Done', count: '5 of 5' });
+    expect(boardProgress(' 37% ')).toEqual({ pct: 37, state: 'Active', count: '37%' });
+    expect(boardProgress('100%')).toEqual({ pct: 100, state: 'Done', count: '100%' });
+  });
+
+  it('keeps the bar inside its ends when the count runs over', () => {
+    expect(boardProgress('7/5')).toEqual({ pct: 100, state: 'Done', count: '7 of 5' });
+    expect(boardProgress('250%')).toEqual({ pct: 100, state: 'Done', count: '100%' });
+    // One of 300 is started, even though the bar rounds to nothing.
+    expect(boardProgress('1/300')).toEqual({ pct: 0, state: 'Active', count: '1 of 300' });
+  });
+
+  it('leaves every other tag alone', () => {
+    for (const t of ['', 'Claim', 'Lv 5', '3/0', '2/5 done', 'x 3', '1/2/3', '-1/5']) expect(boardProgress(t)).toBeNull();
+  });
 });

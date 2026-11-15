@@ -7,7 +7,7 @@ import type { AssetManifest } from '../../assets/catalog';
 import { rxFileOf } from './assets';
 import { mountRedux, type ReduxCtx, type ReduxView } from './stage';
 import { act, type Area, esc, H, TX, W } from './kit';
-import { gridView, menuView, pic, scrollStart, tabsBar } from './templates';
+import { boardProgress, type BoardRow, boardView, gridView, menuView, scrollStart, tabsBar } from './templates';
 
 export interface PickerBridge {
   title: string;
@@ -90,9 +90,6 @@ export function scrapeRow(scene: Phaser.Scene, box: Phaser.GameObjects.Container
   };
 }
 
-const attr = (k: number): string => `${act('pick', k)} data-over="over"`;
-const more = (n: number, s: number, size: number, st: string): string => (n > size ? `<div class="abs sm" style="${st}">${s > 0 ? '▲' : ''} ${s + 1}–${Math.min(n, s + size)} of ${n} ${s + size < n ? '▼' : ''}</div>` : '');
-
 function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerKind): string {
   // "Bank · 0 credits · 0 candies": the name goes in the band, the rest becomes chips beside it.
   const [name = '', ...extra] = p.title.split(/\s+·\s+/);
@@ -111,13 +108,17 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
     const cur = row(index), found = Array.from({ length: n }, (_, i) => p.problem(i) === null).filter(Boolean).length;
     body = gridView(c, { title: name, area, hints, n, cell: (i) => { const r = row(i); return { art: r.art, label: r.label, off: p.problem(i) !== null }; }, index, detail: { title: cur.label, body: cur.note, facts: cur.tag ? [['', cur.tag]] : [], art: cur.art }, found, total: n, text });
   } else if (kind === 'board') {
-    if (c.v(2) === 1) {
-      const s = scrollStart(n, index, 6) & ~1;
-      body = H(name, area, hints) + `<div class="abs" style="left:24px;right:24px;top:70px;display:grid;grid-template-columns:1fr 1fr;gap:18px">${Array.from({ length: Math.min(6, n - s) }, (_, q) => { const i = s + q, r = row(i); return W(`<div class="row">${pic(r.art, 30)}<b class="grow" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.label)}</b>${r.tag ? `<span class="tg${i === index ? '' : ' no'}">${esc(r.tag)}</span>` : ''}</div><div class="sm" style="line-height:19px;max-height:38px;overflow:hidden">${esc(r.note)}</div>`, 'display:flex;flex-direction:column;gap:6px;padding:10px 14px;min-width:0', i === index ? 'sel' : p.problem(i) ? 'dim' : '', attr(i)); }).join('')}</div>` + more(n, s, 6, 'right:28px;top:438px') + TX(esc(text));
-    } else {
-      const s = scrollStart(n, index, 5);
-      body = H(name, area, hints) + `<div class="abs col" style="left:24px;right:24px;top:72px;gap:15px">${Array.from({ length: Math.min(5, n - s) }, (_, q) => { const i = s + q, r = row(i); return W(`${pic(r.art, 36)}<div class="col grow" style="gap:4px"><b style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.label)}</b><span class="sm" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.note)}</span></div>${r.tag ? `<span class="tg${i === index ? '' : ' no'}">${esc(r.tag)}</span>` : ''}`, 'display:flex;align-items:center;gap:14px;padding:9px 16px', i === index ? 'sel' : p.problem(i) ? 'dim' : '', attr(i)); }).join('')}</div>` + more(n, s, 5, 'right:28px;top:446px') + TX(esc(text));
-    }
+    // Only the rows near the cursor are on screen, so only those are read.
+    const near = (i: number): boolean => Math.abs(i - index) < 8;
+    const rows = Array.from({ length: n }, (_, i): BoardRow => {
+      if (!near(i)) return { title: '', sub: '' };
+      const r = row(i), prog = boardProgress(r.tag);
+      // A count ("2/5") becomes the mock-ups' progress bar, a state tag and the count in words under the title.
+      return prog
+        ? { title: r.label, sub: [prog.count, r.note].filter(Boolean).join(' · '), tag: prog.state, pct: prog.pct, art: r.art, off: p.problem(i) !== null }
+        : { title: r.label, sub: r.note, tag: r.tag, art: r.art, off: p.problem(i) !== null };
+    });
+    body = boardView(c, { title: name, area, rows, index, text, hints });
   } else {
     // menu: only the rows on screen are read.
     const v = c.v(3), size = v === 1 ? 8 : 7, s = v === 2 ? 0 : v === 1 ? scrollStart(n, index, 8) & ~1 : scrollStart(n, index, 7);
