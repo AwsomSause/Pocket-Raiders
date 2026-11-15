@@ -1,0 +1,781 @@
+{
+ "catalogOverhaul": "evil-story",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "galar-lost-pokemon",
+   "name": "Biscuit",
+   "group": "Galar",
+   "tags": [
+    "Region",
+    "Pokémon",
+    "Relationship"
+   ],
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "pokemon": "yamper",
+    "tint": "#486898",
+    "effect": "rain"
+   },
+   "intro": "A trainer stands in the rain by the stadium with a damp cardboard sign: LOST: YAMPER. ANSWERS TO BISCUIT. When you pass, they grab your sleeve. Teddie: \"I've looked since the match last night. We lost. I said a thing. I didn't mean it.\" Under a bench by the stadium wall, you can see a Yamper, soaked, its ears flat against its head.",
+   "choices": [
+    {
+     "label": "Call Biscuit.",
+     "success": {
+      "text": "\"Biscuit!\" It flinches at the voice, and bolts along the wall to the next bench, farther away, and crouches under that one instead. You'll have to try something gentler.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "galar-lost-pokemon-bench"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit with Biscuit.",
+     "success": {
+      "text": "You sit down on the wet ground and say nothing. Your lead lies down beside the bench, nose on its paws, and waits with you. A long while later, the Yamper creeps out and puts its head on your lead's paw. You carry Biscuit back to Teddie wrapped in your jacket. Teddie gives you a Sitrus Berry and pins the damp FOUND sign to your bag, and won't hear a word about it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 25,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "biscuit-home",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-sign",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bring Teddie here.",
+     "success": {
+      "text": "You fetch Teddie. They kneel down in front of the bench, in front of everyone walking past, and say sorry to a Yamper. Out loud. \"I didn't mean it. We lost and I was angry and I didn't mean it.\" Biscuit comes out, and climbs into their lap. Teddie gives you a Sitrus Berry, and pins their FOUND sign to your bag.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "biscuit-home",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-sign",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "galar-lost-pokemon-bench",
+   "name": "Under the Bench",
+   "group": "Galar",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "pokemon": "yamper",
+    "tint": "#486898",
+    "effect": "rain"
+   },
+   "intro": "Biscuit is under the far bench now, shaking. Teddie has their hands over their mouth.",
+   "choices": [
+    {
+     "label": "Sit with Biscuit.",
+     "success": {
+      "text": "You sit down on the wet ground and say nothing. Your lead lies down beside the bench, nose on its paws, and waits with you. A long while later, the Yamper creeps out and puts its head on your lead's paw. You carry Biscuit back to Teddie wrapped in your jacket. Teddie gives you a Sitrus Berry and pins the damp FOUND sign to your bag, and won't hear a word about it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 25,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "biscuit-home",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-sign",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bring Teddie here.",
+     "success": {
+      "text": "You fetch Teddie. They kneel down in front of the bench, in front of everyone walking past, and say sorry to a Yamper. Out loud. \"I didn't mean it. We lost and I was angry and I didn't mean it.\" Biscuit comes out, and climbs into their lap. Teddie gives you a Sitrus Berry, and pins their FOUND sign to your bag.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "biscuit-home",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-sign",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "little-league",
+   "name": "COACH",
+   "group": "Trainers and challenges",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "effect": "sparkle"
+   },
+   "room": false,
+   "intro": "Kids practising battles in a park, badly. They've got a Wooper, a Tyrogue, a Skwovet and a Pichu, and the Pichu keeps shocking its own trainer. The tallest one marches up to you. Linnet, the captain: \"You're a real trainer. Coach us? The Little Cup's soon.\" Four faces look up at you. First lesson: what's the team about?",
+   "choices": [
+    {
+     "label": "\"Win at all costs.\"",
+     "success": {
+      "text": "They nod, very serious. The Tyrogue's trainer punches the air.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "coach-style-costs",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "little-league-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Have fun first.\"",
+     "success": {
+      "text": "The Pichu's trainer laughs so hard she sits down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "coach-style-fun",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "little-league-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Look after each other.\"",
+     "success": {
+      "text": "Linnet looks round at the other three, and nods slowly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "coach-style-each-other",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "little-league-2"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "biscuit",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "biscuit-home",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Teddie is sitting on the park bench with Biscuit in their lap, watching the practice."
+    }
+   ]
+  },
+  {
+   "id": "little-league-2",
+   "name": "COACH: Tactics",
+   "group": "Trainers and challenges",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "Second lesson. Linnet: \"What do we do when we're actually battling?\"",
+   "choices": [
+    {
+     "label": "\"Use your strongest move.\"",
+     "success": {
+      "text": "The Wooper's trainer writes it on his hand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "coach-style-strongest",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "little-league-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Read the other side.\"",
+     "success": {
+      "text": "They all turn and stare at each other's Pokémon, very hard, as practice.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "coach-style-read",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "little-league-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "little-league-3",
+   "name": "COACH: Losing",
+   "group": "Trainers and challenges",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "Last lesson. The smallest one, the Skwovet's trainer, asks it very quietly. \"What if we lose?\"",
+   "choices": [
+    {
+     "label": "\"Losing's the worst.\"",
+     "success": {
+      "text": "She nods, and holds her Skwovet tighter.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "coach-style-worst",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "coach-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Losing's how you learn.\"",
+     "success": {
+      "text": "She thinks about it, and then she nods too, and lets go a little.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "coach-style-learn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "coach-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "little-league-cup",
+   "name": "The Little Cup",
+   "group": "Trainers and challenges",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "coach-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "little-cup-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "The Little Cup. Your team, your four kids, in matching shirts they've made themselves. You sit on the coach's bench. In the stands, a trainer with a Yamper on their lap is cheering for everyone.",
+   "choices": [
+    {
+     "label": "Watch from the bench.",
+     "chance": 0.5,
+     "success": {
+      "text": "They win. They actually win. Linnet runs over and pushes the trophy into your hands. You hold it for a second, and give it back. It's theirs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "little-cup-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "little-cup-won",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "They lose, in the final, by one hit. They walk off the field together.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "little-cup-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "worst",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "coach-style-worst",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "If they lose, you know already: they'll cry, and quit. You taught them that losing is the worst."
+    },
+    {
+     "id": "learn",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "coach-style-learn",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Win or lose, they'll shake hands at the end. You taught them that."
+    }
+   ]
+  },
+  {
+   "id": "pokemon-salesman",
+   "name": "The Honest Salesman",
+   "group": "Merchants and deals",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "pokemon": "magikarp",
+    "effect": "sparkle"
+   },
+   "intro": "A Magikarp on a velvet cushion, flopping gently. The salesman: \"Only ₽500! It's a secret kind!\" You look at it. \"It's a Magikarp.\" There's a long pause. Mr. Pettigrew: \"...It is a Magikarp. It's a good one. It tries very hard. I'm tired of lying about it.\" He holds up a little card, written in pen. HONEST TRADE: ₽500 for one Magikarp, level 10, knows Bounce, already likes people. Fair value about ₽200. You'd be overpaying by ₽300.",
+   "choices": [
+    {
+     "label": "Buy it (₽500).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "You pay the full ₽500. He's so surprised he throws in a Mystic Water and has to sit down. The Magikarp flops off the cushion and into your arms.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "magikarp"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pettigrew-karp",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer ₽200.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "Mr. Pettigrew: \"Fair. That's fair.\" He takes it, and he looks lighter for it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "magikarp"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pettigrew-karp",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "He nods. He wasn't expecting anything else. The Magikarp flops in a way that might be a wave.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-reverse-fountain",
+   "name": "The Reverse Wishing Fountain",
+   "group": "Run-Wide Modifiers",
+   "stop": "well",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#142a3a",
+    "effect": "sparkle"
+   },
+   "intro": "A fountain full of coins, and a sign: TAKE A COIN INSTEAD OF LEAVING ONE. Each coin has a wish scratched into it. \"For Mum's hip.\" \"Make Rocky win.\" \"Let me pass.\" If you take a coin and you carry Jirachi's Promise, the Promise breaks.",
+   "choices": [
+    {
+     "label": "Take a coin.",
+     "success": {
+      "text": "You fish one out. ₽100. Scratched on it, in someone else's hand: \"Let me pass.\" It won't come true now.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 100
+       },
+       {
+        "kind": "flag",
+        "key": "took-wish",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave one of mine.",
+     "success": {
+      "text": "You scratch your own wish into a coin with a key, and drop it in. It sinks. Nothing happens, which is as it should be.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Read the wishes.",
+     "success": {
+      "text": "You read them all, one by one. One is a child's, in big letters: \"LET ROCKY WIN HIS GYM.\" You remember the name.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocky-wish",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "promise",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "promise-jirachi",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Jirachi's Promise is warm in your bag. If you take a coin, it breaks.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Take a coin. (breaks the Promise)",
+       "success": {
+        "text": "You take one. ₽100. In your bag, Jirachi's Promise cracks right across, quietly.",
+        "effects": [
+         {
+          "kind": "money",
+          "amount": 100
+         },
+         {
+          "kind": "flag",
+          "key": "took-wish",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "promise-jirachi-broken",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "final-chant",
+   "name": "The Long Table",
+   "group": "Set Pieces",
+   "stop": "tower",
+   "rarity": "rare",
+   "minStage": 8,
+   "requires": [
+    {
+     "kind": "partySize",
+     "atLeast": 3
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c1c28",
+    "effect": "sparkle"
+   },
+   "intro": "In the room before the Champion's door there's a long table, laid for a meal. There's a chair for every Pokémon you've had this run: the ones here now, the ones who went home, and the ones you lost, whose chairs are empty. Your team gathers round it. Each of them has a cry. One starts, and then the next, and it goes round the table.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "You join in, as loud as any of them. When it gets back round to the start, they're all looking at you. Whatever happens through that door, the first move will be yours together.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 25,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "final-chant-joined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "You listen. Every voice, all the way round. Nothing else changes, and that's fine.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Say each name.",
+     "success": {
+      "text": "You say each name, all the way round the table, the empty chairs too. You say the lost ones last, and the team goes quiet for them. Then the cry starts again, softer.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 25,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "final-names-said",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "rival",
+     "when": [
+      {
+       "kind": "rivalPath",
+       "path": "friend"
+      }
+     ],
+     "notice": "Your rival is at the table too, in a chair with their name on it. They say the first cry, and then look at you, embarrassed."
+    }
+   ]
+  },
+  {
+   "id": "final-conversation",
+   "name": "The Last Door",
+   "group": "Set Pieces",
+   "stop": "tower",
+   "rarity": "rare",
+   "minStage": 8,
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#1c1c28",
+    "effect": "glint"
+   },
+   "intro": "The last door. Before you can knock, a voice behind it asks: \"Before we fight: what do you want?\"",
+   "choices": [
+    {
+     "label": "\"To win.\"",
+     "success": {
+      "text": "\"Good. So do I.\" The door opens.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "final-want-win",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"To see how far we've come.\"",
+     "success": {
+      "text": "\"Then I'll show you.\" When the door opens, the Champion is holding one Ball, the oldest one, worn smooth. They'll lead with their oldest friend.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "final-want-far",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"To be done.\"",
+     "success": {
+      "text": "A long silence. \"...I know that feeling.\" The door opens. \"After this, win or lose, come and sit at the table for a while.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "final-want-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -116,7 +116,7 @@ describe('story foundation: random streams', () => {
     })(),
     // The six original Evil Teams are Story Run only (Classic never draws them) and name the story Legends.
     evilTeams: { ...structuredClone(RAW_CONTENT.evilTeams as object), teams: (RAW_CONTENT.evilTeams as { teams: { storyOnly?: boolean }[] }).teams.filter((t) => !t.storyOnly) },
-    eventsExtra: (RAW_CONTENT.eventsExtra as { events?: { group?: string; id?: string }[]; catalogOverhaul?: string }[]).filter((f) => !f.catalogOverhaul /* Catalog Overhaul Pack rebuilds came later */).map((f) => ({ ...f, events: (f.events ?? []).filter((e) => !String(e.group ?? '').startsWith('Story:') && e.group !== 'Plush Workshop' && e.group !== 'Canon Spaces: Kanto' && (e as { id?: string }).id !== 'ev-sabrina-labyrinth') })),
+    eventsExtra: (RAW_CONTENT.eventsExtra as { events?: { group?: string; id?: string }[]; catalogOverhaul?: string }[]).filter((f) => !f.catalogOverhaul /* Catalog Overhaul Pack rebuilds came later */).map((f) => ({ ...f, events: (f.events ?? []).filter((e) => !String(e.group ?? '').startsWith('Story:') && e.group !== 'Plush Workshop' && e.group !== 'Canon Spaces: Kanto' && (e as { id?: string }).id !== 'ev-sabrina-labyrinth' && (e as { id?: string }).id !== 'ev-hidden-hideout' /* its single Hideout pseudo-stage is off: Catalog Overhaul SF13 gives each team its own */) })),
     // Run events B (trainer battles) came later too.
     eventsRB: { events: [] },
     eventsCanonKanto: { events: [] }, eventsCanonVermilion: { events: [] }, eventsCanonFuchsia: { events: [] }, // Kanto canon spaces came later too

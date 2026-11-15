@@ -10,7 +10,7 @@ import { createPokemon } from '../../src/core/pokemon';
 import { hashSeed, Rng } from '../../src/core/rng';
 import { buyItem, chooseNode, chooseStarter, createRun, debugJumpToColumn, leaveShop, shopPrice, shopStock, takeTurn, useItemOutsideBattle, visitSide, type TurnResult } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
-import { content } from './helpers';
+import { content, plainNodes } from './helpers';
 
 function newRun(seed = 'shop-items'): RunState {
   const run = chooseStarter(content, createRun(content, { runId: 'r', seed, archetypeId: 'red' }), 0);
@@ -96,6 +96,7 @@ describe('Member Card and Wepear Berry', () => {
 /** Fights the next node of `kind` with a level 100 lead until the battle ends. */
 function winNext(run: RunState, kind: 'wild' | 'trainer'): TurnResult {
   if (kind === 'trainer') run = debugJumpToColumn(run, run.stage!.map.trainerColumns[0]!);
+  run = plainNodes(structuredClone(run));
   const node = nextChoices(run.stage!).find((n) => n.kind === kind && !n.harder) ?? nextChoices(run.stage!).find((n) => n.kind === kind)!;
   run = chooseNode(content, run, node.id);
   const lead = createPokemon(content, 'houndoom', 100, run.party[0]!.uid);

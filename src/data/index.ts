@@ -805,7 +805,8 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
       if (f.kind === 'itemFrom') for (const id of f.ids) if (!knownItem(id)) problems.push(`${where} gives unknown item "${id}"`);
       if (f.kind === 'recruit' && !content.archetypes.has(f.trainer)) problems.push(`${where} recruits unknown trainer "${f.trainer}"`);
       if (f.kind === 'join') for (const id of f.species) if (!content.species.has(id)) problems.push(`${where} offers unknown species "${id}"`);
-      if (f.kind === 'addEvent' && !content.events.has(f.eventId)) problems.push(`${where} opens unknown event "${f.eventId}"`);
+      // A room id may name the region's Evil Team (`evil-{teamId}-hideout-boss`): it must exist for every team that can run a region's story.
+      if (f.kind === 'addEvent') for (const id of f.eventId.includes('{teamId}') ? content.evilTeams.teams.filter((t) => !t.roaming).map((t) => f.eventId.replaceAll('{teamId}', t.id)) : [f.eventId]) if (!content.events.has(id)) problems.push(`${where} opens unknown event "${id}"`);
       if (f.kind === 'addEventFrom') for (const id of f.ids) if (!content.events.has(id)) problems.push(`${where} opens unknown event "${id}"`);
     }
     for (const r of [...e.requires, ...e.secret, ...e.choices.flatMap((c) => c.requires)]) {
