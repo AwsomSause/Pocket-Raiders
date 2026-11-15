@@ -121,13 +121,28 @@ import eventsTrainingJson from './eventsTraining.json';
 import eventsVillainJson from './eventsVillain.json';
 import eventsMerchantsJson from './eventsMerchants.json';
 const eventsExtraFiles = Object.values(import.meta.glob<unknown>('./events/*.json', { eager: true, import: 'default' }));
+// Catalog Overhaul placement blocks, one file per category (src/data/catalogOverhaul/placement/*.json), keyed by event id.
+const coPlacementFiles = Object.values(import.meta.glob<Record<string, Record<string, unknown>>>('./catalogOverhaul/placement/*.json', { eager: true, import: 'default' }));
 import npcStoryJson from './npcStory.json';
 import { isGiftable } from '../core/events';
+import { readPlacement, type CoPlacement } from '../core/co/placement';
 import { chainEvents } from '../core/overhaul/chains';
 import { mythicalChainEvents } from '../core/overhaul/mythicalChains';
 import { dungeonEvents } from '../core/dungeon/compile';
 import { validateAllDungeons } from '../core/dungeon/schema';
 import { pseudoEvents, validateAllPseudo } from '../core/dungeon/pseudo';
+
+/** Catalog Overhaul: merges the placement files. An id in two files, or one that is no event, is a data problem. */
+function readCoPlacement(files: Record<string, Record<string, unknown>>[], eventIds: Set<string>, problems: string[]): Map<string, CoPlacement> {
+  const out = new Map<string, CoPlacement>();
+  for (const file of files) for (const [id, raw] of Object.entries(file)) {
+    if (id.startsWith('$')) continue; // "$note" and the like
+    if (out.has(id)) problems.push(`catalogOverhaul/placement: ${id} is placed in two files`);
+    else if (!eventIds.has(id)) problems.push(`catalogOverhaul/placement: ${id} is not an event`);
+    else out.set(id, readPlacement(raw));
+  }
+  return out;
+}
 
 export class ContentError extends Error {
   constructor(public readonly problems: string[]) {
@@ -210,6 +225,8 @@ export interface RawContent {
   eventsMerchants?: unknown;
   /** Every src/data/events/*.json file, auto-discovered, added to `events`. */
   eventsExtra?: unknown[];
+  /** Catalog Overhaul placement files (event id to placement block). */
+  coPlacement?: Record<string, Record<string, unknown>>[];
 }
 
 /**
@@ -342,6 +359,7 @@ export const RAW_CONTENT: RawContent = {
   eventsVillain: eventsVillainJson,
   eventsMerchants: eventsMerchantsJson,
   eventsExtra: eventsExtraFiles,
+  coPlacement: coPlacementFiles,
 };
 
 function parse<T>(schema: z.ZodType<T>, value: unknown, label: string, problems: string[]): T | null {
@@ -408,10 +426,14 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const storyEvents = [...((raw.eventsStory as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsFaces as { events?: unknown[] } | undefined)?.events ?? [])];
   const gamesEvents = [...((raw.eventsGames as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsRK as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsVillain as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsMerchants as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsRB as { events?: unknown[] } | undefined)?.events ?? [])];
   // An event in src/data/events/*.json replaces any older event with the same id (Beta 0.6 revisions of the pack's REVISE/MERGE events).
-  const extraFiles = (raw.eventsExtra ?? []) as { events?: unknown[]; override?: boolean }[];
+  const extraFiles = (raw.eventsExtra ?? []) as { events?: unknown[]; override?: boolean; catalogOverhaul?: string; remove?: string[] }[];
   // A file marked `"override": true` (hazards.json) also wins over other auto-loaded files.
   const winners = new Set(extraFiles.filter((f) => f.override).flatMap((f) => (f.events ?? []).map((e) => (e as { id?: string }).id)));
-  const extraEvents = extraFiles.flatMap((file) => (file.events ?? []).filter((e) => file.override || !winners.has((e as { id?: string }).id)));
+  // Catalog Overhaul Pack files (co-*.json, built by tools/build-co-events.ts) win over every other file, override or not.
+  const coIds = new Set(extraFiles.filter((f) => f.catalogOverhaul).flatMap((f) => (f.events ?? []).map((e) => (e as { id?: string }).id)));
+  // Old events the pack merged, scrapped or turned into a rule: kept (a saved run may stand on one) but never drawn again.
+  const retired = new Set(extraFiles.filter((f) => f.catalogOverhaul).flatMap((f) => f.remove ?? []).filter((id) => !coIds.has(id)));
+  const extraEvents = extraFiles.flatMap((file) => (file.events ?? []).filter((e) => (file.catalogOverhaul ? true : !coIds.has((e as { id?: string }).id) && (file.override || !winners.has((e as { id?: string }).id)))));
   const extraIds = new Set(extraEvents.map((e) => (e as { id?: string }).id));
   gamesEvents.push(...extraEvents);
   // Overhaul slice 23: the pack's event chains become map events (core/overhaul/chains.ts).
@@ -426,7 +448,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   if (balance?.overhaulChains.enabled) gamesEvents.push(...chainEvents(((raw.itemCatalog as { id: string; family: string; rarity: string; status: string }[] | undefined) ?? []), balance.overhaulChains).events);
   if (balance?.mythicalChains.enabled) gamesEvents.push(...mythicalChainEvents(balance.mythicalChains));
   const extraSet = new Set<unknown>(extraEvents);
-  const replaced = (list: unknown[]): unknown[] => list.filter((e) => extraSet.has(e) || !extraIds.has((e as { id?: string }).id));
+  const replaced = (list: unknown[]): unknown[] => list.filter((e) => extraSet.has(e) || !extraIds.has((e as { id?: string }).id)).map((e) => (retired.has((e as { id: string }).id) ? { ...(e as object), disabled: true } : e));
   const eventsFile = parse(EventsFileSchema, evilTeams ? { events: replaced([...(raw.events as { events: unknown[] }).events, ...expandEvilEvents(evilTeams), ...w5Events, ...storyEvents, ...gamesEvents]) } : { events: replaced([...(raw.events as { events: unknown[] }).events, ...w5Events, ...storyEvents, ...gamesEvents]) }, 'events.json', problems);
   const baseExpeditions = parse(ExpeditionFileSchema, raw.expeditions, 'expeditions.json', problems);
   const legend = parse(LegendaryFileSchema, raw.legendaryEvents, 'legendaryEvents.json', problems);
@@ -473,6 +495,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
     assetCredits: parse(AssetCreditsSchema, raw.assetCredits ?? assetCredits, 'assetCredits.json', problems) ?? { sections: [] },
     raids,
     events: toMap(eventsFile.events, 'events.json', problems),
+    coPlacement: readCoPlacement(raw.coPlacement ?? [], new Set(eventsFile.events.map((e) => e.id)), problems),
     totems,
     shadowWorld,
     evilTeams,
@@ -774,7 +797,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const knownItem = (id: string) => content.items.has(id) || content.catalog.has(id);
   for (const e of content.events.values()) {
     const where = `event "${e.id}"`;
-    const effects = e.choices.flatMap((c) => [c.success, ...(c.failure ? [c.failure] : [])]).flatMap((o) => [...o.effects, ...(o.battle?.win ?? [])]);
+    const effects = e.choices.flatMap((c) => [c.success, ...(c.failure ? [c.failure] : [])]).flatMap((o) => [...o.effects, ...(o.battle?.win ?? [])]).concat(e.choices.flatMap((c) => c.branches.flatMap((b) => b.effects)));
     for (const f of effects) {
       if (f.kind === 'item' && !knownItem(f.id)) problems.push(`${where} gives unknown item "${f.id}"`);
       if (f.kind === 'loseItem' && f.id && !knownItem(f.id)) problems.push(`${where} uses unknown item "${f.id}"`);
