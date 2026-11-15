@@ -337,3 +337,54 @@ describe('New UI level-up window and evolution picture', () => {
     expect(evolveView(ctx(0), { from: null, to: null, done: true }, 'a <b>b</b>\nc')).toContain('a &lt;b&gt;b&lt;/b&gt;<br>c');
   });
 });
+
+describe('New UI battle tooltips and the pinned card', () => {
+  const tip = { head: 'Flamethrower', chips: ['fire'], facts: [['Category', 'Special'], ['PP', '12 / 15']] as [string, string][], lines: ['May burn the target (10%).'] };
+  const card = { head: 'Inner Focus', chips: [], facts: [['Hidden Ability', 'Justified'], ['Seen in', '14 battles']] as [string, string][], lines: ['This Pokémon cannot flinch.'] };
+
+  for (const layout of [0, 1, 2, 3]) {
+    it(`layout ${layout}: boxes and moves carry their hover keys; a box without one is inert`, () => {
+      const html = battleView(ctx(layout), model({ foes: [foe({ tip: 'foe:0' })], mine: [me({ tip: 'mine:0' })], menu: { options: moves.map((m, k) => ({ ...m, tip: `move:${k}` })), index: 0 } }));
+      expect(html).toContain('data-act="pin" data-arg="foe:0" data-tip="foe:0"');
+      expect(html).toContain('data-act="pin" data-arg="mine:0" data-tip="mine:0"');
+      expect(count(html, 'data-tip="move:')).toBe(4);
+      const plain = battleView(ctx(layout), model());
+      expect(plain).not.toContain('data-tip');
+      expect(plain).not.toContain('data-act="pin"');
+    });
+
+    it(`layout ${layout}: a hovered move shows its tooltip, which takes no clicks`, () => {
+      const html = battleView(ctx(layout), model({ menu: { options: moves, index: 0 }, tip }));
+      expect(html).toContain('Flamethrower</b>');
+      expect(html).toContain('May burn the target (10%).');
+      expect(html).toContain('width:330px');
+      expect(html).toContain('pointer-events:none');
+      expect(html).not.toContain('data-act="info"');
+    });
+
+    it(`layout ${layout}: the Ability card sits over the field as in the mock-up; pinned, a click lets it go`, () => {
+      const hover = battleView(ctx(layout), model({ card }));
+      expect(hover).toContain('left:330px;top:150px;width:320px');
+      expect(hover).toContain('Inner Focus');
+      expect(hover).toContain('This Pokémon cannot flinch.');
+      expect(hover).toContain('14 battles');
+      expect(hover).not.toContain('data-act="pin" data-arg=""');
+      const pinned = battleView(ctx(layout), model({ card: { ...card, pinned: true } }));
+      expect(pinned).toContain('data-act="pin" data-arg=""');
+    });
+  }
+
+  it('the opened info panel wins over a hover tooltip, and the card waits behind panels, the log and the level window', () => {
+    const open = battleView(ctx(0), model({ panels: [{ head: 'Battlefield', chips: [], facts: [], lines: ['Clear skies'] }], tip, card }));
+    expect(open).toContain('Battlefield');
+    expect(open).not.toContain('May burn the target');
+    expect(open).not.toContain('Inner Focus');
+    expect(battleView(ctx(0), model({ log: { tabs: ['All'], index: 0, lines: [] }, card }))).not.toContain('Inner Focus');
+  });
+
+  it('the card escapes its words and shows whose it is when told', () => {
+    const html = battleView(ctx(0), model({ card: { ...card, head: '<i>x</i>', tag: 'Lucario' } }));
+    expect(html).not.toContain('<i>x</i>');
+    expect(html).toContain('>Lucario</span>');
+  });
+});

@@ -660,6 +660,69 @@ test('New UI: a win shows the Exp panel, the level-up window and the evolution p
   expect(errors).toEqual([]);
 });
 
+test('New UI: resting the pointer on a move or a data box shows the mock-up tooltips; a click pins a Pokémon\'s card', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Battle');
+  const hud = view(page, 'Battle');
+  await toCommands(page);
+  const card = hud.locator('.win', { hasText: 'Seen in' });
+  const mine = hud.locator('[data-tip="mine:0"]'), foe = hud.locator('[data-tip="foe:0"]');
+  await expect(card).toHaveCount(0);
+  // Your own Pokémon: its Ability and what it does, after the Tooltip delay.
+  await mine.hover();
+  await expect(card).toBeVisible();
+  const names = await page.evaluate(() => [...(window as any).__pkr.session.content.abilities.values()].map((a: any) => a.name as string));
+  const head = (await card.locator('b.acc').textContent()) ?? '';
+  expect(names).toContain(head);
+  // Off the box, the card leaves.
+  await page.mouse.move(480, 200);
+  await expect(card).toHaveCount(0);
+  // The foe has shown no Ability yet: the card says so and gives nothing away.
+  await foe.hover();
+  await expect(card).toContainText('Ability not seen yet');
+  await page.mouse.move(480, 200);
+  await expect(card).toHaveCount(0);
+  // A click pins the card: it stays with the pointer elsewhere, and a click on it lets it go.
+  await mine.click();
+  await page.mouse.move(200, 300);
+  await page.waitForTimeout(400);
+  await expect(card).toBeVisible();
+  await expect(card).toContainText(head);
+  await card.click();
+  await page.mouse.move(200, 300);
+  await expect(card).toHaveCount(0);
+  // A move: its details as the tooltip window, which never takes the click meant for the button.
+  await hud.locator('[data-act="pick"]', { hasText: 'Fight' }).click();
+  const move = hud.locator('[data-tip="move:0"]');
+  await expect(move).toBeVisible();
+  const tip = hud.locator('.win', { hasText: 'Power / Accuracy' });
+  await expect(tip).toHaveCount(0);
+  await move.hover();
+  await expect(tip).toBeVisible();
+  await expect(tip).toContainText('Category');
+  await expect(tip).toContainText('Priority');
+  await page.mouse.move(200, 300);
+  await expect(tip).toHaveCount(0);
+  // Tooltip delay Off: resting shows nothing, a pin still works.
+  await page.evaluate(() => { const S = (window as any).__pkr.session; S.saveSettings({ ...S.settings, tooltipDelay: 'off' }); });
+  await move.hover();
+  await page.waitForTimeout(1500);
+  await expect(tip).toHaveCount(0);
+  await mine.hover();
+  await page.waitForTimeout(1500);
+  await expect(card).toHaveCount(0);
+  await mine.click();
+  await expect(card).toBeVisible();
+  // The turn's pictures take the field back from a pinned card.
+  await move.click();
+  await expect(card).toHaveCount(0);
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.session.run.battle?.turn ?? 99), { timeout: 30_000 }).toBeGreaterThan(0);
+  expect(errors).toEqual([]);
+});
+
 test('UI style: Old shows no New layer; the address can ask for either', async ({ page }) => {
   const errors = watch(page);
   // An automated browser gets Old by default (the older specs rely on it).

@@ -8,7 +8,8 @@ import { mentorMoment } from '../core/story/mentorMoments';
 import { mentorScene } from '../ui/battleFx/mentorScene';
 import { riskLine } from '../core/battleRisk';
 import { gimmickContext } from '../core/gimmicks';
-import { aeroMood, autoInterruption, cameraFocus, capFlash, hapticPattern, interactionLog } from '../core/presentation/uiPrefs';
+import { aeroMood, autoInterruption, cameraFocus, capFlash, hapticPattern, interactionLog, TOOLTIP_DELAY_MS } from '../core/presentation/uiPrefs';
+import { tallyOf } from '../core/dexResearch';
 import { fitBlock, fitLine } from '../ui/fitText';
 import { cheerDue } from '../core/sky/spectate';
 import { FINALE_ASK, chunkLines } from '../core/sky/text';
@@ -246,6 +247,8 @@ const ROLE_RIMS = { wild: 0xff4fd8, trainer: 0xff8a3c, rival: 0xff3048, ultimate
 
 interface InfoBox {
   container: Phaser.GameObjects.Container;
+  /** The Pokémon the box last showed (the shown copy, so a disguise holds). */
+  mon?: PokemonInstance;
   isPlayer: boolean;
   name: Phaser.GameObjects.Text;
   level: Phaser.GameObjects.Text;
@@ -323,6 +326,9 @@ export class BattleScene extends Phaser.Scene {
   private rxGim: { choices: TransformRequest[]; tera: string } | null = null;
   /** New UI: where the target menu is aiming (the mock-ups' TARGET tag), and the Exp each Pokémon just earned. */
   private rxAim: { x: number; y: number } | null = null;
+  /** New UI: what the pointer rests on ("move:1", "foe:0", "mine:0") and since when; and the box whose card is pinned. */
+  private rxHover: { key: string; at: number } | null = null;
+  private rxPin: string | null = null;
   private rxExp = new Map<string, { amount: number; level: number | null; was?: PokemonInstance }>();
   /** New UI: the level-up window and the evolution picture now showing. */
   private rxLevel: BattleLevel | null = null;
@@ -1623,6 +1629,7 @@ export class BattleScene extends Phaser.Scene {
         box.teamText.setText(battle.enemyTeam.map((m) => (m.hp > 0 ? '●' : '○')).join(' '));
       }
     }
+    box.mon = mon;
     if (this.rx) {
       const battle = this.run.battle;
       const word = (c?: Phaser.GameObjects.Container): string => (c?.list.find((o): o is Phaser.GameObjects.Text => o instanceof Phaser.GameObjects.Text)?.text ?? '').trim();
@@ -1661,7 +1668,10 @@ export class BattleScene extends Phaser.Scene {
           this.showMoveMenu();
         },
         log: (i) => this.setLogTab(LOG_TABS[Number(i)]?.id),
+        // A click on a data box pins its card; a second click (or one on the card) lets it go.
+        pin: (key) => { this.rxPin = !key || this.rxPin === key ? null : key; },
       },
+      tip: (key) => { this.rxHover = key ? { key, at: this.time.now } : null; },
       overs: { over: (i) => { const k = Number(i); if (this.menu && !this.picker && this.menu.index !== k && !this.menu.options[k]?.disabled) this.menu.focus(k); } },
     });
     const tick = (): void => this.rxTick();
@@ -1688,8 +1698,21 @@ export class BattleScene extends Phaser.Scene {
         this.rxHidden.add(o);
       }
     }
-    const boxes = (list: InfoBox[]): BattleBox[] => list.filter((b) => b.container.visible && b.rx).map((b) => ({ ...b.rx!, hp: Math.round(b.rx!.hp * 200) / 200 }));
-    const menu = this.menu && this.menu.container.visible ? { options: this.menu.options.map((o) => ({ ...(o.rx?.sub ?? o.detail ? { label: o.label, sub: o.rx?.sub ?? o.detail } : splitChoice(o.label)), type: o.rx?.type, off: !!o.disabled })), index: this.menu.index } : null;
+    const boxes = (list: InfoBox[], key: string): BattleBox[] => list.flatMap((b, k) => (b.container.visible && b.rx ? [{ ...b.rx, hp: Math.round(b.rx.hp * 200) / 200, tip: `${key}:${k}` }] : []));
+    const moves = this.tabs.current === 'attack' && !!this.menu && !this.picker;
+    const menu = this.menu && this.menu.container.visible ? { options: this.menu.options.map((o, k) => ({ ...(o.rx?.sub ?? o.detail ? { label: o.label, sub: o.rx?.sub ?? o.detail } : splitChoice(o.label)), type: o.rx?.type, off: !!o.disabled, ...(moves && this.activeMon().moves[k] ? { tip: `move:${k}` } : {}) })), index: this.menu.index } : null;
+    // A tooltip shows once the pointer has rested for the Tooltip delay setting (Off shows none); a pinned card stays.
+    const wait = TOOLTIP_DELAY_MS[services().session.settings.tooltipDelay];
+    const hot = this.rxHover && wait !== null && this.time.now - this.rxHover.at >= wait ? this.rxHover.key : null;
+    const boxOf = (key: string | null): InfoBox | undefined => {
+      const m = /^(foe|mine):(\d+)$/.exec(key ?? '');
+      const b = m ? (m[1] === 'foe' ? foes : mine)[Number(m[2])] : undefined;
+      return b?.container.visible ? b : undefined;
+    };
+    if (this.rxPin && !boxOf(this.rxPin)) this.rxPin = null;
+    const shownBox = boxOf(this.rxPin) ?? boxOf(hot);
+    const card = shownBox?.mon ? { ...this.rxCard(shownBox.mon, shownBox.isPlayer), pinned: !!this.rxPin } : null;
+    const tip = moves && hot?.startsWith('move:') && !this.infoPanel ? this.moveTip(Number(hot.slice(5))) : null;
     const content = services().session.content;
     const exp = [...this.rxExp].flatMap(([uid, g]) => {
       const m = this.run.party.find((x) => x.uid === uid);
@@ -1704,8 +1727,8 @@ export class BattleScene extends Phaser.Scene {
     const tabs = this.tabs.view;
     const list = this.picker;
     const data: BattleModel = {
-      foes: boxes(foes),
-      mine: boxes(mine),
+      foes: boxes(foes, 'foe'),
+      mine: boxes(mine, 'mine'),
       // An open list (Party, Item) says what the focused row does in the text box.
       text: list ? list.note || (this.message.visible ? this.message.text : '') : this.message.visible ? this.message.text : this.moveInfo.visible ? this.rxInfo || this.moveInfo.text : '',
       menu,
@@ -1724,6 +1747,8 @@ export class BattleScene extends Phaser.Scene {
       evolve: this.rxEvolve,
       panels: this.infoPanel ? this.rxPanels : null,
       panelAt: this.rxPanelAt,
+      tip,
+      card,
       log: this.historyView ? { tabs: LOG_TABS.map((t) => t.label), index: LOG_TABS.findIndex((t) => t.id === this.logTab), lines: filterLog(this.history, this.logTab).slice(-12) } : null,
     };
     const sig = JSON.stringify(data);
@@ -3293,6 +3318,46 @@ export class BattleScene extends Phaser.Scene {
     done?.();
   }
 
+  /** New UI: one move of the Pokémon choosing, as the mock-ups' tooltip (the I key and a rest of the pointer both show it). */
+  private moveTip(i: number): BattlePanel | null {
+    const content = services().session.content;
+    const slot = this.activeMon().moves[i];
+    const move = slot ? content.moves.get(slot.id) : undefined;
+    if (!slot || !move) return null;
+    const foeTypes = getSpecies(content, this.shown.enemy.speciesId).types as TypeName[];
+    const hint = move.category === 'status' ? null : effectivenessWord(typeEffectiveness(content.typeChart, move.type as TypeName, foeTypes));
+    const power = move.power ? (slot.hyper ? `${move.power + content.balance.hyperMove.powerBonus} (Hyper +${content.balance.hyperMove.powerBonus})` : move.power) : fixedDamageLabel(move.effects.fixedDamage);
+    return {
+      head: move.name,
+      chips: [move.type],
+      facts: [
+        ['Category', move.category.charAt(0).toUpperCase() + move.category.slice(1)],
+        ['Power / Accuracy', `${power ?? '—'} / ${move.accuracy ?? '—'}`],
+        ['PP', `${slot.pp} / ${maxPp(content, slot)}`],
+        ['Priority', `${move.priority > 0 ? '+' : ''}${move.priority}`],
+        ...(hint ? [[`Against ${this.speciesName(this.shown.enemy)}`, hint.text] as const] : []),
+      ],
+      lines: [moveFullDescription(move), ...moveFlagLabels(move), ...(this.transformChoice ? [`Special action ready: ${this.transformChoice.kind}`] : [])],
+    };
+  }
+
+  /** New UI: a Pokémon's Ability card. A foe's Ability shows only once it has come into play; a hidden foe shows nothing. */
+  private rxCard(mon: PokemonInstance, own: boolean): BattlePanel {
+    const { session } = services();
+    const content = session.content;
+    const seen = tallyOf(session.profile, mon.speciesId).seen;
+    const past: [string, string] = ['Seen in', seen ? `${seen} ${seen === 1 ? 'battle' : 'battles'}` : 'no earlier run'];
+    if (!own && this.foeHidden(mon)) return { head: '???', chips: [], facts: [], lines: ['This foe has not shown itself yet.'] };
+    // With several Pokémon on the field the card says whose it is.
+    const who = this.duo ? { tag: this.speciesName(mon) } : {};
+    const id = own ? abilityOf(content, mon) : this.foeReveals.get(mon.uid)?.ability;
+    const ability = id ? content.abilities.get(id) : undefined;
+    if (!ability) return { head: own ? 'No Ability' : 'Ability not seen yet', ...who, chips: [], facts: [past], lines: [own ? 'This Pokémon has no Ability.' : 'It shows here once it comes into play.'] };
+    const hidden = own ? getSpecies(content, mon.speciesId).abilities.hidden : null;
+    const hiddenName = hidden ? content.abilities.get(hidden)?.name ?? null : null;
+    return { head: ability.name, ...who, chips: [], facts: [...(hiddenName ? [['Hidden Ability', hidden === id ? 'This one' : hiddenName] as [string, string]] : []), past], lines: [ability.description] };
+  }
+
   /** I key / the ⓘ tab: details of the focused move on the Attack page, otherwise what is going on in the battle. */
   private toggleInfo(): void {
     if (this.infoPanel) {
@@ -3314,18 +3379,7 @@ export class BattleScene extends Phaser.Scene {
           { head: move.name, text: `${move.type.toUpperCase()} · ${move.category}\nPower ${power} · Accuracy ${move.accuracy ?? '—'} · PP ${slot!.pp}/${maxPp(content, slot!)}\nPriority ${move.priority > 0 ? '+' : ''}${move.priority}${hint ? `\nAgainst ${this.speciesName(this.shown.enemy)}: ${hint.text}` : ''}` },
           { head: 'What it does', text: moveFullDescription(move) },
           { head: 'Notes', text: `${flags.length ? flags.join('\n') : 'No special properties.'}${this.transformChoice ? `\nSpecial action ready: ${this.transformChoice.kind}` : ''}` },
-        ], undefined, {
-          head: move.name,
-          chips: [move.type],
-          facts: [
-            ['Category', move.category.charAt(0).toUpperCase() + move.category.slice(1)],
-            ['Power / Accuracy', `${power ?? '—'} / ${move.accuracy ?? '—'}`],
-            ['PP', `${slot!.pp} / ${maxPp(content, slot!)}`],
-            ['Priority', `${move.priority > 0 ? '+' : ''}${move.priority}`],
-            ...(hint ? [[`Against ${this.speciesName(this.shown.enemy)}`, hint.text] as const] : []),
-          ],
-          lines: [moveFullDescription(move), ...flags, ...(this.transformChoice ? [`Special action ready: ${this.transformChoice.kind}`] : [])],
-        });
+        ], undefined, this.moveTip(this.focusedMove) ?? undefined);
         return;
       }
     }
@@ -4514,6 +4568,8 @@ export class BattleScene extends Phaser.Scene {
     const planned = planCues(events, content, moveAnims(), { mode: battleAnimations, intensity: effectIntensity, shake: session.settings.shakeIntensity, animPack: session.settings.moveAnimPack }, (side) => (this.shown[side] ? abilityOf(content, this.shown[side]) : null));
     // Plugin hooks (S344) may reshape the cues; skipped when animations are off. Presentation only.
     const cues = battleAnimations === 'off' ? planned : applyCueHooks(planned, events);
+    // New UI: a pinned card steps aside for the turn's pictures.
+    this.rxPin = null;
 
     for (const [index, e] of events.entries()) {
       // New UI: the level-up window stays through that Pokémon's level and move lines, then leaves.

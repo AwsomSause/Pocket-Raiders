@@ -20,9 +20,11 @@ export interface BattleBox {
   tags: readonly string[];
   /** The foe Trainer's team as balls: how many, and how many have fainted. Null for a wild Pokémon or your side. */
   team: { n: number; out: number } | null;
+  /** The box's key for its hover card and its pin ("foe:0", "mine:1"); none leaves the box inert. */
+  tip?: string;
 }
 
-export interface BattleOption { label: string; sub?: string; type?: string; off?: boolean }
+export interface BattleOption { label: string; sub?: string; type?: string; off?: boolean; /** Hover key for this choice's tooltip. */ tip?: string }
 
 export interface BattleModel {
   /** One box per Pokémon on the field, in field order (one in a single battle, up to three). */
@@ -57,6 +59,10 @@ export interface BattleModel {
   /** The info panel (I): one window per section, left of the field; a single move's details show as the mock-ups' tooltip. */
   panels?: readonly BattlePanel[] | null;
   panelAt?: 'left' | 'tip';
+  /** A move's details beside the pointer's button (hover); nothing in it takes clicks. */
+  tip?: BattlePanel | null;
+  /** A Pokémon's Ability card over the field (hover on its box, or pinned by a click); `pinned` marks the pinned one. */
+  card?: (BattlePanel & { pinned?: boolean }) | null;
   /** The battle log (H): its filter tabs and the lines of the open one. */
   log?: { tabs: readonly string[]; index: number; lines: readonly string[] } | null;
 }
@@ -172,7 +178,7 @@ const bar = (r: number): string => hpb(pct(r));
 /** One data box: name and level, the HP bar, and for your own Pokémon the HP numbers and the Exp strip. */
 function box(b: BattleBox, foe: boolean, st: string, small = false): string {
   const mine = foe ? '' : `${b.hpText ? `<div class="row sm"><span class="grow">${esc(b.hpText)}</span></div>` : ''}${b.xp === null ? '' : hpb(pct(b.xp), 0, ' xp')}`;
-  return W(`<div class="row" style="gap:6px"><b class="grow" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis${small ? ';font-size:14px' : ''}">${esc(b.name)}</b>${tags(b)}<span class="sm">${esc(b.level)}</span></div><div class="row" style="gap:6px"><span style="font-size:12px;font-weight:700">HP</span>${bar(b.hp)}</div>${small ? '' : mine}`, `position:absolute;width:${small ? 240 : 290}px;padding:${small ? '5px 10px' : '8px 12px'};display:flex;flex-direction:column;gap:5px;${st}`, 'glass');
+  return W(`<div class="row" style="gap:6px"><b class="grow" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis${small ? ';font-size:14px' : ''}">${esc(b.name)}</b>${tags(b)}<span class="sm">${esc(b.level)}</span></div><div class="row" style="gap:6px"><span style="font-size:12px;font-weight:700">HP</span>${bar(b.hp)}</div>${small ? '' : mine}`, `position:absolute;width:${small ? 240 : 290}px;padding:${small ? '5px 10px' : '8px 12px'};display:flex;flex-direction:column;gap:5px;${b.tip ? 'cursor:pointer;' : ''}${st}`, 'glass', b.tip ? `${act('pin', b.tip)} data-tip="${esc(b.tip)}"` : '');
 }
 
 /** How tall the tray's choices stand over the bottom edge, so the player's box and the tabs can sit above them. */
@@ -190,7 +196,7 @@ export function battleView(c: ReduxCtx, d: BattleModel): string {
   const many = v === 3 ? n > 4 : Math.ceil(n / 2) > 2;
   const cell = (o: BattleOption, k: number, st = ''): string => {
     const tc = o.type ? TYPE_COLORS[cap(o.type)] : undefined;
-    return `<div class="btn${k === on ? ' on' : ''}${tc ? ' mv' : ''}" style="${tc ? `--tc:${tc};` : ''}${o.off ? 'opacity:.5;' : ''}${many ? 'font-size:15px;' : ''}min-width:0;${st}"${act('pick', k)} data-over="over"><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">${esc(o.label)}</span>${o.sub ? `<small>${esc(o.sub)}</small>` : ''}</div>`;
+    return `<div class="btn${k === on ? ' on' : ''}${tc ? ' mv' : ''}" style="${tc ? `--tc:${tc};` : ''}${o.off ? 'opacity:.5;' : ''}${many ? 'font-size:15px;' : ''}min-width:0;${st}"${act('pick', k)} data-over="over"${o.tip ? ` data-tip="${esc(o.tip)}"` : ''}><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">${esc(o.label)}</span>${o.sub ? `<small>${esc(o.sub)}</small>` : ''}</div>`;
   };
   const msg = esc(d.text).replace(/\n/g, '<br>');
   const h = many ? 34 : 44;
@@ -220,7 +226,7 @@ export function battleView(c: ReduxCtx, d: BattleModel): string {
     const me = d.mine[0], foe = d.foes[0];
     const half = (b: BattleBox | undefined, flip: boolean): string => {
       if (!b) return '<span class="grow"></span>';
-      const parts = [`<b style="white-space:nowrap">${esc(b.name)}</b>`, tags(b), `<span class="sm" style="white-space:nowrap">${esc(b.level)}</span>`, `<div class="grow">${bar(b.hp)}</div>`];
+      const parts = [`<b style="white-space:nowrap${b.tip ? ';cursor:pointer' : ''}"${b.tip ? `${act('pin', b.tip)} data-tip="${esc(b.tip)}"` : ''}>${esc(b.name)}</b>`, tags(b), `<span class="sm" style="white-space:nowrap">${esc(b.level)}</span>`, `<div class="grow">${bar(b.hp)}</div>`];
       return (flip ? parts.reverse() : parts).join('');
     };
     head = !me && !foe ? '' : `<div class="abs win row" style="left:0;right:0;top:0;height:64px;padding:0 20px;gap:14px">${half(me, false)}<span class="vsx" style="font-size:34px">VS</span>${half(foe, true)}</div><div class="abs row" style="left:20px;top:72px;gap:10px">${d.party ? balls(d.party.n, d.party.out, 18) : ''}${me?.hpText ? `<span class="sm" style="color:#fff;text-shadow:1px 1px 0 #000">${esc(me.hpText)}</span>` : ''}</div>${foe?.team ? `<div class="abs" style="right:20px;top:72px">${balls(foe.team.n, foe.team.out, 18)}</div>` : ''}`;
@@ -240,10 +246,13 @@ export function battleView(c: ReduxCtx, d: BattleModel): string {
   // The info panel and the log sit over the field, clear of the tray; a click closes them.
   const room = 540 - 92 - top - 12 - (d.tabs && v !== 2 ? 34 : 0);
   const win = 'display:flex;flex-direction:column;gap:6px;padding:10px 12px;cursor:pointer';
+  const tipAt = `position:absolute;right:60px;bottom:${Math.max(150, top + (d.tabs ? 42 : 8) + 34)}px;width:330px;${win};padding:10px 14px;z-index:8`;
   const panels = !d.panels?.length ? ''
     : d.panelAt === 'tip'
-      ? W(panelBody(d.panels[0]!, true), `position:absolute;right:60px;bottom:${Math.max(150, top + (d.tabs ? 42 : 8) + 34)}px;width:330px;${win};padding:10px 14px;z-index:8`, '', act('info'))
+      ? W(panelBody(d.panels[0]!, true), tipAt, '', act('info'))
       : `<div class="abs" style="left:20px;top:92px;height:${room}px;display:flex;flex-direction:column;flex-wrap:wrap;align-content:flex-start;gap:8px 6px;z-index:8"${act('info')}>${d.panels.map((p) => W(panelBody(p, false), `width:${d.panels!.length > 2 ? 284 : 310}px;${win}`)).join('')}</div>`;
+  const tip = d.tip && !d.panels?.length ? W(panelBody(d.tip, true), `${tipAt.replace(';cursor:pointer', '')};pointer-events:none`) : '';
+  const card = d.card ? W(`<div class="row"><b class="acc grow">${esc(d.card.head)}</b>${d.card.tag ? `<span class="tg" style="font-size:11px;padding:1px 6px">${esc(d.card.tag)}</span>` : ''}</div>${d.card.lines.map((t) => `<div class="sm" style="line-height:19px">${esc(t)}</div>`).join('')}${facts(d.card.facts)}`, `position:absolute;left:330px;top:150px;width:320px;display:flex;flex-direction:column;gap:6px;padding:10px 14px;z-index:8;${d.card.pinned ? 'cursor:pointer' : 'pointer-events:none'}`, '', d.card.pinned ? act('pin', '') : '') : '';
   const log = d.log ? W(`<div class="tabs" style="margin-bottom:6px">${d.log.tabs.map((t, k) => `<span class="${k === d.log!.index ? 'on' : ''}" style="cursor:pointer"${act('log', k)}>${esc(t)}</span>`).join('')}</div>${d.log.lines.length ? d.log.lines.map((l) => `<span class="sm">${esc(l)}</span>`).join('') : '<span class="sm" style="opacity:.7">Nothing here yet.</span>'}`, `position:absolute;left:20px;top:92px;width:430px;max-height:${room}px;overflow:hidden;${win.replace(';cursor:pointer', '')};z-index:8`) : '';
   // The transform buttons sit over the tray, across from the page tabs.
   const gimAt = v === 2 ? 'right:40px;bottom:132px' : v === 3 ? `right:20px;bottom:${Math.max(222, top + 8) + 42}px` : `left:20px;bottom:${Math.max(v === 1 ? 138 : 128, top + 8)}px`;
@@ -255,7 +264,7 @@ export function battleView(c: ReduxCtx, d: BattleModel): string {
   const shade = d.shadow ? '<div class="fill" style="background:radial-gradient(#0000 40%,#3a0a5a90);pointer-events:none"></div>' : '';
   const body = d.shadow ? `<div style="--p2:#3a1a5a;--acc:#c070ff;--pa:#1c0a2c;--pai:#f0e0ff;--tf:#8a40c8">${tray}</div>` : tray;
   const level = d.level ? levelView(c, d.level) : '';
-  return shade + level + head + body + tabs + gim + marks + (rows.length || level ? '' : header + momentum) + status + note + pin + panels + log + (level ? '' : exp);
+  return shade + level + head + body + tabs + gim + marks + (rows.length || level ? '' : header + momentum) + status + note + pin + panels + tip + (d.panels?.length || d.log || level ? '' : card) + log + (level ? '' : exp);
 }
 
 export interface BattleListRow {
