@@ -49,14 +49,14 @@ export const farewell = (label: string, species: string[]): Json => ({ kind: 'tr
 /** Signs (STANDARDS.md): a Legendary Sign of +n until the legends thread names the real effect. */
 export const sign = (legend: string, n = 1): Json => ({ kind: 'flag', key: `sign-${legend}`, amount: n });
 
-// ---------- battles: a story fight never ends a run (a loss sends you back to the map; `lose` effects apply) ----------
+// ---------- battles: every story fight is friendly (people's piece): a loss never ends the run, the party gets back up, `lose` effects apply ----------
 type Extra = Record<string, unknown>;
 /** A trainer fight. `extra` takes any EventBattle trainer field (lineup, team, sprite, spritePokemon, rule, lose, level, weather, ally...). */
-export const duel = (name: string, o: Parameters<typeof trainer>[1] = {}, extra: Extra = {}): Json => ({ ...trainer(name, o), pseudo: true, ...extra });
-/** A wild fight. `extra` takes any EventBattle wild field (rule, foeMoves, level, weather...). A wild fight has no `lose` list: use `duel` with `spritePokemon` when the story needs one. */
-export const beast = (o: Parameters<typeof wild>[0] = {}, extra: Extra = {}): Json => ({ ...wild(o), pseudo: true, ...extra });
+export const duel = (name: string, o: Parameters<typeof trainer>[1] = {}, extra: Extra = {}): Json => ({ ...trainer(name, o), friendly: true, ...extra });
+/** A wild fight. `extra` takes any EventBattle wild field (lose, rule, foeMoves, weather...). */
+export const beast = (o: Parameters<typeof wild>[0] = {}, extra: Extra = {}): Json => ({ ...wild(o), friendly: true, ...extra });
 /** A fight against one named Pokémon that can pay `lose` effects (drawn as that Pokémon, not as a person). */
-export const monDuel = (name: string, species: string, lv = 0, extra: Extra = {}): Json => ({ ...trainer(name, { size: 1, lv }), lineup: [species], spritePokemon: species, pseudo: true, ...extra });
+export const monDuel = (name: string, species: string, lv = 0, extra: Extra = {}): Json => ({ ...trainer(name, { size: 1, lv }), lineup: [species], spritePokemon: species, friendly: true, ...extra });
 
 // ---------- placement (src/data/catalogOverhaul/placement/anime.json; the lead thread's placer reads it) ----------
 export type Shape = 'Single' | 'Door' | 'Stage-Three' | 'Trial' | 'Region' | 'Run-Long' | 'Companion' | 'Tournament';

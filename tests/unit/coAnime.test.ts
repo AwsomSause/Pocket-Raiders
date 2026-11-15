@@ -11,13 +11,17 @@ import fixture from './fixtures/coAnimeChoices.json';
 
 const root = join(__dirname, '../..');
 const json = <T>(p: string): T => JSON.parse(readFileSync(join(root, p), 'utf8')) as T;
-const files = readdirSync(join(root, 'src/data/events')).filter((f) => /^co-anime-.*\.json$/.test(f));
+/** ANIME_ONLY=anime-3: check one module against its own report (node_modules/.anime-report/anime-3, written by anime-report.ts with the same variable). */
+const only = process.env.ANIME_ONLY;
+const reportRoot = only ? join(root, 'node_modules/.anime-report', only) : root;
+const report = <T>(p: string): T => JSON.parse(readFileSync(join(reportRoot, p), 'utf8')) as T;
+const files = readdirSync(join(root, 'src/data/events')).filter((f) => (only ? f === `co-${only}.json` : /^co-anime-.*\.json$/.test(f)));
 const builtIds = files.flatMap((f) => json<{ events: { id: string }[] }>(`src/data/events/${f}`).events.map((e) => e.id));
 const content = getContent();
 const events: EventDef[] = builtIds.map((id) => content.events.get(id)!);
-const status = json<{ built: Record<string, string>; extra: Record<string, string> }>('src/data/catalogOverhaul/status/anime.json');
-const placement = json<Record<string, { shape: string; earliest: string; beats?: string[] }>>('src/data/catalogOverhaul/placement/anime.json');
-const flagsFile = json<{ flags: { key: string; setBy: string[]; readBy: string[] }[]; external: { key: string; readBy: string[] }[] }>('src/data/catalogOverhaul/flags/anime.json');
+const status = report<{ built: Record<string, string>; extra: Record<string, string> }>('src/data/catalogOverhaul/status/anime.json');
+const placement = report<Record<string, { shape: string; earliest: string; beats?: string[] }>>('src/data/catalogOverhaul/placement/anime.json');
+const flagsFile = report<{ flags: { key: string; setBy: string[]; readBy: string[] }[]; external: { key: string; readBy: string[] }[] }>('src/data/catalogOverhaul/flags/anime.json');
 const doc = fixture.questlines as Record<string, { title: string; choices: string[] }>;
 
 /** The catalog ids of this category live inside these questlines. */
@@ -33,13 +37,8 @@ const allConditions = (e: EventDef): EventCondition[] => [...e.requires, ...e.se
 /** Labels compare without case, quotes, emphasis marks or end punctuation. */
 const norm = (s: string) => s.toLowerCase().replace(/[’‘]/g, "'").replace(/[*"“”]/g, '').replace(/[.!?…]+$/g, '').replace(/\s+/g, ' ').trim();
 
-/**
- * Doc "choices" that are not buttons, or that the questline offers in another way. Each needs a reason.
- * Keep this list short: a label the doc writes on a button belongs on a button.
- */
-const NOT_A_BUTTON: Record<string, Record<string, string>> = {
-  AQ16: { 'Seen a bird? Gold?': 'the hunter\'s question, printed on the same line as the choices' },
-};
+/** Doc "choices" that are not buttons, or that the questline offers another way: each module's `NOT_A_BUTTON` (questline -> label -> reason), gathered by anime-report.ts. */
+const NOT_A_BUTTON = report<Record<string, Record<string, string>>>('tests/unit/fixtures/coAnimeNotButtons.json');
 
 describe('anime questlines: what is built', () => {
   it('has events, all loaded by the game', () => {
@@ -110,7 +109,7 @@ describe('anime questlines: the game\'s rules', () => {
 
   it('no story fight can end a run', () => {
     for (const e of events) for (const c of allChoices(e)) for (const o of outcomes(c)) {
-      if (o.battle && o.battle.kind !== 'raid') expect(o.battle.pseudo, `${e.id} "${c.label}"`).toBe(true);
+      if (o.battle && o.battle.kind !== 'raid') expect(o.battle.friendly, `${e.id} "${c.label}"`).toBe(true);
     }
   });
 

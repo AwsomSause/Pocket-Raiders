@@ -16,6 +16,11 @@ export const PLACEMENT: Record<string, Place> = {
   'aq16-shiny-owl': { shape: 'Companion', earliest: 'A3', home: 11, window: [8, 14], sits: 'optional', attaches: 'before', tags: ['forest'], level: 'A+1', beats: ['aq16-owl-watch', 'aq16-owl-hat', 'aq16-owl-sun', 'aq16-owl-lamps'], note: 'Night. Hunters A+0, the turning point A+1, two stages on at Step 13.' },
 };
 
+/** Doc choices that are not buttons (questline -> label -> reason). Keep it short: a label the doc writes on a button belongs on a button. */
+export const NOT_A_BUTTON: Record<string, Record<string, string>> = {
+  AQ16: { 'Seen a bird? Gold?': 'the hunter\'s question, printed on the same line as the choices' },
+};
+
 export const LIMITS: Record<string, string[]> = {
   AN9: [
     'The crew helps in the storm fight as one boost (your Pokémon take 15% less damage); the navigator calling the foe\'s next move is told in the text only.',
@@ -35,42 +40,42 @@ const WOOD = tagTypes('forest');
 
 export const EVENTS: Json[] = [
   // ---------------- AN9. The Crew of the Rusted Anchor ----------------
-  ev('an09-rusted-anchor', 'The Crew of the Rusted Anchor', AN, { rarity: 'rare', minStage: stageOf('A4'), types: SEA, cast: ['trainer.sailor'], pokemon: 'dhelmise', tint: '#1d3a4a', effect: 'float' },
+  ev('an09-rusted-anchor', 'The Crew of the Rusted Anchor', AN, { rarity: 'rare', minStage: stageOf('A4'), types: SEA, cast: ['trainer.pr/veteran_m'], pokemon: 'dhelmise', tint: '#1d3a4a', effect: 'float' },
     'A small ship rides at the jetty. It has had three other names, and they all show through the paint. Coiled on the bow, draped in weed like a shawl, is a Dhelmise: a living anchor. A man stands on the rail with his arms flung wide. "I\'m Captain Marcellin Hathersage. Barnacle, to my crew. I\'m going to find the island at the end of the map!" He looks you up and down. "I need a crew. You look like a crew." The Dhelmise creaks, long and low, like a door that has an opinion.',
     [
       ch('Join.', out('"HA!" He nearly falls off the rail. You catch his coat. "First act as crew: saving the captain. Promotion!" The Dhelmise loops a strand of weed round your wrist, gently, the way it would test a rope. "Three islands ahead. A crew is out there, they just don\'t know it yet. We sail when you reach the water."', flag('an09-crew-joined'), fr(2), later('an09-three-islands', 5))),
       ch('What\'s at the end?', out('"No idea! That\'s the point. If I knew, somebody would have been." He says it with his whole chest, and for a moment the old patched ship looks like the finest thing on the sea. The offer stands; he shouts it after you twice.', flag('an09-crew-asked-end'), room('an09-rusted-anchor-again'))),
       ch('You can\'t swim?', out('He glances at the water the way other people glance at a debt. "Neither can the anchor. We\'re fine." The Dhelmise creaks. It sounds a little like laughing. The offer stands.', flag('an09-crew-asked-swim'), room('an09-rusted-anchor-again'))),
     ]),
-  ev('an09-rusted-anchor-again', 'The Crew of the Rusted Anchor', AN, { room: true, cast: ['trainer.sailor'], pokemon: 'dhelmise', tint: '#1d3a4a', effect: 'float' },
+  ev('an09-rusted-anchor-again', 'The Crew of the Rusted Anchor', AN, { room: true, cast: ['trainer.pr/veteran_m'], pokemon: 'dhelmise', tint: '#1d3a4a', effect: 'float' },
     'Captain Hathersage is still on the rail, still with his arms out, as if the answer might come in on the wind. "Well? The map isn\'t getting any shorter!"',
     [
       ch('Join.', out('"A crew of two!" He counts on his fingers anyway. The Dhelmise loops weed round your wrist: you are tied on now. "Three islands ahead. We sail when you reach the water."', flag('an09-crew-joined'), fr(2), later('an09-three-islands', 5))),
       ch('Not this voyage.', leave('"Then wave when we pass!" he calls. You do not doubt that he will pass, somewhere, shouting.')),
     ]),
-  ev('an09-three-islands', 'Three Islands', AN, { room: true, requires: [flagIs('an09-crew-joined')], cast: ['trainer.sailor', 'trainer.aroma_lady'], pokemon: 'cramorant', tint: '#1d3a4a', effect: 'float' },
+  ev('an09-three-islands', 'Three Islands', AN, { room: true, requires: [flagIs('an09-crew-joined')], cast: ['trainer.pr/veteran_m', 'trainer.aroma_lady'], pokemon: 'cramorant', tint: '#1d3a4a', effect: 'float' },
     'The Rusted Anchor noses between three small islands. On the first, Miss Persimmon Yardley runs a food stall nobody visits. On the second, Mr. Valerian Underhill has drawn a map of somewhere he has never been. On the third, a Cramorant stands very still with a fish stuck in its throat. "Crew!" the captain whispers, far too loudly. "Every one of them! Go and tell them!"',
     [
       ch('Eat what the cook makes.', out('It is very good, and it is very strange: something purple, something that hums. You eat all of it. Miss Yardley watches the empty bowl as if it were a letter. "He said he\'d eat anything. Nobody has ever said that to me as a compliment." She packs her knives. She was packed already; she only needed asking.', flag('an09-crew-cook'), heal(0.5), room('an09-island-navigator'))),
     ]),
-  ev('an09-island-navigator', 'The Navigator\'s Bet', AN, { room: true, requires: [flagIs('an09-crew-cook')], cast: ['trainer.gentleman'], tint: '#1d3a4a', effect: 'float' },
+  ev('an09-island-navigator', 'The Navigator\'s Bet', AN, { room: true, requires: [flagIs('an09-crew-cook')], cast: ['trainer.pr/rich_m'], tint: '#1d3a4a', effect: 'float' },
     'Mr. Valerian Underhill holds his map to his chest. The coastline on it is beautiful and belongs to nowhere. "A battle. I bet the map. If I lose, I come. If I win, I come, and I bring the map." He frowns. "I don\'t see a way I don\'t come."',
     [
-      ch('Take the bet.', fight('He bows, very formally, to you and then to the sea.', duel('Navigator Underhill', { cls: 'gentleman', size: 2, types: ['water', 'flying'], win: [flag('an09-crew-navigator'), room('an09-island-bird')] }, { lose: [flag('an09-crew-navigator'), flag('an09-crew-navigator-won'), room('an09-island-bird')] }))),
+      ch('Take the bet.', fight('He bows, very formally, to you and then to the sea.', duel('Navigator Underhill', { cls: 'veteran', size: 2, types: ['water', 'flying'], win: [flag('an09-crew-navigator'), room('an09-island-bird')] }, { lose: [flag('an09-crew-navigator'), flag('an09-crew-navigator-won'), room('an09-island-bird')] }))),
     ]),
   ev('an09-island-bird', 'A Bird With a Problem', AN, { room: true, requires: [flagIs('an09-crew-navigator')], pokemon: 'cramorant', tint: '#1d3a4a', effect: 'float' },
     'Mr. Underhill is already aboard, map and all. On the third island the Cramorant has not moved. Its eyes are wide. The tail of a fish sticks out of its beak and waves, faintly.',
     [
       ch('Pat it on the back.', out('One good pat. The fish shoots out, lands in the sea and swims off, offended. The Cramorant looks at you. It looks at the ship. It has nowhere else to be, so it walks up the gangplank as if it had a ticket. The captain counts: "A cook! A navigator! A bird! And you! That\'s a crew! That\'s four more than I had!"', flag('an09-crew-bird'), flag('an09-crew-whole'), fr(3), later('an09-the-storm', 5))),
     ]),
-  ev('an09-the-storm', 'The Storm', AN, { room: true, requires: [flagIs('an09-crew-whole')], cast: ['trainer.sailor'], pokemon: 'gyarados', tint: '#143028', effect: 'rain',
+  ev('an09-the-storm', 'The Storm', AN, { room: true, requires: [flagIs('an09-crew-whole')], cast: ['trainer.pr/veteran_m'], pokemon: 'gyarados', tint: '#143028', effect: 'rain',
     remembers: [{ id: 'chest-brother', when: [flagIs('captains-chest-dived')], notice: 'The anchor has been watching you all voyage. It knows the diver who opened its brother\'s chest. It goes very still, and then it holds on tighter.' }] },
     'The sky goes green. The sea stands up. Captain Hathersage goes over the side with the first wave, and he cannot swim. The anchor goes in after him. It cannot swim either. It sinks on purpose, chain run out, and comes up underneath him like a floor. Then the wave that took him opens its eyes: a Gyarados, as angry as the weather. Miss Yardley is already throwing something from her pot. Mr. Underhill is shouting what it will do next. The Cramorant has a fish ready.',
     [
       ch('Fight for the ship!', fight('The deck pitches. The crew is at your back, every one of them, shouting.', beast({ species: ['gyarados'], lv: 1, win: [flag('an09-crew-storm-won'), room('an09-after-the-storm')] }), temp('The crew at your back', [{ kind: 'damageTakenMultiplier', value: 0.85 }], 1))),
       ch('Haul the captain in first.', out('You get the rope round him while the Gyarados circles. The anchor heaves; the cook and the navigator heave; the bird helps by standing on your head. The great serpent looks at the five of you, soaked and shouting on a ship that should have sunk three names ago, and decides the storm is company enough. It dives.', flag('an09-crew-storm-hauled'), room('an09-after-the-storm'))),
     ]),
-  ev('an09-after-the-storm', 'As a Crew', AN, { room: true, cast: ['trainer.sailor'], pokemon: 'dhelmise', tint: '#1d3a4a', effect: 'sparkle' },
+  ev('an09-after-the-storm', 'As a Crew', AN, { room: true, cast: ['trainer.pr/veteran_m'], pokemon: 'dhelmise', tint: '#1d3a4a', effect: 'sparkle' },
     'Captain Hathersage is hauled aboard upside down. "Did you see that? We nearly died! As a crew!" He is crying, or it is the sea. The anchor settles back on the bow and, very carefully, breaks off a young cutting of itself: a small Dhelmise, still soft, that it sets on the deck in front of you. The cook presses a folded flag into your hands. It has five badly sewn figures on it. One is a bird.',
     [
       ch('Take the cutting and the flag.', out('The little Dhelmise winds itself round your arm and holds on. The flag smells of salt and purple stew. "Not the end!" the captain shouts as the ship pulls away. "There\'s more map! Come!" You can hear him for a long time.', gain('dhelmise', { bond: 20 }), relic('crews-flag', 'The Crew\'s Flag', [{ kind: 'healingMultiplier', value: 1.1 }]), flag('an09-crew-flag'), moment('You sailed with the crew of the Rusted Anchor, and nearly died. As a crew.', 70))),

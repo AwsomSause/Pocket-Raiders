@@ -4,20 +4,27 @@
 //   src/data/catalogOverhaul/flags/anime.json      every remembered flag: who sets it, who reads it; flags other threads own
 //   docs/status/co-anime.md                        status note: re-read table and real limits
 // Run after `npm run co:build`: node tools/catalog-overhaul/anime-report.ts
+//   ANIME_ONLY=anime-3 node tools/catalog-overhaul/anime-report.ts   one module only, written under node_modules/.anime-report/anime-3/
+//   (so several modules can be checked at once without touching the shared files; the gate test reads it with the same ANIME_ONLY).
+//   tests/unit/fixtures/coAnimeNotButtons.json                     each module's NOT_A_BUTTON exceptions (doc choices that are not buttons, with a reason)
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 type Json = Record<string, unknown>;
-interface Mod { QUESTLINES?: Record<string, string>; PLACEMENT?: Record<string, Json>; LIMITS?: Record<string, string[]>; CHECKED?: Record<string, string> }
+interface Mod { QUESTLINES?: Record<string, string>; PLACEMENT?: Record<string, Json>; LIMITS?: Record<string, string[]>; CHECKED?: Record<string, string>; NOT_A_BUTTON?: Record<string, Record<string, string>> }
 const root = join(import.meta.dirname, '../..');
 const coDir = join(root, 'tools/events/co');
-const names = readdirSync(coDir).filter((f) => /^anime-.*\.ts$/.test(f)).map((f) => f.slice(0, -3)).sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
+const only = process.env.ANIME_ONLY;
+const names = readdirSync(coDir).filter((f) => /^anime-.*\.ts$/.test(f)).map((f) => f.slice(0, -3)).filter((n) => !only || n === only).sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
+if (only && !names.length) throw new Error(`no module tools/events/co/${only}.ts`);
+const outRoot = only ? join(root, 'node_modules/.anime-report', only) : root;
 const order = (a: string, b: string) => a.slice(0, 2).localeCompare(b.slice(0, 2)) || Number(a.slice(2)) - Number(b.slice(2));
 
 const questlines: Record<string, string> = {};
 const placement: Record<string, Json> = {};
 const limits: Record<string, string[]> = {};
 const checked: Record<string, string> = {};
+const notButtons: Record<string, Record<string, string>> = {};
 const moduleOf: Record<string, string> = {};
 const events: (Json & { id: string })[] = [];
 for (const name of names) {
@@ -30,6 +37,7 @@ for (const name of names) {
   Object.assign(placement, mod.PLACEMENT ?? {});
   Object.assign(limits, mod.LIMITS ?? {});
   Object.assign(checked, mod.CHECKED ?? {});
+  Object.assign(notButtons, mod.NOT_A_BUTTON ?? {});
   events.push(...(JSON.parse(readFileSync(join(root, `src/data/events/co-${name}.json`), 'utf8')) as { events: (Json & { id: string })[] }).events);
 }
 const ids = new Set(events.map((e) => e.id));
@@ -45,11 +53,13 @@ const built: Record<string, string> = {};
 for (const id of mine) if (ids.has(id) && checked[CATALOG_HOME[id] ?? '']) built[id] = checked[CATALOG_HOME[id]!]!;
 const sorted = Object.keys(questlines).sort(order);
 const write = (file: string, data: unknown) => {
-  mkdirSync(join(root, file, '..'), { recursive: true });
-  writeFileSync(join(root, file), typeof data === 'string' ? data : JSON.stringify(data, null, 1) + '\n');
+  mkdirSync(join(outRoot, file, '..'), { recursive: true });
+  writeFileSync(join(outRoot, file), typeof data === 'string' ? data : JSON.stringify(data, null, 1) + '\n');
 };
 write('src/data/catalogOverhaul/status/anime.json', { category: 'anime', built, merged: {}, rule: {}, scrapped: [], extra: Object.fromEntries(sorted.map((q) => [q, questlines[q]])) });
 write('src/data/catalogOverhaul/placement/anime.json', Object.fromEntries(sorted.filter((q) => placement[questlines[q]!]).map((q) => [questlines[q], placement[questlines[q]!]])));
+
+write('tests/unit/fixtures/coAnimeNotButtons.json', Object.fromEntries(Object.keys(notButtons).sort(order).map((q) => [q, notButtons[q]])));
 
 // ---- flags ----
 const sets = new Map<string, Set<string>>();
