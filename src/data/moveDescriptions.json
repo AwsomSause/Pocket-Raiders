@@ -745,6 +745,7 @@
  "return": "This move can’t be used. It’s recommended that this move is forgotten. Once forgotten, this move can’t be remembered.",
  "revelation-dance": "The user attacks the target by dancing with all its might. This move becomes the same type as the user's type.",
  "revenge": "This attack move’s power is doubled if the user has been hurt by the opponent in the same turn.",
+ "norths-wind": "A wind from the north lifts one fainted party member back to its feet at half its max HP, and the user's Sp. Atk and Speed rise by one stage. It has a single charge per battle; only a rest refills it.",
  "revival-blessing": "The user bestows a loving blessing, reviving a party Pokémon that has fainted and restoring half that Pokémon's max HP.",
  "rising-voltage": "The user attacks with electricity rising from the ground. This move's power is doubled if the target is on Electric Terrain.",
  "roar": "The target is scared off, and a different Pokémon is dragged out. In the wild, this ends a battle against a single Pokémon.",
