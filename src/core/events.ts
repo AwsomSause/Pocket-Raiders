@@ -9,6 +9,7 @@
 // one seeded by the stop. No existing stream is touched, so adding events
 // changes no other roll, and choosing again after a reload gives the same result.
 
+import { applyCoEffect, coConditionMet, coConditionText, coEffectWords, fillCoText, restoreMachine } from './events/coToolkit';
 import { modifierEventWeight } from './runModifiers';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
 import { rememberPick, rememberedPick } from './co/pickMemory';
@@ -247,6 +248,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       const ago = run.regionIndex + 1 - at;
       return at > 0 && ago >= (c.regionsAgo ?? 0) && ago <= (c.regionsAgoMost ?? 99);
     }
+    case 'record':
+      return coConditionMet(run, c);
     case 'partyBlissful':
       return run.party.some((m) => m.blissful);
     case 'partyShadow':
@@ -466,6 +469,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs a rival who feels a certain way about you';
     case 'flag':
       return 'Needs something you did earlier';
+    case 'record':
+      return coConditionText(c);
     case 'partyBlissful':
       return 'Needs a Blissful Pokémon in your party';
     case 'partyShadow':
@@ -852,9 +857,9 @@ export function eventView(content: Content, run: RunState, sideId: string): Even
     const missing = unmet ? conditionText(content, unmet) : tradeMissing(content, run, c);
     const chance = choiceChance(content, run, c);
     const preview = insight ? `${outcomeWords(content, c.success)}${c.failure ? ` · if it fails: ${outcomeWords(content, c.failure)}` : ''}` : null;
-    return { label: c.label, locked: missing, kind: choiceKind(c, chance), tradePicks: tradePicksOf(content, run, c), chance, attribute: c.check ?? null, attributeValue: c.check ? effectiveAttributes(content, run)[c.check] : null, preview, ...choiceRisk(content, c) };
+    return { label: fillCoText(content, run, c.label), locked: missing, kind: choiceKind(c, chance), tradePicks: tradePicksOf(content, run, c), chance, attribute: c.check ?? null, attributeValue: c.check ? effectiveAttributes(content, run)[c.check] : null, preview, ...choiceRisk(content, c) };
   });
-  return { event, choices };
+  return { event: { ...event, intro: fillCoText(content, run, event.intro) }, choices };
 }
 
 export interface EventResult {
@@ -938,7 +943,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
     run.afterDecisions = 'map';
     continueAfterDecisions(content, run);
   }
-  return { run, success, text: outcome.text, changes, battle };
+  return { run, success, text: fillCoText(content, current, outcome.text), changes, battle };
 }
 
 function useUpKeyItem(run: RunState, id: string): void {
@@ -1094,6 +1099,11 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'rivalChange':
     case 'flag':
       return '';
+    case 'ruleRead':
+    case 'rulePrize':
+    case 'pickTest':
+    case 'timeMachine':
+      return coEffectWords(e);
     case 'cast':
       return 'a new file in your Dossier';
     case 'grandArcRom':
@@ -1504,6 +1514,11 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       // Shadow II: a story flag may be exactly the key a Shadow in your party or PC has been waiting for.
       for (const line of checkFlagKeys(content, run)) recordChoice(content, run, { id: `shadow-key-${e.key}`, pick: 'yes', text: line, weight: 2 });
       return '';
+    case 'ruleRead':
+    case 'rulePrize':
+    case 'pickTest':
+    case 'timeMachine':
+      return applyCoEffect(content, run, e, tradeUid);
     case 'cast':
       return recordCast(run, e.id, e.status) ? effectWords(content, e) : '';
     case 'mentor':
@@ -1946,6 +1961,7 @@ export function eventBattleWon(content: Content, run: RunState, event: EventBatt
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
   if (!battle) return [];
   const rng = new Rng(hashSeed(`${run.seed}::event-win::${stageKey(run)}::${event.sideId}`));
+  restoreMachine(content, run);
   if (battle.kind === 'trainer') evilBattleWon(run, battle);
   const slow = battle.kind === 'trainer' && battle.rule?.turnLimit !== undefined && turns > battle.rule.turnLimit && battle.slowWin;
   return (slow || battle.win).map((e) => applyEffect(content, run, e, rng)).filter(Boolean);
@@ -1953,6 +1969,7 @@ export function eventBattleWon(content: Content, run: RunState, event: EventBatt
 
 /** The consolation prize of a lost pseudo-stage fight (`lose` effects of the battle that was lost). */
 export function eventBattleLost(content: Content, run: RunState, event: EventBattleRef): string[] {
+  restoreMachine(content, run);
   const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
   if (!battle || !battle.lose?.length) return [];
