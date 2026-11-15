@@ -134,6 +134,42 @@ test('New UI: a long event script is read page by page; choices wait for the las
   expect(errors).toEqual([]);
 });
 
+test('New UI: a tournament event shows its rounds, and B opens the bracket (group pages, close)', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  await addSide(page, { id: 'nu-tourney', kind: 'event', used: false, eventId: 'cs-kanto-saffron-t2' });
+  await page.evaluate(() => void (window as any).__pkr.game.scene.getScene('Map').scene.start('Event', { sideId: 'nu-tourney' }));
+  await waitForScene(page, 'Event');
+  const ev = view(page, 'Event');
+  // The strip: five rounds, the Round of 16 is next.
+  await expect(ev).toContainText('Round of 32');
+  await expect(ev).toContainText('▶ Round of 16');
+  await expect(ev).toContainText('Final');
+  await page.keyboard.press('b');
+  await expect(ev).toContainText('Saffron Fighting Tournament');
+  await expect(ev).toContainText('16 still in');
+  // Group A is the player's group; the finals are not decided yet, so that page shows no names.
+  await expect(ev.locator('[data-act="bracketPage"]')).toHaveCount(5);
+  await expect(ev).toContainText('★');
+  await ev.locator('[data-act="bracketPage"]').nth(4).click();
+  await expect(ev).toContainText('Champion');
+  await expect(ev).not.toContainText('★');
+  // Left wraps back through the groups; Esc closes without leaving the event or picking anything.
+  await page.keyboard.press('ArrowRight');
+  await expect(ev).toContainText('★');
+  await page.keyboard.press('Escape');
+  await expect(ev).not.toContainText('Saffron Fighting Tournament');
+  await expect(ev).toContainText('▶ Round of 16');
+  expect(await scene(page)).toBe('Event');
+  // A click on the strip opens it as well.
+  await ev.locator('[data-act="bracket"]').first().click();
+  await expect(ev).toContainText('Saffron Fighting Tournament');
+  await page.keyboard.press('b');
+  await expect(ev).not.toContainText('Saffron Fighting Tournament');
+  expect(errors).toEqual([]);
+});
+
 test('New UI: learning a move asks with the mock-up decision screen and its Yes/No box', async ({ page }) => {
   const errors = watch(page);
   await start(page, 'ui=new&seed=newui-e2e');

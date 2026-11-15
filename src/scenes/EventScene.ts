@@ -31,6 +31,7 @@ import { drawChampionStage, drawTourneyPanel, drawTourneyStrip } from '../ui/tou
 import { artOf, monFile } from '../ui/redux/game';
 import { pageSpeaker, scriptPages, type ScriptPage } from '../ui/redux/script';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { tourneyHome, tourneyPage, tourneyRounds } from '../ui/redux/screens/bracket';
 import { eventView as rxEventView } from '../ui/redux/screens/event';
 
 
@@ -57,6 +58,9 @@ export class EventScene extends Phaser.Scene {
   private rxOutAt = 0;
   /** New UI: a split-second countdown waits here until the last intro page (the choices) is on show. */
   private rxStartClock: (() => void) | null = null;
+  /** New UI, tournament events: the bracket page on show, or null while the bracket is closed. */
+  private rxBracket: number | null = null;
+  private toggleBracket: (() => void) | null = null;
   private inputReady = false;
   private leaving = false;
   private outcomeBox: Phaser.GameObjects.Container | null = null;
@@ -90,6 +94,8 @@ export class EventScene extends Phaser.Scene {
     this.rxOutPages = [];
     this.rxOutAt = 0;
     this.rxStartClock = null;
+    this.rxBracket = null;
+    this.toggleBracket = null;
     this.picker = null;
     this.result = null;
     this.leaving = false;
@@ -144,22 +150,32 @@ export class EventScene extends Phaser.Scene {
     this.moneyPill(run.money, this.layout.moneyAt);
     // Beta 0.7 Fighting Tournament: the bracket strip on every tournament event, B for the full bracket, the podium at the end.
     this.bracketPanel = null;
-    if (scene.tourney !== undefined) {
-      const tv = tourneyBracket(content, run, scene.tourney);
+    const tv = scene.tourney !== undefined ? tourneyBracket(content, run, scene.tourney) : null;
+    let champion: string | null = null;
+    if (tv) {
       const toggle = (): void => {
+        // New UI: the bracket is a page of the event's own view (its group pages turn with left and right).
+        if (this.rx) {
+          this.rxBracket = this.rxBracket === null ? tourneyHome(tv) : null;
+          playSfx(this, 'ui.select', 0.4);
+          this.rx.refresh();
+          return;
+        }
         if (this.bracketPanel) { this.bracketPanel.destroy(); this.bracketPanel = null; return; }
         this.bracketPanel = drawTourneyPanel(this, content, tv, toggle);
       };
+      this.toggleBracket = toggle;
       drawTourneyStrip(this, tv, toggle);
       this.input.keyboard?.on('keydown-B', toggle);
       if (scene.tourney === 6) {
         const champ = run.party.find((m) => m.champion) ?? run.party.find((m) => m.speciesId === 'primeape' || m.speciesId === 'mankey');
-        drawChampionStage(this, content, champ?.speciesId ?? 'primeape', Number(run.story.flags['ev:r25-food'] ?? 0) > 0, this.calm);
+        champion = champ?.speciesId ?? 'primeape';
+        drawChampionStage(this, content, champion, Number(run.story.flags['ev:r25-food'] ?? 0) > 0, this.calm);
       }
     }
     this.rx = null;
     this.rxClock = '';
-    if (reduxOn() && eventStyleOf(session.settings.eventStyle) === 'diorama' && scene.tourney === undefined) {
+    if (reduxOn() && eventStyleOf(session.settings.eventStyle) === 'diorama') {
       const pct = (c: ChoiceView): string => (c.chance === null ? '' : `${Math.round(c.chance * 100)}%`);
       const sub = (c: ChoiceView): string => c.locked ?? [c.cost, c.preview ?? c.risk].filter(Boolean).join(' · ');
       const cast = artOf(this, ctx.castIds[0]);
@@ -171,7 +187,8 @@ export class EventScene extends Phaser.Scene {
       };
       this.rxPages = scriptPages(view.event.intro);
       this.rxAt = ctx.introSeen ? this.rxPages.length - 1 : 0;
-      const star = ctx.species ? monFile(this, ctx.species.id) : null;
+      const star = champion ? monFile(this, champion) : ctx.species ? monFile(this, ctx.species.id) : null;
+      const rounds = tv ? tourneyRounds(tv) : null;
       const tag = `${view.event.group} · ${view.event.rarity.charAt(0).toUpperCase()}${view.event.rarity.slice(1)}`;
       this.rx = mountRedux(this, {
         render: (c) => {
@@ -201,11 +218,16 @@ export class EventScene extends Phaser.Scene {
             countdown: this.rxClock,
             timer: this.rxClock && view.event.countdown ? this.rxLeft / view.event.countdown : null,
             standing: view.standing ?? null,
+            rounds,
+            bracket: tv && this.rxBracket !== null ? tourneyPage(tv, (sp) => monFile(this, sp), this.rxBracket, 'Saffron Fighting Tournament') : null,
+            title: champion ? 'CHAMPION' : null,
           });
         },
         acts: {
           pick: (k) => this.confirm(Number(k)),
           page: () => this.turnPage(1),
+          bracket: () => this.toggleBracket?.(),
+          bracketPage: (k) => { this.rxBracket = Number(k); this.rx?.refresh(); },
           next: () => this.advanceOutcome(),
           trade: (k) => { const uid = this.picker?.picks[Number(k)]?.uid; if (uid) void this.commit(uid); },
         },
@@ -312,6 +334,14 @@ export class EventScene extends Phaser.Scene {
     if (this.bracketPanel) {
       this.bracketPanel.destroy();
       this.bracketPanel = null;
+      return;
+    }
+    if (this.rxBracket !== null) {
+      if (action === 'left' || action === 'up') this.rxBracket = (this.rxBracket + 4) % 5;
+      else if (action === 'right' || action === 'down') this.rxBracket = (this.rxBracket + 1) % 5;
+      else this.rxBracket = null;
+      playSfx(this, 'ui.select', 0.3);
+      this.rx?.refresh();
       return;
     }
     if (this.fullLayer) {

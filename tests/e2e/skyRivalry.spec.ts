@@ -33,7 +33,10 @@ test('the Pidgey and Spearow branch fight plays by itself on the battle scene', 
   let shots = 0;
   const t0 = Date.now();
   while ((await scene(page)) === 'Battle' && Date.now() - t0 < 100_000) {
-    await page.keyboard.press('Enter');
+    // Enter only while a line is waiting to be read. A press made while the battle is closing is handled by no screen,
+    // so an automated browser keeps it and replays it into the map, where Enter starts the next trip (a new battle).
+    const waiting = await page.evaluate(() => Boolean((window as any).__pkr.game.scene.getScene('Battle')?.advance));
+    if (waiting) await page.keyboard.press('Enter');
     await page.waitForTimeout(350);
     const state = await page.evaluate(() => {
       const b = (window as any).__pkr.game.scene.getScene('Battle');
