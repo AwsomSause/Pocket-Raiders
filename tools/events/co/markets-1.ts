@@ -326,7 +326,7 @@ export const EVENTS: Json[] = [
     id: 'scrap-buyer', name: 'The Scrap Buyer', stop: 'merchant',
     intro: 'A man with a handcart and a voice that carries three streets. "I buy anything! Anything at all!" Wex pays the plain scrap price, weighed on a scale you can watch.',
     choices: [
-      ch('Sell junk.', out('Wex weighs it, pays the scrap price to the coin, and then stops. He picks a clean little cog out of the pile and hands it back. "That\'s a Machine Part. Too good for my cart. Keep it."', mk('sell', { pick: 'junk', factor: 1 }), item('machine-part'), ...visit('wex', 'scrap-buyer'))),
+      ch('Sell junk.', out('Wex weighs it, pays the scrap price to the coin, and then stops. He picks a clean little cog out of the pile and hands it back. "That\'s a Machine Part. Too good for my cart. Keep it."', mk('sell', { pick: 'junk', factor: 1 }), flag('machine-parts'), ...visit('wex', 'scrap-buyer'))),
       ch('Sell something good.', out('Wex looks at what you are holding and pushes it gently back toward you. "That\'s worth more at a shop. Go there." He means it. He would rather lose the trade than cheat you by an inch.')),
       ask('What do you do with it?', '"Machine Parts. For the TM Workshop." Wex pats the cart. "Fidget turns scrap into discs. I turn clutter into scrap. Everything\'s something, if you carry it far enough."', 'scrap-buyer'),
     ],

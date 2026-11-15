@@ -19,7 +19,7 @@ export const kind = (n = 1): Json[] => [flag('kind-total', n), flag('kind-helped
 /** Reputation +N / −N (a run flag each way, so neither is lost at zero). */
 export const rep = (n: number): Json[] => (n >= 0 ? [flag('rep', n)] : [flag('rep-lost', -n)]);
 /** "(a node)" as a cost (STANDARDS.md: the `takeNode` effect, built by the new-events thread). Off until that effect is on this branch. */
-export const TAKE_NODE = false;
+export const TAKE_NODE = true;
 export const aNode = (nodes = 1): Json[] => (TAKE_NODE ? [{ kind: 'takeNode', ...(nodes > 1 ? { nodes } : {}) }] : []);
 /** A full mini-game opens beside the node (data/minigames.json id). */
 export const game = (id: string): Json => ({ kind: 'addStop', stop: 'minigame', game: id });

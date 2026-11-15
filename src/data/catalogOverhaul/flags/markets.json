@@ -2,9 +2,30 @@
  "category": "markets",
  "note": "Run flags the markets category sets or reads. `external` flags are set by another category's events; markets only reads them (the scene plays its plain version until they exist).",
  "external": [
-  { "key": "apprentice-met", "setBy": "The Apprentice (SF2, families)", "readBy": "bargain-bin" },
-  { "key": "berry-festival-fixed", "setBy": "The Berry Festival (SF76)", "readBy": "berry-merchant" },
-  { "key": "team-op-stopped-stone-harvest", "setBy": "The Stone Harvest (M2, Flare)", "readBy": "mega-bazaar" },
-  { "key": "promise-genesect-no-machines", "setBy": "Genesect's Promise (legends)", "readBy": "tm-vendor, services" }
+  {
+   "key": "apprentice-met",
+   "setBy": "The Apprentice (SF2, families)",
+   "readBy": "bargain-bin"
+  },
+  {
+   "key": "berry-festival-fixed",
+   "setBy": "The Berry Festival (SF76)",
+   "readBy": "berry-merchant"
+  },
+  {
+   "key": "team-op-stopped-stone-harvest",
+   "setBy": "The Stone Harvest (M2, Flare)",
+   "readBy": "mega-bazaar"
+  },
+  {
+   "key": "promise-genesect-no-machines",
+   "setBy": "Genesect's Promise (legends)",
+   "readBy": "tm-vendor, services"
+  },
+  {
+   "key": "promise-meloetta-kept",
+   "setBy": "Meloetta's Promise (legends)",
+   "readBy": "nature-counselor"
+  }
  ]
 }
