@@ -16,7 +16,38 @@
    "genesect",
    "cryogonal",
    "bastiodon",
-   "probopass"
+   "probopass",
+   "magnemite",
+   "magneton",
+   "porygon",
+   "golurk-mega",
+   "klink",
+   "klang",
+   "magearna",
+   "beldum",
+   "metang",
+   "metagross-mega",
+   "bronzor",
+   "registeel",
+   "duraludon",
+   "archaludon",
+   "iron-treads",
+   "iron-bundle",
+   "iron-hands",
+   "iron-jugulis",
+   "iron-moth",
+   "iron-thorns",
+   "iron-valiant",
+   "iron-leaves",
+   "iron-boulder",
+   "iron-crown",
+   "varoom",
+   "revavroom",
+   "rotom-heat",
+   "rotom-wash",
+   "rotom-frost",
+   "rotom-fan",
+   "rotom-mow"
   ],
   "starters": [
    "venusaur",
@@ -132,6 +163,361 @@
    "solrock",
    "latias",
    "latios"
+  ],
+  "pa2-the-dead": [
+   "yamask",
+   "cofagrigus",
+   "yamask-galar",
+   "runerigus",
+   "duskull",
+   "dusclops",
+   "dusknoir",
+   "spiritomb",
+   "sinistea",
+   "polteageist",
+   "drifloon",
+   "drifblim",
+   "phantump",
+   "trevenant",
+   "pumpkaboo",
+   "gourgeist",
+   "greavard",
+   "houndstone",
+   "poltchageist",
+   "sinistcha",
+   "marowak-alola",
+   "annihilape"
+  ],
+  "pa3-guardians": [
+   "regirock",
+   "regice",
+   "registeel",
+   "regieleki",
+   "regidrago",
+   "regigigas",
+   "golett",
+   "golurk",
+   "golurk-mega",
+   "sudowoodo",
+   "bronzong",
+   "carbink",
+   "stonjourner",
+   "kleavor"
+  ],
+  "pa7-tricksters": [
+   "zorua",
+   "zoroark",
+   "zorua-hisui",
+   "zoroark-hisui",
+   "ditto",
+   "mimikyu",
+   "sableye",
+   "murkrow",
+   "honchkrow",
+   "purrloin",
+   "liepard",
+   "impidimp",
+   "morgrem",
+   "grimmsnarl",
+   "grimmsnarl-gmax",
+   "nickit",
+   "thievul",
+   "meowth",
+   "persian",
+   "meowth-alola",
+   "persian-alola",
+   "meowth-galar",
+   "perrserker",
+   "spinda"
+  ],
+  "pa8-pack": [
+   "poochyena",
+   "mightyena",
+   "houndour",
+   "houndoom",
+   "houndoom-mega",
+   "lillipup",
+   "herdier",
+   "stoutland",
+   "electrike",
+   "manectric",
+   "manectric-mega",
+   "rockruff",
+   "lycanroc",
+   "lycanroc-midnight",
+   "lycanroc-dusk",
+   "zigzagoon",
+   "linoone",
+   "zigzagoon-galar",
+   "linoone-galar",
+   "obstagoon",
+   "nickit",
+   "thievul",
+   "maschiff",
+   "mabosstiff",
+   "greavard",
+   "houndstone"
+  ],
+  "pa15-giants": [
+   "munchlax",
+   "snorlax",
+   "snorlax-gmax",
+   "wailord",
+   "hippowdon",
+   "avalugg",
+   "cetitan",
+   "dondozo",
+   "copperajah",
+   "stonjourner",
+   "guzzlord",
+   "torterra"
+  ],
+  "pa16-mascots": [
+   "pichu",
+   "pikachu",
+   "pikachu-gmax",
+   "raichu",
+   "raichu-alola",
+   "raichu-mega-x",
+   "raichu-mega-y",
+   "plusle",
+   "minun",
+   "pachirisu",
+   "emolga",
+   "dedenne",
+   "togedemaru",
+   "morpeko",
+   "pawmi",
+   "pawmo",
+   "pawmot"
+  ],
+  "trio-birds": [
+   "articuno",
+   "zapdos",
+   "moltres",
+   "articuno-galar",
+   "zapdos-galar",
+   "moltres-galar"
+  ],
+  "trio-beasts": [
+   "raikou",
+   "entei",
+   "suicune"
+  ],
+  "trio-lake": [
+   "uxie",
+   "mesprit",
+   "azelf"
+  ],
+  "trio-weather": [
+   "groudon",
+   "kyogre",
+   "rayquaza"
+  ],
+  "trio-creation": [
+   "dialga",
+   "palkia",
+   "giratina",
+   "arceus"
+  ],
+  "trio-swords": [
+   "cobalion",
+   "terrakion",
+   "virizion",
+   "keldeo"
+  ],
+  "trio-tao": [
+   "reshiram",
+   "zekrom",
+   "kyurem"
+  ],
+  "trio-forces": [
+   "tornadus",
+   "thundurus",
+   "landorus",
+   "enamorus"
+  ],
+  "trio-regis": [
+   "regirock",
+   "regice",
+   "registeel",
+   "regieleki",
+   "regidrago",
+   "regigigas"
+  ],
+  "trio-tapus": [
+   "tapu-koko",
+   "tapu-lele",
+   "tapu-bulu",
+   "tapu-fini"
+  ],
+  "trio-lati": [
+   "latias",
+   "latios"
+  ],
+  "trio-aura": [
+   "xerneas",
+   "yveltal",
+   "zygarde"
+  ],
+  "trio-light": [
+   "solgaleo",
+   "lunala",
+   "necrozma",
+   "cosmog",
+   "cosmoem"
+  ],
+  "trio-heroes": [
+   "zacian",
+   "zamazenta",
+   "eternatus"
+  ],
+  "trio-ruin": [
+   "wo-chien",
+   "chien-pao",
+   "ting-lu",
+   "chi-yu"
+  ],
+  "trio-steeds": [
+   "calyrex",
+   "glastrier",
+   "spectrier"
+  ],
+  "trio-loyal": [
+   "okidogi",
+   "munkidori",
+   "fezandipiti",
+   "ogerpon"
+  ],
+  "trio-bells": [
+   "ho-oh",
+   "lugia"
+  ],
+  "trio-paradise": [
+   "koraidon",
+   "miraidon"
+  ],
+  "pa10-starter-lines": [
+   "bulbasaur",
+   "ivysaur",
+   "venusaur",
+   "venusaur-mega",
+   "venusaur-gmax",
+   "charmander",
+   "charmeleon",
+   "charizard",
+   "charizard-mega-x",
+   "charizard-mega-y",
+   "charizard-gmax",
+   "squirtle",
+   "wartortle",
+   "blastoise",
+   "blastoise-mega",
+   "blastoise-gmax",
+   "chikorita",
+   "bayleef",
+   "meganium",
+   "meganium-mega",
+   "cyndaquil",
+   "quilava",
+   "typhlosion",
+   "typhlosion-hisui",
+   "totodile",
+   "croconaw",
+   "feraligatr",
+   "feraligatr-mega",
+   "treecko",
+   "grovyle",
+   "sceptile",
+   "sceptile-mega",
+   "torchic",
+   "combusken",
+   "blaziken",
+   "blaziken-mega",
+   "mudkip",
+   "marshtomp",
+   "swampert",
+   "swampert-mega",
+   "turtwig",
+   "grotle",
+   "torterra",
+   "chimchar",
+   "monferno",
+   "infernape",
+   "piplup",
+   "prinplup",
+   "empoleon",
+   "snivy",
+   "servine",
+   "serperior",
+   "tepig",
+   "pignite",
+   "emboar",
+   "emboar-mega",
+   "oshawott",
+   "dewott",
+   "samurott",
+   "samurott-hisui",
+   "chespin",
+   "quilladin",
+   "chesnaught",
+   "chesnaught-mega",
+   "fennekin",
+   "braixen",
+   "delphox",
+   "delphox-mega",
+   "froakie",
+   "frogadier",
+   "greninja",
+   "greninja-ash",
+   "greninja-mega",
+   "rowlet",
+   "dartrix",
+   "decidueye",
+   "decidueye-hisui",
+   "litten",
+   "torracat",
+   "incineroar",
+   "popplio",
+   "brionne",
+   "primarina",
+   "grookey",
+   "thwackey",
+   "rillaboom",
+   "rillaboom-gmax",
+   "scorbunny",
+   "raboot",
+   "cinderace",
+   "cinderace-gmax",
+   "sobble",
+   "drizzile",
+   "inteleon",
+   "inteleon-gmax",
+   "sprigatito",
+   "floragato",
+   "meowscarada",
+   "fuecoco",
+   "crocalor",
+   "skeledirge",
+   "quaxly",
+   "quaxwell",
+   "quaquaval",
+   "pichu",
+   "pikachu",
+   "pikachu-gmax",
+   "raichu",
+   "raichu-alola",
+   "raichu-mega-x",
+   "raichu-mega-y",
+   "eevee",
+   "vaporeon",
+   "jolteon",
+   "flareon",
+   "espeon",
+   "umbreon",
+   "leafeon",
+   "glaceon",
+   "sylveon"
   ]
  },
  "moments": [
@@ -174,6 +560,20 @@
    "effect": {
     "reviveHpMult": 1.5,
     "overcharged": true
+   },
+   "layer": "archetype",
+   "chancePlus": {
+    "species": [
+     "magnezone",
+     "golurk",
+     "rotom",
+     "rotom-heat",
+     "rotom-wash",
+     "rotom-frost",
+     "rotom-fan",
+     "rotom-mow"
+    ],
+    "plus": 0.1
    }
   },
   {
@@ -3455,6 +3855,329 @@
     "rememberedNext": true
    },
    "allyScope": "any"
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "supported",
+   "id": "pa2-the-ones-who-were-people",
+   "name": "The Ones Who Were People",
+   "scope": {
+    "groups": [
+     "pa2-the-dead"
+    ]
+   },
+   "trigger": "faint",
+   "chance": 0.25,
+   "effect": {
+    "haunting": {
+     "turns": 3,
+     "pct": 50,
+     "foeAccDown": 10
+    }
+   },
+   "effectText": "Haunting: for 3 turns its spirit strikes with its best move at half power, and the foe's moves are 10% less accurate.",
+   "presentation": "The battlefield goes silent, a faint kind voice that is not its own | \"Not like this.\""
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "id": "pa3-set-in-stone",
+   "name": "Set in Stone",
+   "scope": {
+    "groups": [
+     "pa3-guardians"
+    ]
+   },
+   "trigger": "ally",
+   "allyScope": "any",
+   "chance": 0.4,
+   "effect": {
+    "guardNext": true
+   },
+   "effectText": "When an ally faints: the next ally sent in is Guarded (this Pokémon takes the next hit meant for it) and gets Defence +1.",
+   "presentation": "A heavy thud | [Name] steps forward without being told."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "id": "pa5-older-than-the-map",
+   "name": "Older Than the Map",
+   "scope": {
+    "groups": [
+     "fossils"
+    ]
+   },
+   "trigger": "start",
+   "chance": 0.5,
+   "requires": {
+    "foeWeakTo": true,
+    "foeNotGroup": "fossils"
+   },
+   "effect": {
+    "firstSuperCut": 25
+   },
+   "effectText": "Facing a modern Pokémon of a type it is weak to: its first super-effective hit taken does 25% less.",
+   "presentation": "A low, old cry | [Name] has survived worse than this. It survived the end of the world."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "id": "pa5-older-than-the-map-face-off",
+   "name": "Older Than the Map",
+   "scope": {
+    "groups": [
+     "fossils"
+    ]
+   },
+   "trigger": "enter",
+   "chance": 0.5,
+   "requires": {
+    "foeWeakTo": true,
+    "foeNotGroup": "fossils"
+   },
+   "effect": {
+    "firstSuperCut": 25
+   },
+   "effectText": "Facing a modern Pokémon of a type it is weak to: its first super-effective hit taken does 25% less.",
+   "presentation": "A low, old cry | [Name] has survived worse than this. It survived the end of the world."
+  },
+  {
+   "limit": "run",
+   "tier": "major",
+   "status": "supported",
+   "id": "pa7-playing-dead",
+   "name": "Playing Dead",
+   "scope": {
+    "groups": [
+     "pa7-tricksters"
+    ]
+   },
+   "trigger": "lethal",
+   "chance": 0.15,
+   "effect": {
+    "healPct": 25
+   },
+   "effectText": "It was faking: it gets back up at 25% HP. Once per run for each Pokémon.",
+   "presentation": "It faints, the other side cheers | Wait."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "id": "pa8-the-pack",
+   "name": "The Pack",
+   "scope": {
+    "groups": [
+     "pa8-pack"
+    ]
+   },
+   "trigger": "start",
+   "chance": 1,
+   "requires": {
+    "partyMatching": 2
+   },
+   "effect": {
+    "packStat": 5
+   },
+   "effectText": "Each pack Pokémon gets +5% to every stat but HP for each other pack member in the party.",
+   "presentation": "The party howls together (pa8_howl) | The pack is all here."
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa10-the-starters",
+   "name": "The Starters",
+   "scope": {
+    "groups": [
+     "pa10-starter-lines"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.25,
+   "layer": "archetype",
+   "requires": {
+    "starter": true
+   },
+   "effect": {
+    "resolute": true
+   },
+   "effectText": "Your chosen starter stands back up at 1 HP, Resolute (no flinch, no confusion, +1 priority on its next move).",
+   "presentation": "The fade begins, then stops, and the lab and the Poké Ball on the table flash by | [Name] was there at the start."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "id": "pa12-out-of-time",
+   "name": "Out of Time",
+   "scope": {
+    "groups": [
+     "paradox"
+    ]
+   },
+   "trigger": "start",
+   "chance": 1,
+   "requires": {
+    "foeCounterpart": true
+   },
+   "effect": {
+    "paradoxDrive": true
+   },
+   "effectText": "Facing its own modern counterpart: its Protosynthesis or Quark Drive turns on without sun or terrain.",
+   "presentation": "Both stop, the music skips like a scratched record | They know each other. Neither knows how."
+  },
+  {
+   "limit": "battle",
+   "tier": "minor",
+   "status": "supported",
+   "id": "pa12-out-of-time-face-off",
+   "name": "Out of Time",
+   "scope": {
+    "groups": [
+     "paradox"
+    ]
+   },
+   "trigger": "enter",
+   "chance": 1,
+   "requires": {
+    "foeCounterpart": true
+   },
+   "effect": {
+    "paradoxDrive": true
+   },
+   "effectText": "Facing its own modern counterpart: its Protosynthesis or Quark Drive turns on without sun or terrain.",
+   "presentation": "Both stop, the music skips like a scratched record | They know each other. Neither knows how."
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa13-the-weight-of-the-world",
+   "name": "The Weight of the World",
+   "scope": {
+    "tags": [
+     "legendary"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.15,
+   "layer": "archetype",
+   "requires": {
+    "notVsOwnTrio": true
+   },
+   "effect": {
+    "reviveHpPct": 50
+   },
+   "effectText": "A Legendary will not fall on a road: it gets back up at 50% HP. Not against its own trio or counterpart.",
+   "presentation": "The fade stops halfway, everything greys except the Legendary | It doesn't die here. Not on a road. Not like this."
+  },
+  {
+   "limit": "battle",
+   "tier": "major",
+   "status": "limited",
+   "id": "pa15-sleeping-giants",
+   "name": "Sleeping Giants",
+   "scope": {
+    "groups": [
+     "pa15-giants"
+    ]
+   },
+   "trigger": "allyLethal",
+   "chance": 0.2,
+   "effect": {},
+   "effectText": "A hit that would knock out the Pokémon in front is taken by this giant from the bench (it holds at 1 HP or more).",
+   "presentation": "A huge shape moves in front | [Name] got up. It doesn't do that."
+  },
+  {
+   "limit": "run",
+   "tier": "landmark",
+   "status": "supported",
+   "id": "pa16-the-mascots",
+   "name": "The Mascots",
+   "scope": {
+    "groups": [
+     "pa16-mascots"
+    ]
+   },
+   "trigger": "runEnd",
+   "chance": 0.1,
+   "layer": "archetype",
+   "effect": {
+    "reviveHpPct": 25,
+    "boost": {
+     "spe": 2
+    }
+   },
+   "effectText": "It gets back up at 25% HP with its Speed doubled.",
+   "presentation": "A small squeak in the dark, a spark, another | [Name] won't let it end like this."
   }
- ]
+ ],
+ "counterparts": {
+  "great-tusk": [
+   "donphan"
+  ],
+  "scream-tail": [
+   "jigglypuff"
+  ],
+  "brute-bonnet": [
+   "amoonguss"
+  ],
+  "flutter-mane": [
+   "misdreavus"
+  ],
+  "slither-wing": [
+   "volcarona"
+  ],
+  "sandy-shocks": [
+   "magneton"
+  ],
+  "roaring-moon": [
+   "salamence"
+  ],
+  "walking-wake": [
+   "suicune"
+  ],
+  "gouging-fire": [
+   "entei"
+  ],
+  "raging-bolt": [
+   "raikou"
+  ],
+  "iron-treads": [
+   "donphan"
+  ],
+  "iron-bundle": [
+   "delibird"
+  ],
+  "iron-hands": [
+   "hariyama"
+  ],
+  "iron-jugulis": [
+   "hydreigon"
+  ],
+  "iron-moth": [
+   "volcarona"
+  ],
+  "iron-thorns": [
+   "tyranitar"
+  ],
+  "iron-valiant": [
+   "gardevoir",
+   "gallade"
+  ],
+  "iron-leaves": [
+   "virizion"
+  ],
+  "iron-boulder": [
+   "terrakion"
+  ],
+  "iron-crown": [
+   "cobalion"
+  ]
+ }
 }

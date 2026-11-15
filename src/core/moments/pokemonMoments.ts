@@ -14,7 +14,7 @@ import { Rng, hashSeed } from '../rng';
 import type { Content, Species } from '../contentSchema';
 import type { PokemonInstance } from '../state';
 
-export const MOMENT_TRIGGERS = ['runEnd', 'lethal', 'faint', 'ally', 'start', 'low', 'ko', 'enter', 'super', 'crit', 'weather', 'status', 'rest', 'catch', 'turn'] as const;
+export const MOMENT_TRIGGERS = ['runEnd', 'lethal', 'faint', 'ally', 'start', 'low', 'ko', 'enter', 'super', 'crit', 'weather', 'status', 'rest', 'catch', 'turn', 'allyLethal'] as const;
 export type MomentTrigger = (typeof MOMENT_TRIGGERS)[number];
 
 /** Triggers in priority order: when several moments could be the cinematic of one battle, the earlier one wins. */
@@ -114,6 +114,16 @@ export const MomentEffectSchema = z.object({
   foeBadPoison: z.boolean().optional(),
   /** Its first Ground move this battle hits Flying-types. */
   groundHitsFlying: z.boolean().optional(),
+  /** Run-end revive: HP as a percent of max HP (instead of `reviveHpMult`). */
+  reviveHpPct: z.number().int().min(1).max(100).optional(),
+  /** Guarded (PA3): the next ally sent in is guarded by this Pokémon, which takes the next hit meant for it; that ally's Defence +1. */
+  guardNext: z.boolean().optional(),
+  /** Its first super-effective hit taken does this much less damage (percent). */
+  firstSuperCut: z.number().int().min(1).max(100).optional(),
+  /** The Pack: every matching party member gets +pct% to every stat but HP for each other matching member in the party. */
+  packStat: z.number().int().min(1).max(25).optional(),
+  /** Its Protosynthesis or Quark Drive is on without sun or terrain. */
+  paradoxDrive: z.boolean().optional(),
   /** Names the opponent's ace (its strongest Pokémon) before it comes out. */
   revealAce: z.boolean().optional(),
   /** Haunting: after it faints it stays as a spirit for `turns` turns, striking with its best move at `pct`% power each turn; it can't be hit. */
@@ -160,6 +170,15 @@ export const PokemonMomentSchema = z.object({
       tailwind: z.boolean().optional(),
       /** It was knocked out by a contact move. */
       contact: z.boolean().optional(),
+      /** The foe in front has a type this Pokémon is weak to, and is not in the named group (a "modern" Pokémon). */
+      foeWeakTo: z.boolean().optional(),
+      foeNotGroup: z.string().optional(),
+      /** The foe in front is this Pokémon's counterpart, as listed in the `counterparts` table. */
+      foeCounterpart: z.boolean().optional(),
+      /** Not when an opponent shares one of its trios or pairs (groups named `trio-*`). */
+      notVsOwnTrio: z.boolean().optional(),
+      /** Only the run's chosen starter. */
+      starter: z.boolean().optional(),
       /** A named opponent: a trainer battle, not a wild one. */
       named: z.boolean().optional(),
       /** The opponent's ace (its strongest Pokémon) has one of these types. */
@@ -172,6 +191,12 @@ export const PokemonMomentSchema = z.object({
   hpBelow: z.number().int().min(1).max(99).optional(),
   /** 0–1. */
   chance: z.number().min(0).max(1),
+  /** The chance grows by `perStep` for each Bond level above `above`, up to `max` (PA1). */
+  chanceBond: z.object({ above: z.number().int().min(0).max(5), perStep: z.number().min(0).max(1), max: z.number().min(0).max(1) }).optional(),
+  /** These evolution lines (by root or member) get `plus` on top. */
+  chancePlus: z.object({ species: z.array(z.string()), plus: z.number().min(0).max(1) }).optional(),
+  /** Run-end order (pack §0.3): individual, species, group, archetype, type. Lower goes first. */
+  layer: z.enum(['individual', 'species', 'group', 'archetype', 'type']).optional(),
   limit: z.enum(['battle', 'run']),
   tier: z.enum(['minor', 'major', 'landmark']),
   status: z.enum(['supported', 'limited', 'disabled']),
@@ -183,10 +208,12 @@ export const PokemonMomentSchema = z.object({
 });
 export type PokemonMoment = z.infer<typeof PokemonMomentSchema>;
 
-const FileSchema = z.object({ status: z.string(), note: z.string(), groups: z.record(z.string(), z.array(z.string())), moments: z.array(PokemonMomentSchema) });
+const FileSchema = z.object({ status: z.string(), note: z.string(), groups: z.record(z.string(), z.array(z.string())), counterparts: z.record(z.string(), z.array(z.string())).default({}), moments: z.array(PokemonMomentSchema) });
 const file = FileSchema.parse(raw);
 
 export const MOMENT_GROUPS: Readonly<Record<string, readonly string[]>> = file.groups;
+/** PA12: a Paradox Pokémon and the modern species it mirrors. */
+export const MOMENT_COUNTERPARTS: Readonly<Record<string, readonly string[]>> = file.counterparts;
 export const POKEMON_MOMENTS: readonly PokemonMoment[] = file.moments;
 const BY_ID = new Map(POKEMON_MOMENTS.map((m) => [m.id, m]));
 export const pokemonMoment = (id: string): PokemonMoment | undefined => BY_ID.get(id);
@@ -247,6 +274,8 @@ export interface MomentHooks {
   noteCinematic: (tier: PokemonMoment['tier']) => void;
   /** True when the run would really end now (no checkpoint, Safety Net or recorder could still save it). */
   runWouldEnd: () => boolean;
+  /** The run's chosen starter (PA10). */
+  starterUid?: string | null;
 }
 
 /** One stateless roll: true with probability `chance`. Same inputs, same answer. */

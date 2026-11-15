@@ -239,3 +239,167 @@ describe('pack type moments: rest', () => {
     expect(restMoments(content, run).some((l) => l.includes('Sunlight Through Leaves'))).toBe(true);
   });
 });
+
+describe('pack archetype moments: run end (shared use, layer and Bond order)', () => {
+  function wipe(seed: string, party: PokemonInstance[], foe = mon('machamp', 90, 'm', ['close-combat']), starterUid: string | null = null) {
+    for (const p of party) p.hp = 1;
+    const battle = createBattle('wild', [foe], 0, party[0]!.uid);
+    const flags: MomentHooks['flags'] = {};
+    const moments: MomentHooks = { seed, flags, cinematic: () => true, noteCinematic: () => undefined, runWouldEnd: () => true, starterUid };
+    const ctx: BattleContext = { content, battle, party, inventory: {}, rng: new Rng(hashSeed(seed)), captureRng: new Rng(hashSeed(`${seed}c`)), catchMultiplier: 1, moments };
+    return { ctx, battle, flags };
+  }
+  /** Knocks the whole party out with one strong hit per turn, until the battle ends or someone gets back up. */
+  const fall = (ctx: BattleContext): BattleEvent[] => {
+    const all: BattleEvent[] = [];
+    for (let i = 0; i < 12 && !ctx.battle.outcome; i++) {
+      if (ctx.battle.needsSwitch) {
+        const next = ctx.party.findIndex((p) => p.hp > 0);
+        if (next < 0) break;
+        all.push(...resolveTurn(ctx, { kind: 'switch', partyIndex: next }));
+      } else all.push(...move(ctx));
+      if (all.some((e) => e.type === 'pmoment' && e.trigger === 'runEnd')) break;
+    }
+    return all;
+  };
+
+  it('PA16 The Mascots: back up at 25% HP with Speed +2 (doubled); the shared use is spent', () => {
+    someSeed('pa16', (seed) => {
+      const { ctx, battle, flags } = wipe(seed, [mon('pikachu', 30, 'pk', ['splash'])]);
+      const events = fall(ctx);
+      expect(flags['pm:runend-used']).toBe(1);
+      if (!played(events, 'pa16-the-mascots')) return false;
+      const pk = ctx.party[0]!;
+      expect(pk.hp).toBe(Math.max(1, Math.floor(calcStats(content, pk).hp / 4)));
+      expect(battle.playerStages.spe).toBe(2);
+      expect(battle.outcome).toBeNull();
+      return true;
+    });
+  });
+
+  it('PA10 The Starters: only the chosen starter, at 1 HP and Resolute', () => {
+    someSeed('pa10', (seed) => {
+      const { ctx, battle } = wipe(seed, [mon('bulbasaur', 30, 'st', ['splash'])], undefined, 'st');
+      const events = fall(ctx);
+      if (!played(events, 'pa10-the-starters')) return false;
+      expect(ctx.party[0]!.hp).toBe(1);
+      expect(battle.storyEffects).toContain('pm-noconfuse:st');
+      return true;
+    });
+    for (let i = 0; i < 40; i++) {
+      const { ctx } = wipe(`pa10-not-${i}`, [mon('bulbasaur', 30, 'st', ['splash'])], undefined, 'someone-else');
+      expect(played(fall(ctx), 'pa10-the-starters')).toBe(false);
+    }
+  });
+
+  it('only one revival per run: after one roll the next wipe has none', () => {
+    const { ctx, flags } = wipe('once', [mon('pikachu', 30, 'pk', ['splash'])]);
+    fall(ctx);
+    expect(flags['pm:runend-used']).toBe(1);
+    const again = wipe('once-2', [mon('pikachu', 30, 'pk2', ['splash'])]);
+    again.ctx.moments!.flags['pm:runend-used'] = 1;
+    expect(fall(again.ctx).some((e) => e.type === 'pmoment' && e.trigger === 'runEnd')).toBe(false);
+  });
+
+  it('PA13 The Weight of the World: never against its own trio', () => {
+    for (let i = 0; i < 60; i++) {
+      const { ctx } = wipe(`pa13-${i}`, [mon('zapdos', 50, 'z', ['splash'])], mon('articuno', 90, 'a', ['ice-beam']));
+      expect(played(fall(ctx), 'pa13-the-weight-of-the-world')).toBe(false);
+    }
+    someSeed('pa13-ok', (seed) => {
+      const { ctx } = wipe(seed, [mon('zapdos', 50, 'z', ['splash'])], mon('golem', 90, 'g', ['rock-slide']));
+      const events = fall(ctx);
+      if (!played(events, 'pa13-the-weight-of-the-world')) return false;
+      expect(ctx.party[0]!.hp).toBe(Math.floor(calcStats(content, ctx.party[0]!).hp / 2));
+      return true;
+    });
+  });
+
+  it('a higher-Bond starter goes before the machine (PA10 over PA1); a tie keeps PA1 first', () => {
+    const order = (bond: number): string[] => {
+      const party = [mon('rotom', 30, 'ro', ['splash']), mon('pichu', 30, 'st', ['splash'])];
+      party[1]!.friendship = bond;
+      // Rotom is part Ghost, so the foe bites.
+      const { ctx } = wipe('order', party, mon('machamp', 90, 'm', ['crunch']), 'st');
+      const seen: string[] = [];
+      const flags = ctx.moments!.flags;
+      const proxy = new Proxy(flags, { set: (t, k, v) => { if (typeof k !== 'string') return false; if (k.startsWith('pm:') && k !== 'pm:runend-used') seen.push(k); (t as Record<string, unknown>)[k] = v; return true; } });
+      ctx.moments!.flags = proxy;
+      fall(ctx);
+      return seen;
+    };
+    const low = order(0);
+    expect(low[0]).toContain('failure-not-tolerated');
+    const high = order(255);
+    expect(high[0]).toMatch(/pa10-the-starters|pa16-the-mascots/);
+  });
+});
+
+describe('pack archetype moments: battle', () => {
+  it('PA8 The Pack: with two pack Pokémon each gets +5% stats (Speed shows it)', () => {
+    const { ctx, battle } = fight('pa8', [mon('poochyena', 30, 'a', ['splash']), mon('houndour', 30, 'b', ['splash'])], [mon('caterpie', 5, 'c', ['string-shot'])], 'wild');
+    expect(played(move(ctx), 'pa8-the-pack')).toBe(true);
+    expect(battle.storyEffects).toContain('pm-statpct:a:5');
+    expect(battle.storyEffects).toContain('pm-statpct:b:5');
+    const solo = fight('pa8-solo', [mon('poochyena', 30, 'a', ['splash'])], [mon('caterpie', 5, 'c', ['string-shot'])], 'wild');
+    expect(played(move(solo.ctx), 'pa8-the-pack')).toBe(false);
+  });
+
+  it('PA12 Out of Time: facing its own counterpart, Protosynthesis turns on', () => {
+    const { ctx, battle } = fight('pa12', [mon('great-tusk', 50, 'gt', ['splash'])], [mon('donphan', 50, 'd', ['splash'])], 'wild');
+    expect(played(move(ctx), 'pa12-out-of-time')).toBe(true);
+    expect(battle.storyEffects).toContain('pm-paradox:gt');
+    const other = fight('pa12-no', [mon('great-tusk', 50, 'gt', ['splash'])], [mon('phanpy', 50, 'd', ['splash'])], 'wild');
+    expect(played(move(other.ctx), 'pa12-out-of-time')).toBe(false);
+  });
+
+  it('PA5 Older Than the Map: the first super-effective hit is cut by a quarter, then the cut is spent', () => {
+    someSeed('pa5', (seed) => {
+      const { ctx, battle } = fight(seed, [mon('kabuto', 40, 'k', ['splash'])], [mon('oddish', 30, 'o', ['absorb'])], 'wild');
+      const events = move(ctx);
+      if (!played(events, 'pa5-older-than-the-map')) return false;
+      expect(battle.storyEffects.some((t) => t.startsWith('pm-supercut:k:'))).toBe(false);
+      return true;
+    });
+  });
+
+  it('PA7 Playing Dead: back up at a quarter HP, once per run for that Pokémon', () => {
+    someSeed('pa7', (seed) => {
+      const { ctx } = fight(seed, [mon('zorua', 20, 'z', ['splash']), mon('snorlax', 60, 's', ['splash'])], [mon('machamp', 80, 'm', ['close-combat'])], 'wild');
+      const events = move(ctx);
+      if (!played(events, 'pa7-playing-dead')) return false;
+      expect(ctx.party[0]!.hp).toBeGreaterThan(1);
+      expect(ctx.moments!.flags['pm:pa7-playing-dead@z']).toBe(1);
+      return true;
+    });
+  });
+
+  it('PA3 Set in Stone: the next ally sent in is Guarded with Defence +1, and the guardian takes its next hit', () => {
+    someSeed('pa3', (seed) => {
+      const party = [mon('pidgey', 20, 'p', ['splash'], 5), mon('sudowoodo', 50, 'su', ['splash']), mon('snorlax', 60, 's', ['splash'])];
+      const { ctx, battle } = fight(seed, party, [mon('machamp', 60, 'm', ['close-combat'])], 'wild');
+      if (!played(move(ctx), 'pa3-set-in-stone')) return false;
+      resolveTurn(ctx, { kind: 'switch', partyIndex: 2 });
+      expect(battle.storyEffects).toContain('pm-guarded:s:su');
+      expect(battle.playerStages.def).toBe(1);
+      const snorlaxHp = ctx.party[2]!.hp;
+      const guardHp = ctx.party[1]!.hp;
+      const events = move(ctx);
+      expect(said(events, 'takes the hit')).toBe(true);
+      expect(ctx.party[2]!.hp).toBe(snorlaxHp);
+      expect(ctx.party[1]!.hp).toBeLessThan(guardHp);
+      return true;
+    });
+  });
+
+  it('PA15 Sleeping Giants: a giant on the bench takes the knockout hit', () => {
+    someSeed('pa15', (seed) => {
+      const { ctx } = fight(seed, [mon('pidgey', 20, 'p', ['splash'], 5), mon('snorlax', 60, 's', ['splash'])], [mon('rattata', 40, 'r', ['tackle'])], 'wild');
+      const events = move(ctx);
+      if (!played(events, 'pa15-sleeping-giants')) return false;
+      expect(ctx.party[0]!.hp).toBeGreaterThan(0);
+      expect(ctx.party[1]!.hp).toBeLessThan(calcStats(content, ctx.party[1]!).hp);
+      return true;
+    });
+  });
+});

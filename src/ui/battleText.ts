@@ -123,7 +123,8 @@ export function eventText(content: Content, names: Names, e: RunEvent, details =
       // Pack lines name the Pokémon as [Name].
       const line = (def?.presentation.split(' | ').pop() ?? '').replace(/^"|"$/g, '').replace(/\[Name\]/g, content.species.get(e.speciesId)?.name ?? 'It');
       // Battle-start and switch-in moments: their flavour line, then what it did.
-      if (e.trigger !== 'lethal' && e.trigger !== 'runEnd') return `${e.name}! ${line ? `${line} ` : ''}${def?.effectText ?? ''}`.trim();
+      if (e.trigger === 'runEnd') return `${e.name}! ${who(e.side)} gets back up!${line ? ` ${line}` : ''}`;
+      if (e.trigger !== 'lethal') return `${e.name}! ${line ? `${line} ` : ''}${def?.effectText ?? ''}`.trim();
       return `${e.name}! ${who(e.side)} hangs on!${line ? ` ${line}` : ''}`;
     }
     case 'hyper':

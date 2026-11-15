@@ -3013,6 +3013,7 @@ function pokemonMomentHooks(content: Content, run: RunState): MomentHooks {
     flags: run.story.flags,
     cinematic: (tier) => momentAllowed(content, run, tier),
     noteCinematic: (tier) => noteMoments(run, tier),
+    starterUid: run.log.starterUid,
     // Only a wipe with nothing left to catch it ends the run: no checkpoint to return to, no Safety Net, no VS Recorder.
     runWouldEnd: () => {
       const battle = run.battle;

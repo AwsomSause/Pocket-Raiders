@@ -119,7 +119,7 @@ import { ARENA_IMMUNE, foeStake, aimAccuracy, arenaText, dealOffer, mindReader, 
 import { benchSupporter, addBleed, bleedDamage, causesBleed, curseMultiplier, resonanceMultiplier } from './w1Rules';
 import { sacrificeFor } from './sacrificeRule';
 import { berserkDue, berserkMove, isBerserk } from './berserk';
-import { hauntAccuracyCut, momentGroundTypes, momentNoConfuse, momentRooted, momentStatMult, noteContactHit, tryHauntStrikes, momentContactPoison, momentDamageMult, spendMomentBoost, applyPendingMoments, fadeMomentBoosts, tryFaintMoments, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
+import { momentGuardHit, momentParadoxDrive, momentSuperCut, tryAllyLethalMoment, hauntAccuracyCut, momentGroundTypes, momentNoConfuse, momentRooted, momentStatMult, noteContactHit, tryHauntStrikes, momentContactPoison, momentDamageMult, spendMomentBoost, applyPendingMoments, fadeMomentBoosts, tryFaintMoments, momentNoFlinch, momentPriority, guardAmount, tryEntryMoments, tryLethalMoment, tryReactiveMoments, tryRunEndMoment, tryStartMoments } from './pokemonMoments';
 import type { MomentHooks } from '../moments/pokemonMoments';
 import { quirkAccuracy, quirkDamageMult, quirkEntryStages, quirkGuard, quirkNoCrits, quirkOf, quirkPriority, quirkSurvives } from '../co/quirks';
 import { reapplyBoost } from '../instrumentality/secondChance';
@@ -148,7 +148,7 @@ export type BattleEvent =
   /** Became confused; `confusion` is the "is confused!" check at the start of its move; `confusionEnd` snapped out. */
   | { type: 'confused'; side: Side }
   /** A Pokémon moment (core/moments): `cinematic` false means it is told as a plain line; `scene` is the full-screen run-end revive. */
-  | { type: 'pmoment'; side: Side; uid: string; speciesId: string; id: string; name: string; tier: 'minor' | 'major' | 'landmark'; hpAfter: number; cinematic: boolean; scene: boolean; trigger: 'runEnd' | 'lethal' | 'faint' | 'start' | 'enter' | 'ally' | 'low' | 'ko' | 'super' | 'crit' | 'weather' | 'status' | 'rest' | 'catch' | 'turn' }
+  | { type: 'pmoment'; side: Side; uid: string; speciesId: string; id: string; name: string; tier: 'minor' | 'major' | 'landmark'; hpAfter: number; cinematic: boolean; scene: boolean; trigger: 'runEnd' | 'lethal' | 'faint' | 'start' | 'enter' | 'ally' | 'low' | 'ko' | 'super' | 'crit' | 'weather' | 'status' | 'rest' | 'catch' | 'turn' | 'allyLethal' }
   | { type: 'confusion'; side: Side }
   | { type: 'confusionEnd'; side: Side }
   | { type: 'confusionHit'; side: Side; amount: number; hpAfter: number }
@@ -2524,7 +2524,7 @@ function statsOf(ctx: BattleContext, c: Combatant): ReturnType<typeof calcStats>
   const remembered = momentStatMult(ctx, c);
   const stats = remembered === 1 ? raw : { ...raw, atk: Math.floor(raw.atk * remembered), def: Math.floor(raw.def * remembered), spa: Math.floor(raw.spa * remembered), spd: Math.floor(raw.spd * remembered), spe: Math.floor(raw.spe * remembered) };
   const ability = abilityIn(ctx, c);
-  const boosted = (ability === 'protosynthesis' && weatherNow(ctx) === 'sun') || (ability === 'quark-drive' && ctx.battle.terrain?.id === 'electric');
+  const boosted = (ability === 'protosynthesis' && weatherNow(ctx) === 'sun') || (ability === 'quark-drive' && ctx.battle.terrain?.id === 'electric') || ((ability === 'protosynthesis' || ability === 'quark-drive') && momentParadoxDrive(ctx, c));
   if (!boosted) return stats;
   const best = (['atk', 'def', 'spa', 'spd', 'spe'] as const).reduce((a, b) => (stats[b] > stats[a] ? b : a));
   return { ...stats, [best]: Math.floor(stats[best] * (best === 'spe' ? 1.5 : 1.3)) };
@@ -2857,6 +2857,10 @@ function takeHp(
     (ctx.momentQueue ??= []).push({ type: 'raid', tone: 'info', text: `${getSpecies(ctx.content, guard.speciesId).name} throws itself in the way and takes the hit!` });
     return { lost: 0, lastStand: null, hyper: null, knockedDown: false, stand: false };
   }
+  // Pack moments (PA3 Guarded): a guardian on the bench takes the next hit meant for this Pokémon.
+  if (hit !== null && c.side === 'player' && lost > 0 && ctx.moments && momentGuardHit(ctx, c, lost)) return { lost: 0, lastStand: null, hyper: null, knockedDown: false, stand: false };
+  // Pack moments (PA15 Sleeping Giants): a giant on the bench takes a hit that would knock the one in front out.
+  if (hit !== null && c.side === 'player' && lost > 0 && lost >= c.mon.hp && ctx.moments && tryAllyLethalMoment(ctx, c, lost)) return { lost: 0, lastStand: null, hyper: null, knockedDown: false, stand: false };
   // Beta 0.6 Pokémon moments: a species, line, type or group may hang on (core/moments). A Hyper moment this turn comes first.
   if (hit !== null && c.side === 'player' && lost > 0 && lost >= c.mon.hp) {
     const left = tryLethalMoment(ctx, c);
@@ -4240,6 +4244,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (user.side === 'player' && ctx.feat && user.mon.hp * 2 <= calcStats(content, user.mon).hp && tryFeat(ctx, user, 'old_style_surge')) final *= 1.5;
       if (userAbility === 'neuroforce' && effectiveness > 1) final *= 1.25;
       if (fx.superEffectiveBoost && effectiveness > 1) final *= 4 / 3;
+      // Pack moments (PA5 Older Than the Map): the first super-effective hit it takes is cut.
+      if (ctx.moments && target.side === 'player') final *= momentSuperCut(ctx, target, effectiveness);
       if (user.mon.awakened?.includes(move.id)) final *= content.story.awakening.boost;
       if (user.mon.mastered?.includes(move.id)) final *= 1 + content.balance.trainerWorld.masteryPower;
       if (user.side === 'player' && ctx.battle.comboUid === user.mon.uid) final *= content.balance.w1.play.combo.bonus;

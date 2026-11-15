@@ -6,7 +6,8 @@ import { calcStats, maxPp } from '../pokemon';
 import { Rng, hashSeed } from '../rng';
 import { currentEnemy, freshStages, freshVolatile, type PokemonInstance } from '../state';
 import { calcDamage, clampStage, isStatusImmune, typeEffectiveness } from './damage';
-import { momentKey, momentMatches, momentRoll, momentsFor, pokemonMoment, runClaimKey, type MomentEffect, type MomentTrigger, type PokemonMoment } from '../moments/pokemonMoments';
+import { MOMENT_COUNTERPARTS, MOMENT_GROUPS, momentKey, momentMatches, momentRoll, momentsFor, pokemonMoment, runClaimKey, type MomentEffect, type MomentTrigger, type PokemonMoment } from '../moments/pokemonMoments';
+import { bondLevel } from '../co/who';
 import type { BattleContext, BattleEvent, Combatant } from './engine';
 
 export type PMomentEvent = Extract<BattleEvent, { type: 'pmoment' }>;
@@ -34,6 +35,11 @@ const NEXTPRIO = 'pm-nextprio:';
 const GROUND_FLYING = 'pm-groundflying:';
 const HAUNT = 'pm-haunt:';
 const CONTACT_HIT = 'pm-contacthit:';
+const GUARD_NEXT = 'pm-guardnext:';
+const GUARDED = 'pm-guarded:';
+const SUPERCUT = 'pm-supercut:';
+const STATPCT = 'pm-statpct:';
+const PARADOX = 'pm-paradox:';
 
 /** One seeded number in [0, 1) for a moment's own pick (a move to learn). Stateless: same inputs, same answer. */
 function momentUnit(ctx: BattleContext, id: string, uid: string, turn: number): number {
@@ -68,7 +74,67 @@ export function momentDamageMult(ctx: BattleContext, c: Combatant, moveType: str
 
 /** Remembered: +10% to every stat but HP for the rest of the battle. 1 when not. */
 export function momentStatMult(ctx: Pick<BattleContext, 'battle'>, c: Pick<Combatant, 'side' | 'mon'>): number {
-  return c.side === 'player' && ctx.battle.storyEffects.includes(`${REMEMBERED}${c.mon.uid}`) ? 1.1 : 1;
+  if (c.side !== 'player') return 1;
+  const tags = ctx.battle.storyEffects;
+  // The Pack: +N% per other pack member.
+  const prefix = `${STATPCT}${c.mon.uid}:`;
+  const pack = tags.filter((t) => t.startsWith(prefix)).reduce((n, t) => n + Number(t.slice(prefix.length)), 0);
+  return (tags.includes(`${REMEMBERED}${c.mon.uid}`) ? 1.1 : 1) * (1 + pack / 100);
+}
+
+/** Out of Time (PA12): its Protosynthesis or Quark Drive is on without sun or terrain. */
+export function momentParadoxDrive(ctx: Pick<BattleContext, 'battle'>, c: Pick<Combatant, 'side' | 'mon'>): boolean {
+  return c.side === 'player' && ctx.battle.storyEffects.includes(`${PARADOX}${c.mon.uid}`);
+}
+
+/** Older Than the Map (PA5): the first super-effective hit it takes is cut. Returns the damage multiplier and spends the cut. */
+export function momentSuperCut(ctx: Pick<BattleContext, 'battle'>, c: Pick<Combatant, 'side' | 'mon'>, effectiveness: number): number {
+  if (c.side !== 'player' || effectiveness <= 1) return 1;
+  const prefix = `${SUPERCUT}${c.mon.uid}:`;
+  const tag = ctx.battle.storyEffects.find((t) => t.startsWith(prefix));
+  if (!tag) return 1;
+  ctx.battle.storyEffects = ctx.battle.storyEffects.filter((t) => t !== tag);
+  return 1 - Number(tag.slice(prefix.length)) / 100;
+}
+
+/**
+ * Set in Stone (PA3): a Guarded Pokémon's guardian takes the next hit meant for it, from the bench, and holds on at 1 HP or
+ * more. Returns the guardian when it did (the caller skips the damage), or null.
+ */
+export function momentGuardHit(ctx: BattleContext, c: Combatant, lost: number): PokemonInstance | null {
+  if (c.side !== 'player' || lost <= 0) return null;
+  const prefix = `${GUARDED}${c.mon.uid}:`;
+  const tag = ctx.battle.storyEffects.find((t) => t.startsWith(prefix));
+  if (!tag) return null;
+  ctx.battle.storyEffects = ctx.battle.storyEffects.filter((t) => t !== tag);
+  const guard = ctx.party.find((p) => p.uid === tag.slice(prefix.length));
+  if (!guard || guard.hp <= 0 || guard.uid === c.mon.uid) return null;
+  guard.hp = Math.max(1, guard.hp - lost);
+  (ctx.momentQueue ??= []).push({ type: 'raid', tone: 'info', text: `${ctx.content.species.get(guard.speciesId)?.name ?? 'Its guardian'} steps forward and takes the hit!` });
+  return guard;
+}
+
+/**
+ * Sleeping Giants (PA15): a hit is about to knock out the Pokémon in front, and a giant on the bench gets up and takes it.
+ * It takes the damage from the bench and holds at 1 HP or more; it does not stay in front (limited, see the status note).
+ */
+export function tryAllyLethalMoment(ctx: BattleContext, c: Combatant, lost: number): boolean {
+  const hooks = ctx.moments;
+  if (!hooks || c.side !== 'player') return false;
+  for (const giant of ctx.party) {
+    if (giant.uid === c.mon.uid || giant.hp <= 0) continue;
+    for (const m of momentsFor(ctx.content, giant, 'allyLethal')) {
+      const key = momentKey(m, giant.uid);
+      if (ctx.battle.storyEffects.includes(key)) continue;
+      ctx.battle.storyEffects.push(key);
+      if (!momentRoll(hooks.seed, m.id, giant.uid, ctx.battle.turn, m.chance)) continue;
+      giant.hp = Math.max(1, giant.hp - lost);
+      const gc: Combatant = { side: 'player', mon: giant, stages: freshStages(), vol: freshVolatile(), flinched: false, protected: false };
+      (ctx.momentQueue ??= []).push(eventFor(ctx, gc, m, giant.hp, cinematicNow(ctx, m.tier)));
+      return true;
+    }
+  }
+  return false;
 }
 
 /** Frozen in Place: it won't give ground, so it can't be switched out yet. */
@@ -216,6 +282,13 @@ function applyEffect(ctx: BattleContext, c: Combatant, fx: MomentEffect, m: Poke
     const ace = foeAce(ctx);
     (ctx.momentQueue ??= []).push({ type: 'raid', tone: 'info', text: `${content.species.get(c.mon.speciesId)?.name ?? 'It'} already knows: the last one will be ${content.species.get(ace.speciesId)?.name ?? ace.speciesId}, Lv. ${ace.level}.` });
   }
+  if (fx.guardNext) add(`${GUARD_NEXT}${c.mon.uid}`);
+  if (fx.firstSuperCut) add(`${SUPERCUT}${c.mon.uid}:${fx.firstSuperCut}`);
+  if (fx.paradoxDrive) add(`${PARADOX}${c.mon.uid}`);
+  if (fx.packStat) {
+    const pack = ctx.party.filter((p) => momentMatches(content, m, p.speciesId));
+    for (const p of pack) add(`${STATPCT}${p.uid}:${fx.packStat * (pack.length - 1)}`);
+  }
   if (fx.haunting) add(`${HAUNT}${c.mon.uid}:${ctx.battle.turn + fx.haunting.turns}:${fx.haunting.pct}:${fx.haunting.foeAccDown ?? 0}`);
   return hp;
 }
@@ -314,24 +387,46 @@ export function tryLethalMoment(ctx: BattleContext, c: Combatant): number | null
   return null;
 }
 
+const LAYERS = ['individual', 'species', 'group', 'archetype', 'type'] as const;
+
+/** A moment's chance for this Pokémon: Bond steps and named species can raise it (never money). */
+function chanceFor(ctx: BattleContext, m: PokemonMoment, mon: PokemonInstance): number {
+  let chance = m.chance;
+  if (m.chanceBond) chance = Math.min(m.chanceBond.max, chance + Math.max(0, bondLevel(ctx.content, mon) - m.chanceBond.above) * m.chanceBond.perStep);
+  if (m.chancePlus && momentMatches(ctx.content, { ...m, scope: { lines: m.chancePlus.species } }, mon.speciesId)) chance += m.chancePlus.plus;
+  return Math.min(1, chance);
+}
+
 /**
- * The last Pokémon is down and the run would really end: Failure Will (NOT) Be Tolerated may bring a construct back, once
- * per run. Returns true when the battle goes on (the Pokémon is back up, Overcharged).
+ * The last Pokémon is down and the run would really end: a run-end revival may bring one Pokémon back (Failure Will (NOT) Be
+ * Tolerated, the starter, a Legendary, the mascots...). Only one fires, and they all share one use per run (pack §0.3): the
+ * order is individual, species, group, archetype, type, and inside a layer the highest Bond first. Every candidate gets its
+ * one roll in that order; the shared use is spent whether or not one succeeds, so a reload cannot roll again.
  */
 export function tryRunEndMoment(ctx: BattleContext, events: BattleEvent[]): boolean {
   const hooks = ctx.moments;
-  if (!hooks || !hooks.runWouldEnd()) return false;
-  const m = pokemonMoment('failure-not-tolerated');
-  // Every run-end revival shares one use per run.
-  if (!m?.effect || m.status === 'disabled' || hooks.flags[runClaimKey(m)] !== undefined || hooks.flags[RUN_END_CLAIM] !== undefined) return false;
-  const mon = ctx.party.find((p) => momentsFor(ctx.content, p, 'runEnd').includes(m));
-  if (!mon) return false;
-  // One claim per run, spent whether or not the roll succeeds, so a reload or replay cannot roll again.
-  hooks.flags[runClaimKey(m)] = 1;
+  if (!hooks || !hooks.runWouldEnd() || hooks.flags[RUN_END_CLAIM] !== undefined) return false;
+  const combatant = (mon: PokemonInstance): Combatant => ({ side: 'player', mon, stages: freshStages(), vol: freshVolatile(), flinched: false, protected: false });
+  const candidates: { m: PokemonMoment; mon: PokemonInstance; order: number }[] = [];
+  ctx.party.forEach((mon, at) => {
+    for (const m of momentsFor(ctx.content, mon, 'runEnd')) {
+      if (!m.effect || hooks.flags[runClaimKey(m)] !== undefined || !requirementsMet(ctx, m, combatant(mon))) continue;
+      candidates.push({ m, mon, order: LAYERS.indexOf(m.layer ?? 'archetype') * 1000 - bondLevel(ctx.content, mon) * 10 + at / 10 });
+    }
+  });
+  if (candidates.length === 0) return false;
+  candidates.sort((a, b) => a.order - b.order);
   hooks.flags[RUN_END_CLAIM] = 1;
-  if (!momentRoll(hooks.seed, m.id, mon.uid, ctx.battle.turn, m.chance)) return false;
-  mon.overcharged = true;
-  mon.hp = Math.max(1, Math.floor(calcStats(ctx.content, mon).hp));
+  const won = candidates.find(({ m, mon }) => {
+    hooks.flags[runClaimKey(m)] = 1;
+    return momentRoll(hooks.seed, m.id, mon.uid, ctx.battle.turn, chanceFor(ctx, m, mon));
+  });
+  if (!won) return false;
+  const { m, mon } = won;
+  const fx = m.effect!;
+  if (fx.overcharged) mon.overcharged = true;
+  const max = calcStats(ctx.content, mon).hp;
+  mon.hp = fx.overcharged ? max : fx.reviveHpPct ? Math.max(1, Math.floor((max * fx.reviveHpPct) / 100)) : 1;
   mon.status = null;
   // The Pokémon is back in front with clean stat stages; the rest of the party stays down.
   ctx.battle.activeIndex = ctx.party.indexOf(mon);
@@ -339,7 +434,11 @@ export function tryRunEndMoment(ctx: BattleContext, events: BattleEvent[]): bool
   ctx.battle.playerVolatile = freshVolatile();
   ctx.battle.needsSwitch = false;
   ctx.battle.outcome = null;
-  events.push({ type: 'pmoment', side: 'player', uid: mon.uid, speciesId: mon.speciesId, id: m.id, name: m.name, tier: m.tier, hpAfter: mon.hp, cinematic: cinematicNow(ctx, 'landmark', true), scene: true, trigger: 'runEnd' });
+  // Its other effects (Resolute, doubled Speed) start now.
+  const c: Combatant = { side: 'player', mon, stages: ctx.battle.playerStages, vol: ctx.battle.playerVolatile, flinched: false, protected: false };
+  const { reviveHpMult: _m, overcharged: _o, reviveHpPct: _p, healPct: _h, ...rest } = fx;
+  applyEffect(ctx, c, rest, m, ctx.battle.turn);
+  events.push({ type: 'pmoment', side: 'player', uid: mon.uid, speciesId: mon.speciesId, id: m.id, name: m.name, tier: m.tier, hpAfter: mon.hp, cinematic: cinematicNow(ctx, 'landmark', true), scene: Boolean(m.scene), trigger: 'runEnd' });
   return true;
 }
 
@@ -355,6 +454,19 @@ function requirementsMet(ctx: BattleContext, m: PokemonMoment, c?: Combatant): b
     if (!types || !r.foeTypes.every((t) => types.includes(t))) return false;
   }
   if (r.named && ctx.battle.kind !== 'trainer') return false;
+  if (r.starter && !(c && ctx.moments?.starterUid === c.mon.uid)) return false;
+  if (r.notVsOwnTrio && c) {
+    const trios = Object.entries(MOMENT_GROUPS).filter(([g, ids]) => g.startsWith('trio-') && ids.includes(c.mon.speciesId)).map(([, ids]) => ids);
+    if (ctx.battle.enemyTeam.some((e) => trios.some((ids) => ids.includes(e.speciesId)))) return false;
+  }
+  if (r.foeWeakTo && c) {
+    const foe = currentEnemy(ctx.battle);
+    const own = ctx.content.species.get(c.mon.speciesId)?.types ?? [];
+    const foeTypes = ctx.content.species.get(foe.speciesId)?.types ?? [];
+    if (!foeTypes.some((t) => typeEffectiveness(ctx.content.typeChart, t, own) > 1)) return false;
+    if (r.foeNotGroup && MOMENT_GROUPS[r.foeNotGroup]?.some((id) => momentMatches(ctx.content, { ...m, scope: { lines: [id] } }, foe.speciesId))) return false;
+  }
+  if (r.foeCounterpart && !(c && MOMENT_COUNTERPARTS[c.mon.speciesId]?.includes(currentEnemy(ctx.battle).speciesId))) return false;
   if (r.lastStanding && !(c && ctx.party.every((p) => p.uid === c.mon.uid || p.hp <= 0))) return false;
   if (r.fullHp && !(c && c.mon.hp >= calcStats(ctx.content, c.mon).hp)) return false;
   if (r.foeHpBelow) {
@@ -511,8 +623,9 @@ export function tryFaintMoments(ctx: BattleContext, turnEvents: BattleEvent[], e
         if (!spend(m, owner.uid)) continue;
         if (!momentRoll(hooks.seed, m.id, owner.uid, battle.turn, m.chance)) continue;
         // A Small Kindness acts for whoever comes out next, so it plays now instead of waiting for its owner.
-        if (m.effect.rememberedNext) {
-          if (!battle.storyEffects.includes(REMEMBER_NEXT)) battle.storyEffects.push(REMEMBER_NEXT);
+        if (m.effect.rememberedNext || m.effect.guardNext) {
+          if (m.effect.rememberedNext && !battle.storyEffects.includes(REMEMBER_NEXT)) battle.storyEffects.push(REMEMBER_NEXT);
+          if (m.effect.guardNext) battle.storyEffects.push(`${GUARD_NEXT}${owner.uid}`);
           const oc: Combatant = { side: 'player', mon: owner, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false };
           events.push(eventFor(ctx, oc, m, owner.hp, false));
         } else battle.storyEffects.push(`${PENDING}${m.id}:${owner.uid}`);
@@ -532,6 +645,15 @@ export function applyPendingMoments(ctx: BattleContext, c: Combatant, events: Ba
     ctx.battle.storyEffects = ctx.battle.storyEffects.filter((t) => t !== tag);
     ctx.battle.storyEffects.push(`${KINDLED}${c.mon.uid}:${type}:${pct}`);
     events.push({ type: 'raid', tone: 'info', text: `Something still warm passes to ${name}. It is Kindled!` });
+  }
+  // Set in Stone: the next ally sent in is Guarded by the guardian, and its Defence rises.
+  for (const tag of ctx.battle.storyEffects.filter((t) => t.startsWith(GUARD_NEXT))) {
+    const guardUid = tag.slice(GUARD_NEXT.length);
+    if (guardUid === c.mon.uid || c.mon.hp <= 0) continue;
+    ctx.battle.storyEffects = ctx.battle.storyEffects.filter((t) => t !== tag);
+    ctx.battle.storyEffects.push(`${GUARDED}${c.mon.uid}:${guardUid}`);
+    c.stages.def = clampStage((c.stages.def ?? 0) + 1);
+    events.push({ type: 'raid', tone: 'info', text: `${ctx.content.species.get(ctx.party.find((p) => p.uid === guardUid)?.speciesId ?? '')?.name ?? 'A guardian'} stands over ${name}. It is Guarded!` });
   }
   // A Small Kindness: the next Pokémon sent in is Remembered.
   if (ctx.battle.storyEffects.includes(REMEMBER_NEXT) && c.mon.hp > 0) {

@@ -43,7 +43,9 @@ describe('Pokémon moments data', () => {
     const ids = (s: string, t: Parameters<typeof momentsFor>[2]) => momentsFor(content, { speciesId: s }, t).map((m) => m.id);
     expect(ids('rotom', 'runEnd')).toEqual(['failure-not-tolerated']);
     expect(ids('golurk', 'runEnd')).toEqual(['failure-not-tolerated']);
-    expect(ids('pikachu', 'runEnd')).toEqual([]);
+    // The pack gave Pikachu run-end moments of its own: a partner starter (PA10, only if chosen) and a mascot (PA16).
+    expect(ids('pikachu', 'runEnd')).toEqual(['pa10-the-starters', 'pa16-the-mascots']);
+    expect(ids('caterpie', 'runEnd')).toEqual([]);
     expect(ids('golem', 'lethal')).toContain('stone-sturdy');
     expect(ids('charizard', 'lethal')).toEqual(expect.arrayContaining(['starter-fire', 'fire-last-blaze']));
   });
