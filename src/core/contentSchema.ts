@@ -4,6 +4,7 @@
 
 import { NATURE_IDS } from './natures';
 import { z } from 'zod';
+import { CO_MOVE_FLAGS, CO_WHO_NAMES } from './co/who';
 import { ANIME_LOOKS } from './animeLooks';
 import { GRADES as PROMPT_GRADES } from './interaction/prompt';
 import { UltraRuleIdSchema } from './ultra/beasts';
@@ -28,6 +29,10 @@ export const TYPE_NAMES = [
 ] as const;
 export const TypeNameSchema = z.enum(TYPE_NAMES);
 export type TypeName = z.infer<typeof TypeNameSchema>;
+
+/** Catalog Overhaul: which party Pokémon an event effect lands on (core/co/who.ts). A match is the first able Pokémon that fits. */
+export const CoMatchSchema = z.object({ types: z.array(TypeNameSchema).min(1).max(4).optional(), moveFlag: z.enum(CO_MOVE_FLAGS).optional(), species: z.array(z.string().min(1)).min(1).optional() }).refine((m) => m.types !== undefined || m.moveFlag !== undefined || m.species !== undefined, { message: 'a match needs types, a move flag or species' });
+export const CoWhoSchema = z.union([z.enum(CO_WHO_NAMES), CoMatchSchema]);
 
 export const STAT_NAMES = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const;
 export const StatNameSchema = z.enum(STAT_NAMES);
@@ -2157,6 +2162,8 @@ export const BalanceSchema = z.object({
   overlevel: z.object({ xpPerItem: z.number().int().min(0), item: z.string() }).default({ xpPerItem: 400, item: 'hyper-potion' }),
   /** Beta 0.7 L3 Rewinds (core/rewind.ts): how far back a battle rewind may go, and how many rewinds a stage allows. */
   rewind: z.object({ maxTurnsBack: z.number().int().min(1), usesPerStage: z.number().int().min(0) }).default({ maxTurnsBack: 5, usesPerStage: 1 }),
+  /** Catalog Overhaul Pack words: "+1 Bond" on one Pokémon is `bondFriendship` friendship (`bondFriendshipParty` each for the whole party); Bond level N is friendship N x `bondLevelStep`. */
+  co: z.object({ bondFriendship: z.number().int().min(1), bondFriendshipParty: z.number().int().min(1), bondLevelStep: z.number().int().min(1) }).default({ bondFriendship: 5, bondFriendshipParty: 3, bondLevelStep: 50 }),
   badgePower: z.object({ damagePerBadge: z.number().min(0).default(0.03), weaknessCutPerBadge: z.number().min(0).default(0.03), maxStacks: z.number().int().min(1).default(4) }).default({ damagePerBadge: 0.03, weaknessCutPerBadge: 0.03, maxStacks: 4 }),
   /** Item rework (Kice, 2026-11-07): charm odds in the draft, and how much of each Luck gain a run keeps. */
   itemRework: z
@@ -2827,6 +2834,10 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('noTrainerTag'), tag: z.string() }),
   /** Event Director: a party member this fond of you (friendship, 0 to 255). */
   z.object({ kind: z.literal('friendship'), atLeast: z.number().int().min(1).max(255) }),
+  /** Catalog Overhaul: the pack's Bond level (0 to 5; level N = friendship N x balance.co.bondLevelStep). Someone in the party, or the named Pokémon, is at this level or above. `absent`: nobody is. */
+  z.object({ kind: z.literal('bondLevel'), atLeast: z.number().int().min(1).max(5), who: z.union([z.literal('any'), CoWhoSchema]).default('any'), absent: z.boolean().optional() }),
+  /** Catalog Overhaul: a party Pokémon of any of these types (a "Ground- or Water-type"). */
+  z.object({ kind: z.literal('partyTypes'), types: z.array(TypeNameSchema).min(1).max(6) }),
   /** Event Director: a rival you have fought at least this many times. */
   z.object({ kind: z.literal('rivalMet'), atLeast: z.number().int().min(1) }),
   /** A rival whose rivalry with you ended as friends (state ally). */
@@ -3027,11 +3038,13 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Restores every move's PP for the whole party (Erika's tea). */
   z.object({ kind: z.literal('restorePp') }),
   z.object({ kind: z.literal('status'), status: z.enum(['poison', 'burn', 'paralysis', 'sleep']), who: z.enum(['party', 'lead']).default('party'), except: z.array(TypeNameSchema).max(4).default([]) }),
-  z.object({ kind: z.literal('friendship'), amount: z.number().int(), who: z.enum(['lead', 'party', 'picked']).default('party') }),
+  z.object({ kind: z.literal('friendship'), amount: z.number().int(), who: CoWhoSchema.default('party') }),
+  /** Catalog Overhaul: "(a node)" as a cost. The next `nodes` ordinary nodes on the path are spent on the work (no battle, no reward; core/co/takeNode.ts). `back`: "a node back", which costs nothing (battles already won are not refought). */
+  z.object({ kind: z.literal('takeNode'), nodes: z.number().int().min(1).max(3).default(1), back: z.boolean().default(false) }),
   z.object({ kind: z.literal('attribute'), key: AttributeKeySchema, amount: z.number().int() }),
   /** Research Points, paid at the end of the run. */
   z.object({ kind: z.literal('research'), amount: z.number().int().positive() }),
-  z.object({ kind: z.literal('levels'), amount: z.number().int().positive(), who: z.enum(['lead', 'party', 'weakest', 'picked']).default('lead') }),
+  z.object({ kind: z.literal('levels'), amount: z.number().int().positive(), who: z.union([z.literal('weakest'), CoWhoSchema]).default('lead') }),
   /** A Pokémon joins (or goes to storage when the party is full): a listed species, or one of the types, or the stage's theme. */
   z.object({ kind: z.literal('join'), species: z.array(z.string()).default([]), types: z.array(TypeNameSchema).default([]), levelBonus: z.number().int().default(0), shinyMultiplier: z.number().min(1).default(1), shadow: z.boolean().default(false), blissful: z.boolean().default(false), hiddenAbility: z.boolean().default(false), /** It joins with this ability instead of its own (Squad Squirtle: Contrary). */ ability: z.string().optional(), /** Anime Forms art (core/animeLooks.ts; the Squad Squirtle). Presentation only. */ look: z.enum(ANIME_LOOKS).optional(), /** Beta 0.6 Vermilion: it joins at exactly this level (Flight North's Caterpie is level 5), not the stage's event level. */ level: z.number().int().min(1).max(100).optional(), /** Beta 0.6 Vermilion: it joins knowing these moves too (the Kaiju Tentacool's Liquidation); a full moveset loses its last move. */ moves: z.array(z.string()).max(4).default([]), /** Beta 0.6 Vermilion: it goes straight into the party with no accept prompt (a companion for a stage; the lone Bug-type of Flight North). */ direct: z.boolean().default(false), /** Beta 0.7 Route 25: it joins fonder of you, with this much extra friendship (the troop's thanks when the food came back). */ friendship: z.number().int().min(1).max(100).optional() }),
   /** A seedling grows in the Berry Garden (core/berries.ts): a held-berry plot, optionally mutated; the garden must have room. */
@@ -3415,7 +3428,7 @@ export const EventChoiceSchema = z.object({
   prompt: z.object({ id: z.string().min(1), needs: z.enum(PROMPT_GRADES).default('good') }).optional(),
   /** Catalog Overhaul: the player picks one party Pokémon for this choice ("Who soaks first?"). Effects with `who: 'picked'` land on it
    *  (the lead when nothing was picked). `types` narrows the list. The screens show it with the trade picker. */
-  pick: z.object({ types: z.array(TypeNameSchema).max(4).default([]) }).optional(),
+  pick: z.object({ types: z.array(TypeNameSchema).max(4).default([]), /** Only Pokémon that know a move with this flag ("a Pokémon with a sound move"). */ moveFlag: z.enum(CO_MOVE_FLAGS).optional(), /** Only Pokémon at this Bond level or above. */ bond: z.number().int().min(1).max(5).optional() }).optional(),
   success: EventOutcomeSchema,
   /** What happens when the check or chance fails (needed when there is one). */
   failure: EventOutcomeSchema.optional(),

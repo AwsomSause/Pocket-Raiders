@@ -102,6 +102,7 @@ import { bumpEventCounters } from './eventToolkit';
 import { blackMarketMarkup, fieldResearchMoney, spookyEncounterChance, voiceAsksToJoin } from './trainerEvolution';
 import { growGarden } from './berries';
 import { layEgg, tickEggs } from './eggs';
+import { spendTakenNode } from './co/takeNode';
 import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
@@ -1060,6 +1061,12 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   wandererStep(content, run);
   // Catalog Overhaul questlines: an event queued for "N nodes on" opens beside this node.
   laterEventStep(content, run);
+  // Catalog Overhaul: a choice that cost "(a node)" spends this stop on the work: no battle and no reward, but the level counts.
+  const taken = spendTakenNode(content, run, node);
+  if (taken) {
+    onCross(taken.text);
+    if (taken.spent) return run;
+  }
   // The Mach Bike rides past a wild Pokémon: no battle, but the reward draft still comes.
   if (mode === 'machBike' && node.kind === 'wild') {
     run.afterDecisions = 'reward';
