@@ -1,7 +1,9 @@
 {
  "catalogOverhaul": "evil-story",
  "override": true,
- "remove": [],
+ "remove": [
+  "ev-hidden-hideout"
+ ],
  "events": [
   {
    "id": "ps-evil-hideout-gate",
@@ -736,8 +738,10 @@
      "label": "Pick it.",
      "requires": [
       {
-       "kind": "item",
-       "id": "lockpicks"
+       "kind": "flag",
+       "key": "lockpicks",
+       "atLeast": 1,
+       "atMost": 99
       }
      ],
      "success": {
@@ -1332,9 +1336,9 @@
       "text": "An hour, two pots of tea, and a lot of patience later, she gives you a roll of picks and a long look. \"Only locks that deserve it.\"",
       "effects": [
        {
-        "kind": "item",
-        "id": "lockpicks",
-        "count": 1
+        "kind": "flag",
+        "key": "lockpicks",
+        "amount": 1
        }
       ]
      }

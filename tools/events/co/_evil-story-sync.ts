@@ -117,6 +117,10 @@ for (const story of TEAMS) {
   if (!op) throw new Error(`${story.id}: colleague's Operation ${story.col.freeOp} missing`);
   team.inside = { op: op.id, half: story.col.half === true };
   for (const def of team.ops) {
+    // The doc's own name for the Operation (Part D), so the map, the journal and the scene agree.
+    const named = story.ops.find((o) => o.id === def.id);
+    if (!named) throw new Error(`${story.id}: no Operation ${def.id} in Part D`);
+    def.name = named.name;
     const lasting = LASTING[def.id];
     if (!lasting) throw new Error(`no lasting effect for ${def.id}`);
     def.lasting = lasting;

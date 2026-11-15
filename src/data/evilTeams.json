@@ -396,7 +396,7 @@
     {
      "id": "radio-tower",
      "kind": "facility",
-     "name": "Radio Tower Takeover",
+     "name": "Radio Tower",
      "text": "Rocket has seized the local radio tower and is broadcasting a strange signal.",
      "lasting": {
       "text": "The signal forces evolutions: wild Pokémon in the region are evolved, stronger and angry.",
@@ -419,7 +419,7 @@
     {
      "id": "evolution-signal",
      "kind": "experiment",
-     "name": "Forced Evolution Lab",
+     "name": "Evolution Signal",
      "text": "A hidden machine is forcing wild Pokémon to evolve, and it hurts them.",
      "lasting": {
       "text": "Pokémon forced to evolve in this region are hurting: 10% lower in every stat.",
@@ -576,7 +576,7 @@
     {
      "id": "deep-sea-study",
      "kind": "legendary",
-     "name": "Deep Sea Survey",
+     "name": "Deep-Sea Study",
      "text": "Aqua divers are mapping the trench where a giant sleeps.",
      "lasting": {
       "text": "Aqua knows where Kyogre sleeps: at the Hideout it is half-awake, and the sea comes in.",
@@ -589,7 +589,7 @@
     {
      "id": "harbor-control",
      "kind": "control",
-     "name": "Harbor Lockdown",
+     "name": "Harbour Control",
      "text": "Team Aqua has closed the harbor and charges a toll to pass.",
      "lasting": {
       "text": "Ferries cost ₽500 for the rest of the region, and the sea roads are guarded.",
@@ -890,7 +890,7 @@
     {
      "id": "energy-plant",
      "kind": "facility",
-     "name": "Power Plant Takeover",
+     "name": "Energy Plant",
      "text": "Galactic Energy has bought the local power plant and turned the lights off.",
      "lasting": {
       "text": "Lights out across the region: the Blackout starts at Severity 2.",
@@ -907,7 +907,7 @@
     {
      "id": "spirit-lab",
      "kind": "experiment",
-     "name": "Spirit Extraction Lab",
+     "name": "Spirit Lab",
      "text": "Scientists are draining the \"spirit\" from captured Pokémon.",
      "lasting": {
       "text": "The Pokémon of the spirit lab, freed later, are listless: Bond grows slower.",
@@ -925,7 +925,7 @@
     {
      "id": "veilstone-warehouse",
      "kind": "steal",
-     "name": "Warehouse Raid",
+     "name": "Veilstone Warehouse",
      "text": "Galactic is emptying a warehouse of Poké Balls and fossils.",
      "lasting": {
       "text": "The fossils are shipped away: no fossil revival this region.",
@@ -1057,7 +1057,7 @@
     {
      "id": "pokemon-confiscation",
      "kind": "steal",
-     "name": "\"Rescue\" Drive",
+     "name": "Pokémon Confiscation",
      "text": "Plasma grunts in fake ranger coats are taking Pokémon \"for their safety\".",
      "lasting": {
       "text": "The checkpoints stay up: your Pokémon can be confiscated in town. Anything taken is in the Hideout's Holding Pen.",
@@ -1070,7 +1070,7 @@
     {
      "id": "frigate-build",
      "kind": "facility",
-     "name": "Frigate Dock",
+     "name": "Frigate Build",
      "text": "Plasma is fitting an ice cannon to a flying frigate in the harbor.",
      "lasting": {
       "text": "The ice cannon fires: it hails in every battle this region.",
@@ -1089,7 +1089,7 @@
     {
      "id": "genesect-project",
      "kind": "artificial",
-     "name": "Ancient Revival Project",
+     "name": "Genesect Project",
      "text": "Plasma scientists are rebuilding an ancient Pokémon as a weapon.",
      "lasting": {
       "text": "A rebuilt Genesect is loose, and hostile. It will come for you before the region is out.",
@@ -1209,7 +1209,7 @@
     {
      "id": "power-plant",
      "kind": "facility",
-     "name": "Power Plant Seizure",
+     "name": "Power Plant",
      "text": "Flare grunts in red suits are running the local power plant.",
      "lasting": {
       "text": "The power is gone from the towns: the Blackout starts at Severity 1.",
@@ -1226,7 +1226,7 @@
     {
      "id": "stone-mining",
      "kind": "habitat",
-     "name": "Mega Stone Mining",
+     "name": "Stone Mining",
      "text": "Flare is strip-mining a cave full of Mega Stones and sleeping Pokémon.",
      "lasting": {
       "text": "The mine keeps running: Mega-capable Pokémon flicker in battle, and the Mega meter rises each stage.",
@@ -1239,7 +1239,7 @@
     {
      "id": "ultimate-weapon",
      "kind": "research",
-     "name": "Weapon Research",
+     "name": "Ultimate Weapon",
      "text": "A Flare lab is studying an ancient weapon that drains life.",
      "lasting": {
       "text": "The land is drained: every rest in this region heals 10% less.",
@@ -1257,7 +1257,7 @@
     {
      "id": "flare-tickets",
      "kind": "trade",
-     "name": "Future Tickets",
+     "name": "Flare Tickets",
      "text": "Flare is selling \"tickets to the future\" for five million each.",
      "lasting": {
       "text": "The rich of the region leave with their tickets: shop prices rise 10%.",
@@ -1382,7 +1382,7 @@
     {
      "id": "pokemon-snatch",
      "kind": "steal",
-     "name": "Pokémon Snatching",
+     "name": "Pokémon Snatch",
      "text": "Skull grunts are grabbing Pokémon from a daycare.",
      "lasting": {
       "text": "The daycare is closed for the rest of the region.",
@@ -1395,7 +1395,7 @@
     {
      "id": "trial-crash",
      "kind": "interfere",
-     "name": "Trial Crashing",
+     "name": "Trial Crash",
      "text": "Team Skull has crashed a local trial and is blocking every challenger.",
      "lasting": {
       "text": "The Island Trial is crashed: it is closed for this run.",
@@ -1421,7 +1421,7 @@
     {
      "id": "skull-recruit",
      "kind": "recruit",
-     "name": "Recruitment Drive",
+     "name": "Skull Recruit",
      "text": "Skull is recruiting kids who failed their trials.",
      "lasting": {
       "text": "Skull has new members: three more Grunts in every ambush.",
@@ -1541,7 +1541,7 @@
     {
      "id": "preservation-lab",
      "kind": "facility",
-     "name": "Preservation Wing",
+     "name": "Preservation Lab",
      "text": "Aether has opened a \"preservation\" lab that freezes rescued Pokémon.",
      "lasting": {
       "text": "The frozen Pokémon are lost for this run.",
@@ -1554,7 +1554,7 @@
     {
      "id": "beast-research",
      "kind": "research",
-     "name": "Wormhole Research",
+     "name": "Beast Research",
      "text": "Aether is measuring energy from a crack in the sky.",
      "lasting": {
       "text": "The crack widens into a Tear: Ultra Beast rules in this region.",
@@ -1567,7 +1567,7 @@
     {
      "id": "type-null-project",
      "kind": "artificial",
-     "name": "Project Type: Null",
+     "name": "Type: Null Project",
      "text": "Aether is building an artificial Pokémon to fight the beasts.",
      "lasting": {
       "text": "Type: Null is Faba's weapon now. It will be sent after you before the region is out.",
@@ -1706,7 +1706,7 @@
     {
      "id": "stadium-block",
      "kind": "interfere",
-     "name": "Stadium Blockade",
+     "name": "Stadium Block",
      "text": "Team Yell is blocking the stadium so nobody but Marnie can enter.",
      "lasting": {
       "text": "The stadium's exhibition is cancelled.",
@@ -1719,7 +1719,7 @@
     {
      "id": "route-chant",
      "kind": "control",
-     "name": "Route Chant-Off",
+     "name": "Route Chant",
      "text": "Team Yell has taken over a route and won't let anyone through.",
      "lasting": {
       "text": "The chanting never stops: that route takes two nodes.",
@@ -1732,7 +1732,7 @@
     {
      "id": "ticket-scalp",
      "kind": "trade",
-     "name": "Ticket Scalping",
+     "name": "Ticket Scalp",
      "text": "Team Yell is buying up every match ticket and reselling them.",
      "lasting": {
       "text": "Circuit rung entry costs ₽100 more this region.",
@@ -1748,7 +1748,7 @@
     {
      "id": "fan-recruit",
      "kind": "recruit",
-     "name": "Fan Drive",
+     "name": "Fan Recruit",
      "text": "Team Yell is recruiting new grunts with free scarves.",
      "lasting": {
       "text": "Twice the ambushes, but every one of them is a scarf-waving new fan.",
@@ -1881,7 +1881,7 @@
     {
      "id": "class-crash",
      "kind": "interfere",
-     "name": "Class Crashing",
+     "name": "Class Crash",
      "text": "Team Star is crashing the local trainer school and scaring off students.",
      "lasting": {
       "text": "The trainer school is closed: fewer young Roster trainers.",
@@ -1894,7 +1894,7 @@
     {
      "id": "star-recruit",
      "kind": "recruit",
-     "name": "Star Recruitment",
+     "name": "Star Recruit",
      "text": "Team Star is recruiting new grunts with shiny jackets.",
      "lasting": {
       "text": "Star has a new member: one more in every ambush squad.",
@@ -2080,7 +2080,7 @@
     {
      "id": "engine-works",
      "kind": "facility",
-     "name": "The Resonance Engine",
+     "name": "Engine Works",
      "text": "Chalk researchers are assembling something huge inside an old observatory.",
      "lasting": {
       "text": "The Hideout's Engine is complete. At the climax it binds one of your Pokémon until you win.",
@@ -2198,7 +2198,7 @@
     {
      "id": "tolling-bells",
      "kind": "control",
-     "name": "The Tolling",
+     "name": "Tolling Bells",
      "text": "The Choir rings the town bells at all hours. Nobody can sleep but their own.",
      "lasting": {
       "text": "The bells ring all night: no rest heals fully this region.",
@@ -2216,7 +2216,7 @@
     {
      "id": "counting-stones",
      "kind": "legendary",
-     "name": "The Counting Stones",
+     "name": "Counting Stones",
      "text": "Hooded figures chant at the Counting Stones every night.",
      "lasting": {
       "text": "The Long Night: wild Pokémon are Ghost-touched for the region.",
@@ -2377,7 +2377,7 @@
     {
      "id": "veinheart-drill",
      "kind": "facility",
-     "name": "The Deep Drill",
+     "name": "Veinheart Drill",
      "text": "A huge drill is boring toward the Veinheart seam under the hills.",
      "lasting": {
       "text": "The drill reaches the deep seam: the Quake starts, and Veinheart's Sign is harder.",
@@ -2587,7 +2587,7 @@
     {
      "id": "local-guides",
      "kind": "recruit",
-     "name": "Paid Guides",
+     "name": "Local Guides",
      "text": "The Society pays locals well to show them the old paths.",
      "lasting": {
       "text": "Every guide in the region works for the Society now: a friendly guide always betrays you.",
@@ -2757,7 +2757,7 @@
     {
      "id": "manifesto-drive",
      "kind": "recruit",
-     "name": "The Manifesto",
+     "name": "Manifesto Drive",
      "text": "Copies of a green-and-black manifesto are pasted on every wall.",
      "lasting": {
       "text": "The townsfolk side with the Accord, and the Rangers think less of you.",
@@ -2891,7 +2891,7 @@
     {
      "id": "betting-ring",
      "kind": "trade",
-     "name": "The Back Room",
+     "name": "Betting Ring",
      "text": "A private room behind the arena takes bets on every gym battle.",
      "lasting": {
       "text": "Gym battles in the region have hecklers: your Speed drops on turn one.",
@@ -2904,7 +2904,7 @@
     {
      "id": "referee-bribes",
      "kind": "interfere",
-     "name": "Bought Whistles",
+     "name": "Referee Bribes",
      "text": "Referees are calling close battles for the Circle's favourites.",
      "lasting": {
       "text": "Close calls go to the Circle: ties lose.",

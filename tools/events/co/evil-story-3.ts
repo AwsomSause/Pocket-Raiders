@@ -4,7 +4,7 @@
 // the Warehouse Door, then one room per column picked by the player on a map drawn like a stage, the boss, the boss's last
 // words, the Holding Pen and the Way Out. The shared rooms are written once with the team's words as tokens ({team}, {front},
 // {grunt}, {lt}, {boss}) and read the region's own team with the `evil` condition's `has` / `lacks` marks.
-import { $, any, ch, ev, fight, flag, flagIs, has as holds, item, money, out, ptype, room, wild, HELD, RARE_HELD, TREASURE, type Json } from '../dsl.ts';
+import { $, any, ch, ev, fight, flag, flagIs, item, money, out, ptype, room, wild, HELD, RARE_HELD, TREASURE, type Json } from '../dsl.ts';
 import { evil as story, foe, kind, node, rep } from './_evil-story-kit.ts';
 import { TEAMS, type TeamStory } from './_evil-story-teams.ts';
 import { teamJson } from './evil-story-1.ts';
@@ -100,7 +100,7 @@ const ROOMS: Json[] = [
     id: 'vt-locked-chest', name: 'The Locked Chest', room: true, requires: [],
     intro: `An old iron-bound chest in an alcove, with a lock that has outlived three owners and means to outlive you.`,
     choices: [
-      ch('Pick it.', out(`The lockpicks find the pins one by one. The lid comes up on something worth having.`, any(...RARE_HELD)), { requires: [holds('lockpicks')] }),
+      ch('Pick it.', out(`The lockpicks find the pins one by one. The lid comes up on something worth having.`, any(...RARE_HELD)), { requires: [flagIs('lockpicks')] }),
       ch('Break it with a Fighting-type.', out(`One blow and the lid caves in. Most of what was inside is crushed with it. You save what you can.`, any(...HELD)), { requires: [ptype('fighting')] }),
       ch('Leave it.', out(`Some things are better left shut.`)),
     ],
@@ -169,7 +169,7 @@ const ROOMS: Json[] = [
     id: 'vt-lockpick-lesson', name: 'The Lockpick Lesson',
     intro: `A retired burglar is having tea on her porch, and she waves you over as if you were late. "Sit. Never know when you'll need it."`,
     choices: [
-      ch('Learn. (a node)', out(`An hour, two pots of tea, and a lot of patience later, she gives you a roll of picks and a long look. "Only locks that deserve it."`, item('lockpicks'), ...node())),
+      ch('Learn. (a node)', out(`An hour, two pots of tea, and a lot of patience later, she gives you a roll of picks and a long look. "Only locks that deserve it."`, flag('lockpicks'), ...node())),
       ch('No, thanks.', out(`She shrugs and pours herself another cup. "Your loss, love."`)),
     ],
   },
@@ -308,4 +308,5 @@ function hideout(t: TeamStory): Json[] {
 }
 
 export const EVENTS: Json[] = [...ROOMS, ...KEYS, ...TEAMS.flatMap(hideout)];
-export const REMOVE: string[] = [];
+// SF131: the old "A Suspicious Warehouse" stop is now the Warehouse Door of every Hideout.
+export const REMOVE: string[] = ['ev-hidden-hideout'];

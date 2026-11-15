@@ -177,7 +177,9 @@ function storyline(t: TeamStory): Json[] {
   // ---------- A9. A Legend Stirs ----------
   const L = t.legend;
   const name = L.name;
-  const callFight = (lv: number) => fight(`It turns its head, and then, without hurry, it comes.`, wild({ species: L.species, lv, win: [mark('legend-called')] }), mark('legend-seen'));
+  // After the region the team is archived, so the legend's own flags name the team (not a mark of the current one).
+  const seenIt = flag(`team-${t.id}-legend-seen`);
+  const callFight = (lv: number) => fight(`It turns its head, and then, without hurry, it comes.`, wild({ species: L.species, lv, win: [flag(`team-${t.id}-legend-called`)] }), seenIt);
   const watched = L.species.map((s) => flag(`reunion-sky-${s}`));
   const legend: Json = {
     id: id('legend'),
@@ -187,18 +189,18 @@ function storyline(t: TeamStory): Json[] {
     intro: `With ${t.name} gone, the Pokémon they hunted has no more reason to hide. ${L.sight}`,
     choices: L.original
       ? [
-        ch('Bow.', out(`You bow, low, and stay bowed until the air changes. When you straighten up, ${name} is already a long way off. That was all. It was enough.`, mark('legend-seen'))),
+        ch('Bow.', out(`You bow, low, and stay bowed until the air changes. When you straighten up, ${name} is already a long way off. That was all. It was enough.`, seenIt)),
         ch('Call to it.', callFight(5)),
-        ch('Watch it go.', out(`You stand still and watch ${name} until there is nothing left to watch. Somewhere, you think, it will remember a trainer who didn't reach for a Ball.`, mark('legend-seen'), ...watched)),
+        ch('Watch it go.', out(`You stand still and watch ${name} until there is nothing left to watch. Somewhere, you think, it will remember a trainer who didn't reach for a Ball.`, seenIt, ...watched)),
       ]
       : [
-        ch('Bow.', out(`You bow, low, and stay bowed until the air changes. When you straighten up, ${name} is already a long way off. Something passed between you, small and certain.`, mark('legend-seen'), ...L.species.map((s) => sign(s)))),
-        ch('Call to it.', out(`You call to it, not loudly. It turns its head toward you and holds there, listening, for one long breath. Then it goes on its way.`, mark('legend-seen'), ...L.species.map((s) => sign(s)))),
-        ch('Watch it go.', out(`You stand still and watch ${name} until there is nothing left to watch. It will be in the sky again, at the very end. You're sure of it.`, mark('legend-seen'), ...L.species.map((s) => sign(s)), ...watched)),
+        ch('Bow.', out(`You bow, low, and stay bowed until the air changes. When you straighten up, ${name} is already a long way off. Something passed between you, small and certain.`, seenIt, ...L.species.map((s) => sign(s)))),
+        ch('Call to it.', out(`You call to it, not loudly. It turns its head toward you and holds there, listening, for one long breath. Then it goes on its way.`, seenIt, ...L.species.map((s) => sign(s)))),
+        ch('Watch it go.', out(`You stand still and watch ${name} until there is nothing left to watch. It will be in the sky again, at the very end. You're sure of it.`, seenIt, ...L.species.map((s) => sign(s)), ...watched)),
       ],
   };
   if (!L.original) {
-    const bow2 = (s: string) => ch('Bow.', out(`You bow, low. When you straighten up, ${name} has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.`, mark('legend-seen'), sign(s, 2)));
+    const bow2 = (s: string) => ch('Bow.', out(`You bow, low. When you straighten up, ${name} has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.`, seenIt, sign(s, 2)));
     legend.remembers = [
       { id: 'close', when: [flagIs(`blessing-${L.species[0]}`), flagIs('blessing-influence', 5)], hide: [0, 1], addChoices: [bow2(L.species[0]!), ch('Call to it.', callFight(5))] },
       ...L.species.map((s) => ({ id: `blessed-${s}`, when: [flagIs(`blessing-${s}`)], hide: [0], addChoices: [bow2(s)] })),

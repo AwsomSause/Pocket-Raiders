@@ -1,1 +1,0 @@
-[{"id":"lockpicks","name":"Lockpicks","family":"Key items: tickets, keys and story items","description":"A retired burglar's set, taught over tea: every locked chest in the run opens for you","rarity":"rare","stacksOn":"player","max":1,"how":"passive","icon":"card-key","status":"supported","effect":{"kind":"perk","lasts":{"for":"run"},"perks":[{"perk":"eventKey"}]}}]

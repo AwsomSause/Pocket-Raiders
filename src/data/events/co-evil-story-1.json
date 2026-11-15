@@ -76,7 +76,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "team-rocket-booth-exposed",
+       "key": "front-exposed",
        "atLeast": 1,
        "atMost": 99
       }
@@ -1174,8 +1174,9 @@
       "text": "You bow, low, and stay bowed until the air changes. When you straighten up, Mewtwo is already a long way off. Something passed between you, small and certain.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-rocket-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -1191,8 +1192,9 @@
       "text": "You call to it, not loudly. It turns its head toward you and holds there, listening, for one long breath. Then it goes on its way.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-rocket-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -1208,8 +1210,9 @@
       "text": "You stand still and watch Mewtwo until there is nothing left to watch. It will be in the sky again, at the very end. You're sure of it.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-rocket-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -1253,8 +1256,9 @@
         "text": "You bow, low. When you straighten up, Mewtwo has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-rocket-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -1270,8 +1274,9 @@
         "text": "It turns its head, and then, without hurry, it comes.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-rocket-legend-seen",
+          "amount": 1
          }
         ],
         "battle": {
@@ -1284,8 +1289,9 @@
          "shinyMultiplier": 1,
          "win": [
           {
-           "kind": "evil",
-           "mark": "legend-called"
+           "kind": "flag",
+           "key": "team-rocket-legend-called",
+           "amount": 1
           }
          ]
         }
@@ -1313,8 +1319,9 @@
         "text": "You bow, low. When you straighten up, Mewtwo has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-rocket-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -1401,7 +1408,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "team-aqua-booth-exposed",
+       "key": "front-exposed",
        "atLeast": 1,
        "atMost": 99
       }
@@ -2499,8 +2506,9 @@
       "text": "You bow, low, and stay bowed until the air changes. When you straighten up, Kyogre is already a long way off. Something passed between you, small and certain.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-aqua-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -2516,8 +2524,9 @@
       "text": "You call to it, not loudly. It turns its head toward you and holds there, listening, for one long breath. Then it goes on its way.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-aqua-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -2533,8 +2542,9 @@
       "text": "You stand still and watch Kyogre until there is nothing left to watch. It will be in the sky again, at the very end. You're sure of it.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-aqua-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -2578,8 +2588,9 @@
         "text": "You bow, low. When you straighten up, Kyogre has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-aqua-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -2595,8 +2606,9 @@
         "text": "It turns its head, and then, without hurry, it comes.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-aqua-legend-seen",
+          "amount": 1
          }
         ],
         "battle": {
@@ -2609,8 +2621,9 @@
          "shinyMultiplier": 1,
          "win": [
           {
-           "kind": "evil",
-           "mark": "legend-called"
+           "kind": "flag",
+           "key": "team-aqua-legend-called",
+           "amount": 1
           }
          ]
         }
@@ -2638,8 +2651,9 @@
         "text": "You bow, low. When you straighten up, Kyogre has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-aqua-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -2726,7 +2740,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "team-magma-booth-exposed",
+       "key": "front-exposed",
        "atLeast": 1,
        "atMost": 99
       }
@@ -3824,8 +3838,9 @@
       "text": "You bow, low, and stay bowed until the air changes. When you straighten up, Groudon is already a long way off. Something passed between you, small and certain.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-magma-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -3841,8 +3856,9 @@
       "text": "You call to it, not loudly. It turns its head toward you and holds there, listening, for one long breath. Then it goes on its way.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-magma-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -3858,8 +3874,9 @@
       "text": "You stand still and watch Groudon until there is nothing left to watch. It will be in the sky again, at the very end. You're sure of it.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-magma-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -3903,8 +3920,9 @@
         "text": "You bow, low. When you straighten up, Groudon has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-magma-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -3920,8 +3938,9 @@
         "text": "It turns its head, and then, without hurry, it comes.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-magma-legend-seen",
+          "amount": 1
          }
         ],
         "battle": {
@@ -3934,8 +3953,9 @@
          "shinyMultiplier": 1,
          "win": [
           {
-           "kind": "evil",
-           "mark": "legend-called"
+           "kind": "flag",
+           "key": "team-magma-legend-called",
+           "amount": 1
           }
          ]
         }
@@ -3963,8 +3983,9 @@
         "text": "You bow, low. When you straighten up, Groudon has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-magma-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -4051,7 +4072,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "team-galactic-booth-exposed",
+       "key": "front-exposed",
        "atLeast": 1,
        "atMost": 99
       }
@@ -5149,8 +5170,9 @@
       "text": "You bow, low, and stay bowed until the air changes. When you straighten up, the one they meant to chain is already a long way off. Something passed between you, small and certain.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-galactic-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -5171,8 +5193,9 @@
       "text": "You call to it, not loudly. It turns its head toward you and holds there, listening, for one long breath. Then it goes on its way.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-galactic-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -5193,8 +5216,9 @@
       "text": "You stand still and watch the one they meant to chain until there is nothing left to watch. It will be in the sky again, at the very end. You're sure of it.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-galactic-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -5248,8 +5272,9 @@
         "text": "You bow, low. When you straighten up, the one they meant to chain has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-galactic-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -5265,8 +5290,9 @@
         "text": "It turns its head, and then, without hurry, it comes.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-galactic-legend-seen",
+          "amount": 1
          }
         ],
         "battle": {
@@ -5280,8 +5306,9 @@
          "shinyMultiplier": 1,
          "win": [
           {
-           "kind": "evil",
-           "mark": "legend-called"
+           "kind": "flag",
+           "key": "team-galactic-legend-called",
+           "amount": 1
           }
          ]
         }
@@ -5309,8 +5336,9 @@
         "text": "You bow, low. When you straighten up, the one they meant to chain has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-galactic-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -5342,8 +5370,9 @@
         "text": "You bow, low. When you straighten up, the one they meant to chain has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-galactic-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -5430,7 +5459,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "team-plasma-booth-exposed",
+       "key": "front-exposed",
        "atLeast": 1,
        "atMost": 99
       }
@@ -6528,8 +6557,9 @@
       "text": "You bow, low, and stay bowed until the air changes. When you straighten up, Kyurem is already a long way off. Something passed between you, small and certain.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-plasma-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -6545,8 +6575,9 @@
       "text": "You call to it, not loudly. It turns its head toward you and holds there, listening, for one long breath. Then it goes on its way.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-plasma-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -6562,8 +6593,9 @@
       "text": "You stand still and watch Kyurem until there is nothing left to watch. It will be in the sky again, at the very end. You're sure of it.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-plasma-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -6607,8 +6639,9 @@
         "text": "You bow, low. When you straighten up, Kyurem has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-plasma-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -6624,8 +6657,9 @@
         "text": "It turns its head, and then, without hurry, it comes.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-plasma-legend-seen",
+          "amount": 1
          }
         ],
         "battle": {
@@ -6638,8 +6672,9 @@
          "shinyMultiplier": 1,
          "win": [
           {
-           "kind": "evil",
-           "mark": "legend-called"
+           "kind": "flag",
+           "key": "team-plasma-legend-called",
+           "amount": 1
           }
          ]
         }
@@ -6667,8 +6702,9 @@
         "text": "You bow, low. When you straighten up, Kyurem has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-plasma-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -6755,7 +6791,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "team-flare-booth-exposed",
+       "key": "front-exposed",
        "atLeast": 1,
        "atMost": 99
       }
@@ -7853,8 +7889,9 @@
       "text": "You bow, low, and stay bowed until the air changes. When you straighten up, the one the weapon woke is already a long way off. Something passed between you, small and certain.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-flare-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -7875,8 +7912,9 @@
       "text": "You call to it, not loudly. It turns its head toward you and holds there, listening, for one long breath. Then it goes on its way.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-flare-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -7897,8 +7935,9 @@
       "text": "You stand still and watch the one the weapon woke until there is nothing left to watch. It will be in the sky again, at the very end. You're sure of it.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-flare-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -7952,8 +7991,9 @@
         "text": "You bow, low. When you straighten up, the one the weapon woke has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-flare-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -7969,8 +8009,9 @@
         "text": "It turns its head, and then, without hurry, it comes.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-flare-legend-seen",
+          "amount": 1
          }
         ],
         "battle": {
@@ -7984,8 +8025,9 @@
          "shinyMultiplier": 1,
          "win": [
           {
-           "kind": "evil",
-           "mark": "legend-called"
+           "kind": "flag",
+           "key": "team-flare-legend-called",
+           "amount": 1
           }
          ]
         }
@@ -8013,8 +8055,9 @@
         "text": "You bow, low. When you straighten up, the one the weapon woke has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-flare-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -8046,8 +8089,9 @@
         "text": "You bow, low. When you straighten up, the one the weapon woke has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-flare-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -8134,7 +8178,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "team-skull-booth-exposed",
+       "key": "front-exposed",
        "atLeast": 1,
        "atMost": 99
       }
@@ -9271,8 +9315,9 @@
       "text": "You bow, low, and stay bowed until the air changes. When you straighten up, the island's guardian is already a long way off. Something passed between you, small and certain.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-skull-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -9288,8 +9333,9 @@
       "text": "You call to it, not loudly. It turns its head toward you and holds there, listening, for one long breath. Then it goes on its way.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-skull-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -9305,8 +9351,9 @@
       "text": "You stand still and watch the island's guardian until there is nothing left to watch. It will be in the sky again, at the very end. You're sure of it.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-skull-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -9350,8 +9397,9 @@
         "text": "You bow, low. When you straighten up, the island's guardian has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-skull-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -9367,8 +9415,9 @@
         "text": "It turns its head, and then, without hurry, it comes.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-skull-legend-seen",
+          "amount": 1
          }
         ],
         "battle": {
@@ -9381,8 +9430,9 @@
          "shinyMultiplier": 1,
          "win": [
           {
-           "kind": "evil",
-           "mark": "legend-called"
+           "kind": "flag",
+           "key": "team-skull-legend-called",
+           "amount": 1
           }
          ]
         }
@@ -9410,8 +9460,9 @@
         "text": "You bow, low. When you straighten up, the island's guardian has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-skull-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -9498,7 +9549,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "team-aether-booth-exposed",
+       "key": "front-exposed",
        "atLeast": 1,
        "atMost": 99
       }
@@ -10596,8 +10647,9 @@
       "text": "You bow, low, and stay bowed until the air changes. When you straighten up, the one from beyond the crack is already a long way off. Something passed between you, small and certain.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-aether-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -10618,8 +10670,9 @@
       "text": "You call to it, not loudly. It turns its head toward you and holds there, listening, for one long breath. Then it goes on its way.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-aether-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -10640,8 +10693,9 @@
       "text": "You stand still and watch the one from beyond the crack until there is nothing left to watch. It will be in the sky again, at the very end. You're sure of it.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-aether-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -10695,8 +10749,9 @@
         "text": "You bow, low. When you straighten up, the one from beyond the crack has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-aether-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -10712,8 +10767,9 @@
         "text": "It turns its head, and then, without hurry, it comes.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-aether-legend-seen",
+          "amount": 1
          }
         ],
         "battle": {
@@ -10727,8 +10783,9 @@
          "shinyMultiplier": 1,
          "win": [
           {
-           "kind": "evil",
-           "mark": "legend-called"
+           "kind": "flag",
+           "key": "team-aether-legend-called",
+           "amount": 1
           }
          ]
         }
@@ -10756,8 +10813,9 @@
         "text": "You bow, low. When you straighten up, the one from beyond the crack has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-aether-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -10789,8 +10847,9 @@
         "text": "You bow, low. When you straighten up, the one from beyond the crack has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-aether-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -10877,7 +10936,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "team-yell-booth-exposed",
+       "key": "front-exposed",
        "atLeast": 1,
        "atMost": 99
       }
@@ -12014,8 +12073,9 @@
       "text": "You bow, low, and stay bowed until the air changes. When you straighten up, the one from the old story is already a long way off. Something passed between you, small and certain.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-yell-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -12036,8 +12096,9 @@
       "text": "You call to it, not loudly. It turns its head toward you and holds there, listening, for one long breath. Then it goes on its way.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-yell-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -12058,8 +12119,9 @@
       "text": "You stand still and watch the one from the old story until there is nothing left to watch. It will be in the sky again, at the very end. You're sure of it.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-yell-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -12113,8 +12175,9 @@
         "text": "You bow, low. When you straighten up, the one from the old story has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-yell-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -12130,8 +12193,9 @@
         "text": "It turns its head, and then, without hurry, it comes.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-yell-legend-seen",
+          "amount": 1
          }
         ],
         "battle": {
@@ -12145,8 +12209,9 @@
          "shinyMultiplier": 1,
          "win": [
           {
-           "kind": "evil",
-           "mark": "legend-called"
+           "kind": "flag",
+           "key": "team-yell-legend-called",
+           "amount": 1
           }
          ]
         }
@@ -12174,8 +12239,9 @@
         "text": "You bow, low. When you straighten up, the one from the old story has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-yell-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -12207,8 +12273,9 @@
         "text": "You bow, low. When you straighten up, the one from the old story has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-yell-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -12295,7 +12362,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "team-star-booth-exposed",
+       "key": "front-exposed",
        "atLeast": 1,
        "atMost": 99
       }
@@ -13432,8 +13499,9 @@
       "text": "You bow, low, and stay bowed until the air changes. When you straighten up, the one from the crater is already a long way off. Something passed between you, small and certain.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-star-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -13454,8 +13522,9 @@
       "text": "You call to it, not loudly. It turns its head toward you and holds there, listening, for one long breath. Then it goes on its way.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-star-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -13476,8 +13545,9 @@
       "text": "You stand still and watch the one from the crater until there is nothing left to watch. It will be in the sky again, at the very end. You're sure of it.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-star-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -13531,8 +13601,9 @@
         "text": "You bow, low. When you straighten up, the one from the crater has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-star-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -13548,8 +13619,9 @@
         "text": "It turns its head, and then, without hurry, it comes.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-star-legend-seen",
+          "amount": 1
          }
         ],
         "battle": {
@@ -13563,8 +13635,9 @@
          "shinyMultiplier": 1,
          "win": [
           {
-           "kind": "evil",
-           "mark": "legend-called"
+           "kind": "flag",
+           "key": "team-star-legend-called",
+           "amount": 1
           }
          ]
         }
@@ -13592,8 +13665,9 @@
         "text": "You bow, low. When you straighten up, the one from the crater has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-star-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -13625,8 +13699,9 @@
         "text": "You bow, low. When you straighten up, the one from the crater has not moved, and it is looking at you the way it looked at nobody else. The bond between you and the Legendary that blesses this run grows deeper.",
         "effects": [
          {
-          "kind": "evil",
-          "mark": "legend-seen"
+          "kind": "flag",
+          "key": "team-star-legend-seen",
+          "amount": 1
          },
          {
           "kind": "flag",
@@ -13713,7 +13788,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "team-marauders-booth-exposed",
+       "key": "front-exposed",
        "atLeast": 1,
        "atMost": 99
       }
@@ -14811,8 +14886,9 @@
       "text": "You bow, low, and stay bowed until the air changes. When you straighten up, Equinar is already a long way off. That was all. It was enough.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-marauders-legend-seen",
+        "amount": 1
        }
       ]
      }
@@ -14823,8 +14899,9 @@
       "text": "It turns its head, and then, without hurry, it comes.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-marauders-legend-seen",
+        "amount": 1
        }
       ],
       "battle": {
@@ -14837,8 +14914,9 @@
        "shinyMultiplier": 1,
        "win": [
         {
-         "kind": "evil",
-         "mark": "legend-called"
+         "kind": "flag",
+         "key": "team-marauders-legend-called",
+         "amount": 1
         }
        ]
       }
@@ -14850,8 +14928,9 @@
       "text": "You stand still and watch Equinar until there is nothing left to watch. Somewhere, you think, it will remember a trainer who didn't reach for a Ball.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-marauders-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -14936,7 +15015,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "team-choir-booth-exposed",
+       "key": "front-exposed",
        "atLeast": 1,
        "atMost": 99
       }
@@ -16034,8 +16113,9 @@
       "text": "You bow, low, and stay bowed until the air changes. When you straighten up, the Hollow Shepherd is already a long way off. That was all. It was enough.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-choir-legend-seen",
+        "amount": 1
        }
       ]
      }
@@ -16046,8 +16126,9 @@
       "text": "It turns its head, and then, without hurry, it comes.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-choir-legend-seen",
+        "amount": 1
        }
       ],
       "battle": {
@@ -16060,8 +16141,9 @@
        "shinyMultiplier": 1,
        "win": [
         {
-         "kind": "evil",
-         "mark": "legend-called"
+         "kind": "flag",
+         "key": "team-choir-legend-called",
+         "amount": 1
         }
        ]
       }
@@ -16073,8 +16155,9 @@
       "text": "You stand still and watch the Hollow Shepherd until there is nothing left to watch. Somewhere, you think, it will remember a trainer who didn't reach for a Ball.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-choir-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -16159,7 +16242,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "team-ironvein-booth-exposed",
+       "key": "front-exposed",
        "atLeast": 1,
        "atMost": 99
       }
@@ -17257,8 +17340,9 @@
       "text": "You bow, low, and stay bowed until the air changes. When you straighten up, Veinheart is already a long way off. That was all. It was enough.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-ironvein-legend-seen",
+        "amount": 1
        }
       ]
      }
@@ -17269,8 +17353,9 @@
       "text": "It turns its head, and then, without hurry, it comes.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-ironvein-legend-seen",
+        "amount": 1
        }
       ],
       "battle": {
@@ -17283,8 +17368,9 @@
        "shinyMultiplier": 1,
        "win": [
         {
-         "kind": "evil",
-         "mark": "legend-called"
+         "kind": "flag",
+         "key": "team-ironvein-legend-called",
+         "amount": 1
         }
        ]
       }
@@ -17296,8 +17382,9 @@
       "text": "You stand still and watch Veinheart until there is nothing left to watch. Somewhere, you think, it will remember a trainer who didn't reach for a Ball.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-ironvein-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -17382,7 +17469,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "team-cartographers-booth-exposed",
+       "key": "front-exposed",
        "atLeast": 1,
        "atMost": 99
       }
@@ -18480,8 +18567,9 @@
       "text": "You bow, low, and stay bowed until the air changes. When you straighten up, Brinecrown is already a long way off. That was all. It was enough.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-cartographers-legend-seen",
+        "amount": 1
        }
       ]
      }
@@ -18492,8 +18580,9 @@
       "text": "It turns its head, and then, without hurry, it comes.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-cartographers-legend-seen",
+        "amount": 1
        }
       ],
       "battle": {
@@ -18506,8 +18595,9 @@
        "shinyMultiplier": 1,
        "win": [
         {
-         "kind": "evil",
-         "mark": "legend-called"
+         "kind": "flag",
+         "key": "team-cartographers-legend-called",
+         "amount": 1
         }
        ]
       }
@@ -18519,8 +18609,9 @@
       "text": "You stand still and watch Brinecrown until there is nothing left to watch. Somewhere, you think, it will remember a trainer who didn't reach for a Ball.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-cartographers-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -18605,7 +18696,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "team-wildfire-booth-exposed",
+       "key": "front-exposed",
        "atLeast": 1,
        "atMost": 99
       }
@@ -19703,8 +19794,9 @@
       "text": "You bow, low, and stay bowed until the air changes. When you straighten up, Verdelis is already a long way off. That was all. It was enough.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-wildfire-legend-seen",
+        "amount": 1
        }
       ]
      }
@@ -19715,8 +19807,9 @@
       "text": "It turns its head, and then, without hurry, it comes.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-wildfire-legend-seen",
+        "amount": 1
        }
       ],
       "battle": {
@@ -19729,8 +19822,9 @@
        "shinyMultiplier": 1,
        "win": [
         {
-         "kind": "evil",
-         "mark": "legend-called"
+         "kind": "flag",
+         "key": "team-wildfire-legend-called",
+         "amount": 1
         }
        ]
       }
@@ -19742,8 +19836,9 @@
       "text": "You stand still and watch Verdelis until there is nothing left to watch. Somewhere, you think, it will remember a trainer who didn't reach for a Ball.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-wildfire-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -19828,7 +19923,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "team-gilt-booth-exposed",
+       "key": "front-exposed",
        "atLeast": 1,
        "atMost": 99
       }
@@ -20926,8 +21021,9 @@
       "text": "You bow, low, and stay bowed until the air changes. When you straighten up, Lumeria is already a long way off. That was all. It was enough.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-gilt-legend-seen",
+        "amount": 1
        }
       ]
      }
@@ -20938,8 +21034,9 @@
       "text": "It turns its head, and then, without hurry, it comes.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-gilt-legend-seen",
+        "amount": 1
        }
       ],
       "battle": {
@@ -20952,8 +21049,9 @@
        "shinyMultiplier": 1,
        "win": [
         {
-         "kind": "evil",
-         "mark": "legend-called"
+         "kind": "flag",
+         "key": "team-gilt-legend-called",
+         "amount": 1
         }
        ]
       }
@@ -20965,8 +21063,9 @@
       "text": "You stand still and watch Lumeria until there is nothing left to watch. Somewhere, you think, it will remember a trainer who didn't reach for a Ball.",
       "effects": [
        {
-        "kind": "evil",
-        "mark": "legend-seen"
+        "kind": "flag",
+        "key": "team-gilt-legend-seen",
+        "amount": 1
        },
        {
         "kind": "flag",
