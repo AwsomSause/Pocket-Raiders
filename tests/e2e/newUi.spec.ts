@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { confirmToMenu, confirmUntil } from './battleInput';
 
 // The New UI (Settings > UI style: New, the default for players): the mock-up screens are an HTML layer over the
 // canvas, so this spec drives the game by clicking that layer. The older specs run with the Old UI (an automated
@@ -447,6 +448,56 @@ test('New UI: a lost run ends on the mock-up page; Witness the Rest, the report,
   await page.waitForTimeout(250);
   await end.locator('[data-act="pick"]', { hasText: 'Back to Hub' }).click();
   await waitForScene(page, 'Hub');
+  expect(errors).toEqual([]);
+});
+
+test('New UI: the battle shows the mock-up boxes, text box and menus over the live field; a move chosen by click plays the turn', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Battle');
+  const hud = view(page, 'Battle');
+  await expect(hud).toBeVisible();
+  // The HUD is see-through: the canvas keeps the arena and the Pokémon, and no longer draws its own boxes.
+  await expect(hud).toHaveClass(/clear/);
+  // Through the opening lines to the first choice (the shared helper never presses Enter while the menu is up).
+  await confirmToMenu(page);
+  const fight = hud.locator('[data-act="pick"]', { hasText: 'Fight' });
+  await expect(fight).toBeVisible();
+  await expect(hud.locator('.win.glass')).toHaveCount(2);
+  await expect(hud.locator('.txt')).toContainText('What will');
+  await expect(hud.locator('[data-act="tab"]')).toHaveCount(5);
+  const state = () => page.evaluate(() => {
+    const s = (window as any).__pkr.game.scene.getScene('Battle');
+    const run = (window as any).__pkr.session.run;
+    return { turn: run.battle?.turn ?? -1, hidden: s.playerBox.container.cameraFilter !== 0 && s.message.cameraFilter !== 0, name: s.playerBox.name.text as string };
+  });
+  const before = await state();
+  expect(before.hidden).toBe(true);
+  await expect(hud.locator('.win.glass').last()).toContainText(before.name);
+  // Fight opens the moves: type-coloured buttons with PP, and the text box describes the focused move.
+  await fight.click();
+  const move = hud.locator('.btn.mv');
+  await expect(move.first()).toBeVisible();
+  await expect(move.first()).toContainText('PP');
+  await expect(hud.locator('.txt')).toContainText('Power');
+  await expect(hud.locator('[data-act="tab"].on')).toContainText('Attack');
+  // The keyboard moves the same cursor the buttons show.
+  if ((await move.count()) > 1) {
+    await page.keyboard.press('ArrowRight');
+    await expect(hud.locator('.btn.on.mv')).toHaveAttribute('data-arg', '1');
+    await page.keyboard.press('ArrowLeft');
+    await expect(hud.locator('.btn.on.mv')).toHaveAttribute('data-arg', '0');
+  }
+  // A click on the first move plays the turn.
+  await page.waitForTimeout(250);
+  await move.first().click();
+  await expect(move).toHaveCount(0);
+  await confirmUntil(page, async () => (await state()).turn > before.turn || (await page.evaluate(() => (window as any).__pkr.session.run.phase)) !== 'battle', 30_000);
+  const after = await state();
+  const phase = await page.evaluate(() => (window as any).__pkr.session.run.phase);
+  expect(phase !== 'battle' || after.turn > before.turn).toBe(true);
   expect(errors).toEqual([]);
 });
 

@@ -115,6 +115,8 @@ import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, STATUS_LABELS, TYPE_COLOR
 import { Bar, badge, drawPanel, Menu } from '../ui/widgets';
 import { sceneForRun } from './routing';
 import { battleSkinFor, type BattleFrameInfo, type BattleHud, type BattleSkin, type BoxSpec, type MenuLayout, type MenuSpec, type Rect } from '../ui/battleStyles';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { battleView, type BattleBox, type BattleModel } from '../ui/redux/screens/battle';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { KIT_LAYOUTS, KitBar, kitTexturesReady, type GaugeLike } from '../ui/battleUiStyles';
 import { loadAssets, partySpecies, pokemonArtIds, preloadPokemon, queueAssets } from '../ui/lazyAssets';
@@ -260,6 +262,8 @@ interface InfoBox {
   danger?: Phaser.GameObjects.Graphics;
   /** A battle style's layout for this box (screens redesign); absent for the original look. */
   spec?: BoxSpec;
+  /** What the New UI draws for this box; `hp` is the bar on screen, which follows the real HP as the canvas bar does. */
+  rx?: BattleBox;
   typesText?: Phaser.GameObjects.Text;
   teamRow?: Phaser.GameObjects.Container;
   portrait?: { species: string; obj: Phaser.GameObjects.GameObject };
@@ -300,6 +304,13 @@ export class BattleScene extends Phaser.Scene {
   private skin: BattleSkin | null = null;
   private skinId = 'original';
   private skinHud: BattleHud | null = null;
+  /** New UI: the mock-ups' HUD drawn over the canvas (default look only). The canvas HUD stays built but is not drawn. */
+  private rx: ReduxView | null = null;
+  private rxData: BattleModel | null = null;
+  private rxSig = '';
+  private rxHidden = new WeakSet<object>();
+  /** The focused move in words, for the New UI's text box. */
+  private rxInfo = '';
   private playerBox!: InfoBox;
   private enemyBox!: InfoBox;
   private playerSprite: Visual | null = null;
@@ -617,6 +628,11 @@ export class BattleScene extends Phaser.Scene {
     this.input.keyboard?.on('keydown-T', () => this.toggleAuto());
     onInputAction(this, (a) => this.handleInput(a));
     this.input.on('pointerdown', () => this.advance?.());
+    this.rx = null;
+    this.rxData = null;
+    this.rxSig = '';
+    this.rxInfo = '';
+    if (reduxOn() && !this.skin) this.mountRx();
 
     void this.intro();
   }
@@ -1574,6 +1590,7 @@ export class BattleScene extends Phaser.Scene {
       box.formIcon = this.add.image(box.name.x + box.name.width + 10, box.name.y + 14, sym).setOrigin(0, 0.5);
       box.container.add(box.formIcon);
     }
+    let xpShown: number | null = null;
     box.rageBadge?.destroy();
     box.rageBadge = undefined;
     if (!box.isPlayer && mon.uid === this.riledUid) {
@@ -1586,7 +1603,8 @@ export class BattleScene extends Phaser.Scene {
       const { maxLevel, highLevelXp } = content.balance.difficulty;
       const lo = xpForLevel(species.growthRate, mon.level, highLevelXp);
       const hi = xpForLevel(species.growthRate, mon.level + 1, highLevelXp);
-      void box.xpBar.set(mon.level >= maxLevel ? 1 : (mon.xp - lo) / Math.max(1, hi - lo), animate);
+      xpShown = mon.level >= maxLevel ? 1 : Phaser.Math.Clamp((mon.xp - lo) / Math.max(1, hi - lo), 0, 1);
+      void box.xpBar.set(xpShown, animate);
     }
     if (box.teamText && !spec) {
       const battle = this.run.battle;
@@ -1594,7 +1612,78 @@ export class BattleScene extends Phaser.Scene {
         box.teamText.setText(battle.enemyTeam.map((m) => (m.hp > 0 ? '●' : '○')).join(' '));
       }
     }
+    if (this.rx) {
+      const battle = this.run.battle;
+      const word = (c?: Phaser.GameObjects.Container): string => (c?.list.find((o): o is Phaser.GameObjects.Text => o instanceof Phaser.GameObjects.Text)?.text ?? '').trim();
+      const to = Phaser.Math.Clamp(mon.hp / max, 0, 1);
+      const from = box.rx?.hp ?? to;
+      box.rx = {
+        name: shown,
+        level: this.foeHidden(mon) ? 'Lv ?' : `Lv ${mon.level}`,
+        hp: animate ? from : to,
+        hpText: box.isPlayer ? `${Math.max(0, mon.hp)} / ${max}` : '',
+        xp: box.isPlayer ? xpShown : null,
+        tags: [mon.status ? STATUS_LABELS[mon.status.id]?.label ?? '' : '', word(box.teraBadge), word(box.roleBadge), word(box.rageBadge)].filter(Boolean),
+        team: !box.isPlayer && battle?.trainer ? { n: battle.enemyTeam.length, out: battle.enemyTeam.filter((m) => m.hp <= 0).length } : null,
+      };
+      this.tweens.killTweensOf(box.rx);
+      // The same drain the canvas bar plays, so the two never disagree about when the HP has settled.
+      if (animate && from !== to) this.tweens.add({ targets: box.rx, hp: to, duration: Math.round(250 + 450 * Math.abs(to - from)), ease: 'Sine.easeOut' });
+    }
     return box.hpBar.set(mon.hp / max, animate);
+  }
+
+  /** New UI: mounts the mock-ups' battle HUD over the canvas and stops the canvas drawing its own. */
+  private mountRx(): void {
+    this.rx = mountRedux(this, {
+      clear: true,
+      render: (c) => (this.rxData ? battleView(c, this.rxData) : ''),
+      acts: {
+        pick: (i) => { if (!this.picker && !this.infoPanel && !this.autoRunning) this.menu?.press(Number(i)); },
+        tab: (i) => this.tabs.press(Number(i)),
+        auto: () => this.toggleAuto(),
+      },
+      overs: { over: (i) => { const k = Number(i); if (this.menu && !this.picker && this.menu.index !== k && !this.menu.options[k]?.disabled) this.menu.focus(k); } },
+    });
+    const tick = (): void => this.rxTick();
+    this.events.on('update', tick);
+    this.events.once('shutdown', () => this.events.off('update', tick));
+  }
+
+  /** New UI: reads what the battle shows right now and redraws the HUD when any of it changed. */
+  private rxTick(): void {
+    if (!this.rx) return;
+    const cam = this.cameras.main;
+    const side = (s: Side, main: InfoBox): InfoBox[] => (this.duo ? this.duo.slots[s].map((o) => (o ? o.box : main)) : [main]);
+    const foes = side('enemy', this.enemyBox), mine = side('player', this.playerBox);
+    // The canvas keeps building its HUD (the scene's logic reads and moves it); it is only left out of the picture.
+    for (const o of [...foes.map((b) => b.container), ...mine.map((b) => b.container), this.header, this.momentumText, this.status, this.storyBar?.container, this.commandWindow, this.message, this.moveInfo, this.moveBadges, this.tabs.root, this.note, this.menu?.container]) {
+      if (o && !this.rxHidden.has(o)) {
+        cam.ignore(o);
+        this.rxHidden.add(o);
+      }
+    }
+    const boxes = (list: InfoBox[]): BattleBox[] => list.filter((b) => b.container.visible && b.rx).map((b) => ({ ...b.rx!, hp: Math.round(b.rx!.hp * 200) / 200 }));
+    const menu = this.menu && this.menu.container.visible ? { options: this.menu.options.map((o) => ({ label: o.label, sub: o.rx?.sub ?? o.detail, type: o.rx?.type, off: !!o.disabled })), index: this.menu.index } : null;
+    const tabs = this.tabs.view;
+    const data: BattleModel = {
+      foes: boxes(foes),
+      mine: boxes(mine),
+      text: this.message.visible ? this.message.text : this.moveInfo.visible ? this.rxInfo || this.moveInfo.text : '',
+      menu,
+      tabs: tabs.shown ? { labels: tabs.labels, index: tabs.index, auto: tabs.auto, autoOff: tabs.autoOff } : null,
+      header: this.header.visible ? this.header.text : '',
+      status: this.status.visible ? this.status.text : '',
+      momentum: this.momentumText.visible ? this.momentumText.text : '',
+      note: this.note.alpha > 0.05 ? this.note.text : '',
+      auto: this.autoRunning,
+      party: { n: this.run.party.length, out: this.run.party.filter((m) => m.hp <= 0).length },
+    };
+    const sig = JSON.stringify(data);
+    if (sig === this.rxSig) return;
+    this.rxSig = sig;
+    this.rxData = data;
+    this.rx.refresh();
   }
 
   /** At a quarter of its HP or less, a box gets a gentle red pulse behind it (still with reduced motion). */
@@ -3451,7 +3540,7 @@ export class BattleScene extends Phaser.Scene {
           const move = zMoves?.[i] ?? maxMoves?.[i] ?? content.moves.get(slot.id)!;
           // A battle style may label its buttons its own way (PP, power, type).
           const styled = this.skin?.moveText?.({ name, type: move.type, category: move.category, power: String(move.power ?? fixedDamageLabel(move.effects.fixedDamage)), accuracy: move.accuracy === null || move.accuracy === undefined ? '-' : String(move.accuracy), pp: slot.pp, maxPp: maxPp(content, slot) });
-          return { label: styled?.label ?? name, detail: styled?.detail, disabled };
+          return { label: styled?.label ?? name, detail: styled?.detail, disabled, rx: { type: move.type, sub: `PP ${slot.pp}/${maxPp(content, slot)}` } };
         })
       : [{ label: 'Struggle' }];
     // Moves fill the message bar; the command window shows the focused move's details.
@@ -3500,6 +3589,7 @@ export class BattleScene extends Phaser.Scene {
         const art = [type, cat].filter((o): o is Phaser.GameObjects.Image => o !== null);
         const label = art.length === 2 ? '' : `${move.type.toUpperCase()}  ·  ${move.category}\n`;
         const at = this.skin?.layout.moveInfo;
+        this.rxInfo = `${move.name} · ${move.type.charAt(0).toUpperCase()}${move.type.slice(1)} · ${move.category.charAt(0).toUpperCase()}${move.category.slice(1)} · Power ${power} · Acc ${move.accuracy === null || move.accuracy === undefined ? '-' : move.accuracy}\nPP ${slot.pp}/${maxPp(content, slot)}`;
         this.moveInfo.setText(`${label}${services().session.settings.typeMarkers ? `${move.type.toUpperCase()} ${move.category}  ·  ` : ''}PP  ${slot.pp}/${maxPp(content, slot)}  ·  Power ${power}`);
         if (at?.inline) this.moveInfo.setY(at.y);
         else this.moveInfo.setY(at ? (art.length === 2 ? at.y + 40 : at.y + 6) : art.length === 2 ? MESSAGE_Y + 64 : MESSAGE_Y + 30);
