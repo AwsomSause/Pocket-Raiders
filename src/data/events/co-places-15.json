@@ -1,0 +1,2624 @@
+{
+ "catalogOverhaul": "places",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "abandoned-power-plant",
+   "name": "Abandoned Power Plant",
+   "group": "Biome Hazards",
+   "rarity": "rare",
+   "types": [
+    "electric"
+   ],
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#202008",
+    "effect": "flicker"
+   },
+   "intro": "The Abandoned Power Plant. Sparks spit from a broken generator in the dark, and the air tastes of metal. A Voltorb rolls out from under a turbine, stops, and looks at you. Everything in here is humming.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "chance": 0.5,
+     "success": {
+      "text": "You hurry past the generator. A spark jumps the gap and catches your lead mid-stride; it shakes it off, but its legs are stiff for a while.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "paralysis",
+        "who": "lead"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You hurry past the generator, between sparks, and make it through untouched. The Voltorb watches you go.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You sit and wait while the generator cools, tick by tick, until the sparks stop. It takes a long time. The Voltorb falls asleep against your boot.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Ground- or Electric-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground",
+        "electric"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon walks straight through the sparks. If it is a Ground-type they cannot touch it; if it is an Electric-type it drinks them down, and comes out the far side crackling, faster than it has ever been.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Charged up",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 1.5
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "power-plant-fault",
+   "name": "Power Plant Fault",
+   "group": "Biome Hazards",
+   "types": [
+    "electric"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "effect": "flicker"
+   },
+   "intro": "The Abandoned Power Plant. Sparks spit from a broken generator in the dark, and the air tastes of metal. A Voltorb rolls out from under a turbine, stops, and looks at you. Everything in here is humming.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "chance": 0.5,
+     "success": {
+      "text": "You hurry past the generator. A spark jumps the gap and catches your lead mid-stride; it shakes it off, but its legs are stiff for a while.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "paralysis",
+        "who": "lead"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You hurry past the generator, between sparks, and make it through untouched. The Voltorb watches you go.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You sit and wait while the generator cools, tick by tick, until the sparks stop. It takes a long time. The Voltorb falls asleep against your boot.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Ground- or Electric-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground",
+        "electric"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon walks straight through the sparks. If it is a Ground-type they cannot touch it; if it is an Electric-type it drinks them down, and comes out the far side crackling, faster than it has ever been.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Charged up",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 1.5
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ancient-forest",
+   "name": "Ancient Forest",
+   "group": "Biome Hazards",
+   "rarity": "rare",
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "minStage": 4,
+   "scene": {
+    "cast": [],
+    "pokemon": "celebi",
+    "tint": "#103010",
+    "effect": "sparkle"
+   },
+   "intro": "The Ancient Forest. Trees so old and so huge their roots are hills. The light comes down green and slow. Time feels slower here, as if the forest is thinking about something and has been for a thousand years.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You push on and the paths all look the same. By the time you find your way out, the light has moved a long way.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You sit on a root and wait for the forest to show you the way. It does, eventually, in its own time.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Grass- or Psychic-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "grass",
+        "psychic"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon closes its eyes and listens, and then it knows: it leads you through the roots without one wrong turn, and when you are out, it looks back at the forest for a long time, and then at you.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": {
+         "types": [
+          "grass",
+          "psychic"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "blizzard-pass",
+   "name": "Blizzard Pass",
+   "group": "Biome Hazards",
+   "rarity": "uncommon",
+   "types": [
+    "ice"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#203040",
+    "effect": "snow"
+   },
+   "intro": "Blizzard Pass. The road goes up into white and disappears. Snow to the knee, to the waist, wind like knives.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You put your heads down and push through. Your Ice-types love it. Nobody else does.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "party",
+        "except": [
+         "ice"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You dig in behind a rock and wait for the blizzard to blow itself out. It does, by evening.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Fire-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "fire"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Fire-type walks ahead, and the snow hisses and melts in front of it, and you follow a black path of steaming stone all the way over the pass, warm as toast.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": {
+         "types": [
+          "fire"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cherry-blossom",
+   "name": "Cherry Blossoms",
+   "group": "Biome Hazards",
+   "scene": {
+    "cast": [],
+    "tint": "#402830",
+    "effect": "hearts"
+   },
+   "intro": "Cherry Blossoms. A road under trees so thick with pink petals that the air is pink. There is a festival on, lanterns in the branches, music. A kind place.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You join the festival. You eat things on sticks. You sit under the trees with your team while petals land on everyone. It is a rest, and a good one.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Grass- or Fairy-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "grass",
+        "fairy"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon dances in the falling petals, and the festival stops to watch, and then everyone is dancing, and your whole team with them.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "crystal-cave",
+   "name": "Crystal Cave",
+   "group": "Biome Hazards",
+   "rarity": "uncommon",
+   "types": [
+    "rock",
+    "ice"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#182838",
+    "effect": "glint"
+   },
+   "intro": "The Crystal Cave. Glowing crystals in every wall, blue and violet. They hum, all of them, a low note that comes and goes.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You push on through the glow and lose the way twice. You come out the far side much later than you meant to.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Rock- or Psychic-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "rock",
+        "psychic"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon follows the hum, turning left, then right, then down, to a chamber where it is loudest. In the middle, a clay that holds the light: a Light Clay.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "light-clay",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "desert-oasis",
+   "name": "Desert Oasis",
+   "group": "Biome Hazards",
+   "rarity": "uncommon",
+   "types": [
+    "ground",
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#403018",
+    "effect": "float"
+   },
+   "intro": "A Desert Oasis. Palm trees and a pool of clear water in the middle of the sand. A kind place.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You drink. Everyone drinks. You lie in the shade until the heat goes out of you.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Water-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "water"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Water-type dives straight in and swims laps of the pool, delighted, splashing everyone. It comes out happier than you have seen it in days.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": {
+         "types": [
+          "water"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "foggy-moor",
+   "name": "Foggy Moor",
+   "group": "Biome Hazards",
+   "types": [
+    "ghost",
+    "dark"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#182020",
+    "effect": "fog"
+   },
+   "intro": "The Foggy Moor. Fog so thick you cannot see your own feet. Somewhere out there is a road. Somewhere out there is a bog.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You push on and walk straight into a dead end, and then another. By the time you find the road, half the day is gone.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You wait for the fog to lift. It lifts, slowly, by noon.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Flying-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "flying"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Flying-type beats its wings, once, twice, and the fog tears open in front of you like a curtain. The road is right there.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": {
+         "types": [
+          "flying"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "heatwave",
+   "name": "Heatwave",
+   "group": "Biome Hazards",
+   "types": [
+    "fire"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#402010",
+    "effect": "fire"
+   },
+   "intro": "A Heatwave. The sun burns. The road shimmers. Your team is panting before you have gone a hundred steps.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "chance": 0.5,
+     "success": {
+      "text": "You push on through the heat. It costs you: everyone is scorched and sore, and your lead takes a burn.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "status",
+        "status": "burn",
+        "who": "lead"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You push on through the heat. It costs you, but nobody burns.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You rest in the shade of a rock until evening, when the heat breaks.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Water-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "water"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Water-type mists the whole party as you walk, a fine cool spray, all the way to the next stop. Nobody so much as sweats.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": {
+         "types": [
+          "water"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "moonlit-path",
+   "name": "Moonlit Path",
+   "group": "Biome Hazards",
+   "rarity": "uncommon",
+   "types": [
+    "fairy",
+    "dark"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#101830",
+    "effect": "sparkle"
+   },
+   "intro": "A Moonlit Path. A full moon, and in a clearing by the road, Fairy Pokémon dancing in a ring, slow and silver. A kind place.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You step into the ring. Nobody minds. You dance with them until the moon goes down, and your team does too.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Fairy-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "fairy"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Fairy-type joins the ring as if it had always been part of it. When the dance ends, the Clefairy at the centre gives it a stone that shines like the moon.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "moon-stone",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rainbow-bridge",
+   "name": "Rainbow Bridge",
+   "group": "Biome Hazards",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#203048",
+    "effect": "sparkle"
+   },
+   "intro": "A Rainbow Bridge. A rainbow after rain, so bright and so close you could walk under it. A kind place.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You walk under the rainbow. For a moment, in the colours, you see something enormous and golden flying very high, and then it is gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-ho-oh",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You walked under a rainbow and saw something golden flying in it.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Flying-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "flying"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Flying-type flies straight up through the rainbow and out the other side, every colour on its wings, and comes down to you shining.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": {
+         "types": [
+          "flying"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sandstorm",
+   "name": "Sandstorm",
+   "group": "Biome Hazards",
+   "types": [
+    "ground",
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#403018",
+    "effect": "fog"
+   },
+   "intro": "A Sandstorm. Sand across the route, stinging, blinding. Off the road, a burrow in a dune, big enough to crawl into.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You push on with your eyes shut. The sand gets everywhere and into everyone, except the ones built for it.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "party",
+        "except": [
+         "rock",
+         "ground",
+         "steel"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You crawl into the burrow to wait it out. Something is in there already: a Sandile, who looks at you, decides you are fine, and goes back to sleep. When the storm ends it follows you out.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "sandile"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Ground- or Rock-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground",
+        "rock"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon leads, head down, sand sliding off it, and you walk in its shadow the whole way.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": {
+         "types": [
+          "ground",
+          "rock"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r122-sandstorm-burrow",
+   "name": "Sandstorm Burrow",
+   "group": "Biome Hazards",
+   "types": [
+    "ground",
+    "rock"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "dugtrio",
+    "tint": "#3a3018",
+    "effect": "fog"
+   },
+   "intro": "A Sandstorm. Sand across the route, stinging, blinding. Off the road, a burrow in a dune, big enough to crawl into.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You push on with your eyes shut. The sand gets everywhere and into everyone, except the ones built for it.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "party",
+        "except": [
+         "rock",
+         "ground",
+         "steel"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You crawl into the burrow to wait it out. Something is in there already: a Sandile, who looks at you, decides you are fine, and goes back to sleep. When the storm ends it follows you out.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "sandile"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Ground- or Rock-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground",
+        "rock"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon leads, head down, sand sliding off it, and you walk in its shadow the whole way.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": {
+         "types": [
+          "ground",
+          "rock"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "volcano-rim",
+   "name": "Volcano Rim",
+   "group": "Biome Hazards",
+   "rarity": "rare",
+   "types": [
+    "fire"
+   ],
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#400808",
+    "effect": "fire"
+   },
+   "intro": "The Volcano Rim. A narrow path along the crater's edge. Far below, lava breathes in and out.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "chance": 0.5,
+     "success": {
+      "text": "You hurry along the rim. A gust of heat comes up from below and catches two of you.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "burn"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You hurry along the rim, and the heat never quite reaches you.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You wait for the crater to settle before you go on. It takes all afternoon.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Fire- or Rock-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "fire",
+        "rock"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon leads along the rim, completely at home, and you step where it steps.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": {
+         "types": [
+          "fire",
+          "rock"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cave-in",
+   "name": "Cave-In",
+   "group": "Biome Hazards",
+   "types": [
+    "rock"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "effect": "shake"
+   },
+   "intro": "A Cave-In. Rubble seals a chamber off the path. Through a gap, something metallic glints.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You dig at the rubble with your hands. A stone shifts and comes down on your lead. You get through, scraped, and the glint is a Metal Coat.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "item",
+        "id": "metal-coat",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You go round the long way. You never find out what the glint was.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Fighting- or Ground-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "fighting",
+        "ground"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon clears the rubble in a few great heaves. The glint is a Metal Coat, lying on the floor as if someone set it down and meant to come back.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "metal-coat",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "world-cave-in",
+   "name": "Cave-In",
+   "group": "Biome Hazards",
+   "rarity": "uncommon",
+   "types": [
+    "rock",
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "shake"
+   },
+   "intro": "A Cave-In. Rubble seals a chamber off the path. Through a gap, something metallic glints.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You dig at the rubble with your hands. A stone shifts and comes down on your lead. You get through, scraped, and the glint is a Metal Coat.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "item",
+        "id": "metal-coat",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You go round the long way. You never find out what the glint was.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Fighting- or Ground-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "fighting",
+        "ground"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon clears the rubble in a few great heaves. The glint is a Metal Coat, lying on the floor as if someone set it down and meant to come back.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "metal-coat",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "frozen-lake",
+   "name": "Frozen Lake",
+   "group": "Biome Hazards",
+   "types": [
+    "ice"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.snow_worker_m"
+    ],
+    "tint": "#a0c0e0",
+    "effect": "snow"
+   },
+   "intro": "A Frozen Lake. A shortcut straight across the ice. Out in the middle, something shines under the surface.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "chance": 0.67,
+     "success": {
+      "text": "You cross slowly, testing every step. The ice groans but holds the whole way. The shining thing stays sealed in it, out of reach.",
+      "effects": []
+     },
+     "failure": {
+      "text": "Halfway across, the ice cracks under someone with a sound like a gunshot, and everyone gets wet and cold scrambling to the far side.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You go round the shore. It takes a long time, and the shining thing stays where it is.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use an Ice-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ice"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Ice-type walks straight across, the ice thickening under its feet, and stops in the middle, and digs. The shine is a Never-Melt Ice.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "never-melt-ice",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "w4-winter-lake",
+   "name": "The Frozen Lake",
+   "group": "Biome Hazards",
+   "types": [
+    "ice"
+   ],
+   "requires": [
+    {
+     "kind": "season",
+     "in": [
+      "Winter"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a3a",
+    "effect": "snow"
+   },
+   "intro": "A Frozen Lake. A shortcut straight across the ice. Out in the middle, something shines under the surface.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "chance": 0.67,
+     "success": {
+      "text": "You cross slowly, testing every step. The ice groans but holds the whole way. The shining thing stays sealed in it, out of reach.",
+      "effects": []
+     },
+     "failure": {
+      "text": "Halfway across, the ice cracks under someone with a sound like a gunshot, and everyone gets wet and cold scrambling to the far side.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You go round the shore. It takes a long time, and the shining thing stays where it is.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use an Ice-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ice"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Ice-type walks straight across, the ice thickening under its feet, and stops in the middle, and digs. The shine is a Never-Melt Ice.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "never-melt-ice",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-floating-ice-floes",
+   "name": "Floating Ice Floes",
+   "group": "Biome Hazards",
+   "types": [
+    "ice",
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a4a5a",
+    "effect": "snow"
+   },
+   "intro": "Ice Floes in a channel, rocking. On the far one, something shiny.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You jump from floe to floe. You make it, mostly. Some of you get a dunking.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "item",
+        "id": "pearl",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Water-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "water"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Water-type ferries everyone across one by one, and brings back the shiny thing: a Pearl.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "pearl",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": {
+         "types": [
+          "water"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "junkyard",
+   "name": "Junkyard",
+   "group": "Biome Hazards",
+   "types": [
+    "steel"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "rattle"
+   },
+   "intro": "A Junkyard. Scrap metal in piles taller than houses, rusting, leaning. Something useful is in there somewhere.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You climb over the piles. One shifts. Everyone gets a scrape, and nobody finds anything worth having.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Steel-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "steel"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Steel-type sorts the scrap like it was born to it, tossing aside rust, until it holds up something good: a held item, perfectly fine under the grime.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "metal-coat",
+         "iron-ball",
+         "magnet",
+         "shed-shell",
+         "grip-claw",
+         "quick-claw"
+        ],
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "toxic-swamp",
+   "name": "Toxic Swamp",
+   "group": "Biome Hazards",
+   "types": [
+    "poison"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#283010",
+    "effect": "fog"
+   },
+   "intro": "A Toxic Swamp. Purple bubbles rise and pop in the mud. The smell makes your eyes water.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You wade through. The fumes get two of you.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "poison"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You wait for the wind to change and blow the fumes away. It takes a while.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Poison- or Steel-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "poison",
+        "steel"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon leads through, untroubled, and finds the one firm path across.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": {
+         "types": [
+          "poison",
+          "steel"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "w4-quicksand",
+   "name": "Quicksand!",
+   "group": "Biome Hazards",
+   "types": [
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2010",
+    "effect": "shake"
+   },
+   "intro": "Quicksand. A hiker up to his chest in it, shouting, struggling, sinking deeper every time he moves. \"Don't come near! It'll take you too!\"",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You grab his hands and pull. The sand pulls back. Your lead gets dragged in to the knees before he comes free, both of you gasping. \"Dale,\" he says, when he can talk. \"I'm Dale. I owe you.\"",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "flag",
+        "key": "dale-saved",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Ground- or Grass-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground",
+        "grass"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon firms the sand, or throws him a vine, and he comes out with a sucking pop. He sits on the bank and shakes. \"Dale,\" he says. \"I'm Dale. I owe you. I know these flats. If you're ever lost round here, I'll be your guide.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dale-saved",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You pulled a hiker named Dale out of quicksand.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-quicksand-flats",
+   "name": "Quicksand Flats",
+   "group": "Biome Hazards",
+   "types": [
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3018",
+    "effect": "shake"
+   },
+   "intro": "Quicksand. A hiker up to his chest in it, shouting, struggling, sinking deeper every time he moves. \"Don't come near! It'll take you too!\"",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You grab his hands and pull. The sand pulls back. Your lead gets dragged in to the knees before he comes free, both of you gasping. \"Dale,\" he says, when he can talk. \"I'm Dale. I owe you.\"",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "flag",
+        "key": "dale-saved",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Ground- or Grass-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground",
+        "grass"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon firms the sand, or throws him a vine, and he comes out with a sucking pop. He sits on the bank and shakes. \"Dale,\" he says. \"I'm Dale. I owe you. I know these flats. If you're ever lost round here, I'll be your guide.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dale-saved",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You pulled a hiker named Dale out of quicksand.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "w4-spring-flood",
+   "name": "The Flooded Meadow",
+   "group": "Biome Hazards",
+   "types": [
+    "water",
+    "grass"
+   ],
+   "requires": [
+    {
+     "kind": "season",
+     "in": [
+      "Spring"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#14283a",
+    "effect": "rain"
+   },
+   "intro": "A Spring Flood. A meadow turned into a shallow lake overnight, flowers standing up through the water.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You wade across, slow and heavy. Your legs ache for the rest of the day.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Waterlogged",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 0.67
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You wait for the water to go down. It does, by evening, and the flowers are still there.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Water-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "water"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Water-type carries everyone across one by one, swimming between the flowers, and is plainly having the time of its life.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": {
+         "types": [
+          "water"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-earthquake-tremor",
+   "name": "Earthquake Tremor",
+   "group": "Biome Hazards",
+   "types": [
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a18",
+    "effect": "shake"
+   },
+   "intro": "An Earthquake Tremor. The ground rumbles under your feet, then rolls. Stones bounce down the hillside.",
+   "choices": [
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You push on through the shaking. Rocks come down around you, and some of them hit. Somewhere deep under you, something is getting worse.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "crisis",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You wait in the open until the ground is still.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Ground- or Rock-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground",
+        "rock"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon plants itself and the ground steadies around it, and you all walk through the tremor in its calm.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": {
+         "types": [
+          "ground",
+          "rock"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "beach-cleanup",
+   "name": "Beach Cleanup",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [
+     "boss.npc_swimmer_m"
+    ],
+    "effect": "none"
+   },
+   "intro": "A beach littered with bags and bottles, and Trubbish rummaging happily through all of it. A woman in rubber gloves holds out a sack. Coral, the organiser: \"Every bag counts. Every single one.\"",
+   "choices": [
+    {
+     "label": "Volunteer (a node; choose a Pokémon).",
+     "pick": {},
+     "success": {
+      "text": "You spend the day filling sacks. By sunset the beach is sand again. The town will remember. The one who helped will remember more.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "picked",
+         "types": [
+          "water",
+          "poison"
+         ]
+        }
+       ],
+       "text": "Your Pokémon works harder than anyone, and the Trubbish follow it all afternoon, and when you leave, one of them follows it home. The town will remember.",
+       "effects": [
+        {
+         "kind": "takeNode",
+         "nodes": 1
+        },
+        {
+         "kind": "friendship",
+         "bond": 2,
+         "who": "picked"
+        },
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 1
+        },
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "trubbish"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Donate instead (200).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "You give what you can. It goes in a tin, and someone writes your name in a book.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "Not today. They wave you off anyway.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "charity-marathon",
+   "name": "Charity Marathon Sponsor",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [
+     "boss.npc_rocker"
+    ],
+    "effect": "none"
+   },
+   "intro": "A road lined with bunting and a runner in a paper number, stretching. Esme, the runner: \"Every coin goes to the shelter! Run a bit with me?\"",
+   "choices": [
+    {
+     "label": "Volunteer (a node; choose a Pokémon).",
+     "pick": {},
+     "success": {
+      "text": "You run beside her the whole way, and your Pokémon with you. You are not fast. You finish. The town will remember. The one who helped will remember more.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": []
+    },
+    {
+     "label": "Donate instead (300).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "You give what you can. It goes in a tin, and someone writes your name in a book.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "Not today. They wave you off anyway.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "graveyard-tidy",
+   "name": "Overgrown Graveyard Tidy",
+   "group": "Helpers, gifts and kindness",
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "fog"
+   },
+   "intro": "An overgrown graveyard behind a little chapel, the stones lost in brambles. Whispers in the long grass. The groundskeeper leans on his rake. \"They like it neat,\" he says. \"They told me.\"",
+   "choices": [
+    {
+     "label": "Volunteer (a node; choose a Pokémon).",
+     "pick": {},
+     "success": {
+      "text": "You clear the brambles, stone by stone, and read every name. The town will remember. The one who helped will remember more.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "picked",
+         "types": [
+          "ghost"
+         ]
+        }
+       ],
+       "text": "Your Ghost-type drifts from stone to stone as you work, and the whispers follow it, softer and softer, until the last thing you hear is something very like \"thank you.\" The town will remember.",
+       "effects": [
+        {
+         "kind": "takeNode",
+         "nodes": 1
+        },
+        {
+         "kind": "friendship",
+         "bond": 2,
+         "who": "picked"
+        },
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Donate instead (150).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "You give what you can. It goes in a tin, and someone writes your name in a book.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "Not today. They wave you off anyway.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "neighbors-garden",
+   "name": "Neighbor's Garden Weeding",
+   "group": "Helpers, gifts and kindness",
+   "types": [
+    "grass"
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_aromalady"
+    ],
+    "effect": "none"
+   },
+   "intro": "A garden gone wild, waist-high weeds, and a little old woman in a cardigan surveying it with despair. Mrs. Pike: \"A Grass-type would make quick work of this. If anyone had one.\"",
+   "choices": [
+    {
+     "label": "Volunteer (a node; choose a Pokémon).",
+     "pick": {},
+     "success": {
+      "text": "You pull weeds all afternoon. Mrs. Pike brings tea at the right moments. The town will remember. The one who helped will remember more.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "picked",
+         "types": [
+          "grass"
+         ]
+        }
+       ],
+       "text": "Your Grass-type has the whole garden sorted in an hour, and then plants her a row of something that will flower in spring. She cries a little, and gives it a biscuit. The town will remember.",
+       "effects": [
+        {
+         "kind": "takeNode",
+         "nodes": 1
+        },
+        {
+         "kind": "friendship",
+         "bond": 2,
+         "who": "picked"
+        },
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Donate instead (100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "You give what you can. It goes in a tin, and someone writes your name in a book.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "Not today. They wave you off anyway.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "orchard-harvest",
+   "name": "Orchard Harvest Day",
+   "group": "Helpers, gifts and kindness",
+   "stop": "berry",
+   "types": [
+    "grass"
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_camper"
+    ],
+    "effect": "none"
+   },
+   "intro": "Harvest day in the orchard. Ladders against every tree, baskets everywhere. Brae waves you over from the top of a ladder: \"Hands needed! Any hands!\"",
+   "choices": [
+    {
+     "label": "Volunteer (a node; choose a Pokémon).",
+     "pick": {},
+     "success": {
+      "text": "You pick until your arms ache and your basket is the fullest on the row. The town will remember. The one who helped will remember more.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "picked",
+         "types": [
+          "fighting",
+          "normal"
+         ]
+        }
+       ],
+       "text": "Your Pokémon with good strong arms picks two baskets for every one of yours, and Brae calls it the best picker she has ever had. The town will remember.",
+       "effects": [
+        {
+         "kind": "takeNode",
+         "nodes": 1
+        },
+        {
+         "kind": "friendship",
+         "bond": 2,
+         "who": "picked"
+        },
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Donate instead (200).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "You give what you can. It goes in a tin, and someone writes your name in a book.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "Not today. They wave you off anyway.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "soup-kitchen",
+   "name": "Soup Kitchen Volunteer",
+   "group": "Helpers, gifts and kindness",
+   "stop": "heal",
+   "scene": {
+    "cast": [
+     "boss.npc_aromalady"
+    ],
+    "effect": "hearts"
+   },
+   "intro": "A soup kitchen in a church hall. A pot steaming on a stove, a queue at the door, and nobody to serve. Barnaby, the cook: \"It's beans. It's always beans. Can you help?\"",
+   "choices": [
+    {
+     "label": "Volunteer (a node; choose a Pokémon).",
+     "pick": {},
+     "success": {
+      "text": "You ladle beans for three hours. You learn everyone's name. The town will remember. The one who helped will remember more.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "picked",
+         "types": [
+          "fire"
+         ]
+        }
+       ],
+       "text": "Your Fire-type keeps the pot hot all evening, and the children in the queue sit as close to it as they can get, warming their hands. The town will remember.",
+       "effects": [
+        {
+         "kind": "takeNode",
+         "nodes": 1
+        },
+        {
+         "kind": "friendship",
+         "bond": 2,
+         "who": "picked"
+        },
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Donate instead (150).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "You give what you can. It goes in a tin, and someone writes your name in a book.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "Not today. They wave you off anyway.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "volunteer-cleanup",
+   "name": "Volunteer Cleanup",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "A river with an oily sheen on it, rubbish caught in the reeds. Volunteers in waders, working in a line. \"Grab a net,\" someone calls. \"We could use you.\"",
+   "choices": [
+    {
+     "label": "Volunteer (a node; choose a Pokémon).",
+     "pick": {},
+     "success": {
+      "text": "You work the reeds with them all day, pulling out tyres and trolleys and worse. The town will remember. The one who helped will remember more.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "picked",
+         "types": [
+          "water"
+         ]
+        }
+       ],
+       "text": "Your Water-type dives for the things nobody can reach, and comes up with something every time, and the volunteers cheer it each time. The town will remember.",
+       "effects": [
+        {
+         "kind": "takeNode",
+         "nodes": 1
+        },
+        {
+         "kind": "friendship",
+         "bond": 2,
+         "who": "picked"
+        },
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Donate instead (200).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "You give what you can. It goes in a tin, and someone writes your name in a book.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "Not today. They wave you off anyway.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "zoo-keeper-aid",
+   "name": "Zoo Keeper's Aid",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [
+     "boss.npc_tamer"
+    ],
+    "effect": "hearts"
+   },
+   "intro": "A little zoo of rescued Pokémon, each with a sign: where it was found, what it is afraid of. Hettie, the keeper: \"Spend an afternoon with them? They need people who'll be gentle.\"",
+   "choices": [
+    {
+     "label": "Volunteer (a node; choose a Pokémon).",
+     "pick": {},
+     "success": {
+      "text": "You sit in the enclosures for hours, being gentle. The town will remember. The one who helped will remember more.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": []
+    },
+    {
+     "label": "Donate instead (200).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "You give what you can. It goes in a tin, and someone writes your name in a book.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "Not today. They wave you off anyway.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}
