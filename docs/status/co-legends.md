@@ -27,7 +27,22 @@ Door Alphas (A2 Black Tide, A3 Frostbound, A4 Hushed One) are chain pseudo-stage
 
 Keeper's Lamp's accuracy guard is not built (plain 80-power Water move).
 
+## Mega Anomalies M1-M6 (built 2026-11-15, `tools/events/co/legends-2.ts` -> `co-legends-2.json`, 24 events)
+Pack questlines, so the status file lists them under `extra` (M1-M6 -> entry event). Re-read against QUESTLINES_ALPHAS_AND_ANOMALIES.md part two.
+
+| Code | Entry | Shape | Built | Limits |
+|---|---|---|---|---|
+| M1 | co-m1-absol | Companion A5, 11 | follow / break stone / grave, Absol joins or leaves | none |
+| M2 | co-m2-harvest | Region A9, stages 2/5/8 | farm, bribe, mine (2 checkpoints), seam vs Celosia | none |
+| M3 | co-m3-twins | Companion A6, 12 | cutter two nodes on, both whole or one scorched (your Charizard can calm it) | none |
+| M4 | co-m4-mirror | Door A7, 14 | pseudo chain `ps_mirror_spider`: rooms 1-3, central room, merge or split | none |
+| M5 | co-m5-tatsugiri | Single A4, 10 | contest or feed, verdict, tie gives a later ride | none |
+| M6 | co-m6-flower | Single A17, 11-13 | fence, reactor, AZ's Flute | none |
+| M7 | not built | | needs the rivals row's rival slot | waits on rivals |
+
+The region Anomaly meter is run flag `mega-meter`; `syncLegendFlags` resets it to 0 when the region changes. Tests: `tests/unit/coLegendsMega.test.ts`.
+
 ## Where I stopped (paused 2026-11-15, Kice: five threads at a time)
-- Resumed 2026-11-15 (merged ui-mockups; shared pieces are in the base now). Alphas done; next M1-M7.
-- Still to build: M1-M7, D1-D8, Z1-Z7, L2-L15, MY1-MY22, U1-U9, the 382 RULE ids (ladder Trial/Recognition/Presence), placement/flags/status files, update fragment, PR.
+- Resumed 2026-11-15 (merged ui-mockups; shared pieces are in the base now). Alphas and Megas M1-M6 done; next D1-D8.
+- Still to build: M7 (rivals slot), D1-D8, Z1-Z7, L2-L15, MY1-MY22, U1-U9, the 382 RULE ids (ladder Trial/Recognition/Presence), placement/flags/status files, update fragment, PR.
 - Run the full `npm run check` before opening the PR.

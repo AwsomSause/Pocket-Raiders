@@ -65,9 +65,14 @@ export const signMatches = (who: string, legend: string): boolean => who === 'ow
 /**
  * Keeps the read-only mirror flags current: `blessing-<legend>`, `blessing-<group>`, `blessing-influence`, `blessing-communion`, `blessing-company`, `blessing-solitary`,
  * `guest-<mythical>`, `promise-<mythical>`, `promise-kept-<mythical>`, `promise-broken-<mythical>`. Cheap and idempotent; called at
- * every stage start and after every Sign or Telling.
+ * every stage start and after every Sign or Telling. Also starts the region's Mega Anomaly meter (`mega-meter`, 0 to 5) at 0.
  */
-export function syncLegendFlags(run: Pick<RunState, 'story' | 'expansion'>): void {
+export function syncLegendFlags(run: Pick<RunState, 'story' | 'expansion' | 'regionIndex'>): void {
+  // The Mega Anomaly meter (QUESTLINES_ALPHAS_AND_ANOMALIES part two) is one per region: a new region starts it at 0.
+  if (flags(run)['ev:mega-meter-region'] !== run.regionIndex + 1) {
+    delete flags(run)['ev:mega-meter'];
+    flags(run)['ev:mega-meter-region'] = run.regionIndex + 1;
+  }
   const legend = blessingLegend(run);
   const state = run.expansion?.blessing;
   if (legend && state) {

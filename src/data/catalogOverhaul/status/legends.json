@@ -15,5 +15,12 @@
  "merged": {},
  "rule": {},
  "scrapped": [],
- "extra": {}
+ "extra": {
+  "M1": "co-m1-absol",
+  "M2": "co-m2-harvest",
+  "M3": "co-m3-twins",
+  "M4": "co-m4-mirror",
+  "M5": "co-m5-tatsugiri",
+  "M6": "co-m6-flower"
+ }
 }

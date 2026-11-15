@@ -1,6 +1,6 @@
 {
  "category": "legends",
- "note": "Door shapes of the legends questlines (Alphas A2-A4). Rooms are co-* events in co-legends-1.json.",
+ "note": "Door shapes of the legends questlines (Alphas A2-A4, Mega Anomaly M4). Rooms are co-* events in co-legends-1.json and co-legends-2.json.",
  "chains": [
   {
    "id": "ps_black_tide",
@@ -27,6 +27,15 @@
    "themeId": "normal-flying",
    "tint": "#3a3048",
    "mood": "silent dusk",
+   "start": "opened"
+  },
+  {
+   "id": "ps_mirror_spider",
+   "name": "The Mirror-Spider Ruin",
+   "entry": "co-m4-mirror",
+   "themeId": "rock-ghost",
+   "tint": "#404858",
+   "mood": "pale ruin",
    "start": "opened"
   }
  ]

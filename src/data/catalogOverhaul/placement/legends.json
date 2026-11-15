@@ -152,5 +152,100 @@
    "night"
   ],
   "level": "A+2"
+ },
+ "co-m1-absol": {
+  "shape": "Companion",
+  "earliest": "A5",
+  "home": 11,
+  "window": [
+   8,
+   14
+  ],
+  "where": "Starts 11; the grave comes when you follow her",
+  "sits": "side-branch",
+  "tags": [
+   "snow"
+  ],
+  "level": "A+1"
+ },
+ "co-m2-harvest": {
+  "shape": "Region",
+  "earliest": "A9",
+  "stages": [
+   2,
+   5,
+   8
+  ],
+  "where": "The farm on stage 2, the mine on stage 5, the seam on stage 8",
+  "level": "A+1"
+ },
+ "co-m2-mine": {
+  "shape": "Region",
+  "earliest": "A9",
+  "stages": [
+   5
+  ],
+  "level": "A+1"
+ },
+ "co-m2-seam": {
+  "shape": "Region",
+  "earliest": "A9",
+  "stages": [
+   8
+  ],
+  "level": "A+2"
+ },
+ "co-m3-twins": {
+  "shape": "Companion",
+  "earliest": "A6",
+  "home": 12,
+  "window": [
+   9,
+   15
+  ],
+  "where": "Starts 12; the stone-cutter is two nodes on",
+  "level": "A+1"
+ },
+ "co-m4-mirror": {
+  "shape": "Door",
+  "earliest": "A7",
+  "home": 14,
+  "window": [
+   12,
+   16
+  ],
+  "sits": "side-branch",
+  "tags": [
+   "cave",
+   "ruin"
+  ],
+  "level": "A+2"
+ },
+ "co-m5-tatsugiri": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 10,
+  "window": [
+   7,
+   13
+  ],
+  "tags": [
+   "water",
+   "beach"
+  ],
+  "level": "A+1"
+ },
+ "co-m6-flower": {
+  "shape": "Single",
+  "earliest": "A17",
+  "stages": [
+   11,
+   12,
+   13
+  ],
+  "tags": [
+   "forest"
+  ],
+  "level": "A+1"
  }
 }

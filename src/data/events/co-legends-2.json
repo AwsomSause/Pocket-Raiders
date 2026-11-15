@@ -1,0 +1,1960 @@
+{
+ "catalogOverhaul": "legends",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "co-m1-absol",
+   "name": "The One That Cannot Turn Back",
+   "group": "Story: Mega Anomalies",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "pokemon": "absol-mega",
+    "tint": "#c8d0e0",
+    "effect": "snow"
+   },
+   "intro": "Snow on a ridge. A Mega Absol stands at the edge, wings of white fur shaking. It has been Mega for a week. It cannot stop.\n\nThe Absol does not attack. It watches you and makes a sound that is almost a word.\nAn old woman with a lantern, coming up the path: \"You see it too. Good. I thought I was mad.\"\nOld woman: \"My son's Absol. He fell on this ridge, battling, with the Key Stone still in his fist.\"\nOld woman: \"The bond's open. Nobody on the other end. It can't come back down.\"\nOld woman: \"We buried the Stone with him. I didn't know.\"",
+   "choices": [
+    {
+     "label": "\"I'll find the Stone.\"",
+     "success": {
+      "text": "\"The churchyard's two hours down,\" she says. \"I'll meet you at the grave. I want to be there.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "absol-stone",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "co-m1-churchyard",
+        "nodes": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "co-m1-grave",
+        "nodes": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Can it be broken?\"",
+     "success": {
+      "text": "Old woman: \"Break it and he's gone twice.\" She turns and goes down the path alone, toward the churchyard. You can follow.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-m1-grave"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let it be.\"",
+     "success": {
+      "text": "You leave it on the ridge. It follows you at a distance for the rest of the region. It does not sleep, so nobody does.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "absol-left",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-meter",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m1-churchyard",
+   "name": "The One That Cannot Turn Back: The Churchyard",
+   "group": "Story: Mega Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "absol-mega",
+    "tint": "#8090a0",
+    "effect": "snow"
+   },
+   "intro": "The churchyard gate is iced shut. Something has made its den among the old stones, and it does not want visitors.",
+   "choices": [
+    {
+     "label": "Clear the way.",
+     "success": {
+      "text": "It comes out of the snow at you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "ghost"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m1-grave",
+   "name": "The One That Cannot Turn Back: The Grave",
+   "group": "Story: Mega Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "pokemon": "absol-mega",
+    "tint": "#a0a8b8",
+    "effect": "snow"
+   },
+   "intro": "The old woman kneels and lets you dig. The Stone is in your hand. The Absol lands beside the grave.\n\nOld woman: \"Someone has to hold the other end.\"\nOld woman: \"I'm too old. His girl's too young. But she wants to.\"",
+   "choices": [
+    {
+     "label": "\"I'll hold it.\"",
+     "success": {
+      "text": "The bond closes through you. The Absol reverts, sleeps for a full day, and when it wakes it comes with you. It needs no Stone of its own: the bond is already there.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "absol-joined",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-resolved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-meter",
+        "amount": -1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "absol"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 50
+       },
+       {
+        "kind": "item",
+        "id": "absolite",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "An Absol that had been Mega for a week came back down, through you.",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Give it to his daughter.\"",
+     "success": {
+      "text": "The girl, Mirel, holds it two-handed. The Absol reverts and goes home with her. The old woman presses her lantern into your hands. \"It shows the weather on the road ahead,\" she says. \"He made it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "absol-home",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-resolved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-meter",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "old-lantern",
+        "amount": 1
+       },
+       {
+        "kind": "scout",
+        "columns": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Break it.\"",
+     "success": {
+      "text": "The Stone cracks in two. The Absol reverts, free, and runs into the snow. You see it once more, on a far ridge, looking back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "absol-free",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-resolved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-meter",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m2-harvest",
+   "name": "The Stone Harvest",
+   "group": "Story: Mega Anomalies",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "ampharos-mega",
+    "tint": "#a03030",
+    "effect": "none"
+   },
+   "intro": "Red uniforms on a hillside. A seam of stone glows under their drills. Somewhere down the valley, a Pokémon screams.\n\nFlare Grunt: \"Stand aside. This is a licensed excavation.\"\nGrunt: \"Every stone we cut is worth a house. Every stone.\"\nDown the valley, a Mega Ampharos staggers through a field, its mane flickering on and off.\nFarmer, running up: \"That's mine! It just went off like that! Is that you? Is that you lot?\"\nGrunt: \"We cut a stone, something somewhere evolves. Not our problem.\"",
+   "choices": [
+    {
+     "label": "\"Shut it down.\"",
+     "success": {
+      "text": "You note the mine's entrance. It will take more than one day.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-mine-entered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"How many stones are left?\"",
+     "success": {
+      "text": "Grunt: \"Forty. Maybe fifty.\" He holds one out, low, where the farmer can't see. \"Yours. Look the other way.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-m2-bribe"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay with the Ampharos.",
+     "success": {
+      "text": "You leave the mine and go down to the field. You stand with the Ampharos for two turns of its flickering, talking, until its mane goes dark and it sits down in the grass. The farmer will not forget it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-farmer-helped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-mine-entered",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave it for now.\"",
+     "success": {
+      "text": "The drills keep running behind you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-mine-running",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-meter",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m2-bribe",
+   "name": "The Stone Harvest: The Offer",
+   "group": "Story: Mega Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#a03030",
+    "effect": "none"
+   },
+   "intro": "One random Mega Stone, now, for looking the other way. The farmer is still standing there.",
+   "choices": [
+    {
+     "label": "Take the stone.",
+     "success": {
+      "text": "You take it. The farmer saw you take it.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "absolite",
+         "manectite",
+         "ampharosite",
+         "aggronite",
+         "lucarionite"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "flare-bribed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-meter",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "\"Your loss.\" He pockets it. You go round the mine and mark the entrance.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-mine-entered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m2-mine",
+   "name": "The Stone Harvest: The Mine",
+   "group": "Story: Mega Anomalies",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "flare-mine-entered",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#702020",
+    "effect": "none"
+   },
+   "intro": "The mine. Three levels down, two Flare checkpoints, and at the bottom, the seam chamber.",
+   "choices": [
+    {
+     "label": "Go down.",
+     "success": {
+      "text": "Flare Grunt: \"You again? Get them!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "houndour",
+        "golbat"
+       ],
+       "name": "Flare Grunt",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-m2-mine-2"
+        }
+       ],
+       "evil": "grunt"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m2-mine-2",
+   "name": "The Stone Harvest: The Second Checkpoint",
+   "group": "Story: Mega Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#601818",
+    "effect": "none"
+   },
+   "intro": "The second checkpoint. The walls glow here.",
+   "choices": [
+    {
+     "label": "Push through.",
+     "success": {
+      "text": "Two of them this time.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "houndour",
+        "croagunk",
+        "scraggy"
+       ],
+       "name": "Flare Grunts",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "flare-mine-cleared",
+         "amount": 1
+        }
+       ],
+       "evil": "grunt",
+       "format": "doubles"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m2-seam",
+   "name": "The Stone Harvest: The Seam Chamber",
+   "group": "Story: Mega Anomalies",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "flare-mine-cleared",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "pokemon": "manectric-mega",
+    "tint": "#c04040",
+    "effect": "none"
+   },
+   "intro": "Celosia, Flare Admin: \"You found us. The boss said someone would.\"\nCelosia: \"Do you know what a Mega Stone is? It's a Pokémon's future, frozen. We're just thawing them early.\"\nHer Mega Manectric has been Mega for three days. Its fur is falling out.",
+   "choices": [
+    {
+     "label": "Return the stones to the ground.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "flare-bribed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Celosia: \"Then you'll have to make me.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "manectric",
+        "drapion",
+        "liepard"
+       ],
+       "name": "Celosia",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "flare-mine-shut",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "mega-resolved",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "mega-meter",
+         "amount": -1
+        },
+        {
+         "kind": "join",
+         "species": [
+          "mareep"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "moment",
+         "text": "The stones went back into the seam. Celosia's Manectric reverted, and she held it, stunned.",
+         "importance": 80
+        }
+       ],
+       "evil": "executive"
+      }
+     }
+    },
+    {
+     "label": "Give back the bribe, then return the stones.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "flare-bribed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Celosia: \"You took one. You're no different.\" You put it on the ground between you. She looks at it for a long time.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "manectric",
+        "drapion",
+        "liepard"
+       ],
+       "name": "Celosia",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "flare-mine-shut",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "mega-resolved",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "mega-meter",
+         "amount": -1
+        },
+        {
+         "kind": "join",
+         "species": [
+          "mareep"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        }
+       ],
+       "evil": "executive"
+      }
+     }
+    },
+    {
+     "label": "Take the stones.",
+     "success": {
+      "text": "Celosia: \"So that's what you came for.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "manectric",
+        "drapion",
+        "liepard"
+       ],
+       "name": "Celosia",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "flare-stones-taken",
+         "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "manectite",
+          "ampharosite",
+          "aggronite",
+          "lucarionite",
+          "absolite"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "gardevoirite",
+          "scizorite",
+          "altarianite",
+          "medichamite"
+         ]
+        }
+       ],
+       "evil": "executive"
+      }
+     }
+    },
+    {
+     "label": "Flood the mine.",
+     "success": {
+      "text": "No battle. You open the old drainage gate and the river comes in. The seam is gone for the run, and so is every Mega Stone in this region. The meter goes still.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-mine-flooded",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-meter",
+        "amount": -5
+       },
+       {
+        "kind": "flag",
+        "key": "mega-resolved",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m3-twins",
+   "name": "The Twin Flames",
+   "group": "Story: Mega Anomalies",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "charizard-mega-x",
+    "tint": "#e06020",
+    "effect": "none"
+   },
+   "intro": "Two Charizard in a clearing, each Mega in a different way: one black with blue fire, one sleek with wide wings. Then both drop, gasping, back to normal.\n\nTeen trainer, Brann: \"They're siblings. Hatched the same day. One Charizardite between them, so I broke it in half.\"\nBrann: \"They each get two turns now. Then they collapse.\"\nBrann: \"I know. I know. It was stupid.\"\nHis sister, Ketty, arriving: \"It was your idea. Don't make it sound like you're sorry now.\"",
+   "choices": [
+    {
+     "label": "\"Who can fix it?\"",
+     "success": {
+      "text": "Brann: \"There's a stone-cutter. In the hills.\" Two nodes to her.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "twins-cutter",
+        "amount": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-m3-cutter"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Pick one of them.\"",
+     "success": {
+      "text": "Ketty: \"Don't you dare.\" Brann and Ketty command one sibling each.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "team": [
+        "charizard",
+        "charizard"
+       ],
+       "format": "doubles",
+       "name": "Brann and Ketty",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "\"Fight both.\"",
+     "success": {
+      "text": "Win or lose, they will leave without fixing it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "team": [
+        "charizard",
+        "charizard"
+       ],
+       "format": "doubles",
+       "name": "Brann and Ketty",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m3-cutter",
+   "name": "The Twin Flames: The Stone-Cutter",
+   "group": "Story: Mega Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "charizard",
+    "tint": "#a07040",
+    "effect": "none"
+   },
+   "intro": "The stone-cutter is a past Gym Leader, retired, half-blind.\n\nStone-cutter: \"Two halves. I can make one whole stone now. Or two whole stones, given two years and the rest of my sight.\"\nStone-cutter: \"I'd do the two. But that's me.\"",
+   "choices": [
+    {
+     "label": "\"One stone now: Mega X.\"",
+     "success": {
+      "text": "One sibling becomes a full Mega, black and blue-fired. The other leaves the clearing for good.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "twins-one",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-resolved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-meter",
+        "amount": -1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "charizard"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "item",
+        "id": "charizardite-x",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"One stone now: Mega Y.\"",
+     "success": {
+      "text": "One sibling becomes a full Mega, sleek and wide-winged. The other leaves the clearing for good.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "twins-one",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-resolved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-meter",
+        "amount": -1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "charizard"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "item",
+        "id": "charizardite-y",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Two, the long way.\"",
+     "success": {
+      "text": "\"Two years,\" she says. \"Come back when you're further along.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "twins-both",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let the twins choose.\"",
+     "success": {
+      "text": "They fight it out in an exhibition you referee. The winner chooses its own Mega, and comes with you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "twins-chose",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-resolved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-meter",
+        "amount": -1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "charizard"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "charizardite-x",
+         "charizardite-y"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m3-whole",
+   "name": "The Twin Flames: Both Whole",
+   "group": "Story: Mega Anomalies",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "twins-both",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "charizard-mega-y",
+    "tint": "#e08040",
+    "effect": "none"
+   },
+   "intro": "A letter finds you on the road, and then the twins themselves: both Charizard, both whole. The stone-cutter did the two.",
+   "choices": [
+    {
+     "label": "\"Which of you is coming?\"",
+     "success": {
+      "text": "Brann and Ketty argue about it for an hour. In the end one sibling simply walks over to you and sits down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mega-resolved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-meter",
+        "amount": -1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "charizard"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "charizardite-x",
+         "charizardite-y"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m3-scorched",
+   "name": "The Twin Flames: The Other Sibling",
+   "group": "Story: Mega Anomalies",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "twins-one",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "charizard",
+    "tint": "#802010",
+    "effect": "none"
+   },
+   "intro": "A wild Charizard on a burnt hillside, wings scorched, angry. An Alpha now. It is the sibling that left the clearing, and it wants its sibling, not a fight.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "success": {
+      "text": "It comes at you anyway.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "alpha": true,
+       "species": [
+        "charizard"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "pseudo": true,
+       "rule": {
+        "calm": {
+         "need": 6,
+         "start": 0,
+         "perTurn": 0,
+         "likes": []
+        }
+       },
+       "win": [
+        {
+         "kind": "flag",
+         "key": "twins-scorched-beaten",
+         "amount": 1
+        }
+       ],
+       "calm": [
+        {
+         "kind": "join",
+         "species": [
+          "charizard"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "alpha": true
+        },
+        {
+         "kind": "flag",
+         "key": "twins-reunited",
+         "amount": 1
+        }
+       ],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Let your Charizard go to it.",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "charizard"
+      }
+     ],
+     "success": {
+      "text": "Your Charizard walks up to it alone. They stand nose to nose a long time. The red goes out of its eyes, and it follows you both.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "charizard"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "alpha": true
+       },
+       {
+        "kind": "flag",
+        "key": "twins-reunited",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m4-mirror",
+   "name": "The Mirror-Spider",
+   "group": "Story: Mega Anomalies",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "metagross-delta-spider-mega",
+    "tint": "#404858",
+    "effect": "none"
+   },
+   "intro": "An old ruin under a hill. In one room, a Metagross made of old pale stone stands still. In the next, the same shape: dark, legged like a spider, clicking.\n\nNeither moves when you look at it. When you turn, the clicking moves.\nAn archaeologist, Teodor, in the doorway: \"Don't turn your back. I'm serious.\"\nTeodor: \"It's one Pokémon. Mega Evolved across a time rift. Half of it's here, half of it's there.\"\nTeodor: \"I've been watching them six weeks. They want to be in the same room.\"",
+   "choices": [
+    {
+     "label": "\"Herd them together.\"",
+     "success": {
+      "text": "Teodor hands you a mirror from his kit. \"Each moves only when it's unseen. Let each see where the other stands.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mirror-started",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-m4-room-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Catch the near one.\"",
+     "success": {
+      "text": "The pale one turns to face you. It is not still any more.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "metagross-delta-ruin-mega"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "mirror-split",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Leave the ruin.\"",
+     "success": {
+      "text": "Teodor keeps watching. The ruin stays on the hill.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m4-room-1",
+   "name": "The Mirror-Spider: Room 1",
+   "group": "Story: Mega Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "metagross-delta-ruin-mega",
+    "tint": "#506070",
+    "effect": "none"
+   },
+   "intro": "The first room. The pale form stands by the door. Somewhere ahead, clicking.",
+   "choices": [
+    {
+     "label": "Set the mirror so each can see the other.",
+     "success": {
+      "text": "You angle the mirror and back away. Behind you, the clicking moves one room closer.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-m4-room-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn your back to draw it on.",
+     "success": {
+      "text": "You turn. It is right behind you. You do not turn again until your heart stops pounding.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-m4-room-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m4-room-2",
+   "name": "The Mirror-Spider: Room 2",
+   "group": "Story: Mega Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "metagross-delta-spider-mega",
+    "tint": "#506070",
+    "effect": "none"
+   },
+   "intro": "The second room has three doors. The dark form is in the far one, very still, as long as you look at it.",
+   "choices": [
+    {
+     "label": "Set the mirror so each can see the other.",
+     "success": {
+      "text": "You angle the mirror and back away. Behind you, the clicking moves one room closer.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-m4-room-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn your back to draw it on.",
+     "success": {
+      "text": "You turn. It is right behind you. You do not turn again until your heart stops pounding.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-m4-room-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m4-room-3",
+   "name": "The Mirror-Spider: Room 3",
+   "group": "Story: Mega Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "metagross-delta-ruin-mega",
+    "tint": "#506070",
+    "effect": "none"
+   },
+   "intro": "The third room is all mirrors already: someone tried this before. One is cracked.",
+   "choices": [
+    {
+     "label": "Set the mirror so each can see the other.",
+     "success": {
+      "text": "You angle the mirror and back away. Behind you, the clicking moves one room closer.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-m4-centre"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn your back to draw it on.",
+     "success": {
+      "text": "You turn. It is right behind you. You do not turn again until your heart stops pounding.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-m4-centre"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m4-centre",
+   "name": "The Mirror-Spider: The Central Room",
+   "group": "Story: Mega Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "metagross",
+    "tint": "#607080",
+    "effect": "none"
+   },
+   "intro": "Both are in the central room. They face each other.\n\nTeodor, whispering: \"It's going to choose.\"",
+   "choices": [
+    {
+     "label": "\"Let it merge.\"",
+     "success": {
+      "text": "The rift closes like an eye. On the floor: one Metagross, normal, asleep. It joins you. Either Delta form will answer it, when it Mega Evolves.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mirror-whole",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-resolved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-meter",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-dialga",
+        "amount": 2
+       },
+       {
+        "kind": "join",
+        "species": [
+         "metagross"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "item",
+        "id": "spider-delta-metagrossite",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "ruin-delta-metagrossite",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Stop it.\"",
+     "success": {
+      "text": "You step between them. The Spider form fades into the rift. The Ruin form stays, and comes to you, unstable. Teodor is furious.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mirror-split",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "metagross"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "item",
+        "id": "ruin-delta-metagrossite",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m5-tatsugiri",
+   "name": "The Three Tatsugiri",
+   "group": "Story: Mega Anomalies",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "dondozo",
+    "tint": "#5090b0",
+    "effect": "rain"
+   },
+   "intro": "A beach under a light rain of fish. A Dondozo sits on the sand with its mouth wide, looking miserable. Inside it, three small voices argue.\n\nFisher: \"It's been like that since dawn. It ate something.\"\nThree Tatsugiri poke out: a Curly, a Droopy, and a Stretchy. Each glows. Each pushes the others back in.\nFisher: \"Is that... are they all trying to Mega?\"\nThe Dondozo hiccups. More fish fall.",
+   "choices": [
+    {
+     "label": "\"Hold a contest.\"",
+     "success": {
+      "text": "Three rounds: a rhythm, a trick with a Berry, a dive. You judge.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tatsu-contest",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-m5-judge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Pull them out.\"",
+     "success": {
+      "text": "They bite. The Dondozo gets angry.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "dondozo",
+        "tatsugiri"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Feed the Dondozo something else.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "big-malasada"
+      }
+     ],
+     "success": {
+      "text": "A Big Malasada goes in. The Dondozo burps them out, dazed, onto the sand.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "big-malasada"
+       },
+       {
+        "kind": "flag",
+        "key": "tatsu-fed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-m5-judge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Feed it five Berries.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "Five Berries go in, one after another. The Dondozo burps them out, dazed, onto the sand.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "flag",
+        "key": "tatsu-fed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-m5-judge"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m5-judge",
+   "name": "The Three Tatsugiri: The Verdict",
+   "group": "Story: Mega Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "tatsugiri",
+    "tint": "#60a0c0",
+    "effect": "none"
+   },
+   "intro": "The Curly pouts. The Droopy lies flat. The Stretchy waits.",
+   "choices": [
+    {
+     "label": "\"The Curly wins.\"",
+     "success": {
+      "text": "The Curly Megas once, proudly, and the others sulk. The Droopy climbs out of the Dondozo and comes with you, still sulking. It will prove a point one day.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tatsu-winner",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-resolved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-meter",
+        "amount": -1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "tatsugiri"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "item",
+        "id": "tatsugirinite-droopy",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The Droopy wins.\"",
+     "success": {
+      "text": "The Droopy Megas once, proudly, and the others sulk. The Stretchy climbs out of the Dondozo and comes with you, still sulking. It will prove a point one day.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tatsu-winner",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-resolved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-meter",
+        "amount": -1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "tatsugiri"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "item",
+        "id": "tatsugirinite-stretchy",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The Stretchy wins.\"",
+     "success": {
+      "text": "The Stretchy Megas once, proudly, and the others sulk. The Curly climbs out of the Dondozo and comes with you, still sulking. It will prove a point one day.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tatsu-winner",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-resolved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-meter",
+        "amount": -1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "tatsugiri"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "item",
+        "id": "tatsugirinite",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's a tie.\"",
+     "success": {
+      "text": "None Megas. They make up. All three climb back into the Dondozo and ride off. One shouts back, and you notice a fourth seat left in its mouth.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tatsu-tie",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-resolved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-meter",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m5-ride",
+   "name": "The Three Tatsugiri: A Ride",
+   "group": "Story: Mega Anomalies",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tatsu-tie",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "dondozo",
+    "tint": "#4080a0",
+    "effect": "none"
+   },
+   "intro": "A Dondozo surfaces by the shore with its mouth open. Three small voices shout from inside. There is a seat for you.",
+   "choices": [
+    {
+     "label": "Climb in.",
+     "success": {
+      "text": "You cross the sea in a Dondozo's mouth, three nodes in one long, wet, cheerful ride.",
+      "effects": [
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave them off.",
+     "success": {
+      "text": "They shout something rude and very fond, and swim away.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m6-flower",
+   "name": "The Flower That Was Never Meant to Bloom",
+   "group": "Story: Mega Anomalies",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "floette-mega",
+    "tint": "#e0c040",
+    "effect": "none"
+   },
+   "intro": "A field of yellow flowers. In the middle, a Floette with a red flower, glowing, Mega Evolved. It should not be possible.\n\nIt flies straight to you and hides behind you.\nAcross the field, the grass is burning in a perfect line, coming from the east.\nA Ranger, arriving: \"There's a lab out east. It's pulling power from somewhere. Every flower for a mile's wilting.\"\nRanger: \"That Floette came from that direction. Running.\"",
+   "choices": [
+    {
+     "label": "\"Follow the line east.\"",
+     "success": {
+      "text": "Three nodes east along the burnt line.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "floette-followed",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "co-m6-scientist",
+        "nodes": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "co-m6-reactor",
+        "nodes": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Hide it.\"",
+     "success": {
+      "text": "It stays with you, under your coat. The meter climbs while the lab runs. You will have to find it sooner or later.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "floette-hidden",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-meter",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "co-m6-reactor",
+        "nodes": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Take it to a Pokémon Center.\"",
+     "success": {
+      "text": "Nurse Joy can't treat it. Joy: \"It's not hurt. It's frightened.\" You go east after all.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "floette-followed",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "co-m6-scientist",
+        "nodes": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "co-m6-reactor",
+        "nodes": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m6-scientist",
+   "name": "The Flower That Was Never Meant to Bloom: The Fence",
+   "group": "Story: Mega Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#a03030",
+    "effect": "none"
+   },
+   "intro": "A Flare scientist at the lab fence, with a clipboard and a Pokémon that has clearly been told to guard it.",
+   "choices": [
+    {
+     "label": "Get past.",
+     "success": {
+      "text": "\"Visitors are not on the schedule.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "magneton",
+        "klefki"
+       ],
+       "name": "Flare Scientist",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [],
+       "evil": "specialist"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m6-reactor",
+   "name": "The Flower That Was Never Meant to Bloom: The Reactor Room",
+   "group": "Story: Mega Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "pokemon": "floette-mega",
+    "tint": "#c03030",
+    "effect": "none"
+   },
+   "intro": "Flare scientist: \"It's charging. It's been charging for three thousand years. Do you know what it was built to do?\"\nThe Floette stares at the machine. It starts to shake.",
+   "choices": [
+    {
+     "label": "\"Shut it down.\"",
+     "success": {
+      "text": "A battle at the console.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "magnezone",
+        "klefki",
+        "bronzong"
+       ],
+       "name": "Flare Scientist",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "floette-saved",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "mega-resolved",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "mega-meter",
+         "amount": -1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-m6-az"
+        }
+       ],
+       "evil": "specialist"
+      }
+     }
+    },
+    {
+     "label": "\"Let the Floette decide.\"",
+     "success": {
+      "text": "It flies into the machine and out again. The reactor dies. The Floette reverts, but its flower is pale.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "floette-pale",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-resolved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mega-meter",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-m6-az"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m6-az",
+   "name": "The Flower That Was Never Meant to Bloom: North",
+   "group": "Story: Mega Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "floette-eternal",
+    "tint": "#806040",
+    "effect": "none"
+   },
+   "intro": "The Floette slumps into your hands, then lifts its head and points north. Toward a tall shape on a road: a very old, very tall man, walking.",
+   "choices": [
+    {
+     "label": "Take it to him.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "floette-pale",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "He sees it and stops walking. He kneels. The Floette flies to him and he cups it in both hands, and you understand that it was always his. He gives you the last thing he made before the war.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "az-flute",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "az-flute",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The old man gave you the last thing he made before the war: AZ's Flute.",
+        "importance": 85
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it to him.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "floette-pale",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He sees its pale flower and weeps. He holds it a long time. Then he gives you the last thing he made before the war.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "az-flute",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "az-flute",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The old man gave you the last thing he made before the war: AZ's Flute.",
+        "importance": 85
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
