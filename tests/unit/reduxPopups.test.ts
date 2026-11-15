@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { bookRows, bookView, dossierView, DOSSIER_ROWS, leadLine, listWindow, pyramidFace, reportView, rollView, trackView, type BookModel, type DossierModel, type ReportModel, type RollCard, type RollModel, type TrackModel } from '../../src/ui/redux/screens/popups';
+import { bookRows, bookView, dossierView, DOSSIER_ROWS, leadLine, listWindow, pauseView, pyramidFace, reportView, rollView, trackView, type BookModel, type DossierModel, type ReportModel, type RollCard, type RollModel, type TrackModel } from '../../src/ui/redux/screens/popups';
 import type { ReduxCtx } from '../../src/ui/redux/stage';
 
 // The New UI map pop-ups (Dossier, Field Notes, Notebook track page, Rival Report), drawn from the mock-ups' Beta 0.6
@@ -218,5 +218,28 @@ describe('Town Roll', () => {
   it('never injects text as HTML', () => {
     const html = rollView(ctx(0), roll({ town: '<b>t</b>', cards: [card('<i>n</i>', 'dice', '<u>k</u>')], text: '<p>x</p>' }));
     for (const bit of ['<b>t</b>', '<i>n</i>', '<u>k</u>', '<p>x</p>']) expect(html).not.toContain(bit);
+  });
+});
+
+describe('Pause menu', () => {
+  const six = ['Resume', 'Party', 'Bag', 'Settings', 'Save', 'End run'].map((label) => ({ label }));
+  it('dims the page and shows the title and the six buttons, the cursor on one', () => {
+    const html = pauseView({ options: six, index: 0, note: '' });
+    expect(html).toContain('class="shade hit"');
+    expect(html).toContain('>Paused<');
+    for (const l of ['Resume', 'Party', 'Bag', 'Settings', 'Save', 'End run']) expect(html).toContain(l);
+    expect(count(html, 'data-act="pause"')).toBe(7);
+    expect(count(html, 'data-over="pauseOver"')).toBe(6);
+    expect(count(html, 'data-arg="-1"')).toBe(1);
+  });
+  it('a closed button is dimmed and the note says why', () => {
+    const html = pauseView({ options: six.map((o) => ({ ...o, off: o.label === 'End run' })), index: 5, note: 'Only an Adventure run can be ended here.' });
+    expect(count(html, 'opacity:.5')).toBe(1);
+    expect(html).toContain('Only an Adventure run can be ended here.');
+    expect(pauseView({ options: six, index: 5, note: '' })).not.toContain('opacity:.5');
+  });
+  it('never injects text as HTML', () => {
+    const html = pauseView({ options: [{ label: '<b>x</b>' }], index: 0, note: '<i>n</i>' });
+    for (const bit of ['<b>x</b>', '<i>n</i>']) expect(html).not.toContain(bit);
   });
 });

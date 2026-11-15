@@ -1747,3 +1747,107 @@ test('New UI: a champion in the Hall of Fame opens the winning-team page; Esc go
   await waitForScene(page, 'Hub');
   expect(errors).toEqual([]);
 });
+
+test('New UI: Esc on the map opens the mock-up pause menu; its buttons open the map\'s own menus, Settings comes back to the map, End run needs an Adventure run and two presses', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  await page.waitForTimeout(250);
+  const map = () => view(page, 'Map').first();
+  const top = () => view(page, 'Map').last();
+  const buttons = () => map().locator('[data-act="pause"][data-over="pauseOver"]');
+  const paused = async (yes: boolean) => expect(buttons()).toHaveCount(yes ? 6 : 0);
+  const node = await page.evaluate(() => (window as any).__pkr.session.run.currentNodeId);
+  await page.keyboard.press('Escape');
+  await paused(true);
+  await expect(map()).toContainText('Paused');
+  await expect(buttons()).toHaveText(['Resume', 'Party', 'Bag', 'Settings', 'Save', 'End run']);
+  await expect(map().locator('.btn.on[data-act="pause"]')).toHaveText('Resume');
+  await page.screenshot({ path: 'test-results/newui-pause.png' });
+  // While paused the map does not travel: Enter is "Resume", not the stop under the cursor.
+  await page.keyboard.press('Enter');
+  await paused(false);
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.currentNodeId)).toBe(node);
+  expect(await scene(page)).toBe('Map');
+  // Esc closes it too, and a click beside the buttons.
+  await page.keyboard.press('Escape');
+  await paused(true);
+  await page.keyboard.press('Escape');
+  await paused(false);
+  await page.keyboard.press('Escape');
+  await paused(true);
+  await map().locator('.shade[data-act="pause"]').click({ position: { x: 40, y: 300 } });
+  await paused(false);
+  // The arrows wrap; Party, Bag and Save open the map's own menus.
+  await page.keyboard.press('Escape');
+  await page.keyboard.press('ArrowUp');
+  await expect(map().locator('.btn.on[data-act="pause"]')).toHaveText('End run');
+  // A Classic run cannot be ended from here: the button is dim, says why, and pressing it does nothing.
+  await expect(map()).toContainText('Only an Adventure run can be ended here. Use Save to leave this one.');
+  await page.keyboard.press('Enter');
+  await paused(true);
+  expect(await scene(page)).toBe('Map');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowDown');
+  await expect(map().locator('.btn.on[data-act="pause"]')).toHaveText('Party');
+  await page.keyboard.press('Enter');
+  await expect(top().locator('.hd')).toContainText('Party');
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Escape');
+  await expect(view(page, 'Map')).toHaveCount(1);
+  await paused(false);
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Escape');
+  await buttons().nth(2).click();
+  await expect(top().locator('.hd')).toContainText('Bag');
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Escape');
+  await expect(view(page, 'Map')).toHaveCount(1);
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Escape');
+  await buttons().nth(4).click();
+  for (const bit of ['Save', 'Save & Quit', 'Save & go back to Hub']) await expect(top()).toContainText(bit);
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Escape');
+  await expect(view(page, 'Map')).toHaveCount(1);
+  // Settings opens with a way back to the map, without the rows that would leave the run.
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Escape');
+  await buttons().nth(3).click();
+  await waitForScene(page, 'Settings');
+  const settings = view(page, 'Settings').last();
+  await page.waitForTimeout(250);
+  // Up from the first row wraps to the last one: the way back.
+  await page.keyboard.press('ArrowUp');
+  await expect(settings).toContainText('Back to the map');
+  await expect(settings).not.toContainText('Back to the title screen');
+  await settings.locator('[data-act]', { hasText: 'Save & Data' }).first().click();
+  await expect(settings).toContainText('Export save to a file');
+  for (const gone of ['Import save from a file', 'Replay the tutorial', 'Asset credits', 'Read the update log']) await expect(settings).not.toContainText(gone);
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Escape');
+  await expect(settings).toContainText('Animations & Effects');
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Escape');
+  await waitForScene(page, 'Map');
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 15_000 }).toBe(false);
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.currentNodeId)).toBe(node);
+  // An Adventure run: End run lights up, asks once more, and the second press ends the run.
+  await page.evaluate(() => { (window as any).__pkr.session.run.rules.modeId = 'adventure'; });
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Escape');
+  await paused(true);
+  await buttons().nth(5).click();
+  await expect(map()).toContainText('Press End run again to end this Adventure run.');
+  expect(await scene(page)).toBe('Map');
+  // Moving away disarms it.
+  await page.keyboard.press('ArrowUp');
+  await page.keyboard.press('ArrowDown');
+  await expect(map()).toContainText('Give up this run. What you earned so far still counts.');
+  await page.keyboard.press('Enter');
+  await expect(map()).toContainText('Press End run again to end this Adventure run.');
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'GameOver');
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.victory)).toBe(false);
+  expect(errors).toEqual([]);
+});

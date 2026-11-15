@@ -228,3 +228,21 @@ export function rollView(c: ReduxCtx, d: RollModel): string {
     `<div class="abs row" style="left:24px;right:24px;top:${top}px"><span class="grow">${count}</span>${B('To the map', true, 'cursor:pointer', '', act('pop'))}</div>` + TX(esc(d.text))
   );
 }
+
+// ---------- Pause menu ----------
+
+export interface PauseModel {
+  options: readonly { label: string; off?: boolean }[];
+  index: number;
+  /** A line under the buttons (why one is closed, or "press again"); '' for none. */
+  note: string;
+}
+
+/** The pause menu (mock-up overlay `pause`): the page dims and six buttons stand in the middle. A click beside them resumes. */
+export function pauseView(d: PauseModel): string {
+  const buttons = d.options.map((o, k) => B(esc(o.label), k === d.index, `justify-content:center;cursor:pointer${o.off ? ';opacity:.5' : ''}`, '', `${act('pause', k)} data-over="pauseOver"`)).join('');
+  return (
+    `<div class="shade hit" style="z-index:30"${act('pause', -1)}></div>` +
+    `<div class="abs col" style="left:340px;right:340px;top:110px;gap:9px;z-index:31"><b class="cen" style="font-size:28px;text-align:center;color:#fff">Paused</b>${buttons}${d.note ? `<span class="sm" style="text-align:center;color:#fff">${esc(d.note)}</span>` : ''}</div>`
+  );
+}

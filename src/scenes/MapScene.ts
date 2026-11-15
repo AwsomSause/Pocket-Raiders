@@ -119,7 +119,7 @@ import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/
 import { hoverTips, ownAbilityCard } from '../ui/redux/tips';
 import type { BattlePanel } from '../ui/redux/screens/battle';
 import { mapView, type MapLegendRow, type MapModel, type MapNodeView } from '../ui/redux/screens/map';
-import { bookRows, bookView, dossierView, reportView, rollView, trackView } from '../ui/redux/screens/popups';
+import { bookRows, bookView, dossierView, pauseView, reportView, rollView, trackView } from '../ui/redux/screens/popups';
 import { bracketView as rxBracketView, galarHome, galarPage } from '../ui/redux/screens/bracket';
 import { artOf, monFile, rivalArt } from '../ui/redux/game';
 import { nodeStyle } from '../ui/redux/kit';
@@ -241,6 +241,8 @@ export class MapScene extends Phaser.Scene {
 
   /** New UI: the pop-up that is open over the map (R, T, D, F, B), drawn by the layer instead of the canvas. */
   private rxPop: MapPop | null = null;
+  /** New UI: the pause menu (Esc on the map) and its cursor; `armed` once End run was pressed once. */
+  private rxPause: { index: number; armed: boolean } | null = null;
   /** New UI: a tournament match is being watched (drawn on the canvas, so the layer steps aside). */
   private rxWatching = false;
   /** New UI: when a pop-up last opened or closed. Its key can also be a direction (D is "right"), and that same press must not move anything. */
@@ -266,6 +268,75 @@ export class MapScene extends Phaser.Scene {
     this.rxCard = null;
     this.busy = true;
     this.rxView?.refresh();
+  }
+
+  // ---- New UI: the pause menu (the mock-ups' "Paused" overlay) ----
+
+  private static readonly PAUSE = ['Resume', 'Party', 'Bag', 'Settings', 'Save', 'End run'] as const;
+
+  private pauseOpen(): void {
+    if (!this.rxView || this.rxPause || this.busy || this.picker || this.legend) return;
+    this.rxPause = { index: 0, armed: false };
+    this.rxCard = null;
+    this.busy = true;
+    this.rxView.refresh();
+  }
+
+  private pauseClose(): void {
+    this.rxPause = null;
+    this.busy = false;
+    this.rxView?.refresh();
+  }
+
+  private pauseInput(action: InputAction): void {
+    const p = this.rxPause;
+    if (!p) return;
+    if (action === 'back') return this.pauseClose();
+    if (action === 'confirm') return this.pausePick(p.index);
+    const n = MapScene.PAUSE.length;
+    p.index = (p.index + (action === 'up' || action === 'left' ? n - 1 : 1)) % n;
+    p.armed = false;
+    this.rxView?.refresh();
+  }
+
+  /** A button of the pause menu (or -1: a click beside them, which resumes). Each one is the map's own action. */
+  private pausePick(k: number): void {
+    const p = this.rxPause;
+    if (!p) return;
+    const name = MapScene.PAUSE[k];
+    if (!name || name === 'Resume') return this.pauseClose();
+    if (name === 'End run') {
+      // Only an Adventure run can be given up from the map (core/run.ts endRunEarly); it asks twice, like the map's own button.
+      if (!wipeStatus(services().session.run!)) return;
+      if (!p.armed) {
+        p.index = k;
+        p.armed = true;
+        this.rxView?.refresh();
+        return;
+      }
+      services().session.endRunEarly();
+      this.scene.start('GameOver');
+      return;
+    }
+    if (name === 'Settings') {
+      this.scene.start('Settings', { from: 'Map' });
+      return;
+    }
+    this.pauseClose();
+    if (name === 'Party') openPokemonMenu(this.fieldHost());
+    else if (name === 'Bag') openBagMenu(this.fieldHost());
+    else openSaveMenu(this.fieldHost(), (to) => {
+      this.busy = true;
+      this.scene.start(to);
+    });
+  }
+
+  private pauseHtml(): string {
+    const p = this.rxPause;
+    if (!p) return '';
+    const can = !!wipeStatus(services().session.run!);
+    const note = MapScene.PAUSE[p.index] !== 'End run' ? '' : !can ? 'Only an Adventure run can be ended here. Use Save to leave this one.' : p.armed ? 'Press End run again to end this Adventure run.' : 'Give up this run. What you earned so far still counts.';
+    return pauseView({ options: MapScene.PAUSE.map((label) => ({ label, off: label === 'End run' && !can })), index: p.index, note });
   }
 
   private popClose(): void {
@@ -1104,6 +1175,7 @@ export class MapScene extends Phaser.Scene {
     this.rxBanner = null;
     this.rxLegend = null;
     this.rxPop = null;
+    this.rxPause = null;
     this.rxWatching = false;
     if (reduxOn() && !mapSkin) {
       const manifest = this.cache.json.get('manifest') as AssetManifest | undefined;
@@ -1127,20 +1199,21 @@ export class MapScene extends Phaser.Scene {
       };
       const keyActs: Record<string, () => void> = { C: doCry, H: doHand, N: doName, R: () => this.toggleRivalReport(), T: () => this.toggleTrackPage(), D: () => this.toggleDossier(), F: () => this.toggleFieldNotes(), O: () => this.popToggle('roll') };
       this.rxView = mountRedux(this, {
-        render: (c) => this.rxPop ? this.popView(c, this.rxPop) : mapView(c, { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() }),
+        render: (c) => this.rxPop ? this.popView(c, this.rxPop) : mapView(c, { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() }) + this.pauseHtml(),
         acts: {
           pick: (i) => { if (this.busy || this.picker) return; if (Number(i) !== this.index) this.focus(Number(i)); this.activate(Number(i)); },
           go: () => { if (!this.busy && !this.picker) this.activate(this.index); },
           key: (k) => { if (!this.busy && !this.picker) keyActs[k]?.(); },
           legend: () => this.toggleLegend(),
           pop: () => this.popClose(),
+          pause: (k) => this.pausePick(Number(k)),
           popTab: (i) => this.popPick('tab', Number(i)),
           popPick: (i) => this.popPick('pick', Number(i)),
           bracket: () => this.popClose(),
           bracketPage: (i) => { if (this.rxPop?.kind === 'bracket') { this.rxPop.page = Math.max(0, Math.min(4, Number(i) || 0)); this.rxView?.refresh(); } },
           bracketWatch: () => this.watchLast(),
         },
-        overs: { over: (i) => { if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); }, popOver: (i) => this.popPick('pick', Number(i)) },
+        overs: { over: (i) => { if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); }, popOver: (i) => this.popPick('pick', Number(i)), pauseOver: (i) => { const p = this.rxPause, k = Number(i); if (p && k >= 0 && k !== p.index) { p.index = k; p.armed = false; this.rxView?.refresh(); } } },
         // Resting the pointer on a party Pokémon shows its Ability card (the mock-ups' Pokémon info card).
         tip: hoverTips((key) => { if (this.rxPop) return; this.rxCard = key; this.rxView?.refresh(); }),
       });
@@ -1154,6 +1227,7 @@ export class MapScene extends Phaser.Scene {
 
     onInputAction(this, (action) => {
       if (this.rxView && this.time.now === this.rxPopAt && action !== 'back' && action !== 'confirm') return;
+      if (this.rxPause) return this.pauseInput(action);
       if (this.rxPop) {
         if (!this.rxWatching) this.popInput(action);
         return;
@@ -1179,6 +1253,8 @@ export class MapScene extends Phaser.Scene {
         return;
       }
       if (this.busy) return;
+      // New UI: Esc on the free map opens the pause menu.
+      if (action === 'back') return this.pauseOpen();
       const n = this.options.length;
       if (action === 'up' || action === 'left') this.focus((this.index - 1 + n) % n);
       if (action === 'down' || action === 'right') this.focus((this.index + 1) % n);
