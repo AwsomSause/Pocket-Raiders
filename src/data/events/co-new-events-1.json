@@ -1096,64 +1096,6 @@
       }
      }
     }
-   ],
-   "remembers": [
-    {
-     "id": "little-league",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "little-league-look-after",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "You have taught small ones to look after each other before. It shows in how you stand.",
-     "hide": [
-      0
-     ],
-     "addChoices": [
-      {
-       "label": "Teach her (choose a Pokémon to walk beside her).",
-       "pick": {},
-       "success": {
-        "text": "It takes no time at all. Your Pokémon walks, the calf copies, and at the ravine's edge she stops and looks first, and thirty Tauros stop behind her.\n\nXimena fills your arms with Moomoo Milk. A young Tauros, with nobody left to follow in circles, decides to follow you.",
-        "effects": [
-         {
-          "kind": "flag",
-          "key": "calf-taught",
-          "amount": 1
-         },
-         {
-          "kind": "friendship",
-          "bond": 3,
-          "who": "picked"
-         },
-         {
-          "kind": "item",
-          "id": "moomoo-milk",
-          "count": 3
-         },
-         {
-          "kind": "join",
-          "shadow": false,
-          "species": [
-           "tauros"
-          ],
-          "types": [],
-          "levelBonus": 0,
-          "shinyMultiplier": 1
-         },
-         {
-          "kind": "flag",
-          "key": "ne04-crowned-calf-done",
-          "amount": 1
-         }
-        ]
-       }
-      }
-     ]
-    }
    ]
   },
   {
@@ -1358,108 +1300,6 @@
        }
       }
      }
-    }
-   ],
-   "remembers": [
-    {
-     "id": "took-an-egg",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "took-egg",
-       "atLeast": 1,
-       "atMost": 99
-      },
-      {
-       "kind": "flag",
-       "key": "egg-returned",
-       "atLeast": 0,
-       "atMost": 0
-      }
-     ],
-     "notice": "It knows. It looks at your bag, and at your hands, and it screams at you until the cliff rings.",
-     "hide": [
-      0
-     ],
-     "addChoices": [
-      {
-       "label": "Sit below the nest until it lands (two nodes).",
-       "success": {
-        "text": "You sit. It doesn't trust you, and it is right not to. It dives at you all afternoon, and all the next morning.\n\nOn the second dusk it lands. Not beside you. Near. It folds its wings and looks out to sea.\n\nWhen you get up to go, there is a Sharp Beak on the rock where it sat, and one long feather.",
-        "effects": [
-         {
-          "kind": "takeNode",
-          "nodes": 2
-         },
-         {
-          "kind": "flag",
-          "key": "calmed-alpha",
-          "amount": 1
-         },
-         {
-          "kind": "item",
-          "id": "sharp-beak",
-          "count": 1
-         },
-         {
-          "kind": "flag",
-          "key": "braviary-feather",
-          "amount": 1
-         },
-         {
-          "kind": "flag",
-          "key": "ne05-alpha-of-the-empty-nest-done",
-          "amount": 1
-         }
-        ]
-       }
-      }
-     ]
-    },
-    {
-     "id": "returned-the-egg",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "egg-returned",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "It circles once over your head, lower than it comes for anyone. It has heard about an egg that went home.",
-     "hide": [
-      0
-     ],
-     "addChoices": [
-      {
-       "label": "Sit below the nest.",
-       "success": {
-        "text": "You have barely sat down when it lands beside you, at once, and folds its wings.\n\nIt doesn't look at the nest. It looks at you, sidelong, for a long time.\nThere is a Sharp Beak on the rock when you go, and one long feather for your hat.",
-        "effects": [
-         {
-          "kind": "flag",
-          "key": "calmed-alpha",
-          "amount": 1
-         },
-         {
-          "kind": "item",
-          "id": "sharp-beak",
-          "count": 1
-         },
-         {
-          "kind": "flag",
-          "key": "braviary-feather",
-          "amount": 1
-         },
-         {
-          "kind": "flag",
-          "key": "ne05-alpha-of-the-empty-nest-done",
-          "amount": 1
-         }
-        ]
-       }
-      }
-     ]
     }
    ]
   },
@@ -1844,54 +1684,6 @@
     }
    ],
    "remembers": [
-    {
-     "id": "black-market-researcher",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "bought-stolen",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "The researcher is at the gate again. You know that coat: it's the black market's. Philippa takes your sleeve and asks, very quietly, if you would see her off.",
-     "addChoices": [
-      {
-       "label": "See the researcher off.",
-       "success": {
-        "text": "\"I only want to learn so much,\" she says, and reaches for a Ball.",
-        "effects": [
-         {
-          "kind": "flag",
-          "key": "ne07-delta-in-the-greenhouse-done",
-          "amount": 1
-         }
-        ],
-        "battle": {
-         "kind": "trainer",
-         "name": "Researcher",
-         "classId": "scientist",
-         "size": 2,
-         "types": [],
-         "levelBonus": 0,
-         "win": [
-          {
-           "kind": "flag",
-           "key": "delta-greenhouse",
-           "amount": 1,
-           "stamp": "region"
-          },
-          {
-           "kind": "item",
-           "id": "nevermeltice",
-           "count": 1
-          }
-         ]
-        }
-       }
-      }
-     ]
-    },
     {
      "id": "kind-to-it",
      "when": [
@@ -2535,20 +2327,6 @@
       ]
      }
     }
-   ],
-   "remembers": [
-    {
-     "id": "elder-ditto",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "elder-ditto-met",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "Before anything else, it turns for a moment into an old, slow, sea-coloured shape you have met before: the elder's. A greeting.\nThen it is you again, with the hat wrong."
-    }
    ]
   },
   {
@@ -3051,18 +2829,6 @@
        }
       }
      ]
-    },
-    {
-     "id": "magma-money",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "team-op-stopped-magma-drill",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "You know that folder's crest. Ferreira's money is Magma's, and he knows you know. He is already edging toward his cart."
     }
    ]
   },
@@ -3215,20 +2981,6 @@
        }
       ]
      }
-    }
-   ],
-   "remembers": [
-    {
-     "id": "facing-away",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "sign-broken",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "In the drawing, it is facing away. Anselmo doesn't know why he drew it like that. He says that is how it stood at the window last night."
     }
    ]
   },
@@ -5004,20 +4756,6 @@
        "lose": []
       }
      }
-    }
-   ],
-   "remembers": [
-    {
-     "id": "glove-duel",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "glove-duel-accepted",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "Before anything else, it draws a line across the bridge with one arm: the same line somebody once drew for you with a glove."
     }
    ]
   },

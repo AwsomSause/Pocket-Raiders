@@ -1522,20 +1522,6 @@
       }
      }
     }
-   ],
-   "remembers": [
-    {
-     "id": "the-interview",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "journalist-interview",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "Someone in the queue nudges her friend and points at you. \"That's the one from the paper.\" The whole queue turns round to listen before you have said a word."
-    }
    ]
   },
   {
@@ -2590,20 +2576,6 @@
        }
       ]
      }
-    }
-   ],
-   "remembers": [
-    {
-     "id": "haddons-manners",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "haddon-ferried",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "Lorcan watches you step into the boat: weight low, hand on the side, sitting where you are put. \"You've a ferryman's manners. Someone taught you.\""
     }
    ]
   },

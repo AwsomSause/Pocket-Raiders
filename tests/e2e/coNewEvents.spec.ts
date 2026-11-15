@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 // Catalog Overhaul new events (row 17): three of the hundred new scenes open in the New UI event screen with every {token}
-// filled: the Alpha who lost its voice (NE1), the Museum of You (NE41, fills {player}) and the Road Home (NE100).
+// filled: the Alpha who lost its voice (NE1), the Museum of You (NE41, fills {player}) and the Shop With No Shopkeeper (NE91).
 
 const scene = (page: Page) => page.evaluate(() => (window as any).__pkr?.activeScene() ?? null);
 
@@ -72,15 +72,15 @@ test('new event scenes play in the New UI with their tokens filled', async ({ pa
   expect(text).toContain('Read the cards.');
   expect(text).not.toMatch(/\{[a-z]/);
 
-  await openEvent(page, 'ne100-road-home', 'e2e-ne100');
+  await openEvent(page, 'ne91-shop-with-no-shopkeeper', 'e2e-ne91');
   text = await eventText(page);
-  expect(text).toContain('The Road Home');
-  expect(text).toContain('Bring everyone inside.');
+  expect(text).toContain('The Shop With No Shopkeeper');
+  expect(text).toContain('Pay extra.');
   expect(text).not.toMatch(/\{[a-z]/);
   for (const [w, h] of [[800, 450], [480, 800]] as const) {
     await page.setViewportSize({ width: w, height: h });
     await page.waitForTimeout(300);
-    await page.screenshot({ path: `test-results/co-new-events-ne100-${w}x${h}.png` });
+    await page.screenshot({ path: `test-results/co-new-events-ne91-${w}x${h}.png` });
   }
   expect(errors).toEqual([]);
 });

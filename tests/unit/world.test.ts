@@ -292,6 +292,8 @@ describe('landmarks and dungeons', () => {
           for (const ef of [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle?.lose ?? [])]) {
             if (ef.kind === 'addEvent') opened.add(ef.eventId);
             if (ef.kind === 'addEventFrom') ef.ids.forEach((i) => opened.add(i));
+            // A later beat (queueLaterEvent): the room opens a set number of nodes further on.
+            if (ef.kind === 'laterEvent') opened.add(ef.eventId);
             // Rival questlines (core/rivals/questlines.ts): the first scene whose conditions hold, or stops further along the map.
             // These may also open a scheduled beat (not a room), so they only count as a way into a room.
             if (ef.kind === 'rivalQuest') {

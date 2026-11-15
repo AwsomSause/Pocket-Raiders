@@ -647,8 +647,7 @@
       ]
      }
     }
-   ],
-   "remembers": []
+   ]
   },
   {
    "id": "ne78-the-orchard-green",
@@ -836,20 +835,6 @@
        }
       ]
      }
-    }
-   ],
-   "remembers": [
-    {
-     "id": "bills-lighthouse",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "lighthouse-lit",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "Both keepers stop turning the moment they see you.\nBenedicta: \"You're the one who lit Bill's Lighthouse.\"\nAloysius takes his hand off the lamp. \"Then you decide,\" he says. Benedicta nods. Neither argues."
     }
    ]
   },
@@ -1415,6 +1400,51 @@
       ]
      }
     }
+   ],
+   "remembers": [
+    {
+     "id": "the-pair-is-here",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "camp-pair",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The pair from the fire watches from the side, ears up, tails still. They have opinions about this. They have been waiting to be asked.",
+     "addChoices": [
+      {
+       "label": "Ask the pair to sort it out.",
+       "success": {
+        "text": "You look at the pair from the fire and nod. They trot over, unhurried, and sit down right between the two of them.\n\nNobody says anything. The argument just runs out of air. A minute later all four are lying in the warm spot together, and nobody is sulking at all.",
+        "effects": [
+         {
+          "kind": "campBond",
+          "chemistry": 12,
+          "calm": 12,
+          "settle": true
+         },
+         {
+          "kind": "friendship",
+          "bond": 1,
+          "who": "party"
+         },
+         {
+          "kind": "flag",
+          "key": "camp-argument",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "camp-the-argument-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
    ]
   },
   {
@@ -1837,6 +1867,20 @@
        }
       ]
      }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "the-two-in-the-photo",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "camp-argument",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "And there, right at the front: the two who argued over the fire. Nose to nose, asleep, curled around each other as if nothing had ever happened."
     }
    ]
   },
@@ -5126,7 +5170,7 @@
    "tags": [
     "Story"
    ],
-   "room": true,
+   "disabled": true,
    "stop": "event",
    "types": [],
    "minStage": 1,

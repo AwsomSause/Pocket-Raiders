@@ -117,13 +117,34 @@ export interface NeOpts extends EventOpts {
 }
 
 /**
+ * Remembered variants that read a flag only another row's event sets (none is built yet). They stay written here but are left out
+ * of the built data until that event exists, so no memory reads a flag nothing sets (tests/unit/eventMemory.test.ts). When a row
+ * builds the setter, delete its key here and rebuild. Listed in docs/status/co-new-events.md.
+ */
+export const WAITING_FLAGS = new Set([
+  'little-league-look-after', 'took-egg', 'egg-returned', 'bought-stolen', 'elder-ditto-met', 'team-op-stopped-magma-drill', 'sign-broken',
+  'glove-duel-accepted', 'journalist-interview', 'haddon-ferried', 'lighthouse-lit',
+]);
+/** Variant ids held back, by event: written to the status file. */
+export const WAITING_MEMORY: Record<string, string[]> = {};
+const reads = (v: Json): string[] => ((v.when as Json[] | undefined) ?? []).flatMap((c) => (c.kind === 'flag' && typeof c.key === 'string' ? [c.key] : []));
+function ready(id: string, remembers?: Json[]): Json[] | undefined {
+  if (!remembers) return remembers;
+  const out = remembers.filter((v) => !reads(v).some((k) => WAITING_FLAGS.has(k)));
+  const held = remembers.filter((v) => !out.includes(v)).map((v) => `${String(v.id)} (needs ${reads(v).filter((k) => WAITING_FLAGS.has(k)).join(', ')})`);
+  if (held.length > 0) WAITING_MEMORY[id] = held;
+  return out.length > 0 ? out : undefined;
+}
+
+/**
  * One of the hundred. Once per run: it needs `<id>-done` unset and every outcome sets it. `earliest` becomes minStage, the placement tags
  * become stage types (and a gate on the stage's theme), `night` becomes the evening or night clock, a + node becomes a rest stop.
  */
-export function ne(n: number, slug: string, name: string, group: string, o: NeOpts, intro: string, choices: Json[], remembers?: Json[]): Json {
+export function ne(n: number, slug: string, name: string, group: string, o: NeOpts, intro: string, choices: Json[], all?: Json[]): Json {
   const { id = `ne${String(n).padStart(2, '0')}-${slug}`, place: where, repeat, requires = [], ...opts } = o;
   const tags = (where.tags ?? []).filter((t): t is Exclude<Tag, 'night'> => t !== 'night');
   const types = [...new Set(tags.flatMap((t) => TAG_TYPES[t]))];
+  const remembers = ready(id, all);
   const gates: Json[] = [...requires];
   if (types.length > 0) gates.push({ kind: 'stageTypes', types });
   if (where.tags?.includes('night')) gates.push({ kind: 'period', in: ['evening', 'night'] });
@@ -139,7 +160,8 @@ export function ne(n: number, slug: string, name: string, group: string, o: NeOp
 }
 
 /** An afterstory or a later beat: a follow-up scene that gets its stop on the first later stage where `when` holds. Plays once. */
-export function after(n: number, id: string, name: string, group: string, when: Json[], o: EventOpts & { minStage?: number; tags?: string[] }, intro: string, choices: Json[], remembers?: Json[]): Json {
+export function after(n: number, id: string, name: string, group: string, when: Json[], o: EventOpts & { minStage?: number; tags?: string[] }, intro: string, choices: Json[], all?: Json[]): Json {
+  const remembers = ready(id, all);
   stamp(choices, flag(`${id}-done`));
   for (const v of remembers ?? []) stamp((v.addChoices as Json[] | undefined) ?? [], flag(`${id}-done`));
   NE_IDS[`NE${n}:${id}`] = id;
@@ -147,7 +169,8 @@ export function after(n: number, id: string, name: string, group: string, when: 
 }
 
 /** A second step of the same scene: opens beside the node from another choice's `room(id)`, never drawn on its own. */
-export function step(n: number, id: string, name: string, group: string, o: EventOpts, intro: string, choices: Json[], remembers?: Json[]): Json {
+export function step(n: number, id: string, name: string, group: string, o: EventOpts, intro: string, choices: Json[], all?: Json[]): Json {
+  const remembers = ready(id, all);
   NE_IDS[`NE${n}:${id}`] = id;
   return fitted({ ...ev(id, name, group, { rarity: 'common', ...o, room: true }, intro, choices), ...(remembers ? { remembers } : {}) });
 }

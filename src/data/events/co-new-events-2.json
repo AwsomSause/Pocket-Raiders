@@ -1161,8 +1161,7 @@
       "ditto-mirror",
       "ally-travels",
       "wedding-battle",
-      "rival-swap",
-      "rival-swap-one"
+      "rival-swap"
      ]
     },
     {
@@ -3405,7 +3404,7 @@
        },
        {
         "kind": "flag",
-        "key": "rival-swap-one",
+        "key": "rival-swap",
         "amount": 1
        },
        {
@@ -3615,13 +3614,7 @@
       "battle": {
        "kind": "trainer",
        "friendly": true,
-       "lose": [
-        {
-         "kind": "flag",
-         "key": "rival-honest-lost",
-         "amount": 1
-        }
-       ],
+       "lose": [],
        "name": "Your rival",
        "rival": true,
        "size": 6,
@@ -3702,25 +3695,13 @@
       "battle": {
        "kind": "trainer",
        "friendly": true,
-       "lose": [
-        {
-         "kind": "flag",
-         "key": "sponsor-signed-rival",
-         "amount": 1
-        }
-       ],
+       "lose": [],
        "name": "Your rival",
        "rival": true,
        "size": 6,
        "types": [],
        "levelBonus": 2,
-       "win": [
-        {
-         "kind": "flag",
-         "key": "sponsor-signed-both",
-         "amount": 1
-        }
-       ]
+       "win": []
       }
      }
     }

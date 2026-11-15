@@ -929,7 +929,9 @@ const NE100: Json[] = [
   ne(100, 'road-home', 'The Road Home', GROUP.fest, {
     place: { earliest: 'A1', sits: 'must-see', attaches: 'after', note: 'After the final battle, win or lose. Not on the map: it is the map, walked backwards. Every node where somebody was helped has them standing on it.' },
     tags: ['Story'], rarity: 'rare', effect: 'none', tint: '#2a2418',
-    room: true,
+    // Disabled until the run end can open a scene after the final battle (win or lose): that screen belongs to the New UI run end.
+    // The scene is written in full so turning it on is one line. See docs/status/co-new-events.md.
+    disabled: true,
   },
   P(
     'The road you came by, walked the other way. Everything is smaller than it was.',
