@@ -301,7 +301,7 @@ import type { Nemesis, Rival } from './story/schema';
 import { answerMentorship, graduateMentorships, planMentorship } from './story/mentorship';
 import { mentorshipsAfterBattle } from './story/mentorBond';
 import { answerReturn, planReturn, recordDefeats, returningPokemon } from './story/returnProtege';
-import { PSEUDO } from './dungeon/pseudo';
+import { PSEUDO, leavePseudoStage, settleChain } from './dungeon/pseudo';
 import { addCanonStops, failCanonRaid, finishCanonRaid, restoreStash } from './expansion/canonRun';
 import { expireStageMods } from './expansion/stageMods';
 import { freshUltra, markBattle as ultraMarkBattle, tallyEvents as ultraTally, settleBattle as ultraSettle, stageTick as ultraStageTick, incursionBeast, markIncursionFought } from './ultra/run';
@@ -999,6 +999,8 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   const blocker = menuBlocker(run);
   if (blocker) throw new Error(blocker);
   closeNodeMenu(content, run);
+  // A pseudo-stage plays like a stage, but its nodes play their room event (no route items, roamers or stage extras on its small map).
+  if (stage.pseudo) return moveInPseudo(content, run, nodeId);
   const mode = run.moveMode;
   delete run.moveMode;
   const node = findNode(stage.map, nodeId);
@@ -1078,6 +1080,22 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   return run;
 }
 
+/** Walks to a node of a pseudo-stage: time passes as on any stage, then the node's room event opens beside it (the map opens it at once). */
+function moveInPseudo(content: Content, run: RunState, nodeId: string): RunState {
+  const stage = run.stage!;
+  delete run.moveMode;
+  const node = findNode(stage.map, nodeId);
+  stage.current = nodeId;
+  stage.visited.push(nodeId);
+  tickChainTimers(run.story.flags);
+  stepClock(content, run);
+  if (node.roomEvent && !node.sides.some((x) => x.eventId === node.roomEvent)) {
+    node.sides.push({ id: `event-room-1-${node.id}`, kind: 'event', used: false, eventId: node.roomEvent });
+    if (run.itemCounters) delete run.itemCounters[`event-seen:${node.roomEvent}`];
+  }
+  return run;
+}
+
 /** VS Recorder: a trainer battle can replay once per run. */
 function vsRecorderReady(content: Content, run: RunState): boolean {
   return run.battle?.kind === 'trainer' && hasPerk(content, run, 'vsRecorder') && (run.itemCounters?.['vs-recorder-used'] ?? 0) === 0;
@@ -1102,6 +1120,8 @@ function recordBattleStart(content: Content, run: RunState): void {
 export function mapChoices(content: Content, run: RunState): MapNode[] {
   const stage = requireStage(run);
   const plain = nextChoices(stage);
+  // A chain pseudo-stage's rooms open each other: while a room is still waiting, there is nothing to pick.
+  if (stage.pseudo?.chain && stage.current !== null && findNode(stage.map, stage.current).sides.some((x) => !x.used)) return [];
   if (run.moveMode === 'bicycle') {
     const ahead = new Map<string, MapNode>();
     for (const n of plain) for (const id of n.next) ahead.set(id, findNode(stage.map, id));
@@ -1344,7 +1364,7 @@ export interface NodePreview {
  */
 export function mapPreviews(content: Content, run: RunState): Record<string, NodePreview> {
   const stage = run.stage;
-  if (!stage || run.phase !== 'map') return {};
+  if (!stage || stage.pseudo || run.phase !== 'map') return {};
   const working = activePreviewItems(content, run);
   const perks = (what: 'wild' | 'trainers' | 'gymAce' | 'gymTeam') =>
     working.find((id) => {
@@ -3938,6 +3958,7 @@ export function continueAfterDecisions(content: Content, run: RunState): void {
     enterNextRegion(content, run);
   } else {
     run.phase = 'map';
+    settleChain(run);
   }
 }
 
@@ -4451,5 +4472,7 @@ export function pseudoLost(content: Content, run: RunState): void {
     m.status = null;
   }
   run.battle = null;
+  // Back out to the stage the pseudo-stage sits in.
+  leavePseudoStage(run);
   run.phase = 'map';
 }

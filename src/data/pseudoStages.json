@@ -1,5 +1,5 @@
 {
-  "note": "Pseudo stages and regions (Story Overhaul W7, design 14.17): chains of 3 to 6 rooms opened from a map event, run by the dungeon machinery. They never add a stage index, badge or region clear (P1), always offer Leave before the first fight (P2), are capped at 1 per region and 2 per run and never in a League stage, daily-route, boss-rush or quick-route (P3), pay at most one item (P4), and a loss inside ejects to the map with a partial heal (P5).",
+  "note": "Pseudo stages and regions (Story Overhaul W7, design 14.17): small stages with a drawn node map, opened from a map event and played inside that one node (Kice 2026-11-15). They never add a stage index, badge or region clear (P1), always offer Leave before the first fight (P2), are capped at 1 per region and 2 per run and never in a League stage, daily-route, boss-rush or quick-route (P3), pay at most one item (P4), and a loss inside ejects to the map with a partial heal (P5).",
   "rules": {
     "perRegion": 1,
     "perRun": 2,
@@ -18,6 +18,7 @@
       "tier": 1,
       "mood": "calm grassland",
       "tint": "#2a4a1f",
+      "themeId": "normal-grass",
       "entry": "safari ticket (the Safari Preserve service)",
       "wild": [
         "kangaskhan",
@@ -72,6 +73,7 @@
       "tier": 3,
       "mood": "arena",
       "tint": "#33281a",
+      "themeId": "normal-fighting",
       "entry": "event: Trainer Tournament",
       "wild": [
         "machamp",
@@ -136,6 +138,7 @@
       "tier": 3,
       "mood": "league hall",
       "tint": "#1b2638",
+      "themeId": "fighting-dragon",
       "entry": "event: Champion's Invitation",
       "wild": [
         "staraptor",
@@ -185,6 +188,7 @@
       "tier": 4,
       "mood": "warped, low gravity",
       "tint": "#2b1a3d",
+      "themeId": "psychic-ghost",
       "entry": "event: Distortion Rift",
       "wild": [
         "gastly",
@@ -258,6 +262,7 @@
       "tier": 3,
       "mood": "dark and cold",
       "tint": "#161a22",
+      "themeId": "ghost-dark",
       "entry": "evil beat (the Evil Team schedule)",
       "wild": [
         "zubat",
@@ -305,7 +310,7 @@
         "count": 3
       },
       "exit": "win the executive or expose",
-      "countsAsStage": true,
+      "countsAsStage": false,
       "status": "limited",
       "trainerClass": "veteran",
       "intro": "Cold air, hum of machines, and a lot of guards.",
@@ -322,6 +327,7 @@
       "tier": 2,
       "mood": "soft clouds",
       "tint": "#3a2a4a",
+      "themeId": "psychic-fairy",
       "entry": "item: Dream Orb, or a sleep event",
       "wild": [
         "drowzee",
@@ -383,6 +389,7 @@
       "tier": 4,
       "mood": "inverted",
       "tint": "#1a1a26",
+      "themeId": "ghost-dragon",
       "entry": "event: Dimensional Collision",
       "wild": [
         "gastly",
@@ -455,6 +462,7 @@
       "tier": 3,
       "mood": "primal",
       "tint": "#2f3a1a",
+      "themeId": "grass-rock",
       "entry": "event: Ancient Discovery",
       "wild": [
         "tyrunt",
@@ -515,6 +523,7 @@
       "tier": 4,
       "mood": "stars",
       "tint": "#101a3a",
+      "themeId": "flying-psychic",
       "entry": "dungeon: Celestial Observatory cleared",
       "wild": [
         "minior",
@@ -567,6 +576,7 @@
       "tier": 3,
       "mood": "ruins and jungle",
       "tint": "#1f3a22",
+      "themeId": "water-rock",
       "entry": "event: Lost Civilization",
       "wild": [
         "tropius",
@@ -632,6 +642,40 @@
         "name": "Island Guardian",
         "size": 5
       }
+    }
+  ],
+  "chains": [
+    {
+      "id": "ps_flight_north",
+      "name": "Flight North",
+      "entry": "cs-kanto-vermilion-flight",
+      "themeId": "normal-flying",
+      "tint": "#2f5d73",
+      "mood": "open sky"
+    },
+    {
+      "id": "ps_sabrinas_labyrinth",
+      "name": "Sabrina's Labyrinth",
+      "entry": "cs-kanto-saffron-labyrinth",
+      "themeId": "psychic-ghost",
+      "tint": "#2a1a40",
+      "mood": "shadow lanterns"
+    },
+    {
+      "id": "ps_route_25",
+      "name": "Route 25: The Angry Mankey",
+      "entry": "cs-kanto-saffron-r25",
+      "themeId": "normal-fighting",
+      "tint": "#4a3220",
+      "mood": "rocky trail"
+    },
+    {
+      "id": "ps_fighting_tournament",
+      "name": "The Fighting Tournament",
+      "entry": "cs-kanto-saffron-tournament",
+      "themeId": "fighting-dragon",
+      "tint": "#4a2a1a",
+      "mood": "arena"
     }
   ]
 }

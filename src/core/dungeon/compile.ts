@@ -21,11 +21,19 @@ const exitWords: Record<string, string> = {
   rare: 'Follow the unusual cry', hidden: 'Open the sealed door (needs a Key Charm)', boss: 'Climb toward the deepest room', exit: 'Walk out into the light',
 };
 
+/** What a pseudo-stage room's button says: the room's own action (the map already moved the player here). */
+const ownWords: Record<string, string> = {
+  wild: 'Step in and face it', trainer: 'Meet the trainer', cache: 'Open the chest', rest: 'Sit down and rest', mystery: 'Reach for the light',
+  puzzle: 'Work the carved door', trap: 'Cross the suspicious floor', den: 'Enter the den', rare: 'Face the unusual cry',
+  hidden: 'Open the sealed door (needs a Key Charm)', boss: 'Face the guardian', exit: 'Walk out into the light',
+};
+
 export function room(d: RoomDef, nodeIndex: number): Raw {
   const n = d.nodes[nodeIndex]!;
   const byId = new Map(d.nodes.map((x) => [x.id, x]));
   const lvl = cfg.levelBonus[d.tier - 1]!;
-  const open = (to: string) => ({ kind: 'addEvent', eventId: roomId(d, to) });
+  // A pseudo-stage room is one node of a drawn map: the map moves the player on, so a room never opens the next room itself (`open` is not used there).
+  const open = (to: string): Raw => ({ kind: 'addEvent', eventId: roomId(d, to) });
   const species = n.kind === 'rare' ? (d.rare ?? d.wild) : d.wild;
   const intro: Record<string, string> = {
     wild: `Something stirs ahead in ${d.name}.`, trainer: `Someone is waiting in ${d.name}, arms folded.`, cache: 'A battered chest sits in a side room.',
@@ -36,12 +44,12 @@ export function room(d: RoomDef, nodeIndex: number): Raw {
   };
   const first = n.kind === 'wild' && nodeIndex === 0 ? `${d.intro} ${intro.wild}` : n.kind === 'wild' || nodeIndex > 0 ? intro[n.kind]! : `${d.intro} ${intro[n.kind]}`;
   const choices: Raw[] = [];
-  const exits = n.next.length > 0 ? n.next : [''];
+  const exits = d.pseudo ? [''] : n.next.length > 0 ? n.next : [''];
   for (const to of exits) {
     const target = to ? byId.get(to) : undefined;
-    const label = n.kind === 'exit' ? 'Leave the dungeon' : exitWords[target?.kind ?? 'wild']!;
-    const requires = target?.kind === 'hidden' ? [{ kind: 'item', id: 'key-charm' }] : [];
-    const onward = to ? [open(to)] : [];
+    const label = d.pseudo ? ownWords[n.kind]! : n.kind === 'exit' ? 'Leave the dungeon' : exitWords[target?.kind ?? 'wild']!;
+    const requires = d.pseudo ? (n.kind === 'hidden' ? [{ kind: 'item', id: 'key-charm' }] : []) : target?.kind === 'hidden' ? [{ kind: 'item', id: 'key-charm' }] : [];
+    const onward = to && !d.pseudo ? [open(to)] : [];
     const fx = (text: string, effects: Raw[] = [], battle?: Raw): Raw => ({ text, effects: [...effects, ...onward], ...(battle ? { battle: { ...battle, win: [...((battle.win as Raw[] | undefined) ?? []), ...onward] } } : {}) });
     const base = { label, ...(requires.length > 0 ? { requires } : {}) };
     switch (n.kind) {
@@ -76,21 +84,26 @@ export function room(d: RoomDef, nodeIndex: number): Raw {
         choices.push({ ...base, success: fx('The lock clicks open. Inside lies an old stash.', [{ kind: 'item', id: d.supply.item, count: d.supply.count + 1 }, { kind: 'research', amount: 3 }]) });
         break;
       case 'exit':
-        choices.push({ ...base, success: fx(`You leave ${d.name} with what you found.`, [{ kind: 'item', id: d.reward.item, count: d.reward.count }, { kind: 'money', amount: cfg.moneyPerTier * d.tier }, { kind: 'moment', text: `You explored ${d.name} and made it out.`, importance: 45 }]) });
+        choices.push({ ...base, success: fx(`You leave ${d.name} with what you found.`, [...(d.pseudo ? [{ kind: 'leavePseudo' }] : []), { kind: 'item', id: d.reward.item, count: d.reward.count }, { kind: 'money', amount: cfg.moneyPerTier * d.tier }, { kind: 'moment', text: `You explored ${d.name} and made it out.`, importance: 45 }]) });
         break;
     }
   }
   // Dark trap room: a Torch lights it, so nobody trips. A sealed room: a Dungeon Key opens it for one use.
-  if (n.kind === 'trap' && n.next[0]) {
-    choices.push({ label: 'Light a Torch and cross safely', requires: [{ kind: 'item', id: 'torch' }], success: { text: 'The torchlight shows every trigger plate. The torch burns out as you cross.', effects: [{ kind: 'loseItem', id: 'torch' }, open(n.next[0])] } });
+  const sealed = (to: string) => byId.get(to)?.kind === 'hidden';
+  if (n.kind === 'trap' && (d.pseudo || n.next[0])) {
+    choices.push({ label: 'Light a Torch and cross safely', requires: [{ kind: 'item', id: 'torch' }], success: { text: 'The torchlight shows every trigger plate. The torch burns out as you cross.', effects: [{ kind: 'loseItem', id: 'torch' }, ...(d.pseudo ? [] : [open(n.next[0]!)])] } });
   }
-  for (const to of n.next) {
-    if (byId.get(to)?.kind === 'hidden') choices.push({ label: 'Use a Dungeon Key on the sealed door', requires: [{ kind: 'item', id: 'dungeon-key' }], success: { text: 'The key turns and crumbles to rust.', effects: [{ kind: 'loseItem', id: 'dungeon-key' }, open(to)] } });
+  if (d.pseudo && n.kind === 'hidden') {
+    choices.push({ label: 'Use a Dungeon Key on the sealed door', requires: [{ kind: 'item', id: 'dungeon-key' }], success: { text: 'The key turns and crumbles to rust. Inside lies an old stash.', effects: [{ kind: 'loseItem', id: 'dungeon-key' }, { kind: 'item', id: d.supply.item, count: d.supply.count + 1 }, { kind: 'research', amount: 3 }] } });
+    choices.push({ label: 'Leave it sealed', success: { text: 'You leave the old lock alone and move on.', effects: [] } });
+  }
+  if (!d.pseudo) for (const to of n.next) {
+    if (sealed(to)) choices.push({ label: 'Use a Dungeon Key on the sealed door', requires: [{ kind: 'item', id: 'dungeon-key' }], success: { text: 'The key turns and crumbles to rust.', effects: [{ kind: 'loseItem', id: 'dungeon-key' }, open(to)] } });
   }
   // A trap can also be skipped with an Escape Rope (only when the choices still fit).
   if (n.kind === 'trap' && choices.length <= 3) {
     const to = n.next[0];
-    choices.push({ label: 'Use an Escape Rope to skip it', requires: [{ kind: 'item', id: 'escape-rope' }], success: { text: 'You haul the party over the trap on a rope. The rope is spent.', effects: [{ kind: 'loseItem', id: 'escape-rope' }, ...(to ? [open(to)] : [])] } });
+    choices.push({ label: 'Use an Escape Rope to skip it', requires: [{ kind: 'item', id: 'escape-rope' }], success: { text: 'You haul the party over the trap on a rope. The rope is spent.', effects: [{ kind: 'loseItem', id: 'escape-rope' }, ...(to && !d.pseudo ? [open(to)] : [])] } });
   }
   return {
     id: roomId(d, n.id), name: nodeIndex === 0 ? d.name : `${d.name}: ${n.kind}`, group: 'Dungeons', stop: 'delve', rarity: 'rare', tags: ['Dungeon', 'Exploration'],

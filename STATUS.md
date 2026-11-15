@@ -9,6 +9,7 @@ Current versions (`src/save/saveManager.ts` `CURRENT_VERSIONS`): profile 20, run
 The long "Done" list (about 140 bullets) and the older known-limits notes moved to `docs/archive/status-done-2026-10-30.md`; newer slice notes are in `docs/status/` (run `npm run status:find -- word`, or grep `docs/status/INDEX.md`, one line per note; do not read it whole). To check if a feature exists: `grep -il "<word>" docs/status/*.md docs/archive/status-done-2026-10-30.md` or grep `CHECKLIST.md`. Do not read either whole.
 
 ## In progress / next
+- Pseudo-stages rebuilt as real drawn stages inside a node (`docs/status/pseudo-stages-real-stages.md`).
 - **Beta 0.6 INSTRUMENTALITY** is merged to `main` (#1260, 2026-11-14): update log `docs/updates/beta-0.6.md`, plan and decisions in `docs/plans/instrumentality/`. What shipped, how it works, known gaps and the bug-hunt results: `docs/HANDOFF.md`.
 - **Beta 0.7 Jet batch 3** (39 Galarian-line Pokémon, Magmuk, Neocleon, Hoopno): `docs/status/beta07-galarian-pokemon.md`.
 - **Beta 0.7** is not started and its scope is Kice's call: Node Event Menus and/or the rest of INSTRUMENTALITY (milestones 3.0 and 3.0+1.0). Everything planned or deferred: `docs/HANDOFF.md` section 8.

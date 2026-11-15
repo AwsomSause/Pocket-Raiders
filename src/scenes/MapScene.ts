@@ -129,6 +129,8 @@ const KIND_STYLE: Record<MapNode['kind'], { color: number; glyph: string; label:
   elite: { color: 0x6848b0, glyph: 'E', label: 'Elite Four' },
   champion: { color: 0xd8a020, glyph: 'C', label: 'Champion' },
 };
+/** Pseudo-stage rooms that are not a plain fight show what waits there. */
+const ROOM_GLYPH: Record<string, string> = { mystery: '✦', puzzle: '?', trap: '⚠', cache: '▣', rest: '♥', hidden: '🔒', exit: '⇦', rare: '★', den: '♨', story: '✎' };
 const BOSS_KINDS: readonly MapNode['kind'][] = ['gym', 'elite', 'champion'];
 const HARDER_COLOR = 0x9048c8;
 const SIDE_STYLE: Record<SideStop['kind'], { color: number; glyph: string }> = {
@@ -429,7 +431,7 @@ export class MapScene extends Phaser.Scene {
       this.add.text(26, 44, `Elite Four, then ${leader.title}  ·  Healed after every battle`, textStyle(16, hSub));
     } else {
       const blind = blindMap(run.rules);
-      this.add.text(24, 12, `Stage ${stage.index + 1}: ${blind ? '???' : theme.name}`, textStyle(28, hInk));
+      this.add.text(24, 12, stage.pseudo ? `${stage.pseudo.name}` : `Stage ${stage.index + 1}: ${blind ? '???' : theme.name}`, textStyle(28, hInk));
       const stageMod = stageModifier(run);
       if (stageMod) this.add.text(24 + 560, 14, stageMod.name, textStyle(18, hSub));
       let bx = 26;
@@ -437,10 +439,10 @@ export class MapScene extends Phaser.Scene {
         const b = badge(this, bx, 44, type, TYPE_COLORS[type] ?? 0x808080, 14);
         bx += b.width + 6;
       }
-      this.add.text(bx + 8, 44, leader.title, textStyle(16, hSub));
+      this.add.text(bx + 8, 44, stage.pseudo ? `Inside Stage ${stage.index + 1}  ·  not a stage of its own` : leader.title, textStyle(16, hSub));
     }
     this.add
-      .text(GAME_WIDTH - 24, 14, `${region.name}  ·  ${league ? 'Battle' : 'Level'} ${column}/${stage.map.columns}`, textStyle(24, hInk))
+      .text(GAME_WIDTH - 24, 14, `${region.name}  ·  ${league ? 'Battle' : stage.pseudo ? 'Room' : 'Level'} ${column}/${stage.map.columns}`, textStyle(24, hInk))
       .setOrigin(1, 0);
     const hud = this.add
       .text(GAME_WIDTH - 24, 44, `${clockLabel(run)}  ·  ${tideLabel(content, run)}  ·  ₽${run.money}  ·  Badges ${run.badges.length}  ·  Level cap ${cap}${wipeStatus(run) ? `  ·  Wipes ${wipeStatus(run)!.wipes}${wipeStatus(run)!.max ? `/${wipeStatus(run)!.max}` : ''}` : ''}`, textStyle(16, hSub))
@@ -490,7 +492,7 @@ export class MapScene extends Phaser.Scene {
       if (light.alpha > 0) this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, light.tint, light.alpha * 0.8).setOrigin(0).setDepth(-46).setName('map-daylight');
     }
     // Weather forecast: a front ahead, or the one you are in, and fog.
-    const fc = league ? null : forecast(content, run);
+    const fc = league || stage.pseudo ? null : forecast(content, run);
     if (fc) {
       const where = fc.startsIn === 0 ? `now over levels ${fc.front.from}–${fc.front.to}` : `in ${fc.startsIn} level${fc.startsIn === 1 ? '' : 's'} (levels ${fc.front.from}–${fc.front.to})`;
       const band = fc.front.band === 'all' ? '' : fc.front.band === 'high' ? ', top route only' : ', lower routes only';
@@ -663,7 +665,8 @@ export class MapScene extends Phaser.Scene {
       }
       // What waits there: a Poké Ball for wild Pokémon, the boss's portrait, or a letter.
       const boss = this.bossFor(n);
-      if (!fog && n.kind === 'wild' && this.textures.exists('ball.pb')) {
+      const roomGlyph = n.roomKind ? ROOM_GLYPH[n.roomKind] : undefined;
+      if (!fog && n.kind === 'wild' && !roomGlyph && this.textures.exists('ball.pb')) {
         mapLayer.add(this.add.image(x, y - 1, 'ball.pb').setScale(2).setAlpha(alpha));
       } else if (boss) {
         const art = trainerVisual(this, boss.spriteAssetId, boss.name, x, y + r - 4, 1);
@@ -671,7 +674,7 @@ export class MapScene extends Phaser.Scene {
         art.setAlpha(alpha);
         mapLayer.add(art);
       } else {
-        mapLayer.add(this.add.text(x, y, style.glyph, textStyle(26, '#ffffff', { stroke: '#181818', strokeThickness: 4 })).setOrigin(0.5).setAlpha(alpha));
+        mapLayer.add(this.add.text(x, y, roomGlyph ?? style.glyph, textStyle(26, '#ffffff', { stroke: '#181818', strokeThickness: 4 })).setOrigin(0.5).setAlpha(alpha));
       }
       if (n.harder && !fog) mapLayer.add(this.add.text(x + r - 2, y - r + 2, '!', textStyle(22, '#f8f8f8', { stroke: '#5a2890', strokeThickness: 5 })).setOrigin(0.5));
       // Story Run (S4): a Story Stop still to play here.
@@ -682,7 +685,7 @@ export class MapScene extends Phaser.Scene {
       const omen = fog ? null : this.omens[n.id];
       if (omen) mapLayer.add(this.add.text(x - r + 2, y + r - 12, '●', textStyle(20, OMEN_COLOR[omen.tier], { stroke: '#181818', strokeThickness: 4 })).setOrigin(0.5));
       // A weather front over this node: a small badge in the front's colour.
-      const front = fog ? null : frontAt(content, run, n);
+      const front = fog || stage.pseudo ? null : frontAt(content, run, n);
       if (front) {
         const fb = this.add.graphics();
         fb.fillStyle(0x181818, 1);
@@ -739,7 +742,7 @@ export class MapScene extends Phaser.Scene {
       const kindOf = (n: MapNode) => KIND_STYLE[n.kind];
       const rects = drawNextStop(this, {
         motion: this.motion,
-        lines: [`Stage ${stage.index + 1}: ${theme.name}`, clockLabel(run), `₽${run.money} · Badges ${run.badges.length}`, `Level cap ${cap}`, `${leader.title} in ${Math.max(0, stage.map.columns - column)} stops`],
+        lines: [stage.pseudo ? `${stage.pseudo.name} (inside Stage ${stage.index + 1})` : `Stage ${stage.index + 1}: ${theme.name}`, clockLabel(run), `₽${run.money} · Badges ${run.badges.length}`, `Level cap ${cap}`, stage.pseudo ? `${stage.pseudo.name}: ${Math.max(0, stage.map.columns - column)} rooms to go` : `${leader.title} in ${Math.max(0, stage.map.columns - column)} stops`],
         cards: cardNodes.map((n) => ({
           title: kindOf(n).label,
           color: kindOf(n).color,
@@ -909,7 +912,9 @@ export class MapScene extends Phaser.Scene {
       this.showBanner('Welcome back', league ? `${region.name} League` : `Stage ${stage.index + 1}`, `Resumed at ${league ? 'battle' : 'level'} ${Math.max(1, column)} of ${stage.map.columns}  ·  Day ${run.clock.day}  ·  Your run was saved here`);
     } else if (stage.current === null && !data.notice) {
       const regions = run.regionOrder.length;
-      if (league) {
+      if (stage.pseudo) {
+        this.showBanner(`Inside Stage ${stage.index + 1}`, stage.pseudo.name, `${theme.types.map((t) => t.toUpperCase()).join(' / ')}  ·  Clear the rooms to walk back out`);
+      } else if (league) {
         const size = getCampaign(content, run.campaignId).eliteFourSize;
         const tournament = region.id === 'galar' && stage.map.nodes.some((n) => n.sides.length > 0);
         if (tournament) this.showBanner(region.name, 'Champion Tournament', `32 trainers, ${size + 1} wins to the title  ·  Healed after every round  ·  Ball Guy's shop after rounds 2 and 4`);
@@ -920,6 +925,9 @@ export class MapScene extends Phaser.Scene {
         this.showBanner(`Stage ${stage.index + 1}`, blindMap(run.rules) ? '???' : theme.name, `${blindMap(run.rules) ? 'Blind Research' : theme.types.map((t) => t.toUpperCase()).join(' / ')}  ·  ${leader.title}`, run.stagePlan?.lines ?? []);
       }
     }
+    // A pseudo-stage room opens as soon as you reach its node, like a stage fight does.
+    const room = stage.pseudo && stage.current && run.phase === 'map' ? findNode(stage.map, stage.current).sides.find((x) => x.kind === 'event' && !x.used) : undefined;
+    if (room) this.time.delayedCall(450, () => this.scene.start('Event', { sideId: room.id }));
     this.askRegionForm();
   }
 
