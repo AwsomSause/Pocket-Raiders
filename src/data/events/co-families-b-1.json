@@ -1,0 +1,4628 @@
+{
+ "catalogOverhaul": "families-b",
+ "override": true,
+ "remove": [
+  "dz-dive",
+  "dz-dive-reef",
+  "dz-dive-trench",
+  "ovc-lost-expedition-s1",
+  "ovc-phantom-lighthouse-s1",
+  "ovc-phantom-lighthouse-s2",
+  "ovc-phantom-lighthouse-s3",
+  "ovc-the-lighthouse-that-remembers-s2",
+  "ovc-the-lighthouse-that-remembers-s3"
+ ],
+ "events": [
+  {
+   "id": "ev-abandoned-expedition",
+   "name": "The Lost Expedition",
+   "group": "Landmarks",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a24",
+    "effect": "fog"
+   },
+   "requires": [],
+   "callback": false,
+   "room": false,
+   "pseudo": true,
+   "minStage": 6,
+   "intro": "A collapsed signpost marks an old trail into the hills. Boot prints go in. None come out. A faded poster is nailed to a tree: THE HALVERSON EXPEDITION. SIX MEMBERS. FIND THE LOST VALLEY. It is dated twelve years ago. Under it, in fresh chalk, somebody has written: STILL LOOKING.",
+   "choices": [
+    {
+     "label": "Follow the prints.",
+     "success": {
+      "text": "The prints are old, but the trail remembers them. You follow six people into the hills.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "expedition-on",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "lost-expedition-camp"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the poster closely.",
+     "success": {
+      "text": "Six names. One is circled: Ilse Halverson, the leader. The chalk handwriting matches none of the six. Whoever is still looking was never on the list. You follow the prints in.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "expedition-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "expedition-names",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "lost-expedition-camp"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not my business.",
+     "success": {
+      "text": "You leave the poster to the wind. The chalk will be rained off by morning, and somebody will write it again.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "lost-expedition-camp",
+   "name": "The Lost Expedition: The Camp",
+   "group": "Emergent Stories",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#24201a",
+    "effect": "fog"
+   },
+   "requires": [],
+   "callback": false,
+   "room": true,
+   "intro": "Torn tents, a cold fire, a leather journal weighed down with a stone. The explorers who made this camp did not pack up. The last entry reads: \"Day 41. Found it. The valley is real. Pokémon there we have no names for. Ilse says we can't tell anyone. Bram says we must. We'll vote in the morning.\" There is no Day 42.",
+   "choices": [
+    {
+     "label": "Read the earlier entries.",
+     "success": {
+      "text": "Forty days of blisters and bad jokes. Three things stand out: a cache \"behind the split boulder\", a drawing of a Pokémon nobody has named, and one line underlined twice: \"the ridge path, only at dawn\".",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "expedition-clues",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "lost-expedition-cache"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Search the tents.",
+     "success": {
+      "text": "Six tents. Five sleeping bags, still rolled out as if their owners stepped away for a moment. The sixth is missing. Somebody walked out of this camp carrying their bed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "expedition-five",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "lost-expedition-cache"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the journal.",
+     "success": {
+      "text": "You lift the stone and take the journal. It is heavier than paper should be. Forty-one days of six people's lives go into your bag.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "expedition-journal",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "lost-expedition-cache"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "names",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "expedition-names",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You read the six names on the poster. In the journal, Ilse Halverson's handwriting is the careful one.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "lost-expedition-cache",
+   "name": "The Lost Expedition: The Cache",
+   "group": "Emergent Stories",
+   "rarity": "rare",
+   "minStage": 1,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2410",
+    "effect": "glint"
+   },
+   "requires": [],
+   "callback": false,
+   "intro": "Behind the split boulder: a sealed crate, and a drawing pinned under a stone. Inside the crate are field notes, photographs and a sealed sample tube. A letter lies on top: \"If you find this, we didn't make it home. The valley is at the end of the ridge path. Please decide better than we did.\" The drawing shows a small Pokémon, part leaf, part stone. It is labelled \"Valley-born.\"",
+   "choices": [
+    {
+     "label": "Take the notes.",
+     "success": {
+      "text": "The notes join your bag: a year of work by people who never got to finish the sentence. You take the ridge path at dawn.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "expedition-notes",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ovc-lost-expedition-s2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the crate sealed.",
+     "success": {
+      "text": "You put the lid back and set the stone on it. You walk on with only the letter, and the feeling of having been trusted by strangers.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "expedition-respected",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ovc-lost-expedition-s2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look at the photos.",
+     "success": {
+      "text": "Six people laughing at a campfire. You count again. Five faces, and across the grass, the long shadow of the one holding the camera. You take the ridge path at dawn.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "expedition-photos",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ovc-lost-expedition-s2"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "five",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "expedition-five",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Five sleeping bags in the camp. Whoever took the sixth would have passed this boulder.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-lost-expedition-s2",
+   "name": "The Lost Expedition: The Survivor",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "minStage": 1,
+   "requires": [],
+   "callback": false,
+   "scene": {
+    "cast": [],
+    "tint": "#3a342a",
+    "effect": "none"
+   },
+   "room": true,
+   "intro": "The ridge path at dawn. A hut at the end, smoke from the chimney. An old woman with a cane comes out: Ilse Halverson. \"You found the camp. Nobody has found the camp in twelve years. The others went down to tell the world. A rockslide took the path. I stayed. Someone had to keep the valley's secret.\" She points down. \"Pokémon no one has named. If the world finds out, it ends. If it doesn't, the five of them died for nothing.\"",
+   "choices": [
+    {
+     "label": "Show me the valley.",
+     "success": {
+      "text": "She walks you to the edge without a word. Below, a valley nobody has drawn: green, quiet, full of shapes you have no names for. One of them climbs the path, looks at you for a long moment, and goes home.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "expedition-saw",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ovc-lost-expedition-s3"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "expedition-respected",
+         "atLeast": 1,
+         "atMost": 99
+        },
+        {
+         "kind": "region",
+         "ids": [
+          "kanto",
+          "hoenn",
+          "unova",
+          "torren",
+          "orrery-basin"
+         ]
+        }
+       ],
+       "text": "She walks you to the edge without a word. Below, a valley nobody has drawn: green, quiet, full of shapes you have no names for. One of them climbs the path, looks at you for a long moment, and goes home. Before you go she presses a sealed sample tube into your hands. \"You left the crate shut. So this is yours. It is an egg. Valley-born. Name it well.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "expedition-saw",
+         "amount": 1
+        },
+        {
+         "kind": "egg",
+         "species": [
+          "bramblin"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "left": 4,
+         "unit": "battle"
+        },
+        {
+         "kind": "flag",
+         "key": "expedition-egg",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ovc-lost-expedition-s3"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "expedition-respected",
+         "atLeast": 1,
+         "atMost": 99
+        },
+        {
+         "kind": "region",
+         "ids": [
+          "johto",
+          "kalos",
+          "alola",
+          "paldea",
+          "grand",
+          "trial-archipelago"
+         ]
+        }
+       ],
+       "text": "She walks you to the edge without a word. Below, a valley nobody has drawn: green, quiet, full of shapes you have no names for. One of them climbs the path, looks at you for a long moment, and goes home. Before you go she presses a sealed sample tube into your hands. \"You left the crate shut. So this is yours. It is an egg. Valley-born. Name it well.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "expedition-saw",
+         "amount": 1
+        },
+        {
+         "kind": "egg",
+         "species": [
+          "smoliv"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "left": 4,
+         "unit": "battle"
+        },
+        {
+         "kind": "flag",
+         "key": "expedition-egg",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ovc-lost-expedition-s3"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "expedition-respected",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "She walks you to the edge without a word. Below, a valley nobody has drawn: green, quiet, full of shapes you have no names for. One of them climbs the path, looks at you for a long moment, and goes home. Before you go she presses a sealed sample tube into your hands. \"You left the crate shut. So this is yours. It is an egg. Valley-born. Name it well.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "expedition-saw",
+         "amount": 1
+        },
+        {
+         "kind": "egg",
+         "species": [
+          "nacli"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "left": 4,
+         "unit": "battle"
+        },
+        {
+         "kind": "flag",
+         "key": "expedition-egg",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ovc-lost-expedition-s3"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Who wrote STILL LOOKING?",
+     "success": {
+      "text": "Ilse: \"My brother Bram's son. Tavin. He comes every year with his chalk. He has never found the camp.\" She looks at her hands. \"I have watched him from up here. Every year.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "expedition-nephew",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ovc-lost-expedition-s3"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "expedition-respected",
+         "atLeast": 1,
+         "atMost": 99
+        },
+        {
+         "kind": "region",
+         "ids": [
+          "kanto",
+          "hoenn",
+          "unova",
+          "torren",
+          "orrery-basin"
+         ]
+        }
+       ],
+       "text": "Ilse: \"My brother Bram's son. Tavin. He comes every year with his chalk. He has never found the camp.\" She looks at her hands. \"I have watched him from up here. Every year.\" Before you go she presses a sealed sample tube into your hands. \"You left the crate shut. So this is yours. It is an egg. Valley-born. Name it well.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "expedition-nephew",
+         "amount": 1
+        },
+        {
+         "kind": "egg",
+         "species": [
+          "bramblin"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "left": 4,
+         "unit": "battle"
+        },
+        {
+         "kind": "flag",
+         "key": "expedition-egg",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ovc-lost-expedition-s3"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "expedition-respected",
+         "atLeast": 1,
+         "atMost": 99
+        },
+        {
+         "kind": "region",
+         "ids": [
+          "johto",
+          "kalos",
+          "alola",
+          "paldea",
+          "grand",
+          "trial-archipelago"
+         ]
+        }
+       ],
+       "text": "Ilse: \"My brother Bram's son. Tavin. He comes every year with his chalk. He has never found the camp.\" She looks at her hands. \"I have watched him from up here. Every year.\" Before you go she presses a sealed sample tube into your hands. \"You left the crate shut. So this is yours. It is an egg. Valley-born. Name it well.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "expedition-nephew",
+         "amount": 1
+        },
+        {
+         "kind": "egg",
+         "species": [
+          "smoliv"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "left": 4,
+         "unit": "battle"
+        },
+        {
+         "kind": "flag",
+         "key": "expedition-egg",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ovc-lost-expedition-s3"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "expedition-respected",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Ilse: \"My brother Bram's son. Tavin. He comes every year with his chalk. He has never found the camp.\" She looks at her hands. \"I have watched him from up here. Every year.\" Before you go she presses a sealed sample tube into your hands. \"You left the crate shut. So this is yours. It is an egg. Valley-born. Name it well.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "expedition-nephew",
+         "amount": 1
+        },
+        {
+         "kind": "egg",
+         "species": [
+          "nacli"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "left": 4,
+         "unit": "battle"
+        },
+        {
+         "kind": "flag",
+         "key": "expedition-egg",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ovc-lost-expedition-s3"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Come home with me.",
+     "success": {
+      "text": "Ilse: \"And leave it?\" She looks at the valley, then at the cane, then at the path she has not walked in twelve years. \"...Give me a minute to bank the fire.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "expedition-home",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ovc-lost-expedition-s3"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "expedition-respected",
+         "atLeast": 1,
+         "atMost": 99
+        },
+        {
+         "kind": "region",
+         "ids": [
+          "kanto",
+          "hoenn",
+          "unova",
+          "torren",
+          "orrery-basin"
+         ]
+        }
+       ],
+       "text": "Ilse: \"And leave it?\" She looks at the valley, then at the cane, then at the path she has not walked in twelve years. \"...Give me a minute to bank the fire.\" Before you go she presses a sealed sample tube into your hands. \"You left the crate shut. So this is yours. It is an egg. Valley-born. Name it well.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "expedition-home",
+         "amount": 1
+        },
+        {
+         "kind": "egg",
+         "species": [
+          "bramblin"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "left": 4,
+         "unit": "battle"
+        },
+        {
+         "kind": "flag",
+         "key": "expedition-egg",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ovc-lost-expedition-s3"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "expedition-respected",
+         "atLeast": 1,
+         "atMost": 99
+        },
+        {
+         "kind": "region",
+         "ids": [
+          "johto",
+          "kalos",
+          "alola",
+          "paldea",
+          "grand",
+          "trial-archipelago"
+         ]
+        }
+       ],
+       "text": "Ilse: \"And leave it?\" She looks at the valley, then at the cane, then at the path she has not walked in twelve years. \"...Give me a minute to bank the fire.\" Before you go she presses a sealed sample tube into your hands. \"You left the crate shut. So this is yours. It is an egg. Valley-born. Name it well.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "expedition-home",
+         "amount": 1
+        },
+        {
+         "kind": "egg",
+         "species": [
+          "smoliv"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "left": 4,
+         "unit": "battle"
+        },
+        {
+         "kind": "flag",
+         "key": "expedition-egg",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ovc-lost-expedition-s3"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "expedition-respected",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Ilse: \"And leave it?\" She looks at the valley, then at the cane, then at the path she has not walked in twelve years. \"...Give me a minute to bank the fire.\" Before you go she presses a sealed sample tube into your hands. \"You left the crate shut. So this is yours. It is an egg. Valley-born. Name it well.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "expedition-home",
+         "amount": 1
+        },
+        {
+         "kind": "egg",
+         "species": [
+          "nacli"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "left": 4,
+         "unit": "battle"
+        },
+        {
+         "kind": "flag",
+         "key": "expedition-egg",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "ovc-lost-expedition-s3"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "remembers": [
+    {
+     "id": "sealed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "expedition-respected",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You left the crate sealed. Ilse knows: she checks it every spring.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-lost-expedition-s3",
+   "name": "The Lost Expedition: Publish or Bury",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "minStage": 1,
+   "requires": [],
+   "callback": false,
+   "scene": {
+    "cast": [],
+    "tint": "#3a342a",
+    "effect": "none"
+   },
+   "room": true,
+   "intro": "Back down the ridge. A town at the bottom, and a young man on the kerb with chalk dust on his sleeve. Tavin. \"You came from up there. Did you find them?\" You have what you carried out, and what you saw. He is waiting for an answer he has waited twelve years for.",
+   "choices": [
+    {
+     "label": "Publish everything.",
+     "success": {
+      "text": "You tell it all. The six names are printed, and the five are honoured in every town on the road. The valley becomes a reserve. There is already talk of a viewing platform.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "expedition-published",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bury it.",
+     "success": {
+      "text": "That night the journal goes into a fire, a page at a time. The valley stays what it was. Tavin never knows, and will write on the poster again next year. Somewhere above, small shapes sleep unafraid.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "expedition-buried",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "The valley trusts you",
+        "effects": [
+         {
+          "kind": "captureMultiplier",
+          "value": 1.5
+         }
+        ],
+        "battles": 3,
+        "until": "wild"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it to Tavin.",
+     "success": {
+      "text": "Tavin reads on the kerb until the light goes. \"My dad voted to tell. He died for it.\" He closes the journal. \"...And I think he would want me to listen to her now.\" He publishes the six names, and not the place. Then he gives you the last thing the expedition carried out: an egg.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "expedition-tavin",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fb-valley-egg"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "home-vale",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "expedition-home",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "mentor",
+       "id": "linden-vale"
+      }
+     ],
+     "notice": "Ilse came down the ridge with you. She is standing a few steps behind, both hands on her cane. And Dr. Vale has already written to ask for the notes.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Give it to Tavin.",
+       "success": {
+        "text": "Tavin reads. Then he looks up, past you, at the old woman with the cane. \"...Aunt Ilse?\" Nobody says anything for a while. \"My dad voted to tell. He died for it. And I think he would want me to listen to her now.\" They decide together: the names, and not the place. They walk into town side by side. That is the ending.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "expedition-tavin",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "expedition-reunion",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Ilse Halverson came down the ridge after twelve years, and her nephew was waiting.",
+          "importance": 80
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "fb-valley-egg"
+         }
+        ]
+       }
+      },
+      {
+       "label": "Give the notes to Dr. Vale.",
+       "success": {
+        "text": "Dr. Vale takes them with both hands. His paper names all six, in full, in the first line. Where the map should be, the page is left blank. \"Some findings,\" he writes, \"are better kept than shared.\"",
+        "effects": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "leftovers",
+           "focus-sash",
+           "choice-band",
+           "choice-specs",
+           "choice-scarf",
+           "life-orb",
+           "eviolite",
+           "rocky-helmet"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "rep",
+          "amount": 2
+         },
+         {
+          "kind": "flag",
+          "key": "expedition-published",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "expedition-vale",
+          "amount": 1
+         },
+         {
+          "kind": "mentor",
+          "trust": 5
+         },
+         {
+          "kind": "leavePseudo"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "home",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "expedition-home",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Ilse came down the ridge with you. She is standing a few steps behind, both hands on her cane.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Give it to Tavin.",
+       "success": {
+        "text": "Tavin reads. Then he looks up, past you, at the old woman with the cane. \"...Aunt Ilse?\" Nobody says anything for a while. \"My dad voted to tell. He died for it. And I think he would want me to listen to her now.\" They decide together: the names, and not the place. They walk into town side by side. That is the ending.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "expedition-tavin",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "expedition-reunion",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Ilse Halverson came down the ridge after twelve years, and her nephew was waiting.",
+          "importance": 80
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "fb-valley-egg"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "vale",
+     "when": [
+      {
+       "kind": "mentor",
+       "id": "linden-vale"
+      }
+     ],
+     "notice": "Dr. Vale has already written to ask for the notes. He wants them badly.",
+     "hide": [],
+     "addChoices": [
+      {
+       "label": "Give the notes to Dr. Vale.",
+       "success": {
+        "text": "Dr. Vale takes them with both hands. His paper names all six, in full, in the first line. Where the map should be, the page is left blank. \"Some findings,\" he writes, \"are better kept than shared.\"",
+        "effects": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "leftovers",
+           "focus-sash",
+           "choice-band",
+           "choice-specs",
+           "choice-scarf",
+           "life-orb",
+           "eviolite",
+           "rocky-helmet"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "rep",
+          "amount": 2
+         },
+         {
+          "kind": "flag",
+          "key": "expedition-published",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "expedition-vale",
+          "amount": 1
+         },
+         {
+          "kind": "mentor",
+          "trust": 5
+         },
+         {
+          "kind": "leavePseudo"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "fb-valley-egg",
+   "name": "The Lost Expedition: The Sample Tube",
+   "group": "Landmarks",
+   "rarity": "rare",
+   "requires": [],
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a342a",
+    "effect": "glint"
+   },
+   "intro": "Tavin holds out a sealed sample tube, padded in a wool sock. \"They carried this out before the slide. It has been warm the whole time. I think it has been waiting for somebody who went and looked.\"",
+   "choices": [
+    {
+     "label": "Take the egg.",
+     "success": {
+      "text": "It is warm through the glass. Valley-born: part leaf, part stone, and nobody has ever given one a name.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "nacli"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 4,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "expedition-egg",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "region",
+         "ids": [
+          "kanto",
+          "hoenn",
+          "unova",
+          "torren",
+          "orrery-basin"
+         ]
+        }
+       ],
+       "text": "It is warm through the glass. Valley-born: part leaf, part stone, and nobody has ever given one a name.",
+       "effects": [
+        {
+         "kind": "egg",
+         "species": [
+          "bramblin"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "left": 4,
+         "unit": "battle"
+        },
+        {
+         "kind": "flag",
+         "key": "expedition-egg",
+         "amount": 1
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "region",
+         "ids": [
+          "johto",
+          "kalos",
+          "alola",
+          "paldea",
+          "grand",
+          "trial-archipelago"
+         ]
+        }
+       ],
+       "text": "It is warm through the glass. Valley-born: part leaf, part stone, and nobody has ever given one a name.",
+       "effects": [
+        {
+         "kind": "egg",
+         "species": [
+          "smoliv"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "left": 4,
+         "unit": "battle"
+        },
+        {
+         "kind": "flag",
+         "key": "expedition-egg",
+         "amount": 1
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "lighthouse-entrance",
+   "name": "The Sunken Lighthouse",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "water",
+    "ghost"
+   ],
+   "minStage": 5,
+   "scene": {
+    "cast": [],
+    "tint": "#14242c",
+    "effect": "fog"
+   },
+   "requires": [],
+   "callback": false,
+   "room": false,
+   "pseudo": true,
+   "intro": "A lighthouse stands knee-deep in the sea, its lamp still turning. No keeper. Its door is open to the tide. A fisher on the shore does not look up from her nets: \"Keeper drowned forty years back. The lamp has never stopped. Nobody has ever been up.\"",
+   "choices": [
+    {
+     "label": "Wade in.",
+     "success": {
+      "text": "The water is colder than it looks, and it pulls. You get through the door soaked to the waist.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": [
+         "water"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "sunk-in",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "lighthouse-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for low tide (a node).",
+     "success": {
+      "text": "You sit with the fisher while the sea goes out. She shares her tea and says nothing. When the sand shows, you walk in dry.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sunk-in",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "lighthouse-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the keeper.",
+     "success": {
+      "text": "Fisher: \"Old Corvin Ashby. Lived alone with a Chinchou. Never said a word to anyone but it.\" She nods at a line of dry rocks. \"Go in that way, if you must.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sunk-in",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sunk-name",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "lighthouse-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lighthouse-1",
+   "name": "The Sunken Lighthouse: The Pool",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "water",
+    "ghost"
+   ],
+   "minStage": 1,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#14242c",
+    "effect": "fog"
+   },
+   "requires": [],
+   "callback": false,
+   "intro": "The ground floor is a pool. The stairs are above the water, if you can reach them. Wild Tentacool drift in the dark. Something blue glows at the bottom.",
+   "choices": [
+    {
+     "label": "Swim for the stairs.",
+     "success": {
+      "text": "Halfway across, the water under you rises. A Tentacruel has been watching the door for a long time.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "tentacruel"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "lighthouse-2"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Dive for the glow.",
+     "success": {
+      "text": "You come up with a Poké Ball, old and furred with weed. It is empty. Somebody opened it once and never needed it again. You climb out onto the stairs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sunk-ball",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "lighthouse-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Pokémon to bridge.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "grass",
+        "ice"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Vines catch the stair rail and pull tight, or one cold breath lays a path of ice across the pool. Either way you cross above the Tentacool without wetting a boot, and they bump against your bridge from below, puzzled.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "lighthouse-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lighthouse-2",
+   "name": "The Sunken Lighthouse: The Keeper's Room",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "water",
+    "ghost"
+   ],
+   "minStage": 1,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#14242c",
+    "effect": "fog"
+   },
+   "requires": [],
+   "callback": false,
+   "intro": "A bed, a table, a keeper's lantern. Something moves in the corner. A ghostly keeper in an oilskin sits reading a letter he cannot hold. \"You'll be wanting the lamp. Mind the stairs. I never did.\" The thing moving in the corner is a Lanturn, old and blind, curled around the keeper's chair.",
+   "choices": [
+    {
+     "label": "Who is the Lanturn?",
+     "success": {
+      "text": "Keeper: \"My Chinchou. Grew up. Still here. Won't leave me.\" The Lanturn turns toward his voice. Its light is very faint, as if most of it were somewhere else.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sunk-lanturn",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "lighthouse-final"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Why did you drown?",
+     "success": {
+      "text": "Keeper: \"Storm took the lamp out. I went out on the rocks to fix the lens. Got it lit. Didn't get back.\" He says it the way a man mentions a missed train.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sunk-story",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "lighthouse-final"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go up.",
+     "success": {
+      "text": "You nod to him and take the stairs. He goes back to his letter. The Lanturn listens to your footsteps all the way up.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "lighthouse-final"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "name",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sunk-name",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"Mr. Ashby?\" The ghost looks up, startled. Nobody has said his name in forty years.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "ball",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sunk-ball",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The empty Ball from the pool is still in your hand. The Lanturn turns its blind face toward it.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "lighthouse-final",
+   "name": "The Sunken Lighthouse: The Lamp and the Chest",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "water",
+    "ghost"
+   ],
+   "minStage": 1,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#14242c",
+    "effect": "glint"
+   },
+   "requires": [],
+   "callback": false,
+   "intro": "The lamp at the top is a ball of living light. It is the Lanturn's light, sent up the stairs every night for forty years. Beside it stands a chest the keeper never opened. Inside: letters. Hundreds. All to \"Little Light.\" All from the keeper. He wrote one every night and never sent them, because who sends letters to someone in the same room?",
+   "choices": [
+    {
+     "label": "Read them to the Lanturn.",
+     "success": {
+      "text": "You carry the chest down and read aloud until your voice cracks. The Lanturn listens to every one. On the last letter, its light goes out upstairs and comes on in the room. The keeper reaches out, and for the first time, he can touch it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sunk-read",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fb-lighthouse-farewell"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give them to the keeper.",
+     "success": {
+      "text": "You set the chest in front of him. He holds them. All of them. \"I never sent one.\" He takes the top letter and, hands shaking, gives it to the Lanturn.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sunk-sent",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fb-lighthouse-farewell"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Close the chest.",
+     "success": {
+      "text": "Some things are not yours to open. You close the lid. The lamp keeps turning, as it has, as it will.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sunk-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "lanturn",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sunk-lanturn",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"My Chinchou. Still here.\" Now you understand where its light has been going.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "fb-lighthouse-farewell",
+   "name": "The Sunken Lighthouse: Little Light",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "water",
+    "ghost"
+   ],
+   "requires": [],
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "lanturn",
+    "tint": "#14242c",
+    "effect": "glint"
+   },
+   "intro": "The keeper stands. He is lighter than he was. \"I can go now, I think. Will you see to it?\" The Lanturn presses against his boots.",
+   "choices": [
+    {
+     "label": "I'll take it with me.",
+     "success": {
+      "text": "The old Lanturn leaves the chair it has circled for forty years. The keeper watches it go and smiles. Behind you, the great lamp gutters and goes dark. The harbour will have to build its own light now.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "lanturn"
+        ],
+        "types": [],
+        "levelBonus": 2,
+        "shinyMultiplier": 1,
+        "moves": [
+         "light-screen",
+         "heal-bell"
+        ],
+        "friendship": 100
+       },
+       {
+        "kind": "flag",
+        "key": "sunk-took",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sunk-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "sunk-name",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The old Lanturn leaves the chair it has circled for forty years. Corvin Ashby watches it go and smiles. Behind you, the great lamp gutters and goes dark. The harbour will have to build its own light now.",
+       "effects": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "lanturn"
+         ],
+         "types": [],
+         "levelBonus": 2,
+         "shinyMultiplier": 1,
+         "moves": [
+          "light-screen",
+          "heal-bell"
+         ],
+         "friendship": 100
+        },
+        {
+         "kind": "flag",
+         "key": "sunk-took",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sunk-done",
+         "amount": 1
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "It can stay as the light.",
+     "success": {
+      "text": "The keeper fades like breath off glass. The Lanturn settles under the lens, and the lamp turns, and will turn. Weary travellers will rest here now, under a light that knows it is loved.",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "heal"
+       },
+       {
+        "kind": "flag",
+        "key": "sunk-stay",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sunk-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "sunk-name",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Corvin Ashby fades like breath off glass. The Lanturn settles under the lens, and the lamp turns, and will turn. Weary travellers will rest here now, under a light that knows it is loved.",
+       "effects": [
+        {
+         "kind": "addStop",
+         "stop": "heal"
+        },
+        {
+         "kind": "flag",
+         "key": "sunk-stay",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sunk-done",
+         "amount": 1
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Ask it.",
+     "success": {
+      "text": "You kneel and ask. The Lanturn thinks about it, in its slow blind way. It chooses the lamp. But it noses something out from under the keeper's chair and pushes it to your feet: an egg, faintly glowing.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "chinchou"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "sunk-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sunk-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "sunk-name",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You kneel and ask. The Lanturn thinks about it, in its slow blind way. It chooses the lamp. But it noses something out from under the keeper's chair and pushes it to your feet: an egg, faintly glowing.",
+       "effects": [
+        {
+         "kind": "egg",
+         "species": [
+          "chinchou"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "left": 3,
+         "unit": "battle"
+        },
+        {
+         "kind": "flag",
+         "key": "sunk-asked",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sunk-done",
+         "amount": 1
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "remembers": [
+    {
+     "id": "name",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sunk-name",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Corvin Ashby stands. He is lighter than he was. \"I can go now, I think. Will you see to it?\" The Lanturn presses against his boots.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-lighthouse-that-remembers-s1",
+   "name": "The Lighthouse That Remembers",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#0c1a2c",
+    "effect": "fog"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "sunk-done",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": true,
+   "room": false,
+   "minStage": 5,
+   "intro": "The lighthouse at night. A voice from the lamp recites every ship that has ever passed, by name: \"The Margery. The Swift. The Old Corvin...\" Out on the water a ghost ship appears: a fishing boat with no one aboard, and its lamp lit.",
+   "choices": [
+    {
+     "label": "Signal the ghost ship.",
+     "success": {
+      "text": "You flash the lamp. The ghost ship flashes back, once, and sinks without a ripple, like something finally allowed to. The light dims, content. In the morning a pearl has washed up on the step.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "pearl",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sunk-remembered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it pass.",
+     "success": {
+      "text": "It passes. The light dims as it goes by, the way you lower your voice in a quiet room, then brightens again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sunk-remembered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the light its name.",
+     "success": {
+      "text": "The voice stops. Then it recites one more, shyly: \"Little Light.\" After that it is quiet, and the lamp turns.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sunk-remembered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "read",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sunk-read",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You read it every letter. Tonight the voice recites the keeper's name last, and warmly: \"Corvin Ashby.\"",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "sailed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "harbour-sailed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You crossed this bay for the medicine. Near the end of the list, the voice says your name.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "quarry-entrance",
+   "name": "The Old Quarry",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "rock",
+    "ground"
+   ],
+   "minStage": 4,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "fog"
+   },
+   "requires": [],
+   "callback": false,
+   "room": false,
+   "pseudo": true,
+   "intro": "A quarry cut into a hillside. Cranes frozen halfway through a lift. A dozen shafts going down. An ex-foreman on the road out catches your sleeve: \"Don't. Something came up the deep shaft. We ran. Left everything. It didn't hurt anyone. It just stood in the way. Roared. We weren't paid enough.\"",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "He lets go of your sleeve and shakes his head. The gate hangs open. Twelve dark doors, and a load of stone still swinging gently on its chain.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "quarry-in",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "quarry-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "What did it look like?",
+     "success": {
+      "text": "Ex-foreman: \"Stone. Big. Gems on its back.\" He rubs his arm. \"It looked at us like we were the ones trespassing.\" You go in.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "quarry-in",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "quarry-hint",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "quarry-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave the quarry to whatever came up the deep shaft. The foreman looks relieved.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "king",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "story-alpha-quarry-king"
+      }
+     ],
+     "notice": "This is the quarry road the Gym Leader roped off. Whatever came up the shaft, you have met it: the Quarry King.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "quarry-1",
+   "name": "The Old Quarry: Among the Gear",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "rock",
+    "ground"
+   ],
+   "minStage": 1,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "fog"
+   },
+   "requires": [],
+   "callback": false,
+   "intro": "The crane operators left in a hurry. A Pokémon has made itself at home among their gear: a family of Roggenrola in a lunchbox. The smallest one is wearing a hard hat.",
+   "choices": [
+    {
+     "label": "Leave them.",
+     "success": {
+      "text": "You step around the lunchbox. Four round bodies turn to watch you go. The hard hat tips, slowly, like a salute.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "quarry-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the hard hat back.",
+     "success": {
+      "text": "You lift the hat. The small one cries, a thin grinding sound, and the whole family comes out of the lunchbox at once.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "roggenrola",
+        "boldore"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "quarry-hat",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "quarry-2"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Feed them.",
+     "success": {
+      "text": "You crumble a ration bar into the lunchbox. They hum. The biggest rolls a Hard Stone to your boot, and the one in the hard hat follows you down the shaft, keeping three careful paces behind.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "hard-stone",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "quarry-fed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "quarry-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "quarry-2",
+   "name": "The Old Quarry: The Deep Shaft",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "rock",
+    "ground"
+   ],
+   "minStage": 1,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "fog"
+   },
+   "requires": [],
+   "callback": false,
+   "intro": "One shaft goes much deeper than the rest. Rubble blocks the bottom. Behind the rubble: breathing. Big.",
+   "choices": [
+    {
+     "label": "Clear the rubble.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "fighting",
+        "ground"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon sets itself against the pile and the rubble gives, block by block. The breathing on the other side does not change.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "quarry-final"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call to it.",
+     "success": {
+      "text": "\"Hello?\" Silence. Then stone shifts, from the other side, one careful block at a time. It is opening the door for you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "quarry-called",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "quarry-final"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Climb back up.",
+     "success": {
+      "text": "Some doors are shut for a reason. You climb back to daylight.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "fed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "quarry-fed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The little Roggenrola in the hard hat has followed you down. It is not afraid of the breathing.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "quarry-final",
+   "name": "The Old Quarry: The Seam",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "rock",
+    "ground"
+   ],
+   "minStage": 1,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "glint"
+   },
+   "requires": [],
+   "callback": false,
+   "intro": "A seam of coloured stone runs back into the mountain. Fossils, ore and gems, all laid open. A Gigalith stands in front of it. It is not angry. It is guarding something: in the stone, a cluster of Carbink, newly formed, still soft at the edges.",
+   "choices": [
+    {
+     "label": "Mine the seam.",
+     "success": {
+      "text": "You lift the pick. The Gigalith does not roar. It just steps in front of the nursery, and stays there.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "gigalith"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "old-amber",
+          "helix-fossil",
+          "dome-fossil"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "plume-fossil",
+          "root-fossil",
+          "claw-fossil",
+          "hisui-spark-fossil"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "rock-gem",
+          "ground-gem",
+          "fire-gem",
+          "water-gem",
+          "electric-gem",
+          "ice-gem",
+          "fairy-gem",
+          "steel-gem"
+         ],
+         "count": 2
+        },
+        {
+         "kind": "flag",
+         "key": "quarry-mined",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "fb-quarry-after"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "promise-diancie",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You lift the pick. The Gigalith does not roar. It just steps in front of the nursery, and stays there. A Carbink drifts out of the stone and sets a gem in your palm, unasked.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "rock-gem",
+          "ground-gem",
+          "fire-gem",
+          "water-gem",
+          "electric-gem",
+          "ice-gem",
+          "fairy-gem",
+          "steel-gem"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Leave it sealed.",
+     "success": {
+      "text": "You set the pick down. The Gigalith bows, slow as a hill. When you climb out, it climbs out behind you, and does not go back.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "gigalith"
+        ],
+        "types": [],
+        "levelBonus": 1,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "quarry-sealed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fb-quarry-after"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "eventSeen",
+         "id": "story-alpha-quarry-king"
+        },
+        {
+         "kind": "flag",
+         "key": "promise-diancie",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You set the pick down. The Rhyperior lowers its horn until it touches the floor. It will remember who came to the seam and took nothing. A Carbink drifts out of the stone and sets a gem in your palm, unasked.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "rock-gem",
+          "ground-gem",
+          "fire-gem",
+          "water-gem",
+          "electric-gem",
+          "ice-gem",
+          "fairy-gem",
+          "steel-gem"
+         ]
+        },
+        {
+         "kind": "friendship",
+         "amount": 3,
+         "who": "party"
+        },
+        {
+         "kind": "flag",
+         "key": "quarry-sealed",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "fb-quarry-after"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "eventSeen",
+         "id": "story-alpha-quarry-king"
+        }
+       ],
+       "text": "You set the pick down. The Rhyperior lowers its horn until it touches the floor. It will remember who came to the seam and took nothing.",
+       "effects": [
+        {
+         "kind": "friendship",
+         "amount": 3,
+         "who": "party"
+        },
+        {
+         "kind": "flag",
+         "key": "quarry-sealed",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "fb-quarry-after"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "promise-diancie",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You set the pick down. The Gigalith bows, slow as a hill. When you climb out, it climbs out behind you, and does not go back. A Carbink drifts out of the stone and sets a gem in your palm, unasked.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "rock-gem",
+          "ground-gem",
+          "fire-gem",
+          "water-gem",
+          "electric-gem",
+          "ice-gem",
+          "fairy-gem",
+          "steel-gem"
+         ]
+        },
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "gigalith"
+         ],
+         "types": [],
+         "levelBonus": 1,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "flag",
+         "key": "quarry-sealed",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "fb-quarry-after"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Mine around the nursery (a node).",
+     "success": {
+      "text": "It takes most of a day, on your knees, a chisel-width at a time. One fossil. One gem. Not a crack in the stone where the Carbink sleep. The Gigalith watches every stroke, and lets you go.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "old-amber",
+         "helix-fossil",
+         "dome-fossil"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rock-gem",
+         "ground-gem",
+         "fire-gem",
+         "water-gem",
+         "electric-gem",
+         "ice-gem",
+         "fairy-gem",
+         "steel-gem"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "quarry-careful",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fb-quarry-after"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "eventSeen",
+         "id": "story-alpha-quarry-king"
+        },
+        {
+         "kind": "flag",
+         "key": "promise-diancie",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "It takes most of a day, on your knees, a chisel-width at a time. One fossil. One gem. Not a crack in the stone where the Carbink sleep. The Rhyperior watches every stroke, and lets you go. A Carbink drifts out of the stone and sets a gem in your palm, unasked.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "rock-gem",
+          "ground-gem",
+          "fire-gem",
+          "water-gem",
+          "electric-gem",
+          "ice-gem",
+          "fairy-gem",
+          "steel-gem"
+         ]
+        },
+        {
+         "kind": "takeNode",
+         "nodes": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "old-amber",
+          "helix-fossil",
+          "dome-fossil"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "rock-gem",
+          "ground-gem",
+          "fire-gem",
+          "water-gem",
+          "electric-gem",
+          "ice-gem",
+          "fairy-gem",
+          "steel-gem"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "quarry-careful",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "fb-quarry-after"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "eventSeen",
+         "id": "story-alpha-quarry-king"
+        }
+       ],
+       "text": "It takes most of a day, on your knees, a chisel-width at a time. One fossil. One gem. Not a crack in the stone where the Carbink sleep. The Rhyperior watches every stroke, and lets you go.",
+       "effects": [
+        {
+         "kind": "takeNode",
+         "nodes": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "old-amber",
+          "helix-fossil",
+          "dome-fossil"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "rock-gem",
+          "ground-gem",
+          "fire-gem",
+          "water-gem",
+          "electric-gem",
+          "ice-gem",
+          "fairy-gem",
+          "steel-gem"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "quarry-careful",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "fb-quarry-after"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "promise-diancie",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "It takes most of a day, on your knees, a chisel-width at a time. One fossil. One gem. Not a crack in the stone where the Carbink sleep. The Gigalith watches every stroke, and lets you go. A Carbink drifts out of the stone and sets a gem in your palm, unasked.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "rock-gem",
+          "ground-gem",
+          "fire-gem",
+          "water-gem",
+          "electric-gem",
+          "ice-gem",
+          "fairy-gem",
+          "steel-gem"
+         ]
+        },
+        {
+         "kind": "takeNode",
+         "nodes": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "old-amber",
+          "helix-fossil",
+          "dome-fossil"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "rock-gem",
+          "ground-gem",
+          "fire-gem",
+          "water-gem",
+          "electric-gem",
+          "ice-gem",
+          "fairy-gem",
+          "steel-gem"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "quarry-careful",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "fb-quarry-after"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "remembers": [
+    {
+     "id": "king",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "story-alpha-quarry-king"
+      }
+     ],
+     "intro": "A seam of coloured stone runs back into the mountain. Fossils, ore and gems, all laid open. A Rhyperior stands in front of it. It is not angry. It is guarding something: in the stone, a cluster of Carbink, newly formed, still soft at the edges.",
+     "notice": "The Quarry King. It knows you. It does not move from the nursery.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Mine the seam.",
+       "success": {
+        "text": "You lift the pick. The Rhyperior does not roar. It just steps in front of the nursery, and stays there.",
+        "effects": [],
+        "battle": {
+         "kind": "wild",
+         "species": [
+          "rhyperior"
+         ],
+         "types": [],
+         "levelBonus": 2,
+         "shinyMultiplier": 1,
+         "win": [
+          {
+           "kind": "itemFrom",
+           "ids": [
+            "old-amber",
+            "helix-fossil",
+            "dome-fossil"
+           ]
+          },
+          {
+           "kind": "itemFrom",
+           "ids": [
+            "plume-fossil",
+            "root-fossil",
+            "claw-fossil",
+            "hisui-spark-fossil"
+           ]
+          },
+          {
+           "kind": "itemFrom",
+           "ids": [
+            "rock-gem",
+            "ground-gem",
+            "fire-gem",
+            "water-gem",
+            "electric-gem",
+            "ice-gem",
+            "fairy-gem",
+            "steel-gem"
+           ],
+           "count": 2
+          },
+          {
+           "kind": "flag",
+           "key": "quarry-mined",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "fb-quarry-after"
+          }
+         ],
+         "pseudo": true
+        }
+       },
+       "branches": [
+        {
+         "when": [
+          {
+           "kind": "flag",
+           "key": "promise-diancie",
+           "atLeast": 1,
+           "atMost": 99
+          }
+         ],
+         "text": "You lift the pick. The Rhyperior does not roar. It just steps in front of the nursery, and stays there. A Carbink drifts out of the stone and sets a gem in your palm, unasked.",
+         "effects": [
+          {
+           "kind": "itemFrom",
+           "ids": [
+            "rock-gem",
+            "ground-gem",
+            "fire-gem",
+            "water-gem",
+            "electric-gem",
+            "ice-gem",
+            "fairy-gem",
+            "steel-gem"
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "diancie",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "promise-diancie",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You promised Diancie to sell nothing. The Carbink can tell: they crowd to the edge of the stone to look at you.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "called",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "quarry-called",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It opened the way for you itself. It is calm. It is waiting to see what kind of visitor you are.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "fb-quarry-after",
+   "name": "The Old Quarry: The Road Out",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "rock",
+    "ground"
+   ],
+   "requires": [],
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3226",
+    "effect": "none"
+   },
+   "intro": "Daylight. The cranes have not moved. The quarry is as quiet as you found it, and you know now what the quiet is for.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You leave the quarry behind you.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "quarry-hint",
+         "atLeast": 1,
+         "atMost": 99
+        },
+        {
+         "kind": "flag",
+         "key": "quarry-careful",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "He is quiet for a while. A week later the quarry reopens, with a new sign painted by hand: KEEP OUT OF SHAFT 12. He hammers it in himself.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "quarry-reopened",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "The Old Quarry reopened, with a sign: KEEP OUT OF SHAFT 12.",
+         "importance": 60
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "quarry-hint",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "\"Stone. Big. Gems on its back,\" you tell him. He nods. \"Told you.\" He looks down the shaft for a long time before he goes.",
+       "effects": [
+        {
+         "kind": "leavePseudo"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "remembers": [
+    {
+     "id": "sign",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "quarry-hint",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "quarry-careful",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Daylight. The ex-foreman is at the gate. He came back to see. You show him the fossil, and tell him about the nursery.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "hint",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "quarry-hint",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Daylight. The ex-foreman is at the gate. He came back to see for himself what you would bring out.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "w4-dive",
+   "name": "The Captain's Chest",
+   "group": "World & Traversal",
+   "rarity": "uncommon",
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#0c1c30",
+    "effect": "rain"
+   },
+   "requires": [],
+   "callback": false,
+   "room": false,
+   "pseudo": true,
+   "minStage": 5,
+   "intro": "Clear deep water. A wreck far below. Diving gear on the rocks, and an old diver, Odo, mending it. \"Four breaths of air, and every room below costs one. A Water-type'll help you. The Silver Morrow went down with her captain's chest. Nobody's brought it up. Not for want of trying.\"",
+   "choices": [
+    {
+     "label": "Dive.",
+     "success": {
+      "text": "You fill your lungs and go down the shaft of blue light. Breath: 4. The reef takes the first.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "chest-breath",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "chest-breath",
+        "amount": 3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "w4-dive-1"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "leadType",
+         "type": "water"
+        }
+       ],
+       "text": "You fill your lungs and go down the shaft of blue light. Breath: 6. The reef takes the first.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "chest-breath",
+         "amount": -99
+        },
+        {
+         "kind": "flag",
+         "key": "chest-breath",
+         "amount": 5
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "w4-dive-1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Who's tried?",
+     "success": {
+      "text": "Odo: \"Me. Three times. Something wouldn't let me take it.\" He turns his empty hands over. \"Maybe it's waiting for someone else.\" You dive. Breath: 4. The reef takes the first.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "chest-breath",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "chest-breath",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "chest-odo",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "w4-dive-1"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "leadType",
+         "type": "water"
+        }
+       ],
+       "text": "Odo: \"Me. Three times. Something wouldn't let me take it.\" He turns his empty hands over. \"Maybe it's waiting for someone else.\" You dive. Breath: 6. The reef takes the first.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "chest-breath",
+         "amount": -99
+        },
+        {
+         "kind": "flag",
+         "key": "chest-breath",
+         "amount": 5
+        },
+        {
+         "kind": "flag",
+         "key": "chest-odo",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "w4-dive-1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Lend me the gear.",
+     "success": {
+      "text": "Odo buckles his old tank onto you himself, checking every strap twice. \"Bring it back. Bring yourself back.\" Breath: 5. The reef takes the first.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "chest-breath",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "chest-breath",
+        "amount": 4
+       },
+       {
+        "kind": "flag",
+        "key": "chest-gear",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "w4-dive-1"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "leadType",
+         "type": "water"
+        }
+       ],
+       "text": "Odo buckles his old tank onto you himself, checking every strap twice. \"Bring it back. Bring yourself back.\" Breath: 7. The reef takes the first.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "chest-breath",
+         "amount": -99
+        },
+        {
+         "kind": "flag",
+         "key": "chest-breath",
+         "amount": 6
+        },
+        {
+         "kind": "flag",
+         "key": "chest-gear",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "w4-dive-1"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "remembers": [
+    {
+     "id": "water",
+     "when": [
+      {
+       "kind": "leadType",
+       "type": "water"
+      }
+     ],
+     "notice": "Your Water-type lead slips into the shallows and waits for you. With it beside you, you have two more breaths.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "w4-dive-1",
+   "name": "The Captain's Chest: The Reef",
+   "group": "World & Traversal",
+   "rarity": "uncommon",
+   "types": [
+    "water"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#0c1c30",
+    "effect": "rain"
+   },
+   "requires": [],
+   "callback": false,
+   "minStage": 1,
+   "intro": "A coral garden. Strange fish drift past, unbothered. Shells and pearls lie on the sand. Your breath ticks down.",
+   "choices": [
+    {
+     "label": "Gather pearls (costs 1 breath).",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "chest-breath",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You spend a breath on your knees in the sand. A Pearl, and under it, a Big Pearl. Then you kick on toward the dark shape of the wreck.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "chest-breath",
+        "amount": -2
+       },
+       {
+        "kind": "item",
+        "id": "pearl",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "big-pearl",
+        "count": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-dive-wreck"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Swim on.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "chest-breath",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The pearls will be here tomorrow. Your air will not. You kick on toward the dark shape of the wreck.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "chest-breath",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-dive-wreck"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Surface.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "chest-breath",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Your chest is burning. You turn for the light and break the surface gasping. Odo hauls you onto the rocks.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-dive-wreck",
+   "name": "The Captain's Chest: The Wreck and the Trench",
+   "group": "World & Traversal",
+   "rarity": "rare",
+   "minStage": 1,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#081428",
+    "effect": "fog"
+   },
+   "stop": "event",
+   "requires": [],
+   "callback": false,
+   "types": [
+    "water",
+    "ghost"
+   ],
+   "intro": "A ship on her side, hold still shut. Beyond her the light fades, and a huge shape moves in the dark. It is a Wailord, asleep. It is not the danger.",
+   "choices": [
+    {
+     "label": "Into the hold.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "chest-breath",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You pull yourself through a split in the hull. The dark inside is complete, and something in it is awake.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "chest-breath",
+        "amount": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "w4-dive-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Into the trench.",
+     "success": {
+      "text": "You swim down beside the sleeping Wailord, close enough to feel its slow heart in the water. Something glints in the silt by its side. You take it with your last breath and kick for the light.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "chest-breath",
+        "amount": -99
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Surface.",
+     "success": {
+      "text": "Enough. You turn for the light. The Silver Morrow keeps her chest.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "w4-dive-2",
+   "name": "The Captain's Chest: The Guardian",
+   "group": "World & Traversal",
+   "rarity": "uncommon",
+   "types": [
+    "water",
+    "ghost"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#081428",
+    "effect": "fog"
+   },
+   "requires": [],
+   "callback": false,
+   "minStage": 1,
+   "intro": "Inside the wreck, a captain's chest, and something guarding it in the dark: an anchor with an eye. The Dhelmise was this ship's anchor. It wraps its chain around the chest. It looks at your lead.",
+   "choices": [
+    {
+     "label": "Let my Water-type carry it.",
+     "requires": [
+      {
+       "kind": "leadType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Your lead swims forward alone. The Dhelmise studies it, a creature of the sea, the same as the ship was. Link by link, the chain lets go. The chest comes up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "chest-carried",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fb-chest-surface"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It will not let a stranger of the land take what the sea was given. The chain lashes out.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "dhelmise"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "chest-forced",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "fb-chest-surface"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You let go of the chest. The Dhelmise nods, once, the way a sailor nods to another. You surface with empty hands and a strange light feeling.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "odo",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "chest-odo",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"Something wouldn't let me take it.\" Odo was right. It is looking at your lead, not at you.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "fb-chest-surface",
+   "name": "The Captain's Chest: On the Surface",
+   "group": "World & Traversal",
+   "rarity": "uncommon",
+   "types": [
+    "water"
+   ],
+   "requires": [],
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#0c1c30",
+    "effect": "glint"
+   },
+   "intro": "The chest breaks the surface. Odo wades in to his chest to help you land it, laughing and swearing. The water behind you boils: the Dhelmise has followed you up, and it is angry. It circles once, and goes.",
+   "choices": [
+    {
+     "label": "Open the chest.",
+     "success": {
+      "text": "The captain's log. A compass, still true. And a letter to his crew: \"If the anchor holds, we're home. If it doesn't, we're the sea's.\"",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "captains-compass",
+        "name": "The Captain's Compass",
+        "effects": [
+         {
+          "kind": "preview",
+          "what": "wild"
+         }
+        ]
+       },
+       {
+        "kind": "foresight",
+        "columns": 4
+       },
+       {
+        "kind": "item",
+        "id": "gold-bottle-cap",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "chest-opened",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "chest-carried",
+         "atLeast": 1,
+         "atMost": 99
+        },
+        {
+         "kind": "mentor",
+         "id": "ravi-ironhand"
+        }
+       ],
+       "text": "The captain's log. A compass, still true. And a letter to his crew: \"If the anchor holds, we're home. If it doesn't, we're the sea's.\" You read it aloud, for the anchor. It listens, then sinks away to wait for a keel that needs it. Captain Ravi takes the compass from you. He reads the letter. He says nothing for a long time. Then he closes your fingers around the compass. \"He would want it at sea.\"",
+       "effects": [
+        {
+         "kind": "relic",
+         "id": "captains-compass",
+         "name": "The Captain's Compass",
+         "effects": [
+          {
+           "kind": "preview",
+           "what": "wild"
+          }
+         ]
+        },
+        {
+         "kind": "foresight",
+         "columns": 4
+        },
+        {
+         "kind": "item",
+         "id": "gold-bottle-cap",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "chest-opened",
+         "amount": 1
+        },
+        {
+         "kind": "mentor",
+         "trust": 8
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "chest-carried",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The captain's log. A compass, still true. And a letter to his crew: \"If the anchor holds, we're home. If it doesn't, we're the sea's.\" You read it aloud, for the anchor. It listens, then sinks away to wait for a keel that needs it.",
+       "effects": [
+        {
+         "kind": "relic",
+         "id": "captains-compass",
+         "name": "The Captain's Compass",
+         "effects": [
+          {
+           "kind": "preview",
+           "what": "wild"
+          }
+         ]
+        },
+        {
+         "kind": "foresight",
+         "columns": 4
+        },
+        {
+         "kind": "item",
+         "id": "gold-bottle-cap",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "chest-opened",
+         "amount": 1
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "mentor",
+         "id": "ravi-ironhand"
+        }
+       ],
+       "text": "The captain's log. A compass, still true. And a letter to his crew: \"If the anchor holds, we're home. If it doesn't, we're the sea's.\" Captain Ravi takes the compass from you. He reads the letter. He says nothing for a long time. Then he closes your fingers around the compass. \"He would want it at sea.\"",
+       "effects": [
+        {
+         "kind": "relic",
+         "id": "captains-compass",
+         "name": "The Captain's Compass",
+         "effects": [
+          {
+           "kind": "preview",
+           "what": "wild"
+          }
+         ]
+        },
+        {
+         "kind": "foresight",
+         "columns": 4
+        },
+        {
+         "kind": "item",
+         "id": "gold-bottle-cap",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "chest-opened",
+         "amount": 1
+        },
+        {
+         "kind": "mentor",
+         "trust": 8
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "remembers": [
+    {
+     "id": "carried-ravi",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "chest-carried",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "mentor",
+       "id": "ravi-ironhand"
+      }
+     ],
+     "intro": "The chest breaks the surface. Odo wades in to his chest to help you land it, laughing and swearing. Behind you the Dhelmise surfaces too, quiet, its chain trailing. It is offering itself. Captain Ravi has gone very still: the name on the lid is his father's.",
+     "hide": [],
+     "addChoices": [
+      {
+       "label": "Open the chest. Take the anchor aboard.",
+       "success": {
+        "text": "The captain's log. A compass, still true. And a letter to his crew: \"If the anchor holds, we're home. If it doesn't, we're the sea's.\" The Dhelmise hooks itself gently over your arm. It held one ship to the end. It wants another.",
+        "effects": [
+         {
+          "kind": "relic",
+          "id": "captains-compass",
+          "name": "The Captain's Compass",
+          "effects": [
+           {
+            "kind": "preview",
+            "what": "wild"
+           }
+          ]
+         },
+         {
+          "kind": "foresight",
+          "columns": 4
+         },
+         {
+          "kind": "item",
+          "id": "gold-bottle-cap",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "chest-opened",
+          "amount": 1
+         },
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "dhelmise"
+          ],
+          "types": [],
+          "levelBonus": 2,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "chest-dhelmise",
+          "amount": 1
+         },
+         {
+          "kind": "leavePseudo"
+         }
+        ]
+       },
+       "branches": [
+        {
+         "when": [
+          {
+           "kind": "mentor",
+           "id": "ravi-ironhand"
+          }
+         ],
+         "text": "The captain's log. A compass, still true. And a letter to his crew: \"If the anchor holds, we're home. If it doesn't, we're the sea's.\" The Dhelmise hooks itself gently over your arm. It held one ship to the end. It wants another. Captain Ravi takes the compass from you. He reads the letter. He says nothing for a long time. Then he closes your fingers around the compass. \"He would want it at sea.\"",
+         "effects": [
+          {
+           "kind": "relic",
+           "id": "captains-compass",
+           "name": "The Captain's Compass",
+           "effects": [
+            {
+             "kind": "preview",
+             "what": "wild"
+            }
+           ]
+          },
+          {
+           "kind": "foresight",
+           "columns": 4
+          },
+          {
+           "kind": "item",
+           "id": "gold-bottle-cap",
+           "count": 1
+          },
+          {
+           "kind": "flag",
+           "key": "chest-opened",
+           "amount": 1
+          },
+          {
+           "kind": "mentor",
+           "trust": 8
+          },
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "dhelmise"
+           ],
+           "types": [],
+           "levelBonus": 2,
+           "shinyMultiplier": 1
+          },
+          {
+           "kind": "flag",
+           "key": "chest-dhelmise",
+           "amount": 1
+          },
+          {
+           "kind": "leavePseudo"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "carried",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "chest-carried",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The chest breaks the surface. Odo wades in to his chest to help you land it, laughing and swearing. Behind you the Dhelmise surfaces too, quiet, its chain trailing. It is offering itself.",
+     "hide": [],
+     "addChoices": [
+      {
+       "label": "Open the chest. Take the anchor aboard.",
+       "success": {
+        "text": "The captain's log. A compass, still true. And a letter to his crew: \"If the anchor holds, we're home. If it doesn't, we're the sea's.\" The Dhelmise hooks itself gently over your arm. It held one ship to the end. It wants another.",
+        "effects": [
+         {
+          "kind": "relic",
+          "id": "captains-compass",
+          "name": "The Captain's Compass",
+          "effects": [
+           {
+            "kind": "preview",
+            "what": "wild"
+           }
+          ]
+         },
+         {
+          "kind": "foresight",
+          "columns": 4
+         },
+         {
+          "kind": "item",
+          "id": "gold-bottle-cap",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "chest-opened",
+          "amount": 1
+         },
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "dhelmise"
+          ],
+          "types": [],
+          "levelBonus": 2,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "chest-dhelmise",
+          "amount": 1
+         },
+         {
+          "kind": "leavePseudo"
+         }
+        ]
+       },
+       "branches": [
+        {
+         "when": [
+          {
+           "kind": "mentor",
+           "id": "ravi-ironhand"
+          }
+         ],
+         "text": "The captain's log. A compass, still true. And a letter to his crew: \"If the anchor holds, we're home. If it doesn't, we're the sea's.\" The Dhelmise hooks itself gently over your arm. It held one ship to the end. It wants another. Captain Ravi takes the compass from you. He reads the letter. He says nothing for a long time. Then he closes your fingers around the compass. \"He would want it at sea.\"",
+         "effects": [
+          {
+           "kind": "relic",
+           "id": "captains-compass",
+           "name": "The Captain's Compass",
+           "effects": [
+            {
+             "kind": "preview",
+             "what": "wild"
+            }
+           ]
+          },
+          {
+           "kind": "foresight",
+           "columns": 4
+          },
+          {
+           "kind": "item",
+           "id": "gold-bottle-cap",
+           "count": 1
+          },
+          {
+           "kind": "flag",
+           "key": "chest-opened",
+           "amount": 1
+          },
+          {
+           "kind": "mentor",
+           "trust": 8
+          },
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "dhelmise"
+           ],
+           "types": [],
+           "levelBonus": 2,
+           "shinyMultiplier": 1
+          },
+          {
+           "kind": "flag",
+           "key": "chest-dhelmise",
+           "amount": 1
+          },
+          {
+           "kind": "leavePseudo"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ravi",
+     "when": [
+      {
+       "kind": "mentor",
+       "id": "ravi-ironhand"
+      }
+     ],
+     "notice": "Captain Ravi has gone very still. The name on the lid is his father's.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "whispering-grove-entrance",
+   "name": "The Whispering Grove",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "grass",
+    "fairy"
+   ],
+   "minStage": 6,
+   "scene": {
+    "cast": [],
+    "tint": "#1a2d1c",
+    "effect": "fog"
+   },
+   "requires": [],
+   "callback": false,
+   "room": false,
+   "pseudo": true,
+   "intro": "A grove where the wind seems to be saying your name. Every tree has a face if you look long enough. The faces are the faces of Pokémon. One looks like one you had.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "The wind drops as you step under the branches, the way a room goes quiet when the person being talked about walks in.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "grove-in",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "whispering-grove-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Listen to the names.",
+     "success": {
+      "text": "You stand still and listen. The wind says the names of your team, one by one, softly, the way you say them yourself when nobody is near. Then you go in.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "grove-in",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "grove-listened",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "whispering-grove-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You do not want to know what else it knows. The wind says your name once more, behind you, and lets you go.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "whispering-grove-1",
+   "name": "The Whispering Grove: The Lullaby",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "grass",
+    "fairy"
+   ],
+   "minStage": 1,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a2d1c",
+    "effect": "fog"
+   },
+   "requires": [],
+   "callback": false,
+   "intro": "A ring of mossy stones. Something is humming a lullaby. It is a Jigglypuff, old, singing to nobody. Every wild Pokémon in the ring is asleep.",
+   "choices": [
+    {
+     "label": "Sit and listen.",
+     "success": {
+      "text": "You sit on a stone. The song is gentle, and older than the singer. Your team's breathing slows to match it. When it ends, they are better.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "whispering-grove-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wake them.",
+     "success": {
+      "text": "You clap your hands. Three pairs of eyes open, grumpy, and in no mood to be reasoned with.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "triples",
+       "species": [],
+       "types": [
+        "grass",
+        "fairy"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "whispering-grove-2"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Sing back.",
+     "requires": [
+      {
+       "kind": "partyMoveFlag",
+       "flag": "sound"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon answers the lullaby, note for note. The old Jigglypuff stops, astonished. Then it smiles, and bows you through the ring.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "grove-sang",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "whispering-grove-2"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "listened",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "grove-listened",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The lullaby has words, if you listen the way you listened to the wind. They are names too.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "whispering-grove-2",
+   "name": "The Whispering Grove: The Root Guardian",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "grass",
+    "fairy"
+   ],
+   "minStage": 1,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a2d1c",
+    "effect": "fog"
+   },
+   "requires": [],
+   "callback": false,
+   "intro": "A tree older than the grove. A guardian wakes in its roots: a Trevenant. Its voice is in the leaves. \"You have come for one of them. They are sleeping. They do not need you.\"",
+   "choices": [
+    {
+     "label": "I just want to see.",
+     "success": {
+      "text": "The Trevenant considers you with its one red eye. Then the roots draw aside. It follows you in, watching.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "whispering-grove-final"
+       }
+      ]
+     }
+    },
+    {
+     "label": "They were mine.",
+     "success": {
+      "text": "Trevenant: \"Were.\" The roots come up out of the ground.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "trevenant"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "grove-fought",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "whispering-grove-final"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "I'm sorry.",
+     "success": {
+      "text": "Trevenant: \"Tell them, not me.\" But the roots draw aside, gently, and it does not follow.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "grove-sorry",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "whispering-grove-final"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "whispering-grove-final",
+   "name": "The Whispering Grove: The Sleeper",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "grass",
+    "fairy"
+   ],
+   "minStage": 1,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a2d1c",
+    "effect": "glint"
+   },
+   "requires": [],
+   "callback": false,
+   "intro": "A clearing where the light falls in a perfect circle. A Pokémon sleeps at its centre. It is the same kind as your starter, a wild one, small, with a leaf caught on its ear. It opens one eye.",
+   "choices": [
+    {
+     "label": "Say its name.",
+     "success": {
+      "text": "You say the only name you have for one of its kind. It wakes fully. It is not yours, and never was. But it walks over to your starter, and they touch noses, like two letters of the same word.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "grove-named",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit beside it.",
+     "success": {
+      "text": "You sit. It looks at you, decides something, and goes back to sleep against your leg. You stay until the circle of light has crossed the whole clearing. Nobody hurries you.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "grove-sat",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it sleeping.",
+     "success": {
+      "text": "You back out of the light. The eye closes. Behind you, in a thousand leaves, the grove whispers: thank you. Something small and silver hangs from a low branch, where you cannot miss it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "soothe-bell",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "grove-left",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "sorry",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "grove-sorry",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"Tell them, not me,\" the Trevenant said. The sleeper is listening.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "windswept-spire-entrance",
+   "name": "The Windswept Spire",
+   "group": "Landmarks",
+   "rarity": "rare",
+   "types": [
+    "flying",
+    "dragon"
+   ],
+   "minStage": 5,
+   "scene": {
+    "cast": [],
+    "tint": "#20283a",
+    "effect": "fog"
+   },
+   "requires": [],
+   "callback": false,
+   "room": false,
+   "pseudo": true,
+   "intro": "A spire of rock rising into the clouds, a stair carved around it. The wind is loud. Carved at the foot are the names of everyone who reached the top. The newest is forty years old.",
+   "choices": [
+    {
+     "label": "Climb.",
+     "success": {
+      "text": "You put your hand on the first step. The stone is worn into a hollow by everyone who did the same.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "spire-in",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "windswept-spire-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the names.",
+     "success": {
+      "text": "Hundreds, in a dozen hands. Near the bottom, cut deep and careful: OSWIN & EMBER. Two names, one chisel. You start to climb.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "spire-in",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "spire-oswin",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "windswept-spire-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "The wind is too loud today. The names will wait. They have waited forty years.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "ashes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ranger-spire",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The tin box is in your bag. \"She loved the Windswept Spire,\" Oswin said. \"I can't climb it anymore.\"",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "windswept-spire-1",
+   "name": "The Windswept Spire: The Sideways Wind",
+   "group": "Landmarks",
+   "rarity": "rare",
+   "types": [
+    "flying",
+    "dragon"
+   ],
+   "minStage": 1,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#20283a",
+    "effect": "fog"
+   },
+   "requires": [],
+   "callback": false,
+   "intro": "A terrace where the wind comes in sideways. You can barely stand. The stair goes on at the far end, forty steps away. It might as well be forty miles.",
+   "choices": [
+    {
+     "label": "Crawl.",
+     "success": {
+      "text": "On your belly, fingers in the cracks, one arm's length at a time. It is slow. It is not dignified. You get there.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "windswept-spire-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a Flying-type shield me.",
+     "pick": {
+      "types": [
+       "flying"
+      ]
+     },
+     "success": {
+      "text": "Your Flying-type spreads its wings on the windward side and walks you across like a sail. It is fast. At the far end it is shaking with the effort.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "picked"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "windswept-spire-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for a lull (a node).",
+     "success": {
+      "text": "You tuck into the rock and wait. An hour. Two. Then the wind drops, all at once, and a flock of wild Swablu drifts across the terrace like blown cloud. You cross behind them.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "windswept-spire-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "windswept-spire-2",
+   "name": "The Windswept Spire: The Nests",
+   "group": "Landmarks",
+   "rarity": "rare",
+   "types": [
+    "flying",
+    "dragon"
+   ],
+   "minStage": 1,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#20283a",
+    "effect": "fog"
+   },
+   "requires": [],
+   "callback": false,
+   "intro": "A ledge crowded with nests. The guardian circles overhead: a Braviary. It dives at you, and pulls up a wing's width away.",
+   "choices": [
+    {
+     "label": "Stand still.",
+     "success": {
+      "text": "You do not move. Not when it dives again, not when the wind of its wings fills your eyes. The Braviary lands. It lets you pass an arm's length from the nests, watching every step.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "spire-still",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "windswept-spire-final"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "region",
+         "ids": [
+          "alola",
+          "galar",
+          "kalos",
+          "paldea"
+         ]
+        }
+       ],
+       "text": "You do not move. Not when it dives again, not when the wind of its wings fills your eyes. The Mandibuzz lands. It lets you pass an arm's length from the nests, watching every step.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "spire-still",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "windswept-spire-final"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "You reach for a Ball. The Braviary does not pull up this time.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "braviary"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "spire-fought",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "windswept-spire-final"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Back away from the nests.",
+     "success": {
+      "text": "You edge back until your heels find the drop. The Braviary is satisfied. The way round is a ledge the width of your boot, and you take it facing the rock.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "windswept-spire-final"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "region",
+         "ids": [
+          "alola",
+          "galar",
+          "kalos",
+          "paldea"
+         ]
+        }
+       ],
+       "text": "You edge back until your heels find the drop. The Mandibuzz is satisfied. The way round is a ledge the width of your boot, and you take it facing the rock.",
+       "effects": [
+        {
+         "kind": "addEvent",
+         "eventId": "windswept-spire-final"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "remembers": [
+    {
+     "id": "mandibuzz",
+     "when": [
+      {
+       "kind": "region",
+       "ids": [
+        "alola",
+        "galar",
+        "kalos",
+        "paldea"
+       ]
+      }
+     ],
+     "intro": "A ledge crowded with nests. The guardian circles overhead: a Mandibuzz. It dives at you, and pulls up a wing's width away.",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Battle it.",
+       "success": {
+        "text": "You reach for a Ball. The Mandibuzz does not pull up this time.",
+        "effects": [],
+        "battle": {
+         "kind": "wild",
+         "species": [
+          "mandibuzz"
+         ],
+         "types": [],
+         "levelBonus": 2,
+         "shinyMultiplier": 1,
+         "win": [
+          {
+           "kind": "flag",
+           "key": "spire-fought",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "windswept-spire-final"
+          }
+         ],
+         "pseudo": true
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "windswept-spire-final",
+   "name": "The Windswept Spire: The Feather",
+   "group": "Landmarks",
+   "rarity": "rare",
+   "types": [
+    "flying",
+    "dragon"
+   ],
+   "minStage": 1,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#20283a",
+    "effect": "glint"
+   },
+   "requires": [],
+   "callback": false,
+   "intro": "The top, above the cloud line. A single shrine, and a single feather turning in the wind. It is the feather of this region's Legendary bird. The wind stops, for the first time since the foot of the stair.",
+   "choices": [
+    {
+     "label": "Take the feather.",
+     "success": {
+      "text": "It is warm, and it weighs nothing. Somewhere far off, something that owns the sky notices that you have it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-bird",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "spire-feather",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "spire-feather",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it at the shrine.",
+     "success": {
+      "text": "You set a stone on its quill so it will not blow away, and bow. On the way down a shadow crosses the stair, twice: the bird itself, circling the spire, seeing you off.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-bird",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "spire-left",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carve my name.",
+     "success": {
+      "text": "At the foot of the stair you find a clean place and cut your name under forty years of silence. The newest name on the Spire is yours now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-bird",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "spire-carved",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "ashes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ranger-spire",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The tin box is in your bag. This is where she wanted to be.",
+     "hide": [],
+     "addChoices": [
+      {
+       "label": "Scatter Ember's ashes.",
+       "success": {
+        "text": "You open the tin box. For a moment nothing happens. Then the wind comes back, gently, and takes her: up, and out, over the whole forest she ran in for forty years. High above, a great bird turns once in the light, and is gone.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sign-bird",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "spire-ember",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Ember's ashes were scattered from the top of the Windswept Spire.",
+          "importance": 85
+         },
+         {
+          "kind": "leavePseudo"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "oswin",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "spire-oswin",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "OSWIN & EMBER, at the foot of the stair. When you see the old ranger again, you can tell him his name is still there.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,3 @@
+[
+  { "id": "spire-feather", "name": "Spire Feather", "family": "Catalog Overhaul: Story Families 6", "description": "A feather of the region's Legendary bird, taken from the shrine on the Windswept Spire. Flying moves +20%", "rarity": "rare", "stacksOn": "pokemon", "max": 1, "how": "held", "icon": "library/prettyfeather", "status": "supported", "effect": { "kind": "held", "hooks": [{ "hook": "typePower", "types": ["flying"], "percent": 20 }] } }
+]

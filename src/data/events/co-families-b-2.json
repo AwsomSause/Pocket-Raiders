@@ -1,0 +1,1621 @@
+{
+ "catalogOverhaul": "families-b",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "ev-pokemon-migration",
+   "name": "The One Far From Home",
+   "group": "World & Traversal",
+   "rarity": "rare",
+   "tags": [
+    "Pokémon",
+    "Region",
+    "Exploration"
+   ],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "vulpix-alola",
+    "tint": "#3a4a34",
+    "effect": "none"
+   },
+   "callback": false,
+   "room": false,
+   "minStage": 2,
+   "intro": "A long line of Vulpix crosses the hills, red as embers. One in the herd is white as snow: an Alolan Vulpix, a thousand miles from any mountain it knows. The herd's leader nudges it along. It keeps stopping to look at the sky in the wrong direction. A herder on a stile: \"Joined us last spring. Followed a storm, I reckon. It doesn't know where it is.\"",
+   "choices": [
+    {
+     "label": "Escort it to its herd (two nodes).",
+     "success": {
+      "text": "You walk beside it for two days, toward the weather it keeps looking at. On the second evening something that has been following the herd decides the straggler is alone.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "dark"
+       ],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "big-malasada",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "farhome-escorted",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "farhome-done",
+         "amount": 1
+        }
+       ]
+      }
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "faller-rank",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You walk beside it for two days, toward the weather it keeps looking at. On the second evening something that has been following the herd decides the straggler is alone. Your Ultra Beast has not taken its eyes off the stranger once. It knows what it is to be the wrong shape for the sky.",
+       "effects": [
+        {
+         "kind": "takeNode",
+         "nodes": 2
+        },
+        {
+         "kind": "friendship",
+         "amount": 5,
+         "who": "top"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You step between it and the herd. It does not run. It only looks at you, then at the sky in the wrong direction, then at you again.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "vulpix-alola"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "farhome-kept",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "farhome-done",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let the herd decide.",
+     "success": {
+      "text": "The herd's leader steps between you and the stranger, and does not move. The herd closes around it like water around a stone. It will be the wrong colour among them for the rest of its life, and it will not be alone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "farhome-herd",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "farhome-done",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "region",
+         "ids": [
+          "alola"
+         ]
+        },
+        {
+         "kind": "partySpecies",
+         "species": "vulpix-alola"
+        }
+       ],
+       "text": "The herd's leader steps between you and the stranger. Then it sees your Alolan Vulpix, one of its own, standing calm at your side. It looks for a long time. It steps back. The stranger walks over to you, and does not look at the sky again.",
+       "effects": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "vulpix"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "flag",
+         "key": "farhome-herd",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "farhome-done",
+         "amount": 1
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "region",
+         "ids": [
+          "alola"
+         ]
+        }
+       ],
+       "text": "The herd's leader steps between you and the stranger, and does not move. The herd closes around it like water around a stone. It will be the wrong colour among them for the rest of its life, and it will not be alone.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "farhome-herd",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "farhome-done",
+         "amount": 1
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "partySpecies",
+         "species": "vulpix"
+        }
+       ],
+       "text": "The herd's leader steps between you and the stranger. Then it sees your Vulpix, one of its own, standing calm at your side. It looks for a long time. It steps back. The stranger walks over to you, and does not look at the sky again.",
+       "effects": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "vulpix-alola"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "flag",
+         "key": "farhome-herd",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "farhome-done",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "remembers": [
+    {
+     "id": "alola",
+     "when": [
+      {
+       "kind": "region",
+       "ids": [
+        "alola"
+       ]
+      }
+     ],
+     "intro": "A long line of Alolan Vulpix crosses the snowline, white as the drifts. One in the herd is red as an ember: a Vulpix from across the sea, a thousand miles from any meadow it knows. The herd's leader nudges it along. It keeps stopping to look at the sky in the wrong direction. A herder on a stile: \"Joined us last spring. Followed a storm, I reckon. It doesn't know where it is.\"",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Escort it to its herd (two nodes).",
+       "success": {
+        "text": "You walk beside it for two days, toward the weather it keeps looking at. On the second evening something that has been following the herd decides the straggler is alone.",
+        "effects": [
+         {
+          "kind": "takeNode",
+          "nodes": 2
+         }
+        ],
+        "battle": {
+         "kind": "wild",
+         "species": [],
+         "types": [
+          "dark"
+         ],
+         "levelBonus": 2,
+         "shinyMultiplier": 1,
+         "win": [
+          {
+           "kind": "item",
+           "id": "pewter-crunchies",
+           "count": 1
+          },
+          {
+           "kind": "flag",
+           "key": "farhome-escorted",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "farhome-done",
+           "amount": 1
+          }
+         ]
+        }
+       },
+       "branches": [
+        {
+         "when": [
+          {
+           "kind": "flag",
+           "key": "faller-rank",
+           "atLeast": 1,
+           "atMost": 99
+          }
+         ],
+         "text": "You walk beside it for two days, toward the weather it keeps looking at. On the second evening something that has been following the herd decides the straggler is alone. Your Ultra Beast has not taken its eyes off the stranger once. It knows what it is to be the wrong shape for the sky.",
+         "effects": [
+          {
+           "kind": "takeNode",
+           "nodes": 2
+          },
+          {
+           "kind": "friendship",
+           "amount": 5,
+           "who": "top"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "label": "Keep it.",
+       "success": {
+        "text": "You step between it and the herd. It does not run. It only looks at you, then at the sky in the wrong direction, then at you again.",
+        "effects": [],
+        "battle": {
+         "kind": "wild",
+         "species": [
+          "vulpix"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "win": [
+          {
+           "kind": "flag",
+           "key": "farhome-kept",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "farhome-done",
+           "amount": 1
+          }
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "ub",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "faller-rank",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Your Ultra Beast has gone very still. It is watching the stranger, and only the stranger.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "lighthouse",
+   "name": "The Light at the Harbour",
+   "group": "Places and weather",
+   "rarity": "uncommon",
+   "types": [
+    "electric",
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "ampharos",
+    "tint": "#102030",
+    "effect": "fog"
+   },
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "callback": false,
+   "room": false,
+   "minStage": 3,
+   "intro": "A harbour at night. The lighthouse lamp is out. Ships drift outside the reef, sounding their horns at nothing. The keeper's daughter, Dina, meets you on the stairs: \"It's Amphy. She's sick. She can't light it.\" In the lamp room an Ampharos lies on blankets, the jewel on her tail dim. \"The medicine's on an island across the bay. The ferry's out. Three ships are waiting for the light.\"",
+   "choices": [
+    {
+     "label": "Fetch the medicine (two nodes).",
+     "success": {
+      "text": "Dina unties her father's skiff with shaking hands. The bay is black and steep. Your best swimmer or flier takes the lead, and you follow it out into the weather.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "front",
+        "weather": "rain",
+        "columns": 3
+       },
+       {
+        "kind": "flag",
+        "key": "harbour-medicine",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "harbour-sailed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Light the lamp myself.",
+     "pick": {
+      "types": [
+       "electric"
+      ]
+     },
+     "success": {
+      "text": "Your Electric-type climbs into the great lens and gives it everything. The beam swings out over the water. One by one, three ships come in under it. Amphy watches from her blankets, too weak to lift her head, and her tail glows faintly in answer. At dawn Dina presses her thanks into your hands.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "harbour-lamp",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "cell-battery",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "electric-gem",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "harbour-ferry-free",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "harbour-done",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "tide-lamp",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Your Electric-type climbs into the great lens and gives it everything. The beam swings out over the water. One by one, three ships come in under it. Amphy watches from her blankets, too weak to lift her head, and her tail glows faintly in answer. At midnight, far down the coast, another lamp answers: the Sunken Lighthouse, the one you relit. The two lights flash to each other across the dark, like old friends who have just found out the other is still alive.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "harbour-lamp",
+         "amount": 1
+        },
+        {
+         "kind": "item",
+         "id": "cell-battery",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "electric-gem",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "harbour-ferry-free",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "harbour-done",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Both (two nodes).",
+     "pick": {
+      "types": [
+       "electric"
+      ]
+     },
+     "success": {
+      "text": "One of yours stays in the lens, burning steady, holding three ships off the rocks. You take the skiff out alone into the weather. Behind you the beam sweeps the water, and every time it passes, you know who is sending it.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "front",
+        "weather": "rain",
+        "columns": 3
+       },
+       {
+        "kind": "flag",
+        "key": "harbour-both",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "harbour-sailed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fb-harbour-island",
+   "name": "The Light at the Harbour: The Island",
+   "group": "Places and weather",
+   "rarity": "uncommon",
+   "types": [
+    "electric",
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "harbour-sailed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "harbour-dose",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "room": false,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2c38",
+    "effect": "rain"
+   },
+   "intro": "The island, at last. A shuttered pharmacy with one lamp burning. The old pharmacist turns a small brown bottle over in his fingers. \"For an Ampharos? I've only one dose. There's a Pikachu in town with the same fever.\" Through the back door you can see it: a small yellow shape under a blanket, and a child asleep in the chair beside it.",
+   "choices": [
+    {
+     "label": "Ampharos.",
+     "success": {
+      "text": "You take the bottle. The child in the chair does not wake. The pharmacist nods, slowly. \"It'll pull through. Slower. They mostly do.\" You do not look through the back door again on the way out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "harbour-dose",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "harbour-dose-amphy",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "crisis-fever-on",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You take the bottle. The child in the chair does not wake. The pharmacist nods, slowly. \"It'll pull through. Slower. They mostly do.\" You do not look through the back door again on the way out. It is the same fever that is in the kennels and the roosts. One more place it did not take.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "harbour-dose",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "harbour-dose-amphy",
+         "amount": 1
+        },
+        {
+         "kind": "crisis",
+         "amount": -1
+        },
+        {
+         "kind": "flag",
+         "key": "crisis-fever-harbour",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "The Pikachu.",
+     "success": {
+      "text": "You push the bottle back across the counter. The pharmacist looks at you for a long moment, then carries it through the back door. You row home with empty hands, working out what to say to Dina.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "harbour-dose",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "harbour-dose-pikachu",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Split the dose.",
+     "success": {
+      "text": "The pharmacist measures it out with a hand steadier than his voice. \"Half each. It'll be slow for both. But it'll be both.\" He stoppers your half and wraps it in a clean cloth.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "harbour-dose",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "harbour-dose-split",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "crisis-fever-on",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The pharmacist measures it out with a hand steadier than his voice. \"Half each. It'll be slow for both. But it'll be both.\" He stoppers your half and wraps it in a clean cloth. It is the same fever that is in the kennels and the roosts. One more place it did not take.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "harbour-dose",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "harbour-dose-split",
+         "amount": 1
+        },
+        {
+         "kind": "crisis",
+         "amount": -1
+        },
+        {
+         "kind": "flag",
+         "key": "crisis-fever-harbour",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "remembers": [
+    {
+     "id": "fever",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "crisis-fever-on",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know this fever. And you know the handwriting on the label: the medicine is Ranger Ines's own.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "fb-harbour-return",
+   "name": "The Light at the Harbour: The Lamp",
+   "group": "Places and weather",
+   "rarity": "uncommon",
+   "types": [
+    "electric",
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "harbour-dose",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "harbour-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "room": false,
+   "scene": {
+    "cast": [],
+    "pokemon": "ampharos",
+    "tint": "#102030",
+    "effect": "glint"
+   },
+   "intro": "The harbour again. Dina gives Amphy the medicine a drop at a time. By evening the jewel on her tail is the colour of a coal you could blow back to life. She gets up. She climbs the stairs herself. Out past the reef, word comes back that the Pikachu on the island is mending too, slowly, a little more each day.",
+   "choices": [
+    {
+     "label": "Watch her light the lamp.",
+     "success": {
+      "text": "The beam swings out over the water, steadier than any machine. Three ships come in under it. Dina cannot stop crying, and cannot stop laughing, and gives you everything in her father's drawer that she thinks a trainer could use. \"And the ferry's yours. For good. I'll tell them myself.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "cell-battery",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "electric-gem",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "harbour-ferry-free",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "harbour-done",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "tide-lamp",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The beam swings out over the water, steadier than any machine. Three ships come in under it. Dina gives you everything in her father's drawer that she thinks a trainer could use. \"And the ferry's yours. For good.\" At midnight, far down the coast, another lamp answers: the Sunken Lighthouse, the one you relit. The two lights flash to each other across the dark, like old friends who have just found out the other is still alive.",
+       "effects": [
+        {
+         "kind": "item",
+         "id": "cell-battery",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "electric-gem",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "harbour-ferry-free",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "harbour-done",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "remembers": [
+    {
+     "id": "pikachu",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "harbour-dose-pikachu",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The harbour again. You tell Dina the truth. She says nothing. Amphy has been listening. She gets up, sicker than before, and climbs the stairs on legs that barely hold her. She lights the lamp one more time, with the last of her strength. Then she sleeps for three days, and wakes up hungry.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "split",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "harbour-dose-split",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The harbour again. Half a dose is slow medicine. For the nights in between, your own Electric-type sits in the lens and holds the beam, while Amphy watches from her blankets and learns its rhythm. Tonight, at last, she stands up. Word comes from the island: the Pikachu is standing too.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "old-foe-returns",
+   "name": "The One That Beat You",
+   "group": "World Callbacks",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "oldFoe"
+    },
+    {
+     "kind": "flag",
+     "key": "foe-stalking",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "foe-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1d1d",
+    "effect": "fog"
+   },
+   "callback": false,
+   "room": false,
+   "intro": "A familiar cry from the tall grass. A wild Pokémon that knocked out one of your team earlier in this run is back, and it is not backing down. It is bigger now. There is a scar where your Pokémon hit it. It looks straight at the one it beat.",
+   "choices": [
+    {
+     "label": "Send out the one it beat.",
+     "pick": {},
+     "success": {
+      "text": "Your Pokémon walks out alone. It is shaking. It does not stop. The two of them look at each other across the grass, and everything else goes quiet.",
+      "effects": [
+       {
+        "kind": "leadPicked"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "recall": true,
+       "species": [],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "friendship",
+         "amount": 10,
+         "who": "picked"
+        },
+        {
+         "kind": "flag",
+         "key": "foe-rematch",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "fb-foe-after"
+        }
+       ],
+       "rule": {
+        "noSwitch": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Send out my strongest.",
+     "success": {
+      "text": "No sentiment. You send out your best. The wild one bares its teeth: it expected nothing else from you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "recall": true,
+       "species": [],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "foe-fought",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "fb-foe-after"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back away.",
+     "success": {
+      "text": "You back away, slowly. It lets you. But when you look over your shoulder an hour later, there is a shape on the ridge, keeping pace.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "foe-stalking",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "grave",
+     "when": [
+      {
+       "kind": "memorial",
+       "atLeast": 1
+      }
+     ],
+     "notice": "You have buried a Pokémon on this road. The wild one carries a scar from that fight too. If there is a grave, it knows where.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "fb-foe-stalks",
+   "name": "The One That Beat You: Still Following",
+   "group": "World Callbacks",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "oldFoe"
+    },
+    {
+     "kind": "flag",
+     "key": "foe-stalking",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "foe-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "room": false,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1d1d",
+    "effect": "fog"
+   },
+   "intro": "It has followed you for days. You have seen it on ridges, at the edge of firelight, once in the reflection of a stream. Now it steps out onto the road in front of you. The scar is the same. So is the look.",
+   "choices": [
+    {
+     "label": "Send out the one it beat.",
+     "pick": {},
+     "success": {
+      "text": "Your Pokémon walks out alone. It is shaking. It does not stop. The two of them look at each other across the grass, and everything else goes quiet.",
+      "effects": [
+       {
+        "kind": "leadPicked"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "recall": true,
+       "species": [],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "friendship",
+         "amount": 10,
+         "who": "picked"
+        },
+        {
+         "kind": "flag",
+         "key": "foe-rematch",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "fb-foe-after"
+        }
+       ],
+       "rule": {
+        "noSwitch": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Send out my strongest.",
+     "success": {
+      "text": "No sentiment. You send out your best. The wild one bares its teeth: it expected nothing else from you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "recall": true,
+       "species": [],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "foe-fought",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "fb-foe-after"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back away.",
+     "success": {
+      "text": "You back away again. This time it does not follow. At the edge of the region it stops on the last hill and watches you out of sight. Some things are never finished.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "foe-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fb-foe-after",
+   "name": "The One That Beat You: After",
+   "group": "World Callbacks",
+   "rarity": "uncommon",
+   "requires": [],
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1d1d",
+    "effect": "none"
+   },
+   "intro": "It lies down in the flattened grass, breathing hard. It is looking at the Pokémon that beat it now. There is no anger left in the look. It is waiting to find out what happens next.",
+   "choices": [
+    {
+     "label": "Catch it.",
+     "success": {
+      "text": "It does not struggle. It has spent this whole run studying your team's weak places. Now it stands in front of them.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "foe-caught",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "foe-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "It gets up. It nods, the way one fighter nods to another, and walks into the grass without looking back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "foe-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let my Pokémon decide.",
+     "success": {
+      "text": "Your Pokémon looks at it, then at you, then steps back to your side. The wild one understands. It gets up, nods once, and goes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "foe-done",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "foe-rematch",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The one it beat walks up to it, alone. They stand nose to nose. Then your Pokémon turns and walks back to you, and the wild one gets up and follows. They are rivals now. Neither would have it any other way.",
+       "effects": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "flag",
+         "key": "foe-caught",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "foe-rivals",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "foe-done",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "remembers": [
+    {
+     "id": "grave",
+     "when": [
+      {
+       "kind": "memorial",
+       "atLeast": 1
+      }
+     ],
+     "notice": "If you let it go, you think you know where it will walk to. It has a scar from that fight too. It will wait there.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "w4-night-watch",
+   "name": "Who Keeps Watch",
+   "group": "World & Traversal",
+   "types": [],
+   "scene": {
+    "cast": [],
+    "tint": "#0c0c1c",
+    "effect": "fog"
+   },
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "callback": false,
+   "room": false,
+   "minStage": 2,
+   "intro": "Camp for the night. Somebody has to keep watch. The fire is low. The party is tired. One of them stands up, looking at you.",
+   "choices": [
+    {
+     "label": "Pick the watcher.",
+     "pick": {},
+     "success": {
+      "text": "A curious wild Pokémon comes out of the dark and sits down beside your watcher, not too close. Neither makes a sound. They keep the fire together until dawn, and then it is gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "watch-kept",
+        "amount": 1
+       },
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fb-watch-dawn"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "picked",
+         "types": [
+          "fire"
+         ]
+        }
+       ],
+       "text": "Your watcher burns low and steady, and the cold comes to it. Small shapes creep in from the frost to sit in the warmth. By dawn one of them has decided not to leave.",
+       "effects": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [],
+         "types": [
+          "ice",
+          "water"
+         ],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "flag",
+         "key": "watch-kept",
+         "amount": 1
+        },
+        {
+         "kind": "rest"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "fb-watch-dawn"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "picked",
+         "types": [
+          "dark",
+          "ghost"
+         ]
+        }
+       ],
+       "text": "Something is going through your bag. Your watcher lets it get both hands in. Then it is simply there, behind the thief, in the dark it knows better. The thief drops a sack and runs. In the sack: something stolen on this road, days ago.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "lucky-punch",
+          "macho-brace",
+          "smoke-ball"
+         ],
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "watch-kept",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "watch-thief",
+         "amount": 1
+        },
+        {
+         "kind": "rest"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "fb-watch-dawn"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "picked",
+         "types": [
+          "psychic",
+          "fairy"
+         ]
+        }
+       ],
+       "text": "You dream badly. Your watcher sees it happen: sees what you are dreaming, and stands between you and it until morning. Far away, something that lives in bad dreams notices it was noticed.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "telling-darkrai",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "watch-kept",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "watch-dream",
+         "amount": 1
+        },
+        {
+         "kind": "rest"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "fb-watch-dawn"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "picked",
+         "types": [
+          "flying"
+         ]
+        }
+       ],
+       "text": "Something passes overhead, vast and silent. Your watcher looks up and does not cry out. In the morning there is a single feather lying across the ashes, longer than your arm.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "sign-bird",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "watch-kept",
+         "amount": 1
+        },
+        {
+         "kind": "rest"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "fb-watch-dawn"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "picked",
+         "types": [
+          "normal",
+          "fighting"
+         ]
+        }
+       ],
+       "text": "Nothing comes. Nothing at all. Your watcher stands at the edge of the firelight all night with its fists up, ready. At dawn you find it still standing there, fast asleep on its feet.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "watch-kept",
+         "amount": 1
+        },
+        {
+         "kind": "rest"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "fb-watch-dawn"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "fb-watch-dawn",
+   "name": "Who Keeps Watch: At Dawn",
+   "group": "World & Traversal",
+   "rarity": "common",
+   "requires": [],
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3040",
+    "effect": "none"
+   },
+   "intro": "Dawn. The fire is ash. Your watcher turns to you, tired to the bone, and waits to see whether it did well.",
+   "choices": [
+    {
+     "label": "Thank it.",
+     "success": {
+      "text": "You tell it so, out loud, with the others listening. It stands a little straighter. Tired is nothing, next to that.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "picked"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "picked",
+         "starter": true
+        }
+       ],
+       "text": "You tell it so, out loud, with the others listening. Your starter stands a little straighter. Of course it kept watch. It will again.",
+       "effects": [
+        {
+         "kind": "friendship",
+         "amount": 10,
+         "who": "picked"
+        },
+        {
+         "kind": "flag",
+         "key": "watch-starter",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Let it sleep in my bag.",
+     "success": {
+      "text": "You make a nest of spare clothes and lift it in. It is asleep before you close the flap. By the next battle it will be itself again.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "picked"
+       },
+       {
+        "kind": "heal",
+        "share": 1,
+        "who": "picked"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "picked",
+         "starter": true
+        }
+       ],
+       "text": "You make a nest of spare clothes and lift your starter in. It is asleep before you close the flap, one paw still on your wrist. It will keep watch again.",
+       "effects": [
+        {
+         "kind": "friendship",
+         "amount": 5,
+         "who": "picked"
+        },
+        {
+         "kind": "heal",
+         "share": 1,
+         "who": "picked"
+        },
+        {
+         "kind": "flag",
+         "key": "watch-starter",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Get moving.",
+     "success": {
+      "text": "There is road to cover. It falls in behind you without complaint, a step slower than yesterday.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "picked"
+       },
+       {
+        "kind": "damage",
+        "share": 0.2,
+        "who": "picked"
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "picked",
+         "starter": true
+        }
+       ],
+       "text": "There is road to cover. Your starter falls in beside you without complaint, a step slower than yesterday. It will keep watch again tonight, whether you ask or not.",
+       "effects": [
+        {
+         "kind": "friendship",
+         "amount": 5,
+         "who": "picked"
+        },
+        {
+         "kind": "damage",
+         "share": 0.2,
+         "who": "picked"
+        },
+        {
+         "kind": "flag",
+         "key": "watch-starter",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "fb-watch-again",
+   "name": "Who Keeps Watch: Unasked",
+   "group": "World & Traversal",
+   "rarity": "common",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "watch-starter",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "watch-again",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "callback": true,
+   "room": false,
+   "scene": {
+    "cast": [],
+    "tint": "#0c0c1c",
+    "effect": "fog"
+   },
+   "intro": "Camp again. Before you can ask, your starter is already sitting at the edge of the firelight with its back to you, facing the dark. Nobody told it to. It looks over its shoulder once, to make sure you are lying down.",
+   "choices": [
+    {
+     "label": "Let it.",
+     "success": {
+      "text": "You sleep better than you have in weeks. In the morning it is exactly where you left it.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "starter"
+       },
+       {
+        "kind": "flag",
+        "key": "watch-again",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit up with it.",
+     "success": {
+      "text": "You sit down next to it. It leans on you, just slightly. Neither of you sleeps much. Neither of you minds.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "starter"
+       },
+       {
+        "kind": "flag",
+        "key": "watch-again",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
