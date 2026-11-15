@@ -1,11 +1,13 @@
 import { expect, test, type Page } from '@playwright/test';
 import { confirmUntil } from './battleInput';
+import { sceneAfterResult } from './helpers/resultGate';
 
 
 // Milestone 2 in a real browser: the Fight / Bag / Pokémon menu, throwing a
 // ball, the caught-Pokémon decision, and choosing who gets a reward.
 
-const scene = (page: Page) => page.evaluate(() => (window as any).__pkr?.activeScene() ?? null);
+// Reward/Decision results wait for an input now; reading the scene presses through one that is up.
+const scene = (page: Page) => sceneAfterResult(page);
 const run = (page: Page) => page.evaluate(() => (window as any).__pkr.session.run);
 
 async function waitForScene(page: Page, key: string, timeout = 20_000) {
