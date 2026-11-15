@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { createBattle, resolveTurn, type BattleContext } from '../../src/core/battle/engine';
-import { chooseEvent, conditionMet, eventBattleLost, eventBattleWon } from '../../src/core/events';
+import { eligibleEvents, chooseEvent, conditionMet, eventBattleLost, eventBattleWon } from '../../src/core/events';
 import { createPokemon, abilityOf } from '../../src/core/pokemon';
-import { chooseStarter, createRun, debugForceEvent } from '../../src/core/run';
+import { chooseStarter, createRun, debugForceEvent, takeTurn } from '../../src/core/run';
 import { hashSeed, Rng } from '../../src/core/rng';
 import { applyCanonEffect, ghostReturnEvent, ghostReturns, labRetryEvent, leaveCanonStash, nearestBst, restoreStash, ruleEvolution } from '../../src/core/expansion/canonSaffron';
 import { falseSlotFor } from '../../src/core/expansion/labyrinth';
@@ -412,6 +412,39 @@ describe("Sabrina's Labyrinth rebuilt", () => {
     run.expansion!.canon!.labResume = true;
     expect(labRetryEvent(content, run)).toBe(P + 'lab-n4');
     expect(run.expansion!.canon!.lab!.freed).toHaveLength(1);
+  });
+});
+
+describe("Sabrina's Labyrinth: the opening in a normal run", () => {
+  const plain = (seed: string) => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red' }), 0);
+  it('the general opener is a pseudo-stage event any run can draw (no Kanto setting needed)', () => {
+    const ev = content.events.get('ev-sabrina-labyrinth')!;
+    expect(ev.pseudo).toBe(true);
+    expect(ev.canon).toBeFalsy();
+    expect(ev.minStage).toBeLessThanOrEqual(3);
+    const run = plain('LAB-DRAW');
+    run.stage!.index = 3;
+    expect(eligibleEvents(content, run).some((e) => e.id === 'ev-sabrina-labyrinth')).toBe(true);
+  });
+  it('you are sent in with no Pokémon, lose a fight because of it, and the ghost then offers to help', () => {
+    let run = structuredClone(plain('LAB-OPEN'));
+    run.party = [createPokemon(content, 'pikachu', 30, 'a'), createPokemon(content, 'eevee', 30, 'b')];
+    const opener = debugForceEvent(content, structuredClone(run), 'ev-sabrina-labyrinth');
+    const entered = chooseEvent(content, opener.run, opener.sideId, 0);
+    run = structuredClone(entered.run);
+    expect(run.expansion!.canon!.stash).toHaveLength(2);
+    expect(run.party).toHaveLength(1);
+    const first = debugForceEvent(content, run, `${P}lab-lost`);
+    const fight = chooseEvent(content, first.run, first.sideId, 0);
+    expect(fight.battle).toBe(true);
+    expect(fight.run.battle!.eventRule?.noPokemon).toBe(true);
+    const res = takeTurn(content, structuredClone(fight.run), { kind: 'move', index: 0 });
+    expect(res.defeated).toBe(false);
+    expect(res.run.battle).toBeNull();
+    expect(res.run.phase).toBe('map');
+    expect(res.run.expansion!.canon!.lab!.active).toBe(true);
+    const here = res.run.stage!.map.nodes.find((n) => n.id === res.run.stage!.current)!;
+    expect(here.sides.some((sd) => sd.eventId === `${P}lab-ghost`)).toBe(true);
   });
 });
 
