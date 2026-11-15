@@ -11,7 +11,7 @@
 
 import { modifierEventWeight } from './runModifiers';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
-import { PSEUDO } from './dungeon/pseudo';
+import { PSEUDO, enterPseudoStage, leavePseudoStage, routeChainEvent } from './dungeon/pseudo';
 import { addMark, overhaulOf, type FeelingKey } from './rivals/overhaul';
 import { friendName, friendTeam, pseudoRivalBeat } from './rivals/live';
 import { repAtLeast } from './rivals/reputation';
@@ -995,6 +995,10 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'addEvent':
     case 'addEventFrom':
       return 'a new place opens here';
+    case 'enterPseudo':
+      return 'you step into a place with a map of its own';
+    case 'leavePseudo':
+      return 'you walk back out';
     case 'front':
       return `a ${e.weather} front is coming`;
     case 'convoy':
@@ -1483,15 +1487,24 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       celebrateToday(content, run);
       return effectWords(content, e);
     case 'addEvent': {
+      if (routeChainEvent(content, run, e.eventId)) return effectWords(content, e);
       const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
       here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId: e.eventId });
       // The room is seen again later even if it was played before.
       if (run.itemCounters) delete run.itemCounters[`event-seen:${e.eventId}`];
       return effectWords(content, e);
     }
+    case 'enterPseudo': {
+      enterPseudoStage(content, run, e.id);
+      return effectWords(content, e);
+    }
+    case 'leavePseudo':
+      leavePseudoStage(run);
+      return effectWords(content, e);
     case 'addEventFrom': {
-      const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
       const eventId = rng.pick(e.ids);
+      if (routeChainEvent(content, run, eventId)) return effectWords(content, e);
+      const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
       here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId });
       if (run.itemCounters) delete run.itemCounters[`event-seen:${eventId}`];
       return effectWords(content, e);

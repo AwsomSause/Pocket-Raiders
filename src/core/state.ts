@@ -1066,6 +1066,9 @@ export const MapNodeSchema = z.object({
   ace: z.boolean().optional(),
   /** Beta 0.6 B6: this trainer always fights two at a time (region 2 and later). */
   doubles: z.boolean().optional(),
+  /** Pseudo-stage nodes only: the room event (events.json id) that plays when the player reaches this node, and what kind of room it is. */
+  roomEvent: z.string().optional(),
+  roomKind: z.string().optional(),
   /** How the generator made this node, for debugging. */
   note: z.string(),
 });
@@ -1107,6 +1110,8 @@ export const StageStateSchema = z.object({
   obstacles: z.record(z.string(), z.string()).optional(),
   /** Convoy Mode: the escort under your care this stage (null = none). It is delivered at the gym, or lost at 0 health. */
   convoy: z.object({ name: z.string(), hp: z.number().int().min(0), maxHp: z.number().int().min(1) }).nullable().default(null),
+  /** Pseudo-stage (beta 0.7): this stage lives inside one node of the parent stage (`RunState.pseudoParent`). It never counts as a stage or a node. */
+  pseudo: z.object({ id: z.string(), name: z.string(), /** Made from an existing event chain: its events open each other and walk the player along the map. */ chain: z.boolean().optional() }).optional(),
 });
 export type StageState = z.infer<typeof StageStateSchema>;
 
@@ -1412,6 +1417,8 @@ export const RunStateSchema = z.object({
   eventChain: z.object({ eventId: z.string(), choiceIndex: z.number().int().min(0), sideId: z.string(), success: z.boolean(), step: z.number().int().min(0) }).optional(),
   /** The current stage and its map (null only for saves from before stage maps existed). */
   stage: StageStateSchema.nullable(),
+  /** While a pseudo-stage is being played (`stage.pseudo`), the real stage it sits inside; it comes back when the pseudo-stage ends. */
+  pseudoParent: StageStateSchema.optional(),
   /** Themes and bosses (gym leaders, Elite Four, champions) already used this run (they never repeat, D6). */
   usedThemes: z.array(z.string()),
   usedLeaders: z.array(z.string()),

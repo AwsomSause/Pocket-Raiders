@@ -3140,6 +3140,10 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Exploration: another event stop opens beside this node (a next room of a landmark, a follow-up scene). */
   z.object({ kind: z.literal('addEvent'), eventId: z.string().min(1) }),
   /** Exploration: like addEvent, but the next room is one of these, picked by the event's roll (a Mystery Dungeon floor). */
+  /** Pseudo-stage: step into a pseudo-stage (src/data/pseudoStages.json) from this node; it plays like a stage and returns here. */
+  z.object({ kind: z.literal('enterPseudo'), id: z.string().min(1) }),
+  /** Pseudo-stage: the way out. Back to the parent stage (a no-op outside a pseudo-stage). */
+  z.object({ kind: z.literal('leavePseudo') }),
   z.object({ kind: z.literal('addEventFrom'), ids: z.array(z.string().min(1)).min(1) }),
   /** Exploration: a front of this weather rolls in over the columns ahead (it hits the routes it covers). */
   z.object({ kind: z.literal('front'), weather: WeatherSchema, columns: z.number().int().min(1).max(8).default(3) }),
