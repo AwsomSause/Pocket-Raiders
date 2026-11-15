@@ -258,22 +258,26 @@
   "shape": "Run-Long",
   "earliest": "A3",
   "where": "Each later region Stage 3, the Town node",
-  "attaches": "town"
+  "attaches": "town",
+  "often": "once per region"
  },
  "delta-clue-nest": {
   "shape": "Run-Long",
   "earliest": "A3",
-  "where": "After the Delta Journal: any + node"
+  "where": "After the Delta Journal: any + node",
+  "often": "once per region"
  },
  "delta-clue-scales": {
   "shape": "Run-Long",
   "earliest": "A3",
-  "where": "After the Delta Journal: any + node"
+  "where": "After the Delta Journal: any + node",
+  "often": "once per region"
  },
  "delta-clue-song": {
   "shape": "Run-Long",
   "earliest": "A3",
-  "where": "After the Delta Journal: any + node"
+  "where": "After the Delta Journal: any + node",
+  "often": "once per region"
  },
  "delta-research-battle": {
   "shape": "Run-Long",
@@ -329,9 +333,6 @@
   "earliest": "A3",
   "chain": "d4",
   "beat": 1,
-  "steps": [
-   6
-  ],
   "tags": [
    "water"
   ]
@@ -340,19 +341,13 @@
   "shape": "Stage-Three",
   "earliest": "A3",
   "chain": "d4",
-  "beat": 2,
-  "steps": [
-   12
-  ]
+  "beat": 2
  },
  "co-d4-last": {
   "shape": "Stage-Three",
   "earliest": "A3",
   "chain": "d4",
-  "beat": 3,
-  "steps": [
-   17
-  ]
+  "beat": 3
  },
  "co-d5-dump": {
   "shape": "Single",
@@ -452,7 +447,8 @@
   "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
   "home": 13,
   "sits": "side-branch",
-  "level": "A+1"
+  "level": "A+1",
+  "often": "once per region"
  },
  "island-trial-fighting": {
   "shape": "Run-Long",
@@ -460,7 +456,8 @@
   "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
   "home": 13,
   "sits": "side-branch",
-  "level": "A+1"
+  "level": "A+1",
+  "often": "once per region"
  },
  "island-trial-flying": {
   "shape": "Run-Long",
@@ -468,7 +465,8 @@
   "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
   "home": 13,
   "sits": "side-branch",
-  "level": "A+1"
+  "level": "A+1",
+  "often": "once per region"
  },
  "island-trial-poison": {
   "shape": "Run-Long",
@@ -476,7 +474,8 @@
   "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
   "home": 13,
   "sits": "side-branch",
-  "level": "A+1"
+  "level": "A+1",
+  "often": "once per region"
  },
  "island-trial-ground": {
   "shape": "Run-Long",
@@ -484,7 +483,8 @@
   "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
   "home": 13,
   "sits": "side-branch",
-  "level": "A+1"
+  "level": "A+1",
+  "often": "once per region"
  },
  "island-trial-rock": {
   "shape": "Run-Long",
@@ -492,7 +492,8 @@
   "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
   "home": 13,
   "sits": "side-branch",
-  "level": "A+1"
+  "level": "A+1",
+  "often": "once per region"
  },
  "island-trial-bug": {
   "shape": "Run-Long",
@@ -500,7 +501,8 @@
   "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
   "home": 13,
   "sits": "side-branch",
-  "level": "A+1"
+  "level": "A+1",
+  "often": "once per region"
  },
  "island-trial-ghost": {
   "shape": "Run-Long",
@@ -508,7 +510,8 @@
   "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
   "home": 13,
   "sits": "side-branch",
-  "level": "A+1"
+  "level": "A+1",
+  "often": "once per region"
  },
  "island-trial-steel": {
   "shape": "Run-Long",
@@ -516,7 +519,8 @@
   "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
   "home": 13,
   "sits": "side-branch",
-  "level": "A+1"
+  "level": "A+1",
+  "often": "once per region"
  },
  "island-trial-fire": {
   "shape": "Run-Long",
@@ -524,7 +528,8 @@
   "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
   "home": 13,
   "sits": "side-branch",
-  "level": "A+1"
+  "level": "A+1",
+  "often": "once per region"
  },
  "island-trial-water": {
   "shape": "Run-Long",
@@ -532,7 +537,8 @@
   "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
   "home": 13,
   "sits": "side-branch",
-  "level": "A+1"
+  "level": "A+1",
+  "often": "once per region"
  },
  "island-trial-grass": {
   "shape": "Run-Long",
@@ -540,7 +546,8 @@
   "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
   "home": 13,
   "sits": "side-branch",
-  "level": "A+1"
+  "level": "A+1",
+  "often": "once per region"
  },
  "island-trial-electric": {
   "shape": "Run-Long",
@@ -548,7 +555,8 @@
   "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
   "home": 13,
   "sits": "side-branch",
-  "level": "A+1"
+  "level": "A+1",
+  "often": "once per region"
  },
  "island-trial-psychic": {
   "shape": "Run-Long",
@@ -556,7 +564,8 @@
   "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
   "home": 13,
   "sits": "side-branch",
-  "level": "A+1"
+  "level": "A+1",
+  "often": "once per region"
  },
  "island-trial-ice": {
   "shape": "Run-Long",
@@ -564,7 +573,8 @@
   "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
   "home": 13,
   "sits": "side-branch",
-  "level": "A+1"
+  "level": "A+1",
+  "often": "once per region"
  },
  "island-trial-dragon": {
   "shape": "Run-Long",
@@ -572,7 +582,8 @@
   "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
   "home": 13,
   "sits": "side-branch",
-  "level": "A+1"
+  "level": "A+1",
+  "often": "once per region"
  },
  "island-trial-dark": {
   "shape": "Run-Long",
@@ -580,7 +591,8 @@
   "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
   "home": 13,
   "sits": "side-branch",
-  "level": "A+1"
+  "level": "A+1",
+  "often": "once per region"
  },
  "island-trial-fairy": {
   "shape": "Run-Long",
@@ -588,7 +600,8 @@
   "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
   "home": 13,
   "sits": "side-branch",
-  "level": "A+1"
+  "level": "A+1",
+  "often": "once per region"
  },
  "co-z1-grand": {
   "shape": "Run-Long",
@@ -644,9 +657,6 @@
   "earliest": "A6",
   "chain": "z4",
   "beat": 2,
-  "steps": [
-   12
-  ],
   "tags": [
    "night"
   ]
@@ -656,9 +666,6 @@
   "earliest": "A6",
   "chain": "z4",
   "beat": 3,
-  "steps": [
-   17
-  ],
   "tags": [
    "night"
   ]
@@ -710,5 +717,378 @@
    "night"
   ],
   "level": "A+2"
+ },
+ "co-l2-cliff-1": {
+  "shape": "Trial",
+  "earliest": "A4",
+  "chain": "l2",
+  "beat": 1,
+  "tags": [
+   "snow",
+   "storm",
+   "hot"
+  ]
+ },
+ "co-l2-cliff-2": {
+  "shape": "Trial",
+  "earliest": "A4",
+  "chain": "l2",
+  "beat": 2,
+  "tags": [
+   "snow",
+   "storm",
+   "hot"
+  ]
+ },
+ "co-l2-cliff-3": {
+  "shape": "Trial",
+  "earliest": "A4",
+  "chain": "l2",
+  "beat": 3,
+  "tags": [
+   "snow",
+   "storm",
+   "hot"
+  ],
+  "level": "A+2"
+ },
+ "co-l2-jealous-articuno": {
+  "shape": "Trial",
+  "earliest": "A4",
+  "where": "After two birds: the next + node",
+  "level": "A+2"
+ },
+ "co-l2-jealous-zapdos": {
+  "shape": "Trial",
+  "earliest": "A4",
+  "where": "After two birds: the next + node",
+  "level": "A+2"
+ },
+ "co-l2-jealous-moltres": {
+  "shape": "Trial",
+  "earliest": "A4",
+  "where": "After two birds: the next + node",
+  "level": "A+2"
+ },
+ "co-l3-feather": {
+  "shape": "Region",
+  "earliest": "A3",
+  "stages": [
+   2
+  ],
+  "level": "A+1"
+ },
+ "co-l3-place-1": {
+  "shape": "Region",
+  "earliest": "A3",
+  "stages": [
+   3,
+   4
+  ]
+ },
+ "co-l3-place-2": {
+  "shape": "Region",
+  "earliest": "A3",
+  "stages": [
+   5,
+   6
+  ]
+ },
+ "co-l3-place-3": {
+  "shape": "Region",
+  "earliest": "A3",
+  "stages": [
+   6,
+   7
+  ]
+ },
+ "co-l3-tower": {
+  "shape": "Region",
+  "earliest": "A3",
+  "stages": [
+   8
+  ],
+  "level": "A+1"
+ },
+ "co-l4-whirl": {
+  "shape": "Door",
+  "earliest": "A6",
+  "home": 14,
+  "window": [
+   12,
+   16
+  ],
+  "sits": "side-branch",
+  "tags": [
+   "water",
+   "storm"
+  ],
+  "needs": "L2",
+  "level": "A+2"
+ },
+ "co-l5-cave": {
+  "shape": "Door",
+  "earliest": "A12",
+  "where": "The door at Stage 6, Step 13; the finale at Stage 8, Step 17",
+  "stages": [
+   6
+  ],
+  "home": 13,
+  "level": "A+2"
+ },
+ "co-l6-towns": {
+  "shape": "World Event",
+  "earliest": "A9",
+  "stages": [
+   3
+  ],
+  "where": "Steps 5, 10, 15 of Stages 3, 6 and 8; the header alternates Drought and Deluge"
+ },
+ "co-l6-aqua": {
+  "shape": "World Event",
+  "earliest": "A9",
+  "stages": [
+   3,
+   6
+  ]
+ },
+ "co-l6-magma": {
+  "shape": "World Event",
+  "earliest": "A9",
+  "stages": [
+   3,
+   6
+  ]
+ },
+ "co-l6-pillar": {
+  "shape": "World Event",
+  "earliest": "A9",
+  "stages": [
+   6
+  ]
+ },
+ "co-l6-finale": {
+  "shape": "World Event",
+  "earliest": "A9",
+  "stages": [
+   8
+  ],
+  "level": "A+2"
+ },
+ "co-l7-shimmer": {
+  "shape": "Companion",
+  "earliest": "A5",
+  "home": 10,
+  "window": [
+   7,
+   13
+  ],
+  "tags": [
+   "water",
+   "city"
+  ]
+ },
+ "co-l8-regirock": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "One door per region: Stage 5, Step 14",
+  "home": 14,
+  "sits": "side-branch",
+  "tags": [
+   "cave"
+  ],
+  "level": "A+2",
+  "often": "once per region"
+ },
+ "co-l8-regice": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "One door per region: Stage 5, Step 14",
+  "home": 14,
+  "sits": "side-branch",
+  "tags": [
+   "cave"
+  ],
+  "level": "A+2",
+  "often": "once per region"
+ },
+ "co-l8-registeel": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "One door per region: Stage 5, Step 14",
+  "home": 14,
+  "sits": "side-branch",
+  "tags": [
+   "cave"
+  ],
+  "level": "A+2",
+  "often": "once per region"
+ },
+ "co-l8-regieleki": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "One door per region: Stage 5, Step 14",
+  "home": 14,
+  "sits": "side-branch",
+  "tags": [
+   "cave"
+  ],
+  "level": "A+2",
+  "often": "once per region"
+ },
+ "co-l8-regidrago": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "One door per region: Stage 5, Step 14",
+  "home": 14,
+  "sits": "side-branch",
+  "tags": [
+   "cave"
+  ],
+  "level": "A+2",
+  "often": "once per region"
+ },
+ "co-l8-meadow": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "After four keystones: the next region Stage 5, Step 14",
+  "home": 14,
+  "level": "A+2"
+ },
+ "co-l9-lake-1": {
+  "shape": "Trial",
+  "earliest": "A10",
+  "chain": "l9",
+  "beat": 1,
+  "tags": [
+   "water"
+  ]
+ },
+ "co-l9-lake-2": {
+  "shape": "Trial",
+  "earliest": "A10",
+  "chain": "l9",
+  "beat": 2,
+  "tags": [
+   "water"
+  ]
+ },
+ "co-l9-lake-3": {
+  "shape": "Trial",
+  "earliest": "A10",
+  "chain": "l9",
+  "beat": 3,
+  "tags": [
+   "water"
+  ],
+  "level": "A+2"
+ },
+ "co-l9-pillar": {
+  "shape": "Trial",
+  "earliest": "A10",
+  "stages": [
+   8
+  ],
+  "home": 17,
+  "level": "A+2"
+ },
+ "co-l10-stone": {
+  "shape": "Stage-Three",
+  "earliest": "A8",
+  "chain": "l10",
+  "beat": 1
+ },
+ "co-l10-town": {
+  "shape": "Stage-Three",
+  "earliest": "A8",
+  "chain": "l10",
+  "beat": 2
+ },
+ "co-l10-tower": {
+  "shape": "Stage-Three",
+  "earliest": "A8",
+  "chain": "l10",
+  "beat": 3,
+  "level": "A+2"
+ },
+ "co-l11-valley": {
+  "shape": "Region",
+  "earliest": "A12",
+  "stages": [
+   2,
+   5,
+   8
+  ],
+  "level": "A+2"
+ },
+ "co-l12-lillie": {
+  "shape": "Companion",
+  "earliest": "A4",
+  "where": "Starts at a + node"
+ },
+ "co-l12-attempt-1": {
+  "shape": "Companion",
+  "earliest": "A4"
+ },
+ "co-l12-attempt-2": {
+  "shape": "Companion",
+  "earliest": "A4"
+ },
+ "co-l12-attempt-3": {
+  "shape": "Companion",
+  "earliest": "A4"
+ },
+ "co-l12-altars": {
+  "shape": "Door",
+  "earliest": "A4",
+  "where": "Two regions on, Stage 6, Step 14",
+  "home": 14,
+  "level": "A+1"
+ },
+ "co-l13-dim": {
+  "shape": "World Event",
+  "earliest": "A14",
+  "where": "One stage; the header reads Dimmed; Steps 5, 10, 15",
+  "level": "A+2"
+ },
+ "co-l14-ruin": {
+  "shape": "Trial",
+  "earliest": "A8",
+  "chain": "l14",
+  "beat": 1
+ },
+ "co-l14-hum-1": {
+  "shape": "Trial",
+  "earliest": "A8",
+  "chain": "l14",
+  "beat": 2
+ },
+ "co-l14-hum-2": {
+  "shape": "Trial",
+  "earliest": "A8",
+  "chain": "l14",
+  "beat": 3,
+  "level": "A+1"
+ },
+ "co-l14-weald": {
+  "shape": "Trial",
+  "earliest": "A8",
+  "where": "After the third hum: the next stage, Step 16",
+  "level": "A+2"
+ },
+ "co-l15-shrine": {
+  "shape": "Run-Long",
+  "earliest": "A5",
+  "where": "One ward per region, four regions: Stage 6, Step 15",
+  "home": 15,
+  "sits": "side-branch",
+  "level": "A+2",
+  "often": "once per region"
+ },
+ "co-l15-tablets": {
+  "shape": "Run-Long",
+  "earliest": "A5",
+  "where": "A hidden node near the shrine",
+  "sits": "side-branch"
  }
 }

@@ -72,7 +72,29 @@ Catalog ids rebuilt: the 18 `island-trial-*` (Z1), `z-sigil-ruin`, `z-sigil-pool
 
 Tests: `tests/unit/coLegendsZ.test.ts` (incl. Pack Call). Old-seed fingerprints: legends items added to `LATE_ITEMS` in story.test.ts (no re-pin).
 
+## Legendary questlines L2-L15 (built 2026-11-15, `legends-5.ts` L2-L8, 54 events; `legends-6.ts` L9-L15, 35 events)
+Pack questlines (status `extra` L2-L15). Every Legendary fight is a pseudo fight. Recognition: with that Legendary's blessing at Influence 7+, a variant lets it offer itself. Catching the blessing's Legendary gives Communion through the existing blessings code.
+
+| Code | Built | Limits |
+|---|---|---|
+| L2 Birds | three cliffs (chain l2), Articuno = survive 6 turns with no attacks, Zapdos = 4 climbs (non-Ground lead is paralysed, 3 strikes fail), Moltres = 4 wind checks (a Fire-type relights once), landing battle, the jealous third after two | crests across runs cut |
+| L3 Ho-Oh | feather, three burnt footprints (help sets `hooh-helped`), Bell Tower: 3 = roof (battle or Sacred Ash), 1-2 circles, 0 grey | no "lost for good" Pokémon outside Nuzlocke, so Ho-Oh always "simply waits"; Sacred Ash is the item (no free rescue roll) |
+| L4 Lugia | pseudo chain `ps_lugia_whirl`: 3 whirl islands (fight / wait / ask that island's bird), still sea if all birds passed, island 4 answers; Silver Wing | Aqua submarine not built |
+| L5 Mewtwo | pseudo chain `ps_mewtwo_lab`: three questions, honesty from what you did (rival beaten, a recent faint), 3 honest = battle or leave in peace | "no Pokémon released" counts as honest (releases are not tracked) |
+| L6 Weather | towns, two bases (take Orb / listen / report), Sky Pillar (Flying-type retry), finale: calm Kyogre or Groudon (need 6, or 3 when both leaders were heard), or Rayquaza after the Pillar | the Drought/Deluge header is the placer's; the arena does not alternate weather |
+| L7 Eon | three bridges (fight / draw off / break the lens with a Steel or Rock move), garden: hold 6 turns or get Latias out; Blue Mind jewel; all lenses broken = no overload; Eon Ticket | Final Reunion bench not built |
+| L8 Regis | five doors (do as it says = it joins, force = full-anger fight, leave it for him), Regigigas meadow (wake / sleep / ask the others) | the acts are told, not checked turn by turn (only Registeel needs a Steel-type) |
+| L9 Lakes | Uxie (truth checked against your types), Mesprit (who you'd leave costs Bond), Azelf (lose, then "Again" = Red Chain), Spear Pillar (Time / Space / both = survive 8, Giratina Sign) | Uxie's "forget a move" penalty is a flag only |
+| L10 Tao | stone (needs a Fire- and a Water-type), the divided town (N follows on "Both"), tower: Reshiram / Zekrom / both crack (Kyurem Sign) | Kyurem fusion and the rival's far-side dragon not built |
+| L11 Life | wake the tree (both, doubles) / stop the lab (Yveltal at night) / the green lights (needs `zygarde-cells`) | AZ on the ridge not built |
+| L12 Nebby | Lillie, three Aether attempts, the altars: Lillie keeps it, or (if Nebby chose you) Solgaleo by day / Lunala by night | Ash questline link is the families' |
+| L13 Necrozma | summit: fight / give it light (survive 6) / let it take Solgaleo's or Lunala's light; Poipole at Faller rank 5 | the Sun/Moon Legendary is not removed after the fusion |
+| L14 Wolves | relics, two red nights, the Weald: sword = Zacian, shield = Zamazenta, both = Eternatus fight then choose | Swordbert crown not built |
+| L15 Wards | put back (doubles vs the Ruinous four) / find the seller (3 clues, Gilt Circle guards) / pull the rest (healing x0.6 for the region, the four roam); tablets add "Apologise" | the curse is healing x0.9 per stake, not a stat drop; stake-woods not built |
+
+Tests: `tests/unit/coLegendsLegendary.test.ts`.
+
 ## Where I stopped (paused 2026-11-15, Kice: five threads at a time)
-- Resumed 2026-11-15 (merged ui-mockups; shared pieces are in the base now). Alphas, Megas, Deltas and Z (not Z5) done; next L2-L15, MY1-MY22 (+Z5), U1-U9.
+- Resumed 2026-11-15 (merged ui-mockups; shared pieces are in the base now). Alphas, Megas, Deltas, Z (not Z5) and Legendary L2-L15 done; next MY1-MY22 (+Z5), U1-U9, RULE ids.
 - Still to build: M7 (rivals slot), D1-D8, Z1-Z7, L2-L15, MY1-MY22, U1-U9, the 382 RULE ids (ladder Trial/Recognition/Presence), placement/flags/status files, update fragment, PR.
 - Run the full `npm run check` before opening the PR.

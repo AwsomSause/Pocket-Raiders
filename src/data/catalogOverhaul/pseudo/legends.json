@@ -1,6 +1,6 @@
 {
  "category": "legends",
- "note": "Door shapes of the legends questlines (Alphas A2-A4, Mega Anomaly M4). Rooms are co-* events in co-legends-1.json and co-legends-2.json.",
+ "note": "Door shapes of the legends questlines (Alphas A2-A4, Mega Anomaly M4, Legendary L4 and L5). Rooms are co-* events in co-legends-*.json.",
  "chains": [
   {
    "id": "ps_black_tide",
@@ -36,6 +36,24 @@
    "themeId": "rock-ghost",
    "tint": "#404858",
    "mood": "pale ruin",
+   "start": "opened"
+  },
+  {
+   "id": "ps_lugia_whirl",
+   "name": "Under the Whirl",
+   "entry": "co-l4-whirl",
+   "themeId": "water-ice",
+   "tint": "#4070a0",
+   "mood": "four islands",
+   "start": "opened"
+  },
+  {
+   "id": "ps_mewtwo_lab",
+   "name": "The Lab at the End of the Cave",
+   "entry": "co-l5-cave",
+   "themeId": "psychic-dark",
+   "tint": "#504060",
+   "mood": "humming cave",
    "start": "opened"
   }
  ]
