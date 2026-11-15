@@ -43,6 +43,11 @@ import { COLORS, GAME_HEIGHT, GAME_WIDTH, STATUS_LABELS, textStyle } from './the
 import { Bar } from './widgets';
 import { storyIcon } from './storyIcon';
 import { storyIconId } from '../assets/storyIcons';
+import { arenaFor, getTheme } from '../core/themes';
+import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from './redux/stage';
+import { hoverTips, moveTipOf } from './redux/tips';
+import { artOf, monFile } from './redux/game';
+import { partyCols, partyView, summaryView, type SummaryBody } from './redux/screens/party';
 
 export const POKEMON_TABS = ['Overview', 'Stats', 'Moves', 'Items', 'Bond', 'History', 'Traits'] as const;
 type Tab = (typeof POKEMON_TABS)[number];
@@ -119,6 +124,13 @@ class PokemonScreen implements PickerLike {
   private readonly undo = new MoveUndo();
   /** A second Pokémon chosen with Ctrl-click or C to compare against (Stats tab). */
   private compareIdx: number | null = null;
+  /** New UI: the mock-ups' Party and Summary, drawn over this screen (null in the Old UI or with a picked party look). */
+  private rx: ReduxView | null = null;
+  /** New UI: the move chip the pointer rests on ("move:1"), once the Tooltip delay has passed. */
+  private rxTip: string | null = null;
+  private rxCols = 1;
+  /** The backdrop behind the Pokémon on the New Summary: the stage's arena picture. */
+  private rxArt: string | null = null;
   /** Drag a row onto another to reorder with a snap, or hold a row for the action menu (long-press). */
   private readonly up = (p: Phaser.Input.Pointer): void => {
     const press = this.press;
@@ -161,7 +173,9 @@ class PokemonScreen implements PickerLike {
       this.root.add(drawGlass(scene, 24, 16, GAME_WIDTH - 48, GAME_HEIGHT - 32, { radius: 26 }));
       this.root.add(drawGlass(scene, 36, 24, GAME_WIDTH - 72, 46, { tint: AERO.sky, rim: AERO.rim, glow: false, radius: 20 }));
     }
-    this.roster = !!this.skin?.roster;
+    // New UI: the Party page comes first (as with a look that has a roster); Enter opens the Summary.
+    const newUi = reduxOn() && !this.skin;
+    this.roster = !!this.skin?.roster || newUi;
     const cap = runLevelCap(session.content, session.run!);
     this.root.add(scene.add.text(48, 47, pick ? `${pick.title}  ·  cap ${cap}` : `Pokémon  ·  Level cap ${cap}`, textStyle(30, COLORS.textLight)).setOrigin(0, 0.5).setName('pokemon-title'));
     const back = scene.add.text(GAME_WIDTH - 48, 47, '◀ Back', textStyle(22, COLORS.gold)).setOrigin(1, 0.5).setName('picker-back').setInteractive({ useHandCursor: true });
@@ -177,7 +191,57 @@ class PokemonScreen implements PickerLike {
     this.root.add(this.dyn);
     scene.input.keyboard?.on('keydown', this.keys);
     scene.input.on('pointerup', this.up);
+    if (newUi) {
+      const run = session.run!;
+      const theme = run.stage ? getTheme(session.content, run.stage.themeId) : undefined;
+      this.rxArt = artOf(scene, theme ? arenaFor(session.content, theme) : undefined)?.file ?? null;
+      const live = (fn: () => void) => (): void => { if (!this.closed) fn(); };
+      this.rx = mountRedux(scene, {
+        render: (c) => this.rxView(c),
+        acts: {
+          pick: (k) => live(() => {
+            this.sel = Phaser.Math.Clamp(Number(k), 0, this.party.length - 1);
+            if (this.pick) return this.handle('confirm');
+            this.roster = false;
+            playSfx(scene, 'ui.select');
+            this.render();
+          })(),
+          tab: (k) => live(() => {
+            this.tab = Phaser.Math.Clamp(Number(k), 0, POKEMON_TABS.length - 1);
+            this.cursor = 0;
+            if (this.mode === 'detail' && this.cursorCount() === 0) this.mode = 'list';
+            playSfx(scene, 'ui.cursor', 0.5);
+            this.render();
+          })(),
+          cursor: (k) => live(() => {
+            if (this.cursorCount() === 0) return;
+            this.cursor = Phaser.Math.Clamp(Number(k), 0, this.cursorCount() - 1);
+            this.mode = 'detail';
+            this.render();
+          })(),
+          takeoff: live(() => { if (this.pick || this.tabName !== 'Items') return; this.takeOff(); this.render(); }),
+          menu: (k) => live(() => {
+            const o = this.mode === 'menu' ? this.menuOptions()[Number(k)] : undefined;
+            if (!o) return;
+            this.menuIdx = Number(k);
+            this.chooseMenu(o);
+          })(),
+          menuBack: live(() => { if (this.mode === 'menu') this.handle('back'); }),
+        },
+        overs: {
+          over: (k) => live(() => { const i = Number(k); if (this.roster && i !== this.sel && i >= 0 && i < this.party.length) { this.sel = i; this.render(); } })(),
+          menuOver: (k) => live(() => { const i = Number(k); if (this.mode === 'menu' && i !== this.menuIdx && i >= 0 && i < this.menuOptions().length) { this.menuIdx = i; this.render(); } })(),
+        },
+        // Resting the pointer on a move's chip (Overview) shows the mock-ups' move tooltip.
+        tip: hoverTips((key) => { if (this.closed) return; this.rxTip = key; this.rx?.refresh(); }),
+      });
+    }
     this.render();
+  }
+
+  /** The screen has a Party page before the Summary: a picked look with a roster, or the New UI. */
+  private get hasRoster(): boolean {
+    return !!this.skin?.roster || this.rx !== null;
   }
 
   /** Hotkeys: 1-6 jump to a Pokémon, U undoes the last move in the order, C compares, P pins a card, M opens actions. */
@@ -257,9 +321,15 @@ class PokemonScreen implements PickerLike {
     }
     this.flash = '';
     const n = this.party.length;
+    // The New UI's grid layout is three cards wide: up and down change the line there.
+    const cols = this.rx ? this.rxCols : 1;
+    const rosterStep = (a: InputAction): number => {
+      if (cols === 1) return (this.sel + (a === 'up' || a === 'left' ? n - 1 : 1)) % n;
+      const to = this.sel + (a === 'left' ? -1 : a === 'right' ? 1 : a === 'up' ? -cols : cols);
+      return to >= 0 && to < n ? to : this.sel;
+    };
     if (this.roster && !this.pick) {
-      if (action === 'up' || action === 'left') this.sel = (this.sel + n - 1) % n;
-      else if (action === 'down' || action === 'right') this.sel = (this.sel + 1) % n;
+      if (action === 'up' || action === 'left' || action === 'down' || action === 'right') this.sel = rosterStep(action);
       else if (action === 'confirm') this.roster = false;
       else if (action === 'back') return this.leave();
       playSfx(this.host.scene, 'ui.cursor', 0.5);
@@ -267,7 +337,7 @@ class PokemonScreen implements PickerLike {
     }
     if (this.roster && this.pick && (action === 'up' || action === 'down' || action === 'left' || action === 'right' || action === 'back')) {
       if (action === 'back') return this.leave();
-      this.sel = (this.sel + (action === 'up' || action === 'left' ? n - 1 : 1)) % n;
+      this.sel = rosterStep(action);
       playSfx(this.host.scene, 'ui.cursor', 0.5);
       return this.render();
     }
@@ -328,7 +398,7 @@ class PokemonScreen implements PickerLike {
       playSfx(this.host.scene, 'ui.select');
     } else if (action === 'back') {
       if (this.mode === 'detail') this.mode = 'list';
-      else if (this.skin?.roster && !this.pick) this.roster = true;
+      else if (this.hasRoster && !this.pick) this.roster = true;
       else return this.leave();
     }
     this.render();
@@ -508,6 +578,8 @@ class PokemonScreen implements PickerLike {
     this.closed = true;
     this.host.scene.input.keyboard?.off('keydown', this.keys);
     this.host.scene.input.off('pointerup', this.up);
+    this.rx?.destroy();
+    this.rx = null;
     this.root.destroy();
   }
 
@@ -516,6 +588,10 @@ class PokemonScreen implements PickerLike {
     if (this.closed) return;
     const { scene } = this.host;
     this.dyn.removeAll(true);
+    if (this.rx) {
+      this.rx.refresh();
+      return;
+    }
     if (this.roster && this.skin?.roster) {
       const first = !this.rosterDrawn;
       this.rosterDrawn = true;
@@ -579,6 +655,181 @@ class PokemonScreen implements PickerLike {
     if (this.mode === 'menu') this.drawMenu(scene);
     this.footer.setText(this.footerText());
     this.footer.setColor(this.flash ? '#ffe08a' : COLORS.textLight);
+  }
+
+  /** New UI: the Party page or the Summary, as the mock-ups draw them, from the same data the Old screen shows. */
+  private rxView(c: ReduxCtx): string {
+    this.rxCols = partyCols(c);
+    const { scene } = this.host;
+    const content = this.content, run = this.run;
+    const heldShort = (m: PokemonInstance): string => {
+      const held = summaryInfo(content, run, m).held;
+      return held.length ? `${held[0]!.name}${held.length > 1 ? ` +${held.length - 1}` : ''}` : '';
+    };
+    if (this.roster) {
+      return partyView(c, {
+        title: this.pick ? this.pick.title : 'Party',
+        hints: [['Enter', this.pick ? 'choose' : 'summary'], ['Esc', 'back']],
+        index: this.sel,
+        text: this.footerText(),
+        mons: this.party.map((m, i) => {
+          const r = this.rosterMon(m, i);
+          return { name: r.name, file: monFile(scene, r.species.id, 'front', r.shiny), level: r.level, hp: r.hp, maxHp: r.maxHp, held: heldShort(m), tag: r.tag, types: r.types, ability: r.ability, nature: r.nature, moves: r.moves.map((x) => ({ name: x.name, type: x.type })), off: this.pick ? this.pick.problemFor(i) !== null : false };
+        }),
+      });
+    }
+    const mon = this.mon;
+    const info = summaryInfo(content, run, mon);
+    const species = lookSpecies(content, mon);
+    const build = heldBuild(content, mon);
+    const xp = xpProgress(content, mon);
+    const maxHp = this.maxHp(mon);
+    const held = build.items.reduce((n, it) => n + it.copies, 0);
+    let body: SummaryBody;
+    switch (this.tabName) {
+      case 'Overview': {
+        const r = readiness(content, mon);
+        const hf = healFirst(content, run);
+        const status = mon.hp <= 0 ? 'Fainted' : mon.status ? STATUS_LABELS[mon.status.id]?.label ?? mon.status.id : 'No status condition';
+        const bv = bondView(content, run, mon);
+        const care = mon.care;
+        const extra = [care?.talent ? `talent ${care.talent.toUpperCase()}` : '', care?.fatigue ? `tired ×${care.fatigue}` : '', care?.favourite ? '★ favourite' : '', care?.ace ? 'ace' : ''].filter(Boolean).join(' · ');
+        const grow = growthInfo(content, services().session.profile, mon);
+        body = {
+          kind: 'overview',
+          ability: info.ability,
+          facts: [
+            ['Nature', info.nature ?? 'Unknown'],
+            ['Exp', `${xp ? xp.text : 'Level limit'} · level cap ${runLevelCap(content, run)}`],
+            ['Battle readiness', r.label],
+            ['Mood', `${moodWord(care?.mood ?? 0)} · feeling ${(bv.emotion ? bv.emotion.name : 'Calm').toLowerCase()}${extra ? ` · ${extra}` : ''}`],
+            ['Journal', `${care?.fights ?? 0} fights · ${care?.falls ?? 0} falls · ${mon.moves.filter((m) => m.star).length}★ moves`],
+            ['Bond', `${bv.mood.text}  ${'♥'.repeat(bv.hearts)}${'♡'.repeat(5 - bv.hearts)}`],
+            ['Evolution', grow.evolutions[0] ?? 'None'],
+          ],
+          note: `HP ${mon.hp} / ${maxHp}. ${status}. ${r.notes.join(' ')}${hf && hf.uid === mon.uid ? ' Heal this one first.' : ''}`.trim(),
+          moves: info.moves.map((m) => ({ name: mon.awakened?.includes(m.id) ? `★ ${m.name}` : m.name, type: m.type })),
+        };
+        break;
+      }
+      case 'Stats': {
+        const other = this.compareIdx !== null && this.compareIdx !== this.sel && this.compareIdx < this.party.length ? this.compareIdx : compareTarget(this.party, this.sel);
+        const cmp = other === null ? null : compareStats(content, mon, this.party[other]!);
+        const next = evolutionPreview(content, mon);
+        body = {
+          kind: 'stats',
+          rows: info.stats.map((s, i) => {
+            const d = cmp?.[i]?.delta ?? 0;
+            return { label: s.label, value: s.value, pct: Math.round((s.base / BASE_STAT_SCALE) * 100), iv: `${s.iv}${s.hyper ? '★' : ''}`, ev: s.ev, up: s.boosted, perfect: s.iv >= 31 || s.hyper, delta: !cmp ? '' : d === 0 ? '=' : `${d > 0 ? '+' : ''}${d}` };
+          }),
+          foot: `${info.evLine} · bar = base stat · Nature: ${info.nature ?? 'unknown'}${next.length ? ` · Next: ${next.slice(0, 2).join(' / ')}` : ''}`,
+          versus: cmp ? `± is against ${this.nameOf(this.party[other!]!)}${other === 0 ? ' (lead)' : ''}. C marks another Pokémon to compare.` : '',
+        };
+        break;
+      }
+      case 'Moves': {
+        const cursor = Math.max(0, Math.min(this.cursor, info.moves.length - 1));
+        const m = info.moves[cursor];
+        const move = m ? content.moves.get(m.id) : undefined;
+        body = {
+          kind: 'moves',
+          moves: info.moves.map((x) => ({ name: mon.awakened?.includes(x.id) ? `★ ${x.name}` : x.name, type: x.type, pp: x.pp })),
+          cursor,
+          facts: m ? [['Type / Category', `${m.type.charAt(0).toUpperCase()}${m.type.slice(1)} · ${m.category.charAt(0).toUpperCase()}${m.category.slice(1)}`], ['Power / Accuracy', `${m.power} / ${m.accuracy}`]] : [],
+          lines: move ? moveEffectLines(move).map((l) => `• ${l}`) : [],
+        };
+        break;
+      }
+      case 'Items': {
+        const cursor = Math.max(0, Math.min(this.cursor, build.items.length - 1));
+        const it = build.items[cursor];
+        const more: string[] = [];
+        if (it) {
+          more.push(it.description);
+          for (const e of it.effects) more.push(`• ${e}`);
+          for (const x of it.catches) more.push(`⚠ ${x}`);
+          if (it.conditions.length > 0) more.push(`When: ${it.conditions.join(', ')}.`);
+          more.push(`Stacking: ${it.stacking}`);
+          if (it.detail.length > 0 && this.mode === 'detail') more.push(...it.detail);
+        }
+        body = {
+          kind: 'items',
+          summary: build.summary,
+          items: build.items.map((x) => ({ name: `${x.name}${x.copies > 1 ? ` ×${x.copies}` : ''}`, art: artOf(scene, x.icon), mode: `${MODE_TEXT[x.mode]}${x.consumed ? ' · used up' : ''}`, text: x.description })),
+          cursor,
+          lines: more,
+          takeOff: !this.pick && build.items.length > 0,
+        };
+        break;
+      }
+      case 'Bond': {
+        const v = bondView(content, run, mon);
+        body = {
+          kind: 'text',
+          head: `${v.mood.text} · ${v.trait[0]!.toUpperCase()}${v.trait.slice(1)} · ${v.roles.join(' / ')}`,
+          bars: BOND_BARS.map((bar) => ({ label: bar.label, value: v.values.find((e) => e.key === bar.key)?.value ?? 0 })),
+          sections: [
+            { title: 'Mood', lines: [v.mood.hint] },
+            { title: 'Personality', lines: [v.personality] },
+            { title: 'Friendships', lines: [v.relations || 'No close friendships yet.'], side: true },
+            { title: 'Feeling', lines: [`${v.emotion ? v.emotion.name : 'Calm'}  ${'♥'.repeat(v.hearts)}${'♡'.repeat(5 - v.hearts)}`], side: true },
+          ],
+        };
+        break;
+      }
+      case 'History': {
+        const h = historyView(run, mon);
+        body = {
+          kind: 'text',
+          head: '',
+          bars: [],
+          sections: [
+            { title: 'This run', lines: [h.record] },
+            { title: 'Titles', lines: [h.titles.length > 0 ? h.titles.join(', ') : 'None yet.'] },
+            { title: 'Most memorable moments', lines: h.memories.length > 0 ? h.memories.map((t) => `• ${t}`) : ['No story yet: it will remember its battles here.'] },
+          ],
+        };
+        break;
+      }
+      default: {
+        const grow = growthInfo(content, services().session.profile, mon);
+        const traits = traitLines(content, mon);
+        body = {
+          kind: 'text',
+          head: '',
+          bars: [],
+          sections: [
+            { title: 'Evolution', lines: grow.evolutions.map((t) => `→ ${t}`) },
+            { title: 'Battle forms', lines: grow.forms.length > 0 ? grow.forms.map((t) => `★ ${t}`) : ['No Mega form.'] },
+            { title: 'Mastery', lines: [grow.mastery.rank, grow.mastery.next ? `Next, ${grow.mastery.next}` : '(top rank)'] },
+            { title: 'Special characteristics', lines: traits.length > 0 ? traits.map((t) => `• ${t}`) : ['Nothing out of the ordinary.'], side: true },
+          ],
+        };
+      }
+    }
+    return summaryView(c, {
+      title: this.pick ? this.pick.title : 'Summary',
+      hints: [['←→', 'page'], ['↑↓', this.mode === 'detail' ? 'pick' : 'Pokémon'], ['Enter', this.pick ? 'choose' : 'actions'], ['Esc', 'back']],
+      face: {
+        name: `${info.name}${mon.shiny ? ' ★' : ''}`,
+        file: monFile(scene, species.id, 'front', !!mon.shiny),
+        art: this.rxArt,
+        level: info.level,
+        gender: genderSign(content, mon) ?? '',
+        types: info.types,
+        no: `No. ${String(species.dex).padStart(3, '0')}`,
+        held: held ? `Holding ${held} item${held === 1 ? '' : 's'}` : 'Holding nothing',
+        hpPct: Math.max(0, Math.min(100, Math.round((mon.hp / Math.max(1, maxHp)) * 100))),
+        xpPct: Math.round((xp ? xp.fraction : 1) * 100),
+      },
+      tabs: POKEMON_TABS,
+      tab: this.tab,
+      itemsTab: POKEMON_TABS.indexOf('Items'),
+      body,
+      text: this.footerText(),
+      menu: this.mode === 'menu' ? { options: this.menuOptions().map((o) => ({ label: o.label, off: o.problem !== null })), index: this.menuIdx } : null,
+      tip: this.tabName === 'Overview' && this.rxTip?.startsWith('move:') ? moveTipOf(mon.moves[Number(this.rxTip.slice(5))]) : null,
+    });
   }
 
   private rosterMon(mon: PokemonInstance, index: number): RosterMon {

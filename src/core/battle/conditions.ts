@@ -11,6 +11,7 @@ import { currentEnemy, type PokemonInstance, type RunState, type SideEffects, ty
 import { emotionOf } from '../story/emotions';
 import { STANCE_INFO, autoProfile, stanceOf } from './autoBattle';
 import { awakeningLevel, focusOf } from './growthStats';
+import { sweetAirHere } from '../expansion/canonKantoRules';
 
 export interface Conditions {
   field: string[];
@@ -181,6 +182,7 @@ export function battleConditions(content: Content, run: RunState, reveals: FoeRe
   } else if (battle.scanned === 'fail') out.foe.push('Scan unclear');
   if (battle.mindRead) out.foe.push(`Mind-read: likely to use ${content.moves.get(battle.mindRead)?.name ?? battle.mindRead}`);
   if (battle.spectator) out.field.push(`${battle.spectator.name} is watching${battle.spectator.used ? ' (already cheered)' : ''}`);
+  if (sweetAirHere(content, run)) out.field.push('Sweet Air: on the first turn, your lead may fall asleep for a turn');
   if (battle.arena) out.field.push(`Arena: ${battle.arena.kind}${battle.arena.spent ? ' (smashed)' : ' hazard every few turns; Smash it'}`);
   if (battle.alpha) out.foe.push('ALPHA: oversized and stronger, with a bigger prize');
   const foeStatus = statusWord(foe);

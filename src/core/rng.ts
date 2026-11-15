@@ -51,6 +51,14 @@ export function createStreams(seed: string): RngStreams {
   return streams;
 }
 
+/**
+ * A one-off named generator derived from another stream's current state, without drawing from it (so every roll of
+ * that stream stays where it was). Used for rolls a feature needs only now and then (Foe Move Preview).
+ */
+export function deriveRng(name: string, from: RngState): Rng {
+  return new Rng(hashSeed(`${name}::${from.a}.${from.b}.${from.c}.${from.d}`));
+}
+
 /** Makes a short random seed for a new run (uses real randomness, not a stream). */
 export function makeRandomSeed(): string {
   const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';

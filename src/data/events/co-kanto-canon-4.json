@@ -1,0 +1,6984 @@
+{
+ "catalogOverhaul": "kanto-canon",
+ "override": true,
+ "remove": [
+  "cs-kanto-cinnabar-lab-fossil",
+  "cs-kanto-cinnabar-lab-fossil-1",
+  "cs-kanto-cinnabar-lab-fossil-10",
+  "cs-kanto-cinnabar-lab-fossil-2",
+  "cs-kanto-cinnabar-lab-fossil-3",
+  "cs-kanto-cinnabar-lab-fossil-4",
+  "cs-kanto-cinnabar-lab-fossil-5",
+  "cs-kanto-cinnabar-lab-fossil-6",
+  "cs-kanto-cinnabar-lab-fossil-7",
+  "cs-kanto-cinnabar-lab-fossil-8",
+  "cs-kanto-cinnabar-lab-fossil-9",
+  "cs-kanto-cinnabar-lab-trade",
+  "cs-kanto-cinnabar-mansion-n7",
+  "cs-kanto-cinnabar-mansion-n8",
+  "cs-kanto-cinnabar-mansion-sw-s1-v1",
+  "cs-kanto-cinnabar-mansion-sw-s1-v2",
+  "cs-kanto-cinnabar-mansion-sw-s1-v3",
+  "cs-kanto-cinnabar-mansion-sw-s2-v1",
+  "cs-kanto-cinnabar-mansion-sw-s2-v2",
+  "cs-kanto-cinnabar-mansion-sw-s2-v3",
+  "cs-kanto-cinnabar-mansion-sw-s3-v1",
+  "cs-kanto-cinnabar-mansion-sw-s3-v2",
+  "cs-kanto-cinnabar-mansion-sw-s3-v3",
+  "cs-kanto-cinnabar-seafoam-bd-s1-v1",
+  "cs-kanto-cinnabar-seafoam-bd-s1-v2",
+  "cs-kanto-cinnabar-seafoam-bd-s2-v1",
+  "cs-kanto-cinnabar-seafoam-bd-s2-v2",
+  "cs-kanto-cinnabar-seafoam-bd-s3-v1",
+  "cs-kanto-cinnabar-seafoam-bd-s3-v2",
+  "cs-kanto-cinnabar-seafoam-n1",
+  "cs-kanto-cinnabar-seafoam-n6a",
+  "cs-kanto-cinnabar-seafoam-n6b",
+  "cs-kanto-cinnabar-seafoam-n7",
+  "cs-kanto-cinnabar-volcano-n1",
+  "cs-kanto-cinnabar-volcano-n2",
+  "cs-kanto-cinnabar-volcano-n3",
+  "cs-kanto-cinnabar-volcano-n4",
+  "cs-kanto-cinnabar-volcano-n5",
+  "cs-kanto-cinnabar-volcano-n6",
+  "cs-kanto-indigo-cave",
+  "cs-kanto-indigo-cave-n1",
+  "cs-kanto-indigo-cave-n2",
+  "cs-kanto-route-charizard-end",
+  "cs-kanto-route-charizard-n1",
+  "cs-kanto-route-charizard-n2",
+  "cs-kanto-route-charizard-n3",
+  "cs-kanto-route-pidgeotto-bye"
+ ],
+ "events": [
+  {
+   "id": "cs-kanto-cinnabar-lab",
+   "name": "Cinnabar Lab",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "museum",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-museum-registry",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Dr. Yarrow has the paperwork. \"Blackwood wrote. Nine pages. He wants to know everything it does.\""
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "A white building on black rock. Inside, everything hums, and a man's asleep on a keyboard. Three rooms: Fossil Revival, the Fusion Display, and the Trade Wing.",
+   "choices": [
+    {
+     "label": "Fossil Revival.",
+     "success": {
+      "text": "The revival room is cold and very clean, with one plate in the middle of it like an altar.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-revive"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Fusion Display.",
+     "success": {
+      "text": "Two tanks and a drawing of what would come out. An assistant: \"We don't do it. We draw it. The drawing's the fun part. Nobody gets hurt by a drawing.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-fusion"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Trade Wing.",
+     "success": {
+      "text": "Three researchers look up from three desks at once. Each of them wants something common, and each has something that isn't.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-trades"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave him asleep on his keyboard.",
+     "success": {
+      "text": "You let the door close softly. Behind it the hum goes on, and so does the snoring.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cinnabar.lab"
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-revive",
+   "name": "Cinnabar Lab: Fossil Revival",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "One revival per visit. Helix, Omanyte; Dome, Kabuto; Old Amber, Aerodactyl; and the other regions' fossils likewise.",
+   "choices": [
+    {
+     "label": "The Helix Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "helix-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "helix-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "omanyte"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Dome Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "dome-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "dome-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "kabuto"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Old Amber.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "old-amber"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "old-amber",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "aerodactyl"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Other fossils, or a Fossil Fragment.",
+     "success": {
+      "text": "Dr. Yarrow pulls out a second tray.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-revive2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-revive2",
+   "name": "Cinnabar Lab: Other Fossils",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The other regions' fossils, and a drawer marked FRAGMENTS. A player holding one fragment gets the second here, for nothing.",
+   "choices": [
+    {
+     "label": "A fossil from another region.",
+     "success": {
+      "text": "He picks it out of your bag himself.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-revive3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The second Fossil Fragment, for nothing.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-fossil-fragment",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Dr. Yarrow: \"Half of a thing is no use to anybody. Here.\" The two halves fit.",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "fossilFragment"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The shelf marked UNCLAIMED.",
+     "success": {
+      "text": "Dr. Yarrow follows your eyes to the shelf, and goes quiet for a moment.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-backlog"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the hall.",
+     "success": {
+      "text": "Back to the humming.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-hall"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-revive3",
+   "name": "Cinnabar Lab: Other Fossils",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The plate takes any fossil. It just takes a little longer with the far ones.",
+   "choices": [
+    {
+     "label": "Hoenn, Sinnoh or Unova.",
+     "success": {
+      "text": "He pulls out the tray and holds his hand out for it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-hoenn1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Kalos or Galar.",
+     "success": {
+      "text": "He pulls out the tray and holds his hand out for it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-kalos1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hisui.",
+     "success": {
+      "text": "He pulls out the tray and holds his hand out for it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-hisui1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back.",
+     "success": {
+      "text": "Back to the hall.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-hall"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-hoenn1",
+   "name": "Cinnabar Lab: Other Fossils",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The Root Fossil, The Claw Fossil, The Skull Fossil.",
+   "choices": [
+    {
+     "label": "The Root Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "root-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "root-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "lileep"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Claw Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "claw-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "claw-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "anorith"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Skull Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "skull-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "skull-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "cranidos"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The next tray.",
+     "success": {
+      "text": "Another tray, another three.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-hoenn2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-hoenn2",
+   "name": "Cinnabar Lab: Other Fossils",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The Armor Fossil, The Cover Fossil, The Plume Fossil.",
+   "choices": [
+    {
+     "label": "The Armor Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "armor-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "armor-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "shieldon"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Cover Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "cover-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "cover-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "tirtouga"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Plume Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "plume-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "plume-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "archen"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not these. Back.",
+     "success": {
+      "text": "He puts the tray away again, carefully.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-revive3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-kalos1",
+   "name": "Cinnabar Lab: Other Fossils",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The Jaw Fossil, The Sail Fossil, The Fossilized Bird.",
+   "choices": [
+    {
+     "label": "The Jaw Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "jaw-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "jaw-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "tyrunt"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Sail Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "sail-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "sail-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "amaura"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Fossilized Bird.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "fossilized-bird"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "fossilized-bird",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "dracozolt"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The next tray.",
+     "success": {
+      "text": "Another tray, another three.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-kalos2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-kalos2",
+   "name": "Cinnabar Lab: Other Fossils",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The Fossilized Dino, The Fossilized Drake, The Fossilized Fish.",
+   "choices": [
+    {
+     "label": "The Fossilized Dino.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "fossilized-dino"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "fossilized-dino",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "arctozolt"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Fossilized Drake.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "fossilized-drake"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "fossilized-drake",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "dracovish"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Fossilized Fish.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "fossilized-fish"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "fossilized-fish",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "arctovish"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not these. Back.",
+     "success": {
+      "text": "He puts the tray away again, carefully.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-revive3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-hisui1",
+   "name": "Cinnabar Lab: Other Fossils",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The Hisuian Ember Fossil, The Hisuian Spark Fossil, The Hisuian Tide Fossil.",
+   "choices": [
+    {
+     "label": "The Hisuian Ember Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "hisui-ember-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "hisui-ember-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "growlithe-hisui"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Hisuian Spark Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "hisui-spark-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "hisui-spark-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "voltorb-hisui"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Hisuian Tide Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "hisui-tide-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "hisui-tide-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "qwilfish-hisui"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The next tray.",
+     "success": {
+      "text": "Another tray, another three.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-hisui2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-hisui2",
+   "name": "Cinnabar Lab: Other Fossils",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The Hisuian Talon Fossil, The Hisuian Veil Fossil, The Hisuian Inferno Fossil.",
+   "choices": [
+    {
+     "label": "The Hisuian Talon Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "hisui-talon-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "hisui-talon-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "sneasel-hisui"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Hisuian Veil Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "hisui-veil-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "hisui-veil-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "zorua-hisui"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Hisuian Inferno Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "hisui-inferno-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "hisui-inferno-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "arcanine-hisui"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The next tray.",
+     "success": {
+      "text": "Another tray, another three.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-hisui3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-hisui3",
+   "name": "Cinnabar Lab: Other Fossils",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The Hisuian Thunder Fossil, The Hisuian Ghostfire Fossil, The Hisuian Blade Fossil.",
+   "choices": [
+    {
+     "label": "The Hisuian Thunder Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "hisui-thunder-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "hisui-thunder-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "electrode-hisui"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Hisuian Ghostfire Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "hisui-ghostfire-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "hisui-ghostfire-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "typhlosion-hisui"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Hisuian Blade Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "hisui-blade-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "hisui-blade-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "samurott-hisui"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The next tray.",
+     "success": {
+      "text": "Another tray, another three.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-hisui4"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-hisui4",
+   "name": "Cinnabar Lab: Other Fossils",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The Hisuian Quill Fossil, The Hisuian Phantom Fossil, The Hisuian Slime Fossil.",
+   "choices": [
+    {
+     "label": "The Hisuian Quill Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "hisui-quill-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "hisui-quill-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "decidueye-hisui"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Hisuian Phantom Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "hisui-phantom-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "hisui-phantom-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "zoroark-hisui"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Hisuian Slime Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "hisui-slime-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "hisui-slime-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "goodra-hisui"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The next tray.",
+     "success": {
+      "text": "Another tray, another three.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-hisui5"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-hisui5",
+   "name": "Cinnabar Lab: Other Fossils",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The Hisuian Bloom Fossil, The Hisuian Crest Fossil, The Hisuian Glacier Fossil.",
+   "choices": [
+    {
+     "label": "The Hisuian Bloom Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "hisui-bloom-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "hisui-bloom-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "lilligant-hisui"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Hisuian Crest Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "hisui-crest-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "hisui-crest-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "braviary-hisui"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Hisuian Glacier Fossil.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "hisui-glacier-fossil"
+      }
+     ],
+     "success": {
+      "text": "Dr. Fenwick Yarrow: \"Put it on the plate. Stand back. No, further. It's been asleep a long time and it wakes up offended.\" The plate glows. The stone cracks along a line that was always there.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "hisui-glacier-fossil",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "avalugg-hisui"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-fossil-revived",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not these. Back.",
+     "success": {
+      "text": "He puts the tray away again, carefully.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-revive3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-wake",
+   "name": "Cinnabar Lab: It Wakes",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "Something very old opens its eyes on a world with the wrong stars, and sees one face.",
+   "choices": [
+    {
+     "label": "\"It's all right.\"",
+     "success": {
+      "text": "It looks at you for a long time. Then it decides to believe you. Its Bond starts one step higher.",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "bond",
+        "who": "newest",
+        "count": 5
+       },
+       {
+        "kind": "kc",
+        "act": "bond",
+        "who": "newest",
+        "count": 5
+       },
+       {
+        "kind": "moment",
+        "text": "Woke a fossil at the Cinnabar Lab, and were the first face it saw."
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Welcome back.\"",
+     "success": {
+      "text": "It doesn't know the words. It knows the voice. Its Bond starts one step higher.",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "bond",
+        "who": "newest",
+        "count": 5
+       },
+       {
+        "kind": "kc",
+        "act": "bond",
+        "who": "newest",
+        "count": 5
+       },
+       {
+        "kind": "moment",
+        "text": "Woke a fossil at the Cinnabar Lab, and were the first face it saw."
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Say nothing; hold out a hand.)",
+     "success": {
+      "text": "It puts its head under your hand, and leaves it there. Its Bond starts one step higher.",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "bond",
+        "who": "newest",
+        "count": 5
+       },
+       {
+        "kind": "kc",
+        "act": "bond",
+        "who": "newest",
+        "count": 5
+       },
+       {
+        "kind": "moment",
+        "text": "Woke a fossil at the Cinnabar Lab, and were the first face it saw."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-fusion",
+   "name": "Cinnabar Lab: The Fusion Display",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "Pick any two of your party, and the assistant sketches what would come out. Cosmetic: nobody gets hurt by a drawing.",
+   "choices": [
+    {
+     "label": "Pick two and watch her draw.",
+     "pick": {},
+     "success": {
+      "text": "The sketch is very bad and very loving. Your lead looks at it, and then at you, with deep suspicion. You keep it anyway.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-hall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back.",
+     "success": {
+      "text": "Back.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-hall"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-lab-hall",
+   "name": "Cinnabar Lab",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "Everything hums. The man on the keyboard has turned his head the other way.",
+   "choices": [
+    {
+     "label": "Fossil Revival.",
+     "success": {
+      "text": "The revival room is cold and very clean, with one plate in the middle of it like an altar.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-revive"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Fusion Display.",
+     "success": {
+      "text": "Two tanks and a drawing of what would come out. An assistant: \"We don't do it. We draw it. The drawing's the fun part. Nobody gets hurt by a drawing.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-lab-fusion"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Trade Wing.",
+     "success": {
+      "text": "Three researchers look up from three desks at once. Each of them wants something common, and each has something that isn't.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-trades"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave him asleep on his keyboard.",
+     "success": {
+      "text": "You let the door close softly. Behind it the hum goes on, and so does the snoring.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion",
+   "name": "Pokémon Mansion",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "A great house with no roof. The fire was years ago. Grimer live in what was the kitchen. Burned-out ruins: Fire, Poison and Electric Pokémon, and a 1 in 16 chance of a burn from hot rubble at every room.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "The front door is only half a door.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "You leave the ruin to its Grimer.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cinnabar.mansion"
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-n1",
+   "name": "Pokémon Mansion: The Hall",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "Two statues with red eyes. One's eye is a switch. Three statues in the house, and each one opens some doors and shuts others.",
+   "choices": [
+    {
+     "label": "Go on.",
+     "chance": 0.9375,
+     "success": {
+      "text": "The hall is full of things that live in rubble now.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-mansion-n2"
+        }
+       ],
+       "types": [
+        "fire",
+        "poison",
+        "electric"
+       ]
+      }
+     },
+     "failure": {
+      "text": "The hall is full of things that live in rubble now. Hot rubble shifts underfoot and your lead is burned.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "burn",
+        "who": "lead",
+        "except": [
+         "fire"
+        ]
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-mansion-n2"
+        }
+       ],
+       "types": [
+        "fire",
+        "poison",
+        "electric"
+       ]
+      }
+     }
+    },
+    {
+     "label": "Press the hall statue's eye.",
+     "chance": 0.5,
+     "success": {
+      "text": "Something clunks deep in the walls, and a door you hadn't noticed stands open.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Something clunks deep in the walls, and the wrong door slams shut. It takes another try to put it right.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-n2",
+   "name": "Pokémon Mansion: The Library",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "Burned books. On the one desk, Diary page 1: \"We found it in the jungle. A new kind. We've named it. It let us.\"",
+   "choices": [
+    {
+     "label": "Go on.",
+     "chance": 0.9375,
+     "success": {
+      "text": "Something in the stacks objects to you reading.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-mansion-n3"
+        }
+       ],
+       "types": [
+        "fire",
+        "poison",
+        "electric"
+       ]
+      }
+     },
+     "failure": {
+      "text": "Something in the stacks objects to you reading. Hot rubble shifts underfoot and your lead is burned.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "burn",
+        "who": "lead",
+        "except": [
+         "fire"
+        ]
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-mansion-n3"
+        }
+       ],
+       "types": [
+        "fire",
+        "poison",
+        "electric"
+       ]
+      }
+     }
+    },
+    {
+     "label": "Read it twice.",
+     "success": {
+      "text": "It let us. You read that line a third time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-mansion-diary",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Read page 1 of the Mansion diary: a new kind, found in the jungle"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-n3",
+   "name": "Pokémon Mansion: The Laboratory",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "Broken tanks. A second statue switch. Diary page 2: \"It's had a child. We are calling the child Two. We're very proud. I'm ashamed of how proud.\" On the back of the page, in pencil, the order of the switches.",
+   "choices": [
+    {
+     "label": "Read the back of page 2, and press them in order.",
+     "success": {
+      "text": "Hall, laboratory, basement. Every door opens at once, the right ones.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-mansion-diary",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Read page 2 of the Mansion diary: the child called Two"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-mansion-order",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Press the laboratory statue's eye.",
+     "chance": 0.5,
+     "success": {
+      "text": "Something clunks deep in the walls, and a door you hadn't noticed stands open.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n4"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Something clunks deep in the walls, and the wrong door slams shut. It takes another try to put it right.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on.",
+     "chance": 0.9375,
+     "success": {
+      "text": "A Magmar has made a nest in the warm tank.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-mansion-n4"
+        }
+       ],
+       "types": [
+        "fire",
+        "poison",
+        "electric"
+       ]
+      }
+     },
+     "failure": {
+      "text": "A Magmar has made a nest in the warm tank. Hot rubble shifts underfoot and your lead is burned.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "burn",
+        "who": "lead",
+        "except": [
+         "fire"
+        ]
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-mansion-n4"
+        }
+       ],
+       "types": [
+        "fire",
+        "poison",
+        "electric"
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-n4",
+   "name": "Pokémon Mansion: The Nursery",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "A small room. A cot. Toys for something that wasn't a child. Nothing lives in this room; nothing fights here. Diary page 3: \"It asks questions now. We haven't taught it any. I answered one honestly and it didn't speak for a week.\"",
+   "choices": [
+    {
+     "label": "Take the page.",
+     "success": {
+      "text": "You fold it into your notebook very carefully, as if it could still be hurt.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-mansion-diary",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Read page 3 of the Mansion diary: it asks questions"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the page on the cot.",
+     "success": {
+      "text": "Some things should stay where they were left.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n5"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-n5",
+   "name": "Pokémon Mansion: The Basement",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The third switch, and the door it opens. Diary page 4: \"We can't hold it. He says we must. He signs the cheques. He doesn't sign them with his name.\" Page 4 is a File: the cheques tie to Giovanni's cover.",
+   "choices": [
+    {
+     "label": "Take page 4, and open the door.",
+     "success": {
+      "text": "The file goes in your bag. The door opens on a light.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-mansion-diary",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Read page 4 of the Mansion diary: the cheques"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-mansion-file",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Press the basement statue's eye.",
+     "chance": 0.5,
+     "success": {
+      "text": "Something clunks deep in the walls, and a door you hadn't noticed stands open.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n6"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Something clunks deep in the walls, and the wrong door slams shut. It takes another try to put it right.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n6"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-n6",
+   "name": "Pokémon Mansion: The Scientist",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "A Rocket scientist, left behind, with a Muk or a Weezing. The scientist: \"I came back for my notes. That's all. I just want my name off them.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "chance": 0.5,
+     "success": {
+      "text": "He fights like a man who wants it to be over.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rocket Scientist",
+       "size": 1,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "secret-key",
+         "count": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-mansion-reward"
+        }
+       ],
+       "team": [
+        "muk"
+       ]
+      }
+     },
+     "failure": {
+      "text": "He fights like a man who wants it to be over.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rocket Scientist",
+       "size": 1,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "secret-key",
+         "count": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-mansion-reward"
+        }
+       ],
+       "team": [
+        "weezing"
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Whose name's on the cheques?\"",
+     "success": {
+      "text": "\"Not his. Never his.\" He says it to the floor. Then he looks up: \"Battle me or let me go. I can't stand here.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-n6b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Take your notes and go.\"",
+     "success": {
+      "text": "No battle. He gathers his notes, and leaves the Secret Key on the table, and goes up the stairs without looking back.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "secret-key",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-reward"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-n6b",
+   "name": "Pokémon Mansion: The Scientist",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "He waits for your answer with his notes held against his chest.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "He fights like a man who wants it to be over.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rocket Scientist",
+       "size": 1,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "secret-key",
+         "count": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-mansion-reward"
+        }
+       ],
+       "team": [
+        "weezing"
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Take your notes and go.\"",
+     "success": {
+      "text": "He leaves the Secret Key on the table.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "secret-key",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-mansion-reward"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-mansion-reward",
+   "name": "Pokémon Mansion: What the House Gives",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The Secret Key opens the Gym's door, and one locked room in Cerulean Cave. And in the scientist's drawer: TM Fire Spin, or a Fire-type fossil.",
+   "choices": [
+    {
+     "label": "TM Fire Spin.",
+     "success": {
+      "text": "The disc is warm, as if the fire never quite went out in it.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "fire-spin"
+       },
+       {
+        "kind": "moment",
+        "text": "Walked out of the burned Mansion with the Secret Key."
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Fire-type fossil.",
+     "success": {
+      "text": "A fossil with a little warmth still in the stone.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "hisui-ember-fossil",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Walked out of the burned Mansion with the Secret Key."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam",
+   "name": "Seafoam Islands",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "Two islands joined underground. The sea goes in at one end and comes out the other, fast. An ice cave with a current: until a boulder is set, the current may carry you one room back. Three boulders, on the second, third and fourth rooms, each to be pushed into the hole on the level below.",
+   "choices": [
+    {
+     "label": "Go down.",
+     "success": {
+      "text": "The first room is all ice and spray, and a Seel who thinks you are in its way.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "seel",
+        "dewgong",
+        "shellder",
+        "slowpoke",
+        "jynx",
+        "golbat",
+        "zubat",
+        "psyduck"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-seafoam-n2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "You leave the sea to its business.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cinnabar.seafoam"
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam-n2",
+   "name": "Seafoam Islands: The First Boulder",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The first boulder sits by the hole, and the current runs hard under it.",
+   "choices": [
+    {
+     "label": "Push it in with Strength.",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "strength"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon puts its shoulder to the boulder and it drops into the hole on the level below. The current there breaks against it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-n3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push it in with your lead: two pushes.",
+     "success": {
+      "text": "The first push moves it halfway. Something in the ice cave doesn't like the noise.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "seel",
+        "dewgong",
+        "shellder",
+        "slowpoke",
+        "jynx",
+        "golbat",
+        "zubat",
+        "psyduck"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-seafoam-n3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it, and wade past.",
+     "chance": 0.5,
+     "success": {
+      "text": "You keep your feet. Just. The current pulls at you the whole way, and lets go at the far side.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-n3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Without the boulder the current is still running. It takes you off your feet and carries you one room back.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-n2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam-n3",
+   "name": "Seafoam Islands: The Second Boulder",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "A Slowpoke's sitting on the second boulder. It doesn't move. It's noticed you. It'll have noticed properly by tomorrow.",
+   "choices": [
+    {
+     "label": "Push anyway. Gently.",
+     "success": {
+      "text": "You push. The Slowpoke rides the boulder all the way into the hole, and climbs out again, unbothered.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-n4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for it.",
+     "success": {
+      "text": "You wait. It takes a node's time. When it finally gets down, it follows you, and lets itself be caught without a fight.",
+      "effects": [
+       {
+        "kind": "takeNode"
+       },
+       {
+        "kind": "join",
+        "species": [
+         "slowpoke"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-n4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer it a Berry.",
+     "success": {
+      "text": "It takes the Berry, and gets off, and the boulder goes in.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-n4"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam-n4",
+   "name": "Seafoam Islands: The Third Boulder",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The last boulder. Beyond it the water goes still.",
+   "choices": [
+    {
+     "label": "Push it in with Strength.",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "strength"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon puts its shoulder to the boulder and it drops into the hole on the level below. The current there breaks against it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-n5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push it in with your lead: two pushes.",
+     "success": {
+      "text": "The first push moves it halfway. Something in the ice cave doesn't like the noise.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "seel",
+        "dewgong",
+        "shellder",
+        "slowpoke",
+        "jynx",
+        "golbat",
+        "zubat",
+        "psyduck"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-seafoam-n5"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it, and wade past.",
+     "chance": 0.5,
+     "success": {
+      "text": "You keep your feet. Just. The current pulls at you the whole way, and lets go at the far side.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-n5"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Without the boulder the current is still running. It takes you off your feet and carries you one room back.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-n3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam-n5",
+   "name": "Seafoam Islands: The Still Water",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The current is broken. The sound of the sea has gone somewhere far away. One more room, and the bottom.",
+   "choices": [
+    {
+     "label": "Go on down.",
+     "success": {
+      "text": "A Jynx is singing in the dark, and stops when it sees you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "jynx",
+        "dewgong",
+        "golbat"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-seafoam-n6"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam-n6",
+   "name": "Seafoam Islands: The Bottom",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "It's the only thing down here that isn't moving. The current goes round it.",
+   "choices": [
+    {
+     "label": "Look.",
+     "chance": 0.45,
+     "success": {
+      "text": "A pillar of ice, in still water.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-seafoam-pillar"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Not a bird. Dewgong: five of them, surfacing one after another, and none of them pleased.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "dewgong"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "item",
+         "id": "nevermeltice",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "icy-rock",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Fought a Dewgong horde at the bottom of the Seafoam Islands."
+        }
+       ],
+       "chain": 3
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-seafoam-pillar",
+   "name": "Seafoam Islands: The Pillar",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "On a pillar of ice in still water, something with long blue feathers. It can be caught, at low odds.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "chance": 0.78,
+     "success": {
+      "text": "It opens its wings and the water freezes round your feet.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "articuno"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "item",
+         "id": "nevermeltice",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "icy-rock",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-seafoam-articuno",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Met Articuno at the bottom of the Seafoam Islands."
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "Its feathers are the wrong colour: violet, and the eyes are wrong too. A Galarian Articuno.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "articuno-galar"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "item",
+         "id": "nevermeltice",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "icy-rock",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-seafoam-articuno",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Met a Galarian Articuno at the bottom of the Seafoam Islands."
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-newisland",
+   "name": "New Island",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "A Dragonite lands with a letter, and waits for an answer. The letter: \"You are invited, as one of a few trainers of promise, to the castle on New Island. A ferry leaves at dusk. The ferry will not run. Come anyway.\" A thunderstorm: rain throughout; Thunder never misses.",
+   "choices": [
+    {
+     "label": "Go.",
+     "success": {
+      "text": "The Dragonite bows, and flies off ahead of you into the dark.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-newisland-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Who sent this?",
+     "success": {
+      "text": "The Dragonite doesn't know how to say. It looks at the sea.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-newisland-ask"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not tonight.",
+     "success": {
+      "text": "Declining ends it; nothing's lost. The Dragonite takes the letter back, very carefully.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cinnabar.newisland"
+  },
+  {
+   "id": "cs-kanto-cinnabar-newisland-ask",
+   "name": "New Island: The Letter",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The Dragonite waits, rain running off its wings.",
+   "choices": [
+    {
+     "label": "Go.",
+     "success": {
+      "text": "It flies ahead.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-newisland-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not tonight.",
+     "success": {
+      "text": "It takes the letter back.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-newisland-n1",
+   "name": "New Island: The Crossing",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The ferry isn't running. Your own Pokémon carry you through the storm: a timing course. The harbour mistress, in a cloak, watching: \"The ones who get across are the ones who should.\"",
+   "choices": [
+    {
+     "label": "Cross.",
+     "prompt": {
+      "id": "dodge-tap",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You cross, soaked to the bone, every one of your Pokémon gasping on the far shore.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-newisland-n2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You wake on the dock. \"Your best Pokémon was scanned.\" Nothing's lost. Nobody on the dock remembers a castle.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-newisland-dock",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-newisland-n2",
+   "name": "New Island: The Hall",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "A long table set for many; three other trainers who made it. A hooded woman who speaks as if reciting.",
+   "choices": [
+    {
+     "label": "Sit.",
+     "success": {
+      "text": "Nobody eats. The hooded woman leads you all deeper.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-newisland-n3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-newisland-n3",
+   "name": "New Island: The Host",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The hood comes off. She's a missing nurse, and she blinks, and doesn't know where she is. The host speaks without a mouth: \"You came through a storm because a letter flattered you. So did they.\"",
+   "choices": [
+    {
+     "label": "Go on.",
+     "success": {
+      "text": "The nurse holds your sleeve. You take her with you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-newisland-n4"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-newisland-n4",
+   "name": "New Island: The Laboratory",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "Tanks. Every Pokémon the guests brought is scanned, through the Balls, without being taken. Nothing of yours is removed.",
+   "choices": [
+    {
+     "label": "Go down.",
+     "success": {
+      "text": "Below, a floor like a stage.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-newisland-n5"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-newisland-n5",
+   "name": "New Island: The Clone Battle",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "Copies of your own team: the same species, no items, no abilities, +10% to every stat, and they know your moves and use the best one against each matchup. Your lead looks at itself. Itself looks back. Neither wants to go first.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "After two knock-outs on either side, the fighting slows. Both sides are tired. They're hitting themselves.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "The Copies",
+       "size": 3,
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cinnabar-newisland-after"
+        }
+       ],
+       "mirror": true,
+       "clone": true,
+       "weather": "rain",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "kanto-newisland-dock",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-newisland-after",
+   "name": "New Island: Both Sides Tired",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "Both sides are tired. They're hitting themselves.",
+   "choices": [
+    {
+     "label": "Keep fighting.",
+     "success": {
+      "text": "The battle's finished as a battle. The host says: \"As I thought. Nothing in it.\" The Clone Core is left on the floor: once, copy one Pokémon's moves to another.",
+      "effects": [
+       {
+        "kind": "copyMoves"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-newisland-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stop. Call mine back.",
+     "success": {
+      "text": "The copies stop too. They've nobody telling them to go on. The host leaves, taking the copies with it: \"They're mine. I won't have them used. Not even by me.\" The Clone Core is left behind.",
+      "effects": [
+       {
+        "kind": "copyMoves"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-newisland-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-newisland-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stand between them.",
+     "success": {
+      "text": "Off-screen, a white flash. You're on the floor. Both parties are round you. The host's silent for a long time. \"...Why would you do that for something you could replace?\" Then it leaves, taking the copies: \"They're mine. I won't have them used. Not even by me.\" The Clone Core is left behind.",
+      "effects": [
+       {
+        "kind": "copyMoves"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-newisland-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-newisland-stood",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Stood between your team and its copies on New Island."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-newisland-end"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-newisland-end",
+   "name": "New Island: The Rafters",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The castle is emptying. Something pink might have been watching from the rafters all along.",
+   "choices": [
+    {
+     "label": "Look up.",
+     "chance": 0.1,
+     "success": {
+      "text": "Something pink's been watching from the rafters all along. It can be tried for, once.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-newisland-mew"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Only rafters, and the storm going quiet outside.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-newisland-mew",
+   "name": "New Island: Mew",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "It hangs in the air, upside down, curious. Once.",
+   "choices": [
+    {
+     "label": "Try for it.",
+     "success": {
+      "text": "It plays with you more than it fights.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "mew"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Saw Mew on New Island."
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let it watch.",
+     "success": {
+      "text": "It watches you go, and then it is gone.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-volcano",
+   "name": "Cinnabar Volcano",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The Center's out of burn medicine. The herb it's made from grows in one place. Nurse: \"It's up there. It only grows where it's too hot to pick it. I'd go, but then who's here?\" Three steps up; each has a 1 in 16 chance of a burn to your lead. A Fire-type in the lead takes none, and finds the path.",
+   "choices": [
+    {
+     "label": "Climb (step 1 of 3).",
+     "chance": 0.9375,
+     "success": {
+      "text": "Hot stone, and the smell of sulphur, and the path climbing.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-volcano-s2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A vent breathes out as you pass. Your lead is burned.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "burn",
+        "who": "lead",
+        "except": [
+         "fire"
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-volcano-s2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "The nurse nods. \"Somebody will.\"",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cinnabar.volcano"
+  },
+  {
+   "id": "cs-kanto-cinnabar-volcano-s2",
+   "name": "Cinnabar Volcano: Halfway",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "The ground is warm through your boots.",
+   "choices": [
+    {
+     "label": "Climb (step 2 of 3).",
+     "chance": 0.9375,
+     "success": {
+      "text": "Hot stone, and the smell of sulphur, and the path climbing.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-volcano-s3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A vent breathes out as you pass. Your lead is burned.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "burn",
+        "who": "lead",
+        "except": [
+         "fire"
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-volcano-s3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-volcano-s3",
+   "name": "Cinnabar Volcano: The Last Step",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "Nearly there. The air shimmers.",
+   "choices": [
+    {
+     "label": "Climb (step 3 of 3).",
+     "chance": 0.9375,
+     "success": {
+      "text": "Hot stone, and the smell of sulphur, and the path climbing.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-volcano-top"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A vent breathes out as you pass. Your lead is burned.",
+      "effects": [
+       {
+        "kind": "status",
+        "status": "burn",
+        "who": "lead",
+        "except": [
+         "fire"
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cinnabar-volcano-top"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cinnabar-volcano-top",
+   "name": "Cinnabar Volcano: The Herb Bed",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#8a3a2a"
+   },
+   "intro": "At the top, a Magmar, a Charmeleon or a Ponyta, sitting in the herb bed as if it's a garden.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It gets up out of the herbs, slowly, and shakes them off.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "magmar",
+        "charmeleon",
+        "ponyta"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "item",
+         "id": "fire-stone",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "heat-rock",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-volcano-herb",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Climbed Cinnabar Volcano for the burn herb."
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask. Pick only what's needed.",
+     "success": {
+      "text": "It watches. You take one handful. It lets you.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "fire-stone",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "heat-rock",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-volcano-herb",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Climbed Cinnabar Volcano for the burn herb."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade it a Berry for a handful.",
+     "success": {
+      "text": "It takes the Berry, and moves over.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "fire-stone",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "heat-rock",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-volcano-herb",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Climbed Cinnabar Volcano for the burn herb."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-badge-check",
+   "name": "Route 23: The Badge Check",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "perfume",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-perfume-foiled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Fourth guard: \"Rainbow. You pushed a wheelbarrow at Team Rocket. My sister was there. She can't tell it without crying.\""
+    },
+    {
+     "id": "stew",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-stew-perfect",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Second guard, unprompted: \"And Brock says the stew's never been better since.\""
+    },
+    {
+     "id": "quiet",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-perfume-foiled",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Fourth guard: \"Rainbow. Quiet one, that. Nothing wrong with quiet.\""
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Eight guards, one after another, on one road. Each checks one Badge, and each has heard one thing about you. First guard: \"Boulder. ...You're the one who sat through Brock's stew? Brave.\" Eighth guard: \"Earth. ...Go on. Nobody's checked that one in years. Nobody's had it.\"",
+   "choices": [
+    {
+     "label": "Walk the road.",
+     "success": {
+      "text": "Eight guards, eight Badges, eight small nods. At the end of the road the gate is open.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Passed the eight guards on Route 23."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the shortcut the sixth guard offers.",
+     "requires": [
+      {
+       "kind": "badges",
+       "atLeast": 6
+      }
+     ],
+     "success": {
+      "text": "He opens a side door: \"Six Badges by Stage 7. You've earned the short way round.\" It skips the first two rooms of Victory Road.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-badge-shortcut",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.badge-check"
+  },
+  {
+   "id": "cs-kanto-indigo-road",
+   "name": "Victory Road",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "short",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-badge-shortcut",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "addChoices": [
+      {
+       "label": "The guard's side door.",
+       "success": {
+        "text": "The short way round comes out past the first boulder.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "cs-kanto-indigo-road-n3"
+         }
+        ]
+       }
+      }
+     ],
+     "notice": "The sixth guard's side door is unlocked."
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3f7a"
+   },
+   "intro": "A cave with a carved arch. Eight sockets in the arch. As you walk under, eight lights come on, one at a time.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "The lights stay on behind you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-road-n1"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.indigo.road"
+  },
+  {
+   "id": "cs-kanto-indigo-road-n1",
+   "name": "Victory Road: The Arch",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3f7a"
+   },
+   "intro": "A trainer sitting just inside, boots off: \"I've been in here a month. I'm not lost. I'm resting.\"",
+   "choices": [
+    {
+     "label": "Go on.",
+     "success": {
+      "text": "Past the resting trainer, the cave gets serious.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "machop",
+        "machoke",
+        "geodude",
+        "graveler",
+        "onix",
+        "rhyhorn",
+        "marowak",
+        "zubat",
+        "golbat"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-indigo-road-n2"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-indigo-road-n2",
+   "name": "Victory Road: Boulder Puzzle 1",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3f7a"
+   },
+   "intro": "One boulder, one plate.",
+   "choices": [
+    {
+     "label": "Push the boulder onto the plate.",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "strength"
+      }
+     ],
+     "success": {
+      "text": "The boulder grinds onto the plate, and a gate lifts.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-road-n3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push it the hard way.",
+     "success": {
+      "text": "The boulder grinds onto the plate, and a gate lifts. It takes long enough that something comes to see what the noise is.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "machop",
+        "machoke",
+        "geodude",
+        "graveler",
+        "onix",
+        "rhyhorn",
+        "marowak",
+        "zubat",
+        "golbat"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-indigo-road-n3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look round the whole hall first.",
+     "success": {
+      "text": "There are more boulders here than the way through needs, and more plates. Somebody built this as a puzzle on purpose.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-boulders"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-indigo-road-n3",
+   "name": "Victory Road: Back to Back",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3f7a"
+   },
+   "intro": "Two trainers, back to back.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "A double battle.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Ace Trainers",
+       "size": 2,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-indigo-road-n4"
+        }
+       ],
+       "format": "doubles"
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-indigo-road-n4",
+   "name": "Victory Road: Boulder Puzzle 2",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3f7a"
+   },
+   "intro": "Two boulders, two plates, one of them on the floor above.",
+   "choices": [
+    {
+     "label": "Push the boulder onto the plate.",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "strength"
+      }
+     ],
+     "success": {
+      "text": "Two boulders, two plates; the second one rolls the last foot by itself.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-road-n5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push it the hard way.",
+     "success": {
+      "text": "Two boulders, two plates; the second one rolls the last foot by itself. It takes long enough that something comes to see what the noise is.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "machop",
+        "machoke",
+        "geodude",
+        "graveler",
+        "onix",
+        "rhyhorn",
+        "marowak",
+        "zubat",
+        "golbat"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-indigo-road-n5"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look round the whole hall first.",
+     "success": {
+      "text": "There are more boulders here than the way through needs, and more plates. Somebody built this as a puzzle on purpose.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-boulders-r2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-indigo-road-n5",
+   "name": "Victory Road: The Ledge",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3f7a"
+   },
+   "intro": "A rest: a ledge with a view of every stage of Kanto you've crossed. The party sits.",
+   "choices": [
+    {
+     "label": "Sit with them.",
+     "success": {
+      "text": "Every road, every town, from up here, small and lit. Nobody says anything. Bond +1.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-road-n6"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-indigo-road-n6",
+   "name": "Victory Road: Boulder Puzzle 3",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3f7a"
+   },
+   "intro": "The last boulder, and behind it, either a nest or a kennel.",
+   "choices": [
+    {
+     "label": "Push the boulder onto the plate.",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "strength"
+      }
+     ],
+     "success": {
+      "text": "The last boulder drops, and the wall behind it opens.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-road-n6b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push it the hard way.",
+     "success": {
+      "text": "The last boulder drops, and the wall behind it opens. It takes long enough that something comes to see what the noise is.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "machop",
+        "machoke",
+        "geodude",
+        "graveler",
+        "onix",
+        "rhyhorn",
+        "marowak",
+        "zubat",
+        "golbat"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-indigo-road-n6b"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look round the whole hall first.",
+     "success": {
+      "text": "There are more boulders here than the way through needs, and more plates. Somebody built this as a puzzle on purpose.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-boulders-r3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-indigo-road-n6b",
+   "name": "Victory Road: Behind the Boulder",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3f7a"
+   },
+   "intro": "Behind the third boulder: the cave's one shaft of daylight.",
+   "choices": [
+    {
+     "label": "Look.",
+     "chance": 0.35,
+     "success": {
+      "text": "Moltres, asleep on a ledge with the cave's one shaft of daylight on it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-road-moltres"
+       }
+      ]
+     },
+     "failure": {
+      "text": "An Arcanine, old, guarding nothing in particular.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-road-arcanine"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-indigo-road-moltres",
+   "name": "Victory Road: The Nest",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3f7a"
+   },
+   "intro": "Moltres, asleep in the light. It can be caught, at low odds.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It wakes, and the light becomes fire.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "moltres"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-road-moltres",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Met Moltres on Victory Road."
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-indigo-road-n7"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let it sleep.",
+     "success": {
+      "text": "You pass it on tiptoe.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-road-n7"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-indigo-road-arcanine",
+   "name": "Victory Road: The Kennel",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3f7a"
+   },
+   "intro": "The old Arcanine lifts its head. It can be battled, or passed with a bow.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It fights the way old dogs fight: rarely, and well.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "arcanine"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-indigo-road-n7"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Pass with a bow.",
+     "success": {
+      "text": "It lowers its head to you, and lets you go.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-indigo-road-n7"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-indigo-road-n7",
+   "name": "Victory Road: The Rival's Last Stand",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "trust",
+     "when": [
+      {
+       "kind": "rivalState",
+       "feeling": {
+        "key": "trust",
+        "atLeast": 5
+       }
+      }
+     ],
+     "notice": "The rival walks out beside you."
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a3f7a"
+   },
+   "intro": "The exit. Daylight. Somebody's sitting in it. Rival: \"I got here yesterday. I was going to go straight in. Then I thought: no. They'll come through here. I want that one first. Everything after this is strangers. This one's ours.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "A full battle. Win or lose, at the end the rival gets up first. Rival: \"Right. Go on, then. I'll be behind you. ...I'll be right behind you.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rival",
+       "size": 6,
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "item",
+         "id": "hard-stone",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Fought the rival one last time at the mouth of Victory Road."
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-cave"
+        }
+       ],
+       "rival": true,
+       "lose": [
+        {
+         "kind": "item",
+         "id": "hard-stone",
+         "count": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-cave"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-cave",
+   "name": "Cerulean Cave",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5f8a"
+   },
+   "intro": "A cave mouth over the water north of Cerulean. There was always a man standing in front of it. He's gone. Strong wild Pokémon of every kind; no trainers. Nobody else has been let in.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "The first thing in the dark is not friendly.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "electrode",
+        "raichu",
+        "kadabra",
+        "wobbuffet",
+        "chansey",
+        "ditto",
+        "rhydon",
+        "golbat",
+        "parasect",
+        "sandslash"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-cave-n2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Not yet.",
+     "success": {
+      "text": "The water laps at the mouth of the cave. It will wait.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.cave",
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-cave-n2",
+   "name": "Cerulean Cave: The Deep",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5f8a"
+   },
+   "intro": "Deeper. A locked door in the rock, and the way on.",
+   "choices": [
+    {
+     "label": "Open the locked door with the Secret Key.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "secret-key"
+      }
+     ],
+     "success": {
+      "text": "A cot, the same as the one in the Mansion's nursery. It's been carried here, a long way, by something that didn't need to carry anything.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-cerulean-cave-n3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on.",
+     "success": {
+      "text": "Something else lives down here.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "electrode",
+        "raichu",
+        "kadabra",
+        "wobbuffet",
+        "chansey",
+        "ditto",
+        "rhydon",
+        "golbat",
+        "parasect",
+        "sandslash"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-cave-n3"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-cave-n3",
+   "name": "Cerulean Cave: The Bottom",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5f8a"
+   },
+   "intro": "It's standing in still water with its back turned. Mewtwo: \"Another one. You've come to see if it's true. It's true. Now what?\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It can't be caught on this visit. It ends when it has seen enough. Mewtwo: \"Enough. You fight like someone who'll stop when it's asked. That's rare. Go.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Mewtwo",
+       "size": 1,
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-cave-first",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-cave-leave"
+        }
+       ],
+       "team": [
+        "mewtwo"
+       ],
+       "spritePokemon": "mewtwo",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "kanto-cave-first",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-cave-leave"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-cave-leave",
+   "name": "Cerulean Cave: Before Leaving",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "stood",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-newisland-stood",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "addChoices": [
+      {
+       "label": "Wait.",
+       "success": {
+        "text": "It turns round. It has heard about the castle.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "cs-kanto-cerulean-cave-second"
+         }
+        ]
+       }
+      }
+     ],
+     "notice": "It knows you. It knows what you did on New Island."
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5f8a"
+   },
+   "intro": "Mewtwo has turned its back again.",
+   "choices": [
+    {
+     "label": "\"I'm sorry for what they did.\"",
+     "success": {
+      "text": "Mewtwo: \"You didn't do it. Don't carry what isn't yours. I've enough for both.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-cave-answer",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "cs-kanto-cerulean-cave-second",
+        "nodes": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What do you want?\"",
+     "success": {
+      "text": "Mewtwo: \"Nobody's asked. ...Come back when I've an answer.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-cave-answer",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "cs-kanto-cerulean-cave-second",
+        "nodes": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Leave, quietly.)",
+     "success": {
+      "text": "You leave the way you came, and the water closes over the sound of your steps.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-cave-answer",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "cs-kanto-cerulean-cave-second",
+        "nodes": 2
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-cave-second",
+   "name": "Cerulean Cave: The Second Visit",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5f8a"
+   },
+   "intro": "Mewtwo: \"I've an answer. I'd like to see what it's like. Out there. With someone who stops when asked.\" It offers to come. No Ball's thrown unless you choose to; it steps into one.",
+   "choices": [
+    {
+     "label": "Hold out a Ball.",
+     "success": {
+      "text": "It steps into it. The Kanto Secret.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "mewtwo"
+        ],
+        "levelBonus": 2
+       },
+       {
+        "kind": "moment",
+        "text": "Mewtwo chose to come with you: the Kanto Secret."
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Come without one.\"",
+     "success": {
+      "text": "It comes without one, and a Ball is only for the rules. The Kanto Secret.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "mewtwo"
+        ],
+        "levelBonus": 2
+       },
+       {
+        "kind": "moment",
+        "text": "Mewtwo chose to come with you: the Kanto Secret."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-lament-flash",
+   "name": "Sabrina's Lament",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kanto-sabrina-labyrinth-done",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A flashback, at a quiet place on the road. A small girl who bent a spoon, and a room that went quiet.",
+   "choices": [
+    {
+     "label": "Let it pass.",
+     "success": {
+      "text": "The memory is not yours, and it leaves you holding it anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-charizard",
+   "name": "Charizard Valley",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A canyon with a gate, and a woman on a Charizard above it, looking down. The warden, Liza: \"Nobody's kept here. They come to get strong, and they leave when they are. Yours wants in? Or you do?\"",
+   "choices": [
+    {
+     "label": "Three battles.",
+     "success": {
+      "text": "Charizard 1: each one stronger. Between them you may rest, but not heal.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "charizard"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "item",
+         "id": "charizard-feather",
+         "count": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-charizard-r2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let it fight all three alone.",
+     "pick": {
+      "types": [
+       "fire"
+      ]
+     },
+     "requires": [
+      {
+       "kind": "partyLine",
+       "species": "charmander"
+      }
+     ],
+     "success": {
+      "text": "Your Charmander line asked to fight all three alone, and you let it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "charizard"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "item",
+         "id": "charizard-feather",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "charizard-feather",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "charizard-feather",
+         "count": 1
+        },
+        {
+         "kind": "kc",
+         "act": "statUp",
+         "stat": "best"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-charizard-prize"
+        }
+       ],
+       "chain": 3,
+       "rule": {
+        "leadType": "fire",
+        "noSwitch": true
+       }
+      }
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "Liza: \"Come back when it asks.\"",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.charizard"
+  },
+  {
+   "id": "cs-kanto-route-charizard-r2",
+   "name": "Charizard Valley: The Second",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "The second Charizard drops off the cliff and lands in front of you.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Charizard 2: each one stronger. Between them you may rest, but not heal.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "charizard"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "charizard-feather",
+         "count": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-charizard-r3"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-charizard-r3",
+   "name": "Charizard Valley: The Third",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "The third is the oldest, scarred across one wing.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Charizard 3: each one stronger. Between them you may rest, but not heal.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "charizard"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "item",
+         "id": "charizard-feather",
+         "count": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-charizard-prize"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-charizard-prize",
+   "name": "Charizard Valley: Liza",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Liza lands beside you. She gives you Charcoal, and looks at you a long while: half the time, she gives a Mega Stone too.",
+   "choices": [
+    {
+     "label": "Thank her.",
+     "chance": 0.5,
+     "success": {
+      "text": "A Mega Stone, too.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "charcoal",
+        "count": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "charizardite-x",
+         "charizardite-y"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Beat the three Charizard of the valley."
+       }
+      ]
+     },
+     "failure": {
+      "text": "Charcoal, warm in the hand.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "charcoal",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Beat the three Charizard of the valley."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-pidgeotto",
+   "name": "Pidgeotto's Farewell",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "partySpecies",
+     "species": "pidgeotto"
+    },
+    {
+     "kind": "flag",
+     "key": "kanto-flock-pidgey",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "The flock again. Fearow now. Under them, a tree full of Pidgey and Pidgeotto, with nobody to lead them. Your Pidgeotto's out of its Ball before it's called. It looks at the tree. It looks at you.",
+   "choices": [
+    {
+     "label": "\"Go. They need you.\"",
+     "success": {
+      "text": "It evolves in the air. It leaves the party. A Sharp Beak's left on the path. It will be back, once, when you need it most.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "your Pidgeotto",
+         "species": [
+          "pidgeotto"
+         ]
+        }
+       },
+       {
+        "kind": "item",
+        "id": "sharp-beak",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-pidgeotto-released",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Let your Pidgeotto go to lead the flock."
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Stay. We'll drive them off together.\"",
+     "success": {
+      "text": "A battle with the Fearow.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Fearow flock",
+       "size": 1,
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "formChange",
+         "from": "pidgeotto",
+         "to": "pidgeot"
+        },
+        {
+         "kind": "moment",
+         "text": "Your Pidgeotto drove off the Fearow, and stayed."
+        }
+       ],
+       "team": [
+        "fearow"
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"It's your choice.\"",
+     "success": {
+      "text": "It goes. A stage later it comes back, and goes again. It's the tree's, and it's yours. It's both.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "your Pidgeotto",
+         "species": [
+          "pidgeotto"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-pidgeotto-released",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-pidgeotto-both",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.pidgeotto"
+  },
+  {
+   "id": "cs-kanto-route-pidgeotto-back",
+   "name": "Pidgeotto's Farewell: Both",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kanto-pidgeotto-both",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A Pidgeot lands in front of you on the road, and shakes out its wings.",
+   "choices": [
+    {
+     "label": "Welcome it back.",
+     "success": {
+      "text": "It stays a while. No choice here loses it for good.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "pidgeot"
+        ],
+        "levelBonus": 0
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-bulbasaur",
+   "name": "Bulbasaur's Gathering",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Every Bulbasaur for miles, walking the same way, in the dark, in silence. A clearing. A tree in the middle with one enormous bud. A hundred Bulbasaur in rings round it. They start to sway.",
+   "choices": [
+    {
+     "label": "Sway with them.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Four bars, and you hit them, and every bulb in the clearing opens at once. A Bulbasaur or an Ivysaur follows you out, with a Miracle Seed.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "bulbasaur",
+         "ivysaur"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Saw every bulb open at the Bulbasaur gathering."
+       }
+      ]
+     },
+     "failure": {
+      "text": "You lose the beat, and the bulbs stay shut. Nobody minds.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Watch from the edge.",
+     "success": {
+      "text": "You watch until dawn. It is enough.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let mine join.",
+     "pick": {},
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "bulbasaur"
+      },
+      {
+       "kind": "bondLevel",
+       "atLeast": 3
+      }
+     ],
+     "success": {
+      "text": "At the last bar, it stops. Everyone else evolves. It can choose not to. You're asked nothing; it looks at you, and decides: it stays as it is, and gains what it would've gained.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 2,
+        "who": "picked"
+       },
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let mine join (it's young yet).",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "bulbasaur"
+      },
+      {
+       "kind": "bondLevel",
+       "atLeast": 3,
+       "absent": true
+      }
+     ],
+     "success": {
+      "text": "At the last bar, everyone evolves, and so does yours.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "bulbasaur",
+        "to": "ivysaur"
+       },
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.bulbasaur"
+  },
+  {
+   "id": "cs-kanto-route-haunter",
+   "name": "Haunter's Mansion",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "prank",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-prank-friend",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It's the same Haunter, from Lavender. \"It's got a house?\""
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "An empty house with every light on, and music. The door opens by itself. A banner: \"WELCOME\" and, under it, in a different hand, your name, spelled nearly right. A party thrown by ghosts who haven't had a guest in forty years. A Gastly serving drinks through the glasses. A Gengar at the piano. A Haunter, hosting, in a hat.",
+   "choices": [
+    {
+     "label": "Stay for the party.",
+     "success": {
+      "text": "Three party games: musical chairs (the chairs move), charades (the Haunter's are all \"ghost\"), and a toast. Then the Haunter asks to come along.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "haunter"
+        ],
+        "levelBonus": 0
+       },
+       {
+        "kind": "item",
+        "id": "spell-tag",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Stayed for a party forty years in the making."
+       }
+      ]
+     }
+    },
+    {
+     "label": "This is a trap.",
+     "success": {
+      "text": "It isn't. They're hurt. A battle, half-hearted.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "haunter",
+        "gengar",
+        "gastly"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "item",
+         "id": "spell-tag",
+         "count": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "I can't stay long.",
+     "success": {
+      "text": "They understand. A slice of cake, wrapped. It's forty years old. It's a Spell Tag.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "spell-tag",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.haunter"
+  },
+  {
+   "id": "cs-kanto-route-lapras",
+   "name": "Lapras's Song",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "silph",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-silph-lapras",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Singing, from the water. Your Lapras from Silph answers it. The young one follows her voice out to the herd. No escort's needed.",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Let her sing.",
+       "success": {
+        "text": "They sing to each other until the young one is gone over the horizon.",
+        "effects": [
+         {
+          "kind": "item",
+          "id": "mystic-water",
+          "count": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 2,
+          "who": "party"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Singing, from the water. One voice, with gaps left in it where other voices should come in. A young Lapras in a cove too small for it, singing out to sea. Nothing sings back.",
+   "choices": [
+    {
+     "label": "Help it find them.",
+     "success": {
+      "text": "You walk the shore and it swims beside you. A two-step escort along the coast, and one battle with Tentacool. At the end, far out: answering voices. It goes. It looks back once.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "tentacool"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "item",
+         "id": "mystic-water",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-lapras-escort",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Took a young Lapras home to its herd."
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Sing the gaps.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "It stops, astonished. It tries the song again with you in it. A two-step escort along the coast, and one battle with Tentacool. At the end, far out: answering voices. It goes. It looks back once.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "tentacool"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "item",
+         "id": "mystic-water",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-lapras-escort",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Took a young Lapras home to its herd."
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "Your voice cracks. It sings anyway. A two-step escort along the coast, and one battle with Tentacool. At the end, far out: answering voices. It goes. It looks back once.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "tentacool"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "item",
+         "id": "mystic-water",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-lapras-escort",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Took a young Lapras home to its herd."
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Catch it.",
+     "success": {
+      "text": "It lets itself be caught. It's quiet in the Ball. A Lapras with Water Absorb and Sing.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "lapras"
+        ],
+        "levelBonus": 0,
+        "ability": "water-absorb",
+        "moves": [
+         "sing"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.lapras"
+  },
+  {
+   "id": "cs-kanto-route-poster",
+   "name": "The Tournament Poster",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A poster on the wall: FIGHTING TOURNAMENT. ALL COMERS. P-1 GRAND PRIX. Somebody's drawn a moustache on the Hitmonchan.",
+   "choices": [
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "You read every line. You're entered at the door, without the entry test.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-tournament-poster",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk past.",
+     "success": {
+      "text": "The Hitmonchan's moustache watches you go.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.poster"
+  },
+  {
+   "id": "cs-kanto-route-pidgey-rush",
+   "name": "Pidgey Rush",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A Pidgey and Rattata horde: six, one after another. A boy on a fence: \"They do that. Run at them. They hate that.\"",
+   "choices": [
+    {
+     "label": "Fight all six.",
+     "success": {
+      "text": "Pidgey and Rattata, one after another.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "pidgey",
+        "rattata"
+       ],
+       "levelBonus": -2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-route-pidgey-rush-more"
+        }
+       ],
+       "chain": 3
+      }
+     }
+    },
+    {
+     "label": "Run at them.",
+     "success": {
+      "text": "Pidgey and Rattata, one after another.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "pidgey",
+        "rattata"
+       ],
+       "levelBonus": -2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Ran at a Pidgey rush, and it worked."
+        }
+       ],
+       "chain": 3
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.pidgey-rush"
+  },
+  {
+   "id": "cs-kanto-route-pidgey-rush-more",
+   "name": "Pidgey Rush: Three More",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Three more come out of the grass.",
+   "choices": [
+    {
+     "label": "Fight on.",
+     "success": {
+      "text": "Pidgey and Rattata, one after another.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "pidgey",
+        "rattata"
+       ],
+       "levelBonus": -2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Ran at a Pidgey rush, and it worked."
+        }
+       ],
+       "chain": 3
+      }
+     }
+    },
+    {
+     "label": "Run at them.",
+     "success": {
+      "text": "They scatter. The boy on the fence applauds.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-cut-tree",
+   "name": "The Cut Tree",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A small tree across a side path.",
+   "choices": [
+    {
+     "label": "Cut it.",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "cut"
+      }
+     ],
+     "success": {
+      "text": "The tree comes down clean. Behind it: an item, and a quiet place to rest.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "pp-up",
+         "nugget"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Samurai's Slash.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kanto-forest-samurai-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The tree comes down clean. Behind it: an item, and a quiet place to rest.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "pp-up",
+         "nugget"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rest under it.",
+     "success": {
+      "text": "Without Cut, the tree's a rest of its own. A Caterpie's asleep in it. Nothing's lost.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.3
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.cut-tree"
+  },
+  {
+   "id": "cs-kanto-route-tough-junior",
+   "name": "The Tough Junior",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Junior Trainer Thomasina Stubbs: \"I'm tough. Ask anybody. Ask my mum.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "She is, in fact, quite tough.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Junior Trainer Thomasina",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 0.3
+        },
+        {
+         "kind": "moment",
+         "text": "Beat the toughest junior on the road."
+        }
+       ],
+       "lose": [
+        {
+         "kind": "heal",
+         "share": 0.5
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.tough-junior"
+  },
+  {
+   "id": "cs-kanto-route-fishing",
+   "name": "The Fishing Contest",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "sprat",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-sprat-taught",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Mr. Sprat is the judge, and he pretends he's never seen you."
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Five anglers on a pier. Three casts; the biggest catch wins a Super Rod.",
+   "choices": [
+    {
+     "label": "Cast.",
+     "prompt": {
+      "id": "pull-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Yours is the biggest by a hand. A Super Rod.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "super-rod",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Won the fishing contest on the pier."
+       }
+      ]
+     },
+     "failure": {
+      "text": "Yours is respectable, and not the biggest.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You watch them fish until the light goes.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.fishing"
+  },
+  {
+   "id": "cs-kanto-route-stone-seller-list",
+   "name": "The Stone Seller",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Stones at ×1.2: ₽2,400. He never goes above it.",
+   "choices": [
+    {
+     "label": "Fire Stone (₽2,400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2400
+      }
+     ],
+     "success": {
+      "text": "He wraps it in newspaper.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2400
+       },
+       {
+        "kind": "item",
+        "id": "fire-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Water Stone (₽2,400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2400
+      }
+     ],
+     "success": {
+      "text": "He wraps it in newspaper.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2400
+       },
+       {
+        "kind": "item",
+        "id": "water-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thunder Stone (₽2,400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2400
+      }
+     ],
+     "success": {
+      "text": "He wraps it in newspaper.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2400
+       },
+       {
+        "kind": "item",
+        "id": "thunder-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The other stones.",
+     "success": {
+      "text": "He turns the tray round.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-stone-seller-list2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-stone-seller-list2",
+   "name": "The Stone Seller",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Stones at ×1.2: ₽2,400. He never goes above it.",
+   "choices": [
+    {
+     "label": "Leaf Stone (₽2,400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2400
+      }
+     ],
+     "success": {
+      "text": "He wraps it in newspaper.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2400
+       },
+       {
+        "kind": "item",
+        "id": "leaf-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Moon Stone (₽2,400)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2400
+      }
+     ],
+     "success": {
+      "text": "He wraps it in newspaper.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2400
+       },
+       {
+        "kind": "item",
+        "id": "moon-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No, thank you.",
+     "success": {
+      "text": "He never goes above the listed price. He tips his hat anyway.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-stone-seller-best",
+   "name": "The Stone Seller",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "The best result: ×0.8, ₽1,600.",
+   "choices": [
+    {
+     "label": "Fire Stone (₽1,600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1600
+      }
+     ],
+     "success": {
+      "text": "He wraps it in newspaper.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1600
+       },
+       {
+        "kind": "item",
+        "id": "fire-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Water Stone (₽1,600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1600
+      }
+     ],
+     "success": {
+      "text": "He wraps it in newspaper.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1600
+       },
+       {
+        "kind": "item",
+        "id": "water-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thunder Stone (₽1,600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1600
+      }
+     ],
+     "success": {
+      "text": "He wraps it in newspaper.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1600
+       },
+       {
+        "kind": "item",
+        "id": "thunder-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The other stones.",
+     "success": {
+      "text": "He turns the tray round.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-stone-seller-best2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-stone-seller-best2",
+   "name": "The Stone Seller",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "The best result: ×0.8, ₽1,600.",
+   "choices": [
+    {
+     "label": "Leaf Stone (₽1,600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1600
+      }
+     ],
+     "success": {
+      "text": "He wraps it in newspaper.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1600
+       },
+       {
+        "kind": "item",
+        "id": "leaf-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Moon Stone (₽1,600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1600
+      }
+     ],
+     "success": {
+      "text": "He wraps it in newspaper.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1600
+       },
+       {
+        "kind": "item",
+        "id": "moon-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No, thank you.",
+     "success": {
+      "text": "He never goes above the listed price. He tips his hat anyway.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-route-stone-seller",
+   "name": "The Stone Seller",
+   "group": "Canon Spaces: Kanto",
+   "stop": "merchant",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A man with a tray. Stones at ×1.2. Haggle, with the Honest Trade Card: a three-step offer game. Best result: ×0.8. Worst: the listed price. He never goes above it.",
+   "choices": [
+    {
+     "label": "Haggle.",
+     "prompt": {
+      "id": "gauge-hold",
+      "needs": "perfect"
+     },
+     "success": {
+      "text": "Three offers, three counter-offers, and he laughs and gives in.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-stone-seller-best"
+       }
+      ]
+     },
+     "failure": {
+      "text": "He holds firm at the listed price.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-stone-seller-list"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pay the listed price.",
+     "success": {
+      "text": "He turns the tray to you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-route-stone-seller-list"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "He doesn't call after you.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.stone-seller"
+  },
+  {
+   "id": "cs-kanto-route-cycling",
+   "name": "Cycling Road",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "owned",
+     "when": [
+      {
+       "kind": "item",
+       "id": "bike-voucher"
+      }
+     ],
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Race.",
+       "prompt": {
+        "id": "tilt-drag",
+        "needs": "good"
+       },
+       "success": {
+        "text": "You win by a wheel. A Quick Claw, since you already have the Voucher. Biker, losing: \"You haven't even got a bell.\"",
+        "effects": [
+         {
+          "kind": "item",
+          "id": "quick-claw",
+          "count": 1
+         }
+        ]
+       },
+       "failure": {
+        "text": "Biker: \"You haven't even got a bell.\"",
+        "effects": []
+       }
+      }
+     ]
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "A long hill down. A race against three Bikers: a lane-switching game.",
+   "choices": [
+    {
+     "label": "Race.",
+     "prompt": {
+      "id": "tilt-drag",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You win by a wheel. The Bike Voucher.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "bike-voucher",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Won the race down Cycling Road."
+       }
+      ]
+     },
+     "failure": {
+      "text": "They win, but only just. Biker, sneering anyway: \"You haven't even got a bell.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "Walk your bike down.",
+     "success": {
+      "text": "It takes a long time. The view is lovely.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.cycling"
+  },
+  {
+   "id": "cs-kanto-route-biker-gang",
+   "name": "The Biker Gang",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#5a6b3a"
+   },
+   "intro": "Six Bikers across the road, Rocket patches under their jackets.",
+   "choices": [
+    {
+     "label": "Battle all three pairs.",
+     "success": {
+      "text": "Three battles.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Biker Gang",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "evil",
+         "heat": -1
+        },
+        {
+         "kind": "moment",
+         "text": "Beat the Biker Gang."
+        }
+       ],
+       "chain": 3
+      }
+     }
+    },
+    {
+     "label": "\"Nice bikes.\"",
+     "success": {
+      "text": "Their leader, a woman called Big Dot, talks engines for ten minutes and lets you through. No Heat change.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.biker-gang"
+  }
+ ]
+}

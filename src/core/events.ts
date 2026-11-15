@@ -14,6 +14,7 @@ import { flagAge, lineHolds, lineMember, queueLaterEvent, stampFlagStage } from 
 import { modifierEventWeight } from './runModifiers';
 import { bringBack, sendAway, stopWeightOf } from './co/placesRules';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
+import { rememberPick, rememberedPick } from './co/pickMemory';
 import { PSEUDO, enterPseudoStage, leavePseudoStage, routeChainEvent } from './dungeon/pseudo';
 import { addMark, overhaulOf, type FeelingKey } from './rivals/overhaul';
 import { friendName, friendTeam, pseudoRivalBeat } from './rivals/live';
@@ -41,6 +42,7 @@ import { featuredRival, rivalBeaten, rivalFightTeam, rivalLastResult, rivalPath 
 import { monRivalState } from './rivals/monRivals';
 import { openFeud, settleFeud } from './story/feud';
 import { apprenticeLevelBonus, applyMentorEffect, mentorConditionMet, mentorConditionText, mentorStopEvent } from './mentors';
+import { applyMentorLesson, fillMentorText, mentorSceneId } from './mentors/lessons';
 import { noteEventMorality } from './story/nemesis';
 import { addHuntClue, finishHunt, huntClues, huntDone } from './story/grandEnemy';
 import { gauntletLeft, startGauntlet } from './story/gauntlet';
@@ -70,6 +72,7 @@ import { eggMoveOptions, familyId, teachEggMove } from './mastery';
 import { applyTrainEffect, trainEffectText } from './trainingEffects';
 import { noteCanonEvent, restoreStash, stashParty } from './expansion/canonRun';
 import { flightNorthEffect } from './instrumentality/flightNorth';
+import { applyKc, kcConditionWords, kcHolds, kcWords } from './expansion/canonKantoRules';
 import { applyCanonEffect, ghostReturns, labRetryEvent, nearestBst } from './expansion/canonSaffron';
 import { addStageAttribute } from './expansion/stageMods';
 import { raidOffered, resolveStoryRaid } from './raid/storyRaids';
@@ -91,8 +94,9 @@ import { earnRom, gainStock, grandArcOf, romById, romsHeld } from './grandArc';
 import { climaxCutOf } from './arc/climaxExtended';
 import { addMercy, changeRep, joinInsideMan, joinProblem, resolveVerdict, standWithClimaxWon, standWithOf, standWithPlayable, verdictsOpen } from './arc/standWithExtended';
 import { checkFlagKeys } from './shadow2/keys';
-import { bondLevel, bondLevelMet, fitsMatch, whoOf, whoWords } from './co/who';
+import { bondFriendship, bondLevel, bondLevelMet, fitsMatch, whoOf, whoWords } from './co/who';
 import { oweNodes } from './co/takeNode';
+import { clearNodeHold, setNodeBattle } from './co/attach';
 import { noteSpecial } from './expansion/fieldNotes';
 import { grantNamedShadow } from './shadow2/grant';
 import type { MapNode, PokemonInstance, RunState, SideStop } from './state';
@@ -102,10 +106,11 @@ import { emit } from './story/record';
 import { calmDisturbance, hasDisturbance, noteDungeonEntered } from './worldSim/tick';
 import { recordBattleStarted } from './story/hooks';
 import { partyLifeBond } from './partyLife';
-import { celebrateToday, milestoneToday, periodOf, PERIOD_LABEL, restUntilMorning, seasonOf } from './clock';
+import { celebrateToday, milestoneToday, periodOf, PERIOD_LABEL, restUntilMorning, seasonOf, tideOf } from './clock';
 import { BERRIES } from './berries';
 import { choiceAt, effectiveEvent, visibleChoices } from './eventMemory';
 import { getTheme, typesPool } from './themes';
+import { fitsStage, nodesAhead, planCoStage, positioned, SAME_STAGE, stageTags, type CoEntry } from './co/placement';
 import { anyRoaming, endRoamer, healConvoy, startConvoy, partyHasAbility, placeCamp, scoutAhead, CAMP_EVENT_ID } from './world';
 import { MAX_FOES, MAX_FOES_LISTED } from './bossLimits';
 
@@ -142,6 +147,13 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return (!!run.stage && run.party.some((m) => m.level >= curveLevel(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, run.stage!.index, 1)) + c.over)) !== (c.absent === true);
     case 'partyMoveType':
       return run.party.some((m) => m.hp > 0 && m.moves.some((s) => { const mv = content.moves.get(s.id); return mv?.type === c.type && mv.category !== 'status'; }));
+    case 'leadType':
+      return !!content.species.get(run.party.find((m) => m.hp > 0)?.speciesId ?? '')?.types.includes(c.type);
+    case 'picked': {
+      const mon = rememberedPick(run);
+      const types = mon ? content.species.get(mon.speciesId)?.types ?? [] : [];
+      return !!mon && (c.types.length === 0 || types.some((t) => c.types.includes(t))) && (c.starter === undefined || (mon.uid === run.log.starterUid) === c.starter);
+    }
     case 'partyType':
       return run.party.some((m) => content.species.get(m.speciesId)?.types.includes(c.type)) !== (c.absent === true);
     case 'period':
@@ -150,6 +162,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return c.in.includes(seasonOf(content, run));
     case 'region':
       return c.ids.includes(currentRegion(content, run).id);
+    case 'regionsLeft':
+      return run.regionOrder.length - 1 - run.regionIndex <= c.atMost;
     case 'milestone':
       return milestoneToday(content, run);
     case 'partySpecies':
@@ -228,6 +242,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       if (!rec) return false;
       return (!c.feeling || rec.feelings[c.feeling.key] >= c.feeling.atLeast) && (c.leadAtLeast === undefined || rec.lead >= c.leadAtLeast) && (c.leadAtMost === undefined || rec.lead <= c.leadAtMost) && (!c.mark || rec.marks.includes(c.mark));
     }
+    case 'kc':
+      return kcHolds(content, run, c);
     case 'flag': {
       const value = Number(run.story.flags[`ev:${c.key}`] ?? 0);
       if (value < c.atLeast || value > c.atMost) return false;
@@ -320,7 +336,7 @@ export function tradeCandidates(content: Content, run: RunState, want: TradeWant
     .sort((a, b) => a.level - b.level);
 }
 
-function tradePicksOf(content: Content, run: RunState, choice: EventChoice): { uid: string; label: string }[] | null {
+function tradePicksOf(content: Content, run: RunState, choice: EventChoice): TradePick[] | null {
   // Clone Core: the player picks which other party Pokémon gets the lead's moves.
   if (choice.success.effects.some((f) => f.kind === 'copyMoves')) return run.party.slice(1).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
   const e = choice.success.effects.find((f) => f.kind === 'tradeAway' || f.kind === 'tradeFor');
@@ -330,7 +346,9 @@ function tradePicksOf(content: Content, run: RunState, choice: EventChoice): { u
     return run.party.filter((m) => fitsMatch(content, m, { ...(types.length > 0 ? { types } : {}), ...(moveFlag ? { moveFlag } : {}) }) && (bond === undefined || bondLevel(content, m) >= bond)).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
   }
   if (!e || (e.kind !== 'tradeAway' && e.kind !== 'tradeFor')) return null;
-  return tradeCandidates(content, run, e.want).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
+  // A swap from a fixed table says what comes back before the player commits (the Honest Trade Card). A "similar strength" swap is rolled, so it stays unknown.
+  const table = e.kind === 'tradeFor' ? e.table : {};
+  return tradeCandidates(content, run, e.want).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}`, ...(e.kind === 'tradeFor' ? { gets: table[m.speciesId] && content.species.has(table[m.speciesId]!) ? table[m.speciesId]! : null } : {}) }));
 }
 
 /** Why a choice's trade cannot happen yet, in words (null when it can or the choice has no trade). */
@@ -368,10 +386,16 @@ export function conditionText(content: Content, c: EventCondition): string {
       return `Only in the ${c.in.map((x) => PERIOD_LABEL[x].toLowerCase()).join(' or ')}`;
     case 'season':
       return `Only in ${c.in.join(' or ')}`;
+    case 'regionsLeft':
+      return c.atMost === 0 ? 'Only in the last region' : `Only in the last ${c.atMost + 1} regions`;
     case 'region':
       return `Only in ${c.ids.map((id) => content.regions.get(id)?.name ?? id).join(' or ')}`;
     case 'milestone':
       return 'Needs a milestone day';
+    case 'leadType':
+      return `Needs a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in the lead`;
+    case 'picked':
+      return 'Needs the Pokémon you picked';
     case 'partyType':
       return c.absent ? `Only without a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party` : `Needs a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party`;
     case 'memorial':
@@ -446,6 +470,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs the tournament bracket to be at this round';
     case 'rivalState':
       return 'Needs a rival who feels a certain way about you';
+    case 'kc':
+      return kcConditionWords(c);
     case 'flag':
       return 'Needs something you did earlier';
     case 'record':
@@ -504,8 +530,12 @@ function eventPacks(content: Content, run: RunState): Set<string> {
   return new Set([...runGameEventIds(run), ...own]);
 }
 
-/** An event whose only recruit is a trainer the player already owns (or is playing). */
+/**
+ * An event whose only recruit is a trainer the player already owns (or is playing). A story meeting (a callback or a room, such as the
+ * last meeting of a Road Roster arc) is never hidden this way: the recruit there is a bonus, and owning the trainer must not cut the story.
+ */
 function recruitsOwned(run: RunState, e: EventDef): boolean {
+  if (e.callback || e.room) return false;
   const ids = e.choices.flatMap((c) => [c.success, c.failure ?? c.success].flatMap((o) => [...o.effects, ...(o.battle?.win ?? [])])).flatMap((x) => (x.kind === 'recruit' ? [x.trainer] : []));
   return ids.length > 0 && ids.every((id) => id === run.archetypeId || (run.itemCounters?.[`owned:${id}`] ?? 0) > 0);
 }
@@ -526,6 +556,58 @@ function legendaryCapped(run: RunState, e: EventDef): boolean {
   const inRegion = counters[`epic-seen:${run.regionIndex}`] ?? 0;
   const inRun = Object.entries(counters).filter(([k]) => k.startsWith('epic-seen:')).reduce((sum, [, n]) => sum + n, 0);
   return inRegion >= LEGENDARY_PER_REGION || inRun >= LEGENDARY_PER_RUN;
+}
+
+// ---------- Catalog Overhaul placement (core/co/placement.ts; data src/data/catalogOverhaul/placement/*.json) ----------
+
+/** Seen already? A placed event marked "once per region" may come back in a later region. */
+function coSeen(content: Content, run: RunState, id: string): boolean {
+  if (!run.itemCounters?.[`event-seen:${id}`]) return false;
+  return !(content.coPlacement?.get(id)?.often === 'region' && run.itemCounters[`co-region:${id}`] !== run.regionIndex + 1);
+}
+
+/** A placed event only appears on a stage its placement allows (earliest absolute stage, in-region stage, stage tags). */
+export function coFits(content: Content, run: RunState, id: string): boolean {
+  const p = content.coPlacement?.get(id);
+  if (!p || !run.stage) return true;
+  return fitsStage(p, stageNumber(content, run), run.stage.index + 1, stageTags(getTheme(content, run.stage.themeId).types, periodOf(run), tideOf(content, run)));
+}
+
+/** Is this event put on a chosen step by the placer (so it is never drawn at random)? */
+function coPositioned(content: Content, id: string): boolean {
+  const p = content.coPlacement?.get(id);
+  return !!p && positioned(p);
+}
+
+function coPut(run: RunState, placed: { id: string; nodeIds: string[]; hidden: boolean }[]): void {
+  for (const place of placed) for (const nodeId of place.nodeIds) {
+    const node = run.stage!.map.nodes.find((n) => n.id === nodeId)!;
+    node.sides.push({ id: `event-co-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId: place.id, ...(place.hidden ? { hidden: true } : {}) });
+  }
+}
+
+/**
+ * A story whose beats share one stage (Stage-Three, World Event): the moment a later beat is earned it is placed ahead of the player,
+ * on its own step where that is still ahead, else on the next step that is. Nothing is rolled: the pick is seeded by the event id.
+ */
+function placeEarnedCoBeats(content: Content, run: RunState): void {
+  const stage = run.stage;
+  if (!stage || stage.kind !== 'stage' || stage.pseudo || !stage.current || !content.coPlacement?.size) return;
+  const onMap = new Set(stage.map.nodes.flatMap((n) => n.sides.map((x) => x.eventId)));
+  const due: CoEntry[] = [];
+  for (const [id, p] of content.coPlacement) {
+    if (!SAME_STAGE.has(p.shape) || p.beat < 2 || !positioned(p) || onMap.has(id)) continue;
+    const e = content.events.get(id);
+    if (!e || e.disabled || coSeen(content, run, id) || !coFits(content, run, id) || !e.requires.every((c) => conditionMet(content, run, c))) continue;
+    due.push({ id, p, door: e.pseudo });
+  }
+  if (due.length === 0) return;
+  const here = stage.map.nodes.find((n) => n.id === stage.current)!;
+  const ahead = nodesAhead(stage.map, here.id);
+  // A beat whose step is already behind the player moves to the first step still ahead.
+  const nextStep = Math.min(19, Math.ceil(((here.column + 1) * 20) / stage.map.columns));
+  const moved = due.map((d) => (d.p.window && Math.round((d.p.window[1] * stage.map.columns) / 20) <= here.column ? { ...d, p: { ...d.p, home: nextStep, window: [nextStep, 19] as [number, number] } } : d));
+  coPut(run, planCoStage(stage.map, moved, `${run.seed}::co-beat::${stageKey(run)}`, ahead));
 }
 
 /** Events that can appear on the current stage (key-item events only while the key item is held). */
@@ -549,7 +631,8 @@ export function eligibleEvents(content: Content, run: RunState): EventDef[] {
       (!e.gameEvent || packs.has(e.gameEvent)) &&
       // A mode's own stops (Spooky Mode's clues, boss and finale) only appear in runs of that mode.
       (!e.mode || run.rules.modeId === e.mode) &&
-      !(run.itemCounters?.[`event-seen:${e.id}`]) &&
+      !coSeen(content, run, e.id) &&
+      coFits(content, run, e.id) &&
       !recruitsOwned(run, e) &&
       e.requires.every((c) => conditionMet(content, run, c)),
   );
@@ -601,11 +684,22 @@ export function addEventStops(content: Content, run: RunState): void {
     // E3b: a run event (`xr.*`) keeps one column away from every story event (`xe.*`) on the stage, when the map allows it.
     const xe = eventId.startsWith('xr.') ? xeColumns(run) : [];
     const apart = xe.length > 0 ? candidates.filter((n) => xe.every((c) => Math.abs(c - n.column) > 1)) : candidates;
-    const node = rng.pick(apart.length > 0 ? apart : candidates);
+    // Catalog Overhaul pools: a camp scene (attaches at a + node) drawn to fill the stage goes on a + node when the stage has one.
+    const camps = content.coPlacement?.get(eventId)?.attaches === 'rest' ? (apart.length > 0 ? apart : candidates).filter((n) => n.sides.some((x) => x.kind === 'heal')) : [];
+    const node = rng.pick(camps.length > 0 ? camps : apart.length > 0 ? apart : candidates);
     node.sides.push({ id: `event-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId, ...(hidden ? { hidden: true } : {}) });
   };
   // A running tournament round and a serious crisis always get their stop (until played), so neither can be missed by luck.
   const open = new Set(eligibleEvents(content, run).map((e) => e.id));
+  // Catalog Overhaul: events with a placement block go on their own step first (must-see on a chokepoint, optional on one node, ...).
+  // One that finds no place waits for a later stage; either way it is never drawn at random below.
+  const coOpen = [...open].filter((id) => coPositioned(content, id));
+  if (coOpen.length > 0) {
+    // A same-stage story's later beats are placed when they are earned (placeEarnedCoBeats), not at the start of the stage.
+    const entries = coOpen.map((id) => ({ id, p: content.coPlacement!.get(id)!, door: content.events.get(id)!.pseudo })).filter((e) => !(SAME_STAGE.has(e.p.shape) && e.p.beat >= 2));
+    coPut(run, planCoStage(stage.map, entries, `${run.seed}::co-place::${stageKey(run)}`));
+    for (const id of coOpen) { taken.add(id); open.delete(id); }
+  }
   // A run milestone (catalog 99) is offered at the middle stage of every region.
   const milestone = (run.stage?.index ?? 0) === 2 ? ['milestone-dawn', 'milestone-crossroads', 'milestone-summit', 'milestone-embers'].find((id) => open.has(id)) : undefined;
   const modeStops = [...open].filter((id) => content.events.get(id)!.modeStop);
@@ -733,6 +827,9 @@ export function stopIsHidden(content: Content, run: RunState, node: MapNode, sid
 
 // ---------- the scene and its choices ----------
 
+/** A party Pokémon a choice can take. `gets` (swaps only): the species that comes back, or null when it is not known until the swap happens. */
+export interface TradePick { uid: string; label: string; gets?: string | null }
+
 export interface ChoiceView {
   label: string;
   /** Why it can't be chosen, or null. */
@@ -750,14 +847,22 @@ export interface ChoiceView {
   /** What kind of uncertainty it carries, in words ("Depends on your Luck · a setback if it fails"). */
   risk: string;
   /** For a trade: the party Pokémon the partner would take (the player picks one), else null. */
-  tradePicks: { uid: string; label: string }[] | null;
+  tradePicks: TradePick[] | null;
   /** Battle, trade, chance, cost or safe: the tag and colour every event style shows. */
   kind: ChoiceKind;
+}
+
+/** A small "standing" panel beside the event text (Trust with a rival, a rank on a ladder): a rank label and up to three named meters. */
+export interface EventStanding {
+  rank: string;
+  meters: { label: string; value: number; max: number }[];
 }
 
 export interface EventView {
   event: EventDef;
   choices: ChoiceView[];
+  /** Shown beside the event text when set (the New UI draws it; see `src/ui/redux/screens/event.ts`). */
+  standing?: EventStanding | null;
 }
 
 function findSide(run: RunState, sideId: string): { node: MapNode; side: SideStop } {
@@ -786,7 +891,8 @@ function outcomeWords(content: Content, o: EventOutcome): string {
 }
 
 /** Who a hazard's damage or status hits: the party (or only the lead), minus Pokémon of the spared types. */
-function hazardTargets(content: Content, run: RunState, e: { who: 'party' | 'lead'; except: string[] }) {
+function hazardTargets(content: Content, run: RunState, e: { who: 'party' | 'lead' | 'picked'; except: string[] }, tradeUid?: string) {
+  if (e.who === 'picked') return whoOf(content, run, 'picked', tradeUid).filter((m) => m.hp > 0);
   const able = run.party.filter((m) => m.hp > 0 && !(e.except.length && content.species.get(m.speciesId)?.types.some((t) => e.except.includes(t))));
   return e.who === 'lead' ? able.slice(0, 1) : able;
 }
@@ -836,9 +942,9 @@ export function eventView(content: Content, run: RunState, sideId: string): Even
     const missing = unmet ? conditionText(content, unmet) : tradeMissing(content, run, c);
     const chance = choiceChance(content, run, c);
     const preview = insight ? `${outcomeWords(content, c.success)}${c.failure ? ` · if it fails: ${outcomeWords(content, c.failure)}` : ''}` : null;
-    return { label: fillCoText(content, run, c.label), locked: missing, kind: choiceKind(c, chance), tradePicks: tradePicksOf(content, run, c), chance, attribute: c.check ?? null, attributeValue: c.check ? effectiveAttributes(content, run)[c.check] : null, preview, ...choiceRisk(content, c) };
+    return { label: fillMentorText(run, fillCoText(content, run, c.label)), locked: missing, kind: choiceKind(c, chance), tradePicks: tradePicksOf(content, run, c), chance, attribute: c.check ?? null, attributeValue: c.check ? effectiveAttributes(content, run)[c.check] : null, preview, ...choiceRisk(content, c) };
   });
-  return { event: { ...event, intro: fillCoText(content, run, event.intro) }, choices };
+  return { event: { ...event, intro: fillMentorText(run, fillCoText(content, run, event.intro)) }, choices };
 }
 
 export interface EventResult {
@@ -874,7 +980,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   delete runSide.hidden;
   // A roaming Legendary's stop: whatever you do, the chase ends here.
   if (runSide.roamer) endRoamer(run, runSide.roamer);
-  run.itemCounters = { ...run.itemCounters, [`event-seen:${event.id}`]: 1, ...(event.rarity === 'epic' ? { [`epic-seen:${run.regionIndex}`]: (run.itemCounters?.[`epic-seen:${run.regionIndex}`] ?? 0) + 1 } : {}), ...(event.pseudo ? { [`pseudo-seen:${run.regionIndex}`]: (run.itemCounters?.[`pseudo-seen:${run.regionIndex}`] ?? 0) + 1 } : {}) };
+  run.itemCounters = { ...run.itemCounters, [`event-seen:${event.id}`]: 1, ...(content.coPlacement?.get(event.id)?.often === 'region' ? { [`co-region:${event.id}`]: run.regionIndex + 1 } : {}), ...(event.rarity === 'epic' ? { [`epic-seen:${run.regionIndex}`]: (run.itemCounters?.[`epic-seen:${run.regionIndex}`] ?? 0) + 1 } : {}), ...(event.pseudo ? { [`pseudo-seen:${run.regionIndex}`]: (run.itemCounters?.[`pseudo-seen:${run.regionIndex}`] ?? 0) + 1 } : {}) };
   if (event.keyItem) useUpKeyItem(run, event.keyItem);
   keepsakeEvent(run, event);
   const found = noteDungeonEntered(run, event.id);
@@ -886,7 +992,11 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   const rng = new Rng(hashSeed(`${run.seed}::event::${stageKey(run)}::${node.id}::${sideId}`));
   const chance = choice.prompt ? 1 : choiceChance(content, run, choice);
   const success = choice.prompt ? atLeast({ grade: promptGrade ?? 'miss' } as PromptResult, choice.prompt.needs) : chance === null || rng.float() < chance;
-  const outcome = success ? choice.success : choice.failure!;
+  // Catalog Overhaul: the picked Pokémon is remembered for the scenes that follow; a branch may then replace the outcome's words and effects.
+  if (choice.pick) rememberPick(run, tradeUid);
+  const base = success ? choice.success : choice.failure!;
+  const branch = success ? choice.branches.find((b) => b.when.every((c) => conditionMet(content, run, c))) : undefined;
+  const outcome = branch ? { ...base, text: branch.text, effects: branch.effects } : base;
   // The Event Director remembers important choices (and whether you took a risk).
   const risky = chance !== null || choice.prompt !== undefined;
   run.story.flags[risky ? 'choices:risky' : 'choices:safe'] = Number(run.story.flags[risky ? 'choices:risky' : 'choices:safe'] ?? 0) + 1;
@@ -910,15 +1020,18 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
     const words = giveItem(content, run, rng.pick(content.balance.events.explorerItems), 1, rng);
     if (words) changes.push(`Explorer Kit: ${words}`);
   }
+  placeEarnedCoBeats(content, run);
   let battle = false;
   if (outcome.battle && run.party.some((p) => p.hp > 0)) {
+    // An event placed before the node's battle that starts a battle of its own: that one takes the node's battle's place.
+    clearNodeHold(run);
     startEventBattle(content, run, node, outcome.battle, rng, { eventId: event.id, choiceIndex, sideId, success });
     battle = true;
   } else {
     run.afterDecisions = 'map';
     continueAfterDecisions(content, run);
   }
-  return { run, success, text: fillCoText(content, current, outcome.text), changes, battle };
+  return { run, success, text: fillMentorText(current, fillCoText(content, current, outcome.text)), changes, battle };
 }
 
 function useUpKeyItem(run: RunState, id: string): void {
@@ -982,7 +1095,9 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'status':
       return `${e.who === 'lead' ? 'lead' : 'party'} ${e.status === 'paralysis' ? 'paralysed' : e.status === 'sleep' ? 'asleep' : e.status === 'burn' ? 'burned' : 'poisoned'}`;
     case 'friendship':
-      return `${e.who === 'party' ? '' : `${whoWords(e.who)}: `}friendship ${e.amount >= 0 ? '+' : ''}${e.amount}`;
+      return e.bond !== undefined ? `${e.who === 'party' ? 'everyone' : whoWords(e.who)}: Bond ${e.bond >= 0 ? '+' : ''}${e.bond}` : `${e.who === 'party' ? '' : `${whoWords(e.who)}: `}friendship ${e.amount >= 0 ? '+' : ''}${e.amount}`;
+    case 'nodeBattle':
+      return e.skip ? 'the fight here does not happen' : e.level ? `the fight here is ${e.level > 0 ? 'harder' : 'easier'}` : '';
     case 'typeShift':
       return `a lasting type shift: ${e.type[0]!.toUpperCase()}${e.type.slice(1)}`;
     case 'vow':
@@ -1003,6 +1118,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return `${whoWords(e.who)} +${e.amount} level${e.amount === 1 ? '' : 's'}`;
     case 'join':
       return e.shadow ? 'a Shadow Pokémon is rescued' : e.blissful ? 'a Blissful Pokémon joins' : 'a Pokémon joins';
+    case 'kc':
+      return kcWords(e);
     case 'canon':
       return e.action === 'champion' ? 'a champion belt' : e.action === 'ghostReturn' ? 'a ghost asks to join' : e.action === 'ghostFree' ? 'a trapped Pokémon is freed' : '';
     case 'seedling':
@@ -1019,8 +1136,12 @@ export function effectWords(content: Content, e: EventEffect): string {
       return 'a Pokémon learns a new move';
     case 'copyMoves':
       return "your lead's moves are copied onto another Pokémon";
+    case 'mentorLesson':
+      return e.again ? "your mentor's lesson, once more" : "your mentor's lesson";
+    case 'mentorScene':
+      return 'your mentor has something to show you';
     case 'statBoost':
-      return `${e.who === 'party' ? 'party' : e.who === 'weakest' ? 'lowest-level Pokémon' : e.who === 'picked' ? 'your pick' : 'lead'}: ${e.stat === 'best' ? 'best stat' : e.stat === 'all' ? 'every stat' : STAT_WORDS[e.stat]} +${e.percent}%${e.until === 'region' ? ' for the region' : ''}`;
+      return `${whoWords(e.who)}: ${e.stat === 'best' ? 'best stat' : e.stat === 'all' ? 'every stat' : STAT_WORDS[e.stat]} +${e.percent}%${e.until === 'region' ? ' for the region' : ''}`;
     case 'train':
       return trainEffectText(e);
     case 'betterDraft':
@@ -1046,6 +1167,7 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'foresight':
       return `the forecast reaches ${e.columns} more column${e.columns === 1 ? '' : 's'} ahead`;
     case 'seeAgain':
+    case 'leadPicked':
       return '';
     case 'addEvent':
     case 'addEventFrom':
@@ -1189,6 +1311,8 @@ export function isGiftable(content: Content, id: string): boolean {
 
 /** Applies one effect (mutates `run`) and says what changed, or '' when nothing did. */
 export function applyEffect(content: Content, run: RunState, e: EventEffect, rng: Rng, tradeUid?: string): string {
+  // The picked Pokémon: the one named now, else the one a pick choice named earlier this run (co/pickMemory.ts).
+  const pickedUid = tradeUid ?? rememberedPick(run)?.uid;
   switch (e.kind) {
     case 'money': {
       const bonus = e.amount > 0 ? scavengerBonus(content, run.licenses, rng) : 0;
@@ -1254,13 +1378,14 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'flightNorth':
       return flightNorthEffect(run, e);
     case 'heal': {
-      if (e.share >= 1) healParty(content, run);
+      if (e.who === 'picked') for (const m of whoOf(content, run, 'picked', pickedUid)) { if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * e.share)); }
+      else if (e.share >= 1) healParty(content, run);
       else for (const m of run.party) if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * e.share));
       return effectWords(content, e);
     }
     case 'damage': {
       // Never knocks a Pokémon out: it stops at 1 HP.
-      for (const m of hazardTargets(content, run, e)) m.hp = Math.max(1, m.hp - Math.floor(maxHp(content, m) * e.share));
+      for (const m of hazardTargets(content, run, e, pickedUid)) m.hp = Math.max(1, m.hp - Math.floor(maxHp(content, m) * e.share));
       return effectWords(content, e);
     }
     case 'storyRaid': {
@@ -1283,24 +1408,28 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     }
     case 'friendship': {
       const gain = runAttributeEffects(content, run).friendship;
-      const who = whoOf(content, run, e.who, tradeUid);
-      for (const m of who) changeFriendship(content, m, e.amount, e.amount > 0 ? gain : 1);
+      const who = whoOf(content, run, e.who, pickedUid);
+      const amount = e.bond !== undefined ? bondFriendship(content, e.bond, e.who) : e.amount;
+      for (const m of who) changeFriendship(content, m, amount, amount > 0 ? gain : 1);
       return who.length > 0 ? effectWords(content, e) : '';
     }
+    case 'nodeBattle':
+      setNodeBattle(run, { skip: e.skip, level: e.level });
+      return effectWords(content, e);
     case 'typeShift': {
-      const mon = whoOf(content, run, e.who, tradeUid)[0];
+      const mon = whoOf(content, run, e.who, pickedUid)[0];
       if (!mon) return '';
       mon.shiftType = e.type;
       return `${content.species.get(mon.speciesId)?.name ?? mon.speciesId} is part ${e.type[0]!.toUpperCase()}${e.type.slice(1)} now.`;
     }
     case 'vow': {
-      const mon = whoOf(content, run, e.who, tradeUid)[0];
+      const mon = whoOf(content, run, e.who, pickedUid)[0];
       if (!mon || mon.vowed) return '';
       mon.vowed = true;
       return `${content.species.get(mon.speciesId)?.name ?? mon.speciesId} made the vow. It stays with you, whatever comes.`;
     }
     case 'sendAway': {
-      const mon = sendAway(content, run, e.key, whoOf(content, run, e.who, tradeUid)[0], e.type, e.shadow === true);
+      const mon = sendAway(content, run, e.key, whoOf(content, run, e.who, pickedUid)[0], e.type, e.shadow === true);
       return mon ? `${content.species.get(mon.speciesId)?.name ?? mon.speciesId} stays behind.` : '';
     }
     case 'bringBack': {
@@ -1319,14 +1448,16 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'levels': {
       const cap = runLevelCap(content, run);
       // The weakest is the lowest level (the first one on a tie): catch-up for a Pokémon that fell behind.
-      const who = whoOf(content, run, e.who, tradeUid);
+      const who = whoOf(content, run, e.who, pickedUid);
       let gained = 0;
       for (const m of who) gained += addLevels(content, m, e.amount, cap).levelsGained;
       return gained > 0 ? effectWords(content, e) : '';
     }
     case 'join': {
       const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
-      const speciesId = pickSpecies(content, run, e.species, e.types, rng, 'reward');
+      const starter = e.starterType ? (run.party.find((m) => m.uid === run.log.starterUid) ?? run.party[0]) : undefined;
+      const types = starter ? [getSpecies(content, starter.speciesId).types[0]!] : e.types;
+      const speciesId = (e.recall ? oldFoe(run) : null) ?? pickSpecies(content, run, e.species, types, rng, 'reward');
       // No event lifts the party's level cap (Balancing Phase 7).
       const level = e.level ?? Math.max(1, Math.min(runLevelCap(content, run), eventLevel(content, run, node, rng) + e.levelBonus));
       const mon = newMon(content, run, e.level ? speciesId : evolvedFormAt(content, speciesId, level, rng), level, 'p');
@@ -1357,6 +1488,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       run.pending.push({ kind: 'caught', mon });
       return `${content.species.get(mon.speciesId)?.name ?? mon.speciesId} ${e.shadow ? 'was rescued from the haze and' : ''} wants to join you!`.replace('  ', ' ');
     }
+    case 'kc':
+      return applyKc(content, run, e, { cap: runLevelCap(content, run), picked: whoOf(content, run, 'picked', pickedUid), egg: (species, types = []) => applyEffect(content, run, { kind: 'egg', species, types, levelBonus: 0, shinyMultiplier: 1, left: 3, unit: 'battle' } as EventEffect, rng, tradeUid) });
     case 'canon': {
       if (e.action === 'ghostReturn') {
         const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
@@ -1395,8 +1528,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return `You got ${made.kind === 'mystery' ? 'a Mystery' : made.tier === 'ordinary' ? 'an' : `a ${eggTier(made.tier).name}`} Egg! ${eggStatus(made)}.`;
     }
     case 'statBoost': {
-      const able = run.party.filter((m) => m.hp > 0);
-      const who = e.who === 'picked' ? whoOf(content, run, 'picked', tradeUid) : e.who === 'lead' ? able.slice(0, 1) : e.who === 'weakest' ? [...able].sort((a, b) => a.level - b.level).slice(0, 1) : run.party;
+      const who = whoOf(content, run, e.who, pickedUid);
       let changed = false;
       for (const m of who) changed = boostStat(content, m, e.stat, e.percent, e.until === 'region') || changed;
       return changed ? effectWords(content, e) : '';
@@ -1590,12 +1722,27 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const warmed = warmEggs(run, 1);
       return warmed > 0 ? `${effectWords(content, e)}; your Egg${warmed === 1 ? ' is' : 's are'} snug by the fire` : effectWords(content, e);
     }
+    case 'leadPicked': {
+      const [mon] = whoOf(content, run, 'picked', pickedUid);
+      if (mon) run.party = [mon, ...run.party.filter((m) => m.uid !== mon.uid)];
+      return '';
+    }
     case 'celebrate':
       celebrateToday(content, run);
       return effectWords(content, e);
     case 'seeAgain':
       if (run.itemCounters) delete run.itemCounters[`event-seen:${e.eventId}`];
       return '';
+    case 'mentorLesson':
+      return applyMentorLesson(content, run, e.again);
+    case 'mentorScene': {
+      const id = mentorSceneId(content, run, e.part);
+      if (!id) return '';
+      const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+      here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId: id });
+      if (run.itemCounters) delete run.itemCounters[`event-seen:${id}`];
+      return '';
+    }
     case 'addEvent': {
       if (routeChainEvent(content, run, e.eventId)) return effectWords(content, e);
       const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
@@ -1697,9 +1844,10 @@ function pickSpecies(content: Content, run: RunState, species: string[], types: 
   return directSpecies(content, { source, level: gate, cap: levelCap(content, run.regionIndex), draw: () => rng.weighted(pool) }).speciesId;
 }
 
-function eventLevel(content: Content, run: RunState, node: MapNode, rng: Rng): number {
+/** `stageOffset`: a placed event's level line (A-2 to A+2): the game's own level for that many stages earlier or later. */
+function eventLevel(content: Content, run: RunState, node: MapNode, rng: Rng, stageOffset = 0): number {
   const stage = run.stage!;
-  const scale = withPartyStrength(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, stage.index, node.column), run.party.map((p) => p.level));
+  const scale = withPartyStrength(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, Math.max(0, stage.index + stageOffset), node.column), run.party.map((p) => p.level));
   return enemyLevel(content, getArchetype(content, run.archetypeId), scale, 0, rng).level;
 }
 
@@ -1710,7 +1858,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
   const pondLead = b.kind === 'trainer' && b.rule?.pondDuel ? run.party.findIndex((p) => p.pond && p.hp > 0) : -1;
   const dueler = pondLead >= 0 ? pondLead : b.kind === 'trainer' && b.rule?.leadType ? run.party.findIndex((p) => p.hp > 0 && getSpecies(content, p.speciesId).types.includes(b.rule!.leadType!)) : -1;
   const activeIndex = dueler >= 0 ? dueler : lastAlive >= 0 ? lastAlive : run.party.findIndex((p) => p.hp > 0);
-  const base = (b.kind !== 'raid' ? b.level : undefined) ?? (b.kind === 'trainer' && b.rule?.matchLead ? run.party[activeIndex]!.level + b.levelBonus : eventLevel(content, run, node, rng) + b.levelBonus);
+  const base = (b.kind !== 'raid' ? b.level : undefined) ?? (b.kind === 'trainer' && b.rule?.matchLead ? run.party[activeIndex]!.level + b.levelBonus : eventLevel(content, run, node, rng, content.coPlacement?.get(event.eventId)?.level ?? 0) + b.levelBonus);
   // Event foes stay under the region's level cap like every ordinary enemy (Balancing Phase 7).
   const cap = levelCap(content, run.regionIndex);
   if (b.kind === 'raid') {

@@ -15,6 +15,12 @@ export function scaleAt(stageIndex: number, column: number, regionIndex = 0, c: 
 /** On the map, walks into the first normal (not harder) next node; otherwise returns the run unchanged. */
 export function toBattle(run: RunState, c: Content = content): RunState {
   if (run.phase !== 'map') return run;
+  // An event placed before (or instead of) this node's battle plays first: take its first open choice.
+  const waiting = waitingStop(c, run);
+  if (waiting) {
+    const pick = eventView(c, run, waiting).choices.findIndex((ch) => !ch.locked);
+    return chooseEvent(c, run, waiting, Math.max(0, pick)).run;
+  }
   const choices = mapChoices(c, run);
   const node = choices.find((n) => !n.harder) ?? choices[0]!;
   const next = chooseNode(c, run, node.id);
@@ -24,6 +30,8 @@ export function toBattle(run: RunState, c: Content = content): RunState {
 }
 
 import { freshSos } from '../../src/core/battle/sos';
+import { waitingStop } from '../../src/core/co/attach';
+import { chooseEvent, eventView } from '../../src/core/events';
 import { rewardTargetProblem } from '../../src/core/rewards';
 
 /**

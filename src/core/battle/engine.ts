@@ -40,7 +40,8 @@ import { KINDNESS_USES } from '../episodes/poliPond';
 import { HOUSE_WINS_STAGES, LIGHTS_OUT_ACCURACY, LIGHTS_OUT_TURNS, housePending, isHousePair, takeHousePending, traitDoubleEntry, traitDrill, traitFeedHeal, traitFoodKnocked, traitLightsOut, traitOverhears, traitPayout, traitSeatMessage, traitTakesBerry, GRID_TIE_SHARE, traitBloodScent, traitGridTie, traitLingering, traitOnSchedule, traitSubtraction, traitUndertow, traitUpdraft } from '../expansion/traits';
 import { ACCESSORY_TORN_MESSAGE, SPIRITLESS_MESSAGE, variantBlocksForcedSwitch, variantBlocksMind, variantBlocksStage, variantBlocksStatus, variantEndTurnLoss, variantAccessory, variantAccessoryTorn, variantCheer, variantEndTurnStages, variantGimmickTick, variantGadget, variantIncoming, variantItemMove, variantLosesTurn, variantNeverMisses, variantOnEntry, variantOutgoing, variantPriorityBonus, variantSnagRefuses, variantTagCall } from '../expansion/variantLines';
 import { enemyHyperChancePerk, weatherHealPercent, burnDamagePerk, ppCostExtra, statusChancePerk, statusTurnsPerk, statusLengthPerk, damageDealtPerk, damageTakenPerk, critDamagePerk, critChancePerk, bonusFriendship, enemyHealingBlocked, isSpreadMove, turnHealPercent, healingMoveMultiplier, burnDamageTakenPerk, statusMoveAccuracyPerk, accuracyPerk, isBossClass, isLegendaryLike, critChanceBonusPerk, hypeMeterOf, isUltraBeast, moveStyleOf, poisonDamagePerk, evasionPerk, moveFlagsOf, unusualKind, battleStartRules } from '../trainerPerks';
-import type { Rng } from '../rng';
+import { deriveRng, type Rng } from '../rng';
+import { turnOneKoSpeedStages, noFlinchTurnOne, foeMissBoostStages, hasFoeMovePreview } from '../trainerPerks';
 import { fnv1a } from '../expansion/hash';
 import { cooldownKey, hasBattleEffect, markBattleEffect } from '../story/ledger';
 import type { StoryTriggerKind } from '../story/schema';
@@ -839,8 +840,10 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   const enemyChoice = choiceLock(battle, enemy.mon);
   const enemyChoiceIndex = enemyChoice ? enemy.mon.moves.findIndex((m) => m.id === enemyChoice) : -1;
   const foresightMove = foresightBegin(battle, action.kind === 'move' && action.index >= 0 ? ctx.party[battle.activeIndex]?.moves[action.index]?.id ?? null : null, events);
+  // Mentor lesson Foe Move Preview: the move shown before the player chose is the foe's turn-one move.
+  const previewIndex = previewedEnemyMove(battle, enemy.mon);
   let enemyMoveIndex =
-    enemyForcedIndex >= 0 ? enemyForcedIndex : enemyChoiceIndex >= 0 ? enemyChoiceIndex : ctx.enemyPick !== undefined && ctx.enemyPick >= 0 && ctx.enemyPick < enemy.mon.moves.length ? ctx.enemyPick : chooseEnemyMove(enemy.mon, rng, { content, ai: foresightMove ? 1 : battle.ai, target: ctx.party[battle.activeIndex]!, stages: battle.enemyStages, battle, party: ctx.party, ...(foresightMove ? { foresight: foresightMove } : {}) });
+    enemyForcedIndex >= 0 ? enemyForcedIndex : enemyChoiceIndex >= 0 ? enemyChoiceIndex : ctx.enemyPick !== undefined && ctx.enemyPick >= 0 && ctx.enemyPick < enemy.mon.moves.length ? ctx.enemyPick : previewIndex >= 0 ? previewIndex : chooseEnemyMove(enemy.mon, rng, { content, ai: foresightMove ? 1 : battle.ai, target: ctx.party[battle.activeIndex]!, stages: battle.enemyStages, battle, party: ctx.party, ...(foresightMove ? { foresight: foresightMove } : {}) });
   ctx.enemyPick = undefined;
   let enemyMove = resolveMove(content, enemy.mon, enemyMoveIndex);
   // Beta 0.6 Translator: once per battle he overhears the foe and reveals its next move.
@@ -1804,6 +1807,13 @@ function switchIn(ctx: BattleContext, partyIndex: number, events: BattleEvent[])
   // Pokémon moments (Beta 0.6): a "switch-in" moment for the Pokémon that just came out.
   if (ctx.moments) tryEntryMoments(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, 'enter', events);
   if (ctx.moments) applyPendingMoments(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, events);
+  // Mentor lesson: after a turn-one knockout, the next Pokémon you send in enters faster (once per battle).
+  const koSpeed = turnOneKoSpeedStages(ctx.perks);
+  if (koSpeed > 0 && battle.lesson?.koTurnOne && !battle.lesson.koSpeedUsed) {
+    battle.lesson.koSpeedUsed = true;
+    events.push({ type: 'raid', tone: 'info', text: `Your mentor's lesson: ${nameOf(ctx, mon)} rides the early knockout!` });
+    applyStageChange(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, 'spe', koSpeed, events);
+  }
 }
 
 /** Poké Doll: the wild Pokémon loses this turn (uses up one free turn). */
@@ -2615,6 +2625,8 @@ function canAct(ctx: BattleContext, user: Combatant, events: BattleEvent[], move
   }
   if (user.vol.infatuated && variantBlocksMind(ctx.battle.extra.variants, user.mon.uid)) user.vol.infatuated = false;
   if (user.flinched && variantBlocksMind(ctx.battle.extra.variants, user.mon.uid)) user.flinched = false;
+  // Mentor lesson: in boss and rival battles your Pokémon can't flinch on turn one.
+  if (user.flinched && user.side === 'player' && noFlinchTurnOne(ctx.perks, ctx.battle)) user.flinched = false;
   if (user.vol.infatuated) {
     events.push({ type: 'selfState', side: user.side, state: 'inLove' });
     if (rng.chance(0.5)) {
@@ -3913,6 +3925,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   if (targetsEnemy && rng.float() >= accuracy && !(baseAccuracy !== null && (user.stages.acc < 0 || user.vol.confusion > 0) && tryFeat(ctx, user, 'blind_strike'))) {
     events.push({ type: 'miss', side: user.side });
     Held.onMiss(ctx, user, events as Held.HeldEvent[]);
+    if (user.side === 'enemy' && target.side === 'player') foeMissLesson(ctx, target, events);
     if (fx.crashOnMiss) abilityHurt(ctx, user, Math.max(1, Math.floor(calcStats(content, user.mon).hp / 2)), events);
     return;
   }
@@ -4606,6 +4619,17 @@ function elementalReaction(ctx: BattleContext, user: Combatant, target: Combatan
   else if (reaction.effect === 'burn') tryInflictStatus(ctx, user, target, 'brn', undefined, events, false);
   else if (reaction.effect === 'stat' && reaction.stat) changeStage(ctx, user, target, reaction.stat, reaction.amount, events);
   else if (reaction.effect === 'heal' && user.mon.hp > 0 && user.mon.hp < calcStats(ctx.content, user.mon).hp) healMon(ctx, user, reaction.amount, events);
+}
+
+/** Mentor lesson: the first time a foe's move misses your Pokémon in a battle, its higher attacking stat rises (Attack on a tie). */
+function foeMissLesson(ctx: BattleContext, target: Combatant, events: BattleEvent[]): void {
+  const stages = foeMissBoostStages(ctx.perks);
+  if (stages === 0 || ctx.battle.lesson?.missUsed || target.mon.hp <= 0) return;
+  (ctx.battle.lesson ??= {}).missUsed = true;
+  const stats = calcStats(ctx.content, target.mon);
+  const stat = stats.spa > stats.atk ? 'spa' : 'atk';
+  events.push({ type: 'raid', tone: 'info', text: `Your mentor's lesson: ${nameOf(ctx, target.mon)} seizes the opening!` });
+  applyStageChange(ctx, target, stat, stages, events);
 }
 
 /** Makes the target flinch, unless Inner Focus stops it or it is Dynamaxed. */
@@ -6783,6 +6807,8 @@ function recordFaints(ctx: BattleContext, player: Combatant, enemy: Combatant, e
       }
     }
     events.push({ type: 'faint', side: c.side, uid: c.mon.uid, participants });
+    // Mentor lesson: a turn-one knockout readies a Speed boost for the next Pokémon you send in.
+    if (c.side === 'enemy' && ctx.battle.turn === 1 && turnOneKoSpeedStages(ctx.perks) > 0) (ctx.battle.lesson ??= {}).koTurnOne = true;
     // Beta 0.6 traits: Lights Out darkens the field; the other of the House pair is lifted.
     if (traitLingering(ctx.battle.extra.traits, c.mon.uid)) {
       const facing = c.side === 'enemy' ? player : enemy;
@@ -6905,9 +6931,31 @@ export function startBattle(ctx: BattleContext): BattleEvent[] {
   ultraBattleStart(ctx);
   overhaulFieldStart(ctx, events);
   trapBeforeBattle(ctx, events);
+  foeMovePreview(ctx);
   const passive = classPassiveOf(ctx.content, ctx.battle);
   if (passive) events.push(say('enemy', 'arena', passiveLine(ctx.battle.trainer!.name, passive)));
   return events;
+}
+
+/**
+ * Mentor lesson Foe Move Preview: decides the foe lead's turn-one move now, from its own derived generator (the battle
+ * stream is read, never drawn from), and keeps it on the battle so the screen can show it and turn one uses it.
+ */
+export function foeMovePreview(ctx: BattleContext): void {
+  const { battle, content } = ctx;
+  if (!hasFoeMovePreview(ctx.perks) || battle.turn !== 1 || battle.lesson?.foeMove || battle.doubles || battle.outcome) return;
+  const foe = currentEnemy(battle);
+  const me = ctx.party[battle.activeIndex];
+  if (!foe || foe.hp <= 0 || !me) return;
+  const pick = chooseEnemyMove(foe, deriveRng('foeMovePreview', ctx.rng.state), { content, ai: battle.ai, target: me, stages: battle.enemyStages, battle, party: ctx.party });
+  const id = foe.moves[pick]?.id;
+  if (id) (battle.lesson ??= {}).foeMove = id;
+}
+
+/** The previewed foe move's index if it is still the foe's turn-one choice (same Pokémon, move has PP), otherwise -1. */
+function previewedEnemyMove(battle: BattleState, enemy: PokemonInstance): number {
+  const id = battle.turn === 1 ? battle.lesson?.foeMove : undefined;
+  return id ? enemy.moves.findIndex((m) => m.id === id && m.pp > 0) : -1;
 }
 
 /** Overhaul slice 20: the battle's environment and condition are announced; a weather condition sets its weather. */

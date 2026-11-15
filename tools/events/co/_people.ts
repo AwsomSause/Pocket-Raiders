@@ -42,11 +42,33 @@ export interface Scene {
 }
 
 /**
+ * The old `npc-meet-<trainer>` events recruited the trainer as a playable trainer (account unlock, `recruit` effect). The pack's arcs keep
+ * that: every outcome that finishes the arc (sets `roster-<key>-done`) also recruits `npc-<trainer>`. Added here, so scene files never write it.
+ */
+function withRecruit(choices: Json[], doneKey: string, trainer: string): Json[] {
+  const add = (list: Json[] | undefined): Json[] | undefined =>
+    list && list.some((x) => x.kind === 'flag' && x.key === doneKey) && !list.some((x) => x.kind === 'recruit') ? [...list, { kind: 'recruit', trainer }] : list;
+  const outcome = (o: Json | undefined): Json | undefined => {
+    if (!o) return o;
+    const battle = o.battle as Json | undefined;
+    return { ...o, effects: add(o.effects as Json[]) ?? o.effects, ...(battle ? { battle: { ...battle, ...(battle.win ? { win: add(battle.win as Json[]) } : {}), ...(battle.lose ? { lose: add(battle.lose as Json[]) } : {}) } } : {}) };
+  };
+  return choices.map((c) => ({ ...c, success: outcome(c.success as Json), ...(c.failure ? { failure: outcome(c.failure as Json) } : {}) }));
+}
+
+/**
  * A Road Roster trainer (ROAD_ROSTER.md): three meetings, each at least one region after the one before, at the trainer's hours.
  * Flags are `roster-<key>-<name>`; `m1`, `m2` and `done` drive the arc and must be set by every outcome that counts as that meeting.
+ * Finishing the arc also recruits the trainer (see `withRecruit`).
  */
 export function rosterKit(key: string, baseId: string, who: string) {
   const old = oldOf(baseId);
+  const trainer = baseId.replace(/^npc-meet-/, 'npc-');
+  const finish = (choices: Json[]): Json[] => withRecruit(choices, `roster-${key}-done`, trainer);
+  const finishAll = (s: Scene): { choices: Json[]; remembers?: Json[] } => ({
+    choices: finish(s.choices),
+    ...(s.remembers ? { remembers: s.remembers.map((v) => (v.addChoices ? { ...v, addChoices: finish(v.addChoices as Json[]) } : v)) } : {}),
+  });
   const hours = ((old.requires as Json[] | undefined) ?? []).filter((c) => c.kind === 'period');
   const k = (name: string) => `roster-${key}-${name}`;
   const idOf = (n: 1 | 2 | 3) => (n === 1 ? baseId : `${baseId}-m${n}`);
@@ -66,14 +88,14 @@ export function rosterKit(key: string, baseId: string, who: string) {
       return {
         id: idOf(n), name: `${who}: ${s.title}`, ...base, rarity: n === 1 ? (old.rarity ?? 'common') : 'uncommon', minStage: s.minStage ?? (old.minStage as number | undefined) ?? 1,
         requires: [...hours, ...gate, ...(s.requires ?? [])], ...(n > 1 ? { callback: true } : {}),
-        scene: s.scene ?? old.scene ?? { cast: [], effect: 'none' }, intro: s.intro, choices: s.choices, ...(s.remembers ? { remembers: s.remembers } : {}),
+        scene: s.scene ?? old.scene ?? { cast: [], effect: 'none' }, intro: s.intro, ...finishAll(s),
       };
     },
     /** A side scene that only opens from one of this trainer's choices (`room(R.roomId(name))`): the second node of a search, a contest round. */
     room(name: string, s: Scene): Json {
       return {
         id: `${baseId}-${name}`, name: `${who}: ${s.title}`, ...base, rarity: 'uncommon', room: true, requires: s.requires ?? [],
-        scene: s.scene ?? old.scene ?? { cast: [], effect: 'none' }, intro: s.intro, choices: s.choices, ...(s.remembers ? { remembers: s.remembers } : {}),
+        scene: s.scene ?? old.scene ?? { cast: [], effect: 'none' }, intro: s.intro, ...finishAll(s),
       };
     },
   };

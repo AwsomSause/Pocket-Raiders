@@ -1,0 +1,630 @@
+{
+ "catalogOverhaul": "people",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "mentor-brook-tidewater-lesson",
+   "name": "Brook: One Type, Done Properly",
+   "group": "Mentors",
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "brook-tidewater"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 1,
+   "intro": "A harbour wall, slick with spray, gulls arguing over the fish boxes. Brook sits on a bollard in yellow oilskins with a Golduck at their feet, both of them watching the water like it might try something. Brook: \"One type. Done properly. That's the whole lesson.\" The Golduck flicks water off its bill in agreement. Brook: \"Pick one. Learn every trick it has. Then learn the tricks against it.\"",
+   "choices": [
+    {
+     "label": "\"Water, like you.\"",
+     "success": {
+      "text": "Brook almost smiles. They spend the afternoon on the wall, Brook pointing at the waves and naming what each one would do to a Fire-type, a Grass-type, a Water-type like their own. For the run, every Water-type you have hits a little harder with its own-type moves.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "brook-water",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"My starter's type.\"",
+     "success": {
+      "text": "Brook looks at your starter for a long time, then nods slowly, like they approve of the honesty. Brook: \"The one you started with. Good. You already love it; now learn it.\" For the run, every Pokémon of your starter's type hits a little harder with its own-type moves.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "brook-starter",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why not all of them?\"",
+     "success": {
+      "text": "Brook does not even turn round. Brook: \"Because you'll be good at none.\" The Golduck sighs through its bill. The question is still there on the wall between you, waiting.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-brook-tidewater-lesson-again"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-brook-tidewater-lesson-again",
+   "name": "Brook: Pick One",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "The tide has come up a foot while you were thinking. Brook is still waiting, still watching the water. Brook: \"Pick one.\"",
+   "choices": [
+    {
+     "label": "\"Water, like you.\"",
+     "success": {
+      "text": "Brook nods once, like you finally said the right word. The afternoon goes to waves and what they do. For the run, every Water-type you have hits a little harder with its own-type moves.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "brook-water",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"My starter's type.\"",
+     "success": {
+      "text": "Brook: \"The one you started with. Good.\" For the run, every Pokémon of your starter's type hits a little harder with its own-type moves.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "brook-starter",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-brook-tidewater-recruit",
+   "name": "Brook: Starting to Flow",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "brook-tidewater"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-recruit",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#2a2a44",
+    "effect": "sparkle"
+   },
+   "rarity": "uncommon",
+   "intro": "Brook has been watching you battle from the end of a jetty, arms folded under the oilskins. When it is over they come down the boards slowly, and there is something close to warmth in their weathered face. Brook: \"You're starting to flow. I know a fisherman with a Pokémon that'd suit you. Of your type.\"",
+   "choices": [
+    {
+     "label": "\"Meet him.\"",
+     "success": {
+      "text": "The fisherman is a quiet old man with a net over one shoulder, and the Pokémon is already waiting at the end of his boat, looking at you like it has heard all about you. It comes to you without being asked.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [],
+        "types": [
+         "water"
+        ],
+        "levelBonus": 0,
+        "friendship": 15
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-recruit",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 1,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not yet.\"",
+     "success": {
+      "text": "Brook shrugs, unbothered. Brook: \"He'll be there. So will it.\" The offer will come round again at the next harbour.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "mentor-brook-tidewater-recruit"
+       },
+       {
+        "kind": "mentor",
+        "trust": 0,
+        "loyalty": 1,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "starter-type",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "brook-starter",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "\"Meet him.\"",
+       "success": {
+        "text": "The fisherman is a quiet old man with a net over one shoulder, and the Pokémon waiting on his boat is the same type as your starter, looking at you like it has heard all about you. It comes to you without being asked.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [],
+          "types": [],
+          "levelBonus": 0,
+          "friendship": 15,
+          "starterType": true
+         },
+         {
+          "kind": "flag",
+          "key": "mentor-recruit",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "mentor",
+          "trust": 1,
+          "loyalty": 2,
+          "rivalry": 0
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mentor-brook-tidewater-story",
+   "name": "Brook: Her Badge, Not Her Name",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "brook-tidewater"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-story",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#44301a",
+    "effect": "fire"
+   },
+   "rarity": "uncommon",
+   "intro": "An old gym by the harbour, boarded up, its sign so salt-bleached you can barely read TIDEWATER on it. Brook stands in front of it with their hands in their pockets. Brook: \"My mother kept this gym. When the harbour flooded, we saved the Pokémon first. I took her badge, not her name.\" A gull lands on the sign and leaves again. Brook: \"The town wants me to reopen it. Under her name.\"",
+   "choices": [
+    {
+     "label": "\"Reopen it under her name.\"",
+     "success": {
+      "text": "Brook is quiet for a long moment, then pulls the first board off the door with their bare hands. The Tidewater Gym opens again as their mother's, with her old Kingdra and Lapras in the pool. When Brook battles you at the end, it will be with them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "brook-mother",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Under yours.\"",
+     "success": {
+      "text": "Brook looks at you like nobody has ever said that out loud. Then they laugh, short and surprised. The sign gets repainted: BROOK'S TIDEWATER GYM. When Brook battles you at the end, it will be with their own team.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "brook-own",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Don't reopen it.\"",
+     "success": {
+      "text": "Brook lets out a long breath, like they have been holding it for years. Brook: \"...No. I'm a teacher. That's enough.\" The gym stays shut. When the Final Lesson comes, it will be out here on the harbour wall, with the sea for a crowd.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "brook-teacher",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bram",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mentor-bram-told",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Brook gives you a narrow look. Brook: \"Bram told you. Of course he did.\""
+    }
+   ]
+  },
+  {
+   "id": "mentor-brook-tidewater-final",
+   "name": "Brook: The Final Lesson",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "Brook leads you to the harbour wall at low tide, where they first taught you, and stands with the sea at their back. Six Poké Balls hang at their belt, every one of them a Water-type. Brook: \"One type. Done properly. Show me yours.\"",
+   "choices": [
+    {
+     "label": "\"Ready.\"",
+     "success": {
+      "text": "Brook sends out their own Golduck first, the one that sat at their feet that first day, and the tide comes in around both of you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Brook's Final Lesson beat you, and you still graduated",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-brook-tidewater-farewell"
+        }
+       ],
+       "team": [
+        "golduck",
+        "pelipper",
+        "gyarados",
+        "starmie",
+        "vaporeon",
+        "milotic"
+       ],
+       "name": "Brook of Tidewater",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You passed Brook's Final Lesson",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-brook-tidewater-farewell"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "mother",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "brook-mother",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The Tidewater Gym, open again, its pool green and full. Brook stands at the far end under a painted sign with their mother's name on it. Six Poké Balls, every one a Water-type; the first two belonged to her. Brook: \"One type. Done properly. Show me yours.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "\"Ready.\"",
+       "success": {
+        "text": "Brook sends out their mother's old Kingdra first. It rises out of the gym pool like it never left.",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "moment",
+           "text": "Brook's Final Lesson beat you, and you still graduated",
+           "importance": 60
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "mentor-brook-tidewater-farewell"
+          }
+         ],
+         "team": [
+          "kingdra",
+          "lapras",
+          "gyarados",
+          "starmie",
+          "vaporeon",
+          "milotic"
+         ],
+         "name": "Brook of Tidewater",
+         "size": 6,
+         "types": [],
+         "levelBonus": 2,
+         "win": [
+          {
+           "kind": "moment",
+           "text": "You passed Brook's Final Lesson",
+           "importance": 60
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "mentor-brook-tidewater-farewell"
+          }
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "own",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "brook-own",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Brook's Tidewater Gym, the paint on the new sign barely dry. Brook stands at the far end of the pool with six Poké Balls, every one a Water-type, every one their own. Brook: \"One type. Done properly. Show me yours.\""
+    }
+   ]
+  },
+  {
+   "id": "mentor-brook-tidewater-farewell",
+   "name": "Brook: You've Done Yours",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "When it is over, Brook calls their last Pokémon back and stands for a while looking at the water. Then they turn to you, and for once the weathered face is not hiding anything. Brook: \"One type. Done properly. You've done yours.\" They press something into your hand: a Mystic Water, and the old Tidewater badge, worn smooth by their thumb.",
+   "choices": [
+    {
+     "label": "\"Thank you.\"",
+     "success": {
+      "text": "You close your hand round both. Brook nods once, the way they did on the first day, and goes back to watching the sea. You walk on, and the badge is warm in your pocket.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-graduated",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Brook gave you the Tidewater badge",
+        "importance": 70
+       },
+       {
+        "kind": "mentor",
+        "trust": 40,
+        "loyalty": 5,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
