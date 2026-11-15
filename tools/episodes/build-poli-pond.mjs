@@ -77,7 +77,7 @@ const rematchFight = (id, name, exceptional) => ({
       text: exceptional ? 'You step back. The Poliwag does not look at you for permission. It looks at the bully.' : 'You step back, and it is the hardest thing you have done all stage. You trust the Poliwag. You taught it everything you could.',
       effects: [],
       battle: {
-        kind: 'trainer', name: 'The Lead Bully', classId: 'roughneck', team: ['poliwhirl'], size: 1, levelBonus: 7, pseudo: true,
+        kind: 'trainer', name: 'The Lead Bully', classId: 'roughneck', team: ['poliwhirl'], spritePokemon: 'poliwhirl', size: 1, levelBonus: 7, pseudo: true,
         rule: { pondDuel: true, noSwitch: true, matchLead: true, ...(exceptional ? { evolveMid: true } : {}) },
         win: [pond('rematchWon'), { kind: 'addEvent', eventId: 'pp-ending' }],
         lose: [{ kind: 'heal', share: 0.5, who: 'party' }],
