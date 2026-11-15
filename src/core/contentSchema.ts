@@ -2993,6 +2993,13 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
     defector: z.boolean().optional(),
     ends: z.array(z.enum(['none', 'defeated', 'exposed', 'allied'])).optional(),
     stopped: z.number().int().min(0).optional(),
+    /** Catalog Overhaul SF13: a remembered mark of the team in this region's story (`files`, `defector-lt`... the run flag `team-<team>-<mark>`), held or not held. Shared rooms read the region's own team with these. */
+    has: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
+    lacks: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
+    /** SF13 A5: Trouble Inside comes between the lieutenant's two meetings. `true`: it has played (always true outside the region-by-region story); `false`: not yet. */
+    trouble: z.boolean().optional(),
+    /** SF13 A7: with `op`, the Operation marked first at The Plan has been dealt with (or this is it). Until then the others wait. */
+    afterFirst: z.boolean().optional(),
   }),
   /** Beta 0.6 rival questlines: the featured rival's overhaul state (core/rivals/overhaul.ts): a feeling at least this (0 to 10), their Lead in a range (-3 to +3, rival ahead is positive), or a mark they hold. Never true without a rival. */
   z.object({
@@ -3335,9 +3342,24 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
     beat: z.boolean().default(false),
     heat: z.number().int().default(0),
     op: z.enum(['foiled', 'infiltrated', 'succeeded', 'joined']).optional(),
+    /** Catalog Overhaul SF13: with `op`, the Operation it ends (a team runs four at once after The Plan); without it, the first one still running. */
+    opId: z.string().optional(),
+    /** SF13 A7 The Plan: the Operation the player means to stop first (it is marked and must be met). */
+    planFirst: z.string().optional(),
+    /** SF13 A8: the player is at the Hideout door: every Operation still running happens now (one is held back when Jenny has the files). */
+    door: z.boolean().optional(),
     talk: z.enum(['grunt', 'specialist', 'executive', 'leader']).optional(),
     defect: z.boolean().default(false),
     end: z.enum(['defeated', 'exposed', 'allied']).optional(),
+    /** Catalog Overhaul SF13: remembers a mark of the region's team (run flag `team-<team>-<mark>` +1), so shared rooms can write team flags. */
+    mark: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
+    /** SF133 The Holding Pen: every Pokémon this team took from you this run comes back (its impound holds close). */
+    pen: z.boolean().optional(),
+    /** SF130: the region's team takes this many party Pokémon (from the back, never below two) to its Holding Pen. Teams without a holding site take none. */
+    steal: z.number().int().min(1).max(3).optional(),
+    /** SF130: run modifiers that last only while the run is in this region (like an Operation's lasting effect), with the words that say so. */
+    mods: z.array(ArchetypeModifierSchema).min(1).max(3).optional(),
+    modsText: z.string().min(1).optional(),
   }),
   /** Run events G (core/trainingEffects.ts): changes the lead's build: Nature, ability slot, weakest stat, or learns a move (of `type`). */
   z.object({ kind: z.literal('train'), what: z.enum(['natureReroll', 'natureNudge', 'abilitySwap', 'weakestStat', 'learnMove', 'evolutionHint', 'masteryShard', 'nap']), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']).optional(), type: TypeNameSchema.optional() }),
@@ -3525,6 +3547,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     evil: z.enum(['grunt', 'specialist', 'executive', 'leader']).optional(),
     /** Grand Arc: with `evil`, fight this roaming team (cipher, rocket-remnants, snagem) instead of the run's own team. */
     evilTeam: z.string().optional(),
+    /** Catalog Overhaul SF13 A4: with `evil`, the villain has studied you: once you have met before, their team carries a counter to your party's most common type (evilTeams.json `config.counters`). */
+    evilStudy: z.boolean().optional(),
     /** Stand With Them: this is a Stand-with climax battle. A loss is Second Shot (the party is healed and you go back to the map; the second loss is the worst ending). Needs `pseudo`. */
     standWith: z.boolean().optional(),
     /** Shadow Boxing: the foe is a copy of your lead (same species, its level plus `levelBonus`); `size` is ignored. */

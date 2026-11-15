@@ -1,5 +1,5 @@
 import { MENTORS } from '../../src/core/mentors';
-import { PSEUDO } from '../../src/core/dungeon/pseudo';
+import { PSEUDO, PSEUDO_CHAINS } from '../../src/core/dungeon/pseudo';
 import { canonKantoPlaced } from '../../src/data/expansion';
 // Exploration (APPROVED.md §5-6): fog of war, weather fronts, roaming Legendaries, camps, secret
 // paths, callbacks, landmark rooms and the stops of the limited-time events.
@@ -322,6 +322,8 @@ describe('landmarks and dungeons', () => {
     for (const e of content.events.values()) if (e.stop === LANDMARK_STOP) opened.add(e.id);
     // Beta 0.7: a pseudo-stage's rooms are the nodes of its own map (core/dungeon/pseudo.ts), entered by walking there.
     for (const r of PSEUDO.records) for (const n of r.nodes) opened.add(`${r.id.replace(/_/g, '-')}-${n.id}`);
+    // Catalog Overhaul: a chain pseudo-stage with a layout (the Evil Team Hideouts) places its rooms by column.
+    for (const c of PSEUDO_CHAINS) for (const col of c.layout ?? []) for (const id of col) opened.add(c.team ? id.replaceAll('{teamId}', c.team) : id);
     // Beta 0.7 U1: the code places each Ultra Beast Tear (core/ultra/run.ts placeTear).
     for (const id of content.events.keys()) if (id.startsWith('ultra-tear-')) opened.add(id);
     // Beta 0.7: Pidgey's Resolve places its join rooms from code (core/sky/story.ts pushRoom).

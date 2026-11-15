@@ -111,7 +111,15 @@ describe('memory flag registry', () => {
     // Catalog Overhaul flag files name the flags code keeps (`rule`) and the ones another set will write (`hook`, its line waits until then).
     const coFlags = Object.values(import.meta.glob<{ flags: { key: string; rule?: string; hook?: string }[] }>('../../src/data/catalogOverhaul/flags/*.json', { eager: true, import: 'default' }));
     for (const f of coFlags) for (const x of f.flags ?? []) if (x.rule || x.hook) setKeys.add(x.key);
-    const missing = reads.filter((r) => !setKeys.has(r.split(':')[1]!));
+    // The Evil Team engine writes flags too: an Operation's lasting flags, and team marks (`team-<team>-<mark>`) from `evil` effects.
+    for (const t of content.evilTeams.teams) {
+      for (const op of t.ops) for (const f of op.lasting?.flags ?? []) setKeys.add(typeof f === 'string' ? f : f.key);
+      for (const ev of content.events.values()) for (const ch of allChoices(ev)) for (const o of [ch.success, ch.failure]) for (const e of [...(o?.effects ?? []), ...(o?.battle?.win ?? [])]) if (e.kind === 'evil' && e.mark) setKeys.add(`team-${t.id}-${e.mark}`);
+    }
+    // Flags another Catalog Overhaul row writes, declared until that row's events are on the branch (src/data/catalogOverhaul/flags/*.json).
+    const external = Object.values(import.meta.glob('../../src/data/catalogOverhaul/flags/*.json', { eager: true, import: 'default' }) as Record<string, { external?: Record<string, string> }>).flatMap((f) => Object.keys(f.external ?? {}));
+    const declared = (k: string) => external.some((x) => (x.endsWith('*') ? k.startsWith(x.slice(0, -1)) : k === x));
+    const missing = reads.filter((r) => !setKeys.has(r.split(':')[1]!) && !declared(r.split(':')[1]!));
     expect(missing).toEqual([]);
   });
 });

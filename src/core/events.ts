@@ -51,6 +51,7 @@ import { keepsakeEvent } from './story2/keepsakes';
 import { deliverLegacyEgg, legacyEggWaiting } from './memories/heirloom';
 import { noteChoice } from './memories/world';
 import { applyEvilEffect, evilBattle, evilBattleWon, evilConditionMet, evilConditionText, evilTeam } from './evil/teams';
+import { fillEventText, resolveEventId } from './evil/text';
 import { shapeInstances, strategyIdForGroup } from './bossStrategy';
 import { choiceMade, recordChoice } from './evil/choices';
 import { recordCast } from './expansion/cast/dossier';
@@ -356,8 +357,14 @@ function tradePicksOf(content: Content, run: RunState, choice: EventChoice): Tra
 
 /** Why a choice's trade cannot happen yet, in words (null when it can or the choice has no trade). */
 function tradeMissing(content: Content, run: RunState, choice: EventChoice): string | null {
-  if (choice.pick && tradePicksOf(content, run, choice)?.length === 0) return 'Needs a Pokémon that fits';
   if (choice.success.effects.some((e) => e.kind === 'copyMoves') && run.party.length < 2) return 'Needs 2 Pokémon in your party';
+  // Catalog Overhaul: a "send a Water-type" choice needs one of those types in the party to pick.
+  const types = choice.pick?.types ?? [];
+  if (types.length > 0 && !run.party.some((m) => (content.species.get(m.speciesId)?.types ?? []).some((t) => types.includes(t)))) {
+    const names = types.map((t) => t[0]!.toUpperCase() + t.slice(1));
+    return `Needs a ${names.length > 1 ? `${names.slice(0, -1).join(', ')} or ${names.at(-1)}` : names[0]}-type Pokémon`;
+  }
+  if (choice.pick && tradePicksOf(content, run, choice)?.length === 0) return 'Needs a Pokémon that fits';
   for (const e of choice.success.effects) {
     if (e.kind !== 'tradeAway' && e.kind !== 'tradeFor') continue;
     if (e.kind === 'tradeAway' && run.party.length < 2) return 'Needs 2 Pokémon in your party';
@@ -1005,7 +1012,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   const base = success ? choice.success : choice.failure!;
   const branch = success ? choice.branches.find((b) => b.when.every((c) => conditionMet(content, run, c))) : undefined;
   const outcome = branch ? { ...base, text: branch.text, effects: branch.effects } : base;
-  const outcomeText = questText(content, run, event.id, fillCoText(content, current, outcome.text));
+  const outcomeText = questText(content, run, event.id, fillCoText(content, current, fillEventText(content, current, outcome.text)));
   // The Event Director remembers important choices (and whether you took a risk).
   const risky = chance !== null || choice.prompt !== undefined;
   run.story.flags[risky ? 'choices:risky' : 'choices:safe'] = Number(run.story.flags[risky ? 'choices:risky' : 'choices:safe'] ?? 0) + 1;
@@ -1732,11 +1739,14 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return '';
     }
     case 'addEvent': {
-      if (routeChainEvent(content, run, e.eventId)) return effectWords(content, e);
+      // SF13 Hideout: a room id may name the region's team (`evil-{teamId}-hideout-boss`); with no team it opens nothing.
+      const eventId = resolveEventId(run, e.eventId);
+      if (!eventId || !content.events.has(eventId)) return '';
+      if (routeChainEvent(content, run, eventId)) return effectWords(content, e);
       const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
-      here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId: e.eventId });
+      here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId });
       // The room is seen again later even if it was played before.
-      if (run.itemCounters) delete run.itemCounters[`event-seen:${e.eventId}`];
+      if (run.itemCounters) delete run.itemCounters[`event-seen:${eventId}`];
       return effectWords(content, e);
     }
     case 'enterPseudo': {
