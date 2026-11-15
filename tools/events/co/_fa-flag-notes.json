@@ -1,0 +1,21 @@
+{
+ "freed-caged": "Set by other families (MEMORY_AND_FORMAT 2.2: any cage opened).",
+ "honest-returned-wallet": "Set by Lost Wallet / Lost Ring (MEMORY_AND_FORMAT 2.1).",
+ "rival-helped": "Set by A Rival in Trouble (rivals, MEMORY_AND_FORMAT 2.3).",
+ "frost-warmed": "Set by Alpha A3, the Baxcalibur kept warm (legends).",
+ "roster-finn-done": "Set by Swimmer Finn's third meeting (people, ROAD_ROSTER).",
+ "kind-total": "Shared board: the Kindness total, +1 beside every Kindness +1.",
+ "kind-helped-stranger": "Pack flag kind.helped_stranger (MEMORY_AND_FORMAT 2.1): read by The Watchers, Old Ranger and others.",
+ "kind-walked-past": "Pack flag kind.walked_past (MEMORY_AND_FORMAT 2.1): read by You Walked Past Us.",
+ "rival-name-known": "Pack flag rival.name_known (MEMORY_AND_FORMAT 2.3): read by the final rival battle line.",
+ "crisis-*-first-*": "Pack flag crisis.<strand>.first (who was saved first): read by the rival's Report line (SF1.9 Remembers) and the Final Reunion.",
+ "crisis-*": "A strand beat or ending of the Region in Crisis (SF1), kept for the rival's Report and the Final Reunion.",
+ "rescue-*": "Pack flags rescue.* (SF1.6 to SF1.8): read by rescued-callback scenes and the Final Reunion.",
+ "apprentice-*": "Tib's story (SF2): read by the Final Reunion, the All-Star Tournament and the Evil Team's last raid (SF2 Afterstory).",
+ "farmer-*": "Abner's story (SF3): read by the Final Reunion, where Wynne comes alone.",
+ "elder-*": "The Elder's Last Wish (SF4): how it ended, kept for the run's chronicle.",
+ "wicker-*": "Wicker's Cart (SF5): what the player learned about her, kept for later merchant scenes.",
+ "tam-*": "Old Tam (SF5): what the player learned about him, kept for later merchant scenes.",
+ "penpal-*": "The Pen Pal (SF6): every reply (penpal.wrote.<topic>); the rival quotes it back in a later scene (R17, rivals).",
+ "blessing-kyogre": "Read-only state flag from legends (LEGENDS_PIECES section 3): Kyogre's blessing is the run's."
+}

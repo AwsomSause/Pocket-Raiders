@@ -313,22 +313,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -380,22 +380,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -458,22 +458,22 @@
         {
          "kind": "flag",
          "key": "crisis-strand-open",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-asked",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-split",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-together",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
@@ -531,22 +531,22 @@
         {
          "kind": "flag",
          "key": "crisis-strand-open",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-asked",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-split",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-together",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
@@ -605,22 +605,22 @@
          {
           "kind": "flag",
           "key": "crisis-strand-open",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-asked",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-split",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-together",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
@@ -696,22 +696,22 @@
          {
           "kind": "flag",
           "key": "crisis-strand-open",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-asked",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-split",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-together",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
@@ -768,22 +768,22 @@
          {
           "kind": "flag",
           "key": "crisis-strand-open",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-asked",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-split",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-together",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
@@ -869,22 +869,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -937,22 +937,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -997,22 +997,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -1065,22 +1065,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -1154,22 +1154,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -1579,22 +1579,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -1646,22 +1646,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -1724,22 +1724,22 @@
         {
          "kind": "flag",
          "key": "crisis-strand-open",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-asked",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-split",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-together",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
@@ -1797,22 +1797,22 @@
         {
          "kind": "flag",
          "key": "crisis-strand-open",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-asked",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-split",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-together",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
@@ -1879,22 +1879,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -1952,22 +1952,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -2020,22 +2020,22 @@
          {
           "kind": "flag",
           "key": "crisis-strand-open",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-asked",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-split",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-together",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
@@ -2092,22 +2092,22 @@
          {
           "kind": "flag",
           "key": "crisis-strand-open",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-asked",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-split",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-together",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
@@ -2193,22 +2193,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -2261,22 +2261,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -2321,22 +2321,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -2389,22 +2389,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -2455,6 +2455,12 @@
      "kind": "crisis",
      "atLeast": 4,
      "atMost": 5
+    },
+    {
+     "kind": "flag",
+     "key": "blessing-kyogre",
+     "atLeast": 0,
+     "atMost": 0
     }
    ],
    "intro": "The weir went in the night, with nobody there. You hear it from a ferryman poling across what used to be a street. The school is a roof. The shelter is a roof. Everyone got out, he thinks. Almost everyone. He does not finish the thought.",
@@ -2478,22 +2484,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -3090,22 +3096,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -3169,22 +3175,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -3247,22 +3253,22 @@
         {
          "kind": "flag",
          "key": "crisis-strand-open",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-asked",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-split",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-together",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
@@ -3320,22 +3326,22 @@
         {
          "kind": "flag",
          "key": "crisis-strand-open",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-asked",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-split",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-together",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
@@ -3393,22 +3399,22 @@
          {
           "kind": "flag",
           "key": "crisis-strand-open",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-asked",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-split",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-together",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
@@ -3460,22 +3466,22 @@
          {
           "kind": "flag",
           "key": "crisis-strand-open",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-asked",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-split",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-together",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
@@ -3546,22 +3552,22 @@
          {
           "kind": "flag",
           "key": "crisis-strand-open",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-asked",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-split",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-together",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
@@ -3618,22 +3624,22 @@
          {
           "kind": "flag",
           "key": "crisis-strand-open",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-asked",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-split",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-together",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
@@ -3719,22 +3725,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -3787,22 +3793,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -3847,22 +3853,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -3915,22 +3921,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -4004,22 +4010,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -4413,22 +4419,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -4480,22 +4486,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -4559,22 +4565,22 @@
         {
          "kind": "flag",
          "key": "crisis-strand-open",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-asked",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-split",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-together",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
@@ -4644,22 +4650,22 @@
         {
          "kind": "flag",
          "key": "crisis-strand-open",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-asked",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-split",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-together",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
@@ -4704,22 +4710,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -4802,22 +4808,22 @@
          {
           "kind": "flag",
           "key": "crisis-strand-open",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-asked",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-split",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-together",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
@@ -4898,22 +4904,22 @@
          {
           "kind": "flag",
           "key": "crisis-strand-open",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-asked",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-split",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-together",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
@@ -4970,22 +4976,22 @@
          {
           "kind": "flag",
           "key": "crisis-strand-open",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-asked",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-split",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-together",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
@@ -5072,22 +5078,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -5140,22 +5146,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -5201,22 +5207,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -5269,22 +5275,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -5358,22 +5364,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -5484,19 +5490,18 @@
     "tint": "#3a1808",
     "effect": "fire"
    },
-   "requires": [],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "crisis-fire-on",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
    "intro": "A field is burning in a line too straight to be an accident. At the far end of it a figure with a torch looks back at the flames, laughs, and runs into the smoke. A farmer stumbles out of the stubble beating at his sleeve. Farmer: \"That's the third one! He's lighting them on purpose!\" He turns his wet face into the wind and goes still. \"The wind's turning toward the orchard village.\"",
    "choices": [
     {
      "label": "Chase him.",
-     "requires": [
-      {
-       "kind": "flag",
-       "key": "crisis-strand-open",
-       "atLeast": 0,
-       "atMost": 0
-      }
-     ],
      "success": {
       "text": "You go into the smoke after the laugh. He is waiting on the far side with the torch still lit and a uniform under his coat, delighted to have an audience.",
       "effects": [
@@ -5572,6 +5577,11 @@
        },
        {
         "kind": "flag",
+        "key": "crisis-strand-open",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
         "key": "crisis-beat",
         "amount": 1
        },
@@ -5581,7 +5591,7 @@
        },
        {
         "kind": "friendship",
-        "amount": 6,
+        "amount": 3,
         "who": "party"
        },
        {
@@ -5604,14 +5614,6 @@
     },
     {
      "label": "Warn the village.",
-     "requires": [
-      {
-       "kind": "flag",
-       "key": "crisis-strand-open",
-       "atLeast": 0,
-       "atMost": 0
-      }
-     ],
      "success": {
       "text": "You outrun the wind by minutes. Bells. Doors. Carts filled with grandmothers and ladders and caged birds. When the smoke reaches the first orchard wall, there is nobody left behind it to breathe it. Whatever the fire takes from this village now, it will not be a person.",
       "effects": [
@@ -5656,6 +5658,121 @@
        }
       ]
      }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "hazard-only",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "crisis-strand-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Chase him.",
+       "success": {
+        "text": "You go into the smoke after the laugh. He is waiting on the far side with the torch still lit and a uniform under his coat, delighted to have an audience.",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "name": "The Arsonist",
+         "size": 3,
+         "types": [],
+         "levelBonus": 1,
+         "win": [
+          {
+           "kind": "flag",
+           "key": "crisis-fire-caught",
+           "amount": 1
+          },
+          {
+           "kind": "evil",
+           "beat": false,
+           "heat": 1
+          },
+          {
+           "kind": "money",
+           "amount": 300
+          }
+         ],
+         "evil": "grunt",
+         "friendly": true,
+         "lose": []
+        }
+       }
+      },
+      {
+       "label": "Fight the fire.",
+       "requires": [
+        {
+         "kind": "partyMoveType",
+         "type": "water"
+        }
+       ],
+       "success": {
+        "text": "Your team lays water down the burning line again, and again, and a third time, until the last of it hisses out a stride from the farmer's barn. This field, at least, will be ploughed in spring. He cannot speak. He just holds his hat against his chest.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "amount": 3,
+          "who": "party"
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-helped-stranger",
+          "amount": 1
+         }
+        ]
+       }
+      },
+      {
+       "label": "Warn the village.",
+       "success": {
+        "text": "You outrun the wind by minutes. Bells. Doors. Carts filled with grandmothers and ladders and caged birds. When the smoke reaches the first orchard wall, there is nobody left behind it to breathe it.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "crisis-fire-warned",
+          "amount": 1
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-helped-stranger",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
     }
    ]
   },
@@ -5720,22 +5837,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -5787,22 +5904,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -5865,22 +5982,22 @@
         {
          "kind": "flag",
          "key": "crisis-strand-open",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-asked",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-split",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-together",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
@@ -5938,22 +6055,22 @@
         {
          "kind": "flag",
          "key": "crisis-strand-open",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-asked",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-split",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-together",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
@@ -6024,22 +6141,22 @@
          {
           "kind": "flag",
           "key": "crisis-strand-open",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-asked",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-split",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-together",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
@@ -6096,22 +6213,22 @@
          {
           "kind": "flag",
           "key": "crisis-strand-open",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-asked",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-split",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-together",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
@@ -6197,22 +6314,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -6265,22 +6382,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -6325,22 +6442,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -6393,22 +6510,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -6482,22 +6599,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -6554,14 +6671,6 @@
    "choices": [
     {
      "label": "Go down the mine.",
-     "requires": [
-      {
-       "kind": "flag",
-       "key": "crisis-strand-open",
-       "atLeast": 0,
-       "atMost": 0
-      }
-     ],
      "success": {
       "text": "The hiker stares at you. Then he lets go of the tree and points. \"Adit's behind that boulder. Twelve of them went down this morning.\" He swallows. \"I'll hold the rope. I'll hold it as long as it takes.\"",
       "effects": [
@@ -6605,6 +6714,11 @@
        },
        {
         "kind": "flag",
+        "key": "crisis-strand-open",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
         "key": "crisis-beat",
         "amount": 1
        },
@@ -6614,7 +6728,7 @@
        },
        {
         "kind": "friendship",
-        "amount": 6,
+        "amount": 5,
         "who": "lead"
        },
        {
@@ -6653,6 +6767,11 @@
        },
        {
         "kind": "flag",
+        "key": "crisis-strand-open",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
         "key": "crisis-beat",
         "amount": 1
        },
@@ -6662,7 +6781,7 @@
        },
        {
         "kind": "friendship",
-        "amount": 6,
+        "amount": 5,
         "who": "lead"
        },
        {
@@ -6694,6 +6813,204 @@
        }
       ]
      }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "hazard-only",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "crisis-strand-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Go down the mine.",
+       "success": {
+        "text": "The hiker stares at you. Then he lets go of the tree and points. \"Adit's behind that boulder. Twelve of them went down this morning.\" He swallows. \"I'll hold the rope. I'll hold it as long as it takes.\"",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "crisis-quake-mine"
+         }
+        ]
+       }
+      },
+      {
+       "label": "Steady the slope.",
+       "requires": [
+        {
+         "kind": "partyType",
+         "type": "ground"
+        }
+       ],
+       "success": {
+        "text": "Your Pokémon plants itself across the fall line and leans. The next shock comes, and the slope groans, and holds. The trail behind it stays open, for you and for everyone who will need to come down this hill in a hurry tonight.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "amount": 5,
+          "who": "lead"
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-helped-stranger",
+          "amount": 1
+         }
+        ]
+       }
+      },
+      {
+       "label": "Steady the slope. (Rock-type)",
+       "requires": [
+        {
+         "kind": "partyType",
+         "type": "rock"
+        }
+       ],
+       "success": {
+        "text": "Your Pokémon plants itself across the fall line and leans. The next shock comes, and the slope groans, and holds. The trail behind it stays open, for you and for everyone who will need to come down this hill in a hurry tonight.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "amount": 5,
+          "who": "lead"
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-helped-stranger",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "told-before",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "crisis-quake-on",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Go down the mine.",
+       "success": {
+        "text": "The hiker stares at you. Then he lets go of the tree and points. \"Adit's behind that boulder. Twelve of them went down this morning.\" He swallows. \"I'll hold the rope. I'll hold it as long as it takes.\"",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "crisis-quake-mine"
+         }
+        ]
+       }
+      },
+      {
+       "label": "Steady the slope.",
+       "requires": [
+        {
+         "kind": "partyType",
+         "type": "ground"
+        }
+       ],
+       "success": {
+        "text": "Your Pokémon plants itself across the fall line and leans. The next shock comes, and the slope groans, and holds. The trail behind it stays open, for you and for everyone who will need to come down this hill in a hurry tonight.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "amount": 5,
+          "who": "lead"
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-helped-stranger",
+          "amount": 1
+         }
+        ]
+       }
+      },
+      {
+       "label": "Steady the slope. (Rock-type)",
+       "requires": [
+        {
+         "kind": "partyType",
+         "type": "rock"
+        }
+       ],
+       "success": {
+        "text": "Your Pokémon plants itself across the fall line and leans. The next shock comes, and the slope groans, and holds. The trail behind it stays open, for you and for everyone who will need to come down this hill in a hurry tonight.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "amount": 5,
+          "who": "lead"
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-helped-stranger",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
     }
    ]
   },
@@ -6858,22 +7175,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -6925,22 +7242,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -7004,22 +7321,22 @@
         {
          "kind": "flag",
          "key": "crisis-strand-open",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-asked",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-split",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-together",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
@@ -7077,22 +7394,22 @@
         {
          "kind": "flag",
          "key": "crisis-strand-open",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-asked",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-split",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-together",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
@@ -7151,22 +7468,22 @@
          {
           "kind": "flag",
           "key": "crisis-strand-open",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-asked",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-split",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-together",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
@@ -7223,22 +7540,22 @@
          {
           "kind": "flag",
           "key": "crisis-strand-open",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-asked",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-split",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-together",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
@@ -7325,22 +7642,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -7393,22 +7710,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -7454,22 +7771,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -7522,22 +7839,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -7612,22 +7929,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -7684,14 +8001,6 @@
    "choices": [
     {
      "label": "Follow the voice.",
-     "requires": [
-      {
-       "kind": "flag",
-       "key": "crisis-strand-open",
-       "atLeast": 0,
-       "atMost": 0
-      }
-     ],
      "success": {
       "text": "You put your head down and walk at the sound. It comes and goes. Twice you lose it altogether and stand still until it comes again. Then your shin hits a bumper.",
       "effects": [
@@ -7752,6 +8061,64 @@
        }
       ]
      }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "hazard-only",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "crisis-strand-open",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Follow the voice.",
+       "success": {
+        "text": "You put your head down and walk at the sound. It comes and goes. Twice you lose it altogether and stand still until it comes again. Then your shin hits a bumper.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "crisis-blizzard-bus"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "told-before",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "crisis-blizzard-on",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Follow the voice.",
+       "success": {
+        "text": "You put your head down and walk at the sound. It comes and goes. Twice you lose it altogether and stand still until it comes again. Then your shin hits a bumper.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "crisis-blizzard-bus"
+         }
+        ]
+       }
+      }
+     ]
     }
    ]
   },
@@ -7938,22 +8305,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -8005,22 +8372,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -8083,22 +8450,22 @@
         {
          "kind": "flag",
          "key": "crisis-strand-open",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-asked",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-split",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-together",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
@@ -8156,22 +8523,22 @@
         {
          "kind": "flag",
          "key": "crisis-strand-open",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-asked",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-split",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
          "key": "crisis-ally-together",
-         "amount": -1
+         "amount": -9
         },
         {
          "kind": "flag",
@@ -8242,22 +8609,22 @@
          {
           "kind": "flag",
           "key": "crisis-strand-open",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-asked",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-split",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-together",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
@@ -8314,22 +8681,22 @@
          {
           "kind": "flag",
           "key": "crisis-strand-open",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-asked",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-split",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
           "key": "crisis-ally-together",
-          "amount": -1
+          "amount": -9
          },
          {
           "kind": "flag",
@@ -8415,22 +8782,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -8483,22 +8850,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -8543,22 +8910,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -8611,22 +8978,22 @@
           {
            "kind": "flag",
            "key": "crisis-strand-open",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-asked",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-split",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
            "key": "crisis-ally-together",
-           "amount": -1
+           "amount": -9
           },
           {
            "kind": "flag",
@@ -8706,22 +9073,22 @@
        {
         "kind": "flag",
         "key": "crisis-strand-open",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-asked",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-split",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
         "key": "crisis-ally-together",
-        "amount": -1
+        "amount": -9
        },
        {
         "kind": "flag",
@@ -8805,7 +9172,7 @@
        },
        {
         "kind": "friendship",
-        "amount": 12,
+        "amount": 5,
         "who": "lead"
        },
        {
@@ -8849,7 +9216,7 @@
        },
        {
         "kind": "friendship",
-        "amount": 6,
+        "amount": 3,
         "who": "lead"
        },
        {
