@@ -388,8 +388,12 @@ export class Menu {
     return { x: (i % this.columns) * this.itemWidth, y: Math.floor(i / this.columns) * this.itemHeight };
   }
 
+  /** Called after the focused option changes (the New UI redraws its view from it). */
+  onFocus: ((i: number) => void) | null = null;
+
   focus(i: number, sound = true): void {
     if (i < 0 || i >= this.config.options.length) return;
+    if (i !== this.index) queueMicrotask(() => this.onFocus?.(this.index));
     if (sound && i !== this.index) playSfx(this.scene, 'ui.cursor', 0.5);
     const prev = this.index;
     this.index = i;

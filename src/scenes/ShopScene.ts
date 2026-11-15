@@ -24,6 +24,8 @@ import { effectiveAttributes } from '../core/attributes';
 import { textStyle } from '../ui/theme';
 import { sceneForRun } from './routing';
 import { partySpecies, preloadPokemon } from '../ui/lazyAssets';
+import { reduxOn } from '../ui/redux/stage';
+import { reduxChoicePrompt, reduxShop } from '../ui/redux/screens/shop';
 
 export class ShopScene extends Phaser.Scene {
   private picker: Picker | null = null;
@@ -103,7 +105,8 @@ export class ShopScene extends Phaser.Scene {
         notice: data.notice,
         haggle: { charisma, chance: haggleChance(content, charisma) },
       };
-    this.handles = shopLayout(this.shopType)(this.ctx, { focus: (i) => this.setFocus(i), pick: (i) => this.pick(i) });
+    // New UI: the mock-ups' shop draws every kind of shop; Old keeps each shop's own look.
+    this.handles = (reduxOn() ? reduxShop : shopLayout(this.shopType))(this.ctx, { focus: (i) => this.setFocus(i), pick: (i) => this.pick(i) });
     this.setFocus(Math.min(data.focus ?? 0, view.rows.length - (view.canSell ? 0 : 1)));
 
     onInputAction(this, (action) => {
@@ -278,7 +281,7 @@ export class ShopScene extends Phaser.Scene {
 
   private openPrompt(question: string, options: [string, () => void][]): void {
     if (!this.ctx) return;
-    const ui = choicePrompt(this.ctx, question, options.map((o) => o[0]), (k) => this.closePrompt(k));
+    const ui = reduxOn() ? reduxChoicePrompt(question, options.map((o) => o[0]), (k) => this.closePrompt(k)) : choicePrompt(this.ctx, question, options.map((o) => o[0]), (k) => this.closePrompt(k));
     this.prompt = { ui, index: 0, actions: options.map((o) => o[1]) };
     ui.focus(0);
   }

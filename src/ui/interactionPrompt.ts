@@ -15,6 +15,8 @@ import {
 } from '../core/interaction/prompt';
 import { MicMeter, ShoutDetector } from '../game/micInput';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from './theme';
+import { esc, W } from './redux/kit';
+import { mountRedux, reduxOn, type ReduxView } from './redux/stage';
 
 const BOX = { w: 360, h: 220 };
 const GRADE_COLOR: Record<string, string> = { miss: '#ff6a6a', ok: '#ffe08a', good: '#8affc0', perfect: '#9fe8ff' };
@@ -66,9 +68,18 @@ export function runInteractionPrompt(scene: Phaser.Scene, def: PromptDef, opts: 
     const toBox = (p: Phaser.Input.Pointer): [number, number] => [((p.x - left) / BOX.w) * 100, ((p.y - top) / BOX.h) * 100];
     const px = (v: [number, number]) => ({ x: left + (v[0] / 100) * BOX.w, y: top + (v[1] / 100) * BOX.h });
 
+    // New UI: the prompt is the mock-ups' small window (fishing bite bar, "Enter: talk" prompt) drawn over whatever
+    // screen is open. Same timestamps, same judges; only the picture and where the pointer lands differ.
+    let rx: ReduxView | null = null;
+    let shown: PromptResult | null = null;
+    const offs: (() => void)[] = [];
+
     const finish = (result: PromptResult) => {
       if (finished) return;
       finished = true;
+      shown = result;
+      rx?.refresh();
+      for (const off of offs) off();
       scene.input.off('pointerdown', onDown);
       scene.input.off('pointerup', onUp);
       scene.input.off('pointermove', onMove);
@@ -78,7 +89,7 @@ export function runInteractionPrompt(scene: Phaser.Scene, def: PromptDef, opts: 
       meter?.stop();
       verdict.setText(result.skipped ? 'Skipped' : result.grade.toUpperCase()).setColor(GRADE_COLOR[result.grade] ?? '#ffffff').setAlpha(1);
       if (motion === 'full') scene.tweens.add({ targets: verdict, scale: { from: 0.6, to: 1.1 }, duration: 260, ease: 'Back.easeOut' });
-      window.setTimeout(() => { try { root.destroy(true); } catch { /* scene already gone */ } resolve(result); }, motion === 'off' ? 250 : 650);
+      window.setTimeout(() => { try { root.destroy(true); } catch { /* scene already gone */ } rx?.destroy(); resolve(result); }, motion === 'off' ? 250 : 650);
     };
 
     const judge = (): PromptResult => {
@@ -134,6 +145,69 @@ export function runInteractionPrompt(scene: Phaser.Scene, def: PromptDef, opts: 
 
     let pulseUntil = 0;
     function pulse() { pulseUntil = now() + 120; }
+
+    if (reduxOn()) {
+      root.setVisible(false);
+      const pct = (v: number): string => `${Math.max(0, Math.min(100, v * 100)).toFixed(1)}%`;
+      // The mock-ups' gold bar, with the zone to hit marked on it.
+      const bar = (k: number, zone?: readonly [number, number]): string =>
+        `<div class="hp gold" style="height:12px;position:relative;overflow:visible"><i style="width:${pct(k)};transition:none"></i>${zone ? `<u style="position:absolute;left:${pct(zone[0])};width:${pct(zone[1] - zone[0])};top:-4px;bottom:-4px;border-radius:4px;box-shadow:0 0 0 2px var(--acc);background:#fff3"></u>` : ''}</div>`;
+      const html = (): string => {
+        const t = now();
+        const key = '<kbd>Enter</kbd>';
+        const head = shown
+          ? `<b style="font-size:26px;color:${GRADE_COLOR[shown.grade] ?? '#fff'};text-shadow:2px 2px 0 #0008">${shown.skipped ? 'Skipped' : shown.grade.toUpperCase()}</b>`
+          : `<b class="acc${motion === 'full' ? ' pulse' : ''}" style="font-size:24px">${esc(def.label)}</b>`;
+        // The data's hints describe the old ring; the bar gets the mock-up's words, keeping any extra context after a colon.
+        const extra = /:\s*(.+)$/.exec(def.hint)?.[1] ?? '';
+        const words = def.kind === 'timing' ? `Press Enter when the bar is in the gold zone.${extra ? ` ${extra.charAt(0).toUpperCase()}${extra.slice(1)}` : ''}` : def.kind === 'hold' ? 'Hold Enter, then let go when the bar is in the gold zone.' : def.hint;
+        const hintLine = `<div class="sm">${esc(words)} <span style="opacity:.7">(Esc skips)</span></div>`;
+        const frame = (body: string, st = `left:${left}px;width:${BOX.w}px;top:${cy - 80}px`): string => '<div class="fill hit"></div>' + W(head + body + hintLine, `position:absolute;${st};display:flex;flex-direction:column;gap:10px;padding:16px 18px;text-align:center;z-index:2;pointer-events:none`);
+        switch (def.kind) {
+          case 'tap':
+            // The mock-up prompt chip: the key and what it does; it lights up when the mark appears.
+            return frame(`<div class="row" style="justify-content:center;opacity:${t < 400 ? 0.35 : 1}">${key}<b>Now!</b></div>`);
+          case 'timing': {
+            const len = promptLengthMs(def);
+            return frame(bar(t / len, [(def.landMs - def.windowsMs.good) / len, (def.landMs + def.windowsMs.good) / len]));
+          }
+          case 'hold': {
+            const len = promptLengthMs(def);
+            return frame(bar(pressAt === null ? 0 : (heldMs ?? t - pressAt) / len, [(def.targetMs - def.windowsMs.good) / len, (def.targetMs + def.windowsMs.good) / len]));
+          }
+          case 'rhythm': {
+            const last = Math.max(...def.beatsMs) + 400;
+            const dots = def.beatsMs.map((b) => `<u style="position:absolute;left:${pct(b / last)};top:-3px;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 2px #0006"></u>`).join('');
+            return frame(`<div class="hp" style="height:8px;position:relative;overflow:visible;margin:8px 0">${dots}<u style="position:absolute;left:${pct(t / last)};top:-7px;width:22px;height:22px;margin-left:-11px;border-radius:50%;background:${t < pulseUntil ? '#78f090' : '#9fe8ff'};box-shadow:0 0 0 2px #fff"></u></div>`);
+          }
+          case 'shout':
+            return frame(bar(Math.min(1, level * 3)) + `<div class="row" style="justify-content:center">${key}<b>Shout!</b></div>`);
+          case 'drag': {
+            // The drag field sits exactly where the pointer maths expects it (the same box the canvas drew).
+            const at = (v: readonly [number, number], st: string): string => `<u style="position:absolute;left:${v[0]}%;top:${v[1]}%;${st}"></u>`;
+            const lineTo = dragging && dragEnd ? `<svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="${def.from[0]}" y1="${def.from[1]}" x2="${dragEnd[0]}" y2="${dragEnd[1]}" stroke="#9fe8ff" stroke-width="1.2"/></svg>` : '';
+            const field = `<div class="abs" style="left:${left}px;top:${top}px;width:${BOX.w}px;height:${BOX.h}px;background:var(--p2);border-radius:6px;z-index:3;pointer-events:none">${lineTo}${at(def.from, 'width:20px;height:20px;margin:-10px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #0006')}${at(def.to, 'width:44px;height:44px;margin:-22px;border-radius:50%;box-shadow:0 0 0 3px var(--acc),inset 0 0 0 12px #0000,inset 0 0 0 15px var(--acc)')}${dragging && dragEnd ? at(dragEnd, 'width:16px;height:16px;margin:-8px;border-radius:50%;background:#9fe8ff') : ''}</div>`;
+            // One window holds the title, the field and the hint; the field keeps the canvas box's place for the pointer maths.
+            const shell = W(`${head}<span style="flex:1"></span>${hintLine}`, `position:absolute;left:${left - 18}px;top:${top - 52}px;width:${BOX.w + 36}px;height:${BOX.h + 112}px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;padding:12px 16px;text-align:center;z-index:2;pointer-events:none`);
+            return '<div class="fill hit"></div>' + shell + field;
+          }
+        }
+      };
+      rx = mountRedux(scene, { clear: true, render: html });
+      // The window covers the canvas, so the pointer is read from it (in game pixels) and fed to the same handlers.
+      const el = rx.el;
+      const point = (e: PointerEvent): Phaser.Input.Pointer => {
+        const r = el.getBoundingClientRect();
+        return { x: ((e.clientX - r.left) / r.width) * GAME_WIDTH, y: ((e.clientY - r.top) / r.height) * GAME_HEIGHT } as Phaser.Input.Pointer;
+      };
+      const down = (e: PointerEvent): void => onDown(point(e));
+      const move = (e: PointerEvent): void => onMove(point(e));
+      const up = (e: PointerEvent): void => onUp(point(e));
+      el.addEventListener('pointerdown', down);
+      el.addEventListener('pointermove', move);
+      el.addEventListener('pointerup', up);
+      offs.push(() => { el.removeEventListener('pointerdown', down); el.removeEventListener('pointermove', move); el.removeEventListener('pointerup', up); });
+    }
 
     const draw = () => {
       const t = now();
@@ -195,7 +269,8 @@ export function runInteractionPrompt(scene: Phaser.Scene, def: PromptDef, opts: 
       callback: () => {
         if (finished) return;
         if (meter && meter.state === 'on') { level = meter.level(); if (detector.feed(level, now())) { shouted = true; return finish(judge()); } }
-        draw();
+        if (rx) rx.refresh();
+        else draw();
         // Don't hang: end at the latest when the prompt's length is up.
         if (now() > promptLengthMs(def) + 300 && !(def.kind === 'drag' && dragging)) finish(judge());
       },

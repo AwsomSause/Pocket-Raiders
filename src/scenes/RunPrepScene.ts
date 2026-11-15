@@ -103,6 +103,9 @@ function fitLabel(text: string, max = 38): string {
   return text.length > max ? `${text.slice(0, max - 1)}…` : text;
 }
 
+import { mountRedux, reduxOn } from '../ui/redux/stage';
+import { menuView } from '../ui/redux/templates';
+
 export class RunPrepScene extends Phaser.Scene {
   private menu!: Menu;
   private picker: Picker | null = null;
@@ -206,7 +209,9 @@ export class RunPrepScene extends Phaser.Scene {
     }
     const summary = this.add.container(left, top);
     let y = 0;
+    const lines: string[] = [];
     const line = (text: string, size = 18, color: string = COLORS.textLight) => {
+      lines.push(text);
       const t = this.add.text(0, y, text, textStyle(size, color, { wordWrap: { width } }));
       summary.add(t);
       y += t.height + 4;
@@ -274,6 +279,23 @@ export class RunPrepScene extends Phaser.Scene {
         t.setAlpha(0).setX(x + dx);
         this.tweens.add({ targets: t, alpha: 1, x, duration: 220, ease: 'Cubic.easeOut' });
       }
+    }
+
+    // New UI: the mock-up's Preparation Desk (the menu template); this scene stays the controller.
+    if (reduxOn()) {
+      const view = mountRedux(this, {
+        render: (c) => menuView(c, {
+          title: 'Preparation Desk', area: 'run', hints: [['Enter', 'select'], ['←→', 'change'], ['Q/E', 'page'], ['Esc', 'trainers']],
+          items: rows.map((r) => { const [name = '', ...rest] = labels[r].replace(/\s*▶$/, '').split(': '); return { label: name, note: rest.join(': '), disabled: disabled(r) }; }),
+          index: this.focusIndex,
+          detail: { title: lines[0] ?? def.title, body: lines.slice(1).join('\n') },
+          text: notice || ROW_HELP[rows[this.focusIndex]!] || def.blurb,
+          tabs: { labels: PAGES.map((p) => p.title), index: this.page },
+        }),
+        acts: { pick: (i) => { this.menu.focus(Number(i), false); this.menu.confirm(); }, tab: (k) => !this.picker && this.goPage(Number(k)) },
+        overs: { over: (i) => { if (!disabled(rows[Number(i)]!)) this.menu.focus(Number(i), false); } },
+      });
+      this.menu.onFocus = () => view.refresh();
     }
 
     onInputAction(this, (a) => {

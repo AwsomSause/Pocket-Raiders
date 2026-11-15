@@ -16,6 +16,8 @@ import { pokemonIcon } from '../ui/sprites';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { Menu } from '../ui/widgets';
 import { sceneForRun } from './routing';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { savesView, type ConfirmModel } from '../ui/redux/screens/saves';
 
 const CARD_X = 60;
 const CARD_W = GAME_WIDTH - 120;
@@ -33,6 +35,8 @@ export class SaveSlotsScene extends Phaser.Scene {
   private rings: Phaser.GameObjects.Graphics[] = [];
   private deleteTexts: Phaser.GameObjects.Text[] = [];
   private note: Phaser.GameObjects.Text | null = null;
+  private view: ReduxView | null = null;
+  private ask: ConfirmModel | null = null;
 
   constructor() {
     super('SaveSlots');
@@ -61,6 +65,33 @@ export class SaveSlotsScene extends Phaser.Scene {
     this.note = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 58, data?.notice ?? 'Each slot is its own profile and run. The run saves by itself at every checkpoint.', textStyle(16, '#f0e0a0', { align: 'center', wordWrap: { width: GAME_WIDTH - 80 } })).setOrigin(0.5, 0);
     this.add.text(16, GAME_HEIGHT - 22, '↑/↓ choose  ·  Enter load  ·  → Delete  ·  Esc back', textStyle(14, '#8a7f96'));
     this.paint();
+    this.ask = null;
+    this.view = null;
+    // New UI: the mock-up's Save Slots screen; this scene stays the controller.
+    if (reduxOn()) {
+      const sprite = (m: (typeof this.peeks)[number]['run'] & { status: 'ok' }) => m.data.party.slice(0, 6).map((p) => `pokemon/${lookSpecies(session.content, p).assets.sprite}`);
+      this.view = mountRedux(this, {
+        render: (c) => savesView(c, {
+          slots: this.cards.map((card, i) => {
+            const run = this.peeks[i]!.run;
+            return { tag: `Slot ${card.slot}`, name: card.title.split(' · ').slice(1).join(' · '), where: card.lines[0] ?? '', time: card.savedAt ? stampText(card.savedAt).slice(0, 10) : '', party: run.status === 'ok' ? sprite(run) : [], empty: card.status === 'empty' };
+          }),
+          focus: this.focus,
+          onDelete: this.onDelete,
+          note: this.note?.text ?? '',
+          confirm: this.ask && this.confirm ? { ...this.ask, index: this.confirm.index } : null,
+        }),
+        acts: {
+          open: (i) => !this.confirm && this.open(Number(i)),
+          del: (i) => !this.confirm && this.askDelete(Number(i)),
+          confirm: (k) => { this.confirm?.focus(Number(k), false); this.confirm?.confirm(); },
+        },
+        overs: {
+          over: (i) => { if (!this.confirm && this.focus !== Number(i)) { this.focus = Number(i); this.setDelete(false); } },
+          confirmOver: (k) => this.confirm?.focus(Number(k), false),
+        },
+      });
+    }
 
     onInputAction(this, (a) => {
       if (this.confirm) return this.confirm.handle(a);
@@ -106,6 +137,7 @@ export class SaveSlotsScene extends Phaser.Scene {
   }
 
   private paint(): void {
+    this.view?.refresh();
     this.rings.forEach((ring, i) => {
       ring.clear();
       if (i !== this.focus) return;
@@ -143,6 +175,7 @@ export class SaveSlotsScene extends Phaser.Scene {
 
   private say(text: string): void {
     this.note?.setText(text);
+    this.view?.refresh();
     playSfx(this, 'ui.error', 0.4);
   }
 
@@ -160,6 +193,8 @@ export class SaveSlotsScene extends Phaser.Scene {
       this.confirm = null;
       this.overlay?.destroy();
       this.overlay = null;
+      this.ask = null;
+      this.view?.refresh();
     };
     this.confirm = new Menu(this, {
       x: 320,
@@ -177,5 +212,8 @@ export class SaveSlotsScene extends Phaser.Scene {
       onBack: close,
     });
     this.confirm.container.setDepth(51);
+    this.ask = { title: `Delete slot ${card.slot}?`, body: 'Its profile, run and history are removed from this slot. One backup copy is kept in browser storage.', options: ['Keep it', `Delete slot ${card.slot}`], index: 0 };
+    this.confirm.onFocus = () => this.view?.refresh();
+    this.view?.refresh();
   }
 }

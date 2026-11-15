@@ -9,6 +9,7 @@ paths:
 - Browser tests: Playwright 1.63.0 in `tests/e2e/`. Chromium is pre-installed in cloud sessions; don't reinstall Playwright.
 - Gotcha: the first key press right after a scene change can be dropped. Wait 250 ms after each scene change.
 - Two Run-Prep e2e tests in `milestone5_5.spec.ts` are known to be flaky on `main` as well.
+- UI style in browser tests: an automated browser gets the **Old** look (the New UI layer covers the canvas, and the older specs click the canvas). To test the New look, open the game with `?ui=new` and click the layer (`#rx .stage[data-scene="<SceneKey>"]`, `[data-act]`); see `tests/e2e/newUi.spec.ts`.
 - Never skip, disable or loosen a test to get green. Cover normal, boundary and failure cases.
 
 ## Re-pinning the gameplay fingerprints (`tests/unit/story.test.ts`, `BEFORE_STORY`)

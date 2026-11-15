@@ -109,6 +109,11 @@ import { nodeMenuData } from '../core/nodeMenu/data';
 import { drawTrackPage } from '../ui/trackPage';
 import { drawDossier } from '../ui/dossier';
 import { dossierFolders } from '../core/expansion/cast/dossier';
+import { pokemonAssetIds, type AssetManifest } from '../assets/catalog';
+import { rxFileOf } from '../ui/redux/assets';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mapView, type MapLegendRow, type MapModel, type MapNodeView } from '../ui/redux/screens/map';
+import { nodeStyle } from '../ui/redux/kit';
 
 const COL_SPACING = 104;
 const ROW_SPACING = 92;
@@ -199,6 +204,12 @@ export class MapScene extends Phaser.Scene {
   /** Where each node is drawn inside the scrolling map layer (for the travel animation). */
   private nodePos = new Map<string, { x: number; y: number }>();
   private mapLayer: Phaser.GameObjects.Container | null = null;
+  /** New UI: the mock-ups' stage map over this scene, and what it draws from. */
+  private rxView: ReduxView | null = null;
+  private rxModel: Omit<MapModel, 'index' | 'info' | 'notice' | 'going' | 'banner' | 'legend'> | null = null;
+  private rxGoing: string | null = null;
+  private rxBanner: MapModel['banner'] = null;
+  private rxLegend: MapLegendRow[] | null = null;
 
   constructor() {
     super('Map');
@@ -561,6 +572,9 @@ export class MapScene extends Phaser.Scene {
       y: MAP_MID_Y + (n.row - (widthOf(n.column) - 1) / 2) * ROW_SPACING + (totalRise ? totalRise / 2 - (n.column - 1) * rise : 0),
     });
 
+    const rxNodes: MapNodeView[] = [];
+    const rxEdges: MapModel['edges'] = [];
+    const rxButtons: MapModel['buttons'] = [];
     const lines = this.add.graphics();
     mapLayer.add(lines);
     const openPaths: [{ x: number; y: number }, { x: number; y: number }][] = [];
@@ -594,6 +608,7 @@ export class MapScene extends Phaser.Scene {
           lines.lineBetween(a.x, a.y, b.x, b.y);
         }
         if (open) openPaths.push([a, b]);
+        rxEdges.push({ a: n.id, b: id, open, walked });
       }
     }
     // Open paths glow, and little lights travel along them toward the choices.
@@ -725,6 +740,27 @@ export class MapScene extends Phaser.Scene {
         else mapLayer.add(this.add.text(sx, sy, s.glyph, textStyle(18, '#ffffff', { stroke: '#181818', strokeThickness: 3 })).setOrigin(0.5).setAlpha(side.used ? 0.4 : 1));
       });
       if (mapSkin?.labels && !fog) mapLayer.add(this.add.text(x, y + r * 0.95 + 9, KIND_STYLE[n.kind].label.split(' ')[0]!, textStyle(10, '#33475f')).setOrigin(0.5, 0));
+      {
+        // New UI: the same facts, for the mock-up map.
+        const hex = (v: number): string => `#${v.toString(16).padStart(6, '0')}`;
+        const marks: (readonly [string, string])[] = [];
+        if (!fog && n.storyStops?.some((id) => !run.story.v2?.stops.done.includes(id))) marks.push(['★ story', '#ffd860']);
+        if (n.id === hidden && !visited) marks.push(['✦ item', '#f8e070']);
+        if (omen) marks.push(['●', OMEN_COLOR[omen.tier]]);
+        if (front) marks.push([FRONT_LABEL[front.weather] ?? front.weather, hex(FRONT_COLOR[front.weather] ?? 0xffffff)]);
+        if (obstacle) marks.push([obstacle.icon, obstacle.color]);
+        if (n.harder && !fog) marks.push(['! harder', '#d0a0ff']);
+        if (boss && !fog) marks.push([boss.name, '#ffffff']);
+        const text = this.describe({ kind: 'node', node: n });
+        rxNodes.push({
+          id: n.id, col: n.column, row: n.row, rows: widthOf(n.column), kind: n.kind, ...(roomGlyph ? { glyph: roomGlyph } : {}), fog, visited, cur: isCurrent, go: reachable, dim, harder: !!n.harder, opt: -1,
+          sides: n.sides.map((side) => {
+            const special = fog ? HIDDEN_STYLE : side.kind === 'expedition' && legendOf(side.expeditionId) ? LEGEND_STYLE : side.roamer ? ROAMER_STYLE : side.eventId === 'camp-checkpoint' ? CAMP_STYLE : null;
+            return { kind: side.kind, used: !!side.used, ...(special ? { color: hex(special.color), glyph: special.glyph } : {}) };
+          }),
+          marks, title: fog ? 'Fog' : boss?.name ?? n.name ?? KIND_STYLE[n.kind].label, text: text.replace(/\n/g, ' · '),
+        });
+      }
       if (reachable && mapSkin?.cards) cardNodes.push(n);
       else if (reachable) {
         this.addOption({ kind: 'node', node: n }, () => this.ringCursor(mapLayer, x, y, r + (isBoss ? 8 : 10)), {
@@ -733,6 +769,7 @@ export class MapScene extends Phaser.Scene {
           w: NODE_RADIUS * 2,
           h: NODE_RADIUS * 2,
         });
+        rxNodes[rxNodes.length - 1]!.opt = this.options.length - 1;
       }
     }
 
@@ -824,6 +861,7 @@ export class MapScene extends Phaser.Scene {
       const label = this.add.text(bxPos + bw / 2, byPos + bh / 2, b.label, textStyle(oneRow && b.label.length <= 6 && bw >= 92 ? 22 : 16, b.color === COLORS.panel ? (chrome?.button.ink ?? '#ffffff') : '#ffffff')).setOrigin(0.5);
       fitLine(label, bw - 12);
       this.addOption(b.option, () => this.boxCursor(bxPos, byPos, bw, bh), { x: bxPos, y: byPos, w: bw, h: bh });
+      rxButtons.push({ label: b.label, opt: this.options.length - 1, hot: b.color !== COLORS.panel });
     });
 
     // Without a notice, the corner shows the map items that are working (Repel ×2 · Black Flute...).
@@ -833,6 +871,48 @@ export class MapScene extends Phaser.Scene {
       .text(GAME_WIDTH - 24, 482, data.notice ?? wealthTaxNotice(run) ?? (working ? `Working: ${working}` : newsLine(content, run)), textStyle(15, chrome?.bottom.sub ?? '#f0e0a0', { align: 'right', wordWrap: { width: 300 } }))
       .setOrigin(1, 0);
     fitBlock(this.notice, 300, 48);
+    // New UI: the mock-ups' stage map (journey, web, tile map or cards by theme) when no map style is picked.
+    this.rxView = null;
+    this.rxModel = null;
+    this.rxGoing = null;
+    this.rxBanner = null;
+    this.rxLegend = null;
+    if (reduxOn() && !mapSkin) {
+      const manifest = this.cache.json.get('manifest') as AssetManifest | undefined;
+      const stages = getCampaign(content, run.campaignId).stagesPerRegion;
+      // Every status line the old header drew under its title (mentor, forecast, escort, objectives, pinned quest...).
+      const lines = (this.children.list.filter((o) => o instanceof Phaser.GameObjects.Text && o.y >= 60 && o.y <= 112 && o.depth === 0 && o.text.trim() !== '') as Phaser.GameObjects.Text[]).sort((a, b) => a.y - b.y).map((t) => t.text);
+      const hudBits = hud.text.split('  ·  ').filter((t) => !t.startsWith('₽'));
+      this.rxModel = {
+        title: league ? `${region.name} Pokémon League` : stage.pseudo ? stage.pseudo.name : `${region.name} · Stage ${stage.index + 1}`,
+        chips: [league ? `Battle ${column} / ${stage.map.columns}` : stage.pseudo ? `Inside Stage ${stage.index + 1}` : `Stage ${stage.index + 1} / ${stages}`, league ? `Elite Four, then ${leader.title}` : stage.pseudo ? 'Clear the rooms to walk out' : `Gym in ${Math.max(0, stage.map.columns - column)} stops`, `₽ ${run.money.toLocaleString('en-US')}`, ...hudBits],
+        types: league || blindMap(run.rules) ? [] : theme.types,
+        lines: [league ? 'Healed after every battle' : `${blindMap(run.rules) ? '???' : theme.name}${blindMap(run.rules) ? '' : ` (${theme.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' / ')})`} · ${leader.title}${stageModifier(run) ? ` · ${stageModifier(run)!.name}` : ''}`, ...lines],
+        party: run.party.map((mon) => { const sp = content.species.get(mon.speciesId)!; return { file: rxFileOf(manifest, pokemonAssetIds(sp.assets).front)?.file ?? null, hp: Math.round((mon.hp / Math.max(1, maxHp(content, mon))) * 100), label: `${sp.name} Lv${mon.level}` }; }),
+        eggs: run.eggs.map((egg) => `${egg.left}${egg.unit === 'battle' ? 'B' : 'S'}`),
+        art: bg ? rxFileOf(manifest, bg)?.file ?? null : null,
+        trainer: rxFileOf(manifest, content.archetypes.get(run.archetypeId)?.spriteAssetId ?? '')?.file ?? null,
+        columns: stage.map.columns, column,
+        nodes: rxNodes, edges: rxEdges, buttons: rxButtons,
+        keys: [['C', 'cry'], ['H', 'paw'], ['N', 'name']],
+        hints: [['L', 'legend'], ['Enter', 'go']],
+      };
+      const keyActs: Record<string, () => void> = { C: doCry, H: doHand, N: doName, R: () => this.toggleRivalReport(), T: () => this.toggleTrackPage(), D: () => this.toggleDossier(), F: () => this.toggleFieldNotes() };
+      this.rxView = mountRedux(this, {
+        render: (c) => mapView(c, { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend }),
+        acts: {
+          pick: (i) => { if (this.busy || this.picker) return; if (Number(i) !== this.index) this.focus(Number(i)); this.activate(Number(i)); },
+          go: () => { if (!this.busy && !this.picker) this.activate(this.index); },
+          key: (k) => { if (!this.busy && !this.picker) keyActs[k]?.(); },
+          legend: () => this.toggleLegend(),
+        },
+        overs: { over: (i) => { if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); } },
+      });
+      // The old pop-ups (legend, reports, the node menu, the bracket) still draw on the canvas: show it while one is open.
+      const sync = (): void => this.rxView?.visible(!(this.report || this.fieldNotes || this.nodeMenuPanel || this.bracket));
+      this.events.on('postupdate', sync);
+      this.events.once('shutdown', () => this.events.off('postupdate', sync));
+    }
     this.focus(Math.min(data.focus ?? 0, this.options.length - 1), false);
     showAchievementToasts(this, session.takeAchievementToasts(), this.motion);
 
@@ -901,6 +981,13 @@ export class MapScene extends Phaser.Scene {
     if (league && region.id === 'galar' && stage.map.nodes.some((n) => n.sides.length > 0)) {
       this.input.keyboard?.on('keydown-B', () => this.toggleBracket());
       this.add.text(GAME_WIDTH - 24, 386, 'B: tournament bracket', textStyle(12, '#ffe060')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('bracket-tag').on('pointerdown', () => this.toggleBracket());
+    }
+    if (this.rxModel) {
+      // New UI: the pop-up keys this map has (the old tags down the right edge).
+      const tagKeys: [string, readonly [string, string]][] = [['rival-report-tag', ['R', 'rivals']], ['track-tag', ['T', 'track']], ['dossier-tag', ['D', 'dossier']], ['field-notes-tag', ['F', 'notes']]];
+      this.rxModel.keys = [...tagKeys.filter(([name]) => this.children.getByName(name)).map(([, key]) => key), ...this.rxModel.keys];
+      if (this.children.getByName('bracket-tag')) this.rxModel.hints = [['L', 'legend'], ['B', 'bracket'], ['Enter', 'go']];
+      this.rxView?.refresh();
     }
     // A run continued from a save (ideas W4): a gentle welcome back, and the map glides to where you stand.
     if (session.takeResumed() && !data.notice) {
@@ -982,6 +1069,12 @@ export class MapScene extends Phaser.Scene {
   private travel(node: MapNode): number {
     const layer = this.mapLayer;
     const to = this.nodePos.get(node.id);
+    if (this.rxView) {
+      // New UI: the trainer walks to the stop on the mock-up map.
+      this.rxGoing = node.id;
+      this.rxView.refresh();
+      return this.motion === 'off' ? 0 : 420;
+    }
     if (this.motion !== 'full' || !layer || !to) return 0;
     const stage = services().session.run!.stage!;
     const from = (stage.current && this.nodePos.get(stage.current)) || { x: to.x - this.colSpacing, y: to.y };
@@ -1176,6 +1269,7 @@ export class MapScene extends Phaser.Scene {
     } else if (to && home) to.setPosition(home.x, home.y);
     const option = this.options[i];
     if (option && this.info) fitBlock(this.info, 580, 52, this.describe(option).replace(/\n/g, '  ·  '));
+    this.rxView?.refresh();
   }
 
   private fieldHost(): FieldMenuHost {
@@ -1768,7 +1862,7 @@ export class MapScene extends Phaser.Scene {
     const view = session.serviceView(sideId);
     // Trade Posts have their own anime-styled screen (trade stops redesign).
     const run = session.run!;
-    if (view.service.id === 'trade' && view.options.length > 0 && useTradeScreen(session.settings.screenStyles, tradeSalt(run.seed, sideId, run.log.counters.tradesMade ?? 0))) {
+    if (view.service.id === 'trade' && view.options.length > 0 && (reduxOn() || useTradeScreen(session.settings.screenStyles, tradeSalt(run.seed, sideId, run.log.counters.tradesMade ?? 0)))) {
       this.busy = true;
       this.scene.start('Trade', { source: 'service', sideId, back: { scene: 'Map' } });
       return;
@@ -2059,6 +2153,8 @@ export class MapScene extends Phaser.Scene {
       this.legend.destroy();
       this.legend = null;
       this.busy = false;
+      this.rxLegend = null;
+      this.rxView?.refresh();
       return;
     }
     if (this.busy || this.picker) return;
@@ -2095,9 +2191,42 @@ export class MapScene extends Phaser.Scene {
     });
     this.legend = layer;
     this.busy = true;
+    if (this.rxView) {
+      // New UI: the legend window of the mock-ups, with the marks this map draws.
+      layer.setVisible(false);
+      const hex = (v: number): string => `#${v.toString(16).padStart(6, '0')}`;
+      const kind = (k: string, text: string): MapLegendRow => ({ glyph: nodeStyle(k)[1], color: nodeStyle(k)[0], text });
+      this.rxLegend = [
+        ...(Object.keys(KIND_STYLE) as MapNode['kind'][]).map((k) => kind(k, KIND_STYLE[k].label)),
+        { glyph: '?', color: '#56607a', text: 'In the fog: not seen yet' },
+        ...(Object.keys(SIDE_STYLE) as SideStop['kind'][]).map((k) => kind(k, `${SIDE_LABEL[k]} stop`)),
+        { glyph: ROAMER_STYLE.glyph, color: hex(ROAMER_STYLE.color), text: 'Roaming Legendary' },
+        { glyph: LEGEND_STYLE.glyph, color: hex(LEGEND_STYLE.color), text: 'Legendary event' },
+        { glyph: CAMP_STYLE.glyph, color: hex(CAMP_STYLE.color), text: 'Checkpoint camp' },
+        { glyph: '!', color: hex(HARDER_COLOR), text: 'Purple ring: harder route, better rewards' },
+        { glyph: '★', color: '#b08a20', text: 'A Story Stop waits here' },
+        { glyph: '✦', color: '#b09a30', text: 'Itemfinder: an item hides here' },
+        { glyph: '●', color: '#70a070', text: 'Omen: calm, uneasy or dire' },
+        { glyph: '☂', color: hex(FRONT_COLOR.rain!), text: 'Weather front over the stop' },
+        ...obstacles.map((o) => ({ glyph: o.glyph, color: hex(o.color), text: o.text })),
+      ];
+      this.rxView.refresh();
+    }
   }
 
   private showBanner(top: string, title: string, sub: string, plan: readonly string[] = []): void {
+    if (this.rxView) {
+      // New UI: the same sign, drawn on the mock-up map.
+      this.rxBanner = { top, title, sub, plan };
+      this.rxView.refresh();
+      this.busy = true;
+      this.time.delayedCall(plan.length > 0 ? 3600 : 1800, () => {
+        this.rxBanner = null;
+        this.busy = false;
+        this.rxView?.refresh();
+      });
+      return;
+    }
     const layer = this.add.container(0, 0).setDepth(80);
     layer.add(this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.55).setOrigin(0));
     // A banner band across the screen, like a Pokémon game's location sign.

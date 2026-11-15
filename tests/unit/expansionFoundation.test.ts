@@ -12,7 +12,7 @@ const freshRun = () => chooseStarter(content, createRun(content, { runId: 'x43',
 
 describe('expansion settings (settings v42)', () => {
   it('has the plan defaults and the current versions', () => {
-    expect(CURRENT_VERSIONS.settings).toBe(42);
+    expect(CURRENT_VERSIONS.settings).toBe(43);
     expect(CURRENT_VERSIONS.run).toBe(43);
     expect(EXPANSION_SETTINGS_DEFAULTS).toMatchObject({ climaxCut: 'standard', micInput: false, minigamesDifficulty: 'normal' });
   });

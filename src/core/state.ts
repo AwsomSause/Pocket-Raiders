@@ -2,6 +2,7 @@
 // and the permanent profile. These schemas double as save-file validators,
 // so the game refuses to load a save that doesn't match.
 
+import { REDUX_SKIN_IDS } from './presentation/redux';
 import { UltraRuleIdSchema } from './ultra/beasts';
 import { ExpansionRunSchema, ExpansionSettingsSchema, EXPANSION_SETTINGS_DEFAULTS } from './expansion/schema';
 import { ProfileStorySchema, StorySettingsSchema, STORY_SETTINGS_DEFAULTS } from './story2/schema';
@@ -1989,6 +1990,10 @@ export const SettingsSchema = z.object({
   autoRules: z.array(z.enum(['superEffective', 'healLow', 'noItems', 'stayIn'])).default([]),
   /** W11 (UI, accessibility, presentation). All presentation only. */
   uiTheme: z.enum(['classic', 'aero', 'ds', 'wii', 'cyber']).default('classic'),
+  /** UI mock-ups update: 'new' draws the redesigned screens (the default), 'old' keeps the earlier UI. Presentation only. */
+  uiStyle: z.enum(['new', 'old']).default('new'),
+  /** The New UI's look, one of twenty (core/presentation/redux.ts). */
+  reduxSkin: z.enum(REDUX_SKIN_IDS).default('raiders'),
   fontSize: z.enum(['normal', 'large', 'huge']).default('normal'),
   dyslexiaFont: z.boolean().default(false),
   reducedFlash: z.boolean().default(false),

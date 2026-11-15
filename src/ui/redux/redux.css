@@ -1,0 +1,96 @@
+/* The New UI (UI mock-ups update). Generated from the director's mock-up sources (redux-tpl.html and
+   redux-explorer.js in pocket-raiders-mockups.zip) with every rule scoped under .rx; hand additions go at the end. */
+.rx{position:fixed;left:0;top:0;width:0;height:0;z-index:40;pointer-events:none}
+.rx .stage{pointer-events:auto}
+.rx .stage.clear{background:none;pointer-events:none}.rx .stage.clear .hit,.rx .stage.clear [data-act]{pointer-events:auto}
+.rx [data-act]{cursor:pointer}
+/* ---- the 960 x 540 game stage ---- */
+.rx .stage{position:absolute;left:0;top:0;width:960px;height:540px;transform-origin:0 0;transform:scale(var(--s,.35));overflow:hidden;line-height:1.15;background:var(--pat,var(--g));color:var(--ink);font-family:var(--font),"Pixelify Sans","PRMain",sans-serif;font-size:var(--fs);font-weight:var(--fw);user-select:none}
+.rx .stage *{box-sizing:border-box}
+.rx .stage b{font-weight:700}
+.rx .abs,.rx .win.abs,.rx .txt.abs,.rx .btn.abs{position:absolute}.rx .fill{position:absolute;inset:0}.rx .row{display:flex;align-items:center;gap:10px}.rx .col{display:flex;flex-direction:column;gap:8px}.rx .grow{flex:1;min-width:0}.rx .cen{align-items:center;justify-content:center;text-align:center}
+.rx .sm{font-size:14px;opacity:.78}.rx .big{font-size:26px;font-weight:700}.rx .acc{color:var(--acc)}
+.rx .an{position:relative;display:block;flex:none}.rx .an b{position:absolute;display:block;image-rendering:pixelated;background-repeat:no-repeat}
+.rx .an.sil b,.rx .sil{filter:brightness(0)}.rx .an.flip{transform:scaleX(-1)}
+.rx .im{display:block;flex:none;image-rendering:pixelated;background-repeat:no-repeat}
+.rx .bg{position:absolute;inset:0;background:no-repeat 50% 50%/cover;image-rendering:pixelated}
+.rx .shade{position:absolute;inset:0;background:#0b0f18a0}
+.rx .foot{position:absolute;transform:translate(-50%,-100%)}
+.rx .hd{position:absolute;left:0;top:0;height:48px;display:flex;align-items:center;gap:10px;padding:0 46px 0 18px;background:var(--c,var(--f));color:#fff;font-size:25px;font-weight:700;z-index:3;text-shadow:2px 2px 0 #0005;white-space:nowrap}
+.rx .hd .dot{width:12px;height:12px;background:#fff;transform:rotate(45deg)}
+.rx .b-slant .hd{clip-path:polygon(0 0,100% 0,calc(100% - 28px) 100%,0 100%);min-width:330px}
+.rx .b-flat .hd{right:0}.rx .b-tab .hd{border-radius:0 0 18px 0}
+.rx .b-letter .hd{right:0;height:42px;background:var(--l);color:var(--f);letter-spacing:.12em;text-transform:uppercase;font-size:19px;text-shadow:none;border-bottom:2px solid var(--f)}.rx .b-letter .hd .dot{background:var(--acc)}
+.rx .b-pill .hd{left:14px;top:8px;height:38px;border-radius:19px;font-size:20px;padding:0 22px 0 14px}
+.rx .keys{position:absolute;right:16px;top:14px;font-size:14px;display:flex;gap:12px;z-index:4;color:var(--ink)}
+.rx .b-flat .keys,.rx .b-letter .keys{color:#fff}
+.rx kbd{font:inherit;background:var(--p2);color:var(--wink);padding:1px 6px;border-radius:3px;margin-right:4px;box-shadow:0 2px 0 var(--l)}
+.rx .win:not(.abs){position:relative}.rx .win{background:var(--p);color:var(--wink);padding:12px 14px}
+.rx .w-double .win{border-radius:4px;box-shadow:0 0 0 3px var(--p),0 0 0 6px var(--f),0 0 0 9px var(--l)}
+.rx .w-flat .win{border:2px solid var(--f);border-radius:3px}
+.rx .w-plum .win{box-shadow:inset 0 0 0 3px var(--f),0 0 0 3px var(--l)}
+.rx .w-card .win{border-radius:16px;box-shadow:0 6px 0 var(--l)}
+.rx .w-cut .win{clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px);border-left:5px solid var(--f)}
+.rx .win.sel{background:var(--acc);color:#14161e}.rx .win.dim{opacity:.55}
+.rx .win.glass{background:color-mix(in srgb,var(--p) 82%,transparent)}
+.rx .txt{background:var(--pa);color:var(--pai);padding:10px 18px;font-size:19px;line-height:25px;border-radius:6px;box-shadow:0 0 0 3px var(--pa),0 0 0 6px var(--tf),0 0 0 9px var(--l)}
+.rx .w-card .txt{border-radius:20px}.rx .w-cut .txt,.rx .w-plum .txt{border-radius:0}.rx .w-flat .txt{box-shadow:0 0 0 2px var(--tf)}
+.rx .txt .nm{position:absolute;left:14px;top:-30px;background:var(--tf);color:#fff;padding:3px 14px;font-size:16px;font-weight:700;border-radius:4px 4px 0 0}
+.rx .btn{height:42px;padding:0 16px;display:flex;align-items:center;gap:8px;background:var(--p2);color:var(--wink);font-weight:700;white-space:nowrap}
+.rx .k-bevel .btn{border-radius:6px;box-shadow:inset 0 -4px 0 #0004,0 0 0 3px var(--l)}
+.rx .k-pill .btn{border-radius:22px;box-shadow:0 3px 0 var(--l)}
+.rx .k-plate .btn{clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);padding:0 22px}
+.rx .k-outline .btn{background:#0000;box-shadow:inset 0 0 0 2px var(--f);border-radius:2px}
+.rx .k-block .btn{border-radius:3px;box-shadow:0 4px 0 var(--l)}
+.rx .btn.on{background:var(--acc);color:#14161e}.rx .k-outline .btn.on{box-shadow:none}
+.rx .btn small{margin-left:auto;font-weight:400;opacity:.8}
+.rx .hp{height:10px;min-width:40px;background:#0007;border-radius:5px;overflow:hidden;box-shadow:0 0 0 2px var(--l)}.rx .hp i{display:block;height:100%;background:#48d058}.rx .hp.mid i{background:#f0c030}.rx .hp.low i{background:#e84838}.rx .hp.xp{height:6px}.rx .hp.xp i{background:#40a8f0}.rx .hp.gold i{background:var(--acc)}
+.rx .tg{font-size:13px;line-height:1;padding:3px 8px;border-radius:10px;background:var(--acc);color:#14161e;font-weight:700;white-space:nowrap}.rx .tg.no{background:var(--p2);color:var(--wink)}
+.rx .ty{font-size:12px;line-height:1;padding:3px 8px;border-radius:3px;color:#fff;font-weight:700;text-transform:uppercase;text-shadow:1px 1px 0 #0006;background:var(--tc,#888)}
+.rx .cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:var(--p2);border-radius:6px;color:var(--wink);overflow:hidden;position:relative}.rx .cell.off{opacity:.4}.rx .cell.sel{box-shadow:0 0 0 3px var(--acc)}
+.rx .bars{position:absolute;left:0;right:0;height:62px;background:#000;z-index:5}
+.rx .plate{background:var(--l);color:#fff;padding:4px 16px;font-weight:700}
+.rx .vsx{font-size:90px;font-weight:700;font-style:italic;color:var(--acc);text-shadow:5px 5px 0 var(--l)}
+.rx .caps .hd,.rx .caps .btn,.rx .caps b{text-transform:uppercase;letter-spacing:.03em}
+@media (prefers-reduced-motion:no-preference){.rx .pulse{animation:pulse 1.2s ease-in-out infinite}}
+/* ---- shared pieces (redux-explorer.js) ---- */
+.rx .ball{display:block;width:var(--b,54px);height:var(--b,54px);border-radius:50%;background:linear-gradient(#e84838 45%,#14161e 45% 55%,#f4f4f4 55%);box-shadow:0 0 0 3px #14161e;position:relative;flex:none}
+.rx .ball::after{content:"";position:absolute;left:50%;top:50%;width:28%;height:28%;margin:-14%;border-radius:50%;background:#f4f4f4;box-shadow:0 0 0 3px #14161e}
+.rx .ball.out{background:#555;opacity:.5}
+.rx .nd{position:absolute;width:38px;height:38px;margin:-19px;border-radius:50%;background:var(--c);color:#fff;font-weight:700;font-size:17px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px var(--l),0 5px 0 3px #0005;z-index:2}
+.rx .nd u{position:absolute;inset:-9px;border:3px solid var(--acc);border-radius:50%}
+.rx .nd.off{opacity:.45}
+.rx .mv{border-left:8px solid var(--tc)}
+.rx .tabs{display:flex;gap:6px}.rx .tabs span{padding:5px 14px;background:var(--p2);color:var(--wink);font-size:15px;font-weight:700;border-radius:4px 4px 0 0}.rx .tabs span.on{background:var(--acc);color:#14161e}
+.rx .burst{position:absolute;inset:-40%;background:repeating-conic-gradient(from 0deg,var(--acc) 0 5deg,#0000 5deg 13deg);-webkit-mask:radial-gradient(#0000 16%,#000 17%,#0000 62%);mask:radial-gradient(#0000 16%,#000 17%,#0000 62%);opacity:.5}
+@media (prefers-reduced-motion:no-preference){.rx .burst{animation:spin 30s linear infinite}}
+.rx .beat{display:flex;gap:6px;align-items:center;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#fff}.rx .beat i{width:26px;height:5px;background:#fff4}.rx .beat i.on{background:var(--acc)}
+.rx .fx-rain{background:repeating-linear-gradient(105deg,#fff0 0 14px,#bfe0ff55 14px 16px)}.rx .fx-snow{background:radial-gradient(#fff 2px,#0000 3px) 0 0/60px 70px,radial-gradient(#fff 1.5px,#0000 2.5px) 30px 20px/50px 60px}
+.rx .fx-fog{background:linear-gradient(90deg,#fff0,#ffffff40,#fff0) 0 0/200% 100%}.rx .fx-sparkle,.rx .fx-glint{background:radial-gradient(#fff 1.5px,#0000 3px) 0 0/90px 80px,radial-gradient(#ffe 2px,#0000 4px) 40px 30px/130px 110px}
+.rx .fx-fire{background:linear-gradient(#0000 55%,#ff6a2070)}.rx .fx-hearts{background:radial-gradient(circle,#ff7fb040,#0000 70%)}.rx .fx-flicker{background:#000;opacity:0}
+@media (prefers-reduced-motion:no-preference){.rx .fx-rain{animation:fxr .5s linear infinite}.rx .fx-snow{animation:fxs 6s linear infinite}.rx .fx-fog{animation:fxf 9s linear infinite}.rx .fx-sparkle,.rx .fx-glint,.rx .fx-hearts{animation:pulse 1.6s ease-in-out infinite}.rx .fx-fire{animation:pulse .7s ease-in-out infinite}.rx .fx-flicker{animation:fxk 2.2s steps(1) infinite}}
+.rx .key{width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--p2);color:var(--wink);border-radius:4px;font-weight:700}
+
+@keyframes pulse{50%{opacity:.45}}
+@keyframes spin{to{transform:rotate(1turn)}}
+@keyframes fxr{to{background-position:-30px 60px}}
+@keyframes fxs{to{background-position:0 70px,30px 80px}}
+@keyframes fxf{to{background-position:200% 0}}
+@keyframes fxk{0%,100%{opacity:0}48%{opacity:.35}52%{opacity:0}80%{opacity:.25}84%{opacity:0}}
+/* ---- hand additions ---- */
+.rx.calm *,.rx.calm *::before,.rx.calm *::after{animation:none!important;transition:none!important}
+.rx .stage{animation:rx-in .12s ease-out}
+@keyframes rx-in{from{opacity:0}}
+.rx .btn.off,.rx .win.off{opacity:.45}
+.rx .stage.noin{animation:none}
+/* ---- stage map (game additions to the mock-ups' .nd) ---- */
+.rx .nd.go{cursor:pointer}
+.rx .nd.foc{box-shadow:0 0 0 3px var(--l),0 0 0 6px #fff,0 5px 0 6px #0005;z-index:3}
+@keyframes rx-walk{from{translate:var(--fx) var(--fy)}to{translate:0 0}}
+@media (prefers-reduced-motion:no-preference){.rx .nd.go{animation:rx-nd 1.1s ease-in-out infinite}}
+@keyframes rx-nd{50%{filter:brightness(1.25)}}
+
+@keyframes rx-pop{0%{scale:.2;opacity:0}60%{scale:1.15;opacity:1}100%{scale:1}}
+.rx .rx-pop{animation:rx-pop .45s ease-out both}.rx.calm .rx-pop{animation:none}
+@keyframes rx-more{from{translate:0 0}to{translate:0 3px}}
+.rx .rx-more{animation:rx-more .6s ease-in-out infinite alternate}.rx.calm .rx-more{animation:none}

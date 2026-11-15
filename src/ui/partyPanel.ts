@@ -29,6 +29,9 @@ import { paintBackdrop, type Skin as DSkin } from './dSkins';
 
 const DEPTH = 100;
 
+import { reduxOn } from './redux/stage';
+import { mountPickerView, type PickerView } from './redux/pickerView';
+
 export interface PickerRow {
   /** Draws the row's contents inside a w×h box at (0, 0) of `container`. */
   draw: (scene: Phaser.Scene, container: Phaser.GameObjects.Container, w: number, h: number) => void;
@@ -104,6 +107,8 @@ export class Picker implements PickerLike {
   /** Where the list starts (lower when there are tabs) and ends. */
   private readonly top: number;
   private readonly bottom: number;
+  /** New UI: the mock-up picture of this list, drawn over it (null in the Old UI and for the battle dock). */
+  private rx: PickerView | null = null;
 
   constructor(private readonly scene: Phaser.Scene, private readonly config: PickerConfig) {
     this.root = scene.add.container(0, 0).setDepth(config.depth ?? DEPTH);
@@ -253,6 +258,23 @@ export class Picker implements PickerLike {
     }
     const first = config.rows.findIndex((r) => !r.problem);
     this.focus(config.start !== undefined && config.start < config.rows.length ? config.start : first >= 0 ? first : 0, false);
+    if (!dock && reduxOn()) {
+      this.rx = mountPickerView(scene, {
+        title: config.title,
+        rows: config.rows.length,
+        index: () => this.index,
+        box: (i) => this.boxes[i],
+        problem: (i) => config.rows[i]?.problem ?? null,
+        hint: (i) => config.rows[i]?.hint ?? '',
+        tabs: config.tabs,
+        canBack: Boolean(config.onBack),
+        backLabel: config.backLabel,
+        summary: () => (this.summary && config.inspect ? config.inspect(this.index) : null),
+        pick: (i) => { if (this.closed) return; this.focus(i); this.confirm(); },
+        hover: (i) => { if (!this.closed && !this.summary && i !== this.index && !config.rows[i]?.problem) this.focus(i, false); },
+        back: () => this.handle('back'),
+      });
+    }
   }
 
   /** The row now highlighted (used to pin Bag items to the hotbar). */
@@ -270,6 +292,7 @@ export class Picker implements PickerLike {
     this.scrollTo(i);
     const row = this.config.rows[i]!;
     fitBlock(this.footer, FOOTER_W, 40, row.problem ?? row.hint ?? '');
+    this.rx?.refresh();
     this.footer.setColor(row.problem ? (this.config.skin?.rowText ? '#c03030' : '#f0a0a0') : this.config.skin?.rowText ?? COLORS.textLight);
   }
 
@@ -307,7 +330,8 @@ export class Picker implements PickerLike {
       return;
     }
     const n = this.config.rows.length;
-    const cols = this.config.columns;
+    // New UI: the cursor moves by the columns the mock-up layout shows.
+    const cols = this.rx ? this.rx.cols : this.config.columns;
     switch (action) {
       case 'up':
         if (n) this.focus((this.index - cols + n) % n);
@@ -391,6 +415,7 @@ export class Picker implements PickerLike {
     if (this.summary) {
       this.summary.destroy();
       this.summary = null;
+      this.rx?.refresh();
       return;
     }
     if (!this.config.rows[this.index]) return;
@@ -404,10 +429,13 @@ export class Picker implements PickerLike {
     box.add(this.scene.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 66, 'Press I, Enter or Esc to go back to the list', textStyle(16, COLORS.gold)).setOrigin(0.5));
     this.root.add(box);
     this.summary = box;
+    this.rx?.refresh();
   }
 
   close(): void {
     this.closed = true;
+    this.rx?.destroy();
+    this.rx = null;
     this.scene.input.keyboard?.off('keydown-I', this.onInspectKey);
     // Popup closing (spec §24): it stops taking input at once, then sinks and fades out.
     const root = this.root;

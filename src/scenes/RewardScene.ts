@@ -25,6 +25,9 @@ import { revealPop } from '../ui/wiiMotion';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { DARK_INK, LIGHT_INK, REWARD_SKINS } from '../ui/rewardStyles';
 import type { RewardLayoutHandle } from '../ui/rewardStyles/types';
+import { artOf, partyChips } from '../ui/redux/game';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { rewardView } from '../ui/redux/screens/stops';
 
 export class RewardScene extends Phaser.Scene {
   /** False for the first 220 ms of game time, while a held key could still pick a card (tests wait for it). */
@@ -196,6 +199,27 @@ export class RewardScene extends Phaser.Scene {
 
     this.notice = this.add.text(GAME_WIDTH / 2, 508, data.notice ?? '', textStyle(18, skin?.light ? ink.keep : '#f0e0a0')).setOrigin(0.5);
     this.add.text(GAME_WIDTH / 2, 528, '←/→ ↑/↓ move  ·  Enter choose', textStyle(14, ink.hint)).setOrigin(0.5);
+    this.view = null;
+    this.rxResult = null;
+    if (reduxOn() && !skin) {
+      const cards = draft.map((rewardId) => {
+        const reward = content.rewards.get(rewardId)!;
+        const cmp = compareReward(content, run, reward);
+        const why = rewardSynergy(content, run, reward);
+        const reroll = isRerollReward(content, run, reward);
+        return { name: reward.name, kind: reward.rarity[0]!.toUpperCase() + reward.rarity.slice(1), text: reroll ? 'You already have the most of this. Pick it for a free re-roll!' : reward.description, art: artOf(this, reward.iconAssetId), notes: [cmp ? `Now ${cmp.now} → After ${cmp.after} (${cmp.label})` : '', why ?? '', (run.draftCarry ?? []).includes(rewardId) ? 'Locked: in the next draft too' : ''].filter(Boolean) };
+      });
+      const party = partyChips(this);
+      this.view = mountRedux(this, {
+        render: (c) => rewardView(c, { title: 'Choose a reward', cards, index: this.index, party, buttons: buttons.map((b) => b.label), text: this.notice?.text || `Encounter ${run.encountersCompleted} cleared. ₽${run.money}, Candies ${run.candies}. Pick 1 of ${draft.length}.`, result: this.rxResult }),
+        acts: {
+          pick: (i) => { if (this.picker || this.chosen) return; this.focus(Number(i)); this.activate(Number(i)); },
+          take: () => { if (!this.picker && !this.chosen) this.activate(this.index < draft.length ? this.index : 0); },
+          done: () => this.dismiss?.(),
+        },
+        overs: { over: (i) => { if (!this.picker && !this.chosen) this.focus(Number(i)); } },
+      });
+    }
     this.focus(data.focus ?? 0, false);
 
     // A key pressed through the battle's last message must not pick a card the moment the screen opens.
@@ -226,11 +250,15 @@ export class RewardScene extends Phaser.Scene {
   }
 
   private buttons: { label: string; act: () => void }[] = [];
+  /** New UI: the mock-ups' reward draft over this scene, and the result lines after the pick. */
+  private view: ReduxView | null = null;
+  private rxResult: string[] | null = null;
 
   private startMode(mode: DraftItemKind, hint: string): void {
     this.mode = mode;
     this.notice?.setText(hint);
     this.focus(0);
+    this.view?.refresh();
   }
 
   private get motion(): MotionLevel {
@@ -256,6 +284,7 @@ export class RewardScene extends Phaser.Scene {
     this.index = i;
     this.cursors.forEach((c, n) => c.setVisible(n === i));
     this.layoutHandle?.focus(i);
+    this.view?.refresh();
     // The focused card lifts a little; the others settle back.
     this.cards.forEach((card, n) => {
       const lift = n === i ? -10 : 0;
@@ -293,6 +322,7 @@ export class RewardScene extends Phaser.Scene {
       if (problem) {
         playSfx(this, 'ui.error');
         this.notice?.setText(problem);
+        this.view?.refresh();
         return;
       }
       this.choose(draftIndex, 0);
@@ -346,6 +376,10 @@ export class RewardScene extends Phaser.Scene {
     }
     this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.6).setOrigin(0).setDepth(50);
     const next = result.run.phase === 'map' ? 'Choose your next path…' : '';
+    if (this.view) {
+      this.rxResult = [...result.reward.messages, next];
+      this.view.refresh();
+    }
     const text = this.add
       .text(GAME_WIDTH / 2, 250, [...result.reward.messages, '', next].join('\n'), textStyle(28, COLORS.textLight, { align: 'center', wordWrap: { width: GAME_WIDTH - 160 } }))
       .setOrigin(0.5)

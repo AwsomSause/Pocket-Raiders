@@ -4,7 +4,7 @@
 import { fitLine } from '../ui/fitText';
 import Phaser from 'phaser';
 import { DEFAULT_SETTINGS } from '../save/saveManager';
-import { changeSetting, resetSettings, searchSettings, settingsIn, SETTING_CATEGORIES, type SettingCategory, type SettingDef } from '../core/settingsRegistry';
+import { changeSetting, resetSettings, searchSettings, settingsIn, SETTINGS, SETTING_CATEGORIES, type SettingCategory, type SettingDef } from '../core/settingsRegistry';
 import { services } from '../game/services';
 import { refreshMusicVolume, stopMusic } from '../ui/audio';
 import { downloadText, pickTextFile } from '../ui/files';
@@ -23,13 +23,23 @@ import { screenStyleOf } from '../core/presentation/screenStyles';
 import { drawBackdrop, drawPanel, Menu, type MenuOption } from '../ui/widgets';
 import { Picker } from '../ui/partyPanel';
 import { gameSummary, type SummaryTopic } from '../core/encyclopedia';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { menuView, settingsView } from '../ui/redux/templates';
+import { confirmBox } from '../ui/redux/screens/saves';
 
 type Page = 'home' | 'search' | 'confirmReset' | 'summary' | SettingCategory;
 interface Row {
   option: MenuOption;
   hint: string;
   action: () => void;
+  /** New UI: the setting's name and value apart (the row draws `name ◀ value ▶`), and its id for stepping back. */
+  name?: string;
+  value?: string;
+  id?: string;
 }
+
+/** New UI tab names, in SETTING_CATEGORIES order (the mock-ups' short forms). */
+const TAB_NAMES: Record<SettingCategory, string> = { display: 'Display', audio: 'Audio', gameplay: 'Gameplay', animations: 'Animations', text: 'Text', accessibility: 'Access', controls: 'Controls', story: 'Story', data: 'Data' };
 
 const APPLIES_TAG = { now: '', nextBattle: '  · next battle', restart: '  · restart needed' } as const;
 
@@ -49,6 +59,8 @@ export class SettingsScene extends Phaser.Scene {
   private topics: SummaryTopic[] | null = null;
   private ui?: Phaser.GameObjects.Container;
   private hintText?: Phaser.GameObjects.Text;
+  private view: ReduxView | null = null;
+  private shown: Row[] = [];
 
   constructor() {
     super('Settings');
@@ -71,10 +83,20 @@ export class SettingsScene extends Phaser.Scene {
     else if (this.textures.exists('ui.optionsbg')) {
       this.add.image(0, 0, 'ui.optionsbg').setOrigin(0).setDisplaySize(GAME_WIDTH, GAME_HEIGHT).setAlpha(0.94).setName('options-bg');
     } else drawBackdrop(this);
+    this.view = reduxOn() ? mountRedux(this, {
+      render: (c) => this.reduxHtml(c),
+      acts: {
+        pick: (i) => { this.menu?.focus(Number(i), false); this.menu?.confirm(); },
+        tab: (k) => this.go(SETTING_CATEGORIES[Number(k)]!.id),
+      },
+      overs: { over: (i) => { if (!this.shown[Number(i)]?.option.disabled) this.menu?.focus(Number(i), false); } },
+    }) : null;
     onInputAction(this, (a) => {
       if (this.picker) return this.picker.handle(a);
       if (this.page === 'search') return; // typing is handled by the key listener below
       if (a === 'back') this.back();
+      // New UI: on a settings page, right steps a value forward and left steps it back (the row shows both arrows).
+      else if (this.view && (a === 'left' || a === 'right') && this.shown[this.menu?.index ?? -1]?.id) this.change(this.shown[this.menu!.index]!.id!, a === 'left');
       else this.menu?.handle(a);
     });
     this.input.keyboard?.on('keydown', (e: KeyboardEvent) => this.typed(e));
@@ -121,6 +143,9 @@ export class SettingsScene extends Phaser.Scene {
         option: { label: `${d.label}: ${d.show(s)}${APPLIES_TAG[d.applies]}${d.advanced ? '  (advanced)' : ''}${withCategory ? `  [${cat}]` : ''}`, disabled: d.disabled?.(s) ?? false, tip: d.description },
         hint: d.description,
         action: () => this.change(d.id),
+        name: d.label,
+        value: `${d.show(s)}${APPLIES_TAG[d.applies]}`,
+        id: d.id,
       };
     };
     const back: Row = { option: { label: 'Back' }, hint: '', action: () => this.back() };
@@ -184,9 +209,12 @@ export class SettingsScene extends Phaser.Scene {
       onBack: () => {
         picker.close();
         this.picker = null;
+        this.view?.visible(true);
       },
     });
     this.picker = picker;
+    // The topic reader is still the earlier picture: show it while it is open.
+    this.view?.visible(false);
   }
 
   private remapping = false;
@@ -218,13 +246,22 @@ export class SettingsScene extends Phaser.Scene {
     this.events.once('shutdown', () => this.stopListening?.());
   }
 
-  private change(id: string): void {
+  private change(id: string, backwards = false): void {
     const { session } = services();
     const before = session.settings;
-    const after = changeSetting(before, id);
+    let after = changeSetting(before, id);
     if (after === before) return;
+    if (backwards) {
+      // One step back = going forward round the whole cycle but one. Values repeat within a few dozen presses.
+      const def = SETTINGS.find((d) => d.id === id);
+      const seen = [after];
+      for (let n = 0; def && n < 64 && def.show(seen[seen.length - 1]!) !== def.show(before); n++) seen.push(changeSetting(seen[seen.length - 1]!, id));
+      after = seen[Math.max(0, seen.length - 2)]!;
+    }
     session.saveSettings(after);
     this.sideEffects(before, after);
+    // New / Old swaps the whole picture: open this page again in the chosen style, on the same row.
+    if (before.uiStyle !== after.uiStyle) return void this.scene.restart({ from: this.from, page: this.page, focus: this.menu?.index ?? 0 });
     this.render(this.menu?.index ?? 0);
     this.previewAnim(id, after);
   }
@@ -264,6 +301,7 @@ export class SettingsScene extends Phaser.Scene {
     this.ui?.destroy(true);
     const ui = (this.ui = this.add.container(0, 0));
     const rows = this.rows();
+    this.shown = rows;
     const cat = SETTING_CATEGORIES.find((c) => c.id === this.page)?.label;
     const title = this.page === 'home' ? 'Settings' : this.page === 'summary' ? 'Game Summary' : this.page === 'search' ? 'Search settings' : this.page === 'confirmReset' ? 'Reset to defaults?' : `Settings · ${cat}`;
     // The UIE Options backdrop already has the word "Options" in its corner: the home page leaves the title to the art,
@@ -319,7 +357,37 @@ export class SettingsScene extends Phaser.Scene {
     if (this.page === 'display' || this.page === 'text' || this.page === 'accessibility') this.preview(ui);
     this.menu.focus(Math.min(focus, rows.length - 1), false);
     this.hintText.setText(rows[this.menu.index]?.hint ?? '');
+    this.menu.onFocus = () => this.view?.refresh();
+    this.view?.refresh();
   }
+
+  /** New UI: the page as the mock-ups draw it. The home list is a menu; a category is the tabbed Settings screen. */
+  private reduxHtml(c: Parameters<typeof menuView>[0]): string {
+    const rows = this.shown, index = this.menu?.index ?? 0;
+    const text = this.notice || rows[index]?.hint || 'Changes apply at once. Looks never change battle results.';
+    const hints = [['Enter', 'choose'], ['Esc', 'back']] as const;
+    const cats = SETTING_CATEGORIES.map((x) => x.id);
+    if (cats.includes(this.page as SettingCategory) || this.page === 'search') {
+      const search = this.page === 'search';
+      return settingsView(c, {
+        title: search ? 'Search settings' : 'Settings',
+        tabs: search ? [`Find: ${this.query}▌`] : cats.map((id) => TAB_NAMES[id]),
+        tab: search ? 0 : cats.indexOf(this.page as SettingCategory),
+        rows: rows.map((r) => ({ label: r.name ?? r.option.label, value: r.value ?? '', disabled: r.option.disabled })),
+        index,
+        text: search && this.query && rows.length === 1 ? 'No setting matches.' : text,
+        hints: search ? [['Type', 'search'], ['Enter', 'change'], ['Esc', 'back']] : [['←→', 'change'], ['Enter', 'choose'], ['Esc', 'back']],
+      });
+    }
+    const home = this.page === 'confirmReset' ? this.homeItems : rows.map((r) => ({ label: r.option.label, note: '', disabled: r.option.disabled, hint: r.hint }));
+    if (this.page === 'home') this.homeItems = home;
+    const at = this.page === 'confirmReset' ? 11 : index;
+    const base = menuView(c, { title: this.page === 'summary' ? 'Game Summary' : 'Settings', hints, items: home, index: Math.min(at, home.length - 1), detail: { body: home[Math.min(at, home.length - 1)]?.hint ?? '' }, text: this.page === 'confirmReset' ? '' : text });
+    if (this.page !== 'confirmReset') return base;
+    return base + confirmBox({ title: 'Reset to defaults?', body: rows[index]?.hint || 'Audio, display, animations and text all go back to their starting values. Your saves are not touched.', options: rows.map((r) => r.option.label), index }).replaceAll('data-act="confirm"', 'data-act="pick"').replaceAll('data-over="confirmOver"', 'data-over="over"');
+  }
+
+  private homeItems: { label: string; note: string; disabled?: boolean; hint: string }[] = [];
 
   /** A live sample of the chosen theme, text size and popup size, drawn from the saved settings on the right. */
   private preview(ui: Phaser.GameObjects.Container): void {

@@ -1,5 +1,7 @@
 // Pure gate for the update splash (no Phaser import, so unit tests can load it).
 
+/** The version named on the Title screen's plate (New UI). */
+export const VERSION_LABEL = 'Beta 0.7';
 export const SPLASH_ID = 'beta-0.5';
 export const SPLASH_IMAGE = 'assets/images/ui/splash-beta-0.5.png';
 export const SPLASH_BIRDS = 'assets/audio/ambience/amb-birds.mp3';

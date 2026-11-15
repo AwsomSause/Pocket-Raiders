@@ -19,6 +19,9 @@ import { styleFor } from '../ui/tradeStyles';
 import type { RowWidget, TradeCtx, TradeRow, TradeStyle } from '../ui/tradeStyles/types';
 import { sceneForRun } from './routing';
 import { ensureNarration, partyNarration } from '../core/overhaul/partyNarration';
+import { artOf, monFile } from '../ui/redux/game';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { tradeView as rxTradeView, type TradeMon } from '../ui/redux/screens/stops';
 
 export interface TradeSceneData {
   source: TradeSource;
@@ -41,6 +44,9 @@ export class TradeScene extends Phaser.Scene {
   private index = 0;
   private phase: 'loading' | 'choose' | 'moment' | 'done' = 'loading';
   private notice = '';
+  /** New UI: the mock-up trade screen (shown when no trade style is picked), and the offer it last showed. */
+  private rx: ReduxView | null = null;
+  private rxAt = 0;
 
   constructor() {
     super('Trade');
@@ -85,6 +91,45 @@ export class TradeScene extends Phaser.Scene {
       if (this.ctx.layers.back.active) this.build();
     });
     onInputAction(this, (a) => this.handle(a));
+    this.rx = null;
+    this.rxAt = 0;
+    if (reduxOn() && this.styleId === 'original') {
+      const offers = this.view.offers;
+      const you = artOf(this, content.archetypes.get(run.archetypeId)?.spriteAssetId) ?? artOf(this, PLAYER_ART);
+      const monOf = (m: { speciesId: string; name: string; level: number; types: string[] } | null): TradeMon | null => (m ? { file: monFile(this, m.speciesId), name: m.name, level: m.level, types: m.types } : null);
+      const leaveRow = this.rows.length - 1;
+      this.rx = mountRedux(this, {
+        render: (c) => {
+          if (this.index < offers.length) this.rxAt = this.index;
+          const o = offers[this.rxAt];
+          const done = this.phase === 'done' || this.phase === 'moment';
+          return rxTradeView(c, {
+            title: this.view.place.toLowerCase().replace(/\b\w/g, (ch) => ch.toUpperCase()),
+            money: this.ctx.view.money,
+            you,
+            trader: o?.trader.name ?? 'Trader',
+            traderArt: artOf(this, o?.trader.art),
+            give: monOf(o?.give ?? null),
+            get: monOf(o?.get ?? null),
+            verdict: o ? (o.problem ?? o.note) : '',
+            bad: Boolean(o?.problem),
+            cost: o?.cost ?? 0,
+            at: this.rxAt,
+            count: offers.length,
+            focus: this.index === leaveRow ? 1 : 0,
+            line: this.notice && !done ? this.notice : (o?.trader.line ?? 'Nobody is trading here today.'),
+            done: done ? this.notice : null,
+          });
+        },
+        acts: {
+          accept: () => this.pick(this.rxAt),
+          decline: () => this.leave(),
+          done: () => this.phase === 'done' && this.leave(),
+          step: (d) => offers.length > 0 && this.focus((this.rxAt + Number(d) + offers.length) % offers.length),
+        },
+        overs: { acc: () => this.focus(this.rxAt, false), dec: () => this.focus(leaveRow, false) },
+      });
+    }
   }
 
   private build(): void {
@@ -95,6 +140,7 @@ export class TradeScene extends Phaser.Scene {
     this.drawList();
     this.drawStage();
     if (!this.ctx.calm) this.cameras.main.fadeIn(250);
+    this.rx?.refresh();
   }
 
   /** The style id this stop drew with (tests read it). */
@@ -129,6 +175,7 @@ export class TradeScene extends Phaser.Scene {
     if (paged) this.drawList();
     else this.widgets.forEach((w, k) => w.focus(this.first + k === i));
     this.drawStage();
+    this.rx?.refresh();
   }
 
   private handle(action: InputAction): void {
@@ -160,6 +207,7 @@ export class TradeScene extends Phaser.Scene {
     } catch (err) {
       playSfx(this, 'ui.error', 0.5);
       this.notice = String(err instanceof Error ? err.message : err);
+      this.rx?.refresh();
       return;
     }
     playSfx(this, 'ui.select');
@@ -168,9 +216,11 @@ export class TradeScene extends Phaser.Scene {
     this.ctx.layers.list.removeAll(true);
     this.ctx.layers.stage.setVisible(false);
     const offer = row.offer as TradeOffer & { give: NonNullable<TradeOffer['give']> };
-    const ms = this.style.moment(this.ctx, offer);
+    const ms = this.rx ? 500 : this.style.moment(this.ctx, offer);
+    this.rx?.refresh();
     this.time.delayedCall(this.ctx.calm ? Math.min(ms, 300) : ms, () => {
       this.phase = 'done';
+      this.rx?.refresh();
       const tip = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 14, '▼ Continue', textStyle(16, '#ffffff', { stroke: '#000000', strokeThickness: 4 })).setOrigin(0.5, 1).setDepth(60);
       if (!this.ctx.calm) this.tweens.add({ targets: tip, alpha: 0.4, duration: 600, yoyo: true, repeat: -1 });
       this.input.once('pointerdown', () => this.leave());

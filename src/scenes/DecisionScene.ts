@@ -47,6 +47,10 @@ import { glassPanel as drawPanel } from '../ui/aero';
 import { sceneForRun } from './routing';
 import { partySpecies, preloadPokemon, queueAssets } from '../ui/lazyAssets';
 import { moveFullDescription } from '../core/battle/moveText';
+import { artOf, monFile, partyChips } from '../ui/redux/game';
+import { mountConfirm } from '../ui/redux/confirm';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { decisionView, type DecisionModel, type DecisionOption } from '../ui/redux/screens/decision';
 
 /** The EBDX art the Egg hatch uses (loaded only when an Egg is hatching). */
 const HATCH_ASSETS = ['pack.ebdx.egg', 'pack.ebdx.eggCracks', 'pack.ebdx.hatch.hatchbg', 'pack.ebdx.hatch.line', 'pack.ebdx.hatch.overlay', 'pack.ebdx.hatch.shine6', 'pack.ebdx.hatch.shine7', 'se.egg_get'];
@@ -57,12 +61,31 @@ function describeMove(content: Content, id: string): string {
   return `${m.type.toUpperCase()} · ${m.category} · Pow ${power} · Acc ${m.accuracy ?? '—'} · PP ${m.pp}`;
 }
 
+/** What a builder tells the New UI to draw; the cursor, the detail sheet and the result line are the scene's. */
+type RxSpec = Omit<DecisionModel, 'index' | 'more' | 'result' | 'hints'> & { more?: string[]; hints?: DecisionModel['hints'] };
+const capWord = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+/** A move as a New UI button: "Special · 90 · PP 12/15" with the type's stripe. */
+function rxMove(content: Content, id: string, pp?: number, slot?: MoveSlot): DecisionOption {
+  const m = content.moves.get(id)!;
+  const power = m.power ?? fixedDamageLabel(m.effects.fixedDamage);
+  return { label: m.name, small: `${capWord(m.category)} · ${power || '—'} · PP ${pp ?? m.pp}/${slot ? maxPp(content, slot) : m.pp}`, type: m.type, off: false };
+}
+/** What a move does, in one line: the "In this game: ..." part of its full description when it has one. */
+const moveBrief = (text: string): string => { const cut = /In this game: (.*)$/s.exec(text); return cut ? capWord(cut[1]!) : text; };
+const plain = (label: string, small = '', off = false): DecisionOption => ({ label, small, type: null, off });
+
 export class DecisionScene extends Phaser.Scene {
   private menu: Menu | null = null;
   private picker: Picker | null = null;
   private confirmMenu: Menu | null = null;
   private confirmLayer: Phaser.GameObjects.Container | null = null;
   private done = false;
+  /** New UI: the mock-up decision screen over the canvas, the Yes/No box above it, and what they show. */
+  private rx: ReduxView | null = null;
+  private rxConfirm: ReduxView | null = null;
+  private rxSpec: (() => RxSpec) | null = null;
+  private rxMore = false;
+  private rxResult: string | null = null;
   /** The Egg hatch is playing; input waits until the Pokémon is shown. */
   private hatching = false;
 
@@ -94,6 +117,11 @@ export class DecisionScene extends Phaser.Scene {
     this.confirmLayer = null;
     this.done = false;
     this.dismiss = null;
+    this.rx = null;
+    this.rxConfirm = null;
+    this.rxSpec = null;
+    this.rxMore = false;
+    this.rxResult = null;
     // A beaten raid boss asking to join plays that tier's capture jingle (Raid Battles pack).
     const tier = this.raidTier();
     if (tier) playMusic(this, raidCaptureTrack(tier));
@@ -119,7 +147,43 @@ export class DecisionScene extends Phaser.Scene {
   private dismiss: (() => void) | null = null;
   private compareStep?: (d: number) => void;
 
+  /** New UI: draws this decision with the mock-up screen (the first call mounts it; later calls swap what it shows). */
+  private rxShow(spec: () => RxSpec): void {
+    if (!reduxOn()) return;
+    this.rxSpec = spec;
+    if (this.menu) this.menu.onFocus = () => this.rx?.refresh();
+    if (this.rx) return this.rx.refresh();
+    const busy = (): boolean => this.done || this.confirmMenu !== null || this.picker !== null || this.rxMore;
+    this.rx = mountRedux(this, {
+      render: (c) => {
+        const d = this.rxSpec!();
+        return decisionView(c, { ...d, index: this.menu?.index ?? 0, more: this.rxMore ? (d.more ?? null) : null, result: this.rxResult, hints: d.hints ?? [['Enter', 'choose'], ...(d.more ? ([['I', 'details']] as const) : [])] });
+      },
+      acts: {
+        pick: (i) => {
+          if (busy() || this.rxSpec?.().options[Number(i)]?.off) return;
+          this.menu?.focus(Number(i), false);
+          this.menu?.confirm();
+        },
+        more: () => this.rxToggleMore(),
+        done: () => this.dismiss?.(),
+      },
+      overs: { over: (i) => { if (!busy() && !this.rxSpec?.().options[Number(i)]?.off) this.menu?.focus(Number(i), false); } },
+    });
+    this.input.keyboard?.on('keydown-I', () => this.rxToggleMore());
+  }
+
+  private rxToggleMore(): void {
+    if (!this.rx || this.done || this.confirmMenu || this.picker || !this.rxSpec?.().more) return;
+    this.rxMore = !this.rxMore;
+    this.rx.refresh();
+  }
+
   private handleInput(action: InputAction): void {
+    if (this.rxMore) {
+      if (action === 'confirm' || action === 'back') this.rxToggleMore();
+      return;
+    }
     if (this.done) {
       if (this.dismiss && (action === 'confirm' || action === 'back')) this.dismiss();
       return;
@@ -138,6 +202,13 @@ export class DecisionScene extends Phaser.Scene {
     this.closeConfirm();
     this.picker?.close();
     this.picker = null;
+    // New UI: the result line sits in the mock-up text box until the next input (a decision with nothing to draw still gets it).
+    if (reduxOn()) {
+      this.rxMore = false;
+      this.rxResult = result.message;
+      if (this.rx) this.rx.refresh();
+      else this.rxShow(() => ({ title: 'Decision', card: null, options: [], details: [], text: '', party: null }));
+    }
     this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.75).setOrigin(0).setDepth(150);
     this.add
       .text(GAME_WIDTH / 2, GAME_HEIGHT / 2, result.message, textStyle(30, COLORS.textLight, { align: 'center', wordWrap: { width: GAME_WIDTH - 120 } }))
@@ -178,6 +249,7 @@ export class DecisionScene extends Phaser.Scene {
     this.confirmMenu.container.setDepth(121);
     // Default to "No" for choices that can't be undone.
     this.confirmMenu.focus(1, false);
+    if (reduxOn()) this.rxConfirm = mountConfirm(this, text, this.confirmMenu);
   }
 
   private closeConfirm(): void {
@@ -185,6 +257,8 @@ export class DecisionScene extends Phaser.Scene {
     this.confirmMenu = null;
     this.confirmLayer?.destroy();
     this.confirmLayer = null;
+    this.rxConfirm?.destroy();
+    this.rxConfirm = null;
   }
 
   // ---------- learning a move ----------
@@ -248,11 +322,30 @@ export class DecisionScene extends Phaser.Scene {
         this.confirm(`${name} will forget ${old.name} and learn ${newMove.name}. OK?`, () => this.resolve({ kind: 'forgetMove', moveIndex: i }));
       },
     });
+    const file = monFile(this, mon.speciesId, 'icon', mon.shiny) ?? monFile(this, mon.speciesId, 'front', mon.shiny);
+    const newPower = newMove.power ?? fixedDamageLabel(newMove.effects.fixedDamage);
+    this.rxShow(() => {
+      const i = (this.menu?.index ?? 0) - room;
+      const slot = mon.moves[i];
+      const old = slot ? content.moves.get(slot.id)! : null;
+      return {
+        title: 'New move',
+        card: { big: false, file, name, level: '', tag: '', sub: 'wants to learn', accent: newMove.name, types: [newMove.type], lines: [`${capWord(newMove.category)}${newMove.power ? ` · Power ${newPower}` : ''} · PP ${newMove.pp}. ${moveBrief(moveFullDescription(newMove))}`] },
+        options: [...(room ? [plain(`Learn ${newMove.name}`, 'Free move slot')] : []), ...mon.moves.map((m) => rxMove(content, m.id, m.pp, m)), plain(`Do not learn ${newMove.name}`)],
+        details: [],
+        party: null,
+        text: old
+          ? `${room ? 'It has room for another move, or p' : 'P'}ick a move to forget${room ? '' : `, or keep the ${mon.moves.length} it knows`}. ${old.name} would be replaced. ${moveBrief(moveFullDescription(old))}`
+          : room && i < 0
+            ? 'It has room for another move. Learning it forgets nothing.'
+            : `Keep the moves it knows and give up on ${newMove.name}.`,
+      };
+    });
   }
 
   // ---------- a trainer's signature mechanic (core/signature.ts) ----------
 
-  private buildSignature(title: string, options: { label: string; description: string }[], kind: 'signature' | 'mutator' | 'circuit' = 'signature'): void {
+  private buildSignature(title: string, options: { label: string; description: string; sprite?: string }[], kind: 'signature' | 'mutator' | 'circuit' = 'signature', notes: string[] = []): void {
     this.add.text(GAME_WIDTH / 2, 60, title, textStyle(34, COLORS.textLight, { align: 'center', wordWrap: { width: 800 } })).setOrigin(0.5, 0);
     // The Circuit's Fork Gate and Rematch Day have long leader lines: a wider panel.
     const wide = kind === 'circuit';
@@ -267,6 +360,16 @@ export class DecisionScene extends Phaser.Scene {
       // Beta 4.4: the modifier pick answers as a 'mutator' choice (it used to send 'signature', which the run refused).
       onSelect: (i) => this.resolve({ kind, optionIndex: i }),
     });
+    const arts = options.map((o) => (o.sprite ? artOf(this, o.sprite) : null));
+    this.rxShow(() => ({
+      title: kind === 'mutator' ? 'Modifier' : kind === 'circuit' ? 'The road ahead' : 'Signature',
+      area: 'run',
+      card: null,
+      options: options.map((o, i) => ({ label: o.label, small: o.description, type: null, off: false, art: arts[i] })),
+      details: notes,
+      party: null,
+      text: title,
+    }));
   }
 
   /** The Circuit's Fork Gate and Rematch Day: the menu with each Leader's portrait beside their row. */
@@ -280,8 +383,8 @@ export class DecisionScene extends Phaser.Scene {
   /** Modifier Run: pick 1 of 3 blessings/curses. */
   private buildMutator(ids: string[]): void {
     const options = ids.flatMap((id) => getMutator(id) ?? []).map((m) => ({ label: `${m.kind === 'blessing' ? '✦' : '☠'} ${m.name}`, description: m.blurb }));
-    this.buildSignature('Pick a modifier for the rest of the run', options, 'mutator');
     const picked = (services().session.run?.mutators ?? []).flatMap((id) => getMutator(id)?.name ?? []);
+    this.buildSignature('Pick a modifier for the rest of the run', options, 'mutator', picked.length > 0 ? [`Active: ${picked.join(', ')}`] : []);
     if (picked.length > 0) this.add.text(GAME_WIDTH / 2, 470, `Active: ${picked.join(', ')}`, textStyle(18, '#d8d0e0', { align: 'center', wordWrap: { width: 800 } })).setOrigin(0.5, 0);
   }
 
@@ -322,6 +425,19 @@ export class DecisionScene extends Phaser.Scene {
         else this.resolve({ kind: 'teachMove', moveIndex: i });
       },
     });
+    const file = monFile(this, mon.speciesId, 'icon', mon.shiny) ?? monFile(this, mon.speciesId, 'front', mon.shiny);
+    this.rxShow(() => {
+      const id = shown[this.menu?.index ?? 0];
+      const m = id ? content.moves.get(id)! : null;
+      return {
+        title: itemName,
+        card: { big: false, file, name: species.name, level: '', tag: '', sub: 'can learn a move from the', accent: itemName, types: m ? [m.type] : [], lines: [m ? `${m.name}: ${moveBrief(moveFullDescription(m))}` : `Keep the ${itemName} unused.`] },
+        options: [...shown.map((x) => rxMove(content, x)), plain("Don't teach a move")],
+        details: [],
+        party: null,
+        text: `Which move should ${species.name} learn?${mon.moves.length < 4 ? '' : ' It knows four moves, so it will forget one.'}`,
+      };
+    });
   }
 
   // ---------- a veteran offers to mentor a teammate ----------
@@ -349,6 +465,16 @@ export class DecisionScene extends Phaser.Scene {
       fontSize: 26,
       onSelect: (i) => this.resolve({ kind: 'askLead', accept: i === 0 }),
     });
+    const file = monFile(this, mon.speciesId, 'front', mon.shiny);
+    const party = partyChips(this);
+    this.rxShow(() => ({
+      title: 'A request',
+      card: { big: true, file, name: sp.name, level: `Lv ${mon.level}`, tag: '', sub: '', accent: '', types: sp.types, lines: [] },
+      options: [plain(`Let ${sp.name} lead`, 'Goes first next battle'), plain('Not now')],
+      details: ['Letting it lead puts it first in the party and grows its friendship.', 'It will fight at the front next battle.'],
+      party,
+      text: askLeadText(content, run, { uid, reason }),
+    }));
   }
 
   private buildMentorship(mentorUid: string, proteUid: string, path: MentorPath, types: readonly MentorType[] = []): void {
@@ -379,6 +505,15 @@ export class DecisionScene extends Phaser.Scene {
       fontSize: 26,
       onSelect: (i) => this.resolve({ kind: 'mentor', accept: i === 0 }),
     });
+    const files = [monFile(this, mentor.speciesId, 'front', mentor.shiny), monFile(this, prote.speciesId, 'icon', prote.shiny) ?? monFile(this, prote.speciesId, 'front', prote.shiny)];
+    this.rxShow(() => ({
+      title: 'Mentorship',
+      card: { big: true, file: files[0]!, second: files[1], name: `${m.name} & ${p.name}`, level: '', tag: '', sub: pathName(path), accent: '', types: [], lines: [PATH_BLURB[path]] },
+      options: [plain(`Let ${m.name} mentor ${p.name}`), plain('Not now')],
+      details: [...types.map((t) => `${TYPE_NAMES[t]}: ${TYPE_BLURB[t]}`), "Chemistry grows with every win together: it shifts the protégé's stats toward its mentor, unlocks mentor moves, and lets the mentor step in once per battle.", 'When the protégé catches up, the pair can hold a graduation spar.'],
+      party: null,
+      text: `${p.name} looks up to ${m.name}.`,
+    }));
   }
 
   /** M5: a Pokémon you defeated comes back and asks to be taught. Unskippable: no back button, one button per beat. */
@@ -419,8 +554,18 @@ export class DecisionScene extends Phaser.Scene {
           step += 1;
           if (step < beats.length) text.setText(beats[step]!);
           else this.resolve({ kind: 'returnProtege' });
+          this.rx?.refresh();
         },
       });
+      const files = [monFile(this, mentor.speciesId, 'front', mentor.shiny), monFile(this, foe.speciesId, 'icon', foe.shiny) ?? monFile(this, foe.speciesId, 'front', foe.shiny)];
+      this.rxShow(() => ({
+        title: 'A familiar face',
+        card: { big: true, file: files[0]!, second: files[1], name: `${m.name} & ${f.name}`, level: '', tag: '', sub: `${f.name} returns`, accent: '', types: [], lines: [] },
+        options: [plain('Continue')],
+        details: [],
+        party: null,
+        text: beats[Math.min(step, beats.length - 1)]!,
+      }));
     });
   }
 
@@ -448,6 +593,15 @@ export class DecisionScene extends Phaser.Scene {
       fontSize: 24,
       onSelect: (i) => this.resolve({ kind: 'ppUpMove', moveIndex: i }),
     });
+    const file = monFile(this, mon.speciesId, 'icon', mon.shiny) ?? monFile(this, mon.speciesId, 'front', mon.shiny);
+    this.rxShow(() => ({
+      title: itemName,
+      card: { big: false, file, name: species.name, level: '', tag: '', sub: 'gets more PP from the', accent: itemName, types: [], lines: [`Each PP Up adds a fifth of the move's PP (at most ${MAX_PP_UPS}).${ups > 1 ? ` This counts as ${ups}.` : ''}`] },
+      options: mon.moves.map((slot) => ({ ...rxMove(content, slot.id, slot.pp, slot), small: `PP ${slot.pp}/${maxPp(content, slot)} · PP Ups ${slot.ppUps ?? 0}/${MAX_PP_UPS}`, off: (slot.ppUps ?? 0) >= MAX_PP_UPS })),
+      details: [],
+      party: null,
+      text: `Use the ${itemName} on which of ${species.name}'s moves?`,
+    }));
   }
 
   // ---------- a caught Pokémon ----------
@@ -584,6 +738,7 @@ export class DecisionScene extends Phaser.Scene {
       if (run.party.length < 2) return;
       compareIdx = (compareIdx + d + run.party.length) % run.party.length;
       drawSummary();
+      this.rx?.refresh();
     };
 
     const candyText = `${candies} cand${candies === 1 ? 'y' : 'ies'}`;
@@ -617,6 +772,26 @@ export class DecisionScene extends Phaser.Scene {
       },
     });
     const note = past ? 'It wants to join you again. It kept its moves; it meets you at this battle\'s level.' : 'Candies are kept after the run ends.';
+    const file = monFile(this, caught.speciesId, 'front', caught.shiny);
+    const chips = partyChips(this);
+    // "Send to the PC (3/30)" reads as the button and its small print in the mock-up.
+    const split = (label: string, off = false): DecisionOption => { const cut = /^(.*?) \((.*)\)$/.exec(label); return plain(cut ? cut[1]! : label, cut ? cut[2]! : '', off); };
+    this.rxShow(() => {
+      const other = run.party[compareIdx];
+      const brief = catchSummary(content, caught, other, { ...extras, compact: true }).slice(1);
+      const ability = /Ability: (.*)$/.exec(brief.find((l) => l.startsWith('Type:')) ?? '')?.[1] ?? '';
+      const nature = (brief.find((l) => l.startsWith('Nature:')) ?? '').replace('Nature: ', '');
+      return {
+        title: past ? 'Reunion' : caught.hatched ? 'Hatched!' : 'Caught!',
+        card: { big: true, file, name: `${species.name}${caught.shiny ? ' ★' : ''}`, level: `Lv ${caught.level}`, tag: extras.firstDiscovery ? 'NEW' : '', sub: [ability, nature].filter(Boolean).join(' · '), accent: '', types: species.types, lines: [] },
+        options: options.map((o, i) => (i === 0 ? plain(o.label, blocked ?? (full ? `Party is full (${partyMax})` : `Party ${run.party.length}/${partyMax}`), Boolean(o.disabled)) : split(o.label))),
+        details: [...brief.filter((l) => !l.startsWith('Type:') && !l.startsWith('Nature:')), masteryPreview(content, profile, run, caught)],
+        party: chips,
+        text: `${title} Where should it go? ${note}`,
+        more: [...catchSummary(content, caught, other, { ...extras, compact: false }), masteryPreview(content, profile, run, caught)],
+        hints: [['Enter', 'choose'], ...(run.party.length > 1 ? ([['←→', `compare: ${other ? getSpecies(content, other.speciesId).name : 'nobody'}`]] as const) : []), ['I', 'details']],
+      };
+    });
     this.add.text(GAME_WIDTH / 2, past ? 520 : 500, note, textStyle(18, '#a69cb4')).setOrigin(0.5);
   }
 
