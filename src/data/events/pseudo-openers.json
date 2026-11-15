@@ -148,6 +148,47 @@
     }
    ],
    "pseudo": true
+  },
+  {
+   "id": "ev-sabrina-labyrinth",
+   "name": "The Fortune-Teller's Offer",
+   "group": "Pseudo Stages",
+   "stop": "event",
+   "rarity": "uncommon",
+   "tags": [
+    "Mystery",
+    "Pokémon"
+   ],
+   "minStage": 3,
+   "requires": [],
+   "intro": "A fortune-teller in a violet shawl stops you on the road and takes your hand. Hers are cold. \"Let me read your aura.\" A guide at her elbow whispers about an entrance few ever see, behind a painted wall. They are both smiling a little too long. Somewhere behind the plaster, something that is not wind is breathing out.",
+   "choices": [
+    {
+     "label": "Let her read your aura",
+     "success": {
+      "text": "Your Poké Balls rattle against your belt, then go quiet, one by one, like children told to hush. The world tilts, and when it settles you are standing in a violet corridor with empty hands.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "ghostStart",
+        "species": []
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-lab-lost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on",
+     "success": {
+      "text": "You decline. Behind you, the fortune-teller goes on smiling at the place where you were.",
+      "effects": []
+     }
+    }
+   ],
+   "pseudo": true
   }
  ]
 }

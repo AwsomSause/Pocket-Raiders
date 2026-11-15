@@ -3240,6 +3240,8 @@ export const EventRuleSchema = z.object({
   bstMatch: z.boolean().optional(),
   /** Saffron canon: when your only Pokémon would faint, the ghost calls the other spirits, the foe goes down instead and you win (Sabrina's Labyrinth). */
   ghostRescue: z.boolean().optional(),
+  /** Beta 0.7 Sabrina's Labyrinth opening: you have no Pokémon of your own here, so the first fight is lost the moment you act. */
+  noPokemon: z.boolean().optional(),
   /** Beta 0.7 Sabrina's Labyrinth: each turn one of your move slots is false (shows one move, does another); every second turn the companion marks it. */
   falseSlot: z.boolean().optional(),
   surviveTurns: z.number().int().min(1).max(30).optional(),
