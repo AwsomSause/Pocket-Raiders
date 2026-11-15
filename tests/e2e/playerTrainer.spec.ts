@@ -22,6 +22,8 @@ async function startBattle(page: Page, seed: string): Promise<string[]> {
     await waitForScene(page, next);
   }
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
+  // A plain first fight: no event (Kanto's attached ones) opens before it.
+  await page.evaluate(() => { for (const n of (window as any).__pkr.session.run.stage.map.nodes) if (n.column === 1) n.sides = []; });
   await page.keyboard.press('Enter');
   await waitForScene(page, 'Battle');
   await confirmToMenu(page);
