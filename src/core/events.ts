@@ -221,8 +221,15 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       if (!rec) return false;
       return (!c.feeling || rec.feelings[c.feeling.key] >= c.feeling.atLeast) && (c.leadAtLeast === undefined || rec.lead >= c.leadAtLeast) && (c.leadAtMost === undefined || rec.lead <= c.leadAtMost) && (!c.mark || rec.marks.includes(c.mark));
     }
-    case 'flag':
-      return Number(run.story.flags[`ev:${c.key}`] ?? 0) >= c.atLeast && Number(run.story.flags[`ev:${c.key}`] ?? 0) <= c.atMost;
+    case 'flag': {
+      const value = Number(run.story.flags[`ev:${c.key}`] ?? 0);
+      if (value < c.atLeast || value > c.atMost) return false;
+      if (c.regionsAgo === undefined && c.regionsAgoMost === undefined) return true;
+      // A stamped flag (`stamp: 'region'`) remembers the region it was first set in: the scene waits `regionsAgo` regions, or ends after `regionsAgoMost`.
+      const at = Number(run.story.flags[`ev:${c.key}-at`] ?? 0);
+      const ago = run.regionIndex + 1 - at;
+      return at > 0 && ago >= (c.regionsAgo ?? 0) && ago <= (c.regionsAgoMost ?? 99);
+    }
     case 'partyBlissful':
       return run.party.some((m) => m.blissful);
     case 'partyShadow':
@@ -1081,6 +1088,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return `the map shows ${e.columns} more column${e.columns === 1 ? '' : 's'} ahead`;
     case 'foresight':
       return `the forecast reaches ${e.columns} more column${e.columns === 1 ? '' : 's'} ahead`;
+    case 'seeAgain':
+      return '';
     case 'addEvent':
     case 'addEventFrom':
       return 'a new place opens here';
@@ -1504,6 +1513,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return applySky(content, run, e);
     case 'flag':
       run.story.flags[`ev:${e.key}`] = Math.max(0, Number(run.story.flags[`ev:${e.key}`] ?? 0) + e.amount);
+      if (e.stamp === 'region' && run.story.flags[`ev:${e.key}-at`] === undefined) run.story.flags[`ev:${e.key}-at`] = run.regionIndex + 1;
       // Shadow II: a story flag may be exactly the key a Shadow in your party or PC has been waiting for.
       for (const line of checkFlagKeys(content, run)) recordChoice(content, run, { id: `shadow-key-${e.key}`, pick: 'yes', text: line, weight: 2 });
       return '';
@@ -1580,6 +1590,9 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'celebrate':
       celebrateToday(content, run);
       return effectWords(content, e);
+    case 'seeAgain':
+      if (run.itemCounters) delete run.itemCounters[`event-seen:${e.eventId}`];
+      return '';
     case 'addEvent': {
       if (routeChainEvent(content, run, e.eventId)) return effectWords(content, e);
       const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
@@ -1771,6 +1784,8 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       const speciesId = boss ? boss.signature[i % boss.signature.length]! : lane && content.species.has(lane) ? lane : b.rule?.bstMatch && b.species?.length ? nearestBst(content, b.species, run.party[activeIndex]!) : pickSpecies(content, run, b.species ?? [], b.types, rng);
       return newMon(content, run, evolvedFormAt(content, speciesId, level, rng), level, 'e');
     });
+    // Catalog Overhaul (people): the first foe knows the scripted moves (replacing its last ones).
+    if (b.kind === 'trainer' && team[0]) for (const [n, id] of (b.foeMoves ?? []).entries()) if (content.moves.has(id) && !team[0].moves.some((m) => m.id === id)) team[0].moves[Math.max(0, team[0].moves.length - 1 - n)] = { id, pp: content.moves.get(id)!.pp };
     // Beta 0.7: only a listed story boss (`seventh`) fields a 7th foe; every other team is cut to 6.
     if (team.length > MAX_FOES && !(b.kind === 'trainer' && b.seventh)) team.length = MAX_FOES;
     else if (team.length > MAX_FOES_LISTED) team.length = MAX_FOES_LISTED;
@@ -1878,6 +1893,13 @@ export function isPseudoBattle(content: Content, event: EventBattleRef): boolean
   return battle?.pseudo === true;
 }
 
+/** Catalog Overhaul: a friendly event fight (`friendly: true`). A loss never ends the run and the fight's `lose` effects apply. */
+export function isFriendlyBattle(content: Content, event: EventBattleRef): boolean {
+  const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
+  const battle = (event.success ? choice?.success : choice?.failure)?.battle;
+  return (battle?.kind === 'trainer' || battle?.kind === 'wild') && battle.friendly === true;
+}
+
 /** A detour's next battle (`chain`): same stop, no healing in between. Called once decisions from the last fight are done. */
 export function continueEventChain(content: Content, run: RunState): void {
   // The Betrayal: right after an Evil Team leader falls, the Legendary they chased turns on them and fights you (no scene change).
@@ -1938,9 +1960,9 @@ export function eventBattleWon(content: Content, run: RunState, event: EventBatt
 
 /** The consolation prize of a lost pseudo-stage fight (`lose` effects of the battle that was lost). */
 export function eventBattleLost(content: Content, run: RunState, event: EventBattleRef): string[] {
-  const choice = content.events.get(event.eventId)?.choices[event.choiceIndex];
+  const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
-  if (!battle || (battle.kind !== 'trainer' && battle.kind !== 'raid') || !battle.lose?.length) return [];
+  if (!battle || !battle.lose?.length) return [];
   const rng = new Rng(hashSeed(`${run.seed}::event-lose::${stageKey(run)}::${event.sideId}`));
   return battle.lose.map((e) => applyEffect(content, run, e, rng)).filter(Boolean);
 }
