@@ -59,7 +59,7 @@ describe('Honest Trade Card (core)', () => {
 
   it('a pick that is not a swap carries no card at all', () => {
     const run = begin('TC4');
-    const { run: at, sideId } = debugForceEvent(content, run, 'cs-kanto-cinnabar-newisland-n4');
+    const { run: at, sideId } = debugForceEvent(content, run, 'cs-kanto-celadon-mansion-roof'); // a "pick a Pokémon" choice (the Kanto canon rebuild moved New Island's)
     const picks = eventView(content, at, sideId).choices[0]!.tradePicks!;
     expect(picks.length).toBeGreaterThan(0);
     for (const p of picks) expect('gets' in p).toBe(false);

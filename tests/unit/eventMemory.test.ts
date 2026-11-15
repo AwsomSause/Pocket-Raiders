@@ -101,6 +101,9 @@ describe('memory flag registry', () => {
       }
       for (const v of ev.remembers) for (const c of v.when) if (c.kind === 'flag') reads.push(`${ev.id}:${c.key}`);
     }
+    // Catalog Overhaul flag files name the flags code keeps (`rule`) and the ones another set will write (`hook`, its line waits until then).
+    const coFlags = Object.values(import.meta.glob<{ flags: { key: string; rule?: string; hook?: string }[] }>('../../src/data/catalogOverhaul/flags/*.json', { eager: true, import: 'default' }));
+    for (const f of coFlags) for (const x of f.flags ?? []) if (x.rule || x.hook) setKeys.add(x.key);
     const missing = reads.filter((r) => !setKeys.has(r.split(':')[1]!));
     expect(missing).toEqual([]);
   });

@@ -1,3 +1,4 @@
+// Lavender Town canon spaces, as rebuilt from KANTO_PLACED_1.md (catalog overhaul, tools/events/co/kanto-canon-2.ts).
 import { describe, expect, it } from 'vitest';
 import { canonInterludeOf, addCanonStops } from '../../src/core/expansion/canonRun';
 import { chooseEvent, conditionMet } from '../../src/core/events';
@@ -7,7 +8,7 @@ import { content } from './helpers';
 const begin = (seed: string) => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red', expansion: { kantoCanon: true } }), 0);
 const room = (id: string) => content.events.get(id)!;
 const P = 'cs-kanto-lavender-';
-const targets = (id: string) => room(id).choices.flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])]).flatMap((e) => (e.kind === 'addEvent' ? [e.eventId] : e.kind === 'addEventFrom' ? e.ids : []));
+const targets = (id: string) => [...room(id).choices, ...room(id).remembers.flatMap((v) => v.addChoices)].flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? [])]).flatMap((e) => (e.kind === 'addEvent' ? [e.eventId] : e.kind === 'addEventFrom' ? e.ids : []));
 const play = (seed: string, id: string, choice: number, tweak?: (r: ReturnType<typeof begin>) => void) => {
   const base = begin(seed);
   tweak?.(base);
@@ -15,27 +16,34 @@ const play = (seed: string, id: string, choice: number, tweak?: (r: ReturnType<t
   return chooseEvent(content, run, sideId, choice).run;
 };
 const heldCount = (run: ReturnType<typeof begin>, id: string) => (run.inventory[id] ?? 0) + (run.passives?.[id] ?? 0) + run.party.reduce((n, m) => n + (m.held?.[id] ?? 0), 0);
-/** A Pokémon that joined: in the party, or waiting in the "caught" decision. */
 const joined = (run: ReturnType<typeof begin>, species: string) => run.party.find((m) => m.speciesId === species) ?? run.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : [])).find((m) => m.speciesId === species);
 const kantoSeeds = (() => { const out: string[] = []; for (let i = 0; out.length < 12 && i < 300; i++) if (begin(`LV${i}`).regionOrder[0] === 'kanto') out.push(`LV${i}`); return out; })();
+const GATES = ['tower', 'fuji', 'fanclub', 'rocktunnel', 'powerplant', 'volunteers', 'prank'];
 
 describe('Lavender canon: the event graph', () => {
-  it('every room opens from a gate, and every addEvent target exists', () => {
-    const ids = [...content.events.keys()].filter((id) => id.startsWith(P));
-    for (const id of ids) for (const t of targets(id)) expect(content.events.has(t), `${id} -> ${t}`).toBe(true);
-    const gates = ['tower', 'fuji', 'fanclub', 'rocktunnel', 'powerplant', 'volunteers'].map((s) => `${P}${s}`);
-    const reach = new Set<string>(gates);
+  it('every room opens from a gate, and every target exists', () => {
+    const ids = [...content.events.values()].filter((e) => e.id.startsWith(P) && !e.disabled).map((e) => e.id);
+    for (const id of ids) for (const t of targets(id)) expect(content.events.has(t) && !content.events.get(t)!.disabled, `${id} -> ${t}`).toBe(true);
+    // Every entry event (it carries a catalog id) is a gate; Volume II (KANTO_PLACED_3) adds more.
+    const reach = new Set<string>([...GATES.map((s) => `${P}${s}`), ...ids.filter((id) => room(id).canon)]);
     for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id)) if (!reach.has(t)) { reach.add(t); again = true; } }
     expect([...reach].sort()).toEqual(ids.sort());
   });
   it('the gates carry the catalog ids', () => {
-    for (const s of ['tower', 'fuji', 'fanclub', 'rocktunnel', 'powerplant', 'volunteers']) expect(room(`${P}${s}`).canon).toBe(`cs.kanto.lavender.${s}`);
+    for (const s of GATES) expect(room(`${P}${s}`).canon).toBe(`cs.kanto.lavender.${s}`);
   });
-  it('Pokémon Tower is seven floors: graves, graves, two channelers, the prank, the Marowak, the top', () => {
-    const chain = ['tower-n1', 'tower-n2', 'tower-n3', 'tower-n4', 'tower-n5', 'tower-n6'].map((s) => `${P}${s}`);
-    for (let i = 0; i < chain.length - 1; i++) expect(targets(chain[i]!)).toContain(chain[i + 1]);
-    expect(targets(chain[5]!)).toContain(`${P}tower-memorial`);
-    expect(targets(`${P}tower-memorial`)).toContain(`${P}tower-top`);
+  it('Pokémon Tower is seven floors: the graves, the unseen, the channelers, the wall, the prank (25%), the Marowak, the top', () => {
+    expect(targets(`${P}tower`)).toEqual([`${P}tower-f1`]);
+    expect(targets(`${P}tower-f1`)).toEqual([`${P}tower-f2`]);
+    expect(targets(`${P}tower-f2`)).toEqual([`${P}tower-f3`, `${P}tower-f3`, `${P}tower-f3`]);
+    expect(targets(`${P}tower-f3b`)).toEqual([`${P}tower-f4`]);
+    // Floor 5 is a 25% draw (one Haunter among four), then the Marowak, then the top.
+    const leave = room(`${P}tower-f4`).choices.at(-1)!.success.effects.find((e) => e.kind === 'addEventFrom') as { ids: string[] };
+    expect(leave.ids.filter((x) => x === `${P}tower-f5`)).toHaveLength(1);
+    expect(leave.ids).toHaveLength(4);
+    expect(targets(`${P}tower-f5`)).toEqual([`${P}tower-f6`, `${P}tower-f6`]);
+    expect(new Set(targets(`${P}tower-f6`))).toEqual(new Set([`${P}tower-f7a`]));
+    expect(targets(`${P}tower-f7a`)).toContain(`${P}tower-f7`);
   });
 });
 
@@ -48,7 +56,7 @@ describe('Lavender in a run (the interlude between Stage 3 and Stage 4)', () => 
     run.stage!.index = 4;
     expect(canonInterludeOf(run)).toBeNull();
   });
-  it('the Tower is always there; at most two Pseudo Stages are offered; every offered space has an event', () => {
+  it('the Tower is always there and on every route (must-see); Rock Tunnel or the Power Plant, never both; every offered space has an event', () => {
     for (const seed of kantoSeeds) {
       const run = begin(seed);
       run.stage!.index = 3;
@@ -56,103 +64,109 @@ describe('Lavender in a run (the interlude between Stage 3 and Stage 4)', () => 
       addCanonStops(content, run);
       const menu = run.expansion!.canon!.menus['interlude-3']!;
       expect(menu[0]).toBe('cs.kanto.lavender.tower');
-      expect(menu.filter((id) => ['tower', 'rocktunnel', 'powerplant'].includes(id.split('.').pop()!)).length).toBeLessThanOrEqual(2);
-      const placed = run.stage!.map.nodes.flatMap((n) => n.sides.map((s) => s.eventId)).filter((id) => id?.startsWith(P));
-      expect(placed.length).toBe(menu.length);
+      expect(menu.filter((id) => ['rocktunnel', 'powerplant'].includes(id.split('.').pop()!)).length).toBeLessThanOrEqual(1);
+      const placed = new Set(run.stage!.map.nodes.flatMap((n) => n.sides.map((s) => s.eventId)).filter((id) => id?.startsWith(P)));
+      expect(placed.size).toBe(menu.length);
+      const towerCols = new Set(run.stage!.map.nodes.filter((n) => n.sides.some((s) => s.eventId === `${P}tower`)).map((n) => n.column));
+      expect(towerCols.size).toBe(1);
+      const col = [...towerCols][0]!;
+      expect(run.stage!.map.nodes.filter((n) => n.column === col).every((n) => n.sides.some((s) => s.eventId === `${P}tower`))).toBe(true);
     }
   });
 });
 
 describe('Pokémon Tower', () => {
-  it('without the Silph Scope the first floor only offers a Channeler fight; with it, wild ghosts', () => {
+  it('without the Silph Scope the unseen can only be fled; with it (or the prank Haunter) it can be fought', () => {
     const run = begin('PT');
-    const [scope, channeler] = room(`${P}tower-n1`).choices;
+    const [flee, scope, haunter] = room(`${P}tower-f2`).choices;
+    expect(flee!.requires).toEqual([]);
+    expect(flee!.success.battle).toBeUndefined();
     expect(conditionMet(content, run, scope!.requires[0]!)).toBe(false);
-    expect(channeler!.requires).toEqual([]);
+    expect(conditionMet(content, run, haunter!.requires[0]!)).toBe(false);
+    run.inventory['silph-scope'] = 1;
+    expect(conditionMet(content, run, scope!.requires[0]!)).toBe(true);
     expect(scope!.success.battle!.kind).toBe('wild');
-    expect(channeler!.success.battle!.kind).toBe('trainer');
   });
-  it('the prank: a 25% roll on the stairs, and laughing along pays a Spell Tag', () => {
-    expect(room(`${P}tower-n5`).choices[0]!.chance).toBe(0.25);
-    expect(room(`${P}tower-prank`).choices[0]!.success.effects).toContainEqual({ kind: 'item', id: 'spell-tag', count: 1 });
+  it('the Marowak is a trainer (never catchable); stepping back starts it at -1 Attack; Cubone can go to it instead', () => {
+    const [fight, back, cubone] = room(`${P}tower-f6`).choices;
+    expect(fight!.success.battle!.kind).toBe('trainer');
+    expect(back!.success.battle!.kind).toBe('trainer');
+    expect((back!.success.battle as { rule?: { stages?: object } }).rule?.stages).toEqual({ atk: -1 });
+    expect(cubone!.requires).toEqual([{ kind: 'partySpecies', species: 'cubone' }]);
+    expect(cubone!.success.battle).toBeUndefined();
+    expect(cubone!.success.effects).toContainEqual({ kind: 'item', id: 'thick-club', count: 1 });
   });
-  it('the Marowak is a trainer (never catchable) and beating it sets the release flag', () => {
-    const b = room(`${P}tower-n6`).choices[0]!.success.battle!;
-    expect(b.kind).toBe('trainer');
-    expect(b.win).toContainEqual({ kind: 'flag', key: 'kanto-tower-marowak', amount: 1 });
-  });
-  it('the Memorial Wall needs a Nuzlocke memorial entry; gifts are capped at three by three rooms', () => {
+  it('the Memorial Wall answers flowers only for names the run has lost, three at most', () => {
     const run = begin('MW');
-    const gift = room(`${P}tower-memorial`).choices[0]!;
-    expect(conditionMet(content, run, gift.requires[0]!)).toBe(false);
+    const wall = room(`${P}tower-f4`);
+    expect(wall.remembers[0]!.when).toEqual([{ kind: 'memorial', atLeast: 1 }]);
+    const flower = wall.remembers[0]!.addChoices[0]!;
+    expect(conditionMet(content, run, flower.requires[0]!)).toBe(false);
     run.nuzlocke = { areas: [], memorial: [{ uid: 'a', speciesId: 'rattata', level: 5, shiny: false, ace: false, area: 'x', cause: 'lost to Brock' }] };
-    expect(conditionMet(content, run, gift.requires[0]!)).toBe(true);
-    const wall3 = room(`${P}tower-memorial-3`).choices;
-    expect(targets(`${P}tower-memorial-3`).every((t) => t === `${P}tower-top`)).toBe(true);
-    expect(wall3.some((c) => c.label === 'Move on')).toBe(true);
-    const out = play('MW', `${P}tower-memorial`, 0, (r) => { r.nuzlocke = run.nuzlocke; });
-    expect(heldCount(out, 'spell-tag')).toBe(1);
-    expect(out.story.flags['ev:kanto-tower-memorial']).toBe(1);
+    expect(conditionMet(content, run, flower.requires[0]!)).toBe(true);
+    // Three flowers lead f4b -> f4c -> f4d, and f4d offers only "Walk on".
+    expect(room(`${P}tower-f4d`).choices.map((c) => c.label)).toEqual(['Walk on.']);
   });
-  it('freeing Mr. Fuji pays the Silph Scope, the Tower Scroll and the story flags; a released Marowak adds Cubone with Lightning Rod and Bone Rush', () => {
-    const plain = play('TF', `${P}tower-top`, 1);
-    expect(heldCount(plain, 'silph-scope')).toBe(1);
-    expect(plain.story.flags['ev:kanto-tower-cleared']).toBe(1);
-    expect(plain.story.flags['ev:xk-tower-cleansed']).toBe(1);
-    expect(joined(plain, 'cubone')).toBeUndefined();
-    const kind = play('TF', `${P}tower-top`, 0, (r) => { r.story.flags['ev:kanto-tower-marowak'] = 1; });
+  it('the top pays the Silph Scope, the Tower Scroll and the story flags; a released Marowak adds Cubone with Lightning Rod and Bone Rush', () => {
+    const kind = play('TF', `${P}tower-f7`, 0, (r) => { r.story.flags['ev:kanto-tower-marowak'] = 1; });
+    expect(heldCount(kind, 'silph-scope')).toBe(1);
+    expect(kind.story.flags['ev:kanto-tower-cleared']).toBe(1);
+    expect(kind.story.flags['ev:xk-tower-cleansed']).toBe(1);
     const cubone = joined(kind, 'cubone')!;
     expect(cubone.fixedAbility).toBe('lightning-rod');
     expect(cubone.moves.some((m) => m.id === 'bone-rush')).toBe(true);
   });
 });
 
-describe('Fuji, Fan Club, Rock Tunnel, Power Plant, Volunteers', () => {
-  it("Mr. Fuji's house: adopt one of three babies and get the Poké Flute and +1 friendship", () => {
-    const labels = room(`${P}fuji`).choices.map((c) => c.label);
-    expect(labels.filter((l) => l.startsWith('Adopt')).length).toBe(3);
-    const out = play('FJ', `${P}fuji`, 0);
-    expect(joined(out, 'pichu')).toBeDefined();
+describe('Fuji, Fan Club, Rock Tunnel, Power Plant, Volunteers, the Prank', () => {
+  it("Mr. Fuji's house: adopt one of three, with the Poké Flute and Fuji's Blessing for the whole party", () => {
+    expect(room(`${P}fuji`).choices.filter((c) => c.label.startsWith('"')).length).toBe(3);
+    const out = play('FJ', `${P}fuji`, 1);
     expect(heldCount(out, 'poke-flute')).toBe(1);
+    expect(out.pending.some((p) => p.kind === 'caught') || out.party.length > 1).toBe(true);
+    expect(out.story.flags['ev:kanto-fuji-adopted']).toBe(1);
   });
-  it('Fan Club: listening pays a Bike Voucher, interrupting pays a Poké Doll', () => {
-    const c = room(`${P}fanclub`).choices;
-    expect(c[0]!.success.effects).toContainEqual({ kind: 'item', id: 'bike-voucher', count: 1 });
-    expect(c[1]!.success.effects).toContainEqual({ kind: 'item', id: 'poke-doll', count: 1 });
+  it('Fan Club: four times "Interrupt." beside "Keep listening."; listening to the end pays a Bike Voucher, interrupting a Poké Doll', () => {
+    for (const n of [1, 2, 3, 4]) expect(room(`${P}fanclub-t${n}`).choices.map((c) => c.label)).toEqual(['Interrupt.', 'Keep listening.']);
+    expect(room(`${P}fanclub-t4`).choices[1]!.success.effects).toContainEqual({ kind: 'item', id: 'bike-voucher', count: 1 });
+    expect(room(`${P}fanclub-t2`).choices[0]!.success.effects).toContainEqual({ kind: 'item', id: 'poke-doll', count: 1 });
   });
-  it('Rock Tunnel is five nodes, needs a light to choose, and cuts accuracy by a tenth', () => {
+  it('Rock Tunnel is five nodes; without light fights are blind (accuracy x0.9, hidden foe) and cannot be avoided', () => {
     const chain = [1, 2, 3, 4, 5].map((n) => `${P}rocktunnel-n${n}`);
     for (let i = 0; i < 4; i++) expect(targets(chain[i]!)).toContain(chain[i + 1]);
+    const dark = room(chain[1]!).choices.at(-1)!;
+    expect(dark.requires).toEqual([]);
+    expect((dark.success.battle as { rule?: object }).rule).toEqual({ accuracyMult: 0.9, hiddenFoe: true });
     const run = begin('RT');
-    expect(conditionMet(content, run, room(chain[0]!).choices[0]!.requires[0]!)).toBe(false);
-    expect(room(chain[0]!).choices.at(-1)!.requires).toEqual([]);
-    const end = play('RT', chain[4]!, 0);
+    expect(conditionMet(content, run, room(chain[1]!).choices[0]!.requires[0]!)).toBe(false);
+    const end = play('RT', chain[4]!, 0, (r) => { r.story.flags['ev:kanto-rocktunnel-onix'] = 1; });
     expect(joined(end, 'onix')!.fixedAbility).toBe('sturdy');
-    expect(heldCount(end, 'flashlight')).toBe(1);
   });
-  it('Power Plant is six nodes ending in a 40% Zapdos, else an Electrode horde, then a Magnet and a Thunder Stone', () => {
-    const boss = room(`${P}powerplant-n5`).choices[0]!;
-    expect(boss.chance).toBe(0.4);
-    expect((boss.success.battle as { species: string[] }).species).toEqual(['zapdos']);
-    expect((boss.failure!.battle as { species: string[] }).species).toEqual(['electrode']);
-    const out = play('PP', `${P}powerplant-n6`, 0);
+  it('Power Plant: five halls where a rocking item ball is a Voltorb or Electrode, then 40% Zapdos, 60% an Electrode horde', () => {
+    for (const n of [1, 2, 3, 4, 5]) {
+      expect(room(`${P}powerplant-c${n}r`).choices[0]!.success.battle).toBeUndefined();
+      expect(room(`${P}powerplant-c${n}f`).choices[0]!.success.battle!.kind).toBe('wild');
+    }
+    const end = room(`${P}powerplant-c5r`).choices[0]!.success.effects.find((e) => e.kind === 'addEventFrom') as { ids: string[] };
+    expect(end.ids.filter((x) => x.endsWith('zapdos'))).toHaveLength(2);
+    expect(end.ids.filter((x) => x.endsWith('horde'))).toHaveLength(3);
+    expect((room(`${P}powerplant-zapdos`).choices[0]!.success.battle as { species: string[]; levelBonus: number }).species).toEqual(['zapdos']);
+    const out = play('PP', `${P}powerplant-spoils`, 0);
     expect(heldCount(out, 'magnet')).toBe(1);
-    // The Thunder Stone is a reward item: it goes to a Pokémon that can use it, and is sold if nobody can.
-    expect(room(`${P}powerplant-n6`).choices[0]!.success.effects).toContainEqual({ kind: 'item', id: 'thunderstone', count: 1 });
   });
-  it('Volunteers: sells ghost goods for coins, and the Revive can be bought only once', () => {
-    const before = begin('VL');
-    before.money = 5000;
-    const run = play('VL', `${P}volunteers-revive`, 0, (r) => { r.money = 5000; });
-    expect(run.money).toBe(4500);
-    expect(heldCount(run, 'revive')).toBeGreaterThanOrEqual(1);
-    expect(run.story.flags['ev:kanto-volunteers-revive']).toBe(1);
-    expect(conditionMet(content, run, room(`${P}volunteers-revive`).choices[0]!.requires[1]!)).toBe(false);
+  it('Volunteers: ghost goods for coins, and one revive of a fainted Pokémon for ₽500, out of battle', () => {
     const spell = play('VL', `${P}volunteers`, 0, (r) => { r.money = 5000; });
     expect(spell.money).toBe(4400);
     expect(heldCount(spell, 'spell-tag')).toBe(1);
-    const poor = begin('VP');
-    poor.money = 100;
-    expect(conditionMet(content, poor, room(`${P}volunteers`).choices[0]!.requires[0]!)).toBe(false);
+    const run = play('VL', `${P}volunteers-revive`, 0, (r) => { r.money = 5000; r.party[0]!.hp = 0; r.party.push({ ...structuredClone(r.party[0]!), uid: 'second', hp: 10 }); });
+    expect(run.money).toBe(4500);
+    expect(run.party[0]!.hp).toBeGreaterThan(0);
+    expect(run.story.flags['ev:kanto-volunteers-revive']).toBe(1);
+    expect(conditionMet(content, run, room(`${P}volunteers-revive`).choices[0]!.requires[2]!)).toBe(false);
+  });
+  it("Haunter's Prank: laughing pays a Spell Tag; winning the face-off makes the Tower's unseen visible", () => {
+    expect(room(`${P}prank`).choices[0]!.success.effects).toContainEqual({ kind: 'item', id: 'spell-tag', count: 1 });
+    expect(room(`${P}prank-r3`).choices[0]!.success.effects).toContainEqual({ kind: 'flag', key: 'kanto-prank-friend', amount: 1 });
+    expect(room(`${P}tower-f2`).choices[2]!.requires).toEqual([{ kind: 'flag', key: 'kanto-prank-friend', atLeast: 1, atMost: 99 }]);
   });
 });
