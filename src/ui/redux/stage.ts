@@ -192,6 +192,27 @@ export function mountOverlay(game: Phaser.Game, o: Pick<ReduxOptions, 'render' |
   return { refresh: redraw, el };
 }
 
+/**
+ * An empty see-through layer over every view, for a tool that builds its own DOM (the debug panel's form). It lives as
+ * long as the game and wears the current look; only its `.hit` children and `[data-act]` take the pointer.
+ */
+export function mountTool(game: Phaser.Game, name: string): HTMLElement {
+  const root = ensureHost(game);
+  const el = document.createElement('div');
+  el.dataset.scene = name;
+  el.style.zIndex = '70';
+  root.append(el);
+  const redraw = (): void => {
+    el.className = `${skinClass(reduxSkinIndex(services().session.settings.reduxSkin))} clear noin`;
+  };
+  shield(el);
+  views.add({ redraw });
+  lastBox = '';
+  place();
+  redraw();
+  return el;
+}
+
 /** Draws a scene's New UI view over the canvas until the scene shuts down. Call only when `reduxOn()`. */
 /** Where the pointer was at the last hover any view took (shared, so a view opening under a resting pointer does not count either). */
 let overAt = '';

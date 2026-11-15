@@ -1757,7 +1757,7 @@ test('New UI: Esc on the map opens the mock-up pause menu; its buttons open the 
   const top = () => view(page, 'Map').last();
   const buttons = () => map().locator('[data-act="pause"][data-over="pauseOver"]');
   const paused = async (yes: boolean) => expect(buttons()).toHaveCount(yes ? 6 : 0);
-  const node = await page.evaluate(() => (window as any).__pkr.session.run.currentNodeId);
+  const node = await page.evaluate(() => (window as any).__pkr.session.run.stage.current);
   await page.keyboard.press('Escape');
   await paused(true);
   await expect(map()).toContainText('Paused');
@@ -1767,7 +1767,7 @@ test('New UI: Esc on the map opens the mock-up pause menu; its buttons open the 
   // While paused the map does not travel: Enter is "Resume", not the stop under the cursor.
   await page.keyboard.press('Enter');
   await paused(false);
-  expect(await page.evaluate(() => (window as any).__pkr.session.run.currentNodeId)).toBe(node);
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.stage.current)).toBe(node);
   expect(await scene(page)).toBe('Map');
   // Esc closes it too, and a click beside the buttons.
   await page.keyboard.press('Escape');
@@ -1831,7 +1831,7 @@ test('New UI: Esc on the map opens the mock-up pause menu; its buttons open the 
   await page.keyboard.press('Escape');
   await waitForScene(page, 'Map');
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 15_000 }).toBe(false);
-  expect(await page.evaluate(() => (window as any).__pkr.session.run.currentNodeId)).toBe(node);
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.stage.current)).toBe(node);
   // An Adventure run: End run opens the mock-up's "End this run?" box with the cursor on "Keep playing".
   await page.evaluate(() => { (window as any).__pkr.session.run.rules.modeId = 'adventure'; });
   await page.waitForTimeout(250);
@@ -1864,5 +1864,75 @@ test('New UI: Esc on the map opens the mock-up pause menu; its buttons open the 
   await answers().nth(1).click();
   await waitForScene(page, 'GameOver');
   expect(await page.evaluate(() => (window as any).__pkr.session.run.victory)).toBe(false);
+  expect(errors).toEqual([]);
+});
+
+test('New UI: F2 opens the mock-up debug window (Scene, Seed, RNG stream, FPS and six tags); a tag unfolds its tool and the tools still work', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&debug=1&seed=newui-debug');
+  // With no run yet the window still opens: the title screen's scene, no seed.
+  await page.keyboard.press('F2');
+  const win = page.locator('#rx .stage[data-scene="debug"] #rx-debug');
+  await expect(win).toBeVisible();
+  await expect(win).toContainText('Debug panel');
+  await expect(win.locator('[data-fact="scene"] b')).toHaveText('MainMenuScene');
+  await expect(win.locator('.tg')).toHaveText(['Scene jump', 'Story log', 'Asset viewer', 'Moment viewer', 'Save creator', 'Extended Cut']);
+  await expect(win.locator('.tg:not(.no)')).toHaveText('Scene jump');
+  await expect(win.locator('.dbg-tool')).toHaveCount(0);
+  // The old panel and the corner frame meter step aside while the window is open.
+  await expect(page.locator('#debug-panel')).toBeHidden();
+  await expect(page.locator('#fps-meter')).toBeHidden();
+  await win.locator('.tg', { hasText: 'Story log' }).click();
+  await expect(win.locator('.dbg-tool')).toContainText('No active run.');
+  await page.keyboard.press('F2');
+  await expect(win).toBeHidden();
+  await expect(page.locator('#fps-meter')).toBeVisible();
+  // On the map: the scene line follows the game, the seed is the run's, the frame rate is a number.
+  await toMap(page);
+  await page.keyboard.press('F2');
+  await expect(win.locator('[data-fact="scene"] b')).toHaveText('MapScene');
+  await expect(win).toContainText('newui-debug');
+  await expect(win.locator('[data-fact="fps"] b')).toHaveText(/^\d+$/, { timeout: 15_000 });
+  await expect(win.locator('.row.sm', { hasText: 'RNG stream' }).locator('b')).toHaveText(/^[a-z]+ #[0-9a-f]{8}$/);
+  // The window stays inside the game picture, folded and unfolded.
+  const inside = async () => {
+    const [w, g] = await Promise.all([win.boundingBox(), page.locator('canvas').boundingBox()]);
+    expect(w!.x).toBeGreaterThanOrEqual(g!.x);
+    expect(w!.y).toBeGreaterThanOrEqual(g!.y);
+    expect(w!.x + w!.width).toBeLessThanOrEqual(g!.x + g!.width + 1);
+    expect(w!.y + w!.height).toBeLessThanOrEqual(g!.y + g!.height + 1);
+  };
+  await inside();
+  await page.screenshot({ path: 'test-results/newui-debug.png' });
+  // Story log was the chosen tag: its tool is still unfolded and now reads the run.
+  await expect(win.locator('.tg:not(.no)')).toHaveText('Story log');
+  await expect(win.locator('.dbg-tool')).toContainText('Story Log');
+  // A click on the chosen tag folds it; another tag unfolds its own tool.
+  await win.locator('.tg', { hasText: 'Story log' }).click();
+  await expect(win.locator('.dbg-tool')).toHaveCount(0);
+  await win.locator('.tg', { hasText: 'Scene jump' }).click();
+  for (const bit of ['seed: newui-debug', 'RNG streams', 'Region', 'Stage', 'Heal party', 'Add Pokémon to party', 'Give item', 'New run with seed']) await expect(win.locator('.dbg-tool')).toContainText(bit);
+  await inside();
+  // A tool does its job: Give 5 puts five of the chosen item in the bag (and the map under the window is not clicked).
+  const node = await page.evaluate(() => (window as any).__pkr.session.run.stage.current);
+  const item = await win.locator('.dbg-tool select').nth(1).inputValue();
+  const had = await page.evaluate((id) => (window as any).__pkr.session.run.inventory[id] ?? 0, item);
+  await win.locator('.dbg-tool button', { hasText: 'Give 5' }).click();
+  expect(await page.evaluate((id) => (window as any).__pkr.session.run.inventory[id] ?? 0, item)).toBe(had + 5);
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.stage.current)).toBe(node);
+  expect(await scene(page)).toBe('Map');
+  await win.locator('.tg', { hasText: 'Asset viewer' }).click();
+  await expect(win.locator('.dbg-tool')).toContainText(/Assets: \d+ loaded/);
+  await win.locator('.tg', { hasText: 'Moment viewer' }).click();
+  await expect(win.locator('#moment-list')).toContainText('shown');
+  await expect(win.locator('#force-event option')).not.toHaveCount(0);
+  await win.locator('.tg', { hasText: 'Save creator' }).click();
+  await expect(win.locator('.dbg-tool button')).toHaveText('Open the Save Creator');
+  await win.locator('.tg', { hasText: 'Extended Cut' }).click();
+  await expect(win.locator('.dbg-tool button')).toHaveText('Jump to the Extended Cut');
+  await page.screenshot({ path: 'test-results/newui-debug-tool.png' });
+  // F2 puts it away again.
+  await page.keyboard.press('F2');
+  await expect(win).toBeHidden();
   expect(errors).toEqual([]);
 });
