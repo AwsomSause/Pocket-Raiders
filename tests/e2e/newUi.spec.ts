@@ -1838,31 +1838,29 @@ test('New UI: Esc on the map opens the mock-up pause menu; its buttons open the 
   await page.keyboard.press('Escape');
   await paused(true);
   await buttons().nth(5).click();
-  const answers = () => map().locator('[data-act="pauseAsk"][data-over="pauseAskOver"]');
+  const answers = () => map().locator('[data-act="confirm"][data-over="confirmOver"]');
   await expect(answers()).toHaveText(['Keep playing', 'End run']);
   await expect(map()).toContainText('End this run?');
   await expect(map()).toContainText('Your progress is banked as a defeat. This cannot be undone.');
-  await expect(map().locator('.btn.on[data-act="pauseAsk"]')).toHaveText('Keep playing');
+  await expect(map().locator('.btn.on[data-act="confirm"]')).toHaveText('Keep playing');
   await page.screenshot({ path: 'test-results/newui-pause-confirm.png' });
-  // Enter on "Keep playing", Esc, and a click beside the box all go back to the pause menu; the run goes on.
+  // Enter on "Keep playing" and Esc both go back to the pause menu; a click beside the box does nothing; the run goes on.
   await page.keyboard.press('Enter');
   await expect(answers()).toHaveCount(0);
   await paused(true);
   await page.keyboard.press('Enter');
   await expect(answers()).toHaveCount(2);
   await page.keyboard.press('ArrowRight');
-  await expect(map().locator('.btn.on[data-act="pauseAsk"]')).toHaveText('End run');
+  await expect(map().locator('.btn.on[data-act="confirm"]')).toHaveText('End run');
   await page.keyboard.press('Escape');
   await expect(answers()).toHaveCount(0);
   await paused(true);
   await page.keyboard.press('Enter');
-  await map().locator('.shade[data-act="pauseAsk"]').click({ position: { x: 40, y: 300 } });
-  await expect(answers()).toHaveCount(0);
-  await paused(true);
+  await map().locator('.shade').click({ position: { x: 40, y: 300 } });
+  await expect(answers()).toHaveCount(2);
   expect(await scene(page)).toBe('Map');
   expect(await page.evaluate(() => (window as any).__pkr.session.run.phase)).toBe('map');
   // "End run" in the box ends it.
-  await page.keyboard.press('Enter');
   await answers().nth(1).click();
   await waitForScene(page, 'GameOver');
   expect(await page.evaluate(() => (window as any).__pkr.session.run.victory)).toBe(false);

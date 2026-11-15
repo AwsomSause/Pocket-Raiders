@@ -119,7 +119,8 @@ import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/
 import { hoverTips, ownAbilityCard } from '../ui/redux/tips';
 import type { BattlePanel } from '../ui/redux/screens/battle';
 import { mapView, type MapLegendRow, type MapModel, type MapNodeView } from '../ui/redux/screens/map';
-import { bookRows, bookView, confirmView, dossierView, pauseView, reportView, rollView, trackView } from '../ui/redux/screens/popups';
+import { confirmBox } from '../ui/redux/screens/saves';
+import { bookRows, bookView, dossierView, pauseView, reportView, rollView, trackView } from '../ui/redux/screens/popups';
 import { bracketView as rxBracketView, galarHome, galarPage } from '../ui/redux/screens/bracket';
 import { artOf, monFile, rivalArt } from '../ui/redux/game';
 import { nodeStyle } from '../ui/redux/kit';
@@ -333,7 +334,7 @@ export class MapScene extends Phaser.Scene {
     });
   }
 
-  /** An answer in the "End this run?" box: 1 ends the run; 0 (or -1, a click beside it) goes back to the pause menu. */
+  /** An answer in the "End this run?" box: 1 ends the run; 0 goes back to the pause menu. */
   private pauseAsk(k: number): void {
     const p = this.rxPause;
     if (!p || p.ask === null) return;
@@ -352,7 +353,7 @@ export class MapScene extends Phaser.Scene {
     const can = !!wipeStatus(services().session.run!);
     const note = MapScene.PAUSE[p.index] === 'End run' && !can ? 'Only an Adventure run can be ended here. Use Save to leave this one.' : '';
     if (p.ask === null) return pauseView({ options: MapScene.PAUSE.map((label) => ({ label, off: label === 'End run' && !can })), index: p.index, note });
-    return confirmView({ title: 'End this run?', text: 'Your progress is banked as a defeat. This cannot be undone.', options: ['Keep playing', 'End run'], index: p.ask, act: 'pauseAsk', over: 'pauseAskOver' });
+    return confirmBox({ title: 'End this run?', body: 'Your progress is banked as a defeat. This cannot be undone.', options: ['Keep playing', 'End run'], index: p.ask }).replace('class="shade"', 'class="shade hit"');
   }
 
   private popClose(): void {
@@ -1223,14 +1224,14 @@ export class MapScene extends Phaser.Scene {
           legend: () => this.toggleLegend(),
           pop: () => this.popClose(),
           pause: (k) => this.pausePick(Number(k)),
-          pauseAsk: (k) => this.pauseAsk(Number(k)),
+          confirm: (k) => this.pauseAsk(Number(k)),
           popTab: (i) => this.popPick('tab', Number(i)),
           popPick: (i) => this.popPick('pick', Number(i)),
           bracket: () => this.popClose(),
           bracketPage: (i) => { if (this.rxPop?.kind === 'bracket') { this.rxPop.page = Math.max(0, Math.min(4, Number(i) || 0)); this.rxView?.refresh(); } },
           bracketWatch: () => this.watchLast(),
         },
-        overs: { over: (i) => { if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); }, popOver: (i) => this.popPick('pick', Number(i)), pauseOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask === null && k >= 0 && k !== p.index) { p.index = k; this.rxView?.refresh(); } }, pauseAskOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask !== null && (k === 0 || k === 1) && k !== p.ask) { p.ask = k; this.rxView?.refresh(); } } },
+        overs: { over: (i) => { if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); }, popOver: (i) => this.popPick('pick', Number(i)), pauseOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask === null && k >= 0 && k !== p.index) { p.index = k; this.rxView?.refresh(); } }, confirmOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask !== null && (k === 0 || k === 1) && k !== p.ask) { p.ask = k; this.rxView?.refresh(); } } },
         // Resting the pointer on a party Pokémon shows its Ability card (the mock-ups' Pokémon info card).
         tip: hoverTips((key) => { if (this.rxPop) return; this.rxCard = key; this.rxView?.refresh(); }),
       });

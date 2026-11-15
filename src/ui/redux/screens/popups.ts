@@ -246,25 +246,3 @@ export function pauseView(d: PauseModel): string {
     `<div class="abs col" style="left:340px;right:340px;top:110px;gap:9px;z-index:31"><b class="cen" style="font-size:28px;text-align:center;color:#fff">Paused</b>${buttons}${d.note ? `<span class="sm" style="text-align:center;color:#fff">${esc(d.note)}</span>` : ''}</div>`
   );
 }
-
-// ---------- Confirm dialog ----------
-
-export interface ConfirmModel {
-  title: string;
-  text: string;
-  /** The safe answer first. */
-  options: readonly [string, string];
-  index: number;
-  /** The view's handler: called with 0 or 1 for a button, -1 for a click beside the box. */
-  act: string;
-  over?: string;
-}
-
-/** The confirm box (mock-up overlay `confirm`): the page dims, a question, one line on what it costs, two buttons side by side. */
-export function confirmView(d: ConfirmModel): string {
-  const buttons = d.options.map((o, k) => B(esc(o), k === d.index, 'flex:1;justify-content:center;cursor:pointer', '', `${act(d.act, k)}${d.over ? ` data-over="${d.over}"` : ''}`)).join('');
-  return (
-    `<div class="shade hit" style="z-index:32"${act(d.act, -1)}></div>` +
-    W(`<b style="font-size:21px">${esc(d.title)}</b><div class="sm" style="line-height:20px">${esc(d.text)}</div><div class="row">${buttons}</div>`, 'position:absolute;left:260px;right:260px;top:170px;display:flex;flex-direction:column;gap:12px;padding:18px 20px;z-index:33')
-  );
-}
