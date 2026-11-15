@@ -170,6 +170,35 @@ test('New UI: a tournament event shows its rounds, and B opens the bracket (grou
   expect(errors).toEqual([]);
 });
 
+test('New UI: a pseudo-stage opens from its gate and draws as a stage map of rooms', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  await addSide(page, { id: 'nu-gate', kind: 'event', used: false, eventId: 'ps-safari-zone-gate' });
+  await page.evaluate(() => void (window as any).__pkr.game.scene.getScene('Map').scene.start('Event', { sideId: 'nu-gate' }));
+  await waitForScene(page, 'Event');
+  const ev = view(page, 'Event');
+  await expect(ev).toContainText('Safari Zone');
+  await expect(ev.locator('[data-act="pick"]').first()).toContainText('Enter Safari Zone');
+  await ev.locator('[data-act="pick"]').first().click();
+  await expect(ev.locator('[data-act="next"]')).toBeVisible({ timeout: 10_000 });
+  await page.waitForTimeout(700);
+  await ev.locator('[data-act="next"]').click();
+  // The outcome has a results step only when something changed; either way the next press leaves.
+  await page.waitForTimeout(1500);
+  if ((await scene(page)) === 'Event') await ev.locator('[data-act="next"]').click();
+  await waitForScene(page, 'Map');
+  const pseudo = await page.evaluate(() => { const s = (window as any).__pkr.session.run.stage; return { name: s.pseudo?.name ?? null, rooms: s.map.nodes.length }; });
+  expect(pseudo.name).toBe('Safari Zone');
+  const map = view(page, 'Map');
+  await expect(map).toContainText('Safari Zone');
+  await expect(map).toContainText('Inside Stage 1');
+  // It is not a stage of its own: its line says so in place of a Gym Leader.
+  await expect(map).toContainText('not a stage of its own');
+  await expect(map.locator('.nd')).toHaveCount(pseudo.rooms);
+  expect(errors).toEqual([]);
+});
+
 test('New UI: learning a move asks with the mock-up decision screen and its Yes/No box', async ({ page }) => {
   const errors = watch(page);
   await start(page, 'ui=new&seed=newui-e2e');
