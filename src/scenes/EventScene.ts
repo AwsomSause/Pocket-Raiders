@@ -28,6 +28,9 @@ import type { ChoiceWidget, EventCtx, EventLayoutHandles, Rect } from '../ui/eve
 import { sceneForRun } from './routing';
 import { tourneyBracket } from '../core/expansion/tourney';
 import { drawChampionStage, drawTourneyPanel, drawTourneyStrip } from '../ui/tourneyBracket';
+import { artOf, monFile } from '../ui/redux/game';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { eventView as rxEventView } from '../ui/redux/screens/event';
 
 
 const BOTTOM_H = 168;
@@ -56,6 +59,10 @@ export class EventScene extends Phaser.Scene {
   private moneyText: Phaser.GameObjects.Text | null = null;
   private layout: EventLayoutHandles | null = null;
   private bracketPanel: Phaser.GameObjects.Container | null = null;
+  /** New UI: the mock-up event screen drawn over the canvas (default event style only). */
+  private rx: ReduxView | null = null;
+  private rxClock = '';
+  private rxLeft = 0;
 
   constructor() {
     super('Event');
@@ -69,6 +76,7 @@ export class EventScene extends Phaser.Scene {
     this.cards = [];
     this.index = 0;
     this.phase = 'choose';
+    this.outcomeStep = 'text';
     this.picker = null;
     this.result = null;
     this.leaving = false;
@@ -136,7 +144,49 @@ export class EventScene extends Phaser.Scene {
         drawChampionStage(this, content, champ?.speciesId ?? 'primeape', Number(run.story.flags['ev:r25-food'] ?? 0) > 0, this.calm);
       }
     }
-    this.offerFullText(view.event.intro);
+    this.rx = null;
+    this.rxClock = '';
+    if (reduxOn() && eventStyleOf(session.settings.eventStyle) === 'diorama' && scene.tourney === undefined) {
+      const pct = (c: ChoiceView): string => (c.chance === null ? '' : `${Math.round(c.chance * 100)}%`);
+      const sub = (c: ChoiceView): string => c.locked ?? [c.cost, c.preview ?? c.risk].filter(Boolean).join(' · ');
+      const cast = artOf(this, ctx.castIds[0]);
+      const star = ctx.species ? monFile(this, ctx.species.id) : null;
+      const tag = `${view.event.group} · ${view.event.rarity.charAt(0).toUpperCase()}${view.event.rarity.slice(1)}`;
+      this.rx = mountRedux(this, {
+        render: (c) => {
+          const r = this.result;
+          const out = this.phase === 'outcome' && r ? { step: this.outcomeStep, ok: r.success, changes: r.changes, next: r.battle ? 'Battle!' : 'Continue' } : null;
+          return rxEventView(c, {
+            name: view.event.name,
+            tag,
+            line: out ? (out.step === 'rewards' ? 'Here is what changed.' : r!.text) : view.event.intro,
+            art: artOf(this, ctx.arena)?.file ?? null,
+            tint: scene.tint ?? null,
+            fx: this.calm ? null : scene.effect,
+            cast,
+            mon: star,
+            choices: view.choices.map((x) => ({ label: x.label, sub: sub(x), chance: pct(x), locked: x.locked !== null })),
+            index: this.index,
+            money: (r?.run ?? run).money,
+            outcome: out,
+            pick: this.picker ? { labels: this.picker.picks.map((x) => x.label), at: this.picker.at } : null,
+            countdown: this.rxClock,
+            timer: this.rxClock && view.event.countdown ? this.rxLeft / view.event.countdown : null,
+          });
+        },
+        acts: {
+          pick: (k) => this.confirm(Number(k)),
+          next: () => this.advanceOutcome(),
+          trade: (k) => { const uid = this.picker?.picks[Number(k)]?.uid; if (uid) void this.commit(uid); },
+        },
+        overs: { over: (k) => this.focus(Number(k)), tradeOver: (k) => this.pickAt(Number(k)) },
+      });
+      const rx = this.rx;
+      // Timed prompts (press on the beat, hold...) are drawn by the game canvas: step aside while one plays.
+      const sync = (): void => rx.visible(!this.busy);
+      this.events.on('postupdate', sync);
+      this.events.once('shutdown', () => this.events.off('postupdate', sync));
+    } else this.offerFullText(view.event.intro);
     if (!this.calm) this.ambient(scene.effect, area, layers.fx);
     if (area.w < GAME_WIDTH || area.h < GAME_HEIGHT) layers.fx.setMask(this.make.graphics({}, false).fillRect(area.x, area.y, area.w, area.h).createGeometryMask());
     this.cards = this.layout.widgets.map((w, i) => ({ box: w.box, view: view.choices[i]!, widget: w }));
@@ -147,6 +197,9 @@ export class EventScene extends Phaser.Scene {
     const seconds = view.event.countdown;
     if (seconds && session.settings.skillPrompts) {
       let left = seconds;
+      this.rxClock = `Decide! ${left}`;
+      this.rxLeft = left;
+      this.rx?.refresh();
       const clock = this.add.text(GAME_WIDTH / 2, 20, `Decide! ${left}`, textStyle(26, '#ffe060', { stroke: '#181818', strokeThickness: 5 })).setOrigin(0.5).setDepth(50);
       this.time.addEvent({
         delay: 1000,
@@ -154,6 +207,9 @@ export class EventScene extends Phaser.Scene {
         callback: () => {
           if (this.phase !== 'choose') return clock.destroy();
           left -= 1;
+          this.rxClock = left > 0 ? `Decide! ${left}` : '';
+          this.rxLeft = left;
+          this.rx?.refresh();
           clock.setText(`Decide! ${left}`).setColor(left <= 3 ? '#ff6a6a' : '#ffe060');
           if (left > 0) return;
           clock.destroy();
@@ -238,6 +294,7 @@ export class EventScene extends Phaser.Scene {
     this.index = i;
     this.cards.forEach((c, j) => c.widget.focus(j === i));
     this.layout?.detail(this.cards[i]?.view);
+    this.rx?.refresh();
   }
 
   private confirm(at?: number): void {
@@ -276,6 +333,7 @@ export class EventScene extends Phaser.Scene {
     });
     this.picker = { box, rows, picks, at: 0 };
     this.pickAt(0);
+    this.rx?.refresh();
   }
 
   private pickAt(i: number): void {
@@ -283,6 +341,7 @@ export class EventScene extends Phaser.Scene {
     if (!pk) return;
     pk.at = i;
     pk.rows.forEach((t, j) => t.setColor(j === i ? '#f8e8a0' : COLORS.textLight).setText(`${j === i ? '▶ ' : ''}${pk.picks[j]!.label}`));
+    this.rx?.refresh();
   }
 
   private handlePick(action: InputAction): void {
@@ -296,6 +355,7 @@ export class EventScene extends Phaser.Scene {
       pk.box.destroy();
       this.picker = null;
       this.phase = 'choose';
+      this.rx?.refresh();
     }
   }
 
@@ -332,6 +392,8 @@ export class EventScene extends Phaser.Scene {
     playSfx(this, r.success ? 'se.level_up' : 'ui.error', 0.5);
     this.outcomeStep = 'text';
     this.inputReady = false;
+    this.rxClock = '';
+    this.rx?.refresh();
     this.time.delayedCall(this.calm ? 0 : 450, () => (this.inputReady = true));
     this.input.on('pointerdown', () => this.advanceOutcome());
     const chips = r.changes;
@@ -360,6 +422,7 @@ export class EventScene extends Phaser.Scene {
     if (this.outcomeStep === 'text' && r.changes.length) {
       this.outcomeStep = 'rewards';
       this.inputReady = false;
+      this.rx?.refresh();
       playSfx(this, 'ui.select', 0.4);
       const old = this.outcomeBox;
       if (old) {
