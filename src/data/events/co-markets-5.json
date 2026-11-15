@@ -1,0 +1,2419 @@
+{
+ "catalogOverhaul": "markets",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "festival-day",
+   "name": "The Fairground",
+   "group": "Fairground",
+   "stop": "contest",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#3a2030",
+    "effect": "sparkle"
+   },
+   "intro": "Paper lanterns, drums, three stalls by the gate. Madame Roux wears her late husband's hat. \"Today there's a game for everyone. And if you see a girl in a yellow coat on her own, she's mine. My granddaughter. She wanders.\"",
+   "choices": [
+    {
+     "label": "Play the games.",
+     "success": {
+      "text": "Roux waves you through the gate. Music from three directions, sugar in the air, and somewhere in the crowd a flash of a small yellow coat.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "rf-balancing-act",
+         "rf-balloon-pop",
+         "rf-barrel-roll",
+         "rf-berry-bobbing",
+         "rf-berry-taste",
+         "rf-bumper-cars",
+         "rf-carnival-plush"
+        ]
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "rf-crane-operator",
+         "rf-cupid-arrow",
+         "rf-disco-floor",
+         "rf-haunted-jenga",
+         "rf-hot-potato",
+         "rf-hurdles",
+         "rf-rhythm-raid"
+        ]
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "rf-sandcastle",
+         "rf-smell-test",
+         "rf-tug-of-war",
+         "rf-type-rps",
+         "rf-whack-diglett",
+         "rf-whistle-echo",
+         "dance-competition"
+        ]
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "fairy-tea",
+         "festival-fireworks",
+         "firebreather-show",
+         "flower-garden",
+         "photo-contest",
+         "pokefan-meetup",
+         "sky-race",
+         "street-brawl"
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fair-lost-child"
+       },
+       {
+        "kind": "flag",
+        "key": "fair-visits",
+        "amount": 1
+       },
+       {
+        "kind": "market",
+        "action": "comeBack",
+        "event": "festival-day"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look for Poppet.",
+     "success": {
+      "text": "You do not even get past the first stall. There she is, small and yellow and alone, standing by a game as if she owns it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fair-poppet",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fair-lost-child"
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "rf-balancing-act",
+         "rf-balloon-pop",
+         "rf-barrel-roll",
+         "rf-berry-bobbing",
+         "rf-berry-taste",
+         "rf-bumper-cars",
+         "rf-carnival-plush"
+        ]
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "rf-crane-operator",
+         "rf-cupid-arrow",
+         "rf-disco-floor",
+         "rf-haunted-jenga",
+         "rf-hot-potato",
+         "rf-hurdles",
+         "rf-rhythm-raid"
+        ]
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "rf-sandcastle",
+         "rf-smell-test",
+         "rf-tug-of-war",
+         "rf-type-rps",
+         "rf-whack-diglett",
+         "rf-whistle-echo",
+         "dance-competition"
+        ]
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "fairy-tea",
+         "festival-fireworks",
+         "firebreather-show",
+         "flower-garden",
+         "photo-contest",
+         "pokefan-meetup",
+         "sky-race",
+         "street-brawl"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "fair-visits",
+        "amount": 1
+       },
+       {
+        "kind": "market",
+        "action": "comeBack",
+        "event": "festival-day"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the fair across the river.",
+     "success": {
+      "text": "Roux's face does something complicated. \"My nephews. They think I stole their mother's fair. I didn't. I saved it.\" She straightens the hat. \"They're in the will, you know. Nobody's told them.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fair-stile",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "festival-day"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "fair-ribbon",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "fair-poppet-found",
+       "atLeast": 3,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "fair-ribbon",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Poppet is at the gate, holding Roux's hand. Not lost. She is holding something yellow out to you.",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Take the yellow ribbon.",
+       "success": {
+        "text": "Poppet ties her yellow ribbon round your wrist, in a terrible knot, very seriously. She does not wander off. Roux watches her. \"She was waiting for you, I think.\"",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "fair-ribbon",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Poppet gave you her yellow ribbon, and stopped getting lost.",
+          "importance": 70
+         },
+         {
+          "kind": "addEventFrom",
+          "ids": [
+           "rf-balancing-act",
+           "rf-balloon-pop",
+           "rf-barrel-roll",
+           "rf-berry-bobbing",
+           "rf-berry-taste",
+           "rf-bumper-cars",
+           "rf-carnival-plush"
+          ]
+         },
+         {
+          "kind": "addEventFrom",
+          "ids": [
+           "rf-crane-operator",
+           "rf-cupid-arrow",
+           "rf-disco-floor",
+           "rf-haunted-jenga",
+           "rf-hot-potato",
+           "rf-hurdles",
+           "rf-rhythm-raid"
+          ]
+         },
+         {
+          "kind": "addEventFrom",
+          "ids": [
+           "rf-sandcastle",
+           "rf-smell-test",
+           "rf-tug-of-war",
+           "rf-type-rps",
+           "rf-whack-diglett",
+           "rf-whistle-echo",
+           "dance-competition"
+          ]
+         },
+         {
+          "kind": "addEventFrom",
+          "ids": [
+           "fairy-tea",
+           "festival-fireworks",
+           "firebreather-show",
+           "flower-garden",
+           "photo-contest",
+           "pokefan-meetup",
+           "sky-race",
+           "street-brawl"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "fair-visits",
+          "amount": 1
+         },
+         {
+          "kind": "market",
+          "action": "comeBack",
+          "event": "festival-day"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "fair-reunited",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "fair-stile-will",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "One fair today, not two. The rival fair across the river is dark, and Lem Stile is running the bumper cars, grinning like a boy."
+    },
+    {
+     "id": "fair-poppet-home",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "fair-ribbon",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Poppet sits on the gatepost swinging her legs, right where Roux can see her. She waves at you. She is not lost at all.",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Play the games.",
+       "success": {
+        "text": "Roux waves you through. Poppet points out her favourite game as you go past.",
+        "effects": [
+         {
+          "kind": "addEventFrom",
+          "ids": [
+           "rf-balancing-act",
+           "rf-balloon-pop",
+           "rf-barrel-roll",
+           "rf-berry-bobbing",
+           "rf-berry-taste",
+           "rf-bumper-cars",
+           "rf-carnival-plush"
+          ]
+         },
+         {
+          "kind": "addEventFrom",
+          "ids": [
+           "rf-crane-operator",
+           "rf-cupid-arrow",
+           "rf-disco-floor",
+           "rf-haunted-jenga",
+           "rf-hot-potato",
+           "rf-hurdles",
+           "rf-rhythm-raid"
+          ]
+         },
+         {
+          "kind": "addEventFrom",
+          "ids": [
+           "rf-sandcastle",
+           "rf-smell-test",
+           "rf-tug-of-war",
+           "rf-type-rps",
+           "rf-whack-diglett",
+           "rf-whistle-echo",
+           "dance-competition"
+          ]
+         },
+         {
+          "kind": "addEventFrom",
+          "ids": [
+           "fairy-tea",
+           "festival-fireworks",
+           "firebreather-show",
+           "flower-garden",
+           "photo-contest",
+           "pokefan-meetup",
+           "sky-race",
+           "street-brawl"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "fair-visits",
+          "amount": 1
+         },
+         {
+          "kind": "market",
+          "action": "comeBack",
+          "event": "festival-day"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "fair-lost-child",
+   "name": "The Lost Child",
+   "group": "Fairground",
+   "stop": "contest",
+   "room": true,
+   "intro": "A small girl in a yellow coat stands alone by a game, arms folded. She looks up at you with total confidence. \"I'm not lost,\" says Poppet. \"Gran is.\"",
+   "choices": [
+    {
+     "label": "Let's find her together.",
+     "success": {
+      "text": "You walk across the whole fair hand in hand. Poppet knows everyone: the clown, the juggler, three Machamp by name. Roux is at the gate, crying with relief. She presses a ticket into your hand. \"One game a visit, free. For life.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fair-poppet-found",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fair-ticket",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay here, I'll get her.",
+     "success": {
+      "text": "You run for Roux. When you come back, the spot by the game is empty. A moment later you spot a yellow coat by the next game along. She did not stay. She never does.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fair-lost-child"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Want to play a game first?",
+     "success": {
+      "text": "Her eyes go huge. You play one game together, free, and she cheats outrageously, and you let her. Then she takes your hand, and you go to find Gran together. Roux is at the gate, weeping into the hat.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fair-poppet-found",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fair-ticket",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-balancing-act",
+   "name": "Balancing Act",
+   "group": "Fairground",
+   "stop": "contest",
+   "scene": {
+    "cast": [
+     "trainer.juggler"
+    ],
+    "tint": "#2a1a3a",
+    "effect": "float"
+   },
+   "room": true,
+   "intro": "A wobbling stack of plates on a pole. Teeter, the acrobat, balances on one hand on top of it. \"Hold steady and we all win!\" The prize, painted on a board: a Quick Claw for a perfect stack.",
+   "choices": [
+    {
+     "label": "Balance.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "perfect"
+     },
+     "success": {
+      "text": "The plates sway, and settle, and stand. Perfectly still. Teeter flips down and presents the Quick Claw with a bow.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "quick-claw",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The top plate tips, and then all of them, in a long musical crash. Teeter catches six. \"Nearly! Nearly is a lot!\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "Let a Pokémon balance.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Your Pokémon stacks them with total calm, one on its nose. The crowd counts. Perfect. A Quick Claw.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "quick-claw",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your Pokémon gets eight plates up before sneezing. Teeter is crying with laughter.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-balloon-pop",
+   "name": "Balloon Pop",
+   "group": "Fairground",
+   "stop": "contest",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a3a4a",
+    "effect": "float"
+   },
+   "room": true,
+   "intro": "A wall of balloons in four colours. Pip-Pop, the clown, honks a horn. \"Pop only the matching colours!\" Ten in a row wins a Silk Scarf.",
+   "choices": [
+    {
+     "label": "Pop.",
+     "prompt": {
+      "id": "whack-tap",
+      "needs": "perfect"
+     },
+     "success": {
+      "text": "Pop, pop, pop, ten in a row, every one the right colour. Pip-Pop honks the horn until it squeaks. A Silk Scarf.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "silk-scarf",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Seven in a row, and then a red when you wanted blue. Pip-Pop honks sadly.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Let a Flying-type peck.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "flying"
+       ]
+      }
+     ],
+     "prompt": {
+      "id": "whack-tap",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Your Flying-type pecks with surgical precision. Ten. Pip-Pop salutes it with the horn.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "silk-scarf",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your Flying-type gets distracted by its own reflection in a balloon.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-barrel-roll",
+   "name": "Barrel Roll",
+   "group": "Fairground",
+   "stop": "contest",
+   "scene": {
+    "cast": [
+     "trainer.sailor"
+    ],
+    "tint": "#2a1a10",
+    "effect": "spin"
+   },
+   "room": true,
+   "intro": "Barrels at the top of a grassy slope. Rolf, the starter, raises a flag. \"Down the slope! Your Pokémon pushes!\" The winner takes a Muscle Band.",
+   "choices": [
+    {
+     "label": "Race.",
+     "prompt": {
+      "id": "hurdle-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Your Pokémon shoves, and runs, and shoves, and your barrel bounces over the line first. Rolf drops the flag. A Muscle Band.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "muscle-band",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your barrel veers into a hay bale. Your Pokémon emerges covered in straw, delighted.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Cheer.",
+     "success": {
+      "text": "You cheer for everybody. A tiny Rattata pushing a barrel twice its size wins by a whisker and looks round to see if anyone saw. You saw.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-berry-bobbing",
+   "name": "Berry Bobbing",
+   "group": "Fairground",
+   "stop": "contest",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a3a2a",
+    "effect": "rain"
+   },
+   "room": true,
+   "intro": "A barrel of water bobbing with Berries. Splashy Sue, soaked to the skin, waves you over. \"Hands behind your back!\" Every Berry you catch, you keep.",
+   "choices": [
+    {
+     "label": "Bob.",
+     "prompt": {
+      "id": "dive-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You come up spluttering with a Berry in your teeth. Then another. Splashy Sue cheers every one.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "pecha-berry",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You come up with water up your nose and nothing in your teeth. Sue hands you a towel and a Berry anyway.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a Water-type bob.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "water"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Water-type dives in and does not come up for a worryingly long time. Then it surfaces with its cheeks stuffed. Every Berry in the barrel.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 2
+       },
+       {
+        "kind": "item",
+        "id": "pecha-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "cheri-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-berry-taste",
+   "name": "Berry Taste",
+   "group": "Fairground",
+   "stop": "contest",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#3a1a2a",
+    "effect": "sparkle"
+   },
+   "room": true,
+   "intro": "Five covered bowls. Prune, the taster, holds up a card with a clue. \"Spicy, dry, sweet, bitter, sour. Match the clue.\" Five right wins a rare Berry.",
+   "choices": [
+    {
+     "label": "Taste.",
+     "chance": 0.4,
+     "success": {
+      "text": "Spicy. Sour. Dry, so dry. Five clues, five bowls, five right. Prune gives you a Lum Berry with great ceremony.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "lum-berry",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You get the bitter one wrong. Everyone gets the bitter one wrong. Prune gives you a common Berry for trying.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask a Pokémon to sniff.",
+     "chance": 0.8,
+     "success": {
+      "text": "Your Pokémon sniffs each bowl and points with total certainty. Five for five. A Lum Berry.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "lum-berry",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your Pokémon is very sure, and very wrong, about the sour one. A common Berry for trying.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-bumper-cars",
+   "name": "Bumper Cars",
+   "group": "Fairground",
+   "stop": "contest",
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "tint": "#2a1a1a",
+    "effect": "shake"
+   },
+   "room": true,
+   "intro": "A floor of sparking bumper cars. Dent, the operator, slams the lever. \"Knock your rivals off the floor!\" ₽300 to the last car standing. Two cars are the Brothers Stile. They are cheating.",
+   "choices": [
+    {
+     "label": "Drive.",
+     "success": {
+      "text": "You drive. The Stiles gang up on you at once, two cars, one plan. Their Pokémon ride on the bonnets. Fine. Ram them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "format": "doubles",
+       "name": "The Brothers Stile",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 300
+        },
+        {
+         "kind": "money",
+         "amount": 200
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You watch from the rail. The Stiles take each other out in the end, head on, and climb out arguing. Dent rolls his eyes so hard he nearly falls over.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-carnival-plush",
+   "name": "Carnival Plush",
+   "group": "Fairground",
+   "stop": "contest",
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#3a2030",
+    "effect": "sparkle"
+   },
+   "room": true,
+   "intro": "Rows of plush Pokémon on pegs. Hoopla, the ring-toss girl, spins a hoop on each wrist. \"Ring the plush and your party gets a lucky charm.\" Or buy one outright: ₽300.",
+   "choices": [
+    {
+     "label": "Throw.",
+     "prompt": {
+      "id": "throw-ring",
+      "needs": "good"
+     },
+     "success": {
+      "text": "The hoop drops clean over a plush's head. Hoopla hands it over. Your team crowds round it and decides, together, that it is theirs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fair-plush",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The hoop bounces off a plush's ear. Hoopla gives you another, for free, out of pity. That one misses too.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Buy the plush outright.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "You pay ₽300 and choose. Hoopla does not judge. Your team crowds round the plush and adopts it on the spot.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "flag",
+        "key": "fair-plush",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-crane-operator",
+   "name": "Crane Operator",
+   "group": "Fairground",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2a1a",
+    "effect": "rattle"
+   },
+   "stop": "contest",
+   "room": true,
+   "intro": "A real harbour crane over a pile of crates. Big Rosa leans on the controls. \"Speed or accuracy, you decide.\" Fast pays ₽300. Careful wins a Gold Bottle Cap.",
+   "choices": [
+    {
+     "label": "Fast.",
+     "prompt": {
+      "id": "shout-tap",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You slam the crate onto the dock with a bang. Rosa checks the clock and laughs. \"Fast. Ugly. Paid.\" ₽300.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     },
+     "failure": {
+      "text": "Too fast. The crate swings wide, and Rosa takes the controls back, very calmly.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Careful.",
+     "prompt": {
+      "id": "gauge-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Slow, slow, and down, so gently the crate does not even creak. Rosa takes her hat off. A Gold Bottle Cap.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "gold-bottle-cap",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Down, and a little crooked. Rosa sighs. \"Careful is a whole lot of careful.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-cupid-arrow",
+   "name": "Cupid's Arrow",
+   "group": "Fairground",
+   "stop": "contest",
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#3a1a2a",
+    "effect": "hearts"
+   },
+   "room": true,
+   "intro": "A target with paired hearts. Valentina, the archer, notches a blunt arrow. \"Hit a pair and your party gets closer!\" The prize: two of your Pokémon, named on the pair you hit, grow closer.",
+   "choices": [
+    {
+     "label": "Aim.",
+     "prompt": {
+      "id": "aim-drag",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Thunk. Dead centre of a pair of hearts. Valentina writes two of your Pokémon's names in them, and they sit together for the rest of the day.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The arrow wobbles off into the bunting. Valentina retrieves it without comment.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Let a Fairy-type aim.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "fairy"
+       ]
+      }
+     ],
+     "prompt": {
+      "id": "aim-drag",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Your Fairy-type does not even look. Thunk. Two hearts. Valentina applauds slowly.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your Fairy-type hits the hearts, but the wrong pair. It insists this was on purpose.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-disco-floor",
+   "name": "Disco Floor",
+   "group": "Fairground",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#2a1030",
+    "effect": "sparkle"
+   },
+   "stop": "contest",
+   "room": true,
+   "intro": "A light-up dance floor, flashing. DJ Glimmer spins under a mirror ball. \"Step on the beat!\" A full combo wins a Sweet Heart.",
+   "choices": [
+    {
+     "label": "Dance.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "perfect"
+     },
+     "success": {
+      "text": "Every step on every beat. The floor lights up gold under you. DJ Glimmer stops the record to applaud. A Sweet Heart.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "sweet-heart",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You lose the beat halfway, and find it again, and lose it. The crowd dances anyway.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Let a Pokémon dance.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Your Pokémon has rhythm you never suspected. Full combo. DJ Glimmer hands it the Sweet Heart personally.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "sweet-heart",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your Pokémon dances to a completely different song in its head. It has a lovely time.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-haunted-jenga",
+   "name": "Haunted Tower",
+   "group": "Fairground",
+   "stop": "contest",
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "pokemon": "shuppet",
+    "tint": "#1c1c2a",
+    "effect": "fog"
+   },
+   "room": true,
+   "intro": "A tower of wooden blocks, operated by a Mimikyu in a tiny cap. When you reach for a block, it nudges the tower. Ten blocks wins a Spell Tag.",
+   "choices": [
+    {
+     "label": "Pull a block.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "perfect"
+     },
+     "success": {
+      "text": "You pull ten, the Mimikyu nudging every time, and the tower holds. The Mimikyu stares. It hands over a Spell Tag, outraged.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "spell-tag",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Mimikyu nudges, and the tower comes down. It wiggles under its cap. Laughing, you suspect.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Ask it to stop.",
+     "success": {
+      "text": "The Mimikyu stops, embarrassed, and shuffles behind the table. Its cap droops.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fair-mimikyu-stopped",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rf-haunted-jenga"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "jenga-fair",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "fair-mimikyu-stopped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Mimikyu keeps its paws to itself now, very pointedly.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Pull a block.",
+       "prompt": {
+        "id": "brace-hold",
+        "needs": "good"
+       },
+       "success": {
+        "text": "Ten blocks, with nobody nudging. The Mimikyu hands over the Spell Tag, a little sulky, a little proud of you.",
+        "effects": [
+         {
+          "kind": "item",
+          "id": "spell-tag",
+          "count": 1
+         }
+        ]
+       },
+       "failure": {
+        "text": "The tower comes down on its own this time. The Mimikyu looks very innocent.",
+        "effects": []
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rf-hot-potato",
+   "name": "Hot Potato",
+   "group": "Fairground",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "pokemon": "voltorb",
+    "tint": "#3a1a1a",
+    "effect": "flicker"
+   },
+   "stop": "contest",
+   "room": true,
+   "intro": "A ring of players and a Voltorb being passed hand to hand, ticking. Fizzbang, the juggler, grins. \"Hold the Voltorb at zero and it blows. Pass fast!\" A Cell Battery to the winner.",
+   "choices": [
+    {
+     "label": "Play.",
+     "prompt": {
+      "id": "shout-tap",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Round and round. Zero. The Voltorb goes off in someone else's hands with a pop of confetti. You win a Cell Battery. The Voltorb is beaming.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "cell-battery",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Zero, in your hands. Pop. Confetti everywhere, nobody hurt. The Voltorb looks thrilled. You are out.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Is it a real Voltorb?",
+     "success": {
+      "text": "\"Oh, very real,\" Fizzbang says. \"He loves this game. It's just confetti. He makes it himself.\" The Voltorb looks smug.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rf-hot-potato"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-hurdles",
+   "name": "Hurdles",
+   "group": "Fairground",
+   "stop": "contest",
+   "scene": {
+    "cast": [
+     "trainer.marshal"
+    ],
+    "tint": "#2a3a2a",
+    "effect": "float"
+   },
+   "room": true,
+   "intro": "A short track with low hurdles. Coach Leap blows a whistle. \"Tap the rhythm. Clear them all!\" The prize: +1 Speed effort for the runner.",
+   "choices": [
+    {
+     "label": "Run.",
+     "prompt": {
+      "id": "hurdle-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Your lead clears every hurdle on the beat, clean. Coach Leap writes the time on the board and underlines it twice.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "spe",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your lead clips the third hurdle, and the fourth, and finishes laughing.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Let a fast Pokémon run.",
+     "prompt": {
+      "id": "hurdle-rhythm",
+      "needs": "ok"
+     },
+     "pick": {},
+     "success": {
+      "text": "The Pokémon you pick takes the hurdles like they are not there. Coach Leap drops his whistle.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "effort",
+        "stat": "spe",
+        "amount": 1,
+        "who": "picked"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It runs round the hurdles instead of over them. Technically fastest. Coach Leap does not allow it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-rhythm-raid",
+   "name": "Rhythm Raid",
+   "group": "Fairground",
+   "stop": "contest",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#2a1030",
+    "effect": "sparkle"
+   },
+   "room": true,
+   "intro": "A stage, speakers stacked high. MC Volt taps a mic. \"Tap along and the beat carries you into battle.\" Hit the beat, and your moves hit a tenth harder in his battle.",
+   "choices": [
+    {
+     "label": "Tap.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You lock onto the beat. MC Volt grins and calls his Pokémon up on stage. The bass drops.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "On the beat: moves +10%",
+        "effects": [
+         {
+          "kind": "damageMultiplier",
+          "value": 1.1
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "name": "MC Volt",
+       "size": 2,
+       "types": [
+        "electric"
+       ],
+       "levelBonus": 0,
+       "win": []
+      }
+     },
+     "failure": {
+      "text": "You lose the beat. MC Volt shrugs. \"Battle's still on.\" It is.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Freestyle.",
+     "success": {
+      "text": "You ignore the beat entirely. The crowd loves it. MC Volt loves it. He calls his Pokémon up anyway.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "name": "MC Volt",
+       "size": 2,
+       "types": [
+        "electric"
+       ],
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-sandcastle",
+   "name": "Sandcastle",
+   "group": "Fairground",
+   "stop": "contest",
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "sandygast",
+    "tint": "#3a3010",
+    "effect": "float"
+   },
+   "room": true,
+   "intro": "A beach of sand piles and one very serious judge: a Sandygast, scorecard stuck to its shovel. The tallest castle wins a Soft Sand.",
+   "choices": [
+    {
+     "label": "Build.",
+     "prompt": {
+      "id": "tilt-drag",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Up, and up, and a tower on top, and a flag. The Sandygast measures it with its shovel twice. Tallest. It hands over Soft Sand, grudgingly.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "soft-sand",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your castle slumps gently into a heap. The Sandygast writes something on its card. You suspect it is not kind.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Ask the Sandygast for tips.",
+     "success": {
+      "text": "It hesitates, then leads you behind the dunes, to its own castle. Towers, bridges, a moat with a Wingull in it. It is beautiful. The Sandygast looks at you, waiting for your opinion.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rf-sandcastle"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-smell-test",
+   "name": "Smell Test",
+   "group": "Fairground",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a3a2a",
+    "effect": "fog"
+   },
+   "stop": "contest",
+   "room": true,
+   "intro": "A row of covered jars. Sniffles, the nose, holds one under yours. \"Which item's in this jar?\" Five right wins a Lagging Tail.",
+   "choices": [
+    {
+     "label": "Sniff.",
+     "chance": 0.4,
+     "success": {
+      "text": "Five jars, five answers, five right. Sniffles laughs so hard he has to sit down, and hands over a Lagging Tail.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "lagging-tail",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Three right, then two very confident wrong answers. Sniffles laughs anyway.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Let a Pokémon sniff.",
+     "chance": 0.8,
+     "success": {
+      "text": "Your Pokémon sniffs once per jar and names each one by pointing. Sniffles is helpless with laughter. A Lagging Tail.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "lagging-tail",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your Pokémon tries to eat the fourth jar. Disqualified, adored.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-tug-of-war",
+   "name": "Tug of War",
+   "group": "Fairground",
+   "stop": "contest",
+   "scene": {
+    "cast": [
+     "boss.npc_blackbelt"
+    ],
+    "pokemon": "machamp",
+    "tint": "#3a1a1a",
+    "effect": "shake"
+   },
+   "room": true,
+   "intro": "A thick rope across a mud pit, and on the far end, three Machamp, flexing all twelve arms. Win, as a team, and the prize is a Black Belt.",
+   "choices": [
+    {
+     "label": "Pull with the team.",
+     "prompt": {
+      "id": "pull-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Everyone on the rope, everyone pulling, everyone yelling. The Machamp go into the mud, all three, and come up laughing. A Black Belt.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "black-belt",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Machamp pull once, politely, and you all slide into the mud. They help you out, one arm each.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Pull alone.",
+     "success": {
+      "text": "You grab the rope alone. One Machamp pulls with one finger. You fly into the mud. The crowd cheers you anyway.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-type-rps",
+   "name": "Type Rock-Paper-Scissors",
+   "group": "Fairground",
+   "stop": "contest",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "sparkle"
+   },
+   "room": true,
+   "intro": "A kid in a cap with his hand behind his back. Rocco grins. \"Fire, Water or Grass? I always pick Grass!\" The winner gets ₽100.",
+   "choices": [
+    {
+     "label": "Fire.",
+     "success": {
+      "text": "Fire beats Grass. He really did pick Grass. He cries, loudly, for six seconds, and then he is fine, and pays you ₽100 from his pocket.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 100
+       }
+      ]
+     }
+    },
+    {
+     "label": "Water.",
+     "success": {
+      "text": "Grass beats Water. He really does always pick Grass. He cheers so loudly a Pidgey takes off.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Grass.",
+     "success": {
+      "text": "Grass and Grass. A tie. Rocco looks at you with deep respect, as one Grass person to another.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-whack-diglett",
+   "name": "Whack-a-Diglett",
+   "group": "Fairground",
+   "stop": "contest",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "diglett",
+    "tint": "#3a2a1a",
+    "effect": "shake"
+   },
+   "room": true,
+   "intro": "A board of holes with Diglett popping in and out. Moley, the operator, holds out a soft hammer. \"Tap before they hide! Points pay cash.\" Ten points per Diglett.",
+   "choices": [
+    {
+     "label": "Whack.",
+     "prompt": {
+      "id": "whack-tap",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Bop, bop, bop. The Diglett pop down giggling. Thirty points: Moley pays ₽300.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Diglett are too quick, and they know it. Moley pays you ₽50 for effort.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Feed the Diglett instead.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ground"
+       ]
+      }
+     ],
+     "success": {
+      "text": "You hold out a Berry. Every Diglett pops up and stays up, adoring, swaying. No points. Your Ground-type sits among them like it has come home.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "ground"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-whistle-echo",
+   "name": "Whistle Echo",
+   "group": "Fairground",
+   "scene": {
+    "cast": [
+     "trainer.bird_keeper_m"
+    ],
+    "tint": "#203a2a",
+    "effect": "float"
+   },
+   "stop": "contest",
+   "room": true,
+   "intro": "An old man on a bench with a tin whistle. Old Tune plays four notes. \"Copy my melody exactly.\" The prize: a Poké Flute.",
+   "choices": [
+    {
+     "label": "Whistle back.",
+     "prompt": {
+      "id": "pitch-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Four notes, exactly. Old Tune closes his eyes. Then he hands you a Poké Flute. \"Wakes the sleepy ones. Play it kindly.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "poke-flute",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Three notes right, one very wrong. Old Tune winces, and plays it again, slower.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Let a sound-move Pokémon sing it.",
+     "prompt": {
+      "id": "pitch-hold",
+      "needs": "ok"
+     },
+     "pick": {
+      "moveFlag": "sound"
+     },
+     "success": {
+      "text": "The Pokémon you pick sings the melody back perfectly, and then adds a harmony. Old Tune wipes his eyes. A Poké Flute.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "poke-flute",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "It sings something else entirely, beautiful, and wrong. Old Tune claps anyway.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dance-competition",
+   "name": "Dance Competition",
+   "group": "Fairground",
+   "stop": "contest",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#2a1030",
+    "effect": "sparkle"
+   },
+   "room": true,
+   "intro": "A stage with glowing arrows and three judges holding scorecards. \"Match the arrows!\" The winner takes a Dancer's ribbon.",
+   "choices": [
+    {
+     "label": "Dance.",
+     "prompt": {
+      "id": "copycat-claps",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Up, left, spin, down, every arrow. Three tens. A Dancer's ribbon pinned on your collar.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fair-dance-ribbon",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Dancer's ribbon from the fair's dance competition.",
+        "importance": 50
+       }
+      ]
+     },
+     "failure": {
+      "text": "You miss an arrow and improvise. The judges hold up a 6, a 7 and, inexplicably, a 10.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Dance with a Pokémon.",
+     "prompt": {
+      "id": "copycat-claps",
+      "needs": "ok"
+     },
+     "pick": {},
+     "success": {
+      "text": "You and the Pokémon you pick dance as one. The judges stand up. A Dancer's ribbon for each of you, and your partner will not stop doing the spin.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fair-dance-ribbon",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "picked"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You step on each other. Twice. You both laugh too hard to finish.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "picked"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fairy-tea",
+   "name": "The Fairy Tea Party",
+   "group": "Fairground",
+   "types": [
+    "fairy"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#402038",
+    "effect": "hearts"
+   },
+   "stop": "contest",
+   "room": true,
+   "intro": "A tea table set for twelve, every seat a Fairy Pokémon. At the head, a Hatterene in a bonnet. Subtitled: \"Sit. Pour. Mind your manners.\"",
+   "choices": [
+    {
+     "label": "Pour for everyone.",
+     "success": {
+      "text": "You pour for every guest, saucer and all, without spilling a drop. The Hatterene inclines its head. A Pixie Plate is slid across the cloth.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "fairy"
+         ]
+        }
+       },
+       {
+        "kind": "item",
+        "id": "pixie-plate",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bring a Fairy-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "fairy"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Fairy-type is welcomed with a cup of its own and a little bow from every guest. As you leave, it is given a Fairy Gem to take home.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "fairy-gem",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Spill.",
+     "success": {
+      "text": "Tea, everywhere. Twelve Fairies gasp at once. And then the Hatterene laughs, a sound like bells, and so does everyone. Nothing lost.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "festival-fireworks",
+   "name": "The Fireworks",
+   "group": "Fairground",
+   "stop": "contest",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#101030",
+    "effect": "sparkle"
+   },
+   "intro": "Five fuses on a riverbank, one chance. Madame Roux hands you the taper. \"Light them in the right order. The show depends on it.\" Poppet is sitting on the wall, swinging her legs.",
+   "choices": [
+    {
+     "label": "Smallest to biggest.",
+     "success": {
+      "text": "Pop, crackle, bang, BANG, and the sky fills. Your whole team sits on the bank with their faces lit up gold. A perfect show.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Biggest first.",
+     "success": {
+      "text": "The big one first, then everything at once, then one small sad fizz at the end. A mess. Everyone agrees it was wonderful.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Ask Poppet.",
+     "success": {
+      "text": "\"Red, then blue, then gold, then the two big ones together.\" She is right. The best show in years. Roux cries again. Poppet looks unbearably smug.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "Poppet lit the fair's fireworks with you. The best show in years.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "firebreather-show",
+   "name": "The Fire-Breather",
+   "group": "Fairground",
+   "types": [
+    "fire"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.firebreather"
+    ],
+    "effect": "fire"
+   },
+   "stop": "contest",
+   "room": true,
+   "intro": "A man in a leather apron with a Magmar at his side. Ignatius winks. \"Want to see a real one?\" His Magmar breathes a perfect ring of fire into the night air.",
+   "choices": [
+    {
+     "label": "Applaud.",
+     "success": {
+      "text": "You applaud. Ignatius bows. The Magmar bows lower.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Let my Fire-type try.",
+     "pick": {
+      "types": [
+       "fire"
+      ]
+     },
+     "success": {
+      "text": "Your Fire-type takes a deep breath and blows a ring. It is lopsided. It is wonderful. The crowd goes absolutely wild, and your Fire-type stands a little taller all night.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Is that safe?",
+     "success": {
+      "text": "\"Never,\" says Ignatius happily. \"That's the fun.\" His Magmar nods solemnly.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "flower-garden",
+   "name": "The Flower Garden",
+   "group": "Fairground",
+   "types": [
+    "grass"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "effect": "sparkle"
+   },
+   "stop": "contest",
+   "room": true,
+   "intro": "A bright garden behind the stalls, and an Aroma Lady kneeling in it with her sleeves rolled up. Every bed is a different colour. The air smells like something you remember.",
+   "choices": [
+    {
+     "label": "Help weed.",
+     "success": {
+      "text": "You weed all afternoon, side by side, not talking much. At the end she presses a Miracle Seed into your muddy hand.",
+      "effects": [
+       {
+        "kind": "takeNode"
+       },
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Smell the flowers.",
+     "success": {
+      "text": "You breathe in. Your whole team breathes in. Whatever sleepiness was in them is gone, and their eyes are bright.",
+      "effects": [
+       {
+        "kind": "cure"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick one.",
+     "success": {
+      "text": "She lets you pick one, and tucks it behind your ear herself.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fair-flower",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "garden-rosalind",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-rosalind-done",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A bright garden behind the stalls, and Rosalind kneeling in it, sleeves rolled up, with a whole bed of moonflowers. She sees you and smiles like it has been a long time.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Pick one.",
+       "success": {
+        "text": "\"Not that one.\" Rosalind stops your hand gently. She picks a moonflower instead and puts it in yours. \"This one. You'll know why later.\"",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "fair-flower",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Rosalind gave you a moonflower from her bed at the fair.",
+          "importance": 60
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "photo-contest",
+   "name": "The Photo Contest",
+   "group": "Fairground",
+   "stop": "contest",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.lacey"
+    ],
+    "tint": "#2a2030",
+    "effect": "sparkle"
+   },
+   "room": true,
+   "intro": "A board of pinned photographs and a judge with a magnifying glass. Flick waves you over. \"Show me your best camp photo of your Pokémon!\" First prize ₽500. Second ₽250.",
+   "choices": [
+    {
+     "label": "The starter, sleeping.",
+     "success": {
+      "text": "Flick looks at it for a long time. \"It's always the sleeping ones,\" he says softly, and pins a rosette on it. First prize.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "starter"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The whole team.",
+     "success": {
+      "text": "Everybody squeezed in, somebody blinking. Flick nods. Second prize. \"Good. Honest. Somebody's looking at you instead of the camera.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 250
+       }
+      ]
+     }
+    },
+    {
+     "label": "A blurry action shot.",
+     "success": {
+      "text": "Flick holds it up to the light, turns it sideways, and gasps. \"This is the best bad photo I have ever seen.\" Special mention.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fair-photo-mention",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Flick gave your blurry action shot a special mention.",
+        "importance": 45
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pokefan-meetup",
+   "name": "The Pokéfan Meetup",
+   "group": "Fairground",
+   "types": [
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "hearts"
+   },
+   "stop": "contest",
+   "room": true,
+   "intro": "A ring of folding chairs and Pokéfans with their favourites in their laps. Gwendolyn waves you in. \"Show us yours!\"",
+   "choices": [
+    {
+     "label": "Show the starter.",
+     "success": {
+      "text": "Your starter sits in the middle of the ring, and everyone says its name, and asks questions, and it answers every one by looking at you.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "starter"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show the newest.",
+     "success": {
+      "text": "Your newest Pokémon, shy, in the middle of the ring. Everyone is so kind to it. By the end it is sitting in Gwendolyn's lap.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "newest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask to see theirs.",
+     "success": {
+      "text": "A dozen Pokémon, each with a story, and you hear every story. As you leave, Gwendolyn presses a Soothe Bell into your hand. \"For listening.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "soothe-bell",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-race",
+   "name": "The Sky Race",
+   "group": "Fairground",
+   "types": [
+    "flying"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.bird_keeper_m"
+    ],
+    "effect": "sparkle"
+   },
+   "stop": "contest",
+   "room": true,
+   "intro": "Bird Keepers line up on a hill with their Flying-types. A banner overhead: FIRST OVER THE RIVER WINS A SHARP BEAK. A bookie at the side takes friendly bets: ₽100 on Perry, 1 in 3, pays ₽300.",
+   "choices": [
+    {
+     "label": "Enter a Flying-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "flying"
+       ]
+      }
+     ],
+     "prompt": {
+      "id": "balloon-drag",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Your Flying-type rides the wind like it was made for it. First over the river. A Sharp Beak.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "sharp-beak",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your Flying-type gets caught in a crosswind and comes third, furious about it.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Bet on Perry.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "You put ₽100 on Perry. The birds go up.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 100,
+        "table": [
+         {
+          "weight": 1,
+          "label": "Perry wins! ₽300",
+          "money": 300
+         },
+         {
+          "weight": 2,
+          "label": "Perry comes second"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You lie on the grass and watch them go, wings against the blue, all the way over the river.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "sky-race-perry",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-perry-done",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Perry is on the line, and he looks different. Steady. He catches your eye and nods.",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Bet on Perry.",
+       "requires": [
+        {
+         "kind": "money",
+         "atLeast": 100
+        }
+       ],
+       "success": {
+        "text": "You put ₽100 on Perry. He wins by a length, and lands, and looks for you in the crowd first.",
+        "effects": [
+         {
+          "kind": "money",
+          "amount": -100
+         },
+         {
+          "kind": "money",
+          "amount": 300
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "street-brawl",
+   "name": "The Street Brawl",
+   "group": "Fairground",
+   "types": [
+    "fighting"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "effect": "shake"
+   },
+   "stop": "contest",
+   "room": true,
+   "intro": "Two trainers squaring up behind the stalls. The Brothers Stile. Lem, the older: \"She stole Mum's fair!\" Tobble, the younger: \"We'll take it back!\"",
+   "choices": [
+    {
+     "label": "Break it up.",
+     "success": {
+      "text": "You step between them. They look at each other and agree on one thing: you. A double battle. Afterwards, they stop.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "format": "doubles",
+       "name": "The Brothers Stile",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Battle them both.",
+     "success": {
+      "text": "\"Both of you,\" you say. \"Now.\" They grin, the same grin. They have trained for this. A harder double battle.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "format": "doubles",
+       "name": "The Brothers Stile",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 3,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Tell them about the will.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "fair-stile",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You tell them what Roux told you. They go very quiet. Tobble looks at Lem. Lem looks at the ground. Then they walk, together, toward the gate, to see her.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fair-stile-will",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

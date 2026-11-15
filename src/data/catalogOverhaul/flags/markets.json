@@ -33,9 +33,19 @@
    "readBy": "vt-rocket-bake-sale"
   },
   {
-   "key": "lucky-persian-returned",
-   "setBy": "Gambler Lucky (RR19, people) when his arc ends with his Persian returned",
+   "key": "roster-lucky-done",
+   "setBy": "Gambler Lucky (RR19, people): his arc is done (Persian returned)",
    "readBy": "game-corner"
+  },
+  {
+   "key": "roster-rosalind-done",
+   "setBy": "Rosalind (RR2, people): her arc is done",
+   "readBy": "flower-garden"
+  },
+  {
+   "key": "roster-perry-done",
+   "setBy": "Perry (RR5, people): his arc is done",
+   "readBy": "sky-race"
   }
  ]
 }

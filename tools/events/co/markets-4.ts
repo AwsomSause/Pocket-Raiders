@@ -77,7 +77,7 @@ export const EVENTS: Json[] = [
     remembers: [
       { id: 'corner-dice', when: [...all, flagIs('corner-dice', 0, 0)], notice: 'Delphine is waiting by the door with a small frame under her arm. "Every game in the house. Once each. Nobody does that."',
         addChoices: [ch('Take the frame.', out('Inside the frame: a pair of dice, worn smooth, loaded. Her father\'s. "So nobody uses them again," Delphine says. "Hang them somewhere you\'ll see them."', flag('corner-dice'), moment('Delphine Ruez gave you her father\'s crooked dice, framed, so nobody uses them again.', 65)))] },
-      { id: 'corner-lucky', when: [flagIs('lucky-persian-returned')], notice: 'Lucky works the Corner\'s door now, his Persian asleep on his feet. He nods you in. He doesn\'t play. He never will again.' },
+      { id: 'corner-lucky', when: [flagIs('roster-lucky-done')], notice: 'Lucky works the Corner\'s door now, his Persian asleep on his feet. He nods you in. He doesn\'t play. He never will again.' },
       { id: 'corner-read', when: [flagIs('corner-read')], notice: 'You have read the wall. The odds are in your head now, every one.', hide: [1] },
     ],
   },

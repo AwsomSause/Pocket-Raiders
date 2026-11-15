@@ -222,7 +222,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "lucky-persian-returned",
+       "key": "roster-lucky-done",
        "atLeast": 1,
        "atMost": 99
       }
