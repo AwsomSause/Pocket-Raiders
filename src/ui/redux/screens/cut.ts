@@ -28,8 +28,8 @@ export interface CutModel {
   beat: number;
   /** The split screen's right half turns dark red for a villain. */
   evil?: boolean;
-  /** The key hint at the bottom right. */
-  skip?: readonly [string, string];
+  /** The key hint at the bottom right; null leaves it out (a moment that cannot be skipped). */
+  skip?: readonly [string, string] | null;
 }
 
 const letter = (h: string): string => `<div class="bars" style="top:0"></div><div class="bars" style="bottom:0"></div>${h}`;
@@ -42,10 +42,11 @@ const size = (len: number, base: number): number => (len > 260 ? base - 6 : len 
 
 export function cutView(c: ReduxCtx, d: CutModel): string {
   const v = c.v(3), on = Math.max(0, Math.min(4, Math.floor(d.beat)));
-  const [key, word] = d.skip ?? ['Esc', 'skip'];
-  const tag = `<div class="abs" style="left:60px;bottom:22px;z-index:6"><div class="beat">${CUT_BEATS.map((_, k) => `<i class="${k <= on ? 'on' : ''}"></i>`).join('')}<span>${CUT_BEATS[on]}</span></div></div><div class="abs sm" style="right:60px;bottom:22px;z-index:6;color:#fff"><kbd>${esc(key)}</kbd>${esc(word)}</div>`;
+  const hint = d.skip === null ? null : d.skip ?? (['Esc', 'skip'] as const);
+  const tag = `<div class="abs" style="left:60px;bottom:22px;z-index:6"><div class="beat">${CUT_BEATS.map((_, k) => `<i class="${k <= on ? 'on' : ''}"></i>`).join('')}<span>${CUT_BEATS[on]}</span></div></div>${hint ? `<div class="abs sm" style="right:60px;bottom:22px;z-index:6;color:#fff"><kbd>${esc(hint[0])}</kbd>${esc(hint[1])}</div>` : ''}`;
   const next = `<div class="fill" style="z-index:7;cursor:pointer"${act('next')}></div>`;
-  const line = `“${esc(d.line)}”`, len = d.line.length;
+  // A moment with nothing said (a title only) draws no empty quote marks.
+  const line = d.line ? `“${esc(d.line)}”` : '', len = d.line.length;
   const plate = (st: string): string => (d.role ? `<span class="plate" style="${st}">${esc(d.role)}</span>` : '');
   const name = d.name.length > 12 ? 0.75 : 1;
   if (v === 1) {

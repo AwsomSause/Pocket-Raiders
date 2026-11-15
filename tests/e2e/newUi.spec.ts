@@ -618,6 +618,65 @@ test('New UI: a Trainer battle opens on the mock-up versus card; a click moves o
   expect(errors).toEqual([]);
 });
 
+test('New UI: a Gym Leader enters on the mock-up cutscene card (a click skips it, once and for all); a wild Legendary is revealed on one (Esc skips)', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  const boss = await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    const last = Math.max(...session.run.stage.map.nodes.map((n: any) => n.column));
+    session.debugJumpToColumn(last);
+    const node = session.run.stage.map.nodes.find((n: any) => n.column === last);
+    session.chooseNode(node.id);
+    game.scene.getScene('Map').scene.start('Battle');
+    return { kind: node.kind as string, name: session.run.battle.trainer.name as string };
+  });
+  expect(boss.kind).toBe('gym');
+  await waitForScene(page, 'Battle');
+  const stages = view(page, 'Battle');
+  const cut = stages.filter({ has: page.locator('.beat') });
+  // The card: the plate, the name, the five-beat strip and the skip hint; neither the versus card nor the boxes yet.
+  await expect(cut).toBeVisible();
+  await expect(cut.locator('.plate')).toHaveText('Gym Leader');
+  await expect(cut).toContainText(boss.name);
+  await expect(cut.locator('.beat i')).toHaveCount(5);
+  await expect(cut.locator('kbd')).toHaveText('Esc');
+  await expect(stages.locator('.vsx')).toHaveCount(0);
+  await expect(stages.locator('.win.glass')).toHaveCount(0);
+  await cut.locator('[data-act="next"]').click();
+  await expect(cut).toHaveCount(0);
+  // Skipping is remembered for this boss, and the versus card follows.
+  expect(await page.evaluate(() => (window as any).__pkr.session.settings.skippedIntros.length)).toBe(1);
+  await expect(stages.locator('.vsx')).toBeVisible();
+  await stages.locator('[data-act="next"]').click();
+  await toCommands(page);
+  await expect(stages.locator('.beat')).toHaveCount(0);
+
+  // A wild Legendary: its own card, the Pokémon named on it; Esc skips and the battle goes on.
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    const node = session.run.stage.map.nodes.find((n: any) => n.column === 1);
+    node.kind = 'wild';
+    session.chooseNode(node.id);
+    const b = session.run.battle;
+    b.enemyTeam = [b.enemyTeam[0]];
+    b.enemyTeam[0].speciesId = 'rayquaza';
+    game.scene.getScene('Map').scene.start('Battle');
+  });
+  await waitForScene(page, 'Battle');
+  await expect(cut).toBeVisible();
+  await expect(cut.locator('.plate')).toHaveText('Legendary Pokémon');
+  await expect(cut).toContainText('Rayquaza');
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Escape');
+  await expect(cut).toHaveCount(0);
+  await toCommands(page);
+  await expect(stages.locator('.win.glass')).toHaveCount(2);
+  expect(errors).toEqual([]);
+});
+
 test('New UI: a win shows the Exp panel, the level-up window and the evolution picture from the mock-ups', async ({ page }) => {
   test.setTimeout(120_000);
   const errors = watch(page);
