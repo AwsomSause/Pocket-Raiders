@@ -40,7 +40,7 @@ import { oldFoe } from './story/promises';
 import { featuredRival, rivalBeaten, rivalFightTeam, rivalLastResult, rivalPath } from './rivals/living';
 import { monRivalState } from './rivals/monRivals';
 import { openFeud, settleFeud } from './story/feud';
-import { apprenticeLevelBonus, applyMentorEffect, mentorConditionMet, mentorConditionText, mentorStopEvent } from './mentors';
+import { apprenticeLevelBonus, applyMentorEffect, getMentor, mentorConditionMet, mentorConditionText, mentorStopEvent } from './mentors';
 import { applyMentorLesson, fillMentorText, mentorSceneId } from './mentors/lessons';
 import { noteEventMorality } from './story/nemesis';
 import { addHuntClue, finishHunt, huntClues, huntDone } from './story/grandEnemy';
@@ -108,6 +108,8 @@ import { partyLifeBond } from './partyLife';
 import { celebrateToday, milestoneToday, periodOf, PERIOD_LABEL, restUntilMorning, seasonOf, tideOf } from './clock';
 import { BERRIES } from './berries';
 import { choiceAt, effectiveEvent, visibleChoices } from './eventMemory';
+import { beginRivalBrain } from './rivals/brainSetup';
+import { applyQuestEffect, beginBorrow, beginFeudWatch, interleave, mainRival, secondRival, planRivalTeam, starterRivalryStages, shapeRivalMons, questConditionMet, questText, rivalAllySpecies, rivalStanding, RIVAL_QUEST_GROUP } from './rivals/questlines';
 import { getTheme, typesPool } from './themes';
 import { fitsStage, nodesAhead, planCoStage, positioned, SAME_STAGE, stageTags, type CoEntry } from './co/placement';
 import { anyRoaming, endRoamer, healConvoy, startConvoy, partyHasAbility, placeCamp, scoutAhead, CAMP_EVENT_ID } from './world';
@@ -243,6 +245,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
     }
     case 'kc':
       return kcHolds(content, run, c);
+    case 'rivalQuest':
+      return questConditionMet(content, run, c, (o) => conditionMet(content, run, o));
     case 'flag': {
       const value = Number(run.story.flags[`ev:${c.key}`] ?? 0);
       if (value < c.atLeast || value > c.atMost) return false;
@@ -471,6 +475,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs a rival who feels a certain way about you';
     case 'kc':
       return kcConditionWords(c);
+    case 'rivalQuest':
+      return 'Needs the right moment with your rival';
     case 'flag':
       return 'Needs something you did earlier';
     case 'record':
@@ -933,7 +939,10 @@ export function choiceKind(choice: EventChoice, chance: number | null): ChoiceKi
 export function eventView(content: Content, run: RunState, sideId: string): EventView {
   const { side } = findSide(run, sideId);
   const base = content.events.get(side.eventId!)!;
-  const event = effectiveEvent(content, run, base);
+  const seen = effectiveEvent(content, run, base);
+  // Rival questline tokens ({rival}, {say ...}) are filled for the reader; the stored event keeps them.
+  const say = (t: string): string => questText(content, run, base.id, t);
+  const event = seen.intro.includes('{') || seen.choices.some((c) => c.label.includes('{')) ? { ...seen, intro: say(seen.intro), choices: seen.choices.map((c) => (c.label.includes('{') ? { ...c, label: say(c.label) } : c)) } : seen;
   const insight = hasPerk(content, run, 'eventInsight');
   const choices = event.choices.map((c) => {
     const unmet = c.requires.find((r) => !conditionMet(content, run, r));
@@ -942,7 +951,8 @@ export function eventView(content: Content, run: RunState, sideId: string): Even
     const preview = insight ? `${outcomeWords(content, c.success)}${c.failure ? ` · if it fails: ${outcomeWords(content, c.failure)}` : ''}` : null;
     return { label: fillMentorText(run, fillCoText(content, run, c.label)), locked: missing, kind: choiceKind(c, chance), tradePicks: tradePicksOf(content, run, c), chance, attribute: c.check ?? null, attributeValue: c.check ? effectiveAttributes(content, run)[c.check] : null, preview, ...choiceRisk(content, c) };
   });
-  return { event: { ...event, intro: fillMentorText(run, fillCoText(content, run, event.intro)) }, choices };
+  const standing = base.group === RIVAL_QUEST_GROUP ? rivalStanding(content, run) : null;
+  return { event: { ...event, intro: fillMentorText(run, fillCoText(content, run, event.intro)) }, choices, ...(standing ? { standing } : {}) };
 }
 
 export interface EventResult {
@@ -995,6 +1005,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   const base = success ? choice.success : choice.failure!;
   const branch = success ? choice.branches.find((b) => b.when.every((c) => conditionMet(content, run, c))) : undefined;
   const outcome = branch ? { ...base, text: branch.text, effects: branch.effects } : base;
+  const outcomeText = questText(content, run, event.id, fillCoText(content, current, outcome.text));
   // The Event Director remembers important choices (and whether you took a risk).
   const risky = chance !== null || choice.prompt !== undefined;
   run.story.flags[risky ? 'choices:risky' : 'choices:safe'] = Number(run.story.flags[risky ? 'choices:risky' : 'choices:safe'] ?? 0) + 1;
@@ -1029,7 +1040,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
     run.afterDecisions = 'map';
     continueAfterDecisions(content, run);
   }
-  return { run, success, text: fillMentorText(current, fillCoText(content, current, outcome.text)), changes, battle };
+  return { run, success, text: fillMentorText(current, outcomeText), changes, battle };
 }
 
 function useUpKeyItem(run: RunState, id: string): void {
@@ -1185,6 +1196,7 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'aid':
       return 'allies gathered';
     case 'rivalChange':
+    case 'rivalQuest':
     case 'flag':
     case 'laterEvent':
       return '';
@@ -1600,6 +1612,12 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (e.mark) addMark(rec, e.mark);
       return '';
     }
+    case 'rivalQuest': {
+      const first = e.openFirst?.find((id) => (content.events.get(id)?.requires ?? []).every((c) => conditionMet(content, run, c)));
+      const words = applyQuestEffect(content, run, e);
+      if (first) applyEffect(content, run, { kind: 'addEvent', eventId: first }, rng);
+      return words;
+    }
     case 'sky':
       return applySky(content, run, e);
     case 'laterEvent':
@@ -1868,8 +1886,15 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     const boss = b.bossId ? content.bosses.get(b.bossId) : undefined;
     const ghost = b.retired ? retiredTeam(run.story) : b.ghost ? championTeam(run.story) : [];
     const authored = ghost.length > 0 || (b.rival && featuredRival(run)) ? 'rival-ghost-team' : boss ? 'event-boss-signature' : null;
-    const rival = b.rival ? featuredRival(run) : null;
-    const rivalTeam = rival && ghost.length === 0 ? rivalFightTeam(content, rival) : [];
+    const plan = b.kind === 'trainer' ? b.quest : undefined;
+    // Rival questlines fight the main rival (R11: the second rival, or both together, or the second rival watched against the main).
+    const rival = b.rival ? (plan ? ((plan.second || plan.watch ? secondRival(run) : mainRival(run)) ?? featuredRival(run)) : featuredRival(run)) : null;
+    const partner = plan?.pair ? secondRival(run) : null;
+    const rivalRoster = rival && ghost.length === 0 ? (partner ? interleave(rivalFightTeam(content, rival), rivalFightTeam(content, partner)) : rivalFightTeam(content, rival)) : [];
+    // R12 The Final Lesson: the run's mentor, with their own types.
+    const mentorFoe = plan?.mentor ? getMentor(run.mentor?.id) : undefined;
+    // Rival questlines: the scene may shape the rival's team (a slot aimed at your lead, the ace first, R4's young Pokémon).
+    const rivalTeam = rival && b.kind === 'trainer' && b.quest && rivalRoster.length > 0 ? planRivalTeam(content, run, rival, rivalRoster, b.quest, run.party[activeIndex]!).map((id) => (id.startsWith('type:') ? pickSpecies(content, run, [], [id.slice(5) as TypeName], rng) : id)) : rivalRoster;
     const evil = evilBattle(content, run, b);
     const fellow = b.apprentice ? run.mentor?.fellow ?? null : null;
     const friendFoes = b.kind === 'trainer' && b.friend ? friendTeam(content, run, b.size) : [];
@@ -1901,7 +1926,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     }) : ghost.length > 0 ? ghost.map((m) => newMon(content, run, m.speciesId, Math.min(cap, Math.max(1, Math.min(m.level, base + 6))), 'e')) : Array.from({ length: b.size }, (_, i) => {
       const level = Math.min(cap, Math.max(1, base + (i === b.size - 1 ? 1 : 0)));
       const lane = b.lineup?.[i];
-      const speciesId = boss ? boss.signature[i % boss.signature.length]! : lane && content.species.has(lane) ? lane : b.rule?.bstMatch && b.species?.length ? nearestBst(content, b.species, run.party[activeIndex]!) : pickSpecies(content, run, b.species ?? [], b.types, rng);
+      const speciesId = boss ? boss.signature[i % boss.signature.length]! : lane && content.species.has(lane) ? lane : b.rule?.bstMatch && b.species?.length ? nearestBst(content, b.species, run.party[activeIndex]!) : pickSpecies(content, run, b.species ?? [], mentorFoe ? mentorFoe.leans : b.types, rng);
       return newMon(content, run, evolvedFormAt(content, speciesId, level, rng), level, 'e');
     });
     // Catalog Overhaul (people): the first foe knows the scripted moves (replacing its last ones).
@@ -1909,13 +1934,39 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     // Beta 0.7: only a listed story boss (`seventh`) fields a 7th foe; every other team is cut to 6.
     if (team.length > MAX_FOES && !(b.kind === 'trainer' && b.seventh)) team.length = MAX_FOES;
     else if (team.length > MAX_FOES_LISTED) team.length = MAX_FOES_LISTED;
+    if (rival && rivalTeam.length > 0) shapeRivalMons(content, run, rival, team);
+    // R7 Borrowed Team rules: each side commands the other's ace for this fight.
+    if (rival && rivalTeam.length > 0 && b.kind === 'trainer' && b.quest?.borrow) beginBorrow(run, team);
     if (authored) for (const mon of team) auditEncounter(content, 'event', mon, authored);
     team.slice(0, evil ? evil.shadow : b.shadow).forEach((mon) => makeShadow(mon, rollShadowHeart(content, new Rng(hashSeed(`${run.seed}::shadow-foe::${mon.uid}`)))));
     // Overhaul slice 17: Evil Team and rival fights follow their named strategy (opener, ace item, sharper AI).
     const strategyKey = evil ? { kind: 'evil' as const, key: evilTeam(content, run)?.id ?? '' } : rival && rivalTeam.length > 0 ? { kind: 'rival' as const, key: rival.style } : null;
     const shaped = strategyKey && team.length > 0 ? shapeInstances(content, strategyIdForGroup(content, strategyKey.kind, strategyKey.key), strategyKey.kind, team, 0) : null;
     if (shaped) team.splice(0, team.length, ...shaped.team);
-    run.battle = createBattle('trainer', team, activeIndex, run.party[activeIndex]!.uid, { classId: b.classId ?? 'event', name: evil ? evil.name : rival ? rival.name : fellow ? fellow.name : b.kind === 'trainer' && b.friend ? friendName(run) : b.name, leaderId: null });
+    // R11 the feud watched: your team waits; the main rival's team takes the field against the second rival's.
+    const watching = Boolean(plan?.watch && rival && rivalTeam.length > 0 && mainRival(run));
+    if (watching) {
+      const main = mainRival(run)!;
+      const level = (i: number, n: number): number => Math.min(cap, Math.max(1, base + (i === n - 1 ? 1 : 0)));
+      const theirs = rivalFightTeam(content, main).slice(0, team.length);
+      beginFeudWatch(content, run, theirs.map((id, i) => newMon(content, run, id, level(i, theirs.length), 'p')));
+    }
+    const startAt = watching ? 0 : activeIndex;
+    const trainerName = evil ? evil.name : partner && rival ? `${rival.name} & ${partner.name}` : rival ? (b.kind === 'trainer' && b.quest?.as) || rival.name : mentorFoe ? mentorFoe.name : fellow ? fellow.name : b.kind === 'trainer' && b.friend ? friendName(run) : b.name;
+    run.battle = createBattle('trainer', team, startAt, run.party[startAt]!.uid, { classId: b.classId ?? 'event', name: trainerName, leaderId: null });
+    if (watching) {
+      run.battle.spectate = { kind: 'duel' };
+      // The side you cheered for starts a little braver (Attack and Special Attack +1).
+      const cheer = Number(run.story.flags['ev:rq-r11-cheer'] ?? 0);
+      const side = cheer === 1 ? run.battle.playerStages : cheer === 2 ? run.battle.enemyStages : null;
+      if (side) for (const st of ['atk', 'spa'] as const) side[st] = Math.min(6, (side[st] ?? 0) + 1);
+    }
+    // A questline fight against the rival themself is a real rival battle: tier 5 play, and Lead, Marks and feelings move with the result.
+    if (rival && rivalTeam.length > 0 && b.kind === 'trainer' && b.quest && !b.quest.as && !partner && !watching) {
+      run.battle.rivalId = rival.id;
+      beginRivalBrain(content, run, rival.id);
+      starterRivalryStages(run, run.battle);
+    }
     if (b.kind === 'trainer' && b.sprite && run.battle.trainer) run.battle.trainer.spriteBoss = b.sprite;
     if (b.kind === 'trainer' && b.spritePokemon && run.battle.trainer) run.battle.trainer.spritePokemon = b.spritePokemon;
     if (b.special) assignSpecialTrait(run.battle.extra.traits, team, b.special);
@@ -1943,9 +1994,10 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
         run.battle.enemyStages[stat as 'atk'] = n;
       }
     }
-    if (b.ally && content.species.has(b.ally) && team.length >= 2) {
+    const allyId = b.ally === 'rival' ? rivalAllySpecies(content, run) : b.ally === 'fellow' ? (run.mentor ? pickSpecies(content, run, [], run.mentor.fellow.types, rng) : undefined) : b.ally;
+    if (allyId && content.species.has(allyId) && team.length >= 2) {
       // A temporary ally joins the party for this fight only (finishBattle sends it home).
-      const ally = newMon(content, run, b.ally, Math.max(1, base), 'p');
+      const ally = newMon(content, run, allyId, Math.max(1, base), 'p');
       run.party.push(ally);
       makeDoubles(run.battle, run.party);
       run.battle.doubles!.player.index = run.party.length - 1;
@@ -1994,7 +2046,7 @@ export function isApprenticeBattle(content: Content, event: EventBattleRef): boo
 export function isStoryEventBattle(content: Content, event: EventBattleRef): boolean {
   const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
-  return event.eventId.startsWith('format:') || (battle?.kind === 'trainer' && Boolean(battle.rival || battle.evil || battle.ghost || battle.retired));
+  return event.eventId.startsWith('format:') || (battle?.kind === 'trainer' && Boolean(battle.rival || battle.evil || battle.ghost || battle.retired || battle.quest?.mentor || battle.quest?.soft));
 }
 
 /** A Stand-with climax battle (a loss is Second Shot). */

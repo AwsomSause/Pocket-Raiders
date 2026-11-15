@@ -156,7 +156,7 @@ describe('Beta 0.7 pseudo stages are real, drawn stages inside one node', () => 
 
 describe('Beta 0.7 the Kanto event lines are pseudo stages', () => {
   it('Flight North, the Labyrinth, Route 25 and the Tournament each draw a map from their own events, keeping every room', () => {
-    expect(PSEUDO.chains.map((c) => c.id)).toEqual(['ps_flight_north', 'ps_sabrinas_labyrinth', 'ps_route_25', 'ps_fighting_tournament']);
+    expect(PSEUDO.chains.map((c) => c.id)).toEqual(['ps_flight_north', 'ps_sabrinas_labyrinth', 'ps_route_25', 'ps_fighting_tournament', 'ps_rival_race']);
     const run = newRun('ps-chain');
     for (const c of PSEUDO.chains) {
       expect(content.events.has(c.entry), c.id).toBe(true);

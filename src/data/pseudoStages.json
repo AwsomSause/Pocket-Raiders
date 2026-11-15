@@ -676,6 +676,14 @@
       "themeId": "fighting-dragon",
       "tint": "#4a2a1a",
       "mood": "arena"
+    },
+    {
+      "id": "ps_rival_race",
+      "name": "The Race for First Pick",
+      "entry": "rival-race",
+      "themeId": "normal-grass",
+      "tint": "#2a2a14",
+      "mood": "open field"
     }
   ]
 }

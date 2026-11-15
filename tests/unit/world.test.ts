@@ -5,7 +5,6 @@ import { canonKantoPlaced } from '../../src/data/expansion';
 // paths, callbacks, landmark rooms and the stops of the limited-time events.
 
 import { LANDMARK_STOP, TRAVERSAL } from '../../src/core/traversal';
-import { WANDERER_CHALLENGE, WANDERER_VISIT } from '../../src/core/wanderer';
 import { TREASURE_DIG_EVENT } from '../../src/core/run';
 import { describe, expect, it } from 'vitest';
 import type { Content } from '../../src/core/contentSchema';
@@ -291,6 +290,7 @@ describe('landmarks and dungeons', () => {
     const viaMentor = new Set<string>();
     // Stops queued some nodes on (`laterEvent`: the Fossil Rush's egg) or placed by code need not be rooms, but they do reach the rooms they are.
     const queued = new Set<string>();
+    const questOpened = new Set<string>();
     // Openers: outcome effects, a battle's win and lose effects (a friendly fight's loss still opens its room), choice branches,
     // and the choices a Remembers variant adds.
     for (const e of content.events.values()) {
@@ -303,6 +303,12 @@ describe('landmarks and dungeons', () => {
           // Catalog Overhaul mentors: a shared scene opens the run's mentor's own `mentor-<id>-<part>` (core/mentors/lessons.ts mentorSceneId).
           // Its Recruit and Story are catalog events it can also open, so these count only as a way in to a room.
           if (ef.kind === 'mentorScene') for (const m of MENTORS) viaMentor.add(`mentor-${m.id}-${ef.part}`);
+          // Rival questlines (core/rivals/questlines.ts): the first scene whose conditions hold, or stops further along the map.
+          // These may also open a scheduled beat (not a room), so they only count as a way into a room.
+          if (ef.kind === 'rivalQuest') {
+            ef.openFirst?.forEach((i) => questOpened.add(i));
+            ef.ahead?.forEach((a) => questOpened.add(a.event));
+          }
         }
       }
     }
@@ -311,7 +317,8 @@ describe('landmarks and dungeons', () => {
 
     // Ideas W4: rooms opened by a traversal obstacle, and stops the code places (wanderer, treasure map, landmarks).
     for (const o of TRAVERSAL.obstacles) for (const ef of o.pass) if (ef.kind === 'addEvent') opened.add(ef.eventId);
-    for (const id of [WANDERER_CHALLENGE, WANDERER_VISIT, TREASURE_DIG_EVENT]) opened.add(id);
+    // (The W4 wanderer's two scenes are R13's now, The One Who Follows: they open from the rival questline, not from code.)
+    for (const id of [TREASURE_DIG_EVENT]) opened.add(id);
     for (const e of content.events.values()) if (e.stop === LANDMARK_STOP) opened.add(e.id);
     // Beta 0.7: a pseudo-stage's rooms are the nodes of its own map (core/dungeon/pseudo.ts), entered by walking there.
     for (const r of PSEUDO.records) for (const n of r.nodes) opened.add(`${r.id.replace(/_/g, '-')}-${n.id}`);
@@ -321,7 +328,7 @@ describe('landmarks and dungeons', () => {
     for (const id of content.events.keys()) if (id.startsWith('sky.join.')) opened.add(id);
     for (const id of opened) expect(content.events.get(id)?.room, id).toBe(true);
     // A retired room (Catalog Overhaul REMOVE: kept for saved runs, never drawn) need not be reachable.
-    for (const e of content.events.values()) if (e.room && !e.disabled) expect(opened.has(e.id) || viaMentor.has(e.id) || queued.has(e.id), e.id).toBe(true);
+    for (const e of content.events.values()) if (e.room && !e.disabled) expect(opened.has(e.id) || viaMentor.has(e.id) || queued.has(e.id) || questOpened.has(e.id), e.id).toBe(true);
   });
 
   it('a Mystery Dungeon floor picks its next room from the floor below', () => {

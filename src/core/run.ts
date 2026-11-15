@@ -23,6 +23,7 @@ import { applySecondChance, secondChanceOpen, secondChanceRolls } from './instru
 import { hearTelling, noteEvent as notePromiseEvent, resolveVisit, rollVisit, wonderAfterBattle } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
+import { endBorrow, endFeudWatch, noteCalm, feudWatching, mainRival, notePlayerLoss, scoutedLead, secondRival } from './rivals/questlines';
 import { recordStoryLoss, storyLossApplies } from './story2/loss';
 import { biomeWildWeight } from './biomes';
 import { pickEggFamily } from './eggPools';
@@ -1443,6 +1444,13 @@ export function mapPreviews(content: Content, run: RunState): Record<string, Nod
     if (!battle) continue;
     const withMoves = notebook !== null && node.kind === 'wild';
     out[node.id] = { ...from, team: battle.enemyTeam.map((m) => ({ speciesId: m.speciesId, level: m.level, ...(withMoves ? { moves: m.moves.map((s) => s.id) } : {}) })), trainerName: battle.trainer?.name ?? null };
+  }
+  // R6 The Post-Mortem, "Thanks": the next trainer of the class you lost to shows its lead (the rival's notes).
+  for (const node of mapChoices(content, run)) {
+    if (node.kind !== 'trainer' || out[node.id] || !run.party.some((p) => p.hp > 0)) continue;
+    const battle = moveToNode(content, run, node.id, () => undefined).battle;
+    if (!battle?.trainer || !scoutedLead(run, battle.trainer.classId)) continue;
+    out[node.id] = { itemId: null, source: `${mainRival(run)?.name ?? 'Your rival'}'s notes`, team: battle.enemyTeam.slice(0, 1).map((m) => ({ speciesId: m.speciesId, level: m.level })), trainerName: battle.trainer.name };
   }
   const gym = stage.map.nodes.find((n) => n.kind === 'gym');
   const teamItem = perks('gymTeam') ?? perks('gymAce');
@@ -3241,6 +3249,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   events.push(...ruleEvolution(content, run));
   // Poli-Pond: shyness ends after the first battle, the rematch is a duel, and the pond's return (Release or Reconcile) strikes.
   events.push(...(pondAfterTurn(content, run) as typeof events));
+  noteCalm(run);
   // A rival's battle style may do something now (berserker rage, revenge, last stand).
   const trick = styleTrick(content, run);
   if (trick) events.push(trick);
@@ -3337,7 +3346,20 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, raidFailed: true };
   }
+  // R7 Borrowed Team rules: the aces go back to their own trainers as soon as the fight ends.
+  if (battle.outcome) endBorrow(run);
+  // A temporary ally (a tag battle) goes home after a lost fight too (finishBattle sends it home after a win).
+  if (battle.outcome === 'lose' && battle.loaner) run.party = run.party.filter((m) => m.uid !== battle.loaner);
   // Pidgey's Resolve: a watched CPU fight counts for nothing; the real team comes back and the story reads out how it ended.
+  if (battle.spectate && (battle.outcome === 'win' || battle.outcome === 'lose') && feudWatching(run)) {
+    // R11: the feud watched. Your team comes back; the outcome's effects apply as for any event fight.
+    const winner = endFeudWatch(run, battle.outcome);
+    const lines = battle.event ? (battle.outcome === 'win' ? eventBattleWon(content, run, battle.event, battle.turn - 1) : eventBattleLost(content, run, battle.event)) : [];
+    run.battle = null;
+    run.phase = 'map';
+    recordChanges(content, current, run, 'battle');
+    return { run, events, end: null, defeated: false, cues, drama, spectated: { kind: battle.spectate.kind, lines: [`${winner === 1 ? mainRival(run)?.name : secondRival(run)?.name} wins.`, ...lines] } };
+  }
   if (battle.spectate && (battle.outcome === 'win' || battle.outcome === 'lose')) {
     const lines = finishSpectate(content, run, battle.outcome);
     recordChanges(content, current, run, 'battle');
@@ -3355,6 +3377,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     recordChanges(content, current, run, 'battle');
     return { run, events, end, defeated: false, cues, drama };
   }
+  // R6 The Post-Mortem: a loss to anyone but the rival is remembered (what went wrong, and to whom) for the rival's notebook.
+  if (battle.outcome === 'lose') notePlayerLoss(content, run, battle, run.party[0]);
   if (battle.outcome === 'lose' && battle.expedition && run.expedition) {
     buryFallen(content, run, battleCause(content, battle));
     run.expedition.battleResult = 'lose';
@@ -3404,6 +3428,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     return { run, events, end: null, defeated: false, cues, drama, narrativeDefeat: { id: def.id, defeatLine: def.defeatLine, victoryLine: def.victoryLine } };
   }
   if (battle.outcome === 'lose' && storyLossApplies(run, battle, content, Boolean(battle.event) && isStoryEventBattle(content, battle.event!))) {
+    // A rival questline fight lost: its `lose` effects apply too (the story goes on with the loss).
+    if (battle.event) eventBattleLost(content, run, battle.event);
     storyLossEnd(content, run);
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, storyLoss: true };

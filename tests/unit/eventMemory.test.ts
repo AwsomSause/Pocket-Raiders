@@ -1,6 +1,7 @@
 // Choice memory (Beta 0.6): remembered flags change what an event shows; indices stay stable; the flag registry is clean.
 
 import { describe, expect, it } from 'vitest';
+import { ENGINE_FLAGS } from '../../src/core/rivals/questlines';
 import memoryFlags from '../../src/data/overhaul/memoryFlags.json';
 import { EventDefSchema, MAX_EVENT_VARIANTS } from '../../src/core/contentSchema';
 import { allChoices, choiceAt, effectiveEvent, memoryKey, memoryValue, remembered, visibleChoices } from '../../src/core/eventMemory';
@@ -96,11 +97,17 @@ describe('memory flag registry', () => {
     for (const ev of content.events.values()) {
       // Setters: outcome effects, a battle's win and lose effects (a friendly fight's loss still applies its own), and choice branches.
       for (const ch of allChoices(ev)) {
-        for (const o of [ch.success, ch.failure]) for (const e of [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle?.lose ?? [])]) if (e.kind === 'flag') setKeys.add(e.key);
+        for (const o of [ch.success, ch.failure]) for (const e of [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle?.lose ?? [])]) {
+          if (e.kind === 'flag') setKeys.add(e.key);
+          // Rival questlines set flags through their own effect (set, pick, roll).
+          if (e.kind === 'rivalQuest') for (const k of [e.set?.key, e.pick?.key, e.roll?.key]) if (k) setKeys.add(k);
+        }
         for (const b of ch.branches ?? []) for (const e of b.effects) if (e.kind === 'flag') setKeys.add(e.key);
       }
       for (const v of ev.remembers) for (const c of v.when) if (c.kind === 'flag') reads.push(`${ev.id}:${c.key}`);
     }
+    // Flags the rival questline engine sets after a fight (core/rivals/questlines.ts ENGINE_FLAGS).
+    for (const k of ENGINE_FLAGS) setKeys.add(k);
     // Catalog Overhaul flag files name the flags code keeps (`rule`) and the ones another set will write (`hook`, its line waits until then).
     const coFlags = Object.values(import.meta.glob<{ flags: { key: string; rule?: string; hook?: string }[] }>('../../src/data/catalogOverhaul/flags/*.json', { eager: true, import: 'default' }));
     for (const f of coFlags) for (const x of f.flags ?? []) if (x.rule || x.hook) setKeys.add(x.key);
