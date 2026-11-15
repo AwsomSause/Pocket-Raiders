@@ -23,7 +23,7 @@ function walk(v: unknown, out: Record<string, unknown>[] = []): Record<string, u
 }
 
 // Flags other families set that these events read (names agreed on the shared board or with the owning thread).
-const FROM_OTHERS = new Set(['quarry-in', 'farmer-end', 'hospice-stayed', 'hospice-sea', 'cages-opened', 'promise-deoxys', 'blessing-dialga', 'rep', 'kind-total']);
+const FROM_OTHERS = new Set(['quarry-in', 'farmer-end', 'hospice-stayed', 'hospice-sea', 'cages-opened', 'promise-deoxys', 'promise-volcanion', 'promise-zeraora', 'blessing-dialga', 'rep', 'kind-total']);
 
 describe('families-c events', () => {
   const content = getContent();

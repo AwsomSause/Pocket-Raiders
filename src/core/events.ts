@@ -9,7 +9,7 @@
 // one seeded by the stop. No existing stream is touched, so adding events
 // changes no other roll, and choosing again after a reload gives the same result.
 
-import { applyCoEffect, coConditionMet, coConditionText, coEffectWords, coFoeNote, coFoeTypes, fillCoText, restoreMachine } from './events/coToolkit';
+import { applyCoEffect, coConditionMet, coConditionText, coEffectWords, coFoeNote, coFoeTypes, coRegionPick, fillCoText, restoreMachine } from './events/coToolkit';
 import { flagAge, lineHolds, lineMember, queueLaterEvent, stampFlagStage } from './events/questline';
 import { modifierEventWeight } from './runModifiers';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
@@ -26,7 +26,7 @@ import { eventChanceScale, triplesOnly } from './rules';
 import { getArchetype, runPerks } from './archetypes';
 import { ATTRIBUTE_LABELS, addRunAttribute, effectiveAttributes, runAttributeEffects } from './attributes';
 import { createBattle } from './battle/engine';
-import type { Content, EventBattle, EventBattleFormat, EventChoice, EventCondition, EventDef, EventEffect, EventOutcome, TradeWant, TypeName } from './contentSchema';
+import { EventEffectSchema, type Content, type EventBattle, type EventBattleFormat, type EventChoice, type EventCondition, type EventDef, type EventEffect, type EventOutcome, type TradeWant, type TypeName } from './contentSchema';
 import { curveLevel, enemyLevel, evolvedFormAt, levelScale, rollShiny, withPartyStrength } from './encounters';
 import { changeFriendship } from './friendship';
 import { atLeast, promptById, type Grade, type PromptResult } from './interaction/prompt';
@@ -1269,6 +1269,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return coEffectWords(e);
     case 'friendshipLine':
       return `${content.species.get(e.species)?.name ?? e.species}: friendship ${e.amount >= 0 ? '+' : ''}${e.amount}`;
+    case 'regionJoin':
+      return e.shadow ? 'a Shadow Pokémon of legend' : 'a Pokémon of legend joins';
     case 'cast':
       return 'a new file in your Dossier';
     case 'grandArcRom':
@@ -1716,6 +1718,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       // Shadow II: a story flag may be exactly the key a Shadow in your party or PC has been waiting for.
       for (const line of checkFlagKeys(content, run)) recordChoice(content, run, { id: `shadow-key-${e.key}`, pick: 'yes', text: line, weight: 2 });
       return '';
+    case 'regionJoin':
+      return applyEffect(content, run, EventEffectSchema.parse({ kind: 'join', species: [coRegionPick(run, e.table, currentRegion(content, run).id)], shadow: e.shadow, levelBonus: e.levelBonus }), rng, tradeUid);
     case 'ruleRead':
     case 'rulePrize':
     case 'pickTest':

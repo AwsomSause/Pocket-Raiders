@@ -1,0 +1,1792 @@
+{
+ "catalogOverhaul": "families-c",
+ "override": true,
+ "remove": [
+  "ovc-net-tangle-s1"
+ ],
+ "events": [
+  {
+   "id": "boss-rematch-disguise",
+   "name": "A Familiar Stranger",
+   "group": "Emergent Stories",
+   "rarity": "rare",
+   "minStage": 4,
+   "scene": {
+    "cast": [
+     "boss.hop"
+    ],
+    "tint": "#1e1e2c",
+    "effect": "fog"
+   },
+   "intro": "Rain, the soft kind that soaks you without noticing. A trainer in a rain poncho, hood up, steps out to meet you. They walk like someone who has done this many times before. They have your stride, exactly. The Poncho: \"Quick battle? I've a long way to go.\" The Pokémon at their side is a {lead}. Not like yours. Yours.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The Poncho nods, as if they knew you would. Every Pokémon they send out is one of yours, a little older, a little more tired, moving the way yours will someday.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "stranger-after"
+        }
+       ],
+       "name": "The Poncho",
+       "classId": "ace-trainer",
+       "mirror": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "stranger-after"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take your hood down.",
+     "success": {
+      "text": "They hesitate, then push the hood back. The face under it is yours. A little tired. A little older around the eyes. The Poncho: \"It doesn't get easier. It gets better.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "stranger-talk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I know that Pokémon.",
+     "success": {
+      "text": "The Poncho looks at their {lead}, and then at yours. The Poncho: \"So do I.\" A long breath, rain running off the hood. The Poncho: \"It doesn't get easier. It gets better.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "stranger-talk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "stranger-talk",
+   "name": "A Familiar Stranger",
+   "group": "Emergent Stories",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.hop"
+    ],
+    "tint": "#1e1e2c",
+    "effect": "fog"
+   },
+   "intro": "The Poncho is still there, waiting in the rain, the way you wait for a friend who is running late.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "\"Thank you,\" the Poncho says quietly, and sends out your {lead}.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "stranger-after"
+        }
+       ],
+       "name": "The Poncho",
+       "classId": "ace-trainer",
+       "mirror": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "stranger-after"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let them go.",
+     "success": {
+      "text": "The Poncho pulls the hood back up and walks on into the rain. They don't look back. You know they won't; you wouldn't.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "stranger-after",
+   "name": "A Familiar Stranger",
+   "group": "Emergent Stories",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.hop"
+    ],
+    "tint": "#1e1e2c",
+    "effect": "fog"
+   },
+   "intro": "The Poncho calls their {lead} back. Before it goes, it and your {lead} stand nose to nose in the rain for a long moment, and neither of them blinks. The Poncho: \"It doesn't get easier. It gets better.\"",
+   "choices": [
+    {
+     "label": "Who are you?",
+     "success": {
+      "text": "The Poncho smiles under the hood. \"You know.\" They walk away into the rain.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Again.",
+     "success": {
+      "text": "\"Again,\" the Poncho agrees, and this time they don't hold anything back. This is your team at its very best.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "stranger-after-2"
+        }
+       ],
+       "name": "The Poncho",
+       "classId": "ace-trainer",
+       "mirror": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 5,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "stranger-after-2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Thank you.",
+     "success": {
+      "text": "The Poncho takes something off their {starter} and presses it into your hand. \"It held this the whole way. Your turn.\" They walk off into the rain.",
+      "effects": [
+       {
+        "kind": "copyHeld",
+        "who": "starter"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "stranger-after-2",
+   "name": "A Familiar Stranger",
+   "group": "Emergent Stories",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.hop"
+    ],
+    "tint": "#1e1e2c",
+    "effect": "fog"
+   },
+   "intro": "The Poncho is breathing hard, and grinning, and so are you. Your {lead} and its double press their foreheads together.",
+   "choices": [
+    {
+     "label": "Who are you?",
+     "success": {
+      "text": "\"You know,\" the Poncho says, and goes.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Thank you.",
+     "success": {
+      "text": "The Poncho takes something off their {starter} and presses it into your hand. \"It held this the whole way. Your turn.\"",
+      "effects": [
+       {
+        "kind": "copyHeld",
+        "who": "starter"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dark-deal",
+   "name": "Dark Deal",
+   "group": "PokeRogue-style encounters",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#180820",
+    "effect": "flicker"
+   },
+   "intro": "A dim lab behind a door that should have been locked. A scientist in a stained coat holds a humming device against his chest like a baby. Dr. Vreel: \"Give me one Pokémon. I'll give you a legend. Maybe.\" Dr. Vreel: \"The device closes a heart and opens a door. What comes through is very strong, and very unhappy.\" A screen behind him reads: SHADOW CONVERSION: 4 OF 4 SUCCESSFUL.",
+   "choices": [
+    {
+     "label": "What happens to the one I give you?",
+     "success": {
+      "text": "Vreel doesn't even look up. \"It goes to my employers. You'll see it again, probably.\" He finally meets your eyes. \"On the other side.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dark-deal"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Deal.",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 2
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "You point. Vreel takes the Ball without a word and puts it in the machine, and the hum climbs, and the lights flicker, and the door at the back of the lab opens. What walks out is a legend, and its eyes are dark, and it does not look at you. It must be purified before it will truly fight for you. Using it is up to you.",
+      "effects": [
+       {
+        "kind": "notePicked",
+        "key": "dark-deal",
+        "take": true
+       },
+       {
+        "kind": "regionJoin",
+        "table": "darkDeal",
+        "shadow": true
+       },
+       {
+        "kind": "flag",
+        "key": "dark-dealt",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -3
+       },
+       {
+        "kind": "flag",
+        "key": "cruelty-act",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Report you.",
+     "success": {
+      "text": "You run for the nearest phone. When the officers break the door down, the lab is empty, the device gone, Vreel gone. But his notes are still on the desk, and one page lays out the next step of his employers' plan.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dark-reported",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reported-crime",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-plan-revealed",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "volcanion",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "promise-volcanion",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Steam drifts through the vent above the door. Volcanion is watching. It promised to walk with someone who would never be cruel.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "zeraora",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "promise-zeraora",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A crackle of lightning in the hall, and gone. Zeraora is watching. It promised to walk with someone who would never be cruel.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "dark-deal-admin",
+   "name": "Dark Deal: The Other Side",
+   "group": "PokeRogue-style encounters",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "dark-dealt",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "dark-admin-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_teamrocket_m"
+    ],
+    "tint": "#180820",
+    "effect": "flicker"
+   },
+   "intro": "An Admin of the Evil Team blocks the road, bored, a Ball spinning on one finger. Then the Ball opens, and {note:dark-deal} comes out. Your {note:dark-deal}. It sees you. Its whole body goes still. Admin: \"Oh, you know this one? Funny. It's the best thing that lab ever sent us.\"",
+   "choices": [
+    {
+     "label": "Win it back.",
+     "success": {
+      "text": "\"Sure,\" the Admin says. \"Take it from me.\" {note:dark-deal} stands on the wrong side of the field and will not look at you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "dark-admin-again",
+         "amount": 1,
+         "stamp": "region"
+        }
+       ],
+       "name": "Admin",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 4,
+       "win": [
+        {
+         "kind": "rejoin",
+         "key": "dark-deal"
+        },
+        {
+         "kind": "flag",
+         "key": "dark-admin-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "dark-won-back",
+         "amount": 1
+        }
+       ],
+       "coFoe": {
+        "note": "dark-deal"
+       },
+       "evil": "executive"
+      }
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You walk past. You hear the Ball close behind you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dark-admin-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dark-left",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dark-deal-admin-again",
+   "name": "Dark Deal: The Other Side",
+   "group": "PokeRogue-style encounters",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "dark-admin-again",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "dark-admin-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_teamrocket_m"
+    ],
+    "tint": "#180820",
+    "effect": "flicker"
+   },
+   "intro": "The same Admin, a region on, and {note:dark-deal} at their side. This time it looks at you first.",
+   "choices": [
+    {
+     "label": "Win it back.",
+     "success": {
+      "text": "\"You again,\" the Admin says. \"Fine.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "dark-admin-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "dark-left",
+         "amount": 1
+        }
+       ],
+       "name": "Admin",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 5,
+       "win": [
+        {
+         "kind": "rejoin",
+         "key": "dark-deal"
+        },
+        {
+         "kind": "flag",
+         "key": "dark-admin-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "dark-won-back",
+         "amount": 1
+        }
+       ],
+       "coFoe": {
+        "note": "dark-deal"
+       },
+       "evil": "executive"
+      }
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You walk past. You hear the Ball close behind you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dark-admin-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dark-left",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ditto-impostor",
+   "name": "One of Us Is Not",
+   "group": "Emergent Stories",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "pokemon": "ditto",
+    "tint": "#2a2030",
+    "effect": "none"
+   },
+   "intro": "You count your party. Twice. Then again, slower. Seven Pokémon. Six Balls. One of them is a little too eager to be looked at. It moves like a {impostorType}-type that forgot how. Its cry comes out half a note off. When you say its name, it doesn't turn. And for one frame, just one, its eyes are two black dots.",
+   "choices": [
+    {
+     "label": "Point at the impostor.",
+     "pick": {},
+     "success": {
+      "text": "You point.",
+      "effects": [
+       {
+        "kind": "pickTest",
+        "test": "impostor",
+        "pass": "ditto-spotted",
+        "fail": "ditto-missed",
+        "sulk": 5
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ditto-reveal"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ditto-reveal",
+   "name": "One of Us Is Not",
+   "group": "Emergent Stories",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "ditto",
+    "tint": "#2a2030",
+    "effect": "none"
+   },
+   "intro": "For a second, nothing happens.",
+   "choices": [
+    {
+     "label": "Welcome it.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "ditto-spotted",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The Pokémon you pointed at sags, wobbles, and melts into a very embarrassed Ditto. It shuffles its feet. Then it looks up at you and asks, as plainly as a Ditto can, to come along.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "ditto"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ditto-spotted",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "ditto-missed",
+        "amount": -99
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch it go.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "ditto-missed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The one you pointed at looks at you, hurt, and turns away to sulk. Behind it, the real impostor slips off the edge of the group and into the grass. You catch one last look at it: it has your lead's face. It will be on the other side of your next battle.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ditto-lurking",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ditto-spotted",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "ditto-missed",
+        "amount": -99
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "cove",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ditto-spotted",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "cages-opened",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "It's a cove Ditto, one of the ones you freed. It knew you were a friend the whole time. It just wanted to see if you knew it too.",
+     "hide": [
+      1
+     ],
+     "addChoices": []
+    },
+    {
+     "id": "spotted",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ditto-spotted",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "hide": [
+      1
+     ],
+     "addChoices": []
+    },
+    {
+     "id": "missed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ditto-missed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "hide": [
+      0
+     ],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "injured-pokemon",
+   "name": "Injured Pokémon",
+   "group": "Wild Pokémon scenes",
+   "scene": {
+    "cast": [],
+    "pokemon": "growlithe",
+    "effect": "hearts"
+   },
+   "intro": "A Growlithe lies fainted in the long grass, one ear folded under it. Its fur is matted. It is breathing, barely. It is a long way from anywhere.",
+   "choices": [
+    {
+     "label": "Revive it (costs a Revive).",
+     "requires": [
+      {
+       "kind": "bagHas",
+       "ids": [
+        "revive"
+       ],
+       "count": 1,
+       "label": "a Revive"
+      }
+     ],
+     "success": {
+      "text": "The Revive works fast. The Growlithe wakes all at once, scrambles up, and looks at you for a long, careful moment. Then it runs. At the edge of the grass it stops and looks back once.",
+      "effects": [
+       {
+        "kind": "spendBag",
+        "ids": [
+         "revive"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "helped",
+        "species": "growlithe",
+        "rare": false
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry it to a Center (a node).",
+     "success": {
+      "text": "It's heavier than it looks. Nurse Joy takes it from your arms without a single question. When you leave, it is sitting up on the cot, watching you go through the glass.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "helped",
+        "species": "growlithe",
+        "rare": false
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it in the grass. You don't forget it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "injured-wild-pokemon",
+   "name": "An Injured Pokémon",
+   "group": "Wild Pokémon scenes",
+   "scene": {
+    "cast": [],
+    "pokemon": "ponyta",
+    "tint": "#201820",
+    "effect": "float"
+   },
+   "intro": "A young Ponyta stands beside the path on three legs, breathing hard, its flame burning low and blue. The fourth leg hangs wrong. It watches you come closer, too tired to run.",
+   "choices": [
+    {
+     "label": "Use a Potion.",
+     "requires": [
+      {
+       "kind": "bagHas",
+       "ids": [
+        "potion",
+        "super-potion",
+        "hyper-potion",
+        "full-restore"
+       ],
+       "count": 1,
+       "label": "a Potion"
+      }
+     ],
+     "success": {
+      "text": "You spray the leg slowly, talking to it the whole time. The flame flickers back to orange. It recovers just enough to limp off into the trees.",
+      "effects": [
+       {
+        "kind": "spendBag",
+        "ids": [
+         "potion",
+         "super-potion",
+         "hyper-potion",
+         "full-restore"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "helped",
+        "species": "ponyta",
+        "rare": false
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Splint its leg (a node).",
+     "success": {
+      "text": "A straight stick, a strip of cloth from your own bag, an hour of patience while it trembles. When you're done, it puts its weight on the leg, carefully, and limps off. Then it turns and presses its nose into your hand, once, grateful.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "helped",
+        "species": "ponyta",
+        "rare": false
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it there. It watches you go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kind-walked-past",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "starving-wild",
+   "name": "A Starving Poochyena",
+   "group": "Emergent Stories",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "pokemon": "poochyena",
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "A thin Poochyena sits by the road, watching your bag. Every rib shows. It doesn't growl. It's too tired to growl.",
+   "choices": [
+    {
+     "label": "Feed it.",
+     "requires": [
+      {
+       "kind": "bagHas",
+       "ids": [],
+       "count": 1,
+       "suffix": "-berry",
+       "label": "a Berry"
+      }
+     ],
+     "success": {
+      "text": "You set a Berry down and step back. It eats in three bites, then licks the ground where it was. It watches you go, and keeps watching until you're gone.",
+      "effects": [
+       {
+        "kind": "spendBag",
+        "ids": [],
+        "count": 1,
+        "suffix": "-berry"
+       },
+       {
+        "kind": "flag",
+        "key": "fed-poochyena",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Feed it and stay a while (a node).",
+     "requires": [
+      {
+       "kind": "bagHas",
+       "ids": [],
+       "count": 1,
+       "suffix": "-berry",
+       "label": "a Berry"
+      }
+     ],
+     "success": {
+      "text": "You give it a Berry and sit down in the dust beside it. After a long time it leans against you. Then it falls asleep against your leg, and you let it, until the afternoon is gone.",
+      "effects": [
+       {
+        "kind": "spendBag",
+        "ids": [],
+        "count": 1,
+        "suffix": "-berry"
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fed-poochyena",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fed-poochyena-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. It doesn't follow. It doesn't have the strength.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kind-walked-past",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "starving-wild-returns",
+   "name": "The Poochyena Returns",
+   "group": "Emergent Stories",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "fed-poochyena",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mightyena-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mightyena",
+    "tint": "#2a1d1d",
+    "effect": "glint"
+   },
+   "intro": "A raider has you cornered at the worst moment, your team worn down, nowhere to go. Then a growl, low and huge, and a Mightyena in full health lands between you and the raider, every hair on its back standing up. You know it. It knows you.",
+   "choices": [
+    {
+     "label": "Fight beside it.",
+     "success": {
+      "text": "It doesn't look at you. It doesn't need to. It fights like it owes you something.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "mightyena-done",
+         "amount": 1
+        }
+       ],
+       "name": "Raider",
+       "classId": "roughneck",
+       "ally": "mightyena",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "mightyena-done",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let it handle it.",
+     "success": {
+      "text": "The Mightyena routs the raider in less time than it takes to tell. Then it comes back, and sits down in front of you, and looks at you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mightyena-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mightyena-sits"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mightyena-sits",
+   "name": "The Poochyena Returns",
+   "group": "Emergent Stories",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mightyena",
+    "tint": "#2a1d1d",
+    "effect": "glint"
+   },
+   "intro": "The Mightyena sits in the road, tail still, and looks at you.",
+   "choices": [
+    {
+     "label": "Thank it.",
+     "success": {
+      "text": "You crouch and thank it. It touches its nose to your hand, and lopes away into the grass.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Let it come.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "fed-poochyena-stayed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "It stands, walks around behind you, and falls into step at your heel like it has always been there.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "mightyena"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 100,
+        "who": "newest"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "trapped-pokemon",
+   "name": "Trapped in the Vines",
+   "group": "Wild Pokémon scenes",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "pokemon": "skitty",
+    "tint": "#183018",
+    "effect": "shake"
+   },
+   "intro": "A Skitty is tangled in thick, thorny vines, crying weakly. Every time it struggles, the vines pull tighter. Its paws are bleeding.",
+   "choices": [
+    {
+     "label": "Cut it free (a node).",
+     "success": {
+      "text": "It takes a long time, and the thorns don't care whose hands they cut. When the last vine gives, the Skitty bolts, then stops, and comes back to lick the scratches on your hands.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "damage",
+        "share": 0.05,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "helped",
+        "species": "skitty",
+        "rare": false
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Fire-type.",
+     "pick": {
+      "types": [
+       "fire"
+      ]
+     },
+     "success": {
+      "text": "One careful breath of flame and the vines shrivel away. The Skitty tumbles free, unhurt, and rubs its whole body against your Fire-type's leg.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "picked"
+       },
+       {
+        "kind": "helped",
+        "species": "skitty",
+        "rare": false
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it in the vines. Its crying follows you a long way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kind-walked-past",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "trapped-pokemon-net",
+   "name": "The Net Tangle",
+   "group": "Wild Pokémon scenes",
+   "rarity": "uncommon",
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "wooper",
+    "tint": "#183040",
+    "effect": "rain"
+   },
+   "intro": "A Wooper is caught in an old fishing net in the shallows, crying weakly, its head barely above the water. Somebody left this net here and forgot it.",
+   "choices": [
+    {
+     "label": "Cut it free (a node).",
+     "success": {
+      "text": "You wade in to your waist and saw at the net until your hands ache. The Wooper slips free and floats beside you, blinking, and won't leave until you're back on the bank.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "damage",
+        "share": 0.05,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "helped",
+        "species": "wooper",
+        "rare": false
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Water-type.",
+     "pick": {
+      "types": [
+       "water"
+      ]
+     },
+     "success": {
+      "text": "Your Water-type dives, works the knots loose with practiced care, and surfaces with the Wooper riding on its head.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "picked"
+       },
+       {
+        "kind": "helped",
+        "species": "wooper",
+        "rare": false
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it in the net.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kind-walked-past",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "unlikely-ally",
+   "name": "An Unlikely Ally",
+   "group": "PokeRogue-style encounters",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "pokemon": "ursaring",
+    "effect": "sparkle"
+   },
+   "intro": "A huge Ursaring stands its ground against a whole gang of Primeape, swinging, roaring, bleeding from a dozen scratches. It's strong. It's losing.",
+   "choices": [
+    {
+     "label": "Help it fight.",
+     "success": {
+      "text": "You jump in beside it. The Ursaring looks at you once, surprised, and then turns back to the gang. Side by side.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "helped",
+         "species": "ursaring",
+         "rare": false
+        },
+        {
+         "kind": "flag",
+         "key": "kind-helped-stranger",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 1
+        }
+       ],
+       "team": [
+        "primeape",
+        "mankey",
+        "primeape"
+       ],
+       "name": "The Gang",
+       "ally": "ursaring",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "helped",
+         "species": "ursaring",
+         "rare": false
+        },
+        {
+         "kind": "flag",
+         "key": "kind-helped-stranger",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 1
+        }
+       ],
+       "spritePokemon": "primeape"
+      }
+     }
+    },
+    {
+     "label": "Heal it after.",
+     "requires": [
+      {
+       "kind": "bagHas",
+       "ids": [
+        "potion",
+        "super-potion",
+        "hyper-potion",
+        "full-restore"
+       ],
+       "count": 1,
+       "label": "a Potion"
+      }
+     ],
+     "success": {
+      "text": "You wait until the gang finally breaks and runs. Then you walk over with a Potion. The Ursaring growls at you, then lets you, grudging, grumbling the whole time.",
+      "effects": [
+       {
+        "kind": "spendBag",
+        "ids": [
+         "potion",
+         "super-potion",
+         "hyper-potion",
+         "full-restore"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "helped",
+        "species": "ursaring",
+        "rare": false
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay out.",
+     "success": {
+      "text": "You stay out of it. The Ursaring wins anyway, barely, and limps off into the trees without looking at you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kind-walked-past",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hungry-foe-berry",
+   "name": "A Hungry Foe",
+   "group": "Set Pieces",
+   "stop": "wild",
+   "scene": {
+    "cast": [],
+    "pokemon": "munchlax",
+    "tint": "#2a2a1c",
+    "effect": "none"
+   },
+   "intro": "A wild Munchlax plants itself in the middle of the road and growls at you. Its stomach growls louder than it does.",
+   "choices": [
+    {
+     "label": "Throw a Berry.",
+     "requires": [
+      {
+       "kind": "bagHas",
+       "ids": [],
+       "count": 1,
+       "suffix": "-berry",
+       "label": "a Berry"
+      }
+     ],
+     "success": {
+      "text": "It catches the Berry in both paws and eats it in one bite. Then it stops growling, sits down, and pats its belly, deeply satisfied.",
+      "effects": [
+       {
+        "kind": "spendBag",
+        "ids": [],
+        "count": 1,
+        "suffix": "-berry"
+       },
+       {
+        "kind": "helped",
+        "species": "munchlax",
+        "rare": false
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Hungry and cross, it charges.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "munchlax"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [],
+       "friendly": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Back away.",
+     "success": {
+      "text": "You back away slowly. It follows you, still hungry, a few steps behind. It will be back.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "hungry-foe-berry"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wounded-rare",
+   "name": "The Wounded Rare",
+   "group": "Set Pieces",
+   "stop": "wild",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "pokemon": "dratini",
+    "tint": "#2a1c1c",
+    "effect": "none"
+   },
+   "intro": "A Dratini lies hurt beside the road, its scales dull, a long gash along its side. You have never seen one in the wild. It sees you, and tries to rise, and can't.",
+   "choices": [
+    {
+     "label": "Heal it, don't catch it.",
+     "requires": [
+      {
+       "kind": "bagHas",
+       "ids": [
+        "revive",
+        "potion",
+        "super-potion",
+        "hyper-potion",
+        "full-restore"
+       ],
+       "count": 1,
+       "label": "a Revive or a Potion"
+      }
+     ],
+     "success": {
+      "text": "You kneel and heal it slowly. Its scales brighten. It rises, coils, and looks at you a long moment with its dark wet eyes. Then it slides away into the river.",
+      "effects": [
+       {
+        "kind": "spendBag",
+        "ids": [
+         "revive",
+         "potion",
+         "super-potion",
+         "hyper-potion",
+         "full-restore"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "helped",
+        "species": "dratini",
+        "rare": true
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Catch it while it's weak.",
+     "success": {
+      "text": "It can't even struggle. The Ball barely wobbles. Somewhere behind a fence, a kid who copies you saw.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "dratini"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep-lost",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "apprentice-copy",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "apprentice-copy-caught-weak",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it by the road.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kind-walked-past",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wounded-rare-thanks",
+   "name": "The Wounded Rare",
+   "group": "Set Pieces",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "dratini",
+    "tint": "#1c2a2a",
+    "effect": "sparkle"
+   },
+   "intro": "The Dratini that saved you is waiting by the road, coiled on a warm stone. Its scales shine now. It uncoils when it sees you, and comes closer, and looks at your Balls, and then at you.",
+   "choices": [
+    {
+     "label": "Welcome it.",
+     "success": {
+      "text": "It slides into a Ball on its own, and the Ball clicks shut without a wobble.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "dratini"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 100,
+        "who": "newest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go home.",
+     "success": {
+      "text": "You shake your head gently. It touches its nose to your hand and goes back to the river.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

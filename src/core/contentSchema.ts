@@ -3320,6 +3320,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** SF60: a copy of an item this Pokémon holds. */
   z.object({ kind: z.literal('copyHeld'), who: z.enum(['starter', 'lead']) }),
   /** SF59: the newest unhatched Egg of this species leaves the party (given back; or `hatch`: it hatches now, as the story's scene). */
+  /** SF61: a Pokémon from the region's list in familiesC.json `regionJoin[table]` joins (as a Shadow with `shadow`). */
+  z.object({ kind: z.literal('regionJoin'), table: z.string().min(1), shadow: z.boolean().default(false), levelBonus: z.number().int().default(0) }),
   z.object({ kind: z.literal('returnEgg'), species: z.string().min(1), hatch: z.boolean().default(false) }),
   /** SF63: a Pokémon the player helped; one comes back once a region at the worst moment (`rare`: SF63.8's, the one that returns). */
   z.object({ kind: z.literal('helped'), species: z.string().min(1), rare: z.boolean().default(false) }),

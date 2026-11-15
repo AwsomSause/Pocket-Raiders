@@ -151,6 +151,51 @@
    "key": "valley-wild-angry",
    "setBy": "valley-rangers-grudge",
    "readBy": "engine: coHelpers.sideBattleBegin (wild +1 Attack this region)"
+  },
+  {
+   "key": "cruelty-act",
+   "setBy": "dark-deal",
+   "readBy": "legends (breaks the Volcanion and Zeraora promises), registry"
+  },
+  {
+   "key": "dark-reported",
+   "setBy": "dark-deal",
+   "readBy": "evil-story (Vreel reported to the League)"
+  },
+  {
+   "key": "reported-crime",
+   "setBy": "dark-deal",
+   "readBy": "registry (Final Reunion, people)"
+  },
+  {
+   "key": "evil-plan-revealed",
+   "setBy": "dark-deal",
+   "readBy": "evil-story (an Admin plan known early)"
+  },
+  {
+   "key": "dark-won-back",
+   "setBy": "dark-deal-admin, dark-deal-admin-again",
+   "readBy": "Final Reunion (the given Pokémon came home)"
+  },
+  {
+   "key": "dark-left",
+   "setBy": "dark-deal-admin, dark-deal-admin-again",
+   "readBy": "Final Reunion (the given Pokémon stayed with the Admin)"
+  },
+  {
+   "key": "ditto-lurking",
+   "setBy": "ditto-reveal",
+   "readBy": "engine: coHelpers sideBattleBegin puts a Ditto copy of your lead on the next foe team"
+  },
+  {
+   "key": "kind-walked-past",
+   "setBy": "injured-wild-pokemon, starving-wild, trapped-pokemon, trapped-pokemon-net, unlikely-ally, wounded-rare",
+   "readBy": "registry (Kindness board)"
+  },
+  {
+   "key": "apprentice-copy-caught-weak",
+   "setBy": "wounded-rare",
+   "readBy": "families-a SF2 (The Apprentice copies it)"
   }
  ]
 }

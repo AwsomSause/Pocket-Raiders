@@ -157,5 +157,61 @@
    "pyukumuku"
   ],
   "earlyKoBonus": 1.5
+ },
+ "regionJoin": {
+  "darkDeal": {
+   "kanto": [
+    "articuno",
+    "zapdos",
+    "moltres"
+   ],
+   "johto": [
+    "raikou",
+    "entei",
+    "suicune"
+   ],
+   "hoenn": [
+    "regirock",
+    "regice",
+    "registeel"
+   ],
+   "sinnoh": [
+    "uxie",
+    "mesprit",
+    "azelf"
+   ],
+   "unova": [
+    "cobalion",
+    "terrakion",
+    "virizion"
+   ],
+   "kalos": [
+    "zygarde"
+   ],
+   "alola": [
+    "tapu-koko",
+    "tapu-lele",
+    "tapu-bulu",
+    "tapu-fini"
+   ],
+   "galar": [
+    "regieleki",
+    "regidrago"
+   ],
+   "paldea": [
+    "wo-chien",
+    "chien-pao",
+    "ting-lu",
+    "chi-yu"
+   ],
+   "default": [
+    "articuno",
+    "zapdos",
+    "moltres",
+    "raikou",
+    "entei",
+    "suicune"
+   ]
+  }
  }
 }

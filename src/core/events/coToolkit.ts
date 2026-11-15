@@ -164,6 +164,13 @@ export function coFoeTypes(content: Content, run: Run, against: 'lead' | 'most')
 /** The Pokémon given away under `key` (SF61), for a foe team. */
 export const coFoeNote = (run: Run, key: string): PokemonInstance | null => noted(run, key);
 
+/** SF61: a species from the region's list (`regionJoin[table]` in familiesC.json, `default` for other regions), the same all stage long. */
+export function coRegionPick(run: Pick<Run, 'seed' | 'regionIndex' | 'stage'>, table: string, regionId: string): string {
+  const tables = data.regionJoin as Record<string, Record<string, string[]>>;
+  const list = tables[table]?.[regionId] ?? tables[table]?.default ?? [];
+  return list[new Rng(hashSeed(`${run.seed}::co-region-join::${table}::${run.regionIndex}::${run.stage?.index ?? 0}`)).int(0, Math.max(0, list.length - 1))] ?? 'ditto';
+}
+
 // ---------- conditions and effects ----------
 
 export type CoCondition = Extract<EventCondition, { kind: 'record' | 'barterHas' | 'bagHas' | 'keptGoods' | 'hasEgg' }>;
