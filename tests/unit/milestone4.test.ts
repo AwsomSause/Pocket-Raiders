@@ -247,11 +247,18 @@ describe('the dev campaign, start to finish', () => {
     let guard = 0;
     while (run.phase !== 'over' && guard++ < 200) {
       expect(run.phase).toBe('map');
+      const seen = run.stage!.visited.length;
       run = toBattle(refresh(run));
-      const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
-      kinds.push(node.kind);
+      // Every node walked, also one an event placed "instead of the battle" took (toBattle walks on past it).
+      for (const id of run.stage!.visited.slice(seen)) kinds.push(run.stage!.map.nodes.find((n) => n.id === id)!.kind);
+      // An event placed before this node can start its own battle in the node battle's place: its win goes back to the map.
+      const eventBattle = !!run.battle?.event;
       run = win(run, true);
       if (run.phase === 'over') break;
+      if (eventBattle && run.phase !== 'reward') {
+        run = skipDecisions(run);
+        continue;
+      }
       expect(run.phase).toBe('reward');
       run = skipDecisions(takeAnyReward(run));
       if (run.regionIndex === 1 && !sawSecondRegion) {

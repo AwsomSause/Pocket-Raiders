@@ -24,7 +24,7 @@ import {
   type TurnResult,
 } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
-import { content, takeAnyReward } from './helpers';
+import { content, plainNodes, takeAnyReward } from './helpers';
 
 function newRun(seed = 'move-items'): RunState {
   return chooseStarter(content, createRun(content, { runId: 'r', seed, archetypeId: 'red' }), 0);
@@ -236,7 +236,7 @@ describe('map previews', () => {
   });
 
   it("the Town Map shows the next trainers' teams", () => {
-    const run = take(newRun('town'), 'town-map');
+    const run = plainNodes(take(newRun('town'), 'town-map'));
     const trainer = run.stage!.map.nodes.find((n) => n.kind === 'trainer')!;
     const before = run.stage!.map.nodes.find((n) => n.next.includes(trainer.id))!;
     standOn(run, before.id);
