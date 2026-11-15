@@ -1,0 +1,1370 @@
+{
+ "catalogOverhaul": "rivals",
+ "override": true,
+ "remove": [
+  "living-rival-clash",
+  "rq-bad-day",
+  "rq-colours",
+  "rq-echo-colours-ok",
+  "rq-echo-colours-swap",
+  "rq-echo-read-letter",
+  "rq-echo-straight",
+  "rq-fake-lead",
+  "rq-straight-battle"
+ ],
+ "events": [
+  {
+   "id": "rival-cosplay",
+   "name": "Wearing Each Other's Colours",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R7.open"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2433",
+    "effect": "sparkle"
+   },
+   "callback": true,
+   "intro": "{rival} is waiting at the crossroads, and for a moment you think you are looking into a shop window.\nThey are wearing your jacket. Not one like it. Yours, down to the scuffed cuff.\n\nSame colour. Same zip that sticks halfway. They have even rolled the sleeves the way you roll yours.\n\n{rival}: \"{say event||underdog::I wanted to see what it felt like. To be you.||prodigy::Anyone could wear it. That's my point.||champion-chaser::Looks better on me.||idealist::I want to understand how you see things.}\"",
+   "choices": [
+    {
+     "label": "\"It suits you.\"",
+     "success": {
+      "text": "They go red to the ears. Or they scoff. Somehow they manage both at once.\n\n{rival}: \"{say event||underdog::It... does? Nobody says that. About anything I wear.||prodigy::Obviously it does. ...Thank you.||champion-chaser::I know. I was about to say that.||idealist::Then maybe I'm starting to see it.}\"\nThey walk off still wearing it, a little taller than before.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-colours-ok",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "stamp": "rq-r7-copy",
+        "ahead": [
+         {
+          "event": "rq-r7-trainer",
+          "step": 11
+         },
+         {
+          "event": "rq-r7-shop",
+          "step": 13
+         }
+        ]
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R7.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Take it off.\"",
+     "success": {
+      "text": "They look down at the jacket, then back up at you.\n{rival}: \"No.\"\n\nThey zip it to the chin. It does not suit them. It suits them a little.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "rivalry": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "stamp": "rq-r7-copy",
+        "ahead": [
+         {
+          "event": "rq-r7-trainer",
+          "step": 11
+         },
+         {
+          "event": "rq-r7-shop",
+          "step": 13
+         }
+        ]
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R7.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Swap teams, then.\"",
+     "success": {
+      "text": "They stare at you. Then, slowly, a grin.\n{rival}: \"You mean it? Aces. Yours for mine. Right now.\"\n\nYou hold out a Poké Ball. They hold out theirs. Neither of you lets go a second too soon.\n\nThey look across the field at your ace, in their hands now.\n{rival}: \"It's looking at you. Not me. Even from here.\"\n{rival}: \"...Right. Fine. Come on, you. Show me what they see.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-colours-swap",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R7.open"
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R7.finale"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "quest": {
+        "aceFirst": true,
+        "borrow": true
+       },
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r7-won"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r7-lost"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r7-trainer",
+   "name": "Wearing Each Other's Colours: Mistaken",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "rattata",
+    "tint": "#2a2433",
+    "effect": "shake"
+   },
+   "intro": "A trainer storms up the path with a Rattata under one arm.\nTrainer: \"You! You said my Rattata was \"statistically irrelevant\"! To its face!\"\n\nIt was not you. It was someone in your jacket.\nThe Rattata glares up at you with enormous, wounded dignity.",
+   "choices": [
+    {
+     "label": "\"That wasn't me.\"",
+     "success": {
+      "text": "Trainer: \"Same jacket! Same walk! Nearly the same face! Battle!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Youngster",
+       "friendly": true,
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "classId": "youngster",
+       "lineup": [
+        "rattata",
+        "raticate"
+       ],
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "\"...I'm sorry about that.\"",
+     "success": {
+      "text": "You apologise for something you did not do. The trainer deflates. The Rattata accepts it, graciously.\n\nTrainer: \"...Well. Thank you. Tell your friend they could learn a thing or two from you.\"\nSomewhere down the road, word of it will reach {rival}.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-heard-apology",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It was a bit irrelevant.\"",
+     "success": {
+      "text": "Trainer: \"RIGHT. That's it.\"\nThe Rattata leaps from his arms like a small, furious comet.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Youngster",
+       "friendly": true,
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "classId": "youngster",
+       "lineup": [
+        "rattata",
+        "raticate"
+       ],
+       "win": []
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r7-shop",
+   "name": "Wearing Each Other's Colours: The Usual Discount",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2433",
+    "effect": "glint"
+   },
+   "intro": "Shopkeeper: \"Back again! The usual discount.\"\nShe knocks a good chunk off before you can say a word. She thinks you are {rival}.\n\nShopkeeper: \"And your friend left this for you. Well. For you. You know what I mean.\"\nA parcel, addressed to {rival}, in their own handwriting.\n\nYou can feel a jacket through the paper. They have sent themselves a spare.\nIn your colour.",
+   "choices": [
+    {
+     "label": "Take the discount.",
+     "success": {
+      "text": "You do not correct her. The money stays in your pocket, and the parcel stays on the counter for its owner.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell her the truth.",
+     "success": {
+      "text": "Shopkeeper: \"Oh! You're the OTHER one.\"\nShopkeeper: \"Well, the discount's for that jacket, love, not the face.\"\n\nShe gives it to you anyway, and keeps the parcel back for {rival}.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rival-swap",
+   "name": "Wearing Each Other's Colours: Borrowed Team",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R7.finale"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2433",
+    "effect": "sparkle"
+   },
+   "callback": true,
+   "priority": 80,
+   "remembers": [
+    {
+     "id": "apology",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-heard-apology",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\n{rival}: \"Somebody told me you apologised to a Rattata. For me.\"\nThey look away.\n{rival}: \"...It was a bit irrelevant. But thanks.\""
+    },
+    {
+     "id": "suits",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-colours-ok",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\n{rival}: \"You said it suited me. I've been thinking about that all stage. It's very annoying.\""
+    }
+   ],
+   "intro": "A field at the edge of the route. {rival} is still in the jacket, both hands in the pockets the way yours go.\n\n{rival}: \"Borrowed Team rules. My ace, your hands. Your ace, mine.\"\n{rival}: \"Whoever wins, wins with the other one's heart. That's the whole point.\"",
+   "choices": [
+    {
+     "label": "Trade aces.",
+     "success": {
+      "text": "Two Poké Balls change hands. Two Pokémon look back at the wrong trainer, and then, slowly, forward.\n\nThey look across the field at your ace, in their hands now.\n{rival}: \"It's looking at you. Not me. Even from here.\"\n{rival}: \"...Right. Fine. Come on, you. Show me what they see.\"",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R7.finale"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "quest": {
+        "aceFirst": true,
+        "borrow": true
+       },
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r7-won"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r7-lost"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Not like this.\"",
+     "success": {
+      "text": "They look at the Poké Ball in their hand for a long moment, then put it away.\n{rival}: \"...Fine. Keep your own.\"\n\nThey do the jacket up to the collar.\n{rival}: \"I'm keeping this, though.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-colours-kept",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R7.finale"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  },
+  {
+   "id": "rq-r7-won",
+   "name": "Wearing Each Other's Colours: It Listened",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "remembers": [
+    {
+     "id": "swap",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-colours-swap",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\n{rival}: \"Right there at the crossroads. You didn't even blink.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2433",
+    "effect": "sparkle"
+   },
+   "intro": "{rival} takes the jacket off. They hold it out to you.\n{rival}: \"It listened to you. Mine. It listened.\"\n{rival}: \"I've been shouting at it for a year.\"\n\nYour own ace comes back across the field and bumps its head into your hand, as if it has been gone for weeks.",
+   "choices": [
+    {
+     "label": "Take the jacket.",
+     "success": {
+      "text": "It is still warm. Now you have two, and they have none, and somehow that feels even.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-colours-won",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": []
+  },
+  {
+   "id": "rq-r7-lost",
+   "name": "Wearing Each Other's Colours: The Collar",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "remembers": [
+    {
+     "id": "swap",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-colours-swap",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\n{rival}: \"Right there at the crossroads. You didn't even blink.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2433",
+    "effect": "glint"
+   },
+   "intro": "They do the jacket up, slowly, all the way to the collar.\n{rival}: \"I'm keeping this. I've earned the collar.\"\n\nIt is not a joke at your expense any more. It is a compliment. They wear it like one.\nYour ace trots back to you. It looks back at them once. Then it does not look back again.",
+   "choices": [
+    {
+     "label": "\"It suits you.\"",
+     "success": {
+      "text": "This time they do not scoff at all.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-colours-kept",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": []
+  },
+  {
+   "id": "rival-mind-games",
+   "name": "The Fake Lead",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R8.open"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#202a2a",
+    "effect": "none"
+   },
+   "callback": true,
+   "remembers": [
+    {
+     "id": "notes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-notes-read",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\n{rival}: \"You read my notes. So now I'm writing fake ones. Fair's fair.\""
+    }
+   ],
+   "intro": "A camp by the road. {rival}'s team is out on the grass, their strongest-looking Pokémon right at the front.\nToo obviously at the front.\n\n{rival}: \"Morning. Going my way?\"\nSomething is off. The one at the front holds nothing. Every one behind it holds an item.",
+   "choices": [
+    {
+     "label": "\"Nice lead.\"",
+     "success": {
+      "text": "{rival} smiles, very slightly. A fish has taken the hook, and they are too polite to say so.\n\nYou start planning your next fight against them around that front Pokémon. It feels good. It feels like a plan.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-bait-taken",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R8.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"That's not your lead.\"",
+     "success": {
+      "text": "They laugh, a short, surprised bark.\n{rival}: \"No. It isn't. How did you—\"\nThey look at the held items. They look at you.\n\n{rival}: \"...I'll have to be better than that, then. Good.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-bait-seen",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R8.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You say nothing. You keep your eyes on the one at the back, the one with the held item.\nIf you are right, that is the one that leads.\n\n{rival}: \"Not chatty today. Fine.\"\nThey pack up. They do not know what you saw. You do.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R8.open"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  },
+  {
+   "id": "rq-r8-signpost",
+   "name": "The Fake Lead: The Signpost",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R8.sign"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#202a2a",
+    "effect": "none"
+   },
+   "intro": "A fork in the road. A note is pinned to the signpost.\n\"Left's flooded. Go right.\" And under it, a signature: {rival}.\n\nIt is their handwriting. Neat, careful, unmistakable.\nSomething about it snags.",
+   "choices": [
+    {
+     "label": "\"Go right.\"",
+     "success": {
+      "text": "You go right. It is the long way, all the way round the hill.\nNothing is flooded. Nothing was ever flooded.\n\nSomewhere behind you, someone is very pleased with themself.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R8.sign"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go left.\"",
+     "success": {
+      "text": "",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-sign-seen",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R8.sign"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r8-rock"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Look at the note again.)",
+     "success": {
+      "text": "",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R8.sign"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r8-note"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r8-note",
+   "name": "The Fake Lead: The Signature",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#202a2a",
+    "effect": "none"
+   },
+   "intro": "You look again. The note. The neat hand. The name at the bottom.\nThey never sign anything. Not the Circuit board, not a Center book, not once in all the time you have known them.",
+   "choices": [
+    {
+     "label": "\"Go right.\"",
+     "success": {
+      "text": "You go right anyway. It is the long way, all the way round the hill.\nNothing is flooded. Nothing was ever flooded.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Go left.\"",
+     "success": {
+      "text": "",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-sign-seen",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r8-rock"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r8-rock",
+   "name": "The Fake Lead: On a Rock",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#202a2a",
+    "effect": "none"
+   },
+   "intro": "Left is not flooded. It is one step shorter, and dry as a bone.\nAt the end of it, sitting on a rock, is {rival}.\n\n{rival}: \"...How?\"",
+   "choices": [
+    {
+     "label": "\"You signed it.\"",
+     "success": {
+      "text": "{rival}: \"I signed it.\"\nThey put their face in their hands.\n{rival}: \"I got clever. That's when I'm stupidest.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rival-eavesdrop",
+   "name": "The Fake Lead: The Rival Report",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 7,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R8.report"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#202a2a",
+    "effect": "rain"
+   },
+   "callback": true,
+   "intro": "The Rival Report on the board at the stage gate. {rival}'s team, all six, photographed in bright sunshine.\nSix Pokémon you have never once seen them carry.\n\nAbove the board, the stage header reads: RAIN.\nIt has been raining here all week.",
+   "choices": [
+    {
+     "label": "Plan against the report's team.",
+     "success": {
+      "text": "You sit up late with the photo, planning for six Pokémon.\nSix Pokémon who will not be there.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R8.report"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look at the weather in the photo.",
+     "success": {
+      "text": "Sunshine. In a week of rain. Somebody took this photo somewhere else, on some other day.\nYou do not plan for any of them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-report-seen",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R8.report"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "living-rival-acknowledges-rival",
+   "name": "The Fake Lead: No More Games",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 8,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R8.finale"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#202a2a",
+    "effect": "glint"
+   },
+   "callback": true,
+   "priority": 80,
+   "intro": "A folding table in a field. Six Poké Balls in a row, open, each with its Pokémon standing behind it.\nNo bait. No held-back ace. Everything on the table.\n\n{rival}: \"No more games. I want to know if I can beat you straight.\"\n{rival}: \"I don't know. I've never tried. It's— I'm quite frightened.\"\n{rival}: \"Don't tell me that's a good sign.\"",
+   "choices": [
+    {
+     "label": "Battle them straight.",
+     "success": {
+      "text": "They tear up their notes on you, every page, and let the wind have them. You start from nothing. So do they.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "wipeLedger": true
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R8.finale"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "quest": {
+        "counter": "none",
+        "full": true
+       },
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r8-last"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r8-last"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"It's a good sign.\"",
+     "success": {
+      "text": "{rival}: \"I TOLD you not to—\"\nThey are laughing, though. They tear up their notes on you and let the wind have them.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "wipeLedger": true
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R8.finale"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "quest": {
+        "counter": "none",
+        "full": true
+       },
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r8-last"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r8-last"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r8-last",
+   "name": "The Fake Lead: Straight",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "remembers": [
+    {
+     "id": "read",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-bait-seen",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "rival-sign-seen",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "rival-report-seen",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\n{rival}: \"You're the only one who ever reads me. It's annoying.\"\nA long pause.\n{rival}: \"Thank you.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#202a2a",
+    "effect": "none"
+   },
+   "intro": "They fold the table away, slowly, one leg at a time.\n{rival}: \"Well. Now I know.\"\nIt is hard to tell what they know. They look lighter for knowing it.",
+   "choices": [
+    {
+     "label": "Nod.",
+     "success": {
+      "text": "They nod back. For once there is nothing hidden behind it.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": []
+  },
+  {
+   "id": "living-rival-bad-day",
+   "name": "A Rival's Bad Day",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R9.open",
+     "weather": [
+      "rain"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1d2430",
+    "effect": "rain"
+   },
+   "callback": true,
+   "intro": "Rain, hard and grey. {rival} is sitting on a low wall with a badge case open in their lap. It is empty.\nThey have not noticed you.\n\nBeside them, held down by a stone, a letter. Half open, in someone else's handwriting.\n\"...I expected better. Your mother would have...\"\n\nThe rain is getting into the ink. They do not move it.",
+   "choices": [
+    {
+     "label": "Sit beside them.",
+     "success": {
+      "text": "",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-sat-in-rain",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R9.open"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r9-wall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the letter.",
+     "success": {
+      "text": "You lean in and read. You do not mean to read all of it. You read all of it.\n\nThey see you. Their face does something complicated.\n{rival}: \"{say event||underdog::You read it. ...Nobody's ever been curious about me before. That's weird. It's kind of nice.||champion-chaser::That's private. ...It doesn't matter. I'll win the next one and it won't matter.||bitter-challenger::Get your eyes off that. It's none of your business. None.||enthusiast::Oh! Ha. That's, um. That's nothing. It's an old letter. It's fine!||idealist::You shouldn't have. But I suppose I'd have wanted to know too.||strategist::You've gathered intelligence. Congratulations. Don't use it.||protector::Don't. Please. That one's mine to carry.||prodigy::Three generations in the Hall. You can see why the handwriting's so neat.}\"\n\nThey fold the letter away carefully, as if it could still be saved from the rain.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "personal": {
+         "is": [
+          "underdog"
+         ],
+         "feelings": {
+          "admiration": 1
+         }
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "rival-read-letter",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R9.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer to battle.",
+     "success": {
+      "text": "{rival}: \"...Yeah. Okay. Why not.\"\nThey stand up in the rain and send out their team.\n\nThey play badly. Really badly. Halfway through, they start laughing and cannot stop.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-rain-battle",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R9.open"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Leave them be.",
+     "success": {
+      "text": "You leave them be. The rain keeps falling. They never mention it, and neither do you.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R9.open"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r9-wall",
+   "name": "A Rival's Bad Day: The Wall",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1d2430",
+    "effect": "rain"
+   },
+   "intro": "The wall is wet. You sit. The rain is loud on the empty badge case.\nA long time. A cart goes by. Somebody's dog looks at you both and moves on.\n\n{rival}: \"{say event||prodigy::My family's had someone in the Hall for three generations. I lost to a Gym. ...To a Gym.||champion-chaser::Six badges by now, I told everyone. I've got none from here. None.||bitter-challenger::Everyone was watching. Of course they were. They always are when it goes wrong.||enthusiast::I really thought I had it. I had a whole celebration planned. With a cake.||idealist::I wanted to make them proud. I don't know if they'd even notice if I did.||strategist::I had a plan for every turn. The plan was wrong from the first one.||protector::My team gave everything. I'm the one who let them down. Not them.||underdog::Everyone back home said I'd quit by now. I didn't quit. I just keep losing.}\"",
+   "choices": [
+    {
+     "label": "\"Which Gym?\"",
+     "success": {
+      "text": "They tell you. They tell you everything: every turn, every switch, the exact moment it went wrong.\nBy the end they are almost smiling at how bad it was.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"It's one loss.\"",
+     "success": {
+      "text": "{rival}: \"...Yeah.\"\nThey do not believe you. But they hear it. That is something.",
+      "effects": []
+     }
+    },
+    {
+     "label": "(Say nothing. Stay.)",
+     "success": {
+      "text": "Longer. They move the letter so it lies between you, face down.\n{rival}: \"...You don't have to stay.\"\nThey do not get up either.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r9-report-1",
+   "name": "A Rival's Bad Day: The Rival Report",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R9.report1"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1d2430",
+    "effect": "none"
+   },
+   "intro": "The Rival Report, pinned up at the Center.\nA photo: the Gym's door. {rival}, coming out of it, head down.",
+   "choices": [
+    {
+     "label": "Keep walking.",
+     "success": {
+      "text": "You look at it a moment longer than you need to, then keep walking.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R9.report1"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r9-report-2",
+   "name": "A Rival's Bad Day: The Same Door",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R9.report2"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1d2430",
+    "effect": "none"
+   },
+   "intro": "The Rival Report again. The same door. The same angle.\n{rival} is looking straight at the camera this time. Furious.",
+   "choices": [
+    {
+     "label": "Keep walking.",
+     "success": {
+      "text": "Twice now. You find you are hoping, quite hard, for a third photo.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R9.report2"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r9-photo",
+   "name": "A Rival's Bad Day: A Photograph",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 7,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R9.photo"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "sat",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-sat-in-rain",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nAt the edge of the frame, out of focus, a wet shoulder. Yours. It is the wall.\nThey took it that day, and kept it, and waited until they had earned the badge to send it."
+    },
+    {
+     "id": "battle",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-rain-battle",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nOn the back, in pencil: \"Rematch when I'm good again. Soon.\""
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a1d",
+    "effect": "sparkle"
+   },
+   "intro": "The Rival Report: the Gym's door. {rival} is not in the picture this time.\nThe door is open.\n\nAt the Center, an envelope with your name on it. Inside, a photo: a badge, on an open palm.\nNo note.",
+   "choices": [
+    {
+     "label": "Keep the photo.",
+     "success": {
+      "text": "You keep it somewhere it will not bend.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R9.photo"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  }
+ ]
+}

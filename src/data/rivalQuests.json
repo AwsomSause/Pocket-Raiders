@@ -318,6 +318,85 @@
           "final": true
         }
       }
+    },
+    "R7": {
+      "name": "Wearing Each Other's Colours",
+      "personalities": [
+        "underdog",
+        "prodigy",
+        "champion-chaser",
+        "idealist"
+      ],
+      "beats": {
+        "open": {
+          "event": "rival-cosplay",
+          "minStage": 4,
+          "slot": true
+        },
+        "finale": {
+          "event": "rival-swap",
+          "after": "open",
+          "offset": 1,
+          "slot": true,
+          "final": true
+        }
+      }
+    },
+    "R8": {
+      "name": "The Fake Lead",
+      "personalities": [
+        "strategist"
+      ],
+      "beats": {
+        "open": {
+          "event": "rival-mind-games",
+          "minStage": 5,
+          "slot": true
+        },
+        "sign": {
+          "event": "rq-r8-signpost",
+          "after": "open",
+          "offset": 1
+        },
+        "report": {
+          "event": "rival-eavesdrop",
+          "after": "sign",
+          "offset": 1
+        },
+        "finale": {
+          "event": "living-rival-acknowledges-rival",
+          "after": "report",
+          "offset": 1,
+          "slot": true,
+          "final": true
+        }
+      }
+    },
+    "R9": {
+      "name": "A Rival's Bad Day",
+      "beats": {
+        "open": {
+          "event": "living-rival-bad-day",
+          "minStage": 4,
+          "slot": true
+        },
+        "report1": {
+          "event": "rq-r9-report-1",
+          "after": "open",
+          "offset": 1
+        },
+        "report2": {
+          "event": "rq-r9-report-2",
+          "after": "report1",
+          "offset": 1
+        },
+        "photo": {
+          "event": "rq-r9-photo",
+          "after": "report2",
+          "offset": 1,
+          "final": true
+        }
+      }
     }
   }
 }

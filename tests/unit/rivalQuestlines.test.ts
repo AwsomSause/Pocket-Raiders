@@ -18,7 +18,9 @@ const rng = () => new Rng(hashSeed('rq-fx'));
 /** Flags the engine writes for the questlines (core/rivals/questlines.ts): the Circuit board, a remembered loss, a pick or a roll. */
 const ENGINE_SET = ['rq-lost-at', 'rq-lost-kind', 'rival-mentor-ask', 'rq-r6-true'];
 // Shared keys other files read: Reputation (STANDARDS.md), and the promise flags (MEMORY_AND_FORMAT.md: Jirachi's "every promise kept", NE36 to NE40).
-const SHARED_READ = ['rep', 'rep-lost', 'rival-promise-made', 'rival-promise-kept', 'rival-promise-broken'];
+const SHARED_READ = ['rep', 'rep-lost', 'rival-promise-made', 'rival-promise-kept', 'rival-promise-broken',
+  // Read by the engine (core/rivals/questlines.ts): the bait counter in the next questline fight.
+  'rival-bait-taken'];
 
 describe('rival questlines', () => {
   it('rivalChange moves feelings, lead and marks, all clamped', () => {
