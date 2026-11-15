@@ -163,8 +163,13 @@ test('every event style draws the event and takes a choice', async ({ page }) =>
     await page.waitForTimeout(1500);
     const phase = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Event').phase);
     if (phase === 'outcome') {
-      await page.keyboard.press('Enter');
-      await expect.poll(() => scene(page), { timeout: 10_000 }).not.toBe('Event');
+      // The outcome text, then any changes, each wait for an input: press until the event closes.
+      await expect
+        .poll(async () => {
+          if ((await scene(page)) === 'Event') await page.keyboard.press('Enter');
+          return scene(page);
+        }, { timeout: 15_000, intervals: [1000] })
+        .not.toBe('Event');
     }
     // Back on the map for the next style (a battle choice is fine too: return to the map either way).
     await page.evaluate(() => {

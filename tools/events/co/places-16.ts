@@ -7,7 +7,6 @@ import { kind, moment, rep } from './_delve.ts';
 export const CATEGORY = 'places';
 
 const go = (id: string, text: string, ...fx: Json[]): Json => out(text, ...fx, { kind: 'addEvent', eventId: id });
-const later = (id: string, nodes = 1): Json => ({ kind: 'laterEvent', eventId: id, nodes });
 const bond = (n: number, who: Json | string = 'party'): Json => ({ kind: 'friendship', bond: n, who });
 const fightW = (text: string, species: string[], lv: number, win: Json[], ...fx: Json[]): Json => ({ text, effects: fx, battle: { kind: 'wild', friendly: true, species, types: [], levelBonus: lv, shinyMultiplier: 1, win } });
 const fightT = (text: string, name: string, cls: string, size: number, lv: number, win: Json[], ...fx: Json[]): Json => ({ text, effects: fx, battle: { kind: 'trainer', friendly: true, name, classId: cls, size, types: [], levelBonus: lv, win } });
@@ -76,7 +75,7 @@ export const EVENTS: Json[] = [
     ch('Wait.', out('You wait. The Skwovet comes down on its own, and drops a Berry at your feet, and runs back up.', any(...BERRIES))),
   ])),
   E('w4-echo-chamber', 'A sealed crystal room in the rock, its walls clear as glass and humming, very faintly, a note you almost recognise.', [
-    ch('Sing into it.', out('You sing the note back. The crystal hums louder, and louder, until the whole hill is singing, and somewhere not far away a way into the Crystal Hollow opens.', later('crystal-hollow-entrance', 1), rp(2))),
+    ch('Sing into it.', out('You sing the note back. The crystal hums louder, and louder, until the whole hill is singing, and somewhere deep under your feet, in the Crystal Hollow, something sings back.', flag('crystal-hollow-heard'), rp(2))),
     ch('Leave.', out('You leave the crystal humming to itself.')),
   ]),
   E('w4-lantern-parade', 'At midnight, Ghost-types come down the road carrying lanterns, humming a tune with no words, a long slow procession going somewhere.', [

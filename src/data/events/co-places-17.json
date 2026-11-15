@@ -628,11 +628,6 @@
         "amount": 1
        },
        {
-        "kind": "laterEvent",
-        "eventId": "little-league",
-        "nodes": 1
-       },
-       {
         "kind": "flag",
         "key": "rep",
         "amount": 1
@@ -800,11 +795,6 @@
         "kind": "flag",
         "key": "black-market-lead",
         "amount": 1
-       },
-       {
-        "kind": "laterEvent",
-        "eventId": "lenora-museum",
-        "nodes": 1
        }
       ]
      }

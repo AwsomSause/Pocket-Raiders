@@ -21,6 +21,8 @@ test('mashing Enter from the main menu to the end of a battle works', async ({ p
   for (let i = 0; i < 900 && !over; i++) {
     const s = await scene(page);
     if (s) seen.add(s);
+    // A plain first fight: no event (Kanto's attached ones) opens before it.
+    if (s === 'Map') await page.evaluate(() => { for (const n of (window as any).__pkr.session.run?.stage?.map.nodes ?? []) if (n.column === 1) n.sides = []; });
     if (s === 'Reward' || s === 'GameOver' || s === 'Decision') over = s;
     await page.keyboard.press('Enter');
     await page.waitForTimeout(30);

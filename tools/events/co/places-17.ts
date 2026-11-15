@@ -54,7 +54,7 @@ export const EVENTS: Json[] = [
     ch('Look into the mirror of kindness.', out('The kind mirror shows every good thing you have done, and the faces of the people and Pokémon you did it for.', bond(2), rp(2)), { requires: [{ kind: 'meter', key: 'goodEvil', side: 'positive', atLeast: 2 }] }),
   ]),
   E('school-yard-skirmish', 'A school yard at lunch. Kids with Poké Balls everywhere, all shouting at once: "Battle! Battle! Battle!" A teacher on a bench gives you a look that says please.', [
-    ch('Coach them.', out('You sit them down in a circle and show them how to read a type chart with their fingers. By the bell they are cheering each other on instead of shouting. "We\'re a team," says the smallest one, amazed. "We\'re the Little League!"', flag('little-league-coached'), later('little-league'), rep(1), ...kind())),
+    ch('Coach them.', out('You sit them down in a circle and show them how to read a type chart with their fingers. By the bell they are cheering each other on instead of shouting. "We\'re a team," says the smallest one, amazed. "We\'re the Little League!"', flag('little-league-coached'), rep(1), ...kind())),
     ch('Battle them all.', fightT('They come at you two at a time, giggling. It is chaos. It is wonderful.', trainer('School Kids', { cls: 'youngster', size: 6, lv: -5, chain: 2, win: [$(200), fr(3)] }))),
     ch('Hand out candy.', out('You share what you have. Twenty sticky faces say thank you at once.', $(-50), ...kind()), { requires: [money(50)] }),
   ], { name: 'School Yard' }),
@@ -63,7 +63,7 @@ export const EVENTS: Json[] = [
     ch('Stay silent.', out('Nobody speaks. The judge sighs and lets the Meowth go with a warning anyway, because nobody can prove anything. It slinks off. You think about it for a long time after.')),
   ]),
   E('museum-return', 'The museum doors are open but the guard is crying. **Curator:** "Someone stole our relics. In the night. The cases are just... empty. Those pieces were thousands of years old, and they were ours, everyone\'s."', [
-    ch('I\'ll look.', out('You ask around. A Gym Leader is already on the case, a tall woman with a library card in her coat. "Lenora," she says. "If you\'re helping, keep up." Behind the museum, a scrap of paper: a stall number at a market nobody admits exists.', flag('museum-relic-lead'), flag('black-market-lead'), later('lenora-museum'))),
+    ch('I\'ll look.', out('You ask around. A Gym Leader is already on the case, a tall woman with a library card in her coat. "Lenora," she says. "If you\'re helping, keep up." Behind the museum, a scrap of paper: a stall number at a market nobody admits exists.', flag('museum-relic-lead'), flag('black-market-lead'))),
     ch('Return a Rare Bone.', out('You put the Rare Bone in an empty case. The curator holds it like a baby. "It isn\'t ours," she says. "But it\'s somebody\'s, and now it\'s safe." She presses a reward into your hands.', lose('rare-bone'), $(700), ...kind(), rp(3)), { requires: [has('rare-bone')] }),
     ch('Return a Relic Gold.', out('You give the Relic Gold to the curator. Her hands shake. "This was in the case nearest the door. The first one they took." She pays you, and writes your name in the donor book.', lose('relic-gold'), $(900), ...kind(), rp(3)), { requires: [has('relic-gold')] }),
     ch('Not today.', walk('You leave them to it. The guard is still crying when you go.')),

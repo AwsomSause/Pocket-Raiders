@@ -56,7 +56,8 @@ describe('evil team data', () => {
       expect(content.events.has(evilEventId(t.id, 'disguise'))).toBe(t.style !== 'open');
       const intro = content.events.get(evilEventId(t.id, 'rising-star'))!.intro;
       expect(intro).toContain(t.ranks.executive.name);
-      expect(intro).not.toMatch(/\{\w+\}/);
+      // Catalog Overhaul SF13: only the words that are known when the scene plays ({starter}, {lead}) are left as tokens.
+      expect(intro).not.toMatch(/\{(?!starter\}|lead\})\w+\}/);
     }
   });
 });
@@ -69,20 +70,25 @@ describe('evil team progression', () => {
     expect(withTeam('pick').story.evil.teamId).toBe(withTeam('pick').story.evil.teamId);
   });
 
-  it('starts one operation per region, and an operation left behind succeeds with its lasting downside', () => {
+  it('runs one team per region: The Plan starts all four Operations, and the ones left behind when the region ends happen', () => {
     const run = withTeam('ops');
     const s = evilOf(run);
-    expect(s.ops).toHaveLength(1);
-    expect(s.ops[0]!.outcome).toBe('running');
-    const before = run.perkEffects?.length ?? 0;
-    evilStageStart(content, run);
-    expect(s.ops).toHaveLength(1);
-    run.regionIndex += 1;
-    evilStageStart(content, run);
-    expect(s.ops[0]!.outcome).toBe('succeeded');
-    expect(s.ops).toHaveLength(2);
-    expect((run.perkEffects?.length ?? 0)).toBeGreaterThan(before);
-    expect(choiceHistory(run).some((c) => c.pick === 'succeeded')).toBe(true);
+    const team = evilTeam(content, run)!;
+    expect(s.region).toBe(run.regionIndex);
+    expect(s.ops).toHaveLength(0);
+    s.beat = 5;
+    const planned = pickChoice(run, evilEventId(team.id, 'the-plan'), `Stop ${team.ops[0]!.name} first.`).run;
+    const ps = evilOf(planned);
+    expect(ps.ops.map((o) => o.outcome)).toEqual(['running', 'running', 'running', 'running']);
+    expect(ps.planFirst).toBe(team.ops[0]!.id);
+    planned.regionIndex += 1;
+    evilStageStart(content, planned);
+    // The team is archived with the region; its Operations happened, and their remembered flags stay for the run.
+    expect(ps.past.map((p) => p.teamId)).toContain(team.id);
+    for (const op of team.ops) expect(Number(planned.story.flags[`ev:team-op-done-${op.id}`] ?? 0)).toBe(1);
+    expect(choiceHistory(planned).some((c) => c.pick === 'succeeded')).toBe(true);
+    // A region's lasting effects end with the region.
+    expect(ps.mods.every((m) => m.region === planned.regionIndex)).toBe(true);
   });
 
   it('opens the first beat only for the run team, and moves the story one beat per choice, paced by stages', () => {
@@ -91,39 +97,43 @@ describe('evil team progression', () => {
     const open = eligibleEvents(content, run).map((e) => e.id);
     expect(open).toContain(evilEventId(team.id, 'suspicious'));
     expect(open.filter((id) => id.startsWith('evil-') && id.endsWith('-suspicious'))).toHaveLength(1);
-    const after = pickChoice(run, evilEventId(team.id, 'suspicious'), 'Walk on').run;
+    const after = pickChoice(run, evilEventId(team.id, 'suspicious'), 'Walk past.').run;
     expect(after.story.evil.beat).toBe(1);
-    // The next beat waits for `beatEvery` more stages.
+    // SF13: one step per stage, so the next step waits for the next stage.
     expect(eligibleEvents(content, after).map((e) => e.id)).not.toContain(evilEventId(team.id, 'evidence'));
-    for (let i = 0; i < content.evilTeams.config.beatEvery; i++) evilStageStart(content, after);
+    evilStageStart(content, after);
     expect(eligibleEvents(content, after).map((e) => e.id)).toContain(evilEventId(team.id, 'evidence'));
   });
 
-  it('stopping an operation adds its upside for good, once, and records the choice', () => {
+  it('stopping an Operation another way leaves nothing behind, once, and records the choice', () => {
     const run = withTeam('foil');
     const team = evilTeam(content, run)!;
-    const op = evilOf(run).ops[0]!;
-    const res = pickChoice(run, evilEventId(team.id, 'op', op.id), 'Sneak in disguised');
-    const r = res.run;
-    const def = team.ops.find((o) => o.id === op.id)!;
-    const effects = content.evilTeams.consequences[def.kind];
-    if (res.success) {
-      expect(r.story.evil.ops[0]!.outcome).toBe('infiltrated');
-      expect(r.perkEffects).toEqual(expect.arrayContaining(effects.stopped.effects));
-      expect(res.changes.join(' ')).toContain(effects.stopped.text);
-    } else {
-      expect(r.phase).toBe('battle');
+    evilOf(run).beat = 5;
+    const op = team.ops.find((o) => content.events.get(evilEventId(team.id, 'op', o.id))!.choices[1]!.requires.length === 0 && !content.events.get(evilEventId(team.id, 'op', o.id))!.choices[1]!.prompt && !content.events.get(evilEventId(team.id, 'op', o.id))!.choices[1]!.chance && !content.events.get(evilEventId(team.id, 'op', o.id))!.choices[1]!.success.battle) ?? team.ops[0]!;
+    const planned = pickChoice(run, evilEventId(team.id, 'the-plan'), `Stop ${op.name} first.`).run;
+    const before = planned.perkEffects?.length ?? 0;
+    const event = content.events.get(evilEventId(team.id, 'op', op.id))!;
+    const res = chooseEvent(content, atEvent(planned, event.id, 'op-event'), 'op-event', 1);
+    if (res.success && !res.run.battle) {
+      expect(evilOf(res.run).ops.find((o) => o.id === op.id)!.outcome).toBe('infiltrated');
+      expect(res.run.perkEffects?.length ?? 0).toBe(before);
+      expect(Number(res.run.story.flags[`ev:team-op-stopped-${op.id}`])).toBe(1);
+      expect(choiceHistory(res.run).some((c) => c.pick === 'infiltrated')).toBe(true);
     }
   });
 
-  it('letting an operation through applies its downside', () => {
+  it('letting an Operation happen leaves its lasting effect on the region', () => {
     const run = withTeam('leave');
     const team = evilTeam(content, run)!;
-    const op = evilOf(run).ops[0]!;
-    const r = pickChoice(run, evilEventId(team.id, 'op', op.id), 'Leave it alone').run;
-    const def = team.ops.find((o) => o.id === op.id)!;
-    expect(r.story.evil.ops[0]!.outcome).toBe('succeeded');
-    expect(r.perkEffects).toEqual(expect.arrayContaining(content.evilTeams.consequences[def.kind].through.effects));
+    evilOf(run).beat = 5;
+    const def = team.ops[0]!;
+    const planned = pickChoice(run, evilEventId(team.id, 'the-plan'), `Stop ${def.name} first.`).run;
+    const op = content.events.get(evilEventId(team.id, 'op', def.id))!;
+    const r = chooseEvent(content, atEvent(planned, op.id, 'op-event'), 'op-event', op.choices.findIndex((c) => c.label === 'Let it happen.')).run;
+    expect(evilOf(r).ops.find((o) => o.id === def.id)!.outcome).toBe('succeeded');
+    expect(def.lasting).toBeDefined();
+    if (def.lasting!.effects.length) expect(r.perkEffects).toEqual(expect.arrayContaining(def.lasting!.effects));
+    expect(Number(r.story.flags[`ev:team-op-done-${def.id}`])).toBe(1);
   });
 
   it('recurring villains remember meetings: their teams grow and their lines change', () => {
@@ -151,48 +161,47 @@ describe('evil team progression', () => {
     expect(hot.size).toBe(Math.min(6, calm.size + 1));
   });
 
-  it('the hideout can end the story without a battle when you kept evidence and stopped an operation', () => {
+  it('the Hideout entry steps into the team\'s own Hideout map, and the Operations still running happen at the door', () => {
     const run = withTeam('expose');
     const team = evilTeam(content, run)!;
     const s = evilOf(run);
     s.beat = 6;
-    s.ops[0]!.outcome = 'foiled';
-    const hideout = content.events.get(evilEventId(team.id, 'hideout'))!;
-    const expose = hideout.choices.findIndex((c) => c.label.startsWith('Expose'));
-    expect(() => chooseEvent(content, atEvent(structuredClone(run), hideout.id), 'test-event', expose)).toThrow();
-    recordChoice(content, run, { id: `${team.id}-evidence`, pick: 'kept', text: 'kept', weight: 2 });
-    const r = chooseEvent(content, atEvent(run, hideout.id), 'test-event', expose).run;
-    expect(r.story.evil.end).toBe('exposed');
-    expect(r.story.evil.beat).toBe(7);
-    expect(r.phase).not.toBe('battle');
-    expect(evilSummary(content, r)!.title).toContain('exposed');
-    // The Legendary they hunted stirs once they are gone.
-    expect(eligibleEvents(content, r).map((e) => e.id)).toContain(evilEventId(team.id, 'legend'));
+    s.ops = team.ops.map((o) => ({ id: o.id, region: run.regionIndex, outcome: 'running' as const }));
+    const r = pickChoice(run, evilEventId(team.id, 'hideout'), 'Go in.').run;
+    expect(r.stage?.pseudo).toMatchObject({ id: `ps_evil_hideout_${team.id}`, chain: true });
+    const rooms = r.stage!.map.nodes.map((n) => n.roomEvent);
+    expect(rooms).toContain(`evil-${team.id}-hideout-boss`);
+    expect(rooms).toContain(evilEventId(team.id, 'rescue'));
+    expect(evilOf(r).ops.every((o) => o.outcome === 'succeeded')).toBe(true);
   });
 });
 
 describe('rescue missions and infighting', () => {
-  it('a holding pen opens mid-story; freeing them lets a Pokémon join and is remembered', () => {
+  it('the Holding Pen is a Hideout room: never drawn on the map, and opening it brings back what the team took', () => {
     const run = withTeam('rescue');
     const team = evilTeam(content, run)!;
-    const id = evilEventId(team.id, 'rescue');
-    const opens = () => content.events.get(id)!.requires.every((c) => conditionMet(content, run, c));
-    expect(opens()).toBe(false);
-    evilOf(run).beat = 3;
-    expect(opens()).toBe(true);
-    const r = pickChoice(run, id, 'Walk away').run;
-    expect(choiceMade(r, `${team.id}-rescue`, 'left')).toBe(true);
+    const pen = content.events.get(evilEventId(team.id, 'rescue'))!;
+    expect(pen.room).toBe(true);
+    expect(eligibleEvents(content, run).map((e) => e.id)).not.toContain(pen.id);
+    const label = pen.choices[0]!.label;
+    const r = pickChoice(run, pen.id, label).run;
+    expect(Number(r.story.flags[`ev:team-${team.id}-pen-open`])).toBe(1);
   });
 
   it('siding with the specialist in a team feud wins an inside source (a defector for the hideout)', () => {
     const run = withTeam('feud');
     const team = evilTeam(content, run)!;
     evilOf(run).beat = 4;
-    const r = pickChoice(run, evilEventId(team.id, 'infighting'), `Side with the ${team.ranks.specialist.name}`).run;
+    const feud = content.events.get(evilEventId(team.id, 'infighting'))!;
+    const r = chooseEvent(content, atEvent(run, feud.id), 'test-event', 1).run;
     expect(r.story.evil.defector).toBe(true);
-    const hideout = content.events.get(evilEventId(team.id, 'hideout'))!;
-    const back = hideout.choices.find((c) => c.label.startsWith('Let the defector'))!;
-    expect(back.requires.every((c) => conditionMet(content, r, c))).toBe(true);
+    expect(Number(r.story.flags[`ev:team-${team.id}-defector-colleague`])).toBe(1);
+    // The boss's "Your people are leaving you" needs the defector and the lieutenant out of the way.
+    const boss = content.events.get(`evil-${team.id}-hideout-boss`)!;
+    const leaving = boss.choices[2]!;
+    expect(leaving.requires.every((c) => conditionMet(content, r, c))).toBe(false);
+    r.story.flags[`ev:team-${team.id}-lt-out`] = 1;
+    expect(leaving.requires.every((c) => conditionMet(content, r, c))).toBe(true);
   });
 });
 

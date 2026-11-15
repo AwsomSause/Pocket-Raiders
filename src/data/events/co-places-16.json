@@ -1043,12 +1043,12 @@
     {
      "label": "Sing into it.",
      "success": {
-      "text": "You sing the note back. The crystal hums louder, and louder, until the whole hill is singing, and somewhere not far away a way into the Crystal Hollow opens.",
+      "text": "You sing the note back. The crystal hums louder, and louder, until the whole hill is singing, and somewhere deep under your feet, in the Crystal Hollow, something sings back.",
       "effects": [
        {
-        "kind": "laterEvent",
-        "eventId": "crystal-hollow-entrance",
-        "nodes": 1
+        "kind": "flag",
+        "key": "crystal-hollow-heard",
+        "amount": 1
        },
        {
         "kind": "research",

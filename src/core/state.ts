@@ -176,6 +176,14 @@ export const PokemonInstanceSchema = z.object({
   bondWith: z.string().optional(),
   /** Beta 0.5 M1: moves this Pokémon has mastered (trainer-side move mastery; core/trainerWorld). */
   mastered: z.array(z.string()).optional(),
+  /** Catalog Overhaul (run v44): a quirk id (core/co/quirks.ts), e.g. a homesick Poipole or a traded Pokémon's habit. */
+  quirk: z.string().optional(),
+  /** Catalog Overhaul (run v44): marks it carries from its story ("alpha", "traded"...); shown on its summary. */
+  marks: z.array(z.string()).max(8).optional(),
+  /** Catalog Overhaul (run v44): its original trainer's name when it came from someone else (a trade). */
+  ot: z.string().optional(),
+  /** Catalog Overhaul (run v44): one line about where its quirk came from. */
+  quirkNote: z.string().optional(),
 });
 export type PokemonInstance = z.infer<typeof PokemonInstanceSchema>;
 
@@ -1130,6 +1138,8 @@ export const StageStateSchema = z.object({
   foresight: z.number().int().min(0).default(0),
   /** Fronts that rolled in during the stage (an event's `front` effect); the stage's own come from its seed (core/world.ts). */
   extraFronts: z.array(z.object({ weather: WeatherSchema, from: z.number().int().min(1), to: z.number().int().min(1) })).default([]),
+  /** Catalog Overhaul (new events, NE9): the storm was waited out, so no weather front for the rest of this stage. */
+  clearSky: z.boolean().optional(),
   /** Roaming Legendaries on this map: where each is now and whether it is still roaming. */
   roamers: z.array(z.object({ species: z.string(), nodeId: z.string().nullable(), status: z.enum(['roaming', 'done', 'gone']) })).default([]),
   /** Ideas W4 traversal (run v34): obstacles on this map, node id → obstacle id (src/data/traversal.json). A crossed one is removed. */

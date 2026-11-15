@@ -151,6 +151,9 @@ describe('the live operations: letting one through impounds once', () => {
   const withOp = (seed: string): RunState => {
     const r = mk(seed);
     while (!evilOf(r).teamId) evilStageStart(content, r);
+    // SF13: Operations run from The Plan on; stand one up as if The Plan had shown it.
+    const team = content.evilTeams.teams.find((t) => t.id === evilOf(r).teamId)!;
+    if (!evilOf(r).ops.some((o) => o.outcome === 'running' && o.region === r.regionIndex)) evilOf(r).ops.push({ id: team.ops[0]!.id, region: r.regionIndex, outcome: 'running' });
     return r;
   };
   it('an operation that goes through starts a hold; shutting it down does not', () => {
