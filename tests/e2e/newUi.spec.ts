@@ -1643,3 +1643,107 @@ test('New UI: the League door is the mock-up counter-pick page: pick a boxed Pok
   await expect.poll(() => scene(page), { timeout: 20_000 }).not.toBe('Decision');
   expect(errors).toEqual([]);
 });
+
+test('New UI: Memories pages carry the mock-up names and tags, and an entry opens as a page that can be read and closed', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&debug=1');
+  const mon = (uid: string, speciesId: string, level: number, starter = false) => ({ uid, speciesId, level, shiny: false, moves: ['tackle'], abilitySlot: 0, nature: null, held: [], starter, knockouts: 4, bossesBeaten: 1, titles: [] });
+  const record = (runId: string, over: Record<string, unknown> = {}) => ({
+    replays: [{ id: `${runId}:r0:s0:e5`, kind: 'gym', title: 'Gym battle against Brock', outcome: 'lose', region: 0, stage: 0, foe: { name: 'Brock', team: ['onix'] }, team: ['pikachu'], turns: 3, lines: ['T1: Pikachu used Tackle (-4); Onix used Tackle', 'T2: Pikachu fainted'] }],
+    world: null, format: 1, source: 'run', runId, endedAt: '2026-10-30T12:00:00Z', seed: runId, archetypeId: 'red', campaignId: 'full', prep: null, rules: null,
+    starter: { speciesId: 'pikachu', choices: ['pikachu'] }, regionOrder: ['kanto', 'johto'], regionsCleared: ['kanto'], regionReached: 1, outcome: 'defeat',
+    encounters: 44, battlesWon: 30, badges: ['brock'], bosses: { gym: 8, elite: 0, champion: 0 }, team: [mon(`${runId}-a`, 'pikachu', 41, true), mon(`${runId}-b`, 'onix', 38)],
+    aceUid: `${runId}-a`, rivals: [{ id: 'rv', name: 'Blue', classId: 'youngster', archetype: 'a', state: 'contender', encounters: 4, setbacks: 1, lastResult: 'lose', resolution: null, team: ['pidgeot'], rank: 'champion', world: null, narrativeWins: 0 }],
+    nemeses: [], legendaries: { seen: [], caught: [] }, defeatedBy: { speciesId: 'pidgeot', level: 45, trainer: 'Blue' }, finalBattle: { result: 'lose', speciesId: 'pidgeot', level: 45, trainer: 'Blue' },
+    stats: { maxLevel: 41, survivedFatal: 0, closeCalls: 0, caught: 5, shinies: 0, rivalWins: 0 }, narrative: [], chronicle: [],
+    moments: [{ kind: 'firstGym', text: 'First Gym victory: beat Brock.', speciesId: null, region: 0 }, { kind: 'runEnding', text: "The journey ended against Blue's Pidgeot (Lv 45).", speciesId: 'pidgeot', region: 1 }],
+    journal: [], epitaph: 'Pikachu carried this journey.', ...over,
+  });
+  const heirloom = { runId: 'past-1', speciesId: 'pikachu', name: 'Pikachu', level: 41, shiny: false, trainer: 'Red', chosen: null, spent: false, options: [{ id: 'egg', label: 'A Pikachu Egg', text: 'A Legacy Egg.' }, { id: 'item', label: 'Everstone', text: 'A keepsake.', itemId: 'everstone' }] };
+  await page.evaluate(({ legacyRuns, heirloom }) => {
+    const pkr = (window as any).__pkr;
+    pkr.session.changeProfile((p: any) => ({ ...p, legacyRuns, memories: { heirlooms: [heirloom], claimed: [], cameos: [] } }));
+    pkr.game.scene.getScenes(true)[0].scene.start('Memories');
+  }, { legacyRuns: [record('past-1'), record('past-2', { outcome: 'victory', defeatedBy: null })], heirloom });
+  await waitForScene(page, 'Memories');
+  const mem = page.locator('#rx .stage[data-scene="Memories"]').first();
+  const top = page.locator('#rx .stage[data-scene="Memories"]').last();
+  await expect(mem).toContainText('Run Chronicles');
+  // Run Journal: the mock-up's name in the band, and a Win or Loss tag on each run.
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Enter');
+  await expect(mem).toContainText('Memories: Run Journal');
+  await expect(mem.locator('.hd')).toHaveAttribute('style', /#9a5ad8/); // the story band
+  await expect(mem).toContainText('Loss');
+  await expect(mem).toContainText('Win');
+  // An entry opens as a page over the list (it could not be read in New before), and Enter closes it.
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#rx .stage[data-scene="Memories"]')).toHaveCount(2);
+  for (const bit of ['Team: Pikachu Lv 41, Onix Lv 38', 'Rival Blue', 'Pikachu carried this journey.', 'Enter or Esc to close']) await expect(top).toContainText(bit);
+  await page.screenshot({ path: 'test-results/newui-memories-reader.png' });
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#rx .stage[data-scene="Memories"]')).toHaveCount(1);
+  expect(await scene(page)).toBe('Memories');
+  await page.keyboard.press('Escape');
+  await expect(mem.locator('.hd')).toHaveText('Memories');
+  // Fallen Trainers and Battle Replays: their names and tags; a click on the open page closes it too.
+  for (const [steps, name, tag, band] of [[3, 'Memories: Fallen Trainers', 'Loss', /#9a5ad8/], [1, 'Memories: Battle Replays', 'Play', /#d8483a/]] as const) {
+    for (let i = 0; i < steps; i++) await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
+    await expect(mem).toContainText(name);
+    await expect(mem.locator('.hd')).toHaveAttribute('style', band);
+    await expect(mem).toContainText(tag);
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#rx .stage[data-scene="Memories"]')).toHaveCount(2);
+    await top.locator('[data-act="close"]').last().click();
+    await expect(page.locator('#rx .stage[data-scene="Memories"]')).toHaveCount(1);
+    await page.keyboard.press('Escape');
+    await expect(mem.locator('.hd')).toHaveText('Memories'); // back on the menu, the cursor where it was
+  }
+  // Heirlooms is the mock-up gallery.
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Enter');
+  await expect(mem).toContainText('Memories: Heirlooms');
+  await expect(mem).toContainText('Found');
+  expect(errors).toEqual([]);
+});
+
+test('New UI: a champion in the Hall of Fame opens the winning-team page; Esc goes back to the list', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&debug=1');
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    const mk = (speciesId: string, level: number, shiny = false) => ({ speciesId, level, shiny });
+    const run = { runId: 'r128', endedAt: '2026-11-10T12:00:00Z', seed: 'r128', archetypeId: 'red', campaignId: 'full', victory: true, regionsCleared: 1, regions: 1, badges: 8, encounters: 128, defeatedBy: null, party: [mk('charizard', 52), mk('lucario', 50), mk('gengar', 49), mk('gyarados', 51, true), mk('garchomp', 53), mk('pikachu', 47)], bankCredits: 0, researchPoints: 0, achievements: [], moments: [], journal: [], epitaph: 'Charizard carried this journey.', legacy: [] };
+    pkr.session.changeProfile((p: any) => ({ ...p, runHistory: [run] }));
+    pkr.game.scene.getScenes(true)[0].scene.start('HallOfFame');
+  });
+  await waitForScene(page, 'HallOfFame');
+  const stages = page.locator('#rx .stage[data-scene="HallOfFame"]');
+  await expect(stages.first()).toContainText('Records');
+  await expect(stages.first()).toContainText('Champion team');
+  // Enter on the Records row opens nothing.
+  await page.keyboard.press('Enter');
+  await expect(stages).toHaveCount(1);
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Enter');
+  await expect(stages).toHaveCount(2);
+  const team = stages.last();
+  for (const bit of ['Hall of Fame', 'Charizard', 'Lv 52', 'Fire · Flying', 'LEAD', 'Lucario', 'Gengar', 'Gyarados', 'Shiny', 'Garchomp', 'Pikachu', '2026-11-10 · Champion · Red. Your winning team.']) await expect(team).toContainText(bit);
+  await expect(team.locator('[data-act="pick"]')).toHaveCount(6);
+  await expect(team.locator('.hd')).toHaveAttribute('style', /#b8862a/); // the run end's gold band
+  await expect(team.locator('.an')).toHaveCount(6);
+  // No HP is on record, so no numbers are made up.
+  await expect(team).not.toContainText('1 / 1');
+  await expect(team.locator('.sel')).toContainText('Charizard');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowDown');
+  await expect(team.locator('.sel')).toContainText('Gengar');
+  await page.screenshot({ path: 'test-results/newui-hall-of-fame-team.png' });
+  await page.keyboard.press('Escape');
+  await expect(stages).toHaveCount(1);
+  expect(await scene(page)).toBe('HallOfFame');
+  await page.keyboard.press('Escape');
+  await waitForScene(page, 'Hub');
+  expect(errors).toEqual([]);
+});
