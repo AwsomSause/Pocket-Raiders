@@ -117,7 +117,7 @@ import { Bar, badge, drawPanel, Menu } from '../ui/widgets';
 import { sceneForRun } from './routing';
 import { battleSkinFor, type BattleFrameInfo, type BattleHud, type BattleSkin, type BoxSpec, type MenuLayout, type MenuSpec, type Rect } from '../ui/battleStyles';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
-import { battleView, type BattleBox, type BattleModel } from '../ui/redux/screens/battle';
+import { battleView, panelOf, type BattleBox, type BattleModel, type BattlePanel } from '../ui/redux/screens/battle';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { KIT_LAYOUTS, KitBar, kitTexturesReady, type GaugeLike } from '../ui/battleUiStyles';
 import { loadAssets, partySpecies, pokemonArtIds, preloadPokemon, queueAssets } from '../ui/lazyAssets';
@@ -312,6 +312,11 @@ export class BattleScene extends Phaser.Scene {
   private rxHidden = new WeakSet<object>();
   /** The focused move in words, for the New UI's text box. */
   private rxInfo = '';
+  /** New UI: the open info panel's sections, and whether it shows as a move's tooltip. */
+  private rxPanels: BattlePanel[] = [];
+  private rxPanelAt: 'left' | 'tip' = 'left';
+  /** New UI: the transformations the move menu offers now (the mock-ups' row of buttons). */
+  private rxGim: { choices: TransformRequest[]; tera: string } | null = null;
   /** New UI: the Item window's open pocket. */
   private rxPocket = 0;
   private playerBox!: InfoBox;
@@ -431,15 +436,7 @@ export class BattleScene extends Phaser.Scene {
       const id = this.bagIds[(this.picker as Picker | null)?.current ?? -1];
       if (id) this.toggleHotbar(id);
     });
-    LOG_TABS.forEach((t, i) =>
-      this.input.keyboard?.on(`keydown-${i + 1}`, () => {
-        if (!this.historyView) return;
-        this.logTab = t.id;
-        this.historyView.destroy();
-        this.historyView = null;
-        this.toggleHistory();
-      }),
-    );
+    LOG_TABS.forEach((t, i) => this.input.keyboard?.on(`keydown-${i + 1}`, () => this.setLogTab(t.id)));
     // Presentation only: faster tweens and timers; the battle itself is unchanged.
     const speed = { showcase: 0.75, normal: 1, fast: 2, quick: 3 }[session.settings.battleSpeed];
     this.tweens.timeScale = speed;
@@ -1645,6 +1642,14 @@ export class BattleScene extends Phaser.Scene {
         pick: (i) => { if (!this.picker && !this.infoPanel && !this.autoRunning) this.menu?.press(Number(i)); },
         tab: (i) => this.tabs.press(Number(i)),
         auto: () => this.toggleAuto(),
+        info: () => { if (this.infoPanel) this.closePanel(); },
+        gim: (i) => {
+          const pick = this.rxGim?.choices[Number(i)];
+          if (!pick || !this.menu || this.picker || this.infoPanel || this.busy) return;
+          this.transformChoice = this.transformChoice?.kind === pick.kind ? null : pick;
+          this.showMoveMenu();
+        },
+        log: (i) => this.setLogTab(LOG_TABS[Number(i)]?.id),
       },
       overs: { over: (i) => { const k = Number(i); if (this.menu && !this.picker && this.menu.index !== k && !this.menu.options[k]?.disabled) this.menu.focus(k); } },
     });
@@ -1666,7 +1671,7 @@ export class BattleScene extends Phaser.Scene {
     const side = (s: Side, main: InfoBox): InfoBox[] => (this.duo ? this.duo.slots[s].map((o) => (o ? o.box : main)) : [main]);
     const foes = side('enemy', this.enemyBox), mine = side('player', this.playerBox);
     // The canvas keeps building its HUD (the scene's logic reads and moves it); it is only left out of the picture.
-    for (const o of [...foes.map((b) => b.container), ...mine.map((b) => b.container), this.header, this.momentumText, this.status, this.storyBar?.container, this.commandWindow, this.message, this.moveInfo, this.moveBadges, this.tabs.root, this.note, this.menu?.container]) {
+    for (const o of [...foes.map((b) => b.container), ...mine.map((b) => b.container), this.header, this.momentumText, this.status, this.storyBar?.container, this.commandWindow, this.message, this.moveInfo, this.moveBadges, this.tabs.root, this.note, this.menu?.container, this.infoPanel, this.historyView, this.actionTabUi?.container]) {
       if (o && !this.rxHidden.has(o)) {
         cam.ignore(o);
         this.rxHidden.add(o);
@@ -1689,6 +1694,10 @@ export class BattleScene extends Phaser.Scene {
       note: this.note.alpha > 0.05 ? this.note.text : '',
       auto: this.autoRunning,
       party: { n: this.run.party.length, out: this.run.party.filter((m) => m.hp <= 0).length },
+      gim: this.rxGim && menu ? this.rxGim.choices.map((c) => ({ kind: c.kind, on: this.transformChoice?.kind === c.kind, ...(c.kind === 'tera' ? { row: TERA_ICON_ROW[this.rxGim!.tera] ?? 0 } : {}) })) : null,
+      panels: this.infoPanel ? this.rxPanels : null,
+      panelAt: this.rxPanelAt,
+      log: this.historyView ? { tabs: LOG_TABS.map((t) => t.label), index: LOG_TABS.findIndex((t) => t.id === this.logTab), lines: filterLog(this.history, this.logTab).slice(-12) } : null,
     };
     const sig = JSON.stringify(data);
     if (sig === this.rxSig) return;
@@ -2091,6 +2100,15 @@ export class BattleScene extends Phaser.Scene {
     return plan.total;
   }
 
+  /** The open battle log switches to another filter (keys 1-5, or a click on a tab). */
+  private setLogTab(id: LogTab | undefined): void {
+    if (!this.historyView || !id) return;
+    this.logTab = id;
+    this.historyView.destroy();
+    this.historyView = null;
+    this.toggleHistory();
+  }
+
   /** H: show or hide the last battle messages, with filter tabs (ideas W1 F3). */
   private logTab: LogTab = 'all';
   private toggleHistory(): void {
@@ -2276,6 +2294,7 @@ export class BattleScene extends Phaser.Scene {
     this.moveBadges = null;
     this.actionTabUi?.destroy();
     this.actionTabUi = null;
+    this.rxGim = null;
     this.commandWindow.setVisible(false);
     this.message.setVisible(true);
     this.tabs?.show(false);
@@ -3153,8 +3172,11 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** A glass panel across the bar with up to three text columns (battle Info, move details, party summary). */
-  private openPanel(columns: { head: string; text: string }[], onClose?: () => void): void {
+  private openPanel(columns: { head: string; text: string }[], onClose?: () => void, tip?: BattlePanel): void {
     this.panelClose = onClose ?? null;
+    // New UI: the same words as the mock-ups' windows (one move's details as its tooltip).
+    this.rxPanels = tip ? [tip] : columns.map((c) => panelOf(c.head, c.text));
+    this.rxPanelAt = tip ? 'tip' : 'left';
     this.infoPanel?.destroy();
     const w = (GAME_WIDTH - 56) / columns.length;
     // The panel grows upwards over the arena when a column has more lines than the bar holds (Info stays readable).
@@ -3203,7 +3225,18 @@ export class BattleScene extends Phaser.Scene {
           { head: move.name, text: `${move.type.toUpperCase()} · ${move.category}\nPower ${power} · Accuracy ${move.accuracy ?? '—'} · PP ${slot!.pp}/${maxPp(content, slot!)}\nPriority ${move.priority > 0 ? '+' : ''}${move.priority}${hint ? `\nAgainst ${this.speciesName(this.shown.enemy)}: ${hint.text}` : ''}` },
           { head: 'What it does', text: moveFullDescription(move) },
           { head: 'Notes', text: `${flags.length ? flags.join('\n') : 'No special properties.'}${this.transformChoice ? `\nSpecial action ready: ${this.transformChoice.kind}` : ''}` },
-        ]);
+        ], undefined, {
+          head: move.name,
+          chips: [move.type],
+          facts: [
+            ['Category', move.category.charAt(0).toUpperCase() + move.category.slice(1)],
+            ['Power / Accuracy', `${power ?? '—'} / ${move.accuracy ?? '—'}`],
+            ['PP', `${slot!.pp} / ${maxPp(content, slot!)}`],
+            ['Priority', `${move.priority > 0 ? '+' : ''}${move.priority}`],
+            ...(hint ? [[`Against ${this.speciesName(this.shown.enemy)}`, hint.text] as const] : []),
+          ],
+          lines: [moveFullDescription(move), ...flags, ...(this.transformChoice ? [`Special action ready: ${this.transformChoice.kind}`] : [])],
+        });
         return;
       }
     }
@@ -3680,6 +3713,7 @@ export class BattleScene extends Phaser.Scene {
     ];
     if (choices.length === 0) return;
     const on = this.transformChoice;
+    this.rxGim = { choices, tera: teraOption(ctx) ?? 'normal' };
     this.actionTabUi = actionTab(this, 20, MESSAGE_Y - 26, {
       on: !!on,
       icon: on?.kind === 'dynamax' ? { key: 'ui.dynamax.icon' } : on?.kind === 'mega' ? { key: 'pack.ebdx.symMega' } : { key: 'ui.tera.types', frame: TERA_ICON_ROW[teraOption(ctx) ?? 'normal'] },

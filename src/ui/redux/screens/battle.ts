@@ -2,7 +2,7 @@
 // the choices), the page tabs and the small lines over the field. It is drawn over the canvas, which keeps the arena,
 // the Pokémon and every animation. Pure drawing; BattleScene keeps the rules, the input and the state.
 
-import { act, esc, hpb, TYPE_COLORS, W } from '../kit';
+import { act, esc, facts, hpb, img, TYPE_COLORS, ty, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { type Art, pic, scrollStart } from '../templates';
 
@@ -42,7 +42,61 @@ export interface BattleModel {
   auto: boolean;
   /** Your own party as balls (the top-bar layout shows them under your name): how many, and how many have fainted. */
   party: { n: number; out: number } | null;
+  /** The transform buttons over the move menu (Mega, Tera, Dynamax, Z-Move): the ones this Pokémon can use now. */
+  gim?: readonly BattleGimmick[] | null;
+  /** The info panel (I): one window per section, left of the field; a single move's details show as the mock-ups' tooltip. */
+  panels?: readonly BattlePanel[] | null;
+  panelAt?: 'left' | 'tip';
+  /** The battle log (H): its filter tabs and the lines of the open one. */
+  log?: { tabs: readonly string[]; index: number; lines: readonly string[] } | null;
 }
+
+export interface BattleGimmick {
+  kind: 'mega' | 'tera' | 'dynamax' | 'zmove';
+  on: boolean;
+  /** Tera: the row of the Tera type's jewel on the icon sheet. */
+  row?: number;
+}
+
+const GIM_NAMES: Record<BattleGimmick['kind'], string> = { mega: 'Mega', tera: 'Tera', dynamax: 'Dynamax', zmove: 'Z-Move' };
+const gimIcon = (g: BattleGimmick): string =>
+  g.kind === 'mega' ? img('packs/ebdx/ui/symMega.png', 0.6) : g.kind === 'dynamax' ? img('packs/dbk/dynamax/icon.png', 0.62) : g.kind === 'tera' ? img('packs/dbk/tera/types.png', 0.66, [0, Math.max(0, g.row ?? 0) * 32, 32, 32]) : '';
+
+export interface BattlePanel {
+  head: string;
+  /** A mark at the right of the heading ("Special"), or ''. */
+  tag?: string;
+  /** Type chips under (or beside) the heading. */
+  chips: readonly string[];
+  /** Plain lines that come first ("Lucario Lv.50"), over the rows. */
+  lead?: readonly string[];
+  /** Short "name: value" rows. */
+  facts: readonly (readonly [string, string])[];
+  /** Everything else, as small lines. */
+  lines: readonly string[];
+}
+
+/**
+ * Sorts a panel column's text into the mock-ups' window parts: "Type: Fire / Flying" becomes type chips, a short
+ * "name: value" line becomes a facts row, and the rest stays as lines.
+ */
+export function panelOf(head: string, text: string): BattlePanel {
+  const chips: string[] = [], rows: [string, string][] = [], lead: string[] = [], lines: string[] = [];
+  for (const raw of text.split('\n')) {
+    const line = raw.trim();
+    if (!line) continue;
+    const m = /^([^:]{1,18}):\s+(.+)$/.exec(line);
+    if (m && /^types?$/i.test(m[1]!)) chips.push(...m[2]!.split(/\s*\/\s*/).filter(Boolean));
+    else if (m && m[2]!.length <= 26) rows.push([m[1]!, m[2]!]);
+    else (rows.length ? lines : lead).push(line);
+  }
+  // With no rows at all, everything is just lines.
+  return rows.length ? { head, chips, lead, facts: rows, lines } : { head, chips, facts: rows, lines: lead };
+}
+
+const panelBody = (p: BattlePanel, tip: boolean): string =>
+  `<div class="row"><b class="acc grow">${esc(p.head)}</b>${tip ? p.chips.map(ty).join('') : ''}${p.tag ? `<span class="tg" style="font-size:11px;padding:1px 6px">${esc(p.tag)}</span>` : ''}</div>${!tip && p.chips.length ? `<div class="row" style="gap:6px">${p.chips.map(ty).join('')}</div>` : ''}${(p.lead ?? []).map((t) => `<div style="font-size:14px;font-weight:700">${esc(t)}</div>`).join('')}${facts(p.facts)}${p.lines.map((t) => `<div class="sm" style="line-height:19px">${esc(t)}</div>`).join('')}`;
+
 
 const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
 const pct = (r: number): number => Math.max(0, Math.min(100, Math.round(r * 100)));
@@ -118,7 +172,18 @@ export function battleView(c: ReduxCtx, d: BattleModel): string {
   const status = d.status ? `<div class="abs sm" style="left:20px;top:${duo ? 20 + d.foes.length * 58 : v === 2 ? 98 : 120}px;max-width:470px;white-space:pre-line;${line}">${esc(d.status)}</div>` : '';
   const note = d.note ? `<div class="abs" style="left:50%;top:${v === 2 && !duo ? 100 : 60}px;transform:translateX(-50%);max-width:560px;z-index:5;pointer-events:none"><span class="tg" style="white-space:normal">${esc(d.note)}</span></div>` : '';
   const pin = d.auto ? `<div class="abs btn on" style="left:50%;top:${v === 2 && !duo ? 76 : 20}px;transform:translateX(-50%);height:32px;font-size:14px"${act('auto')}>AUTO ▶▶</div>` : '';
-  return head + tray + tabs + header + momentum + status + note + pin;
+  // The info panel and the log sit over the field, clear of the tray; a click closes them.
+  const room = 540 - 92 - top - 12 - (d.tabs && v !== 2 ? 34 : 0);
+  const win = 'display:flex;flex-direction:column;gap:6px;padding:10px 12px;cursor:pointer';
+  const panels = !d.panels?.length ? ''
+    : d.panelAt === 'tip'
+      ? W(panelBody(d.panels[0]!, true), `position:absolute;right:60px;bottom:${Math.max(150, top + (d.tabs ? 42 : 8) + 34)}px;width:330px;${win};padding:10px 14px;z-index:8`, '', act('info'))
+      : `<div class="abs" style="left:20px;top:92px;height:${room}px;display:flex;flex-direction:column;flex-wrap:wrap;align-content:flex-start;gap:8px 6px;z-index:8"${act('info')}>${d.panels.map((p) => W(panelBody(p, false), `width:${d.panels!.length > 2 ? 284 : 310}px;${win}`)).join('')}</div>`;
+  const log = d.log ? W(`<div class="tabs" style="margin-bottom:6px">${d.log.tabs.map((t, k) => `<span class="${k === d.log!.index ? 'on' : ''}" style="cursor:pointer"${act('log', k)}>${esc(t)}</span>`).join('')}</div>${d.log.lines.length ? d.log.lines.map((l) => `<span class="sm">${esc(l)}</span>`).join('') : '<span class="sm" style="opacity:.7">Nothing here yet.</span>'}`, `position:absolute;left:20px;top:92px;width:430px;max-height:${room}px;overflow:hidden;${win.replace(';cursor:pointer', '')};z-index:8`) : '';
+  // The transform buttons sit over the tray, across from the page tabs.
+  const gimAt = v === 2 ? 'right:40px;bottom:132px' : v === 3 ? `right:20px;bottom:${Math.max(222, top + 8) + 42}px` : `left:20px;bottom:${Math.max(v === 1 ? 138 : 128, top + 8)}px`;
+  const gim = d.gim?.length ? `<div class="abs row" style="${gimAt};gap:8px;z-index:3">${d.gim.map((g, k) => `<div class="btn${g.on ? ' on' : ''}" style="height:34px;font-size:14px;padding:0 10px"${act('gim', k)}>${gimIcon(g)}${GIM_NAMES[g.kind]}</div>`).join('')}</div>` : '';
+  return head + tray + tabs + gim + header + momentum + status + note + pin + panels + log;
 }
 
 export interface BattleListRow {

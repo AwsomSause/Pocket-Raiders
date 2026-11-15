@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BATTLE_LIST_ROWS, battleListView, battleView, trayHeight, type BattleBox, type BattleListModel, type BattleListRow, type BattleModel, type BattleOption, windowTitle } from '../../src/ui/redux/screens/battle';
+import { BATTLE_LIST_ROWS, battleListView, battleView, trayHeight, type BattleBox, type BattleListModel, type BattleListRow, type BattleModel, type BattleOption, panelOf, windowTitle } from '../../src/ui/redux/screens/battle';
 import type { ReduxCtx } from '../../src/ui/redux/stage';
 
 // The New UI battle HUD is a pure function from what the battle shows to HTML, in four layouts.
@@ -179,5 +179,66 @@ describe('New UI battle windows (Party and Item)', () => {
     expect(windowTitle('Bag  (P pins to the hotbar)')).toEqual({ title: 'Bag', note: 'P pins to the hotbar' });
     expect(windowTitle('Switch to…')).toEqual({ title: 'Switch to…', note: '' });
     expect(windowTitle('  ')).toEqual({ title: '', note: '' });
+  });
+});
+
+describe('New UI battle info panel, log and transform buttons', () => {
+  it('sorts a panel column into type chips, short rows and lines, keeping the first lines on top', () => {
+    const p = panelOf('Opposing Pokémon', 'Pikipek Lv.7\nType: Normal / Flying\nAbility: not shown yet\nCatch odds (plain ball): 44% now, 44% at full health\n\nStats: Atk +2 · Def +1');
+    expect(p.head).toBe('Opposing Pokémon');
+    expect(p.chips).toEqual(['Normal', 'Flying']);
+    expect(p.lead).toEqual(['Pikipek Lv.7']);
+    expect(p.facts).toEqual([['Ability', 'not shown yet'], ['Stats', 'Atk +2 · Def +1']]);
+    expect(p.lines).toEqual(['Catch odds (plain ball): 44% now, 44% at full health']);
+  });
+
+  it('keeps plain text as lines when there are no rows, and survives empty text', () => {
+    expect(panelOf('What it does', 'A physical attack.\nIt may flinch.')).toEqual({ head: 'What it does', chips: [], facts: [], lines: ['A physical attack.', 'It may flinch.'] });
+    expect(panelOf('Battlefield', '')).toEqual({ head: 'Battlefield', chips: [], facts: [], lines: [] });
+  });
+
+  for (const layout of [0, 1, 2, 3]) {
+    it(`layout ${layout}: the info panel shows one window per section and closes on a click`, () => {
+      const panels = [panelOf('Battlefield', 'Momentum 0'), panelOf('Your Pokémon', 'Lucario Lv.50\nType: Fighting / Steel\nAbility: Inner Focus')];
+      const html = battleView(ctx(layout), model({ panels, panelAt: 'left' }));
+      for (const t of ['Battlefield', 'Momentum 0', 'Your Pokémon', 'Lucario Lv.50', 'Inner Focus', 'Fighting', 'Steel']) expect(html).toContain(t);
+      expect(count(html, 'data-act="info"')).toBe(1);
+      expect(count(html, 'class="ty"')).toBe(2);
+      expect(html).toContain('left:20px;top:92px');
+    });
+
+    it(`layout ${layout}: the log shows its filter tabs, the open one lit, and its lines`, () => {
+      const html = battleView(ctx(layout), model({ log: { tabs: ['All', 'Damage', 'Status'], index: 1, lines: ['Lucario used Aura Sphere!', 'It hit <hard>'] } }));
+      expect(count(html, 'data-act="log"')).toBe(3);
+      expect(html).toMatch(/class="on"[^>]*data-act="log" data-arg="1"/);
+      expect(html).toContain('Lucario used Aura Sphere!');
+      expect(html).not.toContain('<hard>');
+      expect(battleView(ctx(layout), model({ log: { tabs: ['All'], index: 0, lines: [] } }))).toContain('Nothing here yet.');
+    });
+
+    it(`layout ${layout}: the transform buttons show the ones on offer, with the chosen one lit`, () => {
+      const html = battleView(ctx(layout), model({ menu: { options: moves, index: 0 }, gim: [{ kind: 'mega', on: false }, { kind: 'tera', on: true, row: 3 }, { kind: 'dynamax', on: false }, { kind: 'zmove', on: false }] }));
+      expect(count(html, 'data-act="gim"')).toBe(4);
+      for (const t of ['Mega', 'Tera', 'Dynamax', 'Z-Move']) expect(html).toContain(t);
+      expect(html).toMatch(/class="btn on"[^>]*data-act="gim" data-arg="1"/);
+      expect(count(html, 'data-act="pick"')).toBe(4);
+    });
+  }
+
+  it('a single move shows as the tooltip window with its type chip beside the name', () => {
+    const tip = { head: 'Flamethrower', chips: ['fire'], facts: [['Category', 'Special'], ['Power / Accuracy', '90 / 100']] as [string, string][], lines: ['May burn the target.'] };
+    const html = battleView(ctx(0), model({ panels: [tip], panelAt: 'tip' }));
+    expect(html).toContain('right:60px;bottom:');
+    expect(html).toContain('width:330px');
+    for (const t of ['Flamethrower', 'Fire', 'Special', '90 / 100', 'May burn the target.']) expect(html).toContain(t);
+    expect(html).not.toContain('left:20px;top:92px;height');
+  });
+
+  it('draws nothing extra when no panel, log or transformation is open, and never lets their text in as HTML', () => {
+    const plain = battleView(ctx(0), model());
+    for (const a of ['info', 'log', 'gim']) expect(plain).not.toContain(`data-act="${a}"`);
+    expect(battleView(ctx(0), model({ panels: [], gim: [], log: null }))).toBe(plain);
+    const html = battleView(ctx(0), model({ panels: [{ head: '<b>h</b>', tag: '<i>t</i>', chips: [], lead: ['<u>l</u>'], facts: [['<s>k</s>', '<em>v</em>']], lines: ['<p>x</p>'] }] }));
+    for (const t of ['<b>h</b>', '<i>t</i>', '<u>l</u>', '<s>k</s>', '<em>v</em>', '<p>x</p>']) expect(html).not.toContain(t);
   });
 });
