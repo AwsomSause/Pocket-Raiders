@@ -9,7 +9,7 @@
 import { z } from 'zod';
 import json from '../../data/rivalStepIn.json';
 import type { Content } from '../contentSchema';
-import { isApprenticeBattle, isPseudoBattle, isStoryEventBattle } from '../events';
+import { isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStoryEventBattle } from '../events';
 import { hashSeed, Rng } from '../rng';
 import type { BattleState, RunState } from '../state';
 import { familyId } from '../mastery';
@@ -88,7 +88,7 @@ export function eligibleBattle(run: RunState, b: BattleState): boolean {
 export function catchable(content: Content, b: BattleState): boolean {
   const foe = b.enemyTeam[b.enemyIndex];
   // Event wild fights count too, except story-critical ones (story events, apprentice, pseudo-stage and Battle Club fights).
-  if (b.event && (b.event.eventId === 'plaza:club' || isStoryEventBattle(content, b.event) || isPseudoBattle(content, b.event) || isApprenticeBattle(content, b.event))) return false;
+  if (b.event && (b.event.eventId === 'plaza:club' || isStoryEventBattle(content, b.event) || isPseudoBattle(content, b.event) || isFriendlyBattle(content, b.event) || isApprenticeBattle(content, b.event))) return false;
   return b.kind === 'wild' && !b.trainer && !!foe && !foe.shadow && !foe.blissful && b.enemyTeam.length === 1;
 }
 
