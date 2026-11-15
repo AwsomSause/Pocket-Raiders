@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { bookRows, bookView, dossierView, DOSSIER_ROWS, leadLine, listWindow, pyramidFace, reportView, trackView, type BookModel, type DossierModel, type ReportModel, type TrackModel } from '../../src/ui/redux/screens/popups';
+import { bookRows, bookView, dossierView, DOSSIER_ROWS, leadLine, listWindow, pyramidFace, reportView, rollView, trackView, type BookModel, type DossierModel, type ReportModel, type RollCard, type RollModel, type TrackModel } from '../../src/ui/redux/screens/popups';
 import type { ReduxCtx } from '../../src/ui/redux/stage';
 
 // The New UI map pop-ups (Dossier, Field Notes, Notebook track page, Rival Report), drawn from the mock-ups' Beta 0.6
@@ -168,5 +168,55 @@ describe('New UI Rival Report', () => {
     expect(count(html, 'data-act="popPick"')).toBe(0);
     expect(html).toContain('No marks yet');
     expect(html).not.toContain('◀ ▶');
+  });
+});
+
+describe('Town Roll', () => {
+  const card = (name: string, state: RollCard['state'], note = 'Event'): RollCard => ({ name, state, note });
+  const four = [card('Department Store', 'star', 'Town hub'), card('Game Corner', 'dice'), card('Rooftop Drinks', 'dice', 'Shop'), card('Erika’s Garden', 'off')];
+  const roll = (over: Partial<RollModel> = {}): RollModel => ({ town: 'Celadon City', cards: four, index: 0, rolled: 2, optional: 3, page: null, text: 'Each Kanto town rolls which optional spaces appear this run.', ...over });
+
+  for (const layout of [0, 1]) {
+    it(`layout ${layout}: four spaces stand in one row as on the mock-up, each with its tag`, () => {
+      const html = rollView(ctx(layout), roll());
+      for (const bit of ['Town Roll', 'Department Store', 'Game Corner', 'Rooftop Drinks', 'Erika’s Garden', 'Always here', 'Not this run', 'Town hub', 'Shop', 'Celadon City · 2 of 3 optional spaces placed on the map', 'To the map', 'Each Kanto town rolls']) expect(html).toContain(bit);
+      expect(count(html, '>Rolled<')).toBe(2);
+      expect(count(html, 'data-act="popPick"')).toBe(4);
+      expect(count(html, 'data-act="pop"')).toBe(1);
+      expect(html).toContain(`height:${layout ? 200 : 230}px`);
+      // The space the roll left out is dimmed; the cursor is on the first card.
+      expect(count(html, ' dim"')).toBe(1);
+      expect(count(html, ' sel"')).toBe(1);
+      expect(html).toContain('★');
+    });
+  }
+  it('a real town (more than four): the spaces on the map keep their cards, the rest are small tags under them', () => {
+    const off = ['Brock’s Rest Stop', 'Magikarp Salesman', 'The Water Wheel'].map((n) => card(n, 'off'));
+    const html = rollView(ctx(0), roll({ cards: [card('Veridian Forest', 'star', 'Pseudo-stage'), card('Mt. Moon', 'star', 'Pseudo-stage'), card('The Flock', 'dice'), card('Museum of Science', 'dice'), ...off], rolled: 2, optional: 5 }));
+    expect(html).toContain('grid-template-columns:repeat(4,1fr)');
+    expect(html).toContain('Not this run:');
+    for (const n of ['Brock’s Rest Stop', 'Magikarp Salesman', 'The Water Wheel']) expect(html.indexOf(n)).toBeGreaterThan(html.indexOf('Not this run:'));
+    expect(count(html, 'data-act="popPick"')).toBe(7);
+    expect(count(html, 'opacity:0.6')).toBe(3);
+  });
+  it('more than four spaces on the map: two rows of short cards', () => {
+    const on = Array.from({ length: 6 }, (_, k) => card(`Space ${k}`, k < 2 ? 'star' : k < 5 ? 'dice' : 'open'));
+    const html = rollView(ctx(0), roll({ cards: [...on, card('Left out', 'off')], rolled: 3, optional: 4 }));
+    expect(count(html, 'height:62px')).toBe(6);
+    expect(html).toContain('Unlocked');
+  });
+  it('the cursor on a left-out space rings its tag', () => {
+    const cards = [...four.slice(0, 3), card('A', 'star'), card('Left out', 'off')];
+    const html = rollView(ctx(0), roll({ cards, index: 4 }));
+    expect(count(html, 'box-shadow:0 0 0 2px var(--tf)')).toBe(1);
+    expect(html).not.toContain(' sel"');
+  });
+  it('a stage that passes two towns says which one this is', () => {
+    expect(rollView(ctx(0), roll({ page: [2, 2] }))).toContain('Town 2 of 2');
+    expect(rollView(ctx(0), roll())).not.toContain('Town 1');
+  });
+  it('never injects text as HTML', () => {
+    const html = rollView(ctx(0), roll({ town: '<b>t</b>', cards: [card('<i>n</i>', 'dice', '<u>k</u>')], text: '<p>x</p>' }));
+    for (const bit of ['<b>t</b>', '<i>n</i>', '<u>k</u>', '<p>x</p>']) expect(html).not.toContain(bit);
   });
 });

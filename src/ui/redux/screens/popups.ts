@@ -2,7 +2,7 @@
 // org pyramid), Field Notes (the book), the Notebook's track page and the Rival Report. Pure drawing: MapScene keeps
 // the state and the input, and the words come from the same core views the old pop-ups read.
 
-import { act, esc, facts, H, hpb, mini, paper, tall, TX, W } from '../kit';
+import { act, B, esc, facts, H, hpb, mini, paper, tall, TX, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 
 const pips = (n: number, of = 3): string => `<span style="flex:none">${Array.from({ length: of }, (_, k) => `<i style="display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:4px;background:${k < n ? 'var(--acc)' : '#0000'};box-shadow:0 0 0 2px var(--tf)"></i>`).join('')}</span>`;
@@ -168,4 +168,63 @@ export function reportView(c: ReduxCtx, d: ReportModel): string {
   const feel = W(`<b class="acc">Feelings</b>${d.feelings.map(([n, p]) => `<div class="row"><span style="width:${v ? 86 : 96}px;${clip}">${esc(n)}</span>${hpb(p, 0, ' gold')}</div>`).join('')}<div class="row" style="gap:5px;flex-wrap:wrap;margin-top:2px">${d.marks.length ? d.marks.map((t) => `<span class="tg no">${esc(t)}</span>`).join('') : '<span class="sm">No marks yet</span>'}</div>`, 'flex:1;display:flex;flex-direction:column;gap:6px;min-width:0');
   const meet = W(`<b class="acc">Meetings</b>${d.meetings.map(([a, b]) => `<div class="row sm"><span class="grow">${esc(a)}</span><b>${esc(b)}</b></div>`).join('')}`, 'flex:1;display:flex;flex-direction:column;gap:6px;min-width:0');
   return back('pop') + H('Rival Report', 'story', d.rivals.length > 1 ? [['◀ ▶', 'rival'], ['R', 'close']] : [['R', 'close']]) + `<div class="abs" style="left:24px;top:76px;width:${v ? 250 : 290}px">${card}</div><div class="abs col" style="left:${v ? 300 : 340}px;right:24px;top:76px;gap:16px">${lead}<div class="row" style="gap:16px;align-items:stretch">${feel}${meet}</div></div>` + TX('Lead goes from −3 to +3. A rival win is +1, a rival loss is −1. Marks and feelings come from your choices.');
+}
+
+// ---------- Town Roll ----------
+
+export interface RollCard {
+  name: string;
+  /** 'star': always here. 'dice': rolled this run. 'open': something you did opened it. 'off': not this run. */
+  state: 'star' | 'dice' | 'open' | 'off';
+  /** What kind of place it is, and "Done" once played. */
+  note: string;
+}
+
+export interface RollModel {
+  town: string;
+  cards: readonly RollCard[];
+  index: number;
+  /** Optional spaces drawn, of how many the town has. */
+  rolled: number;
+  optional: number;
+  /** This town of how many (a stage can pass two); null for one. */
+  page: readonly [number, number] | null;
+  text: string;
+}
+
+const ROLL_TAG: Record<RollCard['state'], string> = { star: 'Always here', dice: 'Rolled', open: 'Unlocked', off: 'Not this run' };
+const DICE = '⚄⚁⚅⚂⚀⚃';
+
+/** The Town Roll page (mock-up `roll`): a card per space of the town, starred, rolled or left out this run. */
+export function rollView(c: ReduxCtx, d: RollModel): string {
+  const v = c.v(2), n = d.cards.length;
+  const hit = (k: number): string => `${act('popPick', k)} data-over="popOver"`;
+  let die = 0;
+  const glyphs = d.cards.map((card) => (card.state === 'star' ? '★' : card.state === 'dice' ? DICE[die++ % DICE.length]! : card.state === 'open' ? '!' : '·'));
+  const tag = (card: RollCard): string => `<span class="tg${card.state === 'star' ? '' : ' no'}" style="flex:none;align-self:flex-start">${ROLL_TAG[card.state]}</span>`;
+  const icon = (k: number, side: number): string => `<i style="flex:none;width:${side}px;height:${side}px;border-radius:6px;background:${d.cards[k]!.state !== 'off' ? 'var(--acc)' : 'var(--p2)'};color:#14161e;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:700${side < 30 ? ';font-size:13px' : ''}">${glyphs[k]}</i>`;
+  /** A card as on the mock-up: the icon and name, the tag, and what kind of place it is. */
+  const tall = (card: RollCard, k: number, h: number): string => W(
+    `<div class="row">${icon(k, 34)}<b style="font-size:16px;min-width:0">${esc(card.name)}</b></div>${tag(card)}<span class="sm" style="line-height:19px">${esc(card.note)}</span>`,
+    `flex:1;display:flex;flex-direction:column;gap:8px;height:${h}px;box-sizing:border-box;min-width:0;cursor:pointer`, `${k === d.index ? 'sel' : ''}${card.state === 'off' ? ' dim' : ''}`.trim(), hit(k),
+  );
+  const top = v ? 300 : 330;
+  let body: string;
+  if (n <= 4) body = `<div class="abs row" style="left:24px;right:24px;top:76px;gap:16px;align-items:stretch">${d.cards.map((card, k) => tall(card, k, v ? 200 : 230)).join('')}</div>`;
+  else {
+    // A real town has more spaces than the mock-up's four: the ones on the map keep their cards (two short rows when
+    // there are more than four), and the ones the roll left out sit under them as small dim tags.
+    const on = d.cards.map((card, k) => ({ card, k })).filter((x) => x.card.state !== 'off'), off = d.cards.map((card, k) => ({ card, k })).filter((x) => x.card.state === 'off');
+    const two = on.length > 4, h = two ? 62 : v ? 110 : 140;
+    const cards = on.map(({ card, k }) => (two
+      ? W(`<div class="row" style="gap:6px">${icon(k, 24)}<b style="font-size:13px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(card.name)}</b></div><div class="row" style="gap:6px">${tag(card)}<span class="sm" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(card.note)}</span></div>`, `display:flex;flex-direction:column;gap:5px;height:${h}px;box-sizing:border-box;min-width:0;cursor:pointer;padding:7px 9px`, k === d.index ? 'sel' : '', hit(k))
+      : tall(card, k, h))).join('');
+    const left = off.map(({ card, k }) => `<span class="tg no" style="cursor:pointer;opacity:${k === d.index ? 1 : 0.6}${k === d.index ? ';box-shadow:0 0 0 2px var(--tf)' : ''}"${hit(k)}>${esc(card.name)}</span>`).join('');
+    body = `<div class="abs col" style="left:24px;right:24px;top:76px;gap:12px"><div style="display:grid;grid-template-columns:repeat(${Math.min(4, Math.max(1, on.length))},1fr);gap:${two ? 12 : 16}px">${cards}</div>${off.length ? `<div class="row" style="gap:6px 8px;flex-wrap:wrap;align-items:center"><span class="sm" style="flex:none">${ROLL_TAG.off}:</span>${left}</div>` : ''}</div>`;
+  }
+  const count = `${esc(d.town)} · ${d.rolled} of ${d.optional} optional spaces placed on the map${d.page ? ` · Town ${d.page[0]} of ${d.page[1]}` : ''}`;
+  return (
+    H('Town Roll', 'map', [['Enter', 'choose'], ['Esc', 'back']]) + body +
+    `<div class="abs row" style="left:24px;right:24px;top:${top}px"><span class="grow">${count}</span>${B('To the map', true, 'cursor:pointer', '', act('pop'))}</div>` + TX(esc(d.text))
+  );
 }

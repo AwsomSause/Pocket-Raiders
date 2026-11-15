@@ -1552,3 +1552,94 @@ test('New UI: the Colossus page shows the Apex and the Blueprint of its three sh
   expect(raid.timerLeft).toBe(10);
   expect(errors).toEqual([]);
 });
+
+test('New UI: the Town Roll page opens from the map with O: the town, its starred and rolled spaces, and the ones left out', async ({ page }) => {
+  const errors = watch(page);
+  // A seed whose first region is Kanto, so Stage 1 is Pewter City with Kanto Canon's spaces.
+  await start(page, 'ui=new&seed=roll3');
+  await toMap(page);
+  const before = await page.evaluate(() => JSON.stringify((window as any).__pkr.session.run.expansion.canon));
+  const map = view(page, 'Map');
+  await expect(map.locator('[data-act="key"][data-arg="O"]')).toHaveCount(1);
+  await page.keyboard.press('o');
+  for (const bit of ['Town Roll', 'Veridian Forest', 'Mt. Moon', 'Always here', 'Rolled', 'Not this run:', 'Pewter City · 2 of', 'optional spaces placed on the map', 'To the map', 'Each Kanto town rolls which optional spaces appear this run.']) await expect(map).toContainText(bit);
+  await expect(map.locator('.sel')).toContainText('Veridian Forest');
+  await page.screenshot({ path: 'test-results/newui-town-roll.png' });
+  // The arrows walk the cards; a rolled space tells what it is in the text box.
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('ArrowRight');
+  const rolled = await map.locator('.sel b').innerText();
+  await expect(map.locator('.sel')).toContainText('Rolled');
+  await expect(map).toContainText(`${rolled}: `);
+  // A click on a space the roll left out says so.
+  const left = map.locator('span[data-act="popPick"]').first();
+  const name = await left.innerText();
+  await left.click();
+  await expect(map).toContainText(`${name} is not here this run.`);
+  // The button goes back to the map; O opens the page again and Esc closes it.
+  await map.locator('[data-act="pop"]').click();
+  await expect(map).not.toContainText('optional spaces placed on the map');
+  await page.keyboard.press('o');
+  await expect(map).toContainText('optional spaces placed on the map');
+  await page.keyboard.press('Escape');
+  await expect(map).not.toContainText('optional spaces placed on the map');
+  // Looking rolled nothing.
+  expect(await page.evaluate(() => JSON.stringify((window as any).__pkr.session.run.expansion.canon))).toBe(before);
+  expect(await scene(page)).toBe('Map');
+  expect(errors).toEqual([]);
+});
+
+test('New UI: the League door is the mock-up counter-pick page: pick a boxed Pokémon, swap the answered one out, and the result stays until Enter', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=door1');
+  await toMap(page);
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    const run = pkr.session.run;
+    const base = run.party[0];
+    const mk = (speciesId: string, level: number, i: number) => ({ ...structuredClone(base), uid: `t${i}-${speciesId}`, speciesId, level });
+    run.party = [mk('charizard', 52, 0), mk('lucario', 51, 1), mk('gengar', 50, 2), mk('gyarados', 50, 3), mk('garchomp', 49, 4), mk('pikachu', 48, 5)];
+    run.box = [mk('snorlax', 50, 6), mk('dragonite', 49, 7), mk('tyranitar', 48, 8)];
+    run.expansion = { ...(run.expansion ?? {}), league: { registered: run.party.map((m: any) => m.uid), swapped: false } };
+    const cap = (s: string) => s[0]!.toUpperCase() + s.slice(1);
+    run.phase = 'decision';
+    run.pending = [{
+      kind: 'leagueDoor', title: 'The League has read your team (6 registered). Swap one before the first battle?', outUid: run.party[0].uid, swapIns: run.box.map((m: any) => m.uid),
+      options: [{ label: 'Keep my team', description: 'Go in with the Pokémon you registered.' }, ...run.box.map((m: any) => ({ label: `Swap in ${cap(m.speciesId)} (Lv ${m.level})`, description: `Replaces Charizard, the Pokémon the Elite Four will answer most. The League has not seen ${cap(m.speciesId)}.` }))],
+    }];
+    pkr.game.scene.getScene('Map').scene.start('Decision');
+  });
+  await waitForScene(page, 'Decision');
+  const door = view(page, 'Decision');
+  for (const bit of ['League counter-pick', 'Charizard', 'The League will answer this', 'Lucario', 'Registered', 'Swap it for a boxed Pokémon?', 'Snorlax', 'Dragonite', 'Tyranitar', 'Swap Charizard out', 'Keep my team', 'Registrar', 'The League has studied Charizard most.']) await expect(door).toContainText(bit);
+  await expect(door.locator('.an')).toHaveCount(9); // six in the party, three in the box
+  // The swap button is lit and the first boxed Pokémon is marked, as on the mock-up.
+  await expect(door.locator('.btn.on')).toContainText('Swap Charizard out');
+  await expect(door.locator('[data-act="pick"]', { hasText: 'Pick' })).toContainText('Snorlax');
+  await page.screenshot({ path: 'test-results/newui-counter-pick.png' });
+  // Up twice is Dragonite's row: the box tells what the swap does, and the mark stays until Enter.
+  await page.keyboard.press('ArrowUp');
+  await page.keyboard.press('ArrowUp');
+  await expect(door).toContainText('The League has not seen Dragonite.');
+  await expect(door.locator('[data-act="pick"]', { hasText: 'Pick' })).toContainText('Snorlax');
+  await page.keyboard.press('Enter');
+  await expect(door.locator('[data-act="pick"]', { hasText: 'Pick' })).toContainText('Dragonite');
+  await expect(door.locator('.btn.on')).toContainText('Swap Charizard out');
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.pending.length)).toBe(1);
+  // Enter on the swap button swaps; the result stays on the page until the next input.
+  await page.keyboard.press('Enter');
+  await expect(door.locator('[data-act="done"]')).toHaveCount(1);
+  await expect(door).not.toContainText('Swap Charizard out');
+  const after = await page.evaluate(() => {
+    const run = (window as any).__pkr.session.run;
+    return { lead: run.party[0].speciesId, box: run.box.map((m: any) => m.speciesId), pending: run.pending.length, swapped: run.expansion.league.swapped };
+  });
+  expect(after.lead).toBe('dragonite');
+  expect(after.box).toContain('charizard');
+  expect(after.pending).toBe(0);
+  await page.waitForTimeout(600);
+  expect(await scene(page)).toBe('Decision');
+  await page.keyboard.press('Enter');
+  await expect.poll(() => scene(page), { timeout: 20_000 }).not.toBe('Decision');
+  expect(errors).toEqual([]);
+});

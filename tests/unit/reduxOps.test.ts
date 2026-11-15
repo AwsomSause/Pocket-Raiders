@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ODDS_COLORS, SIEGE_COLORS, rescueView, siegeCost, siegeMapView, type RescueModel, type SiegeDistrict, type SiegeMapModel } from '../../src/ui/redux/screens/ops';
+import { counterView, ODDS_COLORS, SIEGE_COLORS, rescueView, siegeCost, siegeMapView, type CounterModel, type CounterMon, type RescueModel, type SiegeDistrict, type SiegeMapModel } from '../../src/ui/redux/screens/ops';
 import type { ReduxCtx } from '../../src/ui/redux/stage';
 
 // New UI: the Rescue screen and the Siege map, drawn on the mock-ups' Beta 0.6 pages. Each is a pure function from a
@@ -143,5 +143,53 @@ describe('Siege map', () => {
     expect(count(siegeMapView(ctx(1), siege()), 'Chosen gate')).toBe(1);
     expect(siegeMapView(ctx(1), siege({ index: 3 }))).not.toContain('Chosen gate');
     expect(count(siegeMapView(ctx(1), siege({ entered: 1, index: 3 })), 'Chosen gate')).toBe(1);
+  });
+});
+
+describe('League counter-pick', () => {
+  const mon = (name: string, state: CounterMon['state'] = 'registered'): CounterMon => ({ name, file: null, types: ['fire', 'flying'], state });
+  const door = (over: Partial<CounterModel> = {}): CounterModel => ({
+    party: [mon('Charizard', 'answer'), mon('Lucario'), mon('Gengar'), mon('Pikachu', 'out')],
+    bench: [{ name: 'Snorlax', file: null, sub: 'Lv 50' }, { name: 'Dragonite', file: null, sub: 'Lv 49' }, { name: 'Tyranitar', file: null, sub: 'Lv 48' }],
+    pick: 0, at: 3, swap: 'Swap Charizard out', keep: 'Keep my team', who: 'Registrar', text: 'Your party is registered.', result: null, ...over,
+  });
+
+  for (const layout of [0, 1]) {
+    it(`layout ${layout}: the party with its types, the one the League will answer, the box and the two buttons`, () => {
+      const html = counterView(ctx(layout), door());
+      for (const bit of ['League counter-pick', 'Charizard', 'Lucario', 'Gengar', 'Pikachu', 'Fire', 'Flying', 'Swap it for a boxed Pokémon?', 'Snorlax', 'Lv 50', 'Dragonite', 'Tyranitar', 'Swap Charizard out', 'Keep my team', 'Registrar', 'Your party is registered.']) expect(html).toContain(bit);
+      expect(count(html, 'The League will answer this')).toBe(1);
+      expect(count(html, '>Registered<')).toBe(2);
+      expect(count(html, 'Not registered')).toBe(1);
+      expect(count(html, 'data-act="pick"')).toBe(5);
+    });
+  }
+  it('one boxed Pokémon is marked "Pick"; the mark follows the choice, not the cursor', () => {
+    const html = counterView(ctx(0), door({ pick: 1, at: 2 }));
+    expect(count(html, '>Pick<')).toBe(1);
+    expect(html.indexOf('>Pick<')).toBeGreaterThan(html.indexOf('Dragonite'));
+    expect(html.indexOf('>Pick<')).toBeLessThan(html.indexOf('Tyranitar'));
+    // The cursor is a ring on its row, and neither button is lit.
+    expect(count(html, 'box-shadow:0 0 0 2px var(--tf)')).toBe(1);
+    expect(html).not.toContain('class="btn on"');
+  });
+  it('the cursor lights the swap button or the keep button', () => {
+    const swap = counterView(ctx(0), door({ at: 3 })), keep = counterView(ctx(0), door({ at: 4 }));
+    expect(count(swap, 'class="btn on"')).toBe(1);
+    expect(swap.indexOf('class="btn on"')).toBeLessThan(swap.indexOf('Swap Charizard out'));
+    expect(keep.indexOf('class="btn on"')).toBeGreaterThan(keep.indexOf('Swap Charizard out'));
+  });
+  it('once chosen: the result is in the text box, the buttons are gone and a click anywhere goes on', () => {
+    const html = counterView(ctx(0), door({ result: 'Dragonite takes Charizard’s place.' }));
+    expect(html).toContain('Dragonite takes Charizard’s place.');
+    expect(html).not.toContain('Your party is registered.');
+    expect(html).not.toContain('Swap Charizard out');
+    expect(html).not.toContain('Registrar');
+    expect(count(html, 'data-act="done"')).toBe(1);
+    expect(counterView(ctx(0), door())).not.toContain('data-act="done"');
+  });
+  it('never injects text as HTML', () => {
+    const html = counterView(ctx(0), door({ party: [mon('<b>p</b>')], bench: [{ name: '<i>n</i>', file: null, sub: '<u>s</u>' }], swap: '<q>w</q>', keep: '<s>k</s>', who: '<em>r</em>', text: '<p>t</p>' }));
+    for (const bit of ['<b>p</b>', '<i>n</i>', '<u>s</u>', '<q>w</q>', '<s>k</s>', '<em>r</em>', '<p>t</p>']) expect(html).not.toContain(bit);
   });
 });
