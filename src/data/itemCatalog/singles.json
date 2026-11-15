@@ -96,5 +96,29 @@
     }
    ]
   }
+ },
+ {
+  "id": "twisted-spoon",
+  "name": "Twisted Spoon",
+  "family": "Type boosters (held)",
+  "description": "A spoon bent by a mind-reader: Psychic moves +20%",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "twistedspoon",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "psychic"
+     ],
+     "percent": 20
+    }
+   ]
+  }
  }
 ]

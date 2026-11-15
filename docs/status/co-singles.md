@@ -16,7 +16,8 @@ Content: `tools/events/co/singles-<n>.ts` -> `src/data/events/co-singles-<n>.jso
 | 8 | SF149 Puzzle Gates | 24 | built, re-read 2026-11-15 |
 | 9 | SF150 Famous Faces, SF151 Item Returns, SF152 Milestones, SF153 Quiet Moments | 38 | built, re-read 2026-11-15 |
 | 10 | SF154 Choice Rooms (+ the pocket closet's three returns) | 33 | built, re-read 2026-11-15 |
-| later | SF155 to SF161 | 135 | not started (old events still play) |
+| 11 | SF155 Games and Shrines, SF156 Roadside, SF157 Seasonal Set Pieces | 29 | built, re-read 2026-11-15 |
+| later | SF158 to SF161 (calendar weeks, battle moments) | 106 | not started (old weeks and moments still play) |
 
 SF158 to SF160 (82 calendar weeks) live in `gameEvents.json` and SF161 (15 battle moments) in `dramaEvents.json`, not in the event files; they need their own build path.
 
@@ -57,8 +58,11 @@ All checked 2026-11-15 against `STORY_FAMILIES_19.md` and `_20.md`.
 | SF152 | milestone-crossroads, milestone-dawn, milestone-embers (+ `milestone-embers-trainer`, next node), milestone-summit |
 | SF153 | quiet-bond, rk-birthday, rk-counting-sheep, rk-mood-swing, rk-perfect-day, rk-rest-day, rk-terrible-day, hold-the-hand, dream-memory |
 | SF154 | rk-crossroads-four, rk-door-wood/iron/silver/gold, rk-chaos-dial, rk-elevator, rk-floor-1/2/3/4, rk-twin-nodes, rk-twin-left/right, rk-treasure-trap, rk-lucky-number, rk-probability-mage, rk-strangers-dice, rk-streak-1/2/3, rk-echo-item, rk-mastery-echo, rk-mirror-reversal, rk-pocket-closet (+ `rk-pocket-closet-return`, `-2`, `-3`), rk-census, rk-crowd-poll, rk-daily-puzzle, rk-holiday-surprise, rk-team-banner |
+| SF155 | archaeology-dig, fossil-dig, bug-contest, cry-shrine, escape-room/-2, game-show-1/2/3, hide-and-seek, lore-riddle-1/2/3, mind-reader, parrot-teacher, parrot-repeats |
+| SF156 | passing-caravan, sleeping-npc, tap-the-silhouette, voting-booth |
+| SF157 | academy-exam, earth-week-cleanup, friendship-picnic, harvest-berry-fair, pokemon-day-parade, spring-bloom-guardian, spring-egg-hunt, stargazing-meteor-watch, summer-beach-tournament (each still drawn only in its week) |
 
-SF137 to SF154: every doc button checked by script against the built labels (all match); outcomes checked by hand against the doc row while writing and again after the standards pass.
+SF137 to SF157: every doc button checked by script against the built labels (all match); outcomes checked by hand against the doc row while writing and again after the standards pass.
 Buttons match the doc word for word, except `w4-balloon` (the doc says "pick a reachable node", not a button text): "Hop in, and pick where to land."
 Rooms added so a doc outcome can ask its own question: `berry-tree-pell` (callback), `festival-gift-swap`, `shimmering-grass-close`, `hidden-grotto-den`, `gmax-den-*` (5), `w4-graffiti-tag`, `r145-bonsly-railings`.
 
@@ -129,3 +133,10 @@ Rooms added so a doc outcome can ask its own question: `berry-tree-pell` (callba
 | Crowd poll "the options shown" | Two options, even odds | More options |
 | Daily puzzle "the day's prize" | One of four prizes | A real daily rotation |
 | Echo stone "a Common item" | Poké Ball, Great Ball or Repel (an event has at most four buttons) | Nothing |
+| Mind reader "pick one of five" / parrot "a list of 6" | One button at 1 in 5; four words (an event has at most four buttons) | Nothing |
+| Bug contest "named in the next region's contest" | The judge remembers you a region later; the Bug-type is not named | A species token |
+| Escape room "the order the player met their team" | Your starter is named first; the rest is told | Nothing |
+| Voting booth "the Pokémon who voted for the winner +1 Bond" | Even odds between two paths; the lead or top-Bond Pokémon gets +1 | Per-Pokémon votes |
+| Sleeping trainer "the next rival's lead is shown" | Every battle ahead on the stage is shown | A rival preview |
+| Cross-row flags (Tib SF2, Kindness SF128, Egg That Listened SF122, Mew and Deoxys Tellings, Shaymin Sign) | Set here: `tib-seen`, `tib-name-heard`, `kindness`, `egg-that-listened`, `telling-mew`, `telling-deoxys`, `sign-shaymin` | Those rows reading them |
+| Twisted Spoon | New held item: Psychic moves +20% | Nothing |

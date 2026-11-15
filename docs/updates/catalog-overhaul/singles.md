@@ -44,4 +44,9 @@
 - Honest odds, printed: a 1-in-6 slot, a 1-in-3 lucky number worth 10% more prize money all run, a three-game streak stall.
 - A census that pays ₽100 for every different type on your team, and a wardrobe that keeps one valuable safe until a later stage.
 
+**Batch 11: games, shrines, the roadside and the seasons (29 events).**
+- A game show whose first question is about your own starter, a riddle book that ends in buried treasure, and a cellar you escape by remembering the order you met your team.
+- Something pink plays hide-and-seek with you; a falling star leads somewhere strange; a Chatot repeats your word to everyone you meet.
+- Seasonal weeks get their own scenes: an Academy exam, a beach tournament with a Shell Bell, a parade with your starter at the front. New item: the Twisted Spoon.
+
 Known limits: "confused" and "Charged" for one battle are a damage change, the balloon lands two stops ahead (you cannot pick the spot), the Wooloo rolls on any day, and a few "shown before you choose" previews describe the Pokémon without naming it. Full list: `docs/status/co-singles.md`.

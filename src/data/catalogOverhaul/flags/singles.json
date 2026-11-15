@@ -470,6 +470,71 @@
    "key": "closet-star",
    "setBy": "rk-pocket-closet (Leave a Star Piece.)",
    "readBy": "rk-pocket-closet-return-3 (gives it back; spent there)"
+  },
+  {
+   "key": "bug-contest-won",
+   "setBy": "bug-contest (Enter.), stamped with the region",
+   "readBy": "bug-contest (the judge remembers you a region later)"
+  },
+  {
+   "key": "egg-that-listened",
+   "setBy": "spring-egg-hunt (Hunt.)",
+   "readBy": "the row that builds SF122 The Egg That Listened"
+  },
+  {
+   "key": "kindness",
+   "setBy": "sleeping-npc (Leave a blanket.), earth-week-cleanup (Join.)",
+   "readBy": "the Kindness Ledger (SF128)"
+  },
+  {
+   "key": "parrot-phrase",
+   "setBy": "parrot-teacher (any word)",
+   "readBy": "parrot-repeats (placement: it only appears after)"
+  },
+  {
+   "key": "parrot-hello",
+   "setBy": "parrot-teacher (that word)",
+   "readBy": "parrot-repeats (says it back)"
+  },
+  {
+   "key": "parrot-never-give-up",
+   "setBy": "parrot-teacher (that word)",
+   "readBy": "parrot-repeats (says it back)"
+  },
+  {
+   "key": "parrot-good-luck",
+   "setBy": "parrot-teacher (that word)",
+   "readBy": "parrot-repeats (says it back)"
+  },
+  {
+   "key": "parrot-thank-you",
+   "setBy": "parrot-teacher (that word)",
+   "readBy": "parrot-repeats (says it back)"
+  },
+  {
+   "key": "rival-plan-heard",
+   "setBy": "sleeping-npc (Lean in.)",
+   "readBy": "nobody yet: the rivals row"
+  },
+  {
+   "key": "telling-deoxys",
+   "setBy": "stargazing-meteor-watch (Follow where it fell.)",
+   "readBy": "legends row (a Telling of Deoxys)"
+  },
+  {
+   "key": "telling-mew",
+   "setBy": "hide-and-seek (Up in the branches.)",
+   "readBy": "legends row (a Telling of Mew)"
+  },
+  {
+   "key": "tib-seen",
+   "setBy": "passing-caravan",
+   "readBy": "the Apprentice row (SF2): Tib, before meeting the player"
+  },
+  {
+   "key": "tib-name-heard",
+   "setBy": "passing-caravan (Call out.)",
+   "readBy": "the Apprentice row (SF2): the player hears the name again"
   }
  ]
 }
