@@ -16,8 +16,8 @@ const FOREIGN = new Set([
   'spring-flood-dug', 'flood-sandbagged', 'little-league-look-after', 'took-egg', 'egg-returned', 'bought-stolen', 'rocket-radio-shorted',
   'macro-plug-pulled', 'delta-ditto-met', 'elder-ditto-met', 'lighthouse-lit', 'crossing-lamp-lit', 'team-op-stopped-magma-drill',
   'glove-duel-accepted', 'listened-first', 'sign-broken',
-  // Set by the engine: the run's first Z-Move (run.ts finishBattle).
-  'z-move-used',
+  // Set by the engine: the run's first Z-Move, a swapped rival Pokémon fainting (run.ts finishBattle).
+  'z-move-used', 'swap-fainted',
 ]);
 const foreign = (key: string) => FOREIGN.has(key) || /^(blessing|sign|telling|promise|promise-broken|promise-kept|guest)-/.test(key);
 

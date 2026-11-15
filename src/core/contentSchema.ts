@@ -2852,6 +2852,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('weather'), in: z.array(WeatherSchema).min(1) }),
   /** At least one of these story flags is set (an "either one" callback). */
   z.object({ kind: z.literal('anyFlag'), keys: z.array(z.string().min(1)).min(2).max(8) }),
+  /** Catalog Overhaul new events (NE39 Swap Day): the main rival has a team to lend and no swap is running. */
+  z.object({ kind: z.literal('swapReady') }),
   /** Event Director: a rival you have fought at least this many times. */
   z.object({ kind: z.literal('rivalMet'), atLeast: z.number().int().min(1) }),
   /** A rival whose rivalry with you ended as friends (state ally). */
@@ -3105,6 +3107,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('typeItem'), who: CoWhoSchema.default('lead'), table: z.partialRecord(TypeNameSchema, z.string().min(1)) }),
   /** A copy of your lead fights beside you in the next `battles` ordinary trainer battles (a double battle). */
   z.object({ kind: z.literal('tagPartner'), copy: z.literal('lead').default('lead'), battles: z.number().int().min(1).max(3).default(1) }),
+  /** Catalog Overhaul new events (NE39 Swap Day): trade teams with the main rival (`all`), one Pokémon each (`one`: the picked one, or the lead), or hand everything back (`back`; it also happens before a Gym, Elite Four or Champion fight and at a new stage). */
+  z.object({ kind: z.literal('teamSwap'), mode: z.enum(['all', 'one', 'back']) }),
   z.object({ kind: z.literal('attribute'), key: AttributeKeySchema, amount: z.number().int() }),
   /** Research Points, paid at the end of the run. */
   z.object({ kind: z.literal('research'), amount: z.number().int().positive() }),

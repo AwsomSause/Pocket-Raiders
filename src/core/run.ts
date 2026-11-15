@@ -18,6 +18,7 @@ import { finishSpectate } from './sky/spectate';
 import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
+import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
 import { applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, refusesToLeave, returnedBug } from './instrumentality/flightNorth';
 import { applySecondChance, secondChanceOpen, secondChanceRolls } from './instrumentality/secondChance';
 import { hearTelling, noteEvent as notePromiseEvent, resolveVisit, rollVisit, wonderAfterBattle } from './instrumentality/promises';
@@ -711,6 +712,8 @@ function forceFirstRivalColumn(content: Content, run: RunState, index: number, m
 
 /** Starts a stage (mutates `run`): picks a fresh theme and gym leader, generates the map, and shows it. */
 function enterStage(content: Content, run: RunState, index: number): void {
+  // Swap Day (NE39) never outlasts its stage.
+  if (swapRunning(run)) endSwap(content, run, partyCapacity(content, run));
   settleSky(content, run);
   fillRegionOrder(content, run);
   ensureStoryRun(content, run);
@@ -818,6 +821,7 @@ export function fastForwardToStage(content: Content, run: RunState, regionIndex:
 
 /** Starts the region's Pokémon League (mutates `run`): picks the Elite Four and champion and heals the party. */
 function enterLeague(content: Content, run: RunState): void {
+  if (swapRunning(run)) endSwap(content, run, partyCapacity(content, run));
   fillRegionOrder(content, run);
   ensureStoryRun(content, run);
   const campaign = getCampaign(content, run.campaignId);
@@ -1002,6 +1006,8 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   if (!choices.some((n) => n.id === nodeId)) throw new Error(`Node "${nodeId}" is not one of the next choices`);
   const run = structuredClone(current);
   const stage = run.stage!;
+  // Swap Day (NE39): the Gym, the Elite Four and the Champion are never fought with the rival's team.
+  if (['gym', 'elite', 'champion'].includes(findNode(stage.map, nodeId).kind) && swapRunning(run)) endSwap(content, run, partyCapacity(content, run));
   // The Orrery Circuit's Gym Fork: entering a gym asks for a door (or a pass) first; the move happens when the node is chosen again.
   if (findNode(stage.map, nodeId).kind === 'gym') {
     const fork = forkDecision(content, run, run.regionIndex, stage.index);
@@ -3611,6 +3617,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     const share = winHealFraction(run);
     if (share > 0) for (const m of run.party) if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * share));
   }
+  noteSwapFaint(run);
   // Catalog Overhaul (new events): the run's first Z-Move is remembered (NE8's old man in the crowd waits for it).
   if (battle.transform?.used.player.includes('zmove') && !run.story.flags['ev:z-move-used']) run.story.flags['ev:z-move-used'] = 1;
   // Nuzlocke: the fallen are lost for good.

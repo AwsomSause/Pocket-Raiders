@@ -8,6 +8,7 @@ import { hashSeed, Rng } from '../../src/core/rng';
 import { beginBattle, chooseStarter, createRun, takeTurn } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { stageFronts } from '../../src/core/world';
+import { swapRunning } from '../../src/core/co/swap';
 import { content, toBattle } from './helpers';
 import type { EventCondition, EventEffect } from '../../src/core/contentSchema';
 
@@ -68,6 +69,7 @@ describe('{nextRegion} in event text (NE17)', () => {
     expect(fillCoText(content, run, 'After this comes {nextRegion}.')).toBe(`After this comes ${next}.`);
     run.regionIndex = run.regionOrder.length - 1;
     expect(fillCoText(content, run, '{nextRegion}')).toBe('the League');
+    expect(fillCoText(content, run, '{finalRegion}')).toBe(content.regions.get(run.regionOrder[run.regionOrder.length - 1]!)!.name);
   });
 });
 
@@ -113,5 +115,38 @@ describe('the run remembers its first Z-Move (NE8 afterstory)', () => {
       for (let i = 0; i < 6 && r.battle; i++) r = takeTurn(content, r, { kind: 'move', index: 0 }).run;
       expect(Number(r.story.flags['ev:z-move-used'] ?? 0)).toBe(used ? 1 : 0);
     }
+  });
+});
+
+describe('Swap Day (NE39): trading teams with the rival', () => {
+  const withRival = (): RunState => {
+    const run = withTwo();
+    run.story.rivals = [{ id: 'rv', classId: 'youngster', name: 'Gary', state: 'active', rivalPotential: 50, progress: 0, encounters: 1, bonds: {}, traits: { empathy: 50, vindictiveness: 30, resilience: 50, pride: 40, ambition: 50 }, memory: { lastBattle: { eventId: 'e', result: 'win', hpLeftShare: 0, turns: 3, team: ['pidgey', 'rattata', 'spearow'] } }, origin: { eventId: 'e', where: { region: 1, stage: 0, turn: 0 }, path: 'p' } } as never];
+    return run;
+  };
+  it('all: the rival\'s team takes the party, yours waits in the PC, and everything comes back in place', () => {
+    const run = withRival();
+    expect(conditionMet(content, run, { kind: 'swapReady' } as EventCondition)).toBe(true);
+    const mine = run.party.map((m) => m.uid);
+    applyEffect(content, run, { kind: 'teamSwap', mode: 'all' } as EventEffect, rng());
+    expect(swapRunning(run)).toBe(true);
+    expect(run.party.map((m) => m.speciesId)).toEqual(['pidgey', 'rattata', 'spearow']);
+    expect(run.box.map((m) => m.uid)).toEqual(expect.arrayContaining(mine));
+    expect(conditionMet(content, run, { kind: 'swapReady' } as EventCondition)).toBe(false);
+    applyEffect(content, run, { kind: 'teamSwap', mode: 'back' } as EventEffect, rng());
+    expect(run.party.map((m) => m.uid)).toEqual(mine);
+    expect(run.box.some((m) => mine.includes(m.uid))).toBe(false);
+    expect(swapRunning(run)).toBe(false);
+  });
+  it('one: a single loan each way keeps the slot (boundary), and handing back twice changes nothing (failure case)', () => {
+    const run = withRival();
+    expect(conditionMet(content, run, { kind: 'swapReady' } as EventCondition)).toBe(true);
+    const mine = run.party.map((m) => m.uid);
+    applyEffect(content, run, { kind: 'teamSwap', mode: 'one' } as EventEffect, rng());
+    expect(run.party[0]!.speciesId).toBe('pidgey');
+    expect(run.party[1]!.uid).toBe(mine[1]);
+    applyEffect(content, run, { kind: 'teamSwap', mode: 'back' } as EventEffect, rng());
+    applyEffect(content, run, { kind: 'teamSwap', mode: 'back' } as EventEffect, rng());
+    expect(run.party.map((m) => m.uid)).toEqual(mine);
   });
 });

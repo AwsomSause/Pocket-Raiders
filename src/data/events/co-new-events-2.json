@@ -1,0 +1,5591 @@
+{
+ "catalogOverhaul": "new-events",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "ne26-champion-who-teaches-swimming",
+   "name": "The Champion Who Teaches Swimming",
+   "group": "Past Champions and Gym Leaders",
+   "rarity": "uncommon",
+   "tags": [
+    "Story",
+    "Combat"
+   ],
+   "stop": "event",
+   "types": [
+    "water"
+   ],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "water"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne26-champion-who-teaches-swimming-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.wallace-gen6"
+    ],
+    "pokemon": "milotic",
+    "tint": "#103040",
+    "effect": "none"
+   },
+   "intro": "The beach is loud with gulls and small voices. A man in a white cap stands waist-deep in the shallows, teaching six small children how to float.\n\nHe wears a whistle on a cord, and pinned under it, faded by salt, a Champion's ribbon. Nobody on the whole beach has noticed the ribbon.\nHe seems to like it that way.\n\nThe instructor: \"Chin up. The water holds you if you let it. Same as a Milotic.\"\nA child: \"What's a Milotic?\"\nThe instructor, delighted: \"Oh, you're going to have a good life.\"\n\nHis eyes drift up the beach and land on your badges. He knows exactly what they are. He smiles, and puts one finger to his lips.",
+   "choices": [
+    {
+     "label": "Keep his secret.",
+     "success": {
+      "text": "You give him the smallest nod and look away, at the gulls, at anything else. The lesson goes on. One by one, the children let go of the shore.\n\nWhen you come back to your bag, a beach towel is folded over it, still warm from the sun. Rolled up inside it is a Mystic Water.\n\nTucked under it, a note in wet ink: \"Thank you. They don't need a Champion. They need a swimming teacher.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "champ-secret-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne26-champion-who-teaches-swimming-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for a battle after class.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "leadType",
+         "type": "water"
+        }
+       ],
+       "text": "He laughs, actually laughs, and says yes before you have finished asking. \"After class. Dusk. The sandbar. Don't tell the children, or they'll want to battle too.\"\n\nAt dusk the tide goes out and leaves a long silver strip of sand. He brings three Pokémon. He brings them the way you'd bring old friends to a party.\n\nWin or lose, there's no cost to it. He just wants to play. And before you part, he teaches your lead a move of his choosing.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "champ-sparred",
+         "amount": 1
+        },
+        {
+         "kind": "teachMove",
+         "move": "aqua-ring",
+         "who": "lead"
+        },
+        {
+         "kind": "flag",
+         "key": "ne26-champion-who-teaches-swimming-done",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "He laughs, actually laughs, and says yes before you have finished asking. \"After class. Dusk. The sandbar. Don't tell the children, or they'll want to battle too.\"\n\nAt dusk the tide goes out and leaves a long silver strip of sand. He brings three Pokémon. He brings them the way you'd bring old friends to a party.\n\nWin or lose, there's no cost to it. He just wants to play. And before you part, he teaches your lead a move of his choosing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "champ-sparred",
+        "amount": 1
+       },
+       {
+        "kind": "teachMove",
+        "move": "recover",
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "ne26-champion-who-teaches-swimming-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "team": [
+        "whiscash",
+        "ludicolo",
+        "milotic"
+       ],
+       "name": "The Instructor",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Help with the lesson.",
+     "pick": {
+      "types": [
+       "water"
+      ]
+     },
+     "success": {
+      "text": "Your Pokémon slides into the shallows, and six small faces go round with wonder. One by one the children climb on, and are carried out, and carried back, shrieking.\n\nThe smallest one has held the instructor's sleeve all morning.\nYour Pokémon waits beside her, very still, very patient, until she lets go of him and holds on to it instead.\n\nThen she floats. On her own. She looks up at the sky as if she has never seen it before.\nThe instructor turns away to wipe his face, and blames the salt.\n\nBefore you go, he kneels by your Pokémon and shows it something, quietly, the way you'd share a secret: Aqua Ring.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "picked"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "teachMove",
+        "move": "aqua-ring",
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "ne26-champion-who-teaches-swimming-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne26-white-cap-in-the-stands",
+   "name": "A White Cap in the Stands",
+   "group": "Past Champions and Gym Leaders",
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "champ-secret-kept",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "runPlace",
+     "lastRegion": true,
+     "regionEnd": true
+    },
+    {
+     "kind": "flag",
+     "key": "ne26-white-cap-in-the-stands-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.wallace-gen6"
+    ],
+    "tint": "#103040",
+    "effect": "none"
+   },
+   "intro": "The League stands are a wall of noise and colour.\nHalfway up, in the cheap seats, one man sits very still in a white cap, a whistle on a cord round his neck.\n\nNobody near him knows who he is. He catches your eye across the whole arena, touches one finger to his lips, and grins.",
+   "choices": [
+    {
+     "label": "Touch a finger to your own lips.",
+     "success": {
+      "text": "He laughs, and claps once, loudly, and the people round him turn to stare. He doesn't mind. He came to watch you, and he's watching.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne26-white-cap-in-the-stands-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne27-leader-who-failed-her-own-test",
+   "name": "The Leader Who Failed Her Own Test",
+   "group": "Past Champions and Gym Leaders",
+   "rarity": "uncommon",
+   "tags": [
+    "Story",
+    "Combat"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne27-leader-who-failed-her-own-test-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2018",
+    "effect": "none"
+   },
+   "intro": "The Gym doors are chained shut, and a sign hangs from the chain: CLOSED FOR INSPECTION. On the steps below it sits the Leader herself, a clipboard on her knees.\n\nAcross the top of the clipboard, in red, in somebody else's handwriting: FAIL.\n\nLeader Caoimhe: \"League inspector says I've got predictable. Same lead, same ace, four years.\"\nCaoimhe: \"He's right. I stopped being scared of losing. That's when you stop being good.\"\n\nShe stands, brushes off her knees, and looks at you the way a challenger looks at a Leader.\nCaoimhe: \"Battle me with a team I've never used. Tell me the truth after.\"",
+   "choices": [
+    {
+     "label": "Battle her new team.",
+     "success": {
+      "text": "She whistles, and three Pokémon you have never seen in any Gym tumble out of the back door. Wrong types, wrong sizes, nobody's idea of a Leader's team.\n\nCaoimhe: \"I don't know what they'll do. That's the point.\"\nCaoimhe: \"Come on, then. Make me scared.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne27-leader-who-failed-her-own-test-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "ne27-the-truth-after"
+        }
+       ],
+       "name": "Leader Caoimhe",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "ne27-the-truth-after"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Tell her to keep the old one.",
+     "success": {
+      "text": "\"Your old team got you this far,\" you tell her. \"It isn't broken.\" She looks at the FAIL for a long moment.\nThen she nods, slowly, as if she wanted to be told.\n\nShe appeals, and passes on appeal. The chain comes off the doors. Inside, the same lead and the same ace wait where they have always waited. Nothing changes.\nShe looks relieved, and a little sad.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne27-leader-who-failed-her-own-test-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lend her one of mine.",
+     "pick": {},
+     "success": {
+      "text": "You hold out a Poké Ball. Caoimhe stares at it, then at you. \"You'd do that? For your own Gym battle?\" She takes it in both hands, like something breakable.\n\nIt will stand as her ace when you face her for the badge, she promises, and come straight home after.\nAll afternoon she trains with it, shouting, laughing, getting it wrong.\n\nIt comes back to you at dusk a level stronger, and walks like it owns the Gym. It is insufferable. It is very, very pleased with itself.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gym-caoimhe-loan",
+        "amount": 1
+       },
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "ne27-leader-who-failed-her-own-test-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne27-the-truth-after",
+   "name": "The Truth After",
+   "group": "Past Champions and Gym Leaders",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2018",
+    "effect": "none"
+   },
+   "intro": "Afterwards she sits on the steps again, out of breath, grinning like she hasn't in years. Her new team lies in a tired heap at her feet.\n\nCaoimhe: \"Well? The truth. You promised.\"",
+   "choices": [
+    {
+     "label": "\"Better.\"",
+     "success": {
+      "text": "Her whole face changes. She grabs the clipboard, scores out FAIL, and writes BETTER over it in letters far too big for the page.\n\nCaoimhe: \"Then I'm keeping them. And you get something I've never once handed a challenger.\"\n\nShe presses a TM into your hand, still in its wrapper. Her Gym will field the new team now: harder to beat, and so much more fun to lose to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gym-caoimhe-better",
+        "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "tm-normal",
+         "tm-fire",
+         "tm-water",
+         "tm-grass",
+         "tm-electric",
+         "tm-ice",
+         "tm-fighting",
+         "tm-poison",
+         "tm-ground",
+         "tm-flying",
+         "tm-psychic",
+         "tm-bug",
+         "tm-rock",
+         "tm-ghost",
+         "tm-dragon",
+         "tm-dark",
+         "tm-steel",
+         "tm-fairy"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Worse, but alive.\"",
+     "success": {
+      "text": "She laughs so hard she has to sit back down. \"Worse, but alive. Put that on my headstone.\"\n\nShe keeps the new team anyway. She's going to lose more. She looks happier about that than anyone you have ever met.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gym-caoimhe-worse",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go back.\"",
+     "success": {
+      "text": "She nods. It stings; you can see it sting. Then she scoops up her new Pokémon, one at a time, and thanks each of them out loud.\n\nCaoimhe: \"Back to the old team. But I'll remember I was scared today. That's the part I needed.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gym-caoimhe-back",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne27-losing-happily",
+   "name": "Caoimhe, Losing Happily",
+   "group": "Past Champions and Gym Leaders",
+   "rarity": "common",
+   "minStage": 5,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "gym-caoimhe-worse",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ne27-losing-happily-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2018",
+    "effect": "none"
+   },
+   "intro": "A Circuit bracket hangs outside a hall. One name on it was knocked out in the very first round: Leader Caoimhe.\n\nShe's on the steps outside with a sandwich, her new team asleep in a heap around her. She sees you and waves the sandwich.\n\nCaoimhe: \"Lost again! Second round last time, first round today. I've never had so much fun in my life.\"\nCaoimhe: \"Worse, but alive. Best advice I ever got.\"",
+   "choices": [
+    {
+     "label": "Sit down with her.",
+     "success": {
+      "text": "She splits the sandwich with you. Her Pokémon wake up and crowd round, and for a whole hour nobody says a word about winning.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne27-losing-happily-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Next time, the final.\"",
+     "success": {
+      "text": "She points the sandwich at you. \"Next time, I lose in the final. That's the dream.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne27-losing-happily-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne28-trophy-nobody-claimed",
+   "name": "The Trophy Nobody Claimed",
+   "group": "Past Champions and Gym Leaders",
+   "rarity": "uncommon",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 9,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne28-trophy-nobody-claimed-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_lady"
+    ],
+    "tint": "#2a2414",
+    "effect": "none"
+   },
+   "intro": "A pawn shop on a corner, its window crowded with old radios and odd shoes.\nIn the middle of it all, on a velvet cloth gone bald, stands a Champion's trophy.\n\nThe name plate has been scratched out with something sharp. Taped over it, in marker: FOR SALE: ₽300.\n\nPawnbroker Ignacia: \"He brought it in himself. Said it was heavy.\"\nIgnacia: \"He drives the bread van now. Ask him. He'll tell you. He's not ashamed.\"\n\nOutside at the kerb, a bread van idles, warm, smelling of morning.",
+   "choices": [
+    {
+     "label": "Buy it and give it back.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "You pay the ₽300 and carry the trophy out to the van. It is heavy. The man at the wheel sees it, and goes very still.\n\nThe driver, Roderigo: \"I sold it so I'd stop looking at it.\"\nHe is quiet a long time. Then he leans across and opens the passenger door.\nRoderigo: \"...Put it in the van.\"\n\nHe uses it as a doorstop, to hold the back door open on hot mornings. He drives off with the door propped wide, and he is humming.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "flag",
+        "key": "trophy-returned",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne28-trophy-nobody-claimed-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask him why.",
+     "success": {
+      "text": "You knock on the van window. He winds it down and looks at you, and he knows exactly why you've come.\n\nRoderigo: \"I won. Then nobody needed anything from me except to stay the same.\"\nRoderigo: \"Bread's different. People need it new every day.\"\n\nHe hands a warm loaf out of the window and won't take a coin for it. You share it with your team on the kerb.\nIt is the best bread any of you have ever eaten.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne28-trophy-nobody-claimed-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy it and keep it.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "You pay the ₽300. Ignacia wraps the trophy in newspaper without a word. Outside, the bread van pulls away from the kerb.\n\nIt sits at the bottom of your bag. It is heavier than it looks. You find you don't want to take it out and look at it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "flag",
+        "key": "trophy-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne28-trophy-nobody-claimed-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne28-for-the-bread-money",
+   "name": "For the Bread Money",
+   "group": "Past Champions and Gym Leaders",
+   "rarity": "common",
+   "minStage": 10,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "trophy-returned",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ne28-for-the-bread-money-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2414",
+    "effect": "none"
+   },
+   "intro": "The Circuit hall is packed for the final. On the bracket board, one name has climbed all the way up from the bottom: Roderigo.\n\nA bread van is parked crooked outside, its back door propped open with something that shines.\n\nRoderigo, passing you in the corridor: \"For the bread money. That's all. ...Mostly.\"\nHe's smiling the way people smile when nobody needs them to stay the same.",
+   "choices": [
+    {
+     "label": "Cheer from the stands.",
+     "success": {
+      "text": "You cheer until your voice goes. Whatever happens out there, he walks into the arena with flour on his sleeves and his head up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne28-for-the-bread-money-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wish him luck.",
+     "success": {
+      "text": "Roderigo: \"Don't need luck. Need flour.\" He presses a bread roll into your hand on his way out to the arena.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne28-for-the-bread-money-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne29-two-leaders-wedding",
+   "name": "The Two Leaders' Wedding",
+   "group": "Past Champions and Gym Leaders",
+   "rarity": "uncommon",
+   "tags": [
+    "Story",
+    "Combat"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne29-two-leaders-wedding-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.firebreather",
+     "boss.npc_swimmer_f"
+    ],
+    "tint": "#2a1c24",
+    "effect": "sparkle"
+   },
+   "intro": "The road between the two Gyms is hung end to end with ribbons, red and blue, red and blue, so many that the trees look dressed for a party.\n\nThe Fire Leader and the Water Leader are getting married. Both Gyms are here. Both Gyms are arguing about the seating, loudly, over a cake the size of a cart.\n\nBest man, a Fire trainer: \"Fire sits left. Tradition.\"\nMaid of honour, a Water trainer: \"There is no tradition. You invented it this morning.\"\n\nThe two Leaders, together, to you: \"Please. You're neutral. Do the seating.\"\nThey look so tired. They look so happy. They're holding hands under the table.",
+   "choices": [
+    {
+     "label": "Mix everyone.",
+     "success": {
+      "text": "You take the seating plan, tear it in half, and put a Fire trainer beside a Water trainer all the way down the table.\nNobody speaks to anybody for ten long minutes.\n\nThen a Fire trainer's Growlithe and a Water trainer's Psyduck end up nose to nose over the same plate. They share it. They share it very loudly.\n\nSomebody laughs. Somebody passes the salt. By the speeches both Gyms are singing the same song, badly, in two keys.\nThe cake is cut, and there's a gift for the one who did the seating.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wedding-mixed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 2
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "charcoal",
+         "mystic-water"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "ne29-two-leaders-wedding-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Left and right, as asked.",
+     "success": {
+      "text": "Fire on the left, Water on the right, exactly as the best man wanted. Nobody argues. Nobody laughs much, either.\n\nThe vows are lovely. The cake is lovely. Both sides clap politely for each other's speeches, and you are thanked very correctly, and handed cake, and a small wrapped gift.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "charcoal",
+         "mystic-water"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "ne29-two-leaders-wedding-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Make them battle for it.",
+     "success": {
+      "text": "\"Settle it the Gym way,\" you say. The two Leaders look at each other, and both grin at once. Tables are pushed back.\nA ring of ribbons is laid out on the grass.\n\nA double battle: you beside one Leader, against the other. The winning side gets the seating. The Leaders insist that you choose which of them to stand beside.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wedding-battle",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ne29-pick-a-side"
+       },
+       {
+        "kind": "flag",
+        "key": "ne29-two-leaders-wedding-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne29-pick-a-side",
+   "name": "Pick a Side",
+   "group": "Past Champions and Gym Leaders",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c24",
+    "effect": "sparkle"
+   },
+   "intro": "The ring of ribbons, the cake on its cart, two Gyms holding their breath. Both Leaders are looking at you.",
+   "choices": [
+    {
+     "label": "Stand with the Fire Leader.",
+     "success": {
+      "text": "The Fire Leader's Arcanine pads up beside your lead and leans its warm weight against it. Across the grass, the other Leader is laughing, already rolling up both sleeves.\n\nBoth Gyms crowd the ribbons to watch. The winning side chooses the seating, and either way, both sides are already cheering.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "heal",
+         "share": 1
+        },
+        {
+         "kind": "item",
+         "id": "charcoal",
+         "count": 1
+        }
+       ],
+       "format": "doubles",
+       "name": "The Water Leader",
+       "ally": "arcanine",
+       "size": 2,
+       "types": [
+        "water"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 1
+        },
+        {
+         "kind": "item",
+         "id": "charcoal",
+         "count": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stand with the Water Leader.",
+     "success": {
+      "text": "The Water Leader's Gyarados pads up beside your lead and leans its warm weight against it. Across the grass, the other Leader is laughing, already rolling up both sleeves.\n\nBoth Gyms crowd the ribbons to watch. The winning side chooses the seating, and either way, both sides are already cheering.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "heal",
+         "share": 1
+        },
+        {
+         "kind": "item",
+         "id": "mystic-water",
+         "count": 1
+        }
+       ],
+       "format": "doubles",
+       "name": "The Fire Leader",
+       "ally": "gyarados",
+       "size": 2,
+       "types": [
+        "fire"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 1
+        },
+        {
+         "kind": "item",
+         "id": "mystic-water",
+         "count": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne30-champions-mother",
+   "name": "The Champion's Mother",
+   "group": "Past Champions and Gym Leaders",
+   "rarity": "uncommon",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne30-champions-mother-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2030",
+    "effect": "none"
+   },
+   "intro": "A small house at the end of a small street.\nIn its front window stands a shelf, and on the shelf, in order, every newspaper clipping ever printed about one Champion.\n\nThe first clippings are yellow and curling. The last is eleven years old. Nothing has been added since. The glass in front of them was dusted this morning.\n\nAn old woman, Perpetua, at the door: \"They write to the League. Not to me. That's all right. They're busy.\"\nShe looks past you, at the hills, at the road you came in on.\nPerpetua: \"If you get that far, tell them the plum tree came back.\"",
+   "choices": [
+    {
+     "label": "\"I'll tell them.\"",
+     "success": {
+      "text": "Her face does something complicated, and then settles into a smile. She goes inside and comes back with a jar: heavy, dark, sealed with wax.\n\nPerpetua: \"From the tree. The first ones. It took nine years, you know. Everyone said it was dead.\"\nPerpetua: \"Tell them that part too. That everyone said it was dead.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "champ-plums",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "pecha-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne30-champions-mother-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Write a letter. I'll carry it.\"",
+     "success": {
+      "text": "She sits at her kitchen table a long time with the pen held over the paper. She writes very slowly. When she's done, it is one line.\n\nShe folds it twice and doesn't let you see it. She gives you a jar of plums for the road as well. \"For carrying,\" she says.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "champ-letter",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "pecha-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne30-champions-mother-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"They should come home.\"",
+     "success": {
+      "text": "Her hand tightens on the door frame, and for a moment she looks every one of her years.\n\nPerpetua: \"Don't you say that to them. Don't you dare.\"\nPerpetua: \"You tell them about the tree.\"\n\nShe presses the jar of plums into your hands anyway, and shuts the door gently, the way you'd close a door on someone sleeping.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "pecha-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne30-champions-mother-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne30-the-plum-tree",
+   "name": "The Plum Tree Came Back",
+   "group": "Past Champions and Gym Leaders",
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "anyFlag",
+     "keys": [
+      "champ-plums",
+      "champ-letter"
+     ]
+    },
+    {
+     "kind": "runPlace",
+     "lastRegion": true,
+     "regionEnd": true
+    },
+    {
+     "kind": "flag",
+     "key": "ne30-the-plum-tree-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2030",
+    "effect": "none"
+   },
+   "intro": "The Champion's door is at the end of a long, cold corridor. Before it opens, the Champion is there in the anteroom, alone, checking their Poké Balls one last time.\n\nYou remember a small house, and a shelf of clippings, and an old woman at her door.",
+   "choices": [
+    {
+     "label": "\"The plum tree came back.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "champ-plums",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The Champion stops. Their hand stays on the Ball. They don't turn round for a long time.\n\nChampion: \"...Give me a minute.\"\n\nThey take the minute. They take two. When they turn, their eyes are red and their back is very straight, and they nod to you like an equal.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "champ-told-plums",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne30-the-plum-tree-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give them the letter.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "champ-letter",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You hold out the folded paper. The Champion knows the handwriting before they've even taken it.\n\nThey read the one line. Then they read it again.\nChampion: \"...Give me a minute.\"\n\nThey fold it into their breast pocket, over the heart, and walk to the door beside you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "champ-letter-delivered",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne30-the-plum-tree-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne31-ally-who-kept-your-seat",
+   "name": "The Ally Who Kept Your Seat",
+   "group": "Past allies",
+   "rarity": "uncommon",
+   "tags": [
+    "Story"
+   ],
+   "stop": "rest",
+   "types": [],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne31-ally-who-kept-your-seat-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2016",
+    "effect": "none"
+   },
+   "intro": "The inn is warm and half empty. At a table by the window, two places are set. One chair has a coat hung on the back of it.\n\nIt isn't your coat. But it's your size, exactly, down to the length of the sleeves.\n\nA trainer from the last run, sitting across from the empty chair: \"I said I'd wait a year. It's been longer. I ate both dinners most nights.\"\nThey look up, and look you over, slowly.\nYour old partner: \"You look different. Same shoes.\"",
+   "choices": [
+    {
+     "label": "Sit down.",
+     "success": {
+      "text": "You lift the coat off the chair and sit. They push a bowl across, still hot; they must have ordered it the moment you walked in.\n\nThey talk about the last run: how it really ended, who was really on the team, the things that never made it into anybody's story.\nSome of it, you almost remember.\n\nThey make sure you eat everything before you go up to bed. Your team sleeps by the fire as if they've slept there before.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-dinner",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne31-ally-who-kept-your-seat-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'm not who you waited for.\"",
+     "success": {
+      "text": "They look at you a long time, and something in their face goes soft and tired and kind.\n\nYour old partner: \"No. But you're who came.\"\nThey push the plate over.\n\nYou eat. They watch you eat, the way people watch someone they've missed. When the bowl is empty, they fill it again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-dinner",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne31-ally-who-kept-your-seat-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Come with me this time.\"",
+     "success": {
+      "text": "They stand so fast the chair goes over. Then they laugh at themselves, set it right, and shrug on the coat.\n\nYour old partner: \"I've been ready for a year. Longer.\"\n\nThey eat the second dinner standing up, and walk out of the inn beside you. For the rest of the stage there are two of you on the road again.\n\nTheir partner is the strangest part: it is the spitting image of your own lead, down to the scar. In the next fights it stands beside yours.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-travels",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "tagPartner",
+        "copy": "lead",
+        "battles": 3
+       },
+       {
+        "kind": "flag",
+        "key": "ne31-ally-who-kept-your-seat-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne32-borrowed-pokemons-thank-you",
+   "name": "The Borrowed Pokémon's Thank-You",
+   "group": "Past allies",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "anyFlag",
+     "keys": [
+      "ditto-mirror",
+      "ally-travels",
+      "wedding-battle",
+      "rival-swap",
+      "rival-swap-one"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne32-borrowed-pokemons-thank-you-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#20281c",
+    "effect": "none"
+   },
+   "intro": "A Pokémon is sitting in the middle of the path with a parcel tucked under its chin. Its feet are dusty. It has walked a very long way.\n\nYou know it. Once, for a fight, it stood beside you on loan. It knows you too. It gets up, and pushes the parcel toward you with its nose.\n\nIts trainer, arriving behind it, out of breath: \"It wouldn't stop. Three days. It remembered your team.\"\nIts trainer: \"I didn't know they did that.\"",
+   "choices": [
+    {
+     "label": "Open it.",
+     "success": {
+      "text": "String, brown paper, more string. Inside, wrapped in a sock for safety, is a held item, exactly right for your lead, as if somebody had measured.\n\nThe Pokémon watches you open it with enormous seriousness. Then it sits down, satisfied. Its errand is done.",
+      "effects": [
+       {
+        "kind": "typeItem",
+        "who": "lead",
+        "table": {
+         "normal": "silk-scarf",
+         "fighting": "black-belt",
+         "flying": "sharp-beak",
+         "poison": "poison-barb",
+         "ground": "soft-sand",
+         "rock": "hard-stone",
+         "bug": "silver-powder",
+         "ghost": "spell-tag",
+         "steel": "metal-coat",
+         "fire": "charcoal",
+         "water": "mystic-water",
+         "grass": "miracle-seed",
+         "electric": "magnet",
+         "psychic": "twistedspoon",
+         "ice": "nevermeltice",
+         "dragon": "dragon-fang",
+         "dark": "black-glasses",
+         "fairy": "fairy-feather"
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "ne32-borrowed-pokemons-thank-you-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Greet it first.",
+     "success": {
+      "text": "You kneel and hold out a hand, and it forgets the parcel entirely. It barrels into you, then into your lead, then back into you, overjoyed.\n\nThe two of them roll about in the grass like old friends. Much later, somebody remembers the parcel. Inside is a held item, just right for your lead.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "typeItem",
+        "who": "lead",
+        "table": {
+         "normal": "silk-scarf",
+         "fighting": "black-belt",
+         "flying": "sharp-beak",
+         "poison": "poison-barb",
+         "ground": "soft-sand",
+         "rock": "hard-stone",
+         "bug": "silver-powder",
+         "ghost": "spell-tag",
+         "steel": "metal-coat",
+         "fire": "charcoal",
+         "water": "mystic-water",
+         "grass": "miracle-seed",
+         "electric": "magnet",
+         "psychic": "twistedspoon",
+         "ice": "nevermeltice",
+         "dragon": "dragon-fang",
+         "dark": "black-glasses",
+         "fairy": "fairy-feather"
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "ne32-borrowed-pokemons-thank-you-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it something back.",
+     "success": {
+      "text": "You take something from your own bag and tuck it into the empty paper for the Pokémon to carry home. Its trainer starts to protest, then stops.\n\nIts trainer: \"Then we're even.\"\nIts trainer: \"...No. Then we're friends.\"\n\nYou shake on it. The parcel holds a held item for your lead. The Pokémon carries your gift home in its mouth, very proudly, the whole way.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "typeItem",
+        "who": "lead",
+        "table": {
+         "normal": "silk-scarf",
+         "fighting": "black-belt",
+         "flying": "sharp-beak",
+         "poison": "poison-barb",
+         "ground": "soft-sand",
+         "rock": "hard-stone",
+         "bug": "silver-powder",
+         "ghost": "spell-tag",
+         "steel": "metal-coat",
+         "fire": "charcoal",
+         "water": "mystic-water",
+         "grass": "miracle-seed",
+         "electric": "magnet",
+         "psychic": "twistedspoon",
+         "ice": "nevermeltice",
+         "dragon": "dragon-fang",
+         "dark": "black-glasses",
+         "fairy": "fairy-feather"
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "ally-even",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne32-borrowed-pokemons-thank-you-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne33-ones-who-formed-a-club",
+   "name": "The Ones Who Formed a Club",
+   "group": "Past allies",
+   "rarity": "uncommon",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 12,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kind-helped-stranger",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne33-ones-who-formed-a-club-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#28241a",
+    "effect": "none"
+   },
+   "intro": "A hand-painted sign on a garden shed, the letters a little crooked, as if several people painted it at once: PEOPLE {player} HELPED. MEETINGS THURSDAYS.\n\nIt's Thursday. Through the window you can see them: the people you stopped for on the road this run, squeezed in round one table, drinking tea out of mismatched cups.\n\nThe chairperson, the first person you helped, bangs a spoon on a saucer: \"Item one: they're here.\"\nChairperson: \"Item two: somebody tell them about the biscuits.\"",
+   "choices": [
+    {
+     "label": "Join the meeting.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-helped-stranger",
+         "atLeast": 5,
+         "atMost": 99
+        }
+       ],
+       "text": "They make room on the bench. Then, one at a time round the table, each member stands up and says one line about what you did for them.\n\nThe chairperson goes first. Then she sits down, and finds she has nothing else to say, and laughs.\n\nThe second member stands, says one line about the road where you met, and sits down fast, red to the ears.\n\nThe third is funny. The fourth is not funny at all. The chairperson keeps the minutes in a school exercise book and cries a little on item four.\n\nBy the fifth, your Pokémon have eaten every biscuit in the shed. Nobody minds. It takes a long while, and nobody wants it to end.\n\nWhen you leave, the whole club walks you to the gate, and each of them presses something into your hands.",
+       "effects": [
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "party"
+        },
+        {
+         "kind": "flag",
+         "key": "club-formed",
+         "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "ne33-ones-who-formed-a-club-done",
+         "amount": 1
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-helped-stranger",
+         "atLeast": 4,
+         "atMost": 99
+        }
+       ],
+       "text": "They make room on the bench. Then, one at a time round the table, each member stands up and says one line about what you did for them.\n\nThe chairperson goes first. Then she sits down, and finds she has nothing else to say, and laughs.\n\nThe second member stands, says one line about the road where you met, and sits down fast, red to the ears.\n\nThe third is funny. The fourth is not funny at all. The chairperson keeps the minutes in a school exercise book and cries a little on item four.\n\nWhen you leave, the whole club walks you to the gate, and each of them presses something into your hands.",
+       "effects": [
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "party"
+        },
+        {
+         "kind": "flag",
+         "key": "club-formed",
+         "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "ne33-ones-who-formed-a-club-done",
+         "amount": 1
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-helped-stranger",
+         "atLeast": 3,
+         "atMost": 99
+        }
+       ],
+       "text": "They make room on the bench. Then, one at a time round the table, each member stands up and says one line about what you did for them.\n\nThe chairperson goes first. Then she sits down, and finds she has nothing else to say, and laughs.\n\nThe second member stands, says one line about the road where you met, and sits down fast, red to the ears.\n\nWhen you leave, the whole club walks you to the gate, and each of them presses something into your hands.",
+       "effects": [
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "party"
+        },
+        {
+         "kind": "flag",
+         "key": "club-formed",
+         "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "ne33-ones-who-formed-a-club-done",
+         "amount": 1
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-helped-stranger",
+         "atLeast": 2,
+         "atMost": 99
+        }
+       ],
+       "text": "They make room on the bench. Then, one at a time round the table, each member stands up and says one line about what you did for them.\n\nThe chairperson goes first. Then she sits down, and finds she has nothing else to say, and laughs.\n\nWhen you leave, the whole club walks you to the gate, and each of them presses something into your hands.",
+       "effects": [
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "party"
+        },
+        {
+         "kind": "flag",
+         "key": "club-formed",
+         "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "ne33-ones-who-formed-a-club-done",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "They make room on the bench. Then, one at a time round the table, each member stands up and says one line about what you did for them.\n\nThe chairperson goes first. Then she sits down, and finds she has nothing else to say, and laughs.\n\nWhen you leave, the whole club walks you to the gate, and each of them presses something into your hands.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "club-formed",
+        "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "sitrus-berry",
+         "lum-berry",
+         "great-ball",
+         "ether",
+         "big-malasada",
+         "casteliacone"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "ne33-ones-who-formed-a-club-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask why they did this.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-helped-stranger",
+         "atLeast": 5,
+         "atMost": 99
+        }
+       ],
+       "text": "\"Why?\" you ask. The chairperson pours you a cup of tea before she answers, the way people do when the answer matters.\n\nChairperson: \"We kept meeting each other on the road, saying your name. Somebody said we should have a club. So we have a club.\"\n\nBefore you go, each of the 5 of them gives you something from their pockets. They've clearly been saving them.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "club-formed",
+         "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "ne33-ones-who-formed-a-club-done",
+         "amount": 1
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-helped-stranger",
+         "atLeast": 4,
+         "atMost": 99
+        }
+       ],
+       "text": "\"Why?\" you ask. The chairperson pours you a cup of tea before she answers, the way people do when the answer matters.\n\nChairperson: \"We kept meeting each other on the road, saying your name. Somebody said we should have a club. So we have a club.\"\n\nBefore you go, each of the 4 of them gives you something from their pockets. They've clearly been saving them.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "club-formed",
+         "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "ne33-ones-who-formed-a-club-done",
+         "amount": 1
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-helped-stranger",
+         "atLeast": 3,
+         "atMost": 99
+        }
+       ],
+       "text": "\"Why?\" you ask. The chairperson pours you a cup of tea before she answers, the way people do when the answer matters.\n\nChairperson: \"We kept meeting each other on the road, saying your name. Somebody said we should have a club. So we have a club.\"\n\nBefore you go, each of the 3 of them gives you something from their pockets. They've clearly been saving them.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "club-formed",
+         "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "ne33-ones-who-formed-a-club-done",
+         "amount": 1
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-helped-stranger",
+         "atLeast": 2,
+         "atMost": 99
+        }
+       ],
+       "text": "\"Why?\" you ask. The chairperson pours you a cup of tea before she answers, the way people do when the answer matters.\n\nChairperson: \"We kept meeting each other on the road, saying your name. Somebody said we should have a club. So we have a club.\"\n\nBefore you go, each of the 2 of them gives you something from their pockets. They've clearly been saving them.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "club-formed",
+         "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "ne33-ones-who-formed-a-club-done",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "\"Why?\" you ask. The chairperson pours you a cup of tea before she answers, the way people do when the answer matters.\n\nChairperson: \"We kept meeting each other on the road, saying your name. Somebody said we should have a club. So we have a club.\"\n\nBefore you go, she gives you something from her pocket. She's clearly been saving it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "club-formed",
+        "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "sitrus-berry",
+         "lum-berry",
+         "great-ball",
+         "ether",
+         "big-malasada",
+         "casteliacone"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "ne33-ones-who-formed-a-club-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Slip away.",
+     "success": {
+      "text": "You back away from the window before anyone sees you, your face hot, your heart very full.\n\nBehind you, through the glass, the meeting carries on without you. Somebody proposes a vote of thanks. Every hand goes up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "club-formed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "club-slipped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne33-ones-who-formed-a-club-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "one-member",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kind-total",
+       "atLeast": 0,
+       "atMost": 2
+      }
+     ],
+     "intro": "A hand-painted sign on a garden shed: PEOPLE {player} HELPED. MEETINGS THURSDAYS.\n\nIt's Thursday. Through the window you can see one person, sitting at a table set for twelve, with one cup of tea and a whole plate of biscuits.\n\nShe sees you and lights up. She bangs a spoon on her saucer anyway, for form.\nThe chairperson: \"Item one: they're here. Item two: there's ever so many biscuits.\""
+    }
+   ]
+  },
+  {
+   "id": "ne33-the-biscuit-tin",
+   "name": "A Biscuit Tin",
+   "group": "Past allies",
+   "rarity": "common",
+   "minStage": 12,
+   "stop": "rest",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "club-slipped",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne33-the-biscuit-tin-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#28241a",
+    "effect": "none"
+   },
+   "intro": "At the rest stop there's a biscuit tin on your bag. Nobody saw who left it. On the lid, in crooked hand-painted letters: FROM THE CLUB.\n\nInside, under a layer of biscuits, is one small gift, wrapped carefully, with one name on the tag.",
+   "choices": [
+    {
+     "label": "Open the tin.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-helped-stranger",
+         "atLeast": 5,
+         "atMost": 99
+        }
+       ],
+       "text": "You eat a biscuit, and then another, and read every name on every tag twice. Each gift is something useful, chosen with care.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "ne33-the-biscuit-tin-done",
+         "amount": 1
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-helped-stranger",
+         "atLeast": 4,
+         "atMost": 99
+        }
+       ],
+       "text": "You eat a biscuit, and then another, and read every name on every tag twice. Each gift is something useful, chosen with care.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "ne33-the-biscuit-tin-done",
+         "amount": 1
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-helped-stranger",
+         "atLeast": 3,
+         "atMost": 99
+        }
+       ],
+       "text": "You eat a biscuit, and then another, and read every name on every tag twice. Each gift is something useful, chosen with care.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "ne33-the-biscuit-tin-done",
+         "amount": 1
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-helped-stranger",
+         "atLeast": 2,
+         "atMost": 99
+        }
+       ],
+       "text": "You eat a biscuit, and then another, and read every name on every tag twice. Each gift is something useful, chosen with care.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sitrus-berry",
+          "lum-berry",
+          "great-ball",
+          "ether",
+          "big-malasada",
+          "casteliacone"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "ne33-the-biscuit-tin-done",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You eat a biscuit, and then another, and read every name on every tag twice. The gift is something useful, chosen with care.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "sitrus-berry",
+         "lum-berry",
+         "great-ball",
+         "ether",
+         "big-malasada",
+         "casteliacone"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "ne33-the-biscuit-tin-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne34-apprentices-first-student",
+   "name": "The Apprentice's First Student",
+   "group": "Past allies",
+   "rarity": "uncommon",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "apprentice-follows"
+    },
+    {
+     "kind": "flag",
+     "key": "ne34-apprentices-first-student-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_youngster"
+    ],
+    "tint": "#20281a",
+    "effect": "none"
+   },
+   "intro": "On a patch of grass beside the road, Tib is teaching a smaller child how to throw a Poké Ball.\nTib has a stick for pointing, and a very serious face.\n\nTib is getting every detail wrong. Wrong in exactly the way you got it wrong, the day Tib first watched you throw.\n\nTib: \"No, you hold it like this. My teacher holds it like this.\"\nThe student, Pascoe: \"Your teacher holds it wrong.\"\nTib, outraged: \"My teacher's the best there is!\"\n\nThen Tib sees you, and goes the colour of a Cheri Berry.",
+   "choices": [
+    {
+     "label": "Correct Tib.",
+     "success": {
+      "text": "You take the Ball and show them both, gently, how your fingers should have gone all along. Tib watches your hand, then their own, and goes redder still.\n\nThere is a terrible, mortified silence. Then Tib laughs, a big helpless laugh, and Pascoe laughs too, and the next throw sails clean.\n\nTib digs in a pocket and hands you a Great Ball, and then, shyly, a battered old cap. \"I wore it when I followed you. You keep it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tib-corrected",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tib-cap",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne34-apprentices-first-student-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it be.",
+     "success": {
+      "text": "You say nothing. You just nod to Tib, teacher to teacher, and Tib stands a little taller.\n\nPascoe throws it the wrong way, and catches nothing, and throws again. The wrong grip is Tib's now, and soon it will be Pascoe's. Somewhere, a tradition is starting.\n\nTib presses a Great Ball and a battered old cap into your hands. \"For my teacher. You'll need a spare.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tib-grip",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tib-cap",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne34-apprentices-first-student-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Teach them both.",
+     "success": {
+      "text": "You sit down in the grass with both of them and teach until the light changes. It takes the whole next stretch of road. Neither of them notices the time.\n\nNear sunset Pascoe throws, and the Ball wobbles, and wobbles, and clicks. A Rattata. Pascoe's first. Pascoe holds the Ball up to the sky and screams with joy.\n\nTib, very quietly, says it's the best day of their life. Then Tib hands you a Great Ball and their old cap, to remember it by.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tib-cap",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne34-apprentices-first-student-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tib-patient",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "apprentice-kind"
+      }
+     ],
+     "notice": "Tib is patient about it, endlessly patient, the way you were patient with strangers on the road. Tib explains it a fourth time without one sigh."
+    },
+    {
+     "id": "tib-bossy",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "apprentice-sly"
+      }
+     ],
+     "notice": "Tib is bossy about it. Tib smacks the stick into a palm and says \"Again!\" exactly the way you say it when you're in a hurry."
+    }
+   ]
+  },
+  {
+   "id": "ne35-rescue-you-dont-remember",
+   "name": "The Rescue You Don't Remember",
+   "group": "Past allies",
+   "rarity": "uncommon",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne35-rescue-you-dont-remember-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2430",
+    "effect": "none"
+   },
+   "intro": "A stranger comes running across the street, and before you can step aside she has thrown her arms around you, and she will not let go.\n\nStranger, Wilhelmina: \"You pulled me out of the river. Last spring.\"\nWilhelmina: \"You didn't even stop to give your name. You just went.\"\n\nYou have never seen her before in your life. She is crying into your shoulder anyway. Whatever she remembers, it happened on another road, to another you.",
+   "choices": [
+    {
+     "label": "\"I'm glad you're all right.\"",
+     "success": {
+      "text": "She cries harder, then laughs at herself for crying, then hugs you again for good measure.\n\nShe marches you into the inn on the corner and pays for your room before you can argue. \"And breakfast. And theirs,\" she says, pointing at your team.\nShe adds a Sitrus Berry for the road.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wilhelmina-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne35-rescue-you-dont-remember-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"That wasn't me.\"",
+     "success": {
+      "text": "She steps back and holds your face in both hands and looks at it hard, the way you'd check a map.\n\nWilhelmina: \"It was your face.\"\n\nShe pays for your room anyway, and a Sitrus Berry for the road, and won't hear another word about it.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wilhelmina-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne35-rescue-you-dont-remember-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Tell me what happened.\"",
+     "success": {
+      "text": "She sits you down on the inn step and tells it. The flood. The cold.\nA trainer and a Pokémon coming out of the brown water for her when nobody else would.\n\nShe tells it as someone on the bank saw it, with all the parts you'd have left out. It sounds like you. It sounds like someone you'd like to be.\n\nThen she pays for your room, and presses a Sitrus Berry into your hand.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "wilhelmina-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-told",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne35-rescue-you-dont-remember-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne35-in-the-crowd",
+   "name": "A Face in the Crowd",
+   "group": "Past allies",
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wilhelmina-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "runPlace",
+     "lastRegion": true,
+     "regionEnd": true
+    },
+    {
+     "kind": "flag",
+     "key": "ne35-in-the-crowd-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2430",
+    "effect": "none"
+   },
+   "intro": "The League stands roar like surf. In the front row, leaning over the rail as far as she can, is a woman you met once on a street corner.\n\nWilhelmina has made a banner. It's a river, painted blue, and a stick figure in it, and an arrow, and one word: YOU.",
+   "choices": [
+    {
+     "label": "Wave to her.",
+     "success": {
+      "text": "She waves back with both arms and nearly falls over the rail. The people round her ask who you are. She tells them. It takes a while.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne35-in-the-crowd-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rq-empty-slot",
+   "name": "The Rival's Empty Slot",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "rest",
+   "types": [],
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rq-empty-slot-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c1a24",
+    "effect": "glint"
+   },
+   "intro": "{rival} has made camp off the road. Five Pokémon are out around the fire, eating, sleeping, keeping close. The sixth Ball sits on the log beside {rival}, on its own.\nIt's cracked right across.\n\n{rival}: \"{say event||champion-chaser::Don't ask.||bitter-challenger::Just don't.||enthusiast::Please don't ask.||idealist::Don't ask. Please.||strategist::Don't. Not yet.||protector::Don't ask me.||prodigy::Don't ask.||underdog::Please, don't.}\"\n\nA long silence. The fire spits. One of the five lifts its head and looks at the cracked Ball, and puts its head down again.\n\n{rival}: \"...It was a wild battle. A stupid one. I pushed.\"\n{rival}: \"I keep the Ball. I don't know why.\"",
+   "choices": [
+    {
+     "label": "Sit with them.",
+     "success": {
+      "text": "You sit down on the log, on the other side of the cracked Ball, and say nothing at all.\n\nNobody talks. The fire burns down. After a long while, {rival} leans, very slightly, until your shoulders touch. Neither of you mentions it in the morning.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-grief-shared",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rq-empty-slot-done",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell them about one I lost.",
+     "requires": [
+      {
+       "kind": "memorial",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "You tell them about yours. The name. The day. The thing you'd do differently, that you will never get to do.\n\n{rival} listens without interrupting, staring into the fire. When you finish, they're quiet a long time.\n\n{rival}: \"...What was its name? Say it again.\"\nYou say it again. {rival} repeats it, carefully, as if putting it somewhere safe.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 3
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-knows-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rq-empty-slot-done",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle. It'll help.",
+     "success": {
+      "text": "{rival} stands up too fast. \"Fine.\" Five Balls. The sixth stays lying on the log, and their eyes keep going back to it.\n\nThey're somewhere else the whole fight. Their calls come late. Their Pokémon look round for orders that don't come.\n\nWhen it's over, {rival} picks up the cracked Ball and turns it over in their hands. {rival}: \"Not today.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rq-empty-slot-done",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [],
+       "name": "Your rival",
+       "rival": true,
+       "size": 5,
+       "types": [],
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "winning",
+     "when": [
+      {
+       "kind": "rivalState",
+       "leadAtLeast": 2
+      }
+     ],
+     "notice": "{rival}, to nobody: \"I was winning. That's the stupid part.\""
+    }
+   ]
+  },
+  {
+   "id": "rq-help-wanted",
+   "name": "The Rival Applies for Your Job",
+   "group": "Rival questline",
+   "rarity": "uncommon",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rq-help-wanted-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2418",
+    "effect": "glint"
+   },
+   "intro": "A corner shop with a HELP WANTED sign in the window. You reach for the sign, and another hand reaches for it at exactly the same moment. {rival}'s.\n\nYou both hold on. Neither of you lets go. The sign tears a little at the corner.\n\nShopkeeper, Mr. Abernathy-Finch: \"One position. A day's work. ₽600. Convince me.\"\n{rival}: \"{say event||champion-chaser::I'm faster.||bitter-challenger::I'm faster. Obviously.||enthusiast::I'm faster! Watch!||idealist::I'm faster. Honestly.||strategist::I'm faster. Measurably.||protector::I'm faster. And careful.||prodigy::I'm faster. Always.||underdog::I'm faster. I think.}\"",
+   "choices": [
+    {
+     "label": "Out-argue them.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "badges",
+         "atLeast": 2
+        },
+        {
+         "kind": "flag",
+         "key": "rep",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Mr. Abernathy-Finch asks three questions. How many badges you've earned. Who in town would vouch for you. How many mouths you feed on the road.\n\nYour answers are real, and they hold. {rival} starts strong and runs out of road.\n\nMr. Abernathy-Finch: \"You. Apron's on the hook.\"\nYou work the day. It's hard, honest work, and at closing he counts ₽600 into your hand.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": 600
+        },
+        {
+         "kind": "rivalChange",
+         "feelings": {},
+         "lead": -1
+        },
+        {
+         "kind": "flag",
+         "key": "rq-help-wanted-done",
+         "amount": 1
+        },
+        {
+         "kind": "rivalQuest",
+         "takeSlot": true
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "badges",
+         "atLeast": 2
+        },
+        {
+         "kind": "partySize",
+         "atLeast": 4
+        }
+       ],
+       "text": "Mr. Abernathy-Finch asks three questions. How many badges you've earned. Who in town would vouch for you. How many mouths you feed on the road.\n\nYour answers are real, and they hold. {rival} starts strong and runs out of road.\n\nMr. Abernathy-Finch: \"You. Apron's on the hook.\"\nYou work the day. It's hard, honest work, and at closing he counts ₽600 into your hand.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": 600
+        },
+        {
+         "kind": "rivalChange",
+         "feelings": {},
+         "lead": -1
+        },
+        {
+         "kind": "flag",
+         "key": "rq-help-wanted-done",
+         "amount": 1
+        },
+        {
+         "kind": "rivalQuest",
+         "takeSlot": true
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "rep",
+         "atLeast": 1,
+         "atMost": 99
+        },
+        {
+         "kind": "partySize",
+         "atLeast": 4
+        }
+       ],
+       "text": "Mr. Abernathy-Finch asks three questions. How many badges you've earned. Who in town would vouch for you. How many mouths you feed on the road.\n\nYour answers are real, and they hold. {rival} starts strong and runs out of road.\n\nMr. Abernathy-Finch: \"You. Apron's on the hook.\"\nYou work the day. It's hard, honest work, and at closing he counts ₽600 into your hand.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": 600
+        },
+        {
+         "kind": "rivalChange",
+         "feelings": {},
+         "lead": -1
+        },
+        {
+         "kind": "flag",
+         "key": "rq-help-wanted-done",
+         "amount": 1
+        },
+        {
+         "kind": "rivalQuest",
+         "takeSlot": true
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Mr. Abernathy-Finch asks three questions. How many badges you've earned. Who in town would vouch for you. How many mouths you feed on the road.\n\nYou answer honestly. {rival} answers louder. The numbers don't fall your way.\n\nMr. Abernathy-Finch: \"The other one. Apron's on the hook.\"\n{rival} takes the apron with a look you'll be hearing about for the rest of the run.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {},
+        "lead": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rq-help-wanted-done",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them have it.",
+     "success": {
+      "text": "You let go of the sign. {rival} nearly falls over backwards.\n\n{rival}: \"...What's the catch?\"\nThere isn't one. They look at you a long time: suspicious, then less suspicious, then something else.\n\n{rival}: \"Thanks. I mean it. Don't tell anyone I meant it.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rq-help-wanted-done",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Split it.",
+     "success": {
+      "text": "\"Half each,\" you say. Mr. Abernathy-Finch sighs the sigh of a man making a terrible mistake, and hands out two aprons.\n\nYou both work. You're both very bad at it. You argue about the shelving, the till, and the right way to fold a paper bag.\n\nAt closing he pays ₽300 each, and pins a customer's complaint to the board: \"THE TWO SHOUTING ONES.\" {rival} is grinning. So are you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-split-job",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rq-help-wanted-done",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "rival-broke",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "rq-emptied-shelves"
+      }
+     ],
+     "notice": "{rival}'s pockets are turned out. Since the day they emptied a shop's shelves, they haven't had a coin to their name.",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Let them have it.",
+       "success": {
+        "text": "You let go of the sign. {rival} stares at you, then at the sign, then at their own empty hands.\n\n{rival}: \"...You know I'm broke. Don't you.\"\nYou don't say anything. You don't have to.\n\n{rival} ties on the apron, and works the whole day without one complaint, and at closing buys you a drink with the first coin they've had in weeks.",
+        "effects": [
+         {
+          "kind": "rivalChange",
+          "feelings": {
+           "trust": 3
+          },
+          "lead": 0
+         },
+         {
+          "kind": "flag",
+          "key": "rq-help-wanted-done",
+          "amount": 1
+         },
+         {
+          "kind": "rivalQuest",
+          "takeSlot": true
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rq-old-man-sign",
+   "name": "The Sign Changes",
+   "group": "Rival questline",
+   "rarity": "common",
+   "minStage": 3,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flagAge",
+     "key": "rq-help-wanted-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "rq-old-man-sign-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2418",
+    "effect": "glint"
+   },
+   "intro": "Mr. Abernathy-Finch's shop again. He has rehung his sign, and repainted it, and underlined it twice.\n\nIt reads: NO RIVALS.",
+   "choices": [
+    {
+     "label": "Smile and move on.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "rival-split-job",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Under it, in smaller letters: \"Except the two shouting ones. They know why.\"\n\nYou laugh all the way down the street. Some jobs you only do once.",
+       "effects": [
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "friendship": 1
+         },
+         "lead": 0
+        },
+        {
+         "kind": "flag",
+         "key": "rq-old-man-sign-done",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Some jobs you only do once.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rq-old-man-sign-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rq-letter",
+   "name": "The Thing They Never Said",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "rest",
+   "types": [],
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalState",
+     "feeling": {
+      "key": "trust",
+      "atLeast": 4
+     }
+    },
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "rq-letter-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a1424",
+    "effect": "glint"
+   },
+   "intro": "Night camp. The fire is low and red. {rival} sits on the far side of it with a folded letter in one hand, holding it out over the coals.\n\nNot quite in the flames. Not quite out of them. The edge of the paper is starting to brown.\n\n{rival}: \"It's to my dad. He wanted me to win a League. I want to.\"\n{rival}: \"I don't know if it's mine or his.\"\n\nThey look at you across the fire.\n{rival}: \"Burn it or send it?\"",
+   "choices": [
+    {
+     "label": "Send it.",
+     "success": {
+      "text": "{rival} pulls the letter back from the coals and blows on the browned edge until it's cool.\n\nIn the morning they post it at the first town, and stand in front of the post box a long time after it's gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-letter-sent",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rq-letter-done",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Burn it.",
+     "success": {
+      "text": "{rival} opens their fingers. The letter drops, curls, catches, and goes up in one bright breath.\n\nThey watch it go until there's nothing left to watch.\nThen they lie back and look at the stars, and their shoulders come down, slowly, for the first time in a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-letter-burnt",
+        "amount": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {},
+        "lead": 0,
+        "mark": "letter-burnt"
+       },
+       {
+        "kind": "flag",
+        "key": "rq-letter-done",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it to me first.",
+     "success": {
+      "text": "{rival} hesitates. Then they unfold it and read it to you in a quiet, flat voice, as if it were somebody else's. It's short.\n\nIt ends: \"I met someone who makes me want to be good at this for me.\"\n\nThey don't look up. The fire pops. {rival}: \"...So. Send it or burn it?\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 3
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-read-letter",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rq-letter-read"
+       },
+       {
+        "kind": "flag",
+        "key": "rq-letter-done",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "mentor-named",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "rq-mentor"
+      }
+     ],
+     "notice": "On the outside of the letter, under their dad's name, there's a second name, written smaller. Their old mentor's."
+    }
+   ]
+  },
+  {
+   "id": "rq-letter-read",
+   "name": "Send It or Burn It",
+   "group": "Rival questline",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1424",
+    "effect": "glint"
+   },
+   "intro": "The letter is folded again in {rival}'s hand, over the fire. You know what it says now. So do they.",
+   "choices": [
+    {
+     "label": "Send it.",
+     "success": {
+      "text": "{rival} pulls the letter back from the coals and blows on the browned edge until it's cool.\n\nIn the morning they post it at the first town, and stand in front of the post box a long time after it's gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-letter-sent",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Burn it.",
+     "success": {
+      "text": "{rival} opens their fingers. The letter drops, curls, catches, and goes up in one bright breath.\n\nThey watch it go until there's nothing left to watch.\nThen they lie back and look at the stars, and their shoulders come down, slowly, for the first time in a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-letter-burnt",
+        "amount": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {},
+        "lead": 0,
+        "mark": "letter-burnt"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rq-old-man-stands",
+   "name": "The Man in the Stands",
+   "group": "Rival questline",
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-letter-sent",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "runPlace",
+     "lastRegion": true,
+     "regionEnd": true
+    },
+    {
+     "kind": "flag",
+     "key": "rq-old-man-stands-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a1424",
+    "effect": "glint"
+   },
+   "intro": "The League stands are full. At the edge of them an older man stands alone, hat in his hands, watching {rival} warm up below.\n\nHe has {rival}'s way of standing. Exactly. He sees you looking, and nods to you once, as if he knows who you are.",
+   "choices": [
+    {
+     "label": "Nod back.",
+     "success": {
+      "text": "Whatever the letter said, it arrived. {rival} hasn't seen him yet. You don't spoil it.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rq-old-man-stands-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rq-swap-day",
+   "name": "Swap Day",
+   "group": "Rival questline",
+   "rarity": "uncommon",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rq-swap-day-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2430",
+    "effect": "glint"
+   },
+   "intro": "{rival} is waiting in the middle of the path. Before you can say hello, they unclip their whole belt and hold it out to you. Six Balls, swinging.\n\n{rival}: \"One stage. You take mine. I take yours.\"\n{rival}: \"You always say mine are badly trained.\"\n\n{rival}: \"{say event||champion-chaser::Prove it.||bitter-challenger::Go on. Prove it.||enthusiast::Prove it! Please!||idealist::Prove it, fairly.||strategist::Prove it. With data.||protector::Prove it. Gently.||prodigy::Prove it. You can't.||underdog::Prove it. Or don't.}\"",
+   "choices": [
+    {
+     "label": "Swap.",
+     "requires": [
+      {
+       "kind": "swapReady"
+      }
+     ],
+     "success": {
+      "text": "You unclip your own belt and hold it out. For a second neither of you lets go.\nThen the trade is made, and your team is in {rival}'s hands, looking back at you over their shoulders.\n\n{rival}'s team looks up at you, baffled and wary. Six strangers who know your face.\n\nUntil the stage's last road you fight with theirs: their levels, their moves. Then the belts go back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-swap",
+        "amount": 1
+       },
+       {
+        "kind": "teamSwap",
+        "mode": "all"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "rq-swap-day-handback",
+        "nodes": 8
+       },
+       {
+        "kind": "flag",
+        "key": "rq-swap-day-done",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Swap one each.",
+     "requires": [
+      {
+       "kind": "swapReady"
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "You each pick one. {rival} takes yours like a borrowed jacket, carefully, checking the pockets. You take theirs.\n\nFor a while one stranger walks with your team, and one of yours walks with theirs. Both come home with stories.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-swap-one",
+        "amount": 1
+       },
+       {
+        "kind": "teamSwap",
+        "mode": "one"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "rq-swap-day-handback",
+        "nodes": 8
+       },
+       {
+        "kind": "flag",
+        "key": "rq-swap-day-done",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "{rival} snorts and clips the belt back on.\n\n{rival}: \"Scared.\"\n\nThey're grinning when they say it, though. Mostly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rq-swap-day-done",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rq-swap-day-handback",
+   "name": "Swap Day: Handing Back",
+   "group": "Rival questline",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2430",
+    "effect": "glint"
+   },
+   "intro": "At the stage's last road {rival} is waiting with your belt, and you hand back theirs.\nBoth teams pour out of their Balls at once and run to their own trainers.\n\n{rival}: \"Yours argued with me the whole way. I've no idea how you get anything done.\"\n{rival}: \"{say event||champion-chaser::No idea how you win.||bitter-challenger::Yours never listen.||enthusiast::They're amazing! And loud!||idealist::They argued. Fairly.||strategist::Zero discipline.||protector::They missed you.||prodigy::Chaotic. Effective.||underdog::They argued. I lost.}\"",
+   "choices": [
+    {
+     "label": "Take them back.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "swap-fainted",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Your team checks you over as if you've been away a year. Every one of them picked something up on the road with a stranger.\n\nOne of them shows off a brand-new move it learned from {rival}'s ace, very pleased with itself.\n\n{rival} counts their own team, and stops at the one that fainted in your care. They don't say anything. They don't have to.",
+       "effects": [
+        {
+         "kind": "teamSwap",
+         "mode": "back"
+        },
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "party"
+        },
+        {
+         "kind": "eggMove"
+        },
+        {
+         "kind": "rivalChange",
+         "feelings": {},
+         "lead": 0,
+         "mark": "swap-day"
+        },
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "trust": -1
+         },
+         "lead": 0
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your team checks you over as if you've been away a year. Every one of them picked something up on the road with a stranger.\n\nOne of them shows off a brand-new move it learned from {rival}'s ace, very pleased with itself. {rival} pretends not to notice, and fails.\n\n{rival} counts their own team twice, then a third time. Not one of them so much as fainted. {rival}'s ace walks over and leans its whole weight against your legs.",
+      "effects": [
+       {
+        "kind": "teamSwap",
+        "mode": "back"
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "eggMove"
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {},
+        "lead": 0,
+        "mark": "swap-day"
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {},
+        "lead": 0,
+        "mark": "swap-ace-fond"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rq-asks-you-to-lose",
+   "name": "The Rival Asks You to Lose",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalState",
+     "feeling": {
+      "key": "trust",
+      "atLeast": 3
+     }
+    },
+    {
+     "kind": "flag",
+     "key": "rq-asks-you-to-lose-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#201820",
+    "effect": "glint"
+   },
+   "intro": "The tunnel under the stands is cold and echoing. The crowd is a far-off roar. {rival} is waiting by the gate before your match, back to the wall.\nThey don't have their usual face on.\n\n{rival}: \"If I lose this, my sponsor drops me. I go home. That's it.\"\nA breath. They look at the floor, then at you.\n{rival}: \"I'm not asking. ...I'm asking.\"",
+   "choices": [
+    {
+     "label": "\"I'll fight you properly.\"",
+     "success": {
+      "text": "You hold their eyes and say it plainly. Something in {rival}'s face breaks, and then sets again, harder and cleaner than before.\n\n{rival}: \"...Good. Then don't you dare go easy.\"\n\nThe gate opens. The roar comes down the tunnel like weather.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-honest-match",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rq-asks-you-to-lose-done",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "rival-honest-lost",
+         "amount": 1
+        }
+       ],
+       "name": "Your rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "rival-honest-won",
+         "amount": 1
+        },
+        {
+         "kind": "rivalChange",
+         "feelings": {},
+         "lead": 0,
+         "mark": "sponsor-dropped"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"I'll throw it.\"",
+     "success": {
+      "text": "You walk out into the light and lose. You do it carefully, the way you'd do anything you were ashamed of. The crowd doesn't notice. The round is gone.\n\n{rival} notices. They stand in the middle of the field afterwards with their sponsor clapping them on the back, and they cannot look at you. Not once.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-thrown",
+        "amount": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -2
+        },
+        "lead": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rq-asks-you-to-lose-done",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let's tell the sponsor to watch a real match.\"",
+     "success": {
+      "text": "You find the sponsor in her box, a sharp woman with a clipboard, and tell her what you want. She raises an eyebrow, and sits forward.\n\nThen the two of you fight flat out, everything you have, in front of her and the whole roaring stand.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 3
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-real-match",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rq-asks-you-to-lose-done",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "sponsor-signed-rival",
+         "amount": 1
+        }
+       ],
+       "name": "Your rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "sponsor-signed-both",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "rq-dont-you-dare",
+   "name": "Don't You Dare",
+   "group": "Rival questline",
+   "rarity": "common",
+   "minStage": 7,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-thrown",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "runPlace",
+     "lastRegion": true,
+     "regionEnd": true
+    },
+    {
+     "kind": "flag",
+     "key": "rq-dont-you-dare-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#201820",
+    "effect": "glint"
+   },
+   "intro": "The last battle of the run is close. {rival} catches you in the corridor and grabs your sleeve, hard.\n\n{rival}: \"Don't you dare do that again.\"\n\nThey don't say anything else. They don't have to.",
+   "choices": [
+    {
+     "label": "\"I won't.\"",
+     "success": {
+      "text": "{rival} lets go of your sleeve, one finger at a time. \"Good,\" they say, and walk off, and don't look back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rq-dont-you-dare-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rq-hand-sewn-jersey",
+   "name": "A Hand-Sewn Jersey",
+   "group": "Rival questline",
+   "rarity": "common",
+   "minStage": 8,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-honest-won",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "rival-honest-won",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "rq-hand-sewn-jersey-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#201820",
+    "effect": "glint"
+   },
+   "intro": "{rival} is back. They come up the road toward you in a jersey nobody bought them: hand-sewn, a little crooked at the seams, no logo anywhere on it.\n\nThey look lighter. They look like someone who lost something and found out they didn't need it.\n\n{rival}: \"My mum made it. Don't laugh. ...I'm better now. You'll see.\"",
+   "choices": [
+    {
+     "label": "\"It suits you.\"",
+     "success": {
+      "text": "{rival} pretends not to be pleased, and fails completely.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rq-hand-sewn-jersey-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne41-museum-of-you",
+   "name": "The Museum of You",
+   "group": "Future events",
+   "rarity": "rare",
+   "tags": [
+    "Story",
+    "Mystery"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 25,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne41-museum-of-you-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#24202c",
+    "effect": "sparkle"
+   },
+   "intro": "A small museum where yesterday there was an empty lot. Over its door, a banner: THE {player} EXHIBIT. 100 YEARS ON.\n\nIt hasn't happened yet. None of it has happened yet. The door is open anyway, and there's a smell of floor polish and old paper.\n\nCurator, a woman in odd clothes, Seraphine: \"You're early. That's all right; so is the building.\"\n\nInside, glass cases. Your hat. Your first Poké Ball, scuffed exactly where yours is scuffed. A small card in careful handwriting: \"Lost, in a region not yet walked.\"",
+   "choices": [
+    {
+     "label": "Read the cards.",
+     "success": {
+      "text": "You go case by case. Every card is a real thing you did on this road, and every one is written kindly. More kindly than you would have written it.\n\n\"{lead}, who stayed in front.\" \"{starter}, the first of them.\"\n\"Kindnesses done on the road: {flag:kind-total}.\" \"Alphas calmed, not beaten: {flag:calmed-alpha}.\"\n\nSeraphine: \"We had to guess at some. We guessed generously.\" She tears you a ticket stub on your way out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "future-museum-read",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "museum-stub",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne41-museum-of-you-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what's in the last case.",
+     "success": {
+      "text": "The last case stands by the far door, lit like all the others. It is empty. The card beneath it is blank.\n\nSeraphine: \"We're waiting to see.\"\nShe glances, just once, toward the far door and the road beyond it, as if she knows exactly where it goes.\n\nSeraphine: \"The last room is about {finalRegion}. That's all I'll say. Go gently there.\"\nShe tears you a ticket stub on your way out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-last-case",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "museum-stub",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne41-museum-of-you-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave before I see too much.",
+     "success": {
+      "text": "You back out of the door before your eyes can land on anything else. Seraphine doesn't stop you.\n\nSeraphine: \"Sensible.\" She tears a ticket from a roll and tucks the stub into your pocket. \"For when you're ready.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-stub",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne41-museum-of-you-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne41-the-last-card",
+   "name": "The Last Card",
+   "group": "Future events",
+   "rarity": "common",
+   "minStage": 26,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "museum-stub",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "runPlace",
+     "lastRegion": true,
+     "regionEnd": true
+    },
+    {
+     "kind": "flag",
+     "key": "ne41-the-last-card-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#24202c",
+    "effect": "sparkle"
+   },
+   "intro": "Near the end of everything, you find the museum ticket stub in your pocket. You haven't thought about it in a long time.\n\nOn the back, in handwriting that wasn't there before, someone has written the last case's card. It is about this. About now. About you, getting here.",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You don't read it twice. You don't need to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne41-the-last-card-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne42-your-pokemon-old",
+   "name": "Your Pokémon, Old",
+   "group": "Future events",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "rest",
+   "types": [],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne42-your-pokemon-old-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#141a24",
+    "effect": "none"
+   },
+   "intro": "Something wakes you in the night: {lead}, nosing at your hand, quiet and urgent.\n\nAt the very edge of the firelight sits another one. The same kind as {lead}, exactly.\nBut grey at the muzzle, thin in the shoulders, slow in the way it settles. Watching.\n\nThe old one looks at the young one for a long time. The young one sniffs the air, and then, without being told, sits down beside you.\n\nThe old one looks at you. And its tail moves.",
+   "choices": [
+    {
+     "label": "Say hello.",
+     "success": {
+      "text": "You say hello, softly, the way you'd say it to {lead}. The old one gets up, stiff in every joint, and comes round the fire to you.\n\nIt leans its whole weight against your leg. Exactly the way {lead} does. Exactly.\n{lead} watches, then leans on your other leg, and you sit propped between them until the fire is ash.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "ne42-your-pokemon-old-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask if it was a good life.",
+     "success": {
+      "text": "You ask it, very quietly. It can't answer, of course. It only looks at you with old, clouded eyes.\n\nThen it lies down where it is, and closes its eyes, and lets out a long breath. The most contented sound you have ever heard.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "future-good-life",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne42-your-pokemon-old-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You don't say anything. Nobody does. The three of you sit, the old one, the young one and you, while the stars turn over.\n\nAt first light you blink, and the place at the edge of the firelight is empty. Only a flattened patch of grass. {lead} sniffs at it for a long time.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "ne42-your-pokemon-old-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "sits-far-off",
+     "when": [
+      {
+       "kind": "bondLevel",
+       "atLeast": 2,
+       "who": "lead",
+       "absent": true
+      }
+     ],
+     "notice": "The old one sits farther off than it wants to, you think.\nIt looks at the young one, not at you, as if it's the young one it came all this way to see."
+    }
+   ]
+  },
+  {
+   "id": "ne42-sleeps-closer",
+   "name": "Closer",
+   "group": "Future events",
+   "rarity": "common",
+   "minStage": 5,
+   "stop": "rest",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flagAge",
+     "key": "ne42-your-pokemon-old-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne42-sleeps-closer-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#141a24",
+    "effect": "none"
+   },
+   "intro": "Camp again.\nYou lie down, and {lead} lies down, and in the night you wake to find it has crept right up against your back, the way it never used to.\n\nIt stays there till morning. It stays there every night after.",
+   "choices": [
+    {
+     "label": "Let it stay.",
+     "success": {
+      "text": "You fall asleep to the sound of its breathing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne42-sleeps-closer-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne43-kid-from-the-next-run",
+   "name": "The Kid From the Next Run",
+   "group": "Future events",
+   "rarity": "uncommon",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne43-kid-from-the-next-run-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_youngster"
+    ],
+    "tint": "#1c2830",
+    "effect": "none"
+   },
+   "intro": "A child is standing at the start of the road, right where you stood once. A brand-new hat, still with the shop crease in it. At their heels, a starter.\nNot the one you chose this run. One of the others.\n\nThe child: \"Are you them? The one before? The professor said someone went this way.\"\nThey look past you, up the long road, all the way to where it bends out of sight.\nThe child: \"What's it like, further on?\"",
+   "choices": [
+    {
+     "label": "\"It's hard. Go anyway.\"",
+     "success": {
+      "text": "You don't dress it up. They listen to every word, chin up, the starter pressed against their ankle.\n\nWhen you finish, they nod, once, very seriously. Then they straighten their new hat and step out onto the road.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "future-kid-brave",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne43-kid-from-the-next-run-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell them one true thing.",
+     "success": {
+      "text": "You think about what's true. There's a lot of it. You try to choose the one they'll need.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ne43-one-true-thing"
+       },
+       {
+        "kind": "flag",
+        "key": "ne43-kid-from-the-next-run-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give them something.",
+     "success": {
+      "text": "You dig in your bag and press something into their hands. They hold it like treasure, because it is.\n\n\"I'll keep it forever,\" they say, and run off up the road before you can tell them that's the whole point of giving it.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "flag",
+        "key": "future-kid-gift",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne43-kid-from-the-next-run-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne43-one-true-thing",
+   "name": "One True Thing",
+   "group": "Future events",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_youngster"
+    ],
+    "tint": "#1c2830",
+    "effect": "none"
+   },
+   "intro": "The child waits, very still, the way you'd wait for a Pokémon to decide whether to trust you.",
+   "choices": [
+    {
+     "label": "\"Some Alphas only want to be heard.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "calmed-alpha",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You tell them: some Alphas only want to be heard.\n\nThey say it back to you, under their breath, twice, to be sure they have it.\nThen they write it on the inside of their new hat, in pen, and put the hat back on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "future-kid-told-alpha",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Stop for strangers. They remember.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "kind-helped-stranger",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You tell them: stop for strangers. They remember.\n\nThey say it back to you, under their breath, twice, to be sure they have it.\nThen they write it on the inside of their new hat, in pen, and put the hat back on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "future-kid-told-kind",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Your rival is the best thing that will happen to you.\"",
+     "requires": [
+      {
+       "kind": "rivalMet",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "You tell them: your rival is the best thing that will happen to you.\n\nThey say it back to you, under their breath, twice, to be sure they have it.\nThen they write it on the inside of their new hat, in pen, and put the hat back on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "future-kid-told-rival",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Your starter will be braver than you. Let it.\"",
+     "success": {
+      "text": "You tell them: your starter will be braver than you. Let it.\n\nThey say it back to you, under their breath, twice, to be sure they have it.\nThen they write it on the inside of their new hat, in pen, and put the hat back on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "future-kid-told-starter",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne44-gym-that-isnt-built-yet",
+   "name": "The Gym That Isn't Built Yet",
+   "group": "Future events",
+   "rarity": "uncommon",
+   "tags": [
+    "Story",
+    "Combat"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne44-gym-that-isnt-built-yet-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_picnicker"
+    ],
+    "pokemon": "bidoof",
+    "tint": "#242818",
+    "effect": "none"
+   },
+   "intro": "A patch of weeds beside the Gym, with string pegged out in a neat rectangle.\nIn the middle of the rectangle a girl stands very straight, practising a speech to nobody.\n\nThe girl, Calliope: \"'Welcome, challenger, to the... the...'\"\nShe stops. She scowls at her shoes. A Bidoof sits at her feet and scowls with her.\n\nCalliope: \"I don't have a type yet.\"\nCalliope: \"I'm going to be a Leader. Here. When I'm big. What type should it be?\"",
+   "choices": [
+    {
+     "label": "Name a type: point to one of mine.",
+     "pick": {},
+     "success": {
+      "text": "You point to one of your team. Calliope studies it from every side, very seriously, the way an inspector would.\n\nThen she uncaps a pen and writes its type on the back of her hand, big, in capitals, and checks the spelling with you twice.\nThen she draws you a chalk badge on a flat stone, her very first, and gives it to you with both hands.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "calliope-badge",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne44-gym-that-isnt-built-yet-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The one you love.\"",
+     "success": {
+      "text": "She looks down at her feet, at the Bidoof, who looks back up at her with total devotion and a bit of grass in its teeth.\n\nCalliope: \"...Normal, then.\"\nShe says it like it's the easiest thing in the world, and writes NORMAL on her hand.\n\nThen she draws you a chalk badge on a flat stone, her very first, and gives it to you with both hands.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "future-gym-normal",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "calliope-badge",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne44-gym-that-isnt-built-yet-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle me for practice.\"",
+     "success": {
+      "text": "She squeaks, nearly drops her notebook, then sets it down very carefully on the grass, open to a fresh page.\n\nCalliope: \"A proper battle. Like a real Leader. Bidoof, positions!\"\n\nWin or lose, she'll write down every single thing you do.\nThen she draws you a chalk badge on a flat stone, her very first, and gives it to you with both hands.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "calliope-badge",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne44-gym-that-isnt-built-yet-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "team": [
+        "bidoof"
+       ],
+       "name": "Future Leader Calliope",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne45-message-in-your-own-handwriting",
+   "name": "A Message in Your Own Handwriting",
+   "group": "Future events",
+   "rarity": "uncommon",
+   "tags": [
+    "Story",
+    "Mystery",
+    "Combat"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne45-message-in-your-own-handwriting-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#20201c",
+    "effect": "none"
+   },
+   "intro": "A note is pinned to a tree beside the path, at exactly your eye level. You know the handwriting before you've read a word. It's yours.\n\nThe ink is old. The paper is soft from rain and sun. Someone pinned it here a long time ago. Or a long time from now.\n\n\"Don't take the left road after the bridge. I did. — You.\"\n\nPast the tree there is a bridge. After the bridge, the road forks.",
+   "choices": [
+    {
+     "label": "Take the right road.",
+     "success": {
+      "text": "You take the right road. It's an ordinary road, with ordinary trainers and ordinary weather, and nothing whatsoever happens on it.\n\nYou find you're grateful. Somebody made sure of that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne45-message-in-your-own-handwriting-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the left road anyway.",
+     "success": {
+      "text": "You take the left road. Of course you do. The note-writer would have known that about you. They knew it about themselves.\n\nThe road narrows and climbs. At the top waits the hardest fight you've seen in a while. Behind it, something wrapped in oilcloth, waiting for exactly you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "future-left-road",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne45-message-in-your-own-handwriting-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "A Trainer on the Left Road",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "choice-band",
+          "choice-specs",
+          "choice-scarf",
+          "life-orb",
+          "eviolite",
+          "rocky-helmet"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Write a reply.",
+     "success": {
+      "text": "You find a pencil stub in your bag and smooth a scrap of paper flat against the bark.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ne45-the-reply"
+       },
+       {
+        "kind": "flag",
+        "key": "ne45-message-in-your-own-handwriting-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne45-the-reply",
+   "name": "The Reply",
+   "group": "Future events",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#20201c",
+    "effect": "none"
+   },
+   "intro": "The pencil hovers. There's room for one line.",
+   "choices": [
+    {
+     "label": "\"I took it anyway. — Also you.\"",
+     "success": {
+      "text": "You write: \"I took it anyway. — Also you.\"\n\nYou pin it to the tree just under the first note, the two hands side by side. They match. Of course they match.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "future-note-anyway",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Thank you.\"",
+     "success": {
+      "text": "You write: \"Thank you.\"\n\nYou pin it to the tree just under the first note, the two hands side by side. They match. Of course they match.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "future-note-thanks",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"We made it. — You, later.\"",
+     "success": {
+      "text": "You write: \"We made it. — You, later.\"\n\nYou pin it to the tree just under the first note, the two hands side by side. They match. Of course they match.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "future-note-made-it",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne46-night-clinic-for-spirits",
+   "name": "The Night Clinic for Spirits",
+   "group": "Anime-inspired",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [
+    "grass",
+    "bug",
+    "ghost",
+    "psychic",
+    "dark"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "grass",
+      "bug",
+      "ghost",
+      "psychic",
+      "dark"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne46-night-clinic-for-spirits-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "shiftry",
+    "tint": "#141a2c",
+    "effect": "none"
+   },
+   "intro": "A paper lantern sits on a tree stump in the dark, burning low and blue.\nIn front of it, a queue: Ghost-types and Grass-types, one behind the other, patient as stones.\n\nEach one holds a single leaf, and on each leaf there's a mark. They're waiting in front of nobody.\n\nA Shiftry at the front of the queue sees you, steps forward, and holds out its leaf. On it is a name, written by a human hand, long, long ago.\n\nAn old Noctowl on a branch above, in your head: \"A girl took their names to keep them company. She's gone.\"\nThe Noctowl: \"They'd like them back.\"",
+   "choices": [
+    {
+     "label": "Read each name aloud and give it back.",
+     "success": {
+      "text": "You sit on the stump by the lantern and take the first leaf. You read the name aloud.\nThe Shiftry closes its eyes as it hears it, and bows, very low, and goes.\n\nIt takes the whole night. One name, one bow, one leaf, over and over. Your voice goes hoarse. You don't stop.\n\nThe last in the queue is a tiny Ghost-type with no leaf at all. It never had a name to take back.\nIt only wanted to hear the others said out loud.\n\nAt dawn it's still there. It asks, without words, to come with you. The Noctowl drops a Spell Tag at your feet.\nNo Ghost-type in these parts will ambush you again.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "spirits-named",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "item",
+        "id": "spell-tag",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [
+         "ghost"
+        ],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "quietWild",
+        "span": "region",
+        "types": [
+         "ghost"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "ne46-night-clinic-for-spirits-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep the names.",
+     "success": {
+      "text": "You close your hand round the Shiftry's leaf, and don't give it back. The queue doesn't protest. It only turns, all together, and follows you.\n\nFor a whole stage they trail behind you through the trees at a distance, sadly, holding out their empty hands. Then, one by one, they stop.\n\nIn the morning there's a Spell Tag tied to your bag. Nobody saw who left it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "spirits-kept",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "spell-tag",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne46-night-clinic-for-spirits-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the girl.",
+     "success": {
+      "text": "The Noctowl turns its head all the way round and back, thinking.\nThe Noctowl: \"She was lonely. So were they.\"\nThe Noctowl: \"It was a fair trade, then.\"\n\nYou don't know what to say to that. The Shiftry seems to understand. It presses a Spell Tag into your hand.\n\nA small Ghost-type from the back of the queue drifts over and settles on your shoulder, as if it has decided something.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "spell-tag",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [
+         "ghost"
+        ],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne46-night-clinic-for-spirits-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne47-smallest-delivery-service",
+   "name": "The Smallest Delivery Service",
+   "group": "Anime-inspired",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne47-smallest-delivery-service-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_picnicker"
+    ],
+    "pokemon": "drifloon",
+    "tint": "#24283a",
+    "effect": "none"
+   },
+   "intro": "A Drifloon with a parcel tied under it bumps along the rooftops, badly. It knocks a chimney pot sideways. It apologises to the chimney.\n\nUnderneath it, running along the street with one arm up, a girl is shouting directions.\n\nThe girl, Henrietta: \"Left! Your other left! It's our first day!\"\nShe skids to a stop beside you, out of breath.\nHenrietta: \"It's lost its nerve. It dropped one in the river yesterday. Now it won't fly high.\"",
+   "choices": [
+    {
+     "label": "Fly with it.",
+     "pick": {
+      "types": [
+       "flying"
+      ]
+     },
+     "success": {
+      "text": "Your Pokémon lifts off and takes up a place beside the Drifloon, a little below it, where it could catch anything that fell.\n\nThe Drifloon looks down, sees it there, and rises. A foot. Two. Over the rooftops and on, two shapes crossing the sky together toward the edge of town.\n\nYou follow their shadow along the road below. Henrietta runs beside you, waving both arms.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "delivery-flew",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "ne47-delivered",
+        "nodes": 4
+       },
+       {
+        "kind": "flag",
+        "key": "ne47-smallest-delivery-service-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the parcel myself.",
+     "success": {
+      "text": "You untie the parcel and tuck it under your arm. It isn't heavy. You find the address, knock, hand it over. Done.\n\nWhen you look back, the Drifloon is sitting on a chimney with its string trailing, watching you go. It doesn't come down for a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne47-smallest-delivery-service-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell it everyone drops one.",
+     "success": {
+      "text": "You look up at the Drifloon and tell it, loud enough to carry: everybody drops one. Everybody.\n\nHenrietta, at once: \"I dropped six.\"\nThe Drifloon stares at her.\nHenrietta: \"Six! One was a cake!\"\n\nThe Drifloon goes up a foot. Just one. But it goes up.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne47-smallest-delivery-service-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne47-delivered",
+   "name": "The Parcel Lands",
+   "group": "Anime-inspired",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "drifloon",
+    "tint": "#24283a",
+    "effect": "none"
+   },
+   "intro": "Four roads on, a shadow crosses your path, and then another. The Drifloon comes down out of the sky in a long, slow spiral, with your Pokémon right beside it.\n\nThe parcel is delivered to a door with a brass knocker. The Drifloon bobs, enormously pleased. Henrietta, arriving at a run, bursts into tears.",
+   "choices": [
+    {
+     "label": "Wave them off.",
+     "success": {
+      "text": "The two of them go back up together, higher this time. Your Pokémon comes down last, and lands beside you very proud of itself.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne47-three-parcels",
+   "name": "Three Parcels",
+   "group": "Anime-inspired",
+   "rarity": "common",
+   "minStage": 4,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flagAge",
+     "key": "ne47-smallest-delivery-service-done",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne47-three-parcels-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "drifloon",
+    "tint": "#24283a",
+    "effect": "none"
+   },
+   "intro": "A shadow crosses the road. You look up. High above, a Drifloon is flying steady and straight, and under it hang three parcels, neatly tied.\n\nIt sees you. It dips, once, the way a ship dips its flag. Then it carries on, over the hills.",
+   "choices": [
+    {
+     "label": "Wave.",
+     "success": {
+      "text": "Somewhere behind you, faintly, someone is shouting \"Left!\" And it is going left.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne47-three-parcels-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne48-inn-that-feeds-you-what-you-miss",
+   "name": "The Inn That Feeds You What You Miss",
+   "group": "Anime-inspired",
+   "rarity": "uncommon",
+   "tags": [
+    "Story"
+   ],
+   "stop": "rest",
+   "types": [],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne48-inn-that-feeds-you-what-you-miss-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1a14",
+    "effect": "none"
+   },
+   "intro": "A narrow doorway with a cloth curtain, open midnight to dawn. Inside, a counter with six stools, a pot steaming, and a cook with a scar across one eye.\nThere's no menu anywhere.\n\nThe cook, known as Master: \"I make what you ask for, if I've got it.\"\n\nAlong the counter, three strangers eat without looking at each other. A tired Officer. A clown, his red nose off and set beside his bowl.\nA Grunt in half a uniform, the other half nowhere.",
+   "choices": [
+    {
+     "label": "\"What my mum made.\"",
+     "success": {
+      "text": "Master nods as if that's a perfectly normal order, and here it is. He doesn't ask what it was. He cooks a long time.\n\nHe sets down the bowl, and you breathe in, and it's right. It's exactly right. You don't know how.\nYou eat it all, slowly, and then sit with your hands round the empty bowl.\n\nYour team is fed and rested and dozing on the floor by the time you go.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "diner-home",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "diner-visited",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "ne48-inn-that-feeds-you-what-you-miss-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What my starter likes.\"",
+     "success": {
+      "text": "Master looks at {starter} for a long moment. Then he fetches a second stool and sets it at the counter.\n\n{starter} climbs up and eats like a person, elbows and all, very seriously, one careful mouthful at a time. The clown laughs for the first time all night.\n\nYour whole team is fed by the end of it, and dozing, and warm.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "starter"
+       },
+       {
+        "kind": "flag",
+        "key": "diner-visited",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "ne48-inn-that-feeds-you-what-you-miss-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Whatever he's having.\" (the Grunt)",
+     "success": {
+      "text": "Master puts a bowl of plain rice in front of you. Nothing else. The Grunt looks at it, then at you, then at his own.\n\nHe talks. Not to you, exactly. To the rice. He joined because his brother did. He wants out. He doesn't know how anybody gets out.\n\nMaster refills both your bowls without being asked, and feeds your team at the back door.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "diner-grunt",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "diner-visited",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "ne48-inn-that-feeds-you-what-you-miss-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne48-home-mentioned",
+   "name": "Someone Knows Your Town",
+   "group": "Anime-inspired",
+   "rarity": "common",
+   "minStage": 4,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "diner-home",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "diner-home",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne48-home-mentioned-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1a14",
+    "effect": "none"
+   },
+   "intro": "In the next town, a woman at a market stall hears you speak, and looks up sharply.\n\nMarket woman: \"You're from home! I can hear it. Is the bakery on the corner still there?\"",
+   "choices": [
+    {
+     "label": "Tell her about home.",
+     "success": {
+      "text": "You talk about home for far longer than you meant to.\nShe sends you off with an apple, and the taste of it is the taste of somewhere a long way back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne48-home-mentioned-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne48-the-counter-again",
+   "name": "The Counter Again",
+   "group": "Anime-inspired",
+   "rarity": "common",
+   "minStage": 5,
+   "stop": "rest",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "diner-visited",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne48-the-counter-again-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1a14",
+    "effect": "none"
+   },
+   "intro": "Midnight, and a narrow doorway with a cloth curtain you know. Six stools. The pot steaming. Master, with his scar, nodding to you as if you were here last night.\n\nThe same three are at the counter. The Officer laughs at something. The clown has his nose back on. The Grunt's uniform is down to a quarter.\nThey're all slightly happier.",
+   "choices": [
+    {
+     "label": "Sit down.",
+     "success": {
+      "text": "Master puts a bowl in front of you without asking. He remembers. Your team curls up by the stove.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne48-the-counter-again-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne48-the-counter-once-more",
+   "name": "The Counter, Once More",
+   "group": "Anime-inspired",
+   "rarity": "common",
+   "minStage": 7,
+   "stop": "rest",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "diner-visited",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    },
+    {
+     "kind": "flag",
+     "key": "ne48-the-counter-again-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne48-the-counter-once-more-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1a14",
+    "effect": "none"
+   },
+   "intro": "Midnight, and a narrow doorway with a cloth curtain you know. Six stools. The pot steaming. Master, with his scar, nodding to you like an old regular.\n\nThe same three are at the counter. The Officer laughs at something. The clown has his nose back on. The Grunt's uniform is down to a quarter.\nThey're all slightly happier.",
+   "choices": [
+    {
+     "label": "Sit down.",
+     "success": {
+      "text": "Your stool is free. It's always free. Master sets down your bowl, and the clown passes you the salt.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne48-the-counter-once-more-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne49-giants-garden",
+   "name": "The Giant's Garden",
+   "group": "Anime-inspired",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [
+    "flying",
+    "rock",
+    "dragon"
+   ],
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "flying",
+      "rock",
+      "dragon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne49-giants-garden-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_youngster"
+    ],
+    "pokemon": "golurk",
+    "tint": "#1c2a20",
+    "effect": "none"
+   },
+   "intro": "Ruins on a hilltop, open to the wind. A Golurk covered in moss is walking away from a wall that is falling down, very, very slowly.\n\nIn its two huge hands it carries a bird's nest. It doesn't hurry. It has done this before. It has done this for a long time.\n\nNearby there's a grave, and on the grave there are flowers. Fresh ones.\n\nA boy with a trumpet, Tiberio: \"It doesn't guard anything any more.\"\nTiberio: \"It just looks after things.\"",
+   "choices": [
+    {
+     "label": "Help it move the nest.",
+     "success": {
+      "text": "You hold out your hands. The Golurk stops, and looks at you a long moment with its round, lit eyes.\n\nThen it lowers the nest into your hands, as gently as anything has ever been given to you, and turns to the wall to clear the falling stones.\n\nYou stand very still, holding three warm eggs and one cross bird. When the stones are cleared it takes the nest back, and leaves a Light Clay where it was.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "giant-helped",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "light-clay",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "giant-met",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "ne49-giants-garden-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask who's buried there.",
+     "success": {
+      "text": "Tiberio looks at the grave a while before he answers.\n\nTiberio: \"The others like it. All of them. It's the last one.\"\nTiberio: \"It put the flowers.\"\n\nBefore you go, the Golurk sets a lump of Light Clay at your feet, the way it set the flowers.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "light-clay",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "giant-met",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "ne49-giants-garden-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it to its work.",
+     "success": {
+      "text": "You step back and leave it to its slow work. It isn't the kind of work you interrupt.\n\nAs you turn to go, a great shadow falls over you. The Golurk is holding out one flower, very carefully, between two enormous fingers. You take it.\nWrapped round the stem is a Light Clay.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "giant-flower",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "light-clay",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "giant-met",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "ne49-giants-garden-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "golett-line",
+     "when": [
+      {
+       "kind": "partyLine",
+       "species": "golett",
+       "bond": 0
+      }
+     ],
+     "notice": "Your own Golett line steps forward without being told.\nThe two of them stand facing each other in the wind for a long time, the old one and the young one."
+    }
+   ]
+  },
+  {
+   "id": "ne49-trumpet-at-dawn",
+   "name": "A Trumpet at Dawn",
+   "group": "Anime-inspired",
+   "rarity": "common",
+   "minStage": 6,
+   "stop": "rest",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "giant-met",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgoMost": 0
+    },
+    {
+     "kind": "period",
+     "in": [
+      "morning"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne49-trumpet-at-dawn-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a20",
+    "effect": "none"
+   },
+   "intro": "Dawn. From far off, from the hill with the ruins on it, a trumpet is playing. Thin and bright and a little out of tune.\n\nIt's Tiberio. He plays to the morning, and somewhere up there a Golurk lifts its head to listen.",
+   "choices": [
+    {
+     "label": "Listen till it ends.",
+     "success": {
+      "text": "You lie still and listen until the last note goes. Your team is awake and listening too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne49-trumpet-at-dawn-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne50-class-with-one-seat-left",
+   "name": "The Class With One Seat Left",
+   "group": "Anime-inspired",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Mystery"
+   ],
+   "stop": "event",
+   "types": [
+    "flying",
+    "rock",
+    "dragon",
+    "grass",
+    "bug"
+   ],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "flying",
+      "rock",
+      "dragon",
+      "grass",
+      "bug"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne50-class-with-one-seat-left-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_lass"
+    ],
+    "pokemon": "alakazam",
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A run-down schoolhouse at the top of a hill, half its windows patched with card. Inside, the worst class in the district sits at scarred desks.\n\nAt the front of the room, an Alakazam is marking homework. It's using six spoons at once, one per exercise book, and it hasn't looked up.\n\nA student, Sunniva: \"They put us up here to forget us. Then it turned up. It won't say why.\"\n\nThe Alakazam, in everyone's head at once: \"A guest. Good.\"\nThe Alakazam: \"Today's lesson: beat me. Anyone. Any way.\"",
+   "choices": [
+    {
+     "label": "Take the lesson.",
+     "success": {
+      "text": "You step up. So does the whole class, all at once, chairs scraping. The Alakazam looks almost pleased.\n\nIt can't be beaten by force. Every blow stops short, held in the air.\nThe only way through is together: a different trick from every corner of the room, until it runs out of answers.\n\nWin or lose, Sunniva hands you a TwistedSpoon on the way out. \"It said you'd earned the spoon either way.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "twistedspoon",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "class-met",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "ne50-class-with-one-seat-left-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "alakazam"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "class-won",
+         "amount": 1
+        },
+        {
+         "kind": "teachMove",
+         "move": "helping-hand",
+         "who": "lead"
+        }
+       ],
+       "friendly": true,
+       "rule": {
+        "contest": 4
+       },
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Teach a lesson myself.",
+     "success": {
+      "text": "The Alakazam sets down five of its spoons and gestures to the front of the room. Yours, then.\n\nYou teach them one real thing you learned on this road, the hard way. You don't make it sound easy. Twenty pencils scratch at once.\n\nWhen you finish, the Alakazam hands you its sixth spoon, a TwistedSpoon, bent just so. \"Good lesson,\" it says, in everyone's head.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "twistedspoon",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "class-met",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "ne50-class-with-one-seat-left-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask it why it's here.",
+     "success": {
+      "text": "The six spoons stop moving. The whole class goes quiet; nobody has ever dared ask it straight out.\n\nThe Alakazam: \"Someone taught me once, when nobody would.\"\nThe Alakazam: \"I'm paying it on.\"\n\nIt goes back to its marking. On your way out, Sunniva runs after you with a TwistedSpoon. \"It said to give you this. It said you'd understand.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "twistedspoon",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "class-met",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "ne50-class-with-one-seat-left-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne50-the-hill-school-team",
+   "name": "The Hill School Team",
+   "group": "Anime-inspired",
+   "rarity": "common",
+   "minStage": 6,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "class-met",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ne50-the-hill-school-team-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_lass"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A Circuit draw board, and on it a team name you don't recognise: THE HILL SCHOOL. Then you see who's under the banner.\nSunniva, and the whole worst class in the district.\n\nThey're good. They're very good. They're winning, and they're doing it together, calling to each other across the field.",
+   "choices": [
+    {
+     "label": "Ask them for a match.",
+     "success": {
+      "text": "Sunniva grins. \"We were hoping you'd ask. Lesson one: beat you. Anyone. Any way.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne50-the-hill-school-team-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "name": "The Hill School Class",
+       "size": 4,
+       "types": [
+        "psychic"
+       ],
+       "levelBonus": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Cheer them on.",
+     "success": {
+      "text": "You cheer from the rail. Every single one of them looks round to see who's shouting, and waves.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne50-the-hill-school-team-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

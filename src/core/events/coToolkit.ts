@@ -43,7 +43,7 @@ export function impostorTarget(run: Pick<Run, 'party' | 'seed' | 'regionIndex' |
   return run.party[new Rng(hashSeed(`${run.seed}::co-impostor::${run.regionIndex}::${run.stage?.index ?? 0}`)).int(0, run.party.length - 1)];
 }
 
-/** Fills {lead} {starter} {most} {least} {impostorType} {nextRegion} and {flag:<key>} (a run flag's number, 0 when unset) in an event's text. Unknown tokens are left alone (other families fill their own). */
+/** Fills {lead} {starter} {most} {least} {impostorType} {nextRegion} {finalRegion} and {flag:<key>} (a run flag's number, 0 when unset) in an event's text. Unknown tokens are left alone (other families fill their own). */
 export function fillCoText(content: Content, run: Run, text: string): string {
   if (!text.includes('{')) return text;
   const lead = run.party.find((m) => m.hp > 0) ?? run.party[0];
@@ -57,8 +57,10 @@ export function fillCoText(content: Content, run: Run, text: string): string {
     impostorType: () => (imp ? getSpecies(content, imp.speciesId).types[0]! : 'normal'),
     // New events (NE17): the name of the region after this one, or the League when this is the last.
     nextRegion: () => content.regions.get(run.regionOrder[run.regionIndex + 1] ?? '')?.name ?? 'the League',
+    // New events (NE41): the run's last region.
+    finalRegion: () => content.regions.get(run.regionOrder[run.regionOrder.length - 1] ?? '')?.name ?? 'the League',
   };
-  return text.replace(/\{(lead|starter|most|least|impostorType|nextRegion)\}/g, (_, k: string) => table[k]!()).replace(/\{flag:([a-z][a-z0-9-]*)\}/g, (_, k: string) => String(num(run, k)));
+  return text.replace(/\{(lead|starter|most|least|impostorType|nextRegion|finalRegion)\}/g, (_, k: string) => table[k]!()).replace(/\{flag:([a-z][a-z0-9-]*)\}/g, (_, k: string) => String(num(run, k)));
 }
 
 // ---------- SF72 rule battles: "How bad is it for me?" ----------

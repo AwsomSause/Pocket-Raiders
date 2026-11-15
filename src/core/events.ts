@@ -63,6 +63,7 @@ import { addLevels, calcStats, maxHp, maxPp } from './pokemon';
 import { count, countShiny, discover } from './progress';
 import { FLAGS as POND_FLAGS, freshMark, pondMon, recordLesson, setPondFlag } from './episodes/poliPond';
 import { eggStatus, eggTier, layEgg, warmEggs } from './eggs';
+import { beginSwap, endSwap, swapReady } from './co/swap';
 import { anyFlagSet, eggWarm, hasEgg, itemForType, owePartner, quietWild, runPlaceMet, stageTypesMet, stageWeatherMet, stripFoeMoves } from './co/neRules';
 import { makeShadow, rollShadowHeart } from './shadow';
 import { addFlag } from './shadowWorld/world';
@@ -217,6 +218,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return stageWeatherMet(content, run, c.in);
     case 'anyFlag':
       return anyFlagSet(run, c.keys);
+    case 'swapReady':
+      return swapReady(content, run);
     case 'rivalMet':
       return run.story.rivals.some((r) => r.encounters >= c.atLeast);
     case 'rivalAlly':
@@ -448,6 +451,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return `Only in ${c.in.join(' or ')}`;
     case 'anyFlag':
       return 'Only after an earlier choice';
+    case 'swapReady':
+      return 'Your rival has a team to lend';
     case 'rivalAlly':
       return 'Needs a rival who has become a friend';
     case 'friendHere':
@@ -1124,6 +1129,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return `your Egg hatches ${e.steps === 1 ? 'a step' : `${e.steps} steps`} sooner`;
     case 'typeItem':
       return `an item for ${whoWords(e.who)}'s type`;
+    case 'teamSwap':
+      return e.mode === 'all' ? 'you and your rival trade teams' : e.mode === 'one' ? 'you and your rival trade one Pokémon each' : 'the teams go back';
     case 'tagPartner':
       return `a copy of your lead fights beside you ${e.battles === 1 ? 'next battle' : `for ${e.battles} battles`}`;
     case 'attribute': {
@@ -1443,6 +1450,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const id = itemForType(content, whoOf(content, run, e.who, pickedUid)[0], e.table);
       return id ? giveItem(content, run, id, 1, rng) : '';
     }
+    case 'teamSwap':
+      return e.mode === 'back' ? endSwap(content, run, partyCapacity(content, run)) : beginSwap(content, run, e.mode, pickedUid);
     case 'tagPartner':
       owePartner(run, e.battles);
       return 'A copy of your lead will fight beside you in the next trainer battle.';

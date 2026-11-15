@@ -24,7 +24,9 @@ const rivalFight = (size: number, lvl: number, win: Json[] = [], lost: Json[] = 
 const seen = (id: string): Json => ({ kind: 'eventSeen', id });
 const age = (key: string, atLeast = 1, atMost = 99): Json => ({ kind: 'flagAge', key, atLeast, atMost });
 const later = (eventId: string, nodes: number): Json => ({ kind: 'laterEvent', eventId, nodes });
-const pastRun: Json = { kind: 'pastTeams', atLeast: 1 };
+/** Swap Day (NE39): the rival has a team to lend; the hand-back (also automatic before the Gym and at a new stage). */
+const SWAP_READY: Json = { kind: 'swapReady' };
+const BACK: Json = { kind: 'teamSwap', mode: 'back' };
 const night: Json = { kind: 'period', in: ['evening', 'night'] };
 const LEAGUE = (): Json => place({ lastRegion: true, regionEnd: true });
 
@@ -38,7 +40,7 @@ const TMS = TYPES.map((t) => `tm-${t}`);
 /** The held item for a Pokémon's type (a parcel "that suits your lead"). */
 const TYPE_ITEM: Record<string, string> = {
   normal: 'silk-scarf', fighting: 'black-belt', flying: 'sharp-beak', poison: 'poison-barb', ground: 'soft-sand', rock: 'hard-stone', bug: 'silver-powder', ghost: 'spell-tag', steel: 'metal-coat',
-  fire: 'charcoal', water: 'mystic-water', grass: 'miracle-seed', electric: 'magnet', psychic: 'twistedspoon', ice: 'never-melt-ice', dragon: 'dragon-fang', dark: 'black-glasses', fairy: 'fairy-feather',
+  fire: 'charcoal', water: 'mystic-water', grass: 'miracle-seed', electric: 'magnet', psychic: 'twistedspoon', ice: 'nevermeltice', dragon: 'dragon-fang', dark: 'black-glasses', fairy: 'fairy-feather',
 };
 const suitsLead = (): Json => ({ kind: 'typeItem', who: 'lead', table: TYPE_ITEM });
 /** One gift per club member (NE33). */
@@ -46,11 +48,16 @@ const GIFT = ['sitrus-berry', 'lum-berry', 'great-ball', 'ether', 'big-malasada'
 const gifts = (n: number): Json[] => Array.from({ length: n }, () => any(...GIFT));
 
 /** A branch replaces an outcome's effects, so a once-per-run event's done flag is copied into each of its branches. */
-function doneInBranches(e: Json): Json {
-  const key = `${String(e.id)}-done`;
-  if (!((e.requires as Json[] | undefined) ?? []).some((c) => c.kind === 'flag' && c.key === key)) return e;
+/** NE36 to NE40 share the stage's one rival slot with the rival questlines: they need it free, and taking one marks it used. */
+const RIVAL_SLOT = new Set(['rq-empty-slot', 'rq-help-wanted', 'rq-letter', 'rq-swap-day', 'rq-asks-you-to-lose']);
+function rivalSlot(e: Json): Json {
+  if (!RIVAL_SLOT.has(String(e.id))) return e;
+  e.requires = [...((e.requires as Json[] | undefined) ?? []), { kind: 'rivalQuest', slotFree: true }];
   const choices = [...(e.choices as Json[]), ...((e.remembers as Json[] | undefined) ?? []).flatMap((v) => (v.addChoices as Json[] | undefined) ?? [])];
-  for (const c of choices) for (const b of (c.branches as Json[] | undefined) ?? []) (b.effects as Json[]).push(flag(key));
+  for (const c of choices) {
+    for (const o of [c.success, c.failure] as (Json | undefined)[]) if (o) (o.effects as Json[]).push({ kind: 'rivalQuest', takeSlot: true });
+    for (const b of (c.branches as Json[] | undefined) ?? []) (b.effects as Json[]).push({ kind: 'rivalQuest', takeSlot: true });
+  }
   return e;
 }
 
@@ -271,7 +278,7 @@ const NE30: Json[] = [
 const NE31: Json[] = [
   ne(31, 'ally-who-kept-your-seat', 'The Ally Who Kept Your Seat', GROUP.ally, {
     place: { earliest: 'A2', home: 14, window: [10, 18], sits: 'optional', attaches: 'rest', note: 'Needs one finished run. The inn\'s + node has a lit window from three steps away.' },
-    requires: [pastRun], tags: ['Story'], tint: '#2a2016', effect: 'none',
+    tags: ['Story'], tint: '#2a2016', effect: 'none',
   },
   P(
     `The inn is warm and half empty. At a table by the window, two places are set. One chair has a coat hung on the back of it.`,
@@ -292,9 +299,8 @@ const NE31: Json[] = [
       `They stand so fast the chair goes over. Then they laugh at themselves, set it right, and shrug on the coat.`,
       `Your old partner: "I've been ready for a year. Longer."`,
       `They eat the second dinner standing up, and walk out of the inn beside you. For the rest of the stage there are two of you on the road again.`,
-    ), flag('ally-travels'), heal(1))),
-  ], [
-    variant('saw-the-loss', [{ kind: 'retiredGhost' }], { notice: L(`Your old partner, quietly, before anything else: "I saw. How it ended."`, `Your old partner: "I'd have lost too."`) }),
+      `Their partner is the strangest part: it is the spitting image of your own lead, down to the scar. In the next fights it stands beside yours.`,
+    ), flag('ally-travels'), heal(1), { kind: 'tagPartner', copy: 'lead', battles: 3 })),
   ]),
 ];
 
@@ -417,7 +423,7 @@ const rescueEffects = (): Json[] => [heal(1), rest(), item('sitrus-berry'), flag
 const NE35: Json[] = [
   ne(35, 'rescue-you-dont-remember', 'The Rescue You Don\'t Remember', GROUP.ally, {
     place: { earliest: 'A3', home: 13, window: [6, 17], sits: 'optional', attaches: 'after', note: 'Once per save, built once per run. Only with an earlier run on this save.' },
-    requires: [pastRun], tags: ['Story'], tint: '#1c2430', effect: 'none',
+    tags: ['Story'], tint: '#1c2430', effect: 'none',
   },
   P(
     `A stranger comes running across the street, and before you can step aside she has thrown her arms around you, and she will not let go.`,
@@ -591,11 +597,11 @@ const NE39: Json[] = [
       `You unclip your own belt and hold it out. For a second neither of you lets go. Then the trade is made, and your team is in {rival}'s hands, looking back at you over their shoulders.`,
       `{rival}'s team looks up at you, baffled and wary. Six strangers who know your face.`,
       `Until the stage's last road you fight with theirs: their levels, their moves. Then the belts go back.`,
-    ), flag('rival-swap'), later('rq-swap-day-handback', 8))),
+    ), flag('rival-swap'), { kind: 'teamSwap', mode: 'all' }, later('rq-swap-day-handback', 8)), { requires: [SWAP_READY] }),
     ch(`Swap one each.`, out(P(
       `You each pick one. {rival} takes yours like a borrowed jacket, carefully, checking the pockets. You take theirs.`,
       `For a while one stranger walks with your team, and one of yours walks with theirs. Both come home with stories.`,
-    ), trust(1), flag('rival-swap-one'))),
+    ), trust(1), flag('rival-swap-one'), { kind: 'teamSwap', mode: 'one' }, later('rq-swap-day-handback', 8)), { requires: [SWAP_READY], pick: {} }),
     ch(`No.`, out(P(`{rival} snorts and clips the belt back on.`, `{rival}: "Scared."`, `They're grinning when they say it, though. Mostly.`))),
   ]),
   step(39, 'rq-swap-day-handback', 'Swap Day: Handing Back', GROUP.rival, { tint: '#1c2430', effect: 'glint' },
@@ -606,7 +612,14 @@ const NE39: Json[] = [
       ch(`Take them back.`, out(P(
         `Your team checks you over as if you've been away a year. Every one of them picked something up on the road with a stranger.`,
         `One of them shows off a brand-new move it learned from {rival}'s ace, very pleased with itself. {rival} pretends not to notice, and fails.`,
-      ), bondUp(1, 'party'), eggMove(), mark('swap-day'))),
+        `{rival} counts their own team twice, then a third time. Not one of them so much as fainted. {rival}'s ace walks over and leans its whole weight against your legs.`,
+      ), BACK, bondUp(1, 'party'), eggMove(), mark('swap-day'), trust(2), mark('swap-ace-fond')), {
+        branches: [br([flagIs('swap-fainted')], P(
+          `Your team checks you over as if you've been away a year. Every one of them picked something up on the road with a stranger.`,
+          `One of them shows off a brand-new move it learned from {rival}'s ace, very pleased with itself.`,
+          `{rival} counts their own team, and stops at the one that fainted in your care. They don't say anything. They don't have to.`,
+        ), BACK, bondUp(1, 'party'), eggMove(), mark('swap-day'), trust(-1))],
+      }),
     ]),
 ];
 
@@ -671,7 +684,7 @@ const NE41: Json[] = [
     ch(`Ask what's in the last case.`, out(P(
       `The last case stands by the far door, lit like all the others. It is empty. The card beneath it is blank.`,
       L(`Seraphine: "We're waiting to see."`, `She glances, just once, toward the far door and the road beyond it, as if she knows exactly where it goes.`),
-      `She tears you a ticket stub on your way out.`,
+      L(`Seraphine: "The last room is about {finalRegion}. That's all I'll say. Go gently there."`, `She tears you a ticket stub on your way out.`),
     ), flag('museum-last-case'), flag('museum-stub'))),
     ch(`Leave before I see too much.`, out(P(
       `You back out of the door before your eyes can land on anything else. Seraphine doesn't stop you.`,
@@ -753,7 +766,7 @@ const NE43: Json[] = [
 const BADGE_LINE = `Then she draws you a chalk badge on a flat stone, her very first, and gives it to you with both hands.`;
 const typeText = (t: string): string => P(
   `You point to one of your team. Calliope studies it from every side, very seriously, the way an inspector would.`,
-  `Then she uncaps a pen and writes ${t.toUpperCase()} on the back of her hand, big, in capitals. ${BADGE_LINE}`,
+  `Then she uncaps a pen and writes ${t} on the back of her hand, big, in capitals, and checks the spelling with you twice. ${BADGE_LINE}`,
 );
 
 const NE44: Json[] = [
@@ -766,7 +779,7 @@ const NE44: Json[] = [
     L(`The girl, Calliope: "'Welcome, challenger, to the... the...'"`, `She stops. She scowls at her shoes. A Bidoof sits at her feet and scowls with her.`),
     L(`Calliope: "I don't have a type yet."`, `Calliope: "I'm going to be a Leader. Here. When I'm big. What type should it be?"`),
   ), [
-    ch(`Name a type: point to one of mine.`, out(typeText('your type'), flag('calliope-badge')), { pick: {}, branches: TYPES.map((t) => br([pickedIs([t])], typeText(t), flag(`future-gym-${t}`), flag('calliope-badge'))) }),
+    ch(`Name a type: point to one of mine.`, out(typeText('its type'), flag('calliope-badge')), { pick: {} }),
     ch(`"The one you love."`, out(P(
       `She looks down at her feet, at the Bidoof, who looks back up at her with total devotion and a bit of grass in its teeth.`,
       L(`Calliope: "...Normal, then."`, `She says it like it's the easiest thing in the world, and writes NORMAL on her hand.`),
@@ -970,7 +983,7 @@ const NE50: Json[] = [
   // Inspired by Assassination Classroom.
   ne(50, 'class-with-one-seat-left', 'The Class With One Seat Left', GROUP.anime, {
     place: { earliest: 'A4', home: 8, window: [5, 11], sits: 'side-branch', attaches: 'instead', tags: ['high', 'forest'], level: 'A+1, a lesson, not a fight' },
-    tags: ['Pokémon', 'Story', 'Puzzle'], cast: ['boss.npc_lass'], pokemon: 'alakazam', tint: '#2a2418', effect: 'none',
+    tags: ['Pokémon', 'Story', 'Mystery'], cast: ['boss.npc_lass'], pokemon: 'alakazam', tint: '#2a2418', effect: 'none',
   },
   P(
     `A run-down schoolhouse at the top of a hill, half its windows patched with card. Inside, the worst class in the district sits at scarred desks.`,
@@ -1005,4 +1018,4 @@ export const EVENTS: Json[] = [
   ...NE26, ...NE27, ...NE28, ...NE29, ...NE30, ...NE31, ...NE32, ...NE33, ...NE34, ...NE35,
   ...NE36, ...NE37, ...NE38, ...NE39, ...NE40, ...NE41, ...NE42, ...NE43, ...NE44, ...NE45,
   ...NE46, ...NE47, ...NE48, ...NE49, ...NE50,
-].map(doneInBranches);
+].map(rivalSlot);
