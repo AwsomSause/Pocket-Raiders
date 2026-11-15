@@ -11,6 +11,7 @@ import { currentRegion } from '../core/regions';
 import { PLAZA_OW_SHEETS, plazaSeason, plazaSheetId, plazaStyleOf, type PlazaStyleId } from '../core/presentation/plazaStyles';
 import { services } from '../game/services';
 import { tradeSalt, useTradeScreen } from '../core/presentation/tradeStyles';
+import { reduxOn } from '../ui/redux/stage';
 import { playMusicLazy, playSfx } from '../ui/audio';
 import { AERO, drawGlass, type MotionLevel } from '../ui/aero';
 import { onInputAction } from '../ui/input';
@@ -257,7 +258,7 @@ export class PlazaScene extends Phaser.Scene {
     const { session } = services();
     // Specialist traders have their own anime-styled screen (trade stops redesign).
     const run = session.run!;
-    if (section === 'traders' && useTradeScreen(session.settings.screenStyles, tradeSalt(run.seed, this.sideId, run.log.counters.tradesMade ?? 0))) {
+    if (section === 'traders' && (reduxOn() || useTradeScreen(session.settings.screenStyles, tradeSalt(run.seed, this.sideId, run.log.counters.tradesMade ?? 0)))) {
       this.picker?.close();
       this.picker = null;
       this.busy = true;

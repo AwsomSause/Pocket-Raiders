@@ -1862,7 +1862,7 @@ export class MapScene extends Phaser.Scene {
     const view = session.serviceView(sideId);
     // Trade Posts have their own anime-styled screen (trade stops redesign).
     const run = session.run!;
-    if (view.service.id === 'trade' && view.options.length > 0 && useTradeScreen(session.settings.screenStyles, tradeSalt(run.seed, sideId, run.log.counters.tradesMade ?? 0))) {
+    if (view.service.id === 'trade' && view.options.length > 0 && (reduxOn() || useTradeScreen(session.settings.screenStyles, tradeSalt(run.seed, sideId, run.log.counters.tradesMade ?? 0)))) {
       this.busy = true;
       this.scene.start('Trade', { source: 'service', sideId, back: { scene: 'Map' } });
       return;

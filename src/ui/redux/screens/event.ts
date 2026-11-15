@@ -1,10 +1,9 @@
 // New UI event ("?") screen, ported from the mock-ups' `event` template (four layouts by theme) with its
 // outcome panel. EventScene keeps the state, the input and the outcome; this only draws.
 
-import { act, B, bg, esc, foot, mon, tall, TX, W } from '../kit';
+import { act, B, bg, esc, foot, mon, TX, W } from '../kit';
 import type { ReduxCtx } from '../stage';
-import { type Art } from '../templates';
-import { rxImage, rxUrl } from '../assets';
+import { figure, type Art } from '../templates';
 
 export interface EventChoice { label: string; sub: string; chance: string; locked: boolean }
 export interface EventModel {
@@ -45,13 +44,7 @@ export function eventView(c: ReduxCtx, d: EventModel): string {
   const v = c.v(4), out = d.outcome, ch = out ? [] : d.choices;
   const amb = (d.tint ? `<div class="fill" style="background:${d.tint};opacity:.5;mix-blend-mode:multiply"></div>` : '') + (d.fx && FX[d.fx] ? `<div class="fill fx-${FX[d.fx]}"></div>` : '');
   const back = d.art ? bg(d.art) : '<div class="bg" style="background:var(--p2)"></div>';
-  // The person in the scene: a trainer atlas, or a plain picture, scaled to a height.
-  const who = (px: number): string => {
-    if (!d.cast) return '';
-    if (d.cast.atlas) return tall(d.cast.file, px);
-    const dim = rxImage(d.cast.file);
-    return dim ? `<i class="im" style="width:${Math.round((dim[0] * px) / dim[1])}px;height:${px}px;background:url(${rxUrl(d.cast.file)}) 0 0/100% 100%"></i>` : '';
-  };
+  const who = (px: number): string => figure(d.cast, px);
   const star = (x: number): string => (d.mon ? foot(x, 330, mon(d.mon, 3, '', true)) : '');
   const q = `<span class="tg">${esc(d.tag)}</span><span class="tg no" style="margin-left:6px">₽ ${d.money.toLocaleString('en-US')}</span>${d.countdown ? `<span class="tg" style="margin-left:6px;background:#e84838;color:#fff">${esc(d.countdown)}</span>` : ''}`;
   const sub = (x: EventChoice): string => x.sub;

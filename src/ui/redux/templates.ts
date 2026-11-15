@@ -2,7 +2,8 @@
 // layout number and a small model, and returns the stage HTML. Lists longer than a layout holds scroll with the cursor.
 
 import type { ReduxCtx } from './stage';
-import { act, type Area, B, esc, facts, H, hpb, icon, mini, TX, W } from './kit';
+import { act, type Area, B, esc, facts, H, hpb, icon, mini, tall, TX, W } from './kit';
+import { rxImage, rxUrl } from './assets';
 
 /** First row to show so `index` stays visible in a window of `size` rows out of `n`. */
 export const scrollStart = (n: number, index: number, size: number): number => Math.max(0, Math.min(n - size, index - Math.floor(size / 2)));
@@ -70,6 +71,13 @@ export function settingsView(c: ReduxCtx, d: SettingsModel): string {
 
 /** A picture for a cell or a window: an animated atlas (no extension) or a plain image file, under assets/images. */
 export interface Art { file: string; atlas: boolean }
+/** A person or a picture standing `px` tall: a trainer atlas plays its pose, a plain picture is scaled. */
+export function figure(a: Art | null | undefined, px: number): string {
+  if (!a) return '';
+  if (a.atlas) return tall(a.file, px);
+  const dim = rxImage(a.file);
+  return dim ? `<i class="im" style="display:block;width:${Math.round((dim[0] * px) / dim[1])}px;height:${px}px;background:url(${rxUrl(a.file)}) 0 0/100% 100%;image-rendering:pixelated"></i>` : '';
+}
 export const pic = (a: Art | null | undefined, size: number, cls = ''): string => (a ? (a.atlas ? mini(a.file, size, cls) : icon(a.file, size)) : '');
 
 export interface GridCell { art?: Art | null; label: string; off?: boolean; sil?: boolean }
