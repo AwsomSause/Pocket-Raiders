@@ -7,7 +7,13 @@ Row 6 of `/mnt/project-files/plans/catalog-overhaul/PLAN.md`. Docs (in `/mnt/pro
 |---|---|
 | `tools/events/co/_people.ts` | The kit: `rosterKit`, `spar` (friendly fight), `bond`, `scene`, `variant`. |
 | `tools/events/co/people-roster-<n>.ts` | Road Roster trainers (RR1 is the pattern file). |
-| `tools/events/co/people-mentors-<n>.ts`, `people-leaders-<n>.ts`, `people-champions-<n>.ts`, `people-stories-<n>.ts` | Story Families 5 and 8 and the questlines. |
+| `tools/events/co/people-roster-crossovers.ts` | The ten Road Roster crossovers. |
+| `tools/events/co/_mentors.ts`, `people-mentors-1..4.ts` | Mentor kit; MS1-MS12 shared scenes; the twelve mentor arcs (B1-B12). Engine: `src/core/mentors/lessons.ts`, `src/core/mentorWorld.ts`, perks in `trainerPerks.ts`/`battle/engine.ts`. |
+| `tools/events/co/people-leaders-1.ts`, `people-leaders-2.ts` | SF8 Part B (Day Off frame, B1-B16) and GL1, GL3 wings, GL4-GL10. |
+| `tools/events/co/people-champions-1.ts`, `people-champions-2.ts` | PC1-PC10, Victory Hall (C4), PA4; SF8 C1-C3, C5, C6, D1-D7. |
+| `tools/events/co/people-trivia.ts` | The Trivia Mentor (`mentor-quiz`, ledger REVISE). |
+| `src/data/catalogOverhaul/status/people.json`, `placement/people.json` | Ledger status (183 of 183) and the PC/GL/PA4 placement blocks. |
+| `tests/e2e/coPeople.spec.ts` | Browser test in the New UI: a crossover pays and survives a reload; the Trivia Mentor opens her next question. |
 | `src/data/catalogOverhaul/flags/people.json` | Flags read from other categories (`external`) and flags whose reader is another system (`afterstory`). |
 | `tests/unit/coPeople.test.ts` | The gate for this category. `tests/unit/coSharedPieces.test.ts` covers the shared engine pieces. |
 
@@ -49,27 +55,24 @@ Row 6 of `/mnt/project-files/plans/catalog-overhaul/PLAN.md`. Docs (in `/mnt/pro
 **Rewards.** "Reward. Meeting 1: a Potion" is paid when that meeting's battle is won (in `win`); a Meeting 3 reward is paid by every outcome that finishes the meeting unless the doc ties it to one choice. Never more than the doc states.
 
 ## Status
-See the tables below (filled in as files are finished). Checked = the doc section was opened again after the build and compared line by line.
+All 183 ledger ids of the category are built (`npm run co:status`: people 183 / 183, plus 119 new ids from its own docs); 486 events in all, rooms included.
 
-### Where this stopped (2026-11-15, paused when Kice capped running threads at five)
-| Piece | State |
-|---|---|
-| Road Roster RR1-RR51 (`people-roster-1..6`) | Built (all 51). Thread re-read not done yet. |
-| Roster crossovers (`people-roster-crossovers`) | Built (10 scenes). |
-| Mentor engine (lessons, `mentorLesson`/`mentorScene`, `regionsLeft`, battle/map/shop perks, gift items) | Built, unit tests pass (`mentorPerks`, `mentorWorld`). |
-| Shared mentor scenes MS1-MS12 except MS9 (`people-mentors-1`) | Built. |
-| Mentors B1-B12 (`people-mentors-2..4`) | Built. Thread re-read not done yet. |
-| SF8 Day Off frame + B1-B13, B15, B16 (`_wip-people-leaders-1.ts`) | Half written, not built. Rename to `people-leaders-1.ts`, remove `@ts-nocheck`, finish. |
-| GL3 wings, GL4-GL10, B14 (`_wip-people-leaders-2.ts`) | Half written, not built. |
-| PC1-PC10, C4, PA4 (`_wip-people-champions-1.ts`) | Half written, not built. |
-| SF8 C1-C3, C5, C6, D1-D7 (`_wip-people-champions-2.ts`) | Half written, not built. |
-| Still to do | Re-read of every doc; status/placement JSON; update fragment; browser spec; `npm run check`; rebase onto the lead's foundation (PR #1316) and split statBoost into an engine-only commit for the lead. |
+| Doc | Built | Checked |
+|---|---|---|
+| ROAD_ROSTER.md RR1-RR51 + crossovers | `people-roster-1..6`, `people-roster-crossovers` (215 events) | Every choice label in the doc is in the build (script check, 2026-11-15); each roster file re-read by its builder. |
+| STORY_FAMILIES_5.md MS1-MS12, B1-B12 | `people-mentors-1..4` (86 events) | Label check; B2-B6 re-read line by line; B7-B12 compared while written. |
+| STORY_FAMILIES_8.md Part B, GL1 | `people-leaders-1` (48) | Label check; re-read by its builder. |
+| QUESTLINES GL3 wings, GL4-GL10 (DEEPENED GL5, GL6; SF8 B14) | `people-leaders-2` (47) | Label check (GL2 and the GL3 vault are other threads'). |
+| QUESTLINES PC1-PC10 (DEEPENED PC8, PC10), SF8 C4, PA4 | `people-champions-1` (45) | Label check. PA4: in-run part only (Past Ally questlines need an earlier run). |
+| STORY_FAMILIES_8.md C1-C3, C5, C6, D1-D7 | `people-champions-2` (40) | Label check; re-read by its builder. |
+| Ledger REVISE `mentor-quiz` | `people-trivia` (5) | Built from the ledger line. |
+
+Placement: the PC, GL and PA4 rows of `QUESTLINES_PLACED.md` are in `placement/people.json`. PC1 is shape "Endgame" (after the League in the last region): the placer has no Endgame shape yet, so its `requires` (last region) is what holds it back. Everything else keeps its old catalog placement. Final Lesson "in the last region" is read as `regionsLeft <= 1`.
 
 ## Needs Kice
-Listed here as they are found: beats that only work across runs.
+Beats that are not built or are built as the nearest honest version, by file. "Needs engine": a flag records the beat until a system reads it. "Cross-run": not built (memory stays inside one run). "Cross-doc": reads another document's story; no flag invented.
 
-### Build reports (draft, to be sorted into the final list)
-## roster-6 (RR42-RR51): 32 events (30 meetings + jessa-warehouse, tuber-pip-later)
+#### roster-6 (RR42-RR51): 32 events (30 meetings + jessa-warehouse, tuber-pip-later)
 New items: none (Never-Melt Ice = nevermeltice; Gran's Lapras TM = tm-ice).
 Needs engine (told in text + flag): RR42 M2 Wait TODO(takeNode); RR44 M2 Sneak one fewer battle in next Rocket stage (roster-boris-inside); RR44 reward one Rocket plan step revealed (roster-boris-evidence); RR45 M3 "I won't" free heals at this Center (roster-jessa-heals; full heal now); RR45 M3 Rocket admin's weakness (roster-jessa-secret); RR48 M3 Show his best move vs next boss (roster-rudy-best-move; gym() for team).
 Cross-run: RR45 M3 free heals "for the save". Cross-doc: none.
@@ -107,4 +110,13 @@ Needs engine: Fenwick kept (Eevee never evolves), Fenwick choice (Eevee picks ow
 Needs engine: Marigold team at max Bond (text only); Tobias team holding six perfect items (text); Ysolde Regi if met none (always Registeel); Sable in the E4 this run (sable-league/sable-joy); Vesper real League battle (vesper-promise/vesper-soft); Tobias "the region's Gym Leader" (text). Cross-doc: A2 lamp relit (ravi-light), blessing-Legendary Sign (ysolde-sign), SF10 Hooded Traveller. Judgment: Marigold +Azumarill,Snorlax,Clefable; lesson egg Togepi/Happiny/Riolu/Azurill/Munchlax 3 stages; Tobias team Ambipom,Kangaskhan,Snorlax,Breloom,Conkeldurr,Ferrothorn; Vesper E4 team Sableye,Mismagius,Honchkrow,Weavile,Chandelure,Spiritomb; Vesper farewell doc line only on win, written line on loss; Ravi Sail = three sea rooms.
 #### Crossovers (me)
 Needs engine: Boris+Jessa "free heals across the region" (heal stops are already free; heal(1) now); Hal+Willa one forest node always safe; Swim Club sea-node skip per region (ferry() once now).
+#### SF8 Leaders (people-leaders-1, 48 events)
+Needs engine: Day Off payoff (Leader's later Gym battle opens with thanks, ace leaves counter slot empty; flag dayoff-<leader>-helped); B12 film slows Leader's first move in Gym battle (fanclub-film); B13 held pin +5% type moves (built as run relic: type deals 5% more); B15 s2 win by bringing ace to 1 HP and not attacking (hard battle + "last turn" room); B15 s3 Still Water Palm move missing (Mach Punch now, "teach my weakest" gives +1 level only; real move owed by flag). New item: rice ball (B10, owed flag dayoff-larry-owed-rice-ball; Normal Gem given). Cross-run: B1 painting in the hub. Cross-doc: B5 AQ44 Togepi Paradise; B11 Doran (Z6); B11 Kubfu opens SF27 galar-kubfu-disciple even outside Galar; GL1 Lenora "(Museum Return)". Judgment: one Leader per region not enforced (room copy may repeat); Misty rematch after "Let her win"; Poppy "Go easy" no Metal Coat; Byron's reply as later callback; invented teams Candice/Byron/Poppy/Iono/Brant/Ofelia; Brant Rock; Lenora fossil Tirtouga/Archen; pins cost 400, 6 trays; B15 s2 label "Show her."; B16 Remembers reads evil team ending "defeated".
+Test note: new events file needs `npx vitest run ... --fsModuleCache=false`.
+#### GL questlines (people-leaders-2, 47 events)
+Needs engine: GL6 lent badge can't be taken away (flag borrowed-badge-lent; market branch opens black-market); GL6 B14 Hum Coin new key item (flag + TODO); GL8 Rebel Badge counts as a badge (flag rebel-badge); GL9 trophy cosmetic in hub (flag gl9-trophy); GL5 "whoever lasted more turns" judged vs fixed 5-turn limit. Cross-run: GL5 merged Double Battle Gym later runs; GL8 Damian full Leader later run; GL9 free rests for the save; GL7 Imma never on Roster. Cross-doc: GL7/GL10 coached anyone (Little League/Coach); GL8 Damian's Unofficial Gym gn.05; GL9 Hollow Vale saved. Judgment: GL3 keepers Ninetales/Lapras/Venusaur, puzzles gauge-hold/tilt-drag/climb-rhythm, pass or fail gives badge, each badge run relic +5% own type, forgotten-badge counter feeds old vault; GL4 ace Machamp, uncatchable friendly; GL5 Merge locked text generic; GL6 hospital room gives badge case, coin return 75% chance; GL6 s3 only if badge came back; GL7/GL10 s3 open straight as rooms; GL10 floor trainers invented (Fighting); GL8 Damian Fire; GL9 Ilse Walrein; Sorrel TM tm-electric; Vital Throw taught to lead.
+#### Past Champions (people-champions-1, 45 events incl. PA4)
+Needs engine: PC2 "lost a Circuit final or rival Lead+3" condition (uses rivalLast lose); PC2 Blue's pin held item (+5% stats in rival battles; owed flag blue-owed-champion-pin); PC4 egg hatching with Extreme Speed (flag lance-egg-extreme-speed) + picked Flying-type must not faint; PC5 Sable as E4 stand-in (sable-league); PC7 photo +1 Bond (garage-photo); PC9 echo Pokémon copies a species lost this run (notice only); PC10 name from a short list (fixed "Wren Calloway"); C4 room 1 battle rewarding status moves; room 2 weakest leads; PA4 Ressa's partner stat + mentor's move, tag partner limited to next boss/rival (companion(1)). Cross-run: PC1 "you came back", Red in Hall, Red at Final Reunion; PC4 Dragonite recognises player; PC6 past winning team on plinth; C4 own past team in Memory room, name on wall; PC8 Past Ally + Final Reunion traveller; PC10 statue later runs; PA4 past.mentor gate + all three Remembers. Cross-doc: PC1 rival Lead+3 Champion; PC2 Bitter Challenger/Champion-Chaser; PC3 Giratina guidance (Volo); PC4 Old Courier; PC5 winning the Circuit; PC6 past.witness; PC8 Local Legend autograph; PC10 rival lines by personality (only Strategist). Judgment: PC4 new id pc-dragon-master-last-flight (no old id), Lance art missing (Dragonite only); statue fights 600; PC7 prices 700, ace Arcanine; PC8 stage-3 Champion Steven/Diantha/Leon by region; PC10 loss lets it return.
+#### Champion and trainer stories (people-champions-2, 40 events)
+Needs engine: C1 hint about their ace (flag champion-ace-hint); C2 the region's current Champion (old Lance team cut to 3; League Remembers not built; flag champ-won); C3/D2 rival tag ally fixed Eevee (ally takes one species); C6 Zapdos/Articuno Signs and +2 influence are flags (Blessings system not built); D1 M2 counter to most-used type (not tracked); D3 M2 opposite of habits = stronger mirror; D3 M3 full mirror (mirror copies lead only); D3 M3 lead's twin-type item (flag ves-owed-type-item); D4 strongest only / fight my weakest (battle takes the lead); D4 M3 watches next battle (flag galen-watching); D6 Remembers by rival personality Underdog (no condition). Cross-run: D4 M3 Teach mentor option for future runs (flag mentor-galen). Cross-doc: D3 SF41.7 Mirror Lake; D7 Absol line + absol.home (M1 The One That Cannot Turn Back). Judgment: C3 "Go" opens Hall wing 1 free (champ-invite-free-statue variant in PC6 now unused); C6 Seafoam ski also ferry; Power Plant push 90%, miss paralyses lead; Leave a Berry costs nothing; Tower Marowak not catchable; D1 "Only three?" win sets travel-won; D2 Fight alone = doubles vs 4; D3 Swap tradeFor nearest same-type BST; D5 five battles = chain 3 + chain 2; D7 nickname room 3 names; unnamed teams picked.
 
