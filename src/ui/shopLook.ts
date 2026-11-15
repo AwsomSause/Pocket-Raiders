@@ -59,6 +59,10 @@ export interface ShopRow {
   sale: boolean;
   /** PokéNet's deal of the visit. */
   deal: boolean;
+  /** Tobias's lesson: this shop's one cheaper item. */
+  mentorDeal?: boolean;
+  /** Tobias's lesson: a held or evolution item worth it for the current team (core/mentorWorld.ts shopWorthIt). */
+  worthIt?: boolean;
   /** Night Market goods no Mart lists. */
   mystery: boolean;
   /** Kecleon's haggle over this item this visit: won (cheaper) or lost (dearer). */
@@ -97,6 +101,10 @@ export function shopView(content: Content, run: RunState, deps: {
   mystery?: (item: string) => boolean;
   haggle?: { item: string; won: boolean } | null;
   isBlack: (e: Content['shop'][number]) => boolean;
+  /** Tobias's lesson: the shop's deal item and its price factor. */
+  mentorDeal?: { item: string; value: number } | null;
+  /** Tobias's lesson: whether an item is worth it for the team. */
+  worthIt?: (item: string) => boolean;
   canSell: boolean;
   working: string | null;
 }): ShopView {
@@ -109,16 +117,20 @@ export function shopView(content: Content, run: RunState, deps: {
     const sale = deps.saleItem === entry.item;
     const early = run.badges.length < deps.badgesFor(entry);
     const black = deps.isBlack(entry);
+    const mentorDeal = deps.mentorDeal?.item === entry.item;
+    const worthIt = deps.worthIt?.(entry.item) ?? false;
     const users = item.category === 'evolution' || item.category === 'transformation' ? run.party.filter((m) => itemUseProblem(content, item, m, regionId) === null).map((m) => m.uid) : null;
     return {
       itemId: entry.item,
       name: item.name,
-      label: black ? `${item.name} (black market)` : early ? `${item.name} (early)` : sale ? `${item.name} (on sale!)` : item.name,
+      label: `${black ? `${item.name} (black market)` : early ? `${item.name} (early)` : sale ? `${item.name} (on sale!)` : mentorDeal ? `${item.name} (deal!)` : item.name}${worthIt ? ' ✓ worth it' : ''}`,
       iconAssetId: item.iconAssetId,
       price,
-      wasPrice: sale ? deps.basePrice(entry) : null,
+      wasPrice: sale ? deps.basePrice(entry) : mentorDeal ? Math.round(price / deps.mentorDeal!.value) : null,
       sale,
       deal: deps.deal === entry.item,
+      ...(mentorDeal ? { mentorDeal } : {}),
+      ...(worthIt ? { worthIt } : {}),
       mystery: deps.mystery?.(entry.item) ?? false,
       haggle: deps.haggle?.item === entry.item ? (deps.haggle.won ? 'won' : 'lost') : null,
       early,

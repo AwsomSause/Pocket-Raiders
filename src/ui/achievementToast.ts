@@ -7,6 +7,8 @@ import type { Achievement } from '../core/contentSchema';
 import type { MotionLevel } from './aero';
 import { COLORS, GAME_WIDTH, textStyle } from './theme';
 import { drawPanel } from './widgets';
+import { reduxOn } from './redux/stage';
+import { rxToast } from './redux/system';
 
 /** One warm line per achievement category for the tap-open story (presentation only). */
 const CATEGORY_STORY: Record<string, string> = {
@@ -32,6 +34,15 @@ export const rarityOf = (a: Pick<Achievement, 'tier'>): (typeof RARITY)[number] 
 
 export function showAchievementToasts(scene: Phaser.Scene, list: readonly Achievement[], motion: MotionLevel): void {
   list.forEach((a) => interactionLog.add(`Achievement: ${a.name}`));
+  if (reduxOn()) {
+    // New UI: the mock-ups' toast (ribbon, "Achievement", the name); a tap opens what it was for and what it paid.
+    list.slice(0, 3).forEach((a, i) => {
+      const reward = a.reward.bankCredits ? `+${a.reward.bankCredits} credits${a.reward.title ? ` · title ${a.reward.title}` : ''}` : a.reward.title ? `Title ${a.reward.title}` : '';
+      const tier = rarityOf(a).name;
+      rxToast(scene.game, { kicker: tier === 'Common' ? 'Achievement' : `${tier} achievement`, title: a.name, art: 'items/master_ribbon.png', lines: [`${a.description}${reward ? `  ${reward}` : ''}`, CATEGORY_STORY[a.category] ?? 'A milestone on your road.'] }, 3800 + i * 350);
+    });
+    return;
+  }
   list.slice(0, 3).forEach((a, i) => {
     const box = scene.add.container(GAME_WIDTH / 2, -60).setDepth(1000);
     const panel = drawPanel(scene, -230, 0, 460, 52, { fill: COLORS.panelDark, border: rarityOf(a).border });

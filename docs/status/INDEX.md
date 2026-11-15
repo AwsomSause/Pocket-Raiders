@@ -398,3 +398,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - biome-hazards.md: biome hazards, map stops and NE76-80 as events with choice memory, Beta 0.6.
 - rival-questlines.md: 14 rival questline events (NE36-40, R2, R4), rivalState condition and rivalChange effect, Beta 0.6.
 - poli-pond.md: Poli-Pond miniature episode (Poliwag companion, 3 lessons, rematch duel, Kindness, return as Poliwrath), Beta 0.7.
+- new-ui.md: New UI (Settings > UI style New/Old), the mock-ups as an HTML layer over the canvas; event text as pages with speaker lines; what is done and what is still Old-drawn, UI mock-ups update.
