@@ -46,6 +46,16 @@
    "key": "roster-perry-done",
    "setBy": "Perry (RR5, people): his arc is done",
    "readBy": "sky-race"
+  },
+  {
+   "key": "bank-robbed",
+   "setBy": "The evil team's crisis strand (CATALOG_LEDGER bank-teller: the bank can be robbed by the evil team)",
+   "readBy": "bank-teller-return, bank-teller-return-big"
+  },
+  {
+   "key": "glass-forest-ticket",
+   "setBy": "markets sets it (ticket-tout); The Glass Forest (SF41.4, ovc-glass-forest-s1, families) should open for it",
+   "readBy": "(families row)"
   }
  ]
 }

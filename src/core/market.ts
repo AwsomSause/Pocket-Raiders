@@ -176,6 +176,8 @@ function pawn(content: Content, run: RunState, e: MarketEffect): string {
   run.money += paid;
   counters(run)[`${pawnPrefix(key)}${best.id}`] = paid;
   setFlag(run, `pawn-${key}`, 1);
+  // The Pawn Sharks come back with a different line for a Berry ("That Berry, friend. Still want it?").
+  setFlag(run, `pawn-${key}-berry`, best.id.endsWith('-berry') ? 1 : 0);
   return `Pawned ${nameOf(content, best.id)} for ₽${paid}`;
 }
 
@@ -283,12 +285,15 @@ function redeem(content: Content, run: RunState, e: MarketEffect): string {
   if (!held) return '';
   const price = Math.round(held.paid * (e.factor ?? 1));
   setFlag(run, `pawn-${key}`, 0);
+  const berry = flagOf(run, `pawn-${key}-berry`);
+  setFlag(run, `pawn-${key}-berry`, 0);
   delete counters(run)[`${pawnPrefix(key)}${held.item}`];
   if (e.forfeit) return `${nameOf(content, held.item)} stays with them`;
   if (run.money < price) {
     // Never silently lost: the ticket stays good.
     counters(run)[`${pawnPrefix(key)}${held.item}`] = held.paid;
     setFlag(run, `pawn-${key}`, 1);
+    setFlag(run, `pawn-${key}-berry`, berry);
     return `You need ₽${price} to buy it back`;
   }
   run.money -= price;

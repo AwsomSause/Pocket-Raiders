@@ -1,0 +1,3991 @@
+{
+ "catalogOverhaul": "markets",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "w4-toll-bridge",
+   "name": "The Toll Bridge",
+   "group": "Merchants & Deals",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#2a2014",
+    "effect": "none"
+   },
+   "intro": "A rope bridge over a white river, and a big man with a painted sign: TOLL. Big Abe folds his arms. \"Toll's for the village that built it. Money, a battle, or a job. Your pick.\"",
+   "choices": [
+    {
+     "label": "Pay 200.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "Abe takes the coins and writes your name in a fat ledger, under a hundred others. \"The village thanks you.\" The bridge sways, but holds.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "flag",
+        "key": "toll-ledger",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Abe grins and whistles. A Conkeldurr stomps up from under the bridge, a stone pillar on each shoulder. \"Win, and you cross free.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "team": [
+        "conkeldurr"
+       ],
+       "name": "Big Abe",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Do a job.",
+     "success": {
+      "text": "You spend the afternoon on the bridge with Abe, splicing rope, tightening knots. When it is done, he presses a Berry into your hand. \"For the road. Good knots.\"",
+      "effects": [
+       {
+        "kind": "takeNode"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "chesto-berry",
+         "rawst-berry",
+         "aspear-berry",
+         "persim-berry",
+         "leppa-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-mountain-pass-toll",
+   "name": "The Mountain Pass Toll",
+   "group": "Merchants & Deals",
+   "types": [
+    "rock",
+    "fighting"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3a30",
+    "effect": "rattle"
+   },
+   "intro": "A tollkeeper in a narrow pass, snow on her shoulders, a shovel in her fist. Sorcha squints at you. \"No coin? Then do me a favour. My goats got loose.\" Three Mareep bleat somewhere above. The toll is ₽150.",
+   "choices": [
+    {
+     "label": "Round up the goats.",
+     "prompt": {
+      "id": "dodge-tap",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Three chases up three slopes, one Mareep at a time, wool full of snow. Sorcha waves you through for free, and gives you a Wool Ball, spun from them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wool-ball",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Sorcha gave you a Wool Ball spun from her Mareep, for rounding them up.",
+        "importance": 45
+       }
+      ]
+     },
+     "failure": {
+      "text": "The third Mareep leads you a merry dance, but in the end it comes, sulky. Sorcha waves you through, laughing.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Pay 150.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "You pay. Sorcha nods and leans on her shovel to let you pass.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask why the toll.",
+     "success": {
+      "text": "\"Snow clearing. I do it alone. The toll pays the salt.\" She looks up the pass. \"Somebody has to keep it open.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "wx-mountain-pass-toll"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wx-heatwave-oasis",
+   "name": "The Oasis",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "types": [
+    "water",
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a4a18",
+    "effect": "sparkle"
+   },
+   "intro": "An oasis in the scorched flats: water, shade, and a high price. Rahim, the keeper, shows you a slate: the camel train, the well fee, the losses. \"Water's ₽300 a skin. That's what it costs me. Or work an hour and drink free.\"",
+   "choices": [
+    {
+     "label": "Pay 300.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "Cold water, in the shade. Your whole team drinks until they cannot, and lies in the wet sand afterward, restored.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Work an hour.",
+     "success": {
+      "text": "You haul buckets for an hour, and drink free, and so does everyone. Rahim draws a map in the sand. \"A well that isn't dry. Nobody believes me. Go and see.\"",
+      "effects": [
+       {
+        "kind": "takeNode"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "desert-well",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the well.",
+     "success": {
+      "text": "\"There's a well that isn't dry. Nobody believes me.\" He draws the way in the sand with a stick, carefully, twice. \"Go and see.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "desert-well",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "wx-heatwave-oasis"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "oasis-well-known",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-well",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Rahim's map to the Desert Well is in your bag.",
+     "hide": [
+      2
+     ]
+    }
+   ]
+  },
+  {
+   "id": "guide-for-hire",
+   "name": "The Guide for Hire",
+   "group": "Merchants & Deals",
+   "stop": "scout",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#22291e",
+    "effect": "none"
+   },
+   "intro": "Cyrilla, a guide with a walking stick: \"Fifty and I show you the quiet way. Two hundred and I show you the secret way.\" Quiet: three nodes, one hazard, no trainers. Secret: two nodes, a hidden cache, a wild Rare. \"Secret's only worth it if you want the cache.\"",
+   "choices": [
+    {
+     "label": "The quiet way (50).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
+     "success": {
+      "text": "She walks you round the back of everything. Nobody challenges you. One rockslide, which she sees coming. The way ahead is laid out plain.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "The secret way (200).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "Through a crack in a cliff, along a dry stream bed. A cache in a hollow tree, exactly where she said. And at the end, something rare watching you from the rocks.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "ultra-ball",
+         "hyper-potion",
+         "revive",
+         "sitrus-berry",
+         "pp-up",
+         "heart-scale"
+        ]
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [],
+       "rare": true,
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Neither.",
+     "success": {
+      "text": "\"Your road, then.\" Cyrilla tips her hat. \"It's a good road too.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "insurance-agent",
+   "name": "The Insurance Agent",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "mode": "nuzlocke",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#22262e",
+    "effect": "none"
+   },
+   "intro": "A thin man with a briefcase. Mr. Pettifer: \"Nobody likes to talk about losing a Pokémon. One page. Read it.\" Premium ₽500. Payout: a revival token and a memorial plaque if a Pokémon is lost. Exclusions: released or traded Pokémon.",
+   "choices": [
+    {
+     "label": "Sign.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "You sign. Mr. Pettifer stamps it twice and hands you your copy. \"Covered for the region. I hope you never need me.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "insured",
+        "stamp": "region"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "insurance-claim",
+        "nodes": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it again.",
+     "success": {
+      "text": "The same page. Premium, payout, exclusions. No small print; he does not believe in it. \"Read it as often as you like.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "insurance-agent"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Of course.\" He closes the briefcase gently. \"Most people say no. Most people are lucky.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "group": "Merchants & Deals",
+   "callback": false,
+   "id": "insurance-claim",
+   "name": "The Insurance Agent",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "insured",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "insured",
+     "regionsAgoMost": 0
+    }
+   ],
+   "intro": "Mr. Pettifer finds you on the road, briefcase first. \"Checking in on my policy holders. Any losses? I hope the answer is no.\"",
+   "choices": [
+    {
+     "label": "All's well.",
+     "success": {
+      "text": "\"Good. Very good.\" He makes a small, happy tick on his page. \"Still covered for the region. I'll look in again.\"",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "insurance-claim",
+        "nodes": 3
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "insurance-loss",
+     "when": [
+      {
+       "kind": "memberFainted",
+       "within": 6
+      }
+     ],
+     "notice": "He looks at your team, and then at you, and takes off his hat. \"Ah. I'm sorry. That's what the policy is for.\"",
+     "addChoices": [
+      {
+       "label": "Make a claim.",
+       "success": {
+        "text": "He pays without a single question: a Revive in a velvet bag, and a small brass plaque with your Pokémon's name on it, polished. \"The policy is spent. I'm glad it was there.\"",
+        "effects": [
+         {
+          "kind": "item",
+          "id": "revive",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "insured",
+          "amount": -1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rumour-seller",
+   "name": "The Rumour Seller",
+   "group": "Merchants & Deals",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#2a2630",
+    "effect": "none"
+   },
+   "intro": "A man in a coat lined with paper slips. Fitch winks. \"Rumours, ₽100 apiece! Reliability's written on each one. Lies get a refund.\" The slips are stamped 90%, 60%, 30%.",
+   "choices": [
+    {
+     "label": "Buy a rumour.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "Fitch draws a slip and reads it out, reliability first. Then he writes your name on the stub. \"If it's false, I owe you.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "scout",
+        "columns": 2
+       },
+       {
+        "kind": "flag",
+        "key": "rumour-bought",
+        "amount": 1
+       },
+       {
+        "kind": "market",
+        "action": "comeBack",
+        "event": "rumour-seller"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy three.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "Three slips: 90%, 60%, 30%. He reads each one, and the reliability, and writes your name on three stubs.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "scout",
+        "columns": 4
+       },
+       {
+        "kind": "flag",
+        "key": "rumour-bought",
+        "amount": 3
+       },
+       {
+        "kind": "market",
+        "action": "comeBack",
+        "event": "rumour-seller"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "Fitch shrugs. \"The truth's cheaper than you'd think. Come back.\"",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "rumour-refund",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rumour-bought",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Fitch spots you and pulls a stub from his coat. \"One of mine was false. Here.\" He counts out a refund before you can ask.",
+     "addChoices": [
+      {
+       "label": "Take the refund.",
+       "success": {
+        "text": "₽100 back, counted twice. \"Lies get a refund,\" Fitch says. \"I keep my word even when my rumours don't.\"",
+        "effects": [
+         {
+          "kind": "money",
+          "amount": 100
+         },
+         {
+          "kind": "flag",
+          "key": "rumour-bought",
+          "amount": -99
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ticket-tout",
+   "name": "The Ticket Tout",
+   "group": "Merchants & Deals",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "effect": "glint"
+   },
+   "intro": "A man in a flat cap fanning tickets. Jimmy Spark leans in. \"Ticket to a secret stop? Real, I swear. It's the Glass Forest.\" ₽400.",
+   "choices": [
+    {
+     "label": "Buy (400).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "He hands you the ticket and points down the path. \"Two turns past the big rock. Tell 'em Jimmy sent you.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "flag",
+        "key": "glass-forest-ticket",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "How do I know it's real?",
+     "success": {
+      "text": "He names it, shows the route on a map, and draws the trees. It is real. Jimmy is a lot of things, but not a liar.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ticket-tout"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Your loss,\" he says cheerfully, and means it kindly.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "risky-loan",
+   "name": "A Generous Loan",
+   "group": "Merchants & Deals",
+   "stop": "merchant",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#2a2024",
+    "effect": "none"
+   },
+   "intro": "A man in a sharp coat, a pen already uncapped. Mr. Crane smiles. \"Short on funds? I lend. Pay me back at the next town.\" The note: ₽1,000 now; ₽1,200 due at the bank four nodes on; miss it and the Debt Collector comes.",
+   "choices": [
+    {
+     "label": "Borrow.",
+     "success": {
+      "text": "You sign. He counts out ₽1,000, crisp, and folds the note into your pocket himself. \"Four nodes. The bank knows.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 1000
+       },
+       {
+        "kind": "flag",
+        "key": "loan-crane",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "repay-banker",
+        "nodes": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the note again.",
+     "success": {
+      "text": "The same note: ₽1,000 now, ₽1,200 at the next bank, four nodes on. The Debt Collector if you miss it. Mr. Crane waits, pen ready, perfectly patient.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "risky-loan"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Sensible.\" He caps the pen. \"Sensible people never need me. Until they do.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "repay-banker",
+   "name": "Repay the Banker",
+   "group": "Merchants & Deals",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "loan-crane",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#23232a",
+    "effect": "none"
+   },
+   "callback": false,
+   "intro": "A bank window, a clerk with sleeve garters. \"Here to repay Mr. Crane's loan? ₽1,200. I can clear it before the collectors hear.\"",
+   "choices": [
+    {
+     "label": "Repay.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "The clerk counts it, stamps the note PAID, and gives you the stub. You feel lighter than ₽1,200 ought to make you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "flag",
+        "key": "loan-crane",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask for more time.",
+     "success": {
+      "text": "\"One more node. Plus ₽100 interest, stated.\" The clerk writes it on the note. \"Next window along.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "loan-crane-late",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "repay-banker",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not yet.",
+     "success": {
+      "text": "The clerk nods and makes a small note. You know who reads those notes.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "repay-late",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "loan-crane-late",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The note says ₽1,300 now: the ₽100 interest is written in, as promised.",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Repay.",
+       "requires": [
+        {
+         "kind": "money",
+         "atLeast": 1300
+        }
+       ],
+       "success": {
+        "text": "₽1,300. The clerk stamps it PAID. \"Clear. Mr. Crane won't hear your name again.\"",
+        "effects": [
+         {
+          "kind": "money",
+          "amount": -1300
+         },
+         {
+          "kind": "flag",
+          "key": "loan-crane",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "loan-crane-late",
+          "amount": -1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "bank-teller",
+   "name": "The Bank",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A neat counter, a brass bell. Miss Agatha Lowe: \"Deposit half your money now. Next bank stop, ten percent back. Two stops on, twenty-five. If the bank's robbed, you lose half. That's the risk.\"",
+   "choices": [
+    {
+     "label": "Deposit.",
+     "success": {
+      "text": "She counts it, writes a receipt in perfect copperplate, and hands it over. \"Four nodes to the next bank. It'll be waiting.\"",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "deposit",
+        "key": "bank",
+        "factor": 0.5
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "bank-teller-return",
+        "nodes": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "What robs banks?",
+     "success": {
+      "text": "\"The evil team, if their trouble reaches us.\" Miss Lowe does not smile. \"It has happened. I'd rather tell you.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "bank-teller"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Keep it close, then.\" She rings the bell for the next customer.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "bank-teller-return",
+   "name": "The Bank",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "deposit-bank",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": false,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "The next bank, the same copperplate on your receipt. The teller looks up. \"Your deposit's matured. Ten percent. Or leave it in: four more nodes and it's twenty-five.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "Counted out in front of you, ten percent on top.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "withdraw",
+        "key": "bank",
+        "factor": 1.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it in.",
+     "success": {
+      "text": "\"Four more nodes.\" The teller stamps the receipt. \"Interest at last, then.\"",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "bank-teller-return-big",
+        "nodes": 4
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bank-robbed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "bank-robbed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The window is boarded on one side. \"We were robbed,\" the teller says quietly. \"You get half. It's what the sign said. I'm sorry.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Take it.",
+       "success": {
+        "text": "Half, counted out with shaking hands.",
+        "effects": [
+         {
+          "kind": "market",
+          "action": "withdraw",
+          "key": "bank",
+          "factor": 0.5
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "bank-teller-return-big",
+   "name": "The Bank",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "deposit-bank",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": false,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A bigger bank, marble floors. Your receipt has two stamps now. \"Interest at last. Twenty-five percent.\" Or leave it in, and the next stop's return applies.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "Twenty-five percent on top, in a paper band.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "withdraw",
+        "key": "bank",
+        "factor": 1.25
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it in.",
+     "success": {
+      "text": "\"Four more nodes.\" Another stamp.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "bank-teller-return-big",
+        "nodes": 4
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bank-robbed-big",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "bank-robbed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The marble is cracked. \"Robbed,\" says the teller. \"Half. As stated.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Take it.",
+       "success": {
+        "text": "Half, as stated.",
+        "effects": [
+         {
+          "kind": "market",
+          "action": "withdraw",
+          "key": "bank",
+          "factor": 0.5
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "pawn-appraiser",
+   "name": "The Pawn Appraiser",
+   "group": "Merchants & Deals",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#2a2530",
+    "effect": "none"
+   },
+   "intro": "A tiny brass loupe on a chain, and a man behind it. Mr. Okonkwo: \"Bring me anything old. I'll tell you what it is, and if it's stolen.\" He sells at the price he names, too.",
+   "choices": [
+    {
+     "label": "Appraise an item.",
+     "success": {
+      "text": "He turns your treasures over one by one under the loupe and tells you, plainly, what each is worth. None stolen. He seems a little disappointed.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "advise",
+        "key": "best"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "pawn-appraiser"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sell at your price.",
+     "success": {
+      "text": "He names a fair price for your curios, writes it down, and pays it to the coin.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "sell",
+        "pick": "curio",
+        "factor": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Bring me something old another day.\" He polishes the loupe.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "pawn-sharks",
+   "name": "The Pawn Sharks",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a1a2a",
+    "effect": "none"
+   },
+   "intro": "Two men in sharp suits and sharper smiles. Vic and Vinnie: \"Sell now. Buy back later. Markup's on the receipt.\" The receipt: they pay half its value now; buyback at +50% of that, four nodes on.",
+   "choices": [
+    {
+     "label": "Pawn something.",
+     "success": {
+      "text": "Vinnie takes your most valuable item and writes a receipt. Vic counts out the money. \"Four nodes. We'll find you.\"",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "pawn",
+        "key": "sharks",
+        "factor": 0.5
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "pawn-sharks-buyback",
+        "nodes": 4
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "pawn-sharks-buyback-small",
+        "nodes": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Suit yourself.\" They straighten each other's ties.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "pawn-sharks-buyback",
+   "name": "The Pawn Sharks",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pawn-sharks",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "pawn-sharks-berry",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": false,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "Vic and Vinnie fall into step beside you. \"Want it back? It'll cost more now.\" Vinnie holds up the receipt: half again what they paid, just as printed.",
+   "choices": [
+    {
+     "label": "Buy back.",
+     "success": {
+      "text": "Vic counts your money twice, then hands your item back with a little bow.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "redeem",
+        "key": "sharks",
+        "factor": 1.5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep the money.",
+     "success": {
+      "text": "\"Business is business.\" Vinnie tears the receipt in half. They are gone before the pieces land.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "redeem",
+        "key": "sharks",
+        "forfeit": true
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "pawn-sharks-buyback-small",
+   "name": "The Pawn Sharks",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pawn-sharks",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "pawn-sharks-berry",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": false,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "Vic and Vinnie again, Vinnie holding up a little Berry between two fingers. \"That Berry, friend. Still want it?\" The receipt says half again what they paid.",
+   "choices": [
+    {
+     "label": "Buy back.",
+     "success": {
+      "text": "Vinnie tosses it over. Vic pockets the coins. \"Pleasure.\"",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "redeem",
+        "key": "sharks",
+        "factor": 1.5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep the money.",
+     "success": {
+      "text": "Vinnie eats the Berry. Vic sighs at him. \"Business.\"",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "redeem",
+        "key": "sharks",
+        "forfeit": true
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rental-counter",
+   "name": "The Rental Counter",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A counter of glass cases full of held items. Dot-Ann, the clerk: \"Hold items for rent. ₽100. Five battles, then it comes back. Damage terms on the card.\" The card: if it's used up, you pay its value.",
+   "choices": [
+    {
+     "label": "Rent (100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "Dot-Ann unlocks a case and hands you a strong held item on a ribbon tag. \"Five battles. I'll come find you.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "market",
+        "action": "rent",
+        "key": "counter",
+        "only": [
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "expert-belt",
+         "focus-sash"
+        ]
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "rental-return",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the card.",
+     "success": {
+      "text": "\"Rental: ₽100. Five battles. Returned as lent. If it's consumed, the player pays its value.\" Signed by Dot-Ann, in green ink.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rental-counter"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Next time!\" Dot-Ann waves a feather duster at you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rental-return",
+   "name": "The Rental Counter",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rent-counter",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": false,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "Dot-Ann jogs up the path, out of breath, clipboard in hand. \"Time's up! I need it back.\"",
+   "choices": [
+    {
+     "label": "Here.",
+     "success": {
+      "text": "You hand it over. Dot-Ann checks it, ticks her clipboard and beams. \"Lovely. Rent again any time.\" (If it was used up, the card's terms apply.)",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "returnRent",
+        "key": "counter"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I used it.",
+     "success": {
+      "text": "\"These things happen.\" She reads the card out, finds the value, and you pay it. \"Thank you for telling me.\"",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "returnRent",
+        "key": "counter",
+        "used": true
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "layaway-lady",
+   "name": "Layaway",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A kindly woman with a catalogue and a pencil behind her ear. Mrs. Penhaligon: \"Half now, the rest when it arrives. It'll be with you in two nodes.\" Big: Leftovers, ₽2,500. Small: a Quick Claw, ₽600.",
+   "choices": [
+    {
+     "label": "Layaway a big item.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1250
+      }
+     ],
+     "success": {
+      "text": "She writes your name in the catalogue. \"₽1,250 now, ₽1,250 when the Leftovers arrive. Two nodes, dear.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1250
+       },
+       {
+        "kind": "flag",
+        "key": "layaway",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "layaway-pickup",
+        "nodes": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "A small one.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "\"₽300 now, ₽300 when the Quick Claw arrives. Two nodes.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "flag",
+        "key": "layaway-small",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "layaway-pickup-small",
+        "nodes": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Of course. Come back when you're ready.\" She licks her pencil.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "layaway-pickup",
+   "name": "Layaway",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "layaway",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": false,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "Mrs. Penhaligon waves a parcel over her head. \"It's arrived, dear!\" The Leftovers, wrapped in brown paper. ₽1,250 to go.",
+   "choices": [
+    {
+     "label": "Pay the rest.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1250
+      }
+     ],
+     "success": {
+      "text": "You pay, and she hands it over as if it were a birthday present.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1250
+       },
+       {
+        "kind": "item",
+        "id": "leftovers",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "layaway",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cancel (lose the half).",
+     "success": {
+      "text": "\"Of course, dear. The half stays with us; that's the terms.\" She tucks the parcel back under her arm, not unkindly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "layaway",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "layaway-pickup-small",
+   "name": "Layaway",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "layaway-small",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": false,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "Mrs. Penhaligon, a small parcel in hand. \"The small one's here!\" The Quick Claw. ₽300 to go.",
+   "choices": [
+    {
+     "label": "Pay the rest.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "She tucks it into your hand and pats it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "item",
+        "id": "quick-claw",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "layaway-small",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cancel (lose the half).",
+     "success": {
+      "text": "\"The half stays, dear. Terms are terms.\" She smiles anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "layaway-small",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "subscription-box",
+   "name": "The Subscription Box",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A courier with a cap and a tablet. \"Pay once, ₽900, and a surprise box after each of the next three towns. Tiers on the form.\" The form: one Common box, then two Uncommon.",
+   "choices": [
+    {
+     "label": "Subscribe (900).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "You sign. The courier taps the tablet. \"First box in four nodes. You'll love it. Or not. It's a surprise.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "flag",
+        "key": "sub-box",
+        "amount": 3
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "subscription-box-delivery",
+        "nodes": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the form.",
+     "success": {
+      "text": "\"Three boxes. Box one: a Common item. Boxes two and three: an Uncommon item each. ₽900 total.\" No small print. The courier looks proud of that.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "subscription-box"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Your loss!\" The courier zooms off on a bicycle.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "subscription-box-delivery",
+   "name": "The Subscription Box",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "sub-box",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": false,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "The courier skids to a stop beside you, a box under one arm. \"Your subscription! Surprise!\" The label: COMMON.",
+   "choices": [
+    {
+     "label": "Open it.",
+     "success": {
+      "text": "Tissue paper, a ribbon, and inside, a Common item, exactly as the form promised.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "great-ball",
+         "super-potion",
+         "full-heal",
+         "escape-rope",
+         "oran-berry",
+         "repel"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "sub-box",
+        "amount": -1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "subscription-box-delivery",
+        "nodes": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Save it for later.",
+     "success": {
+      "text": "You tuck it in your bag unopened. The courier looks scandalised. \"It'll still be a surprise,\" you tell him.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "subscription-box-delivery",
+        "nodes": 2
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "sub-box-last",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sub-box",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "intro": "The courier, the last box, the label: UNCOMMON. \"Final one! Hope you enjoyed it.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Open it.",
+       "success": {
+        "text": "The last box: an Uncommon item. The courier salutes and pedals away for good.",
+        "effects": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "ultra-ball",
+           "hyper-potion",
+           "revive",
+           "sitrus-berry",
+           "pp-up",
+           "heart-scale"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "sub-box",
+          "amount": -1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "sub-box-second",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sub-box",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "intro": "The courier again, the box bigger this time. The label: UNCOMMON.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Open it.",
+       "success": {
+        "text": "An Uncommon item, nested in straw. \"One more to go,\" says the courier.",
+        "effects": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "ultra-ball",
+           "hyper-potion",
+           "revive",
+           "sitrus-berry",
+           "pp-up",
+           "heart-scale"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "sub-box",
+          "amount": -1
+         },
+         {
+          "kind": "laterEvent",
+          "eventId": "subscription-box-delivery",
+          "nodes": 4
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "ace-trainer-bet",
+   "name": "Ace Trainer's Bet",
+   "group": "Merchants & Deals",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "An Ace Trainer in a crisp jacket. Viv taps a card: \"Bet on our battle? I put up the same.\" Win: you take her stake. Lose: she takes yours. Nothing more.",
+   "choices": [
+    {
+     "label": "Bet 200.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "Two ₽200 stacks on a flat stone. Viv sends out her first Pokémon.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "money",
+         "amount": -200
+        }
+       ],
+       "name": "Ace Trainer Viv",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 200
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Bet 500.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "Two ₽500 stacks on the stone. Viv's smile sharpens.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "money",
+         "amount": -500
+        }
+       ],
+       "name": "Ace Trainer Viv",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Just battle.",
+     "success": {
+      "text": "\"For the love of it, then.\" Viv shakes your hand first.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "name": "Ace Trainer Viv",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gamblers-gauntlet",
+   "name": "Gambler's Gauntlet",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#2b2418",
+    "effect": "none"
+   },
+   "intro": "A card sharp in a waistcoat. Lou shuffles. \"Bet on yourself! Bigger stake, bigger payout.\" Each battle: win ₽300, lose ₽300. Stop any time.",
+   "choices": [
+    {
+     "label": "Three battles, 300 each.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "Lou signals the first of three trainers. \"Round one. You can stop after any of them.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "money",
+         "amount": -300
+        }
+       ],
+       "name": "Gauntlet Trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 300
+        },
+        {
+         "kind": "flag",
+         "key": "gauntlet-wins",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gamblers-gauntlet-next"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "One battle, 300.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "\"Just the one? Fine.\" Lou signals a trainer.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "money",
+         "amount": -300
+        }
+       ],
+       "name": "Gauntlet Trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 300
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Never bet against yourself,\" Lou says. \"But never bet if you don't want to.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "group": "Merchants & Deals",
+   "callback": false,
+   "id": "gamblers-gauntlet-next",
+   "name": "Gambler's Gauntlet",
+   "intro": "Lou deals the next card face up: another trainer, already waiting. \"₽300 on the next one? Or walk away with what you've got.\"",
+   "choices": [
+    {
+     "label": "Next battle, 300.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "Lou waves the next trainer in.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "money",
+         "amount": -300
+        }
+       ],
+       "name": "Gauntlet Trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 300
+        },
+        {
+         "kind": "flag",
+         "key": "gauntlet-wins",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gamblers-gauntlet-next"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stop.",
+     "success": {
+      "text": "\"Smart.\" Lou tips his hat. \"Most people don't know when.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gauntlet-wins",
+        "amount": -99
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "gauntlet-last",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gauntlet-wins",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "notice": "Lou deals the last card. \"Final round.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Last battle, 300.",
+       "requires": [
+        {
+         "kind": "money",
+         "atLeast": 300
+        }
+       ],
+       "success": {
+        "text": "The last trainer, the strongest. Lou watches with real interest.",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "money",
+           "amount": -300
+          },
+          {
+           "kind": "flag",
+           "key": "gauntlet-wins",
+           "amount": -99
+          }
+         ],
+         "name": "Gauntlet Trainer",
+         "size": 2,
+         "types": [],
+         "levelBonus": 4,
+         "win": [
+          {
+           "kind": "money",
+           "amount": 300
+          },
+          {
+           "kind": "flag",
+           "key": "gauntlet-wins",
+           "amount": -99
+          }
+         ]
+        }
+       }
+      }
+     ]
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "sudden-death-duel",
+   "name": "Sudden Death",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.sailor"
+    ],
+    "tint": "#2e1a1a",
+    "effect": "none"
+   },
+   "intro": "A duellist in a long coat holds up a Focus Sash. Raine: \"First faint ends it. Winner takes a held item from the loser.\" Her stake: the Focus Sash. Yours: your most valuable item.",
+   "choices": [
+    {
+     "label": "Accept.",
+     "success": {
+      "text": "One Pokémon each. First faint ends it. Raine bows, very formally, and throws.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "market",
+         "action": "stolen",
+         "key": "duel"
+        }
+       ],
+       "name": "Duellist Raine",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "item",
+         "id": "focus-sash",
+         "count": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Which item of yours?",
+     "success": {
+      "text": "Raine looks through your bag with you and names it, out loud, so there is no mistake.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "advise",
+        "key": "best"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sudden-death-duel"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "Raine bows anyway. \"Another day.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "flea-fossil",
+   "name": "The Flea-Market Fossil",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A blanket of rocks and one lump wrapped in newspaper. Mungo, the hobbyist: \"Real fossil! Or a rock. Reveal's ₽100, and it's yours if it's real. Or buy it unrevealed for ₽300.\" The card: 1 in 3 are real.",
+   "choices": [
+    {
+     "label": "Reveal (100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "Mungo taps the lump with a tiny hammer. It cracks open.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 100,
+        "table": [
+         {
+          "weight": 1,
+          "label": "A real fossil!",
+          "item": "root-fossil"
+         },
+         {
+          "weight": 2,
+          "label": "A rock"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy it unrevealed (300).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "You pay and crack it yourself at the next campfire.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 300,
+        "table": [
+         {
+          "weight": 1,
+          "label": "A real fossil!",
+          "item": "claw-fossil"
+         },
+         {
+          "weight": 2,
+          "label": "A rock"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Plenty more rocks,\" Mungo says, happily.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fossil-trader",
+   "name": "The Fossil Trader",
+   "group": "Merchants & Deals",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#302418",
+    "effect": "shake"
+   },
+   "intro": "A cart of labelled fossils. Ammonia, the trader: \"Ancient fossils! Plume, Root, Spark cheap: ₽1200. Rare ones named and priced: ₽2500.\"",
+   "choices": [
+    {
+     "label": "Buy a common fossil.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "She wraps it in cloth and writes its name on the cloth.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "plume-fossil",
+         "root-fossil",
+         "hisui-spark-fossil"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a rare one.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2500
+      }
+     ],
+     "success": {
+      "text": "She opens a velvet case and lets you choose by eye. The name is on a little card.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2500
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "helix-fossil",
+         "dome-fossil",
+         "old-amber",
+         "claw-fossil",
+         "skull-fossil",
+         "armor-fossil",
+         "cover-fossil",
+         "jaw-fossil",
+         "sail-fossil"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"They've waited a million years,\" Ammonia says. \"They can wait for you.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "itinerant-tutor",
+   "name": "The Itinerant Tutor",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A man with a satchel of scrolls and a notebook. Ambrose: \"One move per visit. My price: a Berry, a coin, or a secret.\"",
+   "choices": [
+    {
+     "label": "A Berry.",
+     "requires": [
+      {
+       "kind": "holdsAny",
+       "ids": [
+        "oran-berry",
+        "pecha-berry",
+        "cheri-berry",
+        "chesto-berry",
+        "rawst-berry",
+        "aspear-berry",
+        "persim-berry",
+        "leppa-berry",
+        "sitrus-berry",
+        "lum-berry"
+       ],
+       "count": 1,
+       "label": "a Berry"
+      }
+     ],
+     "success": {
+      "text": "He eats the Berry thoughtfully, then teaches your lead a move it could not have learned alone.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "payItem",
+        "only": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "chesto-berry",
+         "rawst-berry",
+         "aspear-berry",
+         "persim-berry",
+         "leppa-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "train",
+        "what": "learnMove"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A coin (100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "He pockets the coin and teaches your lead a move.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "train",
+        "what": "learnMove"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A secret.",
+     "success": {
+      "text": "You tell him something you have never told anyone. He writes it down. \"It goes in my memoir. Anonymously.\" Then he teaches your lead a move.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tutor-secret",
+        "amount": 1
+       },
+       {
+        "kind": "train",
+        "what": "learnMove"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "charm-tinkerer",
+   "name": "The Charm Tinkerer",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A workbench of tiny tools and a magnifying lamp. Bix, the tinkerer: \"Two charms in, one blended charm out. Result shown first.\" The result, chalked on the board: a Twin Charm.",
+   "choices": [
+    {
+     "label": "Blend.",
+     "requires": [
+      {
+       "kind": "holdsAny",
+       "ids": [
+        "lucky-charm",
+        "coin-charm",
+        "berry-charm",
+        "healing-charm",
+        "catching-charm",
+        "exp-charm",
+        "friendship-charm",
+        "step-charm",
+        "mercy-charm",
+        "mining-charm",
+        "lure-charm",
+        "clover-charm",
+        "heart-charm",
+        "repel-charm",
+        "frugal-charm",
+        "spirit-charm",
+        "hard-charm",
+        "easy-charm",
+        "nature-charm",
+        "element-charm",
+        "effort-charm"
+       ],
+       "count": 2,
+       "label": "two charms"
+      }
+     ],
+     "success": {
+      "text": "Bix melts two of your charms together over a tiny flame and taps them into one. A Twin Charm, exactly as chalked.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "payItem",
+        "only": [
+         "lucky-charm",
+         "coin-charm",
+         "berry-charm",
+         "healing-charm",
+         "catching-charm",
+         "exp-charm",
+         "friendship-charm",
+         "step-charm",
+         "mercy-charm",
+         "mining-charm",
+         "lure-charm",
+         "clover-charm",
+         "heart-charm",
+         "repel-charm",
+         "frugal-charm",
+         "spirit-charm",
+         "hard-charm",
+         "easy-charm",
+         "nature-charm",
+         "element-charm",
+         "effort-charm"
+        ],
+        "amount": 2
+       },
+       {
+        "kind": "item",
+        "id": "twin-charm",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Charms keep,\" Bix says. \"Bring two when you're ready.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "magnet-salesman",
+   "name": "The Magnet Salesman",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A salesman among floating Magnemite. \"Gadgets that pull coins toward you. Slightly cursed.\" ₽1200.",
+   "choices": [
+    {
+     "label": "Buy.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "He clips the gadget to your bag. Coins already seem to roll your way. So, faintly, does a Magnemite.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Coin magnet: money +10%, more Steel-types in the wild",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.1
+         },
+         {
+          "kind": "typeEncounterWeight",
+          "type": "steel",
+          "value": 1.5
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's the curse?",
+     "success": {
+      "text": "\"Money comes ten percent faster. So do Steel-types: the wild ones notice you more.\" He shrugs. \"For the region. Then it wears off.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "magnet-salesman"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "The Magnemite drift after you a little way, curious, then drift back.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "traveling-doctor",
+   "name": "The Travelling Doctor",
+   "group": "Merchants & Deals",
+   "stop": "heal",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#1e2c2c",
+    "effect": "none"
+   },
+   "intro": "A doctor's bag on a tree stump and a woman with kind eyes. Dr. Isolde Marsh: \"Statuses cured. Hurts healed. No fee for the weeping.\" Her price list: ₽300 for the party.",
+   "choices": [
+    {
+     "label": "Heal (prices listed).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "She works down the line, one Pokémon at a time, listening to each heartbeat. Everything that hurt stops hurting.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "cure"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I'm weeping.",
+     "success": {
+      "text": "She sees that you are. She heals them all, and then sits with you a while, and does not charge a coin.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "cure"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Take care of them,\" she says. \"And yourself.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "apothecary-experiment",
+   "name": "The Apothecary",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A table of bubbling flasks. Herne, the apothecary: \"Test-drink a random potion. I pay ₽300 whatever happens.\" The bottle: a quarter each, a stat's effort up, one down, a nap, nothing.",
+   "choices": [
+    {
+     "label": "Drink.",
+     "success": {
+      "text": "Your lead drinks. Herne watches with a notebook, then pays ₽300 as promised.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "market",
+        "action": "brew"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the effects.",
+     "success": {
+      "text": "Every effect on the label, with its odds: 25% a stat's effort up, 25% a stat's effort down, 25% a nap (half HP back), 25% nothing at all. \"Honest science,\" Herne says.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "apothecary-experiment"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "Herne drinks one himself. Nothing happens. He writes that down too.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "repel-reseller",
+   "name": "The Repel Reseller",
+   "group": "Merchants & Deals",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A crate of dented Super Repels. Slim, the seller: \"Expired. Half effect, half price. Says so on the label.\" Half effect: they work like a plain Repel. ₽150 each.",
+   "choices": [
+    {
+     "label": "Buy.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "Slim hands you one. The label says EXPIRED, then HALF EFFECT, then a sad face somebody drew.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "item",
+        "id": "repel",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Can't blame you,\" Slim says.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "shady-vitamins",
+   "name": "Shady Vitamins",
+   "group": "Merchants & Deals",
+   "stop": "merchant",
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "effect": "fog"
+   },
+   "intro": "A crate of bottles with labels spelled wrong. A sign: \"ONE IN FIVE IS REAL. WE DON'T KNOW WHICH.\" ₽400 a bottle. Five guarantees one real one.",
+   "choices": [
+    {
+     "label": "Buy one.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "You uncap it and sniff. You will find out.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 400,
+        "table": [
+         {
+          "weight": 1,
+          "label": "A real one!",
+          "item": "hp-up"
+         },
+         {
+          "weight": 1,
+          "label": "A real one!",
+          "item": "protein"
+         },
+         {
+          "weight": 1,
+          "label": "A real one!",
+          "item": "iron"
+         },
+         {
+          "weight": 1,
+          "label": "A real one!",
+          "item": "calcium"
+         },
+         {
+          "weight": 1,
+          "label": "A real one!",
+          "item": "zinc"
+         },
+         {
+          "weight": 1,
+          "label": "A real one!",
+          "item": "carbos"
+         },
+         {
+          "weight": 24,
+          "label": "Coloured water"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy five.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2000
+      }
+     ],
+     "success": {
+      "text": "Five bottles. Four are coloured water. One is the real thing, as the sign promised.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2000
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "hp-up",
+         "protein",
+         "iron",
+         "calcium",
+         "zinc",
+         "carbos"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "The sign creaks in the wind. Honest, at least.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mystery-box",
+   "name": "The Mystery Box",
+   "group": "Merchants & Deals",
+   "stop": "merchant",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "effect": "rattle"
+   },
+   "intro": "A stack of sealed boxes. The seller: \"Mystery boxes! ₽700! Odds on the lid.\" The lid: ₽300 coins 40%, an Ultra Ball 30%, a Revive 20%, a Rare Candy 10%.",
+   "choices": [
+    {
+     "label": "Buy.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 700
+      }
+     ],
+     "success": {
+      "text": "You tear the tape off.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 700,
+        "table": [
+         {
+          "weight": 40,
+          "label": "₽300 in coins",
+          "money": 300
+         },
+         {
+          "weight": 30,
+          "label": "An Ultra Ball",
+          "item": "ultra-ball"
+         },
+         {
+          "weight": 20,
+          "label": "A Revive",
+          "item": "revive"
+         },
+         {
+          "weight": 10,
+          "label": "A Rare Candy",
+          "item": "rare-candy"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the lid.",
+     "success": {
+      "text": "Four lines, four odds, nothing else in any box, ever.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mystery-box"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "The seller shakes a box at you as you leave. It rattles enticingly.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "raffle-seller",
+   "name": "The Raffle",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A kid with a drum of tickets. Tilly: \"Win a tier-three item! More tickets, better odds!\" The prize: a Life Orb. ₽50 a ticket, 1 in 50 per ticket.",
+   "choices": [
+    {
+     "label": "One ticket (50).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
+     "success": {
+      "text": "Tilly spins the drum and draws.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 50,
+        "table": [
+         {
+          "weight": 1,
+          "label": "You won the Life Orb!",
+          "item": "life-orb"
+         },
+         {
+          "weight": 49,
+          "label": "Not your number"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ten tickets.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
+     "success": {
+      "text": "Ten tickets, ten draws, Tilly calling each one.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 50,
+        "times": 10,
+        "table": [
+         {
+          "weight": 1,
+          "label": "The Life Orb!",
+          "item": "life-orb"
+         },
+         {
+          "weight": 49,
+          "label": "Not yours"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Next time!\" Tilly spins the drum anyway, for fun.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "clearance-rack",
+   "name": "The Clearance Rack",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#3a1a1a",
+    "effect": "none"
+   },
+   "intro": "A rack of held items, 90% off: ₽250 each. The clerk: \"One's cursed. Which one? The tag says what the curse does.\" Buy without reading and it's one of four.",
+   "choices": [
+    {
+     "label": "Buy one.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 250
+      }
+     ],
+     "success": {
+      "text": "You grab one without reading.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 250,
+        "table": [
+         {
+          "weight": 1,
+          "label": "An Expert Belt",
+          "item": "expert-belt"
+         },
+         {
+          "weight": 1,
+          "label": "A Muscle Band",
+          "item": "muscle-band"
+         },
+         {
+          "weight": 1,
+          "label": "Wise Glasses",
+          "item": "wise-glasses"
+         },
+         {
+          "weight": 1,
+          "label": "The cursed one: a Sticky Barb",
+          "item": "sticky-barb"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read every tag.",
+     "success": {
+      "text": "Expert Belt. Muscle Band. Wise Glasses. And a Sticky Barb: \"CURSED: hurts whoever holds it, and clings.\" Now you know.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "clearance-read",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "clearance-rack"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "The clerk shrugs. \"It'll all go eventually. Even the cursed one.\"",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "clearance-tags",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "clearance-read",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have read every tag.",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Buy the Expert Belt.",
+       "requires": [
+        {
+         "kind": "money",
+         "atLeast": 250
+        }
+       ],
+       "success": {
+        "text": "₽250 for an Expert Belt. Not cursed.",
+        "effects": [
+         {
+          "kind": "money",
+          "amount": -250
+         },
+         {
+          "kind": "item",
+          "id": "expert-belt",
+          "count": 1
+         }
+        ]
+       }
+      },
+      {
+       "label": "Buy the Muscle Band.",
+       "requires": [
+        {
+         "kind": "money",
+         "atLeast": 250
+        }
+       ],
+       "success": {
+        "text": "₽250 for a Muscle Band. Not cursed.",
+        "effects": [
+         {
+          "kind": "money",
+          "amount": -250
+         },
+         {
+          "kind": "item",
+          "id": "muscle-band",
+          "count": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mr-mirage-merchant",
+   "name": "The Mirage Merchant",
+   "group": "Merchants & Deals",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2418",
+    "effect": "glint"
+   },
+   "intro": "A merchant who shimmers at the edges like heat over sand. \"Pay up front. I tend to vanish.\" Her goods: a Choice Scarf, ₽2,500, delivered two nodes on, on the path.",
+   "choices": [
+    {
+     "label": "Pay.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2500
+      }
+     ],
+     "success": {
+      "text": "You pay. She fades, mid-smile, coins and all.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2500
+       },
+       {
+        "kind": "flag",
+        "key": "mirage-paid",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "mirage-delivery",
+        "nodes": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "She shimmers, and then she is not there.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "group": "Merchants & Deals",
+   "callback": false,
+   "id": "mirage-delivery",
+   "name": "The Mirage Merchant",
+   "intro": "Two nodes on, the air shimmers on the path ahead, and there she is, holding out a Choice Scarf. \"I said I tend to vanish. I never said I don't come back.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "The Scarf is real, warm from the sun. She is gone again before you can say thank you.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "choice-scarf",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mirage-paid",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rival-merchants",
+   "name": "The Rival Merchants",
+   "group": "Merchants & Deals",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.guitarist",
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2c2a22",
+    "effect": "none"
+   },
+   "intro": "Two carts shouting prices at each other. Hobb: \"Mine's better!\" (Ultra Balls, ₽800.) Nelly: \"Mine's cheaper!\" (Great Balls, ₽500.) Buy from one and the other drops ten percent to win you back.",
+   "choices": [
+    {
+     "label": "Buy from Hobb.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 800
+      }
+     ],
+     "success": {
+      "text": "Hobb crows. Nelly scowls and scribbles a new price on her board.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -800
+       },
+       {
+        "kind": "item",
+        "id": "ultra-ball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-hobb",
+        "amount": 1
+       },
+       {
+        "kind": "market",
+        "action": "comeBack",
+        "event": "rival-merchants"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy from Nelly.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "Nelly cheers. Hobb mutters and repaints a number on his cart.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-nelly",
+        "amount": 1
+       },
+       {
+        "kind": "market",
+        "action": "comeBack",
+        "event": "rival-merchants"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Both.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1300
+      }
+     ],
+     "success": {
+      "text": "Both of them are briefly speechless.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1300
+       },
+       {
+        "kind": "item",
+        "id": "ultra-ball",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "rival-nelly-cut",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-hobb",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Nelly has cut her price ten percent to win you back: Great Balls, ₽450.",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Buy from Nelly.",
+       "requires": [
+        {
+         "kind": "money",
+         "atLeast": 450
+        }
+       ],
+       "success": {
+        "text": "Nelly grins in triumph.",
+        "effects": [
+         {
+          "kind": "money",
+          "amount": -450
+         },
+         {
+          "kind": "item",
+          "id": "great-ball",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "rival-hobb",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "rival-nelly",
+          "amount": 1
+         },
+         {
+          "kind": "market",
+          "action": "comeBack",
+          "event": "rival-merchants"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "rival-hobb-cut",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-nelly",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Hobb has cut his price ten percent to win you back: Ultra Balls, ₽720.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Buy from Hobb.",
+       "requires": [
+        {
+         "kind": "money",
+         "atLeast": 720
+        }
+       ],
+       "success": {
+        "text": "Hobb bows extravagantly.",
+        "effects": [
+         {
+          "kind": "money",
+          "amount": -720
+         },
+         {
+          "kind": "item",
+          "id": "ultra-ball",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "rival-nelly",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "rival-hobb",
+          "amount": 1
+         },
+         {
+          "kind": "market",
+          "action": "comeBack",
+          "event": "rival-merchants"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "sign-language-market",
+   "name": "The Sign-Language Market",
+   "group": "Merchants & Deals",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#2a2830",
+    "effect": "none"
+   },
+   "intro": "A trader who does not speak your language. She gestures at her Berries: three fingers, a flat palm, a circle. She waits, patient and amused.",
+   "choices": [
+    {
+     "label": "Three fingers (three of something).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "She beams and counts out three Berries for three coins' worth: ₽150. A fair price, because you understood.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 3
+       },
+       {
+        "kind": "flag",
+        "key": "sign-vocab",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Flat palm (wait).",
+     "success": {
+      "text": "You hold up a flat palm. She nods, and waits with you, and the waiting is the word. She teaches you two more signs while you stand there.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-vocab",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sign-language-market"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Circle (a Berry).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
+     "success": {
+      "text": "A circle: one Berry. She hands it over for ₽50, and touches her chest. Fair.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-vocab",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "sign-fluent",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sign-vocab",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know her signs now. She greets you with one that means, as far as you can tell, \"old friend\"."
+    }
+   ]
+  },
+  {
+   "id": "r155-kecleon-bazaar",
+   "name": "The Kecleon Bazaar",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "types": [
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "kecleon",
+    "tint": "#1c3a2a",
+    "effect": "flicker"
+   },
+   "intro": "A stall run by a Kecleon, its wares shimmering and changing colour. Press a stall and it shows its true item. Buy without looking for ₽1,200: half are what they seem (Leftovers), half are a Tiny Mushroom.",
+   "choices": [
+    {
+     "label": "Press each stall.",
+     "success": {
+      "text": "You press each one. Colours drain away, and the true items sit there plainly. One really is a Leftovers. The Kecleon nods: fair is fair.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kecleon-pressed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "r155-kecleon-bazaar"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy without looking.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "You point and pay. The colour fades.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "prize",
+        "stake": 1200,
+        "table": [
+         {
+          "weight": 1,
+          "label": "Leftovers, as it seemed",
+          "item": "leftovers"
+         },
+         {
+          "weight": 1,
+          "label": "A Big Mushroom in disguise",
+          "item": "big-mushroom"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "The Kecleon turns the colour of the wall and watches you go.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "kecleon-known",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kecleon-pressed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know which stall holds the real Leftovers.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Buy the true Leftovers.",
+       "requires": [
+        {
+         "kind": "money",
+         "atLeast": 1200
+        }
+       ],
+       "success": {
+        "text": "₽1,200 for the stall you pressed. Leftovers, really. The Kecleon licks its eye approvingly.",
+        "effects": [
+         {
+          "kind": "money",
+          "amount": -1200
+         },
+         {
+          "kind": "item",
+          "id": "leftovers",
+          "count": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "strangers-map",
+   "name": "The Stranger's Map",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "boss.npc_gambler"
+    ],
+    "tint": "#2a2030",
+    "effect": "none"
+   },
+   "intro": "A hooded stranger with a rolled map. \"It leads to a Legendary's lair. ₽500. My share's included if you find one: ₽500 more, only if you catch it.\"",
+   "choices": [
+    {
+     "label": "Buy.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "The map is old and careful. A waterfall, three nodes on, and a mark behind it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "strangers-map",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "strangers-map-lair",
+        "nodes": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Why sell it?",
+     "success": {
+      "text": "\"I found it. I went. I looked at what was sleeping there and I couldn't.\" The stranger pulls the hood lower. \"Maybe you can.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "strangers-map"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "The stranger nods, unsurprised, and walks on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "strangers-map-lair",
+   "name": "The Hidden Lair",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "choice",
+     "id": "strangers-map",
+     "pick": "trusted",
+     "made": true
+    }
+   ],
+   "callback": false,
+   "scene": {
+    "cast": [],
+    "tint": "#203a5a",
+    "effect": "sparkle"
+   },
+   "intro": "Behind the waterfall, a cave, and in the cave, something vast and sleeping, breathing slowly. The map was real.",
+   "choices": [
+    {
+     "label": "Wake it.",
+     "success": {
+      "text": "It opens its eyes. The whole cave holds its breath.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "articuno",
+        "zapdos",
+        "moltres",
+        "raikou",
+        "entei",
+        "suicune",
+        "regirock",
+        "regice",
+        "registeel",
+        "uxie",
+        "mesprit",
+        "azelf",
+        "cobalion",
+        "terrakion",
+        "virizion"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "strangers-map-share"
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Let it sleep.",
+     "success": {
+      "text": "You back away quietly. Some things are better left dreaming. You leave the map on a rock for the next one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "strangers-map",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "group": "Merchants & Deals",
+   "callback": false,
+   "id": "strangers-map-share",
+   "name": "The Hidden Lair",
+   "intro": "Outside the waterfall, the stranger is waiting, hood dripping. \"Well?\" The share is ₽500, only if you caught it.",
+   "choices": [
+    {
+     "label": "Pay 500 (I caught it).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "The stranger takes it, looks at you a long moment, and nods. \"Look after it.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "strangers-map",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "It got away.",
+     "success": {
+      "text": "\"Then you owe me nothing.\" The stranger smiles, just slightly. \"That's the deal.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "strangers-map",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "token-exchange",
+   "name": "The Token Exchange",
+   "group": "Merchants & Deals",
+   "stop": "trade",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#2a1e2a",
+    "effect": "none"
+   },
+   "intro": "A stall with a price board. The stallholder: \"Nuggets, Star Pieces, Comet Shards. Prices posted.\" The board shows the fair price of every token.",
+   "choices": [
+    {
+     "label": "Exchange.",
+     "success": {
+      "text": "She weighs each token and pays exactly the posted price.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "sell",
+        "pick": "curio",
+        "factor": 1,
+        "only": [
+         "nugget",
+         "big-nugget",
+         "star-piece",
+         "comet-shard"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Prices don't change,\" she says. \"Come back whenever.\"",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

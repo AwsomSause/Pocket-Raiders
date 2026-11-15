@@ -3,14 +3,14 @@
 // shown, every odd printed, every term stated, a loss never more than the stake, and a trader warns you.
 // Scenes that come back later ("next bank stop", "two nodes", "five battles") are rooms queued with `laterEvent` (N nodes on).
 import { $, ch, cure, fight, flag, flagIs, heal, item, out, anyType, trainer, wild, type Json } from '../dsl.ts';
-import { COMMON, RARE, UNCOMMON, aNode, bond, kind, mk, moment, need, pay, rep, stay, temp } from './_markets.ts';
+import { COMMON, RARE, UNCOMMON, aNode, bond, kind, mk, moment, need, pay, rep, stay } from './_markets.ts';
 
 export { CATEGORY } from './_markets.ts';
 
 const G = 'Merchants & Deals';
 const later = (eventId: string, nodes: number): Json => ({ kind: 'laterEvent', eventId, nodes });
 const holds = (ids: string[], label: string, count = 1): Json => ({ kind: 'holdsAny', ids, count, label });
-const room = (e: Json): Json => ({ group: G, ...e, room: true });
+const room = (e: Json): Json => ({ group: G, callback: false, ...e, room: true });
 const BERRIES = ['oran-berry', 'pecha-berry', 'cheri-berry', 'chesto-berry', 'rawst-berry', 'aspear-berry', 'persim-berry', 'leppa-berry', 'sitrus-berry', 'lum-berry'];
 const CHARMS = ['lucky-charm', 'coin-charm', 'berry-charm', 'healing-charm', 'catching-charm', 'exp-charm', 'friendship-charm', 'step-charm', 'mercy-charm', 'mining-charm', 'lure-charm', 'clover-charm', 'heart-charm', 'repel-charm', 'frugal-charm', 'spirit-charm', 'hard-charm', 'easy-charm', 'nature-charm', 'element-charm', 'effort-charm'];
 const RENTALS = ['choice-band', 'choice-specs', 'choice-scarf', 'life-orb', 'expert-belt', 'focus-sash'];
@@ -63,7 +63,7 @@ export const EVENTS: Json[] = [
     id: 'guide-for-hire', name: 'The Guide for Hire', group: G,
     intro: 'Cyrilla, a guide with a walking stick: "Fifty and I show you the quiet way. Two hundred and I show you the secret way." Quiet: three nodes, one hazard, no trainers. Secret: two nodes, a hidden cache, a wild Rare. "Secret\'s only worth it if you want the cache."',
     choices: [
-      ch('The quiet way (50).', out('She walks you round the back of everything. Nobody challenges you. One rockslide, which she sees coming. The way ahead is laid out plain.', pay(50), { kind: 'scout', columns: 3 }, temp('The quiet way: no trainer will stop you', [{ kind: 'repel' }], 3, 'battle')), need(50)),
+      ch('The quiet way (50).', out('She walks you round the back of everything. Nobody challenges you. One rockslide, which she sees coming. The way ahead is laid out plain.', pay(50), { kind: 'scout', columns: 3 }, { kind: 'takeNode', nodes: 3 }), need(50)),
       ch('The secret way (200).', fight('Through a crack in a cliff, along a dry stream bed. A cache in a hollow tree, exactly where she said. And at the end, something rare watching you from the rocks.', { ...wild({ lv: 2 }), rare: true, friendly: true }, pay(200), { kind: 'skipAhead' }, { kind: 'itemFrom', ids: UNCOMMONS }), need(200)),
       ch('Neither.', out('"Your road, then." Cyrilla tips her hat. "It\'s a good road too."')),
     ],
@@ -72,11 +72,21 @@ export const EVENTS: Json[] = [
     id: 'insurance-agent', name: 'The Insurance Agent', group: G,
     intro: 'A thin man with a briefcase. Mr. Pettifer: "Nobody likes to talk about losing a Pokémon. One page. Read it." Premium ₽500. Payout: a revival token and a memorial plaque if a Pokémon is lost. Exclusions: released or traded Pokémon.',
     choices: [
-      ch('Sign.', out('You sign. Mr. Pettifer stamps it twice and hands you your copy. "Covered for the region. I hope you never need me."', pay(500), { kind: 'insurance' }, flag('insured')), need(500)),
+      ch('Sign.', out('You sign. Mr. Pettifer stamps it twice and hands you your copy. "Covered for the region. I hope you never need me."', pay(500), { kind: 'flag', key: 'insured', stamp: 'region' }, later('insurance-claim', 3)), need(500)),
       ch('Read it again.', out('The same page. Premium, payout, exclusions. No small print; he does not believe in it. "Read it as often as you like."', stay('insurance-agent'))),
       ch('No.', out('"Of course." He closes the briefcase gently. "Most people say no. Most people are lucky."')),
     ],
   },
+  room({
+    id: 'insurance-claim', name: 'The Insurance Agent',
+    requires: [flagIs('insured'), { kind: 'flag', key: 'insured', regionsAgoMost: 0 }],
+    intro: 'Mr. Pettifer finds you on the road, briefcase first. "Checking in on my policy holders. Any losses? I hope the answer is no."',
+    choices: [
+      ch('All\'s well.', out('"Good. Very good." He makes a small, happy tick on his page. "Still covered for the region. I\'ll look in again."', later('insurance-claim', 3))),
+    ],
+    remembers: [{ id: 'insurance-loss', when: [{ kind: 'memberFainted', within: 6 }], notice: 'He looks at your team, and then at you, and takes off his hat. "Ah. I\'m sorry. That\'s what the policy is for."',
+      addChoices: [ch('Make a claim.', out('He pays without a single question: a Revive in a velvet bag, and a small brass plaque with your Pokémon\'s name on it, polished. "The policy is spent. I\'m glad it was there."', item('revive'), flag('insured', -1)))] }],
+  }),
   {
     id: 'rumour-seller', name: 'The Rumour Seller', group: G,
     intro: 'A man in a coat lined with paper slips. Fitch winks. "Rumours, ₽100 apiece! Reliability\'s written on each one. Lies get a refund." The slips are stamped 90%, 60%, 30%.',
@@ -92,7 +102,7 @@ export const EVENTS: Json[] = [
     id: 'ticket-tout', name: 'The Ticket Tout', group: G,
     intro: 'A man in a flat cap fanning tickets. Jimmy Spark leans in. "Ticket to a secret stop? Real, I swear. It\'s the Glass Forest." ₽400.',
     choices: [
-      ch('Buy (400).', out('He hands you the ticket and points down the path. "Two turns past the big rock. Tell \'em Jimmy sent you."', pay(400), flag('glass-forest-ticket'), { kind: 'addStop', stop: 'pseudo' }), need(400)),
+      ch('Buy (400).', out('He hands you the ticket and points down the path. "Two turns past the big rock. Tell \'em Jimmy sent you."', pay(400), flag('glass-forest-ticket')), need(400)),
       ch('How do I know it\'s real?', out('He names it, shows the route on a map, and draws the trees. It is real. Jimmy is a lot of things, but not a liar.', stay('ticket-tout'))),
       ch('No.', out('"Your loss," he says cheerfully, and means it kindly.')),
     ],
@@ -132,22 +142,24 @@ export const EVENTS: Json[] = [
   },
   room({
     id: 'bank-teller-return', name: 'The Bank',
+    requires: [flagIs('deposit-bank')], callback: false,
     intro: 'The next bank, the same copperplate on your receipt. The teller looks up. "Your deposit\'s matured. Ten percent. Or leave it in: four more nodes and it\'s twenty-five."',
     choices: [
       ch('Take it.', out('Counted out in front of you, ten percent on top.', mk('withdraw', { key: 'bank', factor: 1.1 }))),
       ch('Leave it in.', out('"Four more nodes." The teller stamps the receipt. "Interest at last, then."', later('bank-teller-return-big', 4))),
     ],
-    remembers: [{ id: 'bank-robbed', when: [flagIs('bank-robbed')], notice: 'The window is boarded on one side. "We were robbed," the teller says quietly. "You get half. It\'s what the sign said. I\'m sorry."', hide: [0, 1],
+    remembers: [{ id: 'bank-robbed', when: [flagIs('bank-robbed')], notice: 'The window is boarded on one side. "We were robbed," the teller says quietly. "You get half. It\'s what the sign said. I\'m sorry."', hide: [0],
       addChoices: [ch('Take it.', out('Half, counted out with shaking hands.', mk('withdraw', { key: 'bank', factor: 0.5 })))] }],
   }),
   room({
     id: 'bank-teller-return-big', name: 'The Bank',
+    requires: [flagIs('deposit-bank')], callback: false,
     intro: 'A bigger bank, marble floors. Your receipt has two stamps now. "Interest at last. Twenty-five percent." Or leave it in, and the next stop\'s return applies.',
     choices: [
       ch('Take it.', out('Twenty-five percent on top, in a paper band.', mk('withdraw', { key: 'bank', factor: 1.25 }))),
       ch('Leave it in.', out('"Four more nodes." Another stamp.', later('bank-teller-return-big', 4))),
     ],
-    remembers: [{ id: 'bank-robbed-big', when: [flagIs('bank-robbed')], notice: 'The marble is cracked. "Robbed," says the teller. "Half. As stated."', hide: [0, 1],
+    remembers: [{ id: 'bank-robbed-big', when: [flagIs('bank-robbed')], notice: 'The marble is cracked. "Robbed," says the teller. "Half. As stated."', hide: [0],
       addChoices: [ch('Take it.', out('Half, as stated.', mk('withdraw', { key: 'bank', factor: 0.5 })))] }],
   }),
   // =====================================================================
@@ -166,13 +178,13 @@ export const EVENTS: Json[] = [
     id: 'pawn-sharks', name: 'The Pawn Sharks', group: G,
     intro: 'Two men in sharp suits and sharper smiles. Vic and Vinnie: "Sell now. Buy back later. Markup\'s on the receipt." The receipt: they pay half its value now; buyback at +50% of that, four nodes on.',
     choices: [
-      ch('Pawn something.', out('Vinnie takes your most valuable item and writes a receipt. Vic counts out the money. "Four nodes. We\'ll find you."', mk('pawn', { key: 'sharks', factor: 0.5 }), later('pawn-sharks-buyback', 4))),
+      ch('Pawn something.', out('Vinnie takes your most valuable item and writes a receipt. Vic counts out the money. "Four nodes. We\'ll find you."', mk('pawn', { key: 'sharks', factor: 0.5 }), later('pawn-sharks-buyback', 4), later('pawn-sharks-buyback-small', 4))),
       ch('No.', out('"Suit yourself." They straighten each other\'s ties.')),
     ],
   },
   room({
     id: 'pawn-sharks-buyback', name: 'The Pawn Sharks',
-    requires: [flagIs('pawn-sharks')],
+    requires: [flagIs('pawn-sharks'), { kind: 'flag', key: 'pawn-sharks-berry', atLeast: 0, atMost: 0 }],
     intro: 'Vic and Vinnie fall into step beside you. "Want it back? It\'ll cost more now." Vinnie holds up the receipt: half again what they paid, just as printed.',
     choices: [
       ch('Buy back.', out('Vic counts your money twice, then hands your item back with a little bow.', mk('redeem', { key: 'sharks', factor: 1.5 }))),
@@ -181,11 +193,11 @@ export const EVENTS: Json[] = [
   }),
   room({
     id: 'pawn-sharks-buyback-small', name: 'The Pawn Sharks',
-    requires: [flagIs('pawn-sharks-small')],
+    requires: [flagIs('pawn-sharks'), flagIs('pawn-sharks-berry')],
     intro: 'Vic and Vinnie again, Vinnie holding up a little Berry between two fingers. "That Berry, friend. Still want it?" The receipt says half again what they paid.',
     choices: [
-      ch('Buy back.', out('Vinnie tosses it over. Vic pockets the coins. "Pleasure."', mk('redeem', { key: 'sharks-small', factor: 1.5 }), flag('pawn-sharks-small', -1))),
-      ch('Keep the money.', out('Vinnie eats the Berry. Vic sighs at him. "Business."', mk('redeem', { key: 'sharks-small', forfeit: true }), flag('pawn-sharks-small', -1))),
+      ch('Buy back.', out('Vinnie tosses it over. Vic pockets the coins. "Pleasure."', mk('redeem', { key: 'sharks', factor: 1.5 }))),
+      ch('Keep the money.', out('Vinnie eats the Berry. Vic sighs at him. "Business."', mk('redeem', { key: 'sharks', forfeit: true }))),
     ],
   }),
   {
