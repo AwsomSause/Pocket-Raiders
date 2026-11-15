@@ -71,10 +71,10 @@ describe('catalog overhaul: singles', () => {
     }
   });
 
-  it('"a Rock- or Steel-type": a partyType condition with `or` holds for any listed type', () => {
-    const run = { party: [{ speciesId: 'geodude' }] } as never;
-    expect(conditionMet(content, run, { kind: 'partyType', type: 'steel', or: ['rock'] })).toBe(true);
-    expect(conditionMet(content, run, { kind: 'partyType', type: 'steel', or: ['water'] })).toBe(false);
-    expect(conditionMet(content, run, { kind: 'partyType', type: 'steel', or: ['rock'], absent: true })).toBe(false);
+  it('"a Rock- or Steel-type" (partyTypes) holds for any listed type', () => {
+    const run = { party: [{ speciesId: 'geodude', hp: 10 }] } as never;
+    expect(conditionMet(content, run, { kind: 'partyTypes', types: ['steel', 'rock'] })).toBe(true);
+    expect(conditionMet(content, run, { kind: 'partyTypes', types: ['steel', 'water'] })).toBe(false);
+    
   });
 });

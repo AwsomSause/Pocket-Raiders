@@ -6468,23 +6468,6 @@
   "existing": "big-nugget"
  },
  {
-  "id": "wooloo-wool",
-  "name": "Wooloo Wool",
-  "family": "Valuables",
-  "description": "+₽200",
-  "rarity": "common",
-  "stacksOn": "player",
-  "max": null,
-  "how": "use",
-  "icon": "fluffy-tail",
-  "status": "supported",
-  "effect": {
-   "kind": "money",
-   "amount": 200,
-   "changes": {}
-  }
- },
- {
   "id": "pearl",
   "name": "Pearl",
   "family": "Valuables",

@@ -140,11 +140,6 @@
         "amount": 1
        },
        {
-        "kind": "friendship",
-        "amount": 1,
-        "who": "party"
-       },
-       {
         "kind": "moment",
         "text": "Pell Junior caught up to say thank you for the Berries left on the tree.",
         "importance": 35
@@ -210,11 +205,6 @@
         "kind": "flag",
         "key": "center-nurse-asked",
         "amount": 1
-       },
-       {
-        "kind": "friendship",
-        "amount": 1,
-        "who": "lead"
        }
       ]
      }
@@ -351,8 +341,12 @@
     {
      "label": "Find R. Tanner.",
      "success": {
-      "text": "It takes most of the day to find him. Tanner is a kid, and the box is every coin he ever saved, buried in case his family needed it. When you hand it back unopened he stares, then holds it out. \"Pick one thing. Please.\" The whole village hears about it by supper.",
+      "text": "It takes a whole stop of the road to find him. Tanner is a kid, and the box is every coin he ever saved, buried in case his family needed it. When you hand it back unopened he stares, then holds it out. \"Pick one thing. Please.\" The whole village hears about it by supper.",
       "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
        {
         "kind": "itemFrom",
         "ids": [
@@ -365,13 +359,9 @@
         ]
        },
        {
-        "kind": "attribute",
-        "key": "goodEvil",
-        "amount": 2
-       },
-       {
-        "kind": "research",
-        "amount": 10
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
        },
        {
         "kind": "flag",
@@ -411,7 +401,7 @@
       "effects": [
        {
         "kind": "addEvent",
-        "eventId": "ev-hidden-hideout"
+        "eventId": "ps-evil-hideout-gate"
        }
       ]
      }
@@ -425,10 +415,6 @@
         "kind": "flag",
         "key": "hideout-noted",
         "amount": 1
-       },
-       {
-        "kind": "research",
-        "amount": 10
        }
       ]
      }
@@ -478,11 +464,6 @@
        },
        {
         "kind": "revealStops"
-       },
-       {
-        "kind": "friendship",
-        "amount": 1,
-        "who": "party"
        }
       ]
      }
@@ -511,7 +492,7 @@
      "requires": [
       {
        "kind": "flag",
-       "key": "torn-pages",
+       "key": "torn-page",
        "atLeast": 3,
        "atMost": 99
       }
@@ -520,8 +501,17 @@
       "text": "The three pages slide home as if they had been waiting. The stone breathes out, and the door swings wide onto stairs nobody has walked in a hundred years. The Mystery Dungeon is open.",
       "effects": [
        {
-        "kind": "addEvent",
-        "eventId": "md-entrance"
+        "kind": "addEventFrom",
+        "ids": [
+         "dg-ancient-ruins-a",
+         "dg-deep-mine-a",
+         "dg-haunted-mansion-a",
+         "dg-frozen-cavern-a",
+         "dg-volcanic-core-a",
+         "dg-deep-ocean-a",
+         "dg-overgrown-forest-a",
+         "dg-celestial-observatory-a"
+        ]
        }
       ]
      }
@@ -540,7 +530,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "torn-pages",
+       "key": "torn-page",
        "atLeast": 3,
        "atMost": 99
       }
@@ -552,7 +542,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "torn-pages",
+       "key": "torn-page",
        "atLeast": 2,
        "atMost": 99
       }
@@ -564,7 +554,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "torn-pages",
+       "key": "torn-page",
        "atLeast": 1,
        "atMost": 99
       }
@@ -612,15 +602,8 @@
       "text": "The stalls are loud and bright and every one of them wants you. Your team is already pulling you toward the nearest.",
       "effects": [
        {
-        "kind": "addEventFrom",
-        "ids": [
-         "rf-balancing-act",
-         "rf-balloon-pop",
-         "rf-barrel-roll",
-         "rf-berry-bobbing",
-         "rf-berry-taste",
-         "rf-bumper-cars"
-        ]
+        "kind": "addStop",
+        "stop": "minigame"
        }
       ]
      }
@@ -664,11 +647,6 @@
         "kind": "item",
         "id": "sitrus-berry",
         "count": 1
-       },
-       {
-        "kind": "attribute",
-        "key": "goodEvil",
-        "amount": 1
        }
       ]
      }
@@ -843,7 +821,7 @@
       "effects": [
        {
         "kind": "addEvent",
-        "eventId": "side-trail"
+        "eventId": "route-detour-trail"
        }
       ]
      }
@@ -876,6 +854,60 @@
     "cast": [],
     "tint": "#2a2418",
     "effect": "shake"
+   },
+   "intro": "A trail that leaves the route and rejoins it further on. Three trainers wait along it, and there is no Center. A board at the fork says the prizes run at ×1.5 here.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "The first trainer steps out of the grass, grinning. Three in a row, no healing between, and every prize half as big again.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Side-trail prizes ×1.5",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.5
+         }
+        ],
+        "battles": 3,
+        "until": "battle"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Trail Trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stay on the route.",
+     "success": {
+      "text": "You stay on the route. The trail was only ever an offer, and it will be here for somebody braver or more broke.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "route-detour-trail",
+   "name": "The Side Trail",
+   "group": "Map stops",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
    },
    "intro": "A trail that leaves the route and rejoins it further on. Three trainers wait along it, and there is no Center. A board at the fork says the prizes run at ×1.5 here.",
    "choices": [
@@ -1003,10 +1035,6 @@
        "shinyMultiplier": 1,
        "win": [
         {
-         "kind": "research",
-         "amount": 6
-        },
-        {
          "kind": "moment",
          "text": "Faced a Gigantamax Pokémon in the wild.",
          "importance": 70
@@ -1050,10 +1078,6 @@
        "levelBonus": 4,
        "shinyMultiplier": 1,
        "win": [
-        {
-         "kind": "research",
-         "amount": 6
-        },
         {
          "kind": "moment",
          "text": "Faced a Gigantamax Pokémon in the wild.",
@@ -1099,10 +1123,6 @@
        "shinyMultiplier": 1,
        "win": [
         {
-         "kind": "research",
-         "amount": 6
-        },
-        {
          "kind": "moment",
          "text": "Faced a Gigantamax Pokémon in the wild.",
          "importance": 70
@@ -1146,10 +1166,6 @@
        "levelBonus": 4,
        "shinyMultiplier": 1,
        "win": [
-        {
-         "kind": "research",
-         "amount": 6
-        },
         {
          "kind": "moment",
          "text": "Faced a Gigantamax Pokémon in the wild.",
@@ -1195,10 +1211,6 @@
        "shinyMultiplier": 1,
        "win": [
         {
-         "kind": "research",
-         "amount": 6
-        },
-        {
          "kind": "moment",
          "text": "Faced a Gigantamax Pokémon in the wild.",
          "importance": 70
@@ -1240,9 +1252,9 @@
      "label": "Stop it (a Rock- or Steel-type).",
      "requires": [
       {
-       "kind": "partyType",
-       "type": "rock",
-       "or": [
+       "kind": "partyTypes",
+       "types": [
+        "rock",
         "steel"
        ]
       }
@@ -1254,11 +1266,6 @@
         "kind": "item",
         "id": "wooloo-wool",
         "count": 1
-       },
-       {
-        "kind": "friendship",
-        "amount": 1,
-        "who": "party"
        }
       ]
      }
@@ -1270,11 +1277,6 @@
       "effects": [
        {
         "kind": "express"
-       },
-       {
-        "kind": "friendship",
-        "amount": 1,
-        "who": "party"
        }
       ]
      }
@@ -1326,10 +1328,6 @@
        },
        {
         "kind": "revealStops"
-       },
-       {
-        "kind": "research",
-        "amount": 4
        }
       ]
      }
@@ -1358,12 +1356,7 @@
        "types": [],
        "levelBonus": 2,
        "shinyMultiplier": 3,
-       "win": [
-        {
-         "kind": "research",
-         "amount": 4
-        }
-       ]
+       "win": []
       }
      }
     },
@@ -1394,12 +1387,11 @@
     {
      "label": "Look for a way up.",
      "success": {
-      "text": "You count heads first. Everyone is here. Then you find the slope, and climb it together, hauling each other the last stretch into the light.",
+      "text": "You count heads first. Everyone is here. Then you find the slope, and climb it together, hauling each other the last stretch into the light. It takes a whole stop of the road.",
       "effects": [
        {
-        "kind": "friendship",
-        "amount": 1,
-        "who": "party"
+        "kind": "takeNode",
+        "nodes": 1
        }
       ]
      }
@@ -1410,8 +1402,17 @@
       "text": "The dark goes on below, and it is not empty. You go down into one floor of a Mystery Dungeon.",
       "effects": [
        {
-        "kind": "addEvent",
-        "eventId": "md-entrance"
+        "kind": "addEventFrom",
+        "ids": [
+         "dg-ancient-ruins-a",
+         "dg-deep-mine-a",
+         "dg-haunted-mansion-a",
+         "dg-frozen-cavern-a",
+         "dg-volcanic-core-a",
+         "dg-deep-ocean-a",
+         "dg-overgrown-forest-a",
+         "dg-celestial-observatory-a"
+        ]
        }
       ]
      }
@@ -1442,11 +1443,6 @@
       "effects": [
        {
         "kind": "express"
-       },
-       {
-        "kind": "friendship",
-        "amount": 1,
-        "who": "party"
        }
       ]
      }
@@ -1485,7 +1481,7 @@
       }
      ],
      "success": {
-      "text": "Your Pokémon lets its voice go. The echo runs the walls, and at one spot the rock answers hollow, cracks, and falls in. Behind it is a hidden room, and something left there long ago.",
+      "text": "Your Pokémon lets its voice go. The echo runs the walls, and at one spot the rock answers hollow, cracks, and falls in. Behind it is a hidden room, and something left there long ago, just inside the door.",
       "effects": [
        {
         "kind": "itemFrom",
@@ -1496,6 +1492,10 @@
          "metronome",
          "throat-spray"
         ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "w4-echo-chamber"
        }
       ]
      }
@@ -1690,11 +1690,6 @@
          "root-fossil",
          "claw-fossil"
         ]
-       },
-       {
-        "kind": "friendship",
-        "amount": 1,
-        "who": "party"
        }
       ]
      }
@@ -1782,10 +1777,6 @@
        "shinyMultiplier": 3,
        "win": [
         {
-         "kind": "research",
-         "amount": 30
-        },
-        {
          "kind": "flag",
          "key": "calmed-alpha",
          "amount": 1
@@ -1804,10 +1795,6 @@
      "success": {
       "text": "You stay where you are and just look, long enough to know exactly what it is: an Alpha of this route, half again the size of any other. You mark the hollow on your map and back away. It never wakes.",
       "effects": [
-       {
-        "kind": "research",
-        "amount": 15
-       },
        {
         "kind": "flag",
         "key": "tracks-hollow-saved",
@@ -1858,8 +1845,20 @@
    "choices": [
     {
      "label": "Ride it.",
+     "prompt": {
+      "id": "zip-line",
+      "needs": "good"
+     },
      "success": {
-      "text": "You clip in, lift your feet, and the valley opens under you like a held breath let go. You land a stop ahead, laughing.",
+      "text": "You clip in, lift your feet, and the valley opens under you like a held breath let go. You let go right over the platform and land running, a stop ahead, laughing.",
+      "effects": [
+       {
+        "kind": "express"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You clip in and the valley opens under you. You let go a beat late and roll into the soft grass past the platform, a stop ahead, laughing anyway.",
       "effects": [
        {
         "kind": "express"
@@ -1875,6 +1874,7 @@
        "type": "flying"
       }
      ],
+     "pick": {},
      "success": {
       "text": "You ride the cable, and your Flying-type flies alongside with a teammate held in its claws, both of them shrieking with joy the whole way down. The passenger will not stop talking about it.",
       "effects": [
@@ -1883,8 +1883,8 @@
        },
        {
         "kind": "friendship",
-        "amount": 1,
-        "who": "party"
+        "amount": 5,
+        "who": "picked"
        }
       ]
      }
@@ -1907,9 +1907,9 @@
      "label": "Fix it (a Steel- or Fighting-type).",
      "requires": [
       {
-       "kind": "partyType",
-       "type": "steel",
-       "or": [
+       "kind": "partyTypes",
+       "types": [
+        "steel",
         "fighting"
        ]
       }
@@ -1919,11 +1919,6 @@
       "effects": [
        {
         "kind": "express"
-       },
-       {
-        "kind": "attribute",
-        "key": "goodEvil",
-        "amount": 1
        }
       ]
      }
@@ -1951,16 +1946,17 @@
    "choices": [
     {
      "label": "Drive (a Pokémon rides on the roof).",
+     "pick": {},
      "success": {
-      "text": "You drive. Your lead rides on the roof with its face in the wind and its eyes shut, and people along the road stop to wave at it. By the time you hand the keys back you are far down the route, and it does not want to get down. It loved every second.",
+      "text": "You drive. The Pokémon you chose rides on the roof with its face in the wind and its eyes shut, and people along the road stop to wave at it. By the time you hand the keys back you are far down the route, and it does not want to get down. It loved every second.",
       "effects": [
        {
         "kind": "express"
        },
        {
         "kind": "friendship",
-        "amount": 1,
-        "who": "lead"
+        "amount": 5,
+        "who": "picked"
        }
       ]
      }
@@ -2000,11 +1996,6 @@
         "kind": "gymPreview"
        },
        {
-        "kind": "attribute",
-        "key": "goodEvil",
-        "amount": 1
-       },
-       {
         "kind": "moment",
         "text": "A postcard arrived from the next region.",
         "importance": 30
@@ -2039,9 +2030,9 @@
      "label": "Rescue (a Water- or Flying-type).",
      "requires": [
       {
-       "kind": "partyType",
-       "type": "water",
-       "or": [
+       "kind": "partyTypes",
+       "types": [
+        "water",
         "flying"
        ]
       }
@@ -2055,11 +2046,6 @@
        },
        {
         "kind": "revealStops"
-       },
-       {
-        "kind": "attribute",
-        "key": "goodEvil",
-        "amount": 1
        }
       ]
      }
@@ -2076,11 +2062,6 @@
        },
        {
         "kind": "revealStops"
-       },
-       {
-        "kind": "attribute",
-        "key": "goodEvil",
-        "amount": 1
        }
       ]
      },
@@ -2131,12 +2112,8 @@
       "text": "Right it is. The path bends, and there is something on it worth stopping for.",
       "effects": [
        {
-        "kind": "addEventFrom",
-        "ids": [
-         "berry-tree",
-         "treasure-cache",
-         "lookout-tower"
-        ]
+        "kind": "addEvent",
+        "eventId": "ask-directions-right"
        }
       ]
      }
@@ -2171,6 +2148,59 @@
    ]
   },
   {
+   "id": "ask-directions-right",
+   "name": "The Right-Hand Path",
+   "group": "Travel and shortcuts",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "The right-hand path bends past an old wayside shrine. The offering bowl is full of things travellers left for whoever needed them more, with a note: \"Take one. Leave one when you can.\"",
+   "choices": [
+    {
+     "label": "Take one.",
+     "success": {
+      "text": "You take one thing, and promise the bowl you will be back with something better.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "potion",
+         "poke-ball",
+         "pecha-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave one.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "potion"
+      }
+     ],
+     "success": {
+      "text": "You leave something of yours in the bowl. Somebody tomorrow will be glad of it, and never know your name.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "potion"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
    "id": "r130-drifting-wingull-island",
    "name": "Drifting Island of Wingull",
    "group": "Wild Scenes",
@@ -2195,11 +2225,6 @@
       "effects": [
        {
         "kind": "express"
-       },
-       {
-        "kind": "friendship",
-        "amount": 1,
-        "who": "party"
        }
       ]
      }
@@ -2247,8 +2272,13 @@
       ]
      },
      "failure": {
-      "text": "Halfway over, the silk takes hold of you and will not let go. It takes most of the day, and all of your team pulling, to get you free. You never reach the far side.",
-      "effects": []
+      "text": "Halfway over, the silk takes hold of you and will not let go. It takes a whole stop of the road, and all of your team pulling, to get you free. You never reach the far side.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
      }
     },
     {
@@ -2270,11 +2300,6 @@
          "star-piece",
          "focus-sash"
         ]
-       },
-       {
-        "kind": "friendship",
-        "amount": 1,
-        "who": "party"
        }
       ]
      }
@@ -2301,12 +2326,7 @@
      "chance": 0.5,
      "success": {
       "text": "One splash. The tree shrieks, leaps a foot in the air and runs off down the pass with its arms waving. The way is open.",
-      "effects": [
-       {
-        "kind": "research",
-        "amount": 20
-       }
-      ]
+      "effects": []
      },
      "failure": {
       "text": "One splash. The tree shrieks, and then it is furious.",
@@ -2319,20 +2339,20 @@
        "types": [],
        "levelBonus": 1,
        "shinyMultiplier": 1,
-       "win": [
-        {
-         "kind": "research",
-         "amount": 15
-        }
-       ]
+       "win": []
       }
      }
     },
     {
      "label": "Wait.",
      "success": {
-      "text": "You sit down and wait. It holds its pose for a long time. Then longer. In the end it sighs, drops its arms and wanders off, bored. It cost you a good while, and nothing else.",
-      "effects": []
+      "text": "You sit down and wait. It holds its pose for a long time. Then longer. In the end it sighs, drops its arms and wanders off, bored. It cost you a stop of the road, and nothing else.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
      }
     }
    ]
@@ -2401,15 +2421,6 @@
       "text": "You work the Sudowoodo loose, one arm and then the other. It hugs the Bonsly so hard they both fall over. They clear the bridge together, and the Bonsly keeps looking back at you.",
       "effects": [
        {
-        "kind": "attribute",
-        "key": "goodEvil",
-        "amount": 1
-       },
-       {
-        "kind": "research",
-        "amount": 10
-       },
-       {
         "kind": "flag",
         "key": "freed-sudowoodo",
         "amount": 1
@@ -2423,11 +2434,6 @@
      "success": {
       "text": "You work the Sudowoodo loose. It bows, stiffly. The Bonsly looks at it, looks at you, and takes three small steps your way. The Sudowoodo nods: go on, then.",
       "effects": [
-       {
-        "kind": "attribute",
-        "key": "goodEvil",
-        "amount": 1
-       },
        {
         "kind": "join",
         "species": [
@@ -2448,15 +2454,6 @@
      "failure": {
       "text": "You work the Sudowoodo loose. The Bonsly takes one step after you, then runs back and holds on to the Sudowoodo's leg. Not today. They wave until you are off the bridge.",
       "effects": [
-       {
-        "kind": "attribute",
-        "key": "goodEvil",
-        "amount": 1
-       },
-       {
-        "kind": "research",
-        "amount": 10
-       },
        {
         "kind": "flag",
         "key": "freed-sudowoodo",

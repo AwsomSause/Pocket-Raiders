@@ -7,14 +7,27 @@ Content: `tools/events/co/singles-<n>.ts` -> `src/data/events/co-singles-<n>.jso
 | Batch | Sections | Ids | State |
 |---|---|---|---|
 | 1 | SF135 Map Stops, SF136 Travel and Shortcuts | 33 | built, re-read 2026-11-15 |
-| later | SF137 to SF161 | 428 | not started (old events still play) |
+| 2 | SF137 Rests, SF139 Comic Encounters | 23 | drafted in `singles-2.ts`, not built |
+| 3 | SF138 Road People | 26 | drafted in `singles-3.ts`, not built; needs `addStop: 'tutor'` and a `coAdvice` effect (not built yet) |
+| 4 | SF140 Gentle Wild Scenes, SF141 Oddities | 49 | drafted in `singles-4.ts`, not built |
+| later | SF142 to SF161 | 330 | not started (old events still play). SF142/SF143 read and old defs checked. |
+
+## Paused 2026-11-15 (Kice: five threads at a time)
+Where I stopped:
+- Batch 1 is committed. The full `npm run check` rerun was stopped part way (typecheck passed; unit tests had not finished). Targeted tests passed. Next: rerun the full check, then open the batch 1 PR into `ui-mockups`.
+- Batches 2 to 4 are drafts only (not built into JSON, not in the status file).
+- New items still to add to `src/data/itemCatalog/singles.json` for batches 3 and 4 (kept out so batch 1 stays clean):
+  - `tiny-mushroom`: Valuables, +₽50, +1 toward Peace (`ragePeace -1`), icon `tinymushroom`, common.
+  - `mareep-wool`: Valuables, +₽300, icon `fluffy-tail`, uncommon.
+  - `toy-pikachu`: Map and encounter item, max 1, next wild battle the wild Pokémon loses its first turn (`encounter` / `freeTurn`, like the Poké Doll), icon `poke-doll`.
+- Batch 4 limits to log: "confused for one battle" is a ×0.75 lead damage tempEffect; "Charged" is Electric ×1.5 for one battle; the map grotto opens on the next node, not two on.
 
 SF158 to SF160 (82 calendar weeks) live in `gameEvents.json` and SF161 (15 battle moments) in `dramaEvents.json`, not in the event files; they need their own build path.
 Party-pick rests (SF137 "Who soaks first?") wait for the lead's party-picker field.
 
 ## Engine pieces added
-- `partyType` condition takes `or` (more types): "a Rock- or Steel-type". Test in `coSingles.test.ts`.
-- Item `wooloo-wool` (Valuables, +₽200) in `itemCatalog.json`.
+- "A Rock- or Steel-type" uses the shared `partyTypes` condition (the `or` field was dropped). Test in `coSingles.test.ts`.
+- Item `wooloo-wool` (Valuables, +₽200) in `src/data/itemCatalog/singles.json`.
 
 ## Re-read table (doc row against the built event: buttons, outcome, flags)
 All checked 2026-11-15 against `STORY_FAMILIES_19.md`.
@@ -37,7 +50,7 @@ Rooms added so a doc outcome can ask its own question: `berry-tree-pell` (callba
 | Reputation +1 (`treasure-cache`) | Good +2 and research | A reputation effect |
 | "Appears on real-time Tuesdays" (`galar-runaway-wooloo`) | Any day | A weekday condition |
 | The Honest Trade Card, TRADES Pool 13 (`ev-regional-festival`) | A plain swap room with both gifts shown (Potion for a Sitrus Berry) | The markets thread's card |
-| Three Torn Pages, SF73 (`ev-hidden-dungeon`) | Reads flag `torn-pages` (3) | The delves thread to set it |
+| Three Torn Pages, SF75 (`ev-hidden-dungeon`) | Reads flag `torn-page` (3), which the old Torn Page events already set | families-c keeps setting it when it rebuilds SF75 |
 | "An exit to the next stage's hidden node" (`world-hidden-grotto`) | A ride ahead, and this stage's hidden stops shown | Next-stage placement |
 | A postcard hint about the next region's Gym (`mailman-shortcut`) | This stage's Gym team is shown | A next-region Gym preview |
 | "One hidden node" / "two hidden nodes" (`lookout-tower`, `w4-graffiti-wall`) | Every hidden stop on the stage is shown | Nothing planned |

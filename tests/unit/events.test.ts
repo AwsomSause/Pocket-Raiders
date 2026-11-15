@@ -136,7 +136,14 @@ describe('map stop types (events and map stops plan)', () => {
   });
 
   it('check cards show the attribute and a locked card says what it needs', () => {
-    const run = atEvent(newRun('cards'), 'rare-sighting');
+    // rare-sighting was the sample until the Catalog Overhaul rebuilt it without checks; this copy keeps the old card shape.
+    const sample = content.events.get('rare-sighting')!;
+    const [luck, locked] = EventChoiceSchema.array().parse([
+      { label: 'Approach quietly', check: 'luck', success: { text: 'It squares up!', effects: [] }, failure: { text: 'It bolts.', effects: [] } },
+      { label: 'Follow the tracks', requires: [{ kind: 'attribute', key: 'luck', atLeast: 20 }], success: { text: 'You cut it off.', effects: [] } },
+    ]);
+    content.events.set('test-check-cards', { ...sample, id: 'test-check-cards', choices: [luck!, locked!], remembers: [] });
+    const run = atEvent(newRun('cards'), 'test-check-cards');
     const view = eventView(content, run, 'test-event');
     expect(view.choices[0]!.attribute).toBe('luck');
     expect(view.choices[0]!.attributeValue).not.toBeNull();

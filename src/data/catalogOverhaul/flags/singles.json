@@ -1,17 +1,70 @@
 {
  "category": "singles",
  "flags": [
-  { "key": "berrytree-left", "setBy": "berry-tree (Take a few, leave the rest.)", "readBy": "berry-tree-pell" },
-  { "key": "berrytree-pell-met", "setBy": "berry-tree-pell", "readBy": "berry-tree-pell (once per run)" },
-  { "key": "center-nurse-asked", "setBy": "pokemon-center (Heal, and ask how she is.)", "readBy": "pokemon-center (free Revive on the next visit)" },
-  { "key": "center-nurse-revive", "setBy": "pokemon-center (Take the free Revive.)", "readBy": "pokemon-center (the Revive is given once)" },
-  { "key": "cache-tanner-found", "setBy": "treasure-cache (Find R. Tanner.)", "readBy": "later singles batches (road people)" },
-  { "key": "hideout-noted", "setBy": "villain-hideout (Note it and leave.)", "readBy": "the Files step (evil-story thread)" },
-  { "key": "torn-pages", "setBy": "Mystery Dungeon pages, SF73 (families-c thread)", "readBy": "ev-hidden-dungeon" },
-  { "key": "cave-echo-heard", "setBy": "w4-cave-echo (Clap.)", "readBy": "w4-cave-echo" },
-  { "key": "calmed-alpha", "setBy": "w4-tracks-deep (Wake it gently.), pack flag calmed.alpha", "readBy": "Noble Frenzy finale, Alpha of Alphas (legends thread)" },
-  { "key": "tracks-hollow-saved", "setBy": "w4-tracks-deep (Look at it.)", "readBy": "w4-tracks-deep" },
-  { "key": "directions-asked", "setBy": "ask-directions (Who's asking?)", "readBy": "ask-directions" },
-  { "key": "freed-sudowoodo", "setBy": "r145-bonsly-railings", "readBy": "later singles batches" }
+  {
+   "key": "berrytree-left",
+   "setBy": "berry-tree (Take a few, leave the rest.)",
+   "readBy": "berry-tree-pell"
+  },
+  {
+   "key": "berrytree-pell-met",
+   "setBy": "berry-tree-pell",
+   "readBy": "berry-tree-pell (once per run)"
+  },
+  {
+   "key": "center-nurse-asked",
+   "setBy": "pokemon-center (Heal, and ask how she is.)",
+   "readBy": "pokemon-center (free Revive on the next visit)"
+  },
+  {
+   "key": "center-nurse-revive",
+   "setBy": "pokemon-center (Take the free Revive.)",
+   "readBy": "pokemon-center (the Revive is given once)"
+  },
+  {
+   "key": "cache-tanner-found",
+   "setBy": "treasure-cache (Find R. Tanner.)",
+   "readBy": "later singles batches (road people)"
+  },
+  {
+   "key": "hideout-noted",
+   "setBy": "villain-hideout (Note it and leave.)",
+   "readBy": "the Files step (evil-story thread)"
+  },
+  {
+   "key": "torn-page",
+   "setBy": "mr-story-page-a/b/c, keep the page (SF75, families-c; the old pages already set it)",
+   "readBy": "ev-hidden-dungeon"
+  },
+  {
+   "key": "cave-echo-heard",
+   "setBy": "w4-cave-echo (Clap.)",
+   "readBy": "w4-cave-echo"
+  },
+  {
+   "key": "calmed-alpha",
+   "setBy": "w4-tracks-deep (Wake it gently.), pack flag calmed.alpha",
+   "readBy": "Noble Frenzy finale, Alpha of Alphas (legends thread)"
+  },
+  {
+   "key": "tracks-hollow-saved",
+   "setBy": "w4-tracks-deep (Look at it.)",
+   "readBy": "w4-tracks-deep"
+  },
+  {
+   "key": "directions-asked",
+   "setBy": "ask-directions (Who's asking?)",
+   "readBy": "ask-directions"
+  },
+  {
+   "key": "freed-sudowoodo",
+   "setBy": "r145-bonsly-railings",
+   "readBy": "later singles batches"
+  },
+  {
+   "key": "rep",
+   "setBy": "treasure-cache (Find R. Tanner.): the pack's Reputation +1 (STANDARDS.md)",
+   "readBy": "families-c Reputation (record condition)"
+  }
  ]
 }
