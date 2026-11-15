@@ -590,6 +590,34 @@ test('New UI: the battle\'s Party and Item tabs open the mock-up windows over th
   expect(errors).toEqual([]);
 });
 
+test('New UI: a Trainer battle opens on the mock-up versus card; a click moves on to the battle', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  const trainer = await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    const node = session.run.stage.map.nodes.find((n: any) => n.column === 1);
+    node.kind = 'trainer';
+    session.chooseNode(node.id);
+    game.scene.getScene('Map').scene.start('Battle');
+    return session.run.battle.trainer.name as string;
+  });
+  await waitForScene(page, 'Battle');
+  const stages = view(page, 'Battle');
+  const card = stages.locator('.vsx');
+  await expect(card).toBeVisible();
+  // The card names the Trainer; the battle's own boxes are not out yet.
+  await expect(stages.filter({ has: page.locator('.vsx') })).toContainText(trainer);
+  await expect(stages.locator('.win.glass')).toHaveCount(0);
+  await stages.locator('[data-act="next"]').click();
+  await expect(card).toHaveCount(0);
+  // The battle goes on to its first choice, with both boxes up.
+  await toCommands(page);
+  await expect(stages.locator('[data-act="pick"]', { hasText: 'Fight' })).toBeVisible();
+  await expect(stages.locator('.win.glass')).toHaveCount(2);
+  expect(errors).toEqual([]);
+});
+
 test('UI style: Old shows no New layer; the address can ask for either', async ({ page }) => {
   const errors = watch(page);
   // An automated browser gets Old by default (the older specs rely on it).

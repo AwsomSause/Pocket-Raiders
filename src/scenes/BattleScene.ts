@@ -84,7 +84,7 @@ import { onInputAction, type InputAction } from '../ui/input';
 import { bagRow, partyRows, Picker } from '../ui/partyPanel';
 import { BAG_POCKETS, itemPocket, POCKET_NAMES } from '../core/bag';
 import { itemCard, itemFooter } from '../core/itemPreview';
-import { runHealMultiplier } from '../core/run';
+import { battleOpening, runHealMultiplier } from '../core/run';
 import { rewindTurnsAvailable } from '../core/rewind';
 import { partyPreviews, quickSummaryText } from '../ui/itemScreen';
 import { animationStrength, animationTimeScale, animSettingsFrom } from '../core/accessibility';
@@ -118,7 +118,10 @@ import { sceneForRun } from './routing';
 import { battleSkinFor, type BattleFrameInfo, type BattleHud, type BattleSkin, type BoxSpec, type MenuLayout, type MenuSpec, type Rect } from '../ui/battleStyles';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { battleView, panelOf, splitChoice, type BattleBox, type BattleModel, type BattlePanel } from '../ui/redux/screens/battle';
-import { monFile } from '../ui/redux/game';
+import { artOf, monFile } from '../ui/redux/game';
+import { versusView, type VersusModel } from '../ui/redux/screens/versus';
+import { rxFileOf } from '../ui/redux/assets';
+import type { AssetManifest } from '../assets/catalog';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { KIT_LAYOUTS, KitBar, kitTexturesReady, type GaugeLike } from '../ui/battleUiStyles';
 import { loadAssets, partySpecies, pokemonArtIds, preloadPokemon, queueAssets } from '../ui/lazyAssets';
@@ -2596,6 +2599,51 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
+  /** New UI: the versus card as a beat (a key or a click moves on). Null when motion is off for an ordinary Trainer. */
+  private rxVersus(plain: boolean): Beat | null {
+    const battle = this.run.battle!;
+    const trainer = battle.trainer;
+    if (!trainer || (plain && this.motion === 'off')) return null;
+    const { content, settings } = services().session;
+    const boss = this.boss();
+    const standIn = !!boss && !!battle.rivalId;
+    const cls = content.trainers.get(trainer.classId);
+    const team = evilTeam(content, this.run);
+    const lead = battle.enemyTeam[0];
+    const v2 = this.run.story.v2;
+    let line = '';
+    try {
+      line = battleOpening(content, this.run, settings.dialogueFrequency).drama[0]?.text ?? '';
+    } catch {
+      line = '';
+    }
+    const model: VersusModel = {
+      name: boss && !standIn ? boss.name : trainer.name,
+      role: boss ? boss.title.replace(boss.name, '').trim() : battle.rivalId || battle.rival ? 'Rival' : cls?.name ?? '',
+      cast: artOf(this, this.trainerArt()?.assetId),
+      line,
+      evil: !!team && Object.values(team.ranks).some((r) => r.name === trainer.name),
+      team: battle.enemyTeam.length,
+      lead: lead ? monFile(this, lead.speciesId, 'front', !!lead.shiny) : null,
+      player: artOf(this, content.archetypes.get(this.run.archetypeId)?.spriteAssetId),
+      playerName: v2?.protagonist?.name || content.archetypes.get(this.run.archetypeId)?.name || 'You',
+      party: this.run.party.map((m) => monFile(this, m.speciesId, 'front', !!m.shiny)),
+      backdrop: this.arenaBgKey ? rxFileOf(this.cache.json.get('manifest') as AssetManifest | undefined, this.arenaBgKey)?.file ?? null : null,
+    };
+    let over = false;
+    let finish!: () => void;
+    const done = new Promise<void>((r) => (finish = r));
+    const end = (): void => {
+      if (over) return;
+      over = true;
+      view.destroy();
+      finish();
+    };
+    const view = mountRedux(this, { render: (c) => versusView(c, model), acts: { next: end } });
+    this.time.delayedCall(plain ? 1500 : this.motion === 'off' ? 1500 : 2600, end);
+    return { done, skip: end };
+  }
+
   /** The opening wipe or VS screen (EBDX transitions); any key skips it. */
   private async playIntro(): Promise<void> {
     const battle = this.run.battle!;
@@ -2607,11 +2655,14 @@ export class BattleScene extends Phaser.Scene {
     const st = services().session.settings;
     const foeName = this.boss()?.title ?? this.trainerTitle() ?? (battle.trainer ? 'The trainer' : this.speciesName(battle.enemyTeam[0]!));
     const recap = introRecap(kind, foeName);
+    // New UI: every Trainer fight opens on the mock-ups' versus card (it stands in for the wipe and the VS screen).
+    const card = this.rx && battle.trainer ? this.rxVersus(kind === 'trainer') : null;
+    if (card) await this.playBeat(card, recap);
     if (kind === 'trainer' || kind === 'wild' || kind === 'wild-dark') {
       await this.playContextMoment();
       return;
     }
-    if (vs && vsScreenReady(this, vs)) await this.playBeat(vsScreen(this, vs, this.motion, capFlash(st.effectIntensity, st.reducedFlash)), recap);
+    if (card) { /* the card was the opening */ } else if (vs && vsScreenReady(this, vs)) await this.playBeat(vsScreen(this, vs, this.motion, capFlash(st.effectIntensity, st.reducedFlash)), recap);
     else await this.playBeat(introTransition(this, kind, this.motion, art ? (x, y) => trainerVisual(this, art.assetId, art.label, x, y, 2.5) : undefined), recap);
     // Bosses and rivals get a title card: who they are and what they specialise in.
     const boss = this.boss();

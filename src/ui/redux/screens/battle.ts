@@ -182,7 +182,7 @@ export function battleView(c: ReduxCtx, d: BattleModel): string {
       const parts = [`<b style="white-space:nowrap">${esc(b.name)}</b>`, tags(b), `<span class="sm" style="white-space:nowrap">${esc(b.level)}</span>`, `<div class="grow">${bar(b.hp)}</div>`];
       return (flip ? parts.reverse() : parts).join('');
     };
-    head = `<div class="abs win row" style="left:0;right:0;top:0;height:64px;padding:0 20px;gap:14px">${half(me, false)}<span class="vsx" style="font-size:34px">VS</span>${half(foe, true)}</div><div class="abs row" style="left:20px;top:72px;gap:10px">${d.party ? balls(d.party.n, d.party.out, 18) : ''}${me?.hpText ? `<span class="sm" style="color:#fff;text-shadow:1px 1px 0 #000">${esc(me.hpText)}</span>` : ''}</div>${foe?.team ? `<div class="abs" style="right:20px;top:72px">${balls(foe.team.n, foe.team.out, 18)}</div>` : ''}`;
+    head = !me && !foe ? '' : `<div class="abs win row" style="left:0;right:0;top:0;height:64px;padding:0 20px;gap:14px">${half(me, false)}<span class="vsx" style="font-size:34px">VS</span>${half(foe, true)}</div><div class="abs row" style="left:20px;top:72px;gap:10px">${d.party ? balls(d.party.n, d.party.out, 18) : ''}${me?.hpText ? `<span class="sm" style="color:#fff;text-shadow:1px 1px 0 #000">${esc(me.hpText)}</span>` : ''}</div>${foe?.team ? `<div class="abs" style="right:20px;top:72px">${balls(foe.team.n, foe.team.out, 18)}</div>` : ''}`;
   } else {
     const foe = d.foes[0], me = d.mine[0];
     head = (foe ? box(foe, true, `left:20px;top:${v === 3 ? 20 : 26}px`) + (foe.team ? `<div class="abs" style="left:30px;top:${v === 3 ? 82 : 88}px">${balls(foe.team.n, foe.team.out, 14)}</div>` : '') : '') + (me ? box(me, false, mineAt) : '');
