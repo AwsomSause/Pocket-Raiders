@@ -24,6 +24,8 @@ export interface PickerBridge {
   hint: (i: number) => string;
   /** A Pokémon row's look, HP left (0 to 1) and short mark, for the battle windows. */
   mon?: (i: number) => { speciesId: string; shiny: boolean; hp: number; mark: string } | undefined;
+  /** A board row said outright (Bonds): its line, bar and tag are not read off the canvas row. */
+  board?: (i: number) => { title: string; sub: string; pct: number; tag: string } | undefined;
   /** The item a row stands for, if any (Bag). */
   item?: (i: number) => string | undefined;
   tabs?: { labels: readonly string[]; index: number; onChange: (index: number) => void };
@@ -44,6 +46,7 @@ export type PickerKind = 'menu' | 'grid' | 'board' | 'bag' | 'window';
 /** Which template a list uses, by its title: the mock-ups' own rule for hub rooms (redux-07.js `kind`). */
 const KIND_BY_NAME: [RegExp, PickerKind][] = [
   [/^bag$/i, 'bag'],
+  [/^bonds?$/i, 'board'],
   // The mock-up catalogue names these screens outright (redux-explorer.js SETS); the rule below covers the rest.
   [/^(lore|story|remembrance) archive|^tales|^run history|^trainer quests|^event hall|^content status|^seed board|run journal|memory lane|fallen trainers|battle replays|leaderboard|^bonds|story journal|^rival|^people|relationships|field notes|^notes/i, 'board'],
   [/^bank|^mentors|^mod packs|district|preparation desk|^camp|in this run|raid prep|^menu$/i, 'menu'],
@@ -153,6 +156,8 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
     const near = (i: number): boolean => Math.abs(i - index) < 8;
     const rows = Array.from({ length: n }, (_, i): BoardRow => {
       if (!near(i)) return { title: '', sub: '' };
+      const said = p.board?.(i);
+      if (said) return { ...said, off: p.problem(i) !== null };
       const r = row(i), prog = boardProgress(r.tag);
       // A count ("2/5") becomes the mock-ups' progress bar, a state tag and the count in words under the title.
       return prog

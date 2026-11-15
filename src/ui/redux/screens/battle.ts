@@ -168,6 +168,14 @@ const panelBody = (p: BattlePanel, tip: boolean): string =>
   `<div class="row"><b class="acc grow">${esc(p.head)}</b>${tip ? p.chips.map(ty).join('') : ''}${p.tag ? `<span class="tg" style="font-size:11px;padding:1px 6px">${esc(p.tag)}</span>` : ''}</div>${!tip && p.chips.length ? `<div class="row" style="gap:6px">${p.chips.map(ty).join('')}</div>` : ''}${(p.lead ?? []).map((t) => `<div style="font-size:14px;font-weight:700">${esc(t)}</div>`).join('')}${facts(p.facts)}${p.lines.map((t) => `<div class="sm" style="line-height:19px">${esc(t)}</div>`).join('')}`;
 
 
+/** A move's details as the mock-ups' tooltip window (`tooltip`): beside the tray, never taking a click. */
+export const tipWindow = (p: BattlePanel, bottom = 150): string =>
+  W(panelBody(p, true), `position:absolute;right:60px;bottom:${bottom}px;width:330px;display:flex;flex-direction:column;gap:6px;padding:10px 14px;z-index:8;pointer-events:none`);
+
+/** A Pokémon's Ability card (`ability`): the name, what it does, then its facts. A pinned card closes on a click. */
+export const cardWindow = (p: BattlePanel, pinned = false): string =>
+  W(`<div class="row"><b class="acc grow">${esc(p.head)}</b>${p.tag ? `<span class="tg" style="font-size:11px;padding:1px 6px">${esc(p.tag)}</span>` : ''}</div>${p.lines.map((t) => `<div class="sm" style="line-height:19px">${esc(t)}</div>`).join('')}${facts(p.facts)}`, `position:absolute;left:330px;top:150px;width:320px;display:flex;flex-direction:column;gap:6px;padding:10px 14px;z-index:8;${pinned ? 'cursor:pointer' : 'pointer-events:none'}`, '', pinned ? act('pin', '') : '');
+
 const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
 const pct = (r: number): number => Math.max(0, Math.min(100, Math.round(r * 100)));
 const balls = (n: number, out: number, b: number): string => `<div class="row" style="gap:5px">${Array.from({ length: Math.max(0, Math.min(6, n)) }, (_, k) => `<i class="ball${k >= n - out ? ' out' : ''}" style="--b:${b}px"></i>`).join('')}</div>`;
@@ -251,8 +259,8 @@ export function battleView(c: ReduxCtx, d: BattleModel): string {
     : d.panelAt === 'tip'
       ? W(panelBody(d.panels[0]!, true), tipAt, '', act('info'))
       : `<div class="abs" style="left:20px;top:92px;height:${room}px;display:flex;flex-direction:column;flex-wrap:wrap;align-content:flex-start;gap:8px 6px;z-index:8"${act('info')}>${d.panels.map((p) => W(panelBody(p, false), `width:${d.panels!.length > 2 ? 284 : 310}px;${win}`)).join('')}</div>`;
-  const tip = d.tip && !d.panels?.length ? W(panelBody(d.tip, true), `${tipAt.replace(';cursor:pointer', '')};pointer-events:none`) : '';
-  const card = d.card ? W(`<div class="row"><b class="acc grow">${esc(d.card.head)}</b>${d.card.tag ? `<span class="tg" style="font-size:11px;padding:1px 6px">${esc(d.card.tag)}</span>` : ''}</div>${d.card.lines.map((t) => `<div class="sm" style="line-height:19px">${esc(t)}</div>`).join('')}${facts(d.card.facts)}`, `position:absolute;left:330px;top:150px;width:320px;display:flex;flex-direction:column;gap:6px;padding:10px 14px;z-index:8;${d.card.pinned ? 'cursor:pointer' : 'pointer-events:none'}`, '', d.card.pinned ? act('pin', '') : '') : '';
+  const tip = d.tip && !d.panels?.length ? tipWindow(d.tip, Math.max(150, top + (d.tabs ? 42 : 8) + 34)) : '';
+  const card = d.card ? cardWindow(d.card, !!d.card.pinned) : '';
   const log = d.log ? W(`<div class="tabs" style="margin-bottom:6px">${d.log.tabs.map((t, k) => `<span class="${k === d.log!.index ? 'on' : ''}" style="cursor:pointer"${act('log', k)}>${esc(t)}</span>`).join('')}</div>${d.log.lines.length ? d.log.lines.map((l) => `<span class="sm">${esc(l)}</span>`).join('') : '<span class="sm" style="opacity:.7">Nothing here yet.</span>'}`, `position:absolute;left:20px;top:92px;width:430px;max-height:${room}px;overflow:hidden;${win.replace(';cursor:pointer', '')};z-index:8`) : '';
   // The transform buttons sit over the tray, across from the page tabs.
   const gimAt = v === 2 ? 'right:40px;bottom:132px' : v === 3 ? `right:20px;bottom:${Math.max(222, top + 8) + 42}px` : `left:20px;bottom:${Math.max(v === 1 ? 138 : 128, top + 8)}px`;

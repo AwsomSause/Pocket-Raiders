@@ -14,9 +14,9 @@ export function mon(file: string, k = 3, cls = '', play = false): string {
   return `<i class="an ${cls}" data-a="${file}" data-k="${k}"${play ? ' data-play' : ''} style="width:${a.sw * k}px;height:${a.sh * k}px"><b style="left:${ox * k}px;top:${oy * k}px;width:${w * k}px;height:${h * k}px;background-image:url(${rxUrl(file + '.png')});background-position:${-x * k}px ${-y * k}px;background-size:${a.w * k}px ${a.h * k}px"></b></i>`;
 }
 /** A sprite fitted into a square of `size`. */
-export function mini(file: string, size = 48, cls = ''): string {
+export function mini(file: string, size = 48, cls = '', play = false): string {
   const a = rxAtlas(file);
-  return a ? mon(file, size / Math.max(a.sw, a.sh), cls) : '';
+  return a ? mon(file, size / Math.max(a.sw, a.sh), cls, play) : '';
 }
 /** A sprite scaled to a height. */
 export function tall(file: string, px: number, cls = ''): string {
