@@ -33,9 +33,13 @@ Kice's ask (2026-11-14): rebuild every event, the Evil Team documents, the rival
 ## Gotcha
 After adding a new `co-*.json` file, tests may still see the old event list. Run `rm -rf node_modules/.vitest-cache node_modules/.vite` once and re-run.
 
+## Shared pieces board
+`/mnt/project-files/plans/catalog-overhaul/STANDARDS.md` lists every shared piece (placement data format, pseudo-stage files, Signs and Tellings, mini-games, the inside route, the pick choice), its owner and its state. Read it before inventing one.
+
 ## Patterns
+- Pick a Pokémon ("Who soaks first?"): `ch('Who soaks first?', out('...', fr(5, 'picked')), { pick: {} })`; `pick: { types: ['fire'] }` narrows the list. `friendship` and `levels` take `who: 'picked'`. The screens show it with the existing picker.
 - Remember something: `flag('key')` adds 1 to a run flag; `flagIs('key')` or `{ kind: 'flag', key, atLeast, atMost }` reads it. Pack flag `kind.helped_stranger` is key `kind-helped-stranger`.
 - Count visits ("a perk on the third visit"): add `flag('market-<seller>-visits')` to every visit's outcomes and give the event a `remembers` variant with `when: [{ kind: 'flag', key: 'market-<seller>-visits', atLeast: 2 }]`.
 - Once per run: `requires: [{ kind: 'flag', key: '<event>-done', atMost: 0 }]` plus `flag('<event>-done')` in every outcome (or the `eventSeen` condition).
-- Map placement (earliest stage, home step, shape, level offset): use `minStage`, `requires`, `callback`, `forced`, `room` and `addEvent` today. The pack's placement shapes are being added by the lead thread; ask there before inventing one.
+- Map placement: write the doc's placement block to `src/data/catalogOverhaul/placement/<category>.json` (shape in the board above) and also set `minStage`, `requires`, `callback`, `forced`, `room` and `addEvent` so the event plays today. The lead thread is building the placer that reads those files.
 - A missing engine piece (an effect or condition the doc needs): add it in `core/` with a unit test, in its own file where you can. Do not replace it with a stand-in.

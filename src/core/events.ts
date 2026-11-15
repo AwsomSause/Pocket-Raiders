@@ -300,6 +300,11 @@ function tradePicksOf(content: Content, run: RunState, choice: EventChoice): { u
   // Clone Core: the player picks which other party Pokémon gets the lead's moves.
   if (choice.success.effects.some((f) => f.kind === 'copyMoves')) return run.party.slice(1).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
   const e = choice.success.effects.find((f) => f.kind === 'tradeAway' || f.kind === 'tradeFor');
+  // Catalog Overhaul: a "pick a Pokémon" choice lists the whole party (or only the given types).
+  if (!e && choice.pick) {
+    const types = choice.pick.types;
+    return run.party.filter((m) => types.length === 0 || (content.species.get(m.speciesId)?.types ?? []).some((t) => types.includes(t))).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
+  }
   if (!e || (e.kind !== 'tradeAway' && e.kind !== 'tradeFor')) return null;
   return tradeCandidates(content, run, e.want).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}` }));
 }
@@ -1125,6 +1130,12 @@ export function isGiftable(content: Content, id: string): boolean {
 }
 
 /** Applies one effect (mutates `run`) and says what changed, or '' when nothing did. */
+/** The Pokémon a "pick a Pokémon" choice named, or the lead (the first able to fight) when none was. */
+function pickedMon(run: RunState, uid?: string): RunState['party'] {
+  const mon = run.party.find((m) => m.uid === uid) ?? run.party.find((m) => m.hp > 0) ?? run.party[0];
+  return mon ? [mon] : [];
+}
+
 export function applyEffect(content: Content, run: RunState, e: EventEffect, rng: Rng, tradeUid?: string): string {
   switch (e.kind) {
     case 'money': {
@@ -1220,7 +1231,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     }
     case 'friendship': {
       const gain = runAttributeEffects(content, run).friendship;
-      const who = e.who === 'lead' ? run.party.filter((m) => m.hp > 0).slice(0, 1) : run.party;
+      const who = e.who === 'picked' ? pickedMon(run, tradeUid) : e.who === 'lead' ? run.party.filter((m) => m.hp > 0).slice(0, 1) : run.party;
       for (const m of who) changeFriendship(content, m, e.amount, e.amount > 0 ? gain : 1);
       return effectWords(content, e);
     }
@@ -1234,7 +1245,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const cap = runLevelCap(content, run);
       const able = run.party.filter((m) => m.hp > 0);
       // The weakest is the lowest level (the first one on a tie): catch-up for a Pokémon that fell behind.
-      const who = e.who === 'lead' ? able.slice(0, 1) : e.who === 'weakest' ? [...able].sort((a, b) => a.level - b.level).slice(0, 1) : run.party;
+      const who = e.who === 'picked' ? pickedMon(run, tradeUid) : e.who === 'lead' ? able.slice(0, 1) : e.who === 'weakest' ? [...able].sort((a, b) => a.level - b.level).slice(0, 1) : run.party;
       let gained = 0;
       for (const m of who) gained += addLevels(content, m, e.amount, cap).levelsGained;
       return gained > 0 ? effectWords(content, e) : '';

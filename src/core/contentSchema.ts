@@ -3023,11 +3023,11 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Restores every move's PP for the whole party (Erika's tea). */
   z.object({ kind: z.literal('restorePp') }),
   z.object({ kind: z.literal('status'), status: z.enum(['poison', 'burn', 'paralysis', 'sleep']), who: z.enum(['party', 'lead']).default('party'), except: z.array(TypeNameSchema).max(4).default([]) }),
-  z.object({ kind: z.literal('friendship'), amount: z.number().int(), who: z.enum(['lead', 'party']).default('party') }),
+  z.object({ kind: z.literal('friendship'), amount: z.number().int(), who: z.enum(['lead', 'party', 'picked']).default('party') }),
   z.object({ kind: z.literal('attribute'), key: AttributeKeySchema, amount: z.number().int() }),
   /** Research Points, paid at the end of the run. */
   z.object({ kind: z.literal('research'), amount: z.number().int().positive() }),
-  z.object({ kind: z.literal('levels'), amount: z.number().int().positive(), who: z.enum(['lead', 'party', 'weakest']).default('lead') }),
+  z.object({ kind: z.literal('levels'), amount: z.number().int().positive(), who: z.enum(['lead', 'party', 'weakest', 'picked']).default('lead') }),
   /** A Pokémon joins (or goes to storage when the party is full): a listed species, or one of the types, or the stage's theme. */
   z.object({ kind: z.literal('join'), species: z.array(z.string()).default([]), types: z.array(TypeNameSchema).default([]), levelBonus: z.number().int().default(0), shinyMultiplier: z.number().min(1).default(1), shadow: z.boolean().default(false), blissful: z.boolean().default(false), hiddenAbility: z.boolean().default(false), /** It joins with this ability instead of its own (Squad Squirtle: Contrary). */ ability: z.string().optional(), /** Anime Forms art (core/animeLooks.ts; the Squad Squirtle). Presentation only. */ look: z.enum(ANIME_LOOKS).optional(), /** Beta 0.6 Vermilion: it joins at exactly this level (Flight North's Caterpie is level 5), not the stage's event level. */ level: z.number().int().min(1).max(100).optional(), /** Beta 0.6 Vermilion: it joins knowing these moves too (the Kaiju Tentacool's Liquidation); a full moveset loses its last move. */ moves: z.array(z.string()).max(4).default([]), /** Beta 0.6 Vermilion: it goes straight into the party with no accept prompt (a companion for a stage; the lone Bug-type of Flight North). */ direct: z.boolean().default(false), /** Beta 0.7 Route 25: it joins fonder of you, with this much extra friendship (the troop's thanks when the food came back). */ friendship: z.number().int().min(1).max(100).optional() }),
   /** A seedling grows in the Berry Garden (core/berries.ts): a held-berry plot, optionally mutated; the garden must have room. */
@@ -3405,6 +3405,9 @@ export const EventChoiceSchema = z.object({
   chance: z.number().min(0).max(1).optional(),
   /** Ideas W5: a skill prompt (core/interaction/prompt.ts, widget ui/interactionPrompt.ts) decides the outcome: success when the grade reaches `needs`. */
   prompt: z.object({ id: z.string().min(1), needs: z.enum(PROMPT_GRADES).default('good') }).optional(),
+  /** Catalog Overhaul: the player picks one party Pokémon for this choice ("Who soaks first?"). Effects with `who: 'picked'` land on it
+   *  (the lead when nothing was picked). `types` narrows the list. The screens show it with the trade picker. */
+  pick: z.object({ types: z.array(TypeNameSchema).max(4).default([]) }).optional(),
   success: EventOutcomeSchema,
   /** What happens when the check or chance fails (needed when there is one). */
   failure: EventOutcomeSchema.optional(),

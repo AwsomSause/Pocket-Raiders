@@ -32,8 +32,8 @@ export function ev(id: string, name: string, group: string, o: EventOpts, intro:
 }
 
 /** A choice. `fail` is required with a check or chance. */
-export function ch(label: string, success: Json, o: { requires?: Json[]; check?: string; chance?: number; prompt?: { id: string; needs: 'ok' | 'good' | 'perfect' }; fail?: Json } = {}): Json {
-  return { label, ...(o.requires ? { requires: o.requires } : {}), ...(o.check ? { check: o.check } : {}), ...(o.chance !== undefined ? { chance: o.chance } : {}), ...(o.prompt ? { prompt: o.prompt } : {}), success, ...(o.fail ? { failure: o.fail } : {}) };
+export function ch(label: string, success: Json, o: { requires?: Json[]; check?: string; chance?: number; prompt?: { id: string; needs: 'ok' | 'good' | 'perfect' }; fail?: Json; pick?: { types?: string[] } } = {}): Json {
+  return { label, ...(o.requires ? { requires: o.requires } : {}), ...(o.check ? { check: o.check } : {}), ...(o.chance !== undefined ? { chance: o.chance } : {}), ...(o.prompt ? { prompt: o.prompt } : {}), ...(o.pick ? { pick: o.pick } : {}), success, ...(o.fail ? { failure: o.fail } : {}) };
 }
 
 export const out = (text: string, ...effects: Json[]): Json => ({ text, effects });
@@ -56,7 +56,7 @@ export const hurtExcept = (share: number, ...except: string[]): Json => ({ kind:
 export const statusLead = (s: 'poison' | 'burn' | 'paralysis' | 'sleep'): Json => ({ kind: 'status', status: s, who: 'lead' });
 export const cure = (): Json => ({ kind: 'cure' });
 export const status = (s: 'poison' | 'burn' | 'paralysis' | 'sleep'): Json => ({ kind: 'status', status: s });
-export const fr = (amount: number, who: 'lead' | 'party' = 'party'): Json => ({ kind: 'friendship', amount, who });
+export const fr = (amount: number, who: 'lead' | 'party' | 'picked' = 'party'): Json => ({ kind: 'friendship', amount, who });
 export const attr = (key: string, amount: number): Json => ({ kind: 'attribute', key, amount });
 export const good = (n: number): Json => attr('goodEvil', n);
 export const evil = (n: number): Json => attr('goodEvil', -n);
