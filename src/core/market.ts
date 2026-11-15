@@ -96,7 +96,7 @@ function effort(content: Content, run: RunState, e: MarketEffect, uid?: string):
   return lines.join(', ');
 }
 
-function prize(content: Content, run: RunState, e: MarketEffect, rng: Rng): string {
+function prize(content: Content, run: RunState, e: MarketEffect, rng: Rng, apply: (x: EventEffect) => string = () => ''): string {
   const table = e.table ?? [];
   if (table.length === 0) return '';
   const stake = e.stake ?? 0;
@@ -116,7 +116,8 @@ function prize(content: Content, run: RunState, e: MarketEffect, rng: Rng): stri
     }
     if (row.item) addItem(run.inventory, row.item, row.count ?? 1);
     if (row.flag) setFlag(run, row.flag, flagOf(run, row.flag) + 1);
-    if (row.money || row.item || row.flag) won.push(row.label);
+    if (row.event) apply({ kind: 'addEvent', eventId: row.event } as EventEffect);
+    if (row.money || row.item || row.flag || row.event) won.push(row.label);
     else if (times === 1) won.push(row.label);
   }
   if (played === 0) return 'Not enough money to play';
@@ -397,7 +398,7 @@ export function applyMarket(content: Content, run: RunState, e: MarketEffect, rn
     case 'effort':
       return effort(content, run, e, uid);
     case 'prize':
-      return prize(content, run, e, rng);
+      return prize(content, run, e, rng, apply);
     case 'sell':
       return sell(content, run, e);
     case 'pawn':

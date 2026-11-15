@@ -3215,7 +3215,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
     pick: z.enum(['stack', 'curio', 'junk']).optional(),
     only: z.array(z.string()).min(1).optional(),
     forfeit: z.boolean().optional(),
-    table: z.array(z.object({ weight: z.number().positive(), label: z.string().min(1), money: z.number().int().optional(), item: z.string().optional(), count: z.number().int().positive().optional(), flag: z.string().regex(/^[a-z][a-z0-9-]*$/).optional() })).min(1).optional(),
+    table: z.array(z.object({ weight: z.number().positive(), label: z.string().min(1), money: z.number().int().optional(), item: z.string().optional(), count: z.number().int().positive().optional(), flag: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(), /** This row also opens that event beside the node (a prize that needs a scene: keep it or give it back, a door with a Pokémon behind it). */ event: z.string().optional() })).min(1).optional(),
     times: z.number().int().min(1).max(10).optional(),
     stake: z.number().int().min(0).optional(),
   }),

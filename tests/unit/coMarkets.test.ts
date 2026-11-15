@@ -30,6 +30,7 @@ describe('co markets: content', () => {
       if (x.kind === 'item') expect(isGiftable(content, x.id), `${e.id} gives ${x.id}`).toBe(true);
       if (x.kind === 'itemFrom') for (const id of x.ids) expect(isGiftable(content, id), `${e.id} gives ${id}`).toBe(true);
       if (x.kind === 'market') for (const row of x.table ?? []) if (row.item) expect(content.items.has(row.item) || content.catalog.has(row.item), `${e.id} prize ${row.item}`).toBe(true);
+      if (x.kind === 'market') for (const row of x.table ?? []) if (row.event) expect(content.events.has(row.event), `${e.id} prize opens ${row.event}`).toBe(true);
       if (x.kind === 'addEvent') expect(content.events.has(x.eventId), `${e.id} opens ${x.eventId}`).toBe(true);
       if (x.kind === 'addEventFrom') for (const id of x.ids) expect(content.events.has(id), `${e.id} opens ${id}`).toBe(true);
       if (x.kind === 'addStop' && x.game) expect(content.minigames.games.some((g) => g.id === x.game), `${e.id} opens game ${x.game}`).toBe(true);
@@ -38,7 +39,7 @@ describe('co markets: content', () => {
   });
 
   it('every room is opened by some event, and no room is drawn on its own', () => {
-    const opened = new Set(events.flatMap((e) => effectsOf(e).flatMap((x) => (x.kind === 'addEvent' ? [x.eventId] : x.kind === 'addEventFrom' ? x.ids : []))));
+    const opened = new Set(events.flatMap((e) => effectsOf(e).flatMap((x) => (x.kind === 'addEvent' ? [x.eventId] : x.kind === 'addEventFrom' ? x.ids : x.kind === 'market' ? (x.table ?? []).flatMap((r) => (r.event ? [r.event] : [])) : []))));
     for (const e of events) if (e.room) expect(opened.has(e.id), `room ${e.id} is never opened`).toBe(true);
   });
 
