@@ -30,7 +30,7 @@ export const bindGnEffects = (schema: z.ZodType, conditions?: z.ZodType): void =
  *  - `stampStage`: the run flag `key` remembers the stage number now (read with the `gn` conditions `laterStage`, `sameStage`, `notThisStage`).
  *  - `partyHas`: the run flag `key` becomes 1 when a party Pokémon is one of `species`, else 0 (a Clefairy or Clefable sees the secret dance).
  */
-export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry', 'ahead', 'check', 'addParty', 'markParty', 'dropUnmarked'] as const;
+export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry', 'ahead', 'check', 'addParty', 'markParty', 'dropUnmarked', 'minigame'] as const;
 export const GnEffectSchema = z.object({
   kind: z.literal('gn'),
   op: z.enum(GN_OPS),
@@ -58,6 +58,8 @@ export const GnEffectSchema = z.object({
   // gn.17. addParty: adds to flag `key` one for each party Pokémon still standing (each pulls one out of the pits). markParty: every Pokémon
   // in the party and the box carries mark `key`. dropUnmarked: Pokémon without mark `key` are lost (caught inside a factory that locked down).
   .refine((e) => (e.op === 'addParty' || e.op === 'markParty' || e.op === 'dropUnmarked' ? !!e.key : true), { message: 'needs `key`' })
+  // gn.18. minigame: a stop for minigame `key` (minigames.json) on the node you stand on (Safari Land's gate opens the park).
+  .refine((e) => (e.op === 'minigame' ? !!e.key : true), { message: 'a minigame needs `key` (the game)' })
   .refine((e) => (e.op === 'partyHas' ? !!e.key && !!e.species : true), { message: 'a partyHas needs `key` and `species`' })
   // leadBoost: the lead's next battle opens with stat `type` at `n` stages ("the lead starts its next battle at -1 Speed").
   .refine((e) => (e.op === 'leadBoost' ? ['atk', 'def', 'spa', 'spd', 'spe', 'acc'].includes(e.type ?? '') && !!e.n : true), { message: 'a leadBoost needs a stat `type` and `n`' })

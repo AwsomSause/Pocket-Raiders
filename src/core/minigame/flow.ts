@@ -9,6 +9,8 @@ import type { Content } from '../contentSchema';
 import type { RunState } from '../state';
 import { gameModule, type MinigameView } from './games';
 import type { Medal, MinigameDef } from './schema';
+import { SAFARI_ID, type SafariState } from '../greenneedle/safari';
+import { safariBegin, safariFinish } from '../greenneedle/safariEnd';
 
 export function getMinigame(content: Content, id: string): MinigameDef {
   const g = content.minigames.games.find((m) => m.id === id);
@@ -56,6 +58,7 @@ export function beginMinigame(content: Content, current: RunState, sideId: strin
   const stage = requireStage(run);
   const rs = new Rng(hashSeed(`${run.seed}::minigame::${stage.index}:${sideId}:${used}:${tier}`)).state;
   run.minigame = { id: def.id, sideId, tier, state: gameModule(def.id).start(content, { ...def.difficultyTiers[tier]!.params, ...conditionParams(run) }, rs), outcome: null };
+  if (def.id === SAFARI_ID) safariBegin(content, run, run.minigame.state as SafariState);
   run.phase = 'minigame';
   return run;
 }
@@ -113,6 +116,7 @@ function settle(content: Content, run: RunState): RunState {
   if (!(s.state as { done: boolean }).done || s.outcome) return run;
   const { score, max } = mod.result(s.state as never);
   s.outcome = payout(content, run, getMinigame(content, s.id), s.tier, score, max);
+  if (s.id === SAFARI_ID) s.outcome.lines.push(...safariFinish(content, run, s.state as SafariState));
   if (s.id === 'berry-blending') {
     const line = poffinConditions(run, s.state as never, s.outcome.medal);
     if (line) s.outcome.lines.push(line);

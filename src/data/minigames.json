@@ -3158,6 +3158,63 @@
         "slowFactor": 1,
         "noTimerOption": false
       }
+    },
+    {
+      "id": "gn-safari",
+      "name": "Safari Land",
+      "category": "resource",
+      "blurb": "A wildlife documentary, with Balls.",
+      "instructions": "30 Safari Balls, 500 steps, no battles. Walk, wait and watch: the quieter you are, the more you see. In each encounter throw a Ball, bait or a rock, or leave. Every chance is shown.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "visit",
+          "label": "Visit",
+          "params": {
+            "steps": 500,
+            "balls": 30
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 1,
+      "scoringRules": "What you catch is yours. The warden buys good photographs and judges how quiet you were.",
+      "medals": {
+        "bronze": 0.1,
+        "silver": 0.2,
+        "gold": 0.3
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        },
+        "gold": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        }
+      },
+      "failureOutcome": "Nothing is lost. The park is still there.",
+      "replayRules": "Once a region (a second free visit when the warden says so).",
+      "uiConfiguration": {
+        "layout": "choices",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": true
+      },
+      "eventOnly": true
     }
   ]
 }

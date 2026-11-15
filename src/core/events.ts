@@ -1835,7 +1835,7 @@ function pickSpecies(content: Content, run: RunState, species: string[], types: 
 }
 
 /** `stageOffset`: a placed event's level line (A-2 to A+2): the game's own level for that many stages earlier or later. */
-function eventLevel(content: Content, run: RunState, node: MapNode, rng: Rng, stageOffset = 0): number {
+export function eventLevel(content: Content, run: RunState, node: MapNode, rng: Rng, stageOffset = 0): number {
   const stage = run.stage!;
   const scale = withPartyStrength(content, levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, Math.max(0, stage.index + stageOffset), node.column), run.party.map((p) => p.level));
   return enemyLevel(content, getArchetype(content, run.archetypeId), scale, 0, rng).level;

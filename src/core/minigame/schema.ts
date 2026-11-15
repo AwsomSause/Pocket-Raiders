@@ -35,6 +35,8 @@ export const MinigameDefSchema = z.object({
   replayRules: z.string().min(1),
   uiConfiguration: z.object({ layout: z.enum(['grid', 'choices']), tickMs: z.number().int().min(0) }),
   accessibilityOptions: z.object({ slowFactor: z.number().min(1).max(4), noTimerOption: z.boolean() }),
+  /** Only a story event opens it (Greenneedle's Safari Land); never drawn as a random map stop. */
+  eventOnly: z.boolean().default(false),
 });
 export type MinigameDef = z.infer<typeof MinigameDefSchema>;
 

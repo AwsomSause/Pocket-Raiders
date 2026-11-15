@@ -640,6 +640,51 @@
   ],
   "tags": []
  },
+ "gn-18-gate": {
+  "gn": "gn.18",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 12,
+  "window": [
+   10,
+   15
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "level": "No battles; catches at A+0",
+  "often": "region",
+  "badge": "own",
+  "dressing": {
+   "kanto": "Safari Land",
+   "kantoStage": "Fuchsia (the canon space)",
+   "elsewhere": "Safari Land"
+  },
+  "note": "Badge: a paw print. The park is the gn-safari minigame stop the gate opens. Until towns exist it sits on step 12. Kanto shows it through cs-kanto-fuchsia-safari.",
+  "kinds": [
+   "Hub Destination",
+   "Community Episode"
+  ],
+  "tags": []
+ },
+ "gn-18-return": {
+  "gn": "gn.18",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 14,
+  "window": [
+   10,
+   20
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "level": "No battles",
+  "often": "region",
+  "note": "The free second visit, after a visit that ended on Quiet 8 or more, the same region.",
+  "kinds": [
+   "Hub Destination"
+  ],
+  "tags": []
+ },
  "gn-17-fishing": {
   "gn": "gn.17",
   "shape": "Single",

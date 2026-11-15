@@ -5,6 +5,10 @@ import { content } from './helpers';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { takeTurn } from '../../src/core/run';
 import { FOE_WAITS } from '../../src/core/greenneedle';
+import { SAFARI_ID, type SafariState } from '../../src/core/greenneedle/safari';
+import { gameModule } from '../../src/core/minigame/games';
+import { beginMinigame, minigameAct } from '../../src/core/minigame/flow';
+import { hashSeed, Rng } from '../../src/core/rng';
 import { SLUDGE_OFF, SLUDGE_TURNS, factoryTurnEnd, factoryWildWeight } from '../../src/core/greenneedle/factory';
 import { RIVAL_RETURN_EVENT } from '../../src/core/expansion/canonSaffron';
 import { choose, flagOf, gnRun, lose, open, scene, setFlag, win } from './helpers/gnPlay';
@@ -367,5 +371,179 @@ describe('gn.17 The Polluted Factory', () => {
     expect(me.status).toBeFalsy();
     expect(after.run.party.find((m) => m.uid === 'gap-muk')!.status?.id).toBe('par');
     expect(after.run.battle?.storyEffects ?? []).toContain('stopgap:gap-muk');
+  });
+});
+
+describe('gn.18 Safari Land', () => {
+  const fresh = (): SafariState => gameModule(SAFARI_ID).start(content, { steps: 500, balls: 30 }, new Rng(hashSeed('t18-park')).state) as unknown as SafariState;
+  const act = (s: SafariState, id: string): SafariState => {
+    gameModule(SAFARI_ID).act(content, s as never, id);
+    return s;
+  };
+  const cells = (s: SafariState) => gameModule(SAFARI_ID).view(content, s as never).cells;
+  /** The gate paid, the park's stop on the node, and the visit started. */
+  const visit = (seed: string, setup: (run: RunState) => void = () => {}): RunState => {
+    const run = gnRun(seed);
+    run.money = 2000;
+    setup(run);
+    open(run, 'gn-18-gate');
+    const paid = choose(run, 'gn-18-gate', run.story.flags['ev:safari-fee-up'] ? 'Pay ₽800 and go in.' : 'Pay ₽500 and go in.').run;
+    const here = paid.stage!.map.nodes.find((n) => n.id === paid.stage!.current)!;
+    const stop = here.sides.find((x) => x.kind === 'minigame' && x.minigameId === SAFARI_ID)!;
+    return beginMinigame(content, paid, stop.id, 0);
+  };
+
+  it('in the town (until towns exist step 12, window 10 to 15), once a region; the park never turns up as a random minigame stop', () => {
+    expect(content.coPlacement!.get('gn-18-gate')).toMatchObject({ home: 12, window: [10, 15], sits: 'optional', attaches: 'town' });
+    expect(content.events.get('gn-18-gate')!.requires).toContainEqual(expect.objectContaining({ kind: 'gn', test: 'notThisRegion', key: 'safari-at' }));
+    expect(content.minigames.games.find((g) => g.id === SAFARI_ID)).toMatchObject({ eventOnly: true, attemptLimit: 1 });
+    expect(content.events.get('cs-kanto-fuchsia-safari')!.canon).toBe('cs.kanto.fuchsia.safari');
+  });
+
+  it('₽500 to enter: 30 Safari Balls and 500 steps; after a loud visit it costs ₽800', () => {
+    const run = visit('t18-gate');
+    expect(run.money).toBe(1500);
+    expect(run.phase).toBe('minigame');
+    const s = run.minigame!.state as SafariState;
+    expect([s.balls, s.steps, s.quiet]).toEqual([30, 500, 0]);
+    expect(visit('t18-gate-b', (r) => setFlag(r, 'safari-fee-up')).money).toBe(1200);
+    expect((visit('t18-alpha', (r) => setFlag(r, 'alpha-calmed')).minigame!.state as SafariState).quiet).toBe(3);
+  });
+
+  it('Quiet rises when you walk, wait and watch, and falls when you run or throw a rock; every chance is shown', () => {
+    const s = fresh();
+    act(s, 'wait');
+    expect(s.quiet).toBe(1);
+    s.mode = 'walk';
+    s.mon = null;
+    act(s, 'look');
+    expect(s.quiet).toBe(2);
+    s.mode = 'walk';
+    s.mon = null;
+    act(s, 'run');
+    expect(s.quiet).toBe(1);
+    expect(s.steps).toBe(500 - 3 - 5 - 5);
+    // An encounter: Ball, bait, rock or leave, with the chances.
+    s.mode = 'meet';
+    s.mon = { species: 'tauros', catchP: 0.3, fleeP: 0.12, behaviour: 'grazing', noticed: true, star: false, hungry: null, fed: false, dragonair: false };
+    expect(cells(s).map((c) => c.label)).toEqual(['Throw a Ball', 'Throw bait', 'Throw a rock', 'Leave']);
+    expect(gameModule(SAFARI_ID).view(content, s as never).prompt).toMatch(/catch 30%, wanders off 12%/);
+    // Bait: easier to catch, likelier to wander off (held at 0% here so the test sees it stay).
+    s.mon.fleeP = -0.1;
+    act(s, 'bait');
+    expect(s.mon!.catchP).toBeCloseTo(0.45);
+    expect(s.mon!.fleeP).toBeCloseTo(0);
+    s.mon!.fleeP = 0.12;
+    const q = s.quiet;
+    act(s, 'rock');
+    if (s.mon) expect(s.mon.catchP).toBeCloseTo(0.35);
+    expect(s.quiet).toBe(Math.max(0, q - 1));
+  });
+
+  it('a Kangaskhan family crosses the plain once; nothing can be thrown at it; the warden buys a photo of the young one', () => {
+    const s = fresh();
+    act(s, 'camera');
+    act(s, 'walk');
+    if (s.mode === 'meet') act(s, 'leave');
+    act(s, 'walk');
+    expect(s.mode).toBe('family');
+    expect(cells(s).find((c) => c.id === 'ball')).toMatchObject({ disabled: true, detail: "Not while the young one's out of the pouch" });
+    act(s, 'photo');
+    expect(s.photoBest).toBe(10);
+    expect(s.photoMoney).toBe(800);
+    act(s, 'leave');
+    expect(s.familySeen).toBe(true);
+  });
+
+  it('two herds at the waterhole: wait three times and one backs down, which changes who lives there', () => {
+    const s = fresh();
+    act(s, 'next');
+    expect(s.mode).toBe('herd');
+    act(act(act(s, 'wait'), 'wait'), 'wait');
+    expect(['rhyhorn', 'tauros']).toContain(s.herd);
+    expect(s.mode).toBe('walk');
+  });
+
+  it('tracking to a nest (two forks): leaving the egg is Quiet +2; a wrong print loses the trail', () => {
+    const s = fresh();
+    s.area = 2;
+    act(s, 'track');
+    const right = s.track!.print;
+    act(act(s, `print:${right}`), `print:${right}`);
+    expect(s.mode).toBe('nest');
+    const q = s.quiet;
+    act(s, 'leaveNest');
+    expect([s.quiet, s.nestLeft]).toEqual([q + 2, true]);
+    const t = fresh();
+    t.area = 3;
+    act(t, 'track');
+    act(t, `print:${(t.track!.print + 1) % 3}`);
+    expect([t.mode, t.egg]).toEqual(['walk', null]);
+  });
+
+  it('feeding: the right food from its behaviour doubles the catch chance; at Quiet 8 it simply follows you', () => {
+    const s = fresh();
+    s.mode = 'meet';
+    s.mon = { species: 'ponyta', catchP: 0.3, fleeP: 0, behaviour: 'grazing', noticed: true, star: false, hungry: 1, fed: false, dragonair: false };
+    expect(gameModule(SAFARI_ID).view(content, s as never).prompt).toMatch(/looking up/);
+    act(s, 'feed:fruit');
+    expect(s.mon!.catchP).toBeCloseTo(0.6);
+    s.quiet = 8;
+    s.mon = { species: 'ponyta', catchP: 0.3, fleeP: 0, behaviour: 'grazing', noticed: true, star: false, hungry: 0, fed: false, dragonair: false };
+    act(s, 'feed:roots');
+    expect(s.caught).toEqual(['ponyta']);
+  });
+
+  it('at Quiet 8 or more, a Dragonair asleep on a rock in the Far Marsh, and only then', () => {
+    const s = fresh();
+    s.area = 3;
+    s.migrationSeen = true;
+    s.quiet = 9;
+    for (let i = 0; i < 40 && s.mode !== 'meet'; i++) act(s, 'wait');
+    expect(s.mon).toMatchObject({ species: 'dragonair', behaviour: 'sleeping', noticed: false });
+    const low = fresh();
+    low.area = 3;
+    low.migrationSeen = true;
+    low.quiet = 4;
+    for (let i = 0; i < 40; i++) {
+      act(low, 'wait');
+      expect(low.mon?.species).not.toBe('dragonair');
+      low.mode = 'walk';
+      low.mon = null;
+      low.quiet = 4;
+    }
+  });
+
+  it('leaving: the catches join at A+0, the photos are paid, the warden judges the Quiet; in Kanto the Stampede and the Gold Teeth are inside', () => {
+    let run = visit('t18-end');
+    const s = run.minigame!.state as SafariState;
+    s.caught = ['tauros', 'dratini'];
+    s.photoMoney = 400;
+    s.quiet = 9;
+    const money = run.money;
+    run = minigameAct(content, run, 'exit');
+    expect(run.minigame!.outcome!.lines.join(' ')).toMatch(/barely here/);
+    expect(run.money).toBe(money + 400);
+    expect(run.pending.filter((p) => p.kind === 'caught').map((p) => (p.kind === 'caught' ? p.mon.speciesId : ''))).toEqual(['tauros', 'dratini']);
+    expect(flagOf(run, 'safari-free')).toBe(run.regionIndex + 1);
+    expect(flagOf(run, 'safari-quiet')).toBe(9);
+    const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+    if (run.regionOrder[run.regionIndex] === 'kanto') expect(here.sides.some((x) => x.eventId === 'cs-kanto-fuchsia-tauros')).toBe(true);
+    const loud = visit('t18-loud');
+    (loud.minigame!.state as SafariState).quiet = 2;
+    const after = minigameAct(content, loud, 'exit');
+    expect(after.minigame!.outcome!.lines.join(' ')).toMatch(/upset for a week/);
+    expect(flagOf(after, 'safari-fee-up')).toBe(1);
+  });
+
+  it('every action costs steps, so a visit always ends', () => {
+    const s = fresh();
+    const r = new Rng(hashSeed('t18-random'));
+    for (let i = 0; i < 2000 && !s.done; i++) {
+      const open = cells(s).filter((c) => !c.disabled && c.id !== 'far' && c.id !== 'exit');
+      act(s, r.pick(open).id);
+    }
+    expect(s.done).toBe(true);
+    expect(s.steps).toBe(0);
   });
 });

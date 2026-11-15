@@ -216,6 +216,14 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       }
       return '';
     }
+    case 'minigame': {
+      const here = run.stage?.map.nodes.find((n) => n.id === run.stage!.current);
+      if (!here || !content.minigames.games.some((g) => g.id === e.key)) return '';
+      const id = `minigame-${e.key}-${here.sides.length + 1}`;
+      here.sides.push({ id, kind: 'minigame', minigameId: e.key!, used: false });
+      delete run.minigames.attempts[id];
+      return '';
+    }
     case 'addParty':
       setGnFlag(run, e.key!, gnFlag(run, e.key!) + run.party.filter((m) => m.hp > 0).length);
       return '';

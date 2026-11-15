@@ -8,6 +8,7 @@ import { Rng, type RngState } from '../rng';
 import { FRONTIER_GAMES } from './frontier';
 import { MINIGAMES_2 } from './games2';
 import { MINIGAMES_3 } from './games3';
+import { SAFARI_GAMES } from '../greenneedle/safari';
 
 export interface Cell {
   id: string;
@@ -850,6 +851,7 @@ export const MINIGAMES: Record<string, MinigameModule<never>> = {
   ...MINIGAMES_2,
   ...MINIGAMES_3,
   ...FRONTIER_GAMES,
+  ...SAFARI_GAMES,
 };
 
 export function gameModule(id: string): MinigameModule<BaseState> {

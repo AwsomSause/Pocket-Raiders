@@ -1,7 +1,7 @@
 // Greenneedle, part 4: events gn.16 to gn.20 (doc GREENNEEDLE_REWORKED_PLACED_4.md).
 // In Kanto the Saffron canon space opens the same Tournament ("The Greenneedle version is the only version"); its old rooms are retired below.
 // Build: npm run co:build -- greenneedle-4   then   npm run co:gn
-import { $, anyType, ch, fight, flag, heal, hurt, item, join, leave, out, room, trainer, wild, type Json } from '../dsl.ts';
+import { $, anyType, ch, fight, flag, heal, hurt, item, join, leave, money, out, room, trainer, wild, type Json } from '../dsl.ts';
 import { bond, chIf, eitherWay, gev, gn, inside, intel, is, kindness, laterStage, leavePseudo, moment, not, notThisRegion, rm, say, scene, setTo, stampRegion, stampStage, when, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
@@ -367,7 +367,38 @@ function HORDE(): Json {
 }
 const KANTO_FACTORY: Json = { ...gev('cs-kanto-fuchsia-factory', 'The Polluted Factory', plant({ stop: 'event', rarity: 'common', types: ['poison'], requires: [not('factory-entered')] }), SCRIMSHAW, GATE), canon: 'cs.kanto.fuchsia.factory' };
 
-export const EVENTS: Json[] = [...gn16, KANTO_TOURNEY, ...gn17, KANTO_FACTORY];
+// =====================================================================================================================
+// gn.18  SAFARI LAND  (Hub Destination: the town; until towns exist step 12, optional; once a region). The park itself is a minigame,
+// core/greenneedle/safari.ts (30 Balls, 500 steps, four areas, Quiet, families, herds, the migration, photography, tracking, feeding);
+// what a visit leaves behind is safariEnd.ts. These events are the gate, the free second visit and the Kanto canon space.
+// =====================================================================================================================
+const PARK_TINT = '#6a7a2e';
+const park = (o: Json = {}): Json => ({ tint: PARK_TINT, tags: ['Pokémon', 'Exploration', 'Story'], effect: 'none', pokemon: 'rhyhorn', ...o });
+const OPEN_PARK: Json[] = [stampRegion('safari-at'), gn('minigame', { key: 'gn-safari' })];
+const WARDEN_GATE = say(
+  'A wooden gatehouse, a turnstile, and a warden in a wide hat with binoculars round their neck.',
+  '**Warden Baoba-Lin:** "Thirty Safari Balls. Five hundred steps. No battles: your Pokémon wait here. Bait, rocks, or Balls. Or nothing, which is underrated."',
+  '**Warden:** "I\'ll be narrating. Under my breath. Pretend I\'m not."',
+);
+const PHOTO_ON_WALL: Json = { id: 'photo', when: [is('safari-photo-best')], notice: 'On the gatehouse wall, one of your photographs hangs in a frame, with a small brass plate under it.' };
+const GATE18: Json[] = [
+  chIf([not('safari-fee-up')], 'Pay ₽500 and go in.', out('The turnstile clicks. Thirty Safari Balls in a canvas bag, and a step counter on your wrist.', $(-500), ...OPEN_PARK), { requires: [money(500)] }),
+  chIf([is('safari-fee-up')], 'Pay ₽800 and go in.', out('**Warden:** "Eight hundred. The Rhyhorn are still talking about last time." The turnstile clicks.', $(-800), ...OPEN_PARK), { requires: [money(800)] }),
+  ch('Not today.', leave('**Warden:** "Fair enough. It\'ll be here. That\'s rather the point of it."')),
+];
+const gn18: Json[] = [
+  gev('gn-18-gate', 'Safari Land', park({ stop: 'event', rarity: 'uncommon', types: ['normal', 'ground'], requires: [notThisRegion('safari-at')], remembers: [PHOTO_ON_WALL] }), WARDEN_GATE, GATE18),
+  gev('gn-18-return', 'Safari Land: A Free Visit', park({ stop: 'event', rarity: 'uncommon', types: ['normal', 'ground'], requires: [is('safari-free'), { kind: 'gn', test: 'thisRegion', key: 'safari-free' }, not('safari-free-used')], remembers: [PHOTO_ON_WALL] }), say(
+    'The warden lifts the turnstile bar before you reach it.',
+    '**Warden:** "You. Go on. No charge. You were barely there last time; be barely there again."',
+  ), [
+    ch('Go in, free.', out('Thirty Safari Balls, and the warden doesn\'t even count them out.', setTo('safari-free-used', 1), gn('minigame', { key: 'gn-safari' }))),
+    ch('Not today.', leave('**Warden:** "It keeps."')),
+  ]),
+];
+const KANTO_SAFARI: Json = { ...gev('cs-kanto-fuchsia-safari', 'Safari Land', park({ stop: 'event', rarity: 'common', types: ['normal', 'ground'], requires: [notThisRegion('safari-at')], remembers: [PHOTO_ON_WALL] }), WARDEN_GATE, GATE18), canon: 'cs.kanto.fuchsia.safari' };
+
+export const EVENTS: Json[] = [...gn16, KANTO_TOURNEY, ...gn17, KANTO_FACTORY, ...gn18, KANTO_SAFARI];
 
 /** The old Kanto canon builds of these stories (moved to Greenneedle): kept for saved runs, never shown again. */
 export const REMOVE: string[] = [
@@ -391,6 +422,12 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'A+1; the raid at A+2', often: 'run', badge: 'own', dressing: { kanto: 'The Polluted Factory', kantoStage: 'The coast road near Fuchsia (the canon space)', elsewhere: 'The Polluted Factory' },
     note: 'The same door, must-see, when the player took the stamped float at the Kaiju (gn.11): Mr. Scrimshaw opens the gate and gives the valve order.',
   },
+  'gn-18-gate': {
+    gn: 'gn.18', shape: 'Single', earliest: 'A5', home: 12, window: [10, 15], sits: 'optional', attaches: 'town', tags: ['Hub Destination', 'Community Episode'],
+    level: 'No battles; catches at A+0', often: 'region', badge: 'own', dressing: { kanto: 'Safari Land', kantoStage: 'Fuchsia (the canon space)', elsewhere: 'Safari Land' },
+    note: 'Badge: a paw print. The park is the gn-safari minigame stop the gate opens. Until towns exist it sits on step 12. Kanto shows it through cs-kanto-fuchsia-safari.',
+  },
+  'gn-18-return': { gn: 'gn.18', shape: 'Single', earliest: 'A5', home: 14, window: [10, 20], sits: 'optional', attaches: 'town', tags: ['Hub Destination'], level: 'No battles', often: 'region', note: 'The free second visit, after a visit that ended on Quiet 8 or more, the same region.' },
   'gn-17-fishing': { gn: 'gn.17', shape: 'Single', earliest: 'A6', home: 14, window: [9, 20], sits: 'optional', tags: ['Afterstory'], level: 'A+0', often: 'run', note: 'Only after the line was shut down, later the same region.' },
 };
 

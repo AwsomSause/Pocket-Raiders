@@ -4287,6 +4287,341 @@
     }
    ],
    "canon": "cs.kanto.fuchsia.factory"
+  },
+  {
+   "id": "gn-18-gate",
+   "name": "Safari Land",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [
+    "normal",
+    "ground"
+   ],
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "safari-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "photo",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "safari-photo-best",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On the gatehouse wall, one of your photographs hangs in a frame, with a small brass plate under it."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "rhyhorn",
+    "tint": "#6a7a2e",
+    "effect": "none"
+   },
+   "intro": "A wooden gatehouse, a turnstile, and a warden in a wide hat with binoculars round their neck.\n\n**Warden Baoba-Lin:** \"Thirty Safari Balls. Five hundred steps. No battles: your Pokémon wait here. Bait, rocks, or Balls. Or nothing, which is underrated.\"\n\n**Warden:** \"I'll be narrating. Under my breath. Pretend I'm not.\"",
+   "choices": [
+    {
+     "label": "Pay ₽500 and go in.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "The turnstile clicks. Thirty Safari Balls in a canvas bag, and a step counter on your wrist.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "safari-at"
+       },
+       {
+        "kind": "gn",
+        "op": "minigame",
+        "key": "gn-safari"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "safari-fee-up",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Pay ₽800 and go in.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 800
+      }
+     ],
+     "success": {
+      "text": "**Warden:** \"Eight hundred. The Rhyhorn are still talking about last time.\" The turnstile clicks.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -800
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "safari-at"
+       },
+       {
+        "kind": "gn",
+        "op": "minigame",
+        "key": "gn-safari"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "safari-fee-up",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "**Warden:** \"Fair enough. It'll be here. That's rather the point of it.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-18-return",
+   "name": "Safari Land: A Free Visit",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [
+    "normal",
+    "ground"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "safari-free",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "safari-free"
+    },
+    {
+     "kind": "flag",
+     "key": "safari-free-used",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "photo",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "safari-photo-best",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On the gatehouse wall, one of your photographs hangs in a frame, with a small brass plate under it."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "rhyhorn",
+    "tint": "#6a7a2e",
+    "effect": "none"
+   },
+   "intro": "The warden lifts the turnstile bar before you reach it.\n\n**Warden:** \"You. Go on. No charge. You were barely there last time; be barely there again.\"",
+   "choices": [
+    {
+     "label": "Go in, free.",
+     "success": {
+      "text": "Thirty Safari Balls, and the warden doesn't even count them out.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "safari-free-used",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "minigame",
+        "key": "gn-safari"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "**Warden:** \"It keeps.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-fuchsia-safari",
+   "name": "Safari Land",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "types": [
+    "normal",
+    "ground"
+   ],
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "safari-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "photo",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "safari-photo-best",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On the gatehouse wall, one of your photographs hangs in a frame, with a small brass plate under it."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "rhyhorn",
+    "tint": "#6a7a2e",
+    "effect": "none"
+   },
+   "intro": "A wooden gatehouse, a turnstile, and a warden in a wide hat with binoculars round their neck.\n\n**Warden Baoba-Lin:** \"Thirty Safari Balls. Five hundred steps. No battles: your Pokémon wait here. Bait, rocks, or Balls. Or nothing, which is underrated.\"\n\n**Warden:** \"I'll be narrating. Under my breath. Pretend I'm not.\"",
+   "choices": [
+    {
+     "label": "Pay ₽500 and go in.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "The turnstile clicks. Thirty Safari Balls in a canvas bag, and a step counter on your wrist.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "safari-at"
+       },
+       {
+        "kind": "gn",
+        "op": "minigame",
+        "key": "gn-safari"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "safari-fee-up",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Pay ₽800 and go in.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 800
+      }
+     ],
+     "success": {
+      "text": "**Warden:** \"Eight hundred. The Rhyhorn are still talking about last time.\" The turnstile clicks.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -800
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "safari-at"
+       },
+       {
+        "kind": "gn",
+        "op": "minigame",
+        "key": "gn-safari"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "safari-fee-up",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "**Warden:** \"Fair enough. It'll be here. That's rather the point of it.\"",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.fuchsia.safari"
   }
  ]
 }
