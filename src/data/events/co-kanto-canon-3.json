@@ -201,7 +201,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "kanto-song-heard",
+       "key": "kanto-route-song",
        "atLeast": 1,
        "atMost": 99
       }
@@ -987,7 +987,8 @@
      }
     }
    ],
-   "canon": "cs.kanto.celadon.rooftop"
+   "canon": "cs.kanto.celadon.rooftop",
+   "room": true
   },
   {
    "id": "cs-kanto-celadon-rooftop-machines",

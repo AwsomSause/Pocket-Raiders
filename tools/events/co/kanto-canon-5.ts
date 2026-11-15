@@ -130,7 +130,7 @@ const score = (n: number): Json => flag('kanto-siblings-score', n);
   s.entry('Ten Brothers and Sisters',
     'A roadside table. A sign: GENUINE ROCKS. PEWTER SOUVENIRS. A man in a hat pulled low, who looks like somebody. The rock seller, Flint: "You want a rock? No. Nobody does. Listen. I\'ve an errand. One hour. There\'s ten of them in that house, and my eldest\'s at work. Mind them. I\'ll pay in rocks, or in something better."',
     [c('"Go on, then."', o('Ten faces at the door. Ten opinions about lunch.', s.open('cook'))), c('"Not today."', o('He nods, and goes back to not selling rocks.'))],
-    { remembers: [{ id: 'stew', when: [is('kanto-brock-stew')], notice: 'Nine of them recognise you from the camp. "It\'s the stew one!"' }] });
+    { remembers: [{ id: 'stew', when: [is('kanto-stew-perfect')], notice: 'Nine of them recognise you from the camp. "It\'s the stew one!"' }] });
   s.room('cook', 'The Ten: Cook', 'A pot, six ingredients, ten opinions. Each child says what they hate, once, fast. Pick the three that the most children will eat.',
     [c('Potato, carrot, cheese.', o('Eight empty bowls. Two that were licked.', score(4), s.open('mend'))), c('Potato, onion, cheese.', o('Seven bowls. Three with the onion picked out in a careful pile.', score(2), s.open('mend'))),
       c('Carrot, peas, fish.', o('Four bowls. Six polite faces.', score(1), s.open('mend'))), c('Everything.', o('Nobody eats it. Everybody says it\'s fine.', s.open('mend')))]);
@@ -530,7 +530,7 @@ const score = (n: number): Json => flag('kanto-siblings-score', n);
   s.entry('The Orphan',
     'Under Mr. Fuji\'s kitchen table, in the furthest corner, something with a skull on its head and its back to the room. A volunteer: "It came from the Tower. It won\'t eat with the others. Don\'t try and pull it out. People try. It\'s worse after."',
     [c('"Sit down on the floor."', o('You sit. Nothing happens. The clock in the hall. The Psyduck doorstop sighs. The Cubone\'s turned its head a little.', flag('kanto-lavender-orphan'), s.open('w2'))), leave],
-    { remembers: [{ id: 'lonely', when: [is('kanto-lonely-cubone')], notice: 'Mr. Fuji: "Ah. You\'ve met it already, I think. It came back to wait for you."' }] });
+    { remembers: [{ id: 'lonely', when: [is('kanto-tower-marowak')], notice: 'Mr. Fuji: "Ah. You\'ve met it already, I think. It came back to wait for you."' }] });
   s.room('w2', 'The Orphan: Waiting', 'Longer. A volunteer steps over your legs without comment.',
     [c('"Sit down on the floor."', o('It\'s a foot nearer. It\'s holding its club in both hands.', flag('kanto-lavender-orphan'), s.open('w3'))), leave]);
   s.room('w3', 'The Orphan: Waiting', 'The light\'s moved across the floor.',

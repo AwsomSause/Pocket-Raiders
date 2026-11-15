@@ -138,7 +138,7 @@ const status = (s: string): Json => ({ kind: 'status', status: s, who: 'lead' })
   s.room('cage', 'The Unstable Eevee: The Cage', 'The cage is open. It\'s in the far corner, changing, changing. It isn\'t a Shadow Pokémon, and it\'s never forced to change.',
     [stone('water-stone', 'vaporeon'), stone('thunder-stone', 'jolteon'), stone('fire-stone', 'flareon'),
       c('"No stone. Take as long as you need."', o('It joins as an Eevee. It bonds slower, and it\'s worth it.', join(['eevee']), flag('kanto-celadon-vee'), moment('Waited for a frightened Eevee to stop changing, and let it stay an Eevee.')))],
-    { remembers: [{ id: 'brothers', when: [is('kanto-eevee-brothers')], notice: 'Later, the Eeveelution Brothers go quiet when they hear. Mikey: "Somebody made it choose? All of them?" Pyro puts his stone in his pocket.' }] });
+    { remembers: [{ id: 'brothers', when: [is('kanto-eevee')], notice: 'Later, the Eeveelution Brothers go quiet when they hear. Mikey: "Somebody made it choose? All of them?" Pyro puts his stone in his pocket.' }] });
 }
 
 // ============================================================ FUCHSIA CITY (Stage 5)

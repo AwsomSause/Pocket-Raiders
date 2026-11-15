@@ -58,6 +58,9 @@ export interface SpaceRow {
   ps?: { name: string; themeId: string; mood: string; start?: 'opened' };
 }
 export const SPACES: SpaceRow[] = [];
+/** Spaces another space also opens (a choice there adds this one's entry), so the entry is a room too (world.test: every opened event is a room).
+ * Rooms are never drawn at random; canon spaces are placed by code (canonRun.ts), so they still sit on their town menus and stages. */
+const OPENED = new Set(['cs.kanto.celadon.rooftop', 'cs.kanto.cerulean.cave', 'cs.kanto.cinnabar.trades', 'cs.kanto.cinnabar.backlog', 'cs.kanto.sevii.network']);
 export const EXTRA: Record<string, string> = {};
 /** Pseudo Stages whose entry is a room of a space, not the space's own entry (the Sevii islands, one map each). */
 export const CHAINS: { entry: string; name: string; town: string; themeId: string; mood: string; start?: 'opened' }[] = [];
@@ -99,7 +102,7 @@ export function space(out: Json[], row: SpaceRow): Ctx {
   const id = (suffix = '') => eid(row.id, suffix);
   EXTRA[row.id] = id();
   return {
-    entry: (name, intro, choices, extra = {}) => base(id(), name, intro, choices, { canon: row.id, stop: row.kind === 'SHOP' ? 'merchant' : 'event', ...extra }),
+    entry: (name, intro, choices, extra = {}) => base(id(), name, intro, choices, { canon: row.id, stop: row.kind === 'SHOP' ? 'merchant' : 'event', ...(OPENED.has(row.id) ? { room: true } : {}), ...extra }),
     room: (suffix, name, intro, choices, extra = {}) => base(id(suffix), name, intro, choices, { room: true, stop: 'delve', ...extra }),
     open: (suffix) => ({ kind: 'addEvent', eventId: id(suffix) }),
     openFrom: (...suffixes) => ({ kind: 'addEventFrom', ids: suffixes.map((s) => id(s)) }),

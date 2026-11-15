@@ -58,10 +58,20 @@ const RULE_FLAGS: Record<string, string> = {
   'kc-stat-rolls': 'kc statUp: counter that keeps each random stat roll distinct',
   'kanto-kaiju-lost': 'core/expansion/canonRun.ts failCanonRaid: Kaiju Tentacruel won, the Harbor Market shows its shutters',
 };
+// Read here (a remembered line waits for them) but written by another set once it lands; until then the line never shows.
+const HOOK_FLAGS: Record<string, string> = {
+  'kanto-silph-won': 'the Silph Co. raid (Rocket story, not built yet): the Silph lobby and the Sevii Admins remember it',
+  'kanto-hideout-won': 'the Rocket Hideout raid (Rocket story, not built yet): the Game Corner remembers it',
+  'kanto-moon-third-fossil': 'Mt. Moon (another thread\'s space): the Pewter Museum remembers the third fossil',
+  'x-rival-threw-match': 'the rivals thread: the rival at the Route 22 gate remembers a thrown match',
+  'x-rival-swapped-teams': 'the rivals thread: the rival at the Route 22 gate remembers swapped teams',
+  'x-met-laughing-ghost': 'another region\'s ghost story: Haunter\'s prank remembers it',
+  'x-met-mimikyu': 'another region\'s Mimikyu event: Haunter\'s prank remembers it',
+};
 write('src/data/catalogOverhaul/flags/kanto-canon.json', {
   category: 'kanto-canon',
   note: 'Story flags (ev:<key>) written by the Kanto Canon Spaces. Same run only. A canon flag kanto.x.y is key kanto-x-y.',
-  flags: [...[...setBy].sort(([a], [b]) => a.localeCompare(b)).map(([key, evs]) => ({ key, setBy: [...evs].sort() })), ...Object.entries(RULE_FLAGS).map(([key, rule]) => ({ key, rule }))],
+  flags: [...[...setBy].sort(([a], [b]) => a.localeCompare(b)).map(([key, evs]) => ({ key, setBy: [...evs].sort() })), ...Object.entries(RULE_FLAGS).map(([key, rule]) => ({ key, rule })), ...Object.entries(HOOK_FLAGS).map(([key, hook]) => ({ key, hook }))],
 });
 
 const statusPath = 'src/data/catalogOverhaul/status/kanto-canon.json';

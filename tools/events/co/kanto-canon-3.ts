@@ -38,7 +38,7 @@ const lose = (id: string, count = 1): Json => ({ kind: 'loseItem', id, count });
       c('Third floor.', o('Miss Philippa Stott: "Third! Discs. Don\'t ask me what\'s on them, I\'ve got a Jigglypuff, it knows one song."', s.open('f3'))),
       c('Fourth floor.', o('Miss Philippa Stott: "Fourth! He\'ll tell you what you need. He\'s usually right. It\'s infuriating."', s.open('f4'))),
       c('Fifth floor.', o('Miss Philippa Stott: "Fifth! Rocks at silly prices."', s.open('f5'))),
-    ], { remembers: [{ id: 'song', when: [is('kanto-song-heard')], notice: 'Miss Stott, between floors: "Oh, that one. Mine learned it from that one. I\'ve not slept properly since."' }] });
+    ], { remembers: [{ id: 'song', when: [is('kanto-route-song')], notice: 'Miss Stott, between floors: "Oh, that one. Mine learned it from that one. I\'ve not slept properly since."' }] });
   s.room('f2', "Celadon Department Store: Trainer's Market", 'Second floor, the Trainer\'s Market: Poké Balls in pyramids, and medicine for the road in rows of little bottles. Nothing here works in the middle of a battle; the clerk is firm about that.',
     [buy('Poké Ball ×5', 1000, 'Five red-and-white Balls in a paper bag with the store\'s crest on it.', item('poke-ball', 5)), buy('Great Ball ×3', 1800, 'Three Great Balls, wrapped like presents, because that is how the store wraps everything.', item('great-ball', 3)),
       buy('Medicine for the road', 500, 'The clerk sees to it there and then: a bottle for each Pokémon, a bandage for the one that limps. Your party leaves the floor steadier than it came in.', heal(0.5), { kind: 'cure' }), lift('Back into the lift. Miss Stott: "Bottles! Lovely."')]);

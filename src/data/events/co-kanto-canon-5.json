@@ -1310,7 +1310,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "kanto-brock-stew",
+       "key": "kanto-stew-perfect",
        "atLeast": 1,
        "atMost": 99
       }
@@ -6563,7 +6563,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "kanto-lonely-cubone",
+       "key": "kanto-tower-marowak",
        "atLeast": 1,
        "atMost": 99
       }

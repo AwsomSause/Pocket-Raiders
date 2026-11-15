@@ -1,4 +1,5 @@
 import { PSEUDO } from '../../src/core/dungeon/pseudo';
+import { canonKantoPlaced } from '../../src/data/expansion';
 // Exploration (APPROVED.md §5-6): fog of war, weather fronts, roaming Legendaries, camps, secret
 // paths, callbacks, landmark rooms and the stops of the limited-time events.
 
@@ -286,16 +287,23 @@ describe('landmarks and dungeons', () => {
 
   it('every room is reached from an event, and every room an event opens exists', () => {
     const opened = new Set<string>();
+    // Stops queued some nodes on (`laterEvent`: the Fossil Rush's egg) or placed by code need not be rooms, but they do reach the rooms they are.
+    const queued = new Set<string>();
     for (const e of content.events.values()) {
-      for (const ch of e.choices) {
+      // A remembered act's extra choices open rooms too (Kanto canon: a second chance at the Song, the rival at the Tower).
+      for (const ch of [...e.choices, ...e.remembers.flatMap((v) => v.addChoices)]) {
         for (const o of [ch.success, ch.failure]) {
-          for (const ef of [...(o?.effects ?? []), ...(o?.battle?.win ?? [])]) {
+          // So do a lost battle's effects.
+          for (const ef of [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])]) {
             if (ef.kind === 'addEvent') opened.add(ef.eventId);
+            if (ef.kind === 'laterEvent') queued.add(ef.eventId);
             if (ef.kind === 'addEventFrom') ef.ids.forEach((i) => opened.add(i));
           }
         }
       }
     }
+    // Kanto canon: follow-up scenes and road rows are placed by code (core/expansion/canonKantoPlaced.ts).
+    for (const r of [...canonKantoPlaced.followups, ...canonKantoPlaced.routes]) queued.add(r.event);
     // Ideas W4: rooms opened by a traversal obstacle, and stops the code places (wanderer, treasure map, landmarks).
     for (const o of TRAVERSAL.obstacles) for (const ef of o.pass) if (ef.kind === 'addEvent') opened.add(ef.eventId);
     for (const id of [WANDERER_CHALLENGE, WANDERER_VISIT, TREASURE_DIG_EVENT]) opened.add(id);
@@ -307,7 +315,8 @@ describe('landmarks and dungeons', () => {
     // Beta 0.7: Pidgey's Resolve places its join rooms from code (core/sky/story.ts pushRoom).
     for (const id of content.events.keys()) if (id.startsWith('sky.join.')) opened.add(id);
     for (const id of opened) expect(content.events.get(id)?.room, id).toBe(true);
-    for (const e of content.events.values()) if (e.room) expect(opened.has(e.id), e.id).toBe(true);
+    // Catalog Overhaul: a retired room (a pack file's `remove`) is kept disabled only so a saved run standing on it still loads; nothing opens it.
+    for (const e of content.events.values()) if (e.room && !e.disabled) expect(opened.has(e.id) || queued.has(e.id), e.id).toBe(true);
   });
 
   it('a Mystery Dungeon floor picks its next room from the floor below', () => {

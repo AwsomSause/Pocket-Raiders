@@ -3046,7 +3046,8 @@
      }
     }
    ],
-   "canon": "cs.kanto.sevii.network"
+   "canon": "cs.kanto.sevii.network",
+   "room": true
   },
   {
    "id": "cs-kanto-sevii-network-center",

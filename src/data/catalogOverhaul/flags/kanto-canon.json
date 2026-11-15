@@ -1998,6 +1998,34 @@
   {
    "key": "kanto-kaiju-lost",
    "rule": "core/expansion/canonRun.ts failCanonRaid: Kaiju Tentacruel won, the Harbor Market shows its shutters"
+  },
+  {
+   "key": "kanto-silph-won",
+   "hook": "the Silph Co. raid (Rocket story, not built yet): the Silph lobby and the Sevii Admins remember it"
+  },
+  {
+   "key": "kanto-hideout-won",
+   "hook": "the Rocket Hideout raid (Rocket story, not built yet): the Game Corner remembers it"
+  },
+  {
+   "key": "kanto-moon-third-fossil",
+   "hook": "Mt. Moon (another thread's space): the Pewter Museum remembers the third fossil"
+  },
+  {
+   "key": "x-rival-threw-match",
+   "hook": "the rivals thread: the rival at the Route 22 gate remembers a thrown match"
+  },
+  {
+   "key": "x-rival-swapped-teams",
+   "hook": "the rivals thread: the rival at the Route 22 gate remembers swapped teams"
+  },
+  {
+   "key": "x-met-laughing-ghost",
+   "hook": "another region's ghost story: Haunter's prank remembers it"
+  },
+  {
+   "key": "x-met-mimikyu",
+   "hook": "another region's Mimikyu event: Haunter's prank remembers it"
   }
  ]
 }

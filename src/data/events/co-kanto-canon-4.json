@@ -4849,7 +4849,8 @@
      }
     }
    ],
-   "canon": "cs.kanto.cerulean.cave"
+   "canon": "cs.kanto.cerulean.cave",
+   "room": true
   },
   {
    "id": "cs-kanto-cerulean-cave-n2",

@@ -1497,7 +1497,7 @@
      "when": [
       {
        "kind": "flag",
-       "key": "kanto-eevee-brothers",
+       "key": "kanto-eevee",
        "atLeast": 1,
        "atMost": 99
       }
@@ -5470,7 +5470,8 @@
      }
     }
    ],
-   "canon": "cs.kanto.cinnabar.backlog"
+   "canon": "cs.kanto.cinnabar.backlog",
+   "room": true
   },
   {
    "id": "cs-kanto-cinnabar-trades",
@@ -5613,7 +5614,8 @@
      }
     }
    ],
-   "canon": "cs.kanto.cinnabar.trades"
+   "canon": "cs.kanto.cinnabar.trades",
+   "room": true
   },
   {
    "id": "cs-kanto-cinnabar-wave",
