@@ -277,6 +277,9 @@
        "kind": "trainer",
        "name": "Kelsey",
        "friendly": true,
+       "quest": {
+        "soft": true
+       },
        "size": 3,
        "types": [],
        "levelBonus": 0,
@@ -386,6 +389,9 @@
        "kind": "trainer",
        "name": "Old Barrow",
        "friendly": true,
+       "quest": {
+        "soft": true
+       },
        "size": 4,
        "types": [],
        "levelBonus": 1,
@@ -468,6 +474,9 @@
        "kind": "trainer",
        "name": "Semifinalist",
        "friendly": true,
+       "quest": {
+        "soft": true
+       },
        "size": 4,
        "types": [],
        "levelBonus": 1,
@@ -506,6 +515,9 @@
        "kind": "trainer",
        "name": "Semifinalist",
        "friendly": true,
+       "quest": {
+        "soft": true
+       },
        "size": 4,
        "types": [],
        "levelBonus": 1,
@@ -538,6 +550,9 @@
        "kind": "trainer",
        "name": "Semifinalist",
        "friendly": true,
+       "quest": {
+        "soft": true
+       },
        "size": 4,
        "types": [],
        "levelBonus": 1,
@@ -775,6 +790,9 @@
        "kind": "trainer",
        "name": "Road Champion",
        "friendly": true,
+       "quest": {
+        "soft": true
+       },
        "size": 6,
        "types": [],
        "levelBonus": 2,
@@ -930,6 +948,9 @@
        "kind": "trainer",
        "name": "Wild Pokémon",
        "friendly": true,
+       "quest": {
+        "soft": true
+       },
        "size": 3,
        "types": [],
        "levelBonus": 1,
@@ -1401,6 +1422,9 @@
        "kind": "trainer",
        "name": "Wild Pokémon",
        "friendly": true,
+       "quest": {
+        "soft": true
+       },
        "size": 3,
        "types": [],
        "levelBonus": 1,

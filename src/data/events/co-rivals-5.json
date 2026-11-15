@@ -211,6 +211,9 @@
        "kind": "trainer",
        "name": "Stranger",
        "friendly": true,
+       "quest": {
+        "soft": true
+       },
        "size": 3,
        "types": [],
        "levelBonus": 0,
@@ -458,6 +461,9 @@
        "kind": "trainer",
        "name": "Stranger",
        "friendly": true,
+       "quest": {
+        "soft": true
+       },
        "size": 3,
        "types": [],
        "levelBonus": 0,
@@ -640,6 +646,9 @@
        "kind": "trainer",
        "name": "Stranger",
        "friendly": true,
+       "quest": {
+        "soft": true
+       },
        "size": 3,
        "types": [],
        "levelBonus": 0,
