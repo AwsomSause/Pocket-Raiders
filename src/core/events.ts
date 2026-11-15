@@ -13,6 +13,8 @@ import { applySinglesEffect, singlesEffectWords } from './events/coSingles';
 import { applyCoEffect, coConditionMet, coConditionText, coEffectWords, fillCoText, restoreMachine } from './events/coToolkit';
 import { flagAge, lineHolds, lineMember, queueLaterEvent, stampFlagStage } from './events/questline';
 import { modifierEventWeight } from './runModifiers';
+import { sendAway, stopWeightOf, upgradeItem } from './co/placesRules';
+import { bringBack } from './co/placesAway';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
 import { rememberPick, rememberedPick } from './co/pickMemory';
 import { PSEUDO, enterPseudoStage, leavePseudoStage, routeChainEvent } from './dungeon/pseudo';
@@ -351,7 +353,7 @@ export function tradeCandidates(content: Content, run: RunState, want: TradeWant
   return run.party
     .filter((m) => {
       const sp = content.species.get(m.speciesId);
-      if (!sp || m.care?.favourite) return false;
+      if (!sp || m.care?.favourite || m.vowed) return false;
       return (
         (want.species.length === 0 || want.species.includes(m.speciesId)) &&
         (!want.type || sp.types.includes(want.type)) &&
@@ -736,7 +738,8 @@ function pickEvent(content: Content, run: RunState, rng: Rng, taken: Set<string>
         (theme && e.types.some((t) => theme.types.includes(t)) ? cfg.themeWeight : 1) *
         (featured.has(e.id) || e.gameEvent || e.mode ? cfg.gameEventWeight : 1) *
         (regionOnly(e, run) ? cfg.regionEventWeight : 1) *
-        modifierEventWeight(content, run, e.types),
+        modifierEventWeight(content, run, e.types) *
+        stopWeightOf(run.perkEffects, e.stop),
     }))
     .filter((p) => p.weight > 0);
   if (pool.length === 0) return null;
@@ -1199,6 +1202,16 @@ export function effectWords(content: Content, e: EventEffect): string {
       return e.bond !== undefined ? `${e.who === 'party' ? 'everyone' : whoWords(e.who)}: Bond ${e.bond >= 0 ? '+' : ''}${e.bond}` : `${e.who === 'party' ? '' : `${whoWords(e.who)}: `}friendship ${e.amount >= 0 ? '+' : ''}${e.amount}`;
     case 'nodeBattle':
       return e.skip ? 'the fight here does not happen' : e.level ? `the fight here is ${e.level > 0 ? 'harder' : 'easier'}` : '';
+    case 'typeShift':
+      return `a lasting type shift: ${e.type[0]!.toUpperCase()}${e.type.slice(1)}`;
+    case 'vow':
+      return 'a vow for the rest of the run';
+    case 'sendAway':
+      return 'a Pokémon stays behind';
+    case 'bringBack':
+      return 'a Pokémon comes back';
+    case 'upgradeItem':
+      return `${itemName(content, e.from)} grows into ${itemName(content, e.to)}`;
     case 'takeNode':
       return e.back ? 'a step back along the road (nothing is refought)' : `takes your next ${e.nodes === 1 ? 'node' : `${e.nodes} nodes`} (no battle there)`;
     case 'quietWild':
@@ -1548,6 +1561,28 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'nodeBattle':
       setNodeBattle(run, { skip: e.skip, level: e.level });
       return effectWords(content, e);
+    case 'typeShift': {
+      const mon = whoOf(content, run, e.who, pickedUid)[0];
+      if (!mon) return '';
+      mon.shiftType = e.type;
+      return `${content.species.get(mon.speciesId)?.name ?? mon.speciesId} is part ${e.type[0]!.toUpperCase()}${e.type.slice(1)} now.`;
+    }
+    case 'vow': {
+      const mon = whoOf(content, run, e.who, pickedUid)[0];
+      if (!mon || mon.vowed) return '';
+      mon.vowed = true;
+      return `${content.species.get(mon.speciesId)?.name ?? mon.speciesId} made the vow. It stays with you, whatever comes.`;
+    }
+    case 'sendAway': {
+      const mon = sendAway(content, run, e.key, whoOf(content, run, e.who, pickedUid)[0], e.type, e.shadow === true);
+      return mon ? `${content.species.get(mon.speciesId)?.name ?? mon.speciesId} stays behind.` : '';
+    }
+    case 'upgradeItem':
+      return upgradeItem(run, e.from, e.to) > 0 ? effectWords(content, e) : '';
+    case 'bringBack': {
+      const mon = bringBack(content, run, e.key, e.levels, e.friendship, partyCapacity(content, run), e.purify === true);
+      return mon ? `${content.species.get(mon.speciesId)?.name ?? mon.speciesId} is back with you.` : '';
+    }
     case 'takeNode':
       if (!e.back) oweNodes(run, e.nodes);
       return effectWords(content, e);
@@ -1808,6 +1843,12 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return '';
     case 'tempEffect':
       run.perkEffects = [...(run.perkEffects ?? []), ...e.effects];
+      // A signed challenge's run rule (SF98) holds while the effect does; a rule the player already chose is left alone.
+      for (const m of e.effects) {
+        if (m.kind !== 'runRule' || run.rules.modifierIds.includes(m.id)) continue;
+        run.rules.modifierIds = [...run.rules.modifierIds, m.id];
+        run.story.flags[`rule-temp:${m.id}`] = true;
+      }
       run.tempEffects.push({ effects: e.effects, battles: e.battles, until: e.until });
       return effectWords(content, e);
     case 'relic': {

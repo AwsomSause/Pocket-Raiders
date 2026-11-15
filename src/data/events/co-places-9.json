@@ -1,0 +1,2802 @@
+{
+ "catalogOverhaul": "places",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "egg-expedition",
+   "name": "Egg Expedition: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "egg-expedition",
+   "scene": {
+    "cast": [],
+    "tint": "#5a7a3a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Breeders out in force! Eggs everywhere!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "A breeder with a basket on each arm finds you before you finish saying yes. \"Here. Keep it warm. It's been waiting for someone.\" The Egg is warm already, and it twitches.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-egg-expedition",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Breeders are on every road, and nests in every hedge. Join in, and one of them will press an Egg into your hands before you even ask.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "egg-expedition"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "catch-carnival",
+   "name": "Catch Carnival: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "catch-carnival",
+   "scene": {
+    "cast": [],
+    "tint": "#7a3a5a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Every ball's a lucky ball!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "Somebody pins a paper rosette to your bag. \"Carnival thrower! Good luck, every throw!\" For the rest of the region your Balls catch a little more easily.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Catch Carnival",
+        "effects": [
+         {
+          "kind": "captureMultiplier",
+          "value": 1.1
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-catch-carnival",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"The whole region is playing at catching. Join in, and your throws land a little truer for the region.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "catch-carnival"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "water-week",
+   "name": "Water Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "water-week",
+   "scene": {
+    "cast": [],
+    "tint": "#2a5a7a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"The tide's in!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "You wade into the fountain with half the town, laughing, soaked to the knees. The sky takes the hint. For the region, every battle opens in a short rain.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Water Week",
+        "effects": [
+         {
+          "kind": "battleStart",
+          "weather": "rain",
+          "turns": 3
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-water-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Water-types are turning up everywhere this week, more and rarer than usual. Join in, and the rain comes with you: every battle opens with a short shower.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "water-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "grass-week",
+   "name": "Grass Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "grass-week",
+   "scene": {
+    "cast": [],
+    "tint": "#3a6a2a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Herb stalls on every corner!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "An old herbalist ties a sprig of mint to your collar. \"A friend of the week. Half price for you, at every stall, till the region's out.\"",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Grass Week",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "items": [
+           "energy-root",
+           "energy-powder",
+           "heal-powder",
+           "revival-herb"
+          ],
+          "value": 0.5
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-grass-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Grass-types are turning up everywhere this week, more and rarer than usual. Join in, and the herb stalls sell to you at half price.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "grass-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "electric-week",
+   "name": "Electric Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "electric-week",
+   "scene": {
+    "cast": [],
+    "tint": "#7a6a1a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Static in the air!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "You rub a balloon on your sleeve with a crowd of children and stick it to the crier's hat. Everyone's hair stands on end. Your team crackles happily all region, and paralysis lets go of them sooner.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Electric Week",
+        "effects": [
+         {
+          "kind": "statusDurationMultiplier",
+          "value": 0.75
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-electric-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Electric-types are turning up everywhere this week, more and rarer than usual. Join in, and your team learns to shrug off a jolt: their paralysis wears off sooner.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "electric-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ice-week",
+   "name": "Ice Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "ice-week",
+   "scene": {
+    "cast": [],
+    "tint": "#4a7a8a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Lakes frozen solid!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "You skate the frozen lake with the town, badly, and fall, and get up, and fall. Someone hands you cocoa. For the region, your hail and snow last two turns longer.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Ice Week",
+        "effects": [
+         {
+          "kind": "weatherTurnsBonus",
+          "turns": 2
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-ice-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Ice-types are turning up everywhere this week, more and rarer than usual. Join in, and your hail lasts two turns longer.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ice-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fighting-week",
+   "name": "Fighting Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "fighting-week",
+   "scene": {
+    "cast": [],
+    "tint": "#7a2a2a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Dojos on every road!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "A dojo master bows to you in the square and you bow back, too low. She laughs and corrects your stance. Your team trains harder for it, all region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Fighting Week",
+        "effects": [
+         {
+          "kind": "xpMultiplier",
+          "value": 1.1
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-fighting-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Fighting-types are turning up everywhere this week, more and rarer than usual. Join in, and every dojo on the road trains your team harder.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fighting-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "poison-week",
+   "name": "Poison Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "poison-week",
+   "scene": {
+    "cast": [],
+    "tint": "#5a2a6a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Swamp season!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "The swamp folk come into town with their bubbling pots. Join their parade and they make you a friend of the swamp: status cures are half price for you, all region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Poison Week",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "items": [
+           "antidote",
+           "paralyze-heal",
+           "awakening",
+           "burn-heal",
+           "ice-heal",
+           "full-heal"
+          ],
+          "value": 0.5
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-poison-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Poison-types are turning up everywhere this week, more and rarer than usual. Join in, and status cures cost you half.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "poison-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ground-week",
+   "name": "Ground Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "ground-week",
+   "scene": {
+    "cast": [],
+    "tint": "#6a4a2a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"The diggers are out!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "You dig with the diggers until your hands blister, and they adopt you for it. For the region, rare finds turn up for you more often.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Ground Week",
+        "effects": [
+         {
+          "kind": "rareItemWeight",
+          "value": 1.5
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-ground-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Ground-types are turning up everywhere this week, more and rarer than usual. Join in, and the diggers share what they turn up: rare finds come your way more often.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ground-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "flying-week",
+   "name": "Flying Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "flying-week",
+   "scene": {
+    "cast": [],
+    "tint": "#4a6a8a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Clear skies!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "You let go of a paper kite with a hundred others, and watch it climb out of sight. The wind stays at your back: you can see further down the road, and get there faster.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-flying-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Flying-types are turning up everywhere this week, more and rarer than usual. Join in, and the wind takes you a little further down the road.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "flying-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "psychic-week",
+   "name": "Psychic Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "psychic-week",
+   "scene": {
+    "cast": [],
+    "tint": "#7a3a6a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Whispers in the mind!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "A fortune teller takes your hand and does not look at it. She looks at you. \"Two roads ahead. I'll show you both.\" And then you can see them.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 2
+       },
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-psychic-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Psychic-types are turning up everywhere this week, more and rarer than usual. Join in, and the fortune tellers show you the road ahead.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "psychic-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "bug-week",
+   "name": "Bug Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "bug-week",
+   "scene": {
+    "cast": [],
+    "tint": "#5a6a1a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Bug Catching Contest!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "You sign the contest sheet and are handed a net and one Ball. The meadow hums. Somewhere in it is the winning catch.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "bug-week-contest"
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-bug-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Bug-types are turning up everywhere this week, more and rarer than usual. Join in, and you are entered in the Bug-Catching Contest: the best catch wins a Sun Stone.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "bug-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rock-week",
+   "name": "Rock Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "rock-week",
+   "scene": {
+    "cast": [],
+    "tint": "#6a5a3a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Fossil digs!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "You join the fossil dig and actually find one, and the whole site cheers. The lab revives it on the spot, for nothing. \"First find of the week goes free. Tradition.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "omanyte",
+         "kabuto",
+         "lileep",
+         "anorith",
+         "cranidos",
+         "shieldon"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-rock-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Rock-types are turning up everywhere this week, more and rarer than usual. Join in, and the fossil lab revives one for you, free.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rock-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ghost-week",
+   "name": "Ghost Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "ghost-week",
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a5a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"The routes feel haunted!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "They give you a paper lantern with a candle in it, and tell you not to let it go out. It does not go out. It flickers, though, toward the marsh, as if something there is calling it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hollow-lantern-clue",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-ghost-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Ghost-types are turning up everywhere this week, more and rarer than usual. Join in, and you carry a lantern: the Hollow Lantern's trail can begin.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ghost-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dark-week",
+   "name": "Dark Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "dark-week",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Night falls early!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "You stay out after dark with the town, telling stories with the lamps turned low. The night likes you for it. Dark-types come to you more often, all region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Dark Week",
+        "effects": [
+         {
+          "kind": "typeEncounterWeight",
+          "type": "dark",
+          "value": 1.5
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-dark-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Dark-types are turning up everywhere this week, more and rarer than usual. Join in, and the night-markets let you in: night creatures turn up more often for you.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dark-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "steel-week",
+   "name": "Steel Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "steel-week",
+   "scene": {
+    "cast": [],
+    "tint": "#5a5a6a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Forge fires burn!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "You work the bellows for an hour at the town forge until your arms shake. The smith claps you on the back. \"Held gear, at cost, for you. All region.\"",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Steel Week",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "otherItems",
+          "value": 0.75
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-steel-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Steel-types are turning up everywhere this week, more and rarer than usual. Join in, and the forges fit your held items for less.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "steel-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fairy-week",
+   "name": "Fairy Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "fairy-week",
+   "scene": {
+    "cast": [],
+    "tint": "#8a5a7a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Fairy rings in every meadow!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "You step into a fairy ring with your team and dance, because everyone else is. Nobody laughs. For the region, wild Pokémon meet you a little friendlier, and come to the Ball more easily.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Fairy Week",
+        "effects": [
+         {
+          "kind": "captureMultiplier",
+          "value": 1.15
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-fairy-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Fairy-types are turning up everywhere this week, more and rarer than usual. Join in, and wild Pokémon meet you friendlier: easier to catch.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fairy-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fire-week",
+   "name": "Fire Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "fire-week",
+   "scene": {
+    "cast": [],
+    "tint": "#8a3a1a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Embers on every road!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "They light the bonfire in the square and you sit close with your team, faces hot, backs cold, until the stars come out. Everyone gets up rested.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "addStop",
+        "stop": "heal"
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-fire-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Fire-types are turning up everywhere this week, more and rarer than usual. Join in, and a bonfire is lit for you on the road: a full rest.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fire-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "normal-week",
+   "name": "Normal Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "normal-week",
+   "scene": {
+    "cast": [],
+    "tint": "#6a6a5a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Plain and proud!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "No tricks, no gimmicks: a picnic in the square, a game of catch, a nap in the sun. Your team is happier for it than you expected.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-normal-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Normal-types are turning up everywhere this week, more and rarer than usual. Join in: nothing fancy, just a good day with your Pokémon.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "normal-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dragon-hatchling-week",
+   "name": "Dragon Hatchling Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "dragon-hatchling-week",
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a7a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Baby Dragons hatching!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "The breeder makes you swear to keep it warm and to sing to it, and you swear both. The Egg is heavy and very still. Then, inside, something knocks.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [
+         "dragon"
+        ],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-dragon-hatchling-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"The Dragon breeders have set up on the hills: baby Dragons are turning up more often (never rarer than Rare). Join in, and one of the breeders trusts you with an Egg.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dragon-hatchling-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dual-type-week",
+   "name": "Dual-Type Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "dual-type-week",
+   "scene": {
+    "cast": [],
+    "tint": "#5a5a3a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Doubles only!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "You play a round of the doubles tournament, and lose, and the winner spends an hour showing you why. It was worth losing.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 4
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-dual-type-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Pokémon with two types turn up more often this week. Join in, and the doubles-only tournament gives you a few pointers.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dual-type-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "baby-pokemon-week",
+   "name": "Baby Pokémon Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "baby-pokemon-week",
+   "scene": {
+    "cast": [],
+    "tint": "#8a6a6a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Nurseries open!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "You spend the morning in the nursery holding tiny Pokémon that fall asleep on you. When you leave, the nurse hands you an Egg. \"This one picked you. They do that.\"",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-baby-pokemon-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Every nursery has its doors open: baby Pokémon turn up more often. Join in, and the nursery sends you home with an Egg.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "baby-pokemon-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "pseudo-legend-week",
+   "name": "Pseudo-Legend Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "pseudo-legend-week",
+   "scene": {
+    "cast": [],
+    "tint": "#5a3a3a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"The heavyweights wander!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "A scout with binoculars shows you the tracks: huge, and fresh. \"Up there, and up there. Go quiet.\" You can see where to go.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-pseudo-legend-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"The first stages of the great Dragon lines are wandering out of the high places (never rarer than Rare). Join in, and the scouts tell you where to look.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pseudo-legend-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "eeveelution-week",
+   "name": "Eeveelution Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "eeveelution-week",
+   "scene": {
+    "cast": [],
+    "tint": "#7a5a3a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Eevee everywhere!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "The fanciers' club meets in the square, two hundred Eevee in one place. When you leave, one of them is in an Egg in your arms.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "eevee"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-eeveelution-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"Eevee are turning up everywhere this week. Join in, and the Eevee fanciers send you off with an Egg of your own.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "eeveelution-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fossil-week",
+   "name": "Fossil Week: The Crier",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "fossil-week",
+   "scene": {
+    "cast": [],
+    "tint": "#5a4a2a",
+    "effect": "none"
+   },
+   "intro": "A bell rings out across the square, again and again, until everyone looks up. Crier Bell stands on a crate with his hat in his hand and his cheeks red from shouting: \"Revived fossils!\" People are already hanging bunting. Somebody is selling something on a stick. It is that kind of week.",
+   "choices": [
+    {
+     "label": "Join in.",
+     "success": {
+      "text": "You bring the lab a fossil, any fossil, and they bring it back to life in front of you. It blinks at you. You are the first thing it has seen in a million years.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "omanyte",
+         "kabuto",
+         "aerodactyl",
+         "lileep",
+         "anorith",
+         "cranidos",
+         "shieldon",
+         "tirtouga",
+         "archen"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "week-joined-fossil-week",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's on?",
+     "success": {
+      "text": "Crier Bell leans down off his crate, delighted to be asked. \"The labs are reviving fossils all week: fossil Pokémon turn up more often. Join in, and the lab revives one for you, free.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fossil-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this week.",
+     "success": {
+      "text": "You smile and keep walking. The week goes on around you anyway: you can hear the bell all the way out of town.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "bug-week-contest",
+   "name": "The Bug-Catching Contest",
+   "group": "Calendar Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [
+    "bug"
+   ],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#5a6a1a",
+    "effect": "none"
+   },
+   "intro": "The meadow is roped off and full of contestants creeping through the grass with nets. The judge has a clipboard and a stopwatch. \"Best catch wins the Sun Stone. You've got till the bell.\"",
+   "choices": [
+    {
+     "label": "Hunt the long grass.",
+     "success": {
+      "text": "Something big and bright moves in the long grass, and does not want to be caught.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "bug"
+       ],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "sun-stone",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "bug-contest-won",
+         "amount": 1
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Help a little contestant instead.",
+     "success": {
+      "text": "A small boy has caught nothing and is trying not to cry. You show him where the Caterpie hide. He catches one, and holds it up, and the judge gives him a ribbon. He gives you his lunch.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "hardcore-hour",
+   "name": "Hardcore Hour: The Challenge Board",
+   "group": "Challenge Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "hardcore-hour",
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "A board by the road, covered in pinned cards, and a big man in a leather apron leaning on it, chewing a straw. Grizzle, the board keeper, taps one card with a thick finger: \"Bosses hit harder. Pay triple. Reward's on the card. Sign up, or don't; nobody'll think less of you.\"",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "Grizzle stamps your card so hard the table jumps. \"Hardcore. Good. The bosses have been told.\" The rule holds for the region. Bosses deal a quarter more damage. Boss prize money ×3.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Hardcore Hour",
+        "effects": [
+         {
+          "kind": "bossDamageTakenMultiplier",
+          "value": 1.25
+         },
+         {
+          "kind": "bossMoneyMultiplier",
+          "value": 3
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "challenge-hardcore-hour",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the card.",
+     "success": {
+      "text": "The card, in Grizzle's big square letters: \"HARDCORE HOUR. Rule: Bosses deal a quarter more damage. Lasts: this region. Reward: Boss prize money ×3.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "hardcore-hour"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this run.",
+     "success": {
+      "text": "Grizzle shrugs, not unkindly, and goes back to his straw. \"Next time, maybe.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "solo-hero-week",
+   "name": "Solo Hero Week: The Challenge Board",
+   "group": "Challenge Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "solo-hero-week",
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "A board by the road, covered in pinned cards, and a big man in a leather apron leaning on it, chewing a straw. Grizzle, the board keeper, taps one card with a thick finger: \"One Pokémon, one road. Reward's on the card. Sign up, or don't; nobody'll think less of you.\"",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "Grizzle looks at your lead for a long moment, and nods to it, not to you. \"One road. You'll be fine.\" The rule holds for the region. Only your lead battles, for the region. At the region's end, your lead gains +5% to every stat, for good.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Solo Hero Week",
+        "effects": [
+         {
+          "kind": "runRule",
+          "id": "solo-run"
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "challenge-solo-hero-week",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the card.",
+     "success": {
+      "text": "The card, in Grizzle's big square letters: \"SOLO HERO WEEK. Rule: Only your lead battles, for the region. Lasts: this region. Reward: At the region's end, your lead gains +5% to every stat, for good.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "solo-hero-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this run.",
+     "success": {
+      "text": "Grizzle shrugs, not unkindly, and goes back to his straw. \"Next time, maybe.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "critical-week",
+   "name": "Critical Week: The Challenge Board",
+   "group": "Challenge Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "critical-week",
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "A board by the road, covered in pinned cards, and a big man in a leather apron leaning on it, chewing a straw. Grizzle, the board keeper, taps one card with a thick finger: \"Everything lands on the weak spot. Reward's on the card. Sign up, or don't; nobody'll think less of you.\"",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "\"Weak spots,\" says Grizzle. \"Theirs and yours. Mind your own.\" The rule holds for the region. Critical hits are twice as likely, for both sides. Prize money ×1.5.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Critical Week",
+        "effects": [
+         {
+          "kind": "critChanceMultiplier",
+          "value": 2
+         },
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.5
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "challenge-critical-week",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the card.",
+     "success": {
+      "text": "The card, in Grizzle's big square letters: \"CRITICAL WEEK. Rule: Critical hits are twice as likely, for both sides. Lasts: this region. Reward: Prize money ×1.5.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "critical-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this run.",
+     "success": {
+      "text": "Grizzle shrugs, not unkindly, and goes back to his straw. \"Next time, maybe.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "no-items-week",
+   "name": "No Items Week: The Challenge Board",
+   "group": "Challenge Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "no-items-week",
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "A board by the road, covered in pinned cards, and a big man in a leather apron leaning on it, chewing a straw. Grizzle, the board keeper, taps one card with a thick finger: \"Bag's locked. Balls only. Reward's on the card. Sign up, or don't; nobody'll think less of you.\"",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "Grizzle ties a bit of string round your bag in a bow. \"Symbolic. Don't touch it.\" The rule holds for the region. No items in battle, for the region. At the region's end, a Rare held item.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "No Items Week",
+        "effects": [
+         {
+          "kind": "runRule",
+          "id": "no-battle-items"
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "challenge-no-items-week",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the card.",
+     "success": {
+      "text": "The card, in Grizzle's big square letters: \"NO ITEMS WEEK. Rule: No items in battle, for the region. Lasts: this region. Reward: At the region's end, a Rare held item.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "no-items-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this run.",
+     "success": {
+      "text": "Grizzle shrugs, not unkindly, and goes back to his straw. \"Next time, maybe.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "no-healing-week",
+   "name": "No Revival Week: The Challenge Board",
+   "group": "Challenge Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "no-healing-week",
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "A board by the road, covered in pinned cards, and a big man in a leather apron leaning on it, chewing a straw. Grizzle, the board keeper, taps one card with a thick finger: \"No revives. Not even at rests. Reward's on the card. Sign up, or don't; nobody'll think less of you.\"",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "Grizzle takes your revives off you and puts them in a little box with your name on. \"You'll get them back. Try not to need them.\" The rule holds for the region. No revives, for the region: a fainted Pokémon only recovers at a Center. At the region's end, +2 Bond for every Pokémon still with you.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "No Revival Week",
+        "effects": [
+         {
+          "kind": "runRule",
+          "id": "no-revives"
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "challenge-no-healing-week",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the card.",
+     "success": {
+      "text": "The card, in Grizzle's big square letters: \"NO REVIVAL WEEK. Rule: No revives, for the region: a fainted Pokémon only recovers at a Center. Lasts: this region. Reward: At the region's end, +2 Bond for every Pokémon still with you.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "no-healing-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this run.",
+     "success": {
+      "text": "Grizzle shrugs, not unkindly, and goes back to his straw. \"Next time, maybe.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "glass-cannon-week",
+   "name": "Glass Cannon Week: The Challenge Board",
+   "group": "Challenge Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "glass-cannon-week",
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "A board by the road, covered in pinned cards, and a big man in a leather apron leaning on it, chewing a straw. Grizzle, the board keeper, taps one card with a thick finger: \"All power, no toughness. Reward's on the card. Sign up, or don't; nobody'll think less of you.\"",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "\"All power,\" says Grizzle. \"Hit first. Hit hard. Don't get hit.\" The rule holds for the region. Every attack deals 30% more damage, both ways. Prize money ×1.5.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Glass Cannon Week",
+        "effects": [
+         {
+          "kind": "damageMultiplier",
+          "value": 1.3
+         },
+         {
+          "kind": "damageTakenMultiplier",
+          "value": 1.3
+         },
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.5
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "challenge-glass-cannon-week",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the card.",
+     "success": {
+      "text": "The card, in Grizzle's big square letters: \"GLASS CANNON WEEK. Rule: Every attack deals 30% more damage, both ways. Lasts: this region. Reward: Prize money ×1.5.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "glass-cannon-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this run.",
+     "success": {
+      "text": "Grizzle shrugs, not unkindly, and goes back to his straw. \"Next time, maybe.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "giant-week",
+   "name": "Giant Week: The Challenge Board",
+   "group": "Challenge Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "giant-week",
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "A board by the road, covered in pinned cards, and a big man in a leather apron leaning on it, chewing a straw. Grizzle, the board keeper, taps one card with a thick finger: \"Everything's huge and slow. Reward's on the card. Sign up, or don't; nobody'll think less of you.\"",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "\"They've been eating well out there,\" says Grizzle. \"Very well.\" The rule holds for the region. Every foe is bigger: two levels higher. Experience ×1.5.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Giant Week",
+        "effects": [
+         {
+          "kind": "enemyLevelOffset",
+          "value": 2
+         },
+         {
+          "kind": "xpMultiplier",
+          "value": 1.5
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "challenge-giant-week",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the card.",
+     "success": {
+      "text": "The card, in Grizzle's big square letters: \"GIANT WEEK. Rule: Every foe is bigger: two levels higher. Lasts: this region. Reward: Experience ×1.5.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "giant-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this run.",
+     "success": {
+      "text": "Grizzle shrugs, not unkindly, and goes back to his straw. \"Next time, maybe.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "only-starters-week",
+   "name": "Only Starters Week: The Challenge Board",
+   "group": "Challenge Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "only-starters-week",
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "A board by the road, covered in pinned cards, and a big man in a leather apron leaning on it, chewing a straw. Grizzle, the board keeper, taps one card with a thick finger: \"Starter lines only. Reward's on the card. Sign up, or don't; nobody'll think less of you.\"",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "Grizzle grins. \"Every starter there ever was, all on one road. Pick a favourite.\" The rule holds for the region. Wild encounters are almost all starter lines, for the region. At the region's end, a starter Egg.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Only Starters Week",
+        "effects": [
+         {
+          "kind": "speciesEncounterWeight",
+          "lines": [
+           "bulbasaur",
+           "charmander",
+           "squirtle",
+           "chikorita",
+           "cyndaquil",
+           "totodile",
+           "treecko",
+           "torchic",
+           "mudkip",
+           "turtwig",
+           "chimchar",
+           "piplup",
+           "snivy",
+           "tepig",
+           "oshawott",
+           "chespin",
+           "fennekin",
+           "froakie",
+           "rowlet",
+           "litten",
+           "popplio",
+           "grookey",
+           "scorbunny",
+           "sobble",
+           "sprigatito",
+           "fuecoco",
+           "quaxly"
+          ],
+          "value": 10
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "challenge-only-starters-week",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the card.",
+     "success": {
+      "text": "The card, in Grizzle's big square letters: \"ONLY STARTERS WEEK. Rule: Wild encounters are almost all starter lines, for the region. Lasts: this region. Reward: At the region's end, a starter Egg.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "only-starters-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this run.",
+     "success": {
+      "text": "Grizzle shrugs, not unkindly, and goes back to his straw. \"Next time, maybe.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "only-fully-evolved-week",
+   "name": "Only Fully Evolved Week: The Challenge Board",
+   "group": "Challenge Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "only-fully-evolved-week",
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "A board by the road, covered in pinned cards, and a big man in a leather apron leaning on it, chewing a straw. Grizzle, the board keeper, taps one card with a thick finger: \"No half measures. Reward's on the card. Sign up, or don't; nobody'll think less of you.\"",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "\"Grown-ups only out there,\" says Grizzle. \"Mind yourself.\" The rule holds for the region. Wild Pokémon are fully evolved and two levels higher. Experience ×1.5.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Only Fully Evolved Week",
+        "effects": [
+         {
+          "kind": "speciesEncounterWeight",
+          "trait": "fullyEvolved",
+          "value": 6
+         },
+         {
+          "kind": "enemyLevelOffset",
+          "value": 2
+         },
+         {
+          "kind": "xpMultiplier",
+          "value": 1.5
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "challenge-only-fully-evolved-week",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the card.",
+     "success": {
+      "text": "The card, in Grizzle's big square letters: \"ONLY FULLY EVOLVED WEEK. Rule: Wild Pokémon are fully evolved and two levels higher. Lasts: this region. Reward: Experience ×1.5.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "only-fully-evolved-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this run.",
+     "success": {
+      "text": "Grizzle shrugs, not unkindly, and goes back to his straw. \"Next time, maybe.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "only-unevolved-week",
+   "name": "Only Unevolved Week: The Challenge Board",
+   "group": "Challenge Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "only-unevolved-week",
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "A board by the road, covered in pinned cards, and a big man in a leather apron leaning on it, chewing a straw. Grizzle, the board keeper, taps one card with a thick finger: \"Show what a Pichu can do. Reward's on the card. Sign up, or don't; nobody'll think less of you.\"",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "\"Little ones,\" says Grizzle, and his whole face softens. \"Show them what little ones can do.\" The rule holds for the region. Wild Pokémon are mostly unevolved, for the region. At the region's end, every Pokémon with you gains a level.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Only Unevolved Week",
+        "effects": [
+         {
+          "kind": "speciesEncounterWeight",
+          "trait": "unevolved",
+          "value": 6
+         },
+         {
+          "kind": "speciesEncounterWeight",
+          "trait": "fullyEvolved",
+          "value": 0.3
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "challenge-only-unevolved-week",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the card.",
+     "success": {
+      "text": "The card, in Grizzle's big square letters: \"ONLY UNEVOLVED WEEK. Rule: Wild Pokémon are mostly unevolved, for the region. Lasts: this region. Reward: At the region's end, every Pokémon with you gains a level.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "only-unevolved-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this run.",
+     "success": {
+      "text": "Grizzle shrugs, not unkindly, and goes back to his straw. \"Next time, maybe.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gravity-week",
+   "name": "Gravity Week: The Challenge Board",
+   "group": "Challenge Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "gravity-week",
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "A board by the road, covered in pinned cards, and a big man in a leather apron leaning on it, chewing a straw. Grizzle, the board keeper, taps one card with a thick finger: \"Nothing floats. Reward's on the card. Sign up, or don't; nobody'll think less of you.\"",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "Grizzle drops his pen to show you. It falls very fast. \"Like that.\" The rule holds for the region. Gravity in every battle. Prize money ×1.25.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Gravity Week",
+        "effects": [
+         {
+          "kind": "battleStart",
+          "field": "gravity",
+          "turns": 5
+         },
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.25
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "challenge-gravity-week",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the card.",
+     "success": {
+      "text": "The card, in Grizzle's big square letters: \"GRAVITY WEEK. Rule: Gravity in every battle. Lasts: this region. Reward: Prize money ×1.25.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gravity-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this run.",
+     "success": {
+      "text": "Grizzle shrugs, not unkindly, and goes back to his straw. \"Next time, maybe.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "trick-room-week",
+   "name": "Trick Room Week: The Challenge Board",
+   "group": "Challenge Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "trick-room-week",
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "A board by the road, covered in pinned cards, and a big man in a leather apron leaning on it, chewing a straw. Grizzle, the board keeper, taps one card with a thick finger: \"The slow go first. Reward's on the card. Sign up, or don't; nobody'll think less of you.\"",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "\"Backwards week,\" says Grizzle. \"Slow's fast. Fast's slow. Don't think about it too hard.\" The rule holds for the region. Trick Room in every battle. Prize money ×1.25.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Trick Room Week",
+        "effects": [
+         {
+          "kind": "battleStart",
+          "field": "trickRoom",
+          "turns": 5
+         },
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.25
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "challenge-trick-room-week",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the card.",
+     "success": {
+      "text": "The card, in Grizzle's big square letters: \"TRICK ROOM WEEK. Rule: Trick Room in every battle. Lasts: this region. Reward: Prize money ×1.25.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "trick-room-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this run.",
+     "success": {
+      "text": "Grizzle shrugs, not unkindly, and goes back to his straw. \"Next time, maybe.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "tailwind-week",
+   "name": "Tailwind Week: The Challenge Board",
+   "group": "Challenge Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "gameEvent": "tailwind-week",
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "A board by the road, covered in pinned cards, and a big man in a leather apron leaning on it, chewing a straw. Grizzle, the board keeper, taps one card with a thick finger: \"Steady wind at your back. Reward's on the card. Sign up, or don't; nobody'll think less of you.\"",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "\"A kind week,\" says Grizzle. \"Everyone needs one. Go on.\" The rule holds for the region. Your side has a Tailwind for the first turns of every battle. No extra reward: it's a breather.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Tailwind Week",
+        "effects": [
+         {
+          "kind": "battleStart",
+          "tailwind": true,
+          "turns": 2
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "challenge-tailwind-week",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the card.",
+     "success": {
+      "text": "The card, in Grizzle's big square letters: \"TAILWIND WEEK. Rule: Your side has a Tailwind for the first turns of every battle. Lasts: this region. Reward: No extra reward: it's a breather.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "tailwind-week"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this run.",
+     "success": {
+      "text": "Grizzle shrugs, not unkindly, and goes back to his straw. \"Next time, maybe.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "solo-hero-week-payout",
+   "name": "Solo Hero Week: Grizzle Pays Up",
+   "group": "Challenge Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "challenge-solo-hero-week",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "solo-hero-week-paid",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "The new region's first road, and Grizzle is waiting at the border with your card, stamped \"SOLO HERO WEEK: DONE\".",
+   "choices": [
+    {
+     "label": "Take the reward.",
+     "success": {
+      "text": "Grizzle finds you at the border with the card in his hand. \"One Pokémon, one road, a whole region. Look at it.\" Your lead stands taller than it did. It is stronger, all over, and it knows it.",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "all",
+        "percent": 5,
+        "who": "lead",
+        "until": "run"
+       },
+       {
+        "kind": "flag",
+        "key": "solo-hero-week-paid",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "no-items-week-payout",
+   "name": "No Items Week: Grizzle Pays Up",
+   "group": "Challenge Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "challenge-no-items-week",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "no-items-week-paid",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "The new region's first road, and Grizzle is waiting at the border with your card, stamped \"NO ITEMS WEEK: DONE\".",
+   "choices": [
+    {
+     "label": "Take the reward.",
+     "success": {
+      "text": "Grizzle meets you at the border and cuts the string off your bag with a pocketknife. \"A whole region with a locked bag. Here. You earned something nice to put back in it.\"",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "no-items-week-paid",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "no-healing-week-payout",
+   "name": "No Revival Week: Grizzle Pays Up",
+   "group": "Challenge Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "challenge-no-healing-week",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "no-healing-week-paid",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "The new region's first road, and Grizzle is waiting at the border with your card, stamped \"NO REVIVAL WEEK: DONE\".",
+   "choices": [
+    {
+     "label": "Take the reward.",
+     "success": {
+      "text": "Grizzle hands back the little box. \"You looked after them. Every one.\" Your team crowds round you while he says it, as if they understood.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "no-healing-week-paid",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "only-starters-week-payout",
+   "name": "Only Starters Week: Grizzle Pays Up",
+   "group": "Challenge Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "challenge-only-starters-week",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "only-starters-week-paid",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "The new region's first road, and Grizzle is waiting at the border with your card, stamped \"ONLY STARTERS WEEK: DONE\".",
+   "choices": [
+    {
+     "label": "Take the reward.",
+     "success": {
+      "text": "Grizzle has a basket at the border with an Egg in it, and a tag: \"Starter. Unknown. Warm.\" \"Somebody's first partner, one day,\" he says. \"Might be yours.\"",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "bulbasaur",
+         "charmander",
+         "squirtle",
+         "chikorita",
+         "cyndaquil",
+         "totodile",
+         "treecko",
+         "torchic",
+         "mudkip",
+         "turtwig",
+         "chimchar",
+         "piplup",
+         "snivy",
+         "tepig",
+         "oshawott",
+         "chespin",
+         "fennekin",
+         "froakie",
+         "rowlet",
+         "litten",
+         "popplio",
+         "grookey",
+         "scorbunny",
+         "sobble",
+         "sprigatito",
+         "fuecoco",
+         "quaxly"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "only-starters-week-paid",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "only-unevolved-week-payout",
+   "name": "Only Unevolved Week: Grizzle Pays Up",
+   "group": "Challenge Weeks",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "challenge-only-unevolved-week",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "only-unevolved-week-paid",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a2a",
+    "effect": "none"
+   },
+   "intro": "The new region's first road, and Grizzle is waiting at the border with your card, stamped \"ONLY UNEVOLVED WEEK: DONE\".",
+   "choices": [
+    {
+     "label": "Take the reward.",
+     "success": {
+      "text": "Grizzle checks your card at the border and laughs out loud. \"Look at them. Look how they've grown.\" They have.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "only-unevolved-week-paid",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

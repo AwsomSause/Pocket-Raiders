@@ -21,18 +21,24 @@ describe('Relics Tree (S373)', () => {
     r.story.flags['ev:tree-ember'] = 1;
     r.story.flags['ev:tree-branch'] = 1;
     expect(open('relic-tree-roots', r)).toBe(false);
+    // Catalog Overhaul places (SF94): a tier also needs the relic grown (2 for the bough, 4 for the crown).
+    expect(open('relic-tree-ember-bough', r)).toBe(false);
+    r.story.flags['ev:relic-growth-ember'] = 2;
     expect(open('relic-tree-ember-bough', r)).toBe(true);
     expect(open('relic-tree-tide-bough', r)).toBe(false);
     expect(open('relic-tree-ember-crown', r)).toBe(false);
     r.story.flags['ev:tree-ember'] = 2;
     expect(open('relic-tree-ember-bough', r)).toBe(false);
+    expect(open('relic-tree-ember-crown', r)).toBe(false);
+    r.story.flags['ev:relic-growth-ember'] = 4;
     expect(open('relic-tree-ember-crown', r)).toBe(true);
   });
 
-  it('each tier-taking choice gives a relic and moves the branch up one', () => {
+  // The relic is the held item itself: each tier upgrades the seed to the bough, the bough to the crown.
+  it('each tier-taking choice upgrades the relic item and moves the branch up one', () => {
     for (const b of BRANCHES) for (const t of ['bough', 'crown']) {
       const take = content.events.get(`relic-tree-${b}-${t}`)!.choices[0]!.success.effects;
-      expect(take.some((e) => e.kind === 'relic')).toBe(true);
+      expect(take.some((e) => e.kind === 'upgradeItem' && e.to === `relic-${b}-${t}`)).toBe(true);
       expect(take.some((e) => e.kind === 'flag' && e.key === `tree-${b}` && e.amount === 1)).toBe(true);
     }
   });

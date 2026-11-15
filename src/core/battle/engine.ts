@@ -21,6 +21,7 @@ import { CARE } from '../care/mods';
 import { shadowDamageMultiplier } from '../shadow';
 import { shadowTurnPlan, shadow2Data } from '../shadow2';
 import { championsAuraStages, firstStrikeBonus } from '../trainerEvolution';
+import { bossLeadStagesOf } from '../co/placesRules';
 import { freshDrama } from '../drama/schema';
 import { skillThrowFactor } from '../camp/schema';
 import type { Perks, TypeModifiers } from '../archetypes';
@@ -1864,6 +1865,7 @@ function ballBonusBase(ctx: BattleContext, effect: Extract<ItemEffect, { kind: '
     case 'flyer': return species.types.includes('flying') ? base : 1;
     case 'weight100': return (species.weight ?? 50) >= 100 ? base : 1;
     case 'weight300': return (species.weight ?? 50) >= 300 ? base : 1;
+    case 'weakened': return enemy.hp * 2 <= maxHp(ctx.content, enemy) ? base : 1;
     default: return base;
   }
 }
@@ -7136,6 +7138,7 @@ export function startBattle(ctx: BattleContext): BattleEvent[] {
   if (lead) quirkEntry(ctx, { side: 'player', mon: lead, stages: ctx.battle.playerStages, vol: ctx.battle.playerVolatile, flinched: false }, events);
   if (ctx.battle.totem) totemAura(ctx, events);
   championsAura(ctx, events);
+  shadowBoonDebt(ctx, events);
   eventStartRules(ctx, events);
   ultraBattleStart(ctx);
   overhaulFieldStart(ctx, events);
@@ -7214,6 +7217,18 @@ function championsAura(ctx: BattleContext, events: BattleEvent[]): void {
   const player: Combatant = { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false };
   events.push({ type: 'raid', tone: 'phase', text: "Champion's Aura! Your Pokémon feels the Champion's resolve!" });
   applyStageChange(ctx, player, best, stages, events);
+}
+
+/** Catalog Overhaul (SF102 Shadow Boon): the debt is collected at the start of a boss battle; the lead's five stats move by the owed stages. */
+function shadowBoonDebt(ctx: BattleContext, events: BattleEvent[]): void {
+  const stages = bossLeadStagesOf(ctx.perks);
+  if (stages === 0 || !isBossClass(ctx.battle.trainer?.classId)) return;
+  const { battle } = ctx;
+  const mon = ctx.party[battle.activeIndex];
+  if (!mon || mon.hp <= 0) return;
+  const player: Combatant = { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false };
+  events.push({ type: 'raid', tone: 'phase', text: stages < 0 ? 'Your shadow collects its loan. Your lead feels heavy.' : 'Your shadow lends its strength.' });
+  for (const stat of ['atk', 'def', 'spa', 'spd', 'spe'] as const) applyStageChange(ctx, player, stat, stages, events);
 }
 
 /** Engine steps the double-battle turn (battle/doubles.ts) drives. Not meant for other callers. */

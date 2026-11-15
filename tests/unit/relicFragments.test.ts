@@ -26,24 +26,26 @@ describe('Relic Fragments (S434)', () => {
     expect(out.money).toBe(200);
   });
 
-  it('the forge needs three fragments, takes them and gives one relic', () => {
+  // Catalog Overhaul places (SF94): the forge fuses three fragments into the relic you are growing (no separate charm or crown).
+  it('the forge needs three fragments, takes them and grows your relic two steps', () => {
     expect(conditionMet(content, atEvent('relic-forge', 2), { ...FRAGMENTS, atLeast: 3 })).toBe(false);
     const few = atEvent('relic-forge', 2);
+    few.story.flags['ev:tree-ember'] = 1;
     expect(() => chooseEvent(content, few, 'rf', 0)).toThrow();
     const run = atEvent('relic-forge', 4);
+    run.story.flags['ev:tree-ember'] = 1;
     const out = chooseEvent(content, run, 'rf', 0).run;
     expect(out.story.flags['ev:relic-frag']).toBe(1);
-    expect(out.story.flags['ev:frag-charm']).toBe(1);
-    expect(JSON.stringify(out)).toContain('Fragment Charm');
+    expect(out.story.flags['ev:relic-growth-ember']).toBe(2);
+    expect(out.story.flags['ev:relic-growth-tide'] ?? 0).toBe(0);
   });
 
-  it('the Crown costs five and each relic can only be forged once', () => {
-    const run = atEvent('relic-forge', 4);
-    expect(() => chooseEvent(content, run, 'rf', 1)).toThrow();
-    const rich = atEvent('relic-forge', 10);
-    rich.story.flags['ev:frag-charm'] = 1;
-    expect(() => chooseEvent(content, rich, 'rf', 0)).toThrow();
-    const out = chooseEvent(content, rich, 'rf', 1).run;
-    expect(out.story.flags['ev:relic-frag']).toBe(5);
+  it('with no relic growing, the forge pays the scrap price and grows nothing', () => {
+    const run = atEvent('relic-forge', 3);
+    const money = run.money;
+    const out = chooseEvent(content, run, 'rf', 0).run;
+    expect(out.story.flags['ev:relic-frag'] ?? 0).toBe(0);
+    expect(out.money).toBe(money + 150);
+    for (const line of ['ember', 'tide', 'leaf']) expect(out.story.flags[`ev:relic-growth-${line}`] ?? 0).toBe(0);
   });
 });

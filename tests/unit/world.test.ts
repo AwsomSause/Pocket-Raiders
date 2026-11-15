@@ -303,8 +303,9 @@ describe('landmarks and dungeons', () => {
         for (const ef of lists.flat()) {
           // Catalog Overhaul markets: a stall that stays open after a question opens itself again (not a room: it is drawn on its own
           // too), and the Game Corner opens its games, which are also drawn on their own (SF91).
+          // An event that opens itself again ("Read it again.", "What's on?") re-shows the same stop; that is not a room.
           if (ef.kind === 'addEvent' && (ef.eventId === e.id || e.id === 'game-corner') && !content.events.get(ef.eventId)?.room) continue;
-          if (ef.kind === 'addEvent') opened.add(ef.eventId);
+          if (ef.kind === 'addEvent' && ef.eventId !== e.id) opened.add(ef.eventId);
           if (ef.kind === 'laterEvent') queued.add(ef.eventId);
           // Catalog Overhaul markets: a prize row that needs its own scene opens it (core/market.ts prize).
           if (ef.kind === 'market') for (const row of ef.table ?? []) if (row.event) opened.add(row.event);
@@ -336,6 +337,8 @@ describe('landmarks and dungeons', () => {
     for (const id of [TREASURE_DIG_EVENT]) opened.add(id);
     // Catalog Overhaul SF161: a Battle Moment with an after-battle choice opens its room beside the next node (core/drama/events.ts).
     for (const d of DRAMA_LIBRARY.events) if (d.after) opened.add(d.after);
+    // A game event places its own room on the map (a `placeEvent` modifier, e.g. the Looping Forest).
+    for (const g of content.gameEvents.values()) for (const m of g.modifiers) if (m.kind === 'placeEvent') opened.add(m.eventId);
     for (const e of content.events.values()) if (e.stop === LANDMARK_STOP) opened.add(e.id);
     // Beta 0.7: a pseudo-stage's rooms are the nodes of its own map (core/dungeon/pseudo.ts), entered by walking there.
     for (const r of PSEUDO.records) for (const n of r.nodes) opened.add(`${r.id.replace(/_/g, '-')}-${n.id}`);

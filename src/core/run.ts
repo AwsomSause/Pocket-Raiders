@@ -892,6 +892,11 @@ export function endRegionTempEffects(run: RunState): void {
     for (const effect of temp.effects) {
       const at = run.perkEffects.findIndex((m) => JSON.stringify(m) === JSON.stringify(effect));
       if (at >= 0) run.perkEffects.splice(at, 1);
+      // A challenge's run rule (SF98) ends with its region, unless the player had chosen it for the run.
+      if (effect.kind === 'runRule' && run.story.flags[`rule-temp:${effect.id}`]) {
+        delete run.story.flags[`rule-temp:${effect.id}`];
+        run.rules.modifierIds = run.rules.modifierIds.filter((id) => id !== effect.id);
+      }
     }
   }
   run.tempEffects = kept;
@@ -4345,6 +4350,7 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
       const old = run.party[choice.partyIndex];
       if (!old) throw new Error('Choose a party member to replace');
       if (old.care?.favourite) throw new Error('A favourite cannot be swapped out. Unmark it in Care first.');
+      if (old.vowed) throw new Error('You made a vow with this Pokémon. It stays.');
       if (shadowTierOf(caught)?.countsAgainstCap && heavyShadowCount(run.party.filter((m) => m.uid !== old.uid)) >= SHADOW_SLOT_CAP) throw new Error(`A party can hold only ${SHADOW_SLOT_CAP} Gripped or Fallen Shadow Pokémon.`);
       const problem = joinProblem(content, run, caught.speciesId, old.uid);
       if (problem) throw new Error(problem);

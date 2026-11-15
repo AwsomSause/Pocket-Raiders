@@ -237,7 +237,10 @@ describe('choosing at an event', () => {
     expect(started.run.passives?.['rm-2-key']).toBeUndefined();
     const before = started.run.money;
     const end = win(started.run);
-    expect(end.run.money).toBeGreaterThanOrEqual(before + 2000);
+    // The prize the event states (its win effects), on top of whatever the battle itself pays.
+    const prize = (content.events.get('rm-2-key-cabin')!.choices[0]!.success.battle!.win ?? []).reduce((n, e) => n + (e.kind === 'money' ? e.amount : 0), 0);
+    expect(prize).toBeGreaterThan(0);
+    expect(end.run.money).toBeGreaterThanOrEqual(before + prize);
     expect(end.run.phase).not.toBe('reward');
   });
 
@@ -255,7 +258,15 @@ describe('choosing at an event', () => {
   });
 
   it('a held-item gift goes to a Pokémon that can hold it', () => {
-    const run = atEvent(newRun('gift'), 'deliver-parcel');
+    // An event whose first choice only hands over one held item (the Parcel is a Potion since the Catalog Overhaul).
+    const gift = [...content.events.values()].find((e) => {
+      const c = e.choices[0];
+      if (!c || e.requires.length || c.requires.length || c.chance !== undefined || c.check || c.success.battle || c.branches?.length) return false;
+      const fx = c.success.effects;
+      return fx.length === 1 && fx[0]!.kind === 'item' && content.catalog.get(fx[0]!.id)?.stacksOn === 'pokemon';
+    })!;
+    expect(gift).toBeDefined();
+    const run = atEvent(newRun('gift'), gift.id);
     const result = chooseEvent(content, run, 'test-event', 0);
     expect(result.changes[0]).toMatch(/for |sold for/);
   });

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import file from '../../src/data/events/dungeonPuzzles.json';
 import { chooseEvent, conditionMet } from '../../src/core/events';
+import { visibleChoices } from '../../src/core/eventMemory';
 import { chooseStarter, createRun } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
@@ -31,14 +32,17 @@ describe('Dungeon traps and puzzles (S22, S145, S146, S147, S149)', () => {
     for (const id of ['dz-mansion-library', 'dz-clockwork-door', 'dz-crypt-pit', 'dz-dive-trench']) expect(rooms(id).room).toBe(true);
   });
 
+  // Catalog Overhaul places (SF118): each of the kitchen, library and cellar has its own lamp; the vault opens when all three are lit.
   it('the vault door stays locked until three lamps are lit, then opens', () => {
     const run = newRun();
-    const open = rooms('dz-mansion-vault').choices[0]!.requires[0]!;
-    expect(conditionMet(content, run, open)).toBe(false);
-    run.story.flags['ev:mansion-lamp'] = 2;
-    expect(conditionMet(content, run, open)).toBe(false);
-    run.story.flags['ev:mansion-lamp'] = 3;
-    expect(conditionMet(content, run, open)).toBe(true);
+    const vault = rooms('dz-mansion-vault');
+    const labels = () => visibleChoices(content, run, vault).map((c) => c.choice.label);
+    expect(labels()).toEqual(['Try the door.']);
+    run.story.flags['ev:mansion-lamp-kitchen'] = 1;
+    run.story.flags['ev:mansion-lamp-library'] = 1;
+    expect(labels()).toEqual(['Try the door.']);
+    run.story.flags['ev:mansion-lamp-cellar'] = 1;
+    expect(labels()).toContain('Read the album.');
   });
 
   it('the dive runs out of air', () => {
@@ -50,15 +54,15 @@ describe('Dungeon traps and puzzles (S22, S145, S146, S147, S149)', () => {
     expect(conditionMet(content, run, need)).toBe(true);
   });
 
-  it('entering the mansion opens its four rooms beside the node and resets the lamps', () => {
+  it('entering the mansion opens the kitchen beside the node (the rooms follow one another) and puts the lamps out', () => {
     const run = newRun();
     const node = run.stage!.map.nodes[0]!;
     run.stage!.current = node.id;
     node.sides.push({ id: 'test-event', kind: 'event', used: false, eventId: 'dz-mansion' });
-    run.story.flags['ev:mansion-lamp'] = 2;
+    run.story.flags['ev:mansion-lamp-kitchen'] = 1;
     const next = chooseEvent(content, run, 'test-event', 0).run;
     const here = next.stage!.map.nodes.find((n) => n.id === node.id)!;
-    expect(here.sides.filter((x) => x.eventId?.startsWith('dz-mansion-')).map((x) => x.eventId).sort()).toEqual(['dz-mansion-cellar', 'dz-mansion-kitchen', 'dz-mansion-library', 'dz-mansion-vault']);
-    expect(next.story.flags['ev:mansion-lamp'] ?? 0).toBe(0);
+    expect(here.sides.filter((x) => x.eventId?.startsWith('dz-mansion-')).map((x) => x.eventId)).toEqual(['dz-mansion-kitchen']);
+    expect(next.story.flags['ev:mansion-lamp-kitchen'] ?? 0).toBe(0);
   });
 });

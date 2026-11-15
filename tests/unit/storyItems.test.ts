@@ -1,6 +1,7 @@
 // Story items: deliveries, trades and form changes through the event system.
 
 import { describe, expect, it } from 'vitest';
+import { visibleChoices } from '../../src/core/eventMemory';
 import { applyCatalog, getCatalogEntry } from '../../src/core/catalog';
 import { chooseEvent } from '../../src/core/events';
 import { createPokemon } from '../../src/core/pokemon';
@@ -31,12 +32,12 @@ describe('story items', () => {
     }
   });
 
-  it('delivering the Letter pays and uses it up', () => {
+  // Catalog Overhaul places (SF95): the Letter is from the shopkeeper's son; giving it is a kindness (Reputation +1), not a fee.
+  it('delivering the Letter raises Reputation and uses it up', () => {
     const run = atEvent(newRun(), 'deliver-letter');
     take(run, 'letter');
-    const money = run.money;
     const result = chooseEvent(content, run, 'test-event', 0);
-    expect(result.run.money).toBe(money + 500);
+    expect(result.run.story.flags['ev:rep']).toBe(1);
     expect(result.run.passives?.letter ?? 0).toBe(0);
   });
 
@@ -55,13 +56,16 @@ describe('story items', () => {
     expect(result.run.party.find((m) => m.uid === 'ky')!.speciesId).toBe('kyurem-black');
   });
 
-  it('Gram 3 pays only after Grams 1 and 2', () => {
+  // SF95: each Gram pays 200; the third piece can be played (a Soothe Bell) only once the first two were delivered.
+  it('Gram 3 plays only after Grams 1 and 2', () => {
+    const labels = (r: ReturnType<typeof newRun>) => visibleChoices(content, r, content.events.get('deliver-gram-3')!).map((c) => c.choice.label);
     const early = atEvent(newRun('gram-a'), 'deliver-gram-3');
-    expect(() => chooseEvent(content, early, 'test-event', 0)).toThrow();
+    expect(labels(early)).not.toContain('"Play it."');
+    const money = early.money;
+    expect(chooseEvent(content, early, 'test-event', 0).run.money).toBe(money + 200);
     const run = atEvent(newRun('gram-b'), 'deliver-gram-3');
-    run.itemCounters = { ...run.itemCounters, 'event-seen:deliver-gram-1': 1, 'event-seen:deliver-gram-2': 1 };
-    const money = run.money;
-    expect(chooseEvent(content, run, 'test-event', 0).run.money).toBe(money + 3000);
+    run.story.flags['ev:gram-delivered'] = 2;
+    expect(labels(run)).toContain('"Play it."');
   });
 });
 
