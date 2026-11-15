@@ -1455,3 +1455,100 @@ test('New UI: a story scene is the mock-up talk page; its lines turn with a clic
   expect(await scene(page)).not.toBe('Story');
   expect(errors).toEqual([]);
 });
+
+test('New UI: the Breather is the mock-up page: the party strip, the quiet room, and a click on Rest heals and goes back to the map', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=e4-breather');
+  await toMap(page);
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    const run = pkr.session.run;
+    run.party[0].hp = 1;
+    run.expansion = { ...(run.expansion ?? {}), cut: { format: { id: 'breather', state: { healPct: 0.5, step: 'choose', revived: null, healed: 0 } } } };
+    pkr.game.scene.getScene('Map').scene.restart({ focus: 0 });
+  });
+  await waitForScene(page, 'Format');
+  const room = view(page, 'Format');
+  for (const bit of ['Breather', 'Bring one back', 'Nobody is down.', 'The quiet room', '+50% HP', 'Heal', '50%', 'When you rest']) await expect(room).toContainText(bit);
+  await expect(room.locator('.an')).toHaveCount(1); // the one Pokémon of the party, drawn on the strip
+  await expect(room.locator('[data-act="pick"]')).toHaveCount(1);
+  await expect(room.locator('[data-act="pick"]')).toContainText('Rest');
+  await page.screenshot({ path: 'test-results/newui-breather.png' });
+  await room.locator('[data-act="pick"]').click();
+  // The rest is over: the page stays until the player goes on.
+  await expect(room.locator('[data-act="pick"]')).toContainText('Continue');
+  await expect(room).toContainText('Everyone still standing has rested.');
+  expect(await scene(page)).toBe('Format');
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Map');
+  const out = await page.evaluate(() => {
+    const run = (window as any).__pkr.session.run;
+    return { hp: run.party[0].hp, done: run.expansion.cut.done, format: run.expansion.cut.format ?? null };
+  });
+  expect(out.hp).toBeGreaterThan(1);
+  expect(out.done).toEqual(['breather']);
+  expect(out.format).toBeNull();
+  expect(errors).toEqual([]);
+});
+
+test('New UI: the Blackout shows a card per anchor and the Seal; keys move over the standing ones and a click starts the sealed fight', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=e4-blackout');
+  await toMap(page);
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    const run = pkr.session.run;
+    const anchors = [
+      { id: 'a1', place: 'the Nugget Bridge crossing', name: 'Anchor: Proton', species: ['mr-mime'], size: 2, beaten: true },
+      { id: 'a2', place: 'the Celadon Lane cordon', name: 'Anchor: Petrel', species: ['mr-mime'], size: 2, beaten: false },
+      { id: 'a3', place: 'the crossroads below Silph', name: 'Anchor: Ariana', species: ['mr-mime'], size: 2, beaten: false },
+    ];
+    run.expansion = { ...(run.expansion ?? {}), cut: { format: { id: 'blackout', state: { anchors, triad: false, pending: null, losses: 0 } } } };
+    pkr.game.scene.getScene('Map').scene.restart({ focus: 0 });
+  });
+  await waitForScene(page, 'Format');
+  const streets = view(page, 'Format');
+  for (const bit of ['Anchor: Proton', 'Fallen', 'Anchor: Petrel', 'Standing · the Celadon Lane cordon', 'Anchor: Ariana', 'The violet Seal', 'Anchors fallen 1 / 2']) await expect(streets).toContainText(bit);
+  // The count is said once, on the Seal's own line.
+  await expect(streets).not.toContainText('Anchors beaten');
+  // Only the two standing anchors can be picked; the cursor starts on the first of them.
+  await expect(streets.locator('[data-act="pick"]')).toHaveCount(2);
+  await expect(streets.locator('.sel')).toContainText('Anchor: Petrel');
+  await page.keyboard.press('ArrowRight');
+  await expect(streets.locator('.sel')).toContainText('Anchor: Ariana');
+  await page.keyboard.press('ArrowRight');
+  await expect(streets.locator('.sel')).toContainText('Anchor: Petrel');
+  await page.screenshot({ path: 'test-results/newui-blackout.png' });
+  await streets.locator('[data-act="pick"]', { hasText: 'Anchor: Ariana' }).click();
+  await waitForScene(page, 'Battle');
+  const got = await page.evaluate(() => {
+    const run = (window as any).__pkr.session.run;
+    return { pending: run.expansion.cut.format.state.pending, rule: run.battle.eventRule };
+  });
+  expect(got.pending).toBe('a3');
+  expect(got.rule).toEqual({ noSwitchFirstTurn: true, typeBoost: { type: 'psychic', pct: 10 } });
+  expect(errors).toEqual([]);
+});
+
+test('New UI: the Colossus page shows the Apex and the Blueprint of its three shields, and the button starts the raid', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=e4-colossus');
+  await toMap(page);
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    const run = pkr.session.run;
+    run.expansion = { ...(run.expansion ?? {}), cut: { format: { id: 'colossus', state: { apex: { id: 'ss.rocket.m2', name: 'M2', code: 'XD002' }, pending: false, result: null } } } };
+    pkr.game.scene.getScene('Map').scene.restart({ focus: 0 });
+  });
+  await waitForScene(page, 'Format');
+  const roof = view(page, 'Format');
+  for (const bit of ['XD002 · The Roof', 'M2', 'Blueprint', 'Shield at 75%', 'Shield at 50%', 'Shield at 25%', 'Ten turns before the helicopter lifts it away.', 'Face M2']) await expect(roof).toContainText(bit);
+  await expect(roof.locator('.an')).toHaveCount(1); // the Apex
+  await page.screenshot({ path: 'test-results/newui-colossus.png' });
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Battle');
+  const raid = await page.evaluate(() => (window as any).__pkr.session.run.battle.raid);
+  expect(raid.pendingShields).toHaveLength(3);
+  expect(raid.timerLeft).toBe(10);
+  expect(errors).toEqual([]);
+});
