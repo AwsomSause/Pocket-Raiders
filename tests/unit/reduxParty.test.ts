@@ -102,3 +102,29 @@ describe('New UI Summary', () => {
     });
   }
 });
+
+describe('New UI Summary: the move tooltip', () => {
+  const tip = { head: 'Flamethrower', chips: ['fire'], facts: [['Category', 'Special'], ['PP', '12 / 15']] as [string, string][], lines: ['May burn the target (10%).'] };
+  const body: SummaryBody = { kind: 'overview', ability: { name: 'Blaze', text: 'Powers up Fire moves in a pinch.' }, facts: [], note: '', moves: [{ name: 'Flamethrower', type: 'fire' }, { name: 'Roost', type: 'flying' }] };
+
+  for (const layout of [0, 1]) {
+    it(`layout ${layout}: each move chip on the Overview carries its hover key`, () => {
+      const html = summaryView(ctx(layout), summary(body));
+      expect(html).toContain('data-tip="move:0"');
+      expect(html).toContain('data-tip="move:1"');
+      expect(html).not.toContain('May burn the target');
+    });
+
+    it(`layout ${layout}: the tooltip is the mock-up window at the right, and never takes a click`, () => {
+      const html = summaryView(ctx(layout), summary(body, { tip }));
+      expect(html).toContain('right:60px;bottom:150px;width:330px');
+      expect(html).toContain('May burn the target (10%).');
+      expect(html).toContain('pointer-events:none');
+    });
+
+    it(`layout ${layout}: the action menu hides the tooltip`, () => {
+      const html = summaryView(ctx(layout), summary(body, { tip, menu: { options: [{ label: 'Make lead', off: false }], index: 0 } }));
+      expect(html).not.toContain('May burn the target');
+    });
+  }
+});
