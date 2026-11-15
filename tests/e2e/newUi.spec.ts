@@ -285,6 +285,50 @@ test('New UI: the Hub is the dock (two tabs of six buttons); its Town page walks
   expect(errors).toEqual([]);
 });
 
+test('New UI: Party opens as the mock-up page; Enter opens the Summary with its tabs and the action menu', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  // A second Pokémon, so the page has a row to move to and an order to change.
+  await page.evaluate(() => {
+    const run = (window as any).__pkr.session.run;
+    const twin = JSON.parse(JSON.stringify(run.party[0]));
+    twin.uid = 'e2e-twin';
+    twin.level = 9;
+    run.party.push(twin);
+  });
+  await view(page, 'Map').first().locator('[data-act="pick"]', { hasText: 'Party' }).first().click();
+  const top = () => view(page, 'Map').last();
+  await expect(top().locator('.hd')).toContainText('Party');
+  await expect(top().locator('[data-act="pick"]')).toHaveCount(2);
+  // The second card opens its Summary; the seven tabs are there and a click turns the page.
+  await page.waitForTimeout(250);
+  await top().locator('[data-act="pick"]').nth(1).click();
+  await expect(top().locator('.hd')).toContainText('Summary');
+  await expect(top()).toContainText('Lv 9');
+  await expect(top().locator('[data-act="tab"]')).toHaveCount(8);
+  await top().locator('[data-act="tab"]', { hasText: 'Stats' }).click();
+  await expect(top()).toContainText('EV');
+  await top().locator('[data-act="tab"]', { hasText: 'Moves' }).click();
+  await expect(top().locator('[data-act="cursor"]').first()).toBeVisible();
+  // Enter opens the action menu; "Make lead" moves the second Pokémon to the front of the party.
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Enter');
+  const lead = top().locator('[data-act="menu"]', { hasText: 'Make lead' });
+  await expect(lead).toBeVisible();
+  await lead.click();
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.party[0].uid)).toBe('e2e-twin');
+  // Esc goes back to the Party page, then to the map.
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Escape');
+  await expect(top().locator('.hd')).toContainText('Party');
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Escape');
+  await waitForScene(page, 'Map');
+  await expect(view(page, 'Map').locator('.hd', { hasText: 'Party' })).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
 test('UI style: Old shows no New layer; the address can ask for either', async ({ page }) => {
   const errors = watch(page);
   // An automated browser gets Old by default (the older specs rely on it).
