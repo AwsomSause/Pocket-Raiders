@@ -108,6 +108,9 @@ describe('memory flag registry', () => {
     }
     // Flags the rival questline engine sets after a fight (core/rivals/questlines.ts ENGINE_FLAGS).
     for (const k of ENGINE_FLAGS) setKeys.add(k);
+    // Catalog Overhaul flag files name the flags code keeps (`rule`) and the ones another set will write (`hook`, its line waits until then).
+    const coFlags = Object.values(import.meta.glob<{ flags: { key: string; rule?: string; hook?: string }[] }>('../../src/data/catalogOverhaul/flags/*.json', { eager: true, import: 'default' }));
+    for (const f of coFlags) for (const x of f.flags ?? []) if (x.rule || x.hook) setKeys.add(x.key);
     const missing = reads.filter((r) => !setKeys.has(r.split(':')[1]!));
     expect(missing).toEqual([]);
   });

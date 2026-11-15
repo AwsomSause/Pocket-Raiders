@@ -1,6 +1,7 @@
 import { MENTORS } from '../../src/core/mentors';
 import { PSEUDO } from '../../src/core/dungeon/pseudo';
 import { POKEMON_MOMENTS } from '../../src/core/moments/pokemonMoments';
+import { canonKantoPlaced } from '../../src/data/expansion';
 // Exploration (APPROVED.md §5-6): fog of war, weather fronts, roaming Legendaries, camps, secret
 // paths, callbacks, landmark rooms and the stops of the limited-time events.
 
@@ -289,6 +290,8 @@ describe('landmarks and dungeons', () => {
     const opened = new Set<string>();
     const viaMentor = new Set<string>();
     const questOpened = new Set<string>();
+    // Stops queued some nodes on (`laterEvent`: the Fossil Rush's egg) or placed by code need not be rooms, but they do reach the rooms they are.
+    const queued = new Set<string>();
     // Openers: outcome effects, a battle's win and lose effects (a friendly fight's loss still opens its room), choice branches,
     // and the choices a Remembers variant adds.
     for (const e of content.events.values()) {
@@ -296,9 +299,8 @@ describe('landmarks and dungeons', () => {
         const lists = [...[ch.success, ch.failure].flatMap((o) => [o?.effects ?? [], o?.battle?.win ?? [], o?.battle?.lose ?? []]), ...(ch.branches ?? []).map((b) => b.effects)];
         for (const ef of lists.flat()) {
           if (ef.kind === 'addEvent') opened.add(ef.eventId);
+          if (ef.kind === 'laterEvent') queued.add(ef.eventId);
           if (ef.kind === 'addEventFrom') ef.ids.forEach((i) => opened.add(i));
-          // A later beat (queueLaterEvent): the room opens a set number of nodes further on.
-          if (ef.kind === 'laterEvent') opened.add(ef.eventId);
           // Rival questlines (core/rivals/questlines.ts): the first scene whose conditions hold, or stops further along the map.
           // These may also open a scheduled beat (not a room), so they only count as a way into a room.
           if (ef.kind === 'rivalQuest') {
@@ -311,6 +313,8 @@ describe('landmarks and dungeons', () => {
         }
       }
     }
+    // Kanto canon: follow-up scenes and road rows are placed by code (core/expansion/canonKantoPlaced.ts).
+    for (const r of [...canonKantoPlaced.followups, ...canonKantoPlaced.routes]) queued.add(r.event);
 
     // Ideas W4: rooms opened by a traversal obstacle, and stops the code places (wanderer, treasure map, landmarks).
     for (const o of TRAVERSAL.obstacles) for (const ef of o.pass) if (ef.kind === 'addEvent') opened.add(ef.eventId);
@@ -327,7 +331,7 @@ describe('landmarks and dungeons', () => {
     for (const m of POKEMON_MOMENTS) if (m.effect?.openEvent) opened.add(m.effect.openEvent);
     for (const id of opened) expect(content.events.get(id)?.room, id).toBe(true);
     // A retired room (Catalog Overhaul REMOVE: kept for saved runs, never drawn) need not be reachable.
-    for (const e of content.events.values()) if (e.room && !e.disabled) expect(opened.has(e.id) || questOpened.has(e.id) || viaMentor.has(e.id), e.id).toBe(true);
+    for (const e of content.events.values()) if (e.room && !e.disabled) expect(opened.has(e.id) || questOpened.has(e.id) || viaMentor.has(e.id) || queued.has(e.id), e.id).toBe(true);
   });
 
   it('a Mystery Dungeon floor picks its next room from the floor below', () => {

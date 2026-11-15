@@ -1,0 +1,4482 @@
+{
+ "catalogOverhaul": "kanto-canon",
+ "override": true,
+ "remove": [
+  "cs-kanto-pewter-rest-spice",
+  "cs-kanto-vermilion-market-hero",
+  "cs-kanto-viridian-diglett-reward",
+  "cs-kanto-viridian-parcel-drop"
+ ],
+ "events": [
+  {
+   "id": "cs-kanto-viridian-oldman",
+   "name": "The Old Man's Lesson",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a",
+    "pokemon": "weedle"
+   },
+   "intro": "An old man is lying across the road outside the Poké Mart, half asleep, with his hat over his face. You go to step around him and the hat speaks. The Old Man: \"Mmf. No. Don't step over me. I'm a landmark.\" His granddaughter, from the doorway: \"He hasn't had his coffee. Give him a minute. Give him several.\" He sits up, slowly, the way an old house settles. The Old Man: \"You've got Balls and no idea. I can tell from here. Watch. I'll do it once.\" A Weedle crosses the road. He throws without standing up. The Old Man: \"There. Wrist, not arm. Now you.\"",
+   "choices": [
+    {
+     "label": "Show me again.",
+     "success": {
+      "text": "He does. It's exactly the same throw: the same lazy turn of the wrist, the same small click, the same Weedle caught and let out again looking faintly put upon. You watch for the trick and there isn't one. The Old Man: \"That's the point. It's always the same throw.\" He lies back down across the road and waits for you to be ready.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-viridian-oldman-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let me try.",
+     "chance": 0.8,
+     "success": {
+      "text": "The Weedle's let out for you. It sits in the road and waits, patient as a stone, as though it has done this for a hundred nervous beginners and expects to do it for a hundred more. You hold the Ball the way he held it. Wrist, not arm. It leaves your hand, it closes, it rocks once and goes still. A guaranteed catch, and it still makes your heart jump. The Old Man doesn't open his eyes. He holds out five Poké Balls and a little charm on a string, and he is already most of the way back to sleep.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "weedle"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-weedle-seed",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 5
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Catching Charm: the first Poké Ball you throw is 25% better",
+        "effects": [
+         {
+          "kind": "captureMultiplier",
+          "value": 1.25
+         }
+        ],
+        "battles": 1,
+        "until": "wild"
+       },
+       {
+        "kind": "moment",
+        "text": "Learned to throw from the Old Man in Viridian City."
+       }
+      ]
+     },
+     "failure": {
+      "text": "He hasn't had it. You can tell, because the hat comes off and the eyes under it are the eyes of a man who has been asked one question too many before breakfast. The Old Man: \"Fine. FINE. We'll do it the long way.\" He lets his Weedle back out. It rears up on the warm road with its horn lowered, and it looks at your lead the way he looks at mornings.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 5
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Catching Charm: the first Poké Ball you throw is 25% better",
+        "effects": [
+         {
+          "kind": "captureMultiplier",
+          "value": 1.25
+         }
+        ],
+        "battles": 1,
+        "until": "wild"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "weedle"
+       ],
+       "levelBonus": -2,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "weedle"
+         ],
+         "levelBonus": -2
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-weedle-seed",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Beat the Old Man's Weedle before he had his coffee, and kept it."
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Have you had your coffee?",
+     "success": {
+      "text": "He hasn't had it. You can tell, because the hat comes off and the eyes under it are the eyes of a man who has been asked one question too many before breakfast. The Old Man: \"Fine. FINE. We'll do it the long way.\" He lets his Weedle back out. It rears up on the warm road with its horn lowered, and it looks at your lead the way he looks at mornings.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 5
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Catching Charm: the first Poké Ball you throw is 25% better",
+        "effects": [
+         {
+          "kind": "captureMultiplier",
+          "value": 1.25
+         }
+        ],
+        "battles": 1,
+        "until": "wild"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "weedle"
+       ],
+       "levelBonus": -2,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "weedle"
+         ],
+         "levelBonus": -2
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-weedle-seed",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Beat the Old Man's Weedle before he had his coffee, and kept it."
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.viridian.oldman"
+  },
+  {
+   "id": "cs-kanto-viridian-oldman-again",
+   "name": "The Old Man's Lesson",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a",
+    "pokemon": "weedle"
+   },
+   "intro": "The Weedle has wandered back to the middle of the road. The old man has one eye open under the brim of his hat, and it is on your hands.",
+   "choices": [
+    {
+     "label": "Let me try.",
+     "chance": 0.8,
+     "success": {
+      "text": "The Weedle's let out for you. It sits in the road and waits, patient as a stone, as though it has done this for a hundred nervous beginners and expects to do it for a hundred more. You hold the Ball the way he held it. Wrist, not arm. It leaves your hand, it closes, it rocks once and goes still. A guaranteed catch, and it still makes your heart jump. The Old Man doesn't open his eyes. He holds out five Poké Balls and a little charm on a string, and he is already most of the way back to sleep.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "weedle"
+        ],
+        "levelBonus": -2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-weedle-seed",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 5
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Catching Charm: the first Poké Ball you throw is 25% better",
+        "effects": [
+         {
+          "kind": "captureMultiplier",
+          "value": 1.25
+         }
+        ],
+        "battles": 1,
+        "until": "wild"
+       },
+       {
+        "kind": "moment",
+        "text": "Learned to throw from the Old Man in Viridian City."
+       }
+      ]
+     },
+     "failure": {
+      "text": "He hasn't had it. You can tell, because the hat comes off and the eyes under it are the eyes of a man who has been asked one question too many before breakfast. The Old Man: \"Fine. FINE. We'll do it the long way.\" He lets his Weedle back out. It rears up on the warm road with its horn lowered, and it looks at your lead the way he looks at mornings.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 5
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Catching Charm: the first Poké Ball you throw is 25% better",
+        "effects": [
+         {
+          "kind": "captureMultiplier",
+          "value": 1.25
+         }
+        ],
+        "battles": 1,
+        "until": "wild"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "weedle"
+       ],
+       "levelBonus": -2,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "weedle"
+         ],
+         "levelBonus": -2
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-weedle-seed",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Beat the Old Man's Weedle before he had his coffee, and kept it."
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Have you had your coffee?",
+     "success": {
+      "text": "He hasn't had it. You can tell, because the hat comes off and the eyes under it are the eyes of a man who has been asked one question too many before breakfast. The Old Man: \"Fine. FINE. We'll do it the long way.\" He lets his Weedle back out. It rears up on the warm road with its horn lowered, and it looks at your lead the way he looks at mornings.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 5
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Catching Charm: the first Poké Ball you throw is 25% better",
+        "effects": [
+         {
+          "kind": "captureMultiplier",
+          "value": 1.25
+         }
+        ],
+        "battles": 1,
+        "until": "wild"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "weedle"
+       ],
+       "levelBonus": -2,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "weedle"
+         ],
+         "levelBonus": -2
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-weedle-seed",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Beat the Old Man's Weedle before he had his coffee, and kept it."
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-oldman-return",
+   "name": "Viridian City, a Year On",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "school-wrong",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-school-done",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "kanto-school-wrong",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Through the Trainer School window you can see the same class, a year on. One child has a Pidgey on the desk now. The child spots you and shouts through the glass: \"You got the Rock one wrong. I remember.\""
+    },
+    {
+     "id": "school",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-school-done",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Through the Trainer School window you can see the same class, a year on. One child has a Pidgey on the desk now. Miss Whitlock taps the glass and points you out to all of them: a real one."
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "You come back into Viridian the long way round, eight Badges heavier, and the road outside the Poké Mart has not changed at all. He's in the same place. Same hat. Same road. The Old Man: \"You again. You've got the wrist now. I can tell from here.\" He doesn't sit up to say it. From the doorway his granddaughter lifts a coffee cup at you, and you understand that it is his, and that it is still full.",
+   "choices": [
+    {
+     "label": "Tip your cap to the landmark.",
+     "success": {
+      "text": "You step around him, carefully, the way you would step around anything that has stood in one place long enough to be part of the town. Behind you he mutters something about wrists. It sounds, very nearly, like pride.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ],
+   "room": false,
+   "canon": "cs.kanto.viridian.oldman"
+  },
+  {
+   "id": "cs-kanto-viridian-route22",
+   "name": "Route 22: The Rival",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "The road west ends at a gate with a guard. Someone's leaning on the gate, arguing with him, with the tired patience of a person who has been arguing for some time. Gate guard: \"Badges. All of them. Come back when the whole region's heard of you.\" Rival: \"I told him the whole region will have. He wants it in writing.\" The rival turns round, and sees you. Something lights behind their eyes that has nothing to do with the gate. Rival: \"Oh, good. Someone I can prove it on.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "You don't answer. You reach for a Poké Ball, and that is answer enough. The guard sighs and takes one step back from his own gate, like a man who has seen this road used for this before.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route22-first",
+        "amount": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "rivalry": 1
+        },
+        "lead": 0,
+        "mark": "route22-token"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rival",
+       "size": 2,
+       "levelBonus": 2,
+       "win": [],
+       "rival": true
+      }
+     }
+    },
+    {
+     "label": "The gate's shut for you too, then.",
+     "success": {
+      "text": "For a second you can't tell whether the rival will laugh. Then the corner of their mouth gives them away, and they hide it behind a Poké Ball. \"Shut for now,\" they say. \"Watch how fast that changes.\" And then there is no more talking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route22-first",
+        "amount": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "rivalry": 1
+        },
+        "lead": 0,
+        "mark": "route22-token"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rival",
+       "size": 2,
+       "levelBonus": 2,
+       "win": [],
+       "rival": true
+      }
+     }
+    },
+    {
+     "label": "I'll catch you up.",
+     "success": {
+      "text": "It isn't a way out. The rival is already standing in the middle of the road, and the road is not wide. Rival: \"No. Now.\" They say it almost gently. They have waited all the way from home for this, and they are not going to wait for the far side of a gate.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route22-first",
+        "amount": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "rivalry": 1
+        },
+        "lead": 0,
+        "mark": "route22-token"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rival",
+       "size": 2,
+       "levelBonus": 2,
+       "win": [],
+       "rival": true
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.viridian.route22"
+  },
+  {
+   "id": "cs-kanto-viridian-route22-return",
+   "name": "Route 22: The Final Rematch",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "threw",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "x-rival-threw-match",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Before the first move, the rival says it out loud, so the guard can hear: \"You threw one for me, back there. Don't you dare do it here. I want this one to be real.\""
+    },
+    {
+     "id": "swapped",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "x-rival-swapped-teams",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Before the first move, the rival says it: \"I carried your team for a day. I know how every one of them breathes. That cuts both ways, so don't think it helps you.\""
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "The same gate. The same guard, a little greyer, counting the Badges on your jacket with one finger in the air. Gate guard: \"Eight. Well, well. Go on through. ...After that one's finished with you.\" Someone is leaning on the gate, exactly where they leaned a region ago. Rival: \"Same gate. I was here first. Again.\" They say it lightly, but they have walked every road you walked to be able to say it, and you both know what this is. The last one in Kanto.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Neither of you reaches for a Ball yet. There is one more thing to settle first, and it is everything that happened between this gate and this gate.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-viridian-route22-ahead"
+       }
+      ]
+     }
+    }
+   ],
+   "room": false,
+   "canon": "cs.kanto.viridian.route22"
+  },
+  {
+   "id": "cs-kanto-viridian-route22-ahead",
+   "name": "Route 22: The Final Rematch",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "labyrinth",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-sabrina-labyrinth-done",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Rival: \"And the Labyrinth. I heard you went in with nothing and came out with a ghost for a friend. I stood outside that door for an hour. I never went in.\""
+    },
+    {
+     "id": "ship",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-ssanne-done",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Rival: \"And the ship. I was on that ship. I saw you on the deck when it went wrong, and I saw what you did. I've been trying to be that fast ever since.\""
+    },
+    {
+     "id": "bridge",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-bridge-fell",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Rival: \"And the bridge. I heard you went down with it and walked out the other side with a village behind you. I was two days back, and I ran the whole way.\""
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "The rival counts it off on their fingers, the whole region, town by town: who got there first, who was a day behind, who is ahead now. By their count it comes out very nearly even, and that is the one answer neither of you can stand.",
+   "choices": [
+    {
+     "label": "Begin.",
+     "success": {
+      "text": "Neither of you talks about who is ahead. It is written all over both of you: every town, every loss, every night camped a day behind the other. The guard opens the gate and stands well clear of it. The first Ball is in the air before the latch has stopped ringing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-route22-final",
+        "amount": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rival",
+       "size": 4,
+       "levelBonus": 2,
+       "win": [],
+       "rival": true
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-parcel",
+   "name": "Viridian Mart: The Parcel",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "The Mart's clerk waves from behind a stack of boxes. Clerk: \"You're heading up the road? Take this to the Center. It's for the professor. It's been here a week. He forgets he orders things.\" A parcel, tied with string, labelled in a hurry. The handwriting leans as if it were running for a train.",
+   "choices": [
+    {
+     "label": "I'll take it.",
+     "success": {
+      "text": "The parcel is lighter than it looks and warmer than it should be. The clerk watches it go the way you watch a guest leave who has stayed a week. \"Center's up the road. You can't miss it. He will have forgotten he ordered it. Tell him it came anyway.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-viridian-parcel-road"
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's in it?",
+     "success": {
+      "text": "The clerk turns the parcel over once and sets it down a little further away from himself. Clerk: \"Don't know. It ticks. I've decided not to wonder.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-viridian-parcel-ask"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not going that way.",
+     "success": {
+      "text": "\"Nobody ever is,\" says the clerk, without any bitterness at all, and puts the parcel back on top of the stack, where it goes on ticking quietly to itself.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.viridian.parcel"
+  },
+  {
+   "id": "cs-kanto-viridian-parcel-ask",
+   "name": "Viridian Mart: The Parcel",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "The parcel sits on the counter between you, tied with string, labelled in a hurry. It ticks. The clerk has decided not to wonder, and is waiting to see what you decide.",
+   "choices": [
+    {
+     "label": "I'll take it.",
+     "success": {
+      "text": "The parcel is lighter than it looks and warmer than it should be. The clerk watches it go the way you watch a guest leave who has stayed a week. \"Center's up the road. You can't miss it. He will have forgotten he ordered it. Tell him it came anyway.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-viridian-parcel-road"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not going that way.",
+     "success": {
+      "text": "\"Nobody ever is,\" says the clerk, without any bitterness at all, and puts the parcel back on top of the stack, where it goes on ticking quietly to itself.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-parcel-road",
+   "name": "The Parcel: On the Way",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "The road to the Center runs through long grass, and the parcel ticks against your ribs with every step. Something in the grass is keeping pace with you. It is small, and it is interested.",
+   "choices": [
+    {
+     "label": "Carry it to the Center.",
+     "chance": 0.75,
+     "success": {
+      "text": "You hold the parcel a little tighter and nothing comes of it. Nurse: \"For the professor? Finally. He's rung four times. Here: he said whoever brought it could have the old one.\" She slides a scuffed Pokédex Upgrade across the counter. It has somebody's initials scratched into the back, and it has plainly been loved. The next five wild Pokémon you meet will show you their Ability.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "devon-scope",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-parcel-upgrade",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Delivered the professor's parcel and got his old Pokédex Upgrade."
+       }
+      ]
+     },
+     "failure": {
+      "text": "A Rattata or a Meowth, you never get a clear look at which, comes out of the grass in one grey streak. It takes the parcel by the string and runs. The ticking goes with it, getting fainter.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-viridian-parcel-thief"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-parcel-thief",
+   "name": "The Parcel: The Thief",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a",
+    "pokemon": "meowth"
+   },
+   "intro": "The thief stops at the edge of the trees to get a better grip on the string. It looks back at you over the parcel. It is deciding whether you are the sort of person who chases.",
+   "choices": [
+    {
+     "label": "Chase it.",
+     "success": {
+      "text": "You run. It runs. It is faster than you and much less burdened by conscience, but the parcel is nearly as big as it is, and at the first fence it has to turn and fight.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "rattata",
+        "meowth"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Chased down the parcel thief on the road out of Viridian."
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-viridian-parcel-deliver"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "You let it go. The grass closes behind it. Somewhere in there a parcel is ticking for nobody, and a professor is about to ring the Center for the fifth time. You tell yourself it was only a parcel. It was tied with string by someone in a hurry.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-parcel-lost",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-parcel-deliver",
+   "name": "The Parcel: Delivery",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "You have the parcel back. The parcel's a little chewed: one corner is soft, and the string has tooth marks in it. It is still ticking. The Center's doors are just ahead.",
+   "choices": [
+    {
+     "label": "Hand it over the counter.",
+     "success": {
+      "text": "Nurse: \"For the professor? Finally. He's rung four times. Here: he said whoever brought it could have the old one.\" She slides a scuffed Pokédex Upgrade across the counter. It has somebody's initials scratched into the back, and it has plainly been loved. The next five wild Pokémon you meet will show you their Ability. She turns the chewed corner toward the wall, so the professor won't see it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "devon-scope",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-parcel-upgrade",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Delivered the professor's parcel and got his old Pokédex Upgrade."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-parcel-nest",
+   "name": "The Parcel: Still Ticking",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kanto-parcel-lost",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "kanto-parcel-found",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a",
+    "pokemon": "meowth"
+   },
+   "intro": "Two stages on, in the roots of a harbor-road tree, there is a Meowth's nest made of string, bottle caps and one lost glove. In the middle of it, unopened, sits a parcel labelled in a hurry. You crouch. It's still ticking. The Meowth is not home. The string has been chewed, thoughtfully, and then left alone, as if even a thief decided not to wonder.",
+   "choices": [
+    {
+     "label": "Take it to the next Center.",
+     "success": {
+      "text": "You carry it the rest of the way, a whole region late. Nurse: \"For the professor? Finally. He's rung four times. Here: he said whoever brought it could have the old one.\" She slides a scuffed Pokédex Upgrade across the counter. It has somebody's initials scratched into the back, and it has plainly been loved. The next five wild Pokémon you meet will show you their Ability. \"A little chewed,\" the nurse adds, turning it in her hands. \"He won't notice. He'll be so pleased it came.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "devon-scope",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-parcel-upgrade",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Delivered the professor's parcel and got his old Pokédex Upgrade."
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-parcel-found",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it in the nest.",
+     "success": {
+      "text": "You leave it where it is. Some things have found their place. Behind you, in a nest of string, a professor's parcel goes on ticking for a Meowth who never opened it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-parcel-found",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-school-q1",
+   "name": "Trainer School: Question One",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "Miss Whitlock writes it on the board in big round letters and underlines it twice. \"Water against Rock?\" Six children turn in their seats to watch you think. One of them is already mouthing the answer.",
+   "choices": [
+    {
+     "label": "Strong.",
+     "pick": {},
+     "success": {
+      "text": "\"Correct!\" The chalk squeaks a tick beside your name. Six children look at you as though you had done something much harder than that, and the Pokémon you pick stands a little taller for it: +1 to a stat.",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "statUp",
+        "stat": "random"
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q5",
+         "cs-kanto-viridian-school-q6",
+         "cs-kanto-viridian-school-q7",
+         "cs-kanto-viridian-school-q8"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Weak.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q5",
+         "cs-kanto-viridian-school-q6",
+         "cs-kanto-viridian-school-q7",
+         "cs-kanto-viridian-school-q8"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "No effect.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q5",
+         "cs-kanto-viridian-school-q6",
+         "cs-kanto-viridian-school-q7",
+         "cs-kanto-viridian-school-q8"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-school-q2",
+   "name": "Trainer School: Question One",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "Miss Whitlock writes it on the board in big round letters and underlines it twice. \"Fire against Grass?\" Six children turn in their seats to watch you think. One of them is already mouthing the answer.",
+   "choices": [
+    {
+     "label": "Weak.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q5",
+         "cs-kanto-viridian-school-q6",
+         "cs-kanto-viridian-school-q7",
+         "cs-kanto-viridian-school-q8"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Strong.",
+     "pick": {},
+     "success": {
+      "text": "\"Correct!\" The chalk squeaks a tick beside your name. Six children look at you as though you had done something much harder than that, and the Pokémon you pick stands a little taller for it: +1 to a stat.",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "statUp",
+        "stat": "random"
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q5",
+         "cs-kanto-viridian-school-q6",
+         "cs-kanto-viridian-school-q7",
+         "cs-kanto-viridian-school-q8"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "No effect.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q5",
+         "cs-kanto-viridian-school-q6",
+         "cs-kanto-viridian-school-q7",
+         "cs-kanto-viridian-school-q8"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-school-q3",
+   "name": "Trainer School: Question One",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "Miss Whitlock writes it on the board in big round letters and underlines it twice. \"Electric against Ground?\" Six children turn in their seats to watch you think. One of them is already mouthing the answer.",
+   "choices": [
+    {
+     "label": "Strong.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q5",
+         "cs-kanto-viridian-school-q6",
+         "cs-kanto-viridian-school-q7",
+         "cs-kanto-viridian-school-q8"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Weak.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q5",
+         "cs-kanto-viridian-school-q6",
+         "cs-kanto-viridian-school-q7",
+         "cs-kanto-viridian-school-q8"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "No effect.",
+     "pick": {},
+     "success": {
+      "text": "\"Correct!\" The chalk squeaks a tick beside your name. Six children look at you as though you had done something much harder than that, and the Pokémon you pick stands a little taller for it: +1 to a stat.",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "statUp",
+        "stat": "random"
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q5",
+         "cs-kanto-viridian-school-q6",
+         "cs-kanto-viridian-school-q7",
+         "cs-kanto-viridian-school-q8"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-school-q4",
+   "name": "Trainer School: Question One",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "Miss Whitlock writes it on the board in big round letters and underlines it twice. \"Grass against Water?\" Six children turn in their seats to watch you think. One of them is already mouthing the answer.",
+   "choices": [
+    {
+     "label": "Strong.",
+     "pick": {},
+     "success": {
+      "text": "\"Correct!\" The chalk squeaks a tick beside your name. Six children look at you as though you had done something much harder than that, and the Pokémon you pick stands a little taller for it: +1 to a stat.",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "statUp",
+        "stat": "random"
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q5",
+         "cs-kanto-viridian-school-q6",
+         "cs-kanto-viridian-school-q7",
+         "cs-kanto-viridian-school-q8"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Weak.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q5",
+         "cs-kanto-viridian-school-q6",
+         "cs-kanto-viridian-school-q7",
+         "cs-kanto-viridian-school-q8"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "No effect.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q5",
+         "cs-kanto-viridian-school-q6",
+         "cs-kanto-viridian-school-q7",
+         "cs-kanto-viridian-school-q8"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-school-q5",
+   "name": "Trainer School: Question Two",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "Miss Whitlock writes it on the board in big round letters and underlines it twice. \"What can't Ground touch?\" Six children turn in their seats to watch you think. One of them is already mouthing the answer.",
+   "choices": [
+    {
+     "label": "Flying.",
+     "pick": {},
+     "success": {
+      "text": "\"Correct!\" The chalk squeaks a tick beside your name. Six children look at you as though you had done something much harder than that, and the Pokémon you pick stands a little taller for it: +1 to a stat.",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "statUp",
+        "stat": "random"
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q9",
+         "cs-kanto-viridian-school-q10",
+         "cs-kanto-viridian-school-q11",
+         "cs-kanto-viridian-school-q12"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Water.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q9",
+         "cs-kanto-viridian-school-q10",
+         "cs-kanto-viridian-school-q11",
+         "cs-kanto-viridian-school-q12"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Grass.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q9",
+         "cs-kanto-viridian-school-q10",
+         "cs-kanto-viridian-school-q11",
+         "cs-kanto-viridian-school-q12"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-school-q6",
+   "name": "Trainer School: Question Two",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "Miss Whitlock writes it on the board in big round letters and underlines it twice. \"What can't Electric touch?\" Six children turn in their seats to watch you think. One of them is already mouthing the answer.",
+   "choices": [
+    {
+     "label": "Water.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q9",
+         "cs-kanto-viridian-school-q10",
+         "cs-kanto-viridian-school-q11",
+         "cs-kanto-viridian-school-q12"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ground.",
+     "pick": {},
+     "success": {
+      "text": "\"Correct!\" The chalk squeaks a tick beside your name. Six children look at you as though you had done something much harder than that, and the Pokémon you pick stands a little taller for it: +1 to a stat.",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "statUp",
+        "stat": "random"
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q9",
+         "cs-kanto-viridian-school-q10",
+         "cs-kanto-viridian-school-q11",
+         "cs-kanto-viridian-school-q12"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Flying.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q9",
+         "cs-kanto-viridian-school-q10",
+         "cs-kanto-viridian-school-q11",
+         "cs-kanto-viridian-school-q12"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-school-q7",
+   "name": "Trainer School: Question Two",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "Miss Whitlock writes it on the board in big round letters and underlines it twice. \"What can't Poison touch?\" Six children turn in their seats to watch you think. One of them is already mouthing the answer.",
+   "choices": [
+    {
+     "label": "Grass.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q9",
+         "cs-kanto-viridian-school-q10",
+         "cs-kanto-viridian-school-q11",
+         "cs-kanto-viridian-school-q12"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fairy.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q9",
+         "cs-kanto-viridian-school-q10",
+         "cs-kanto-viridian-school-q11",
+         "cs-kanto-viridian-school-q12"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Steel.",
+     "pick": {},
+     "success": {
+      "text": "\"Correct!\" The chalk squeaks a tick beside your name. Six children look at you as though you had done something much harder than that, and the Pokémon you pick stands a little taller for it: +1 to a stat.",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "statUp",
+        "stat": "random"
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q9",
+         "cs-kanto-viridian-school-q10",
+         "cs-kanto-viridian-school-q11",
+         "cs-kanto-viridian-school-q12"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-school-q8",
+   "name": "Trainer School: Question Two",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "Miss Whitlock writes it on the board in big round letters and underlines it twice. \"What can't Fighting touch?\" Six children turn in their seats to watch you think. One of them is already mouthing the answer.",
+   "choices": [
+    {
+     "label": "Rock.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q9",
+         "cs-kanto-viridian-school-q10",
+         "cs-kanto-viridian-school-q11",
+         "cs-kanto-viridian-school-q12"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ghost.",
+     "pick": {},
+     "success": {
+      "text": "\"Correct!\" The chalk squeaks a tick beside your name. Six children look at you as though you had done something much harder than that, and the Pokémon you pick stands a little taller for it: +1 to a stat.",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "statUp",
+        "stat": "random"
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q9",
+         "cs-kanto-viridian-school-q10",
+         "cs-kanto-viridian-school-q11",
+         "cs-kanto-viridian-school-q12"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Normal.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q9",
+         "cs-kanto-viridian-school-q10",
+         "cs-kanto-viridian-school-q11",
+         "cs-kanto-viridian-school-q12"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-school-q9",
+   "name": "Trainer School: Question Three",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "Miss Whitlock writes it on the board in big round letters and underlines it twice. \"Name one thing Normal can't hit.\" Six children turn in their seats to watch you think. One of them is already mouthing the answer.",
+   "choices": [
+    {
+     "label": "Ghost.",
+     "pick": {},
+     "success": {
+      "text": "\"Correct!\" The chalk squeaks a tick beside your name. Six children look at you as though you had done something much harder than that, and the Pokémon you pick stands a little taller for it: +1 to a stat. Miss Whitlock claps her hands once. \"There. Now do you see why it matters?\" she asks the room, and for once six children do.",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "statUp",
+        "stat": "random"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-school-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rock.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face. Miss Whitlock claps her hands once. \"There. Now do you see why it matters?\" she asks the room, and for once six children do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-school-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Steel.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face. Miss Whitlock claps her hands once. \"There. Now do you see why it matters?\" she asks the room, and for once six children do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-school-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-school-q10",
+   "name": "Trainer School: Question Three",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "Miss Whitlock writes it on the board in big round letters and underlines it twice. \"Name one thing Psychic can't hit.\" Six children turn in their seats to watch you think. One of them is already mouthing the answer.",
+   "choices": [
+    {
+     "label": "Fighting.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face. Miss Whitlock claps her hands once. \"There. Now do you see why it matters?\" she asks the room, and for once six children do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-school-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dark.",
+     "pick": {},
+     "success": {
+      "text": "\"Correct!\" The chalk squeaks a tick beside your name. Six children look at you as though you had done something much harder than that, and the Pokémon you pick stands a little taller for it: +1 to a stat. Miss Whitlock claps her hands once. \"There. Now do you see why it matters?\" she asks the room, and for once six children do.",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "statUp",
+        "stat": "random"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-school-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Poison.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face. Miss Whitlock claps her hands once. \"There. Now do you see why it matters?\" she asks the room, and for once six children do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-school-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-school-q11",
+   "name": "Trainer School: Question Three",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "Miss Whitlock writes it on the board in big round letters and underlines it twice. \"Name one thing Dragon can't hit.\" Six children turn in their seats to watch you think. One of them is already mouthing the answer.",
+   "choices": [
+    {
+     "label": "Steel.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face. Miss Whitlock claps her hands once. \"There. Now do you see why it matters?\" she asks the room, and for once six children do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-school-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ice.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face. Miss Whitlock claps her hands once. \"There. Now do you see why it matters?\" she asks the room, and for once six children do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-school-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fairy.",
+     "pick": {},
+     "success": {
+      "text": "\"Correct!\" The chalk squeaks a tick beside your name. Six children look at you as though you had done something much harder than that, and the Pokémon you pick stands a little taller for it: +1 to a stat. Miss Whitlock claps her hands once. \"There. Now do you see why it matters?\" she asks the room, and for once six children do.",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "statUp",
+        "stat": "random"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-school-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-school-q12",
+   "name": "Trainer School: Question Three",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "Miss Whitlock writes it on the board in big round letters and underlines it twice. \"Name one thing Ghost can't hit.\" Six children turn in their seats to watch you think. One of them is already mouthing the answer.",
+   "choices": [
+    {
+     "label": "Psychic.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face. Miss Whitlock claps her hands once. \"There. Now do you see why it matters?\" she asks the room, and for once six children do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-school-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Normal.",
+     "pick": {},
+     "success": {
+      "text": "\"Correct!\" The chalk squeaks a tick beside your name. Six children look at you as though you had done something much harder than that, and the Pokémon you pick stands a little taller for it: +1 to a stat. Miss Whitlock claps her hands once. \"There. Now do you see why it matters?\" she asks the room, and for once six children do.",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "statUp",
+        "stat": "random"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-school-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dark.",
+     "success": {
+      "text": "Miss Whitlock is kind about it. She only tilts her head. A child, from the back row: \"I knew that one.\" There is no penalty, except the look on that child's face. Miss Whitlock claps her hands once. \"There. Now do you see why it matters?\" she asks the room, and for once six children do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-school-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-school-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-school",
+   "name": "Viridian Trainer School",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a"
+   },
+   "intro": "A classroom. Six children. A teacher mid-sentence, chalk still raised. Teacher, Miss Adaeze Whitlock: \"And who can tell me— oh. A real one. Class, this is a trainer. Don't crowd. You'll take the quiz, won't you? They never believe me that it matters.\" Six small faces turn to you. You have never been anybody's proof of anything before.",
+   "choices": [
+    {
+     "label": "Take the quiz.",
+     "success": {
+      "text": "You sit at a desk built for someone half your size. Your knees don't fit under it. Nobody laughs; they are all far too interested in whether you are any good.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "cs-kanto-viridian-school-q1",
+         "cs-kanto-viridian-school-q2",
+         "cs-kanto-viridian-school-q3",
+         "cs-kanto-viridian-school-q4"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "Miss Whitlock's shoulders drop a quarter of an inch. \"No. Of course. You're busy. They're always busy,\" she says, and goes back to the board. Six children watch you all the way to the door.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.viridian.school"
+  },
+  {
+   "id": "cs-kanto-viridian-diglett",
+   "name": "Diglett's Cave",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a",
+    "pokemon": "diglett"
+   },
+   "intro": "A hole in a bank, the width of a door. From inside, a sound like a hundred small things clearing their throats. The earth around the hole is fresh and soft, turned over again and again by something that never gets tired of coming up to look.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "You duck under the lip of the bank. The daylight shrinks to a coin behind you, and the throat-clearing stops, all at once, the way a room goes quiet when a stranger walks in.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-viridian-diglett-n1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave the hole to its hundred small voices. As you walk away, one brown head comes up to watch you go, and then, embarrassed, goes down again.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.viridian.diglett",
+   "pseudo": true
+  },
+  {
+   "id": "cs-kanto-viridian-diglett-n1",
+   "name": "Diglett's Cave: The Pop-Ups",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a",
+    "pokemon": "diglett"
+   },
+   "intro": "A row of holes down the middle of the tunnel, neat as buttons. Diglett come up one at a time, look at you, and go down. Some are brown. One is steel-whiskered, far from home. One is a colour you have no name for. None of them seems angry. They only come up to look.",
+   "choices": [
+    {
+     "label": "Step up to the row of holes.",
+     "chance": 0.8,
+     "success": {
+      "text": "The first one pops up under your boot. Each is a short fight, one after another, a swarm taking turns.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "diglett",
+        "diglett-alola",
+        "diglett-delta"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-viridian-diglett-n2"
+        }
+       ],
+       "chain": 3
+      }
+     },
+     "failure": {
+      "text": "The first one pops up under your boot. Each is a short fight, one after another. When the last of them drops out of sight, the wall beside you sighs and falls in: a side tunnel, warm and dry, that smells of sand.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "diglett",
+        "diglett-alola",
+        "diglett-delta"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-viridian-diglett-den"
+        }
+       ],
+       "chain": 3
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-diglett-den",
+   "name": "Diglett's Cave: The Sandshrew Den",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a",
+    "pokemon": "sandshrew"
+   },
+   "intro": "The side tunnel opens into a round, swept little room. A Sandshrew den. Something is curled up in the middle of it like a dropped ball, and one bright eye is watching you over its own tail.",
+   "choices": [
+    {
+     "label": "Step into the den.",
+     "success": {
+      "text": "It uncurls all at once, claws out, between you and whatever it keeps in the dark behind it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "sandshrew",
+        "sandshrew-alola"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-viridian-diglett-n2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back out quietly.",
+     "success": {
+      "text": "You back out the way you came, slowly, hands where it can see them. The eye closes. The tunnel goes on.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-viridian-diglett-n2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-diglett-n2",
+   "name": "Diglett's Cave: The Long Dark",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a",
+    "pokemon": "diglett"
+   },
+   "intro": "More of the same, faster. They come up two and three at a time now, and the tunnel is too long to see the end of. A lamp bobs toward you from the other direction: a hiker, going the other way, in no hurry at all. Hiker Garrick: \"They only come up to look. If you stop hitting them, they stop coming.\"",
+   "choices": [
+    {
+     "label": "Fight through them.",
+     "success": {
+      "text": "You don't have time to stand about in the dark. They come up, and you knock them down, and more come up. Garrick shakes his head and walks on with his lamp.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "diglett",
+        "diglett-alola",
+        "diglett-delta"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-viridian-diglett-n3"
+        }
+       ],
+       "chain": 3
+      }
+     }
+    },
+    {
+     "label": "Wait, and stop hitting them.",
+     "success": {
+      "text": "You hold still. It is harder than fighting. A head comes up, looks at you, and waits to be hit. You don't hit it. It's true: wait three turns, and they stop coming.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "diglett",
+        "diglett-alola",
+        "diglett-delta"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-diglett-waited",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-viridian-diglett-n3w"
+        }
+       ],
+       "rule": {
+        "surviveTurns": 3
+       }
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-diglett-n3",
+   "name": "Diglett's Cave: The Triple",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a",
+    "pokemon": "dugtrio"
+   },
+   "intro": "The tunnel ends in a wide round chamber, and the floor of it is moving. Three heads rise out of the earth together, shoulder to shoulder, and none of them blinks. A Dugtrio. It has heard everything you did on the way in.",
+   "choices": [
+    {
+     "label": "Duel it.",
+     "success": {
+      "text": "Three heads go down as one, and the whole floor comes at you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "dugtrio"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-viridian-diglett-out"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-diglett-out",
+   "name": "Diglett's Cave: The Far Side",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a",
+    "pokemon": "dugtrio"
+   },
+   "intro": "The Dugtrio sinks back into the floor it came from. Where it stood there is a small heap of sand, finer and paler than the rest, soft as flour.",
+   "choices": [
+    {
+     "label": "Take the Soft Sand and walk out.",
+     "chance": 0.95,
+     "success": {
+      "text": "You fill your pocket with it. You come out blinking into the daylight on the far side of the hill.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "soft-sand",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Walked the length of Diglett's Cave."
+       }
+      ]
+     },
+     "failure": {
+      "text": "You fill your pocket with it. You are almost out when the ground behind you rises. A Dugtrio, three heads, one opinion. It follows you out into the daylight, and when you stop, it stops, and looks up, and waits. It knows Tri Attack, and it has decided to come.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "soft-sand",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Walked the length of Diglett's Cave."
+       },
+       {
+        "kind": "join",
+        "species": [
+         "dugtrio"
+        ],
+        "levelBonus": 0,
+        "ability": "sand-veil",
+        "moves": [
+         "tri-attack"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-viridian-diglett-n3w",
+   "name": "Diglett's Cave: The Triple",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3f6b3a",
+    "pokemon": "dugtrio"
+   },
+   "intro": "The tunnel ends in a wide round chamber. Three heads rise out of the earth together, shoulder to shoulder. A Dugtrio. It comes up. It looks at you, for a long moment, with all six eyes. And it goes down again. No duel. Where it was, a little heap of Soft Sand has been left on the path, the way you leave something out for a guest.",
+   "choices": [
+    {
+     "label": "Take the Soft Sand and walk out.",
+     "chance": 0.95,
+     "success": {
+      "text": "You pick it up with both hands. You come out blinking into the daylight on the far side of the hill.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "soft-sand",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Walked the length of Diglett's Cave."
+       }
+      ]
+     },
+     "failure": {
+      "text": "You pick it up with both hands. You are almost out when the ground behind you rises. A Dugtrio, three heads, one opinion. It follows you out into the daylight, and when you stop, it stops, and looks up, and waits. It knows Tri Attack, and it has decided to come.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "soft-sand",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Walked the length of Diglett's Cave."
+       },
+       {
+        "kind": "join",
+        "species": [
+         "dugtrio"
+        ],
+        "levelBonus": 0,
+        "ability": "sand-veil",
+        "moves": [
+         "tri-attack"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-rest",
+   "name": "Brock's Rest Stop",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "baby",
+     "when": [
+      {
+       "kind": "partyTag",
+       "tag": "baby"
+      }
+     ],
+     "notice": "Before anyone else is served, he crouches down by the smallest member of your party and feeds it first, from a small spoon, blowing on every mouthful."
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b6257"
+   },
+   "intro": "A camp by the road. A pot the size of a bathtub. A man stirring it with his eyes shut, tasting, frowning, adding something. Brock: \"You look like you've been living on Berries. Sit. It's nearly ready. It's been nearly ready for an hour; that's how you know it's good.\" Nine small children, all with his face, are setting out bowls. One of them sets a bowl out for you without being asked.",
+   "choices": [
+    {
+     "label": "Thank you.",
+     "chance": 0.5,
+     "success": {
+      "text": "You sit. Nobody has told you to sit in a long time. A bowl is put into your hands. He tastes it, and his eyes, which were shut, stay shut, but his whole face changes. Perfect. He fills a flask for you and wraps it in a cloth. \"Before a big one,\" he says. \"At camp. Not in the middle of it. Decide what they need, and tell them over supper.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-rest-stew"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You sit. Nobody has told you to sit in a long time. A bowl is put into your hands. The pot gives one slow, thoughtful bubble, and Brock goes very still.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-rest-pot"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Can I help?",
+     "success": {
+      "text": "He hands you the spoon without opening his eyes, as if he had been holding it out for you all along. You stir. It is heavier than it looks, and it smells of every kitchen you have ever been homesick for.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-rest-helped"
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's in it?",
+     "success": {
+      "text": "Brock: \"Everything my brothers and sisters wouldn't eat separately.\" Nine children look pointedly at the sky.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-rest-asked"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.pewter.rest"
+  },
+  {
+   "id": "cs-kanto-pewter-rest-helped",
+   "name": "Brock's Rest Stop",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b6257"
+   },
+   "intro": "You stir until your arm aches, and the nine children count the turns for you out loud. Brock leans over the pot and breathes in. \"There,\" he says. \"Now it's nearly ready.\"",
+   "choices": [
+    {
+     "label": "Taste it together.",
+     "chance": 0.65,
+     "success": {
+      "text": "He hands you a second spoon. He tastes it, and his eyes, which were shut, stay shut, but his whole face changes. Perfect. He fills a flask for you and wraps it in a cloth. \"Before a big one,\" he says. \"At camp. Not in the middle of it. Decide what they need, and tell them over supper.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-rest-stew"
+       }
+      ]
+     },
+     "failure": {
+      "text": "He hands you a second spoon. The pot gives one slow, thoughtful bubble, and Brock goes very still.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-rest-pot-h"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-rest-asked",
+   "name": "Brock's Rest Stop",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b6257"
+   },
+   "intro": "The pot bubbles. Whatever is in it, it smells like being looked after. A bowl is waiting with your name on it, or would be, if anyone here had asked your name before deciding to feed you.",
+   "choices": [
+    {
+     "label": "Thank you.",
+     "chance": 0.5,
+     "success": {
+      "text": "You sit. A bowl is put into your hands. He tastes it, and his eyes, which were shut, stay shut, but his whole face changes. Perfect. He fills a flask for you and wraps it in a cloth. \"Before a big one,\" he says. \"At camp. Not in the middle of it. Decide what they need, and tell them over supper.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-rest-stew"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You sit. A bowl is put into your hands. The pot gives one slow, thoughtful bubble, and Brock goes very still.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-rest-pot"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Can I help?",
+     "success": {
+      "text": "He hands you the spoon without opening his eyes. You stir. The nine children count the turns for you out loud.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-rest-helped"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-rest-pot",
+   "name": "Brock's Rest Stop",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b6257"
+   },
+   "intro": "Brock lifts the spoon, and everyone at the camp watches it travel to his mouth.",
+   "choices": [
+    {
+     "label": "Wait for the verdict.",
+     "chance": 0.8,
+     "success": {
+      "text": "He chews. He considers. It's a weak stew, thin where it should be rich, and Brock knows it before the spoon reaches his mouth. It still warms every one of your Pokémon through. He ladles it out anyway, into every bowl, yours first.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.15
+       }
+      ]
+     },
+     "failure": {
+      "text": "He looks at the pot. The children look at him. Nine identical faces, waiting. Brock: \"...We're having toast.\" Nothing can be saved. The toast, at least, is very good toast, and he makes sure you get the first slice.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-rest-pot-h",
+   "name": "Brock's Rest Stop",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b6257"
+   },
+   "intro": "Brock lifts the spoon, and everyone at the camp watches it travel to his mouth.",
+   "choices": [
+    {
+     "label": "Wait for the verdict.",
+     "chance": 0.857,
+     "success": {
+      "text": "He chews. He considers. It's a weak stew, thin where it should be rich, and Brock knows it before the spoon reaches his mouth. It still warms every one of your Pokémon through. He ladles it out anyway, into every bowl, yours first.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.15
+       }
+      ]
+     },
+     "failure": {
+      "text": "He looks at the pot. The children look at him. Nine identical faces, waiting. Brock: \"...We're having toast.\" Nothing can be saved. The toast, at least, is very good toast, and he makes sure you get the first slice.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-rest-stew",
+   "name": "Brock's Stew",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b6257"
+   },
+   "intro": "A flask of perfect stew, once per run. Eaten at camp before a boss, it starts every one of your Pokémon one stage up in a stat you choose, and heals each by 15%. It isn't for the middle of a battle. What do they need?",
+   "choices": [
+    {
+     "label": "Attack.",
+     "success": {
+      "text": "You tell them over supper. Hit hard, you tell them. Brock's Stew goes into your pack, still warm, for the night before the next big fight.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Brock's Stew: Attack +1 stage in the next boss fight",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "value": 1.5
+         }
+        ],
+        "battles": 1,
+        "until": "boss"
+       },
+       {
+        "kind": "heal",
+        "share": 0.15
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-stew-perfect",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Shared a perfect stew at Brock's camp."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Defense.",
+     "success": {
+      "text": "You tell them over supper. Stand firm, you tell them. Brock's Stew goes into your pack, still warm, for the night before the next big fight.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Brock's Stew: Defense +1 stage in the next boss fight",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "value": 1.5
+         }
+        ],
+        "battles": 1,
+        "until": "boss"
+       },
+       {
+        "kind": "heal",
+        "share": 0.15
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-stew-perfect",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Shared a perfect stew at Brock's camp."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Special.",
+     "success": {
+      "text": "You tell them over supper. Burn bright, you tell them. Brock's Stew goes into your pack, still warm, for the night before the next big fight.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Brock's Stew: Special +1 stage in the next boss fight",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spa",
+          "value": 1.5
+         }
+        ],
+        "battles": 1,
+        "until": "boss"
+       },
+       {
+        "kind": "heal",
+        "share": 0.15
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-stew-perfect",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Shared a perfect stew at Brock's camp."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Speed.",
+     "success": {
+      "text": "You tell them over supper. Be first, you tell them. Brock's Stew goes into your pack, still warm, for the night before the next big fight.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Brock's Stew: Speed +1 stage in the next boss fight",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 1.5
+         }
+        ],
+        "battles": 1,
+        "until": "boss"
+       },
+       {
+        "kind": "heal",
+        "share": 0.15
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-stew-perfect",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Shared a perfect stew at Brock's camp."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-museum",
+   "name": "Pewter Museum of Science",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "third-fossil",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-moon-third-fossil",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He sees the fossil you brought down from Mt. Moon before you have said a word. Dr. Blackwood: \"That one? They called that worthless? Give me their names.\""
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b6257",
+    "pokemon": "kabutops"
+   },
+   "intro": "A grey building with a Kabutops skeleton in the window. ₽50 at the door. Inside it is cool and smells of dust and floor polish. Curator, Dr. Lucius Blackwood: \"Fossils on the left. Space on the right. The Old Amber's in the middle, and no, you can't touch it. Unless you can answer three questions. Then we'll talk.\"",
+   "choices": [
+    {
+     "label": "Pay the ₽50 and go in.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
+     "success": {
+      "text": "The coins ring in a brass dish. Dr. Blackwood looks you over as though you were an exhibit that had walked in by itself.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-museum-hall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "You look at the Kabutops through the window a while longer. It looks back with two holes where its eyes were. It has been waiting a very long time, and can wait for you too.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.pewter.museum"
+  },
+  {
+   "id": "cs-kanto-pewter-museum-hall",
+   "name": "Pewter Museum: The Fossil Hall",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b6257"
+   },
+   "intro": "Fossils on the left. Space on the right. In the middle, under glass, a lump of amber the colour of old honey, with a shadow inside it that might be a wing. Dr. Blackwood is watching what you look at.",
+   "choices": [
+    {
+     "label": "Register it.",
+     "requires": [
+      {
+       "kind": "kc",
+       "act": "holdsAny",
+       "ids": [
+        "helix-fossil",
+        "dome-fossil",
+        "old-amber",
+        "root-fossil",
+        "claw-fossil",
+        "skull-fossil",
+        "armor-fossil",
+        "cover-fossil",
+        "plume-fossil",
+        "jaw-fossil",
+        "sail-fossil"
+       ]
+      }
+     ],
+     "success": {
+      "text": "He takes your fossil in both hands, the way you would take a sleeping thing, and measures it, and draws it, and writes its name in a ledger older than he is. Then he gives it back. The museum pays you for the privilege, and pins a small bronze bone to your jacket: the Fossil Registry. Your fossil is still yours, and it can still be woken.",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "museumRegister"
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-museum-registry",
+        "amount": 1
+       },
+       {
+        "kind": "relic",
+        "id": "fossil-registry",
+        "name": "Fossil Registry",
+        "effects": [
+         {
+          "kind": "researchMultiplier",
+          "value": 1.1
+         }
+        ]
+       },
+       {
+        "kind": "moment",
+        "text": "Registered a fossil at the Pewter Museum of Science."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-museum-amber"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I have no fossil.",
+     "requires": [
+      {
+       "kind": "kc",
+       "act": "holdsNone",
+       "ids": [
+        "helix-fossil",
+        "dome-fossil",
+        "old-amber",
+        "root-fossil",
+        "claw-fossil",
+        "skull-fossil",
+        "armor-fossil",
+        "cover-fossil",
+        "plume-fossil",
+        "jaw-fossil",
+        "sail-fossil"
+       ]
+      }
+     ],
+     "success": {
+      "text": "He looks honestly sorry for you. He goes to a drawer, and comes back with half of something: a Fossil Fragment, broken clean down the middle long before either of you was born. \"A second fragment, from anywhere, completes it. They turn up. Things want to be whole.\"",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "fossilFragment"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-museum-amber"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just looking.",
+     "success": {
+      "text": "You look. He lets you. It is a good museum for looking: nobody hurries you, and the bones don't mind.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-museum-amber"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-museum-amber",
+   "name": "Pewter Museum: The Old Amber",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kanto-museum-amber",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b6257"
+   },
+   "intro": "The Old Amber sits in the middle of the room, in a case of its own. You can't touch it. Unless you can answer three questions.",
+   "choices": [
+    {
+     "label": "Ask me the three questions.",
+     "success": {
+      "text": "He straightens his coat, as a man does before something that matters to him.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-museum-a1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the museum.",
+     "success": {
+      "text": "You leave by the door you came in by. The Kabutops in the window watches you go.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-museum-a1",
+   "name": "Pewter Museum: Three Questions",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b6257"
+   },
+   "intro": "He taps the glass over a coiled shell. Dr. Blackwood: \"First. Which Pokémon wakes from the Helix Fossil?\"",
+   "choices": [
+    {
+     "label": "Kabuto.",
+     "success": {
+      "text": "Dr. Blackwood closes his eyes briefly. \"No. Thank you for coming. The gift shop is on the right, past Space.\" The amber stays under its glass.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Omanyte.",
+     "success": {
+      "text": "\"Hm,\" says Dr. Blackwood, which from him is applause.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-museum-a2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Aerodactyl.",
+     "success": {
+      "text": "Dr. Blackwood closes his eyes briefly. \"No. Thank you for coming. The gift shop is on the right, past Space.\" The amber stays under its glass.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-museum-a2",
+   "name": "Pewter Museum: Three Questions",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b6257"
+   },
+   "intro": "He nods, once, and moves to a wall chart of stacked colours. Dr. Blackwood: \"Second. Which era did they swim in? Careful. I wrote the label.\"",
+   "choices": [
+    {
+     "label": "The age of ice.",
+     "success": {
+      "text": "Dr. Blackwood closes his eyes briefly. \"No. Thank you for coming. The gift shop is on the right, past Space.\" The amber stays under its glass.",
+      "effects": []
+     }
+    },
+    {
+     "label": "The age of ancient seas.",
+     "success": {
+      "text": "\"Hm,\" says Dr. Blackwood, which from him is applause.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-pewter-museum-a3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The age of cities.",
+     "success": {
+      "text": "Dr. Blackwood closes his eyes briefly. \"No. Thank you for coming. The gift shop is on the right, past Space.\" The amber stays under its glass.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-museum-a3",
+   "name": "Pewter Museum: Three Questions",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b6257"
+   },
+   "intro": "He stops in front of the amber and lowers his voice, as if it might hear. Dr. Blackwood: \"Third. Of everything in this room: which is the oldest?\"",
+   "choices": [
+    {
+     "label": "The Kabutops in the window.",
+     "success": {
+      "text": "Dr. Blackwood closes his eyes briefly. \"No. Thank you for coming. The gift shop is on the right, past Space.\" The amber stays under its glass.",
+      "effects": []
+     }
+    },
+    {
+     "label": "The Old Amber.",
+     "success": {
+      "text": "For a moment he doesn't say anything. Then he takes a small key from his waistcoat and opens the case himself. Dr. Blackwood: \"Take it. I've had it nine years and I've never dared wake it. You look like you'd dare.\" It is warm from the lamp, and lighter than it should be, and something inside it has been waiting longer than there have been museums.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "old-amber",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-museum-amber",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Was given the Old Amber by Dr. Blackwood, for nothing."
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Moon Stone on the right.",
+     "success": {
+      "text": "Dr. Blackwood closes his eyes briefly. \"No. Thank you for coming. The gift shop is on the right, past Space.\" The amber stays under its glass.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-flock",
+   "name": "Pewter Skies: The Flock",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b6257",
+    "pokemon": "pidgey"
+   },
+   "intro": "Screeching. A cloud of Spearow, wheeling over one spot in the grass. Under them, a Pidgey, on the ground, one wing held wrong. It's facing up at them. It isn't running. It can't fly and it can't win, and it has turned its small chest to the whole sky anyway.",
+   "choices": [
+    {
+     "label": "Drive them off.",
+     "success": {
+      "text": "You run in under the wheel of them. Three waves of Spearow, one after another. The Pidgey doesn't hide behind you: it fights beside your lead, from the ground, with the one wing it has.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-flock-seen",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "spearow"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "pidgey"
+         ],
+         "levelBonus": -1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-flock-pidgey",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Saved a Pidgey from the Spearow flock over Pewter."
+        }
+       ],
+       "chain": 3
+      }
+     }
+    },
+    {
+     "label": "Pick the Pidgey up and run.",
+     "prompt": {
+      "id": "dodge-tap",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You scoop it up against your chest and run. It weighs nothing. Its heart is going like a moth in a jar. The flock follows for one step of the road, diving, and you duck under the last of them into the trees. No waves are fought. When you finally stop, the Pidgey is looking up at you, and it has stopped shaking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-flock-seen",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "pidgey"
+        ],
+        "levelBonus": -1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-flock-pidgey",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Saved a Pidgey from the Spearow flock over Pewter."
+       }
+      ]
+     },
+     "failure": {
+      "text": "You scoop it up and run, and you are not fast enough. The flock is on you in one step, and there is nothing for it but to turn. The Pidgey struggles out of your arms to stand beside your lead.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-flock-seen",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "spearow"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "join",
+         "species": [
+          "pidgey"
+         ],
+         "levelBonus": -1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-flock-pidgey",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Saved a Pidgey from the Spearow flock over Pewter."
+        }
+       ],
+       "chain": 3
+      }
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You keep to the road. Behind you the screeching goes on, and then, after a while, it doesn't. You don't look back to see why. The flock has seen you, though. It will be seen again, later.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-flock-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-flock-left",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.pewter.flock"
+  },
+  {
+   "id": "cs-kanto-pewter-flock-fence",
+   "name": "Two Pidgey on a Fence",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kanto-flock-pidgey",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "eventSeen",
+     "id": "sky.opening"
+    },
+    {
+     "kind": "flag",
+     "key": "kanto-flock-fence",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b6257",
+    "pokemon": "pidgey"
+   },
+   "intro": "On a fence by the road, two Pidgey. You know them both. One you carried out from under a flock of Spearow. The other one you met trying, and trying again. They are sitting a careful wing's width apart, each looking in a different direction, each ignoring the other with tremendous dignity.",
+   "choices": [
+    {
+     "label": "Leave them to it.",
+     "success": {
+      "text": "You walk past. Neither turns its head. When you look back from the bend, they have not moved an inch closer, and not an inch further apart.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-flock-fence",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-pewter-flock-again",
+   "name": "Pewter Skies: The Flock, Again",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kanto-flock-left",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "kanto-flock-again",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#6b6257",
+    "pokemon": "spearow"
+   },
+   "intro": "Screeching, overhead. You know the sound before you look up. The same cloud of Spearow, wheeling over the road ahead of you, bigger than before, louder than before. They are not hunting anything today. They are only going somewhere, together, and taking the whole sky with them. In the claw of the one in front there is a single brown feather.",
+   "choices": [
+    {
+     "label": "Watch them go.",
+     "success": {
+      "text": "You stand in the road until the last of them is over the hill. You don't know whose feather it was. You decide that you don't know, and you keep walking, and you carry it with you anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-flock-again",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-burglary",
+   "name": "Cerulean Burglary",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5f8a"
+   },
+   "intro": "A house with a hole in its side, the shape of a person. A family in the garden, in their nightclothes. The father: \"He came through the wall. There's a door! It wasn't locked!\" The daughter: \"He took Dad's TM. The digging one. He said, 'Team Rocket thanks you for your contribution.'\" At the end of the garden, a man in black is trying to climb a fence with a TM case in his teeth.",
+   "choices": [
+    {
+     "label": "After him.",
+     "success": {
+      "text": "You are already running. The chase is one step long: he is still on the fence when you reach it, one leg over, the TM case clamped in his teeth. He drops down on your side and spits it into his hand. Grunt: \"It's not stealing if you've got a uniform!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rocket Grunt",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "evil",
+         "heat": -1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-burglary-solved",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-burglary-after"
+        }
+       ],
+       "team": [
+        "machop",
+        "drowzee"
+       ],
+       "evil": "grunt"
+      }
+     }
+    },
+    {
+     "label": "Is everyone all right?",
+     "success": {
+      "text": "They are. Nobody is hurt. The grandmother's furious about the wall; she is holding a slipper like a weapon and telling the hole exactly what she thinks of it. The daughter looks at you as if nobody had asked her that all night. Then you run. The chase is one step long: he is still on the fence when you reach it, one leg over, the TM case clamped in his teeth. He drops down on your side and spits it into his hand. Grunt: \"It's not stealing if you've got a uniform!\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rocket Grunt",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "evil",
+         "heat": -1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-burglary-solved",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-burglary-after"
+        }
+       ],
+       "team": [
+        "machop",
+        "drowzee"
+       ],
+       "evil": "grunt"
+      }
+     }
+    },
+    {
+     "label": "Which way did he come in?",
+     "success": {
+      "text": "The daughter takes you round the back, where there's a second hole, low down, edged with fresh earth. He dug in, and walked out through the front. That is not how a thief in a hurry works. That is how somebody practises. You fix it in your memory: a File, for whoever is keeping count of Team Rocket. Then you run. The chase is one step long: he is still on the fence when you reach it, one leg over, the TM case clamped in his teeth. He drops down on your side and spits it into his hand. Grunt: \"It's not stealing if you've got a uniform!\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Rocket Grunt",
+       "size": 2,
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "evil",
+         "heat": -1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-burglary-solved",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-cerulean-burglary-after"
+        }
+       ],
+       "team": [
+        "machop",
+        "drowzee"
+       ],
+       "evil": "grunt"
+      }
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.burglary"
+  },
+  {
+   "id": "cs-kanto-cerulean-burglary-after",
+   "name": "Cerulean Burglary: The TM",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5f8a"
+   },
+   "intro": "The Grunt is gone over the fence without his dignity. The TM case is in your hands: Dig. Heat −1: Rocket's embarrassed. Across the garden, the father is standing in the person-shaped hole in his own wall, watching you, trying not to hope.",
+   "choices": [
+    {
+     "label": "Keep the TM.",
+     "success": {
+      "text": "It is a good TM. You won it fairly from the man who stole it. The father nods, slowly, the way people nod when they had already decided not to ask. The grandmother says nothing at all, which from her is louder.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "dig",
+        "type": "ground"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it back.",
+     "success": {
+      "text": "You hold it out. The father doesn't take it at once. He opens the case first and holds the disc out to you instead: learn it first, he says, and then he'll keep the case. So one of yours learns Dig in a ruined garden at two in the morning, while a grandmother in a nightgown brings out tea for everyone, including the Pokémon.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "dig",
+        "type": "ground"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Gave the stolen TM back to the family in Cerulean."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-cerulean-daycare",
+   "name": "Route 5 Day-Care",
+   "group": "Canon Spaces: Kanto",
+   "stop": "merchant",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5f8a"
+   },
+   "intro": "A fence, a field, an old couple on a bench. In the field, other people's Pokémon are doing nothing in particular, very contentedly. Mr. Holloway: \"Leave one with us a stage. It'll come back bigger, and it'll have opinions.\" Mrs. Holloway doesn't look up from her knitting, but she moves along the bench to make room, in case anyone needs to sit before deciding.",
+   "choices": [
+    {
+     "label": "Leave one with them for a stage.",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "You open the gate and the one at the back of your party walks through by itself, looks round the field, and then looks back at you. It isn't goodbye. It will be back at the start of the next stage, three levels bigger, and with opinions. Mr. Holloway writes its name in a book with a pencil on a string.",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "daycareLeave",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-daycare-left",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave two together.",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 3
+      }
+     ],
+     "success": {
+      "text": "Two of them go through the gate, the two at the back of your party, shoulder to shoulder. Mrs. Holloway finally looks up from her knitting, and looks at the pair of them for a while, and smiles at something she doesn't say. If the two get along, there will be an egg. Either way they come back at the start of the next stage, three levels bigger.",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "daycareLeave",
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-daycare-left",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just sit on the bench a while.",
+     "success": {
+      "text": "You sit. Nobody asks you for anything. A Pokémon that belongs to a stranger comes and leans on your leg. After a while Mrs. Holloway hands you a cup of something hot, as if you had been coming here for years.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.daycare"
+  },
+  {
+   "id": "cs-kanto-cerulean-daycare-back",
+   "name": "Route 5 Day-Care: Collection",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "kc",
+     "act": "daycare"
+    }
+   ],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5f8a"
+   },
+   "intro": "A fence, a field, an old couple on a bench. Mr. Holloway has his book open on his knee before you reach the gate. \"Bigger,\" he says. \"Told you. And the opinions. You'll find out about the opinions.\"",
+   "choices": [
+    {
+     "label": "Open the gate.",
+     "success": {
+      "text": "They come back across the field at a run. Three levels bigger, every one. They have opinions about where you have been, and they tell you all of them at once.",
+      "effects": [
+       {
+        "kind": "kc",
+        "act": "daycareReturn"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-vermilion-fishclub",
+   "name": "Diglett Port: The Fan Club Fish",
+   "group": "Canon Spaces: Kanto",
+   "stop": "event",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "A jetty. A man with a rod, a bucket and a badge that reads VERMILION FISHING FAN CLUB: FOUNDER, CHAIRMAN, MEMBER. The Fishing Guru, Mr. Leland Sprat: \"You've never fished. I can see it in the shoulders. Sit. It's two things: you wait, and then you don't.\"",
+   "choices": [
+    {
+     "label": "Sit, and take the rod.",
+     "success": {
+      "text": "He hands you the rod as if he were handing you a baby. The float sits on the grey water of the harbor, doing nothing, and Mr. Sprat watches it with perfect contentment. The lesson is three casts long.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-fishclub-cast1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "\"No,\" says Mr. Sprat, peacefully. \"Not everybody's ready to wait.\" He goes back to his float. The Fan Club remains at a membership of one.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.vermilion.fishclub"
+  },
+  {
+   "id": "cs-kanto-vermilion-fishclub-cast1",
+   "name": "The Fan Club Fish: First Cast",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "The float trembles. A ring spreads out from it across the water, as fine as a hair.",
+   "choices": [
+    {
+     "label": "Pull!",
+     "success": {
+      "text": "You haul on the rod and bring up nothing but harbor. Mr. Sprat: \"Too soon. You pulled at the ripple. The ripple's the fish thinking about it.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-fishclub-cast2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-vermilion-fishclub-cast2",
+   "name": "The Fan Club Fish: Second Cast",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "This time you make yourself wait. The ripple comes. You wait. The float dips. You wait. You are being so patient. The float comes back up, and sits there, innocent.",
+   "choices": [
+    {
+     "label": "Pull...?",
+     "success": {
+      "text": "The hook comes up clean, the bait gone. Mr. Sprat: \"Too late. It's had its lunch and gone home.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-fishclub-cast3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-vermilion-fishclub-cast3",
+   "name": "The Fan Club Fish: Third Cast",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "The third cast. Mr. Sprat has stopped watching the float. He is watching your shoulders. You wait. And then, somewhere between one breath and the next, something in the line changes, and your hands know it before you do.",
+   "choices": [
+    {
+     "label": "And then you don't.",
+     "prompt": {
+      "id": "shout-tap",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "The rod bends double. Mr. Sprat: \"There. That one you felt. Didn't you. Never mind what's on the end.\" What's on the end comes up thrashing and furious and yours. He unpins nothing from his badge, but he presses a Good Rod into your hands, and for one moment the Vermilion Fishing Fan Club has two members.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "good-rod",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "basculin",
+         "corphish"
+        ],
+        "levelBonus": -1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-sprat-taught",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Learned wait-and-then-don't from Mr. Leland Sprat."
+       }
+      ]
+     },
+     "failure": {
+      "text": "You miss the moment by a hair, and feel yourself miss it, and that is the lesson. Mr. Sprat: \"There. That one you felt. Didn't you. Never mind what's on the end.\" He reaches over, gives the line one small tug at exactly the right time, and what's on the end comes up thrashing and yours. Then he hands you a Good Rod, to practise with.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "good-rod",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "basculin",
+         "corphish"
+        ],
+        "levelBonus": -1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-sprat-taught",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Learned wait-and-then-don't from Mr. Leland Sprat."
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-vermilion-market",
+   "name": "Vermilion Harbor Market",
+   "group": "Canon Spaces: Kanto",
+   "stop": "merchant",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "shut",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-kaiju-lost",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Stalls along the quay, every one of them shut. Shutters down. The nets have been taken in and even the cats are gone from the bollards. A sign is nailed to the first stall, in paint that ran before it dried: BACK WHEN IT'S GONE. Out past the harbor wall, something very large moves under the water.",
+     "hide": [
+      0,
+      1,
+      2
+     ]
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "Stalls along the quay. Nets drying. A cat on every bollard. The whole market smells of salt and rope and the inside of old boats, and everything on every table is a little damp. It sells Water-type goods, and one other thing, at the last stall, behind a hand-lettered sign.",
+   "choices": [
+    {
+     "label": "The stalls: Water-type goods.",
+     "success": {
+      "text": "A stallkeeper pulls back a tarp with a flourish that the goods underneath do not quite deserve.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-market-goods"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The stalls: nets and shells.",
+     "success": {
+      "text": "The next table along is all rope, cork and shell, and a woman mending a net without looking at it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-market-nets"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The last stall: the Ticket.",
+     "success": {
+      "text": "The sign says S.S. ANNE. The woman under it looks you up and down, and decides you are the sort who loses things.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-market-ticket"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on along the quay.",
+     "success": {
+      "text": "You walk on along the quay. A cat on a bollard opens one eye, judges you not to be a fish, and closes it again.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.vermilion.market"
+  },
+  {
+   "id": "cs-kanto-vermilion-market-goods",
+   "name": "Harbor Market: Water Goods",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "Everything on the table is damp, and the stallkeeper is proud of it.",
+   "choices": [
+    {
+     "label": "Mystic Water (₽900)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 900
+      }
+     ],
+     "success": {
+      "text": "A blue drop on a cord, cold as the bottom of the harbor.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -900
+       },
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sea Incense (₽800)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 800
+      }
+     ],
+     "success": {
+      "text": "It smells of a tide going out, a long way off.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -800
+       },
+       {
+        "kind": "item",
+        "id": "sea-incense",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look at the next table.",
+     "success": {
+      "text": "You move along.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-market-nets"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on along the quay.",
+     "success": {
+      "text": "You walk on along the quay. A cat on a bollard opens one eye, judges you not to be a fish, and closes it again.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-vermilion-market-nets",
+   "name": "Harbor Market: Nets and Shells",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "Rope, cork and shell. The woman mending the net still hasn't looked at it.",
+   "choices": [
+    {
+     "label": "Net Ball ×5 (₽600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "Five Net Balls, knotted into a string bag.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -600
+       },
+       {
+        "kind": "item",
+        "id": "net-ball",
+        "count": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dive Ball ×5 (₽600)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "Five Dive Balls, still wet.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -600
+       },
+       {
+        "kind": "item",
+        "id": "dive-ball",
+        "count": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shell Bell (₽1,200)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "It rings by itself when you pick it up, once, softly.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "item",
+        "id": "shell-bell",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go to the last stall.",
+     "success": {
+      "text": "You walk on to the end of the quay.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-vermilion-market-ticket"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-vermilion-market-ticket",
+   "name": "Harbor Market: The Ticket",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "tags": [],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": [
+    {
+     "id": "has",
+     "when": [
+      {
+       "kind": "item",
+       "id": "ss-ticket"
+      }
+     ],
+     "intro": "The last stall sells exactly one thing, and you already have one. Old Dorothea Quince-Marlow squints at the Ticket in your pocket. \"Bill gave you that? Hm. Then you don't need mine. Go on. It's a very full-of-itself ship; don't keep it waiting.\"",
+     "hide": [
+      0
+     ]
+    }
+   ],
+   "callback": false,
+   "forced": false,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#2f5d73"
+   },
+   "intro": "The last stall sells exactly one thing. Ticket seller, Old Dorothea Quince-Marlow: \"Two thousand. I know. I don't set it. The ship does. It's a very full-of-itself ship.\"",
+   "choices": [
+    {
+     "label": "A Ticket for the S.S. Anne (₽2,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2000
+      }
+     ],
+     "success": {
+      "text": "She counts the money twice and stamps the Ticket three times. \"Don't lose it,\" she says. \"It knows what it's worth, and it'll let you.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2000
+       },
+       {
+        "kind": "item",
+        "id": "ss-ticket",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-market-ticket",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on along the quay.",
+     "success": {
+      "text": "You walk on along the quay. A cat on a bollard opens one eye, judges you not to be a fish, and closes it again.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  }
+ ]
+}
