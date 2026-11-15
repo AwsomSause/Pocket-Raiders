@@ -411,6 +411,7 @@
       "effects": [],
       "battle": {
        "kind": "wild",
+       "friendly": true,
        "species": [
         "magnemite",
         "voltorb",
@@ -744,6 +745,7 @@
       "effects": [],
       "battle": {
        "kind": "trainer",
+       "friendly": true,
        "name": "Auction Guards",
        "classId": "black-belt",
        "size": 3,
@@ -814,6 +816,7 @@
       "effects": [],
       "battle": {
        "kind": "wild",
+       "friendly": true,
        "species": [
         "gyarados",
         "lanturn",
@@ -863,6 +866,7 @@
       "effects": [],
       "battle": {
        "kind": "wild",
+       "friendly": true,
        "species": [
         "magikarp",
         "goldeen",
@@ -882,6 +886,7 @@
       "effects": [],
       "battle": {
        "kind": "wild",
+       "friendly": true,
        "species": [
         "goldeen",
         "poliwag",
@@ -908,6 +913,7 @@
       "effects": [],
       "battle": {
        "kind": "wild",
+       "friendly": true,
        "species": [
         "seaking",
         "kingler",
@@ -949,6 +955,7 @@
       "effects": [],
       "battle": {
        "kind": "wild",
+       "friendly": true,
        "species": [
         "seaking",
         "gyarados",

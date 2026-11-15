@@ -11,8 +11,8 @@ const go = (id: string, text: string, ...fx: Json[]): Json => out(text, ...fx, {
 const later = (id: string, nodes = 1): Json => ({ kind: 'laterEvent', eventId: id, nodes });
 const bond = (n: number, who: Json | string = 'party'): Json => ({ kind: 'friendship', bond: n, who });
 const room = <T extends Json>(e: T): T => ({ ...e, room: true });
-const fightW = (text: string, species: string[], lv: number, win: Json[], ...fx: Json[]): Json => ({ text, effects: fx, battle: { kind: 'wild', species, types: [], levelBonus: lv, shinyMultiplier: 1, win } });
-const fightT = (text: string, name: string, cls: string, size: number, lv: number, win: Json[], ...fx: Json[]): Json => ({ text, effects: fx, battle: { kind: 'trainer', name, classId: cls, size, types: [], levelBonus: lv, win } });
+const fightW = (text: string, species: string[], lv: number, win: Json[], ...fx: Json[]): Json => ({ text, effects: fx, battle: { kind: 'wild', friendly: true, species, types: [], levelBonus: lv, shinyMultiplier: 1, win } });
+const fightT = (text: string, name: string, cls: string, size: number, lv: number, win: Json[], ...fx: Json[]): Json => ({ text, effects: fx, battle: { kind: 'trainer', friendly: true, name, classId: cls, size, types: [], levelBonus: lv, win } });
 
 // ---------- SF117 The S.S. Anne (one voyage: the cabins open one after another on the same stop) ----------
 const ANNE: Json[] = [

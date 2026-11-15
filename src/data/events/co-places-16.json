@@ -339,6 +339,7 @@
       "effects": [],
       "battle": {
        "kind": "trainer",
+       "friendly": true,
        "name": "Cup Finalist",
        "classId": "ace-trainer",
        "size": 3,
@@ -527,6 +528,7 @@
       "effects": [],
       "battle": {
        "kind": "wild",
+       "friendly": true,
        "species": [
         "tropius",
         "leafeon",
@@ -1800,6 +1802,7 @@
       "effects": [],
       "battle": {
        "kind": "wild",
+       "friendly": true,
        "species": [
         "snorlax"
        ],
@@ -1848,6 +1851,7 @@
       "effects": [],
       "battle": {
        "kind": "wild",
+       "friendly": true,
        "species": [
         "snorlax"
        ],

@@ -59,7 +59,7 @@ const BUG_CONTEST: Json = {
   ...ev('bug-week-contest', 'The Bug-Catching Contest', 'Calendar Weeks', { stop: 'event', rarity: 'common', types: ['bug'], minStage: 1, tint: '#5a6a1a' },
     'The meadow is roped off and full of contestants creeping through the grass with nets. The judge has a clipboard and a stopwatch. "Best catch wins the Sun Stone. You\'ve got till the bell."',
     [
-      ch('Hunt the long grass.', { text: 'Something big and bright moves in the long grass, and does not want to be caught.', effects: [], battle: wild({ types: ['bug'], lv: 2, win: [item('sun-stone'), flag('bug-contest-won')] }) }),
+      ch('Hunt the long grass.', { text: 'Something big and bright moves in the long grass, and does not want to be caught.', effects: [], battle: { ...wild({ types: ['bug'], lv: 2, win: [item('sun-stone'), flag('bug-contest-won')] }), friendly: true } }),
       ch('Help a little contestant instead.', out('A small boy has caught nothing and is trying not to cry. You show him where the Caterpie hide. He catches one, and holds it up, and the judge gives him a ribbon. He gives you his lunch.', any(...BERRIES), flag('kind-total'), { kind: 'attribute', key: 'goodEvil', amount: 1 })),
     ]),
   room: true,

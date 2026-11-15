@@ -372,3 +372,36 @@ describe('catalog overhaul: Safari Land and the Frontier (SF113, SF114)', () => 
     expect(lv).toBe((content.events.get('ps-battle-frontier-a')!.choices[0]!.success.battle as { levelBonus: number }).levelBonus + 1);
   });
 });
+
+describe('catalog overhaul: single merges (SF129)', () => {
+  it('no places fight ends the run: every event battle outside a pseudo-stage is friendly', () => {
+    for (const id of built) {
+      const e = content.events.get(id)!;
+      if (e.pseudo) continue;
+      for (const c of e.choices) for (const o of [c.success, c.failure]) {
+        const b = o?.battle as { kind: string; friendly?: boolean; pseudo?: boolean; bossId?: string } | undefined;
+        if (b && (b.kind === 'wild' || b.kind === 'trainer') && !b.pseudo && !b.bossId) expect(b.friendly, `${id}: ${c.label}`).toBe(true);
+      }
+    }
+  });
+
+  it("Marta's delivery pays 100 per stop carried, and the Court of the Road's Meowth follows the player out", () => {
+    let run = newRun('marta');
+    run.money = 0;
+    open(run, 'shopkeepers-delivery');
+    run = pick(run, 'Carry it three stops. (+300)');
+    expect(run.money).toBe(300);
+    expect(flagOf(run, 'h-delivery')).toBe(1);
+    open(run, 'court-case');
+    run = pick(run, 'Defend it.');
+    expect(run.pending.some((p) => p.kind === 'caught' && p.mon.speciesId === 'meowth')).toBe(true);
+    expect(flagOf(run, 'court-won')).toBe(1);
+  });
+
+  it('the old Treasure Dig delve is retired into the expedition, and the dojo spar leaves a Tyrogue for later', () => {
+    for (const l of 'abc') expect(content.events.get(`dg-treasure-dig-${l}`)?.disabled, l).toBe(true);
+    const spar = content.events.get('dojo-challenge')!.choices[0]!.success.battle as { win: { kind: string; eventId?: string }[] };
+    expect(spar.win.some((x) => x.kind === 'laterEvent' && x.eventId === 'dojo-tyrogue')).toBe(true);
+    expect(content.events.get('dojo-tyrogue')?.room).toBe(true);
+  });
+});

@@ -123,6 +123,7 @@
       "effects": [],
       "battle": {
        "kind": "trainer",
+       "friendly": true,
        "name": "Sailor",
        "classId": "black-belt",
        "size": 3,
@@ -175,6 +176,7 @@
       "effects": [],
       "battle": {
        "kind": "wild",
+       "friendly": true,
        "species": [
         "haunter"
        ],
@@ -605,6 +607,7 @@
       "effects": [],
       "battle": {
        "kind": "wild",
+       "friendly": true,
        "species": [
         "shuppet"
        ],
@@ -795,6 +798,7 @@
       "effects": [],
       "battle": {
        "kind": "wild",
+       "friendly": true,
        "species": [
         "banette"
        ],

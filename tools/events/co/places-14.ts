@@ -7,8 +7,8 @@ export const CATEGORY = 'places';
 
 const go = (id: string, text: string, ...fx: Json[]): Json => out(text, ...fx, { kind: 'addEvent', eventId: id });
 const room = <T extends Json>(e: T): T => ({ ...e, room: true });
-const fightW = (text: string, species: string[], lv: number, win: Json[], ...fx: Json[]): Json => ({ text, effects: fx, battle: { kind: 'wild', species, types: [], levelBonus: lv, shinyMultiplier: 1, win } });
-const fightT = (text: string, name: string, cls: string, size: number, lv: number, win: Json[], ...fx: Json[]): Json => ({ text, effects: fx, battle: { kind: 'trainer', name, classId: cls, size, types: [], levelBonus: lv, win } });
+const fightW = (text: string, species: string[], lv: number, win: Json[], ...fx: Json[]): Json => ({ text, effects: fx, battle: { kind: 'wild', friendly: true, species, types: [], levelBonus: lv, shinyMultiplier: 1, win } });
+const fightT = (text: string, name: string, cls: string, size: number, lv: number, win: Json[], ...fx: Json[]): Json => ({ text, effects: fx, battle: { kind: 'trainer', friendly: true, name, classId: cls, size, types: [], levelBonus: lv, win } });
 const intel = (n = 1): Json => flag('intel', n);
 
 // ---------- SF123 The Weather Station ----------

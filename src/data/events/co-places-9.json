@@ -1573,7 +1573,8 @@
          "key": "bug-contest-won",
          "amount": 1
         }
-       ]
+       ],
+       "friendly": true
       }
      }
     },
