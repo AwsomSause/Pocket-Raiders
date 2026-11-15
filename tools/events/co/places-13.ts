@@ -20,7 +20,7 @@ const ANNE: Json[] = [
     id: 'ss-ticket-ferry',
     intro: 'The S.S. Anne sounds its horn, a sound so deep you feel it in your ribs. Streamers, a band on the quay, a hundred people waving at nobody in particular. At the gangplank a purser in a white cap checks tickets. Mr. Ashworth, the purser: "All aboard for the Gym city! Ticket, please."',
     choices: [
-      ch('Board.', go('rm-1-key-cabin', 'He punches your ticket and hands you four little brass keys on a ring. "Cabins one, two, four and six, and the suite at the end of the voyage. Enjoy the crossing." The ship pulls away from the quay as you find the first door.', ferry())),
+      ch('Board.', go('rm-1-key-cabin', 'He punches your ticket and hands you four little brass keys on a ring. "Cabins one, two, four and six, and the suite at the end of the voyage. Enjoy the crossing." The ship pulls away from the quay as you find the first door, past the ship\'s shop with its shutters just going up.', ferry(), { kind: 'addStop', stop: 'shop' })),
       ch('Ask about the cabins.', go('ss-ticket-ferry', '"Four keys," says Mr. Ashworth, "each a room, and one voyage to see them all. Cabin one\'s got a trunk nobody\'s claimed. Cabin two\'s got a sailor who\'ll fight anyone. Cabin four\'s cold, I couldn\'t tell you why. Cabin six, there\'s a collector. And then the suite. Best beds on the sea."')),
     ],
   },

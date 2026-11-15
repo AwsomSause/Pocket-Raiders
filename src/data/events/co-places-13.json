@@ -19,10 +19,14 @@
     {
      "label": "Board.",
      "success": {
-      "text": "He punches your ticket and hands you four little brass keys on a ring. \"Cabins one, two, four and six, and the suite at the end of the voyage. Enjoy the crossing.\" The ship pulls away from the quay as you find the first door.",
+      "text": "He punches your ticket and hands you four little brass keys on a ring. \"Cabins one, two, four and six, and the suite at the end of the voyage. Enjoy the crossing.\" The ship pulls away from the quay as you find the first door, past the ship's shop with its shutters just going up.",
       "effects": [
        {
         "kind": "skipAhead"
+       },
+       {
+        "kind": "addStop",
+        "stop": "shop"
        },
        {
         "kind": "addEvent",

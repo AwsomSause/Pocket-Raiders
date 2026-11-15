@@ -215,7 +215,10 @@ describe('choosing at an event', () => {
     expect(started.run.passives?.['rm-2-key']).toBeUndefined();
     const before = started.run.money;
     const end = win(started.run);
-    expect(end.run.money).toBeGreaterThanOrEqual(before + 2000);
+    // The prize the event states (its win effects), on top of whatever the battle itself pays.
+    const prize = (content.events.get('rm-2-key-cabin')!.choices[0]!.success.battle!.win ?? []).reduce((n, e) => n + (e.kind === 'money' ? e.amount : 0), 0);
+    expect(prize).toBeGreaterThan(0);
+    expect(end.run.money).toBeGreaterThanOrEqual(before + prize);
     expect(end.run.phase).not.toBe('reward');
   });
 
