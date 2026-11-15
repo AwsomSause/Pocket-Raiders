@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { confirmToMenu, confirmUntil } from './battleInput';
 
 // The New UI (Settings > UI style: New, the default for players): the mock-up screens are an HTML layer over the
 // canvas, so this spec drives the game by clicking that layer. The older specs run with the Old UI (an automated
@@ -447,6 +448,278 @@ test('New UI: a lost run ends on the mock-up page; Witness the Rest, the report,
   await page.waitForTimeout(250);
   await end.locator('[data-act="pick"]', { hasText: 'Back to Hub' }).click();
   await waitForScene(page, 'Hub');
+  expect(errors).toEqual([]);
+});
+
+/**
+ * Through the opening lines to the battle's first choice. The game keeps a key press for a moment, so an Enter sent
+ * during the last opening line can land on the commands and open Fight; this steps back, so every run starts there.
+ */
+async function toCommands(page: Page) {
+  await confirmToMenu(page);
+  await page.waitForTimeout(400);
+  const tab = () => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').tabs.current as string | null);
+  if ((await tab()) !== null) {
+    await page.keyboard.press('Escape');
+    await expect.poll(tab).toBeNull();
+    await page.waitForTimeout(250);
+  }
+}
+
+test('New UI: the battle shows the mock-up boxes, text box and menus over the live field; a move chosen by click plays the turn', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Battle');
+  const hud = view(page, 'Battle');
+  await expect(hud).toBeVisible();
+  // The HUD is see-through: the canvas keeps the arena and the Pokémon, and no longer draws its own boxes.
+  await expect(hud).toHaveClass(/clear/);
+  // Through the opening lines to the first choice.
+  await toCommands(page);
+  const fight = hud.locator('[data-act="pick"]', { hasText: 'Fight' });
+  await expect(fight).toBeVisible();
+  await expect(hud.locator('.win.glass')).toHaveCount(2);
+  await expect(hud.locator('.txt')).toContainText('What will');
+  await expect(hud.locator('[data-act="tab"]')).toHaveCount(5);
+  const state = () => page.evaluate(() => {
+    const s = (window as any).__pkr.game.scene.getScene('Battle');
+    const run = (window as any).__pkr.session.run;
+    return { turn: run.battle?.turn ?? -1, hidden: s.playerBox.container.cameraFilter !== 0 && s.message.cameraFilter !== 0, name: s.playerBox.name.text as string };
+  });
+  const before = await state();
+  expect(before.hidden).toBe(true);
+  await expect(hud.locator('.win.glass').last()).toContainText(before.name);
+  // Fight opens the moves: type-coloured buttons with PP, and the text box describes the focused move.
+  await fight.click();
+  const move = hud.locator('.btn.mv');
+  await expect(move.first()).toBeVisible();
+  await expect(move.first()).toContainText('PP');
+  await expect(hud.locator('.txt')).toContainText('Power');
+  await expect(hud.locator('[data-act="tab"].on')).toContainText('Attack');
+  // The keyboard moves the same cursor the buttons show.
+  if ((await move.count()) > 1) {
+    await page.keyboard.press('ArrowRight');
+    await expect(hud.locator('.btn.on.mv')).toHaveAttribute('data-arg', '1');
+    await page.keyboard.press('ArrowLeft');
+    await expect(hud.locator('.btn.on.mv')).toHaveAttribute('data-arg', '0');
+  }
+  // A click on the first move plays the turn.
+  await page.waitForTimeout(250);
+  await move.first().click();
+  await expect(move).toHaveCount(0);
+  await confirmUntil(page, async () => (await state()).turn > before.turn || (await page.evaluate(() => (window as any).__pkr.session.run.phase)) !== 'battle', 30_000);
+  const after = await state();
+  const phase = await page.evaluate(() => (window as any).__pkr.session.run.phase);
+  expect(phase !== 'battle' || after.turn > before.turn).toBe(true);
+  expect(errors).toEqual([]);
+});
+
+test('New UI: the battle\'s Party and Item tabs open the mock-up windows over the field; the keyboard and clicks steer them', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Battle');
+  await toCommands(page);
+  // Two kinds of medicine and the starting balls, and a hurt Pokémon so the Potion can be used.
+  await page.evaluate(() => {
+    const run = (window as any).__pkr.session.run;
+    run.inventory = { ...run.inventory, potion: 2, revive: 1 };
+    run.party[0].hp = Math.max(1, run.party[0].hp - 5);
+  });
+  const stages = view(page, 'Battle');
+  const tab = (name: string) => stages.locator('[data-act="tab"]', { hasText: name }).first();
+  const win = stages.locator('.win', { has: page.locator('[data-act="pick"][data-over]') }).filter({ hasNot: page.locator('.btn') });
+  const text = stages.locator('.txt');
+  const picker = () => page.evaluate(() => {
+    const s = (window as any).__pkr.game.scene.getScene('Battle');
+    return s.picker ? { hidden: s.picker.root.cameraFilter !== 0, row: s.picker.current as number } : null;
+  });
+
+  // Party: one window under the foe's box, a row per Pokémon with its HP bar; the canvas list is left out of the picture.
+  await tab('Party').click();
+  await expect(win).toHaveCount(1);
+  await expect(win).toContainText('Switch to…');
+  const party = await page.evaluate(() => (window as any).__pkr.session.run.party.length as number);
+  await expect(win.locator('[data-act="pick"]')).toHaveCount(party);
+  await expect(win.locator('.hp')).toHaveCount(party);
+  expect((await picker())?.hidden).toBe(true);
+  await expect(stages.locator('[data-act="tab"].on').first()).toContainText('Party');
+  // The text box says what the focused Pokémon brings.
+  await expect(text).not.toHaveText('');
+  // Esc goes back to the commands and the window leaves.
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Escape');
+  await expect(win).toHaveCount(0);
+  await expect(stages.locator('[data-act="pick"]', { hasText: 'Fight' })).toBeVisible();
+  expect(await picker()).toBeNull();
+
+  // Item: pockets as tabs, rows with counts, and the focused item's words in the text box.
+  await tab('Item').click();
+  await expect(win).toHaveCount(1);
+  const pockets = win.locator('.tabs [data-act="tab"]');
+  await expect(pockets).toHaveCount(2);
+  await expect(pockets.first()).toHaveClass(/on/);
+  await expect(pockets.first()).toHaveText('Medicine');
+  await expect(win.locator('[data-act="pick"]')).toHaveCount(2);
+  await expect(win).toContainText('Potion');
+  await expect(win).toContainText('× 2');
+  await expect(text).toContainText('HP');
+  // Down moves the same cursor the window shows.
+  await page.waitForTimeout(250);
+  await page.keyboard.press('ArrowDown');
+  await expect.poll(async () => (await picker())?.row).toBe(1);
+  await expect(win).toContainText('Revive');
+  // Right opens the next pocket; a click on a pocket does the same.
+  await page.keyboard.press('ArrowRight');
+  await expect(pockets.nth(1)).toHaveClass(/on/);
+  await expect(win).toContainText('Ball');
+  await pockets.first().click();
+  await expect(pockets.first()).toHaveClass(/on/);
+  // Choosing the Potion asks which Pokémon: the same window with the party, each row saying what the item would do.
+  await win.locator('[data-act="pick"]', { hasText: 'Potion' }).click();
+  await expect(win).toContainText('Use Potion on which Pokémon?');
+  await expect(win.locator('.hp')).toHaveCount(party);
+  // Picking the hurt Pokémon spends the Potion and the turn.
+  const before = await page.evaluate(() => ({ n: (window as any).__pkr.session.run.inventory.potion as number, turn: (window as any).__pkr.session.run.battle.turn as number }));
+  await win.locator('[data-act="pick"]').first().click();
+  await expect(win).toHaveCount(0);
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.session.run.inventory.potion ?? 0)).toBe(before.n - 1);
+  expect(errors).toEqual([]);
+});
+
+test('New UI: a Trainer battle opens on the mock-up versus card; a click moves on to the battle', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  const trainer = await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    const node = session.run.stage.map.nodes.find((n: any) => n.column === 1);
+    node.kind = 'trainer';
+    session.chooseNode(node.id);
+    game.scene.getScene('Map').scene.start('Battle');
+    return session.run.battle.trainer.name as string;
+  });
+  await waitForScene(page, 'Battle');
+  const stages = view(page, 'Battle');
+  const card = stages.locator('.vsx');
+  await expect(card).toBeVisible();
+  // The card names the Trainer; the battle's own boxes are not out yet.
+  await expect(stages.filter({ has: page.locator('.vsx') })).toContainText(trainer);
+  await expect(stages.locator('.win.glass')).toHaveCount(0);
+  await stages.locator('[data-act="next"]').click();
+  await expect(card).toHaveCount(0);
+  // The battle goes on to its first choice, with both boxes up.
+  await toCommands(page);
+  await expect(stages.locator('[data-act="pick"]', { hasText: 'Fight' })).toBeVisible();
+  await expect(stages.locator('.win.glass')).toHaveCount(2);
+  expect(errors).toEqual([]);
+});
+
+test('New UI: a win shows the Exp panel, the level-up window and the evolution picture from the mock-ups', async ({ page }) => {
+  test.setTimeout(120_000);
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Battle');
+  await toCommands(page);
+  // One hit wins, and the Exp banked is enough for several levels: a Caterpie evolves on the way.
+  await page.evaluate(() => {
+    const run = (window as any).__pkr.session.run;
+    run.battle.enemyTeam.forEach((m: any) => (m.hp = 1));
+    const mon = run.party[0];
+    mon.speciesId = 'caterpie';
+    mon.moves[0] = { ...mon.moves[0], id: 'tackle', pp: 35 };
+    mon.xp = 7000;
+  });
+  const stages = view(page, 'Battle');
+  const count = (sel: string, text?: RegExp) => async () => (await (text ? stages.locator(sel, { hasText: text }) : stages.locator(sel)).count()) > 0;
+  await stages.locator('[data-act="pick"]', { hasText: 'Fight' }).click();
+  await expect(stages.locator('.btn.mv').first()).toBeVisible();
+  await page.waitForTimeout(250);
+  await stages.locator('.btn.mv').first().click();
+  // The Exp panel names the Pokémon that earned it, as it was in the fight.
+  await confirmUntil(page, count('.win', /\+\d+ Exp|Level up!/), 40_000);
+  await expect(stages.locator('.win', { hasText: /\+\d+ Exp|Level up!/ }).first()).toContainText('Caterpie');
+  // The level-up window: the step from the level it had, and six stats.
+  await confirmUntil(page, count('.win', /Lv \d+ → \d+/), 40_000);
+  const level = stages.locator('.win', { hasText: /Lv \d+ → \d+/ });
+  await expect(level).toContainText('Caterpie');
+  await expect(level).toContainText('Lv 5 →');
+  for (const stat of ['HP', 'Attack', 'Defense', 'Sp. Atk', 'Sp. Def', 'Speed']) await expect(level).toContainText(stat);
+  // The evolution takes the whole picture: no boxes, the words under it.
+  await confirmUntil(page, count('.burst'), 60_000);
+  await expect(stages.locator('.win.glass')).toHaveCount(0);
+  await expect(stages.locator('.txt')).toContainText(/evolving|evolved/);
+  // Then the run goes on, a new species in the party.
+  await confirmUntil(page, async () => (await page.evaluate(() => (window as any).__pkr.activeScene())) !== 'Battle', 60_000);
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.party[0].speciesId)).not.toBe('caterpie');
+  expect(errors).toEqual([]);
+});
+
+test('New UI: resting the pointer on a move or a data box shows the mock-up tooltips; a click pins a Pokémon\'s card', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Battle');
+  const hud = view(page, 'Battle');
+  await toCommands(page);
+  const card = hud.locator('.win', { hasText: 'Seen in' });
+  const mine = hud.locator('[data-tip="mine:0"]'), foe = hud.locator('[data-tip="foe:0"]');
+  await expect(card).toHaveCount(0);
+  // Your own Pokémon: its Ability and what it does, after the Tooltip delay.
+  await mine.hover();
+  await expect(card).toBeVisible();
+  const names = await page.evaluate(() => [...(window as any).__pkr.session.content.abilities.values()].map((a: any) => a.name as string));
+  const head = (await card.locator('b.acc').textContent()) ?? '';
+  expect(names).toContain(head);
+  // Off the box, the card leaves.
+  await page.mouse.move(480, 200);
+  await expect(card).toHaveCount(0);
+  // The foe has shown no Ability yet: the card says so and gives nothing away.
+  await foe.hover();
+  await expect(card).toContainText('Ability not seen yet');
+  await page.mouse.move(480, 200);
+  await expect(card).toHaveCount(0);
+  // A click pins the card: it stays with the pointer elsewhere, and a click on it lets it go.
+  await mine.click();
+  await page.mouse.move(200, 300);
+  await page.waitForTimeout(400);
+  await expect(card).toBeVisible();
+  await expect(card).toContainText(head);
+  await card.click();
+  await page.mouse.move(200, 300);
+  await expect(card).toHaveCount(0);
+  // A move: its details as the tooltip window, which never takes the click meant for the button.
+  await hud.locator('[data-act="pick"]', { hasText: 'Fight' }).click();
+  const move = hud.locator('[data-tip="move:0"]');
+  await expect(move).toBeVisible();
+  const tip = hud.locator('.win', { hasText: 'Power / Accuracy' });
+  await expect(tip).toHaveCount(0);
+  await move.hover();
+  await expect(tip).toBeVisible();
+  await expect(tip).toContainText('Category');
+  await expect(tip).toContainText('Priority');
+  await page.mouse.move(200, 300);
+  await expect(tip).toHaveCount(0);
+  // Tooltip delay Off: resting shows nothing, a pin still works.
+  await page.evaluate(() => { const S = (window as any).__pkr.session; S.saveSettings({ ...S.settings, tooltipDelay: 'off' }); });
+  await move.hover();
+  await page.waitForTimeout(1500);
+  await expect(tip).toHaveCount(0);
+  await mine.hover();
+  await page.waitForTimeout(1500);
+  await expect(card).toHaveCount(0);
+  await mine.click();
+  await expect(card).toBeVisible();
+  // The turn's pictures take the field back from a pinned card.
+  await move.click();
+  await expect(card).toHaveCount(0);
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.session.run.battle?.turn ?? 99), { timeout: 30_000 }).toBeGreaterThan(0);
   expect(errors).toEqual([]);
 });
 

@@ -9,7 +9,8 @@ import { mountRedux, type ReduxCtx, type ReduxView } from './stage';
 import { act, type Area, esc, H, TX, W } from './kit';
 import { boardProgress, type BoardRow, boardView, gridStart, gridView, menuView, scrollStart, tabsBar } from './templates';
 import { bagCols, bagUseNote, bagView } from './screens/bag';
-import { partyChips, partyStrip } from './game';
+import { battleListView, windowTitle } from './screens/battle';
+import { monFile, partyChips, partyStrip } from './game';
 import { services } from '../../game/services';
 import { itemUseProblem } from '../../core/items';
 
@@ -21,11 +22,15 @@ export interface PickerBridge {
   box: (i: number) => Phaser.GameObjects.Container | undefined;
   problem: (i: number) => string | null;
   hint: (i: number) => string;
+  /** A Pokémon row's look, HP left (0 to 1) and short mark, for the battle windows. */
+  mon?: (i: number) => { speciesId: string; shiny: boolean; hp: number; mark: string } | undefined;
   /** The item a row stands for, if any (Bag). */
   item?: (i: number) => string | undefined;
   tabs?: { labels: readonly string[]; index: number; onChange: (index: number) => void };
   canBack: boolean;
   backLabel?: string;
+  /** The battle window's top edge, when it is not the usual one. */
+  top?: number;
   /** The quick-summary text while it is open (I), else null. */
   summary: () => string | null;
   pick: (i: number) => void;
@@ -33,7 +38,8 @@ export interface PickerBridge {
   back: () => void;
 }
 
-export type PickerKind = 'menu' | 'grid' | 'board' | 'bag';
+/** `window` is the battle's small Party or Item window over the field; the rest are full screens. */
+export type PickerKind = 'menu' | 'grid' | 'board' | 'bag' | 'window';
 
 /** Which template a list uses, by its title: the mock-ups' own rule for hub rooms (redux-07.js `kind`). */
 const KIND_BY_NAME: [RegExp, PickerKind][] = [
@@ -64,6 +70,7 @@ function areaOf(title: string): Area {
 export function pickerCols(kind: PickerKind, c: Pick<ReduxCtx, 'v'>): number {
   if (kind === 'grid') return c.v(2) === 1 ? 5 : 6;
   if (kind === 'bag') return bagCols(c);
+  if (kind === 'window') return 1;
   if (kind === 'board') return c.v(2) === 1 ? 2 : 1;
   const v = c.v(3);
   return v === 1 ? 2 : 1;
@@ -109,6 +116,18 @@ function bagNotes(itemId: string | undefined): string[] | undefined {
 }
 
 function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerKind): string {
+  if (kind === 'window') {
+    const sum = p.summary();
+    const over = sum === null ? '' : '<div class="shade" style="z-index:8"></div>' + W(`<div style="white-space:pre-wrap;line-height:22px;font-size:16px">${esc(sum)}</div><div class="sm acc">Press I, Enter or Esc to go back to the list</div>`, 'position:absolute;left:120px;right:120px;top:40px;bottom:50px;display:flex;flex-direction:column;gap:10px;padding:16px 20px;overflow:hidden;z-index:9', '', act('back'));
+    const t = windowTitle(p.title);
+    return battleListView(c, {
+      ...t, tabs: p.tabs ? { labels: p.tabs.labels, index: p.tabs.index } : null, n: p.rows, index: p.index(), top: p.top, back: p.canBack,
+      row: (i) => {
+        const r = scrapeRow(scene, p.box(i)), m = p.mon?.(i), file = m ? monFile(scene, m.speciesId, 'front', m.shiny) : null;
+        return { label: r.label, art: file ? { file, atlas: true } : m ? null : r.art, hp: m ? m.hp : null, tag: m ? m.mark : r.tag, off: p.problem(i) !== null };
+      },
+    }) + over;
+  }
   // "Bank · 0 credits · 0 candies": the name goes in the band, the rest becomes chips beside it.
   const [name = '', ...extra] = p.title.split(/\s+·\s+/);
   const n = p.rows, index = p.index(), area = areaOf(name);
@@ -164,6 +183,7 @@ export function mountPickerView(scene: Phaser.Scene, p: PickerBridge, kind: Pick
     },
     acts: { pick: (i) => p.pick(Number(i)), tab: (k) => p.tabs && Number(k) !== p.tabs.index && p.tabs.onChange(Number(k)), back: () => p.back() },
     overs: { over: (i) => p.hover(Number(i)) },
+    clear: kind === 'window',
   });
   return Object.assign(view, { get cols() { return cols; } }) as PickerView;
 }
