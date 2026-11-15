@@ -1755,6 +1755,8 @@ export const RegionSchema = z.object({
   custom: z.boolean().default(false),
   /** Special-form tags whose first stages roam this region's routes (e.g. "delta": Torren's Delta Pokémon). */
   specialWilds: z.array(z.string()).default([]),
+  /** Species ids (first stages) that roam this region's routes, native there (Galar: the Galarian lines). Wild-eligible except for being special forms. */
+  wildSpecies: z.array(z.string()).default([]),
   /** One line that sums the region up, shown in its map banner. */
   tagline: z.string().optional(),
   /** Two or three sentences of flavour for the region (lore pages). */
