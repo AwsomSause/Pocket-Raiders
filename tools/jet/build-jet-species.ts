@@ -125,7 +125,7 @@ for (const p of pack) {
   const from = p.evolution.from ? (mega ? 'alolan-vibrava' : kebab(p.evolution.from)) : null;
   const mk = (sid: string, name: string, stats: any, extra: object) => ({
     id: sid, dex: dex++, name, generation: base.generation, types: p.types.map((t: string) => t.toLowerCase()), baseStats: stat(stats), catchRate: p.profile.catchRate, baseExp: p.profile.baseExp,
-    growthRate: p.profile.growthRate.toLowerCase().replace(/ /g, '-'), evolutionStage: stage, evolvesFrom: from, tags: stage === 1 && !p.evolution.from && BASED[id] ? ['scout'] : [], learnset, evolutions: [],
+    growthRate: p.profile.growthRate.toLowerCase().replace(/ /g, '-'), evolutionStage: stage, evolvesFrom: from, tags: stage === 1 && !p.evolution.from && baseOf(id) ? ['scout'] : [], learnset, evolutions: [],
     abilities: { normal, hidden: slot('hidden') ? kebab(slot('hidden').id) : null }, assets: { sprite: `custom/${sid}`, icon: ICON[id] ?? `${base.generation}/${base.dex}`, cry: CRY[id] ?? `${base.dex}` },
     weight: p.profile.weightKg, femaleRatio: p.profile.genderRatio ? p.profile.genderRatio.femalePercent / 100 : null, eggGroups: p.profile.eggGroups.map((g: string) => EGG[g] ?? g.toLowerCase()), color: COLOR[id] ?? base.color, ...extra,
   });
