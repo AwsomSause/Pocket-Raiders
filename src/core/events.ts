@@ -79,6 +79,7 @@ import { currentRegion, getCampaign, levelCap, runLevelCap } from './regions';
 import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } from './encounterDirector';
 import { hashSeed, Rng } from './rng';
 import { continueAfterDecisions, healParty, newMon, partyCapacity, startRaidBattle } from './run';
+import { prepareSpectate } from './sky/spectate';
 import { applySky, shapeSkyFoe, skyCondition, skyConditionText } from './sky/story';
 import { NATURE_IDS } from './natures';
 
@@ -1580,6 +1581,8 @@ function eventLevel(content: Content, run: RunState, node: MapNode, rng: Rng): n
 }
 
 export function startEventBattle(content: Content, run: RunState, node: MapNode, b: EventBattle, rng: Rng, event: EventBattleRef): void {
+  // Pidgey's Resolve: the two watched CPU fights set the player's team aside first.
+  prepareSpectate(content, run, event.eventId);
   const lastAlive = b.kind === 'trainer' && b.rule?.reversed ? run.party.map((p) => p.hp > 0).lastIndexOf(true) : -1;
   const pondLead = b.kind === 'trainer' && b.rule?.pondDuel ? run.party.findIndex((p) => p.pond && p.hp > 0) : -1;
   const dueler = pondLead >= 0 ? pondLead : b.kind === 'trainer' && b.rule?.leadType ? run.party.findIndex((p) => p.hp > 0 && getSpecies(content, p.speciesId).types.includes(b.rule!.leadType!)) : -1;
@@ -1673,7 +1676,6 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     if (b.kind === 'trainer' && b.sprite && run.battle.trainer) run.battle.trainer.spriteBoss = b.sprite;
     if (b.special) assignSpecialTrait(run.battle.extra.traits, team, b.special);
     // Pidgey's Resolve: the sparring Pidgey (and the rematch Pidgeot) is built from the story's state.
-    if (event.eventId === 'sky.meet' || event.eventId === 'sky.rematch') shapeSkyFoe(content, run, event.eventId);
     assignStoryTraits(run.battle.extra.storyTraits, team, b.special, !!run.expansion?.storyTraits);
     // Beta 0.6: the team's special Pokémon carry its variant line (Specialists one, Executives and Leaders two).
     const variantTeam = b.evil ? (b.evilTeam ?? evilTeam(content, run)?.id) : undefined;
@@ -1707,6 +1709,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       run.battle.loaner = ally.uid;
     }
   }
+  if (event.eventId.startsWith('sky.')) shapeSkyFoe(content, run, event.eventId);
   if (b.format && !run.battle.doubles) applyEventFormat(content, run, b.format);
   run.battle.event = event;
   // Rock Tunnel is a dark cave: every fight inside it has its accuracy cut by a tenth.

@@ -169,3 +169,32 @@ export function endingLine(ending: SkyEnding): string {
     case 'fearow-alone': return 'Both birds went their own way.';
   }
 }
+
+/** Splits story lines into pieces that fit the battle message box (about three short lines): whole sentences packed up to `max` characters, a long sentence cut at a space. Nothing is dropped. */
+export function chunkLines(lines: readonly string[], max = 84): string[] {
+  const out: string[] = [];
+  for (const line of lines) {
+    for (const paragraph of line.split('\n')) {
+      const sentences = paragraph.trim().split(/(?<=[.!?…:;])\s+/).filter(Boolean);
+      let current = '';
+      const flush = (): void => {
+        if (current) out.push(current);
+        current = '';
+      };
+      for (const sentence of sentences) {
+        let rest = sentence;
+        while (rest.length > max) {
+          const cut = rest.lastIndexOf(' ', max);
+          const at = cut > max * 0.4 ? cut : max;
+          flush();
+          out.push(rest.slice(0, at).trim());
+          rest = rest.slice(at).trim();
+        }
+        if (current && current.length + 1 + rest.length > max) flush();
+        current = current ? `${current} ${rest}` : rest;
+      }
+      flush();
+    }
+  }
+  return out;
+}

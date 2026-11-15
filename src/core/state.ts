@@ -940,6 +940,8 @@ export const BattleStateSchema = z.object({
   spectacle: SpectacleBattleSchema.optional(),
   /** Auto-Battle (spec §32): the Pokémon chose at least one action this battle by themselves, so its EXP is reduced (core/run.ts awardExperience). Never cleared mid-battle. */
   autoUsed: z.boolean().optional(),
+  /** Pidgey's Resolve (core/sky/spectate.ts): a CPU-versus-CPU fight the player only watches. `cheerAt`: the share of the player-side Pokémon's HP under which the player is asked who to cheer for (once); `cheered` is the answer. Nothing counts: the real party and Bag are put back. */
+  spectate: z.object({ kind: z.enum(['duel', 'finale']), cheerAt: z.number().min(0).max(1).optional(), cheered: z.enum(['pidgeot', 'fearow', 'none']).optional() }).optional(),
   /** The wild Pokémon is an Alpha: oversized, stronger, better prize (ideas W1). */
   alpha: z.boolean().optional(),
   /** A benched Pokémon already cheered this battle (ideas W1). */

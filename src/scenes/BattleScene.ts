@@ -10,6 +10,8 @@ import { riskLine } from '../core/battleRisk';
 import { gimmickContext } from '../core/gimmicks';
 import { aeroMood, autoInterruption, cameraFocus, capFlash, hapticPattern, interactionLog } from '../core/presentation/uiPrefs';
 import { fitBlock, fitLine } from '../ui/fitText';
+import { cheerDue } from '../core/sky/spectate';
+import { FINALE_ASK, chunkLines } from '../core/sky/text';
 import { HazardFloor, bossCinematic, critFreeze, critLetterbox, runScan, tossArc, weaknessesOf } from '../ui/battleFx/skillMoments';
 import { defaultMoveIndex } from '../core/battle/rememberChoice';
 import { aimable, dealOffer, foeStake, type SkillInput } from '../core/battle/w1Play';
@@ -2042,6 +2044,57 @@ export class BattleScene extends Phaser.Scene {
     return { kind, grade: result.grade };
   }
 
+  /** Pidgey's Resolve: one step of a watched fight: the cheer question (finale, first time Pidgeot is low), otherwise the next turn by itself. */
+  private async spectateStep(): Promise<void> {
+    const { session } = services();
+    if (cheerDue(session.content, this.run)) {
+      this.showSkyCheerMenu();
+      return;
+    }
+    this.autoRunning = true;
+    this.clearMenus();
+    this.tabs.show(false);
+    await new Promise<void>((done) => this.time.delayedCall(AUTO_PICK_MS, () => done()));
+    this.autoRunning = false;
+    const battle = this.run.battle;
+    if (!battle) return;
+    const forced = forcedMoveIndex(battle, this.run.party);
+    if (forced !== null) await this.act({ kind: 'move', index: forced });
+    else await this.act({ kind: 'move', index: 0 }, true);
+  }
+
+  /** The finale's one question: who to cheer for. Cheering is the only thing the player does in a watched fight. */
+  private showSkyCheerMenu(): void {
+    this.clearMenus();
+    this.tabs.show(false);
+    this.message.setText(chunkLines([FINALE_ASK])[0] ?? '');
+    void this.readAloud([FINALE_ASK]).then(() => {
+      this.commandWindow.setVisible(true);
+      this.message.setText('Who do you cheer for?');
+      this.menu = new Menu(this, {
+        x: COMMAND_X + 24,
+        y: MESSAGE_Y + 26,
+        options: [{ label: 'Cheer for Pidgeot' }, { label: 'Cheer for Fearow' }],
+        columns: 1,
+        itemWidth: 300,
+        itemHeight: 50,
+        fontSize: 24,
+        color: this.btnText,
+        glass: { paint: this.skin?.pill, tints: [0x1f9a52, 0xc8303c], motion: this.motion },
+        onSelect: (i) => {
+          this.clearMenus();
+          const line = services().session.skyCheer(i === 0 ? 'pidgeot' : 'fearow');
+          void this.readAloud([line]).then(() => this.nextPrompt());
+        },
+      });
+    });
+  }
+
+  /** Reads story lines in the message box, cut so each piece fits, one confirm press per piece (nothing disappears by itself). */
+  private async readAloud(lines: readonly string[]): Promise<void> {
+    for (const piece of chunkLines(lines)) await this.say(piece);
+  }
+
   /** The trainer's deal: accept (the fight ends, bigger prize, no EXP) or refuse (no turn used). */
   private showDealMenu(): void {
     const battle = this.run.battle!;
@@ -2677,6 +2730,11 @@ export class BattleScene extends Phaser.Scene {
 
   private nextPrompt(): void {
     this.refreshMusicState();
+    // Pidgey's Resolve: a watched CPU-versus-CPU fight. No menu is ever shown; every turn plays by itself.
+    if (this.run.battle?.spectate) {
+      void this.spectateStep();
+      return;
+    }
     if (!this.camBusy && !this.camPinned) this.restoreCamera(250); // a new turn always starts on the whole arena
     if (this.duo) {
       if (this.autoOn && !autoBattleProblem(this.run)) void this.runAuto();
@@ -3703,6 +3761,12 @@ export class BattleScene extends Phaser.Scene {
     await this.playEvents(result.events, before, trainer, result.cues, result.drama);
     await this.stadium?.afterTurn();
 
+    if (result.spectated) {
+      await this.readAloud(result.spectated.lines);
+      await exitWipe(this, this.motion, this.wipeMask());
+      this.scene.start(sceneForRun(result.run));
+      return;
+    }
     if (result.end) {
       await this.finish(result, trainer, bossWin);
       return;

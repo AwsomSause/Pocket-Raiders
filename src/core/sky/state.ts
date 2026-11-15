@@ -40,8 +40,8 @@ export const SkyStateSchema = z.object({
   /** The region index the story began in (the finale is in the same region; the afterstory in the next). */
   region: z.number().int().min(0),
   backed: SkySideSchema,
-  /** Who won the opening duel. */
-  duelWinner: SkySideSchema,
+  /** Who won the opening duel (unknown until the watched fight ends). */
+  duelWinner: SkySideSchema.optional(),
   /** `rivalry`: Pidgey vowed to get stronger and the story runs; `done`: it has ended (see `ending`). */
   phase: z.enum(['rivalry', 'done']),
   /** Stage keys that already had a meeting, so there is at most one per stage. */
@@ -60,10 +60,13 @@ export const SkyStateSchema = z.object({
   ending: SkyEndingSchema.optional(),
   /** The afterstory beat (the bird overhead, or the rematch) has been played. */
   afterDone: z.boolean().default(false),
+  /** While a watched CPU fight runs, the player's real team and Bag wait here (put back when it ends). */
+  stash: z.object({ party: z.array(z.unknown()), inventory: z.record(z.string(), z.number()) }).optional(),
   /** A Pidgeot or Fearow that joined: its uid, so a second join can never happen. */
   joinedUid: z.string().optional(),
 });
 export type SkyState = z.infer<typeof SkyStateSchema>;
 
-export const freshSky = (region: number, backed: SkySide, duelWinner: SkySide): SkyState =>
-  SkyStateSchema.parse({ region, backed, duelWinner, phase: backed === 'pidgey' && duelWinner === 'pidgey' ? 'done' : 'rivalry', ...(backed === 'pidgey' && duelWinner === 'pidgey' ? { ending: 'hm' } : {}) });
+/** The story as it stands once the opening fight is decided. */
+export const freshSky = (region: number, backed: SkySide, duelWinner?: SkySide): SkyState =>
+  SkyStateSchema.parse({ region, backed, ...(duelWinner ? { duelWinner } : {}), phase: backed === 'pidgey' && duelWinner === 'pidgey' ? 'done' : 'rivalry', ...(backed === 'pidgey' && duelWinner === 'pidgey' ? { ending: 'hm' } : {}) });
