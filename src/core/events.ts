@@ -99,7 +99,7 @@ import { emit } from './story/record';
 import { calmDisturbance, hasDisturbance, noteDungeonEntered } from './worldSim/tick';
 import { recordBattleStarted } from './story/hooks';
 import { partyLifeBond } from './partyLife';
-import { celebrateToday, milestoneToday, periodOf, PERIOD_LABEL, restUntilMorning, seasonOf } from './clock';
+import { celebrateToday, milestoneToday, periodOf, PERIOD_LABEL, restUntilMorning, seasonOf, tideOf } from './clock';
 import { BERRIES } from './berries';
 import { choiceAt, effectiveEvent, visibleChoices } from './eventMemory';
 import { getTheme, typesPool } from './themes';
@@ -517,7 +517,7 @@ function coSeen(content: Content, run: RunState, id: string): boolean {
 function coFits(content: Content, run: RunState, id: string): boolean {
   const p = content.coPlacement?.get(id);
   if (!p || !run.stage) return true;
-  return fitsStage(p, stageNumber(content, run), run.stage.index + 1, stageTags(getTheme(content, run.stage.themeId).types, periodOf(run)));
+  return fitsStage(p, stageNumber(content, run), run.stage.index + 1, stageTags(getTheme(content, run.stage.themeId).types, periodOf(run), tideOf(content, run)));
 }
 
 /** Is this event put on a chosen step by the placer (so it is never drawn at random)? */
@@ -630,7 +630,9 @@ export function addEventStops(content: Content, run: RunState): void {
     // E3b: a run event (`xr.*`) keeps one column away from every story event (`xe.*`) on the stage, when the map allows it.
     const xe = eventId.startsWith('xr.') ? xeColumns(run) : [];
     const apart = xe.length > 0 ? candidates.filter((n) => xe.every((c) => Math.abs(c - n.column) > 1)) : candidates;
-    const node = rng.pick(apart.length > 0 ? apart : candidates);
+    // Catalog Overhaul pools: a camp scene (attaches at a + node) drawn to fill the stage goes on a + node when the stage has one.
+    const camps = content.coPlacement?.get(eventId)?.attaches === 'rest' ? (apart.length > 0 ? apart : candidates).filter((n) => n.sides.some((x) => x.kind === 'heal')) : [];
+    const node = rng.pick(camps.length > 0 ? camps : apart.length > 0 ? apart : candidates);
     node.sides.push({ id: `event-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId, ...(hidden ? { hidden: true } : {}) });
   };
   // A running tournament round and a serious crisis always get their stop (until played), so neither can be missed by luck.

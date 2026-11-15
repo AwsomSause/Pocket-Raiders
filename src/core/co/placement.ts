@@ -17,7 +17,7 @@ export interface CoPlacement {
   window: [number, number] | null;
   sits: 'must-see' | 'optional' | 'side-branch';
   attaches: 'after' | 'before' | 'instead' | 'rest' | 'town';
-  /** Stage tags it needs (water, high, forest, city, cave, eerie, hot, snow, storm, night). All must hold. */
+  /** Stage tags it needs (water, high, forest, city, cave, eerie, hot, snow, storm, night, high tide, low tide). All must hold. */
   tags: string[];
   /** Battle level as stages away from the current one (A-1 = -1). */
   level: number;
@@ -83,18 +83,26 @@ const TAG_TYPES: Record<string, string[]> = {
   cave: ['rock', 'ground', 'dark'], eerie: ['ghost', 'dark', 'psychic'], hot: ['fire', 'ground'], snow: ['ice'],
 };
 
-/** The tags a stage has, from its types and the time of day (pack section 6). `tide` is not modelled by the game and never holds. */
-export function stageTags(types: readonly string[], period: string): Set<string> {
+/** The tags a stage has, from its types and its header: the time of day and the tide (pack section 6). */
+export function stageTags(types: readonly string[], period: string, tide?: 'high' | 'low'): Set<string> {
   const tags = new Set<string>();
   for (const [tag, list] of Object.entries(TAG_TYPES)) if (types.some((t) => list.includes(t))) tags.add(tag);
   if (types.includes('electric') && (types.includes('flying') || types.includes('water'))) tags.add('storm');
   if (period === 'evening' || period === 'night') tags.add('night');
+  if (tide) tags.add(`${tide} tide`);
   return tags;
 }
 
+/** A tide need as the docs write it ("high tide", "tide: low", "low-tide") reads as `high tide` or `low tide`; a bare "tide" fits either. */
+const tagHolds = (tag: string, tags: ReadonlySet<string>): boolean => {
+  if (!tag.includes('tide')) return tags.has(tag);
+  const want = tag.includes('high') ? 'high tide' : tag.includes('low') ? 'low tide' : null;
+  return want ? tags.has(want) : tags.has('high tide') || tags.has('low tide');
+};
+
 /** May it appear on this stage at all (earliest absolute stage, in-region stage, tags)? */
 export function fitsStage(p: CoPlacement, absStage: number, stageInRegion: number, tags: ReadonlySet<string>): boolean {
-  return absStage >= p.earliest && (p.stages.length === 0 || p.stages.includes(stageInRegion)) && p.tags.every((t) => tags.has(t));
+  return absStage >= p.earliest && (p.stages.length === 0 || p.stages.includes(stageInRegion)) && p.tags.every((t) => tagHolds(t, tags));
 }
 
 /** A pack step (1 to 20) as a column of this map; the last column is the Gym and is never used. */

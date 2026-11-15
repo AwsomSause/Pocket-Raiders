@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { CO_BUDGET, fitsStage, nodesAhead, planCoStage, positioned, readPlacement, stageTags, stepColumn, type CoEntry } from '../../src/core/co/placement';
 import { EventDefSchema } from '../../src/core/contentSchema';
 import { addEventStops, chooseEvent, eligibleEvents } from '../../src/core/events';
+import { nodeProtected } from '../../src/core/co/takeNode';
 import { chooseStarter, createRun } from '../../src/core/run';
 import type { MapNode, StageMap } from '../../src/core/state';
 import { content } from './helpers';
@@ -51,6 +52,11 @@ describe('stage tags and fit', () => {
     expect(stageTags(['electric', 'flying'], 'night').has('storm')).toBe(true);
     expect(stageTags(['rock', 'steel'], 'night').has('night')).toBe(true);
     expect(stageTags(['ice'], 'morning')).toEqual(new Set(['water', 'high', 'snow']));
+    expect(stageTags(['water'], 'morning', 'low').has('low tide')).toBe(true);
+    const low = readPlacement({ tags: ['Water', 'Low tide'] });
+    expect(fitsStage(low, 1, 1, stageTags(['water'], 'morning', 'low'))).toBe(true);
+    expect(fitsStage(low, 1, 1, stageTags(['water'], 'morning', 'high'))).toBe(false);
+    expect(fitsStage(readPlacement({ tags: ['tide'] }), 1, 1, stageTags(['water'], 'morning', 'high'))).toBe(true);
   });
 
   it('waits for the earliest stage, the in-region stage and the tags', () => {
@@ -208,5 +214,36 @@ describe('placement in a run', () => {
     expect(columns.size).toBe(1);
     expect(nodes.length === 1 || nodes.length === after.stage!.map.nodes.filter((n) => n.column === [...columns][0]).length).toBe(true);
     content.events.delete('co-test-b1'); content.events.delete('co-test-b2'); content.coPlacement = new Map();
+  });
+
+  it('a must-see stop or a Door is never spent by a "(a node)" cost; an optional stop can be', () => {
+    for (const id of ['co-test-must', 'co-test-door', 'co-test-opt']) content.events.set(id, ev(id));
+    content.coPlacement = new Map([['co-test-must', readPlacement({ home: 5, sits: 'Must-see' })], ['co-test-door', readPlacement({ shape: 'Door', home: 9 })], ['co-test-opt', readPlacement({ home: 7 })]]);
+    const run = start();
+    const plain = run.stage!.map.nodes.filter((n) => n.kind === 'wild' && n.sides.every((s) => s.kind !== 'event'));
+    const [a, b, c] = plain;
+    a!.sides.push({ id: 'm', kind: 'event', used: false, eventId: 'co-test-must' });
+    b!.sides.push({ id: 'd', kind: 'event', used: false, eventId: 'co-test-door' });
+    c!.sides.push({ id: 'o', kind: 'event', used: false, eventId: 'co-test-opt' });
+    expect(nodeProtected(content, run, a!)).toBe(true);
+    expect(nodeProtected(content, run, b!)).toBe(true);
+    expect(nodeProtected(content, run, c!)).toBe(false);
+    for (const id of ['co-test-must', 'co-test-door', 'co-test-opt']) content.events.delete(id);
+    content.coPlacement = new Map();
+  });
+
+  it('a camp scene drawn from a Pool goes on a + node when the stage has one', () => {
+    content.events.set('co-test-camp', ev('co-test-camp', { forced: true }));
+    content.coPlacement = new Map([['co-test-camp', readPlacement({ shape: 'Pool', attaches: 'At a + node' })]]);
+    expect(positioned(content.coPlacement.get('co-test-camp')!)).toBe(false);
+    const run = start();
+    for (const n of run.stage!.map.nodes) n.sides = n.sides.filter((s) => s.eventId !== 'co-test-camp');
+    const rest = run.stage!.map.nodes.find((n) => n.column === 4)!;
+    if (!rest.sides.some((s) => s.kind === 'heal')) rest.sides.push({ id: 'heal-test', kind: 'heal', used: false });
+    addEventStops(content, run);
+    const nodes = stopsOf(run, 'co-test-camp');
+    expect(nodes.length).toBeGreaterThan(0);
+    for (const n of nodes) expect(n.sides.some((s) => s.kind === 'heal')).toBe(true);
+    content.events.delete('co-test-camp'); content.coPlacement = new Map();
   });
 });
