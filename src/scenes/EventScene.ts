@@ -28,7 +28,10 @@ import type { ChoiceWidget, EventCtx, EventLayoutHandles, Rect } from '../ui/eve
 import { sceneForRun } from './routing';
 import { tourneyBracket } from '../core/expansion/tourney';
 import { drawChampionStage, drawTourneyPanel, drawTourneyStrip } from '../ui/tourneyBracket';
-import { artOf, monFile } from '../ui/redux/game';
+import { artOf, monFile, partyChips } from '../ui/redux/game';
+import { storeOf } from '../ui/redux/storeFloors';
+import { itemEvolutionTargets } from '../core/evolution';
+import { maxHp } from '../core/pokemon';
 import { pageSpeaker, scriptPages, type ScriptPage } from '../ui/redux/script';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { tourneyHome, tourneyPage, tourneyRounds } from '../ui/redux/screens/bracket';
@@ -197,6 +200,14 @@ export class EventScene extends Phaser.Scene {
         return { give: { name: p.label, file: mine ? monFile(this, mine.speciesId, 'front', mine.shiny) : null }, get: got ? { name: got.name, file: monFile(this, got.id) } : null };
       };
       const tag = `${view.event.group} · ${view.event.rarity.charAt(0).toUpperCase()}${view.event.rarity.slice(1)}`;
+      // A department store floor: the directory, and who each good on the shelf helps (a stone that evolves it, medicine for the hurt).
+      const store = storeOf(view.event.id);
+      const helps = (live: typeof run): string[][] => view.event.choices.map((ch) => {
+        const fx = ch.success?.effects ?? [];
+        const item = fx.find((e): e is Extract<typeof e, { kind: 'item' }> => e.kind === 'item')?.id;
+        const heals = fx.some((e) => e.kind === 'heal');
+        return live.party.map((m) => (item && itemEvolutionTargets(content, m, item, live.regionOrder[live.regionIndex]).length ? 'Can evolve' : heals && m.hp > 0 && m.hp < maxHp(content, m) ? 'Heals' : ''));
+      });
       this.rx = mountRedux(this, {
         render: (c) => {
           const r = this.result;
@@ -228,6 +239,7 @@ export class EventScene extends Phaser.Scene {
             rounds,
             bracket: tv && this.rxBracket !== null ? tourneyPage(tv, (sp) => monFile(this, sp), this.rxBracket, 'Saffron Fighting Tournament') : null,
             title: champion ? 'CHAMPION' : null,
+            store: store ? { ...store, party: partyChips(this), notes: helps(r?.run ?? run) } : null,
           });
         },
         acts: {

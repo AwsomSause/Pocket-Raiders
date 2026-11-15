@@ -2142,3 +2142,70 @@ test('New UI: the node event menu is a row of cards over the map; the cursor, a 
   expect((await page.evaluate(() => (window as any).__pkr.session.nodeMenu())).menu.picked.length).toBe(1);
   expect(errors).toEqual([]);
 });
+
+test('New UI: a Celadon Department Store floor is the mock-up store page: floor directory, goods with prices, who a stone helps, and buying works', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-store');
+  await toMap(page);
+  await addSide(page, { id: 'nu-store', kind: 'event', used: false, eventId: 'cs-kanto-celadon-mart-f5' });
+  await addSide(page, { id: 'nu-store-b', kind: 'event', used: false, eventId: 'cs-kanto-celadon-mart-f5b' });
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    pkr.session.run.money = 3500;
+    pkr.session.run.party[0].speciesId = 'eevee';
+    pkr.game.scene.getScene('Map').scene.start('Event', { sideId: 'nu-store' });
+  });
+  await waitForScene(page, 'Event');
+  const ev = view(page, 'Event');
+  await expect(ev.locator('.hd')).toContainText('Celadon Dept. Store');
+  await expect(ev).toContainText('₽ 3,500');
+  // The directory: every floor, the fifth lit; the hidden half floor is not listed.
+  for (const t of ['RF', '5F', '4F', '3F', '2F', '1F', 'Evolution Stones', 'TM Counter']) await expect(ev).toContainText(t);
+  await expect(ev).not.toContainText('4½');
+  await expect(ev.locator('.btn.on', { hasText: '5F' })).toContainText('Evolution Stones');
+  // Read the clerk's text to the end; the goods show after it.
+  await page.waitForTimeout(250);
+  for (let k = 0; k < 6 && (await ev.locator('[data-act="page"]').count()); k++) { await ev.locator('[data-act="page"]').click(); await page.waitForTimeout(150); }
+  const rows = ev.locator('[data-act="pick"]');
+  await expect(rows).toHaveCount(4);
+  await expect(rows.nth(0)).toContainText('Fire Stone');
+  await expect(rows.nth(0)).toContainText('₽ 3,000');
+  await expect(rows.nth(0)).not.toContainText('(');
+  await expect(rows.nth(3)).toContainText('The other two stones.');
+  // The cursor is on the Fire Stone: Eevee can evolve with it. Down on the Thunder Stone it still can; on the last row nobody is named.
+  await expect(rows.nth(0)).toHaveClass(/on/);
+  await expect(ev).toContainText('Can evolve');
+  await page.screenshot({ path: 'test-results/newui-store.png' });
+  await rows.nth(3).hover();
+  await expect(rows.nth(3)).toHaveClass(/on/);
+  await expect(ev).not.toContainText('Can evolve');
+  // Buy the Fire Stone: the text, then what changed, then back to the map with the stone and less money.
+  await rows.nth(0).click();
+  await expect(ev.locator('[data-act="next"]').first()).toBeVisible({ timeout: 10_000 });
+  await expect(ev.locator('.hd')).toContainText('Celadon Dept. Store');
+  await page.waitForTimeout(700);
+  await ev.locator('[data-act="next"]').first().click();
+  await expect(ev).toContainText('Outcome', { timeout: 10_000 });
+  await page.waitForTimeout(1500);
+  await ev.locator('[data-act="next"]').first().click();
+  await waitForScene(page, 'Map');
+  const after = await page.evaluate(() => { const run = (window as any).__pkr.session.run; return { money: run.money, stone: JSON.stringify(run.items ?? run.bag ?? run.inventory ?? {}).includes('fire-stone') }; });
+  expect(after.money).toBe(500);
+  expect(after.stone).toBe(true);
+  // The second tray with ₽500: both stones are dimmed and cannot be bought; the text box says why.
+  await page.waitForTimeout(250);
+  await page.evaluate(() => void (window as any).__pkr.game.scene.getScene('Map').scene.start('Event', { sideId: 'nu-store-b' }));
+  await waitForScene(page, 'Event');
+  await page.waitForTimeout(250);
+  for (let k = 0; k < 6 && (await ev.locator('[data-act="page"]').count()); k++) { await ev.locator('[data-act="page"]').click(); await page.waitForTimeout(150); }
+  await expect(rows).toHaveCount(3);
+  await expect(rows.nth(0)).toContainText('Leaf Stone');
+  await expect(rows.nth(0)).toHaveAttribute('style', /opacity:\.5/);
+  await expect(rows.nth(1)).toHaveAttribute('style', /opacity:\.5/);
+  await expect(rows.nth(2)).not.toHaveAttribute('style', /opacity:\.5/);
+  await rows.nth(0).click();
+  await page.waitForTimeout(400);
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.money)).toBe(500);
+  await expect(rows).toHaveCount(3);
+  expect(errors).toEqual([]);
+});

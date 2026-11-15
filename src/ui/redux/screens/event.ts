@@ -1,9 +1,11 @@
 // New UI event ("?") screen, ported from the mock-ups' `event` template (four layouts by theme) with its
 // outcome panel. EventScene keeps the state, the input and the outcome; this only draws.
 
-import { act, B, bg, esc, foot, hpb, mini, mon, TX, W } from '../kit';
+import { partyStrip, type PartyChip } from '../game';
+import { act, B, bg, esc, foot, H, hpb, mini, mon, TX, W } from '../kit';
 import type { ScriptLine } from '../script';
 import type { ReduxCtx } from '../stage';
+import { priceOf } from '../storeFloors';
 import { figure, type Art } from '../templates';
 import { bracketView, type BracketModel, type RoundChip } from './bracket';
 
@@ -39,6 +41,8 @@ export interface EventModel {
   rounds?: RoundChip[] | null;
   bracket?: BracketModel | null;
   title?: string | null;
+  /** A department store floor (mock-up `store`): the floor directory with this floor lit, the party, and a note per Pokémon for each choice (who a good helps). */
+  store?: { title: string; clerk: string; floors: { tag: string; name: string; on: boolean }[]; party: PartyChip[]; notes: string[][] } | null;
 }
 
 const letter = (h: string): string => `<div class="bars" style="top:0"></div><div class="bars" style="bottom:0"></div>${h}`;
@@ -104,6 +108,16 @@ export function eventView(c: ReduxCtx, d: EventModel): string {
   const gridCols = Math.max(1, Math.min(list.length, list.length > 4 ? Math.ceil(list.length / Math.ceil(list.length / 4)) : 4));
   const cellW = Math.floor((840 - (gridCols - 1) * (list.length > 4 ? 6 : 10)) / gridCols) - 14;
 
+  if (d.store) {
+    // The mock-ups' `store` page: floors down the left, this floor's goods with their prices, who a good helps, the clerk's text box.
+    const S = d.store, tall = S.floors.length > 5;
+    const floors = `<div class="abs col" style="left:24px;top:76px;width:210px;gap:${tall ? 5 : 7}px">${S.floors.map((f) => `<div class="btn${f.on ? ' on' : ''}" style="height:${tall ? 38 : 44}px;cursor:default"><b>${esc(f.tag)}</b><small>${esc(f.name)}</small></div>`).join('')}</div>`;
+    const tight = list.length > 5;
+    const goods = `<div class="abs col" style="left:260px;right:24px;top:92px;gap:${tight ? 5 : 7}px">${list.map((x, k) => { const g = priceOf(x.label); return `<div class="btn${lit(k) ? ' on' : ''}" style="${tight ? 'height:36px;' : ''}${x.locked ? 'opacity:.5;' : ''}cursor:pointer"${btnAct(k)}><span class="grow" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(g ? g.name : x.label)}</span>${g ? `<span>${esc(g.price)}</span>` : x.chance ? `<small>${esc(x.chance)}</small>` : ''}</div>`; }).join('')}</div>`;
+    const cash = d.money === null ? '' : `<span class="tg" style="position:absolute;right:20px;top:60px">₽ ${d.money.toLocaleString('en-US')}</span>`;
+    const why = !out && ch[d.index]?.locked && ch[d.index]!.sub ? `<span class="acc"> ${esc(ch[d.index]!.sub)}</span>` : '';
+    return H(S.title, 'shop', [['Enter', out || more ? 'next' : 'choose']]) + cash + floors + goods + partyStrip(S.party, 'left:24px;right:24px;bottom:112px', out ? undefined : S.notes[d.index]) + TX(`<div style="font-size:${len > 190 ? 14 : len > 110 ? 16 : 18}px;line-height:1.3">${lineP}${why}</div>${mark('right:14px;top:4px')}`, d.speaker ?? S.clerk) + outcome + turn + picker;
+  }
   if (v === 1) {
     return letter(back + amb + star(480) + foot(300, 478, who(280))) + `<div class="abs sm" style="left:20px;top:74px;color:#fff;z-index:6">${esc(d.name)}</div><div class="abs" style="left:20px;top:16px;z-index:7">${q}</div><div class="abs" style="left:120px;right:120px;bottom:${132 + Math.max(0, Math.ceil(list.length / 4) - 1) * 52}px;text-align:center;color:#fff;font-size:${len > 220 ? 15 : len > 120 ? 18 : 21}px;line-height:1.35;text-shadow:2px 2px 0 #000;z-index:6">${line}${mark('right:-60px;bottom:0;color:#fff')}</div><div class="abs" style="left:60px;right:60px;bottom:74px;z-index:6;display:grid;grid-template-columns:repeat(${gridCols},1fr);gap:${list.length > 4 ? 6 : 10}px">${list.map((x, k) => B(esc(x.label), lit(k), `justify-content:center;text-align:center;font-size:14px;padding:0 6px;height:46px${x.locked ? ';opacity:.5' : ''}${fit(x, cellW, 14, false)}`, '', btnAct(k))).join('')}</div>${d.timer !== null && !out ? `<div class="abs hp gold" style="left:60px;right:60px;bottom:22px;height:6px;z-index:6"><i style="width:${Math.round(d.timer * 100)}%"></i></div>` : ''}<div class="abs sm" style="left:60px;right:60px;bottom:44px;z-index:6;color:#fff;text-align:center;text-shadow:1px 1px 0 #000">${esc(list[out ? 0 : d.index] ? sub(list[out ? 0 : d.index]!) : '')}</div>` + strip('left:60px;right:60px;top:98px') + title + standing(`position:absolute;left:20px;top:${sTop(100)}px;width:250px;z-index:7`) + outcome + picker + turn;
   }
