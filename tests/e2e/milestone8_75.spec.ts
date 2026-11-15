@@ -1,11 +1,13 @@
 import { expect, test, type Page } from '@playwright/test';
 import { confirmToMenu } from './battleInput';
+import { sceneAfterResult } from './helpers/resultGate';
 
 // M8.75 item effects in a real browser: catalog items show on the reward
 // screen with the director's icons, a maxed team item is a free re-roll, and
 // a PP Up asks which move to boost.
 
-const scene = (page: Page) => page.evaluate(() => (window as any).__pkr?.activeScene() ?? null);
+// Reward/Decision results wait for an input now; reading the scene presses through one that is up.
+const scene = (page: Page) => sceneAfterResult(page);
 const run = (page: Page) => page.evaluate(() => (window as any).__pkr.session.run);
 
 async function waitForScene(page: Page, key: string, timeout = 20_000) {

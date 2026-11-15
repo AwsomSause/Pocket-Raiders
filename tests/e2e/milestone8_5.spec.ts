@@ -1,11 +1,13 @@
 import { expect, test, type Page } from '@playwright/test';
 import { confirmToMenu, confirmUntil } from './battleInput';
+import { sceneAfterResult } from './helpers/resultGate';
 
 // Milestone 8.5 in a real browser: with the Mega Ring and Venusaurite in the
 // Bag, the battle menu offers "Mega", and choosing it before a move turns
 // Venusaur into Mega Venusaur on screen.
 
-const scene = (page: Page) => page.evaluate(() => (window as any).__pkr?.activeScene() ?? null);
+// Reward/Decision results wait for an input now; reading the scene presses through one that is up.
+const scene = (page: Page) => sceneAfterResult(page);
 
 async function waitForScene(page: Page, key: string, timeout = 20_000) {
   await expect.poll(() => scene(page), { timeout }).toBe(key);
@@ -102,7 +104,14 @@ test('Terastallization from the battle menu', async ({ page }) => {
   });
   await waitForScene(page, 'Battle');
   await confirmToMenu(page);
-  await expect.poll(() => menuLabels(page), { timeout: 15_000 }).toEqual(['Fight', 'Bag', 'Pokémon', 'Tera: OFF']);
+  // A last confirm press can land on the fresh menu and open Fight: back out to the main menu.
+  await expect
+    .poll(async () => {
+      const labels = await menuLabels(page);
+      if (labels && labels[0] !== 'Fight') await page.keyboard.press('Escape');
+      return labels;
+    }, { timeout: 15_000 })
+    .toEqual(['Fight', 'Bag', 'Pokémon', 'Tera: OFF']);
   await page.keyboard.press('ArrowRight');
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Enter');

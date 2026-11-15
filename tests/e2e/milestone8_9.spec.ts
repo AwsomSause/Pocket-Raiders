@@ -1,11 +1,13 @@
 import { expect, test, type Page } from '@playwright/test';
 import { confirmToMenu, confirmUntil } from './battleInput';
+import { sceneAfterResult } from './helpers/resultGate';
 
 // Milestone 8.9 in a real browser: a Hyper moment (Toughened It Out) shows as
 // a story moment (banner + its own line), the debug Story Log lists the events
 // live, and the run-end screen shows the run's top moments.
 
-const scene = (page: Page) => page.evaluate(() => (window as any).__pkr?.activeScene() ?? null);
+// Reward/Decision results wait for an input now; reading the scene presses through one that is up.
+const scene = (page: Page) => sceneAfterResult(page);
 
 async function waitForScene(page: Page, key: string, timeout = 20_000) {
   await expect.poll(() => scene(page), { timeout }).toBe(key);
