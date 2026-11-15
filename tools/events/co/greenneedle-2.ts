@@ -458,10 +458,167 @@ const starterEpisodes: Json[] = [
 const KANTO_BRIDGE: Json = gev('cs-kanto-cerulean-bridge', 'Nugget Bridge', bridge({ stop: 'event', rarity: 'common', types: ['normal', 'water'], effect: 'none' }), BRIDGE_TEXT('The bridge north of Cerulean'), [CROSS()]);
 (KANTO_BRIDGE as Json).canon = 'cs.kanto.cerulean.bridge';
 
-export const EVENTS: Json[] = [...gn06, ...starterEpisodes, KANTO_BRIDGE];
+
+// =====================================================================================================================
+// gn.07  COLD NIGHT'S RAIN  (Pseudo Stage: five nodes; door on step 13, must-see; once per run)
+// =====================================================================================================================
+const RAIN_TINT = '#1a2433';
+const rainy = (o: Json = {}): Json => ({ tint: RAIN_TINT, tags: ['Dungeon', 'Pokémon', 'Story'], effect: 'rain', ...o });
+const inRain = (battle: Json): Json => ({ ...battle, weather: 'rain' });
+const thisRegion = (key: string): Json => ({ kind: 'gn', test: 'thisRegion', key });
+const stampRegionOf = (key: string): Json => gn('stampRegion', { key });
+const clampFlame = (): Json => gn('clampFlag', { key: 'rain-flame', min: 0, max: 5 });
+const flame = (n: number): Json[] => [flag('rain-flame', n), clampFlame()];
+
+/** The Fire-type on the rock, rolled when the stage is created (1 to 13), and whose it was. */
+const FIRES: { id: string; name: string; w: number; owner: 'damian' | 'hunter' | 'show' | 'racer' | 'trainer' }[] = [
+  { id: 'charmander', name: 'Charmander', w: 30, owner: 'damian' },
+  { id: 'growlithe', name: 'Growlithe', w: 7.5, owner: 'hunter' }, { id: 'growlithe-hisui', name: 'Hisuian Growlithe', w: 7.5, owner: 'hunter' },
+  { id: 'vulpix', name: 'Vulpix', w: 6, owner: 'show' }, { id: 'vulpix-alola', name: 'Alolan Vulpix', w: 6, owner: 'show' },
+  { id: 'ponyta', name: 'Ponyta', w: 5, owner: 'racer' }, { id: 'ponyta-galar', name: 'Galarian Ponyta', w: 5, owner: 'racer' },
+  ...['cyndaquil', 'torchic', 'chimchar', 'tepig', 'fennekin', 'litten', 'scorbunny', 'fuecoco'].map((id) => ({ id, name: id[0]!.toUpperCase() + id.slice(1), w: 33 / 8, owner: 'trainer' as const })),
+];
+const fireIs = (i: number): { min: number; max: number } => ({ min: i + 1, max: i + 1 });
+/** Effects for whichever Fire-type it is. */
+const perFire = (make: (f: (typeof FIRES)[number]) => Json[], text?: (f: (typeof FIRES)[number]) => string): Json[] =>
+  FIRES.map((f, i) => when('rain-fire', fireIs(i), make(f), text?.(f)));
+const OWNERS = {
+  damian: { name: 'Damian', cls: 'ace-trainer', cast: 'trainer.damian', types: ['fire', 'fighting'], letter: 'a Fire-type team, and a Gym that is not a real Gym' },
+  hunter: { name: 'The Hunter', cls: 'roughneck', cast: 'trainer.roughneck', types: ['ground', 'normal'], letter: 'a hunter\'s team, Ground and Normal-types, "good noses"' },
+  show: { name: 'The Show Trainer', cls: 'aroma-lady', cast: 'trainer.aroma_lady', types: ['fairy', 'psychic'], letter: 'a show team, Fairy and Psychic-types, "the pretty ones"' },
+  racer: { name: 'The Racer', cls: 'biker', cast: 'trainer.biker', types: ['normal', 'flying'], letter: 'a racing stable, Normal and Flying-types, "the fast ones"' },
+  trainer: { name: 'The Trainer', cls: 'ace-trainer', cast: 'trainer.camper', types: ['water', 'grass'], letter: 'a trainer\'s team, Water and Grass-types, "the ones I actually wanted"' },
+} as const;
+type OwnerKey = keyof typeof OWNERS;
+const ownerOf = (i: number): OwnerKey => FIRES[i]!.owner;
+/** Each owner and the run of Fire-type picks (1 to 15) that were theirs. */
+const OWNER_RANGES: [OwnerKey, number, number][] = (['damian', 'hunter', 'show', 'racer', 'trainer'] as OwnerKey[]).map((k) => {
+  const at = FIRES.flatMap((f, i) => (f.owner === k ? [i + 1] : []));
+  return [k, Math.min(...at), Math.max(...at)];
+});
+/** At Flame 0 it has gone very still; the next rest gives +1 whatever the player does. */
+const STILL: Json = when('rain-flame', { min: 0, max: 0 }, [...flame(1)], 'It has gone very still. Your lead curls round it without being asked, and after a while the little flame comes back.');
+
+const SAVE_IT = (): Json => ch('Save it.', out(
+  'You pick it up. It weighs almost nothing. Its tail hisses in the rain, and it does not fight you. It does not do anything at all.',
+  flag('rain-entered'), setTo('rain-flame', 1), setTo('rain-offered', 0), pick('rain-fire', ...FIRES.map((f) => f.w)),
+  room('gn-07-rock'),
+));
+const WALK_ON = (): Json => ch('Go on your way.', leave('You walk on. Behind you the rain keeps falling on the rock, on the little flame, on the road it is watching.'));
+const RAIN_DOOR_TEXT = (place: string): string => say(
+  '*Fade in. Rain.*',
+  `${place}. A rock by the road. A small Fire-type on it, tail flame the size of a match, looking down the road at someone who isn't coming.`,
+  'It looks at you. It looks back at the road.',
+);
+const WALKED: Json[] = [flag('rain-walked'), stampRegionOf('rain-walked-at')];
+
+const ownerScene = (key: OwnerKey): Json[] => {
+  const o = OWNERS[key];
+  const afterLine = key === 'damian'
+    ? '**Damian:** "...Take care of it. No. Don\'t tell me. I know you will. That\'s the whole point, isn\'t it."'
+    : '**The owner:** "It never looked at me like that."';
+  const won = [when('rain-entered', { min: 1 }, [], afterLine), ...(key === 'damian' ? [flag('rain-damian-beaten')] : []), scene('gn-07-reward')];
+  const lose = [scene(`gn-07-owner-${key}`)];
+  return [
+    rm(`gn-07-owner-${key}`, `The Crossroads: ${o.name}`, rainy({
+      cast: [o.cast],
+      remembers: key === 'damian' ? [{ id: 'met', when: [is('damian-meetings')], notice: '**Damian:** "...It\'s you. From the Gym. Oh. Oh, this looks bad, doesn\'t it."' }] : [],
+    }), key === 'damian' ? say(
+      '*A lantern. A trainer under a good umbrella.*',
+      '**Damian:** "Hey! That\'s— you found my— look, I was coming back. I was. I got busy. It\'s a long road."',
+      '*The Fire-type looks at him. Its flame doesn\'t change.*',
+    ) : say(
+      '*A lantern. A trainer under a good umbrella.*',
+      '**The owner:** "There you are. Huh. You look better. Stronger. All right, I\'ll take it back."',
+      '*The Fire-type looks at them. Its flame doesn\'t change.*',
+    ), [
+      chIf([is('rain-flame', 0, 4)], 'Fight for it.', fight(
+        'It hides inside your coat. You can feel it shaking against your ribs. You fight for it.',
+        inside({ ...inRain(trainer(o.name, { cls: o.cls, size: 6, types: [...o.types], lv: 1, win: won })), lose }),
+      ), { branches: [{ when: [is('rain-flame', 3, 4)], text: 'It climbs out of your coat and steps between you. It doesn\'t attack. It stands there, in the rain, flame up. Then you fight.', effects: [] }] }),
+      chIf([is('rain-flame', 5)], 'Let it stand with you.', fight(
+        'It climbs out of your coat and steps between you, in the rain, flame up. You fight their team down to the last one. Then it steps forward.',
+        inside({ ...inRain(trainer(o.name, { cls: o.cls, size: 5, types: [...o.types], lv: 1, win: [gn('stash'), ...perFire((f) => [join({ species: [f.id] }) as Json].map((j) => ({ ...j, direct: true }))), scene(`gn-07-last-${key}`)] })), lose }),
+      )),
+    ]),
+    rm(`gn-07-last-${key}`, 'Its Own Fight', rainy({ cast: [o.cast] }), say(
+      'Their last Pokémon comes out. Nobody sends the Fire-type out. It just goes.',
+      'It has one move. It is enough.',
+    ), [
+      ch('Watch.', fight('It stands in the rain with its flame up, and does not look back at you once.', inside({
+        ...inRain(trainer(o.name, { cls: o.cls, size: 1, types: [...o.types], lv: 1, win: [gn('unstash'), ...won] })),
+        rule: { gn: 'lastflame' }, lose: [gn('unstash'), ...won],
+      }), moment('In the rain, it fought for itself.', 70))),
+    ]),
+  ];
+};
+
+const gn07: Json[] = [
+  gev('gn-07-door', "Cold Night's Rain", rainy({ stop: 'dungeon', rarity: 'rare', forced: true, types: ['fire', 'water'], requires: [notRegion('kanto'), not('rain-entered'), not('rain-walked')] }),
+    RAIN_DOOR_TEXT('A road at dusk'), [SAVE_IT(), { ...WALK_ON(), success: { ...(WALK_ON().success as Json), effects: WALKED } }]),
+  rm('gn-07-rock', 'The Rock', rainy(), say(
+    'It weighs almost nothing. Its tail hisses in the rain.',
+    'You open your coat and it climbs in without being asked, and turns round twice, and puts its head out under your chin to keep watching the road.',
+    'It will not battle. It will ride along. The rain will not stop tonight: Fire moves are weakened here, and Water moves are strong.',
+  ), [ch('Walk on, into the dark.', out('The road goes down towards the river. The rain does not let up.', room('gn-07-culvert')))]),
+  rm('gn-07-culvert', 'The Culvert', rainy({
+    remembers: [{ id: 'abandoned', when: [is('abandoned-mon')], notice: 'One of your team, one that was once left behind itself, comes and sits down beside it without being asked. Neither of them says anything.' }],
+  }), say(
+    'A concrete pipe under the road, big enough to crawl into, dry at the back. A rest, of a kind.',
+    'The Fire-type watches the rain at the mouth of it. Its flame is very small.',
+  ), [
+    ch('Build a shelter.', out('You prop your coat on two sticks across the mouth of the pipe. The wind stops. The little flame stands up straighter.', heal(1), when('abandoned-mon', { min: 1 }, [...flame(1)]), ...flame(1), room('gn-07-road'))),
+    ch('Offer food.', out('*Offered food: it turns its head away. Its stomach is audible.*', heal(1), setTo('rain-offered', 1), when('abandoned-mon', { min: 1 }, [...flame(1)]), room('gn-07-road'))),
+    ch("Let it sit outside; it's a Fire-type.", out('It sits outside in the rain, because you put it there. It does not complain. The flame gets smaller.', heal(1), when('abandoned-mon', { min: 1 }, [...flame(1)]), ...flame(-1), room('gn-07-road'))),
+  ]),
+  rm('gn-07-road', 'The Flooded Road', rainy(), say(
+    'The road is a river now, ankle-deep and running. Things live in it tonight that do not usually live on roads.',
+  ), [ch('Wade on.', fight('Something rises out of the water ahead.', inside(eitherWay(inRain(wild({ types: ['water', 'electric', 'ghost'], lv: 1, chain: 2, win: [
+    gn('noFaint', { key: 'rain-flame', n: 1 }), clampFlame(), roll('rain-letter', 25),
+    when('rain-letter', { min: 1 }, [intel(1), ...OWNER_RANGES.map(([key, min, max]) => when('rain-fire', { min, max }, [], `On the team: ${OWNERS[key].letter}.`))], 'Caught on a branch: a wet page. *"...it\'s just not strong enough. I\'ll come back for it if it toughens up. Don\'t wait for me, I told it. It didn\'t understand."*'),
+    room('gn-07-barn'),
+  ] }))))))]),
+  rm('gn-07-barn', 'The Barn', rainy(), say(
+    'A barn with half a roof. Dry straw at one end. You can hear the rain on the good half like gravel being poured.',
+    'The Fire-type climbs out of your coat and sits in the straw, and looks at you.',
+  ), [
+    ch('Offer food again.', out('It turns its head away again. Its stomach is audible.', heal(1), STILL, setTo('rain-offered', 1), room('gn-07-crossroads')), {
+      branches: [{ when: [is('rain-offered')], text: '*Offered again: it eats so fast it hiccups a spark.*', effects: [heal(1), STILL, ...flame(1), room('gn-07-crossroads')] }],
+    }),
+    ch('Ask your Fire-type to sit with it.', out('Your Fire-type lies down in the straw and lets it lean on its warm side. After a while you can\'t tell whose flame is whose.', heal(1), STILL, ...flame(2), room('gn-07-crossroads')), { requires: [{ kind: 'partyType', type: 'fire' }] }),
+    ch('Just sleep.', out('You sleep. When you wake it is in your coat again, as if it never left.', heal(1), STILL, room('gn-07-crossroads'))),
+  ]),
+  rm('gn-07-crossroads', 'The Crossroads', rainy(), say(
+    '*A lantern, at the crossroads, swinging a little in the wind. Somebody is standing under it.*',
+  ), [ch('Walk into the lantern light.', out('The Fire-type goes very still in your coat.', ...FIRES.map((_, i) => when('rain-fire', fireIs(i), [...(ownerOf(i) === 'damian' ? [flag('rain-damian')] : []), scene(`gn-07-owner-${ownerOf(i)}`)]))))]),
+  ...(['damian', 'hunter', 'show', 'racer', 'trainer'] as OwnerKey[]).flatMap(ownerScene),
+  rm('gn-07-reward', 'It Warms to You', rainy({ effect: 'none' }), say(
+    'The rain is stopping. Not all at once: the way a person stops crying.',
+    'It climbs down out of your coat and sits in front of you, and looks up, and its flame is the biggest you have seen it.',
+  ), [ch('Take it with you.', out('It climbs back into your coat. It is not going anywhere.',
+    ...perFire((f) => [{ ...join({ species: [f.id] }), ability: 'kept-flame', held: 'charcoal' }, flag('kanto-rain-fire')]),
+    flag('kanto-rain-saved'), flag('rain-saved'), moment('You saved a Fire-type from the rain, and it chose you.', 75), leavePseudo(),
+  ))]),
+  // ---- if the player walked on: met later in the region, beside a nurse at a Center ----
+  gev('gn-07-nurse', 'A Small Scarf', rainy({
+    stop: 'event', rarity: 'uncommon', callback: true, effect: 'none', cast: [], requires: [is('rain-walked'), thisRegion('rain-walked-at'), not('rain-nurse-seen')],
+    remembers: [{ id: 'walked', when: [is('kind-walked-past', 3)], notice: '**The nurse:** "Someone had to."' }],
+  }), say(
+    'At the Center, beside the nurse at the desk, a small Fire-type sits on the counter wearing a little knitted scarf. Healthy. Warm. Somebody else saved it.',
+    '*It looks at you for a moment. It doesn\'t look away quickly.*',
+  ), [ch('Look back at it.', out('Then the nurse calls the next name, and it turns to watch her instead.', flag('rain-nurse-seen')))]),
+];
+
+// ---- Kanto: the canon space on the road out of Cerulean (cs.kanto.cerulean.rain) ----
+const KANTO_RAIN: Json = { ...gev('cs-kanto-cerulean-rain', "Cold Night's Rain", rainy({ stop: 'event', rarity: 'common', types: ['fire', 'water'], requires: [not('rain-entered'), not('rain-walked')] }),
+  RAIN_DOOR_TEXT('The road out of Cerulean'), [SAVE_IT(), { ...WALK_ON(), success: { ...(WALK_ON().success as Json), effects: WALKED } }]), canon: 'cs.kanto.cerulean.rain' };
+
+export const EVENTS: Json[] = [...gn06, ...starterEpisodes, KANTO_BRIDGE, ...gn07, KANTO_RAIN];
 
 /** The old Kanto canon builds of this story (moved to Greenneedle): kept for saved runs, never shown again. */
 export const REMOVE: string[] = [
+  ...['charmander', 'growlithe', 'vulpix', 'ponyta', 'cyndaquil', 'torchic', 'chimchar', 'tepig', 'fennekin', 'litten', 'scorbunny', 'fuecoco'].flatMap((f) => ['open', 'r1', 'r2', 'r3', 'owner'].map((n) => `cs-kanto-cerulean-rain-${f}-${n}`)),
+  'cs-kanto-cerulean-rain-lost',
   'cs-kanto-cerulean-bridge-n1', 'cs-kanto-cerulean-bridge-n2', 'cs-kanto-cerulean-bridge-n3',
   'cs-kanto-cerulean-village', 'cs-kanto-cerulean-hv-n1', 'cs-kanto-cerulean-hv-n2', 'cs-kanto-cerulean-hv-n3', 'cs-kanto-cerulean-hv-pick',
   'cs-kanto-cerulean-hv-t1', 'cs-kanto-cerulean-hv-t2', 'cs-kanto-cerulean-hv-t3', 'cs-kanto-cerulean-hv-t4', 'cs-kanto-cerulean-hv-t5',
@@ -474,8 +631,14 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'A+0 in the gorge; bridge trainers A-1', often: 'region', dressing: { kanto: 'Nugget Bridge', kantoStage: 'Cerulean (the canon space)', elsewhere: 'Bridge Crossing' },
     note: 'Kanto shows it through the canon space cs-kanto-cerulean-bridge. The village starter is once per run for each starter (no cross-run memory).',
   },
+  'gn-07-door': {
+    gn: 'gn.07', shape: 'Door', earliest: 'A3', home: 13, window: [11, 16], sits: 'must-see', attaches: 'instead', tags: ['Pseudo Stage', 'Companion Story'],
+    level: 'A+1', often: 'run', dressing: { kanto: "Cold Night's Rain", kantoStage: 'The road out of Cerulean (the canon space)', elsewhere: "Cold Night's Rain" },
+    note: 'Kanto shows it through cs-kanto-cerulean-rain. The opening can not be skipped: "Go on your way" ends it at once.',
+  },
 };
 
 export const CHAINS: Json[] = [
+  { id: 'ps_gn_rain', name: "Cold Night's Rain", entry: 'gn-07-door', themeId: 'water-ghost', tint: RAIN_TINT, mood: 'rain', start: 'opened' },
   { id: 'ps_gn_gorge', name: 'The Gorge and the Hidden Village', entry: 'gn-06-bridge', themeId: 'water-grass', tint: GORGE_TINT, mood: 'woodsmoke', start: 'opened' },
 ];

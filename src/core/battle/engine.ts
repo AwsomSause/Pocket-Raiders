@@ -4240,7 +4240,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
         burned: userStatus === 'brn' && userAbility !== 'guts',
         frostbitten: !!ruleset.frostbite && userStatus === 'frz',
         physical,
-        weather: Held.hasHook(ctx, user.mon, user.side, 'utilityUmbrella') || Held.hasHook(ctx, target.mon, target.side, 'utilityUmbrella') ? 1 : weatherMultiplier(userAbility === 'mega-sol' ? 'sun' : weather, moveType),
+        weather: Held.hasHook(ctx, user.mon, user.side, 'utilityUmbrella') || Held.hasHook(ctx, target.mon, target.side, 'utilityUmbrella') ? 1 : userAbility === 'kept-flame' && weather === 'rain' && moveType === 'fire' ? 1 : weatherMultiplier(userAbility === 'mega-sol' ? 'sun' : weather, moveType),
         final,
       });
       damage = applyTypeModifiers(ctx, user, target, effectiveness, damage, physical, moveType, move);

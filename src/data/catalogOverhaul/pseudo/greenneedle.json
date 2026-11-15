@@ -21,6 +21,15 @@
    "start": "opened"
   },
   {
+   "id": "ps_gn_rain",
+   "name": "Cold Night's Rain",
+   "entry": "gn-07-door",
+   "themeId": "water-ghost",
+   "tint": "#1a2433",
+   "mood": "rain",
+   "start": "opened"
+  },
+  {
    "id": "ps_gn_gorge",
    "name": "The Gorge and the Hidden Village",
    "entry": "gn-06-bridge",

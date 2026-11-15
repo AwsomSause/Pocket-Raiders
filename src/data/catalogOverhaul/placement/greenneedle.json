@@ -292,5 +292,30 @@
    "Community Episode"
   ],
   "tags": []
+ },
+ "gn-07-door": {
+  "gn": "gn.07",
+  "shape": "Door",
+  "earliest": "A3",
+  "home": 13,
+  "window": [
+   11,
+   16
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "level": "A+1",
+  "often": "run",
+  "dressing": {
+   "kanto": "Cold Night's Rain",
+   "kantoStage": "The road out of Cerulean (the canon space)",
+   "elsewhere": "Cold Night's Rain"
+  },
+  "note": "Kanto shows it through cs-kanto-cerulean-rain. The opening can not be skipped: \"Go on your way\" ends it at once.",
+  "kinds": [
+   "Pseudo Stage",
+   "Companion Story"
+  ],
+  "tags": []
  }
 }

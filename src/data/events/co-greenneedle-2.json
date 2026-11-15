@@ -19,6 +19,67 @@
   "cs-kanto-cerulean-hv-t7",
   "cs-kanto-cerulean-hv-t8",
   "cs-kanto-cerulean-hv-t9",
+  "cs-kanto-cerulean-rain-charmander-open",
+  "cs-kanto-cerulean-rain-charmander-owner",
+  "cs-kanto-cerulean-rain-charmander-r1",
+  "cs-kanto-cerulean-rain-charmander-r2",
+  "cs-kanto-cerulean-rain-charmander-r3",
+  "cs-kanto-cerulean-rain-chimchar-open",
+  "cs-kanto-cerulean-rain-chimchar-owner",
+  "cs-kanto-cerulean-rain-chimchar-r1",
+  "cs-kanto-cerulean-rain-chimchar-r2",
+  "cs-kanto-cerulean-rain-chimchar-r3",
+  "cs-kanto-cerulean-rain-cyndaquil-open",
+  "cs-kanto-cerulean-rain-cyndaquil-owner",
+  "cs-kanto-cerulean-rain-cyndaquil-r1",
+  "cs-kanto-cerulean-rain-cyndaquil-r2",
+  "cs-kanto-cerulean-rain-cyndaquil-r3",
+  "cs-kanto-cerulean-rain-fennekin-open",
+  "cs-kanto-cerulean-rain-fennekin-owner",
+  "cs-kanto-cerulean-rain-fennekin-r1",
+  "cs-kanto-cerulean-rain-fennekin-r2",
+  "cs-kanto-cerulean-rain-fennekin-r3",
+  "cs-kanto-cerulean-rain-fuecoco-open",
+  "cs-kanto-cerulean-rain-fuecoco-owner",
+  "cs-kanto-cerulean-rain-fuecoco-r1",
+  "cs-kanto-cerulean-rain-fuecoco-r2",
+  "cs-kanto-cerulean-rain-fuecoco-r3",
+  "cs-kanto-cerulean-rain-growlithe-open",
+  "cs-kanto-cerulean-rain-growlithe-owner",
+  "cs-kanto-cerulean-rain-growlithe-r1",
+  "cs-kanto-cerulean-rain-growlithe-r2",
+  "cs-kanto-cerulean-rain-growlithe-r3",
+  "cs-kanto-cerulean-rain-litten-open",
+  "cs-kanto-cerulean-rain-litten-owner",
+  "cs-kanto-cerulean-rain-litten-r1",
+  "cs-kanto-cerulean-rain-litten-r2",
+  "cs-kanto-cerulean-rain-litten-r3",
+  "cs-kanto-cerulean-rain-lost",
+  "cs-kanto-cerulean-rain-ponyta-open",
+  "cs-kanto-cerulean-rain-ponyta-owner",
+  "cs-kanto-cerulean-rain-ponyta-r1",
+  "cs-kanto-cerulean-rain-ponyta-r2",
+  "cs-kanto-cerulean-rain-ponyta-r3",
+  "cs-kanto-cerulean-rain-scorbunny-open",
+  "cs-kanto-cerulean-rain-scorbunny-owner",
+  "cs-kanto-cerulean-rain-scorbunny-r1",
+  "cs-kanto-cerulean-rain-scorbunny-r2",
+  "cs-kanto-cerulean-rain-scorbunny-r3",
+  "cs-kanto-cerulean-rain-tepig-open",
+  "cs-kanto-cerulean-rain-tepig-owner",
+  "cs-kanto-cerulean-rain-tepig-r1",
+  "cs-kanto-cerulean-rain-tepig-r2",
+  "cs-kanto-cerulean-rain-tepig-r3",
+  "cs-kanto-cerulean-rain-torchic-open",
+  "cs-kanto-cerulean-rain-torchic-owner",
+  "cs-kanto-cerulean-rain-torchic-r1",
+  "cs-kanto-cerulean-rain-torchic-r2",
+  "cs-kanto-cerulean-rain-torchic-r3",
+  "cs-kanto-cerulean-rain-vulpix-open",
+  "cs-kanto-cerulean-rain-vulpix-owner",
+  "cs-kanto-cerulean-rain-vulpix-r1",
+  "cs-kanto-cerulean-rain-vulpix-r2",
+  "cs-kanto-cerulean-rain-vulpix-r3",
   "cs-kanto-cerulean-village"
  ],
  "events": [
@@ -6138,6 +6199,4225 @@
     }
    ],
    "canon": "cs.kanto.cerulean.bridge"
+  },
+  {
+   "id": "gn-07-door",
+   "name": "Cold Night's Rain",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "dungeon",
+   "rarity": "rare",
+   "forced": true,
+   "types": [
+    "fire",
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notRegion",
+     "types": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "rain-entered",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "rain-walked",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a2433",
+    "effect": "rain"
+   },
+   "intro": "*Fade in. Rain.*\n\nA road at dusk. A rock by the road. A small Fire-type on it, tail flame the size of a match, looking down the road at someone who isn't coming.\n\nIt looks at you. It looks back at the road.",
+   "choices": [
+    {
+     "label": "Save it.",
+     "success": {
+      "text": "You pick it up. It weighs almost nothing. Its tail hisses in the rain, and it does not fight you. It does not do anything at all.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rain-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "rain-flame",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "rain-offered",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "rain-fire",
+        "weights": [
+         30,
+         7.5,
+         7.5,
+         6,
+         6,
+         5,
+         5,
+         4.125,
+         4.125,
+         4.125,
+         4.125,
+         4.125,
+         4.125,
+         4.125,
+         4.125
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-07-rock"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on your way.",
+     "success": {
+      "text": "You walk on. Behind you the rain keeps falling on the rock, on the little flame, on the road it is watching.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rain-walked",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "rain-walked-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-07-rock",
+   "name": "The Rock",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a2433",
+    "effect": "rain"
+   },
+   "intro": "It weighs almost nothing. Its tail hisses in the rain.\n\nYou open your coat and it climbs in without being asked, and turns round twice, and puts its head out under your chin to keep watching the road.\n\nIt will not battle. It will ride along. The rain will not stop tonight: Fire moves are weakened here, and Water moves are strong.",
+   "choices": [
+    {
+     "label": "Walk on, into the dark.",
+     "success": {
+      "text": "The road goes down towards the river. The rain does not let up.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-07-culvert"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-07-culvert",
+   "name": "The Culvert",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "abandoned",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "abandoned-mon",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "One of your team, one that was once left behind itself, comes and sits down beside it without being asked. Neither of them says anything."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a2433",
+    "effect": "rain"
+   },
+   "intro": "A concrete pipe under the road, big enough to crawl into, dry at the back. A rest, of a kind.\n\nThe Fire-type watches the rain at the mouth of it. Its flame is very small.",
+   "choices": [
+    {
+     "label": "Build a shelter.",
+     "success": {
+      "text": "You prop your coat on two sticks across the mouth of the pipe. The wind stops. The little flame stands up straighter.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "abandoned-mon",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "rain-flame",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "clampFlag",
+          "key": "rain-flame",
+          "min": 0,
+          "max": 5
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "rain-flame",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "clampFlag",
+        "key": "rain-flame",
+        "min": 0,
+        "max": 5
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-07-road"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer food.",
+     "success": {
+      "text": "*Offered food: it turns its head away. Its stomach is audible.*",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "rain-offered",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "abandoned-mon",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "rain-flame",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "clampFlag",
+          "key": "rain-flame",
+          "min": 0,
+          "max": 5
+         }
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-07-road"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it sit outside; it's a Fire-type.",
+     "success": {
+      "text": "It sits outside in the rain, because you put it there. It does not complain. The flame gets smaller.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "abandoned-mon",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "rain-flame",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "clampFlag",
+          "key": "rain-flame",
+          "min": 0,
+          "max": 5
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "rain-flame",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "clampFlag",
+        "key": "rain-flame",
+        "min": 0,
+        "max": 5
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-07-road"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-07-road",
+   "name": "The Flooded Road",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a2433",
+    "effect": "rain"
+   },
+   "intro": "The road is a river now, ankle-deep and running. Things live in it tonight that do not usually live on roads.",
+   "choices": [
+    {
+     "label": "Wade on.",
+     "success": {
+      "text": "Something rises out of the water ahead.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "chain": 2,
+       "species": [],
+       "types": [
+        "water",
+        "electric",
+        "ghost"
+       ],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "noFaint",
+         "key": "rain-flame",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "clampFlag",
+         "key": "rain-flame",
+         "min": 0,
+         "max": 5
+        },
+        {
+         "kind": "gn",
+         "op": "roll",
+         "key": "rain-letter",
+         "n": 25
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-letter",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "intel",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "rain-fire",
+           "min": 1,
+           "max": 1,
+           "then": [],
+           "text": "On the team: a Fire-type team, and a Gym that is not a real Gym."
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "rain-fire",
+           "min": 2,
+           "max": 3,
+           "then": [],
+           "text": "On the team: a hunter's team, Ground and Normal-types, \"good noses\"."
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "rain-fire",
+           "min": 4,
+           "max": 5,
+           "then": [],
+           "text": "On the team: a show team, Fairy and Psychic-types, \"the pretty ones\"."
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "rain-fire",
+           "min": 6,
+           "max": 7,
+           "then": [],
+           "text": "On the team: a racing stable, Normal and Flying-types, \"the fast ones\"."
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "rain-fire",
+           "min": 8,
+           "max": 15,
+           "then": [],
+           "text": "On the team: a trainer's team, Water and Grass-types, \"the ones I actually wanted\"."
+          }
+         ],
+         "text": "Caught on a branch: a wet page. *\"...it's just not strong enough. I'll come back for it if it toughens up. Don't wait for me, I told it. It didn't understand.\"*"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-07-barn"
+        }
+       ],
+       "weather": "rain",
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "noFaint",
+         "key": "rain-flame",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "clampFlag",
+         "key": "rain-flame",
+         "min": 0,
+         "max": 5
+        },
+        {
+         "kind": "gn",
+         "op": "roll",
+         "key": "rain-letter",
+         "n": 25
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-letter",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "intel",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "rain-fire",
+           "min": 1,
+           "max": 1,
+           "then": [],
+           "text": "On the team: a Fire-type team, and a Gym that is not a real Gym."
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "rain-fire",
+           "min": 2,
+           "max": 3,
+           "then": [],
+           "text": "On the team: a hunter's team, Ground and Normal-types, \"good noses\"."
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "rain-fire",
+           "min": 4,
+           "max": 5,
+           "then": [],
+           "text": "On the team: a show team, Fairy and Psychic-types, \"the pretty ones\"."
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "rain-fire",
+           "min": 6,
+           "max": 7,
+           "then": [],
+           "text": "On the team: a racing stable, Normal and Flying-types, \"the fast ones\"."
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "rain-fire",
+           "min": 8,
+           "max": 15,
+           "then": [],
+           "text": "On the team: a trainer's team, Water and Grass-types, \"the ones I actually wanted\"."
+          }
+         ],
+         "text": "Caught on a branch: a wet page. *\"...it's just not strong enough. I'll come back for it if it toughens up. Don't wait for me, I told it. It didn't understand.\"*"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-07-barn"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-07-barn",
+   "name": "The Barn",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a2433",
+    "effect": "rain"
+   },
+   "intro": "A barn with half a roof. Dry straw at one end. You can hear the rain on the good half like gravel being poured.\n\nThe Fire-type climbs out of your coat and sits in the straw, and looks at you.",
+   "choices": [
+    {
+     "label": "Offer food again.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "rain-offered",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "*Offered again: it eats so fast it hiccups a spark.*",
+       "effects": [
+        {
+         "kind": "heal",
+         "share": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-flame",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "rain-flame",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "clampFlag",
+           "key": "rain-flame",
+           "min": 0,
+           "max": 5
+          }
+         ],
+         "text": "It has gone very still. Your lead curls round it without being asked, and after a while the little flame comes back."
+        },
+        {
+         "kind": "flag",
+         "key": "rain-flame",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "clampFlag",
+         "key": "rain-flame",
+         "min": 0,
+         "max": 5
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-07-crossroads"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It turns its head away again. Its stomach is audible.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-flame",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "rain-flame",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "clampFlag",
+          "key": "rain-flame",
+          "min": 0,
+          "max": 5
+         }
+        ],
+        "text": "It has gone very still. Your lead curls round it without being asked, and after a while the little flame comes back."
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "rain-offered",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-07-crossroads"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask your Fire-type to sit with it.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "Your Fire-type lies down in the straw and lets it lean on its warm side. After a while you can't tell whose flame is whose.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-flame",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "rain-flame",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "clampFlag",
+          "key": "rain-flame",
+          "min": 0,
+          "max": 5
+         }
+        ],
+        "text": "It has gone very still. Your lead curls round it without being asked, and after a while the little flame comes back."
+       },
+       {
+        "kind": "flag",
+        "key": "rain-flame",
+        "amount": 2
+       },
+       {
+        "kind": "gn",
+        "op": "clampFlag",
+        "key": "rain-flame",
+        "min": 0,
+        "max": 5
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-07-crossroads"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just sleep.",
+     "success": {
+      "text": "You sleep. When you wake it is in your coat again, as if it never left.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-flame",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "rain-flame",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "clampFlag",
+          "key": "rain-flame",
+          "min": 0,
+          "max": 5
+         }
+        ],
+        "text": "It has gone very still. Your lead curls round it without being asked, and after a while the little flame comes back."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-07-crossroads"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-07-crossroads",
+   "name": "The Crossroads",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a2433",
+    "effect": "rain"
+   },
+   "intro": "*A lantern, at the crossroads, swinging a little in the wind. Somebody is standing under it.*",
+   "choices": [
+    {
+     "label": "Walk into the lantern light.",
+     "success": {
+      "text": "The Fire-type goes very still in your coat.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "rain-damian",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-07-owner-damian"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-07-owner-hunter"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-07-owner-hunter"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-07-owner-show"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-07-owner-show"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-07-owner-racer"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-07-owner-racer"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 8,
+        "max": 8,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-07-owner-trainer"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 9,
+        "max": 9,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-07-owner-trainer"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 10,
+        "max": 10,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-07-owner-trainer"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 11,
+        "max": 11,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-07-owner-trainer"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 12,
+        "max": 12,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-07-owner-trainer"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 13,
+        "max": 13,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-07-owner-trainer"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 14,
+        "max": 14,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-07-owner-trainer"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 15,
+        "max": 15,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-07-owner-trainer"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-07-owner-damian",
+   "name": "The Crossroads: Damian",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "met",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "damian-meetings",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**Damian:** \"...It's you. From the Gym. Oh. Oh, this looks bad, doesn't it.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.damian"
+    ],
+    "tint": "#1a2433",
+    "effect": "rain"
+   },
+   "intro": "*A lantern. A trainer under a good umbrella.*\n\n**Damian:** \"Hey! That's— you found my— look, I was coming back. I was. I got busy. It's a long road.\"\n\n*The Fire-type looks at him. Its flame doesn't change.*",
+   "choices": [
+    {
+     "label": "Fight for it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "rain-flame",
+         "atLeast": 3,
+         "atMost": 4
+        }
+       ],
+       "text": "It climbs out of your coat and steps between you. It doesn't attack. It stands there, in the rain, flame up. Then you fight.",
+       "effects": []
+      }
+     ],
+     "success": {
+      "text": "It hides inside your coat. You can feel it shaking against your ribs. You fight for it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Damian",
+       "classId": "ace-trainer",
+       "size": 6,
+       "types": [
+        "fire",
+        "fighting"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-entered",
+         "min": 1,
+         "then": [],
+         "text": "**Damian:** \"...Take care of it. No. Don't tell me. I know you will. That's the whole point, isn't it.\""
+        },
+        {
+         "kind": "flag",
+         "key": "rain-damian-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-reward"
+        }
+       ],
+       "weather": "rain",
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-owner-damian"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "rain-flame",
+       "atLeast": 0,
+       "atMost": 4
+      }
+     ]
+    },
+    {
+     "label": "Let it stand with you.",
+     "success": {
+      "text": "It climbs out of your coat and steps between you, in the rain, flame up. You fight their team down to the last one. Then it steps forward.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Damian",
+       "classId": "ace-trainer",
+       "size": 5,
+       "types": [
+        "fire",
+        "fighting"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "stash"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "charmander"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "growlithe"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "growlithe-hisui"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "vulpix"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 5,
+         "max": 5,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "vulpix-alola"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "ponyta"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "ponyta-galar"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "cyndaquil"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 9,
+         "max": 9,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "torchic"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 10,
+         "max": 10,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "chimchar"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 11,
+         "max": 11,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "tepig"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 12,
+         "max": 12,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "fennekin"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 13,
+         "max": 13,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "litten"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 14,
+         "max": 14,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "scorbunny"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 15,
+         "max": 15,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "fuecoco"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-last-damian"
+        }
+       ],
+       "weather": "rain",
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-owner-damian"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "rain-flame",
+       "atLeast": 5,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-07-last-damian",
+   "name": "Its Own Fight",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.damian"
+    ],
+    "tint": "#1a2433",
+    "effect": "rain"
+   },
+   "intro": "Their last Pokémon comes out. Nobody sends the Fire-type out. It just goes.\n\nIt has one move. It is enough.",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "It stands in the rain with its flame up, and does not look back at you once.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "In the rain, it fought for itself.",
+        "importance": 70
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Damian",
+       "classId": "ace-trainer",
+       "size": 1,
+       "types": [
+        "fire",
+        "fighting"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "unstash"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-entered",
+         "min": 1,
+         "then": [],
+         "text": "**Damian:** \"...Take care of it. No. Don't tell me. I know you will. That's the whole point, isn't it.\""
+        },
+        {
+         "kind": "flag",
+         "key": "rain-damian-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-reward"
+        }
+       ],
+       "weather": "rain",
+       "rule": {
+        "gn": "lastflame"
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "unstash"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-entered",
+         "min": 1,
+         "then": [],
+         "text": "**Damian:** \"...Take care of it. No. Don't tell me. I know you will. That's the whole point, isn't it.\""
+        },
+        {
+         "kind": "flag",
+         "key": "rain-damian-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-reward"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-07-owner-hunter",
+   "name": "The Crossroads: The Hunter",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Story"
+   ],
+   "remembers": [],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1a2433",
+    "effect": "rain"
+   },
+   "intro": "*A lantern. A trainer under a good umbrella.*\n\n**The owner:** \"There you are. Huh. You look better. Stronger. All right, I'll take it back.\"\n\n*The Fire-type looks at them. Its flame doesn't change.*",
+   "choices": [
+    {
+     "label": "Fight for it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "rain-flame",
+         "atLeast": 3,
+         "atMost": 4
+        }
+       ],
+       "text": "It climbs out of your coat and steps between you. It doesn't attack. It stands there, in the rain, flame up. Then you fight.",
+       "effects": []
+      }
+     ],
+     "success": {
+      "text": "It hides inside your coat. You can feel it shaking against your ribs. You fight for it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Hunter",
+       "classId": "roughneck",
+       "size": 6,
+       "types": [
+        "ground",
+        "normal"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-entered",
+         "min": 1,
+         "then": [],
+         "text": "**The owner:** \"It never looked at me like that.\""
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-reward"
+        }
+       ],
+       "weather": "rain",
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-owner-hunter"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "rain-flame",
+       "atLeast": 0,
+       "atMost": 4
+      }
+     ]
+    },
+    {
+     "label": "Let it stand with you.",
+     "success": {
+      "text": "It climbs out of your coat and steps between you, in the rain, flame up. You fight their team down to the last one. Then it steps forward.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Hunter",
+       "classId": "roughneck",
+       "size": 5,
+       "types": [
+        "ground",
+        "normal"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "stash"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "charmander"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "growlithe"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "growlithe-hisui"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "vulpix"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 5,
+         "max": 5,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "vulpix-alola"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "ponyta"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "ponyta-galar"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "cyndaquil"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 9,
+         "max": 9,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "torchic"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 10,
+         "max": 10,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "chimchar"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 11,
+         "max": 11,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "tepig"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 12,
+         "max": 12,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "fennekin"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 13,
+         "max": 13,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "litten"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 14,
+         "max": 14,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "scorbunny"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 15,
+         "max": 15,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "fuecoco"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-last-hunter"
+        }
+       ],
+       "weather": "rain",
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-owner-hunter"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "rain-flame",
+       "atLeast": 5,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-07-last-hunter",
+   "name": "Its Own Fight",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1a2433",
+    "effect": "rain"
+   },
+   "intro": "Their last Pokémon comes out. Nobody sends the Fire-type out. It just goes.\n\nIt has one move. It is enough.",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "It stands in the rain with its flame up, and does not look back at you once.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "In the rain, it fought for itself.",
+        "importance": 70
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Hunter",
+       "classId": "roughneck",
+       "size": 1,
+       "types": [
+        "ground",
+        "normal"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "unstash"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-entered",
+         "min": 1,
+         "then": [],
+         "text": "**The owner:** \"It never looked at me like that.\""
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-reward"
+        }
+       ],
+       "weather": "rain",
+       "rule": {
+        "gn": "lastflame"
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "unstash"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-entered",
+         "min": 1,
+         "then": [],
+         "text": "**The owner:** \"It never looked at me like that.\""
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-reward"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-07-owner-show",
+   "name": "The Crossroads: The Show Trainer",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Story"
+   ],
+   "remembers": [],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#1a2433",
+    "effect": "rain"
+   },
+   "intro": "*A lantern. A trainer under a good umbrella.*\n\n**The owner:** \"There you are. Huh. You look better. Stronger. All right, I'll take it back.\"\n\n*The Fire-type looks at them. Its flame doesn't change.*",
+   "choices": [
+    {
+     "label": "Fight for it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "rain-flame",
+         "atLeast": 3,
+         "atMost": 4
+        }
+       ],
+       "text": "It climbs out of your coat and steps between you. It doesn't attack. It stands there, in the rain, flame up. Then you fight.",
+       "effects": []
+      }
+     ],
+     "success": {
+      "text": "It hides inside your coat. You can feel it shaking against your ribs. You fight for it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Show Trainer",
+       "classId": "aroma-lady",
+       "size": 6,
+       "types": [
+        "fairy",
+        "psychic"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-entered",
+         "min": 1,
+         "then": [],
+         "text": "**The owner:** \"It never looked at me like that.\""
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-reward"
+        }
+       ],
+       "weather": "rain",
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-owner-show"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "rain-flame",
+       "atLeast": 0,
+       "atMost": 4
+      }
+     ]
+    },
+    {
+     "label": "Let it stand with you.",
+     "success": {
+      "text": "It climbs out of your coat and steps between you, in the rain, flame up. You fight their team down to the last one. Then it steps forward.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Show Trainer",
+       "classId": "aroma-lady",
+       "size": 5,
+       "types": [
+        "fairy",
+        "psychic"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "stash"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "charmander"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "growlithe"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "growlithe-hisui"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "vulpix"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 5,
+         "max": 5,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "vulpix-alola"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "ponyta"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "ponyta-galar"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "cyndaquil"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 9,
+         "max": 9,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "torchic"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 10,
+         "max": 10,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "chimchar"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 11,
+         "max": 11,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "tepig"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 12,
+         "max": 12,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "fennekin"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 13,
+         "max": 13,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "litten"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 14,
+         "max": 14,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "scorbunny"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 15,
+         "max": 15,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "fuecoco"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-last-show"
+        }
+       ],
+       "weather": "rain",
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-owner-show"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "rain-flame",
+       "atLeast": 5,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-07-last-show",
+   "name": "Its Own Fight",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#1a2433",
+    "effect": "rain"
+   },
+   "intro": "Their last Pokémon comes out. Nobody sends the Fire-type out. It just goes.\n\nIt has one move. It is enough.",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "It stands in the rain with its flame up, and does not look back at you once.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "In the rain, it fought for itself.",
+        "importance": 70
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Show Trainer",
+       "classId": "aroma-lady",
+       "size": 1,
+       "types": [
+        "fairy",
+        "psychic"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "unstash"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-entered",
+         "min": 1,
+         "then": [],
+         "text": "**The owner:** \"It never looked at me like that.\""
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-reward"
+        }
+       ],
+       "weather": "rain",
+       "rule": {
+        "gn": "lastflame"
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "unstash"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-entered",
+         "min": 1,
+         "then": [],
+         "text": "**The owner:** \"It never looked at me like that.\""
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-reward"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-07-owner-racer",
+   "name": "The Crossroads: The Racer",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Story"
+   ],
+   "remembers": [],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "tint": "#1a2433",
+    "effect": "rain"
+   },
+   "intro": "*A lantern. A trainer under a good umbrella.*\n\n**The owner:** \"There you are. Huh. You look better. Stronger. All right, I'll take it back.\"\n\n*The Fire-type looks at them. Its flame doesn't change.*",
+   "choices": [
+    {
+     "label": "Fight for it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "rain-flame",
+         "atLeast": 3,
+         "atMost": 4
+        }
+       ],
+       "text": "It climbs out of your coat and steps between you. It doesn't attack. It stands there, in the rain, flame up. Then you fight.",
+       "effects": []
+      }
+     ],
+     "success": {
+      "text": "It hides inside your coat. You can feel it shaking against your ribs. You fight for it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Racer",
+       "classId": "biker",
+       "size": 6,
+       "types": [
+        "normal",
+        "flying"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-entered",
+         "min": 1,
+         "then": [],
+         "text": "**The owner:** \"It never looked at me like that.\""
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-reward"
+        }
+       ],
+       "weather": "rain",
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-owner-racer"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "rain-flame",
+       "atLeast": 0,
+       "atMost": 4
+      }
+     ]
+    },
+    {
+     "label": "Let it stand with you.",
+     "success": {
+      "text": "It climbs out of your coat and steps between you, in the rain, flame up. You fight their team down to the last one. Then it steps forward.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Racer",
+       "classId": "biker",
+       "size": 5,
+       "types": [
+        "normal",
+        "flying"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "stash"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "charmander"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "growlithe"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "growlithe-hisui"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "vulpix"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 5,
+         "max": 5,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "vulpix-alola"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "ponyta"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "ponyta-galar"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "cyndaquil"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 9,
+         "max": 9,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "torchic"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 10,
+         "max": 10,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "chimchar"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 11,
+         "max": 11,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "tepig"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 12,
+         "max": 12,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "fennekin"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 13,
+         "max": 13,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "litten"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 14,
+         "max": 14,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "scorbunny"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 15,
+         "max": 15,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "fuecoco"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-last-racer"
+        }
+       ],
+       "weather": "rain",
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-owner-racer"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "rain-flame",
+       "atLeast": 5,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-07-last-racer",
+   "name": "Its Own Fight",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "tint": "#1a2433",
+    "effect": "rain"
+   },
+   "intro": "Their last Pokémon comes out. Nobody sends the Fire-type out. It just goes.\n\nIt has one move. It is enough.",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "It stands in the rain with its flame up, and does not look back at you once.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "In the rain, it fought for itself.",
+        "importance": 70
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Racer",
+       "classId": "biker",
+       "size": 1,
+       "types": [
+        "normal",
+        "flying"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "unstash"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-entered",
+         "min": 1,
+         "then": [],
+         "text": "**The owner:** \"It never looked at me like that.\""
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-reward"
+        }
+       ],
+       "weather": "rain",
+       "rule": {
+        "gn": "lastflame"
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "unstash"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-entered",
+         "min": 1,
+         "then": [],
+         "text": "**The owner:** \"It never looked at me like that.\""
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-reward"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-07-owner-trainer",
+   "name": "The Crossroads: The Trainer",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Story"
+   ],
+   "remembers": [],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.camper"
+    ],
+    "tint": "#1a2433",
+    "effect": "rain"
+   },
+   "intro": "*A lantern. A trainer under a good umbrella.*\n\n**The owner:** \"There you are. Huh. You look better. Stronger. All right, I'll take it back.\"\n\n*The Fire-type looks at them. Its flame doesn't change.*",
+   "choices": [
+    {
+     "label": "Fight for it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "rain-flame",
+         "atLeast": 3,
+         "atMost": 4
+        }
+       ],
+       "text": "It climbs out of your coat and steps between you. It doesn't attack. It stands there, in the rain, flame up. Then you fight.",
+       "effects": []
+      }
+     ],
+     "success": {
+      "text": "It hides inside your coat. You can feel it shaking against your ribs. You fight for it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Trainer",
+       "classId": "ace-trainer",
+       "size": 6,
+       "types": [
+        "water",
+        "grass"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-entered",
+         "min": 1,
+         "then": [],
+         "text": "**The owner:** \"It never looked at me like that.\""
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-reward"
+        }
+       ],
+       "weather": "rain",
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-owner-trainer"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "rain-flame",
+       "atLeast": 0,
+       "atMost": 4
+      }
+     ]
+    },
+    {
+     "label": "Let it stand with you.",
+     "success": {
+      "text": "It climbs out of your coat and steps between you, in the rain, flame up. You fight their team down to the last one. Then it steps forward.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Trainer",
+       "classId": "ace-trainer",
+       "size": 5,
+       "types": [
+        "water",
+        "grass"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "stash"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "charmander"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 2,
+         "max": 2,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "growlithe"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "growlithe-hisui"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 4,
+         "max": 4,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "vulpix"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 5,
+         "max": 5,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "vulpix-alola"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "ponyta"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 7,
+         "max": 7,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "ponyta-galar"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 8,
+         "max": 8,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "cyndaquil"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 9,
+         "max": 9,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "torchic"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 10,
+         "max": 10,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "chimchar"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 11,
+         "max": 11,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "tepig"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 12,
+         "max": 12,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "fennekin"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 13,
+         "max": 13,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "litten"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 14,
+         "max": 14,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "scorbunny"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-fire",
+         "min": 15,
+         "max": 15,
+         "then": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [
+            "fuecoco"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "direct": true
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-last-trainer"
+        }
+       ],
+       "weather": "rain",
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-owner-trainer"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "rain-flame",
+       "atLeast": 5,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-07-last-trainer",
+   "name": "Its Own Fight",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.camper"
+    ],
+    "tint": "#1a2433",
+    "effect": "rain"
+   },
+   "intro": "Their last Pokémon comes out. Nobody sends the Fire-type out. It just goes.\n\nIt has one move. It is enough.",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "It stands in the rain with its flame up, and does not look back at you once.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "In the rain, it fought for itself.",
+        "importance": 70
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Trainer",
+       "classId": "ace-trainer",
+       "size": 1,
+       "types": [
+        "water",
+        "grass"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "unstash"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-entered",
+         "min": 1,
+         "then": [],
+         "text": "**The owner:** \"It never looked at me like that.\""
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-reward"
+        }
+       ],
+       "weather": "rain",
+       "rule": {
+        "gn": "lastflame"
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "unstash"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "rain-entered",
+         "min": 1,
+         "then": [],
+         "text": "**The owner:** \"It never looked at me like that.\""
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-07-reward"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-07-reward",
+   "name": "It Warms to You",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a2433",
+    "effect": "none"
+   },
+   "intro": "The rain is stopping. Not all at once: the way a person stops crying.\n\nIt climbs down out of your coat and sits in front of you, and looks up, and its flame is the biggest you have seen it.",
+   "choices": [
+    {
+     "label": "Take it with you.",
+     "success": {
+      "text": "It climbs back into your coat. It is not going anywhere.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "charmander"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "kept-flame",
+          "held": "charcoal"
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-rain-fire",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "growlithe"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "kept-flame",
+          "held": "charcoal"
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-rain-fire",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "growlithe-hisui"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "kept-flame",
+          "held": "charcoal"
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-rain-fire",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "vulpix"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "kept-flame",
+          "held": "charcoal"
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-rain-fire",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "vulpix-alola"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "kept-flame",
+          "held": "charcoal"
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-rain-fire",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "ponyta"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "kept-flame",
+          "held": "charcoal"
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-rain-fire",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "ponyta-galar"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "kept-flame",
+          "held": "charcoal"
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-rain-fire",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 8,
+        "max": 8,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "cyndaquil"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "kept-flame",
+          "held": "charcoal"
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-rain-fire",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 9,
+        "max": 9,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "torchic"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "kept-flame",
+          "held": "charcoal"
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-rain-fire",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 10,
+        "max": 10,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "chimchar"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "kept-flame",
+          "held": "charcoal"
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-rain-fire",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 11,
+        "max": 11,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "tepig"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "kept-flame",
+          "held": "charcoal"
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-rain-fire",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 12,
+        "max": 12,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "fennekin"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "kept-flame",
+          "held": "charcoal"
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-rain-fire",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 13,
+        "max": 13,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "litten"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "kept-flame",
+          "held": "charcoal"
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-rain-fire",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 14,
+        "max": 14,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "scorbunny"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "kept-flame",
+          "held": "charcoal"
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-rain-fire",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "rain-fire",
+        "min": 15,
+        "max": 15,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "fuecoco"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "kept-flame",
+          "held": "charcoal"
+         },
+         {
+          "kind": "flag",
+          "key": "kanto-rain-fire",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-rain-saved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rain-saved",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You saved a Fire-type from the rain, and it chose you.",
+        "importance": 75
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-07-nurse",
+   "name": "A Small Scarf",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rain-walked",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "rain-walked-at"
+    },
+    {
+     "kind": "flag",
+     "key": "rain-nurse-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "walked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kind-walked-past",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "notice": "**The nurse:** \"Someone had to.\""
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a2433",
+    "effect": "none"
+   },
+   "intro": "At the Center, beside the nurse at the desk, a small Fire-type sits on the counter wearing a little knitted scarf. Healthy. Warm. Somebody else saved it.\n\n*It looks at you for a moment. It doesn't look away quickly.*",
+   "choices": [
+    {
+     "label": "Look back at it.",
+     "success": {
+      "text": "Then the nurse calls the next name, and it turns to watch her instead.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rain-nurse-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-cerulean-rain",
+   "name": "Cold Night's Rain",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "types": [
+    "fire",
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rain-entered",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "rain-walked",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a2433",
+    "effect": "rain"
+   },
+   "intro": "*Fade in. Rain.*\n\nThe road out of Cerulean. A rock by the road. A small Fire-type on it, tail flame the size of a match, looking down the road at someone who isn't coming.\n\nIt looks at you. It looks back at the road.",
+   "choices": [
+    {
+     "label": "Save it.",
+     "success": {
+      "text": "You pick it up. It weighs almost nothing. Its tail hisses in the rain, and it does not fight you. It does not do anything at all.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rain-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "rain-flame",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "rain-offered",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "rain-fire",
+        "weights": [
+         30,
+         7.5,
+         7.5,
+         6,
+         6,
+         5,
+         5,
+         4.125,
+         4.125,
+         4.125,
+         4.125,
+         4.125,
+         4.125,
+         4.125,
+         4.125
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-07-rock"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on your way.",
+     "success": {
+      "text": "You walk on. Behind you the rain keeps falling on the rock, on the little flame, on the road it is watching.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rain-walked",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "rain-walked-at"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.rain"
   }
  ]
 }

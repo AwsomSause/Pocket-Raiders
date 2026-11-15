@@ -1443,6 +1443,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (e.blissful) makeBlissful(content, mon);
       if (e.hiddenAbility && content.species.get(mon.speciesId)?.abilities.hidden) mon.abilitySlot = -1;
       if (e.ability) mon.fixedAbility = e.ability;
+      if (e.held) mon.held = { [e.held]: 1 };
       if (e.look) mon.look = e.look;
       if (e.friendship) mon.friendship = Math.min(255, mon.friendship + e.friendship);
       for (const id of e.moves) {

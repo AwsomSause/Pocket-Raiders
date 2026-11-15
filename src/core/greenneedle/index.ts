@@ -73,6 +73,7 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'sameStage') return stamped === stage;
   if (c.test === 'notThisStage') return stamped !== stage;
   if (c.test === 'notThisRegion') return stamped !== run.regionIndex + 1;
+  if (c.test === 'thisRegion') return stamped === run.regionIndex + 1;
   return stamped > 0 && stamped < run.regionIndex + 1;
 }
 
@@ -147,6 +148,29 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       if (lead) lead.boosts = [...(lead.boosts ?? []), { kind: 'stage', stat: e.type as 'spe', stages: e.n!, turns: 99 }];
       return '';
     }
+    // A Pokémon fights alone for a while (the rain's Fire-type, Flame 5): the team waits in the canon stash, and comes back after.
+    // Unlike Flight North's restore, whoever stood in for them simply leaves; nothing is remembered.
+    case 'stash': {
+      const ex = (run.expansion ?? {}) as NonNullable<RunState['expansion']>;
+      const canon = ex.canon ?? { flags: [], completed: [], menus: {} };
+      if (canon.stash || run.party.length === 0) return '';
+      (run as { expansion?: object }).expansion = { ...ex, canon: { ...canon, stash: structuredClone(run.party) } };
+      run.party = [];
+      return 'Your team steps back';
+    }
+    case 'unstash': {
+      const canon = run.expansion?.canon;
+      if (!canon?.stash || canon.solo) return '';
+      run.party = canon.stash as PokemonInstance[];
+      delete canon.stash;
+      return 'Your team comes back';
+    }
+    case 'noFaint':
+      if (run.party.every((m) => m.hp > 0)) setGnFlag(run, e.key!, gnFlag(run, e.key!) + e.n!);
+      return '';
+    case 'clampFlag':
+      setGnFlag(run, e.key!, Math.max(e.min!, Math.min(e.max!, gnFlag(run, e.key!))));
+      return '';
     case 'itemEach':
       addItem(run.inventory, e.key!, Math.max(1, run.party.length));
       return '';
@@ -189,6 +213,13 @@ export function gnBattleStart(content: Content, run: RunState): void {
   if (battle.eventRule?.gn === 'bex') battle.storyEffects.push(`${FOE_WAITS}Bex is looking for the attack one. "TOP LEFT!" shouts Damian, from the back.`);
   if (battle.eventRule?.gn === 'damian') trainAce(content, battle.enemyTeam[battle.enemyTeam.length - 1], battle.eventRule.ace ?? 1);
   const lead = run.party[battle.activeIndex];
+  // Cold Night's Rain (gn.07), Flame 5: the Fire-type fights the owner's last Pokémon itself, worn down already, with one move. It is enough.
+  if (battle.eventRule?.gn === 'lastflame' && lead) {
+    const foe = battle.enemyTeam[battle.enemyTeam.length - 1];
+    if (foe) foe.hp = 1;
+    const fire = lead.moves.find((m) => content.moves.get(m.id)?.type === 'fire' && (content.moves.get(m.id)?.power ?? 0) > 0);
+    lead.moves = [fire ?? { id: 'ember', pp: content.moves.get('ember')?.pp ?? 25 }];
+  }
   if (battle.eventRule?.gn === 'samurai' && lead && lead.friendship >= BOND_THREE) battle.storyEffects.push(`kind:${lead.uid}`);
 }
 

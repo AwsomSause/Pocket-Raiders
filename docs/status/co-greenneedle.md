@@ -12,11 +12,15 @@ Branch `claude/project-thread-uehq47`, draft PR #1314 into `ui-mockups`.
 | gn.04 Mt. Moon | done, tests pass | yes |
 | gn.05 Damian's Unofficial Gym | done, tests pass | yes |
 | gn.06 Bridge Crossing and the Hidden Village | done, 11 tests pass (Kanto: canon space cs-kanto-cerulean-bridge opens it; old hv-* scenes retired) | yes |
-| gn.07–gn.62 | not started | |
+| gn.07 Cold Night's Rain | done, 9 tests pass (Kept Flame ability, Flame 0-5, owner fights, Flame-5 solo fight; Kanto: cs-kanto-cerulean-rain) | yes |
+| gn.08–gn.62 | not started | |
 | gn.new.01–38 | not started | |
 
 ## Limits (documented)
 - gn.06 "a later run finds a signpost": cross-run memory is not allowed (Kice 2026-11-14), so a later bridge in the same run shows the sign and the village stall instead.
+
+- gn.07 "permanent night": shown by the stage's dark tint; the rule that matters (rain: Fire halved, Water boosted) is on every fight. The Barn's "Ask [Fire-type] to sit with it." reads "Ask your Fire-type to sit with it." (labels can't hold a name).
+- gn.07 remembers an abandoned Pokémon by run flag `abandoned-mon`: gn.new.03 (The Ball That Wouldn't Open) and the Trubbish Nobody Wanted must set it.
 
 ## Fixes found on the way
 - Placement data: the placer reads `tags` as stage needs, so the doc's category labels now go to `kinds`, `needs` become `tags` ("cave|high" = either; `core/co/placement.ts` tagHolds), and the key event's own beat gives its step and stage. Before this no Greenneedle event was ever placed.
