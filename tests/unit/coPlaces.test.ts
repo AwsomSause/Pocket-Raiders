@@ -1,0 +1,123 @@
+// Catalog Overhaul Pack, category "places" (STORY_FAMILIES_14, _15, _17): the Delves, reworks, run events and merged places.
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { describe, expect, it } from 'vitest';
+import { chooseEvent } from '../../src/core/events';
+import { visibleChoices } from '../../src/core/eventMemory';
+import { PSEUDO, chainRooms } from '../../src/core/dungeon/pseudo';
+import { chooseNode, chooseStarter, createRun } from '../../src/core/run';
+import type { RunState } from '../../src/core/state';
+import { content } from './helpers';
+
+const newRun = (seed: string): RunState => {
+  const run = structuredClone(chooseStarter(content, createRun(content, { runId: 'co-places', seed, archetypeId: 'red' }), 0));
+  run.phase = 'map';
+  run.stage!.current = run.stage!.map.nodes.find((n) => n.column === 1)!.id;
+  return run;
+};
+const here = (run: RunState) => run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+/** Opens an event on the node the player stands on and returns its side id. */
+const open = (run: RunState, eventId: string): string => {
+  const id = `t-${eventId}-${here(run).sides.length}`;
+  here(run).sides.push({ id, kind: 'event', used: false, eventId });
+  return id;
+};
+/** Picks the visible choice with this label at the open event on the current node. */
+const pick = (run: RunState, label: string): RunState => {
+  const side = here(run).sides.find((x) => x.kind === 'event' && !x.used)!;
+  const event = content.events.get(side.eventId!)!;
+  const at = visibleChoices(content, run, event).findIndex((c) => c.choice.label === label);
+  if (at < 0) throw new Error(`${event.id}: no visible choice "${label}" (has: ${visibleChoices(content, run, event).map((c) => c.choice.label).join(' | ')})`);
+  return chooseEvent(content, run, side.id, at).run;
+};
+const flagOf = (run: RunState, key: string): number => Number(run.story.flags[`ev:${key}`] ?? 0);
+
+const files = readdirSync(join(import.meta.dirname, '../../src/data/events')).filter((f) => /^co-places-\d+\.json$/.test(f));
+const built = files.flatMap((f) => (JSON.parse(readFileSync(join(import.meta.dirname, '../../src/data/events', f), 'utf8')) as { events: { id: string }[] }).events.map((e) => e.id));
+const DELVES = PSEUDO.chains.filter((c) => c.id.startsWith('ps_delve_'));
+
+describe('catalog overhaul: places (schema and reach)', () => {
+  it('every built event is live, has text that stays under the engine limits, and no choice is a dead end without words', () => {
+    expect(built.length).toBeGreaterThan(0);
+    for (const id of built) {
+      const e = content.events.get(id);
+      expect(e, id).toBeDefined();
+      expect(e!.intro.length, id).toBeGreaterThan(20);
+      for (const c of [...e!.choices, ...e!.remembers.flatMap((v) => v.addChoices)]) {
+        expect(c.success.text.length, `${id}: ${c.label}`).toBeGreaterThan(10);
+        if (c.failure) expect(c.failure.text.length, `${id}: ${c.label}`).toBeGreaterThan(10);
+      }
+    }
+  });
+
+  it('every flag an event reads is set somewhere in the game data, or listed as coming from another system', () => {
+    const listed = new Set((JSON.parse(readFileSync(join(import.meta.dirname, '../../src/data/catalogOverhaul/flags/places.json'), 'utf8')) as { flags: { key: string }[] }).flags.map((x) => x.key));
+    const set = new Set<string>();
+    const read = new Set<string>();
+    const walk = (o: unknown, inCondition: boolean): void => {
+      if (!o || typeof o !== 'object') return;
+      if (Array.isArray(o)) return o.forEach((x) => walk(x, inCondition));
+      const x = o as Record<string, unknown>;
+      if (x.kind === 'flag' && typeof x.key === 'string') (('amount' in x) ? set : read).add(x.key);
+      for (const [k, v] of Object.entries(x)) walk(v, inCondition || k === 'requires' || k === 'when');
+    };
+    for (const e of content.events.values()) walk(e, false);
+    const mine = new Set<string>();
+    for (const id of built) { const before = new Set(read); read.clear(); walk(content.events.get(id), false); for (const k of read) mine.add(k); for (const k of before) read.add(k); }
+    for (const key of mine) expect(set.has(key) || listed.has(key), `flag ${key} is read but never set`).toBe(true);
+  });
+});
+
+describe('catalog overhaul: the Delves (STORY_FAMILIES_14)', () => {
+  it('twelve Delves, 76 rooms, each drawn as a map with one room per step from the gate to the exit', () => {
+    expect(DELVES.length).toBe(12);
+    let rooms = 0;
+    for (const chain of DELVES) {
+      const list = chainRooms(content, chain);
+      rooms += list.length;
+      expect(list.map((r) => r.depth), chain.id).toEqual(list.map((_, i) => i + 1));
+      expect(list.at(-1)!.next, chain.id).toEqual([]);
+      for (const r of list) expect(content.events.get(r.event)!.room, r.event).toBe(true);
+      // Every room but the exit offers "Turn back", and every battle inside is a pseudo-stage fight (a loss never ends the run).
+      for (const r of list.slice(0, -1)) expect(content.events.get(r.event)!.choices.some((c) => c.success.effects.some((x) => x.kind === 'leavePseudo')), `${r.event} turn back`).toBe(true);
+      for (const r of list) for (const c of [...content.events.get(r.event)!.choices, ...content.events.get(r.event)!.remembers.flatMap((v) => v.addChoices)]) for (const o of [c.success, c.failure]) if (o?.battle) expect((o.battle as { pseudo?: boolean }).pseudo, `${r.event}: ${c.label}`).toBe(true);
+    }
+    expect(rooms).toBe(76);
+  });
+
+  it('the Forest Path: resting and feeding the Path Keeper both happen in one room, and then it comes along', () => {
+    let run = newRun('delve-forest');
+    const parent = run.stage!.current;
+    open(run, 'delve-gate-dense-forest-path');
+    run = pick(run, 'Take the path.');
+    expect(run.stage!.pseudo?.id).toBe('ps_delve_dense_forest_path');
+    run = chooseNode(content, run, run.stage!.map.nodes.find((n) => n.column === 1)!.id);
+    run = pick(run, 'Ignore it.');
+    expect(here(run).roomEvent).toBe('dg-dense-forest-path-b');
+    run = pick(run, 'Follow the leaf.');
+    run = pick(run, 'Rest.');
+    expect(here(run).roomEvent).toBe('dg-dense-forest-path-c');
+    run = pick(run, 'Offer it food.');
+    expect(() => pick(run, 'Rest.')).toThrow();
+    run = pick(run, 'Ask the way out.');
+    const size = run.party.length + run.pending.length;
+    run = pick(run, '"Come with me."');
+    expect(run.party.length + run.pending.length).toBe(size + 1);
+    expect(flagOf(run, 'delve-dense-forest-path-done')).toBe(1);
+    expect(flagOf(run, 'delve-dense-forest-path-resident-joined')).toBe(1);
+  });
+
+  it('turning back leaves the Delve on the node it was entered from, with nothing lost', () => {
+    let run = newRun('delve-back');
+    const parent = run.stage!.current;
+    open(run, 'delve-gate-abandoned-mine-shaft');
+    run = pick(run, 'Follow the track in.');
+    run = chooseNode(content, run, run.stage!.map.nodes.find((n) => n.column === 1)!.id);
+    run = pick(run, 'Follow the lamp.');
+    run = pick(run, 'Turn back toward the daylight.');
+    expect(run.stage!.pseudo).toBeUndefined();
+    expect(run.stage!.current).toBe(parent);
+    expect(flagOf(run, 'delve-abandoned-mine-shaft-garnet')).toBe(1);
+    expect(flagOf(run, 'delve-abandoned-mine-shaft-done')).toBe(0);
+  });
+});

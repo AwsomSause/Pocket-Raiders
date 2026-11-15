@@ -1,0 +1,2629 @@
+{
+ "catalogOverhaul": "places",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "delve-gate-abandoned-mine-shaft",
+   "name": "The Abandoned Mine Shaft",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "types": [
+    "rock",
+    "ground"
+   ],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "delve-abandoned-mine-shaft-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a2f26",
+    "effect": "none"
+   },
+   "intro": "A rusted track runs into the hill and the dark swallows it. The timbers are twenty years grey. Somewhere far inside, faint and steady, something is digging.",
+   "choices": [
+    {
+     "label": "Follow the track in.",
+     "success": {
+      "text": "You step over the first sleeper. The daylight shrinks to a coin behind you, and the digging does not stop.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-abandoned-mine-shaft-a"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the hill alone.",
+     "success": {
+      "text": "You walk on. The digging goes on behind you, patient as a clock.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ]
+  },
+  {
+   "id": "dg-abandoned-mine-shaft-a",
+   "name": "Abandoned Mine Shaft",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "geodude",
+    "effect": "none",
+    "tint": "#3a2f26"
+   },
+   "intro": "A rusted track into the hill. Ahead, a Geodude rolls along the rails like a runaway mine cart, then stops dead to stare at you. A lamp on the wall is still lit. Nobody has worked here in twenty years.",
+   "choices": [
+    {
+     "label": "Battle the Geodude.",
+     "success": {
+      "text": "It plants itself on the rails and will not be moved without a fight.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "geodude"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-abandoned-mine-shaft-b"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Roll it along the track.",
+     "success": {
+      "text": "You give it a push. It squeals with joy, rattles away down the rails and looks back to be sure you are following. It knows every turn of this place.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-abandoned-mine-shaft-rolled",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-abandoned-mine-shaft-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the lamp.",
+     "success": {
+      "text": "The lamp is warm. Someone trimmed the wick today. Beside it, scratched deep into the timber by a claw, over and over until the letters are a groove: GARNET.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-abandoned-mine-shaft-garnet",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-abandoned-mine-shaft-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Abandoned Mine Shaft will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-abandoned-mine-shaft-b",
+   "name": "Abandoned Mine Shaft: wild",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "woobat",
+    "effect": "none",
+    "tint": "#3a2f26"
+   },
+   "intro": "A Woobat colony hangs from the ceiling like wet laundry, shivering awake. Digging sounds from deeper in have been disturbing them for a long time. Their eyes are tired.",
+   "choices": [
+    {
+     "label": "Sneak under.",
+     "check": "speed",
+     "success": {
+      "text": "You go heel to toe under a hundred sleeping ears. One opens an eye, sighs, and lets you by.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-abandoned-mine-shaft-c"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A pebble skips off your boot. The whole ceiling drops on you at once.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "woobat"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "dg-abandoned-mine-shaft-c"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "You call out your lead. The colony unfolds, furious at one more noise.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "woobat"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-abandoned-mine-shaft-c"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Listen to the digging.",
+     "success": {
+      "text": "You stand still and listen. Scrape, scrape, rest. Scrape, scrape, rest. It is not an animal burrowing. It is someone working a shift, the way they were taught.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-abandoned-mine-shaft-listened",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-abandoned-mine-shaft-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Abandoned Mine Shaft will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "rolled",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-abandoned-mine-shaft-rolled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Geodude you pushed clatters ahead down the rails, and every Woobat head turns to follow the noise.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Walk under while the Geodude draws them off.",
+       "success": {
+        "text": "The colony streams after the rattling Geodude. You walk under an empty ceiling. Far ahead it waits for you, very pleased with itself.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "dg-abandoned-mine-shaft-c"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dg-abandoned-mine-shaft-c",
+   "name": "Abandoned Mine Shaft: den",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "excadrill",
+    "effect": "none",
+    "tint": "#3a2f26"
+   },
+   "intro": "Claw marks and old nests line the walls. This is somebody's home. Pick, an Alpha Excadrill, huge and grey at the muzzle, is tearing at a rockfall that fills the tunnel. It turns. Its eyes are red, and its claws are worn almost flat.",
+   "choices": [
+    {
+     "label": "Calm it with a Hard Stone.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "hard-stone"
+      }
+     ],
+     "success": {
+      "text": "You roll the Hard Stone across the floor. Pick stops. It chews the stone slowly, the red going out of its eyes, then steps aside to show you the rockfall. Under the lowest slab: a miner's helmet, a name painted inside. GARNET. Pick has been digging toward it for twenty years.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "hard-stone"
+       },
+       {
+        "kind": "flag",
+        "key": "delve-abandoned-mine-shaft-helmet",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-abandoned-mine-shaft-resident-calmed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "calmed-alpha",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       },
+       {
+        "kind": "friendship",
+        "amount": 4,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-abandoned-mine-shaft-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "Pick screams and comes at you through its own dust.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "excadrill"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "delve-abandoned-mine-shaft-resident-fought",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 2
+        },
+        {
+         "kind": "moment",
+         "text": "You drove Pick the Excadrill deeper into its mine.",
+         "importance": 40
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-abandoned-mine-shaft-d"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Help it dig.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ground"
+      }
+     ],
+     "success": {
+      "text": "Your Ground-type steps up beside Pick and puts its claws to the rock. Pick stares, then digs with it. Three long turns, shoulder to shoulder. The slab comes away. Under it lie a helmet with GARNET painted inside, and a letter folded small. Pick touches the helmet with one claw and makes a sound you will not forget.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-abandoned-mine-shaft-helmet",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-abandoned-mine-shaft-letter",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-abandoned-mine-shaft-resident-helped",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       },
+       {
+        "kind": "friendship",
+        "amount": 6,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-abandoned-mine-shaft-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Abandoned Mine Shaft will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "garnet",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-abandoned-mine-shaft-garnet",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You remember the name clawed into the timber by the lamp.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Say the name: \"Garnet.\"",
+       "success": {
+        "text": "\"Garnet.\" The claws stop mid-swing. Pick turns its whole body toward you, trembling, as if you might be him. You are not. It lowers its head anyway and lets you past, to the rockfall, and the helmet under the lowest slab with his name inside.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "delve-abandoned-mine-shaft-helmet",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "delve-abandoned-mine-shaft-resident-calmed",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "calmed-alpha",
+          "amount": 1
+         },
+         {
+          "kind": "research",
+          "amount": 3
+         },
+         {
+          "kind": "friendship",
+          "amount": 4,
+          "who": "party"
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "dg-abandoned-mine-shaft-d"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dg-abandoned-mine-shaft-d",
+   "name": "Abandoned Mine Shaft: cache",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3a2f26"
+   },
+   "intro": "A battered chest sits in a side room: Garnet's lunchbox and his tools, laid out neat. A note is pinned inside the lid in a careful hand: \"For Pick's birthday. Don't tell him.\"",
+   "choices": [
+    {
+     "label": "Open it.",
+     "success": {
+      "text": "Under the tools, wrapped in a clean cloth: a pouch of Soft Sand and a Ground TM with DIG written on the case. A birthday present, twenty years late. You take it, and feel that you have.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "soft-sand",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "tm-ground",
+        "count": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-abandoned-mine-shaft-e"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it to Pick.",
+     "success": {
+      "text": "You carry the lunchbox back down the tunnel and set it in front of Pick. It knows the smell. It curls its worn claws around the box, lies down against the rockfall, and for the first time in twenty years it stops digging.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-abandoned-mine-shaft-lunchbox",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 6,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-abandoned-mine-shaft-e"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You close the lid on the note. It was never yours to read.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-abandoned-mine-shaft-e"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Abandoned Mine Shaft will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "fought",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-abandoned-mine-shaft-resident-fought",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Far below, the digging has started again, faster and angrier. The tunnel shivers with it.",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Leave it open where Pick will find it.",
+       "success": {
+        "text": "You carry the lunchbox to the mouth of the deep tunnel and leave the lid open, the note showing. The digging below falters. Then it stops.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "delve-abandoned-mine-shaft-lunchbox",
+          "amount": 1
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "dg-abandoned-mine-shaft-e"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "ine",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-abandoned-mine-shaft-resident-calmed",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "noble-ine",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You think of Ine the Warden, and can almost hear her: \"That one wasn't frenzied. Just grieving.\""
+    }
+   ]
+  },
+  {
+   "id": "dg-abandoned-mine-shaft-e",
+   "name": "Abandoned Mine Shaft: exit",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "excadrill",
+    "effect": "none",
+    "tint": "#3a2f26"
+   },
+   "intro": "Daylight. Up the hill stands a cottage, and Garnet's widow, Ruby, is hanging washing in the wind. She has hung it facing the mine for twenty years.",
+   "choices": [
+    {
+     "label": "Tell her about Pick.",
+     "success": {
+      "text": "Ruby listens with a peg in her mouth. Then she takes the lantern off its nail and walks down the shaft without a word. An hour later she comes up, and Pick comes up behind her, blinking at the sun. It lives with her now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-abandoned-mine-shaft-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-abandoned-mine-shaft-ruby-told",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "Pick the Excadrill came up out of the mine to live with Ruby.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give her the helmet.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "delve-abandoned-mine-shaft-helmet",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Ruby turns the helmet over and reads the name inside. She cries the way people do when they have waited for it. \"He'd want this working.\" She gives you Garnet's pick, its handle worn to the shape of his hand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-abandoned-mine-shaft-done",
+        "amount": 1
+       },
+       {
+        "kind": "relic",
+        "id": "garnets-pick",
+        "name": "Garnet's Pick",
+        "effects": [
+         {
+          "kind": "typeDamageMultiplier",
+          "type": "ground",
+          "value": 1.1
+         }
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "You carried Garnet's helmet up to Ruby.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You pass the cottage. Ruby nods to you, a stranger on the road, and goes back to her washing. Behind you the hill is quiet, or digging. You know which.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-abandoned-mine-shaft-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "both",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-abandoned-mine-shaft-helmet",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "delve-abandoned-mine-shaft-resident-fought",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "You have Garnet's helmet under your arm, and you know where Pick is.",
+     "addChoices": [
+      {
+       "label": "Tell her about Pick, and give her the helmet.",
+       "success": {
+        "text": "Ruby holds the helmet and goes down the shaft with her lantern. When she comes back up, Pick is beside her, and it walks straight past her to you. Ruby laughs, wet-eyed. \"Go on, take him. He needs to dig somewhere new.\" She presses Garnet's pick into your hand as well.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "delve-abandoned-mine-shaft-done",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "delve-abandoned-mine-shaft-ruby-told",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "delve-abandoned-mine-shaft-resident-joined",
+          "amount": 1
+         },
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "excadrill"
+          ],
+          "types": [],
+          "levelBonus": 3,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "relic",
+          "id": "garnets-pick",
+          "name": "Garnet's Pick",
+          "effects": [
+           {
+            "kind": "typeDamageMultiplier",
+            "type": "ground",
+            "value": 1.1
+           }
+          ]
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 3
+         },
+         {
+          "kind": "moment",
+          "text": "Pick the Excadrill left Garnet's mine to dig somewhere new, with you.",
+          "importance": 70
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "fought",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-abandoned-mine-shaft-resident-fought",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Under your feet, very faintly, Pick is digging again. You fought it in its own home, and it went back to work."
+    }
+   ]
+  },
+  {
+   "id": "delve-gate-dense-forest-path",
+   "name": "The Dense Forest Path",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "delve-dense-forest-path-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1f3a26",
+    "effect": "none"
+   },
+   "intro": "The road ends at a wall of trees. One narrow path goes in, and every traveller's tale about this forest ends the same way: \"and then something showed me the way out.\"",
+   "choices": [
+    {
+     "label": "Take the path.",
+     "success": {
+      "text": "The branches close over your head like a door. High above, something with wide wings shifts its weight and begins to follow.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-dense-forest-path-a"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go around the forest.",
+     "success": {
+      "text": "You take the long road around. From the treeline, something watches you go, and seems almost disappointed.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ]
+  },
+  {
+   "id": "dg-dense-forest-path-a",
+   "name": "Dense Forest Path",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "nuzleaf",
+    "effect": "none",
+    "tint": "#1f3a26"
+   },
+   "intro": "The path narrows under heavy branches. A Nuzleaf whistles from a bough overhead and drops acorns on your hat, one at a time, grinning.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "An acorn bounces off your nose. That does it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "nuzleaf"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-dense-forest-path-b"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Whistle back.",
+     "requires": [
+      {
+       "kind": "partyMoveFlag",
+       "flag": "sound"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon answers the whistle note for note. The Nuzleaf nearly falls off its branch with delight. It hops down and trots ahead of you, whistling the tune, checking that you keep up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-dense-forest-path-whistled",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-dense-forest-path-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ignore it.",
+     "success": {
+      "text": "You walk on with acorns in your collar. The whistle follows you for a while, hopeful, then gives up.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-dense-forest-path-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Dense Forest Path will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-dense-forest-path-b",
+   "name": "Dense Forest Path: wild",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "combee",
+    "effect": "none",
+    "tint": "#1f3a26"
+   },
+   "intro": "A swarm of Combee circles a fallen hive, bumping into each other, lost. An arrow-shaped leaf is pinned to a tree with a single feather. It points left.",
+   "choices": [
+    {
+     "label": "Help rebuild the hive.",
+     "success": {
+      "text": "You wedge the hive back into the fork of the tree and hold it while they seal it with wax. It takes a long while. They leave two combs of Honey at your feet and will not hear of you refusing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "honey",
+        "count": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-dense-forest-path-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The swarm takes you for whatever knocked their home down.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "combee"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-dense-forest-path-c"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Follow the leaf.",
+     "success": {
+      "text": "You go left. A second leaf, then a third, each pinned with a brown feather, each one exactly where a tired traveller would start to doubt. Someone has been doing this for a very long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-dense-forest-path-sign",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-dense-forest-path-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Dense Forest Path will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-dense-forest-path-c",
+   "name": "Dense Forest Path: rest",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "decidueye",
+    "effect": "none",
+    "tint": "#1f3a26"
+   },
+   "intro": "A dry corner under the roots, with room to sit. A Decidueye lands on a stump across from you. It is old: its hood is grey, and it grips the stump like a railing. It watches you, the way a guide watches the last one in the line.",
+   "choices": [
+    {
+     "label": "Rest.",
+     "success": {
+      "text": "You sleep with your back to a root. When you wake the Decidueye has not moved. It kept the watch so you did not have to.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "flag",
+        "key": "delve-dense-forest-path-rested",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-dense-forest-path-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer it food.",
+     "success": {
+      "text": "You hold out half of what you have. It looks at the food, then at you, as if nobody has asked in a hundred years. It eats. Then, for the first time in a long time, it closes its eyes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-dense-forest-path-fed",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-dense-forest-path-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the way out.",
+     "success": {
+      "text": "It lifts one wing and points, without hurry, the way it has pointed for a century of lost travellers. You have the feeling it could do it asleep. You have the feeling it would like to.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-dense-forest-path-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Dense Forest Path will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "both",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-dense-forest-path-rested",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "delve-dense-forest-path-fed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Decidueye sits easier on its stump now, fed and unhurried, watching you over a folded wing.",
+     "hide": [
+      0,
+      1
+     ]
+    },
+    {
+     "id": "rested",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-dense-forest-path-rested",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have slept. The Decidueye is still there, upright, awake.",
+     "hide": [
+      0
+     ]
+    },
+    {
+     "id": "fed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-dense-forest-path-fed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Decidueye opens one eye when you move, and closes it again.",
+     "hide": [
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dg-dense-forest-path-d",
+   "name": "Dense Forest Path: exit",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "decidueye",
+    "effect": "none",
+    "tint": "#1f3a26"
+   },
+   "intro": "Daylight, green and sudden. The Decidueye is on the last branch before the open road, where it has stood to see every traveller out.",
+   "choices": [
+    {
+     "label": "Thank it.",
+     "success": {
+      "text": "You bow. It bows back, stiffly, and drops something at your feet: a Sharp Beak, from a Pokémon it guided out long ago and never forgot.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "sharp-beak",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-dense-forest-path-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-dense-forest-path-resident-thanked",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Come with me.\"",
+     "success": {
+      "text": "It looks at the road, then back at the forest full of people who are not lost yet. It hesitates for a long moment. Then it turns back into the trees. It is too tired to go, and too tired to stop.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-dense-forest-path-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-dense-forest-path-resident-stayed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take its post.",
+     "success": {
+      "text": "You stand at the forest's edge in its place. Near dusk a child comes crying through the ferns, and you walk her out to the road and her mother. On the branch above, the Decidueye watches you do it right. Then it tucks its head under its wing, and lets itself sleep.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-dense-forest-path-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-dense-forest-path-resident-relieved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "moment",
+        "text": "You took the Path Keeper's post so it could finally sleep.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "cared",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-dense-forest-path-rested",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "delve-dense-forest-path-fed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It kept your watch, and you fed it. It has not looked away from you since.",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "\"Come with me.\"",
+       "success": {
+        "text": "It looks at the forest. A Rowlet flutters down onto the branch beside it, puffed up and serious, and takes the post. The old Decidueye studies the little one, nods once, and steps off the branch onto your shoulder. It is heavier than it looks, and it is done being alone.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "delve-dense-forest-path-done",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "delve-dense-forest-path-resident-joined",
+          "amount": 1
+         },
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "decidueye"
+          ],
+          "types": [],
+          "levelBonus": 2,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 2
+         },
+         {
+          "kind": "moment",
+          "text": "The Path Keeper left its forest to a Rowlet and came with you.",
+          "importance": 70
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "delve-gate-coastal-cove",
+   "name": "The Coastal Cove",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "types": [
+    "water",
+    "flying"
+   ],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "delve-coastal-cove-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1f3d4a",
+    "effect": "none"
+   },
+   "intro": "Below the cliff path, waves break at the mouth of a cove no chart shows. A Pelipper flies in with a full beak, flies out with an empty one, and has clearly done so for years.",
+   "choices": [
+    {
+     "label": "Climb down to the cove.",
+     "success": {
+      "text": "You pick your way down the wet rock. The Pelipper passes overhead, on schedule, and does not look down.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-coastal-cove-a"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay on the cliff path.",
+     "success": {
+      "text": "You keep to the path. Below you the Pelipper makes another delivery to nobody.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ]
+  },
+  {
+   "id": "dg-coastal-cove-a",
+   "name": "Coastal Cove",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "krabby",
+    "effect": "none",
+    "tint": "#1f3d4a"
+   },
+   "intro": "Waves fold at the mouth of the hidden cove. A whole army of Krabby sidesteps across the sand in ranks, claws up, going somewhere important.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "You step into the column. The column objects.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "krabby"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-coastal-cove-b"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Wait for them to pass.",
+     "success": {
+      "text": "You sit on a rock and watch the parade go by. It takes a while. The last and smallest Krabby salutes you with one claw.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-coastal-cove-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow them.",
+     "success": {
+      "text": "You fall in at the back of the column. They lead you along a shelf of dry rock above the tide line, a path you would never have seen. Your boots stay dry.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-coastal-cove-dry-path",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-coastal-cove-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Coastal Cove will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-coastal-cove-b",
+   "name": "Coastal Cove: wild",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "pelipper",
+    "effect": "none",
+    "tint": "#1f3d4a"
+   },
+   "intro": "A Pelipper lands hard, drops a letter at your feet as if you were a doorstep, and flies off. The ink is brown with age: \"To Maud. Hold the goods till spring. — R.\" It is thirty years old.",
+   "choices": [
+    {
+     "label": "Keep the letter.",
+     "success": {
+      "text": "You fold it into your bag. Thirty years, and it has finally been delivered to someone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-coastal-cove-letter",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-coastal-cove-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the Pelipper.",
+     "success": {
+      "text": "It flies low into a sea cave, and you wade after it. Inside, it is sorting letters into a crack in the rock with its beak. Hundreds of them. None has ever been collected.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-coastal-cove-followed",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-coastal-cove-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle the Pelipper.",
+     "success": {
+      "text": "It wheels back to defend its route.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-coastal-cove-fought",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "pelipper"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "delve-coastal-cove-letter",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-coastal-cove-c"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Coastal Cove will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-coastal-cove-c",
+   "name": "Coastal Cove: mystery",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "chinchou",
+    "effect": "none",
+    "tint": "#1f3d4a"
+   },
+   "intro": "Something here doesn't belong. A faint light pulses in a tide pool: a Chinchou, but blue-green where it should be yellow, glowing a colour the sea does not make.",
+   "choices": [
+    {
+     "label": "Study it.",
+     "success": {
+      "text": "You crouch and take notes until your knees ache. It lets you. The colour is in its skin, not the water. Somewhere, somebody would give a great deal to read this page.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delta-clue-d1",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-coastal-cove-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Catch it.",
+     "success": {
+      "text": "It comes without a struggle, curious about your light as you are about its own.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "chinchou"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-coastal-cove-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it pulsing in its pool, the wrong colour and perfectly content.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-coastal-cove-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Coastal Cove will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-coastal-cove-d",
+   "name": "Coastal Cove: cache",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#1f3d4a"
+   },
+   "intro": "A battered chest: smuggled goods, long rotted to rags. And beside it, tied with fishing line, a bundle of unsent letters. Every one is addressed to \"Maud\".",
+   "choices": [
+    {
+     "label": "Open the goods.",
+     "success": {
+      "text": "Under the rot, the part that does not spoil: a Pearl and a Big Pearl, still wrapped in a smuggler's handkerchief.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "pearl",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "big-pearl",
+        "count": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-coastal-cove-e"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the letters.",
+     "success": {
+      "text": "You read them in order. R was no great smuggler, and a worse poet. He loved Maud. Every spring he waited at this cove. Every letter ends the same way: \"Perhaps next year.\" She never came.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-coastal-cove-read",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-coastal-cove-e"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give them to the Pelipper.",
+     "success": {
+      "text": "The Pelipper lands and takes the whole bundle in its beak, gently, like eggs. It looks at you once. Then it flies straight out to sea with thirty years of post, toward somewhere it has decided the letters belong.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-coastal-cove-gave-letters",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-coastal-cove-e"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Coastal Cove will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-coastal-cove-e",
+   "name": "Coastal Cove: exit",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "pelipper",
+    "effect": "none",
+    "tint": "#1f3d4a"
+   },
+   "intro": "Daylight. On the cliff above the next cove along, an old woman sits on a folding stool, watching the sea as if it owed her something.",
+   "choices": [
+    {
+     "label": "Ask if she's Maud.",
+     "success": {
+      "text": "\"Nobody's called me that in years.\" She is. She waited too, every spring, at this cove: the wrong one, half a mile off. She laughs until she has to wipe her eyes. \"Thirty years. The old fool. The pair of us.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-coastal-cove-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-coastal-cove-maud-asked",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give her a letter.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "delve-coastal-cove-letter",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "She reads it standing up, lips moving. The Pelipper lands beside her and folds its wings: its route is finished. It looks at Maud, then at you. Maud waves a hand at it. \"Go on. You've carried enough for him.\" It waddles to your side.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-coastal-cove-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-coastal-cove-resident-joined",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "pelipper"
+        ],
+        "types": [],
+        "levelBonus": 2,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "moment",
+        "text": "Gull-Post the Pelipper delivered its last letter, to Maud, thirty years late.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You pass behind her stool. She does not turn. Out over the water, a Pelipper is flying its route.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-coastal-cove-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "gave",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-coastal-cove-gave-letters",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Far out, a white speck circles: the Pelipper, still carrying the bundle you gave it, looking for where it belongs."
+    },
+    {
+     "id": "fought",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-coastal-cove-fought",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Pelipper you fought circles overhead, keeping its distance, still on its route."
+    }
+   ]
+  },
+  {
+   "id": "delve-gate-mountain-pass",
+   "name": "The Mountain Pass",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "types": [
+    "rock",
+    "flying"
+   ],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "delve-mountain-pass-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3b4250",
+    "effect": "none"
+   },
+   "intro": "A ledge climbs between two peaks, with a frayed guide rope bolted along it. A sign in fresh paint: \"CLIMBERS WILL BE TESTED. E. CRANE.\"",
+   "choices": [
+    {
+     "label": "Start up the ledge.",
+     "success": {
+      "text": "You clip a hand to the guide rope. Someone has replaced every worn bolt, recently, and by hand.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-mountain-pass-a"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the valley road.",
+     "success": {
+      "text": "You take the long way through the valley. High above, a figure with a rope over her shoulder watches you choose.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ]
+  },
+  {
+   "id": "dg-mountain-pass-a",
+   "name": "Mountain Pass",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gligar",
+    "effect": "none",
+    "tint": "#3b4250"
+   },
+   "intro": "A ledge between two peaks, a boot wide in places. A Gligar glides across the gap, lands on your pack with a thump, and settles there as if it had paid for the seat.",
+   "choices": [
+    {
+     "label": "Shoo it.",
+     "success": {
+      "text": "It sticks its tongue out and sails off the ledge, sulking in a slow spiral.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-mountain-pass-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It hops off the pack and flares its wings on the narrow ledge.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "gligar"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-mountain-pass-b"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let it ride.",
+     "success": {
+      "text": "You climb on with a passenger. It peers over your shoulder at every handhold, and now and then it tugs your ear toward the safer one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-mountain-pass-gligar",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-mountain-pass-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Mountain Pass will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-mountain-pass-b",
+   "name": "Mountain Pass: trainer",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3b4250"
+   },
+   "intro": "Someone is waiting where the ledge widens, arms folded: a woman with a rope over her shoulder and chalk to the elbows. \"Elspeth Crane. My father carried down eleven climbers who thought they were ready. Show me you're ready.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "\"Good. Words are cheap up here.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Elspeth Crane",
+       "team": [
+        "lucario",
+        "gallade"
+       ],
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "classId": "hiker",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "delve-mountain-pass-passed",
+         "amount": 1
+        },
+        {
+         "kind": "money",
+         "amount": 300
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-mountain-pass-c"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Show her my gear.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "escape-rope"
+      }
+     ],
+     "success": {
+      "text": "She turns your Escape Rope over, checks the weave, the knots, the wear. She nods once. \"You've used it, and you've looked after it. Go on up.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-mountain-pass-passed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-mountain-pass-gear",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-mountain-pass-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about her father.",
+     "success": {
+      "text": "\"He went up for the twelfth. Didn't come down.\" She looks at the peak for exactly one breath. \"So now I test everyone. Your turn.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "Elspeth Crane",
+       "team": [
+        "lucario",
+        "gallade"
+       ],
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "classId": "hiker",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "delve-mountain-pass-passed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "delve-mountain-pass-father",
+         "amount": 1
+        },
+        {
+         "kind": "money",
+         "amount": 300
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-mountain-pass-c"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Mountain Pass will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "flyer",
+     "when": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "notice": "Her eyes go to your Flying-type before they go to you.",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Show her my Flying-type.",
+       "success": {
+        "text": "She holds out an arm. Your Flying-type steps onto it and she feels the strength in its grip. \"This one could carry you off a ledge. I've wished for that. Go on up.\"",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "delve-mountain-pass-passed",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "delve-mountain-pass-gear",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "dg-mountain-pass-c"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dg-mountain-pass-c",
+   "name": "Mountain Pass: rest",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3b4250"
+   },
+   "intro": "A dry corner out of the wind: Elspeth's camp. She got here before you by a route she does not explain. She has made tea for two, and set the second cup where a climbing partner would sit.",
+   "choices": [
+    {
+     "label": "Rest.",
+     "success": {
+      "text": "You drink the tea and sleep in a borrowed blanket. Elspeth sits up, checking her knots by firelight. Nobody in her camp has ever needed rescuing.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-mountain-pass-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the twelfth.",
+     "success": {
+      "text": "She pours before she answers. \"The twelfth was his own apprentice. A boy he'd trained since he could tie a knot. Storm came in. Father went up after him.\" She drinks. \"They found the rope. Just the rope.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-mountain-pass-twelfth",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-mountain-pass-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You thank her for the tea and shoulder your pack. \"Mind the rockfall past the bend,\" she says, not looking up.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-mountain-pass-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Mountain Pass will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-mountain-pass-twelfth",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The fire has burned low. Elspeth is winding her rope, and does not seem to mind that you are still here.",
+     "hide": [
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dg-mountain-pass-d",
+   "name": "Mountain Pass: wild",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "aerodactyl",
+    "effect": "none",
+    "tint": "#3b4250"
+   },
+   "intro": "A crack like a rifle shot, and the slope above lets go. Through the falling rock an Aerodactyl bursts from its roost, startled, screeching, as frightened as you are.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It dives through the dust, striking at anything that moves.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "aerodactyl"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 2
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-mountain-pass-e"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Take cover.",
+     "success": {
+      "text": "You press everyone flat against the wall. Stones rattle off packs and shoulders. When the dust settles the Aerodactyl is gone and everybody is bruised.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-mountain-pass-e"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Calm it.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "rock"
+      }
+     ],
+     "success": {
+      "text": "Your Rock-type steps out into the rockfall and stands there, unbothered, as stone bounces off stone. The Aerodactyl sees one calm thing in a falling world. It stops screeching, circles once, and flies off down the valley.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-mountain-pass-e"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Mountain Pass will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "gligar",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-mountain-pass-gligar",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A heartbeat before the crack, the Gligar on your pack yanked your ear, hard, toward an overhang.",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Duck where the Gligar pulls you.",
+       "success": {
+        "text": "You throw everyone under the overhang as the slope comes down past it like a curtain. Not a pebble touches you. The Gligar pats your head, glides away over the settling dust, and is gone.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "amount": 2,
+          "who": "party"
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "dg-mountain-pass-e"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dg-mountain-pass-e",
+   "name": "Mountain Pass: exit",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#3b4250"
+   },
+   "intro": "Daylight at the top of the pass, hard and clean. A cairn of stones stands here. Twelve names are cut into its flat face, the last two closer together than the rest.",
+   "choices": [
+    {
+     "label": "Add a stone.",
+     "success": {
+      "text": "You find a stone that fits and set it on the cairn. The wind drops. Very high up, something with great wings crosses the sun, and for a moment its shadow rests on you like a hand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-mountain-pass-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-bird",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the names.",
+     "success": {
+      "text": "You read all twelve aloud. Ten strangers. The eleventh name on the stone is CRANE. The twelfth is a boy's. Someone has kept the letters clear of lichen with a knife, every year.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-mountain-pass-done",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call Elspeth up.",
+     "success": {
+      "text": "You shout down the pass. A long silence. Then she climbs it, fast and perfect, and stops short of the top like a horse at a gate. She has not stood here since. She sits down with the cairn and puts her hand flat on her father's name. When you leave, she presses his rope on you. \"It's brought eleven down. Let it bring you.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-mountain-pass-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "delve-mountain-pass-resident-climbed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "crane-rope",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "moment",
+        "text": "Elspeth Crane climbed to her father's cairn for the first time, and gave you his rope.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
