@@ -267,5 +267,30 @@
   "stages": [
    1
   ]
+ },
+ "gn-06-bridge": {
+  "gn": "gn.06",
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "level": "A+0 in the gorge; bridge trainers A-1",
+  "often": "region",
+  "dressing": {
+   "kanto": "Nugget Bridge",
+   "kantoStage": "Cerulean (the canon space)",
+   "elsewhere": "Bridge Crossing"
+  },
+  "note": "Kanto shows it through the canon space cs-kanto-cerulean-bridge. The village starter is once per run for each starter (no cross-run memory).",
+  "kinds": [
+   "Interrupting Episode",
+   "Pseudo Stage",
+   "Community Episode"
+  ],
+  "tags": []
  }
 }

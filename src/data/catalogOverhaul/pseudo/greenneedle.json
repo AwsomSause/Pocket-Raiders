@@ -19,6 +19,15 @@
    "tint": "#1f3a22",
    "mood": "green light",
    "start": "opened"
+  },
+  {
+   "id": "ps_gn_gorge",
+   "name": "The Gorge and the Hidden Village",
+   "entry": "gn-06-bridge",
+   "themeId": "water-grass",
+   "tint": "#24402e",
+   "mood": "woodsmoke",
+   "start": "opened"
   }
  ]
 }

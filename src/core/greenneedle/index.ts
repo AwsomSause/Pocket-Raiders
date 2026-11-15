@@ -7,6 +7,7 @@ import type { PlayerAction } from '../battle/engine';
 import type { BattleState, PokemonInstance, RunState } from '../state';
 import type { GnCond, GnEffect } from './schema';
 import { addLevels, isUsableMove, maxHp } from '../pokemon';
+import { addItem } from '../items';
 import { typeEffectiveness } from '../battle/damage';
 import type { TypeName } from '../contentSchema';
 
@@ -65,6 +66,7 @@ export interface GnHost {
 
 /** A Greenneedle condition. */
 export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage: number): boolean {
+  if (c.test === 'notRegion') return !c.types!.includes(run.regionOrder[run.regionIndex] ?? '');
   if (c.test === 'noMoveType') return !run.party.some((m) => m.moves.some((s) => c.types!.includes(content.moves.get(s.id)?.type ?? '')));
   const stamped = gnFlag(run, c.key!);
   if (c.test === 'laterStage') return stamped > 0 && stamped < stage;
@@ -139,6 +141,14 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return '';
     case 'stampStage':
       setGnFlag(run, e.key!, host.stage);
+      return '';
+    case 'leadBoost': {
+      const lead = run.party.find((m) => m.hp > 0) ?? run.party[0];
+      if (lead) lead.boosts = [...(lead.boosts ?? []), { kind: 'stage', stat: e.type as 'spe', stages: e.n!, turns: 99 }];
+      return '';
+    }
+    case 'itemEach':
+      addItem(run.inventory, e.key!, Math.max(1, run.party.length));
       return '';
     case 'partyHas':
       setGnFlag(run, e.key!, run.party.some((m) => e.species!.includes(m.speciesId)) ? 1 : 0);

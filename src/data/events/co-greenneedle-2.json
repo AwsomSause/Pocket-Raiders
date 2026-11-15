@@ -1,0 +1,6143 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [
+  "cs-kanto-cerulean-bridge-n1",
+  "cs-kanto-cerulean-bridge-n2",
+  "cs-kanto-cerulean-bridge-n3",
+  "cs-kanto-cerulean-hv-exit",
+  "cs-kanto-cerulean-hv-n1",
+  "cs-kanto-cerulean-hv-n2",
+  "cs-kanto-cerulean-hv-n3",
+  "cs-kanto-cerulean-hv-pick",
+  "cs-kanto-cerulean-hv-t1",
+  "cs-kanto-cerulean-hv-t2",
+  "cs-kanto-cerulean-hv-t3",
+  "cs-kanto-cerulean-hv-t4",
+  "cs-kanto-cerulean-hv-t5",
+  "cs-kanto-cerulean-hv-t6",
+  "cs-kanto-cerulean-hv-t7",
+  "cs-kanto-cerulean-hv-t8",
+  "cs-kanto-cerulean-hv-t9",
+  "cs-kanto-cerulean-village"
+ ],
+ "events": [
+  {
+   "id": "gn-06-bridge",
+   "name": "Bridge Crossing",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Trainer"
+   ],
+   "stop": "dungeon",
+   "rarity": "rare",
+   "forced": true,
+   "types": [
+    "normal",
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notRegion",
+     "types": [
+      "kanto"
+     ]
+    }
+   ],
+   "remembers": [
+    {
+     "id": "told",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "village-told",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "At the near end, someone has nailed a new sign to the post. It points straight down. **THE HIDDEN VILLAGE · SOUVENIRS**"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3b28",
+    "effect": "none"
+   },
+   "intro": "A gorge with no name on the map. A rope bridge, slung across a gorge so deep the river at the bottom is only a sound.\n\nIt creaks before you are even on it. The planks are grey with age, and every third one has been mended with something that was not meant to be a plank.\n\nThere is no other way across. The road behind you has already decided that for you.",
+   "choices": [
+    {
+     "label": "Step onto the bridge.",
+     "success": {
+      "text": "You put one foot on the first plank. It takes your weight with a long, complaining groan, like an old man getting out of a chair.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-bridge-fall",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-bridge-held",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "roll",
+          "key": "gn-bridge-fall",
+          "n": 50
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-bridge-held",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "roll",
+          "key": "gn-bridge-fall",
+          "n": 75
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-bridge-fall",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "village-standing",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-st-trust",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-st-chose",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-st-failed",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-st-water",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-st-snivy-miss",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-st-chiko-thanked",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-bridge-fall",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "kanto-bridge-fell",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "gn-bridge-fell-count",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "pick",
+          "key": "gn-village-starter",
+          "weights": [
+           1,
+           1,
+           1,
+           1,
+           1,
+           1,
+           1,
+           1,
+           1
+          ]
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-06-bank"
+         }
+        ],
+        "text": "A plank goes. Then the rope. The river comes up fast. Dark. Then birdsong, and the smell of woodsmoke, and your lead licking your face."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-bridge-fall",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "gn-bridge-held",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-span-1"
+         }
+        ],
+        "text": "It holds. The ropes are older than they look. Next time, perhaps not."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-span-1",
+   "name": "The Bridge: Youngster Ned",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#4a3b28",
+    "effect": "none"
+   },
+   "intro": "Five people stand along the bridge, spaced out like fence posts, each one waiting for you to reach them.\n\n**Youngster Ned:** \"Halfway won't do! You have to beat all five of us!\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The bridge bounces under both of you as the Pokémon come out. Nobody watching would call this a sensible place for a battle.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Youngster Ned",
+       "classId": "youngster",
+       "size": 2,
+       "types": [
+        "normal"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-06-span-2"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-span-2",
+   "name": "The Bridge: Camper Rosa",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.camper"
+    ],
+    "tint": "#4a3b28",
+    "effect": "none"
+   },
+   "intro": "Number 2 of 5. The bridge sways under you, and the next one is already standing up to meet you.\n\n**Camper Rosa:** \"I've stood on this plank since breakfast. Don't look down. I did, once.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The bridge bounces under both of you as the Pokémon come out. Nobody watching would call this a sensible place for a battle.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Camper Rosa",
+       "classId": "camper",
+       "size": 2,
+       "types": [
+        "ground",
+        "normal"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-06-span-3"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-span-3",
+   "name": "The Bridge: Bug Catcher Wil",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.bug_catcher"
+    ],
+    "tint": "#4a3b28",
+    "effect": "none"
+   },
+   "intro": "Number 3 of 5. The bridge sways under you, and the next one is already standing up to meet you.\n\n**Bug Catcher Wil:** \"The bridge sways when you lose. I've lost a lot. I'm used to it.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The bridge bounces under both of you as the Pokémon come out. Nobody watching would call this a sensible place for a battle.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Bug Catcher Wil",
+       "classId": "bug-catcher",
+       "size": 2,
+       "types": [
+        "bug"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-06-span-4"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-span-4",
+   "name": "The Bridge: Swimmer Jo",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.swimmer"
+    ],
+    "tint": "#4a3b28",
+    "effect": "none"
+   },
+   "intro": "Number 4 of 5. The bridge sways under you, and the next one is already standing up to meet you.\n\n**Swimmer Jo:** \"If I fall in, I'll be fine. If you fall in... well. Let's battle.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The bridge bounces under both of you as the Pokémon come out. Nobody watching would call this a sensible place for a battle.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Swimmer Jo",
+       "classId": "swimmer",
+       "size": 2,
+       "types": [
+        "water"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-06-span-5"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-span-5",
+   "name": "The Bridge: Ace Trainer Corin",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.bird_keeper_m"
+    ],
+    "tint": "#4a3b28",
+    "effect": "none"
+   },
+   "intro": "Number 5 of 5. The bridge sways under you, and the next one is already standing up to meet you.\n\n**Ace Trainer Corin:** \"Four down. I'm the one they keep for last. Show me why you got this far.\"",
+   "choices": [
+    {
+     "label": "Battle the last one.",
+     "success": {
+      "text": "The bridge bounces under both of you as the Pokémon come out. Nobody watching would call this a sensible place for a battle.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Ace Trainer Corin",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [
+        "flying",
+        "fighting"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-06-offer"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-offer",
+   "name": "The Far End",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#4a3b28",
+    "effect": "none"
+   },
+   "intro": "At the far end, a man in a plain coat is clapping. Slowly. He has been watching the whole way across.\n\n**The man:** \"Five for five. We pay well for that. Regular meals. A uniform. Interested?\"",
+   "choices": [
+    {
+     "label": "No.",
+     "success": {
+      "text": "He shrugs, as if he had expected nothing else and is only a little sorry about it. He hands over the prize: a Nugget, heavy and cold. **The man:** \"Offer stands.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "nugget",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A man in a plain coat offered a uniform on the bridge. You said no.",
+        "importance": 50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Yes.",
+     "success": {
+      "text": "He grins, too wide. **The man:** \"Good. A small test first. Nothing you can't handle.\" His Pokémon is already out, and it is not really trying.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Man in the Plain Coat",
+       "classId": "gentleman",
+       "size": 1,
+       "types": [
+        "poison"
+       ],
+       "levelBonus": -2,
+       "win": [
+        {
+         "kind": "item",
+         "id": "nugget",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rocket-recruit-offered",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You said yes to the man on the bridge. He wrote your name down.",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Who's 'we'?",
+     "success": {
+      "text": "He smiles, and taps the inside of his collar, where a single red letter is stitched. Then he waits, as if you should already know the answer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-offer-again"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-offer-again",
+   "name": "The Far End",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#4a3b28",
+    "effect": "none"
+   },
+   "intro": "The letter on his collar is the colour of a warning sign. He sees you looking, and lets you look.\n\n**The man:** \"Well? It's a simple question.\"",
+   "choices": [
+    {
+     "label": "No.",
+     "success": {
+      "text": "He shrugs, as if he had expected nothing else and is only a little sorry about it. He hands over the prize: a Nugget, heavy and cold. **The man:** \"Offer stands.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "nugget",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A man in a plain coat offered a uniform on the bridge. You said no.",
+        "importance": 50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Yes.",
+     "success": {
+      "text": "He grins, too wide. **The man:** \"Good. A small test first. Nothing you can't handle.\" His Pokémon is already out, and it is not really trying.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Man in the Plain Coat",
+       "classId": "gentleman",
+       "size": 1,
+       "types": [
+        "poison"
+       ],
+       "levelBonus": -2,
+       "win": [
+        {
+         "kind": "item",
+         "id": "nugget",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rocket-recruit-offered",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You said yes to the man on the bridge. He wrote your name down.",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-bank",
+   "name": "The Bank",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#24402e",
+    "effect": "float"
+   },
+   "intro": "You wake on a bank of round grey stones. The bridge is a thin line against the sky, very far up. Your bag is wet. Your lead is not leaving your side.\n\nSomething rustles in the reeds. Then something else. The gorge has noticed you.",
+   "choices": [
+    {
+     "label": "Get up and keep moving.",
+     "success": {
+      "text": "You get up. Your knees are not sure about it. The reeds part.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "chain": 2,
+       "species": [],
+       "types": [
+        "grass",
+        "water",
+        "bug"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-06-narrows"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-06-narrows"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-narrows",
+   "name": "The Narrows",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "The river runs through a slot in the rock here, fast and white and loud. There is no path along it. There is only across.\n\nA Water-type could carry everyone over. A Flying-type could lift you. Otherwise, it is going to be cold.",
+   "choices": [
+    {
+     "label": "Let your Water-type carry everyone.",
+     "success": {
+      "text": "It goes in without being asked, and takes you over one at a time, dry as a bone, and looks very pleased with itself on the far side.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-06-path"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ]
+    },
+    {
+     "label": "Let your Flying-type lift you over.",
+     "success": {
+      "text": "A few strong wingbeats, a moment of nothing under your feet, and then rock. Nobody gets wet. Nobody says anything about how high that was.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-06-path"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ]
+    },
+    {
+     "label": "Wade across.",
+     "success": {
+      "text": "The water takes your breath straight out of you. You come out the far side shaking, and your lead is shaking worse. It will start its next battle a step slow.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "leadBoost",
+        "type": "spe",
+        "n": -1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-06-path"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-path",
+   "name": "The Old Path",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "Stone steps, worn into dips, and nobody has swept them for a very long time. Moss in every crack.\n\nAt the top of the first flight, a carved post. A leaf. And under the leaf, a hand, held up, palm out. Not *stop*, exactly. More like *wait*.",
+   "choices": [
+    {
+     "label": "Climb the steps.",
+     "success": {
+      "text": "You climb. Something that lives on the steps does not like being climbed past.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "grass",
+        "bug"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-06-mill"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-06-mill"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-mill",
+   "name": "The Mill",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "Smoke, first. Then a waterwheel, stopped, with river weed wound through its paddles. Then roofs: low, mossy, close together, like people keeping warm.\n\nNobody is surprised to see you. That is the strangest part.",
+   "choices": [
+    {
+     "label": "Walk into the village.",
+     "success": {
+      "text": "A small boy sees you, and runs. A moment later an old woman comes out of the biggest house, drying her hands.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-06-village"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-village",
+   "name": "The Hidden Village",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "told",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "village-told",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "There is a signpost at the edge of the village now, and a stall selling carved leaves. Granny Tamsel is not angry. She only looks tired. \"We heard you talked,\" she says. \"Well. Sit anyway.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "A few houses, a mill, a pool that steams in the cool air. People who are not on any map, and would like to keep it that way.\n\n**Granny Tamsel:** \"You fell. Everyone who comes here fell. Sit. Eat. Then we'll see about a rope.\"",
+   "choices": [
+    {
+     "label": "Sit, and eat.",
+     "success": {
+      "text": "You sit. Somebody puts a bowl in your hands. It is hot, and plain, and the best thing you have eaten in weeks. Around you the village goes back to its day, and lets you be part of it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-starter",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "partyHas",
+          "key": "gn-st-family",
+          "species": [
+           "bulbasaur",
+           "ivysaur",
+           "venusaur"
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-bulbasaur-joined",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-bulbasaur"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-starter",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "partyHas",
+          "key": "gn-st-family",
+          "species": [
+           "chikorita",
+           "bayleef",
+           "meganium"
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-chikorita-joined",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-chikorita"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-starter",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "partyHas",
+          "key": "gn-st-family",
+          "species": [
+           "treecko",
+           "grovyle",
+           "sceptile"
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-treecko-joined",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-treecko"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-starter",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "partyHas",
+          "key": "gn-st-family",
+          "species": [
+           "turtwig",
+           "grotle",
+           "torterra"
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-turtwig-joined",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-turtwig"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-starter",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "partyHas",
+          "key": "gn-st-family",
+          "species": [
+           "snivy",
+           "servine",
+           "serperior"
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-snivy-joined",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-snivy"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-starter",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "partyHas",
+          "key": "gn-st-family",
+          "species": [
+           "chespin",
+           "quilladin",
+           "chesnaught"
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-chespin-joined",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-chespin"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-starter",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "partyHas",
+          "key": "gn-st-family",
+          "species": [
+           "rowlet",
+           "dartrix",
+           "decidueye"
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-rowlet-joined",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-rowlet"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-starter",
+        "min": 8,
+        "max": 8,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "partyHas",
+          "key": "gn-st-family",
+          "species": [
+           "grookey",
+           "thwackey",
+           "rillaboom"
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-grookey-joined",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-grookey"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-starter",
+        "min": 9,
+        "max": 9,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "partyHas",
+          "key": "gn-st-family",
+          "species": [
+           "sprigatito",
+           "floragato",
+           "meowscarada"
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-sprigatito-joined",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-sprigatito"
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-pool"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-shrine"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-legend"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-task-mill"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-task-hat"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-task-food"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-rope"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-pool",
+   "name": "The Healing Pool",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#24402e",
+    "effect": "sparkle"
+   },
+   "intro": "A pool in a ring of flat stones, steaming. The water is the colour of weak tea and smells of moss. A child is sitting with her feet in it.\n\n**Child:** \"It fixes things. Not everything. Most things.\"",
+   "choices": [
+    {
+     "label": "Let your team rest in it.",
+     "success": {
+      "text": "One by one they wade in, and one by one their shoulders come down. When they climb out, every scrape is gone. The pool is a little cloudier. It will clear by morning.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-shrine",
+   "name": "The Berry Shrine",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "A little roofed shelf at the edge of the orchard, with a bowl on it. In the bowl, Berries. Next to the bowl, a carved hand, palm up.\n\nThere is no one watching it. There does not need to be.",
+   "choices": [
+    {
+     "label": "Take one for each of your team.",
+     "success": {
+      "text": "One each. You count twice, to be sure. The carved hand does not mind.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "itemEach",
+        "key": "oran-berry"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-legend",
+   "name": "Granny Tamsel's Legend",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "In the evening, by the fire, Granny Tamsel tells the story the village always tells.\n\n**Granny Tamsel:** \"Nine little green ones, from nine far places. Each one fell, the way you did. Each one stayed.\"\n\n**Granny Tamsel:** \"They don't belong to us. We belong to them, a bit. One lives here now. It will look at you.\"\n\n**Granny Tamsel:** \"If it likes what it sees, it goes with you. We never give them. They go.\"",
+   "choices": [
+    {
+     "label": "Listen until the fire is low.",
+     "success": {
+      "text": "By the time she stops, half the village is asleep where they sit. You are not. You are thinking about being looked at.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-task-mill",
+   "name": "Mend the Mill",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "The waterwheel has stopped. River weed has wound itself through the paddles, thick as rope, and the miller stands looking at it with his hands on his hips.\n\n**The miller:** \"Every spring. Every single spring.\"",
+   "choices": [
+    {
+     "label": "Send a Pokémon in to clear it.",
+     "success": {
+      "text": "Your Pokémon goes at the weed like it has a grudge. In a few minutes the wheel shudders, and turns, and the whole village looks up at the sound.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-village-mill",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "village-standing",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "village-standing",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-trust",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-family",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "village-standing",
+            "min": 2,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "setFlag",
+              "key": "gn-st-chose",
+              "n": 1
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "village-standing",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "gn-st-chose",
+            "n": 1
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "water",
+        "grass",
+        "fighting"
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Clear it yourself, by hand.",
+     "success": {
+      "text": "It takes the whole afternoon. Your hands are green to the wrist. When the wheel finally turns, the miller shakes one of them anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-village-mill",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "village-standing",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "village-standing",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-trust",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-family",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "village-standing",
+            "min": 2,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "setFlag",
+              "key": "gn-st-chose",
+              "n": 1
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "village-standing",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "gn-st-chose",
+            "n": 1
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-task-hat",
+   "name": "Find the Hat",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "A small boy, Pip-Tamsel, has lost his straw hat. He is not crying. He is very nearly crying, and he would like you to know that he is not.\n\n**Pip:** \"It was my grandad's. It's too big. I was growing into it.\"",
+   "choices": [
+    {
+     "label": "Help him look.",
+     "success": {
+      "text": "You look in the stream, on the mill roof, and under every bush he points at.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "gn-village-hat",
+        "weights": [
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-hat",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "gn-village-hat",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "village-standing",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "capFlag",
+          "key": "village-standing",
+          "n": 3
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-trust",
+          "min": 1,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "gn-st-family",
+            "min": 0,
+            "max": 0,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "when",
+              "key": "village-standing",
+              "min": 2,
+              "then": [
+               {
+                "kind": "gn",
+                "op": "setFlag",
+                "key": "gn-st-chose",
+                "n": 1
+               }
+              ]
+             }
+            ]
+           },
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "village-standing",
+            "min": 3,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "setFlag",
+              "key": "gn-st-chose",
+              "n": 1
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "text": "It is in the stream, caught on a stone. You fish it out. Pip puts it on wet, and it comes down over his eyes, and he does not care."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-hat",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "gn-village-hat",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "village-standing",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "capFlag",
+          "key": "village-standing",
+          "n": 3
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-trust",
+          "min": 1,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "gn-st-family",
+            "min": 0,
+            "max": 0,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "when",
+              "key": "village-standing",
+              "min": 2,
+              "then": [
+               {
+                "kind": "gn",
+                "op": "setFlag",
+                "key": "gn-st-chose",
+                "n": 1
+               }
+              ]
+             }
+            ]
+           },
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "village-standing",
+            "min": 3,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "setFlag",
+              "key": "gn-st-chose",
+              "n": 1
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "text": "It is on the mill roof. You climb. You do not look down. Pip claps when you hand it over."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-hat",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-task-lotad"
+         }
+        ],
+        "text": "It is on the head of a wild Lotad, sitting in the shallows, looking extremely pleased with itself."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-task-lotad",
+   "name": "The Lotad in the Hat",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "lotad",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "The Lotad wears the hat the way a king wears a crown. It has never owned anything before. You can tell.\n\nPip looks at the Lotad. The Lotad looks at Pip.",
+   "choices": [
+    {
+     "label": "Trade it a Berry.",
+     "success": {
+      "text": "You hold out a Berry. The Lotad thinks about it for a long time, then tips its head, and the hat slides off into Pip's arms. It eats the Berry like it has won.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-village-hat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "village-standing",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "village-standing",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-trust",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-family",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "village-standing",
+            "min": 2,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "setFlag",
+              "key": "gn-st-chose",
+              "n": 1
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "village-standing",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "gn-st-chose",
+            "n": 1
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it keep it; weave him a new one.",
+     "success": {
+      "text": "You sit with Pip by the water and weave reeds until your fingers ache. The new hat is lopsided. He loves it more than the old one, and will not say so.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-village-hat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "village-standing",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "village-standing",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-trust",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-family",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "village-standing",
+            "min": 2,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "setFlag",
+              "key": "gn-st-chose",
+              "n": 1
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "village-standing",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "gn-st-chose",
+            "n": 1
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-task-food",
+   "name": "Share Food",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "At dusk the village eats together, at one long table under the trees. Everybody brings something. Nobody checks.\n\n**Granny Tamsel:** \"Sit down, then. You're making the place look untidy.\"",
+   "choices": [
+    {
+     "label": "Put in a Berry.",
+     "success": {
+      "text": "You put a Berry in the big bowl in the middle. Somebody cuts it into enough pieces for everyone, somehow.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-village-food",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "village-standing",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "village-standing",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-trust",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-family",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "village-standing",
+            "min": 2,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "setFlag",
+              "key": "gn-st-chose",
+              "n": 1
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "village-standing",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "gn-st-chose",
+            "n": 1
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cook something.",
+     "success": {
+      "text": "You cook. It is not very good. Everybody eats it anyway, and the miller asks for more, which is either kindness or a very strange palate.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-village-food",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "village-standing",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "village-standing",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-trust",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-family",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "village-standing",
+            "min": 2,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "setFlag",
+              "key": "gn-st-chose",
+              "n": 1
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "village-standing",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "gn-st-chose",
+            "n": 1
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just sit down when asked.",
+     "success": {
+      "text": "You sit. You eat what you are given. You laugh when the others laugh. That, it turns out, was the task.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-village-food",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "village-standing",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "village-standing",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-trust",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-family",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "village-standing",
+            "min": 2,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "setFlag",
+              "key": "gn-st-chose",
+              "n": 1
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "village-standing",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "gn-st-chose",
+            "n": 1
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-rope",
+   "name": "The Rope",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "chosen",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gn-st-chose",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You are at the foot of the rope, ready to climb. Something is sitting on your bag. **Granny Tamsel:** \"Well. It's decided, then. We don't give them. They go.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "A rope, hanging all the way down from the broken bridge, knotted every arm's length. Somebody has tied it there for you.\n\n**Granny Tamsel:** \"One thing. You'll be asked where you've been. We'd take it kindly if you fell in a river, and that was all.\"",
+   "choices": [
+    {
+     "label": "Climb.",
+     "success": {
+      "text": "You climb. It takes a long time. When you look down from the top, the roofs are a few grey dots and the smoke is one thin line, and then the mist closes over them like a hand.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-starter",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-chose",
+          "min": 1,
+          "then": [
+           {
+            "kind": "join",
+            "shadow": false,
+            "species": [
+             "bulbasaur"
+            ],
+            "types": [],
+            "levelBonus": 0,
+            "shinyMultiplier": 1
+           },
+           {
+            "kind": "teachMove",
+            "move": "power-whip",
+            "species": "bulbasaur"
+           },
+           {
+            "kind": "flag",
+            "key": "gn-st-bulbasaur-joined",
+            "amount": 1
+           },
+           {
+            "kind": "flag",
+            "key": "kanto-hidden-starter",
+            "amount": 1
+           },
+           {
+            "kind": "moment",
+            "text": "The Bulbasaur of the Hidden Village chose you.",
+            "importance": 75
+           }
+          ],
+          "text": "Halfway up, the weight on your bag shifts, and something small and green settles against your neck. At the top, the Bulbasaur looks back down the gorge once. Then it looks at you, and that is that."
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-starter",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-chose",
+          "min": 1,
+          "then": [
+           {
+            "kind": "join",
+            "shadow": false,
+            "species": [
+             "chikorita"
+            ],
+            "types": [],
+            "levelBonus": 0,
+            "shinyMultiplier": 1
+           },
+           {
+            "kind": "teachMove",
+            "move": "ancient-power",
+            "species": "chikorita"
+           },
+           {
+            "kind": "flag",
+            "key": "gn-st-chikorita-joined",
+            "amount": 1
+           },
+           {
+            "kind": "flag",
+            "key": "kanto-hidden-starter",
+            "amount": 1
+           },
+           {
+            "kind": "moment",
+            "text": "The Chikorita of the Hidden Village chose you.",
+            "importance": 75
+           }
+          ],
+          "text": "Halfway up, the weight on your bag shifts, and something small and green settles against your neck. At the top, the Chikorita looks back down the gorge once. Then it looks at you, and that is that."
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-starter",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-chose",
+          "min": 1,
+          "then": [
+           {
+            "kind": "join",
+            "shadow": false,
+            "species": [
+             "treecko"
+            ],
+            "types": [],
+            "levelBonus": 0,
+            "shinyMultiplier": 1
+           },
+           {
+            "kind": "teachMove",
+            "move": "dragon-breath",
+            "species": "treecko"
+           },
+           {
+            "kind": "flag",
+            "key": "gn-st-treecko-joined",
+            "amount": 1
+           },
+           {
+            "kind": "flag",
+            "key": "kanto-hidden-starter",
+            "amount": 1
+           },
+           {
+            "kind": "moment",
+            "text": "The Treecko of the Hidden Village chose you.",
+            "importance": 75
+           }
+          ],
+          "text": "Halfway up, the weight on your bag shifts, and something small and green settles against your neck. At the top, the Treecko looks back down the gorge once. Then it looks at you, and that is that."
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-starter",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-chose",
+          "min": 1,
+          "then": [
+           {
+            "kind": "join",
+            "shadow": false,
+            "species": [
+             "turtwig"
+            ],
+            "types": [],
+            "levelBonus": 0,
+            "shinyMultiplier": 1
+           },
+           {
+            "kind": "teachMove",
+            "move": "superpower",
+            "species": "turtwig"
+           },
+           {
+            "kind": "flag",
+            "key": "gn-st-turtwig-joined",
+            "amount": 1
+           },
+           {
+            "kind": "flag",
+            "key": "kanto-hidden-starter",
+            "amount": 1
+           },
+           {
+            "kind": "moment",
+            "text": "The Turtwig of the Hidden Village chose you.",
+            "importance": 75
+           }
+          ],
+          "text": "Halfway up, the weight on your bag shifts, and something small and green settles against your neck. At the top, the Turtwig looks back down the gorge once. Then it looks at you, and that is that."
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-starter",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-chose",
+          "min": 1,
+          "then": [
+           {
+            "kind": "join",
+            "shadow": false,
+            "species": [
+             "snivy"
+            ],
+            "types": [],
+            "levelBonus": 0,
+            "shinyMultiplier": 1
+           },
+           {
+            "kind": "teachMove",
+            "move": "glare",
+            "species": "snivy"
+           },
+           {
+            "kind": "flag",
+            "key": "gn-st-snivy-joined",
+            "amount": 1
+           },
+           {
+            "kind": "flag",
+            "key": "kanto-hidden-starter",
+            "amount": 1
+           },
+           {
+            "kind": "moment",
+            "text": "The Snivy of the Hidden Village chose you.",
+            "importance": 75
+           }
+          ],
+          "text": "Halfway up, the weight on your bag shifts, and something small and green settles against your neck. At the top, the Snivy looks back down the gorge once. Then it looks at you, and that is that."
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-starter",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-chose",
+          "min": 1,
+          "then": [
+           {
+            "kind": "join",
+            "shadow": false,
+            "species": [
+             "chespin"
+            ],
+            "types": [],
+            "levelBonus": 0,
+            "shinyMultiplier": 1
+           },
+           {
+            "kind": "teachMove",
+            "move": "belly-drum",
+            "species": "chespin"
+           },
+           {
+            "kind": "flag",
+            "key": "gn-st-chespin-joined",
+            "amount": 1
+           },
+           {
+            "kind": "flag",
+            "key": "kanto-hidden-starter",
+            "amount": 1
+           },
+           {
+            "kind": "moment",
+            "text": "The Chespin of the Hidden Village chose you.",
+            "importance": 75
+           }
+          ],
+          "text": "Halfway up, the weight on your bag shifts, and something small and green settles against your neck. At the top, the Chespin looks back down the gorge once. Then it looks at you, and that is that."
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-starter",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-chose",
+          "min": 1,
+          "then": [
+           {
+            "kind": "join",
+            "shadow": false,
+            "species": [
+             "rowlet"
+            ],
+            "types": [],
+            "levelBonus": 0,
+            "shinyMultiplier": 1
+           },
+           {
+            "kind": "teachMove",
+            "move": "confuse-ray",
+            "species": "rowlet"
+           },
+           {
+            "kind": "flag",
+            "key": "gn-st-rowlet-joined",
+            "amount": 1
+           },
+           {
+            "kind": "flag",
+            "key": "kanto-hidden-starter",
+            "amount": 1
+           },
+           {
+            "kind": "moment",
+            "text": "The Rowlet of the Hidden Village chose you.",
+            "importance": 75
+           }
+          ],
+          "text": "Halfway up, the weight on your bag shifts, and something small and green settles against your neck. At the top, the Rowlet looks back down the gorge once. Then it looks at you, and that is that."
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-starter",
+        "min": 8,
+        "max": 8,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-chose",
+          "min": 1,
+          "then": [
+           {
+            "kind": "join",
+            "shadow": false,
+            "species": [
+             "grookey"
+            ],
+            "types": [],
+            "levelBonus": 0,
+            "shinyMultiplier": 1
+           },
+           {
+            "kind": "teachMove",
+            "move": "fake-out",
+            "species": "grookey"
+           },
+           {
+            "kind": "flag",
+            "key": "gn-st-grookey-joined",
+            "amount": 1
+           },
+           {
+            "kind": "flag",
+            "key": "kanto-hidden-starter",
+            "amount": 1
+           },
+           {
+            "kind": "moment",
+            "text": "The Grookey of the Hidden Village chose you.",
+            "importance": 75
+           }
+          ],
+          "text": "Halfway up, the weight on your bag shifts, and something small and green settles against your neck. At the top, the Grookey looks back down the gorge once. Then it looks at you, and that is that."
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-village-starter",
+        "min": 9,
+        "max": 9,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-chose",
+          "min": 1,
+          "then": [
+           {
+            "kind": "join",
+            "shadow": false,
+            "species": [
+             "sprigatito"
+            ],
+            "types": [],
+            "levelBonus": 0,
+            "shinyMultiplier": 1
+           },
+           {
+            "kind": "teachMove",
+            "move": "sucker-punch",
+            "species": "sprigatito"
+           },
+           {
+            "kind": "flag",
+            "key": "gn-st-sprigatito-joined",
+            "amount": 1
+           },
+           {
+            "kind": "flag",
+            "key": "kanto-hidden-starter",
+            "amount": 1
+           },
+           {
+            "kind": "moment",
+            "text": "The Sprigatito of the Hidden Village chose you.",
+            "importance": 75
+           }
+          ],
+          "text": "Halfway up, the weight on your bag shifts, and something small and green settles against your neck. At the top, the Sprigatito looks back down the gorge once. Then it looks at you, and that is that."
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-hidden-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-village-afterstory",
+        "n": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-notebook",
+   "name": "A Traveller with a Notebook",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Trainer"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "gn-village-afterstory",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "gn-village-asked",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#4a3b28",
+    "effect": "none"
+   },
+   "intro": "A traveller with a notebook stops you on the road. Pencil behind his ear. Mud to the knee.\n\n**Traveller:** \"You came up out of the gorge, didn't you? People talk about a village down there. Is it real?\"",
+   "choices": [
+    {
+     "label": "Never heard of it.",
+     "success": {
+      "text": "He looks at you for a moment, then writes something down and crosses it out. \"No. Course not.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "village-kept-secret",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn-village-asked",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-village-afterstory",
+        "n": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "There's nothing down there.",
+     "success": {
+      "text": "\"Nothing at all?\" \"A river. Rocks.\" He sighs, and closes the notebook.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "village-kept-secret",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn-village-asked",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-village-afterstory",
+        "n": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Yes. It's lovely.",
+     "success": {
+      "text": "His whole face lights up. He writes and writes. You have the feeling, watching the pencil go, that you have just given something away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "village-told",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn-village-asked",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-village-afterstory",
+        "n": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-bulbasaur",
+   "name": "Bulbasaur: The Hidden Garden",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bulbasaur",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "Behind the houses there is a garden where sick Pokémon come to rest. In the middle of it, a giant Venusaur lies wilting, its great flower drooping to the ground.\n\nA Bulbasaur stands guard at its side. It does not take its eyes off you. Then it looks, pointedly, at the empty bucket by the well.",
+   "choices": [
+    {
+     "label": "Pick up the bucket.",
+     "success": {
+      "text": "The walk from the well is short, and the bucket is heavy, and the path has a root in it exactly where you are not looking.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "gn-st-spill",
+        "n": 25
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-spill",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-bulbasaur-water-2"
+         }
+        ],
+        "text": "You trip. Half of it goes on your boots. That one does not count."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-spill",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "gn-st-water",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-water",
+          "min": 0,
+          "max": 2,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-bulbasaur-water-2"
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-water",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-bulbasaur-thieves"
+           }
+          ]
+         }
+        ],
+        "text": "You pour it at the Venusaur's roots. The soil drinks it at once."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-bulbasaur-water-2",
+   "name": "Bulbasaur: Another Bucket",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bulbasaur",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "The Bulbasaur watches you come back with the bucket. It does not say thank you. It looks at the well again.",
+   "choices": [
+    {
+     "label": "Fetch another.",
+     "success": {
+      "text": "The walk from the well is short, and the bucket is heavy, and the path has a root in it exactly where you are not looking.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "gn-st-spill",
+        "n": 25
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-spill",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-bulbasaur-water-3"
+         }
+        ],
+        "text": "You trip. Half of it goes on your boots. That one does not count."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-spill",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "gn-st-water",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-water",
+          "min": 0,
+          "max": 2,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-bulbasaur-water-3"
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-water",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-bulbasaur-thieves"
+           }
+          ]
+         }
+        ],
+        "text": "You pour it at the Venusaur's roots. The soil drinks it at once."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-bulbasaur-water-3",
+   "name": "Bulbasaur: Another Bucket",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bulbasaur",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "The Bulbasaur watches you come back with the bucket. It does not say thank you. It looks at the well again.",
+   "choices": [
+    {
+     "label": "Fetch another.",
+     "success": {
+      "text": "The walk from the well is short, and the bucket is heavy, and the path has a root in it exactly where you are not looking.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "gn-st-spill",
+        "n": 25
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-spill",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-bulbasaur-water-4"
+         }
+        ],
+        "text": "You trip. Half of it goes on your boots. That one does not count."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-spill",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "gn-st-water",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-water",
+          "min": 0,
+          "max": 2,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-bulbasaur-water-4"
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-water",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-bulbasaur-thieves"
+           }
+          ]
+         }
+        ],
+        "text": "You pour it at the Venusaur's roots. The soil drinks it at once."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-bulbasaur-water-4",
+   "name": "Bulbasaur: Another Bucket",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bulbasaur",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "The Bulbasaur watches you come back with the bucket. It does not say thank you. It looks at the well again.",
+   "choices": [
+    {
+     "label": "Fetch another.",
+     "success": {
+      "text": "The walk from the well is short, and the bucket is heavy, and the path has a root in it exactly where you are not looking.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "gn-st-spill",
+        "n": 25
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-spill",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-bulbasaur-water-4"
+         }
+        ],
+        "text": "You trip. Half of it goes on your boots. That one does not count."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-spill",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "gn-st-water",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-water",
+          "min": 0,
+          "max": 2,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-bulbasaur-water-4"
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-water",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-bulbasaur-thieves"
+           }
+          ]
+         }
+        ],
+        "text": "You pour it at the Venusaur's roots. The soil drinks it at once."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-bulbasaur-thieves",
+   "name": "Bulbasaur: The Thieves",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bulbasaur",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "The Venusaur lifts its head a little, for the first time. And then, at the garden wall, three shapes: Poison-types, slinking in after the healing herbs.\n\nThe Bulbasaur plants its feet in front of the Venusaur. It glances at you, just once.",
+   "choices": [
+    {
+     "label": "Stand beside it.",
+     "success": {
+      "text": "You stand beside it. The thieves come anyway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-st-water",
+        "n": 0
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "chain": 3,
+       "species": [],
+       "types": [
+        "poison"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "gn-st-trust",
+         "n": 1
+        },
+        {
+         "kind": "flag",
+         "key": "gn-st-bulbasaur-trusted",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-st-trust",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "gn-st-family",
+           "min": 0,
+           "max": 0,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "when",
+             "key": "village-standing",
+             "min": 2,
+             "then": [
+              {
+               "kind": "gn",
+               "op": "setFlag",
+               "key": "gn-st-chose",
+               "n": 1
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "village-standing",
+           "min": 3,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "gn-st-chose",
+             "n": 1
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "gn-st-trust",
+         "n": 1
+        },
+        {
+         "kind": "flag",
+         "key": "gn-st-bulbasaur-trusted",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-st-trust",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "gn-st-family",
+           "min": 0,
+           "max": 0,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "when",
+             "key": "village-standing",
+             "min": 2,
+             "then": [
+              {
+               "kind": "gn",
+               "op": "setFlag",
+               "key": "gn-st-chose",
+               "n": 1
+              }
+             ]
+            }
+           ]
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "village-standing",
+           "min": 3,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "gn-st-chose",
+             "n": 1
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-st-failed",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "item",
+           "id": "miracle-seed",
+           "count": 1
+          },
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-06-st-bulbasaur"
+          }
+         ],
+         "text": "The Bulbasaur watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "gn-st-failed",
+         "min": 1,
+         "then": [],
+         "text": "The Bulbasaur turns away for good. Some doors only open twice."
+        },
+        {
+         "kind": "flag",
+         "key": "gn-st-failed",
+         "amount": 1
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-chikorita",
+   "name": "Chikorita: The Shadow",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "chikorita",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "A Chikorita has followed you since you arrived. Everywhere. When your lead walks beside you, the Chikorita walks closer.\n\nThe village's dew bottle has gone missing. The Chikorita puts its nose to the ground, and finds the first clue at once: a drop of dew on a leaf, where no dew should be.",
+   "choices": [
+    {
+     "label": "Thank the Chikorita.",
+     "success": {
+      "text": "It goes pink from the leaf down. It does not look at your lead at all. It sets off along the trail at a trot.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-st-chiko-thanked",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-chikorita-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thank your lead.",
+     "success": {
+      "text": "Your lead looks pleased. The Chikorita sits down, very hard, and stares at nothing. It is not going to help now.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-chikorita"
+         }
+        ],
+        "text": "The Chikorita watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Chikorita turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-chikorita-2",
+   "name": "Chikorita: The Second Clue",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "chikorita",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "The trail runs out at a fork. Left, the smell of mint. Right, the smell of woodsmoke. Ahead, river water.\n\nThe Chikorita looks at you, waiting.",
+   "choices": [
+    {
+     "label": "Follow the mint.",
+     "success": {
+      "text": "Mint grows where the morning dew lies longest. The Chikorita nods, as if you passed something.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-chikorita-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the woodsmoke.",
+     "success": {
+      "text": "Smoke dries everything. The trail is gone. The Chikorita lies down in the path.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-chikorita"
+         }
+        ],
+        "text": "The Chikorita watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Chikorita turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the river.",
+     "success": {
+      "text": "The river smells of everything at once. You lose the trail in it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-chikorita"
+         }
+        ],
+        "text": "The Chikorita watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Chikorita turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-chikorita-3",
+   "name": "Chikorita: The Third Clue",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "chikorita",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "In the mint, a bee, heavy and slow, flying the same line again and again. A broken cork, chewed. And a dent in the grass the size of a small, round body.",
+   "choices": [
+    {
+     "label": "Follow the bee.",
+     "success": {
+      "text": "The bee goes home. The Chikorita sighs through its nose.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-chikorita"
+         }
+        ],
+        "text": "The Chikorita watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Chikorita turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the dent in the grass.",
+     "success": {
+      "text": "It leads to a Sentret, fast asleep, curled round the dew bottle like a pillow. The Chikorita carries the bottle home in its mouth, very proud, and walks right beside you all the way.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-st-trust",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-chikorita-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-trust",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-family",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "village-standing",
+            "min": 2,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "setFlag",
+              "key": "gn-st-chose",
+              "n": 1
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "village-standing",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "gn-st-chose",
+            "n": 1
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look at the cork.",
+     "success": {
+      "text": "It is a cork. The Chikorita had already seen it. It waits for you to catch up, and you do not.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-chikorita"
+         }
+        ],
+        "text": "The Chikorita watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Chikorita turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-treecko",
+   "name": "Treecko: The Dying Tree",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "treecko",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "A Treecko will not leave an old tree at the edge of the village. The tree is nearly gone: grey bark, three green leaves.\n\nTo speak to it, says the village, you must first beat the Treecko elder across the rooftops. The elder is already waiting on the first roof.",
+   "choices": [
+    {
+     "label": "Climb up and race.",
+     "success": {
+      "text": "The elder flicks its tail: go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-treecko-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-treecko-2",
+   "name": "Treecko: The Rooftops: First Gap",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "treecko",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "The first gap. The roof on the far side is lower, and wet.",
+   "choices": [
+    {
+     "label": "Jump now.",
+     "success": {
+      "text": "You land, skid, keep going. The elder glances back, surprised.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-treecko-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait a beat.",
+     "success": {
+      "text": "The elder is already two roofs on. You will not catch it now.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-treecko"
+         }
+        ],
+        "text": "The Treecko watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Treecko turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-treecko-3",
+   "name": "Treecko: The Rooftops: The Long Roof",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "treecko",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "A long roof, a loose tile halfway along, and the elder going straight over it without slowing.",
+   "choices": [
+    {
+     "label": "Go round the loose tile.",
+     "success": {
+      "text": "Round it, and on. You lose a step. You keep your feet.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-treecko-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the elder straight over.",
+     "success": {
+      "text": "The tile goes. So do you, very nearly. By the time you are up, the race is over.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-treecko"
+         }
+        ],
+        "text": "The Treecko watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Treecko turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-treecko-4",
+   "name": "Treecko: The Rooftops: The Last Leap",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "treecko",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "The last roof, and the old tree beyond it. The elder is beside you, neck and neck.",
+   "choices": [
+    {
+     "label": "Wait a beat, then jump.",
+     "success": {
+      "text": "The elder jumps first, too early, and has to scramble. You land clean. It looks at you a long time, then steps aside.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-treecko-5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Jump now.",
+     "success": {
+      "text": "Too early. You catch the edge, and hang there, and the elder looks down at you, not unkindly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-treecko"
+         }
+        ],
+        "text": "The Treecko watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Treecko turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-treecko-5",
+   "name": "Treecko: The Old Tree",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "treecko",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "The Treecko sits in the last fork of the old tree, among the three green leaves. It lets you come close.\n\nYou can see, now, that it is not guarding the tree. It is keeping it company.",
+   "choices": [
+    {
+     "label": "Plant a cutting.",
+     "success": {
+      "text": "You cut a green shoot from the last living branch, and hold it out. The Treecko looks at it, and at the tree, and takes the cutting gently in its mouth. It comes down. It is coming with you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-st-trust",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-treecko-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-trust",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-family",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "village-standing",
+            "min": 2,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "setFlag",
+              "key": "gn-st-chose",
+              "n": 1
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "village-standing",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "gn-st-chose",
+            "n": 1
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell it the tree will be fine.",
+     "success": {
+      "text": "It looks at you the way you would look at someone who says that. It goes back up into the leaves.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-treecko"
+         }
+        ],
+        "text": "The Treecko watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Treecko turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-turtwig",
+   "name": "Turtwig: The Seedlings",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "turtwig",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "A Turtwig carries the village's seedlings on its back, a little forest of them, all the way to the hill where they will be planted.\n\nIt lets you plant one. Then it settles down beside it, and looks at the sky, and waits for the weather.",
+   "choices": [
+    {
+     "label": "Plant the sapling.",
+     "success": {
+      "text": "You press the earth down round it. The Turtwig nods, slowly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-turtwig-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-turtwig-2",
+   "name": "Turtwig: The First Weather: Sun",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "turtwig",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "The sun comes out hard. The sapling's leaves curl at the edges.",
+   "choices": [
+    {
+     "label": "Water it.",
+     "success": {
+      "text": "You water it. The Turtwig closes its eyes. Too much, too soon.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-turtwig"
+         }
+        ],
+        "text": "The Turtwig watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Turtwig turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shade it with your hands.",
+     "success": {
+      "text": "Your arms ache. The Turtwig gently pushes them down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-turtwig"
+         }
+        ],
+        "text": "The Turtwig watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Turtwig turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You wait. By evening the leaves uncurl on their own. The Turtwig shifts a little closer.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-turtwig-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-turtwig-3",
+   "name": "Turtwig: The Second Weather: Wind",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "turtwig",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "Wind, in the night. The sapling bends almost flat.",
+   "choices": [
+    {
+     "label": "Tie it to a stick.",
+     "success": {
+      "text": "You tie it. The Turtwig unties it with its mouth, carefully, and looks at you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-turtwig"
+         }
+        ],
+        "text": "The Turtwig watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Turtwig turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You wait. In the morning it is standing again, a little crooked, a little stronger.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-turtwig-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Build a wall round it.",
+     "success": {
+      "text": "The wall falls on it. The Turtwig does not say anything. It does not have to.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-turtwig"
+         }
+        ],
+        "text": "The Turtwig watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Turtwig turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-turtwig-4",
+   "name": "Turtwig: The Third Weather: Rain",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "turtwig",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "Rain, for a whole day. The ground goes soft. The sapling does nothing at all.",
+   "choices": [
+    {
+     "label": "Dig a ditch to drain it.",
+     "success": {
+      "text": "You cut its roots with the spade. The Turtwig walks away, very slowly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-turtwig"
+         }
+        ],
+        "text": "The Turtwig watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Turtwig turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You wait. On the third morning, there is a new leaf. The Turtwig gets up, shakes the seedlings on its back, and walks to your side, as if that was always where it was going.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-st-trust",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-turtwig-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-trust",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-family",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "village-standing",
+            "min": 2,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "setFlag",
+              "key": "gn-st-chose",
+              "n": 1
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "village-standing",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "gn-st-chose",
+            "n": 1
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-snivy",
+   "name": "Snivy: Three Tests",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snivy",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "A Snivy sits on the well wall as if it owns it. It looks you up and down and does not seem impressed.\n\nThe first test, plainly, is how you greet it.",
+   "choices": [
+    {
+     "label": "A nod.",
+     "success": {
+      "text": "It nods back, very slightly. Correct.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-snivy-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold out a hand.",
+     "success": {
+      "text": "It looks at the hand. It turns its back for a beat. Then it turns round again, giving you one more chance.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-st-snivy-miss",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-snivy-miss",
+        "min": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-failed",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "item",
+            "id": "miracle-seed",
+            "count": 1
+           },
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-snivy"
+           }
+          ],
+          "text": "The Snivy watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-failed",
+          "min": 1,
+          "then": [],
+          "text": "The Snivy turns away for good. Some doors only open twice."
+         },
+         {
+          "kind": "flag",
+          "key": "gn-st-failed",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-snivy-miss",
+        "min": 0,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-snivy"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-snivy-2",
+   "name": "Snivy: Three Tests: Where to Stand",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snivy",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "It hops down and walks. It expects you to walk too. The question is where.",
+   "choices": [
+    {
+     "label": "Beside it.",
+     "success": {
+      "text": "Beside. It allows this.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-snivy-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "In front, to lead.",
+     "success": {
+      "text": "It stops. It turns its back for a beat.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-st-snivy-miss",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-snivy-miss",
+        "min": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-failed",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "item",
+            "id": "miracle-seed",
+            "count": 1
+           },
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-snivy"
+           }
+          ],
+          "text": "The Snivy watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-failed",
+          "min": 1,
+          "then": [],
+          "text": "The Snivy turns away for good. Some doors only open twice."
+         },
+         {
+          "kind": "flag",
+          "key": "gn-st-failed",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-snivy-miss",
+        "min": 0,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-snivy-2"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Behind it.",
+     "success": {
+      "text": "It stops. A follower is no better than a leader. It turns its back for a beat.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-st-snivy-miss",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-snivy-miss",
+        "min": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-failed",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "item",
+            "id": "miracle-seed",
+            "count": 1
+           },
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-snivy"
+           }
+          ],
+          "text": "The Snivy watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-failed",
+          "min": 1,
+          "then": [],
+          "text": "The Snivy turns away for good. Some doors only open twice."
+         },
+         {
+          "kind": "flag",
+          "key": "gn-st-failed",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-snivy-miss",
+        "min": 0,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-snivy-2"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-snivy-3",
+   "name": "Snivy: Three Tests: When It Wins",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snivy",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "A wild Pokémon wanders too close. The Snivy deals with it in two moves, perfectly, and then looks at you.",
+   "choices": [
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You say nothing. The Snivy holds your gaze a moment longer, and then, for the first time, almost smiles. It walks at your side from then on.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-st-trust",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-snivy-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-trust",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-family",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "village-standing",
+            "min": 2,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "setFlag",
+              "key": "gn-st-chose",
+              "n": 1
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "village-standing",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "gn-st-chose",
+            "n": 1
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Well done!\"",
+     "success": {
+      "text": "It turns its back for a beat. Praise is for those who need it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-st-snivy-miss",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-snivy-miss",
+        "min": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-failed",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "item",
+            "id": "miracle-seed",
+            "count": 1
+           },
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-06-st-snivy"
+           }
+          ],
+          "text": "The Snivy watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-failed",
+          "min": 1,
+          "then": [],
+          "text": "The Snivy turns away for good. Some doors only open twice."
+         },
+         {
+          "kind": "flag",
+          "key": "gn-st-failed",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-snivy-miss",
+        "min": 0,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-snivy-3"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-chespin",
+   "name": "Chespin: The Festival Food",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "chespin",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "The festival food is gone. All of it. A Chespin sits in the empty pot, round as a ball, licking its paws.\n\nSomebody has to cook it again. The Chespin climbs out of the pot to help, which means tasting.",
+   "choices": [
+    {
+     "label": "Start cooking.",
+     "success": {
+      "text": "Six things on the table: Oran, Pecha, Rawst, Tamato, Chesto, and a pinch of salt. It likes three.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-chespin-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-chespin-2",
+   "name": "Chespin: First Ingredient",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "chespin",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "The Chespin sniffs each one. Its ears go up at one of them.",
+   "choices": [
+    {
+     "label": "Oran.",
+     "success": {
+      "text": "Its ears stay up. In it goes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-chespin-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tamato.",
+     "success": {
+      "text": "It sneezes, hard. The pot goes over.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-chespin"
+         }
+        ],
+        "text": "The Chespin watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Chespin turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Chesto.",
+     "success": {
+      "text": "It eats it, and falls asleep in the flour.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-chespin"
+         }
+        ],
+        "text": "The Chespin watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Chespin turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-chespin-3",
+   "name": "Chespin: Second Ingredient",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "chespin",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "It is reaching for the bowl. Again.",
+   "choices": [
+    {
+     "label": "Stop it tasting.",
+     "success": {
+      "text": "You move the bowl. It looks betrayed. Then it points, firmly, at the Pecha.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-chespin-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it taste.",
+     "success": {
+      "text": "It tastes. And tastes. When you look again there is nothing left but the spoon.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-chespin"
+         }
+        ],
+        "text": "The Chespin watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Chespin turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-chespin-4",
+   "name": "Chespin: The Last Two",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "chespin",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "Pecha, then. And one more. The Chespin is leaning on your arm.",
+   "choices": [
+    {
+     "label": "Pecha and Rawst.",
+     "success": {
+      "text": "It tastes the finished pot (once, you allow it) and closes its eyes in bliss. At the festival, it sits on your knee the whole night.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-st-trust",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-chespin-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-trust",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-family",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "village-standing",
+            "min": 2,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "setFlag",
+              "key": "gn-st-chose",
+              "n": 1
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "village-standing",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "gn-st-chose",
+            "n": 1
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pecha and salt.",
+     "success": {
+      "text": "It spits. The whole village hears it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-chespin"
+         }
+        ],
+        "text": "The Chespin watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Chespin turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pecha and Tamato.",
+     "success": {
+      "text": "Its quills go up all at once. Nobody eats that.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-chespin"
+         }
+        ],
+        "text": "The Chespin watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Chespin turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-rowlet",
+   "name": "Rowlet: The Rescue",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "rowlet",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "A Rowlet is stuck in a chimney. It is asleep. It has been asleep, the village thinks, for two days.\n\nThe chimney is on the far side of the village. To get there at night, you must pass three sleeping Pokémon without waking anyone.",
+   "choices": [
+    {
+     "label": "Go at midnight.",
+     "success": {
+      "text": "The moon is thin. Everything is very quiet, and very close.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-rowlet-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-rowlet-2",
+   "name": "Rowlet: The Night Patrol: the Snorlax",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "rowlet",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "A Snorlax across the path, snoring like a bellows.",
+   "choices": [
+    {
+     "label": "Climb over it, softly.",
+     "success": {
+      "text": "Its eyes open. It sits up. So does every light in the village.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-rowlet"
+         }
+        ],
+        "text": "The Rowlet watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Rowlet turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go round by the fence.",
+     "success": {
+      "text": "Round by the fence, between the posts. It snores on.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-rowlet-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-rowlet-3",
+   "name": "Rowlet: The Night Patrol: the Growlithe",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "rowlet",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "A Growlithe asleep on a step, one ear twitching.",
+   "choices": [
+    {
+     "label": "Walk past downwind.",
+     "success": {
+      "text": "The wind takes your smell away. The ear stops twitching.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-rowlet-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk past quickly.",
+     "success": {
+      "text": "It wakes, and barks, and barks.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-rowlet"
+         }
+        ],
+        "text": "The Rowlet watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Rowlet turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-rowlet-4",
+   "name": "Rowlet: The Night Patrol: the Hoothoot",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "rowlet",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "A Hoothoot on the chimney's own roof, eyes shut, one foot tucked up.",
+   "choices": [
+    {
+     "label": "Wait for it to turn its head.",
+     "success": {
+      "text": "It turns its head, all the way round, the other way. You climb.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-rowlet-5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Climb while it sleeps.",
+     "success": {
+      "text": "Hoothoot never fully sleep. It hoots. Lights come on.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-rowlet"
+         }
+        ],
+        "text": "The Rowlet watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Rowlet turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-rowlet-5",
+   "name": "Rowlet: The Chimney",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "rowlet",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "You reach down into the chimney. Feathers. Warm. Still asleep.",
+   "choices": [
+    {
+     "label": "Lift it out.",
+     "success": {
+      "text": "You lift it out. It does not wake. You carry it home and put it on your bag, and go to sleep. In the morning it is on your head, awake, looking around as if it has always lived there.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-st-trust",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-rowlet-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-trust",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-family",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "village-standing",
+            "min": 2,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "setFlag",
+              "key": "gn-st-chose",
+              "n": 1
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "village-standing",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "gn-st-chose",
+            "n": 1
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-grookey",
+   "name": "Grookey: The Lost Stick",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "grookey",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "A Grookey sits on a stump, drumming on its knees. It has lost its stick, and its rhythm with it. The beat keeps falling apart in its hands.",
+   "choices": [
+    {
+     "label": "Find it a stick.",
+     "success": {
+      "text": "You bring the first stick. It holds it, taps it once, and throws it over its shoulder. Too light.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-grookey-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-grookey-2",
+   "name": "Grookey: Another Stick",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "grookey",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "The second stick is better. It taps it twice. It throws it too. Too straight, somehow.",
+   "choices": [
+    {
+     "label": "Find a third.",
+     "success": {
+      "text": "The third stick is crooked, and dark, and heavy at one end. It taps it. It taps it again. It grins.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-grookey-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-grookey-3",
+   "name": "Grookey: The Drum Pattern",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "grookey",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "It plays a pattern on the stumps, and holds the stick out to you. *Long. Short. Short. Long.* Your turn.",
+   "choices": [
+    {
+     "label": "Long, short, short, long.",
+     "success": {
+      "text": "You play it back. It plays it again, louder, faster, and the whole village starts clapping along. It finds the beat. It keeps it. It keeps you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-st-trust",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-grookey-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-trust",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-family",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "village-standing",
+            "min": 2,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "setFlag",
+              "key": "gn-st-chose",
+              "n": 1
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "village-standing",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "gn-st-chose",
+            "n": 1
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Short, long, long, short.",
+     "success": {
+      "text": "It stops. It looks at the stick. The beat falls apart again.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-grookey"
+         }
+        ],
+        "text": "The Grookey watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Grookey turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Long, long, short, short.",
+     "success": {
+      "text": "Close. Not close enough. It sits back down on its stump.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-grookey"
+         }
+        ],
+        "text": "The Grookey watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Grookey turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-sprigatito",
+   "name": "Sprigatito: The Thief",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "sprigatito",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "A Sprigatito strolls up, takes the Berry right out of your hand, and walks off with it. Not fast. It wants you to see.",
+   "choices": [
+    {
+     "label": "Chase it.",
+     "success": {
+      "text": "You run. It runs. It is having the best day of its life.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-sprigatito-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit down, and ignore it.",
+     "success": {
+      "text": "You sit. You look at the trees. After a while there is a small weight in your lap: the Berry, a bit chewed. The Sprigatito sits down next to you, pretending it was always there.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-st-trust",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-sprigatito-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-trust",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-family",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "village-standing",
+            "min": 2,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "setFlag",
+              "key": "gn-st-chose",
+              "n": 1
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "village-standing",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "gn-st-chose",
+            "n": 1
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-sprigatito-2",
+   "name": "Sprigatito: The Chase: the Orchard",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "sprigatito",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "Through the orchard. It stops, looks back, and waits until you are nearly close enough.",
+   "choices": [
+    {
+     "label": "Keep chasing.",
+     "success": {
+      "text": "Over the fence. It is laughing at you, somehow.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-sprigatito-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit down, and ignore it.",
+     "success": {
+      "text": "You sit, in the grass. You do not look. In a while it comes back by itself and drops the Berry in your lap, and sits, and leans on you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-st-trust",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-sprigatito-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-trust",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-family",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "village-standing",
+            "min": 2,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "setFlag",
+              "key": "gn-st-chose",
+              "n": 1
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "village-standing",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "gn-st-chose",
+            "n": 1
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-st-sprigatito-3",
+   "name": "Sprigatito: The Chase: the Mill Roof",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "sprigatito",
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "Up onto the mill roof. It sits on the ridge, Berry in its mouth, tail swishing, very pleased.",
+   "choices": [
+    {
+     "label": "Climb up and catch it.",
+     "success": {
+      "text": "You catch it. It goes limp in your arms and lets you have the Berry. But it does not look at you again. Catching it was never the win.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "item",
+          "id": "miracle-seed",
+          "count": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-st-sprigatito"
+         }
+        ],
+        "text": "The Sprigatito watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-failed",
+        "min": 1,
+        "then": [],
+        "text": "The Sprigatito turns away for good. Some doors only open twice."
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-failed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit down, and ignore it.",
+     "success": {
+      "text": "You sit down on the ground below, your back to the mill. A long while later there is a thump on the grass, and the Berry rolls against your hand. Then the Sprigatito climbs into your lap.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-st-trust",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gn-st-sprigatito-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-st-trust",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "gn-st-family",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "village-standing",
+            "min": 2,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "setFlag",
+              "key": "gn-st-chose",
+              "n": 1
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "village-standing",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "gn-st-chose",
+            "n": 1
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-cerulean-bridge",
+   "name": "Nugget Bridge",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Trainer"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "types": [
+    "normal",
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3b28",
+    "effect": "none"
+   },
+   "intro": "The bridge north of Cerulean. A rope bridge, slung across a gorge so deep the river at the bottom is only a sound.\n\nIt creaks before you are even on it. The planks are grey with age, and every third one has been mended with something that was not meant to be a plank.\n\nThere is no other way across. The road behind you has already decided that for you.",
+   "choices": [
+    {
+     "label": "Step onto the bridge.",
+     "success": {
+      "text": "You put one foot on the first plank. It takes your weight with a long, complaining groan, like an old man getting out of a chair.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn-bridge-fall",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-bridge-held",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "roll",
+          "key": "gn-bridge-fall",
+          "n": 50
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-bridge-held",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "roll",
+          "key": "gn-bridge-fall",
+          "n": 75
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-bridge-fall",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "village-standing",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-st-trust",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-st-chose",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-st-failed",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-st-water",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-st-snivy-miss",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-st-chiko-thanked",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-bridge-fall",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "kanto-bridge-fell",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "gn-bridge-fell-count",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "pick",
+          "key": "gn-village-starter",
+          "weights": [
+           1,
+           1,
+           1,
+           1,
+           1,
+           1,
+           1,
+           1,
+           1
+          ]
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-06-bank"
+         }
+        ],
+        "text": "A plank goes. Then the rope. The river comes up fast. Dark. Then birdsong, and the smell of woodsmoke, and your lead licking your face."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-bridge-fall",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "gn-bridge-held",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-span-1"
+         }
+        ],
+        "text": "It holds. The ropes are older than they look. Next time, perhaps not."
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.cerulean.bridge"
+  }
+ ]
+}

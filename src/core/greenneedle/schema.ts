@@ -28,7 +28,7 @@ export const bindGnEffects = (schema: z.ZodType): void => {
  *  - `stampStage`: the run flag `key` remembers the stage number now (read with the `gn` conditions `laterStage`, `sameStage`, `notThisStage`).
  *  - `partyHas`: the run flag `key` becomes 1 when a party Pokémon is one of `species`, else 0 (a Clefairy or Clefable sees the secret dance).
  */
-export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage'] as const;
+export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach'] as const;
 export const GnEffectSchema = z.object({
   kind: z.literal('gn'),
   op: z.enum(GN_OPS),
@@ -48,7 +48,11 @@ export const GnEffectSchema = z.object({
   .refine((e) => (e.op === 'pick' ? !!e.key && !!e.weights : true), { message: 'a pick needs `key` and `weights`' })
   .refine((e) => (e.op === 'roll' || e.op === 'capFlag' || e.op === 'setFlag' || e.op === 'stageMod' ? !!e.key && e.n !== undefined : true), { message: 'needs `key` and `n`' })
   .refine((e) => (e.op === 'scene' || e.op === 'fossil' || e.op === 'stampRegion' || e.op === 'stampStage' ? !!e.key : true), { message: 'needs `key`' })
-  .refine((e) => (e.op === 'partyHas' ? !!e.key && !!e.species : true), { message: 'a partyHas needs `key` and `species`' });
+  .refine((e) => (e.op === 'partyHas' ? !!e.key && !!e.species : true), { message: 'a partyHas needs `key` and `species`' })
+  // leadBoost: the lead's next battle opens with stat `type` at `n` stages ("the lead starts its next battle at -1 Speed").
+  .refine((e) => (e.op === 'leadBoost' ? ['atk', 'def', 'spa', 'spd', 'spe', 'acc'].includes(e.type ?? '') && !!e.n : true), { message: 'a leadBoost needs a stat `type` and `n`' })
+  // itemEach: one of item `key` for every party Pokémon ("one Berry each for the party").
+  .refine((e) => (e.op === 'itemEach' ? !!e.key : true), { message: 'an itemEach needs `key` (the item)' });
 export type GnEffect = z.infer<typeof GnEffectSchema>;
 
 /**
@@ -57,10 +61,11 @@ export type GnEffect = z.infer<typeof GnEffectSchema>;
  *  - `notThisRegion`: the run flag `key` was not stamped in the region the player is in now (never stamped counts: "at most once per region").
  *  - `laterStage` / `sameStage` / `notThisStage`: against the stage stamped in `key` (`stampStage`): a later stage than it, the same stage,
  *    or any stage but it (never stamped counts as "not this stage").
+ *  - `notRegion`: the run is in none of the regions listed in `types` (a Greenneedle event that Kanto shows through its own canon space).
  *  - `noMoveType`: no party Pokémon knows a move of any of `types` (the mine's pickaxe is for a party with no Fighting, Steel or Ground move).
  */
-export const GnCondSchema = z.object({ kind: z.literal('gn'), test: z.enum(['regionChanged', 'notThisRegion', 'laterStage', 'sameStage', 'notThisStage', 'noMoveType']), key: Key.optional(), types: z.array(z.string().min(1)).min(1).max(6).optional() })
-  .refine((c) => (c.test === 'noMoveType' ? !!c.types : !!c.key), { message: 'noMoveType needs `types`, the others need `key`' });
+export const GnCondSchema = z.object({ kind: z.literal('gn'), test: z.enum(['regionChanged', 'notThisRegion', 'laterStage', 'sameStage', 'notThisStage', 'noMoveType', 'notRegion']), key: Key.optional(), types: z.array(z.string().min(1)).min(1).max(6).optional() })
+  .refine((c) => (c.test === 'noMoveType' || c.test === 'notRegion' ? !!c.types : !!c.key), { message: 'noMoveType and notRegion need `types` (move types / region ids), the others need `key`' });
 export type GnCond = z.infer<typeof GnCondSchema>;
 
 /**

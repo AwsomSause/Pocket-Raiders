@@ -1,0 +1,153 @@
+// Greenneedle part 2 (GREENNEEDLE_REWORKED_PLACED_2.md): gn.06 to gn.10, played through the real engine.
+import { describe, expect, it } from 'vitest';
+import { chainRooms, PSEUDO_CHAINS } from '../../src/core/dungeon/pseudo';
+import type { RunState } from '../../src/core/state';
+import { content } from './helpers';
+import { choose, flagOf, gnRun, lose, open, openSide, scene, setFlag, win } from './helpers/gnPlay';
+
+describe('gn.06 Bridge Crossing and the Hidden Village', () => {
+  const cross = (seed: string, held = 0) => {
+    const run = gnRun(seed);
+    setFlag(run, 'gn-bridge-held', held);
+    open(run, 'gn-06-bridge');
+    return choose(run, 'gn-06-bridge', 'Step onto the bridge.');
+  };
+  /** A seed that falls (or holds) on a first crossing. */
+  const seedWhere = (falls: boolean): string => {
+    for (let i = 0; i < 60; i++) if ((flagOf(cross(`gn06-${i}`).run, 'gn-bridge-fall') === 1) === falls) return `gn06-${i}`;
+    throw new Error('no seed');
+  };
+  const toVillage = (starter: number): RunState => {
+    let run = cross(seedWhere(true)).run;
+    expect(run.stage!.pseudo?.id).toBe('ps_gn_gorge');
+    setFlag(run, 'gn-village-starter', starter);
+    run = win(choose(run, 'gn-06-bank', 'Get up and keep moving.').run);
+    run = choose(run, 'gn-06-narrows', 'Wade across.').run;
+    run = win(choose(run, 'gn-06-path', 'Climb the steps.').run);
+    run = choose(run, 'gn-06-mill', 'Walk into the village.').run;
+    return choose(run, 'gn-06-village', 'Sit, and eat.').run;
+  };
+
+  it('is one check, can not be skipped, and the gorge is five nodes', () => {
+    expect(content.events.get('gn-06-bridge')!.choices.map((c) => c.label)).toEqual(['Step onto the bridge.']);
+    const chain = PSEUDO_CHAINS.find((c) => c.id === 'ps_gn_gorge')!;
+    expect(chainRooms(content, chain).map((r) => r.event)).toEqual(['gn-06-bank', 'gn-06-narrows', 'gn-06-path', 'gn-06-mill', 'gn-06-village']);
+    expect(content.coPlacement!.get('gn-06-bridge')).toMatchObject({ home: 10, window: [8, 12], sits: 'must-see', often: 'region', earliest: 2 });
+  });
+
+  it('holds about half the time; once it has held, the next crossing falls at 75%', () => {
+    let first = 0;
+    let second = 0;
+    for (let i = 0; i < 80; i++) {
+      first += flagOf(cross(`gn06-odds-${i}`).run, 'gn-bridge-fall');
+      second += flagOf(cross(`gn06-odds-${i}`, 1).run, 'gn-bridge-fall');
+    }
+    expect(first).toBeGreaterThan(25);
+    expect(first).toBeLessThan(55);
+    expect(second).toBeGreaterThan(first);
+  });
+
+  it('if it holds: five trainers in a row, then the offer; "Who\'s we" gives Intel and asks again', () => {
+    const r = cross(seedWhere(false));
+    expect(r.changes.join(' ')).toContain('Next time, perhaps not');
+    let run = r.run;
+    for (let i = 1; i <= 5; i++) run = win(choose(run, `gn-06-span-${i}`, i === 5 ? 'Battle the last one.' : 'Battle.').run);
+    run = choose(run, 'gn-06-offer', "Who's 'we'?").run;
+    expect(flagOf(run, 'intel')).toBe(1);
+    expect(scene(run, 'gn-06-offer-again').labels).toEqual(['No.', 'Yes.']);
+    const yes = win(choose(run, 'gn-06-offer-again', 'Yes.').run);
+    expect(flagOf(yes, 'rocket-recruit-offered')).toBe(1);
+    const no = choose(run, 'gn-06-offer-again', 'No.');
+    expect(no.changes.join(' ')).toContain('Nugget');
+    expect(flagOf(no.run, 'intel')).toBe(2);
+  });
+
+  it('a wet crossing leaves the lead a step slow for its next battle', () => {
+    let run = cross(seedWhere(true)).run;
+    run = win(choose(run, 'gn-06-bank', 'Get up and keep moving.').run);
+    run = choose(run, 'gn-06-narrows', 'Wade across.').run;
+    expect(run.party[0]!.boosts).toContainEqual({ kind: 'stage', stat: 'spe', stages: -1, turns: 99 });
+  });
+
+  it('three tasks raise Standing; Sprigatito chooses you when you sit and ignore it, and joins with Sucker Punch', () => {
+    let run = toVillage(9);
+    const before = run.party.length;
+    run = choose(run, 'gn-06-task-mill', 'Clear it yourself, by hand.').run;
+    run = choose(run, 'gn-06-task-food', 'Just sit down when asked.').run;
+    expect(flagOf(run, 'village-standing')).toBe(2);
+    run = choose(run, 'gn-06-st-sprigatito', 'Sit down, and ignore it.').run;
+    expect(flagOf(run, 'gn-st-chose')).toBe(1);
+    expect(scene(run, 'gn-06-rope').intro).toContain('Something is sitting on your bag');
+    run = win(choose(run, 'gn-06-rope', 'Climb.').run); // the join prompt is accepted
+    const joined = [...run.party, ...(run.box ?? [])].find((m) => m.speciesId === 'sprigatito');
+    expect(joined?.moves.map((m) => m.id)).toContain('sucker-punch');
+    expect(run.party.length + (run.box?.length ?? 0)).toBeGreaterThan(before);
+    expect(run.stage!.pseudo).toBeFalsy();
+  });
+
+  it('a failed episode gives a Miracle Seed and one retry; not enough Standing means it stays', () => {
+    let run = toVillage(9);
+    run = choose(run, 'gn-06-st-sprigatito', 'Chase it.').run;
+    run = choose(run, 'gn-06-st-sprigatito-2', 'Keep chasing.').run;
+    const caught = choose(run, 'gn-06-st-sprigatito-3', 'Climb up and catch it.');
+    expect(caught.changes.join(' ')).toContain('Miracle Seed');
+    run = win(caught.run);
+    run = choose(run, 'gn-06-st-sprigatito', 'Sit down, and ignore it.').run;
+    expect(flagOf(run, 'gn-st-trust')).toBe(1);
+    expect(flagOf(run, 'gn-st-chose')).toBe(0); // Standing 0
+    const left = win(choose(run, 'gn-06-rope', 'Climb.').run);
+    expect(left.party.some((m) => m.speciesId === 'sprigatito')).toBe(false);
+  });
+
+  it('owning its family raises the bar to Standing 3', () => {
+    let run = toVillage(1);
+    expect(flagOf(run, 'gn-st-family')).toBe(0);
+    setFlag(run, 'gn-st-family', 1);
+    run = choose(run, 'gn-06-task-mill', 'Clear it yourself, by hand.').run;
+    run = choose(run, 'gn-06-task-food', 'Cook something.').run;
+    setFlag(run, 'gn-st-trust', 1);
+    run = choose(run, 'gn-06-task-hat', 'Help him look.').run;
+    if (openSide(run)?.eventId === 'gn-06-task-lotad') run = choose(run, 'gn-06-task-lotad', 'Trade it a Berry.').run;
+    expect(flagOf(run, 'village-standing')).toBe(3);
+    expect(flagOf(run, 'gn-st-chose')).toBe(1);
+  });
+
+  it('Bulbasaur: three buckets (a spill costs one more), then the thieves; losing them is a fail, not the end', () => {
+    let run = toVillage(1);
+    for (let guard = 0; guard < 8 && flagOf(run, 'gn-st-water') < 3; guard++) {
+      const side = openSide(run)!;
+      const id = run.stage!.map.nodes.flatMap((n) => n.sides).find((x) => !x.used && x.eventId?.startsWith('gn-06-st-bulbasaur'))!.eventId!;
+      run = choose(run, id, scene(run, id).labels[0]!).run;
+      void side;
+    }
+    expect(flagOf(run, 'gn-st-water')).toBe(3);
+    const lost = lose(choose(run, 'gn-06-st-bulbasaur-thieves', 'Stand beside it.').run);
+    expect(lost.phase).toBe('map');
+    expect(flagOf(lost, 'gn-st-failed')).toBe(1);
+    expect(lost.stage!.map.nodes.flatMap((n) => n.sides).some((x) => !x.used && x.eventId === 'gn-06-st-bulbasaur')).toBe(true); // one retry
+  });
+
+  it('every starter has an episode that is opened in its village, with its egg move', () => {
+    for (const [n, id] of ['bulbasaur', 'chikorita', 'treecko', 'turtwig', 'snivy', 'chespin', 'rowlet', 'grookey', 'sprigatito'].entries()) {
+      expect(content.events.get(`gn-06-st-${id}`), id).toBeDefined();
+      const run = toVillage(n + 1);
+      expect(run.stage!.map.nodes.flatMap((x) => x.sides).some((x) => x.eventId === `gn-06-st-${id}`), id).toBe(true);
+    }
+  });
+
+  it('the notebook: telling leaves a sign at the next bridge (same run only)', () => {
+    const run = gnRun('gn06-notebook');
+    setFlag(run, 'gn-village-afterstory', 1);
+    open(run, 'gn-06-notebook');
+    const told = choose(run, 'gn-06-notebook', "Yes. It's lovely.").run;
+    expect(flagOf(told, 'village-told')).toBe(1);
+    expect(scene(told, 'gn-06-bridge').intro).toContain('SOUVENIRS');
+  });
+
+  it('Kanto shows the same check through its canon space, and the old canon scenes are retired', () => {
+    const kanto = content.events.get('cs-kanto-cerulean-bridge')!;
+    expect(kanto.canon).toBe('cs.kanto.cerulean.bridge');
+    expect(kanto.choices.map((c) => c.label)).toEqual(['Step onto the bridge.']);
+    expect(content.events.get('cs-kanto-cerulean-hv-t1')!.disabled).toBe(true);
+  });
+});
