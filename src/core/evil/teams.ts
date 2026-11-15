@@ -66,11 +66,80 @@ export function plannedEvilTeamId(content: Content, run: Pick<RunState, 'seed' |
   return teams[new Rng(hashSeed(`${run.seed}::evil-team`)).int(0, teams.length - 1)]!.id;
 }
 
+/**
+ * Catalog Overhaul SF13: one team runs each region's storyline, seven steps across that region. True unless the campaign schedules
+ * the beats itself (a Story Run: the Narrative Director owns them) or the run was saved under the old run-long story (`region` -1 with a team).
+ */
+export function regionalStory(content: Content, run: Pick<RunState, 'campaignId' | 'story'>): boolean {
+  if (content.campaigns.get(run.campaignId)?.evil) return false;
+  const s = run.story.evil;
+  return !s?.teamId || s.region >= 0;
+}
+
+/** The team a region's story goes to: a team that calls the region home first, else a seeded draw among teams not yet met (no stream rolled). */
+export function regionTeamId(content: Content, run: Pick<RunState, 'seed' | 'perkEffects' | 'story' | 'regionOrder' | 'regionIndex'>): string | null {
+  const s = run.story.evil;
+  const story = !!run.story.v2;
+  const drawable = content.evilTeams.teams.filter((t) => !t.roaming);
+  const own = drawable.filter((t) => t.storyOnly === story);
+  const all = own.length > 0 ? own : drawable;
+  const met = new Set((s?.past ?? []).map((p) => p.teamId));
+  const fresh = all.filter((t) => !met.has(t.id));
+  const pool = fresh.length > 0 ? fresh : all;
+  if (pool.length === 0) return null;
+  const here = run.regionOrder[run.regionIndex] ?? '';
+  const pick = (teams: EvilTeam[], key: string): string => teams[new Rng(hashSeed(`${run.seed}::${key}`)).int(0, teams.length - 1)]!.id;
+  const focus = (run.perkEffects ?? []).flatMap((m) => (m.kind === 'evilTeamFocus' ? m.teams : []));
+  const focused = pool.filter((t) => focus.includes(t.id));
+  if (focused.length > 0) return pick(focused, met.size === 0 ? 'evil-team' : `evil-team::${run.regionIndex}`);
+  const home = pool.filter((t) => t.home.includes(here));
+  if (home.length > 0) return pick(home, `evil-team-home::${here}`);
+  // A team is kept for its own region when this run still goes there.
+  const ahead = new Set(run.regionOrder.slice(run.regionIndex + 1));
+  const free = pool.filter((t) => !t.home.some((r) => ahead.has(r)));
+  return pick(free.length > 0 ? free : pool, met.size === 0 ? 'evil-team' : `evil-team::${run.regionIndex}`);
+}
+
+/** The run's remembered-flag key for a pack flag (`team.op_stopped.x` -> `ev:team-op-stopped-x`), as the `flag` effect and condition use it. */
+const mem = (key: string): string => `ev:${key}`;
+const bump = (run: RunState, key: string, by = 1): void => { run.story.flags[mem(key)] = Number(run.story.flags[mem(key)] ?? 0) + by; };
+
+/** Takes the lasting effects of Operations from regions the run has left off the run. */
+function dropRegionMods(run: RunState, s: EvilState): void {
+  const gone = s.mods.filter((m) => m.region !== run.regionIndex);
+  if (gone.length === 0) return;
+  for (const e of gone.flatMap((m) => m.effects)) {
+    const at = (run.perkEffects ?? []).findIndex((m) => JSON.stringify(m) === JSON.stringify(e));
+    if (at >= 0) run.perkEffects.splice(at, 1);
+  }
+  s.mods = s.mods.filter((m) => m.region === run.regionIndex);
+}
+
+/** The region's story is over (beaten, or the run moved on): Operations still running happen, and the team goes on the record. */
+function closeRegionStory(content: Content, run: RunState, s: EvilState): void {
+  const team = evilTeam(content, run);
+  if (team) for (const op of s.ops) if (op.outcome === 'running') resolveOp(content, run, team, op, 'succeeded');
+  if (s.teamId) s.past = [...s.past, { teamId: s.teamId, region: Math.max(0, s.region), end: s.end }];
+  Object.assign(s, { teamId: null, beat: 0, nextAt: 0, heat: 0, ops: [], villains: {}, defector: false, end: 'none', region: -1, planFirst: null });
+}
+
 /** Called as each stage begins (core/run.ts): counts stages, picks the team, ends a left-behind operation and starts this region's. */
 export function evilStageStart(content: Content, run: RunState): void {
   const s = evilOf(run);
   const cfg = evilConfig(content, run);
   s.stages += 1;
+  if (regionalStory(content, run)) {
+    if (s.teamId && s.region !== run.regionIndex) closeRegionStory(content, run, s);
+    dropRegionMods(run, s);
+    if (s.teamId || s.stages < cfg.firstStage || content.evilTeams.teams.length === 0) return;
+    // One team per region: a region whose team story already ended stays quiet.
+    if (s.past.some((p) => p.region === run.regionIndex)) return;
+    const team = content.evilTeams.teams.find((t) => t.id === regionTeamId(content, run));
+    if (!team) return;
+    Object.assign(s, { teamId: team.id, region: run.regionIndex, beat: 0, nextAt: s.stages });
+    tell(content, run, 'evil-team', `Rumours spread of ${team.name}. People say they mean to ${team.goal}.`, 55);
+    return;
+  }
   if (!s.teamId) {
     if (s.stages < cfg.firstStage || content.evilTeams.teams.length === 0) return;
     const team = content.evilTeams.teams.find((t) => t.id === plannedEvilTeamId(content, run))!;
@@ -96,7 +165,7 @@ export function evilConditionMet(content: Content, run: RunState, c: EvilConditi
   if (c.team !== undefined && s.teamId !== c.team) return false;
   if (c.beat !== undefined && (s.beat !== c.beat || s.stages < s.nextAt || s.end !== 'none')) return false;
   if (c.after !== undefined && s.beat < c.after) return false;
-  if (c.op !== undefined && runningOp(run)?.id !== c.op) return false;
+  if (c.op !== undefined && !s.ops.some((o) => o.id === c.op && o.region === run.regionIndex && o.outcome === 'running')) return false;
   if (c.heat !== undefined && s.heat < c.heat) return false;
   if (c.defector !== undefined && s.defector !== c.defector) return false;
   if (c.ends !== undefined && !c.ends.includes(s.end)) return false;
@@ -131,11 +200,13 @@ export function applyEvilEffect(content: Content, run: RunState, e: EvilEffect):
     s.beat += 1;
     // E2: the real plan comes out (beat 6): the climax is now scheduled, so the region's track rises once.
     if (s.beat === 6) { trackOnClimax(run, run.regionIndex); beginClimax(run, run.regionOrder[run.regionIndex]); }
+    // SF13 A7: The Plan shows all four Operations: from here each is a stop on the map until it is stopped or happens.
+    if (s.beat === 6 && s.region >= 0) for (const def of team.ops) if (!s.ops.some((o) => o.id === def.id && o.region === run.regionIndex)) s.ops.push({ id: def.id, region: run.regionIndex, outcome: 'running' });
     const cfg = evilConfig(content, run);
     // Story Run (Appendix S.7): after beat 6 the hideout waits for League entry (core/campaign/storyDirector.ts places it).
     // E1: the story's last beat comes after the final climax fight is won: the team's Leader is beaten for the Dossier.
     if (s.beat === 7) beatTeamLeaders(run, team.id);
-    s.nextAt = s.beat === 6 && cfg.hideoutAtLeague ? HIDEOUT_AT_LEAGUE : s.stages + cfg.beatEvery;
+    s.nextAt = s.beat === 6 && cfg.hideoutAtLeague ? HIDEOUT_AT_LEAGUE : s.stages + (s.region >= 0 ? 1 : cfg.beatEvery);
     words.push(s.beat === 7 ? `the ${team.name} story reaches its end` : `the ${team.name} story moves on (${s.beat}/7)`);
   }
   if (e.heat !== 0) {
@@ -143,9 +214,24 @@ export function applyEvilEffect(content: Content, run: RunState, e: EvilEffect):
     s.heat = Math.max(0, Math.min(content.evilTeams.config.heatMax, s.heat + e.heat));
     if (s.heat !== before) words.push(s.heat > before ? `${team.name} is angrier (heat ${s.heat})` : `${team.name} eases off (heat ${s.heat})`);
   }
+  if (e.planFirst && !s.planFirst) {
+    s.planFirst = e.planFirst;
+    const name = team.ops.find((o) => o.id === e.planFirst)?.name ?? e.planFirst;
+    bump(run, `team-${team.id}-plan-first-${e.planFirst}`);
+    words.push(`${name} is marked on your map: stop it first`);
+  }
   if (e.op) {
-    const op = runningOp(run);
+    const op = e.opId ? s.ops.find((o) => o.id === e.opId && o.region === run.regionIndex && o.outcome === 'running') : runningOp(run);
     if (op) words.push(resolveOp(content, run, team, op, e.op));
+  }
+  if (e.door) {
+    // Their dates have come. With the files at Jenny's, the first one still running is held back a stage: it only happens if the team outlasts the Hideout.
+    const left = s.ops.filter((o) => o.region === run.regionIndex && o.outcome === 'running');
+    const jenny = Number(run.story.flags[mem(`team-${team.id}-files-jenny`)] ?? 0) > 0;
+    left.forEach((op, i) => {
+      if (jenny && i === 0) { op.delayed = true; words.push(`Officer Jenny's raid is still holding up ${team.ops.find((o) => o.id === op.id)?.name ?? op.id}`); }
+      else words.push(resolveOp(content, run, team, op, 'succeeded'));
+    });
   }
   if (e.defect && !s.defector) {
     s.defector = true;
@@ -154,6 +240,9 @@ export function applyEvilEffect(content: Content, run: RunState, e: EvilEffect):
   }
   if (e.end && s.end === 'none') {
     s.end = e.end;
+    bump(run, `team-${team.id}-beaten`);
+    // An Operation Jenny held back never gets its date once the team is gone.
+    if (e.end !== 'allied') for (const op of s.ops) if (op.outcome === 'running' && op.delayed) { op.outcome = 'foiled'; bump(run, `team-op-stopped-${op.id}`); bump(run, `team-${team.id}-op-stopped`); }
     const text = e.end === 'defeated' ? `${team.ranks.leader.name} is beaten and ${team.name} falls apart.` : e.end === 'exposed' ? `${team.name} is exposed to the world and flees the region.` : `You made a deal with ${team.ranks.leader.name}. ${team.name} answers to no one now.`;
     tell(content, run, `evil-end-${e.end}`, text, 90);
     words.push(text);
@@ -169,11 +258,19 @@ function resolveOp(content: Content, run: RunState, team: EvilTeam, op: EvilStat
   const def = team.ops.find((o) => o.id === op.id);
   const cons = def ? content.evilTeams.consequences[def.kind] : undefined;
   const stopped = outcome === 'foiled' || outcome === 'infiltrated';
-  const side = cons ? (stopped ? cons.stopped : cons.through) : null;
   const key = `evil:op:${op.id}:${op.region}`;
-  if (side && !run.story.flags[key]) {
+  // SF13 Part D: an Operation with its own lasting effect leaves that on the region when it happens (and nothing extra when stopped).
+  const lasting = def?.lasting;
+  const side = lasting ? (stopped ? null : { text: lasting.text, effects: lasting.effects }) : cons ? (stopped ? cons.stopped : cons.through) : null;
+  if (!run.story.flags[key]) {
     run.story.flags[key] = true;
-    run.perkEffects = [...(run.perkEffects ?? []), ...side.effects];
+    bump(run, stopped ? `team-op-stopped-${op.id}` : `team-op-done-${op.id}`);
+    if (stopped) bump(run, `team-${team.id}-op-stopped`);
+    if (side && lasting) {
+      evilOf(run).mods.push({ region: op.region, effects: side.effects });
+      for (const f of lasting.flags) bump(run, f);
+    }
+    if (side) run.perkEffects = [...(run.perkEffects ?? []), ...side.effects];
   }
   // R9: an operation that goes through (lost or left alone) is a failed raid: the team impounds some of your Pokémon, once per operation.
   const impoundKey = `evil:impound:${op.id}:${op.region}`;
@@ -223,9 +320,24 @@ export function evilBattle(content: Content, run: RunState, b: TrainerBattle): E
   }
   if (team.rule.kind === 'shadow') shadow = Math.max(shadow, 1);
   size = Math.max(1, Math.min(6, size));
+  let species = rank.species.slice(0, size);
+  // SF13 A4: they studied you. On a rematch the last slot is the counter to your party's most common type.
+  if (b.evilStudy && rec.met > 0) {
+    const counter = cfg.counters[commonType(content, run) ?? ''];
+    if (counter && content.species.has(counter) && !species.includes(counter)) species = [...species.slice(0, Math.max(0, size - 1)), counter];
+  }
   // The meeting counts as theirs until you win it (evilBattleWon).
   s.villains[key] = { met: rec.met + 1, won: rec.won, lost: rec.lost + 1, last: 'lost' };
-  return { name: rank.name, species: rank.species.slice(0, size), size, levelBonus, shadow: Math.min(shadow, size) };
+  return { name: rank.name, species, size, levelBonus, shadow: Math.min(shadow, size) };
+}
+
+/** The type most of your party shares (ties go to the lead's first type, then to the earlier type name). Null with an empty party. */
+export function commonType(content: Content, run: Pick<RunState, 'party'>): string | null {
+  const count = new Map<string, number>();
+  for (const p of run.party) for (const t of content.species.get(p.speciesId)?.types ?? []) count.set(t, (count.get(t) ?? 0) + 1);
+  if (count.size === 0) return null;
+  const lead = content.species.get(run.party[0]?.speciesId ?? '')?.types[0];
+  return [...count.entries()].sort((a, b) => b[1] - a[1] || Number(b[0] === lead) - Number(a[0] === lead) || a[0].localeCompare(b[0]))[0]![0];
 }
 
 /** You won an Evil Team battle: the villain remembers it. */

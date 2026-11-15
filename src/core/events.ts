@@ -47,6 +47,7 @@ import { keepsakeEvent } from './story2/keepsakes';
 import { deliverLegacyEgg, legacyEggWaiting } from './memories/heirloom';
 import { noteChoice } from './memories/world';
 import { applyEvilEffect, evilBattle, evilBattleWon, evilConditionMet, evilConditionText, evilTeam } from './evil/teams';
+import { fillEventText, resolveEventId } from './evil/text';
 import { shapeInstances, strategyIdForGroup } from './bossStrategy';
 import { choiceMade, recordChoice } from './evil/choices';
 import { recordCast } from './expansion/cast/dossier';
@@ -882,7 +883,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
     run.afterDecisions = 'map';
     continueAfterDecisions(content, run);
   }
-  return { run, success, text: outcome.text, changes, battle };
+  return { run, success, text: fillEventText(content, current, outcome.text), changes, battle };
 }
 
 function useUpKeyItem(run: RunState, id: string): void {
@@ -1498,11 +1499,14 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       celebrateToday(content, run);
       return effectWords(content, e);
     case 'addEvent': {
-      if (routeChainEvent(content, run, e.eventId)) return effectWords(content, e);
+      // SF13 Hideout: a room id may name the region's team (`evil-{teamId}-hideout-boss`); with no team it opens nothing.
+      const eventId = resolveEventId(run, e.eventId);
+      if (!eventId || !content.events.has(eventId)) return '';
+      if (routeChainEvent(content, run, eventId)) return effectWords(content, e);
       const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
-      here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId: e.eventId });
+      here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId });
       // The room is seen again later even if it was played before.
-      if (run.itemCounters) delete run.itemCounters[`event-seen:${e.eventId}`];
+      if (run.itemCounters) delete run.itemCounters[`event-seen:${eventId}`];
       return effectWords(content, e);
     }
     case 'enterPseudo': {

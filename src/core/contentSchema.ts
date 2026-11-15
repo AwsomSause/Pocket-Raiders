@@ -3166,6 +3166,12 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
     beat: z.boolean().default(false),
     heat: z.number().int().default(0),
     op: z.enum(['foiled', 'infiltrated', 'succeeded', 'joined']).optional(),
+    /** Catalog Overhaul SF13: with `op`, the Operation it ends (a team runs four at once after The Plan); without it, the first one still running. */
+    opId: z.string().optional(),
+    /** SF13 A7 The Plan: the Operation the player means to stop first (it is marked and must be met). */
+    planFirst: z.string().optional(),
+    /** SF13 A8: the player is at the Hideout door: every Operation still running happens now (one is held back when Jenny has the files). */
+    door: z.boolean().optional(),
     talk: z.enum(['grunt', 'specialist', 'executive', 'leader']).optional(),
     defect: z.boolean().default(false),
     end: z.enum(['defeated', 'exposed', 'allied']).optional(),
@@ -3344,6 +3350,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     evil: z.enum(['grunt', 'specialist', 'executive', 'leader']).optional(),
     /** Grand Arc: with `evil`, fight this roaming team (cipher, rocket-remnants, snagem) instead of the run's own team. */
     evilTeam: z.string().optional(),
+    /** Catalog Overhaul SF13 A4: with `evil`, the villain has studied you: once you have met before, their team carries a counter to your party's most common type (evilTeams.json `config.counters`). */
+    evilStudy: z.boolean().optional(),
     /** Stand With Them: this is a Stand-with climax battle. A loss is Second Shot (the party is healed and you go back to the map; the second loss is the worst ending). Needs `pseudo`. */
     standWith: z.boolean().optional(),
     /** Shadow Boxing: the foe is a copy of your lead (same species, its level plus `levelBonus`); `size` is ignored. */
