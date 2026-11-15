@@ -103,6 +103,8 @@ export const PokemonInstanceSchema = z.object({
   abilitySlot: z.number().int().min(-1).default(0),
   /** Poli-Pond (Beta 0.7): the Poliwag of the story (or what it grew into) carries its lessons here. Optional, so older saves load as they are. */
   pond: PondMarkSchema.optional(),
+  /** Greenneedle events: story marks this Pokémon carries (`duelist:caterpie` = the forest duelist, caught as a Caterpie). Optional, so older saves load as they are. */
+  gn: z.array(z.string()).optional(),
   /** An ability it was given outright (Squirtle Squad's Contrary); it beats the slot. Optional, so older saves load as they are. */
   fixedAbility: z.string().optional(),
   /** Pidgey's Resolve (Beta 0.7): Mega Evolves with no Mega Stone and takes the ability Sky's Resolve while Mega. Optional, so older saves load as they are. */

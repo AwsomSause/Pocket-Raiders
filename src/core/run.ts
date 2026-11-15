@@ -18,6 +18,7 @@ import { finishSpectate } from './sky/spectate';
 import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
+import { gnAfterTurn, gnShape } from './greenneedle';
 import { applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, refusesToLeave, returnedBug } from './instrumentality/flightNorth';
 import { applySecondChance, secondChanceOpen, secondChanceRolls } from './instrumentality/secondChance';
 import { hearTelling, noteEvent as notePromiseEvent, resolveVisit, rollVisit, wonderAfterBattle } from './instrumentality/promises';
@@ -3089,7 +3090,9 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const bonded = shapeAction(content, run, action);
   // Poli-Pond: the Poliwag's nerves (or the bully's tricks in the rematch) can change the command before it is played.
   const nerves = pondShape(content, run, bonded.action);
-  const shaped = { action: nerves.action, events: [...bonded.events, ...nerves.events] as typeof bonded.events };
+  // Greenneedle events: a named fight rule may answer the command (the Samurai's Pinsir waits out a guard).
+  const gn = gnShape(content, run, nerves.action);
+  const shaped = { action: gn.action, events: [...bonded.events, ...nerves.events, ...gn.events] as typeof bonded.events };
   const wasForced = battle.needsSwitch;
   const outgoing = run.party[battle.activeIndex]?.uid;
   const enemyBefore = battle.enemyIndex;
@@ -3160,6 +3163,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   events.push(...ruleEvolution(content, run));
   // Poli-Pond: shyness ends after the first battle, the rematch is a duel, and the pond's return (Release or Reconcile) strikes.
   events.push(...(pondAfterTurn(content, run) as typeof events));
+  // Greenneedle events: stories that count fights (the forest duelist) take their count once the fight is won.
+  events.push(...(gnAfterTurn(content, run) as typeof events));
   // A rival's battle style may do something now (berserker rage, revenge, last stand).
   const trick = styleTrick(content, run);
   if (trick) events.push(trick);

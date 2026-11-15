@@ -4,6 +4,7 @@
 
 import { NATURE_IDS } from './natures';
 import { z } from 'zod';
+import { bindGnEffects, GnEffectSchema, GnRuleFields } from './greenneedle/schema';
 import { ANIME_LOOKS } from './animeLooks';
 import { GRADES as PROMPT_GRADES } from './interaction/prompt';
 import { UltraRuleIdSchema } from './ultra/beasts';
@@ -2989,6 +2990,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Beta 0.6 Vermilion Flight North: the whole party is taken away (kept in run.expansion.canon.stash) until `restoreParty` or a lost fight inside the stage hands it back. */
   /** Poli-Pond (core/episodes/poliPond.ts): one step of the story. `lesson` names the lesson (with `lesson`); `firstTry` is true when it was taught on the first retry. */
   z.object({ kind: z.literal('pond'), action: z.enum(['begin', 'lesson', 'guilty', 'rematchWon', 'keep', 'release', 'reconcile', 'returnJoin']), lesson: z.enum(['aim', 'footing', 'stand']).optional(), firstTry: z.boolean().default(false), gentle: z.boolean().default(false) }),
+  /** Greenneedle events: one story step (core/greenneedle). */
+  GnEffectSchema,
   z.object({ kind: z.literal('stashParty') }),
   /** Beta 0.6 Vermilion Flight North: the stashed party returns. Whoever is in the party now (the Bug-type) leaves. Does nothing when nothing is stashed. */
   z.object({ kind: z.literal('restoreParty') }),
@@ -3176,6 +3179,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('choice'), id: z.string().regex(/^[a-z][a-z0-9-]*$/), pick: z.string().min(1), text: z.string().min(1), weight: z.number().int().min(1).max(3).default(1) }),
 ]);
 export type EventEffect = z.infer<typeof EventEffectSchema>;
+bindGnEffects(EventEffectSchema);
 
 /** A battle an outcome starts; `win` effects apply only if you win it. Wild Pokémon can be caught. */
 /**
@@ -3186,6 +3190,8 @@ export type EventEffect = z.infer<typeof EventEffectSchema>;
  * `foeAsleep`: the foe's Pokémon start asleep. `reversed`: your last conscious Pokémon leads. `stages`: both sides start with these stat stages.
  */
 export const EventRuleSchema = z.object({
+  /** Greenneedle events (core/greenneedle/schema.ts): a named rule, the marked Pokémon that leads, and one-sided starting stat stages. */
+  ...GnRuleFields,
   /** Beta 0.7 U1: an Ultra Beast's rule holds in this fight (home-world fights), for both sides. */
   ultra: UltraRuleIdSchema.optional(),
   /** Poli-Pond rematch: a one-on-one duel; the story Poliwag leads and cannot be switched out, and the fight is lost if it goes down. */
@@ -3301,6 +3307,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     pseudo: z.boolean().optional(),
     /** The field is forced to this weather for the whole fight (Cold Nights Rain). */
     weather: WeatherSchema.optional(),
+    /** Catalog Overhaul (Greenneedle): rarer foes. Each entry is tried in order on its own seeded roll (`chance` 0 to 1, only while run flag `flag` is set when given); the first hit replaces the foe ("10%: a Pinsir", "1% in the fog: Shedinja"). */
+    rare: z.array(z.object({ species: z.array(z.string().min(1)).min(1), chance: z.number().min(0).max(1), flag: z.string().optional() })).max(3).optional(),
     /** The wild Pokémon is one that beat a party member earlier this run (catalog 28). */
     recall: z.boolean().default(false),
     /** Battles in a row at this stop without healing in between (a detour); `win` pays after the last. */
@@ -3399,6 +3407,8 @@ export type EventOutcome = z.infer<typeof EventOutcomeSchema>;
 export const EventChoiceSchema = z.object({
   label: z.string().min(1),
   requires: z.array(EventConditionSchema).default([]),
+  /** Catalog Overhaul (Greenneedle): the choice is not listed at all unless these hold (a locked choice stays visible; this one does not). Write a partner choice for the other case so a scene never runs out of choices. */
+  showIf: z.array(EventConditionSchema).optional(),
   /** An attribute check: success chance = base% + 1% per point, clamped (balance.events). */
   check: PlainAttributeSchema.optional(),
   /** A plain chance of success (0–1), for luck rolls without an attribute. */

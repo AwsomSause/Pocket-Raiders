@@ -9,6 +9,7 @@
 // one seeded by the stop. No existing stream is touched, so adding events
 // changes no other roll, and choosing again after a reload gives the same result.
 
+import { applyGnEffect, gnBattleStart } from './greenneedle';
 import { modifierEventWeight } from './runModifiers';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
 import { PSEUDO, enterPseudoStage, leavePseudoStage, routeChainEvent } from './dungeon/pseudo';
@@ -919,6 +920,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return `swap ${e.want.label}`;
     case 'pond':
       return '';
+    case 'gn':
+      return '';
     case 'stashParty':
       return 'your Pokémon are taken away';
     case 'restoreParty':
@@ -1195,6 +1198,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     }
     case 'pond':
       return applyPondEffect(content, run, e);
+    case 'gn':
+      return applyGnEffect(content, run, e, { float: () => rng.float(), apply: (x) => applyEffect(content, run, x as EventEffect, rng, tradeUid) });
     case 'stashParty':
       return stashParty(run) ? 'Your Pokémon are taken away' : '';
     case 'restoreParty':
@@ -1609,7 +1614,8 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
   prepareSpectate(content, run, event.eventId);
   const lastAlive = b.kind === 'trainer' && b.rule?.reversed ? run.party.map((p) => p.hp > 0).lastIndexOf(true) : -1;
   const pondLead = b.kind === 'trainer' && b.rule?.pondDuel ? run.party.findIndex((p) => p.pond && p.hp > 0) : -1;
-  const dueler = pondLead >= 0 ? pondLead : b.kind === 'trainer' && b.rule?.leadType ? run.party.findIndex((p) => p.hp > 0 && getSpecies(content, p.speciesId).types.includes(b.rule!.leadType!)) : -1;
+  const marked = b.kind === 'trainer' && b.rule?.leadMark ? run.party.findIndex((p) => p.hp > 0 && p.gn?.some((t) => t === b.rule!.leadMark || t.startsWith(`${b.rule!.leadMark}:`))) : -1;
+  const dueler = pondLead >= 0 ? pondLead : marked >= 0 ? marked : b.kind === 'trainer' && b.rule?.leadType ? run.party.findIndex((p) => p.hp > 0 && getSpecies(content, p.speciesId).types.includes(b.rule!.leadType!)) : -1;
   const activeIndex = dueler >= 0 ? dueler : lastAlive >= 0 ? lastAlive : run.party.findIndex((p) => p.hp > 0);
   const base = (b.kind !== 'raid' ? b.level : undefined) ?? (b.kind === 'trainer' && b.rule?.matchLead ? run.party[activeIndex]!.level + b.levelBonus : eventLevel(content, run, node, rng) + b.levelBonus);
   // Event foes stay under the region's level cap like every ordinary enemy (Balancing Phase 7).
@@ -1624,7 +1630,10 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     return;
   }
   if (b.kind === 'wild') {
-    const speciesId = (b.recall ? oldFoe(run) : null) ?? pickSpecies(content, run, b.species, b.types, rng);
+    // Greenneedle: a rarer foe, rolled on its own stream so no other roll moves.
+    const rareRng = b.rare?.length ? new Rng(hashSeed(`${run.seed}::event-rare::${event.eventId}::${stageKey(run)}::${event.sideId}`)) : null;
+    const rare = rareRng ? b.rare!.find((r) => (!r.flag || Number(run.story.flags[`ev:${r.flag}`] ?? 0) > 0) && rareRng.float() < r.chance) : undefined;
+    const speciesId = (b.recall ? oldFoe(run) : null) ?? (rare ? rareRng!.pick(rare.species.filter((x) => content.species.has(x))) : pickSpecies(content, run, b.species, b.types, rng));
     const level = Math.min(cap, Math.max(1, base));
     const enemy = newMon(content, run, evolvedFormAt(content, speciesId, level, rng), level, 'e');
     enemy.shiny = rollShiny(content, rng, runAttributeEffects(content, run).shinyChance * b.shinyMultiplier);
@@ -1723,6 +1732,8 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
         run.battle.playerStages[stat as 'atk'] = n;
         run.battle.enemyStages[stat as 'atk'] = n;
       }
+      for (const [stat, n] of Object.entries(b.rule.myStages ?? {})) run.battle.playerStages[stat as 'atk'] = n;
+      for (const [stat, n] of Object.entries(b.rule.foeStages ?? {})) run.battle.enemyStages[stat as 'atk'] = n;
     }
     if (b.ally && content.species.has(b.ally) && team.length >= 2) {
       // A temporary ally joins the party for this fight only (finishBattle sends it home).
@@ -1741,6 +1752,8 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
   if (event.eventId.startsWith('cs-kanto-lavender-rock')) run.battle.accuracyMult = 0.9;
   // Veridian Forest fog: every fight inside the forest has its accuracy cut by a tenth.
   if (event.eventId.startsWith('cs-kanto-pewter-forest') && Number(run.story.flags['ev:kanto-forest-fog'] ?? 0) > 0) run.battle.accuracyMult = 0.9;
+  // Greenneedle events: fog in the forest, a trusting duelist (core/greenneedle).
+  gnBattleStart(content, run);
   for (const mon of run.battle.enemyTeam) discover(run, mon.speciesId, false);
   run.phase = 'battle';
   recordBattleStarted(content, run);

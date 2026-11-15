@@ -954,7 +954,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
     actions.forEach((a0, index) => {
       let a = a0;
       if (anyFainted(playerC, enemy) || a.user.mon.hp <= 0) return;
-      if (a.user.side === 'enemy' && (enemyActed || loseFreeTurn(battle, events) || blissfulCalm(ctx, enemy, events) || foeStands(ctx, enemy, events))) return;
+      if (a.user.side === 'enemy' && (enemyActed || loseFreeTurn(battle, events) || blissfulCalm(ctx, enemy, events) || foeStands(ctx, enemy, events) || gnFoeWaits(ctx, enemy, events))) return;
       // Shadow II: a Veiled Pokémon may hesitate; a Gripped or Fallen one may use a move of its own choosing. Decided (and shown) before the turn.
       if (a.user.side === 'player' && a.user.mon.shadow) {
         const plan = shadowTurnPlan(a.user.mon, battle.turn, turnStartState);
@@ -971,7 +971,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
       }
       actWithRage(ctx, a.user, enemy, events, () => executeMove(ctx, a.user, a.target, a.move, a.slot, index === 0, events));
     });
-  } else if (!enemyActed && !loseFreeTurn(battle, events) && !blissfulCalm(ctx, enemy, events) && !foeStands(ctx, enemy, events)) {
+  } else if (!enemyActed && !loseFreeTurn(battle, events) && !blissfulCalm(ctx, enemy, events) && !foeStands(ctx, enemy, events) || gnFoeWaits(ctx, enemy, events)) {
     actWithRage(ctx, enemy, enemy, events, () => executeMove(ctx, enemy, playerC, enemyMove, enemyMoveIndex, false, events));
   }
   recordFaints(ctx, playerC, enemy, events);
@@ -1625,6 +1625,16 @@ function ballRuleProblem(ctx: Pick<BattleContext, 'battle'>, rule: Extract<ItemE
 }
 
 /** A Blissful wild Pokémon is calm: it watches you instead of attacking. */
+/** Greenneedle events: a `gn-foe-waits:<line>` token (core/greenneedle) costs the foe its next attack and shows the line. */
+function gnFoeWaits(ctx: BattleContext, enemy: Combatant, events: BattleEvent[]): boolean {
+  const i = ctx.battle.storyEffects.findIndex((e) => e.startsWith('gn-foe-waits:'));
+  if (i < 0) return false;
+  const [token] = ctx.battle.storyEffects.splice(i, 1);
+  if (enemy.mon.hp <= 0) return false;
+  events.push({ type: 'raid', tone: 'info', text: token!.slice('gn-foe-waits:'.length) });
+  return true;
+}
+
 /** Route 25: with the `foeStands` rule the foe holds its ground for the first turns and does not attack. */
 function foeStands(ctx: BattleContext, enemy: Combatant, events: BattleEvent[]): boolean {
   const turns = ctx.battle.eventRule?.foeStands;
@@ -2527,6 +2537,8 @@ function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
   if (ability === 'silent-cloak' && !c.vol.cloakUsed) return move.priority + 1;
   if ((ability === 'champions-fury' || ability === 'champions-entrance') && !c.vol.furyUsed && move.category !== 'status') return move.priority + 1;
   if (c.side === 'player' && c.vol.movesUsed.length === 0 && ctx.battle.storyEffects.includes(`kind:${c.mon.uid}`)) return move.priority + 1;
+  // Samurai Slash: the first time it is used in a battle it strikes first (and flinches, see flinchFirstUse).
+  if (move.effects.flinchFirstUse && !c.vol.movesUsed.includes(move.id)) return move.priority + 1;
   if (ability === 'gale-wings' && move.type === 'flying' && c.mon.hp >= calcStats(ctx.content, c.mon).hp) return move.priority + 1;
   if (ability === 'triage' && (move.effects.heal || move.effects.drain)) return move.priority + 3;
   if (ability === 'mycelium-might' && move.category === 'status') return move.priority - 0.5;

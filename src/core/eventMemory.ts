@@ -31,11 +31,12 @@ export const choiceAt = (event: EventDef | undefined, index: number): EventChoic
 /** What the player sees: the variant's intro and the visible choices, each with its stable index. */
 export function visibleChoices(content: Content, run: RunState, event: EventDef): { index: number; choice: EventChoice }[] {
   const v = activeVariant(content, run, event);
-  const base = event.choices.map((choice, index) => ({ index, choice })).filter((c) => !v || !v.hide.includes(c.index));
+  const shown = (c: { choice: EventChoice }): boolean => !c.choice.showIf || c.choice.showIf.every((x) => conditionMet(content, run, x));
+  const base = event.choices.map((choice, index) => ({ index, choice })).filter((c) => (!v || !v.hide.includes(c.index)) && shown(c));
   if (!v) return base;
   let at = event.choices.length;
   for (const other of event.remembers) {
-    if (other.id === v.id) return [...base, ...v.addChoices.map((choice, i) => ({ index: at + i, choice }))];
+    if (other.id === v.id) return [...base, ...v.addChoices.map((choice, i) => ({ index: at + i, choice })).filter(shown)];
     at += other.addChoices.length;
   }
   return base;
@@ -44,7 +45,7 @@ export function visibleChoices(content: Content, run: RunState, event: EventDef)
 /** The event as the player sees it now: remembered intro, hidden and added choices applied (indices are positions in the view). */
 export function effectiveEvent(content: Content, run: RunState, event: EventDef): EventDef {
   const v = activeVariant(content, run, event);
-  if (!v) return event;
+  if (!v) return event.choices.some((c) => c.showIf) ? { ...event, choices: visibleChoices(content, run, event).map((c) => c.choice) } : event;
   const intro = [v.intro ?? event.intro, v.notice].filter(Boolean).join(' ');
   return { ...event, intro, choices: visibleChoices(content, run, event).map((c) => c.choice) };
 }
