@@ -145,7 +145,9 @@ export function boardProgress(tag: string): { pct: number; state: 'New' | 'Activ
 
 /** The mock-ups' `board` template. A list longer than one screen scrolls with the focused row and says where it is. */
 export function boardView(c: ReduxCtx, d: BoardModel): string {
-  const grid = c.v(2) === 1, size = boardSize(c), n = d.rows.length;
+  const grid = c.v(2) === 1, n = d.rows.length;
+  // A long text box (three lines or more) grows up over the last row of the one-column list: show one row fewer then.
+  const size = boardSize(c) - (!grid && Math.ceil(d.text.length / 76) >= 3 ? 1 : 0);
   const index = Math.max(0, Math.min(n - 1, d.index));
   // The two-column layout scrolls a whole line (two cards) at a time.
   const from = grid ? gridStart(n, index, size, 2) : scrollStart(n, index, size);

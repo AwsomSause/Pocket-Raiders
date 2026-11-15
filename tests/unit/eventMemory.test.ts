@@ -95,10 +95,14 @@ describe('memory flag registry', () => {
     const setKeys = new Set<string>();
     const reads: string[] = [];
     for (const ev of content.events.values()) {
-      for (const ch of allChoices(ev)) for (const o of [ch.success, ch.failure]) for (const e of [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle?.lose ?? [])]) {
-        if (e.kind === 'flag') setKeys.add(e.key);
-        // Rival questlines set flags through their own effect (set, pick, roll).
-        if (e.kind === 'rivalQuest') for (const k of [e.set?.key, e.pick?.key, e.roll?.key]) if (k) setKeys.add(k);
+      // Setters: outcome effects, a battle's win and lose effects (a friendly fight's loss still applies its own), and choice branches.
+      for (const ch of allChoices(ev)) {
+        for (const o of [ch.success, ch.failure]) for (const e of [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle?.lose ?? [])]) {
+          if (e.kind === 'flag') setKeys.add(e.key);
+          // Rival questlines set flags through their own effect (set, pick, roll).
+          if (e.kind === 'rivalQuest') for (const k of [e.set?.key, e.pick?.key, e.roll?.key]) if (k) setKeys.add(k);
+        }
+        for (const b of ch.branches ?? []) for (const e of b.effects) if (e.kind === 'flag') setKeys.add(e.key);
       }
       for (const v of ev.remembers) for (const c of v.when) if (c.kind === 'flag') reads.push(`${ev.id}:${c.key}`);
     }

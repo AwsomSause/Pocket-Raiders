@@ -43,6 +43,8 @@ export interface PickerRow {
   item?: string;
   /** A Pokémon row: its look, its HP left (0 to 1) and a short mark ("IN BATTLE", "FNT"). The New UI's battle window draws these. */
   mon?: { speciesId: string; shiny: boolean; hp: number; mark: string };
+  /** A board row said outright (the New UI's Bond screen): the line under the name, a bar (0 to 100) and a tag. */
+  board?: { title: string; sub: string; pct: number; tag: string };
 }
 
 export interface PickerConfig {
@@ -276,6 +278,7 @@ export class Picker implements PickerLike {
         hint: (i) => config.rows[i]?.hint ?? '',
         item: (i) => config.rows[i]?.item,
         mon: (i) => config.rows[i]?.mon,
+        board: (i) => config.rows[i]?.board,
         top: win?.top,
         tabs: config.tabs,
         canBack: Boolean(config.onBack),

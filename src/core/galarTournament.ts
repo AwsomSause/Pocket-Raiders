@@ -288,6 +288,24 @@ export function bracketView(content: Content, run: RunState): BracketView {
   return { rounds, wins, standing: remaining(b, wins).map(name), featured };
 }
 
+export interface BracketTreeSlot { id: string; name: string; you: boolean; /** Their best-known Pokémon (species id), or null. */ ace: string | null }
+export interface BracketTree {
+  /** Rounds the player has won (0 to 5). */
+  wins: number;
+  /** Who stands after 0, 1, ... `wins` rounds, in bracket order: 32, 16, 8, 4, 2 and, once the final is won, the champion. */
+  lines: BracketTreeSlot[][];
+}
+
+/** The whole bracket as a tree, for the New UI's bracket screen. Only rounds already played are listed; read only. */
+export function bracketTree(content: Content, run: RunState): BracketTree {
+  const stage = run.stage;
+  const rivalIds = run.story.rivals.map((r) => r.name.toLowerCase()).filter((id) => content.bosses.has(id));
+  const b = buildBracket({ runSeed: run.seed, championId: stage?.leaderId ?? GALAR_TOURNAMENT.champion, rivalIds });
+  const wins = Math.min(GALAR_TOURNAMENT.rounds, Math.max(0, (stage?.visited.length ?? 0) - (run.battle ? 1 : 0)));
+  const slot = (id: string): BracketTreeSlot => ({ id, name: id === PLAYER_SLOT ? 'You' : (content.bosses.get(id)?.name ?? id), you: id === PLAYER_SLOT, ace: content.bosses.get(id)?.signature?.[0] ?? null });
+  return { wins, lines: Array.from({ length: wins + 1 }, (_, c) => remaining(b, c).map(slot)) };
+}
+
 // ---------- watching another match (a short deterministic replay) ----------
 
 export interface ReplayBeat { text: string; hpA: number; hpB: number }

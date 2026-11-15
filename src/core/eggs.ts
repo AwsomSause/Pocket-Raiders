@@ -154,6 +154,8 @@ export function tickEggs(content: Content, run: RunState, unit: Egg['unit']): Po
   if (run.eggs.length === 0) return [];
   const hatched: PokemonInstance[] = [];
   const warmth = eggWarmth(content, run);
+  // Marigold's Shell: an Egg counting now hatches one step sooner (with at least one step passed: this one).
+  const sooner = eggsHatchSooner(content, run);
   const kept: Egg[] = [];
   for (const egg of run.eggs) {
     let left = egg.unit === unit ? egg.left - 1 : egg.left;
@@ -165,7 +167,7 @@ export function tickEggs(content: Content, run: RunState, unit: Egg['unit']): Po
         left -= 1;
       }
     }
-    if (left > 0) {
+    if (left > (sooner && egg.unit === unit ? 1 : 0)) {
       kept.push({ ...egg, left, heat });
       continue;
     }
@@ -187,6 +189,9 @@ export function eggWarmth(content: Content, run: Pick<RunState, 'party'> & MapIt
   // Oval Charm: two more warmth per step, which is one extra step.
   return warm + (hasPerk(content, run, 'ovalCharm') ? EGGS.warmPerStep : 0);
 }
+
+/** Marigold's Shell: every Egg hatches one battle (or stage) sooner. */
+export const eggsHatchSooner = (content: Content, run: MapItemRun): boolean => hasPerk(content, run, 'eggSooner');
 
 /** A night at camp (or any warm spot): every Egg gets `steps` closer to hatching, but never hatches by it (it keeps at least 1 left). Returns how many Eggs moved. */
 /** Run counter for the extra friendship an Egg's Pokémon is born with (co/neRules.ts eggWarm). */
@@ -223,15 +228,16 @@ export function eggProgress(egg: Egg): number {
 export const eggRevealed = (egg: Egg): boolean => egg.kind !== 'mystery' || eggProgress(egg) >= EGGS.revealAt;
 
 /** "Rare Egg (Event) [###-----] Hatches in 3 stages" with a small progress bar, for menus. */
-export function eggLabel(egg: Egg): string {
+export function eggLabel(egg: Egg, sooner = false): string {
   const filled = Math.round(eggProgress(egg) * 8);
   const bar = `[${'#'.repeat(filled)}${'-'.repeat(8 - filled)}]`;
   const name = eggRevealed(egg) ? `${eggTier(egg.tier).name} Egg` : 'Mystery Egg';
-  return `${name} (${egg.source}) ${bar} ${eggStatus(egg)}`;
+  return `${name} (${egg.source}) ${bar} ${eggStatus(egg, sooner)}`;
 }
 
-/** "Hatches after 3 more battles" for menus. */
-export function eggStatus(egg: Egg): string {
+/** "Hatches after 3 more battles" for menus (`sooner`: Marigold's Shell is held, one fewer). */
+export function eggStatus(egg: Egg, sooner = false): string {
   const what = egg.unit === 'battle' ? 'battle' : 'stage';
-  return egg.left <= 1 ? `Hatches after the next ${what}` : `Hatches in ${egg.left} ${what}s`;
+  const left = sooner ? Math.max(1, egg.left - 1) : egg.left;
+  return left <= 1 ? `Hatches after the next ${what}` : `Hatches in ${left} ${what}s`;
 }

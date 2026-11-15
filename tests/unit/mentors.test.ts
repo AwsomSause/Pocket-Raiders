@@ -134,13 +134,15 @@ describe('mentor events', () => {
     const ids = eligibleEvents(content, run).filter((e) => e.group === 'Mentors').map((e) => e.id);
     expect(ids).toContain('mentor-ravi-ironhand-lesson');
     expect(ids).not.toContain('mentor-marigold-hatch-lesson');
-    expect(ids).toContain('mentor-training-session');
+    // The shared scenes (STORY_FAMILIES_5.md MS1-MS12) wait for the run's Lesson; they still need a mentor.
+    expect(ids).not.toContain('mentor-training-session');
+    expect(content.events.get('mentor-training-session')!.requires).toContainEqual({ kind: 'mentor' });
     expect(ids).not.toContain('mentor-graduation-trial');
   });
 
   it('every stage offers exactly one mentor event, picked from a stream of its own', () => {
     const run = start('e-stop');
-    run.stage = { index: 0 } as never;
+    run.stage!.index = 0;
     const open = new Set(eligibleEvents(content, run).map((e) => e.id));
     const a = mentorStopEvent(content, run, open);
     expect(a).not.toBeNull();
@@ -239,7 +241,7 @@ describe('the fellow apprentice as a real battle', () => {
   };
   const duel = (seed: string) => {
     const run = start(seed);
-    const index = content.events.get('mentor-fellow-duel')!.choices.findIndex((c) => c.label === 'Spar for real');
+    const index = content.events.get('mentor-fellow-duel')!.choices.findIndex((c) => c.label === '"Any rules."');
     return { run, result: chooseEvent(content, atEvent(run, 'mentor-fellow-duel'), 'test-event', index) };
   };
 
@@ -280,9 +282,9 @@ describe('the fellow apprentice as a real battle', () => {
     expect(cur.mentor!.rivalry).toBe(-2);
   });
 
-  it('there is a bigger showdown later, gated by trust and stage', () => {
+  it("there is a bigger showdown later, gated by the run's Lesson", () => {
     const ev = content.events.get('mentor-apprentice-showdown')!;
-    expect(ev.minStage).toBe(4);
+    expect(ev.requires.some((c) => c.kind === 'flag' && c.key === 'mentor-lesson')).toBe(true);
     expect(ev.choices[0]!.success.battle).toMatchObject({ kind: 'trainer', apprentice: true, size: 3 });
   });
 });
