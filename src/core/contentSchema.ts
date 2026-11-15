@@ -2772,7 +2772,7 @@ export type MaxMoveData = z.infer<typeof MaxMoveDataSchema>;
 // ---------- map events ("?" stops; plans/events-and-map-stops-plan) ----------
 
 /** The one signature animation each event scene plays. */
-export const EVENT_EFFECTS = ['none', 'rattle', 'spin', 'flicker', 'glint', 'shake', 'float', 'net', 'rain', 'sparkle', 'fog', 'fire', 'snow', 'hearts'] as const;
+export const EVENT_EFFECTS = ['none', 'rattle', 'spin', 'flicker', 'glint', 'shake', 'float', 'net', 'rain', 'sparkle', 'fog', 'fire', 'snow', 'hearts', 'confetti'] as const;
 
 /** Something an event or one of its choices needs; a locked choice stays visible with its requirement. */
 export const EventConditionSchema = z.discriminatedUnion('kind', [
@@ -3240,6 +3240,8 @@ export const EventRuleSchema = z.object({
   bstMatch: z.boolean().optional(),
   /** Saffron canon: when your only Pokémon would faint, the ghost calls the other spirits, the foe goes down instead and you win (Sabrina's Labyrinth). */
   ghostRescue: z.boolean().optional(),
+  /** Beta 0.7 Sabrina's Labyrinth opening: you have no Pokémon of your own here, so the first fight is lost the moment you act. */
+  noPokemon: z.boolean().optional(),
   /** Beta 0.7 Sabrina's Labyrinth: each turn one of your move slots is false (shows one move, does another); every second turn the companion marks it. */
   falseSlot: z.boolean().optional(),
   surviveTurns: z.number().int().min(1).max(30).optional(),
@@ -3355,6 +3357,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     lineup: z.array(z.string()).optional(),
     /** Beta 0.6: draw this foe with a named character's own sprite (a boss id, e.g. "sabrina"). */
     sprite: z.string().optional(),
+    /** Poli-Pond: draw this foe's "trainer" as this Pokémon's own front sprite (a species id) instead of a human. */
+    spritePokemon: z.string().optional(),
     levelBonus: z.number().int().default(0),
     chain: z.number().int().min(1).max(3).default(1),
     /** Run events B: the field is forced to this weather / terrain for the whole fight (Umbrella Squad). */
@@ -3405,6 +3409,8 @@ export const EventSceneSchema = z.object({
   /** Backdrop tint as "#rrggbb". */
   tint: z.string().regex(/^#[0-9a-f]{6}$/i).optional(),
   effect: z.enum(EVENT_EFFECTS).default('none'),
+  /** Beta 0.7 Fighting Tournament: the bracket strip is drawn on this event. 0 = sign-up, 1 to 5 = that round is next, 6 = the champion's cutscene. */
+  tourney: z.number().int().min(0).max(6).optional(),
 });
 
 // ---------- game events (Untitled doc §17, plan Part 4b): weekly and holiday events ----------

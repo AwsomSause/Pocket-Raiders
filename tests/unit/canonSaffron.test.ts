@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { createBattle, resolveTurn, type BattleContext } from '../../src/core/battle/engine';
-import { chooseEvent, conditionMet, eventBattleLost, eventBattleWon } from '../../src/core/events';
+import { eligibleEvents, chooseEvent, conditionMet, eventBattleLost, eventBattleWon } from '../../src/core/events';
 import { createPokemon, abilityOf } from '../../src/core/pokemon';
-import { chooseStarter, createRun, debugForceEvent } from '../../src/core/run';
+import { chooseStarter, createRun, debugForceEvent, takeTurn } from '../../src/core/run';
 import { hashSeed, Rng } from '../../src/core/rng';
 import { applyCanonEffect, ghostReturnEvent, ghostReturns, labRetryEvent, leaveCanonStash, nearestBst, restoreStash, ruleEvolution } from '../../src/core/expansion/canonSaffron';
 import { falseSlotFor } from '../../src/core/expansion/labyrinth';
+import { tourneyBracket, TOURNEY_ROUNDS } from '../../src/core/expansion/tourney';
 import { evolutionTarget } from '../../src/core/evolution';
 import { RunStateSchema } from '../../src/core/state';
 import { content } from './helpers';
@@ -414,10 +415,78 @@ describe("Sabrina's Labyrinth rebuilt", () => {
   });
 });
 
+describe("Sabrina's Labyrinth: the opening in a normal run", () => {
+  const plain = (seed: string) => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red' }), 0);
+  it('the general opener is a pseudo-stage event any run can draw (no Kanto setting needed)', () => {
+    const ev = content.events.get('ev-sabrina-labyrinth')!;
+    expect(ev.pseudo).toBe(true);
+    expect(ev.canon).toBeFalsy();
+    expect(ev.minStage).toBeLessThanOrEqual(3);
+    const run = plain('LAB-DRAW');
+    run.stage!.index = 3;
+    expect(eligibleEvents(content, run).some((e) => e.id === 'ev-sabrina-labyrinth')).toBe(true);
+  });
+  it('you are sent in with no Pokémon, lose a fight because of it, and the ghost then offers to help', () => {
+    let run = structuredClone(plain('LAB-OPEN'));
+    run.party = [createPokemon(content, 'pikachu', 30, 'a'), createPokemon(content, 'eevee', 30, 'b')];
+    const opener = debugForceEvent(content, structuredClone(run), 'ev-sabrina-labyrinth');
+    const entered = chooseEvent(content, opener.run, opener.sideId, 0);
+    run = structuredClone(entered.run);
+    expect(run.expansion!.canon!.stash).toHaveLength(2);
+    expect(run.party).toHaveLength(1);
+    const first = debugForceEvent(content, run, `${P}lab-lost`);
+    const fight = chooseEvent(content, first.run, first.sideId, 0);
+    expect(fight.battle).toBe(true);
+    expect(fight.run.battle!.eventRule?.noPokemon).toBe(true);
+    const res = takeTurn(content, structuredClone(fight.run), { kind: 'move', index: 0 });
+    expect(res.defeated).toBe(false);
+    expect(res.run.battle).toBeNull();
+    expect(res.run.phase).toBe('map');
+    expect(res.run.expansion!.canon!.lab!.active).toBe(true);
+    const here = res.run.stage!.map.nodes.find((n) => n.id === res.run.stage!.current)!;
+    expect(here.sides.some((sd) => sd.eventId === `${P}lab-ghost`)).toBe(true);
+  });
+});
+
 describe('Saved shapes', () => {
   it('a run with a stash and a Labyrinth record still parses', () => {
     const run = withParty('SV', ['pikachu', 'eevee']);
     eff(run, 'ghostStart');
     expect(RunStateSchema.safeParse(JSON.parse(JSON.stringify(run))).success).toBe(true);
+  });
+});
+
+describe('Fighting Tournament bracket and winning cutscene', () => {
+  const run = () => withParty('TB', ['mankey']);
+  it('every tournament event shows the bracket strip; the win beats show the champion podium', () => {
+    const now = (id: string) => room(id).scene.tourney;
+    expect(['tournament', 'tc'].map(now)).toEqual([0, 0]);
+    expect([1, 2, 3, 4].map((n) => now(`t${n}`))).toEqual([1, 2, 3, 4]);
+    expect([1, 2, 3, 4].map((n) => now(`tm${n}`))).toEqual([2, 3, 4, 5]);
+    expect(['t5a', 't5b', 't5c'].map(now)).toEqual([5, 5, 5]);
+    expect(['t-win1', 't-win2', 't-win3'].map(now)).toEqual([6, 6, 6]);
+  });
+  it('the final leads into the winning cutscene, three beats, after the title is given', () => {
+    const win = (room('t5a').choices[0]!.success.battle as unknown as { win: { kind: string; eventId?: string }[] }).win;
+    expect(win.findIndex((w) => w.kind === 'canon')).toBeLessThan(win.findIndex((w) => w.eventId === `${P}t-win1`));
+    expect(targets('t-win1')).toEqual([`${P}t-win2`]);
+    expect(targets('t-win2')).toEqual([`${P}t-win3`, `${P}t-win3`]);
+  });
+  it('the bracket has 32 entrants, you at the top, the named competitors in order, and the same every time', () => {
+    const a = tourneyBracket(content, run(), 1);
+    const b = tourneyBracket(content, run(), 1);
+    expect(a.entrants).toHaveLength(32);
+    expect(a.entrants[0]).toMatchObject({ you: true, species: 'mankey' });
+    expect(JSON.stringify(a)).toBe(JSON.stringify(b));
+    expect(a.survivors.map((c) => c.length)).toEqual([32, 16, 8, 4, 2, 1]);
+    expect(a.opponents.map((o) => o?.species)).toEqual(['machop', 'hawlucha', 'throh', 'hitmonchan', 'mankey']);
+    expect(a.opponents[4]).toMatchObject({ named: true, name: 'Rival Mankey' });
+    expect(TOURNEY_ROUNDS).toHaveLength(5);
+  });
+  it('rounds already played show who is out; the champion is the one left', () => {
+    const v = tourneyBracket(content, run(), 3);
+    expect(v.entrants.filter((e) => e.outIn > 0 && e.outIn <= 2)).toHaveLength(32 - 8);
+    const done = tourneyBracket(content, run(), 6);
+    expect(done.survivors[5]![0]).toMatchObject({ you: true });
   });
 });

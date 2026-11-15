@@ -494,6 +494,7 @@
    "requires": [],
    "scene": {
     "cast": [],
+    "tourney": 0,
     "effect": "none",
     "tint": "#7a3b2e"
    },
@@ -573,6 +574,7 @@
    "requires": [],
    "scene": {
     "cast": [],
+    "tourney": 0,
     "effect": "none",
     "tint": "#7a3b2e"
    },
@@ -631,6 +633,7 @@
    "requires": [],
    "scene": {
     "cast": [],
+    "tourney": 1,
     "effect": "none",
     "tint": "#7a3b2e"
    },
@@ -695,6 +698,7 @@
    "requires": [],
    "scene": {
     "cast": [],
+    "tourney": 2,
     "effect": "none",
     "tint": "#7a3b2e"
    },
@@ -794,6 +798,7 @@
    "requires": [],
    "scene": {
     "cast": [],
+    "tourney": 2,
     "effect": "none",
     "tint": "#7a3b2e"
    },
@@ -859,6 +864,7 @@
    "requires": [],
    "scene": {
     "cast": [],
+    "tourney": 3,
     "effect": "none",
     "tint": "#7a3b2e"
    },
@@ -958,6 +964,7 @@
    "requires": [],
    "scene": {
     "cast": [],
+    "tourney": 3,
     "effect": "none",
     "tint": "#7a3b2e"
    },
@@ -1022,6 +1029,7 @@
    "requires": [],
    "scene": {
     "cast": [],
+    "tourney": 4,
     "effect": "none",
     "tint": "#7a3b2e"
    },
@@ -1121,6 +1129,7 @@
    "requires": [],
    "scene": {
     "cast": [],
+    "tourney": 4,
     "effect": "none",
     "tint": "#7a3b2e"
    },
@@ -1186,6 +1195,7 @@
    "requires": [],
    "scene": {
     "cast": [],
+    "tourney": 5,
     "effect": "none",
     "tint": "#7a3b2e"
    },
@@ -1297,6 +1307,7 @@
    "requires": [],
    "scene": {
     "cast": [],
+    "tourney": 5,
     "effect": "none",
     "tint": "#7a3b2e"
    },
@@ -1343,6 +1354,10 @@
          "kind": "canon",
          "action": "unsolo",
          "species": []
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-t-win1"
         }
        ],
        "lose": [
@@ -1369,6 +1384,7 @@
    "requires": [],
    "scene": {
     "cast": [],
+    "tourney": 5,
     "effect": "none",
     "tint": "#7a3b2e"
    },
@@ -1415,6 +1431,10 @@
          "kind": "canon",
          "action": "unsolo",
          "species": []
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-t-win1"
         }
        ],
        "lose": [
@@ -1441,6 +1461,7 @@
    "requires": [],
    "scene": {
     "cast": [],
+    "tourney": 5,
     "effect": "none",
     "tint": "#7a3b2e"
    },
@@ -1487,6 +1508,10 @@
          "kind": "canon",
          "action": "unsolo",
          "species": []
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-t-win1"
         }
        ],
        "lose": [
@@ -1902,7 +1927,7 @@
     {
      "label": "Let her read your aura",
      "success": {
-      "text": "Your Poké Balls rattle against your belt, then go quiet, one by one, like children told to hush. The world tilts, and you are not holding your own weight anymore.",
+      "text": "Your Poké Balls rattle against your belt, then go quiet, one by one, like children told to hush. The world tilts, and when it settles you are standing in a violet corridor with empty hands.",
       "effects": [
        {
         "kind": "canon",
@@ -1919,7 +1944,7 @@
     {
      "label": "Take the guide’s special entrance",
      "success": {
-      "text": "Your Poké Balls rattle against your belt, then go quiet, one by one, like children told to hush. The world tilts, and you are not holding your own weight anymore.",
+      "text": "Your Poké Balls rattle against your belt, then go quiet, one by one, like children told to hush. The world tilts, and when it settles you are standing in a violet corridor with empty hands.",
       "effects": [
        {
         "kind": "canon",
@@ -2113,16 +2138,68 @@
     "effect": "fog",
     "tint": "#1b1030"
    },
-   "intro": "You are standing in a corridor of violet stone, and your Pokémon are not with you. They are scattered through the Labyrinth, each shut in a shadow lantern like a candle behind glass; you can feel them the way you feel a missing tooth. A hooded shape fills the passage ahead. You reach for a Poké Ball and your hand closes on nothing, and then you look down at the hand and see the floor through it. This fight was lost before it began, and you know it, and the thing in the hood knows it too. A tombstone pushes up through the floor with your own name half carved on it. Then the dark above you fills with wings that are not wings: a swarm of Ghost-types, hundreds of them, pours across the whole sky of the room, laughing without sound. When it has passed, one small ghost is left hovering at the height of your knee. It will not look straight at you. \"I can help you get your body back,\" it says. \"I know the way. Nobody ever asks me to.\"",
+   "intro": "You are standing in a corridor of violet stone, and you are alone. Your Poké Balls are gone from your belt, every one, and the belt is only a belt. Your Pokémon are scattered through the Labyrinth, each shut in a shadow lantern like a candle behind glass; you can feel them the way you feel a missing tooth. You have no Pokémon. You have nothing. A hooded shape fills the passage ahead, and it is not asking you anything. Something small and pale presses itself against the back of your legs, trembling, and does not come out.",
    "choices": [
     {
-     "label": "Fight the hooded shape anyway",
+     "label": "Stand your ground",
      "success": {
-      "text": "You swing at it with a fist that is only an idea. It does not even step back. The small ghost tugs your sleeve, gently: not that way. You let it lead you around the shape, and the shape lets you go, as if you were already something it had finished with.",
+      "text": "You square up to the hooded shape with empty hands.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Hooded Shape",
+       "size": 1,
+       "types": [
+        "ghost",
+        "psychic"
+       ],
+       "pseudo": true,
+       "rule": {
+        "noItems": true,
+        "noPokemon": true
+       },
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-lab-ghost"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-saffron-lab-ghost"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-lab-ghost",
+   "name": "Labyrinth: The Ghost Offers",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "effect": "fog",
+    "tint": "#1b1030"
+   },
+   "intro": "You lost, and it was never a fight: you had no Pokémon to send out, and the hooded shape knew it before you did. A tombstone pushes up through the floor with your own name half carved on it. Then the dark above you fills with wings that are not wings: a swarm of Ghost-types, hundreds of them, pours across the whole sky of the room, laughing without sound. When it has passed, the small pale thing that was hiding behind your legs finally floats up to the height of your knee. It will not look straight at you. \"I can help you get your body back,\" it says, \"and your Pokémon. I know the way. Nobody ever asks me to.\"",
+   "choices": [
+    {
+     "label": "Take its hand",
+     "success": {
+      "text": "It is warmer than you expected a ghost to be. \"Walk where I walk,\" it whispers. \"Put your feet where mine are not.\"",
       "effects": [
        {
         "kind": "flag",
-        "key": "lab-fought-first",
+        "key": "lab-ghost-offered",
         "amount": 1
        },
        {
@@ -2133,10 +2210,15 @@
      }
     },
     {
-     "label": "Back away and follow the ghost",
+     "label": "Ask why it would help you",
      "success": {
-      "text": "You back down the corridor until the wall is there. The small ghost presses close, and it is warmer than you expected a ghost to be. \"Walk where I walk,\" it whispers. \"Put your feet where mine are not.\"",
+      "text": "It thinks about this for a long time. \"Because you stood there with nothing,\" it says, \"and you did not run.\" Then it takes your sleeve in its small cold grip and leads you on.",
       "effects": [
+       {
+        "kind": "flag",
+        "key": "lab-ghost-offered",
+        "amount": 1
+       },
        {
         "kind": "addEvent",
         "eventId": "cs-kanto-saffron-lab-n1"
@@ -2905,6 +2987,124 @@
         }
        ]
       }
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-t-win1",
+   "name": "Tournament: The Bell",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tourney": 6,
+    "effect": "confetti",
+    "tint": "#7a3b2e"
+   },
+   "intro": "The bell rings, and for one heartbeat the whole building holds its breath. Then the noise comes down like a roof falling in. The young announcer has run out of words, and says so, loudly, three times. The old champion beside him takes off his broken-nosed grin, stands, and starts to clap, slowly, and the stadium catches it.",
+   "choices": [
+    {
+     "label": "Lift your fighter's paw",
+     "success": {
+      "text": "You lift it. The crowd lifts with you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-t-win2"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-t-win2",
+   "name": "Tournament: The Belt",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tourney": 6,
+    "effect": "confetti",
+    "tint": "#7a3b2e"
+   },
+   "intro": "The organizer walks out on to the mat with the belt across both her forearms like something asleep. She does not make a speech. She says your fighter's name, and then your name, and then, quieter: \"I watched every round.\" She buckles it around your fighter, who stands very still, trying not to cry, failing. Dynamic Punch is waiting in its paws, and something new in its chest: Champion's Entrance. Nobody will ever walk into a ring the same way again.",
+   "choices": [
+    {
+     "label": "Let it keep the belt",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "r25-food",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "In the stands, the whole Mankey troop is on its feet, hands over their heads, shrieking a name that is not quite your fighter's name and is exactly right. They came down from Route 25 to watch their own go up on the highest step. The sack of grain is still hanging from the rail.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-t-win3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it keep the belt",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "r25-food",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "It looks to the stands for the troop it never fed. There is no brown fur in the rows. It looks at you instead, and its grip on the belt does not loosen. You are the only crowd that matters now, and you are loud.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cs-kanto-saffron-t-win3"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "cs-kanto-saffron-t-win3",
+   "name": "Tournament: The Rival Bows",
+   "group": "Canon Spaces: Kanto",
+   "stop": "delve",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [],
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tourney": 6,
+    "effect": "confetti",
+    "tint": "#7a3b2e"
+   },
+   "intro": "Before the lights go down, the rival walks across the mat. It does not offer a hand. It bows, from the waist, and holds the bow. Then it straightens, takes something from around its own waist, and shows it to your fighter: a strip of red cloth, knotted. \"Next time,\" its trainer says. Your fighter nods once. The belt is heavier than it looks, and it is not heavy enough to hold the sound of the crowd that does not stop for a long time.",
+   "choices": [
+    {
+     "label": "Walk out under the lights",
+     "success": {
+      "text": "You walk out with your fighter beside you, belt on its hips. Your team is waiting at the rail, every one of them. Nobody says anything. Nobody has to.",
+      "effects": []
      }
     }
    ],

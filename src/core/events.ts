@@ -1674,6 +1674,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     if (shaped) team.splice(0, team.length, ...shaped.team);
     run.battle = createBattle('trainer', team, activeIndex, run.party[activeIndex]!.uid, { classId: b.classId ?? 'event', name: evil ? evil.name : rival ? rival.name : fellow ? fellow.name : b.kind === 'trainer' && b.friend ? friendName(run) : b.name, leaderId: null });
     if (b.kind === 'trainer' && b.sprite && run.battle.trainer) run.battle.trainer.spriteBoss = b.sprite;
+    if (b.kind === 'trainer' && b.spritePokemon && run.battle.trainer) run.battle.trainer.spritePokemon = b.spritePokemon;
     if (b.special) assignSpecialTrait(run.battle.extra.traits, team, b.special);
     // Pidgey's Resolve: the sparring Pidgey (and the rematch Pidgeot) is built from the story's state.
     assignStoryTraits(run.battle.extra.storyTraits, team, b.special, !!run.expansion?.storyTraits);
