@@ -66,7 +66,8 @@ export const status = (s: 'poison' | 'burn' | 'paralysis' | 'sleep'): Json => ({
 export type Who = 'lead' | 'party' | 'picked' | 'starter' | 'top' | 'firstCatch' | 'newest' | { types?: string[]; moveFlag?: string; species?: string[] };
 export const fr = (amount: number, who: Who = 'party'): Json => ({ kind: 'friendship', amount, who });
 /** The pack's "+N Bond": +5 friendship per point on one Pokémon, +3 each for the whole party (balance.co). */
-export const bondUp = (points = 1, who: Who = 'lead'): Json => fr(points * (who === 'party' ? 3 : 5), who);
+/** The pack's "+N Bond": the friendship comes from balance.co at play time (5 a point on one Pokémon, 3 each for the party). */
+export const bondUp = (points = 1, who: Who = 'lead'): Json => ({ kind: 'friendship', bond: points, who });
 /** "(a node)" as a cost: the next `nodes` ordinary nodes are spent on the work (no battle, no reward). */
 export const takeNode = (nodes = 1): Json => ({ kind: 'takeNode', nodes });
 /** "(a node back)": a step back along the road; nothing is refought, so it costs nothing. */

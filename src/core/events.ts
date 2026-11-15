@@ -91,7 +91,7 @@ import { earnRom, gainStock, grandArcOf, romById, romsHeld } from './grandArc';
 import { climaxCutOf } from './arc/climaxExtended';
 import { addMercy, changeRep, joinInsideMan, joinProblem, resolveVerdict, standWithClimaxWon, standWithOf, standWithPlayable, verdictsOpen } from './arc/standWithExtended';
 import { checkFlagKeys } from './shadow2/keys';
-import { bondLevel, bondLevelMet, fitsMatch, whoOf, whoWords } from './co/who';
+import { bondFriendship, bondLevel, bondLevelMet, fitsMatch, whoOf, whoWords } from './co/who';
 import { oweNodes } from './co/takeNode';
 import { clearNodeHold, setNodeBattle } from './co/attach';
 import { noteSpecial } from './expansion/fieldNotes';
@@ -1066,7 +1066,7 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'status':
       return `${e.who === 'lead' ? 'lead' : 'party'} ${e.status === 'paralysis' ? 'paralysed' : e.status === 'sleep' ? 'asleep' : e.status === 'burn' ? 'burned' : 'poisoned'}`;
     case 'friendship':
-      return `${e.who === 'party' ? '' : `${whoWords(e.who)}: `}friendship ${e.amount >= 0 ? '+' : ''}${e.amount}`;
+      return e.bond !== undefined ? `${e.who === 'party' ? 'everyone' : whoWords(e.who)}: Bond ${e.bond >= 0 ? '+' : ''}${e.bond}` : `${e.who === 'party' ? '' : `${whoWords(e.who)}: `}friendship ${e.amount >= 0 ? '+' : ''}${e.amount}`;
     case 'nodeBattle':
       return e.skip ? 'the fight here does not happen' : e.level ? `the fight here is ${e.level > 0 ? 'harder' : 'easier'}` : '';
     case 'takeNode':
@@ -1364,7 +1364,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'friendship': {
       const gain = runAttributeEffects(content, run).friendship;
       const who = whoOf(content, run, e.who, pickedUid);
-      for (const m of who) changeFriendship(content, m, e.amount, e.amount > 0 ? gain : 1);
+      const amount = e.bond !== undefined ? bondFriendship(content, e.bond, e.who) : e.amount;
+      for (const m of who) changeFriendship(content, m, amount, amount > 0 ? gain : 1);
       return who.length > 0 ? effectWords(content, e) : '';
     }
     case 'nodeBattle':

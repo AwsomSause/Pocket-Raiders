@@ -3044,7 +3044,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Restores every move's PP for the whole party (Erika's tea). */
   z.object({ kind: z.literal('restorePp') }),
   z.object({ kind: z.literal('status'), status: z.enum(['poison', 'burn', 'paralysis', 'sleep']), who: z.enum(['party', 'lead']).default('party'), except: z.array(TypeNameSchema).max(4).default([]) }),
-  z.object({ kind: z.literal('friendship'), amount: z.number().int(), who: CoWhoSchema.default('party') }),
+  /** `bond`: the pack's "+N Bond" in points; when set, the friendship is worked out from balance.co (core/co/who.ts) and `amount` is ignored. */
+  z.object({ kind: z.literal('friendship'), amount: z.number().int().default(0), bond: z.number().int().min(-5).max(5).optional(), who: CoWhoSchema.default('party') }),
   /** Catalog Overhaul: "(a node)" as a cost. The next `nodes` ordinary nodes on the path are spent on the work (no battle, no reward; core/co/takeNode.ts). `back`: "a node back", which costs nothing (battles already won are not refought). */
   /** Catalog Overhaul: an event placed before the node's battle changes it: `skip` (it does not happen) or `level` (stages easier or harder). core/co/attach.ts. */
   z.object({ kind: z.literal('nodeBattle'), skip: z.boolean().default(false), level: z.number().int().min(-2).max(2).default(0) }),

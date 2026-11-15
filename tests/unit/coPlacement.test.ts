@@ -38,6 +38,12 @@ describe('reading a placement block', () => {
     expect(readPlacement({ shape: 'Visit' })).toMatchObject({ home: 11, sits: 'side-branch' });
   });
 
+  it('leaves an entry placed by its own system (own: true) to that system', () => {
+    expect(readPlacement({ home: 7, own: true })).toMatchObject({ own: true, home: 7 });
+    expect(positioned(readPlacement({ home: 7, own: true }))).toBe(false);
+    expect(positioned(readPlacement({ home: 7 }))).toBe(true);
+  });
+
   it('knows which events it places and which are drawn like any other', () => {
     expect(positioned(readPlacement({ shape: 'Pool' }))).toBe(false);
     expect(positioned(readPlacement({ shape: 'Single', earliest: 'A2' }))).toBe(false);

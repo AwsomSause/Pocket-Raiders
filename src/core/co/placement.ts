@@ -27,6 +27,8 @@ export interface CoPlacement {
   beat: number;
   /** What the player sees on the map: its own badge, a "?", or none (both of the last two show as the game's hidden "?" stop until reached). */
   badge: 'own' | '?' | 'none';
+  /** Placed by its own system (Kanto canon spaces): the placer leaves it alone; attach, must-see protection and node menus still read it. */
+  own: boolean;
 }
 
 const SHAPE_STEPS: Record<string, number[]> = { 'stage-three': [6, 12, 17], trial: [9, 12, 16], region: [8, 12, 17], 'world event': [5, 10, 15], tournament: [12], visit: [11] };
@@ -72,11 +74,12 @@ export function readPlacement(raw: Record<string, unknown>): CoPlacement {
     chain: raw.chain ? String(raw.chain) : null,
     beat,
     badge: lower(raw.badge).includes('?') ? '?' : lower(raw.badge).includes('none') ? 'none' : 'own',
+    own: raw.own === true,
   };
 }
 
 /** True when the placer puts this event on a chosen step; false when it is drawn like any other event (a Pool, or a single with no step). */
-export const positioned = (p: CoPlacement): boolean => p.shape !== 'pool' && (p.home !== null || p.window !== null || p.sits !== 'optional' || p.attaches === 'rest' || p.attaches === 'instead');
+export const positioned = (p: CoPlacement): boolean => !p.own && p.shape !== 'pool' && (p.home !== null || p.window !== null || p.sits !== 'optional' || p.attaches === 'rest' || p.attaches === 'instead');
 
 const TAG_TYPES: Record<string, string[]> = {
   water: ['water', 'ice'], high: ['flying', 'rock', 'dragon', 'ice'], forest: ['grass', 'bug', 'fairy'], city: ['normal', 'electric', 'steel', 'poison', 'fighting'],

@@ -36,7 +36,7 @@ export function isKeepEvent(run: RunState, e: EventDef): boolean {
     || e.id === tournamentEventId(run) || crisisEventIds(run).includes(e.id);
 }
 
-const coPlaced = (content: Content, id: string): boolean => { const p = content.coPlacement?.get(id); return !!p && positioned(p); };
+const coPlaced = (content: Content, id: string): boolean => { const p = content.coPlacement?.get(id); return !!p && (positioned(p) || p.own || p.attaches === 'before' || p.attaches === 'instead'); };
 
 function isKeepSide(content: Content, run: RunState, side: SideStop): boolean {
   if (side.kind === 'plaza' || side.roamer) return true;
