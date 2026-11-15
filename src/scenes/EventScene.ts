@@ -181,11 +181,6 @@ export class EventScene extends Phaser.Scene {
         },
         overs: { over: (k) => this.focus(Number(k)), tradeOver: (k) => this.pickAt(Number(k)) },
       });
-      const rx = this.rx;
-      // Timed prompts (press on the beat, hold...) are drawn by the game canvas: step aside while one plays.
-      const sync = (): void => rx.visible(!this.busy);
-      this.events.on('postupdate', sync);
-      this.events.once('shutdown', () => this.events.off('postupdate', sync));
     } else this.offerFullText(view.event.intro);
     if (!this.calm) this.ambient(scene.effect, area, layers.fx);
     if (area.w < GAME_WIDTH || area.h < GAME_HEIGHT) layers.fx.setMask(this.make.graphics({}, false).fillRect(area.x, area.y, area.w, area.h).createGeometryMask());
