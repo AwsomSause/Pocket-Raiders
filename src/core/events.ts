@@ -12,6 +12,7 @@
 import { modifierEventWeight } from './runModifiers';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
 import { rememberPick, rememberedPick } from './co/pickMemory';
+import { compassReveal } from './co/compass';
 import { PSEUDO, enterPseudoStage, leavePseudoStage, routeChainEvent } from './dungeon/pseudo';
 import { addMark, overhaulOf, type FeelingKey } from './rivals/overhaul';
 import { friendName, friendTeam, pseudoRivalBeat } from './rivals/live';
@@ -126,6 +127,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       const v = effectiveAttributes(content, run)[c.key];
       return c.side === 'positive' ? v >= c.atLeast : -v >= c.atLeast;
     }
+    case 'itemAny':
+      return c.ids.some((id) => (run.inventory[id] ?? 0) > 0 || (run.passives?.[id] ?? 0) > 0);
     case 'item':
       return (run.inventory[c.id] ?? 0) >= (c.count ?? 1) || (run.passives?.[c.id] ?? 0) > 0;
     case 'emotion':
@@ -366,6 +369,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return `Needs a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in the lead`;
     case 'picked':
       return 'Needs the Pokémon you picked';
+    case 'itemAny':
+      return `Needs a ${c.ids.map((id) => content.catalog.get(id)?.name ?? content.items.get(id)?.name ?? id).join(' or ')}`;
     case 'partyType':
       return c.absent ? `Only without a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party` : `Needs a ${c.type.charAt(0).toUpperCase()}${c.type.slice(1)}-type in your party`;
     case 'memorial':
@@ -650,7 +655,7 @@ export function addEventStops(content: Content, run: RunState): void {
   if (effectiveAttributes(content, run).intelligence >= cfg.revealIntelligence) {
     const hidden = stage.map.nodes.flatMap((n) => n.sides).find((s) => s.kind === 'event' && s.hidden);
     if (hidden) delete hidden.hidden;
-  }
+  }  compassReveal(content, run);
 }
 
 /** The ten Expanded flags of RUN_EVENTS_EXPANDED X2, read from the run. */
@@ -940,6 +945,7 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'itemFrom':
       return `one of ${e.ids.map((id) => itemName(content, id)).join(' / ')}`;
     case 'loseItem':
+      if (!e.id && e.from) return `give up one of ${e.from.map((id) => itemName(content, id)).join(' / ')}`;
       return e.id ? `use ${e.count && e.count > 1 ? `${e.count} × ` : 'a '}${itemName(content, e.id)}` : 'lose an item';
     case 'tradeAway':
       return `trade away ${e.want.label}`;
@@ -1180,6 +1186,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'loseItem': {
       const ids = e.id
         ? (run.inventory[e.id] ?? 0) > 0 ? [e.id] : []
+        : e.from
+        ? e.from.filter((id) => (run.inventory[id] ?? 0) > 0)
         : Object.keys(run.inventory).filter((id) => (run.inventory[id] ?? 0) > 0 && !(content.catalog.get(id)?.family ?? '').startsWith('Key items'));
       ids.sort();
       // A named key item that lives in the passives (rods, bikes ...) is traded in from there.

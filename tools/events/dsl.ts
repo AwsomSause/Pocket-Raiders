@@ -37,6 +37,10 @@ export function ch(label: string, success: Json, o: { requires?: Json[]; check?:
 }
 /** A branch of a choice (`ch(..., { branches: [...] })`): when every condition holds, these words and effects replace the outcome (its battle stays). First match wins. */
 export const br = (when: Json[], text: string, ...effects: Json[]): Json => ({ when, text, effects });
+/** You hold one of these items. */
+export const hasAny = (...ids: string[]): Json => ({ kind: 'itemAny', ids });
+/** One of these that you hold is given up. */
+export const loseOne = (...ids: string[]): Json => ({ kind: 'loseItem', from: ids });
 /** The lead (the first Pokémon able to fight) is of this type. */
 export const leadIs = (type: string): Json => ({ kind: 'leadType', type });
 /** The Pokémon the last pick choice named (remembered for the run) is one of these types / is the starter. */
@@ -82,8 +86,9 @@ export const rage = (n: number): Json => attr('ragePeace', n);
 export const peace = (n: number): Json => attr('ragePeace', -n);
 export const rp = (amount: number): Json => ({ kind: 'research', amount });
 export const lv = (amount: number, who: Who | 'weakest' = 'lead'): Json => ({ kind: 'levels', amount, who });
-export const join = (o: { species?: string[]; types?: string[]; lv?: number; shiny?: number; shadow?: boolean } = {}): Json => ({
+export const join = (o: { species?: string[]; types?: string[]; lv?: number; shiny?: number; shadow?: boolean; recall?: boolean } = {}): Json => ({
   kind: 'join',
+  ...(o.recall ? { recall: true } : {}),
   shadow: o.shadow ?? false,
   species: o.species ?? [],
   types: o.types ?? [],

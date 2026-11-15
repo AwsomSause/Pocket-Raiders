@@ -31,7 +31,7 @@ export const TypeNameSchema = z.enum(TYPE_NAMES);
 export type TypeName = z.infer<typeof TypeNameSchema>;
 
 /** Catalog Overhaul: which party Pokémon an event effect lands on (core/co/who.ts). A match is the first able Pokémon that fits. */
-export const CoMatchSchema = z.object({ types: z.array(TypeNameSchema).min(1).max(4).optional(), moveFlag: z.enum(CO_MOVE_FLAGS).optional(), species: z.array(z.string().min(1)).min(1).optional() }).refine((m) => m.types !== undefined || m.moveFlag !== undefined || m.species !== undefined, { message: 'a match needs types, a move flag or species' });
+export const CoMatchSchema = z.object({ types: z.array(TypeNameSchema).min(1).max(4).optional(), moveFlag: z.enum(CO_MOVE_FLAGS).optional(), species: z.array(z.string().min(1)).min(1).optional(), /** Catalog Overhaul (families-b): every able Pokémon that fits, not just the first ("+1 Bond with Water-types"). */ every: z.boolean().optional() }).refine((m) => m.types !== undefined || m.moveFlag !== undefined || m.species !== undefined, { message: 'a match needs types, a move flag or species' });
 export const CoWhoSchema = z.union([z.enum(CO_WHO_NAMES), CoMatchSchema]);
 
 export const STAT_NAMES = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const;
@@ -2795,6 +2795,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** A meter leaning one way: Rage (positive ragePeace) / Peace (negative), Good (positive goodEvil) / Evil (negative). */
   z.object({ kind: z.literal('meter'), key: z.enum(['ragePeace', 'goodEvil']), side: z.enum(['positive', 'negative']), atLeast: z.number().int().min(0) }),
   z.object({ kind: z.literal('item'), id: z.string(), /** Copies needed (default 1). */ count: z.number().int().min(1).optional() }),
+  /** Catalog Overhaul (families-b): you hold at least one of these items ("Offer a gem", "a Berry for the key"). */
+  z.object({ kind: z.literal('itemAny'), ids: z.array(z.string()).min(1) }),
   /** Catalog Overhaul (families-b): the lead (the first Pokémon able to fight) is of this type. */
   z.object({ kind: z.literal('leadType'), type: TypeNameSchema }),
   /** Catalog Overhaul (families-b): the Pokémon the last "pick a Pokémon" choice named (remembered for the run, core/co/pickMemory.ts) is still in the party and is one of these types / is the starter. */
@@ -2992,7 +2994,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** One of these items, picked by the event's roll. */
   z.object({ kind: z.literal('itemFrom'), ids: z.array(z.string()).min(1), count: z.number().int().positive().default(1) }),
   /** A random item from the Bag is lost (never a key item). */
-  z.object({ kind: z.literal('loseItem'), id: z.string().optional(), /** With `id`: how many copies are used (default 1). */ count: z.number().int().min(1).optional() }),
+  z.object({ kind: z.literal('loseItem'), id: z.string().optional(), /** Catalog Overhaul (families-b): without `id`, one of these that you hold is given up. */ from: z.array(z.string()).min(1).optional(), /** With `id`: how many copies are used (default 1). */ count: z.number().int().min(1).optional() }),
   /** A trade: the lowest-level party Pokémon that fits `want` leaves with the partner. The choice stays locked without one (and while only one Pokémon is left). */
   z.object({ kind: z.literal('tradeAway'), want: TradeWantSchema }),
   /**
