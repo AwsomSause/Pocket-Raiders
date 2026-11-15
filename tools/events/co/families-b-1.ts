@@ -1,8 +1,8 @@
 // Catalog Overhaul, families-b (STORY_FAMILIES_6.md): the six Doors.
 // SF31 The Lost Expedition, SF34 The Sunken Lighthouse, SF36 The Old Quarry, SF37 The Captain's Chest,
 // SF39 The Whispering Grove, SF40 The Windswept Spire. Each is a chain pseudo-stage (catalogOverhaul/pseudo/families-b.json).
-import { FOSSILS, RARE_HELD, any, anyType, br, ch, egg, fight, flag, flagIs, fr, heal, hurtLead, item, join, leave, moveFlag, out, relic, rest, room, leadIs, stopHere, takeNode, type Json } from '../dsl.ts';
-import { GEMS, ROOM, VALLEY, exit, foresight, mentorIs, moment, no, pw, rem, seen, temp, withBr } from './_fb.ts';
+import { FOSSILS, RARE_HELD, any, anyType, br, ch, egg, fight, flag, flagIs, fr, heal, hurtLead, item, join, leave, moveFlag, out, rest, room, leadIs, stopHere, takeNode, type Json } from '../dsl.ts';
+import { GEMS, ROOM, VALLEY, exit, mentorIs, moment, no, pw, rem, seen, temp, withBr } from './_fb.ts';
 
 export const CATEGORY = 'families-b';
 
@@ -249,7 +249,8 @@ const SHAFT: Json[] = [
 const RAVI = mentorIs('ravi-ironhand');
 const CHEST = 'The captain\'s log. A compass, still true. And a letter to his crew: "If the anchor holds, we\'re home. If it doesn\'t, we\'re the sea\'s."';
 const RAVI_TAIL = ' Captain Ravi takes the compass from you. He reads the letter. He says nothing for a long time. Then he closes your fingers around the compass. "He would want it at sea."';
-const CHEST_FX: Json[] = [relic('captains-compass', 'The Captain\'s Compass', [{ kind: 'preview', what: 'wild' }]), foresight(4), item('gold-bottle-cap'), flag('chest-opened')];
+// The compass is a key item for the run: sea stops show what they hold (core/co/compass.ts reads the flag).
+const CHEST_FX: Json[] = [flag('chest-compass'), item('gold-bottle-cap'), flag('chest-opened'), moment('You brought up the captain\'s compass from the Silver Morrow. Sea stops show their hazards now.', 70)];
 const TRUST = { kind: 'mentor', trust: 8 };
 const SINKS = ' You read it aloud, for the anchor. It listens, then sinks away to wait for a keel that needs it.';
 const ABOARD = ' The Dhelmise hooks itself gently over your arm. It held one ship to the end. It wants another.';
@@ -388,7 +389,7 @@ const SF40: Json[] = [
     id: 'windswept-spire-final', name: 'The Windswept Spire: The Feather', ...ROOM, minStage: 1,
     intro: 'The top, above the cloud line. A single shrine, and a single feather turning in the wind. It is the feather of this region\'s Legendary bird. The wind stops, for the first time since the foot of the stair.',
     choices: [
-      ch('Take the feather.', out('It is warm, and it weighs nothing. Somewhere far off, something that owns the sky notices that you have it.', flag('sign-bird', 1), item('spire-feather'), flag('spire-feather'), exit)),
+      ch('Take the feather.', out('It is warm, and it weighs nothing. Somewhere far off, something that owns the sky notices that you have it.', flag('sign-bird', 1), flag('spire-feather'), moment('You carry a feather of the region\'s Legendary bird, from the shrine on the Windswept Spire.', 70), exit)),
       ch('Leave it at the shrine.', out('You set a stone on its quill so it will not blow away, and bow. On the way down a shadow crosses the stair, twice: the bird itself, circling the spire, seeing you off.', flag('sign-bird', 2), flag('spire-left'), exit)),
       ch('Carve my name.', out('At the foot of the stair you find a clean place and cut your name under forty years of silence. The newest name on the Spire is yours now.', flag('sign-bird', 1), flag('spire-carved'), exit)),
     ],

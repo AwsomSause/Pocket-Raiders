@@ -3352,19 +3352,9 @@
       "text": "The captain's log. A compass, still true. And a letter to his crew: \"If the anchor holds, we're home. If it doesn't, we're the sea's.\"",
       "effects": [
        {
-        "kind": "relic",
-        "id": "captains-compass",
-        "name": "The Captain's Compass",
-        "effects": [
-         {
-          "kind": "preview",
-          "what": "wild"
-         }
-        ]
-       },
-       {
-        "kind": "foresight",
-        "columns": 4
+        "kind": "flag",
+        "key": "chest-compass",
+        "amount": 1
        },
        {
         "kind": "item",
@@ -3375,6 +3365,11 @@
         "kind": "flag",
         "key": "chest-opened",
         "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You brought up the captain's compass from the Silver Morrow. Sea stops show their hazards now.",
+        "importance": 70
        },
        {
         "kind": "leavePseudo"
@@ -3398,19 +3393,9 @@
        "text": "The captain's log. A compass, still true. And a letter to his crew: \"If the anchor holds, we're home. If it doesn't, we're the sea's.\" You read it aloud, for the anchor. It listens, then sinks away to wait for a keel that needs it. Captain Ravi takes the compass from you. He reads the letter. He says nothing for a long time. Then he closes your fingers around the compass. \"He would want it at sea.\"",
        "effects": [
         {
-         "kind": "relic",
-         "id": "captains-compass",
-         "name": "The Captain's Compass",
-         "effects": [
-          {
-           "kind": "preview",
-           "what": "wild"
-          }
-         ]
-        },
-        {
-         "kind": "foresight",
-         "columns": 4
+         "kind": "flag",
+         "key": "chest-compass",
+         "amount": 1
         },
         {
          "kind": "item",
@@ -3421,6 +3406,11 @@
          "kind": "flag",
          "key": "chest-opened",
          "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You brought up the captain's compass from the Silver Morrow. Sea stops show their hazards now.",
+         "importance": 70
         },
         {
          "kind": "mentor",
@@ -3443,19 +3433,9 @@
        "text": "The captain's log. A compass, still true. And a letter to his crew: \"If the anchor holds, we're home. If it doesn't, we're the sea's.\" You read it aloud, for the anchor. It listens, then sinks away to wait for a keel that needs it.",
        "effects": [
         {
-         "kind": "relic",
-         "id": "captains-compass",
-         "name": "The Captain's Compass",
-         "effects": [
-          {
-           "kind": "preview",
-           "what": "wild"
-          }
-         ]
-        },
-        {
-         "kind": "foresight",
-         "columns": 4
+         "kind": "flag",
+         "key": "chest-compass",
+         "amount": 1
         },
         {
          "kind": "item",
@@ -3466,6 +3446,11 @@
          "kind": "flag",
          "key": "chest-opened",
          "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You brought up the captain's compass from the Silver Morrow. Sea stops show their hazards now.",
+         "importance": 70
         },
         {
          "kind": "leavePseudo"
@@ -3482,19 +3467,9 @@
        "text": "The captain's log. A compass, still true. And a letter to his crew: \"If the anchor holds, we're home. If it doesn't, we're the sea's.\" Captain Ravi takes the compass from you. He reads the letter. He says nothing for a long time. Then he closes your fingers around the compass. \"He would want it at sea.\"",
        "effects": [
         {
-         "kind": "relic",
-         "id": "captains-compass",
-         "name": "The Captain's Compass",
-         "effects": [
-          {
-           "kind": "preview",
-           "what": "wild"
-          }
-         ]
-        },
-        {
-         "kind": "foresight",
-         "columns": 4
+         "kind": "flag",
+         "key": "chest-compass",
+         "amount": 1
         },
         {
          "kind": "item",
@@ -3505,6 +3480,11 @@
          "kind": "flag",
          "key": "chest-opened",
          "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You brought up the captain's compass from the Silver Morrow. Sea stops show their hazards now.",
+         "importance": 70
         },
         {
          "kind": "mentor",
@@ -3542,19 +3522,9 @@
         "text": "The captain's log. A compass, still true. And a letter to his crew: \"If the anchor holds, we're home. If it doesn't, we're the sea's.\" The Dhelmise hooks itself gently over your arm. It held one ship to the end. It wants another.",
         "effects": [
          {
-          "kind": "relic",
-          "id": "captains-compass",
-          "name": "The Captain's Compass",
-          "effects": [
-           {
-            "kind": "preview",
-            "what": "wild"
-           }
-          ]
-         },
-         {
-          "kind": "foresight",
-          "columns": 4
+          "kind": "flag",
+          "key": "chest-compass",
+          "amount": 1
          },
          {
           "kind": "item",
@@ -3565,6 +3535,11 @@
           "kind": "flag",
           "key": "chest-opened",
           "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "You brought up the captain's compass from the Silver Morrow. Sea stops show their hazards now.",
+          "importance": 70
          },
          {
           "kind": "join",
@@ -3597,19 +3572,9 @@
          "text": "The captain's log. A compass, still true. And a letter to his crew: \"If the anchor holds, we're home. If it doesn't, we're the sea's.\" The Dhelmise hooks itself gently over your arm. It held one ship to the end. It wants another. Captain Ravi takes the compass from you. He reads the letter. He says nothing for a long time. Then he closes your fingers around the compass. \"He would want it at sea.\"",
          "effects": [
           {
-           "kind": "relic",
-           "id": "captains-compass",
-           "name": "The Captain's Compass",
-           "effects": [
-            {
-             "kind": "preview",
-             "what": "wild"
-            }
-           ]
-          },
-          {
-           "kind": "foresight",
-           "columns": 4
+           "kind": "flag",
+           "key": "chest-compass",
+           "amount": 1
           },
           {
            "kind": "item",
@@ -3620,6 +3585,11 @@
            "kind": "flag",
            "key": "chest-opened",
            "amount": 1
+          },
+          {
+           "kind": "moment",
+           "text": "You brought up the captain's compass from the Silver Morrow. Sea stops show their hazards now.",
+           "importance": 70
           },
           {
            "kind": "mentor",
@@ -3668,19 +3638,9 @@
         "text": "The captain's log. A compass, still true. And a letter to his crew: \"If the anchor holds, we're home. If it doesn't, we're the sea's.\" The Dhelmise hooks itself gently over your arm. It held one ship to the end. It wants another.",
         "effects": [
          {
-          "kind": "relic",
-          "id": "captains-compass",
-          "name": "The Captain's Compass",
-          "effects": [
-           {
-            "kind": "preview",
-            "what": "wild"
-           }
-          ]
-         },
-         {
-          "kind": "foresight",
-          "columns": 4
+          "kind": "flag",
+          "key": "chest-compass",
+          "amount": 1
          },
          {
           "kind": "item",
@@ -3691,6 +3651,11 @@
           "kind": "flag",
           "key": "chest-opened",
           "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "You brought up the captain's compass from the Silver Morrow. Sea stops show their hazards now.",
+          "importance": 70
          },
          {
           "kind": "join",
@@ -3723,19 +3688,9 @@
          "text": "The captain's log. A compass, still true. And a letter to his crew: \"If the anchor holds, we're home. If it doesn't, we're the sea's.\" The Dhelmise hooks itself gently over your arm. It held one ship to the end. It wants another. Captain Ravi takes the compass from you. He reads the letter. He says nothing for a long time. Then he closes your fingers around the compass. \"He would want it at sea.\"",
          "effects": [
           {
-           "kind": "relic",
-           "id": "captains-compass",
-           "name": "The Captain's Compass",
-           "effects": [
-            {
-             "kind": "preview",
-             "what": "wild"
-            }
-           ]
-          },
-          {
-           "kind": "foresight",
-           "columns": 4
+           "kind": "flag",
+           "key": "chest-compass",
+           "amount": 1
           },
           {
            "kind": "item",
@@ -3746,6 +3701,11 @@
            "kind": "flag",
            "key": "chest-opened",
            "amount": 1
+          },
+          {
+           "kind": "moment",
+           "text": "You brought up the captain's compass from the Silver Morrow. Sea stops show their hazards now.",
+           "importance": 70
           },
           {
            "kind": "mentor",
@@ -4508,14 +4468,14 @@
         "amount": 1
        },
        {
-        "kind": "item",
-        "id": "spire-feather",
-        "count": 1
-       },
-       {
         "kind": "flag",
         "key": "spire-feather",
         "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You carry a feather of the region's Legendary bird, from the shrine on the Windswept Spire.",
+        "importance": 70
        },
        {
         "kind": "leavePseudo"
