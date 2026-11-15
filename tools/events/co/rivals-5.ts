@@ -61,7 +61,8 @@ const follower: Json[] = [
 
   // S+2, Step 12: the question. The answer sets their arc next region (The Race / The Truce / The Student).
   beat('rq-r13-question', 'The One Who Follows: Why', { minStage: 6, requires: [due('R13.finale')], tint: '#1f2a1f', effect: 'glint',
-    remembers: [{ id: 'stopped', when: [yes('follower-stopped')], notice: note(page('You told them to stop following you. They did, for a while. They are here anyway. They look embarrassed about it.')) }] },
+    remembers: [{ id: 'stopped', when: [yes('follower-stopped')], notice: note(page('You told them to stop following you. They did, for a while. They are here anyway. They look embarrassed about it.')) },
+      { id: 'battled', when: [yes('follower-battled')], notice: note(page('There is a new page at the front of the notebook: your battle, every move, and at the bottom, underlined, "how?"')) }] },
     script(page('The stranger is waiting at the side of the path. The notebook is open at the last clean page.'), page(who(STRANGER, 'One more. The only one that matters.'), who(STRANGER, 'Why do you do this?'))),
     [
       ch('"To win."', out(script(page('They write it down, underline it, and shut the notebook for good.', who(STRANGER, 'Then I\'ll race you. Next region. Every stage.'))), flag('follower-answer', 1), done('R13.finale'))),
@@ -129,7 +130,8 @@ const AMBUSH = { kind: 'trainer', name: 'Grunt', evil: 'grunt', friendly: true, 
 const AWAKE = { kind: 'evil', after: 1 };
 
 const gift: Json[] = [
-  beat('rival-trap-gift', 'A Gift You Should Question', { minStage: 6, requires: [met(1), AWAKE, due('R15.open')], tint: '#2a1d2a', effect: 'glint' },
+  beat('rival-trap-gift', 'A Gift You Should Question', { minStage: 6, requires: [met(1), AWAKE, due('R15.open')], tint: '#2a1d2a', effect: 'glint',
+    remembers: [{ id: 'shared', when: [yes('rival-shelves-shared')], notice: note(page('They gave you half a shelf of Balls back, once, with their foot. This does not feel like that.')) }] },
     script(page('A box on your bed at the inn, with {rival}\'s handwriting on the tag.', 'The wrapping is too neat.'), page('The knot is a sailor\'s knot.', '{rival} cannot tie a sailor\'s knot. You have watched them try.')),
     [
       ch('Open it and use it.', out(script(page('A Lucky Egg, warm in your hand. It is a good gift. It is a very good gift.', 'You do not notice the faint, slow blink under the lining.')), GIFT, flag('rival-gift-used'), quest({ stamp: 'rq-r15-gift-at' }), done('R15.open'))),
@@ -165,7 +167,9 @@ const gift: Json[] = [
         }), 'They put the pin on the ground, carefully, like something that might go off.'),
         page('Then they walk to the square, where the sponsor is waiting, and hand back every gift in front of everyone.'),
       ), flag('rival-told-sponsor'), done('R15.finale'))),
-    ] }] },
+    ] },
+      { id: 'found', when: [yes('rival-gift-found')], notice: note(page('You still have the crushed disc from the gift box in your bag. You have not told them about it yet.')) },
+      { id: 'asked', when: [yes('rival-gift-asked')], notice: note(page('"A sponsor asked me to pass it on," they said, back then. They said it so happily.')) }] },
     script(page('{rival} is in a new coat. A good coat. There is a small pin on the collar: {evil}\'s mark, if you know where to look.', R('My sponsor sends their regards. Isn\'t it great? Somebody finally noticed.'))),
     [
       ch('"Your sponsor is {lieutenant}."', out(script(page('Their face closes like a door.', R('You\'re jealous.'), R('Somebody finally backs me, and you can\'t stand it.')), page('They walk off with the pin still on. They will find out at the climax. On the wrong side.')), flag('rival-sponsor-denied'), done('R15.finale'))),

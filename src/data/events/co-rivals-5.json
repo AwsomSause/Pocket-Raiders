@@ -510,6 +510,18 @@
       }
      ],
      "notice": "\n\nYou told them to stop following you. They did, for a while. They are here anyway. They look embarrassed about it."
+    },
+    {
+     "id": "battled",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "follower-battled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nThere is a new page at the front of the notebook: your battle, every move, and at the bottom, underlined, \"how?\""
     }
    ],
    "scene": {
@@ -1055,6 +1067,20 @@
     "effect": "glint"
    },
    "callback": true,
+   "remembers": [
+    {
+     "id": "shared",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-shelves-shared",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nThey gave you half a shelf of Balls back, once, with their foot. This does not feel like that."
+    }
+   ],
    "intro": "A box on your bed at the inn, with {rival}'s handwriting on the tag.\nThe wrapping is too neat.\n\nThe knot is a sailor's knot.\n{rival} cannot tie a sailor's knot. You have watched them try.",
    "choices": [
     {
@@ -1152,8 +1178,7 @@
    ],
    "stop": "event",
    "types": [],
-   "room": false,
-   "remembers": []
+   "room": false
   },
   {
    "id": "rq-r15-ambush",
@@ -1331,6 +1356,30 @@
        }
       }
      ]
+    },
+    {
+     "id": "found",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-gift-found",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nYou still have the crushed disc from the gift box in your bag. You have not told them about it yet."
+    },
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-gift-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\n\"A sponsor asked me to pass it on,\" they said, back then. They said it so happily."
     }
    ],
    "scene": {

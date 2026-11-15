@@ -582,6 +582,58 @@
           "late": true
         }
       }
+    },
+    "R17": {
+      "name": "The Pen Pal",
+      "managed": false,
+      "beats": {}
+    },
+    "R18": {
+      "name": "The Last Battle of the Year",
+      "managed": false,
+      "beats": {}
+    },
+    "R19": {
+      "name": "The Rival Who Became Champion",
+      "managed": false,
+      "beats": {}
+    },
+    "R20": {
+      "name": "Greetings Between Teams",
+      "managed": false,
+      "beats": {}
+    },
+    "R21": {
+      "name": "The Long Night at the Inn",
+      "beats": {
+        "open": {
+          "event": "rq-r21-inn",
+          "minStage": 6,
+          "slot": true,
+          "final": true
+        }
+      }
+    },
+    "R22": {
+      "name": "One for the Road",
+      "managed": false,
+      "beats": {}
+    },
+    "R23": {
+      "name": "The Race for First Pick",
+      "beats": {
+        "open": {
+          "event": "rival-race",
+          "minStage": 3,
+          "slot": true,
+          "final": true
+        }
+      }
+    },
+    "R24": {
+      "name": "What They Call You",
+      "managed": false,
+      "beats": {}
     }
   }
 }

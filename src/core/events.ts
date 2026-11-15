@@ -101,7 +101,7 @@ import { celebrateToday, milestoneToday, periodOf, PERIOD_LABEL, restUntilMornin
 import { BERRIES } from './berries';
 import { choiceAt, effectiveEvent, visibleChoices } from './eventMemory';
 import { beginRivalBrain } from './rivals/brainSetup';
-import { applyQuestEffect, beginBorrow, beginFeudWatch, interleave, mainRival, secondRival, planRivalTeam, shapeRivalMons, questConditionMet, questText, rivalAllySpecies, rivalStanding, RIVAL_QUEST_GROUP } from './rivals/questlines';
+import { applyQuestEffect, beginBorrow, beginFeudWatch, interleave, mainRival, secondRival, planRivalTeam, starterRivalryStages, shapeRivalMons, questConditionMet, questText, rivalAllySpecies, rivalStanding, RIVAL_QUEST_GROUP } from './rivals/questlines';
 import { getTheme, typesPool } from './themes';
 import { anyRoaming, endRoamer, healConvoy, startConvoy, partyHasAbility, placeCamp, scoutAhead, CAMP_EVENT_ID } from './world';
 import { MAX_FOES, MAX_FOES_LISTED } from './bossLimits';
@@ -1743,6 +1743,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     if (rival && rivalTeam.length > 0 && b.kind === 'trainer' && b.quest && !b.quest.as && !partner && !watching) {
       run.battle.rivalId = rival.id;
       beginRivalBrain(content, run, rival.id);
+      starterRivalryStages(run, run.battle);
     }
     if (b.kind === 'trainer' && b.sprite && run.battle.trainer) run.battle.trainer.spriteBoss = b.sprite;
     if (b.kind === 'trainer' && b.spritePokemon && run.battle.trainer) run.battle.trainer.spritePokemon = b.spritePokemon;

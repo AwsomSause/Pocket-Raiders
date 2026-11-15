@@ -474,6 +474,7 @@ export function recordPackMarks(content: Content, run: RunState, rivalId: string
     // One for the Road (R22) and the Promise (R3) open from a close battle.
     setFlag(run, 'rq-thread', flagOf(run, 'rq-thread') + 1);
     setFlag(run, 'rq-thread-won', f.rivalWon ? 0 : 1);
+    setFlag(run, 'rq-drink-owed', 1);
     openBeatHere(content, run, 'R3.open');
   }
   if (f.aceDownFirst) give('ace-down-first');
@@ -746,4 +747,17 @@ export const feudWatching = (run: RunState): boolean => typeof run.story.flags['
 /** R16 Wants to Stop: the foe's Pokémon sat down (the `calm` rule), so the finale's win reads as Talked Down. */
 export function noteCalm(run: RunState): void {
   if (run.battle?.storyEffects.includes('calm:done')) setFlag(run, 'rq-r16-calm', 1);
+}
+
+/** R20 Starter Rivalry: when a rival fight from a scene starts, 3 to 5 gives both sides +1 Speed; 6 and up adds +1 Attack and Sp. Atk. */
+export function starterRivalryStages(run: RunState, battle: BattleState): void {
+  const n = flagOf(run, 'rq-starter-rivalry');
+  if (n < 3) return;
+  for (const side of [battle.playerStages, battle.enemyStages]) {
+    side.spe = Math.min(6, side.spe + 1);
+    if (n >= 6) {
+      side.atk = Math.min(6, side.atk + 1);
+      side.spa = Math.min(6, side.spa + 1);
+    }
+  }
 }
