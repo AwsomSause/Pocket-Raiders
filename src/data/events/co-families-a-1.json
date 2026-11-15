@@ -1264,10 +1264,14 @@
      }
     },
     {
-     "label": "Help people up the hill.",
+     "label": "Help people up the hill. (a node)",
      "success": {
       "text": "You spend the day as a pair of arms. A cot. A grandfather. A crate of hens. Ada's pram, the last and heaviest, lifted over the wall with every photograph dry. By dusk her whole family is counted twice on the hilltop, and the water has not gained an inch on anyone you carried.",
       "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
        {
         "kind": "flag",
         "key": "crisis-flood-on",
@@ -4093,10 +4097,14 @@
    "intro": "A ranger station with its door propped open. Inside, a ranger is asleep face-down on her desk with a pen still in her hand. On blankets along the wall lie three sick Pokémon, breathing fast and shallow. One of them, a Skitty, lifts its head when you come in and cannot hold it up. The ranger jerks awake. Ines: \"Sorry. Sorry. Haven't slept.\" She rubs her face with both hands. \"Same fever everywhere. Wild and owned. Starts as a cough. Then they won't eat.\" She looks at the blankets. \"I think it's in the water. Or a Pokémon carrying it. I can't tell which and I can't test both.\"",
    "choices": [
     {
-     "label": "Test the water.",
+     "label": "Test the water. (two nodes)",
      "success": {
       "text": "Ines hands you three stoppered jars and a map with three streams circled. You fill one at each: the spring, the ford, the pond where everything drinks. Back at the station she holds each to the lamp and adds her drops, and waits, and all three stay clear. \"Clean.\" She breathes out. \"It isn't the water. That's half the question gone.\"",
       "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
        {
         "kind": "flag",
         "key": "crisis-fever-on",
@@ -4125,10 +4133,14 @@
      }
     },
     {
-     "label": "Find the carrier.",
+     "label": "Find the carrier. (two nodes)",
      "success": {
       "text": "You follow the cough. A sick Rattata here, a wheezing Pidgey a mile on, each a little fresher than the last, a trail of small miseries pointing north. It ends at a stand of bare trees white with Swablu, a whole migrating flock, hundreds, and every one of them coughing like a tiny door creaking. They carried it in on the wind. They did not know. They look as sorry as anything you have ever seen.",
       "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
        {
         "kind": "flag",
         "key": "crisis-fever-on",

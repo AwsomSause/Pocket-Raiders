@@ -429,7 +429,7 @@
      }
     },
     {
-     "label": "Give them back with me.",
+     "label": "Give them back with me. (two nodes)",
      "requires": [
       {
        "kind": "money",
@@ -439,6 +439,10 @@
      "success": {
       "text": "Three shops. Three counters. Tib does the talking at each one, in a voice that gets smaller every time, and you stand behind with a hand on Tib's shoulder. Two shopkeepers take their goods back and say nothing. The third reaches for the telephone. It costs you ₽500 to put the receiver down again. Outside, Tib says, very quietly, \"You did it too, though.\" You say yes. You say that is why you came.",
       "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
        {
         "kind": "flag",
         "key": "apprentice-sly",
@@ -2062,10 +2066,14 @@
    "intro": "One region later. You come over the hill and stop. The farmer's fields are green all the way to the horizon: beans, barley, flowers along every hedge. He is at his gate. He looks at you kindly and without knowing. Abner: \"I don't know your face. Take what you like.\" He waves an arm at all of it, amazed and content. Abner: \"I seem to have been lucky. Folk keep planting things for me.\" And at the field three towns on, you know before you see it, the stake is deep in flowers, and beside it, patient as a hill, a Gogoat is lying.",
    "choices": [
     {
-     "label": "Bring the Gogoat home.",
+     "label": "Bring the Gogoat home. (two nodes)",
      "success": {
       "text": "It takes two long days to walk a Gogoat three towns. It comes willingly, a pace behind you, stopping to look at things. At the gate, Abner looks at it for a long time. The Gogoat looks back. \"Hello, you,\" he says. He does not know why he says it. His hand goes out and finds the place behind its horns as if the hand remembered on its own. The Gogoat walks past him into the yard and lies down beside his chair. Wynne comes to you with something held in both hands. A collar. Wynne: \"It's yours. He'd want someone to remember her who can.\"",
       "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
        {
         "kind": "flag",
         "key": "farmer-end",
@@ -2305,7 +2313,7 @@
    "intro": "The old mill, its wheel still turning though there is nothing left to grind. A woman with white hair is standing by the race with the letter open in her hands. She has read it already. She is reading it again. Her hands shake. Sabine: \"Forty years. He could have walked here.\" She laughs, and it breaks in the middle. \"We saw a falling star. He said it was a satellite. I said it was a star. We didn't speak for forty years over a star.\" She folds the page along its old creases. Sabine: \"Tell him the star was real. And bring him a bowl of Berries from the east grove. He used to pick them for me.\"",
    "choices": [
     {
-     "label": "I'll bring them.",
+     "label": "I'll bring them. (two nodes)",
      "success": {
       "text": "The east grove is two fields over, gone half wild. The best bushes are in the middle, and something has made its home under them that does not see why it should share.",
       "effects": [],
@@ -2319,6 +2327,10 @@
        "levelBonus": 0,
        "shinyMultiplier": 1,
        "win": [
+        {
+         "kind": "takeNode",
+         "nodes": 2
+        },
         {
          "kind": "flag",
          "key": "elder-berries",
