@@ -109,3 +109,23 @@ describe('New UI grid scrolling', () => {
     expect(html).toContain('–11 of 11');
   });
 });
+
+describe('New UI board with a long text box', () => {
+  const rows6: BoardRow[] = Array.from({ length: 6 }, (_, i) => ({ title: `Row ${i + 1}`, sub: 'x' }));
+  const long = 'Affection 40 · Respect 40 · Sync 15 · Confidence 50 · Will 30 · Strain 0. Steady: it follows your lead. Protective: Guards its team like a wall. It drags its tail through puddles. Quirk, Stage Fright: Nervous before bosses, then fierce.';
+  const shown = (html: string): number => html.split('data-act="pick"').length - 1;
+  const at = (layout: number): ReduxCtx => ({ k: layout, skin: {} as ReduxCtx['skin'], v: () => layout });
+
+  it('the one-column list shows one row fewer under a text box of three lines or more, so no row hides under it', () => {
+    expect(shown(boardView(at(0), { title: 'Bonds', area: 'party', rows: rows6, index: 0, text: 'Short.' }))).toBe(5);
+    expect(shown(boardView(at(0), { title: 'Bonds', area: 'party', rows: rows6, index: 0, text: long }))).toBe(4);
+    // The focused row is still on screen at the end of the list.
+    const end = boardView(at(0), { title: 'Bonds', area: 'party', rows: rows6, index: 5, text: long });
+    expect(end).toContain('Row 6');
+    expect(shown(end)).toBe(4);
+  });
+
+  it('the two-column layout keeps its six cards (they end well above the text box)', () => {
+    expect(shown(boardView(at(1), { title: 'Bonds', area: 'party', rows: rows6, index: 0, text: long }))).toBe(6);
+  });
+});

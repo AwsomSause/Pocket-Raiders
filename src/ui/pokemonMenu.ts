@@ -45,6 +45,7 @@ import { storyIcon } from './storyIcon';
 import { storyIconId } from '../assets/storyIcons';
 import { arenaFor, getTheme } from '../core/themes';
 import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from './redux/stage';
+import { hoverTips, moveTipOf } from './redux/tips';
 import { artOf, monFile } from './redux/game';
 import { partyCols, partyView, summaryView, type SummaryBody } from './redux/screens/party';
 
@@ -125,6 +126,8 @@ class PokemonScreen implements PickerLike {
   private compareIdx: number | null = null;
   /** New UI: the mock-ups' Party and Summary, drawn over this screen (null in the Old UI or with a picked party look). */
   private rx: ReduxView | null = null;
+  /** New UI: the move chip the pointer rests on ("move:1"), once the Tooltip delay has passed. */
+  private rxTip: string | null = null;
   private rxCols = 1;
   /** The backdrop behind the Pokémon on the New Summary: the stage's arena picture. */
   private rxArt: string | null = null;
@@ -229,6 +232,8 @@ class PokemonScreen implements PickerLike {
           over: (k) => live(() => { const i = Number(k); if (this.roster && i !== this.sel && i >= 0 && i < this.party.length) { this.sel = i; this.render(); } })(),
           menuOver: (k) => live(() => { const i = Number(k); if (this.mode === 'menu' && i !== this.menuIdx && i >= 0 && i < this.menuOptions().length) { this.menuIdx = i; this.render(); } })(),
         },
+        // Resting the pointer on a move's chip (Overview) shows the mock-ups' move tooltip.
+        tip: hoverTips((key) => { if (this.closed) return; this.rxTip = key; this.rx?.refresh(); }),
       });
     }
     this.render();
@@ -823,6 +828,7 @@ class PokemonScreen implements PickerLike {
       body,
       text: this.footerText(),
       menu: this.mode === 'menu' ? { options: this.menuOptions().map((o) => ({ label: o.label, off: o.problem !== null })), index: this.menuIdx } : null,
+      tip: this.tabName === 'Overview' && this.rxTip?.startsWith('move:') ? moveTipOf(mon.moves[Number(this.rxTip.slice(5))]) : null,
     });
   }
 

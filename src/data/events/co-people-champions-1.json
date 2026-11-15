@@ -1,0 +1,3802 @@
+{
+ "catalogOverhaul": "people",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "red-on-the-mountain",
+   "name": "Red on the Mountain",
+   "group": "Famous faces",
+   "rarity": "epic",
+   "minStage": 5,
+   "scene": {
+    "cast": [
+     "boss.red-masters"
+    ],
+    "tint": "#a0b0c8",
+    "effect": "snow"
+   },
+   "types": [],
+   "requires": [
+    {
+     "kind": "regionsLeft",
+     "atMost": 0
+    }
+   ],
+   "intro": "The summit of the highest mountain in the region. The snow comes sideways here, fine as flour, and the wind has a voice. Your team huddles close behind you, breath steaming. A trainer in a red cap stands at the very top with his back to you, looking out at nothing. His Pikachu turns first: ears up, cheeks crackling faintly in the cold, as if it heard you three switchbacks ago. Red does not speak. He turns. He looks at your team, one Pokémon at a time, slowly, the way someone reads a letter twice. Then he takes out one Poké Ball. Pikachu gives a small, bright cry, and somehow, the way you sometimes understand your own team, you know what it means. Pikachu: \"He's been waiting a long time.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Red tips the cap down a fraction of an inch. That is the whole conversation. The ball opens, and the snow seems to stop falling for a second, the way a crowd goes quiet. This is the hardest fight anyone has offered you, and he is not going to hold anything back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "red-battled",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "red-met",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "seeAgain",
+         "eventId": "red-on-the-mountain"
+        },
+        {
+         "kind": "moment",
+         "text": "Red beat you on the summit. The summit is always open.",
+         "importance": 70
+        }
+       ],
+       "name": "Red",
+       "bossId": "red",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "red-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Red on the summit. He gave you his red cap.",
+         "importance": 95
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Sit down.\"",
+     "success": {
+      "text": "You brush the snow off a flat rock and sit. After a long moment, so does he, an arm's length away, cap still low. Nothing happens for a long time. The wind drops. Pikachu climbs into his lap, then, after some thought, into yours. The sky goes from white to blue to the deep gold of late afternoon. Then Red stands, takes a Lemonade from his bag, puts it in your hand, and walks down the far side of the mountain without looking back.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "lemonade",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "red-sat",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "red-met",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "You sat in the snow with Red, and neither of you said a word",
+        "importance": 85
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave.\"",
+     "success": {
+      "text": "You turn and start back down. At the first switchback you look up. He is still there at the top, cap and coat dark against the snow, watching you go. He watches until the cloud closes over the path.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "pikachu",
+     "when": [
+      {
+       "kind": "starter",
+       "species": "pikachu"
+      }
+     ],
+     "notice": "Your Pikachu has gone very still. Red's Pikachu is looking straight at it.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "\"Battle.\"",
+       "success": {
+        "text": "Before anyone sends anything out, the two Pikachu walk across the snow to each other. They touch tails, once, the way old friends shake hands, and go back to their trainers. Red watches it happen with something that is almost a smile. Then the ball opens.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "red-battled",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "flag",
+          "key": "red-met",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ],
+        "battle": {
+         "kind": "trainer",
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "seeAgain",
+           "eventId": "red-on-the-mountain"
+          },
+          {
+           "kind": "moment",
+           "text": "Red beat you on the summit. The summit is always open.",
+           "importance": 70
+          }
+         ],
+         "name": "Red",
+         "bossId": "red",
+         "size": 6,
+         "types": [],
+         "levelBonus": 2,
+         "win": [
+          {
+           "kind": "flag",
+           "key": "red-beaten",
+           "amount": 1
+          },
+          {
+           "kind": "moment",
+           "text": "You beat Red on the summit. He gave you his red cap.",
+           "importance": 95
+          }
+         ]
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "blue-taunt",
+   "name": "The Champion Who Lost in an Afternoon",
+   "group": "Famous faces",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.blue"
+    ],
+    "effect": "shake"
+   },
+   "types": [],
+   "requires": [],
+   "intro": "A small Gym on a quiet street, the kind with a hand-painted sign and a vending machine that only takes exact change. Its Leader is Blue. Today he is being challenged by a kid of maybe nine with a Rattata and a cap on backwards, and the whole street has come in to watch. Blue loses. It is beautifully done. A command called half a second late. A Pokémon held back that should not have been. Nobody in the stands sees it; the kid is crying with joy, and Blue hands over the badge like it costs him something. Only you noticed. Afterwards, at the back door, he catches your eye. Blue: \"Don't tell anyone.\" He leans on the door frame and watches the kid run down the street holding the badge up to the sun. Blue: \"I was Champion for an afternoon. Then someone better walked in.\" Blue: \"You know what that's like? Being the best for one afternoon?\"",
+   "choices": [
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "Blue: \"Good. Don't find out.\" He pushes off the door frame and tosses a Poké Ball from hand to hand, and for a second the old grin is back. His real team, if you want it. Not the one the kid saw.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "blue-taunt-battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yes.\"",
+     "requires": [
+      {
+       "kind": "rivalLast",
+       "result": "lose"
+      }
+     ],
+     "success": {
+      "text": "Blue looks at you for a long moment, and the grin goes away entirely. Blue: \"Then you know.\" He unpins something from the inside of his jacket: a small, scratched Champion pin, the enamel worn through at one corner. He presses it into your palm and closes your fingers over it. For a rival battle, it holds.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "blue-owed-champion-pin",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Blue gave you his old Champion pin",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why did you lose to the kid?\"",
+     "success": {
+      "text": "Blue watches the kid turn the corner, badge still held high. Blue: \"Because someone did it for me once. And I needed it.\" He does not say who. He goes back inside before you can ask.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "red-sat",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "red-sat",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Before anything else, Blue asks how Red is, carefully, like the answer matters. When you tell him you sat with him in the snow, Blue goes quiet. He stays quiet for a while."
+    },
+    {
+     "id": "red-met",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "red-met",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Before anything else, Blue asks how Red is. He listens to the whole answer, then pretends he was not that interested."
+    }
+   ]
+  },
+  {
+   "id": "blue-taunt-battle",
+   "name": "The Champion Who Lost in an Afternoon: His Real Team",
+   "group": "Famous faces",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 2,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.blue"
+    ],
+    "effect": "shake"
+   },
+   "intro": "Blue walks you round to the empty practice field behind the Gym, where the grass is worn bare in two neat circles. He rolls his shoulders. The six Poké Balls at his belt are not the ones he used against the kid. These ones are scuffed from a League.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Blue sends out his first Pokémon with a flick of the wrist, and nothing about it is held back this time. He is fast, and loud, and having the time of his life.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Blue's real team beat you behind his Gym",
+         "importance": 60
+        }
+       ],
+       "name": "Blue",
+       "bossId": "blue",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Blue's real team behind his Gym",
+         "importance": 75
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Not today.\"",
+     "success": {
+      "text": "Blue shrugs and clips the ball back on. He does not look disappointed; he looks like a man who will be here tomorrow, and the day after. You leave him throwing a ball for his Pidgeot in the evening light.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-champion-coffee",
+   "name": "Coffee with Cynthia",
+   "group": "Famous Faces",
+   "rarity": "rare",
+   "minStage": 4,
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#3a2a1e",
+    "effect": "none"
+   },
+   "types": [],
+   "requires": [],
+   "intro": "A café terrace on the edge of town, the kind with mismatched chairs and a cat asleep on the awning. A woman in a long black coat sits at a corner table with two cups of coffee in front of her, both still steaming. She sees you looking and nudges the second cup an inch toward the empty chair. Cynthia: \"The second is for whoever turns up.\" You sit. She studies you over the rim of her own cup. Cynthia: \"I was told I'd meet someone today. I don't believe in that sort of thing.\" She slides a photograph across the table, its corners soft with handling. Cynthia: \"Do you recognise this ruin?\" You do. It is a ruin you passed through on this very journey: the same broken arch, the same carved wall half swallowed by moss. Cynthia: \"I've been looking for it for six years.\"",
+   "choices": [
+    {
+     "label": "\"I've been there.\"",
+     "success": {
+      "text": "Cynthia puts her cup down very carefully, as if it might break. She asks you to take her there. She asks it simply, without any of the weight she must be carrying, and stands before you have quite finished saying yes.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "face-champion-coffee-road"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why?\"",
+     "success": {
+      "text": "Cynthia turns the photograph back toward herself and looks at it for a long while. Cynthia: \"Because my grandmother died before she could read the last wall.\" She finishes her coffee. She does not explain any further, and you find you do not need her to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cynthia-told",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Drink the coffee.\"",
+     "success": {
+      "text": "You drink the coffee. It is very good, and very strong. Cynthia laughs, really laughs, a surprised sound. Cynthia: \"Honest.\" She sets a Poké Ball on the table between the cups. A battle, if you like. For fun.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "face-champion-coffee-battle"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-champion-coffee-road",
+   "name": "Coffee with Cynthia: The Road Back",
+   "group": "Famous Faces",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 4,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#3a2a1e",
+    "effect": "none"
+   },
+   "intro": "You lead Cynthia back along the road you came in on. She walks fast, coat snapping, and asks about every landmark: which way the river bent, whether the old bridge was still standing, what the wild Pokémon were like. She already knows most of the answers. She just wants to hear them from someone who was there.",
+   "choices": [
+    {
+     "label": "\"This way, by the river.\"",
+     "success": {
+      "text": "The river path is quicker and muddier. Cynthia does not seem to notice the mud. When the broken arch comes into view through the trees she stops dead, one hand over her mouth.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "face-champion-coffee-ruin"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The long way, over the ridge.\"",
+     "success": {
+      "text": "The ridge is slower, but from the top you can see the whole valley, and the ruin in the middle of it like a dropped coin. Cynthia stands there a long time before she lets you lead her down.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "face-champion-coffee-ruin"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-champion-coffee-ruin",
+   "name": "Coffee with Cynthia: The Last Wall",
+   "group": "Famous Faces",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 4,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#3a2a1e",
+    "effect": "none"
+   },
+   "intro": "The ruin is just as you left it. Cynthia walks past the arch and the fallen pillars without a glance. She goes straight to the last wall, the carved one, kneels in the moss, and puts her bare hand flat against the stone. Then she starts to read, lips moving, one line at a time. When she reaches the end, she is silent.",
+   "choices": [
+    {
+     "label": "\"Wait with her.\"",
+     "success": {
+      "text": "You sit down on a fallen pillar and wait. The light moves across the wall. Cynthia does not speak for a very long time, and when she finally stands, her eyes are wet and she is smiling. She thanks you with a nod, and keeps whatever the wall said to herself. For now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cynthia-ruin",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "cynthia-inscription",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You took Cynthia to the ruin she had looked for for six years, and she read its wall",
+        "importance": 85
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ask what it says.\"",
+     "success": {
+      "text": "Cynthia does not answer straight away. She traces the last line with one finger, twice. Then she shakes her head gently: not yet. She thanks you with a hand on your shoulder, and you leave her there with the wall and her grandmother's six years of looking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cynthia-ruin",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "cynthia-inscription",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You took Cynthia to the ruin she had looked for for six years, and she read its wall",
+        "importance": 85
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-champion-coffee-letter",
+   "name": "Coffee with Cynthia: A Letter",
+   "group": "Famous Faces",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "cynthia-ruin",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "regionsLeft",
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#3a2a1e",
+    "effect": "none"
+   },
+   "intro": "A letter catches up with you at a Pokémon Center, the envelope creased from travelling and addressed in tall, careful handwriting. Inside is a photograph of the last wall, and one page. Cynthia writes that she has read it a hundred times now, and that her grandmother would have laughed at how simple it is. At the bottom she has copied the inscription, line by line: \"What was taken from the sky is only borrowed. Give it back, and the sky will remember your name.\"",
+   "choices": [
+    {
+     "label": "\"Keep the letter.\"",
+     "success": {
+      "text": "You fold the letter back along its creases and put it somewhere safe. You think about the wall, and the moss, and a woman kneeling in it with her hand on the stone, for the rest of the day.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Cynthia wrote to tell you what the last wall said",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-champion-coffee-battle",
+   "name": "Coffee with Cynthia: For Fun",
+   "group": "Famous Faces",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 4,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#3a2a1e",
+    "effect": "none"
+   },
+   "intro": "Cynthia moves the cups to the next table, apologising to the cat. The terrace is wide enough, just. She rolls the Poké Ball across her knuckles while she waits for you, and there is nothing casual at all about how she holds it.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Cynthia sends out her first Pokémon with a smile, and the café's customers pick up their cups and move indoors without being asked. Her real team. For fun.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Cynthia beat you, for fun, over coffee",
+         "importance": 60
+        }
+       ],
+       "name": "Cynthia",
+       "bossId": "cynthia",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Cynthia, for fun, over coffee",
+         "importance": 80
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Just the coffee.\"",
+     "success": {
+      "text": "Cynthia laughs again and pockets the ball. Cynthia: \"Honest twice.\" She orders two more coffees, and you talk about nothing much until the sun goes down.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "pc-dragon-master-last-flight",
+   "name": "The Dragon Master's Last Flight",
+   "group": "Past Champions and Leaders",
+   "rarity": "rare",
+   "types": [],
+   "minStage": 3,
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "dragonite",
+    "tint": "#2a3448",
+    "effect": "none"
+   },
+   "intro": "A cliff in the high hills, the sea only a grey line far off on the horizon. Lance sits in the grass with his cape folded under him. Beside him lies his Dragonite, chin on her forelegs. She is old. The orange of her scales has faded to the colour of weak tea, and she is grey around the eyes. Lance: \"She carried me through three wars and two Leagues. She can't fly any more.\" He rests a hand on her neck, and she leans into it. Lance: \"She wants to see the sea from the air one more time. I can't carry her.\"",
+   "choices": [
+    {
+     "label": "\"My Flying-type can try.\"",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "pick": {
+      "types": [
+       "flying"
+      ]
+     },
+     "success": {
+      "text": "Lance looks at your Flying-type for a long time, the way a trainer looks at a stranger's Pokémon he is about to trust with everything. Then he nods. Between you, you rig a sling from his cape, and the old Dragonite lets herself be lifted into it with a sigh like wind in a chimney.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pc-dragon-master-last-flight-flight-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let's walk her to the sea.\"",
+     "success": {
+      "text": "Lance stands and brushes the grass off his knees. The Dragonite gets up too, slowly, joint by joint, and the three of you start downhill at her pace, which is very slow indeed.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pc-dragon-master-last-flight-walk-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why are you telling me?\"",
+     "success": {
+      "text": "Lance almost laughs. Lance: \"Because everyone else I'd ask would ask me for a battle first.\" The Dragonite opens one eye at you, as if to say she has heard that too.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pc-dragon-master-last-flight-ask"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pc-dragon-master-last-flight-ask",
+   "name": "The Dragon Master's Last Flight: Still Asking",
+   "group": "Past Champions and Leaders",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 3,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "dragonite",
+    "tint": "#2a3448",
+    "effect": "none"
+   },
+   "intro": "Lance waits. He does not ask twice; he has never had to. The Dragonite looks out toward the grey line of the sea, and her wings twitch, once, the way a sleeping Pokémon's legs twitch when it dreams of running.",
+   "choices": [
+    {
+     "label": "\"My Flying-type can try.\"",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "pick": {
+      "types": [
+       "flying"
+      ]
+     },
+     "success": {
+      "text": "Lance looks at your Flying-type for a long time, the way a trainer looks at a stranger's Pokémon he is about to trust with everything. Then he nods. Between you, you rig a sling from his cape, and the old Dragonite lets herself be lifted into it with a sigh like wind in a chimney.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pc-dragon-master-last-flight-flight-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let's walk her to the sea.\"",
+     "success": {
+      "text": "Lance stands and brushes the grass off his knees. The Dragonite gets up too, slowly, joint by joint, and the three of you start downhill at her pace, which is very slow indeed.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pc-dragon-master-last-flight-walk-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pc-dragon-master-last-flight-flight-1",
+   "name": "The Dragon Master's Last Flight: The Flight (1 of 3)",
+   "group": "Past Champions and Leaders",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 3,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "dragonite",
+    "tint": "#2a3448",
+    "effect": "none"
+   },
+   "intro": "Your Flying-type beats hard for the sky with the sling beneath it. Lance runs alongside until the ground drops away, then stands at the cliff edge with his cape snapping. The first gust off the hills hits you broadside.",
+   "choices": [
+    {
+     "label": "\"Hold steady.\"",
+     "prompt": {
+      "id": "tilt-drag",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Your Flying-type tilts into the gust and rides it up, steady as a kite on a string. In the sling, the Dragonite opens her wings a little, just to feel the air under them.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pc-dragon-master-last-flight-flight-2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The gust slams into you and the sling swings wide. For a horrible second you are falling, and then your Flying-type finds the air again, wings shaking. The Dragonite does not make a sound. She trusts you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pc-dragon-master-last-flight-flight-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pc-dragon-master-last-flight-flight-2",
+   "name": "The Dragon Master's Last Flight: The Flight (2 of 3)",
+   "group": "Past Champions and Leaders",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 3,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "dragonite",
+    "tint": "#2a3448",
+    "effect": "none"
+   },
+   "intro": "Halfway. Cloud closes in, cold and grey and wet, and you cannot see the ground or the sky. Somewhere below, very faint, Lance is calling directions. Your Flying-type is tiring.",
+   "choices": [
+    {
+     "label": "\"Hold steady.\"",
+     "prompt": {
+      "id": "balloon-drag",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You steer by Lance's voice, and then by the smell of salt, and break out of the cloud into sunlight with the sea spread out ahead like hammered silver.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pc-dragon-master-last-flight-flight-3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You lose Lance's voice in the cloud and drift, and drop, and your Flying-type has to labour back up with the sling dragging at it. When you break into the light you are far off course, but the sea is there.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pc-dragon-master-last-flight-flight-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pc-dragon-master-last-flight-flight-3",
+   "name": "The Dragon Master's Last Flight: The Flight (3 of 3)",
+   "group": "Past Champions and Leaders",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 3,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "dragonite",
+    "tint": "#2a3448",
+    "effect": "none"
+   },
+   "intro": "The last stretch, over the cliffs. The updraft here is fierce, and your Flying-type's wings are trembling. In the sling the old Dragonite has gone very still, watching the water come closer.",
+   "choices": [
+    {
+     "label": "\"Hold steady.\"",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Your Flying-type braces against the updraft and holds, and holds, and then glides down in one long slow curve over the waves while the Dragonite looks at everything.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pc-dragon-master-last-flight-sea"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The updraft nearly tears you apart. Your Flying-type holds on through sheer stubbornness, and you come down hard on the shingle, everyone shaken, everyone whole. The Dragonite has seen the sea from the air. That is what mattered.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pc-dragon-master-last-flight-sea"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pc-dragon-master-last-flight-walk-1",
+   "name": "The Dragon Master's Last Flight: The Walk (1 of 4)",
+   "group": "Past Champions and Leaders",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 3,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "dragonite",
+    "tint": "#2a3448",
+    "effect": "none"
+   },
+   "intro": "The first village. A well in the square, and children who stop playing to stare at the old Dragonite as she passes, slow and enormous and gentle.",
+   "choices": [
+    {
+     "label": "\"Tell me about this place.\"",
+     "success": {
+      "text": "Lance: \"She landed here once in a storm, with me half-frozen on her back. The baker took us in.\" The baker's window is still there. Lance buys two buns and gives one to the Dragonite.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pc-dragon-master-last-flight-walk-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Walk on quietly.\"",
+     "success": {
+      "text": "You walk on in silence. The Dragonite stops at the well to drink, and the children creep close enough to touch her tail. She lets them.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pc-dragon-master-last-flight-walk-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pc-dragon-master-last-flight-walk-2",
+   "name": "The Dragon Master's Last Flight: The Walk (2 of 4)",
+   "group": "Past Champions and Leaders",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 3,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "dragonite",
+    "tint": "#2a3448",
+    "effect": "none"
+   },
+   "intro": "An old battlefield, grown over with wildflowers. There is nothing to show what happened here except a stone with no writing on it.",
+   "choices": [
+    {
+     "label": "\"Tell me about this place.\"",
+     "success": {
+      "text": "Lance stops at the stone. Lance: \"One of the three wars. She stood in front of me here for an hour.\" He does not say anything else, and the Dragonite rests her head on his shoulder.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pc-dragon-master-last-flight-walk-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Walk on quietly.\"",
+     "success": {
+      "text": "You do not ask. Lance stops at the stone for a moment anyway, and the Dragonite rests her head on his shoulder, and then you go on.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pc-dragon-master-last-flight-walk-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pc-dragon-master-last-flight-walk-3",
+   "name": "The Dragon Master's Last Flight: The Walk (3 of 4)",
+   "group": "Past Champions and Leaders",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 3,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "dragonite",
+    "tint": "#2a3448",
+    "effect": "none"
+   },
+   "intro": "A League stadium on the edge of a town, empty today, its banners rolled up. The Dragonite's pace slows even further as you pass the gates.",
+   "choices": [
+    {
+     "label": "\"Tell me about this place.\"",
+     "success": {
+      "text": "Lance: \"My first League. She was a Dratini in a jar of water at the back of my bag.\" He smiles. \"I won with her the second time. Not the first.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pc-dragon-master-last-flight-walk-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Walk on quietly.\"",
+     "success": {
+      "text": "The Dragonite stops at the gates and looks in through the bars for a long while. Lance waits with her. Neither of them seems to need you to say anything.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pc-dragon-master-last-flight-walk-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pc-dragon-master-last-flight-walk-4",
+   "name": "The Dragon Master's Last Flight: The Walk (4 of 4)",
+   "group": "Past Champions and Leaders",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 3,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "dragonite",
+    "tint": "#2a3448",
+    "effect": "none"
+   },
+   "intro": "The last hill. You can smell the sea now, and hear it. The Dragonite is breathing hard, and Lance walks with one hand on her side the whole way up.",
+   "choices": [
+    {
+     "label": "\"Tell me about this place.\"",
+     "success": {
+      "text": "Lance: \"This is where she learned to fly. Fell off this hill four times.\" The Dragonite huffs, as if she remembers it differently.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pc-dragon-master-last-flight-sea"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Walk on quietly.\"",
+     "success": {
+      "text": "You walk the last hill together without a word, three sets of footsteps and the sound of the waves getting louder.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "pc-dragon-master-last-flight-sea"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pc-dragon-master-last-flight-sea",
+   "name": "The Dragon Master's Last Flight: At the Sea",
+   "group": "Past Champions and Leaders",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 3,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "dragonite",
+    "tint": "#2a3448",
+    "effect": "none"
+   },
+   "intro": "The sea, at last: wide and grey-green and restless, gulls hanging over it. The Dragonite settles on the shingle at the water's edge and looks at the water for a long time. The wind lifts the faded edges of her wings. Lance stands beside her and does not move. At last he turns to you, and his voice is very quiet. Lance: \"Thank you.\"",
+   "choices": [
+    {
+     "label": "\"Thank her for me.\"",
+     "success": {
+      "text": "Lance kneels and says something to the Dragonite that you do not hear. She noses at the satchel by his feet, and Lance takes out an egg, pale blue and warm. He puts it in your arms. From her last clutch. The Dratini inside will hatch already knowing the fastest move she ever taught him.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "dratini"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "lance-egg-extreme-speed",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You took Lance's old Dragonite to see the sea one last time. He gave you a Dratini egg from her last clutch.",
+        "importance": 90
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "retired-champion-spar",
+   "name": "The Champion Who Left",
+   "group": "NPC Stories",
+   "stop": "dojo",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#24243a",
+    "effect": "none"
+   },
+   "types": [],
+   "requires": [],
+   "intro": "A paddock fence at the edge of town, grey wood, a field of long grass behind it. A woman in a worn coat leans on the top rail with her elbows, watching nothing in particular. Her boots are good boots that have walked a long way. She hears you on the path and does not turn round. Sable: \"I used to hold a title.\" She says it the way someone mentions a town they used to live in. Sable: \"I left because I stopped enjoying it. I was afraid that meant I'd stopped being good.\" Now she turns. Her eyes are calm, and very sharp. Sable: \"Spar with me. If you can stand your ground, I'll tell you something nobody tells you.\"",
+   "choices": [
+    {
+     "label": "\"Spar.\"",
+     "success": {
+      "text": "Sable steps away from the fence and lets six Poké Balls drop from her sleeve into her hand. She moves slowly, deliberately, like she has all the time in the world. It is a Champion's team, and she plays it like one.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Sable Oakridge beat you, and said you stood your ground anyway",
+         "importance": 65
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "retired-champion-spar-after"
+        }
+       ],
+       "team": [
+        "garchomp",
+        "dragonite",
+        "milotic",
+        "lucario",
+        "aegislash",
+        "gardevoir"
+       ],
+       "name": "Sable Oakridge",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You stood your ground against Sable Oakridge, and won",
+         "importance": 80
+        },
+        {
+         "kind": "flag",
+         "key": "lore-champions-chair",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "retired-champion-spar-after"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"What did nobody tell you?\"",
+     "success": {
+      "text": "Sable looks back at the long grass for a while. Sable: \"That you're allowed to stop.\" She says it gently, like she is handing you something breakable. Then she goes back to watching the field.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Do you miss it?\"",
+     "success": {
+      "text": "Sable: \"Every day.\" A long pause. A Pidgey lands on the fence, looks at the two of you, and leaves. Sable: \"Not the winning.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "retired-champion-spar-after",
+   "name": "The Champion Who Left: A Chair",
+   "group": "NPC Stories",
+   "stop": "dojo",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 2,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#24243a",
+    "effect": "none"
+   },
+   "intro": "Afterwards, win or lose, Sable sits down on the bottom rail of the fence and lets her team graze in the long grass. She is breathing a little hard, and she looks pleased about it. Sable: \"The Champion's chair isn't the top of anything. It's a chair.\" She tips her head at you. The question is in her face before she asks it: she wants to know what you think she should do.",
+   "choices": [
+    {
+     "label": "\"Come back.\"",
+     "success": {
+      "text": "Sable laughs, short and surprised. She says she will think about it, and from the way she looks at her team, she already is.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "retired-champion-spar-lesson"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Stay retired.\"",
+     "success": {
+      "text": "Sable lets out a long breath and nods, slowly, like you have given her permission for something. She says the field suits her better than the chair ever did.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "retired-champion-spar-lesson"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "mentor",
+     "when": [
+      {
+       "kind": "mentor",
+       "id": "sable-oakridge",
+       "trustAtLeast": 45
+      }
+     ],
+     "notice": "Sable is your mentor. She has never asked you anything she did not already know the answer to, until now.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "\"Come back.\"",
+       "success": {
+        "text": "Sable stares at you, and then she is grinning, properly delighted, like a kid. Sable: \"...All right.\" She will be in the League in the last region, standing in for one of the Elite Four. She says she will pick a team built to beat yours, and she cannot wait.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sable-league",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "moment",
+          "text": "You told Sable Oakridge to come back, and she said yes",
+          "importance": 80
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "retired-champion-spar-lesson"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "retired-champion-spar-lesson",
+   "name": "The Champion Who Left: Her Lesson",
+   "group": "NPC Stories",
+   "stop": "dojo",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 2,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#24243a",
+    "effect": "none"
+   },
+   "intro": "Sable whistles her team back and stands. Sable: \"I promised you something nobody tells you.\" She looks over your team one Pokémon at a time, the way a teacher reads a class. She will teach one of them, one thing, properly. Which one, and what, is up to you.",
+   "choices": [
+    {
+     "label": "\"Attack.\"",
+     "pick": {},
+     "success": {
+      "text": "Sable spends an hour on one thing: hitting at the right moment instead of the first one. By the end, your Pokémon strikes like it means it.",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "atk",
+        "percent": 5,
+        "who": "picked",
+        "until": "run"
+       },
+       {
+        "kind": "moment",
+        "text": "Sable Oakridge taught one of your team something nobody teaches",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Defence.\"",
+     "pick": {},
+     "success": {
+      "text": "Sable throws everything she has at your Pokémon, gently at first, then not gently at all, until it stops flinching and starts standing.",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "def",
+        "percent": 5,
+        "who": "picked",
+        "until": "run"
+       },
+       {
+        "kind": "moment",
+        "text": "Sable Oakridge taught one of your team something nobody teaches",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Speed.\"",
+     "pick": {},
+     "success": {
+      "text": "Sable makes your Pokémon wait, and wait, and then go. By sunset it is moving before her hand has finished falling.",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "spe",
+        "percent": 5,
+        "who": "picked",
+        "until": "run"
+       },
+       {
+        "kind": "moment",
+        "text": "Sable Oakridge taught one of your team something nobody teaches",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Another stat.\"",
+     "success": {
+      "text": "Sable raises an eyebrow and waits for you to say which.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "retired-champion-spar-lesson-more"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "retired-champion-spar-lesson-more",
+   "name": "The Champion Who Left: Something Else",
+   "group": "NPC Stories",
+   "stop": "dojo",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 2,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#24243a",
+    "effect": "none"
+   },
+   "intro": "Sable: \"Something else, then.\" She folds her arms and waits, patient as the fence.",
+   "choices": [
+    {
+     "label": "\"Special Attack.\"",
+     "pick": {},
+     "success": {
+      "text": "Sable teaches your Pokémon to breathe once, slowly, before it lets go of a move. It hits harder for the waiting.",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "spa",
+        "percent": 5,
+        "who": "picked",
+        "until": "run"
+       },
+       {
+        "kind": "moment",
+        "text": "Sable Oakridge taught one of your team something nobody teaches",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Special Defence.\"",
+     "pick": {},
+     "success": {
+      "text": "Sable teaches your Pokémon to let a blow pass through it instead of fighting it. By the end it shrugs off what used to stagger it.",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "spd",
+        "percent": 5,
+        "who": "picked",
+        "until": "run"
+       },
+       {
+        "kind": "moment",
+        "text": "Sable Oakridge taught one of your team something nobody teaches",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"HP.\"",
+     "pick": {},
+     "success": {
+      "text": "Sable has your Pokémon run the paddock until it can run it again, and again. Sable: \"Staying in is half of it.\"",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "hp",
+        "percent": 5,
+        "who": "picked",
+        "until": "run"
+       },
+       {
+        "kind": "moment",
+        "text": "Sable Oakridge taught one of your team something nobody teaches",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-hall-champions",
+   "name": "The Hall of Past Champions",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2618",
+    "effect": "sparkle"
+   },
+   "types": [],
+   "requires": [],
+   "intro": "A long hall of statues, dim and cool, smelling of stone dust and floor polish. Each statue is a past Champion, life-size, carved mid-command with one arm flung out. Their teams stand on the plinths around them, carved just as carefully. A caretaker with a feather duster and a cough like a drawer opening shuffles out from behind a pillar. Caretaker: \"They tend to move. For a donation.\" He coughs. Caretaker: \"The statues are the Champions. The plinths are the teams. You can fight any one of them. They remember winning.\" He points the duster down the hall, toward the far end, where the light is thin. Caretaker: \"There's one plinth at the end with no statue.\"",
+   "choices": [
+    {
+     "label": "\"Fight a Champion.\"",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "You drop ₽600 in the caretaker's tin. He listens to it land, nods, and leads you to the first wing. Behind you, stone grinds on stone.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -600
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mr-hall-champions-wing-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ask about the empty plinth.\"",
+     "success": {
+      "text": "You walk to the end of the hall with the caretaker. The last plinth is bare, swept clean, waiting. Caretaker: \"For whoever comes next.\" He dusts it anyway, carefully, all the way round, like it matters.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Donate.\"",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "You drop ₽600 in the tin. The caretaker brightens and unhooks an iron key from his belt. Behind the last pillar there is a door you had not noticed, and behind the door a long stone corridor: Victory Hall, where challengers have trained for years.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -600
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dungeon-victory-hall"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "plate",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ghost-plate",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "At the far end, the empty plinth is not quite empty any more. A new brass plate is fixed to its front, still bright: WREN CALLOWAY. Someone has left a sprig of wildflowers beside it."
+    },
+    {
+     "id": "glass-plaque",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "glass-plaque",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "By the door hangs a small plaque of clear glass, new since anyone last dusted in here. You remember promising someone it would be."
+    }
+   ]
+  },
+  {
+   "id": "mr-hall-champions-wing-1",
+   "name": "The Hall of Past Champions: The First Wing",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 3,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2618",
+    "effect": "sparkle"
+   },
+   "intro": "The first wing. Three statues stand in a row, and all three have turned their heads to watch you come in. The caretaker coughs politely and stands well back.",
+   "choices": [
+    {
+     "label": "\"Blue's statue.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "hall-beat-blue",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "The statue of Blue grins, which statues should not do, and steps down off his plinth with a sound like a landslide. His team, as it was the afternoon he won, shakes the dust off.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "mr-hall-champions-wing-1"
+        }
+       ],
+       "name": "Blue",
+       "bossId": "blue",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hall-beat-blue",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "hall-statues",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Blue's statue in the Hall of Past Champions and took a Champion's ribbon",
+         "importance": 70
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mr-hall-champions-wing-1"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Lance's statue.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "hall-beat-lance",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "The statue of Lance sweeps its stone cape aside. Its dragons uncoil from the plinth around it, cracking the varnish, exactly as they were the year he won.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "mr-hall-champions-wing-1"
+        }
+       ],
+       "name": "Lance",
+       "bossId": "lance",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hall-beat-lance",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "hall-statues",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Lance's statue in the Hall of Past Champions and took a Champion's ribbon",
+         "importance": 70
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mr-hall-champions-wing-1"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Steven's statue.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "hall-beat-steven",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "The statue of Steven adjusts a cufflink, very precisely, and steps down. The team behind him gleams like it has just been polished, because it has.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "mr-hall-champions-wing-1"
+        }
+       ],
+       "name": "Steven",
+       "bossId": "steven",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hall-beat-steven",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "hall-statues",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Steven's statue in the Hall of Past Champions and took a Champion's ribbon",
+         "importance": 70
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mr-hall-champions-wing-1"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"The next wing.\"",
+     "success": {
+      "text": "You walk on. The statues turn their heads to watch you go.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mr-hall-champions-wing-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-hall-champions-wing-2",
+   "name": "The Hall of Past Champions: The Second Wing",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 3,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2618",
+    "effect": "sparkle"
+   },
+   "intro": "The second wing, where the floor tiles change colour and the statues stand further apart. One of them is reading a stone book. It closes it as you come in.",
+   "choices": [
+    {
+     "label": "\"Cynthia's statue.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "hall-beat-cynthia",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "The statue of Cynthia closes the stone book and sets it down on the plinth. Her team, the team she won with, rises around her in a long dark coat of shadow.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "mr-hall-champions-wing-2"
+        }
+       ],
+       "name": "Cynthia",
+       "bossId": "cynthia",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hall-beat-cynthia",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "hall-statues",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Cynthia's statue in the Hall of Past Champions and took a Champion's ribbon",
+         "importance": 70
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mr-hall-champions-wing-2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Alder's statue.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "hall-beat-alder",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "The statue of Alder laughs, a deep grinding rumble, and stretches like it has been asleep for years. Its team stretches too.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "mr-hall-champions-wing-2"
+        }
+       ],
+       "name": "Alder",
+       "bossId": "alder",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hall-beat-alder",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "hall-statues",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Alder's statue in the Hall of Past Champions and took a Champion's ribbon",
+         "importance": 70
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mr-hall-champions-wing-2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Diantha's statue.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "hall-beat-diantha",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "The statue of Diantha turns toward you as if into a spotlight, and steps down with perfect grace. Her team follows in a line.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "mr-hall-champions-wing-2"
+        }
+       ],
+       "name": "Diantha",
+       "bossId": "diantha",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hall-beat-diantha",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "hall-statues",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Diantha's statue in the Hall of Past Champions and took a Champion's ribbon",
+         "importance": 70
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mr-hall-champions-wing-2"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"The next wing.\"",
+     "success": {
+      "text": "You walk on into the third wing. The caretaker follows, wheezing.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mr-hall-champions-wing-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-hall-champions-wing-3",
+   "name": "The Hall of Past Champions: The Third Wing",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 3,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2618",
+    "effect": "sparkle"
+   },
+   "intro": "The third wing, the newest, the stone still pale. These statues look almost alive already, as if the sculptor only finished them yesterday.",
+   "choices": [
+    {
+     "label": "\"Kukui's statue.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "hall-beat-kukui",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "The statue of Kukui pushes its stone glasses up its nose, and its team piles off the plinth with a whoop that echoes down the whole hall.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "mr-hall-champions-wing-3"
+        }
+       ],
+       "name": "Kukui",
+       "bossId": "kukui",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hall-beat-kukui",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "hall-statues",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Kukui's statue in the Hall of Past Champions and took a Champion's ribbon",
+         "importance": 70
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mr-hall-champions-wing-3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Leon's statue.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "hall-beat-leon",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "The statue of Leon throws back its stone cape and strikes a pose that the sculptor clearly asked him to hold for hours. His team, the one that never lost, steps down.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "mr-hall-champions-wing-3"
+        }
+       ],
+       "name": "Leon",
+       "bossId": "leon",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hall-beat-leon",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "hall-statues",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Leon's statue in the Hall of Past Champions and took a Champion's ribbon",
+         "importance": 70
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mr-hall-champions-wing-3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Geeta's statue.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "hall-beat-geeta",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "The statue of Geeta folds its hands and regards you, unhurried. Its team assembles on the floor in front of it in perfect formation.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "mr-hall-champions-wing-3"
+        }
+       ],
+       "name": "Geeta",
+       "bossId": "geeta",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hall-beat-geeta",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "hall-statues",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You beat Geeta's statue in the Hall of Past Champions and took a Champion's ribbon",
+         "importance": 70
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mr-hall-champions-wing-3"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Back to the first wing.\"",
+     "success": {
+      "text": "You walk back the way you came, past statues that turn to watch.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mr-hall-champions-wing-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-hall-champions-key",
+   "name": "The Hall of Past Champions: The Caretaker's Key",
+   "group": "Mysteries & Ruins",
+   "stop": "special",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "hall-statues",
+     "atLeast": 9,
+     "atMost": 99
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2618",
+    "effect": "sparkle"
+   },
+   "intro": "The caretaker from the Hall of Past Champions has walked a long way to find you; there is dust on his shoes from three roads. He coughs. He holds out a small, heavy, old key on a loop of string. He says every statue in the Hall has stepped down for you, and that has not happened in his time. The key opens the Archive.",
+   "choices": [
+    {
+     "label": "\"Take the key.\"",
+     "success": {
+      "text": "You take the key. It is warmer than metal should be. The caretaker nods, coughs, and shuffles off back the way he came, already looking forward to dusting.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hall-archive-key",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You beat every Champion's statue in the Hall. The caretaker gave you the key to the Archive.",
+        "importance": 90
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dungeon-victory-hall",
+   "name": "Victory Hall",
+   "group": "Landmark Dungeons",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "fighting",
+    "rock"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c10",
+    "effect": "shake"
+   },
+   "requires": [],
+   "room": true,
+   "intro": "A long stone hall where challengers have trained for years. The flagstones are worn into shallow dips where people have stood and planted their feet. At the far end, three doors. An old hall keeper sits on a stool by the first one with a lantern. Hall keeper: \"Three rooms. Each harder. The prize is a name on the wall.\" The first room is Patience. In the middle of it stands a statue Champion, perfectly still. It only moves when your Pokémon stands still.",
+   "choices": [
+    {
+     "label": "\"Wait for it.\"",
+     "success": {
+      "text": "You tell your lead to wait. It stands still. The statue moves.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Victory Hall's room of Patience beat you",
+         "importance": 50
+        }
+       ],
+       "name": "Statue Champion",
+       "size": 3,
+       "types": [
+        "rock"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "dungeon-victory-hall-courage"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Attack first.\"",
+     "success": {
+      "text": "You strike before it moves, and the whole statue wakes up angry. This is the harder way.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Victory Hall's room of Patience beat you",
+         "importance": 50
+        }
+       ],
+       "name": "Statue Champion",
+       "size": 3,
+       "types": [
+        "rock"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "dungeon-victory-hall-courage"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "dungeon-victory-hall-courage",
+   "name": "Victory Hall: Courage",
+   "group": "Landmark Dungeons",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [
+    "fighting",
+    "rock"
+   ],
+   "minStage": 2,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c10",
+    "effect": "shake"
+   },
+   "intro": "The second room is Courage. A Champion's ace waits in the middle of it, alone, at full strength: a Garchomp, scarred and calm, its fins flat. The keeper holds up one finger. Hall keeper: \"One Pokémon. Yours. No switching.\"",
+   "choices": [
+    {
+     "label": "\"Send the lead.\"",
+     "success": {
+      "text": "Your lead walks out to meet it. Nobody else is coming.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "A Champion's ace beat your lead in Victory Hall",
+         "importance": 50
+        }
+       ],
+       "rule": {
+        "noSwitch": true,
+        "suddenDeath": true
+       },
+       "team": [
+        "garchomp"
+       ],
+       "name": "Champion's Ace",
+       "size": 1,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "dungeon-victory-hall-memory"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Send the weakest.\"",
+     "pick": {},
+     "success": {
+      "text": "You choose the one nobody would choose. The keeper raises an eyebrow, and then nods slowly, like he has seen this before and liked it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Your weakest Pokémon stood against a Champion's ace in Victory Hall",
+         "importance": 60
+        }
+       ],
+       "rule": {
+        "noSwitch": true,
+        "suddenDeath": true
+       },
+       "team": [
+        "garchomp"
+       ],
+       "name": "Champion's Ace",
+       "size": 1,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "friendship",
+         "amount": 15,
+         "who": "picked"
+        },
+        {
+         "kind": "moment",
+         "text": "Your weakest Pokémon beat a Champion's ace alone in Victory Hall",
+         "importance": 80
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dungeon-victory-hall-memory"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "dungeon-victory-hall-memory",
+   "name": "Victory Hall: Memory",
+   "group": "Landmark Dungeons",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [
+    "fighting",
+    "rock"
+   ],
+   "minStage": 2,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c10",
+    "effect": "shake"
+   },
+   "intro": "The third room is Memory. It is round, and lit from above, and holds a single empty plinth. The keeper says it holds a Champion of your choice, whoever you would most like to have beaten. Something on the plinth is already taking shape out of the dust.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "The keeper asks who it should be.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dungeon-victory-hall-memory-pick"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Bow to it.\"",
+     "success": {
+      "text": "You bow. The shape on the plinth bows back, and the room is passed. The keeper takes a chisel from his pocket and, without a word, cuts your name into the wall at the end of the hall, under all the others. Then he pins a Champion's ribbon on you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "victory-hall-name",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your name is cut into the wall of Victory Hall, and you took a Champion's ribbon",
+        "importance": 85
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dungeon-victory-hall-memory-pick",
+   "name": "Victory Hall: Whose Statue",
+   "group": "Landmark Dungeons",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [
+    "fighting",
+    "rock"
+   ],
+   "minStage": 2,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c10",
+    "effect": "shake"
+   },
+   "intro": "The dust on the plinth waits for a name.",
+   "choices": [
+    {
+     "label": "\"Lance.\"",
+     "success": {
+      "text": "The keeper says the name aloud, and a statue at the far end of the room turns to face you: Lance, with the team they won with.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Lance's statue beat you in Victory Hall's last room",
+         "importance": 60
+        }
+       ],
+       "name": "Lance",
+       "bossId": "lance",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "victory-hall-name",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Your name is cut into the wall of Victory Hall, and you took a Champion's ribbon",
+         "importance": 85
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Cynthia.\"",
+     "success": {
+      "text": "The keeper says the name aloud, and a statue at the far end of the room turns to face you: Cynthia, with the team they won with.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Cynthia's statue beat you in Victory Hall's last room",
+         "importance": 60
+        }
+       ],
+       "name": "Cynthia",
+       "bossId": "cynthia",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "victory-hall-name",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Your name is cut into the wall of Victory Hall, and you took a Champion's ribbon",
+         "importance": 85
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Leon.\"",
+     "success": {
+      "text": "The keeper says the name aloud, and a statue at the far end of the room turns to face you: Leon, with the team they won with.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Leon's statue beat you in Victory Hall's last room",
+         "importance": 60
+        }
+       ],
+       "name": "Leon",
+       "bossId": "leon",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "victory-hall-name",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Your name is cut into the wall of Victory Hall, and you took a Champion's ribbon",
+         "importance": 85
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "retired-champ-garage",
+   "name": "The Garage Sale",
+   "group": "Merchants & Deals",
+   "rarity": "epic",
+   "minStage": 4,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "types": [],
+   "requires": [],
+   "intro": "A driveway in the suburbs, with a trestle table and a hand-lettered sign. On the table: trophies, dozens of them, tarnished and dented, and three things laid out on a folded towel. An old Champion sits behind it in a deckchair. Her Arcanine sleeps across the end of the driveway like a draught excluder. Old Champion: \"Three signature items for sale. I won't need them where I'm going.\" She waves at the moving van parked in the road. Old Champion: \"I'm moving to the coast. My Pokémon want to see the sea.\" She touches each of the three things on the towel in turn. Old Champion: \"Each of these won me something. They're not magic. They were just there.\" The prices are written on little paper tags, and they are honest ones.",
+   "choices": [
+    {
+     "label": "\"The scarf.\" (₽700)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 700
+      }
+     ],
+     "success": {
+      "text": "A Choice Scarf from her first League, the colour faded on one side where the sun caught it on a hundred journeys. She folds it carefully, counts your money once, and tells you it was the first thing she ever bought with prize money.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -700
+       },
+       {
+        "kind": "item",
+        "id": "choice-scarf",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The band.\" (₽700)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 700
+      }
+     ],
+     "success": {
+      "text": "A Focus Band, frayed at one end. She holds it a moment before she hands it over. It saved her ace once, she says, in a final, when everything else had gone wrong. Then she takes your money and tucks it in her apron.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -700
+       },
+       {
+        "kind": "item",
+        "id": "focus-band",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The photo.\"",
+     "success": {
+      "text": "You ask about the photo instead: a team of six, young and scruffy, squinting into the sun. The old Champion lights up like you have given her a present.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "retired-champ-garage-team"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "ace",
+     "when": [
+      {
+       "kind": "partySpecies",
+       "species": "arcanine"
+      }
+     ],
+     "notice": "The old Champion's Arcanine has lifted its head off the driveway and is looking at your Arcanine. The old Champion looks too, for a long time.",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "\"The band.\"",
+       "success": {
+        "text": "The old Champion picks up the Focus Band and turns it over, then walks round the table and ties it, very gently, onto your Arcanine. She will not take your money for it, she says: it was her ace's, and it should go to one like it. Her own Arcanine thumps its tail on the concrete.",
+        "effects": [
+         {
+          "kind": "item",
+          "id": "focus-band",
+          "count": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "retired-champ-garage-team",
+   "name": "The Garage Sale: Her First Team",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 4,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "She pulls up a second deckchair for you and tells you about every one of them. The Growlithe who grew into the Arcanine asleep on the drive. The Pidgey who was afraid of heights for a whole year. The Poliwag who ate a shoe. The Oddish who only fought at night, and the two who did not make it to the end of the road with her, whose names she says slowly, the way you say things to keep them. When she is finished she signs the photo across the bottom and holds it out. There is no price tag on it. You asked about them first.",
+   "choices": [
+    {
+     "label": "\"Take the photo.\"",
+     "success": {
+      "text": "You take the photo. Her signature is big and loopy and a little shaky. She tells you to look after it, and then goes back to pricing trophies, humming.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "garage-photo",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A retired Champion gave you a signed photo of her first team",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It should go with you.\"",
+     "success": {
+      "text": "She looks at the photo, and then at you, and then she laughs and puts it in her apron pocket, over her heart. She tells you it was the right answer, and that she was not going to let it go anyway.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-champion-in-disguise-s1",
+   "name": "The Champion in Disguise",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "disguise-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "A casual traveller steps out onto the road ahead and waves you down. Their cap is pulled low and their coat is too plain, plain the way a costume is plain. Traveller: \"Friendly one? I'm rusty. Terribly rusty.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Their Pokémon are superb. Their coats shine, their stances are perfect, and the traveller uses them like somebody playing a piano with mittens on. A switch at the worst possible moment. A status move straight into an immunity. Twice their lead looks back at them, puzzled. They lose, badly, and you are almost sure they meant to.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "ovc-champion-in-disguise-s1-after"
+        }
+       ],
+       "name": "Traveller",
+       "size": 3,
+       "types": [],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "ovc-champion-in-disguise-s1-after"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-champion-in-disguise-s1-after",
+   "name": "The Champion in Disguise: Good Battle",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The traveller calls back their Pokémon, which go with obvious relief, and shakes your hand warmly. Traveller: \"Good battle. You'll go far. I'd know.\"",
+   "choices": [
+    {
+     "label": "\"You threw that.\"",
+     "success": {
+      "text": "Traveller: \"Did I? How embarrassing for both of us.\" They are smiling under the cap. They tip it to you and walk on down the road, whistling, coat flapping.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "disguise-met",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Good battle.\"",
+     "success": {
+      "text": "The traveller beams like you have handed them a medal, and shakes your hand again for good measure. Then they wander off down the road, hands in pockets, whistling something you almost recognise.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "disguise-met",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Your Pokémon are better than that.\"",
+     "success": {
+      "text": "The traveller stops. For just a second, something very sharp looks out from under the cap. Then it is gone, and they laugh, and agree their Pokémon deserve a better trainer, and walk on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "disguise-met",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-champion-in-disguise-s2",
+   "name": "The Champion in Disguise",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "disguise-met",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "disguise-s2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "intro": "A different region, a different road, and the same plain coat leaning on a signpost. The traveller pushes off it with a grin. Traveller: \"Same traveller. Better team this time, I promise.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "This time they try a little. You can see it: their hands keep going to a move and stopping, going and stopping, like someone reaching for a biscuit they have promised not to eat.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "disguise-s2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "ovc-champion-in-disguise-s2-lost"
+        }
+       ],
+       "name": "Traveller",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "ovc-champion-in-disguise-s2-won"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-champion-in-disguise-s2-lost",
+   "name": "The Champion in Disguise: Interested",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 2,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "They win. Narrowly. And then they stand there looking worried about it, cap in both hands. Traveller: \"Sorry. I didn't mean— I got interested. That's the trouble. I always get interested.\"",
+   "choices": [
+    {
+     "label": "\"Don't apologise for winning.\"",
+     "success": {
+      "text": "The traveller blinks at you. Then they put the cap back on, slowly, and nod, as if that is the most interesting thing anyone has said to them in years. They walk on without another word, but they look back twice.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Who are you?\"",
+     "success": {
+      "text": "Traveller: \"Somebody on a walk.\" They pull the cap a little lower and smile at the ground.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Again.\"",
+     "success": {
+      "text": "The traveller's face lights up. They do not even pretend to think about it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The traveller in a plain coat won again, and apologised again",
+         "importance": 50
+        }
+       ],
+       "name": "Traveller",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat the traveller in a plain coat, again",
+         "importance": 55
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-champion-in-disguise-s2-won",
+   "name": "The Champion in Disguise: From This Side",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 2,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "You win. The traveller stares at the field for a second, and then laughs out loud, for the first time, a real laugh that bends them double. Traveller: \"There. Do that again. I'd forgotten what that felt like from this side.\"",
+   "choices": [
+    {
+     "label": "\"Again.\"",
+     "success": {
+      "text": "The traveller's face lights up. They do not even pretend to think about it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The traveller in a plain coat won again, and apologised again",
+         "importance": 50
+        }
+       ],
+       "name": "Traveller",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat the traveller in a plain coat, again",
+         "importance": 55
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Who are you?\"",
+     "success": {
+      "text": "Traveller: \"Somebody on a walk.\" They pull the cap a little lower and smile at the ground.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-champion-in-disguise-s3",
+   "name": "The Champion in Disguise",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "disguise-s2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "disguise-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "intro": "The same road. They are waiting for you on the verge in the plain coat, and this time they do not pretend to be surprised. The cap comes off. It is a Champion you know by face: Steven. Without the cap the silver hair catches the light, and there is a ring on one finger with a stone in it you have seen in every Champion portrait in the region. Steven: \"I wanted to battle someone who didn't know who I was. It's been eleven years.\" They turn the cap over in their hands. Steven: \"People lose to the name. They've lost before I've sent anything out.\" A small, crooked smile. Steven: \"You didn't. You just thought I was a bit useless.\"",
+   "choices": [
+    {
+     "label": "\"Battle me as yourself.\"",
+     "success": {
+      "text": "Steven does not say anything at all. There is no performance, no narration, none of the mittens. They send out their real team, and they are entirely there.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "disguise-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The traveller in the plain coat was Steven. They gave you their cap.",
+        "importance": 85
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Steven beat you, battling as themselves",
+         "importance": 70
+        }
+       ],
+       "name": "Steven",
+       "bossId": "steven",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Steven, battling as themselves",
+         "importance": 90
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Keep the cap on.\"",
+     "success": {
+      "text": "The cap goes back on, and they laugh, and they keep laughing the whole way through. It is another casual battle, and it is the best either of you plays.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "disguise-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The traveller in the plain coat was Steven. They gave you their cap.",
+        "importance": 85
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The traveller in the cap beat you, laughing",
+         "importance": 60
+        }
+       ],
+       "name": "Traveller",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat the traveller in the cap, laughing",
+         "importance": 75
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Why me?\"",
+     "success": {
+      "text": "Steven: \"You didn't ask for an autograph.\" They put the cap on your head instead, and it is too big, and they will not take it back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "disguise-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The traveller in the plain coat was Steven. They gave you their cap.",
+        "importance": 85
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "diantha",
+     "when": [
+      {
+       "kind": "region",
+       "ids": [
+        "kalos",
+        "unova",
+        "alola"
+       ]
+      }
+     ],
+     "intro": "The same road. They are waiting for you on the verge in the plain coat, and this time they do not pretend to be surprised. The cap comes off. It is a Champion you know by face: Diantha. Without the cap the face is unmistakable; you have seen it on posters, on screens, on the side of a bus. Diantha: \"I wanted to battle someone who didn't know who I was. It's been eleven years.\" They turn the cap over in their hands. Diantha: \"People lose to the name. They've lost before I've sent anything out.\" A small, crooked smile. Diantha: \"You didn't. You just thought I was a bit useless.\"",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "\"Battle me as yourself.\"",
+       "success": {
+        "text": "Diantha does not say anything at all. There is no performance, no narration, none of the mittens. They send out their real team, and they are entirely there.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "disguise-done",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "The traveller in the plain coat was Diantha. They gave you their cap.",
+          "importance": 85
+         }
+        ],
+        "battle": {
+         "kind": "trainer",
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "moment",
+           "text": "Diantha beat you, battling as themselves",
+           "importance": 70
+          }
+         ],
+         "name": "Diantha",
+         "bossId": "diantha",
+         "size": 6,
+         "types": [],
+         "levelBonus": 2,
+         "win": [
+          {
+           "kind": "moment",
+           "text": "You beat Diantha, battling as themselves",
+           "importance": 90
+          }
+         ]
+        }
+       }
+      },
+      {
+       "label": "\"Keep the cap on.\"",
+       "success": {
+        "text": "The cap goes back on, and they laugh, and they keep laughing the whole way through. It is another casual battle, and it is the best either of you plays.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "disguise-done",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "The traveller in the plain coat was Diantha. They gave you their cap.",
+          "importance": 85
+         }
+        ],
+        "battle": {
+         "kind": "trainer",
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "moment",
+           "text": "The traveller in the cap beat you, laughing",
+           "importance": 60
+          }
+         ],
+         "name": "Traveller",
+         "size": 3,
+         "types": [],
+         "levelBonus": 1,
+         "win": [
+          {
+           "kind": "moment",
+           "text": "You beat the traveller in the cap, laughing",
+           "importance": 75
+          }
+         ]
+        }
+       }
+      },
+      {
+       "label": "\"Why me?\"",
+       "success": {
+        "text": "Diantha: \"You didn't ask for an autograph.\" They put the cap on your head instead, and it is too big, and they will not take it back.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "disguise-done",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "The traveller in the plain coat was Diantha. They gave you their cap.",
+          "importance": 85
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "leon",
+     "when": [
+      {
+       "kind": "region",
+       "ids": [
+        "galar",
+        "paldea"
+       ]
+      }
+     ],
+     "intro": "The same road. They are waiting for you on the verge in the plain coat, and this time they do not pretend to be surprised. The cap comes off. It is a Champion you know by face: Leon. Without the cap the hair comes tumbling out, and there is no mistaking it; half the children in the region wear their caps the way he does. Leon: \"I wanted to battle someone who didn't know who I was. It's been eleven years.\" They turn the cap over in their hands. Leon: \"People lose to the name. They've lost before I've sent anything out.\" A small, crooked smile. Leon: \"You didn't. You just thought I was a bit useless.\"",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "\"Battle me as yourself.\"",
+       "success": {
+        "text": "Leon does not say anything at all. There is no performance, no narration, none of the mittens. They send out their real team, and they are entirely there.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "disguise-done",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "The traveller in the plain coat was Leon. They gave you their cap.",
+          "importance": 85
+         }
+        ],
+        "battle": {
+         "kind": "trainer",
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "moment",
+           "text": "Leon beat you, battling as themselves",
+           "importance": 70
+          }
+         ],
+         "name": "Leon",
+         "bossId": "leon",
+         "size": 6,
+         "types": [],
+         "levelBonus": 2,
+         "win": [
+          {
+           "kind": "moment",
+           "text": "You beat Leon, battling as themselves",
+           "importance": 90
+          }
+         ]
+        }
+       }
+      },
+      {
+       "label": "\"Keep the cap on.\"",
+       "success": {
+        "text": "The cap goes back on, and they laugh, and they keep laughing the whole way through. It is another casual battle, and it is the best either of you plays.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "disguise-done",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "The traveller in the plain coat was Leon. They gave you their cap.",
+          "importance": 85
+         }
+        ],
+        "battle": {
+         "kind": "trainer",
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "moment",
+           "text": "The traveller in the cap beat you, laughing",
+           "importance": 60
+          }
+         ],
+         "name": "Traveller",
+         "size": 3,
+         "types": [],
+         "levelBonus": 1,
+         "win": [
+          {
+           "kind": "moment",
+           "text": "You beat the traveller in the cap, laughing",
+           "importance": 75
+          }
+         ]
+        }
+       }
+      },
+      {
+       "label": "\"Why me?\"",
+       "success": {
+        "text": "Leon: \"You didn't ask for an autograph.\" They put the cap on your head instead, and it is too big, and they will not take it back.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "disguise-done",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "The traveller in the plain coat was Leon. They gave you their cap.",
+          "importance": 85
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "face-champion-echo",
+   "name": "The Legendary Trainer's Echo",
+   "group": "Famous Faces",
+   "rarity": "epic",
+   "minStage": 6,
+   "scene": {
+    "cast": [
+     "boss.red-masters"
+    ],
+    "tint": "#10101e",
+    "effect": "fog"
+   },
+   "types": [],
+   "requires": [],
+   "intro": "The air bends, the way it does over a road on a hot day, except the day is cold. At the edge of the road a silhouette appears in a red cap, outlined in cold, pale light, like something remembered rather than something there. It raises one hand, the way a trainer calls a Pokémon back. And your lead steps forward on its own, ears and eyes fixed on the silhouette, as if it has been called by name.",
+   "choices": [
+    {
+     "label": "\"Let it go.\"",
+     "success": {
+      "text": "You let it go. Your lead walks out to meet the echo's single Pokémon alone, and nobody else will step in. It fights better than it has ever fought: every move clean, every dodge a hair's breadth, as if someone it wants to impress is watching.",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "all",
+        "percent": 3,
+        "who": "lead",
+        "until": "run"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Your lead fought a legendary trainer's echo alone",
+         "importance": 70
+        }
+       ],
+       "rule": {
+        "noSwitch": true,
+        "suddenDeath": true
+       },
+       "team": [
+        "pikachu"
+       ],
+       "name": "The Echo",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Your lead fought a legendary trainer's echo alone, and won",
+         "importance": 85
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Call it back.\"",
+     "success": {
+      "text": "You call your lead back. It comes, reluctantly, looking over its shoulder. The echo watches it go, and then it nods to you, very slightly, and fades like breath off a window.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Step forward yourself.\"",
+     "success": {
+      "text": "You step forward instead. The echo walks to you, and for a moment you feel it: a hand on your shoulder, light and cold and kind, the hand of someone who has been exactly where you are. And then it is gone, and the air is only air.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "memorial",
+     "when": [
+      {
+       "kind": "memorial",
+       "atLeast": 1
+      }
+     ],
+     "notice": "For a heartbeat the echo's Pokémon flickers and wears another shape, one you knew, one you lost. Then the cold light settles again."
+    },
+    {
+     "id": "red",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "red-met",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know the cap. You know the stance. The echo is Red, younger, the age he must have been when he first climbed the mountain."
+    }
+   ]
+  },
+  {
+   "id": "ovc-champions-ghost-s1",
+   "name": "The Champion's Ghost",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ghost-n1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "Night, and a small fire, and your team curled around it. At the edge of the firelight someone is standing in the road: a long coat of a cut nobody has worn for a century, and a sash across it. Your party has seen them first. Nobody is growling. It is a ghost of a past Champion. Not Red, not anyone you know. A Champion who was forgotten. Ghost: \"I won. I won, and no one remembers my name.\"",
+   "choices": [
+    {
+     "label": "\"Wait—\"",
+     "success": {
+      "text": "You start to get up. They are gone when you stand. Only the firelight on the empty road, and your team looking at the place where they were, and then at you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ghost-n1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-champions-ghost-s2",
+   "name": "The Champion's Ghost",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ghost-n1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ghost-n2",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "intro": "Another night, another fire. This time the ghost is nearer: sitting on the other side of the fire, hands held out to it, though it does nothing for them. Your lead shuffles over to sit beside them anyway. Ghost: \"There were nine thousand in the stands. They shouted it. All of them.\" They stare into the flames. Ghost: \"I can't— I've lost it too. That's the worst part. I can hear them shouting, and I can't make out the word.\"",
+   "choices": [
+    {
+     "label": "\"What did you win with?\"",
+     "success": {
+      "text": "Ghost: \"A Ponyta. Everyone laughed. Then they stopped.\" They smile. It is the first thing they have been sure of, and they hold onto it like a coin in a pocket.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ghost-n2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who forgot you?\"",
+     "success": {
+      "text": "Ghost: \"Nobody decided to. It's just that everyone who knew, died. It isn't anyone's fault.\" The fire pops. Ghost: \"I'd like it to be someone's fault.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ghost-n2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"How long ago?\"",
+     "success": {
+      "text": "The ghost looks down at the coat, at the cut of it, at the sash, as if the answer might be stitched there. They start to count on their fingers, and stop, and shake their head, and just look at the fire with you until it burns down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ghost-n2",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-champions-ghost-s3",
+   "name": "The Champion's Ghost",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ghost-n2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ghost-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "types": [],
+   "intro": "The third night. The ghost is standing when you arrive, coat buttoned, sash straight, the way a Champion stands at the end of a long tunnel before they walk out into the noise. Ghost: \"Battle me. Then tell someone.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "The ghost sends out a team of a century ago: plain, tough Pokémon with old-fashioned names, and leading them a Rapidash made of pale fire that throws no heat at all.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "seeAgain",
+         "eventId": "ovc-champions-ghost-s3"
+        },
+        {
+         "kind": "moment",
+         "text": "A forgotten Champion's ghost beat you, and will wait for another night",
+         "importance": 55
+        }
+       ],
+       "team": [
+        "rapidash",
+        "tauros",
+        "golem",
+        "lapras"
+       ],
+       "name": "The Forgotten Champion",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "ovc-champions-ghost-s3-name"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-champions-ghost-s3-name",
+   "name": "The Champion's Ghost: The Name",
+   "group": "Overhaul chains",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 2,
+   "requires": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "When the Rapidash goes down, it bows its head to your lead. And the nine thousand are there, for one second: the stands, the noise, a roar from everywhere at once, and in it, a word. Ghost: \"There. Did you hear— that's it. That's me. That's my name.\" You heard it. Wren Calloway. The ghost says it again, softly, and again, as if they are afraid to put it down. Ghost: \"Now tell someone.\"",
+   "choices": [
+    {
+     "label": "\"I'll tell the caretaker.\"",
+     "success": {
+      "text": "You promise to tell the caretaker at the Hall of Past Champions. The ghost nods slowly, as if they know the place. At the Hall, an empty plinth will get a plate: Wren Calloway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ghost-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A forgotten Champion's ghost told you their name: Wren Calloway",
+        "importance": 85
+       },
+       {
+        "kind": "flag",
+        "key": "ghost-plate",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll put it in the Hall.\"",
+     "success": {
+      "text": "You promise to cut the plate yourself. The ghost laughs, the first time you have heard it, and it sounds like a crowd. At the Hall of Past Champions, an empty plinth will get a plate with Wren Calloway on it, cut by your own hand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ghost-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A forgotten Champion's ghost told you their name: Wren Calloway",
+        "importance": 85
+       },
+       {
+        "kind": "flag",
+        "key": "ghost-plate",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ghost-cut-plate",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll tell my rival.\"",
+     "requires": [
+      {
+       "kind": "rivalMet",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "You tell your rival the next time you meet. They stop dead. Rival: \"Who? ...Say it again. Slowly. I'm writing it down. Somebody should have written it down.\" You say it slowly: Wren Calloway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ghost-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A forgotten Champion's ghost told you their name: Wren Calloway",
+        "importance": 85
+       },
+       {
+        "kind": "flag",
+        "key": "ghost-told-rival",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-familiar-face",
+   "name": "Mentor: A Familiar Face",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a44",
+    "effect": "sparkle"
+   },
+   "rarity": "uncommon",
+   "intro": "{mentor}'s training ground, early, dew still on the practice posts. Someone else is already there, stretching against the fence, and she turns when she hears your step. You know her: Ressa, the other apprentice, the one who always has a bandage on her knuckles, who left {mentor} a little ahead of you. Ressa: \"Look who it is. I graduated. Came back to help the next ones.\" {mentor} looks from her to you and back. {mentor}: \"You two know each other? Good. Saves me a speech.\" Ressa grins and points a finger at you. Ressa: \"I remember you. You always went first. Even when you shouldn't have.\"",
+   "choices": [
+    {
+     "label": "\"Train with me.\"",
+     "success": {
+      "text": "You train side by side all morning, the same drills, the same posts, Ressa's partner and your lead pushing each other until both are panting. By noon both of them are a little stronger, and Ressa says she will be there when the next hard fight comes.",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "best",
+        "percent": 5,
+        "who": "lead",
+        "until": "run"
+       },
+       {
+        "kind": "flag",
+        "key": "ressa-trained",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "ressa-partner-stat",
+        "amount": 1
+       },
+       {
+        "kind": "wandererFriend",
+        "stages": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Show me what you learned.\"",
+     "success": {
+      "text": "Ressa's eyes light up. She sends out her partner, and in the second turn it uses the move {mentor} taught you both, the one you practised until your hands ached. She is very good now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ressa-battled",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "wandererFriend",
+        "stages": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Ressa, your fellow apprentice, now graduated, beat you",
+         "importance": 55
+        }
+       ],
+       "apprentice": true,
+       "name": "Ressa",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Ressa, your fellow apprentice, now graduated",
+         "importance": 65
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Did it get easier?\"",
+     "success": {
+      "text": "Ressa stops stretching. She sits down on the fence rail and thinks about it properly. Ressa: \"No. You just get used to the weight.\" Then she stays, and you sit with her for a whole rest, saying not much, while your team dozes in the sun.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ressa-talked",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "wandererFriend",
+        "stages": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
