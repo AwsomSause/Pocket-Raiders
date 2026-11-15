@@ -289,6 +289,11 @@ export function applyQuestEffect(content: Content, run: RunState, e: QuestEffect
     const rec = recOf(run, mainRival(run));
     if (rec) scout(rec, { species: run.party.map((m) => m.speciesId), moves: run.party.flatMap((m) => m.moves.map((x) => x.id)), abilities: run.party.map((m) => abilityOf(content, m)).filter((x): x is string => Boolean(x)), turns: 0, switches: 0 });
   }
+  if (e.wipeLedger) {
+    const rec = recOf(run, mainRival(run));
+    if (rec) delete rec.ledger;
+  }
+  for (const a of e.ahead ?? []) placeAhead(run, a.event, a.step);
   if (e.lost) {
     // R4: the Pokémon the rival lost is one of their team that is not the ace (the same one every time the scene is read).
     const lost = lostFamily(content, run);
@@ -297,6 +302,7 @@ export function applyQuestEffect(content: Content, run: RunState, e: QuestEffect
   const target = e.who === 'second' ? recOf(run, secondRival(run)) : recOf(run, mainRival(run));
   if (target) {
     for (const [k, d] of Object.entries(e.feelings ?? {})) target.feelings[k as FeelingKey] = Math.min(10, Math.max(0, target.feelings[k as FeelingKey] + (d ?? 0)));
+    if (e.personal?.is.includes(target.personality)) for (const [k, d] of Object.entries(e.personal.feelings)) target.feelings[k as FeelingKey] = Math.min(10, Math.max(0, target.feelings[k as FeelingKey] + (d ?? 0)));
     for (const [k, v] of Object.entries(e.setFeelings ?? {})) target.feelings[k as FeelingKey] = Math.min(10, Math.max(0, v ?? 0));
     if (e.mark) addMark(target, e.mark);
   }
@@ -513,7 +519,24 @@ export function planRivalTeam(content: Content, run: RunState, rival: Rival, ros
     const slot = team.findIndex((id) => id !== ace);
     if (target && strong.length > 0 && slot >= 0) team[slot] = `type:${strong[fnv1a(`${run.seed}::rq-counter::${rival.id}::${target.speciesId}`) % strong.length]}`;
   }
+  // R7: for the rest of the jacket's stage and the next, the rival's team copies your type spread (their ace stays their own).
+  if (flagOf(run, 'rq-r7-copy') > 0 && stageNow(content, run) - flagOf(run, 'rq-r7-copy') <= 1 && stageNow(content, run) >= flagOf(run, 'rq-r7-copy')) {
+    const types = run.party.map((m) => content.species.get(m.speciesId)?.types[0]).filter((t): t is TypeName => Boolean(t));
+    let n = 0;
+    team = team.map((id) => (id === ace || types.length === 0 ? id : `type:${types[n++ % types.length]}`));
+  }
   if (plan.aceFirst && ace) team = [ace, ...team.filter((id) => id !== ace)];
+  // R8 "Nice lead": you planned against the bait; the next questline fight opens with a Pokémon picked to beat your lead.
+  if (flagOf(run, 'rival-bait-taken') === 1 && !plan.full) {
+    setFlag(run, 'rival-bait-taken', 2);
+    const types = (content.species.get(lead.speciesId)?.types ?? []) as TypeName[];
+    const strong = TYPE_NAMES.filter((t) => typeEffectiveness(content.typeChart, t, types) > 1);
+    if (strong.length > 0) {
+      const bait = `type:${strong[fnv1a(`${run.seed}::rq-bait::${lead.speciesId}`) % strong.length]}`;
+      const drop = team.length >= 6 ? team.findIndex((id) => id !== ace) : -1;
+      team = [bait, ...team.filter((_, i) => i !== drop)];
+    }
+  }
   if (plan.guard || (flagOf(run, 'rq-r4-cautious') > 0 && flagOf(run, 'rq-r4-cautious') === stageNow(content, run))) {
     // R4's cautious stage: their weakest Pokémon (lowest base stat total) is kept back behind everything else.
     const bst = (id: string): number => Object.values(content.species.get(id)?.baseStats ?? {}).reduce((n, v) => n + v, 0);
@@ -590,4 +613,55 @@ export function secondChanceQuestLine(content: Content, run: Pick<RunState, 'sto
   const name = typeof lost === 'string' ? content.species.get(lost)?.name : undefined;
   if (!rivalId || !name) return null;
   return `${name} wasn't there one morning. You are. Get up. I'm not doing that twice.`;
+}
+
+// ---------- R7: Borrowed Team rules ----------
+
+/**
+ * R7's finale: each commands the other's ace. Your highest-level Pokémon waits in the box (string flag `rq:r7-lent`) and
+ * the rival fields a copy of it in place of their ace; their ace (`team[0]`, built ace-first) joins your party in its place
+ * at your ace's level (`rq:r7-borrowed`). `endBorrow` puts everything back the moment the fight ends, whatever the result.
+ */
+export function beginBorrow(run: RunState, team: PokemonInstance[]): void {
+  const theirs = team[0];
+  const alive = run.party.filter((m) => m.hp > 0);
+  const lent = [...alive].sort((a, b) => b.level - a.level)[0];
+  if (!theirs || !lent || run.party.length < 2) return;
+  const at = run.party.indexOf(lent);
+  const borrowed = { ...structuredClone(theirs), uid: `rq-borrow-${theirs.uid}`, level: lent.level };
+  const copy = { ...structuredClone(lent), uid: `rq-lent-${lent.uid}`, level: theirs.level };
+  run.party[at] = borrowed;
+  run.box = [...(run.box ?? []), lent];
+  team[0] = copy;
+  run.story.flags['rq:r7-lent'] = lent.uid;
+  run.story.flags['rq:r7-borrowed'] = borrowed.uid;
+}
+
+/** R7: the Borrowed Team fight is over: your ace comes back to its place and theirs goes home. */
+export function endBorrow(run: RunState): void {
+  const lentUid = run.story.flags['rq:r7-lent'];
+  const borrowedUid = run.story.flags['rq:r7-borrowed'];
+  if (typeof lentUid !== 'string' || typeof borrowedUid !== 'string') return;
+  const lent = (run.box ?? []).find((m) => m.uid === lentUid);
+  const at = run.party.findIndex((m) => m.uid === borrowedUid);
+  if (lent) {
+    run.box = run.box.filter((m) => m.uid !== lentUid);
+    if (at >= 0) run.party[at] = lent;
+    else run.party.push(lent);
+  } else if (at >= 0) run.party.splice(at, 1);
+  delete run.story.flags['rq:r7-lent'];
+  delete run.story.flags['rq:r7-borrowed'];
+}
+
+/** Puts an event on every node of one later column of this stage's map (about `step`; at least the next column), or here when no column is left. */
+export function placeAhead(run: RunState, eventId: string, step: number): void {
+  const stage = run.stage;
+  if (!stage) return;
+  const here = stage.map.nodes.find((n) => n.id === stage.current);
+  const col = Math.max((here?.column ?? 0) + 1, step - 1);
+  const last = stage.map.nodes.reduce((m, n) => Math.max(m, n.column), 0);
+  const target = Math.min(col, last - 1);
+  const nodes = target > (here?.column ?? -1) ? stage.map.nodes.filter((n) => n.column === target && n.kind !== 'gym') : [];
+  for (const node of nodes.length > 0 ? nodes : here ? [here] : []) node.sides.push({ id: `event-ahead-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId });
+  if (run.itemCounters) delete run.itemCounters[`event-seen:${eventId}`];
 }

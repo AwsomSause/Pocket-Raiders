@@ -101,7 +101,7 @@ import { celebrateToday, milestoneToday, periodOf, PERIOD_LABEL, restUntilMornin
 import { BERRIES } from './berries';
 import { choiceAt, effectiveEvent, visibleChoices } from './eventMemory';
 import { beginRivalBrain } from './rivals/brainSetup';
-import { applyQuestEffect, planRivalTeam, shapeRivalMons, questConditionMet, questText, rivalAllySpecies, rivalStanding, RIVAL_QUEST_GROUP } from './rivals/questlines';
+import { applyQuestEffect, beginBorrow, planRivalTeam, shapeRivalMons, questConditionMet, questText, rivalAllySpecies, rivalStanding, RIVAL_QUEST_GROUP } from './rivals/questlines';
 import { getTheme, typesPool } from './themes';
 import { anyRoaming, endRoamer, healConvoy, startConvoy, partyHasAbility, placeCamp, scoutAhead, CAMP_EVENT_ID } from './world';
 import { MAX_FOES, MAX_FOES_LISTED } from './bossLimits';
@@ -1708,6 +1708,8 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     if (team.length > MAX_FOES && !(b.kind === 'trainer' && b.seventh)) team.length = MAX_FOES;
     else if (team.length > MAX_FOES_LISTED) team.length = MAX_FOES_LISTED;
     if (rival && rivalTeam.length > 0) shapeRivalMons(content, run, rival, team);
+    // R7 Borrowed Team rules: each side commands the other's ace for this fight.
+    if (rival && rivalTeam.length > 0 && b.kind === 'trainer' && b.quest?.borrow) beginBorrow(run, team);
     if (authored) for (const mon of team) auditEncounter(content, 'event', mon, authored);
     team.slice(0, evil ? evil.shadow : b.shadow).forEach((mon) => makeShadow(mon, rollShadowHeart(content, new Rng(hashSeed(`${run.seed}::shadow-foe::${mon.uid}`)))));
     // Overhaul slice 17: Evil Team and rival fights follow their named strategy (opener, ace item, sharper AI).

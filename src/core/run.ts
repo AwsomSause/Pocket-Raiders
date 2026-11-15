@@ -23,7 +23,7 @@ import { applySecondChance, secondChanceOpen, secondChanceRolls } from './instru
 import { hearTelling, noteEvent as notePromiseEvent, resolveVisit, rollVisit, wonderAfterBattle } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
-import { mainRival, notePlayerLoss, scoutedLead } from './rivals/questlines';
+import { endBorrow, mainRival, notePlayerLoss, scoutedLead } from './rivals/questlines';
 import { recordStoryLoss, storyLossApplies } from './story2/loss';
 import { biomeWildWeight } from './biomes';
 import { pickEggFamily } from './eggPools';
@@ -3264,6 +3264,10 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, raidFailed: true };
   }
+  // R7 Borrowed Team rules: the aces go back to their own trainers as soon as the fight ends.
+  if (battle.outcome) endBorrow(run);
+  // A temporary ally (a tag battle) goes home after a lost fight too (finishBattle sends it home after a win).
+  if (battle.outcome === 'lose' && battle.loaner) run.party = run.party.filter((m) => m.uid !== battle.loaner);
   // Pidgey's Resolve: a watched CPU fight counts for nothing; the real team comes back and the story reads out how it ended.
   if (battle.spectate && (battle.outcome === 'win' || battle.outcome === 'lose')) {
     const lines = finishSpectate(content, run, battle.outcome);

@@ -3166,6 +3166,12 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
     openFirst: z.array(z.string()).min(1).max(6).optional(),
     /** R5: everything of yours the mentor saw goes into the main rival's scouting ledger. */
     ledger: z.boolean().optional(),
+    /** Feelings that move only for these personalities (R9: reading the letter is Admiration +1 for an Underdog). */
+    personal: z.object({ is: z.array(z.string()).min(1), feelings: z.partialRecord(z.enum(['friendship', 'respect', 'trust', 'rivalry', 'resentment', 'admiration']), z.number().int().min(-10).max(10)) }).optional(),
+    /** R8: the rival's scouting ledger is wiped (a pure battle). */
+    wipeLedger: z.boolean().optional(),
+    /** Places these events as stops further along this stage's map, one column at about the given step (every node of that column, so it cannot be missed). */
+    ahead: z.array(z.object({ event: z.string(), step: z.number().int().min(1).max(20) })).max(4).optional(),
     /** Sets a flag to 1..of, fixed by the run's seed (no gameplay roll; R6: which of three points is the true one). */
     roll: z.object({ key: z.string().regex(/^[a-z][a-z0-9-]*$/), of: z.number().int().min(2).max(9) }).optional(),
   }),
@@ -3448,7 +3454,7 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     /** Run events B: special rules for this fight (see EventRuleSchema). */
     rule: EventRuleSchema.optional(),
     /** Catalog pack rival questlines (core/rivals/questlines.ts planRivalTeam), with `rival`: how the rival builds this fight's team. `counter: 'lead'` aims one slot at your lead's weakness, `'seen'` at a Pokémon of yours they have fought, `'owed'` by what R2 remembers (helped: none; abandoned: lead; else seen); `aceFirst` sends their ace out first; `young` adds R4's young Pokémon (the species they lost) as their opener; `full` brings all six; `guard` keeps their weakest Pokémon back (R4's cautious stage); `as` is another trainer fighting with the rival's team in the rival's style (their mentor): the fight is not recorded as a rival battle. */
-    quest: z.object({ counter: z.enum(['none', 'lead', 'seen', 'owed']).optional(), aceFirst: z.boolean().optional(), young: z.boolean().optional(), full: z.boolean().optional(), guard: z.boolean().optional(), as: z.string().optional() }).optional(),
+    quest: z.object({ counter: z.enum(['none', 'lead', 'seen', 'owed']).optional(), aceFirst: z.boolean().optional(), young: z.boolean().optional(), full: z.boolean().optional(), guard: z.boolean().optional(), as: z.string().optional(), /** R7: Borrowed Team rules, each side commands the other's ace (use with aceFirst). */ borrow: z.boolean().optional() }).optional(),
     /** With `ally`: "rival" lends the rival's ace as your partner for the fight (a tag battle beside them). */
     /** Run events B: `win` effects used instead of `win` when the fight took longer than `rule.turnLimit` turns. */
     slowWin: z.array(EventEffectSchema).optional(),
