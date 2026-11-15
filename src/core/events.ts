@@ -1444,7 +1444,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return `${content.species.get(mon.speciesId)?.name ?? mon.speciesId} ${e.shadow ? 'was rescued from the haze and' : ''} wants to join you!`.replace('  ', ' ');
     }
     case 'kc':
-      return applyKc(content, run, e, { cap: runLevelCap(content, run), picked: pickedMon(run, tradeUid), egg: (species, types = []) => applyEffect(content, run, { kind: 'egg', species, types, levelBonus: 0, shinyMultiplier: 1, left: 3, unit: 'battle' } as EventEffect, rng, tradeUid) });
+      return applyKc(content, run, e, { cap: runLevelCap(content, run), picked: whoOf(content, run, 'picked', pickedUid), egg: (species, types = []) => applyEffect(content, run, { kind: 'egg', species, types, levelBonus: 0, shinyMultiplier: 1, left: 3, unit: 'battle' } as EventEffect, rng, tradeUid) });
     case 'canon': {
       if (e.action === 'ghostReturn') {
         const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
