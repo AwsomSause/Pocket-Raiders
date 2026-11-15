@@ -568,4 +568,4 @@ export const AFTERSTORY: { match: string; readBy: string }[] = [
 ];
 
 /** Flags this file reads that another file sets. */
-export const EXTERNAL: string[] = ['roster-quinn-m1'];
+export const EXTERNAL: string[] = [];
