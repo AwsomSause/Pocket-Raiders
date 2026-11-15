@@ -27,6 +27,7 @@ test('a wild nemesis comes back, telegraphed in the battle intro', async ({ page
     });
     const first = run.stage.map.nodes.filter((n: any) => n.column === 1)[0];
     first.kind = 'wild';
+    first.sides = []; // a plain fight: no event (Kanto's attached ones) opens before it
     session.chooseNode(first.id);
     game.scene.getScenes(true)[0].scene.start('Battle');
   });
