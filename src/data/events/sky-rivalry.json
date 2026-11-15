@@ -40,7 +40,17 @@
         "act": "duel",
         "side": "pidgey"
        }
-      ]
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "spearow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "pseudo": true,
+       "win": []
+      }
      }
     },
     {
@@ -53,7 +63,17 @@
         "act": "duel",
         "side": "spearow"
        }
-      ]
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "spearow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "pseudo": true,
+       "win": []
+      }
      }
     }
    ]
@@ -281,12 +301,17 @@
      "label": "Climb to the ridge and watch",
      "success": {
       "text": "You climb to the ridge above them, and the wind takes your breath, and you do not look away.",
-      "effects": [
-       {
-        "kind": "sky",
-        "act": "finaleWatch"
-       }
-      ]
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "fearow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "pseudo": true,
+       "win": []
+      }
      }
     },
     {
@@ -297,12 +322,18 @@
        {
         "kind": "sky",
         "act": "finaleGiftBerry"
-       },
-       {
-        "kind": "sky",
-        "act": "finaleWatch"
        }
-      ]
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "fearow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "pseudo": true,
+       "win": []
+      }
      },
      "requires": [
       {
@@ -319,12 +350,18 @@
        {
         "kind": "sky",
         "act": "finaleGiftItem"
-       },
-       {
-        "kind": "sky",
-        "act": "finaleWatch"
        }
-      ]
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "fearow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "pseudo": true,
+       "win": []
+      }
      },
      "requires": [
       {
@@ -334,57 +371,6 @@
      ]
     }
    ]
-  },
-  {
-   "id": "sky.cheer",
-   "name": "Who to Cheer For",
-   "group": "Rival episodes",
-   "stop": "event",
-   "rarity": "rare",
-   "tags": [
-    "Story",
-    "Rival",
-    "Pokémon"
-   ],
-   "forced": false,
-   "minStage": 1,
-   "requires": [],
-   "scene": {
-    "cast": [],
-    "pokemon": "pidgeot",
-    "tint": "#1d2a3d",
-    "effect": "glint"
-   },
-   "intro": "Pidgeot is on one wing, and the whole cliff holds its breath. The Rattata have stopped squeaking. The Machop has uncrossed its arms. The wind itself, for a moment, is paused. Every Pokémon on the rocks has turned to look at you.\n\nYou have been there since the branch. You are the only one who has been there. It is yours to say, and there is no right answer, and both of them will remember.\n\nWho do you cheer for?",
-   "choices": [
-    {
-     "label": "Cheer for Pidgeot",
-     "success": {
-      "text": "You shout its name. It is not a clever shout. It is the sound of someone who was there since the first day and is not going to leave now.",
-      "effects": [
-       {
-        "kind": "sky",
-        "act": "cheer",
-        "bird": "pidgeot"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Cheer for Fearow",
-     "success": {
-      "text": "You shout the other name. It is a small sound, and it reaches the cliff anyway. Pidgeot hears it.",
-      "effects": [
-       {
-        "kind": "sky",
-        "act": "cheer",
-        "bird": "fearow"
-       }
-      ]
-     }
-    }
-   ],
-   "room": true
   },
   {
    "id": "sky.join.pidgeot",

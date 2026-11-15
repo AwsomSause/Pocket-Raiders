@@ -3081,7 +3081,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Beta 0.6 E3b: lowers every party Shadow Pokémon's corruption by `amount` (never below 1: the last step stays with its own key). */
   z.object({ kind: z.literal('shadowHeart'), amount: z.number().int().min(-20).max(0) }),
   /** Beta 0.7 Pidgey's Resolve: one step of the Rivalry of the Sky (core/sky/story.ts applySky). */
-  z.object({ kind: z.literal('sky'), act: z.enum(['duel', 'meetSpar', 'sparWon', 'sparLost', 'giftBerry', 'giftItem', 'finaleGiftBerry', 'finaleGiftItem', 'meetAlone', 'aloneGift', 'finaleWatch', 'cheer', 'joinBird', 'freeBird', 'overhead', 'rematchWon', 'rematchLost', 'passBy']), side: z.enum(['pidgey', 'spearow']).optional(), bird: z.enum(['pidgeot', 'fearow']).optional() }),
+  z.object({ kind: z.literal('sky'), act: z.enum(['duel', 'meetSpar', 'sparWon', 'sparLost', 'giftBerry', 'giftItem', 'finaleGiftBerry', 'finaleGiftItem', 'meetAlone', 'aloneGift', 'joinBird', 'freeBird', 'overhead', 'rematchWon', 'rematchLost', 'passBy']), side: z.enum(['pidgey', 'spearow']).optional(), bird: z.enum(['pidgeot', 'fearow']).optional() }),
   z.object({ kind: z.literal('track'), input: z.enum(['raidFailed', 'raidDeclined', 'climaxScheduled', 'raidSuccess', 'officerTurned']) }),
   /** Grand Arc: gains a Stock step (1 to 5). */
   /** Field Notes: the player has now met this special Pokémon (`sv.*`). */
@@ -3240,6 +3240,8 @@ export const EventRuleSchema = z.object({
   bstMatch: z.boolean().optional(),
   /** Saffron canon: when your only Pokémon would faint, the ghost calls the other spirits, the foe goes down instead and you win (Sabrina's Labyrinth). */
   ghostRescue: z.boolean().optional(),
+  /** Beta 0.7 Sabrina's Labyrinth opening: you have no Pokémon of your own here, so the first fight is lost the moment you act. */
+  noPokemon: z.boolean().optional(),
   /** Beta 0.7 Sabrina's Labyrinth: each turn one of your move slots is false (shows one move, does another); every second turn the companion marks it. */
   falseSlot: z.boolean().optional(),
   surviveTurns: z.number().int().min(1).max(30).optional(),

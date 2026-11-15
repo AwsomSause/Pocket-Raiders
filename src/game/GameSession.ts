@@ -54,6 +54,7 @@ import * as Mini from '../core/minigame/flow';
 import { claim } from '../core/quests';
 import { claimCollectionMilestones } from '../core/collection';
 import * as Run from '../core/run';
+import { cheerSky } from '../core/sky/spectate';
 import { rewindBattle } from '../core/rewind';
 import { useBlessingRite } from '../core/blessings';
 import { markRumorShown, nodeHint } from '../core/worldSim/tick';
@@ -675,6 +676,15 @@ export class GameSession {
     this.run = result.run;
     this.persistRun();
     return result.message;
+  }
+
+  /** Pidgey's Resolve: the player cheers for a bird in the watched finale (core/sky/spectate.ts). Returns the line to show. */
+  skyCheer(bird: 'pidgeot' | 'fearow'): string {
+    const run = structuredClone(this.requireRun());
+    const text = cheerSky(this.content, run, bird);
+    this.run = run;
+    this.persistRun();
+    return text;
   }
 
   takeTurn(action: PlayerAction): Run.TurnResult {
