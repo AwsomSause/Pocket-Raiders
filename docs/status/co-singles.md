@@ -13,7 +13,8 @@ Content: `tools/events/co/singles-<n>.ts` -> `src/data/events/co-singles-<n>.jso
 | 5 | SF142 Hidden Paths and Mystery Places, SF143 Ability Secrets | 35 | built, re-read 2026-11-15 |
 | 6 | SF144 Challenges, SF145 Shops and Workshops | 39 | built, re-read 2026-11-15 |
 | 7 | SF146 Study Stops, SF147 Evil-Team Pressure, SF148 Puzzles | 29 | built, re-read 2026-11-15 |
-| later | SF149 to SF161 | 227 | not started (old events still play) |
+| 8 | SF149 Puzzle Gates | 24 | built, re-read 2026-11-15 |
+| later | SF150 to SF161 | 203 | not started (old events still play) |
 
 SF158 to SF160 (82 calendar weeks) live in `gameEvents.json` and SF161 (15 battle moments) in `dramaEvents.json`, not in the event files; they need their own build path.
 
@@ -47,8 +48,9 @@ All checked 2026-11-15 against `STORY_FAMILIES_19.md` and `_20.md`.
 | SF146 | battle-replay-theater, library, mastery-quiz, study-hall, tactical-chalkboard, veterans-notebook, graduation-ceremony, field-hidden-cave, field-overgrowth |
 | SF147 | vt-contraband-detector, vt-contraband-gate (room), vt-gadget-sabotage, vt-mind-control-helmet, vt-ransom-note, rescued-callback, dz-sky-route |
 | SF148 | rf-bingo-1/2/3 (each opens the next two nodes on), rf-crossword-cave (+ `rf-crossword-room`), rf-fossil-puzzle, rf-gear-box, rf-jigsaw-legend, rf-lantern-riddle, rf-map-sudoku, rf-mirror-beam, rf-mole-hunt, rf-move-trivia-1/2/3 (each opens the next) |
+| SF149 | rf-odd-one-out, rf-painting-alignment, rf-pinball (+ `rf-pinball-ball`), rf-rune-tiles, rf-silhouette-1/2/3, rf-slide-whistle-safe (+ `rf-whistle-2/3`), rf-sonar-cave, rf-speed-typing, rf-star-chart, rf-tide-gauge (+ `rf-tide-2/3`), rf-tilt-maze, rf-weighted-scales (+ `rf-scales-2`), w4-express-train, w4-forest-maze, w4-lab-terminal, w4-mirror-maze, w4-pressure-plates, w4-plates-2/3, w4-portal-switches, w4-riddle-signpost, w4-sundial |
 
-SF137 to SF148: every doc button checked by script against the built labels (all match); outcomes checked by hand against the doc row while writing and again after the standards pass.
+SF137 to SF149: every doc button checked by script against the built labels (all match); outcomes checked by hand against the doc row while writing and again after the standards pass.
 Buttons match the doc word for word, except `w4-balloon` (the doc says "pick a reachable node", not a button text): "Hop in, and pick where to land."
 Rooms added so a doc outcome can ask its own question: `berry-tree-pell` (callback), `festival-gift-swap`, `shimmering-grass-close`, `hidden-grotto-den`, `gmax-den-*` (5), `w4-graffiti-tag`, `r145-bonsly-railings`.
 
@@ -95,3 +97,6 @@ Rooms added so a doc outcome can ask its own question: `berry-tree-pell` (callba
 | Evil-team pressure "remembers" | Flags `evil-key`, `evil-trail-lost`, `evil-knows-lead` (same run only), for the evil-story row to read | evil-story reading them |
 | Fossil puzzle reward | The fossil Pokémon joins directly (no revive step) | A fossil reviver stop |
 | Field moves (Cut, Strength, Surf, Rock Climb and more) | Need a living party member who knows the move; Bright Powder is a new held item (10% evasion) | Nothing |
+| Silhouettes: "three names" (the region's starter, Gym 1's ace) | The buttons describe the answer ("This region's Grass starter.", "The first Gym Leader's ace."); the third is your lead by name | Per-region name buttons |
+| Rune tiles: "a Sign" | Flag `sign-own` (a Sign for whichever Legendary blesses the run; the legends row turns it into Influence) | Nothing |
+| Step puzzles (slide whistle, tide gauge, scales) | One room per step; a wrong step carries on but cannot win | Nothing |

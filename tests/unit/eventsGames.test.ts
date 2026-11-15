@@ -6,7 +6,7 @@ import games from '../../src/data/eventsGames.json';
 const ids: string[] = games.events.map((e) => e.id);
 const defs = ids.map((id) => content.events.get(id)!);
 const targetsOf = (e: (typeof defs)[number]): string[] =>
-  e.choices.flatMap((c) => [...c.success.effects, ...(c.failure?.effects ?? [])]).flatMap((f) => (f.kind === 'addEvent' ? [f.eventId] : []));
+  e.choices.flatMap((c) => [...c.success.effects, ...(c.failure?.effects ?? [])]).flatMap((f) => (f.kind === 'addEvent' || f.kind === 'laterEvent' ? [f.eventId] : []));
 
 describe('Run events F: games, puzzles and mini-games', () => {
   it('loads every event into the content map', () => {

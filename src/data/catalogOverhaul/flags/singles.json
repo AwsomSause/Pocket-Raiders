@@ -340,6 +340,41 @@
    "key": "trivia-right",
    "setBy": "rf-move-trivia-1/2/3 (a right answer)",
    "readBy": "rf-move-trivia-3 (three right: a TM; spent there)"
+  },
+  {
+   "key": "pinball-lane",
+   "setBy": "rf-pinball-ball (the left ramp)",
+   "readBy": "nobody yet: the bonus lane is the left ramp, every time"
+  },
+  {
+   "key": "scales-right",
+   "setBy": "rf-weighted-scales (Two against two.)",
+   "readBy": "rf-scales-2 (One against one. finds the Shiny Stone; spent there)"
+  },
+  {
+   "key": "sign-own",
+   "setBy": "rf-rune-tiles (the legend's name)",
+   "readBy": "legends row (a Sign for the Legendary that blesses this run)"
+  },
+  {
+   "key": "silhouette-right",
+   "setBy": "rf-silhouette-1/2/3 (a right answer)",
+   "readBy": "rf-silhouette-3 (three right: a Rare Candy; spent there)"
+  },
+  {
+   "key": "star-chart",
+   "setBy": "rf-star-chart (the Clefairy)",
+   "readBy": "rf-star-chart (you know it now)"
+  },
+  {
+   "key": "tide-right",
+   "setBy": "rf-tide-gauge, rf-tide-2 (Lower.)",
+   "readBy": "rf-tide-3 (Raise. levels it; spent there)"
+  },
+  {
+   "key": "whistle-right",
+   "setBy": "rf-slide-whistle-safe (Low.), rf-whistle-2 (Middle.)",
+   "readBy": "rf-whistle-3 (High. opens it; spent there)"
   }
  ]
 }

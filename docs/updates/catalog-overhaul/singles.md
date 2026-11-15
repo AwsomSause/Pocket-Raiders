@@ -29,4 +29,9 @@
 - Grunts who plant contraband, sabotage your gadgets and send a ransom note; what you do about it is remembered for the rest of the run.
 - A bingo card that fills as you see events, a crossword cave, a fossil puzzle that wakes a fossil Pokémon, three trivia signboards in a row with a TM behind the last hatch.
 
+**Batch 8: puzzle gates (24 events).**
+- Real puzzles with real answers: a Ditto hiding in a line-up, a safe that opens to three whistled notes, a lock gate you level with three pulls, four gems and two weighs.
+- "Who's that Pokémon?" three times in a row, and the last silhouette is your own lead.
+- A pinball table whose bonus lane is always the left ramp, a mirror maze where one reflection is a window, and a portal that skips two stops.
+
 Known limits: "confused" and "Charged" for one battle are a damage change, the balloon lands two stops ahead (you cannot pick the spot), the Wooloo rolls on any day, and a few "shown before you choose" previews describe the Pokémon without naming it. Full list: `docs/status/co-singles.md`.
