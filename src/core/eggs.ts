@@ -122,6 +122,8 @@ export function hatchEgg(content: Content, run: RunState, egg: Egg): PokemonInst
   mon.hatched = true;
   mon.eggTier = tier.id;
   mon.friendship = Math.max(mon.friendship, HATCH_FRIENDSHIP, tier.friendship);
+  // Catalog Overhaul new events: an Egg warmed under a wing (eggWarm) is born fonder of you.
+  mon.friendship = Math.min(255, mon.friendship + eggBondAtBirth(run, egg.uid));
   if (egg.hidden && content.species.get(egg.speciesId)?.abilities.hidden) mon.abilitySlot = -1;
   // Breeding Nursery (S49): the ability you picked beforehand.
   const picked = nurseryAbilitySlot(run, egg.uid);
@@ -187,6 +189,20 @@ export function eggWarmth(content: Content, run: Pick<RunState, 'party'> & MapIt
 }
 
 /** A night at camp (or any warm spot): every Egg gets `steps` closer to hatching, but never hatches by it (it keeps at least 1 left). Returns how many Eggs moved. */
+/** Run counter for the extra friendship an Egg's Pokémon is born with (co/neRules.ts eggWarm). */
+export const eggBondKey = (uid: string): string => `egg-bond:${uid}`;
+
+/** Extra friendship the Pokémon from this Egg is born with; the mark is cleared. */
+export function eggBondAtBirth(run: RunState, eggUid: string): number {
+  const key = eggBondKey(eggUid);
+  const n = run.itemCounters?.[key] ?? 0;
+  if (n > 0) {
+    const { [key]: _gone, ...rest } = run.itemCounters ?? {};
+    run.itemCounters = rest;
+  }
+  return n;
+}
+
 export function warmEggs(run: RunState, steps = 1): number {
   let moved = 0;
   run.eggs = run.eggs.map((egg) => {

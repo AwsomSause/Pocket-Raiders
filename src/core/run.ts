@@ -102,6 +102,7 @@ import { blackMarketMarkup, fieldResearchMoney, spookyEncounterChance, voiceAsks
 import { growGarden } from './berries';
 import { layEgg, tickEggs } from './eggs';
 import { spendTakenNode } from './co/takeNode';
+import { partnerOwed, quietWildWeight, spendPartner } from './co/neRules';
 import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
@@ -2027,7 +2028,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       const [lo, hi] = content.balance.difficulty.harderBonus;
       const bonus = (node.harder ? r.int(lo, hi) : 0) + wildLevelBonus(content, run, mods);
       const shiny = runAttributeEffects(content, run).shinyChance * wildShinyMultiplier(content, run, mods);
-      return planWild(content, archetype, theme, scale, bonus, r, run.regionOrder[run.regionIndex], shiny, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id) * migrationWildWeight(content, run, id) * weatherSpawnWeight(content, frontAt(content, run, node)?.weather, id) * ecosystemWeight(content, run, id) * biomeWildWeight(content, run, id) * modifierWildWeight(content, run, id) * recentWild(familyId(content, id)) * dampen(id));
+      return planWild(content, archetype, theme, scale, bonus, r, run.regionOrder[run.regionIndex], shiny, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id) * migrationWildWeight(content, run, id) * weatherSpawnWeight(content, frontAt(content, run, node)?.weather, id) * ecosystemWeight(content, run, id) * biomeWildWeight(content, run, id) * modifierWildWeight(content, run, id) * recentWild(familyId(content, id)) * dampen(id) * quietWildWeight(content, run, id));
     });
     let speciesId = lockSpecies(content, run, wildSpeciesWithItems(content, run, theme, plan.speciesId, mapItemRng(run, node.id), mods), `wild:${node.id}`);
     const legendary = rollLegendaryWild(content, new Rng(hashSeed(`${run.seed}:legendary:${run.encountersCompleted}:${node.id}`)), run.regionIndex, encounterWeightPerk(archetype.modifiers, 'legendary'));
@@ -2111,7 +2112,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     const doublesCfg = content.balance.doubles;
     const pairRng = new Rng(hashSeed(`${run.seed}::wild-doubles::${run.regionIndex}::${stage.index}::${node.id}::${run.encountersCompleted}`));
     if (!legendary && !mrBack && !run.battle.mapItems && stageNumber >= doublesCfg.fromStage && run.party.filter((m) => m.hp > 0).length >= 2 && (doublesOnly(run.rules) || pairRng.chance(doublesCfg.wildChance))) {
-      const second = planWild(content, archetype, theme, scale, 0, pairRng, run.regionOrder[run.regionIndex], runAttributeEffects(content, run).shinyChance, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id) * migrationWildWeight(content, run, id) * weatherSpawnWeight(content, frontAt(content, run, node)?.weather, id) * ecosystemWeight(content, run, id) * biomeWildWeight(content, run, id) * recentWild(familyId(content, id)) * dampen(id));
+      const second = planWild(content, archetype, theme, scale, 0, pairRng, run.regionOrder[run.regionIndex], runAttributeEffects(content, run).shinyChance, (id) => periodWildWeight(content, run, id) * tideWildWeight(content, run, id) * migrationWildWeight(content, run, id) * weatherSpawnWeight(content, frontAt(content, run, node)?.weather, id) * ecosystemWeight(content, run, id) * biomeWildWeight(content, run, id) * recentWild(familyId(content, id)) * dampen(id) * quietWildWeight(content, run, id));
       const partner = newMon(content, run, lockSpecies(content, run, second.speciesId, `wild2:${node.id}`), Math.min(second.level, enemy.level + 2), 'e');
       partner.shiny = second.shiny;
       if (partner.shiny) countShiny(run, partner.speciesId);
@@ -2388,6 +2389,8 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     else if (node.kind === 'trainer' && !rematch && !back && !rivalBack && !isRival && !nemesis && !memoryHit && !bossBack && stageNumber >= doublesCfg.fromStage && canBeDoubles(run.party, team)) {
       if (doublesOnly(run.rules) || new Rng(hashSeed(`${run.seed}::doubles::${run.regionIndex}::${stage.index}::${node.id}`)).chance(doublesCfg.chance)) makeDoubles(run.battle, run.party);
     }
+    // Catalog Overhaul new events (tagPartner): a copy of your lead fights beside you in an ordinary trainer battle.
+    if (ordinary && !run.battle.doubles && team.length >= 2 && partnerOwed(run) > 0) joinTagPartner(content, run);
     if (trainingIndex >= 0) run.battle.drama.evolvable.push(team[trainingIndex]!.uid);
     if (rivalBack) {
       run.battle.rivalId = rivalBack.id;
@@ -4482,4 +4485,19 @@ export function pseudoLost(content: Content, run: RunState): void {
   // Back out to the stage the pseudo-stage sits in.
   leavePseudoStage(run);
   run.phase = 'map';
+}
+
+/** Catalog Overhaul new events: the tag partner (a copy of the lead, its moves too) joins this battle for this fight only; finishBattle sends it home. */
+function joinTagPartner(content: Content, run: RunState): void {
+  const battle = run.battle!;
+  const lead = run.party[battle.activeIndex];
+  if (!lead) return;
+  const copy = newMon(content, run, lead.speciesId, lead.level, 'p');
+  copy.moves = lead.moves.map((m) => ({ id: m.id, pp: content.moves.get(m.id)?.pp ?? m.pp }));
+  run.party.push(copy);
+  makeDoubles(battle, run.party);
+  battle.doubles!.player.index = run.party.length - 1;
+  battle.participants = [lead.uid, copy.uid];
+  battle.loaner = copy.uid;
+  spendPartner(run);
 }

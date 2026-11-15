@@ -61,6 +61,7 @@ import { addLevels, calcStats, maxHp, maxPp } from './pokemon';
 import { count, countShiny, discover } from './progress';
 import { FLAGS as POND_FLAGS, freshMark, pondMon, recordLesson, setPondFlag } from './episodes/poliPond';
 import { eggStatus, eggTier, layEgg, warmEggs } from './eggs';
+import { anyFlagSet, eggWarm, hasEgg, itemForType, owePartner, quietWild, runPlaceMet, stageTypesMet, stageWeatherMet, stripFoeMoves } from './co/neRules';
 import { makeShadow, rollShadowHeart } from './shadow';
 import { addFlag } from './shadowWorld/world';
 import { grantBlessing, makeBlissful } from './shadowWorld/blissful';
@@ -194,6 +195,16 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return bondLevelMet(content, run, c.atLeast, c.who) !== (c.absent === true);
     case 'partyTypes':
       return run.party.some((m) => m.hp > 0 && (content.species.get(m.speciesId)?.types ?? []).some((t) => c.types.includes(t)));
+    case 'stageTypes':
+      return stageTypesMet(content, run, c.types);
+    case 'runPlace':
+      return runPlaceMet(content, run, c);
+    case 'hasEgg':
+      return hasEgg(run) !== (c.absent === true);
+    case 'weather':
+      return stageWeatherMet(content, run, c.in);
+    case 'anyFlag':
+      return anyFlagSet(run, c.keys);
     case 'rivalMet':
       return run.story.rivals.some((r) => r.encounters >= c.atLeast);
     case 'rivalAlly':
@@ -396,6 +407,16 @@ export function conditionText(content: Content, c: EventCondition): string {
       return c.absent ? `Only while no Pokémon has Bond ${c.atLeast}` : `Needs ${c.who === 'any' ? 'a Pokémon' : whoWords(c.who)} with Bond ${c.atLeast}`;
     case 'partyTypes':
       return `Needs ${/^[aeiou]/.test(c.types[0]!) ? 'an' : 'a'} ${c.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join('- or ')}-type Pokémon`;
+    case 'stageTypes':
+      return `Only on ${c.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(', ')} stages`;
+    case 'runPlace':
+      return c.lastRegion ? 'Only in the last region' : c.regionEnd ? 'Only at the end of a region' : 'Only at this point of the run';
+    case 'hasEgg':
+      return c.absent ? 'Only without an Egg' : 'Needs an Egg in your bag';
+    case 'weather':
+      return `Only in ${c.in.join(' or ')}`;
+    case 'anyFlag':
+      return 'Only after an earlier choice';
     case 'rivalAlly':
       return 'Needs a rival who has become a friend';
     case 'friendHere':
@@ -977,6 +998,14 @@ export function effectWords(content: Content, e: EventEffect): string {
       return `${e.who === 'party' ? '' : `${whoWords(e.who)}: `}friendship ${e.amount >= 0 ? '+' : ''}${e.amount}`;
     case 'takeNode':
       return e.back ? 'a step back along the road (nothing is refought)' : `takes your next ${e.nodes === 1 ? 'node' : `${e.nodes} nodes`} (no battle there)`;
+    case 'quietWild':
+      return `${e.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' and ')} wild Pokémon keep away for the rest of the ${e.span}`;
+    case 'eggWarm':
+      return `your Egg hatches ${e.steps === 1 ? 'a step' : `${e.steps} steps`} sooner`;
+    case 'typeItem':
+      return `an item for ${whoWords(e.who)}'s type`;
+    case 'tagPartner':
+      return `a copy of your lead fights beside you ${e.battles === 1 ? 'next battle' : `for ${e.battles} battles`}`;
     case 'attribute': {
       const label = e.key === 'ragePeace' ? (e.amount >= 0 ? 'Rage' : 'Peace') : e.key === 'goodEvil' ? (e.amount >= 0 ? 'Good' : 'Evil') : ATTRIBUTE_LABELS[e.key];
       return `${label} +${Math.abs(e.amount)}`;
@@ -1267,6 +1296,17 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'takeNode':
       if (!e.back) oweNodes(run, e.nodes);
       return effectWords(content, e);
+    case 'quietWild':
+      return quietWild(content, run, e.span, e.types);
+    case 'eggWarm':
+      return eggWarm(run, e.steps, e.friendship);
+    case 'typeItem': {
+      const id = itemForType(content, whoOf(content, run, e.who, pickedUid)[0], e.table);
+      return id ? giveItem(content, run, id, 1, rng) : '';
+    }
+    case 'tagPartner':
+      owePartner(run, e.battles);
+      return 'A copy of your lead will fight beside you in the next trainer battle.';
     case 'attribute':
       addRunAttribute(content, run, e.key, e.amount);
       return effectWords(content, e);
@@ -1285,7 +1325,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
       const speciesId = (e.recall ? oldFoe(run) : null) ?? pickSpecies(content, run, e.species, e.types, rng, 'reward');
       // No event lifts the party's level cap (Balancing Phase 7).
-      const level = e.level ?? Math.max(1, Math.min(runLevelCap(content, run), eventLevel(content, run, node, rng) + e.levelBonus));
+      const level = e.level ?? Math.max(1, Math.min(runLevelCap(content, run), Math.round((eventLevel(content, run, node, rng) + e.levelBonus) * (e.levelShare ?? 1))));
       const mon = newMon(content, run, e.level ? speciesId : evolvedFormAt(content, speciesId, level, rng), level, 'p');
       mon.shiny = rollShiny(content, rng, runAttributeEffects(content, run).shinyChance * e.shinyMultiplier);
       if (mon.shiny) countShiny(run, mon.speciesId);
@@ -1372,7 +1412,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const move = content.moves.get(e.move);
       // A Pokémon that has just joined waits in `pending` until the player confirms it, so look there first for a species.
       const incoming = e.species ? run.pending.flatMap((p) => (p.kind === 'caught' && p.mon.speciesId === e.species ? [p.mon] : []))[0] : undefined;
-      const learner = (e.species ? incoming ?? run.party.find((m) => m.speciesId === e.species) : e.type ? run.party.find((m) => m.hp > 0 && getSpecies(content, m.speciesId).types.includes(e.type!)) : undefined) ?? run.party.find((m) => m.hp > 0);
+      const learner = (e.who ? whoOf(content, run, e.who, pickedUid)[0] : undefined) ?? (e.species ? incoming ?? run.party.find((m) => m.speciesId === e.species) : e.type ? run.party.find((m) => m.hp > 0 && getSpecies(content, m.speciesId).types.includes(e.type!)) : undefined) ?? run.party.find((m) => m.hp > 0);
       if (!move || !learner || learner.moves.some((m) => m.id === e.move)) return '';
       const slot = { id: move.id, pp: move.pp };
       if (learner.moves.length < 4) learner.moves.push(slot);
@@ -1755,6 +1795,8 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       run.battle.eventRule = b.rule;
       if (b.rule.weatherCycle) run.battle.weather = { id: b.rule.weatherCycle[0]!, turns: 5 };
       if (b.rule.foeAsleep) for (const mon of team) mon.status = { id: 'slp', turns: 3 };
+      if (b.rule.foeNoFlag) for (const mon of team) stripFoeMoves(content, mon, b.rule.foeNoFlag);
+      if (b.rule.foeTailwind) run.battle.sideEffects.enemy.tailwind = b.rule.foeTailwind;
       for (const [stat, n] of Object.entries(b.rule.stages ?? {})) {
         run.battle.playerStages[stat as 'atk'] = n;
         run.battle.enemyStages[stat as 'atk'] = n;
