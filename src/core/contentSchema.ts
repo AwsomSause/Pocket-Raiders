@@ -2949,6 +2949,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
     /** R10: a stage of the region (1-based) and "not yet this region" (the flag's stage is in an earlier region or unset). */
     stageOfRegion: z.number().int().min(1).max(12).optional(),
     freshRegion: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
+    /** R15: the flag's stage is in this region (the tracker's ambushes last for the rest of the region). */
+    sameRegion: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
     /** R10: the last stage before the League (the last stage of the run's last region). */
     leagueEve: z.boolean().optional(),
     /** R12: the run's mentor has taught at least this many lessons. */

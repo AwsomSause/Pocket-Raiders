@@ -1,0 +1,1379 @@
+{
+ "catalogOverhaul": "rivals",
+ "override": true,
+ "remove": [
+  "rival-gift",
+  "rq-echo-follower-for-them",
+  "rq-echo-follower-to-win",
+  "rq-echo-follower-unsure",
+  "rq-echo-follower-walked",
+  "rq-echo-gift-found",
+  "rq-echo-gift-used",
+  "rq-echo-shelves-let",
+  "rq-echo-shelves-shared",
+  "rq-echo-shelves-won",
+  "rq-emptied-shelves",
+  "rq-follower",
+  "rq-follower-why",
+  "rq-gift",
+  "rq-shelves-confront",
+  "rq-sponsor-truth"
+ ],
+ "events": [
+  {
+   "id": "w4-wandering-trainer",
+   "name": "Someone Is Following You",
+   "group": "Rival questline",
+   "stop": "event",
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a1f",
+    "effect": "fog"
+   },
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R13.open"
+    }
+   ],
+   "intro": "{lead} stops and looks back down the path, ears up.\nYou look too. Nothing. A bush, moving, with no wind to move it.",
+   "choices": [
+    {
+     "label": "Keep walking.",
+     "success": {
+      "text": "{lead} keeps glancing back for a while. Then, reluctantly, it lets it go.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "ahead": [
+         {
+          "event": "rq-r13-hat",
+          "step": 9
+         },
+         {
+          "event": "rq-r13-tree",
+          "step": 14
+         },
+         {
+          "event": "rq-r13-meet",
+          "step": 16
+         }
+        ]
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R13.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Hello?\"",
+     "success": {
+      "text": "Nobody answers. The bush stops moving, very suddenly, the way bushes do not.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "ahead": [
+         {
+          "event": "rq-r13-hat",
+          "step": 9
+         },
+         {
+          "event": "rq-r13-tree",
+          "step": 14
+         },
+         {
+          "event": "rq-r13-meet",
+          "step": 16
+         }
+        ]
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R13.open"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r13-hat",
+   "name": "Someone Is Following You: A Hat",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a1f",
+    "effect": "none"
+   },
+   "intro": "A hat, behind a wall. The wall is too low. Most of a person is visible behind it, crouching, very still.",
+   "choices": [
+    {
+     "label": "Pretend not to see.",
+     "success": {
+      "text": "You walk past. The hat turns slowly to follow you.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r13-tree",
+   "name": "Someone Is Following You: Up a Tree",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a1f",
+    "effect": "none"
+   },
+   "intro": "There is somebody up a tree. They have dropped a notebook.\nIt lies open on the path: a drawing of your last battle, every switch marked with arrows.",
+   "choices": [
+    {
+     "label": "Leave it where it is.",
+     "success": {
+      "text": "When you look back, the notebook is gone, and so is the person in the tree.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Hand it up to them.",
+     "success": {
+      "text": "A hand comes down out of the leaves, takes it, and vanishes. A very small voice says, \"Thank you.\"",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r13-meet",
+   "name": "Someone Is Following You: The Stranger",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a1f",
+    "effect": "none"
+   },
+   "intro": "At last they step out onto the path: a trainer about your age, notebook clutched to their chest.\n\nStranger: \"I watched you win a battle you should have lost.\"\nStranger: \"I want to know how.\"",
+   "choices": [
+    {
+     "label": "\"Battle me and find out.\"",
+     "success": {
+      "text": "Stranger: \"I was hoping you'd say that.\"\nThey send out three Pokémon. You know them. They are yours: the same kinds, the same moves, the same order.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "follower-battled",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Stranger",
+       "friendly": true,
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "classId": "ace-trainer",
+       "mirror": true,
+       "win": [],
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "\"Walk with me.\"",
+     "success": {
+      "text": "They blink, as if nobody has ever said that to them.\nStranger: \"...Really? Just walk? Right. Yes. I can walk.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "follower-walked",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Stop following me.\"",
+     "success": {
+      "text": "They go red. They nod. They turn round and walk back the way they came.\n\nYou are almost sure that is the end of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "follower-stopped",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "w4-wanderer-visit",
+   "name": "Your Travelling Companion",
+   "group": "Rival questline",
+   "stop": "event",
+   "room": false,
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a1f",
+    "effect": "glint"
+   },
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "follower-walked",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R13.walk"
+    }
+   ],
+   "intro": "The stranger falls in beside you at the stage gate, notebook already open.\nStranger: \"I've got questions. I've numbered them. Is that all right?\"\n\nStranger: \"Why that one first? The Pokémon you lead with. Why that one?\"",
+   "choices": [
+    {
+     "label": "\"It was the first one I trusted.\"",
+     "success": {
+      "text": "They write it down, very slowly, and underline \"trusted\".",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "ahead": [
+         {
+          "event": "rq-r13-ask-2",
+          "step": 8
+         },
+         {
+          "event": "rq-r13-ask-3",
+          "step": 13
+         },
+         {
+          "event": "w4-wanderer-challenge",
+          "step": 17
+         }
+        ]
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R13.walk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's the one that matches up best.\"",
+     "success": {
+      "text": "They write it down, and draw a little table next to it.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "ahead": [
+         {
+          "event": "rq-r13-ask-2",
+          "step": 8
+         },
+         {
+          "event": "rq-r13-ask-3",
+          "step": 13
+         },
+         {
+          "event": "w4-wanderer-challenge",
+          "step": 17
+         }
+        ]
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R13.walk"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "types": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r13-ask-2",
+   "name": "Your Travelling Companion: Another Question",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a1f",
+    "effect": "none"
+   },
+   "intro": "Stranger: \"Do you always look at them before you pick?\"\nThey mean your Pokémon. You had not noticed that you do.",
+   "choices": [
+    {
+     "label": "\"Always.\"",
+     "success": {
+      "text": "They nod, as if that settles something important.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"I didn't know I did.\"",
+     "success": {
+      "text": "They write that down too. \"Didn't know,\" underlined twice.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r13-ask-3",
+   "name": "Your Travelling Companion: The Last Question",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a1f",
+    "effect": "none"
+   },
+   "intro": "Stranger: \"What do you do when you're frightened? You don't look it.\"\nStranger: \"Is that a trick? Can I have it?\"",
+   "choices": [
+    {
+     "label": "\"You can have it.\"",
+     "success": {
+      "text": "You show them how you breathe before a battle. They copy it badly. Then less badly.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"I just am frightened. I go anyway.\"",
+     "success": {
+      "text": "They stop walking. They write nothing at all.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "w4-wanderer-challenge",
+   "name": "The Wanderer Steps Out",
+   "group": "Rival questline",
+   "stop": "event",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a1f",
+    "effect": "shake"
+   },
+   "rarity": "rare",
+   "callback": false,
+   "intro": "At the end of the stage they stop and close the notebook.\nStranger: \"I think I've got it now. Most of it.\"\nStranger: \"Show me the rest.\"",
+   "choices": [
+    {
+     "label": "Battle them.",
+     "success": {
+      "text": "They lead with something just like yours, and look at it before they pick.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Stranger",
+       "friendly": true,
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "classId": "ace-trainer",
+       "mirror": true,
+       "win": [],
+       "lose": []
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r13-question",
+   "name": "The One Who Follows: Why",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "beat": "R13.finale"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "stopped",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "follower-stopped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nYou told them to stop following you. They did, for a while. They are here anyway. They look embarrassed about it."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a1f",
+    "effect": "glint"
+   },
+   "intro": "The stranger is waiting at the side of the path. The notebook is open at the last clean page.\n\nStranger: \"One more. The only one that matters.\"\nStranger: \"Why do you do this?\"",
+   "choices": [
+    {
+     "label": "\"To win.\"",
+     "success": {
+      "text": "They write it down, underline it, and shut the notebook for good.\nStranger: \"Then I'll race you. Next region. Every stage.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "follower-answer",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R13.finale"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"For them.\"",
+     "success": {
+      "text": "You look at your team. They watch you look. They write it down, underline it, and shut the notebook for good.\nStranger: \"Then maybe we don't have to be enemies. Next region, I'll find out.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "follower-answer",
+        "amount": 2
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R13.finale"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I don't know yet.\"",
+     "success": {
+      "text": "They stare at you. Then they laugh, properly, for the first time.\nStranger: \"Me neither.\"\nThey write it down, underline it, and shut the notebook for good.\n\nStranger: \"Then I'll keep watching. Next region. Closer, this time.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "follower-answer",
+        "amount": 3
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R13.finale"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  },
+  {
+   "id": "rq-r13-rival",
+   "name": "The One Who Follows: A Rival Now",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 7,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "follower-answer",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R13.next"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "truce",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "follower-answer",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "intro": "The stranger is waiting at the stage gate with two cups of something hot.\nStranger: \"For them, you said. I've been trying it. It's harder than winning.\"\nStranger: \"Battle me anyway? Friendly.\""
+    },
+    {
+     "id": "student",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "follower-answer",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ],
+     "intro": "The stranger is waiting at the stage gate with a brand-new notebook, still blank.\nStranger: \"You didn't know yet. Do you know now?\"\nStranger: \"Show me. I'll take notes.\""
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a1f",
+    "effect": "shake"
+   },
+   "intro": "The stranger is waiting at the stage gate, already warmed up, already counting.\nStranger: \"To win, you said. So: race. Me first.\"",
+   "choices": [
+    {
+     "label": "Battle the stranger.",
+     "success": {
+      "text": "They do not look at their Pokémon before they pick. Then, after a second, they do.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R13.next"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Stranger",
+       "friendly": true,
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "classId": "ace-trainer",
+       "mirror": true,
+       "win": [],
+       "lose": []
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  },
+  {
+   "id": "rival-buyout",
+   "name": "Emptied Shelves",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R14.open"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a261d",
+    "effect": "none"
+   },
+   "callback": true,
+   "remembers": [
+    {
+     "id": "ahead",
+     "when": [
+      {
+       "kind": "rivalState",
+       "leadAtLeast": 2
+      }
+     ],
+     "notice": "\n\nShopkeeper: \"Said they were stocking up for the League.\""
+    },
+    {
+     "id": "behind",
+     "when": [
+      {
+       "kind": "rivalState",
+       "leadAtMost": 0
+      }
+     ],
+     "notice": "\n\nShopkeeper: \"They looked frightened, honestly.\"\nShe says it gently, as if it might be catching."
+    }
+   ],
+   "intro": "The shopkeeper is wringing her hands before you are through the door.\nShopkeeper: \"Your friend. The one in all the papers. They came in this morning.\"\n\nShopkeeper: \"Paid in full. Very polite. Took everything.\"\nEvery Poké Ball. Every Revive. The shelves behind her are bare to the wood.",
+   "choices": [
+    {
+     "label": "\"I'll go to the next town.\"",
+     "success": {
+      "text": "A detour, then. The next town's shop is a node out of your way.\nTheir shelves, at least, are full.",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "shop"
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R14.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What else have you got?\"",
+     "success": {
+      "text": "She thinks, then fetches a box from the back: a few Great Balls, honest stock, at a fair price.\nShopkeeper: \"Regular's discount. You look like you'll be a regular.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 3
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R14.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll find them.\"",
+     "success": {
+      "text": "Shopkeeper: \"Went east. Two nodes, I'd say. They had a cart.\"\n\nTheir camp is on your map now, a little further along.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "ahead": [
+         {
+          "event": "rq-r14-camp",
+          "step": 9
+         }
+        ]
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R14.open"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  },
+  {
+   "id": "rq-r14-camp",
+   "name": "Emptied Shelves: The Haul",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "remembers": [
+    {
+     "id": "ahead",
+     "when": [
+      {
+       "kind": "rivalState",
+       "leadAtLeast": 2
+      }
+     ],
+     "notice": "\n\n{rival}: \"It's the League. You stock for the League. Everybody knows that.\""
+    },
+    {
+     "id": "behind",
+     "when": [
+      {
+       "kind": "rivalState",
+       "leadAtMost": 0
+      }
+     ],
+     "notice": "\n\nThey do not look up.\n{rival}: \"I keep thinking: what if I run out. In the middle. With you watching.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a261d",
+    "effect": "none"
+   },
+   "intro": "A camp. Forty Poké Balls in rows. Revives stacked like bricks.\n{rival} is counting them. They lose count. They start again.",
+   "choices": [
+    {
+     "label": "\"Give half back.\"",
+     "requires": [
+      {
+       "kind": "rivalQuest",
+       "feeling": {
+        "who": "main",
+        "key": "trust",
+        "atLeast": 4
+       }
+      }
+     ],
+     "success": {
+      "text": "They push half of it across to you with their foot.\n{rival}: \"...I'd have sold them back to you. At a mark-up.\"\n{rival}: \"I thought about it. I'm telling you so you know I thought about it.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 5
+       },
+       {
+        "kind": "item",
+        "id": "revive",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-shelves-shared",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle for it.",
+     "success": {
+      "text": "{rival}: \"Fine. Winner takes the lot.\"\nThey stack the crates behind them like a wall.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-shelves-won",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "quest": {
+        "counter": "lead"
+       },
+       "win": [
+        {
+         "kind": "item",
+         "id": "poke-ball",
+         "count": 10
+        },
+        {
+         "kind": "item",
+         "id": "revive",
+         "count": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Keep it.\"",
+     "success": {
+      "text": "They stare at you. Then at the haul. Then, slowly, they stop counting.\n{rival}: \"...Right. Thanks.\"\nThey mean it more than they would like to.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-shelves-let",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": []
+  },
+  {
+   "id": "rival-care-package",
+   "name": "A Care Package",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rival-shelves-let",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R14.package"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a261d",
+    "effect": "sparkle"
+   },
+   "callback": true,
+   "stop": "heal",
+   "intro": "At the Center, the nurse slides a paper bag across the counter.\nPoké Balls. A lot of them. Some still have the price stickers from that shop. There is no note.",
+   "choices": [
+    {
+     "label": "Take the bag.",
+     "success": {
+      "text": "You do not need a note. You know whose handwriting it would have been.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 8
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 2
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R14.package"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r14-never",
+   "name": "Emptied Shelves: Never Again",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rival-shelves-won",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R14.never"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a261d",
+    "effect": "none"
+   },
+   "intro": "{rival} passes you outside a shop with exactly one Poké Ball in their hand.\n{rival}: \"One. I bought one. I'm never doing that again.\"\n{rival}: \"Don't say anything.\"",
+   "choices": [
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You say nothing. They look grateful, and a little annoyed that you managed it.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R14.never"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rival-trap-gift",
+   "name": "A Gift You Should Question",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "evil",
+     "after": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R15.open"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1d2a",
+    "effect": "glint"
+   },
+   "callback": true,
+   "intro": "A box on your bed at the inn, with {rival}'s handwriting on the tag.\nThe wrapping is too neat.\n\nThe knot is a sailor's knot.\n{rival} cannot tie a sailor's knot. You have watched them try.",
+   "choices": [
+    {
+     "label": "Open it and use it.",
+     "success": {
+      "text": "A Lucky Egg, warm in your hand. It is a good gift. It is a very good gift.\nYou do not notice the faint, slow blink under the lining.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "lucky-egg",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-gift-used",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "stamp": "rq-r15-gift-at"
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R15.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Check it first.",
+     "success": {
+      "text": "Under the lining: a disc the size of a coin. It is warm. It blinks, slowly.\n{lead} growls at it.\n\nYou prise it out and crush it under your heel. The Lucky Egg you keep.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "lucky-egg",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-gift-found",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R15.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use it as a decoy.",
+     "success": {
+      "text": "You find the blinking disc, and leave it right where it is.\nTomorrow you will put the whole box somewhere useful.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-gift-turned",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R15.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask {rival}.",
+     "success": {
+      "text": "You find them at the Center and hold up the box.\n{rival}: \"I didn't wrap it. A sponsor asked me to pass it on.\"\n{rival}: \"They've been very generous. Why?\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "lucky-egg",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-gift-asked",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R15.open"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r15-ambush",
+   "name": "A Gift You Should Question: The Blink",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rival-gift-used",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "sameRegion": "rq-r15-gift-at",
+     "stale": "rq-r15-ambush-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1d2a",
+    "effect": "flicker"
+   },
+   "intro": "Something in your bag blinks. Slowly. Then the bushes on both sides of the path stand up.\nGrunt: \"There you are. Right where the little light said.\"\n\nOn the board at the last Center, the Rival Report: {rival}, smiling, shaking hands with someone in a good coat. Accepting more help.",
+   "choices": [
+    {
+     "label": "Fight your way through.",
+     "success": {
+      "text": "They come out of the bushes three at a time.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "rq-r15-ambush-at",
+        "again": [
+         "rq-r15-ambush"
+        ]
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Grunt",
+       "evil": "grunt",
+       "friendly": true,
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [],
+       "lose": []
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r15-decoy",
+   "name": "A Gift You Should Question: A Stump",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 7,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rival-gift-turned",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R15.decoy"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1d2a",
+    "effect": "net"
+   },
+   "intro": "You leave the gift on a stump and step back into the trees.\n\nSix Grunts. A net. A great deal of shouting. A stump.\nGrunt: \"It's a stump.\"\nAnother Grunt: \"It's THEIR stump.\"\n\nBehind them, unguarded: their camp. And on a crate, a ledger.",
+   "choices": [
+    {
+     "label": "Read the ledger.",
+     "success": {
+      "text": "Payments, in neat columns. Gifts, passed through a sponsor. The sponsor's name, again and again:\n{lieutenant}, of {evil}.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 3
+       },
+       {
+        "kind": "flag",
+        "key": "rival-sponsor-known",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R15.decoy"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r15-sponsor",
+   "name": "A Gift You Should Question: The Sponsor",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 7,
+   "requires": [
+    {
+     "kind": "evil",
+     "after": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R15.finale"
+    }
+   ],
+   "priority": 80,
+   "remembers": [
+    {
+     "id": "trust",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "feeling": {
+        "who": "main",
+        "key": "trust",
+        "atLeast": 5
+       }
+      }
+     ],
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "\"Your sponsor is {lieutenant}.\"",
+       "success": {
+        "text": "They do not argue. They take the sponsor's pin off their collar and look at it for a long time.\n\n{rival}: \"{say event||champion-chaser::I thought somebody finally thought I was worth it.||prodigy::Of course. Nobody gives anything for nothing. I should have done the sums.||underdog::They said they believed in me. Nobody's ever said that before. I wanted it to be true.||bitter-challenger::Figures. The only people who ever backed me wanted something.}\"\nThey put the pin on the ground, carefully, like something that might go off.\n\nThen they walk to the square, where the sponsor is waiting, and hand back every gift in front of everyone.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "rival-told-sponsor",
+          "amount": 1
+         },
+         {
+          "kind": "rivalQuest",
+          "done": "R15.finale"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1d2a",
+    "effect": "none"
+   },
+   "intro": "{rival} is in a new coat. A good coat. There is a small pin on the collar: {evil}'s mark, if you know where to look.\n{rival}: \"My sponsor sends their regards. Isn't it great? Somebody finally noticed.\"",
+   "choices": [
+    {
+     "label": "\"Your sponsor is {lieutenant}.\"",
+     "success": {
+      "text": "Their face closes like a door.\n{rival}: \"You're jealous.\"\n{rival}: \"Somebody finally backs me, and you can't stand it.\"\n\nThey walk off with the pin still on. They will find out at the climax. On the wrong side.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-sponsor-denied",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R15.finale"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You say nothing. They straighten the pin and go.\nYou will be there when they find out. You will have to be.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-sponsor-silent",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R15.finale"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  }
+ ]
+}

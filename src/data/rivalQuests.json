@@ -472,6 +472,79 @@
           "late": true
         }
       }
+    },
+    "R13": {
+      "name": "The One Who Follows",
+      "beats": {
+        "open": {
+          "event": "w4-wandering-trainer",
+          "minStage": 4
+        },
+        "walk": {
+          "event": "w4-wanderer-visit",
+          "after": "open",
+          "offset": 1
+        },
+        "finale": {
+          "event": "rq-r13-question",
+          "after": "walk",
+          "offset": 1,
+          "final": true
+        },
+        "next": {
+          "event": "rq-r13-rival",
+          "after": "finale",
+          "when": "nextRegion",
+          "late": true
+        }
+      }
+    },
+    "R14": {
+      "name": "Emptied Shelves",
+      "personalities": [
+        "champion-chaser",
+        "prodigy"
+      ],
+      "beats": {
+        "open": {
+          "event": "rival-buyout",
+          "minStage": 5,
+          "slot": true
+        },
+        "package": {
+          "event": "rival-care-package",
+          "after": "open",
+          "when": "regionEnd"
+        },
+        "never": {
+          "event": "rq-r14-never",
+          "after": "open",
+          "offset": 1,
+          "final": true
+        }
+      }
+    },
+    "R15": {
+      "name": "A Gift You Should Question",
+      "beats": {
+        "open": {
+          "event": "rival-trap-gift",
+          "minStage": 6,
+          "slot": true
+        },
+        "decoy": {
+          "event": "rq-r15-decoy",
+          "after": "open",
+          "offset": 1
+        },
+        "finale": {
+          "event": "rq-r15-sponsor",
+          "after": "open",
+          "when": "regionEnd",
+          "slot": true,
+          "final": true
+        }
+      }
     }
   }
 }

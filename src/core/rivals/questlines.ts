@@ -19,6 +19,7 @@ import type { Rival } from '../story/schema';
 import { BANK, BANK_CONTEXTS, type BankContext } from './bank';
 import { featuredRival } from './living';
 import { getMentor } from '../mentors';
+import { evilTeam } from '../evil/teams';
 import { scout } from './tier5';
 import { addMark, overhaulOf, type FeelingKey, type RivalOverhaulState } from './overhaul';
 
@@ -236,6 +237,10 @@ export function questConditionMet(content: Content, run: RunState, c: QuestCondi
     const at = flagOf(run, c.freshRegion);
     if (at > 0 && Math.floor((at - 1) / stagesPerRegion(content, run)) === run.regionIndex) return false;
   }
+  if (c.sameRegion) {
+    const at = flagOf(run, c.sameRegion);
+    if (at === 0 || Math.floor((at - 1) / stagesPerRegion(content, run)) !== run.regionIndex) return false;
+  }
   if (c.leagueEve !== undefined && (run.regionIndex >= run.regionOrder.length - 1 && (run.stage?.index ?? 0) + 1 >= stagesPerRegion(content, run)) !== c.leagueEve) return false;
   if (c.mentorLessons !== undefined && (run.mentor?.lessons.length ?? -1) < c.mentorLessons) return false;
   const main = mainRival(run);
@@ -411,6 +416,8 @@ export function questText(content: Content, run: RunState, eventId: string, text
     rung: RUNG_WORDS[flagOf(run, 'circuit-rung')] ?? 'one',
     lost: content.species.get(lostFamily(content, run) ?? '')?.name ?? 'a name you cannot quite read',
     fellow: run.mentor?.fellow.name ?? 'the other apprentice',
+    evil: evilTeam(content, run)?.name ?? 'the team',
+    lieutenant: evilTeam(content, run)?.ranks.executive.name ?? 'their lieutenant',
     mentor: getMentor(run.mentor?.id)?.name ?? 'your mentor',
     team: (main?.memory?.lastBattle?.team ?? []).map((id) => content.species.get(id)?.name ?? id).join(', ') || 'a list of names, in order',
   };
@@ -423,7 +430,7 @@ export function questText(content: Content, run: RunState, eventId: string, text
     const lines = rec && CONTEXTS.has(ctx) ? (BANK.personalities[rec.personality] as unknown as Record<BankContext, string[]>)[ctx as BankContext] : undefined;
     if (lines?.length) return lines[fnv1a(`${run.seed}::rq-say::${eventId}::${n}`) % lines.length]!;
     return own[0]?.[1] ?? '';
-  }).replace(/\{(rival|rival2|player|called|lead|young|lost|rung|team|fellow|mentor)\}/g, (_m, k: string) => simple[k]!);
+  }).replace(/\{(rival|rival2|player|called|lead|young|lost|rung|team|fellow|mentor|evil|lieutenant)\}/g, (_m, k: string) => simple[k]!);
 }
 
 // ---------- the pack's Marks (RIVAL_SYSTEM_OVERHAUL.md 3.3) ----------
