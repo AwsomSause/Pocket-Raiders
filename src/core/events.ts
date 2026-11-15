@@ -115,7 +115,7 @@ export function stageNumber(content: Content, run: RunState): number {
 export function conditionMet(content: Content, run: RunState, c: EventCondition): boolean {
   switch (c.kind) {
     case 'gn':
-      return gnConditionMet(content, run, c);
+      return gnConditionMet(content, run, c, stageNumber(content, run));
     case 'money':
       return run.money >= c.atLeast;
     case 'partySize':
@@ -1930,7 +1930,8 @@ function applyPondEffect(content: Content, run: RunState, e: Extract<EventEffect
       const avg = levels.length > 0 ? Math.round(levels.reduce((a, b) => a + b, 0) / levels.length) : 5;
       const guest = newMon(content, run, 'poliwag', Math.max(2, Math.min(runLevelCap(content, run), avg - 3)), 'p');
       guest.pond = freshMark();
-      guest.friendship = e.gentle ? 60 : 40;
+      // gn.01 "Pick it up": Bond +1 at the start (friendship +5).
+      guest.friendship = e.gentle ? 45 : 40;
       discover(run, guest.speciesId, true);
       if (run.party.length < partyCapacity(content, run)) run.party.push(guest);
       else run.pending.push({ kind: 'caught', mon: guest });
@@ -1949,7 +1950,8 @@ function applyPondEffect(content: Content, run: RunState, e: Extract<EventEffect
       return 'A small Poliwag stays close to you.';
     }
     case 'lesson':
-      if (e.lesson) recordLesson(run, e.lesson, e.firstTry);
+      if (e.lesson) recordLesson(run, e.lesson, e.firstTry, e.weak);
+      if (e.bond && mon) mon.friendship = Math.min(255, mon.friendship + 5);
       return mon ? `${content.species.get(mon.speciesId)?.name ?? 'The Poliwag'} learned a lesson.` : '';
     case 'guilty':
       setPondFlag(run, 'pp-guilty', 1);

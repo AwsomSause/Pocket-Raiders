@@ -308,3 +308,43 @@ describe("gn.05 Damian's Unofficial Gym", () => {
     expect(flagOf(walked, 'damian-meetings')).toBe(1);
   });
 });
+
+describe('gn.01 Poli-Pond (to the doc)', () => {
+  it('the cold open has the three buttons; stepping aside starts nothing and sets kind-walked-past', () => {
+    const run = gnRun('gn01-a');
+    open(run, 'pp-cold-open');
+    expect(scene(run, 'pp-cold-open').labels).toEqual(['Stand in front of it.', 'Step aside.', 'Pick it up.']);
+    const aside = choose(run, 'pp-cold-open', 'Step aside.').run;
+    expect(aside.party.some((m) => m.pond)).toBe(false);
+    expect(flagOf(aside, 'kind-walked-past')).toBe(1);
+    const picked = choose(run, 'pp-cold-open', 'Pick it up.').run;
+    const stood = choose(run, 'pp-cold-open', 'Stand in front of it.').run;
+    expect(picked.party.find((m) => m.pond)!.friendship).toBe(stood.party.find((m) => m.pond)!.friendship + 5);
+  });
+  it('each lesson has its three responses: patient, kind (Bond +1) and shortcut (weaker)', () => {
+    let run = gnRun('gn01-b');
+    open(run, 'pp-cold-open');
+    run = choose(run, 'pp-cold-open', 'Stand in front of it.').run;
+    expect(scene(run, 'pp-lesson-aim').labels).toEqual(['Laugh.', 'Try again, slower.', 'Move the log closer.']);
+    expect(scene(run, 'pp-lesson-footing').labels).toEqual(['Go and get it.', 'Wait for it to climb back.', 'Show it how you stand.']);
+    expect(scene(run, 'pp-lesson-stand').labels).toEqual(["Don't chase. Sit down.", 'Call its name.', 'Clap again, softer.']);
+    expect(scene(run, 'pp-pond-visit').labels).toEqual(['Sit down next to it.', 'Ask it why.', 'Leave it.']);
+    open(run, 'pp-lesson-aim');
+    const before = run.party.find((m) => m.pond)!.friendship;
+    const laughed = choose(run, 'pp-lesson-aim', 'Laugh.').run;
+    expect(laughed.party.find((m) => m.pond)!.friendship).toBe(before + 5);
+    expect(flagOf(laughed, 'pp-lesson-aim')).toBe(1);
+    expect(flagOf(choose(run, 'pp-lesson-aim', 'Try again, slower.').run, 'pp-lesson-aim')).toBe(2);
+    expect(flagOf(choose(run, 'pp-lesson-aim', 'Move the log closer.').run, 'pp-lesson-aim')).toBe(3);
+  });
+  it('the ending: "This is your pond now." is Release, or Reconcile once the guilty one was found', () => {
+    const run = gnRun('gn01-c');
+    setFlag(run, 'pp-rematch-won', 1);
+    expect(scene(run, 'pp-ending').labels).toEqual(['Come with me.', 'This is your pond now.']);
+    setFlag(run, 'pp-guilty', 1);
+    open(run, 'pp-ending');
+    const r = choose(run, 'pp-ending', 'This is your pond now.');
+    expect(r.text).toMatch(/He holds the reeds back for it/);
+    expect(flagOf(r.run, 'pp-reconcile')).toBe(1);
+  });
+});

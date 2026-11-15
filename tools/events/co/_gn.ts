@@ -92,6 +92,11 @@ export const weighted = (key: string, table: [string, number][]): Json[] => [
 ];
 /** Holds unless the flag was stamped (`stampRegion`) in this region. */
 export const notThisRegion = (key: string): Json => ({ kind: 'gn', test: 'notThisRegion', key });
+/** Remembers the stage number now; read with laterStage / sameStage / notThisStage. */
+export const stampStage = (key: string): Json => gn('stampStage', { key });
+export const laterStage = (key: string): Json => ({ kind: 'gn', test: 'laterStage', key });
+export const sameStage = (key: string): Json => ({ kind: 'gn', test: 'sameStage', key });
+export const notThisStage = (key: string): Json => ({ kind: 'gn', test: 'notThisStage', key });
 export const leavePseudo = (): Json => ({ kind: 'leavePseudo' });
 export const teach = (move: string, o: Json = {}): Json => ({ kind: 'teachMove', move, ...o });
 export const moment = (text: string, importance = 60): Json => ({ kind: 'moment', text, importance });

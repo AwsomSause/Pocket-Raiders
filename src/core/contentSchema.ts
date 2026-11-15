@@ -2991,7 +2991,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('tradeFor'), want: TradeWantSchema, table: z.record(z.string(), z.string()).default({}), similar: z.object({ pool: z.array(z.string()).min(1), bst: z.number().int().min(0).max(200) }).optional() }),
   /** Beta 0.6 Vermilion Flight North: the whole party is taken away (kept in run.expansion.canon.stash) until `restoreParty` or a lost fight inside the stage hands it back. */
   /** Poli-Pond (core/episodes/poliPond.ts): one step of the story. `lesson` names the lesson (with `lesson`); `firstTry` is true when it was taught on the first retry. */
-  z.object({ kind: z.literal('pond'), action: z.enum(['begin', 'lesson', 'guilty', 'rematchWon', 'keep', 'release', 'reconcile', 'returnJoin']), lesson: z.enum(['aim', 'footing', 'stand']).optional(), firstTry: z.boolean().default(false), gentle: z.boolean().default(false) }),
+  z.object({ kind: z.literal('pond'), action: z.enum(['begin', 'lesson', 'guilty', 'rematchWon', 'keep', 'release', 'reconcile', 'returnJoin']), lesson: z.enum(['aim', 'footing', 'stand']).optional(), firstTry: z.boolean().default(false), gentle: z.boolean().default(false), /** gn.01: the shortcut response, learned but weaker. */ weak: z.boolean().default(false), /** gn.01: the kind response, Bond +1 (friendship +5) for the Poliwag. */ bond: z.boolean().default(false) }),
   /** Greenneedle events: one story step (core/greenneedle). */
   GnEffectSchema,
   z.object({ kind: z.literal('stashParty') }),

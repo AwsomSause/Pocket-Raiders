@@ -64,9 +64,12 @@ export interface GnHost {
 }
 
 /** A Greenneedle condition. */
-export function gnConditionMet(content: Content, run: RunState, c: GnCond): boolean {
+export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage: number): boolean {
   if (c.test === 'noMoveType') return !run.party.some((m) => m.moves.some((s) => c.types!.includes(content.moves.get(s.id)?.type ?? '')));
   const stamped = gnFlag(run, c.key!);
+  if (c.test === 'laterStage') return stamped > 0 && stamped < stage;
+  if (c.test === 'sameStage') return stamped === stage;
+  if (c.test === 'notThisStage') return stamped !== stage;
   if (c.test === 'notThisRegion') return stamped !== run.regionIndex + 1;
   return stamped > 0 && stamped < run.regionIndex + 1;
 }
@@ -133,6 +136,9 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     }
     case 'stampRegion':
       setGnFlag(run, e.key!, run.regionIndex + 1);
+      return '';
+    case 'stampStage':
+      setGnFlag(run, e.key!, host.stage);
       return '';
     case 'partyHas':
       setGnFlag(run, e.key!, run.party.some((m) => e.species!.includes(m.speciesId)) ? 1 : 0);
