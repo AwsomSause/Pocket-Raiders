@@ -104,7 +104,7 @@ import { growGarden } from './berries';
 import { layEgg, tickEggs } from './eggs';
 import { spendTakenNode } from './co/takeNode';
 import { attachBlocker, holdNodeBattle, releaseNodeBattle, takeNodeLevelShift } from './co/attach';
-import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
+import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, endRegionStatBoosts, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
@@ -946,6 +946,7 @@ function enterNextRegion(content: Content, run: RunState): void {
   run.regionIndex += 1;
   run.log.charmUsedInRegion = false;
   endRegionTempEffects(run);
+  endRegionStatBoosts(content, [...run.party, ...run.box]);
   shiftPartyLevels(content, run, regionLevelOffset(runArchetype(content, run).modifiers));
   // Pass Orbs turn into money in each new region.
   const orbMoney = regionMoneyFromItems(content, run);

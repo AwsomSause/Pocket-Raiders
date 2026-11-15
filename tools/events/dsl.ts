@@ -83,6 +83,8 @@ export const rage = (n: number): Json => attr('ragePeace', n);
 export const peace = (n: number): Json => attr('ragePeace', -n);
 export const rp = (amount: number): Json => ({ kind: 'research', amount });
 export const lv = (amount: number, who: Who | 'weakest' = 'lead'): Json => ({ kind: 'levels', amount, who });
+/** "+1 to a stat" for a Pokémon (5% per point, capped at 15% per stat; `best` = its highest stat). `region: true` = "for the region". */
+export const stat = (which: 'hp' | 'atk' | 'def' | 'spa' | 'spd' | 'spe' | 'best' | 'all', o: { points?: number; who?: Who | 'weakest'; region?: boolean } = {}): Json => ({ kind: 'statBoost', stat: which, percent: 5 * (o.points ?? 1), who: o.who ?? 'lead', until: o.region ? 'region' : 'run' });
 export const join = (o: { species?: string[]; types?: string[]; lv?: number; shiny?: number; shadow?: boolean } = {}): Json => ({
   kind: 'join',
   shadow: o.shadow ?? false,

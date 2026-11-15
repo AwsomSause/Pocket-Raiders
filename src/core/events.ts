@@ -96,7 +96,7 @@ import { oweNodes } from './co/takeNode';
 import { clearNodeHold, setNodeBattle } from './co/attach';
 import { noteSpecial } from './expansion/fieldNotes';
 import { grantNamedShadow } from './shadow2/grant';
-import type { MapNode, RunState, SideStop } from './state';
+import type { MapNode, PokemonInstance, RunState, SideStop } from './state';
 import { applyReward, rewardTargetProblem } from './rewards';
 import { focusIs, MYSTERY_EXTRA_STOPS, regionFocus } from './campaign/focus';
 import { emit } from './story/record';
@@ -1105,6 +1105,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return 'a Pokémon learns a new move';
     case 'copyMoves':
       return "your lead's moves are copied onto another Pokémon";
+    case 'statBoost':
+      return `${whoWords(e.who)}: ${e.stat === 'best' ? 'best stat' : e.stat === 'all' ? 'every stat' : STAT_WORDS[e.stat]} +${e.percent}%${e.until === 'region' ? ' for the region' : ''}`;
     case 'train':
       return trainEffectText(e);
     case 'betterDraft':
@@ -1465,6 +1467,12 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const level = Math.max(1, eventLevel(content, run, node, rng) + e.levelBonus);
       const made = layEgg(content, run, speciesId, { level, left: e.left, unit: e.unit, source: 'Event', origin: e.origin, tier: e.tier, shinyMultiplier: runAttributeEffects(content, run).shinyChance * e.shinyMultiplier }, rng);
       return `You got ${made.kind === 'mystery' ? 'a Mystery' : made.tier === 'ordinary' ? 'an' : `a ${eggTier(made.tier).name}`} Egg! ${eggStatus(made)}.`;
+    }
+    case 'statBoost': {
+      const who = whoOf(content, run, e.who, pickedUid);
+      let changed = false;
+      for (const m of who) changed = boostStat(content, m, e.stat, e.percent, e.until === 'region') || changed;
+      return changed ? effectWords(content, e) : '';
     }
     case 'train':
       return applyTrainEffect(content, run, e, rng);
@@ -1964,6 +1972,39 @@ export function isPseudoBattle(content: Content, event: EventBattleRef): boolean
   const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
   return battle?.pseudo === true;
+}
+
+const STAT_WORDS = { hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed' } as const;
+/** The most an event scene can add to one stat of one Pokémon, in percent ("inside the cap"). */
+export const EVENT_BOOST_CAP = 15;
+
+/** Catalog Overhaul: an event scene's stat boost for one Pokémon (percent, capped per stat). Returns whether anything changed. */
+export function boostStat(content: Content, mon: PokemonInstance, stat: keyof typeof STAT_WORDS | 'best' | 'all', percent: number, regionOnly = false): boolean {
+  const keys = Object.keys(STAT_WORDS) as (keyof typeof STAT_WORDS)[];
+  const stats = calcStats(content, mon);
+  const picks = stat === 'all' ? keys : stat === 'best' ? [keys.filter((k) => k !== 'hp').reduce((a, b) => (stats[b] > stats[a] ? b : a))] : [stat];
+  let changed = false;
+  for (const k of picks) {
+    const now = mon.eventBoosts?.[k] ?? 0;
+    const add = Math.min(percent, EVENT_BOOST_CAP - now);
+    if (add <= 0) continue;
+    const before = maxHp(content, mon);
+    mon.eventBoosts = { ...mon.eventBoosts, [k]: now + add };
+    if (regionOnly) mon.eventBoostsRegion = { ...mon.eventBoostsRegion, [k]: (mon.eventBoostsRegion?.[k] ?? 0) + add };
+    if (k === 'hp' && mon.hp > 0) mon.hp += maxHp(content, mon) - before;
+    changed = true;
+  }
+  return changed;
+}
+
+/** The region-long share of every Pokémon's event boosts ends (the run moved on). */
+export function endRegionStatBoosts(content: Content, mons: PokemonInstance[]): void {
+  for (const mon of mons) {
+    if (!mon.eventBoostsRegion) continue;
+    for (const [k, v] of Object.entries(mon.eventBoostsRegion) as [keyof typeof STAT_WORDS, number][]) mon.eventBoosts = { ...mon.eventBoosts, [k]: Math.max(0, (mon.eventBoosts?.[k] ?? 0) - v) };
+    delete mon.eventBoostsRegion;
+    mon.hp = Math.min(mon.hp, maxHp(content, mon));
+  }
 }
 
 /** Catalog Overhaul: a friendly event fight (`friendly: true`). A loss never ends the run and the fight's `lose` effects apply. */
