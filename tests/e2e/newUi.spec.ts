@@ -723,6 +723,55 @@ test('New UI: resting the pointer on a move or a data box shows the mock-up tool
   expect(errors).toEqual([]);
 });
 
+test('New UI: the map shows a party Pokémon\'s info card on hover; Bonds is the mock-up board; a move chip in the Summary shows its tooltip', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  const map = view(page, 'Map').first();
+  // The info card: the Pokémon's Ability and what it does, after the Tooltip delay; it leaves with the pointer.
+  const card = map.locator('.win', { hasText: 'Seen in' });
+  await expect(card).toHaveCount(0);
+  await map.locator('[data-tip="mon:0"]').hover();
+  await expect(card).toBeVisible();
+  const names = await page.evaluate(() => [...(window as any).__pkr.session.content.abilities.values()].map((a: any) => a.name as string));
+  expect(names).toContain((await card.locator('b.acc').textContent()) ?? '');
+  await page.mouse.move(2, 2);
+  await expect(card).toHaveCount(0);
+  // Bonds: one row per Pokémon with its Trust bar; the other values are read out in the text box.
+  await map.locator('[data-act="pick"]', { hasText: 'Bonds' }).first().click();
+  const top = () => view(page, 'Map').last();
+  await expect(top().locator('.hd')).toContainText('Bonds');
+  const rows = top().locator('[data-act="pick"]');
+  await expect(rows).toHaveCount(1);
+  await expect(rows.first()).toContainText(/Trust \d+/);
+  await expect(rows.first().locator('.hp')).toHaveCount(1);
+  await expect(top().locator('.txt')).toContainText(/Affection \d+ · Respect \d+/);
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Escape');
+  await expect(view(page, 'Map')).toHaveCount(1);
+  // The Summary's Overview: resting on a move chip shows the tooltip window; it leaves with the pointer.
+  await page.waitForTimeout(250);
+  await map.locator('[data-act="pick"]', { hasText: 'Party' }).first().click();
+  await expect(top().locator('.hd')).toContainText('Party');
+  await page.waitForTimeout(250);
+  await top().locator('[data-act="pick"]').first().click();
+  await expect(top().locator('.hd')).toContainText('Summary');
+  const tip = top().locator('.win', { hasText: 'Power / Accuracy' });
+  await expect(tip).toHaveCount(0);
+  await top().locator('[data-tip="move:0"]').hover();
+  await expect(tip).toBeVisible();
+  await expect(tip).toContainText('Category');
+  // (The top-left corner is clear of every chip at any window size.)
+  await page.mouse.move(2, 2);
+  await expect(tip).toHaveCount(0);
+  // Tooltip delay Off: nothing shows.
+  await page.evaluate(() => { const S = (window as any).__pkr.session; S.saveSettings({ ...S.settings, tooltipDelay: 'off' }); });
+  await top().locator('[data-tip="move:0"]').hover();
+  await page.waitForTimeout(1500);
+  await expect(tip).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
 test('New UI: notifications, an achievement toast and the interaction log show over the screen as in the mock-ups', async ({ page }) => {
   const errors = watch(page);
   await start(page, 'ui=new&seed=newui-e2e');

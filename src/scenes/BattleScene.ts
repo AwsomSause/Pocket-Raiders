@@ -9,7 +9,6 @@ import { mentorScene } from '../ui/battleFx/mentorScene';
 import { riskLine } from '../core/battleRisk';
 import { gimmickContext } from '../core/gimmicks';
 import { aeroMood, autoInterruption, cameraFocus, capFlash, hapticPattern, interactionLog, TOOLTIP_DELAY_MS } from '../core/presentation/uiPrefs';
-import { tallyOf } from '../core/dexResearch';
 import { fitBlock, fitLine } from '../ui/fitText';
 import { cheerDue } from '../core/sky/spectate';
 import { FINALE_ASK, chunkLines } from '../core/sky/text';
@@ -120,6 +119,7 @@ import { battleSkinFor, type BattleFrameInfo, type BattleHud, type BattleSkin, t
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { battleView, panelOf, splitChoice, type BattleBox, type BattleEvolve, type BattleLevel, type BattleModel, type BattlePanel } from '../ui/redux/screens/battle';
 import { artOf, monFile } from '../ui/redux/game';
+import { moveTipOf, ownAbilityCard, seenFact } from '../ui/redux/tips';
 import { versusView, type VersusModel } from '../ui/redux/screens/versus';
 import { rxFileOf } from '../ui/redux/assets';
 import type { AssetManifest } from '../assets/catalog';
@@ -3323,39 +3323,21 @@ export class BattleScene extends Phaser.Scene {
     const content = services().session.content;
     const slot = this.activeMon().moves[i];
     const move = slot ? content.moves.get(slot.id) : undefined;
-    if (!slot || !move) return null;
+    if (!move) return null;
     const foeTypes = getSpecies(content, this.shown.enemy.speciesId).types as TypeName[];
     const hint = move.category === 'status' ? null : effectivenessWord(typeEffectiveness(content.typeChart, move.type as TypeName, foeTypes));
-    const power = move.power ? (slot.hyper ? `${move.power + content.balance.hyperMove.powerBonus} (Hyper +${content.balance.hyperMove.powerBonus})` : move.power) : fixedDamageLabel(move.effects.fixedDamage);
-    return {
-      head: move.name,
-      chips: [move.type],
-      facts: [
-        ['Category', move.category.charAt(0).toUpperCase() + move.category.slice(1)],
-        ['Power / Accuracy', `${power ?? '—'} / ${move.accuracy ?? '—'}`],
-        ['PP', `${slot.pp} / ${maxPp(content, slot)}`],
-        ['Priority', `${move.priority > 0 ? '+' : ''}${move.priority}`],
-        ...(hint ? [[`Against ${this.speciesName(this.shown.enemy)}`, hint.text] as const] : []),
-      ],
-      lines: [moveFullDescription(move), ...moveFlagLabels(move), ...(this.transformChoice ? [`Special action ready: ${this.transformChoice.kind}`] : [])],
-    };
+    return moveTipOf(slot, hint ? [[`Against ${this.speciesName(this.shown.enemy)}`, hint.text]] : [], this.transformChoice ? [`Special action ready: ${this.transformChoice.kind}`] : []);
   }
 
   /** New UI: a Pokémon's Ability card. A foe's Ability shows only once it has come into play; a hidden foe shows nothing. */
   private rxCard(mon: PokemonInstance, own: boolean): BattlePanel {
-    const { session } = services();
-    const content = session.content;
-    const seen = tallyOf(session.profile, mon.speciesId).seen;
-    const past: [string, string] = ['Seen in', seen ? `${seen} ${seen === 1 ? 'battle' : 'battles'}` : 'no earlier run'];
-    if (!own && this.foeHidden(mon)) return { head: '???', chips: [], facts: [], lines: ['This foe has not shown itself yet.'] };
     // With several Pokémon on the field the card says whose it is.
-    const who = this.duo ? { tag: this.speciesName(mon) } : {};
-    const id = own ? abilityOf(content, mon) : this.foeReveals.get(mon.uid)?.ability;
-    const ability = id ? content.abilities.get(id) : undefined;
-    if (!ability) return { head: own ? 'No Ability' : 'Ability not seen yet', ...who, chips: [], facts: [past], lines: [own ? 'This Pokémon has no Ability.' : 'It shows here once it comes into play.'] };
-    const hidden = own ? getSpecies(content, mon.speciesId).abilities.hidden : null;
-    const hiddenName = hidden ? content.abilities.get(hidden)?.name ?? null : null;
-    return { head: ability.name, ...who, chips: [], facts: [...(hiddenName ? [['Hidden Ability', hidden === id ? 'This one' : hiddenName] as [string, string]] : []), past], lines: [ability.description] };
+    const who = this.duo ? this.speciesName(mon) : undefined;
+    if (own) return ownAbilityCard(mon, who);
+    if (this.foeHidden(mon)) return { head: '???', chips: [], facts: [], lines: ['This foe has not shown itself yet.'] };
+    const id = this.foeReveals.get(mon.uid)?.ability;
+    const ability = id ? services().session.content.abilities.get(id) : undefined;
+    return { head: ability ? ability.name : 'Ability not seen yet', ...(who ? { tag: who } : {}), chips: [], facts: [seenFact(mon.speciesId)], lines: [ability ? ability.description : 'It shows here once it comes into play.'] };
   }
 
   /** I key / the ⓘ tab: details of the focused move on the Attack page, otherwise what is going on in the battle. */

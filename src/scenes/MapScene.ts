@@ -113,6 +113,8 @@ import { dossierFolders } from '../core/expansion/cast/dossier';
 import { pokemonAssetIds, type AssetManifest } from '../assets/catalog';
 import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { hoverTips, ownAbilityCard } from '../ui/redux/tips';
+import type { BattlePanel } from '../ui/redux/screens/battle';
 import { mapView, type MapLegendRow, type MapModel, type MapNodeView } from '../ui/redux/screens/map';
 import { nodeStyle } from '../ui/redux/kit';
 
@@ -211,6 +213,13 @@ export class MapScene extends Phaser.Scene {
   private rxGoing: string | null = null;
   private rxBanner: MapModel['banner'] = null;
   private rxLegend: MapLegendRow[] | null = null;
+  /** New UI: the party chip the pointer rests on ("mon:2"), once the Tooltip delay has passed. */
+  private rxCard: string | null = null;
+  private rxCardOf(): BattlePanel | null {
+    const m = /^mon:(\d+)$/.exec(this.rxCard ?? '');
+    const mon = m ? services().session.run?.party[Number(m[1])] : undefined;
+    return mon ? ownAbilityCard(mon, services().session.content.species.get(mon.speciesId)?.name) : null;
+  }
 
   constructor() {
     super('Map');
@@ -900,7 +909,7 @@ export class MapScene extends Phaser.Scene {
       };
       const keyActs: Record<string, () => void> = { C: doCry, H: doHand, N: doName, R: () => this.toggleRivalReport(), T: () => this.toggleTrackPage(), D: () => this.toggleDossier(), F: () => this.toggleFieldNotes() };
       this.rxView = mountRedux(this, {
-        render: (c) => mapView(c, { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend }),
+        render: (c) => mapView(c, { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() }),
         acts: {
           pick: (i) => { if (this.busy || this.picker) return; if (Number(i) !== this.index) this.focus(Number(i)); this.activate(Number(i)); },
           go: () => { if (!this.busy && !this.picker) this.activate(this.index); },
@@ -908,6 +917,8 @@ export class MapScene extends Phaser.Scene {
           legend: () => this.toggleLegend(),
         },
         overs: { over: (i) => { if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); } },
+        // Resting the pointer on a party Pokémon shows its Ability card (the mock-ups' Pokémon info card).
+        tip: hoverTips((key) => { this.rxCard = key; this.rxView?.refresh(); }),
       });
       // The old pop-ups (legend, reports, the node menu, the bracket) still draw on the canvas: show it while one is open.
       const sync = (): void => this.rxView?.visible(!(this.report || this.fieldNotes || this.nodeMenuPanel || this.bracket));
