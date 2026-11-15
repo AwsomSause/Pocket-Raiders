@@ -5,7 +5,6 @@ import { EventRuleSchema } from '../../src/core/contentSchema';
 import { conditionMet, isStoryEventBattle } from '../../src/core/events';
 import { questBattleMeter, raceRivalColumn, starterRivalryStages } from '../../src/core/rivals/questlines';
 import { chooseStarter, createRun } from '../../src/core/run';
-import { Rng, hashSeed } from '../../src/core/rng';
 import { circuitStrip, questMeterBar, rivalStandingPanel } from '../../src/ui/redux/screens/rivalPanels';
 import { content } from './helpers';
 
@@ -52,9 +51,9 @@ describe('R18 the midnight clock', () => {
     const r = run();
     const cond = { kind: 'rivalQuest', date: '12-31' } as never;
     r.calendar.today = '12-30';
-    expect(conditionMet(content, r, cond, new Rng(hashSeed('x')))).toBe(false);
+    expect(conditionMet(content, r, cond)).toBe(false);
     r.calendar.today = '12-31';
-    expect(conditionMet(content, r, cond, new Rng(hashSeed('x')))).toBe(true);
+    expect(conditionMet(content, r, cond)).toBe(true);
   });
 });
 
