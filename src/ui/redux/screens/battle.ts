@@ -65,6 +65,23 @@ export interface BattleModel {
   card?: (BattlePanel & { pinned?: boolean }) | null;
   /** The battle log (H): its filter tabs and the lines of the open one. */
   log?: { tabs: readonly string[]; index: number; lines: readonly string[] } | null;
+  /** The Beta 0.6 pieces over the field; each shows only while its rule is in play. */
+  fx?: BattleFx | null;
+}
+
+export interface BattleFx {
+  /** The Item window is open: healing items and revives used this battle, and the most the battle allows. */
+  budget?: { heals: readonly [used: number, cap: number]; revives: readonly [used: number, cap: number] };
+  /** A boss braces against a sweep: the yellow line over the field. */
+  rally?: string;
+  /** A rule the foe's trainer holds over the turn while you choose (Foresight Tax). */
+  rule?: { name: string; text: string };
+  /** A foe on the field wears a variant line's ring: the hint on where to read its rule. */
+  variant?: boolean;
+  /** A special Pokémon's signature trait just went off. */
+  trait?: { file: string; name: string; text: string };
+  /** A Shadow Pokémon is choosing: its tier line, and what the shadow will do this turn ('' when it obeys). */
+  shadow?: { head: string; plan: string };
 }
 
 export interface BattleLevel {
@@ -272,7 +289,18 @@ export function battleView(c: ReduxCtx, d: BattleModel): string {
   const shade = d.shadow ? '<div class="fill" style="background:radial-gradient(#0000 40%,#3a0a5a90);pointer-events:none"></div>' : '';
   const body = d.shadow ? `<div style="--p2:#3a1a5a;--acc:#c070ff;--pa:#1c0a2c;--pai:#f0e0ff;--tf:#8a40c8">${tray}</div>` : tray;
   const level = d.level ? levelView(c, d.level) : '';
-  return shade + level + head + body + tabs + gim + marks + (rows.length || level ? '' : header + momentum) + status + note + pin + panels + tip + (d.panels?.length || d.log || level ? '' : card) + log + (level ? '' : exp);
+  // The Beta 0.6 pieces: each is a small window or line over the field that takes no clicks.
+  const f = d.fx ?? {}, still = ';pointer-events:none';
+  const meter = (label: string, [used, max]: readonly [number, number]): string => `<div class="row"><span style="width:70px">${label}</span>${hpb(max > 0 ? Math.round((Math.min(used, max) / max) * 100) : 0, 0, ' gold')}<b style="white-space:nowrap">${used} / ${max}</b></div>`;
+  const budget = f.budget ? W(`<div class="row"><b class="acc grow">Item budget</b><span>this battle</span></div>${meter('Heals', f.budget.heals)}${meter('Revives', f.budget.revives)}<div class="sm">${f.budget.heals[0] >= f.budget.heals[1] ? 'No healing items are left for this battle.' : `Healing item ${f.budget.heals[1] + 1} is refused.`} Bosses and rivals get the same budget.</div>`, `position:absolute;right:20px;top:20px;width:320px;display:flex;flex-direction:column;gap:5px;padding:10px 12px;z-index:4${still}`) : '';
+  const rally = f.rally ? `<div class="abs btn on" style="left:420px;max-width:520px;top:150px;height:36px;white-space:nowrap;z-index:5${still}">${esc(f.rally)}</div>` : '';
+  const rule = f.rule ? `<div class="abs win row" style="left:50%;top:14px;transform:translateX(-50%);padding:7px 14px;gap:10px;z-index:5${still}"><i style="flex:none;width:30px;height:18px;border-radius:50%;background:#c070ff;box-shadow:inset 0 0 0 6px #14161e"></i><b style="white-space:nowrap">${esc(f.rule.name)}</b><span class="sm">${esc(f.rule.text)}</span></div>` : '';
+  const variant = f.variant && !budget ? `<div class="abs win" style="right:20px;top:20px;width:250px;padding:7px 12px;font-size:14px;z-index:4${still}">A ring marks a variant-line Pokémon. Press <kbd>I</kbd> to read its rule.</div>` : '';
+  const trait = f.trait ? `<div class="abs win row" style="left:330px;top:24px;max-width:610px;padding:8px 14px;gap:10px;z-index:5${still}">${f.trait.file ? mini(f.trait.file, 40) : ''}<div class="col" style="gap:2px"><span class="sm">Signature trait · ${esc(f.trait.name)}</span><b class="acc">${esc(f.trait.text)}</b></div></div>` : '';
+  const dark = f.shadow ? `<div class="abs win" style="left:20px;bottom:${Math.max(150, top + 8) + (d.gim?.length && v !== 2 && v !== 3 ? 42 : 0)}px;width:480px;padding:7px 12px;background:#1c0a2c;color:#f0e0ff;font-size:15px;z-index:3${still}"><b>${esc(f.shadow.head)}</b>${f.shadow.plan ? `<br>${esc(f.shadow.plan)}` : ''}</div>` : '';
+  const pieces = level ? '' : budget + rally + rule + variant + trait + dark;
+  // The run header gives its corner to the budget and the variant hint while they show.
+  return shade + level + head + body + tabs + gim + marks + (rows.length || level || budget || variant ? '' : header) + (rows.length || level ? '' : momentum) + status + note + pin + pieces + panels + tip + (d.panels?.length || d.log || level ? '' : card) + log + (level ? '' : exp);
 }
 
 export interface BattleListRow {

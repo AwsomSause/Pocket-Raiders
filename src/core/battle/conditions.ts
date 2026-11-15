@@ -11,6 +11,7 @@ import { emotionOf } from '../story/emotions';
 import { STANCE_INFO, autoProfile, stanceOf } from './autoBattle';
 import { awakeningLevel, focusOf } from './growthStats';
 import { sweetAirHere } from '../expansion/canonKantoRules';
+import { variantRule } from '../expansion/variantInfo';
 
 export interface Conditions {
   field: string[];
@@ -157,6 +158,9 @@ export function battleConditions(content: Content, run: RunState, reveals: FoeRe
     out.foe.push(...transformLines(battle, foe, 'enemy'));
     out.foe.push(`Ability: ${reveals.ability ? content.abilities.get(reveals.ability)?.name ?? reveals.ability : 'not shown yet'}`);
     if (reveals.items?.length) out.foe.push(`Held item seen: ${reveals.items.map((id) => content.catalog.get(id)?.name ?? id).join(', ')}`);
+    // The ring at its feet (a variant line): the line's name and what it does.
+    const variant = variantRule(battle.extra?.variants?.[foe.uid]?.line ?? '');
+    if (variant) out.foe.push(`Variant line: ${variant.name}. ${variant.text}`);
     // Overhaul slice 8: each of your moves against what you can see.
     const mon0 = run.party[battle.activeIndex];
     for (const slot of mon0?.moves ?? []) {

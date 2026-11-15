@@ -1936,3 +1936,80 @@ test('New UI: F2 opens the mock-up debug window (Scene, Seed, RNG stream, FPS an
   await expect(win).toBeHidden();
   expect(errors).toEqual([]);
 });
+
+test('New UI: the Beta 0.6 battle pieces show over the field: the Shadow line, the Foresight Tax banner, the variant hint with its rule under I, and the item budget beside the Item window', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'Battle');
+  await toCommands(page);
+  const stage = view(page, 'Battle').first();
+  // Nothing of them in an ordinary fight.
+  for (const bit of ['Shadow ·', 'Foresight Tax', 'variant-line', 'Item budget']) await expect(stage).not.toContainText(bit);
+
+  // A sealed Shadow Pokémon on a turn the shadow overrides: its line stands in its own window, not in the text box.
+  const plan = await page.evaluate(() => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    b.activeMon().shadow = { heart: 100 };
+    for (let t = 1; t < 200; t++) {
+      b.run.battle.turn = t;
+      b.showRootMenu();
+      if (b.rxShadow?.plan.includes('tightens')) return b.rxShadow.plan as string;
+    }
+    return null;
+  });
+  expect(plan).toContain('The shadow tightens: it will use');
+  await expect(stage).toContainText('Shadow · Fallen (tier 4) · Sealed 100/100');
+  await expect(stage).toContainText(plan!);
+  await expect(stage.locator('.txt')).toContainText('What will');
+  await expect(stage.locator('.txt')).not.toContainText('Shadow ·');
+  await page.screenshot({ path: 'test-results/newui-battle-shadow-line.png' });
+
+  // Foresight Tax is on: the banner says so while you choose.
+  await page.evaluate(() => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    delete b.activeMon().shadow;
+    b.run.battle.eventRule = { ...(b.run.battle.eventRule ?? {}), foresight: true };
+    b.showRootMenu();
+  });
+  await expect(stage).toContainText('Foresight Tax');
+  await expect(stage).toContainText('Sabrina sees the first move you choose this turn.');
+  await expect(stage).not.toContainText('Shadow ·');
+  await page.screenshot({ path: 'test-results/newui-battle-foresight.png' });
+
+  // The foe wears a variant line's ring: the hint shows at this prompt, and I reads the rule.
+  await page.evaluate(() => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    b.run.battle.eventRule = { ...b.run.battle.eventRule, foresight: false };
+    b.run.battle.extra = { ...(b.run.battle.extra ?? {}), variants: { [b.shown.enemy.uid]: { line: 'tagged', flags: { tag: 1 } } } };
+    b.showRootMenu();
+  });
+  await expect(stage).not.toContainText('Foresight Tax');
+  await expect(stage).toContainText('A ring marks a variant-line Pokémon. Press I to read its rule.');
+  await page.screenshot({ path: 'test-results/newui-battle-variant.png' });
+  await page.keyboard.press('i');
+  await expect(stage).toContainText('Variant line: Tagged. A Black-Label Pokémon cannot be forced to switch out, and the first hit it takes in each battle does 20% less damage.');
+  await expect(stage).not.toContainText('A ring marks a variant-line');
+  await page.keyboard.press('i');
+  await expect(stage).not.toContainText('Variant line: Tagged');
+  // It is pointed out once: the next prompt for the same foe leaves it out.
+  await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').showRootMenu());
+  await expect(stage).toContainText('What will');
+  await expect(stage).not.toContainText('A ring marks a variant-line');
+
+  // The Item window: the budget stands beside it with what this battle already used.
+  await page.evaluate(() => {
+    const b = (window as any).__pkr.game.scene.getScene('Battle');
+    b.run.inventory = { ...b.run.inventory, potion: 2, revive: 1 };
+    b.run.battle.healsUsed = 10;
+    b.run.battle.revivesUsed = 2;
+  });
+  await page.waitForTimeout(250);
+  await view(page, 'Battle').locator('[data-act="tab"]', { hasText: 'Item' }).first().click();
+  for (const bit of ['Item budget', 'this battle', 'Heals', '10 / 10', 'Revives', '2 / 6', 'No healing items are left for this battle.']) await expect(stage).toContainText(bit);
+  await page.screenshot({ path: 'test-results/newui-battle-budget.png' });
+  await page.keyboard.press('Escape');
+  await expect(stage).not.toContainText('Item budget');
+  expect(errors).toEqual([]);
+});
