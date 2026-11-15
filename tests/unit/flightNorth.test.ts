@@ -163,3 +163,51 @@ describe("North's Wind", () => {
     expect(battle.playerStages.spa).toBe(0);
   });
 });
+
+describe('Flight North: what the player sees', () => {
+  it('the Bully shows the Spearow, and is a real battle against it', () => {
+    const n1 = content.events.get(`${P}n1`)!;
+    expect(n1.scene.pokemon).toBe('spearow');
+    for (const o of [n1.choices[0]!.success, n1.choices[0]!.failure!]) expect(o.battle).toMatchObject({ kind: 'wild', species: ['spearow'] });
+  });
+  it('the stage has six real battles per line', () => {
+    for (const k of ['c', 'w']) {
+      const ids = ['n1', `${k}2`, `${k}4`, `${k}5`, `${k}6`, `${k}7`];
+      for (const id of ids) {
+        const e = content.events.get(`${P}${id}`)!;
+        const hasBattle = e.choices.some((c) => [c.success, c.failure].some((o) => o?.battle));
+        expect(hasBattle, id).toBe(true);
+      }
+    }
+  });
+  it('the shiny rescue and the return carry a cameo for the screen', () => {
+    const hero = createPokemon(content, 'butterfree', 20, 'p1');
+    const foe = createPokemon(content, 'venomoth', 20, 'e1');
+    hero.hp = Math.floor(hero.hp / 5);
+    foe.moves = [{ id: 'splash', pp: 40 }];
+    const battle = createBattle('trainer', [foe], 0, hero.uid, { classId: 'event', name: 'Jessie & James', leaderId: null });
+    battle.eventRule = { shinyRescue: true };
+    const ctx: BattleContext = { content, battle, party: [hero], inventory: {}, rng: new Rng(hashSeed('cameo')), captureRng: new Rng(hashSeed('cameo-c')), catchMultiplier: 1 };
+    startBattle(ctx);
+    const events = resolveTurn(ctx, { kind: 'move', index: 0 });
+    expect(events.some((e) => e.type === 'raid' && e.cameo?.shiny === true && e.cameo.kind === 'rescue')).toBe(true);
+  });
+  it('the return battle shows its ally on the first strike only', () => {
+    const res = doomed(afterStage('FNC', 'weedle'));
+    const battle = res.run.battle!;
+    const hero = res.run.party[0]!;
+    const foe = createPokemon(content, 'rattata', 5, 'e2');
+    foe.hp = 100;
+    foe.moves = [{ id: 'splash', pp: 40 }];
+    battle.enemyTeam = [foe];
+    battle.enemyIndex = 0;
+    battle.outcome = null;
+    const ctx: BattleContext = { content, battle, party: res.run.party, inventory: {}, rng: new Rng(hashSeed('c2')), captureRng: new Rng(hashSeed('c2c')), catchMultiplier: 1 };
+    hero.moves = [{ id: 'splash', pp: 40 }];
+    const first = resolveTurn(ctx, { kind: 'move', index: 0 });
+    const second = resolveTurn(ctx, { kind: 'move', index: 0 });
+    const cameo = (evs: typeof first) => evs.filter((e) => e.type === 'raid' && e.cameo?.kind === 'return');
+    expect(cameo(first)).toHaveLength(1);
+    expect(cameo(second)).toHaveLength(0);
+  });
+});

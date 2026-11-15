@@ -11,6 +11,7 @@
    "requires": [],
    "scene": {
     "cast": [],
+    "pokemon": "meowth",
     "effect": "none",
     "tint": "#2f5d73"
    },
@@ -56,7 +57,8 @@
    "scene": {
     "cast": [],
     "effect": "none",
-    "tint": "#2f5d73"
+    "tint": "#2f5d73",
+    "pokemon": "spearow"
    },
    "room": true,
    "intro": "You wake in a field with nothing but the clothes you stand in. Your hands go to your belt and find nothing. The wind comes across the grass, and with it a scream. A Spearow dives at your head, again and again, the way a small mean bird does when it has decided you are the weakest thing in the field. You cover your face. There is nobody to call out to.",
@@ -79,12 +81,26 @@
         "kind": "flag",
         "key": "kanto-flight-bug",
         "amount": 2
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "cs-kanto-vermilion-flight-w1"
        }
-      ]
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "spearow"
+       ],
+       "level": 4,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "flightNorth",
+         "action": "trust"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-vermilion-flight-w1"
+        }
+       ]
+      }
      },
      "success": {
       "text": "Something small and green drops out of the leaves onto the Spearow's back and bites down. The Spearow shrieks, tumbles, and flaps away, beaten by something a tenth its size. The Caterpie lands in the grass, looks at the sky, looks at you, and seems just as surprised as you are. Then, very quietly, it hops once. It does not know it is a hero. It only knows you were in trouble.",
@@ -101,12 +117,26 @@
         "kind": "flag",
         "key": "kanto-flight-bug",
         "amount": 1
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "cs-kanto-vermilion-flight-c1"
        }
-      ]
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "spearow"
+       ],
+       "level": 4,
+       "pseudo": true,
+       "win": [
+        {
+         "kind": "flightNorth",
+         "action": "trust"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "cs-kanto-vermilion-flight-c1"
+        }
+       ]
+      }
      }
     }
    ]
@@ -123,7 +153,8 @@
    "scene": {
     "cast": [],
     "effect": "none",
-    "tint": "#2f5d73"
+    "tint": "#2f5d73",
+    "pokemon": "caterpie"
    },
    "room": true,
    "intro": "The Caterpie is not going anywhere. It follows you three steps, stops, and looks back at the field where its fight happened, then at you, then at the field. It has an idle wiggle all its own, a little shiver that begins at its head and runs to its tail, and a cry thin and bright that you will know anywhere, years from now. Somebody should call it something.",
@@ -221,7 +252,8 @@
    "scene": {
     "cast": [],
     "effect": "none",
-    "tint": "#2f5d73"
+    "tint": "#2f5d73",
+    "pokemon": "caterpie"
    },
    "room": true,
    "intro": "The Caterpie follows you into the tall grass. Two small wild Pokémon are in the way, and you have no Pokémon at all except this one, which weighs about as much as an apple. It looks at you. It will have to do the fighting, and it knows it. It squares up anyway, trembling, and does the small victory hop it did before. You think it is the bravest thing you have ever seen.",
@@ -279,7 +311,8 @@
    "scene": {
     "cast": [],
     "effect": "none",
-    "tint": "#2f5d73"
+    "tint": "#2f5d73",
+    "pokemon": "caterpie"
    },
    "room": true,
    "intro": "Night falls and it is cold, and there is no fire. The little bug cannot stay awake. It spins a thread against a fallen log, looks at you once, and begins to wrap itself in. It is not afraid of the change. It is afraid you will not be here when it is over. A cocoon is a hard thing to leave unguarded, and you are all it has.",
@@ -366,7 +399,8 @@
    "scene": {
     "cast": [],
     "effect": "none",
-    "tint": "#2f5d73"
+    "tint": "#2f5d73",
+    "pokemon": "metapod"
    },
    "room": true,
    "intro": "A stream cuts the path. The stepping stones are slick and the water is quick. Something wet and angry has claimed the stones, and your small friend, still shaking the night out of its body, plants itself between you and the water. It does not hop this time. It is too busy being brave.",
@@ -418,7 +452,8 @@
    "scene": {
     "cast": [],
     "effect": "none",
-    "tint": "#2f5d73"
+    "tint": "#2f5d73",
+    "pokemon": "metapod"
    },
    "room": true,
    "intro": "A flock of Pidgey takes off from a dead tree all at once, a gray cloud against the evening. Your bug feels it too, something under its shell turning over. You have watched it grow from the size of your thumb. Something is about to change, and it looks at you as if asking permission.",
@@ -478,7 +513,8 @@
    "scene": {
     "cast": [],
     "effect": "none",
-    "tint": "#2f5d73"
+    "tint": "#2f5d73",
+    "pokemon": "butterfree"
    },
    "room": true,
    "intro": "Smoke rises from a camp in a dry riverbed. Your Pokémon are in a cage beside the fire, every one of them looking toward you, and you can hear them. A cat is guarding the cage, and it looks bored. Your friend sees them too. It goes very still, then very sure.",
@@ -529,7 +565,8 @@
    "scene": {
     "cast": [],
     "effect": "none",
-    "tint": "#2f5d73"
+    "tint": "#2f5d73",
+    "pokemon": "butterfree"
    },
    "room": true,
    "intro": "Jessie and James are on their feet, and the whole riverbed goes quiet. \"Venomoth, go!\" Your bug is the only one between them and the cage, and it is not afraid anymore. It looks back at you once. Whatever happens next, you will remember the shape of its wings.",
@@ -586,7 +623,8 @@
    "scene": {
     "cast": [],
     "effect": "none",
-    "tint": "#2f5d73"
+    "tint": "#2f5d73",
+    "pokemon": "weedle"
    },
    "room": true,
    "intro": "The Weedle is not going anywhere. It follows you three steps, stops, and looks back at the field where its fight happened, then at you, then at the field. It has an idle wiggle all its own, a little shiver that begins at its head and runs to its tail, and a cry thin and bright that you will know anywhere, years from now. Somebody should call it something.",
@@ -684,7 +722,8 @@
    "scene": {
     "cast": [],
     "effect": "none",
-    "tint": "#2f5d73"
+    "tint": "#2f5d73",
+    "pokemon": "weedle"
    },
    "room": true,
    "intro": "The Weedle follows you into the tall grass. Two small wild Pokémon are in the way, and you have no Pokémon at all except this one, which weighs about as much as an apple. It looks at you. It will have to do the fighting, and it knows it. It squares up anyway, trembling, and does the small victory hop it did before. You think it is the bravest thing you have ever seen.",
@@ -742,7 +781,8 @@
    "scene": {
     "cast": [],
     "effect": "none",
-    "tint": "#2f5d73"
+    "tint": "#2f5d73",
+    "pokemon": "weedle"
    },
    "room": true,
    "intro": "Night falls and it is cold, and there is no fire. The little bug cannot stay awake. It spins a thread against a fallen log, looks at you once, and begins to wrap itself in. It is not afraid of the change. It is afraid you will not be here when it is over. A cocoon is a hard thing to leave unguarded, and you are all it has.",
@@ -829,7 +869,8 @@
    "scene": {
     "cast": [],
     "effect": "none",
-    "tint": "#2f5d73"
+    "tint": "#2f5d73",
+    "pokemon": "kakuna"
    },
    "room": true,
    "intro": "A stream cuts the path. The stepping stones are slick and the water is quick. Something wet and angry has claimed the stones, and your small friend, still shaking the night out of its body, plants itself between you and the water. It does not hop this time. It is too busy being brave.",
@@ -881,7 +922,8 @@
    "scene": {
     "cast": [],
     "effect": "none",
-    "tint": "#2f5d73"
+    "tint": "#2f5d73",
+    "pokemon": "kakuna"
    },
    "room": true,
    "intro": "A flock of Pidgey takes off from a dead tree all at once, a gray cloud against the evening. Your bug feels it too, something under its shell turning over. You have watched it grow from the size of your thumb. Something is about to change, and it looks at you as if asking permission.",
@@ -941,7 +983,8 @@
    "scene": {
     "cast": [],
     "effect": "none",
-    "tint": "#2f5d73"
+    "tint": "#2f5d73",
+    "pokemon": "beedrill"
    },
    "room": true,
    "intro": "Smoke rises from a camp in a dry riverbed. Your Pokémon are in a cage beside the fire, every one of them looking toward you, and you can hear them. A cat is guarding the cage, and it looks bored. Your friend sees them too. It goes very still, then very sure.",
@@ -992,7 +1035,8 @@
    "scene": {
     "cast": [],
     "effect": "none",
-    "tint": "#2f5d73"
+    "tint": "#2f5d73",
+    "pokemon": "beedrill"
    },
    "room": true,
    "intro": "Jessie and James are on their feet, and the whole riverbed goes quiet. \"Venomoth, go!\" Your bug is the only one between them and the cage, and it is not afraid anymore. It looks back at you once. Whatever happens next, you will remember the shape of its wings.",
