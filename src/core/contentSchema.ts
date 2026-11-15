@@ -2075,6 +2075,8 @@ export const BalanceSchema = z.object({
   leaderMoods: z.boolean().default(true),
   /** Rebalance: Gym Leaders, Elite Four, Champions and Rivals get held items, IVs, EVs and training (core/bossGear.ts). */
   bossGear: z.boolean().default(true),
+  /** Beta 0.7 (X1): late bosses (past `fromLevel`) deal `damagePerLevel` less damage per level above it (never below `minDamageScale`) and cannot raise a stat past `maxBoostStage`; the sim bot could not pass region 4 without it. */
+  lateBoss: z.object({ fromLevel: z.number().int().min(0), damagePerLevel: z.number().min(0), minDamageScale: z.number().min(0.1).max(1), maxBoostStage: z.number().int().min(0).max(6) }).default({ fromLevel: 100, damagePerLevel: 0, minDamageScale: 1, maxBoostStage: 6 }),
   /** Beta 0.6: Pokémon-specific moments (core/moments); off = the rules before them (old-seed tests). */
   pokemonMoments: z.boolean().default(true),
   sos: z.object({ enabled: z.boolean() }).default({ enabled: true }),
