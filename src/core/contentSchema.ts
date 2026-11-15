@@ -2934,6 +2934,13 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
     defector: z.boolean().optional(),
     ends: z.array(z.enum(['none', 'defeated', 'exposed', 'allied'])).optional(),
     stopped: z.number().int().min(0).optional(),
+    /** Catalog Overhaul SF13: a remembered mark of the team in this region's story (`files`, `defector-lt`... the run flag `team-<team>-<mark>`), held or not held. Shared rooms read the region's own team with these. */
+    has: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
+    lacks: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
+    /** SF13 A5: Trouble Inside comes between the lieutenant's two meetings. `true`: it has played (always true outside the region-by-region story); `false`: not yet. */
+    trouble: z.boolean().optional(),
+    /** SF13 A7: with `op`, the Operation marked first at The Plan has been dealt with (or this is it). Until then the others wait. */
+    afterFirst: z.boolean().optional(),
   }),
   /** Beta 0.6 rival questlines: the featured rival's overhaul state (core/rivals/overhaul.ts): a feeling at least this (0 to 10), their Lead in a range (-3 to +3, rival ahead is positive), or a mark they hold. Never true without a rival. */
   z.object({
@@ -3175,6 +3182,10 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
     talk: z.enum(['grunt', 'specialist', 'executive', 'leader']).optional(),
     defect: z.boolean().default(false),
     end: z.enum(['defeated', 'exposed', 'allied']).optional(),
+    /** Catalog Overhaul SF13: remembers a mark of the region's team (run flag `team-<team>-<mark>` +1), so shared rooms can write team flags. */
+    mark: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
+    /** SF133 The Holding Pen: every Pokémon this team took from you this run comes back (its impound holds close). */
+    pen: z.boolean().optional(),
   }),
   /** Run events G (core/trainingEffects.ts): changes the lead's build: Nature, ability slot, weakest stat, or learns a move (of `type`). */
   z.object({ kind: z.literal('train'), what: z.enum(['natureReroll', 'natureNudge', 'abilitySwap', 'weakestStat', 'learnMove', 'evolutionHint', 'masteryShard', 'nap']), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']).optional(), type: TypeNameSchema.optional() }),
@@ -3559,7 +3570,7 @@ export const EventDefSchema = z.object({
   /** Choice memory: at most 3 variants that change what the scene shows when remembered flags hold. */
   remembers: z.array(EventVariantSchema).max(MAX_EVENT_VARIANTS).default([]),
 }).refine((e) => new Set(e.remembers.map((v) => v.id)).size === e.remembers.length, { message: 'remembers variant ids must be unique' })
-  .refine((e) => e.remembers.every((v) => v.hide.every((i) => i < e.choices.length) && e.choices.length - new Set(v.hide).size >= 1 && e.choices.length - new Set(v.hide).size + v.addChoices.length <= 4), { message: 'a remembers variant must leave 1 to 4 choices and only hide base choices' })
+  .refine((e) => e.remembers.every((v) => v.hide.every((i) => i < e.choices.length) && e.choices.length - new Set(v.hide).size + v.addChoices.length >= 1 && e.choices.length - new Set(v.hide).size + v.addChoices.length <= 4), { message: 'a remembers variant must leave 1 to 4 choices and only hide base choices' })
   .refine((e) => e.remembers.every((v) => v.addChoices.every((c) => (c.check === undefined && c.chance === undefined && c.prompt === undefined) || c.failure)), { message: 'an added choice with a check, chance or prompt needs a failure outcome' })
   .refine((e) => e.choices.every((c) => (c.check === undefined && c.chance === undefined && c.prompt === undefined) || c.failure), { message: 'a choice with a check, chance or prompt needs a failure outcome' });
 export type EventDef = z.infer<typeof EventDefSchema>;

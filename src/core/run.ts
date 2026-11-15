@@ -3879,6 +3879,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (pick) {
       run.story.flags[BETRAYAL_FLAG] = `pending:${pick}:${Math.max(...battle.enemyTeam.map((m) => m.level)) + 5}`;
       run.story.flags['ev:evil-legend'] = 1; // the team's own "A Legend Stirs" stop is spent
+      run.story.flags[`ev:team-${evilT.id}-legend-met`] = 1; // SF13 A9 reads it per team (one team per region)
     }
   }
   const betrayalNow = typeof run.story.flags[BETRAYAL_FLAG] === 'string' && String(run.story.flags[BETRAYAL_FLAG]).startsWith('pending:');

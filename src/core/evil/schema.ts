@@ -65,10 +65,19 @@ export const EvilTeamSchema = z.object({
   ops: z.array(z.object({
     id: z.string().regex(/^[a-z][a-z0-9-]*$/), kind: EvilOpKindSchema, name: z.string().min(1), text: z.string().min(1),
     /** Catalog Overhaul SF13 Part D: what the region is left with when this Operation happens (replaces the by-kind consequence). `effects` last until the region is left; `flags` are remembered keys other events read. */
-    lasting: z.object({ text: z.string().min(1), effects: z.array(ArchetypeModifierSchema).max(3).default([]), flags: z.array(z.string().regex(/^[a-z][a-z0-9-]*$/)).default([]) }).optional(),
+    lasting: z.object({
+      text: z.string().min(1),
+      effects: z.array(ArchetypeModifierSchema).max(3).default([]),
+      /** Remembered keys other events read (`key`, or `{ key, amount }` for a number such as a starting Severity). */
+      flags: z.array(z.union([z.string().regex(/^[a-z][a-z0-9-]*$/), z.object({ key: z.string().regex(/^[a-z][a-z0-9-]*$/), amount: z.number().int().min(1) })])).default([]),
+      /** The region's crisis rises by this much (core/story/crisis.ts). */
+      crisis: z.number().int().min(1).max(4).optional(),
+    }).optional(),
   })).min(3),
   /** Catalog Overhaul SF13: regions this team calls home (Rocket in Kanto and Johto). A region's story goes to a home team first. */
   home: z.array(z.string()).default([]),
+  /** SF13 Part C: the Operation the colleague stops from inside when they defect (`half`: its lasting effect is only halved). */
+  inside: z.object({ op: z.string(), half: z.boolean().default(false) }).optional(),
   /** Story Overhaul Part IV: one of the six original teams. Only Story Runs draw it, and Story Runs draw only these (Classic rolls never move). */
   storyOnly: z.boolean().default(false),
   /** Beta 0.6 Grand Arc: a roaming team (Cipher, Rocket Remnants, Team Snag'em). It is never drawn as a run's team; events field it with `evilTeam` on a trainer battle. */

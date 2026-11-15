@@ -47,7 +47,7 @@ export interface TeamStory {
   lair: string;
   /** A Legend Stirs. `original` Legendaries and Mythicals give no Sign. */
   legend: { species: string[]; name: string; sight: string; original?: boolean; mythical?: boolean };
-  lt: { name: string; reason: string; hint: string; first: string; second: string; last: string; letGo: string; ally: string };
+  lt: { name: string; reason: string; hint: string; first: string; second: string; last: string; letGo: string };
   col: { name: string; role: string; ltGrievance: string; grievance: string; defects: string; freeOp: number; half?: boolean };
   ops: [TeamOp, TeamOp, TeamOp, TeamOp];
 }

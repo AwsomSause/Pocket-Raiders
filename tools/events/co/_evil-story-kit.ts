@@ -6,7 +6,7 @@ export const TAKE_NODE = false;
 export const node = (nodes = 1): Json[] => (TAKE_NODE ? [{ kind: 'takeNode', ...(nodes > 1 ? { nodes } : {}) }] : []);
 
 /** An `evil` effect (core/evil/teams.ts). */
-export const evil = (o: { beat?: boolean; heat?: number; op?: 'foiled' | 'infiltrated' | 'succeeded' | 'joined'; opId?: string; planFirst?: string; door?: boolean; defect?: boolean; end?: 'defeated' | 'exposed' | 'allied'; talk?: string }): Json => ({ kind: 'evil', ...o });
+export const evil = (o: { beat?: boolean; heat?: number; op?: 'foiled' | 'infiltrated' | 'succeeded' | 'joined'; opId?: string; planFirst?: string; door?: boolean; defect?: boolean; end?: 'defeated' | 'exposed' | 'allied'; talk?: string; mark?: string }): Json => ({ kind: 'evil', ...o });
 
 /** A battle with the region's team at a rank. Levels: Grunts A-1, the lieutenant A+1, the boss A+2 (STAGE_MAP_AND_PLACEMENT section 2). */
 export const foe = (rank: 'grunt' | 'specialist' | 'executive' | 'leader', name: string, size: number, o: { lv?: number; win?: Json[]; format?: 'doubles'; ally?: string; study?: boolean; pseudo?: boolean; chain?: number } = {}): Json => ({

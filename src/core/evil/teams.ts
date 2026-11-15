@@ -15,7 +15,10 @@
 import { beginClimax } from '../arc/climaxExtended';
 import { standingLine } from '../arc/standWithExtended';
 import { impoundFor } from '../raid/storyRaids';
-import type { Content, EventBattle, EventCondition, EventEffect } from '../contentSchema';
+import { activeHolds, returnedElsewhere } from './rescue';
+import { rescueNode } from './rescueGlue';
+import type { ArchetypeModifier, Content, EventBattle, EventCondition, EventEffect } from '../contentSchema';
+import { changeCrisis } from '../story/crisis';
 import { hashSeed, Rng } from '../rng';
 import type { RunState } from '../state';
 import { emit } from '../story/record';
@@ -103,6 +106,8 @@ export function regionTeamId(content: Content, run: Pick<RunState, 'seed' | 'per
 /** The run's remembered-flag key for a pack flag (`team.op_stopped.x` -> `ev:team-op-stopped-x`), as the `flag` effect and condition use it. */
 const mem = (key: string): string => `ev:${key}`;
 const bump = (run: RunState, key: string, by = 1): void => { run.story.flags[mem(key)] = Number(run.story.flags[mem(key)] ?? 0) + by; };
+/** A remembered mark of a team's story (run flag `team-<team>-<mark>`, written by events or by the engine). */
+const marked = (run: RunState, teamId: string, mark: string): boolean => Number(run.story.flags[mem(`team-${teamId}-${mark}`)] ?? 0) > 0;
 
 /** Takes the lasting effects of Operations from regions the run has left off the run. */
 function dropRegionMods(run: RunState, s: EvilState): void {
@@ -170,6 +175,15 @@ export function evilConditionMet(content: Content, run: RunState, c: EvilConditi
   if (c.defector !== undefined && s.defector !== c.defector) return false;
   if (c.ends !== undefined && !c.ends.includes(s.end)) return false;
   if (c.stopped !== undefined && stoppedCount(s) < c.stopped) return false;
+  if (c.afterFirst && c.op !== s.planFirst && s.ops.some((o) => o.id === s.planFirst && o.region === run.regionIndex && o.outcome === 'running')) return false;
+  if (c.has !== undefined && !marked(run, s.teamId, c.has)) return false;
+  if (c.lacks !== undefined && marked(run, s.teamId, c.lacks)) return false;
+  if (c.trouble !== undefined) {
+    const played = marked(run, s.teamId, 'trouble');
+    // A Story Run keeps the Director's own schedule: there the lieutenant's second meeting never waits for Trouble Inside.
+    if (c.trouble && !played && regionalStory(content, run)) return false;
+    if (!c.trouble && played) return false;
+  }
   return true;
 }
 
@@ -201,7 +215,15 @@ export function applyEvilEffect(content: Content, run: RunState, e: EvilEffect):
     // E2: the real plan comes out (beat 6): the climax is now scheduled, so the region's track rises once.
     if (s.beat === 6) { trackOnClimax(run, run.regionIndex); beginClimax(run, run.regionOrder[run.regionIndex]); }
     // SF13 A7: The Plan shows all four Operations: from here each is a stop on the map until it is stopped or happens.
-    if (s.beat === 6 && s.region >= 0) for (const def of team.ops) if (!s.ops.some((o) => o.id === def.id && o.region === run.regionIndex)) s.ops.push({ id: def.id, region: run.regionIndex, outcome: 'running' });
+    if (s.beat === 6 && s.region >= 0) {
+      for (const def of team.ops) if (!s.ops.some((o) => o.id === def.id && o.region === run.regionIndex)) s.ops.push({ id: def.id, region: run.regionIndex, outcome: 'running' });
+      // Part C: a colleague who defected stops their Operation from inside (Magma's Dr. Tuff only halves its effect, when it happens).
+      const inside = team.inside && marked(run, team.id, 'defector-colleague') ? s.ops.find((o) => o.id === team.inside!.op && o.region === run.regionIndex && o.outcome === 'running') : undefined;
+      if (inside && !team.inside!.half) {
+        bump(run, `team-op-inside-${inside.id}`);
+        words.push(`${resolveOp(content, run, team, inside, 'infiltrated')} (stopped from inside)`);
+      } else if (inside) bump(run, `team-op-inside-${inside.id}`);
+    }
     const cfg = evilConfig(content, run);
     // Story Run (Appendix S.7): after beat 6 the hideout waits for League entry (core/campaign/storyDirector.ts places it).
     // E1: the story's last beat comes after the final climax fight is won: the team's Leader is beaten for the Dossier.
@@ -233,6 +255,13 @@ export function applyEvilEffect(content: Content, run: RunState, e: EvilEffect):
       else words.push(resolveOp(content, run, team, op, 'succeeded'));
     });
   }
+  if (e.mark) bump(run, `team-${team.id}-${e.mark}`);
+  if (e.pen) {
+    const node = rescueNode(content, run);
+    let back = 0;
+    for (const h of activeHolds(run).filter((x) => x.teamId === team.id)) back += returnedElsewhere(run, h.id, node, 'holding-pen').length;
+    if (back > 0) words.push(`${back} of your Pokémon ${back === 1 ? 'is' : 'are'} back with you`);
+  }
   if (e.defect && !s.defector) {
     s.defector = true;
     tell(content, run, 'evil-defector', `A ${team.ranks.grunt.name} defected from ${team.name} to help you.`, 70);
@@ -261,14 +290,21 @@ function resolveOp(content: Content, run: RunState, team: EvilTeam, op: EvilStat
   const key = `evil:op:${op.id}:${op.region}`;
   // SF13 Part D: an Operation with its own lasting effect leaves that on the region when it happens (and nothing extra when stopped).
   const lasting = def?.lasting;
-  const side = lasting ? (stopped ? null : { text: lasting.text, effects: lasting.effects }) : cons ? (stopped ? cons.stopped : cons.through) : null;
+  // Part C (Magma): the colleague's true readings halve what their Operation leaves behind.
+  const half = !stopped && !!lasting && team.inside?.half === true && team.inside.op === op.id && marked(run, team.id, 'defector-colleague');
+  const side = lasting ? (stopped ? null : { text: half ? `${lasting.text} (Halved: the town was warned in time.)` : lasting.text, effects: half ? lasting.effects.map(halveModifier) : lasting.effects }) : cons ? (stopped ? cons.stopped : cons.through) : null;
   if (!run.story.flags[key]) {
     run.story.flags[key] = true;
     bump(run, stopped ? `team-op-stopped-${op.id}` : `team-op-done-${op.id}`);
     if (stopped) bump(run, `team-${team.id}-op-stopped`);
     if (side && lasting) {
       evilOf(run).mods.push({ region: op.region, effects: side.effects });
-      for (const f of lasting.flags) bump(run, f);
+      for (const f of lasting.flags) {
+        const { key: k, amount } = typeof f === 'string' ? { key: f, amount: 1 } : f;
+        bump(run, k, half ? Math.max(1, Math.floor(amount / 2)) : amount);
+      }
+      const rise = half ? Math.floor((lasting.crisis ?? 0) / 2) : (lasting.crisis ?? 0);
+      if (rise > 0) changeCrisis(content, run, rise);
     }
     if (side) run.perkEffects = [...(run.perkEffects ?? []), ...side.effects];
   }
@@ -284,6 +320,14 @@ function resolveOp(content: Content, run: RunState, team: EvilTeam, op: EvilStat
   const text = `${verb} ${name}.${side ? ` ${side.text}` : ''}`;
   tell(content, run, 'evil-op-end', text, stopped ? 70 : 60);
   return text;
+}
+
+/** A modifier at half strength: a multiplier halfway back to 1, an offset halved (rounded toward 0). Others are kept. */
+function halveModifier(m: ArchetypeModifier): ArchetypeModifier {
+  const x = m as ArchetypeModifier & { value?: number };
+  if (typeof x.value !== 'number') return m;
+  const integer = Number.isInteger(x.value) && /Offset$/.test(m.kind);
+  return { ...x, value: integer ? Math.trunc(x.value / 2) : 1 + (x.value - 1) / 2 } as ArchetypeModifier;
 }
 
 export interface EvilBattlePlan {
