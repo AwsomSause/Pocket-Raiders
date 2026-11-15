@@ -26,6 +26,8 @@ export const SkyEndingSchema = z.enum([
   'fearow-free',
   /** Fearow won and Pidgeot had been cheered, or nobody was: neither bird stays. */
   'fearow-alone',
+  /** gn.02: the player backed the Spearow and it lost the opening: nothing; it leaves, and the story never begins. */
+  'spearow-lost',
 ]);
 export type SkyEnding = z.infer<typeof SkyEndingSchema>;
 
@@ -52,6 +54,12 @@ export const SkyStateSchema = z.object({
   boosts: z.number().int().min(0).default(0),
   /** Times it was found training alone. */
   alone: z.number().int().min(0).default(0),
+  /** gn.02: times the player just watched it (it flies a loop it couldn't fly last stage). */
+  watched: z.number().int().min(0).default(0),
+  /** gn.02: Bond the player has with it without its knowing ("Leave quietly"): +5 friendship each when it joins. */
+  bond: z.number().int().min(0).default(0),
+  /** gn.02: Fearow won while the player cheered Pidgeot: the story goes on next region, and Pidgeot is a stage wiser (a level each time). */
+  wiser: z.number().int().min(0).default(0),
   /** Everything the player gave it (item ids), kept to the end. */
   gifts: z.array(z.string()).default([]),
   /** Move ids it carries as answers to what beat it. */
@@ -69,4 +77,8 @@ export type SkyState = z.infer<typeof SkyStateSchema>;
 
 /** The story as it stands once the opening fight is decided. */
 export const freshSky = (region: number, backed: SkySide, duelWinner?: SkySide): SkyState =>
-  SkyStateSchema.parse({ region, backed, ...(duelWinner ? { duelWinner } : {}), phase: backed === 'pidgey' && duelWinner === 'pidgey' ? 'done' : 'rivalry', ...(backed === 'pidgey' && duelWinner === 'pidgey' ? { ending: 'hm' } : {}) });
+  SkyStateSchema.parse({
+    region, backed, ...(duelWinner ? { duelWinner } : {}),
+    phase: duelWinner === 'pidgey' ? 'done' : 'rivalry',
+    ...(duelWinner === 'pidgey' ? { ending: backed === 'pidgey' ? 'hm' : 'spearow-lost' } : {}),
+  });

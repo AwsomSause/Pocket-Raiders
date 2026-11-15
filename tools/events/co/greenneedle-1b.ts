@@ -155,7 +155,84 @@ const EVENTS_1B: Json[] = [
   ]),
 ];
 
-export const EVENTS: Json[] = EVENTS_1B;
+// =====================================================================================================================
+// gn.02  PIDGEY'S RESOLVE: THE RIVALRY OF THE SKY  (region-long; engine core/sky). The scenes keep their Beta 0.7 ids (sky.*).
+// =====================================================================================================================
+const SKY_GROUP = 'Rival episodes';
+const sky = (when: string): Json => ({ kind: 'sky', when });
+const act = (a: string, o: Json = {}): Json => ({ kind: 'sky', act: a, ...o });
+const skyEv = (id: string, name: string, o: Json, intro: string, choices: Json[]): Json => ({ ...gev(id, name, { tags: ['Story', 'Rival', 'Pokémon'], ...o }, intro, choices), group: SKY_GROUP });
+const WATCHED = (text: string, effects: Json[] = []): Json => ({ text, effects, battle: { kind: 'wild', species: ['spearow'], types: [], levelBonus: 0, pseudo: true, win: [] } });
+const FINALE_FIGHT = (text: string, effects: Json[] = []): Json => ({ text, effects, battle: { kind: 'wild', species: ['fearow'], types: [], levelBonus: 0, pseudo: true, win: [] } });
+
+const EVENTS_SKY: Json[] = [
+  // ---- the branch (S1, Step 2, must-see) ----
+  skyEv('sky.opening', "Pidgey's Resolve", { stop: 'event', rarity: 'rare', forced: true, minStage: 1, pokemon: 'pidgey', tint: '#31404f', effect: 'glint', requires: [{ kind: 'xevents' }, sky('opening')] }, say(
+    'A Pidgey and a Spearow are fighting over one branch. Feathers on the ground, brown and speckled, more of them brown.',
+    'It is only a branch. Neither of them will say why it matters. That is how you know it does.',
+    'Then they both stop, and look at you. As if you were the one who decides.',
+  ), [
+    ch('Back the Pidgey.', WATCHED('You say it quietly: come on, little one. The Pidgey hears. The branch shakes. It begins.', [act('duel', { side: 'pidgey' })])),
+    ch('Back the Spearow.', WATCHED('You say it plainly, because it is the bigger bird and the louder. The Pidgey hears that too. The branch shakes. It begins.', [act('duel', { side: 'spearow' })])),
+  ]),
+
+  // ---- one beat per stage (S2 to S7, Step 8, optional) ----
+  skyEv('sky.meet', 'A Shape on a Fence Post', {
+    stop: 'event', rarity: 'rare', forced: true, minStage: 1, pokemon: 'pidgey', tint: '#2a3b52', effect: 'glint', requires: [{ kind: 'xevents' }, sky('meet')],
+    remembers: [{ id: 'nest', when: [sky('nest')], notice: 'Behind it, in the fork of the fence, is its nest. It is lined with everything you ever gave it: every one, kept, tucked in, the way you keep letters.' }],
+  }, say(
+    '*A shape on a fence post. It\'s bigger than last time.*',
+    'It does not chirp a greeting. It stands very straight and looks at you the way you look at a door you are going to walk through someday.',
+    'Somewhere above the clouds, a larger shape turns without a sound. It does not look up. That is how you know it knows.',
+  ), [
+    ch('Spar with it.', {
+      text: 'It bows its head, one small, formal dip. Whatever beats it, it will carry an answer to next time.',
+      effects: [act('meetSpar')],
+      battle: { kind: 'trainer', name: 'Pidgey', team: ['pidgey'], size: 1, pseudo: true, types: [], levelBonus: 0, win: [act('sparWon')], lose: [act('sparLost')] },
+    }),
+    ch('Give it something.', out('You hold it out. It does not take it at first. Nobody has ever just given it something.', act('giftAny')), { requires: [sky('giftAny')] }),
+    ch('Just watch.', out('You lean on the fence and say nothing at all.', act('watch'))),
+  ]),
+
+  // ---- found training alone (S3 and S6, Step 16) ----
+  skyEv('sky.alone', 'Training Alone', { stop: 'event', rarity: 'rare', forced: true, minStage: 1, pokemon: 'pidgey', tint: '#27384a', effect: 'glint', requires: [{ kind: 'xevents' }, sky('alone')] }, say(
+    '*It\'s diving at a rock, pulling up, diving again. It doesn\'t notice you.*',
+    '*There\'s a Fearow feather stuck in the rock. It\'s been aiming at that.*',
+    'The grass is flattened in a ring where it has fallen a hundred times. Nobody watching. Nobody keeping score.',
+  ), [
+    ch('Leave quietly.', out('You back away, one step at a time, until the rock is behind the hill.', act('aloneLeave'))),
+    ch('Call out.', out('You call its name.', act('aloneCall'))),
+  ]),
+
+  // ---- the finale (S8, Step 18, must-see) ----
+  skyEv('sky.finale', 'The Cliff in High Wind', {
+    stop: 'event', rarity: 'epic', forced: true, minStage: 1, pokemon: 'pidgeot', tint: '#1d2a3d', effect: 'glint', requires: [{ kind: 'xevents' }, sky('finale')],
+    remembers: [{ id: 'backed-spearow', when: [is('pidgey-backed-spearow')], notice: 'Before it begins, Pidgeot looks at you. Then it looks away. It has not forgotten which bird you backed, on the first day, at the branch.' }],
+  }, say(
+    'A cliff. High wind. Wild Pokémon on every ledge, watching: they felt it coming, the way a field feels rain.',
+    'Pidgeot on the high rock with its crest into the gale. Across the gap, Fearow lands with its wings half-folded, and says nothing.',
+    '*They circle once. Neither is the bird from the branch.*',
+  ), [
+    ch('Climb to the ridge and watch.', FINALE_FIGHT('You climb to the ridge above them, and the wind takes your breath, and you do not look away.')),
+    ch('Give Pidgeot a last Berry before it begins.', FINALE_FIGHT('You hold it up. Pidgeot lowers its great head and takes it, and does not need to say anything. Then you climb the ridge.', [act('finaleGiftBerry')]), { requires: [sky('giftBerry')] }),
+    ch('Give Pidgeot something to hold before it begins.', FINALE_FIGHT('You press it into its claws and step back. It will carry it into the wind. It will keep it to the end.', [act('finaleGiftItem')]), { requires: [sky('giftItem')] }),
+  ]),
+
+  // ---- after "Fearow!": met in the next region for one more fight, at A+1. Win that, and it'll listen ----
+  skyEv('sky.rematch', 'One More Fight', { stop: 'event', rarity: 'epic', forced: true, minStage: 1, pokemon: 'pidgeot', tint: '#2a2230', effect: 'glint', requires: [{ kind: 'xevents' }, sky('rematch')] }, say(
+    'Pidgeot is waiting on the road, as if it had been waiting since the cliff. It does not look at you.',
+    'It did not leave the road, either. It is standing exactly where you will have to pass.',
+    'It wants one more fight. Under the anger, you see now, is only a question: did you mean it?',
+  ), [
+    ch('Fight it.', {
+      text: 'You step up. It meets your eye for the first time since the cliff.',
+      effects: [],
+      battle: { kind: 'trainer', name: 'Pidgeot', team: ['pidgeot'], size: 1, pseudo: true, types: [], levelBonus: 0, win: [act('rematchWon')], lose: [act('rematchLost')] },
+    }),
+  ]),
+];
+
+export const EVENTS: Json[] = [...EVENTS_1B, ...EVENTS_SKY];
 /** The Beta 0.7 exceptional rematch is one event now (pp-rematch shows its evolving choice when all three lessons were first-retry). */
 export const REMOVE: string[] = ['pp-rematch-exceptional'];
 
@@ -173,5 +250,15 @@ export const PLACEMENT: Record<string, Placement> = {
     ],
     note: 'Stages S1-S6. The cold open places the lessons and the pond visit on later nodes of its stage (core/events.ts pond begin).',
   },
+};
+PLACEMENT['sky.opening'] = {
+  gn: 'gn.02', shape: 'Region-wide', earliest: 'A1', sits: 'must-see', tags: ['Region-Wide Story', 'Rival Episode'], level: 'Pidgey and Spearow match each other at A-1, rising each stage', often: 'run',
+  beats: [
+    { beat: 'The branch', event: 'sky.opening', stage: 'S1', home: 2, window: [1, 4] },
+    { beat: 'Stage beats (spar, give, or watch; optional)', event: 'sky.meet', stage: 'S2-S7', home: 8, window: [6, 12] },
+    { beat: 'Found training alone', event: 'sky.alone', stage: 'S3, S6', home: 16, window: [14, 18] },
+    { beat: 'The finale (must-see)', event: 'sky.finale', stage: 'S8', home: 18, window: [16, 19] },
+  ],
+  note: 'Best in a run\'s first region. Once per run.',
 };
 export const CHAINS: Json[] = [];

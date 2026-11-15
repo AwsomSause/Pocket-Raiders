@@ -32,8 +32,6 @@ export type SkyWhen = Extract<import('../contentSchema').EventCondition, { kind:
 export const SKY_BALANCE = {
   /** The opening duel: both birds' level. */
   duelLevel: 5,
-  /** The chance (percent) that a stage's meeting is "found training alone" (never the first meeting). */
-  alonePct: 30,
   /** Finale: Pidgeot's level above the party's average, before training; each spar and each gift adds one (cap 3 each). */
   pidgeotAbove: 0,
   trainingCap: 3,
@@ -42,8 +40,11 @@ export const SKY_BALANCE = {
   fearowRelief: 2,
   /** Pidgeot is asked to be cheered when it is first under this share of its HP. */
   cheerThreshold: 0.35,
-  /** Rematch: Pidgeot's level above the party's average. */
-  rematchAbove: 3,
+  /** Rematch (gn.02: at A+1): Pidgeot's level above the party's average. */
+  rematchAbove: 1,
+  /** gn.02: each spar adds this much (percent) to Pidgeot's stats in the finale, to the cap. */
+  sparStatPct: 2,
+  sparStatCap: 12,
   /** At most this many answers are carried at once. */
   maxAnswers: 2,
 } as const;
@@ -60,10 +61,10 @@ export function isFinaleStage(content: Content, run: RunState): boolean {
   return !!sky && !!run.stage && run.stage.kind === 'stage' && run.regionIndex === sky.region && run.stage.index + 1 >= stagesPer(content, run);
 }
 
-/** Whether this stage's meeting is the "found training alone" kind: a roll of its own, never the first meeting. */
-export function meetingIsAlone(run: RunState, sky: SkyState): boolean {
-  if (sky.meets < 1) return false;
-  return new Rng(hashSeed(`${run.seed}::sky::alone::${stageKey(run)}`)).int(0, 99) < SKY_BALANCE.alonePct;
+/** Whether this stage's meeting is the "found training alone" kind: gn.02 says two of the six stages, S3 and S6 of its region. */
+export function meetingIsAlone(run: RunState, _sky: SkyState): boolean {
+  const s = (run.stage?.index ?? 0) + 1;
+  return s === 3 || s === 6;
 }
 
 /** The cheapest held-type item of the Bag, berries first or everything else, by catalog rarity then id. */
@@ -95,6 +96,10 @@ export function skyCondition(content: Content, run: RunState, when: SkyWhen): bo
       return !!sky && sky.phase === 'rivalry' && giftCandidate(content, run, 'berry') !== null;
     case 'giftItem':
       return !!sky && sky.phase === 'rivalry' && giftCandidate(content, run, 'item') !== null;
+    case 'giftAny':
+      return !!sky && sky.phase === 'rivalry' && (giftCandidate(content, run, 'berry') ?? giftCandidate(content, run, 'item')) !== null;
+    case 'nest':
+      return !!sky && sky.phase === 'rivalry' && (run.stage?.index ?? 0) + 1 === 7 && sky.gifts.length >= 4;
     case 'overhead':
       return !!sky && sky.phase === 'done' && !sky.afterDone && run.regionIndex > sky.region && (sky.ending === 'pidgeot-alone' || sky.ending === 'pidgeot-free' || sky.ending === 'fearow-free' || sky.ending === 'fearow-alone');
     case 'rematch':
@@ -106,6 +111,7 @@ export function skyConditionText(when: SkyWhen): string {
   switch (when) {
     case 'giftBerry': return 'Needs a berry to give';
     case 'giftItem': return 'Needs something it can hold';
+    case 'giftAny': return 'Needs a Berry or something it can hold';
     default: return 'Not now';
   }
 }
@@ -132,7 +138,7 @@ const heldOf = (gifts: readonly string[]): Record<string, number> => {
 /** Pidgeot's strength at the finale: the party's level, plus a level for each spar and each gift (cap 3 each). */
 export function pidgeotLevel(content: Content, run: RunState, sky: SkyState): number {
   const trained = Math.min(SKY_BALANCE.trainingCap, sky.spars) + Math.min(SKY_BALANCE.trainingCap, sky.gifts.length);
-  return clampLevel(content, run, avgLevel(run) + SKY_BALANCE.pidgeotAbove + trained);
+  return clampLevel(content, run, avgLevel(run) + SKY_BALANCE.pidgeotAbove + trained + sky.wiser);
 }
 
 export function fearowLevel(content: Content, run: RunState, sky: SkyState): number {
@@ -141,16 +147,19 @@ export function fearowLevel(content: Content, run: RunState, sky: SkyState): num
   return clampLevel(content, run, pidgeotLevel(content, run, sky) + SKY_BALANCE.fearowAbove - relief);
 }
 
-/** The moves Fearow has learned so far: it starts with two and learns one more at every meeting. */
-export function fearowMoves(sky: SkyState): string[] {
-  const known = FEAROW_TRACK.slice(0, Math.min(FEAROW_TRACK.length, 2 + sky.meets));
+/** The moves Fearow has learned by this stage of its region (gn.02: one per stage from S2), its four newest. */
+export function fearowMoves(stageInRegion: number): string[] {
+  const known = [...FEAROW_START, ...FEAROW_BY_STAGE.slice(0, Math.max(0, Math.min(FEAROW_BY_STAGE.length, stageInRegion - 1)))];
   return known.slice(-4);
 }
+
+/** Pidgeot's finale stats: +2% per spar, to a cap of 12%. */
+export const sparBoost = (sky: SkyState): number => Math.min(SKY_BALANCE.sparStatCap, SKY_BALANCE.sparStatPct * sky.spars);
 
 const pidgeotDuelist = (content: Content, run: RunState, sky: SkyState): Duelist => ({
   speciesId: 'pidgeot', level: pidgeotLevel(content, run, sky), moves: ['wing-attack', 'quick-attack', 'air-slash', 'agility'], ability: 'scrappy', held: heldOf(sky.gifts),
 });
-const fearowDuelist = (content: Content, run: RunState, sky: SkyState): Duelist => ({ speciesId: 'fearow', level: fearowLevel(content, run, sky), moves: fearowMoves(sky) });
+const fearowDuelist = (content: Content, run: RunState, sky: SkyState): Duelist => ({ speciesId: 'fearow', level: fearowLevel(content, run, sky), moves: fearowMoves((run.stage?.index ?? 0) + 1) });
 
 /** The finale as the engine plays it, with the player's cheer (or none yet). Replayable: the same inputs are always the same fight. */
 export function playFinale(content: Content, run: RunState, sky: SkyState, cheer: 'pidgeot' | 'fearow' | 'ask' | 'none'): DuelResult {
@@ -228,7 +237,8 @@ export function recruitMon(content: Content, run: RunState, sky: SkyState, bird:
       else mon.moves[3] = { id: 'drill-run', pp: drill.pp };
     }
   }
-  mon.friendship = Math.min(255, mon.friendship + 40);
+  // "Leave quietly": the Bond it never knew about (+5 friendship each), and only Pidgey has it.
+  mon.friendship = Math.min(255, mon.friendship + 40 + (bird === 'pidgeot' ? 5 * sky.bond : 0));
   mon.hp = maxHp(content, mon);
   return mon;
 }
@@ -240,6 +250,7 @@ function giveGift(content: Content, run: RunState, sky: SkyState, kind: 'berry' 
   if (run.inventory[id] !== undefined && run.inventory[id]! <= 0) delete run.inventory[id];
   sky.gifts.push(id);
   sky.boosts += 1;
+  run.story.flags['ev:pidgey-gifts'] = sky.gifts.length;
   const lines = GIFT_LINES[kind];
   const rng = new Rng(hashSeed(`${run.seed}::sky::gift-line::${sky.gifts.length}`));
   return `${rng.pick([...lines])} (${content.catalog.get(id)?.name ?? id} given: ${sky.gifts.length} so far.)`;
@@ -264,6 +275,32 @@ export function applySky(content: Content, run: RunState, e: SkyEffect): string 
       discover(run, 'pidgey', false);
       discover(run, 'spearow', false);
       return say(...DUEL_HEADER);
+    }
+    case 'watch': {
+      if (!sky) return '';
+      markMeet(run, sky);
+      sky.watched += 1;
+      return say('It preens, taking its time, as if you were not there. Then it flies a loop it could not fly last stage, tight and clean, and lands, and pretends that was nothing.', fearowGrowthLine(2 + sky.meets), backedLine(sky.backed));
+    }
+    case 'giftAny': {
+      if (!sky) return '';
+      markMeet(run, sky);
+      const kind = giftCandidate(content, run, 'berry') ? 'berry' : 'item';
+      const gift = giveGift(content, run, sky, kind);
+      return say(gift, 'It will keep it to the end, tied to its leg or tucked in its nest.', fearowGrowthLine(2 + sky.meets), backedLine(sky.backed));
+    }
+    case 'aloneLeave': {
+      if (!sky) return '';
+      markMeet(run, sky);
+      sky.alone += 1;
+      sky.bond += 1;
+      return say('You leave as quietly as you came. It never knows you were there. But the next time it sees you, it lands a little closer than it has to, and it does not know why.');
+    }
+    case 'aloneCall': {
+      if (!sky) return '';
+      markMeet(run, sky);
+      sky.alone += 1;
+      return say('You call out. It pulls up out of the dive so hard it nearly hits the rock, and lands, and glares at you, and puffs up every feather it has. It was not doing anything. It was definitely not aiming at that feather.');
     }
     case 'passBy': {
       reopen(run);
@@ -341,7 +378,13 @@ export function applySky(content: Content, run: RunState, e: SkyEffect): string 
       const bird = sky.ending === 'fearow-free' ? 'fearow' : 'pidgeot';
       return say(new Rng(hashSeed(`${run.seed}::sky::overhead`)).pick([...OVERHEAD[bird]]));
     }
-    case 'rematchWon':
+    case 'rematchWon': {
+      // gn.02: "Win that, and it'll listen": Pidgeot lands, and asks to come.
+      if (!sky) return '';
+      sky.afterDone = true;
+      pushRoom(run, 'sky.join.pidgeot');
+      return say('You beat it, and it does not fly off. It lands on the road in front of you, and lowers its head, and listens.');
+    }
     case 'rematchLost': {
       if (!sky) return '';
       sky.afterDone = true;

@@ -190,5 +190,60 @@
    }
   ],
   "note": "Stages S1-S6. The cold open places the lessons and the pond visit on later nodes of its stage (core/events.ts pond begin)."
+ },
+ "sky.opening": {
+  "gn": "gn.02",
+  "shape": "Region-wide",
+  "earliest": "A1",
+  "sits": "must-see",
+  "tags": [
+   "Region-Wide Story",
+   "Rival Episode"
+  ],
+  "level": "Pidgey and Spearow match each other at A-1, rising each stage",
+  "often": "run",
+  "beats": [
+   {
+    "beat": "The branch",
+    "event": "sky.opening",
+    "stage": "S1",
+    "home": 2,
+    "window": [
+     1,
+     4
+    ]
+   },
+   {
+    "beat": "Stage beats (spar, give, or watch; optional)",
+    "event": "sky.meet",
+    "stage": "S2-S7",
+    "home": 8,
+    "window": [
+     6,
+     12
+    ]
+   },
+   {
+    "beat": "Found training alone",
+    "event": "sky.alone",
+    "stage": "S3, S6",
+    "home": 16,
+    "window": [
+     14,
+     18
+    ]
+   },
+   {
+    "beat": "The finale (must-see)",
+    "event": "sky.finale",
+    "stage": "S8",
+    "home": 18,
+    "window": [
+     16,
+     19
+    ]
+   }
+  ],
+  "note": "Best in a run's first region. Once per run."
  }
 }
