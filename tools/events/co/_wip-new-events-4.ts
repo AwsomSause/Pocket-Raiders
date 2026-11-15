@@ -3,7 +3,7 @@
 // NE76 to NE80 keep the ids of their simplified builds (tools/events/hazards.ts), NE81 to NE85 the camp-* ids (src/data/events/camp-rests.json):
 // this file replaces them by id, and keeps the flags other events read (fog-named: the foggy-moor hazard; camp-pair, camp-argument, camp-photo, camp-photo-home).
 // Build: npm run co:build -- new-events-4
-import { $, BERRIES, HEALING, HELD, RARE_HELD, SNACKS, bond, bondIs, bondUp, cure, fight, flag, flagAgo, flagAt, flagIs, fr, gymPreview, heal, hurtLead, item, join, money, moveFlag, out, rest, room, stopHere, takeNode, takeNodeBack, trainer, wild, type Json } from '../dsl.ts';
+import { $, BERRIES, HEALING, HELD, RARE_HELD, SNACKS, bond, bondIs, bondUp, cure, fight, flag, flagAgo, flagAt, flagIs, fr, heal, hurtLead, item, join, money, moveFlag, out, rest, room, stopHere, takeNode, takeNodeBack, trainer, wild, type Json } from '../dsl.ts';
 import { GROUP, L, P, after, ch, has, kind, lose, moment, ne, not, place, rep, step, teach, temp, variant } from './_ne.ts';
 
 export { CATEGORY } from './_ne.ts';
@@ -675,7 +675,7 @@ const NE93: Json[] = [
     ch('Ask about the road.', out(P(
       'The card is printed in small, neat type. It names the Gym Leader ahead, the Pokémon they save for last, and the item it holds.',
       'No warning. No advice. Just what is true. The Xatu\'s head turns back to the front.',
-    ), $(-100), gymPreview()), FORTUNE_COST),
+    ), $(-100), { kind: 'gymPreview' }), FORTUNE_COST),
     ch('Ask about my team.', out(P(
       'The card says: {least}.',
       'Underneath, in smaller type: You have hardly sent it out. It has noticed.',

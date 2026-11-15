@@ -1,0 +1,35 @@
+# New UI (the mock-ups, built into the game)
+
+Kice's ask (2026-11-14): every mock-up in `pocket-raiders-mockups.zip`, in the game, behind **Settings > UI style** (New = default, Old = the earlier look). Update branch `ui-mockups`; notes per PR in `docs/updates/ui-mockups/`.
+
+**How it is built.** The New UI is an HTML/CSS layer (`#rx`) laid over the Phaser canvas (`src/ui/redux/`). It uses the mock-ups' own CSS (`redux.css`) and templates (`templates.ts`, `screens/*.ts`) filled with live game data. Each Phaser scene stays the controller: it builds a plain model, calls `mountRedux(scene, { render, acts, overs })` (`stage.ts`), and the layer calls the scene's own handlers on clicks (`data-act`) and hovers (`data-over`). Keyboard input still goes through the scene. The layer never changes game state and never rolls gameplay RNG. `reduxOn()` says whether the New UI is on.
+
+**Settings.** `uiStyle` (`new` | `old`) and `reduxSkin` (20 looks), settings v43. The address can force a style for one visit: `?ui=new` or `?ui=old`. An automated browser (Playwright) gets Old unless the address says `?ui=new`, because the older browser tests click the canvas, which the layer covers.
+
+**Rule.** In New, a screen shows the mock-up look unless the player picked a specific style for that screen (screen style, map skin, reward skin, event style, plaza style, expedition or minigame look); that pick keeps its look. Battle: only the default look follows the mock-ups; every existing battle style stays in both New and Old (Kice, 2026-11-14).
+
+**Done in New:** Title, Save Slots, Settings, Hub dock, list pickers (every hub room), Trainer Select, Prep Desk, Run Setup, Modifiers, Seed, Starter Select, Briefing, stage map (4 layouts, legend, banner; pseudo-stages too), Reward, Shop, Event (pages, speakers, standing panel, tournament strip and bracket, Honest Trade Card), Decisions and the Yes/No box, Trade, Expedition, Minigames, Plaza dock, timed prompt window.
+
+**Event text as a script** (`src/ui/redux/script.ts`, tests `tests/unit/reduxScript.test.ts`). Under New, an event's `intro` and outcome `text` are read as pages:
+- a blank line (`\n\n`) is a page break; each page stays until Enter or a click (Esc goes back a page);
+- a newline is a new line on the same page;
+- `Name: "words"` is a speaker line: the name goes on the name plate, and that person stands in the picture when the event's cast has them; any other line is narration;
+- a page over about 240 letters splits by itself (between lines, then at sentence ends), so nothing is ever cut;
+- the choices (and a split-second countdown, if the event has one) come with the last page; results come only after the last outcome page.
+Old UI is unchanged (whole text, "Read all" button).
+
+**Hub dock** (`HubScene`, `screens/hub.ts`). In New the Hub opens as the mock-ups' dock unless Hub style is Arena Lobby: two tabs of six buttons under a line-up of Pokémon drawn at their real heights (your walking Pokémon, your last team, past Aces, then the mock-up's own line-up). Town tab: Settings, Trainers, New Run, Events, Unlocks, Town. Last run tab: Hall of Fame, Team, Run History, Memories, Moments, Seeds. A button with several rooms opens their page; every hub room is reachable. Town > Hub Town walks the town; Esc there opens the menu, whose first row ("Hub dock") leads back. The dock remembers its tab and button.
+
+**Board lists** (`boardView` in `templates.ts`). Quest Log, Trainer Quests, Achievement Hall and the other list rooms use one board template. A row's count ("2/5", "40%") is drawn as the mock-ups' progress bar with a state tag (New, Active, Done) and the count in words under the title (`boardProgress`).
+
+**Party, Summary, Bag** (`screens/party.ts`, `screens/bag.ts`; controllers `ui/pokemonMenu.ts` and the Bag picker in `ui/fieldMenus.ts`). In New, Party opens as the mock-ups' page (layouts: big lead with rows, three-wide grid, list with a detail window); Enter opens the Summary: the Pokémon's card on the left, the game's seven tabs (Overview, Stats, Moves, Items, Bond, History, Traits) and the action menu as a window over the page. The Bag shows pockets as tabs, the items as a list with a detail window whose button names what Enter does (Use, Give, Change holder) or as a seven-wide grid of cells, and the party strip says who the focused item helps (Can use, No effect, Fainted, Holds it). A picked Party or Bag style still wins over the mock-up look. Grids (`gridStart`) scroll by whole rows and keep the last row on screen when the list has an uneven number of rows.
+
+**Run end** (`GameOverScene`, `screens/over.ts`, `screens/cut.ts`). In New (unless a Run-end style is picked) the run ends on the mock-ups' `over` page: title, a facts window, a Payouts window, the last party and three buttons (Witness the rest or Roll credits, Run card, Back to Hub). Witness the Rest plays the rival letter and `witnessCards` as cutscene cards (`cutView`, the mock-ups' `cut` template in three layouts; it is the base for the other cutscenes). The run card is the mock-ups' `card` page (Enter saves the PNG). Tab opens the full report (`reportPages`: every line of the Old screen, paged), F the final team (the Party page with a gold header), R retries the seed. The Old screen is still built underneath and keeps its keys (G, T, C, S).
+
+**Event extras.** `EventView.standing` (rank and up to three meters) draws a standing panel. A trade that names what comes back (`TradePick.gets`, from `tradeFor.table`) shows the Honest Trade Card: both sides before the player commits; "Not known yet" when the event does not say. A long choice label shrinks and wraps inside its button. A hover only counts when the pointer moved, so a resting mouse never steals the keyboard cursor.
+
+**Tests.** `tests/e2e/newUi.spec.ts` (New: title to map, an event by clicks, paged event text, a tournament with its bracket, a pseudo-stage's rooms, the Hub dock and the way to Hub Town and back, a decision with the confirm box, Party to Summary to the action menu, the Bag with a Potion used from its window, a lost run's end page with Witness the Rest, report, final team and run card, the style override). Unit: `reduxScript`, `reduxEventView`, `reduxBracket`, `reduxBoard`, `reduxParty`, `reduxBag`, `reduxOver`, `tradeCard`. All older specs run under Old.
+
+**Known limits.** Still Old-drawn inside New: Battle default look, overlays, cutscenes, map pop-ups (the node menu too), Field Trial, egg hatch, Legendary title cards, and Pocket Town (the mock-up shows it as a dock; it is still the walked town). The Plaza in New is the dock (walkable plaza: Old or another plaza style). The New UI ignores Font size and Dyslexia font. Trade shows type chips instead of the mock-up's HP bar. There is no mock-up for walking Hub Town, so it keeps its own look (Hub dock > Town > Hub Town).
+
+**Fonts.** `public/assets/fonts/redux/` holds the nine font files the mock-ups use (Cinzel, Jersey 15, M PLUS Rounded 1c, Oswald, Pixelify Sans, Rajdhani, Tiny5), taken from the mock-up pack; all are Google Fonts families under the SIL Open Font License 1.1.

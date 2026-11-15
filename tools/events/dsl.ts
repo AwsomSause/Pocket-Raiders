@@ -66,7 +66,8 @@ export const status = (s: 'poison' | 'burn' | 'paralysis' | 'sleep'): Json => ({
 export type Who = 'lead' | 'party' | 'picked' | 'starter' | 'top' | 'firstCatch' | 'newest' | { types?: string[]; moveFlag?: string; species?: string[] };
 export const fr = (amount: number, who: Who = 'party'): Json => ({ kind: 'friendship', amount, who });
 /** The pack's "+N Bond": +5 friendship per point on one Pokémon, +3 each for the whole party (balance.co). */
-export const bondUp = (points = 1, who: Who = 'lead'): Json => fr(points * (who === 'party' ? 3 : 5), who);
+/** The pack's "+N Bond": the friendship comes from balance.co at play time (5 a point on one Pokémon, 3 each for the party). */
+export const bondUp = (points = 1, who: Who = 'lead'): Json => ({ kind: 'friendship', bond: points, who });
 /** "(a node)" as a cost: the next `nodes` ordinary nodes are spent on the work (no battle, no reward). */
 export const takeNode = (nodes = 1): Json => ({ kind: 'takeNode', nodes });
 /** "(a node back)": a step back along the road; nothing is refought, so it costs nothing. */
@@ -82,6 +83,8 @@ export const rage = (n: number): Json => attr('ragePeace', n);
 export const peace = (n: number): Json => attr('ragePeace', -n);
 export const rp = (amount: number): Json => ({ kind: 'research', amount });
 export const lv = (amount: number, who: Who | 'weakest' = 'lead'): Json => ({ kind: 'levels', amount, who });
+/** "+1 to a stat" for a Pokémon (5% per point, capped at 15% per stat; `best` = its highest stat). `region: true` = "for the region". */
+export const stat = (which: 'hp' | 'atk' | 'def' | 'spa' | 'spd' | 'spe' | 'best' | 'all', o: { points?: number; who?: Who | 'weakest'; region?: boolean } = {}): Json => ({ kind: 'statBoost', stat: which, percent: 5 * (o.points ?? 1), who: o.who ?? 'lead', until: o.region ? 'region' : 'run' });
 export const join = (o: { species?: string[]; types?: string[]; lv?: number; shiny?: number; shadow?: boolean } = {}): Json => ({
   kind: 'join',
   shadow: o.shadow ?? false,

@@ -116,7 +116,7 @@
        },
        {
         "kind": "friendship",
-        "amount": 10,
+        "bond": 2,
         "who": "picked"
        },
        {
@@ -965,7 +965,7 @@
        },
        {
         "kind": "friendship",
-        "amount": 15,
+        "bond": 3,
         "who": "picked"
        },
        {
@@ -1117,7 +1117,7 @@
          },
          {
           "kind": "friendship",
-          "amount": 15,
+          "bond": 3,
           "who": "picked"
          },
          {
@@ -1187,7 +1187,7 @@
       "effects": [
        {
         "kind": "friendship",
-        "amount": 3,
+        "bond": 1,
         "who": "party"
        },
        {
@@ -1499,7 +1499,7 @@
       "effects": [
        {
         "kind": "friendship",
-        "amount": 5,
+        "bond": 1,
         "who": "newest"
        },
        {
@@ -1992,7 +1992,7 @@
       "effects": [
        {
         "kind": "friendship",
-        "amount": 3,
+        "bond": 1,
         "who": "party"
        },
        {
@@ -2168,7 +2168,7 @@
       "effects": [
        {
         "kind": "friendship",
-        "amount": 5,
+        "bond": 1,
         "who": "top"
        },
        {
@@ -2241,7 +2241,7 @@
        },
        {
         "kind": "friendship",
-        "amount": 10,
+        "bond": 2,
         "who": {
          "types": [
           "ground"
@@ -2369,7 +2369,7 @@
          },
          {
           "kind": "friendship",
-          "amount": 10,
+          "bond": 2,
           "who": {
            "types": [
             "ground"
@@ -2567,7 +2567,7 @@
       "effects": [
        {
         "kind": "friendship",
-        "amount": 5,
+        "bond": 1,
         "who": "lead"
        },
        {
@@ -4191,7 +4191,7 @@
        },
        {
         "kind": "friendship",
-        "amount": 5,
+        "bond": 1,
         "who": "lead"
        },
        {
@@ -4241,7 +4241,7 @@
       "effects": [
        {
         "kind": "friendship",
-        "amount": 3,
+        "bond": 1,
         "who": "party"
        },
        {
@@ -4574,7 +4574,7 @@
        },
        {
         "kind": "friendship",
-        "amount": 10,
+        "bond": 2,
         "who": "picked"
        },
        {
@@ -4662,7 +4662,7 @@
        },
        {
         "kind": "friendship",
-        "amount": 5,
+        "bond": 1,
         "who": {
          "types": [
           "fire"
@@ -5124,7 +5124,7 @@
        },
        {
         "kind": "friendship",
-        "amount": 3,
+        "bond": 1,
         "who": "party"
        },
        {
@@ -5412,7 +5412,7 @@
       "effects": [
        {
         "kind": "friendship",
-        "amount": 5,
+        "bond": 1,
         "who": {
          "types": [
           "water"

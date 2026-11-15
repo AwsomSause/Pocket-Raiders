@@ -105,7 +105,8 @@ import { layEgg, tickEggs } from './eggs';
 import { spendTakenNode } from './co/takeNode';
 import { partnerOwed, quietWildWeight, spendPartner } from './co/neRules';
 import { quirkBadgeBond } from './co/quirks';
-import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
+import { attachBlocker, holdNodeBattle, releaseNodeBattle, takeNodeLevelShift } from './co/attach';
+import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, endRegionStatBoosts, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
@@ -947,6 +948,7 @@ function enterNextRegion(content: Content, run: RunState): void {
   run.regionIndex += 1;
   run.log.charmUsedInRegion = false;
   endRegionTempEffects(run);
+  endRegionStatBoosts(content, [...run.party, ...run.box]);
   shiftPartyLevels(content, run, regionLevelOffset(runArchetype(content, run).modifiers));
   // Pass Orbs turn into money in each new region.
   const orbMoney = regionMoneyFromItems(content, run);
@@ -1022,6 +1024,9 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   // Beta 0.7 Node Event Menus: a required entry must be done first; then the node's menu closes.
   const blocker = menuBlocker(run);
   if (blocker) throw new Error(blocker);
+  // Catalog Overhaul: an event that comes before (or instead of) this node's battle is played before moving on.
+  const waiting = attachBlocker(content, run);
+  if (waiting) throw new Error(waiting);
   closeNodeMenu(content, run);
   // A pseudo-stage plays like a stage, but its nodes play their room event (no route items, roamers or stage extras on its small map).
   if (stage.pseudo) return moveInPseudo(content, run, nodeId);
@@ -1082,7 +1087,7 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   if (notes) onCross(notes);
   // A trainer tailing you steps out after a few nodes (ideas W4, wandering trainer).
   wandererStep(content, run);
-  // Catalog Overhaul questlines: an event queued for "N nodes on" opens beside this node.
+  // Catalog Overhaul questlines: an event queued for "N nodes on" opens beside this node (a node spent on work below moves it one on).
   laterEventStep(content, run);
   // Catalog Overhaul: a choice that cost "(a node)" spends this stop on the work: no battle and no reward, but the level counts.
   const taken = spendTakenNode(content, run, node);
@@ -1096,21 +1101,28 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
     continueAfterDecisions(content, run);
     return run;
   }
+  // Catalog Overhaul: an event placed before (or instead of) the battle plays first; the map opens it at once (core/co/attach.ts).
+  if (holdNodeBattle(content, run, node)) return run;
+  fightNode(content, run, node);
+  return run;
+}
+
+/** The node's own battle. Also started when an event that came before it is done (continueAfterDecisions). */
+function fightNode(content: Content, run: RunState, node: MapNode): void {
   // A Nap Pod (run events G): the party sleeps through the next wild stop: no battle and no reward.
   if (node.kind === 'wild' && (run.itemCounters?.['nap'] ?? 0) > 0) {
     run.itemCounters = { ...run.itemCounters, nap: 0 };
-    return run;
+    return;
   }
   // A Repel keeps a wild Pokémon away: no battle and no reward, but the level counts.
   if (node.kind === 'wild' && repelActive(content, run)) {
     useRepel(content, run);
-    return run;
+    return;
   }
   startEncounter(content, run, node);
   // A weather front over the node sets the battle's weather.
   applyFrontWeather(content, run, node);
   recordBattleStart(content, run);
-  return run;
 }
 
 /** Walks to a node of a pseudo-stage: time passes as on any stage, then the node's room event opens beside it (the map opens it at once). */
@@ -2032,7 +2044,9 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
   const archetype = runArchetype(content, run);
   const theme = getTheme(content, stage.themeId);
   const campaign = getCampaign(content, run.campaignId);
-  const scale = withPartyStrength(content, stage.kind === 'league' ? leagueScale(content, run.regionIndex) : levelScale(content, campaign, run.regionIndex, stage.index, node.column), run.party.map((p) => p.level));
+  // Catalog Overhaul: an event that came first may have made this battle some stages easier or harder (read once).
+  const shift = takeNodeLevelShift(run);
+  const scale = withPartyStrength(content, stage.kind === 'league' ? leagueScale(content, run.regionIndex) : levelScale(content, campaign, run.regionIndex, Math.max(0, stage.index + shift), node.column), run.party.map((p) => p.level));
   // Counts stages from the start of the run (trainer and gym teams grow with it).
   const stageNumber = run.regionIndex * campaign.stagesPerRegion + stage.index;
   const activeIndex = run.party.findIndex((p) => p.hp > 0);
@@ -4017,6 +4031,9 @@ export function continueAfterDecisions(content: Content, run: RunState): void {
   } else {
     run.phase = 'map';
     settleChain(run);
+    // Catalog Overhaul: the event that came before this node's battle is done, so the battle starts now.
+    const held = releaseNodeBattle(content, run);
+    if (held) fightNode(content, run, held);
   }
 }
 

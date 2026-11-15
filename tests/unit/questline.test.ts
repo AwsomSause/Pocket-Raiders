@@ -22,7 +22,7 @@ function setup(): RunState {
   return run;
 }
 function add(run: RunState, species: string, friendship: number): void {
-  const mon = createPokemon(content, species, 10, `q-${species}-${friendship}`);
+  const mon = createPokemon(content, species, 10, `q-${species}-${run.party.length}`);
   mon.friendship = friendship;
   run.party.push(mon);
 }

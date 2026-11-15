@@ -53,7 +53,18 @@ let lastBox = '';
 let gone = { key: '', at: 0 };
 
 /** True while the New UI is chosen (Settings > Display > UI style). */
-export const reduxOn = (): boolean => services().session.settings.uiStyle === 'new';
+/**
+ * `?ui=new` or `?ui=old` in the address picks the style for this page load, over the saved setting (handy for
+ * comparing the two). A browser driven by automation (the Playwright tests) gets Old unless it asks for New:
+ * the older browser tests click and read the canvas, which the New UI layer covers. New has its own specs.
+ */
+const forced: 'new' | 'old' | null = (() => {
+  if (typeof location === 'undefined') return null;
+  const q = new URLSearchParams(location.search).get('ui');
+  if (q === 'new' || q === 'old') return q;
+  return typeof navigator !== 'undefined' && navigator.webdriver ? 'old' : null;
+})();
+export const reduxOn = (): boolean => (forced ?? services().session.settings.uiStyle) === 'new';
 
 function skinCss(): string {
   return REDUX_SKINS.map((s, i) => {
@@ -111,6 +122,9 @@ function ensureHost(game: Phaser.Game): HTMLDivElement {
 }
 
 /** Draws a scene's New UI view over the canvas until the scene shuts down. Call only when `reduxOn()`. */
+/** Where the pointer was at the last hover any view took (shared, so a view opening under a resting pointer does not count either). */
+let overAt = '';
+
 export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
   const root = ensureHost(scene.game);
   const el = document.createElement('div');
@@ -151,7 +165,14 @@ export function mountRedux(scene: Phaser.Scene, o: ReduxOptions): ReduxView {
     if (fn) fn(t.dataset.arg ?? '');
   };
   el.addEventListener('click', (e) => pick(e, 'act', o.acts));
-  el.addEventListener('pointerover', (e) => pick(e, 'over', o.overs));
+  el.addEventListener('pointerover', (e) => {
+    // A redraw puts a new element under a pointer that is resting; only a pointer that moved is a hover, or the
+    // cursor would snap back to the mouse on every key press.
+    const at = `${e.clientX},${e.clientY}`;
+    if (at === overAt) return;
+    overAt = at;
+    pick(e, 'over', o.overs);
+  });
   // A press on the stage must not also reach whatever page element sits under it.
   el.addEventListener('pointerdown', (e) => e.stopPropagation());
 

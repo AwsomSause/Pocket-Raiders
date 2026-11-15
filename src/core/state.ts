@@ -129,6 +129,9 @@ export const PokemonInstanceSchema = z.object({
   held: z.record(z.string(), z.number().int().min(1)).optional(),
   /** Small permanent stat boosts per stat (Wings): copies taken, each worth its catalog percent. */
   statBoosts: z.partialRecord(StatNameSchema, z.number().int().min(0)).optional(),
+  /** Catalog Overhaul: stat boosts in percent given by event scenes ("+1 to a stat" is 5%), capped per stat; `eventBoostsRegion` is the share that ends with the region. */
+  eventBoosts: z.partialRecord(StatNameSchema, z.number().int().min(0)).optional(),
+  eventBoostsRegion: z.partialRecord(StatNameSchema, z.number().int().min(0)).optional(),
   /** Max HP bonus in percent from the trainer's HP perks (core/trainerPerks.ts syncHpPerks keeps it current). */
   perkHp: z.number().int().optional(),
   /** Hatched from an Egg this run (core/eggs.ts; Elm's perk gives these more experience). */
