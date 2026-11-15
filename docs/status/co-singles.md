@@ -17,9 +17,10 @@ Content: `tools/events/co/singles-<n>.ts` -> `src/data/events/co-singles-<n>.jso
 | 9 | SF150 Famous Faces, SF151 Item Returns, SF152 Milestones, SF153 Quiet Moments | 38 | built, re-read 2026-11-15 |
 | 10 | SF154 Choice Rooms (+ the pocket closet's three returns) | 33 | built, re-read 2026-11-15 |
 | 11 | SF155 Games and Shrines, SF156 Roadside, SF157 Seasonal Set Pieces | 29 | built, re-read 2026-11-15 |
-| later | SF158 to SF161 (calendar weeks, battle moments) | 106 | not started (old weeks and moments still play) |
+| 12 | SF158 Seasonal and Cultural Festivals (32 weeks + the berry tree room) | 33 | built, re-read 2026-11-15 |
+| later | SF159 to SF161 (market and activity weeks, battle moments) | 65 | not started (old weeks and moments still play) |
 
-SF158 to SF160 (82 calendar weeks) live in `gameEvents.json` and SF161 (15 battle moments) in `dramaEvents.json`, not in the event files; they need their own build path.
+Calendar weeks (SF158 to SF160) stay in `gameEvents.json`; each week's doc choice is a co event with the week's own id, drawn only while that week runs (`gameEvent`). Its "for the week" effects last the region. SF161 (15 battle moments) lives in `dramaEvents.json` and needs its own build path.
 
 ## Engine pieces added
 - `coCensus {per}` (SF154 The Census): pays `per` for each different type in the party.
@@ -60,9 +61,10 @@ All checked 2026-11-15 against `STORY_FAMILIES_19.md` and `_20.md`.
 | SF154 | rk-crossroads-four, rk-door-wood/iron/silver/gold, rk-chaos-dial, rk-elevator, rk-floor-1/2/3/4, rk-twin-nodes, rk-twin-left/right, rk-treasure-trap, rk-lucky-number, rk-probability-mage, rk-strangers-dice, rk-streak-1/2/3, rk-echo-item, rk-mastery-echo, rk-mirror-reversal, rk-pocket-closet (+ `rk-pocket-closet-return`, `-2`, `-3`), rk-census, rk-crowd-poll, rk-daily-puzzle, rk-holiday-surprise, rk-team-banner |
 | SF155 | archaeology-dig, fossil-dig, bug-contest, cry-shrine, escape-room/-2, game-show-1/2/3, hide-and-seek, lore-riddle-1/2/3, mind-reader, parrot-teacher, parrot-repeats |
 | SF156 | passing-caravan, sleeping-npc, tap-the-silhouette, voting-booth |
+| SF158 | spooky-season, winter-festival, lunar-new-year, friendship-festival, spring-bloom, summer-splash, valentines-duo-week, cherry-blossom-picnic, pride-rainbow-parade, midsummer-night, fireworks-festival, autumn-harvest-moon, thanksgiving-feast, winter-solstice, spring-equinox, autumn-equinox, diwali-light-walk, mid-autumn-moon-cake, day-of-the-dead, brew-fair, harvest-festival, pokemon-day, earth-week, stargazing-nights, trainer-academy, berry-festival (+ `wk-berry-sprout`), new-moon-night, full-moon-rise, friday-the-13th, palindrome-date, weekend-warm-up, shiny-charm-day (each drawn only in its week) |
 | SF157 | academy-exam, earth-week-cleanup, friendship-picnic, harvest-berry-fair, pokemon-day-parade, spring-bloom-guardian, spring-egg-hunt, stargazing-meteor-watch, summer-beach-tournament (each still drawn only in its week) |
 
-SF137 to SF157: every doc button checked by script against the built labels (all match); outcomes checked by hand against the doc row while writing and again after the standards pass.
+SF137 to SF158: every doc button checked by script against the built labels (all match); outcomes checked by hand against the doc row while writing and again after the standards pass.
 Buttons match the doc word for word, except `w4-balloon` (the doc says "pick a reachable node", not a button text): "Hop in, and pick where to land."
 Rooms added so a doc outcome can ask its own question: `berry-tree-pell` (callback), `festival-gift-swap`, `shimmering-grass-close`, `hidden-grotto-den`, `gmax-den-*` (5), `w4-graffiti-tag`, `r145-bonsly-railings`.
 
@@ -140,3 +142,11 @@ Rooms added so a doc outcome can ask its own question: `berry-tree-pell` (callba
 | Sleeping trainer "the next rival's lead is shown" | Every battle ahead on the stage is shown | A rival preview |
 | Cross-row flags (Tib SF2, Kindness SF128, Egg That Listened SF122, Mew and Deoxys Tellings, Shaymin Sign) | Set here: `tib-seen`, `tib-name-heard`, `kindness`, `egg-that-listened`, `telling-mew`, `telling-deoxys`, `sign-shaymin` | Those rows reading them |
 | Twisted Spoon | New held item: Psychic moves +20% | Nothing |
+| Weeks: "for the week" / "for the day" | Lasts the rest of the region | A calendar-length effect |
+| Summer Splash "Swim": tide pools (SF141) | A 25% heal; the Beach Tournament is its own week event | A tide-pool scene |
+| Duo Week "the paired effect (SF153)" | The picked Pokémon and your lead +1 Bond, Bond gains +10% for the region | A true paired effect |
+| Harvest Moon "double Berries from trees" | Four Berries now and flag `harvest-moon` | Doubling every tree |
+| Equinox "day and night events equally likely" | Not changed; the Sign is given | A day/night balance |
+| Day of the Dead "if any `lost.<name>`, see them" | A moment is saved for the friend you remember; no name is read | Named lost Pokémon |
+| Full Moon "25% heal per node at night" | One 25% heal | A heal on each node |
+| Cross-row flags from the weeks | `spooky-costume` (SF16), `roster-trust` (people), `telling-darkrai`, `sign-light`, `sign-cresselia`, `sign-ho-oh`, `sign-shaymin` (legends), `lantern-sea-open` (places), `farmer-forgets-met` (SF3), `mirror-week` (SF41.7) | Those rows reading them |

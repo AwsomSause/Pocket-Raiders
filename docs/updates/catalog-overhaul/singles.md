@@ -50,3 +50,10 @@
 - Seasonal weeks get their own scenes: an Academy exam, a beach tournament with a Shell Bell, a parade with your starter at the front. New item: the Twisted Spoon.
 
 Known limits: "confused" and "Charged" for one battle are a damage change, the balloon lands two stops ahead (you cannot pick the spot), the Wooloo rolls on any day, and a few "shown before you choose" previews describe the Pokémon without naming it. Full list: `docs/status/co-singles.md`.
+
+**Batch 12: festival weeks (32 events).**
+- Every festival week now opens with its own choice: wear a costume for Spooky Season, join the dragon dance at Lunar New Year, leave marigolds for a lost friend on the Day of the Dead.
+- Week choices change what you meet for the rest of the region: Ghost and Dark at the Solstice, Fairy and Bug on Midsummer Night, doubled shiny odds on Shiny Charm Day.
+- Plant a Berry at the Berry Festival and come back six stops later to a tree with your name on it.
+
+Known limits: week effects last the region rather than a calendar week, the Equinox does not balance day and night, and the full moon heals once instead of every night node.

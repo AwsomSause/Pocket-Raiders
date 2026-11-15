@@ -535,6 +535,51 @@
    "key": "tib-name-heard",
    "setBy": "passing-caravan (Call out.)",
    "readBy": "the Apprentice row (SF2): the player hears the name again"
+  },
+  {
+   "key": "spooky-costume",
+   "setBy": "spooky-season (Wear a costume.)",
+   "readBy": "the Pumpkin King and Midnight Parade line (SF16): you came in costume"
+  },
+  {
+   "key": "harvest-moon",
+   "setBy": "autumn-harvest-moon",
+   "readBy": "later harvest and Ghost-night events this region: the moon was seen"
+  },
+  {
+   "key": "roster-trust",
+   "setBy": "thanksgiving-feast (Bring someone.)",
+   "readBy": "the people row (Road Roster): Trust +1 with a roster trainer"
+  },
+  {
+   "key": "telling-darkrai",
+   "setBy": "winter-solstice (Walk in the dark.), new-moon-night (Go out.)",
+   "readBy": "the legends row: a Darkrai Telling"
+  },
+  {
+   "key": "sign-light",
+   "setBy": "spring-equinox",
+   "readBy": "the legends row: a Solgaleo or Lunala Sign"
+  },
+  {
+   "key": "sign-cresselia",
+   "setBy": "full-moon-rise",
+   "readBy": "the legends row: a Cresselia Sign"
+  },
+  {
+   "key": "lantern-sea-open",
+   "setBy": "day-of-the-dead",
+   "readBy": "the places row: the Lantern Sea opens"
+  },
+  {
+   "key": "farmer-forgets-met",
+   "setBy": "harvest-festival (Help.)",
+   "readBy": "the Farmer Who Forgets line (SF3): it can start, or Abner is at the fair"
+  },
+  {
+   "key": "mirror-week",
+   "setBy": "palindrome-date",
+   "readBy": "Mirror matches (SF41.7): they can appear"
   }
  ]
 }
