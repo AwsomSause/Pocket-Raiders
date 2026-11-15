@@ -2013,3 +2013,60 @@ test('New UI: the Beta 0.6 battle pieces show over the field: the Shadow line, t
   await expect(stage).not.toContainText('Item budget');
   expect(errors).toEqual([]);
 });
+
+test('New UI: in an Extended Cut climax a wide-format page opens the phase list with P: done phases, the one running now, and what is ahead', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=e4-breather');
+  await toMap(page);
+  // The Kanto Extended Cut stands at its Breather (phase 6 of 11): five phases are behind it.
+  await page.evaluate(() => {
+    const pkr = (window as any).__pkr;
+    const run = pkr.session.run;
+    run.party[0].hp = 1;
+    run.expansion = { ...(run.expansion ?? {}), cut: { climaxCut: 'extended', region: 'kanto', director: { idx: 5, shots: 0, started: 5 }, format: { id: 'breather', state: { healPct: 0.5, step: 'choose', revived: null, healed: 0 } } } };
+    pkr.game.scene.getScene('Map').scene.restart({ focus: 0 });
+  });
+  await waitForScene(page, 'Format');
+  const room = view(page, 'Format');
+  await expect(room).toContainText('The quiet room');
+  await expect(room.locator('.keys')).toContainText('phases');
+  const cut = () => page.evaluate(() => JSON.stringify((window as any).__pkr.session.run.expansion.cut));
+  const before = await cut();
+  await page.waitForTimeout(250);
+  await page.keyboard.press('p');
+  await expect(room.locator('.hd')).toContainText('Extended Cut: phase list');
+  await expect(room).not.toContainText('The quiet room');
+  // The cursor starts on the phase that is running; the phases before it are done.
+  await expect(room.locator('.win.sel')).toContainText('Breather');
+  await expect(room.locator('.win.sel')).toContainText('Heal, revive one, save');
+  await expect(room.locator('.win.sel .tg')).toHaveText('Now');
+  await expect(room).toContainText('The longer Kanto climax, in order. Second Shot: the first loss retries from the last save point.');
+  await page.screenshot({ path: 'test-results/newui-cut-phases.png' });
+  // Up walks back over what is done; down from there goes on to what is next and ahead.
+  await page.keyboard.press('ArrowUp');
+  await expect(room.locator('.win.sel')).toContainText('The Officers');
+  await expect(room.locator('.win.sel .tg')).toHaveText('Done');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowDown');
+  await expect(room.locator('.win.sel')).toContainText('Saffron Sealed');
+  await expect(room.locator('.win.sel .tg')).toHaveText('Next');
+  await page.keyboard.press('ArrowDown');
+  await expect(room.locator('.win.sel')).toContainText('Giovanni');
+  await expect(room.locator('.win.sel .tg')).toHaveText('Ahead');
+  for (let k = 0; k < 6; k++) await page.keyboard.press('ArrowDown');
+  await expect(room.locator('.win.sel')).toContainText('Resolution');
+  // Esc goes back to the page; a click on the hint opens the list again and Enter closes it. Looking changed nothing.
+  await page.keyboard.press('Escape');
+  await expect(room).toContainText('The quiet room');
+  await room.locator('[data-act="phases"]').click();
+  await expect(room.locator('.hd')).toContainText('Extended Cut: phase list');
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Enter');
+  await expect(room).toContainText('The quiet room');
+  expect(await cut()).toBe(before);
+  expect(await scene(page)).toBe('Format');
+  // The page still works: Rest heals.
+  await room.locator('[data-act="pick"]').click();
+  await expect(room).toContainText('Everyone still standing has rested.');
+  expect(errors).toEqual([]);
+});

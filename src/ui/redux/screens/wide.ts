@@ -148,8 +148,9 @@ function plain(d: WideBase, b: PlainBody): string {
   return `<div class="abs col" style="left:24px;right:24px;top:76px;gap:12px">${b.lines.length ? W(b.lines.map((l) => `<div style="line-height:22px">${esc(l)}</div>`).join(''), 'display:flex;flex-direction:column;gap:8px') : ''}<div class="col" style="gap:8px">${d.options.map((_, k) => button(d, k)).join('')}</div></div>`;
 }
 
-export function wideView(_c: ReduxCtx, d: WideModel): string {
+/** `phases`: the run is in an Extended Cut climax, so the header also offers its phase list (X, or a click on the hint). */
+export function wideView(_c: ReduxCtx, d: WideModel, phases = false): string {
   const b = d.body;
   const body = b.kind === 'breather' ? breather(d, b) : b.kind === 'blackout' ? blackout(d, b) : b.kind === 'convoy' ? convoy(d, b) : b.kind === 'front' ? front(d, b) : b.kind === 'debate' ? debate(d, b) : b.kind === 'plate' ? plate(d, b) : plain(d, b);
-  return (d.art ? bg(d.art) : '') + (d.shade ? `<div class="fill" style="background:${d.shade}"></div>` : '') + H(d.title, 'battle', [['Enter', 'choose']]) + body + TX(esc(d.text));
+  return (d.art ? bg(d.art) : '') + (d.shade ? `<div class="fill" style="background:${d.shade}"></div>` : '') + (phases ? H(d.title, 'battle', [['P', 'phases'], ['Enter', 'choose']]).replace('<span><kbd>P</kbd>', `<span style="cursor:pointer"${act('phases')}><kbd>P</kbd>`) : H(d.title, 'battle', [['Enter', 'choose']])) + body + TX(esc(d.text));
 }
