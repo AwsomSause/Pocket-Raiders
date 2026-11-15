@@ -3,7 +3,7 @@
 // left, tabs, and one window of facts for the tab. Pure drawing; ui/pokemonMenu.ts keeps the state and the input.
 
 import { rxUrl } from '../assets';
-import { act, B, esc, facts, H, hpb, mini, mon, TX, ty, TYPE_COLORS, W } from '../kit';
+import { act, type Area, B, esc, facts, H, hpb, mini, mon, TX, ty, TYPE_COLORS, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 import { pic, scrollStart, type Art } from '../templates';
 
@@ -26,7 +26,7 @@ export interface PartyCard {
   /** It cannot be chosen right now (a pick with a reason against it). */
   off: boolean;
 }
-export interface PartyModel { title: string; mons: PartyCard[]; index: number; text: string; hints: Hints }
+export interface PartyModel { title: string; mons: PartyCard[]; index: number; text: string; hints: Hints; /** Header colour; the party's green unless the page belongs to another part of the game (the run end's final team). */ area?: Area }
 
 /** How many cards the cursor moves across in the Party layout of this theme (the grid is three wide). */
 export const partyCols = (c: Pick<ReduxCtx, 'v'>): number => (c.v(3) === 1 ? 3 : 1);
@@ -37,7 +37,7 @@ const typeColor = (t: string): string => TYPE_COLORS[t.charAt(0).toUpperCase() +
 const pick = (k: number): string => `${act('pick', k)} data-over="over"`;
 
 export function partyView(c: ReduxCtx, d: PartyModel): string {
-  const v = c.v(3), head = H(d.title, 'party', d.hints);
+  const v = c.v(3), head = H(d.title, d.area ?? 'party', d.hints);
   const cls = (p: PartyCard, k: number): string => (k === d.index ? 'sel' : p.hp > 0 && !p.off ? '' : 'dim');
   const tag = (p: PartyCard): string => (p.tag ? `<span class="tg no" style="font-size:11px">${esc(p.tag)}</span>` : '');
   if (d.mons.length === 0) return head + TX(esc(d.text));
